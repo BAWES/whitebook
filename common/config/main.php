@@ -1,10 +1,11 @@
 <?php
+
 return [
-    'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'vendorPath' => dirname(dirname(__DIR__)).'/vendor',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
-        ],  
+        ],
         'i18n' => [
         'translations' => [
             'frontend*' => [
@@ -16,9 +17,9 @@ return [
                 'basePath' => '@common/messages',
             ],
         ],
-    ],       
-    'newcomponent' =>[
-			'class'=> 'backend\components\NewComponent',
-		],      
+    ],
+    'newcomponent' => [
+            'class' => 'backend\components\NewComponent',
+        ],
     ],
 ];
