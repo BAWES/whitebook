@@ -7,7 +7,7 @@ return [
             'username' => 'twbuser',
             'password' => 'twbpass',
             'charset' => 'utf8',
-            //'tablePrefix' => 'whitebook_',
+            'tablePrefix' => 'whitebook_',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
