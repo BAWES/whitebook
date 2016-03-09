@@ -3,11 +3,10 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=thewhitebook',
-            'username' => 'twbuser',
-            'password' => 'twbpass',
+            'dsn' => 'mysql:host=localhost;dbname=yii2advanced',
+            'username' => 'root',
+            'password' => '',
             'charset' => 'utf8',
-            'tablePrefix' => 'whitebook_',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',

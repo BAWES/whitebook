@@ -26,8 +26,24 @@
  * ```
  */
 return [
-    'Development' => [
-        'path' => 'dev',
+    'Development [Khalid]' => [
+        'path' => 'dev-khalid',
+        'setWritable' => [
+            'backend/runtime',
+            'backend/web/assets',
+            'frontend/runtime',
+            'frontend/web/assets',
+        ],
+        'setExecutable' => [
+            'yii',
+        ],
+        'setCookieValidationKey' => [
+            'backend/config/main-local.php',
+            'frontend/config/main-local.php',
+        ],
+    ],
+    'Development [Technoduce]' => [
+        'path' => 'dev-technoduce',
         'setWritable' => [
             'backend/runtime',
             'backend/web/assets',
