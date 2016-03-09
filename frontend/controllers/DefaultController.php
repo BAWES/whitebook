@@ -18,22 +18,22 @@ class DefaultController extends BaseController
     public function behaviors()
     {
         return [
-      [
-        'class' => 'yii\filters\PageCache',
-        'only' => ['index'],
-        'duration' => 60,
-        'variations' => [
-          \Yii::$app->language,
-        ],
-        'dependency' => [
-          'class' => 'yii\caching\DbDependency',
-          'sql' => 'SELECT item_id,whitebook_vendor_item.slug as slug,item_name,item_price_per_unit,vendor_name FROM whitebook_vendor_item JOIN whitebook_vendor on whitebook_vendor.vendor_id=whitebook_vendor_item.vendor_id JOIN whitebook_category on whitebook_category.category_id=whitebook_vendor_item.category_id WHERE whitebook_vendor_item.item_status="Active"',
-          'sql' => 'SELECT * FROM whitebook_slide where trash="Default" and slide_status="Active" order by sort',
-          'sql' => 'SELECT type_name,type_id FROM whitebook_event_type',
-          'sql' => 'SELECT * FROM `whitebook_social_info`',
-        ],
-      ],
-    ];
+          [
+            'class' => 'yii\filters\PageCache',
+            'only' => ['index'],
+            'duration' => 60,
+            'variations' => [
+              \Yii::$app->language,
+            ],
+            'dependency' => [
+              'class' => 'yii\caching\DbDependency',
+              'sql' => 'SELECT item_id,whitebook_vendor_item.slug as slug,item_name,item_price_per_unit,vendor_name FROM whitebook_vendor_item JOIN whitebook_vendor on whitebook_vendor.vendor_id=whitebook_vendor_item.vendor_id JOIN whitebook_category on whitebook_category.category_id=whitebook_vendor_item.category_id WHERE whitebook_vendor_item.item_status="Active"',
+              'sql' => 'SELECT * FROM whitebook_slide where trash="Default" and slide_status="Active" order by sort',
+              'sql' => 'SELECT type_name,type_id FROM whitebook_event_type',
+              'sql' => 'SELECT * FROM `whitebook_social_info`',
+            ],
+          ],
+        ];
     }
 
     public function init()
