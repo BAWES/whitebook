@@ -1,16 +1,16 @@
 <?php
 
 namespace backend\models;
+
 use yii\helpers\ArrayHelper;
-use Yii;
 
 /**
  * This is the model class for table "{{%area}}".
  *
  * @property string $area_id
- * @property integer $area_name
- * @property integer $created_by
- * @property integer $modified_by
+ * @property int $area_name
+ * @property int $created_by
+ * @property int $modified_by
  * @property string $created_datetime
  * @property string $modified_datetime
  * @property string $trash
@@ -18,7 +18,7 @@ use Yii;
 class Area extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -26,17 +26,17 @@ class Area extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['area_name',], 'required'],
+            [['area_name'], 'required'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -50,10 +50,10 @@ class Area extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
-    	public static function loadarea()
-	{
-		 $area=Area::find()->all();
-		return $area=ArrayHelper::map($area,'area_id','area_name');
-		
-	}
+    public static function loadarea()
+    {
+        $area = self::find()->all();
+
+        return $area = ArrayHelper::map($area, 'area_id', 'area_name');
+    }
 }

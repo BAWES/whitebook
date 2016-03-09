@@ -2,23 +2,20 @@
 
 namespace backend\models;
 
-use Yii;
-
 /**
  * This is the model class for table "{{%auth_rule}}".
  *
  * @property string $name
  * @property string $data
- * @property integer $created_at
- * @property integer $updated_at
- *
+ * @property int $created_at
+ * @property int $updated_at
  * @property AuthItem[] $authItems
  */
 class Authrule extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+      * {@inheritdoc}
+      */
      public $created_datetime;
     public static function tableName()
     {
@@ -26,7 +23,7 @@ class Authrule extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -34,12 +31,12 @@ class Authrule extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['data'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe'],
-            [['name'], 'string', 'max' => 64]
+            [['name'], 'string', 'max' => 64],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

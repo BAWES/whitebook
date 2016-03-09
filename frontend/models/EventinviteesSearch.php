@@ -5,7 +5,6 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use frontend\models\Eventinvitees;
 
 /**
  * EventinviteesSearch represents the model behind the search form about `frontend\models\Eventinvitees`.
@@ -13,7 +12,7 @@ use frontend\models\Eventinvitees;
 class EventinviteesSearch extends Eventinvitees
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -24,7 +23,7 @@ class EventinviteesSearch extends Eventinvitees
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -33,24 +32,24 @@ class EventinviteesSearch extends Eventinvitees
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$invitee_name,$event_id)
+    public function search($params, $invitee_name, $event_id)
     {
-     //echo $event_id;die;   
-        $query = Eventinvitees::find() 
-        ->where(['LIKE','name',$invitee_name])
-        ->orwhere(['LIKE','email',$invitee_name])
-        ->orwhere(['LIKE','phone_number',$invitee_name])
-        ->andwhere(['=','event_id',$event_id]);
+        //echo $event_id;die;
+        $query = Eventinvitees::find()
+        ->where(['LIKE', 'name', $invitee_name])
+        ->orwhere(['LIKE', 'email', $invitee_name])
+        ->orwhere(['LIKE', 'phone_number', $invitee_name])
+        ->andwhere(['=', 'event_id', $event_id]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' =>[
-                'pageSize'=> 10,
+            'pagination' => [
+                'pageSize' => 10,
                 ],
         ]);
 
@@ -78,17 +77,17 @@ class EventinviteesSearch extends Eventinvitees
         return $dataProvider;
     }
 
-    public function loadsearch($params,$slug)
-    {        
+    public function loadsearch($params, $slug)
+    {
         $event_details = Yii::$app->db->createCommand('SELECT event_id FROM whitebook_events where slug = "'.$slug.'"')->queryAll();
-                
+
         $query = Eventinvitees::find()
-        ->andwhere(['event_id'=>$event_details[0]['event_id']]);      
-        
+        ->andwhere(['event_id' => $event_details[0]['event_id']]);
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' =>[
-                'pageSize'=> 10,
+            'pagination' => [
+                'pageSize' => 10,
                 ],
         ]);
 

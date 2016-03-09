@@ -14,17 +14,16 @@ use yii\filters\VerbFilter;
  */
 class AuthassignmentController extends Controller
 {
-	public function init()
-    {		
-        parent::init();	
-        if(Yii::$app->user->isGuest){ // chekck the admin logged in
-			//$this->redirect('login');
-			$url =  Yii::$app->urlManager->createUrl(['admin/site/login']);
-				Yii::$app->getResponse()->redirect($url);
-		}
-       
+    public function init()
+    {
+        parent::init();
+        if (Yii::$app->user->isGuest) { // chekck the admin logged in
+            //$this->redirect('login');
+            $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
+            Yii::$app->getResponse()->redirect($url);
+        }
     }
-    
+
     public function behaviors()
     {
         return [
@@ -39,6 +38,7 @@ class AuthassignmentController extends Controller
 
     /**
      * Lists all Authassignment models.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -54,8 +54,10 @@ class AuthassignmentController extends Controller
 
     /**
      * Displays a single Authassignment model.
+     *
      * @param string $item_name
      * @param string $user_id
+     *
      * @return mixed
      */
     public function actionView($item_name, $user_id)
@@ -68,6 +70,7 @@ class AuthassignmentController extends Controller
     /**
      * Creates a new Authassignment model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     *
      * @return mixed
      */
     public function actionCreate()
@@ -86,8 +89,10 @@ class AuthassignmentController extends Controller
     /**
      * Updates an existing Authassignment model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param string $item_name
      * @param string $user_id
+     *
      * @return mixed
      */
     public function actionUpdate($item_name, $user_id)
@@ -106,8 +111,10 @@ class AuthassignmentController extends Controller
     /**
      * Deletes an existing Authassignment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param string $item_name
      * @param string $user_id
+     *
      * @return mixed
      */
     public function actionDelete($item_name, $user_id)
@@ -120,9 +127,12 @@ class AuthassignmentController extends Controller
     /**
      * Finds the Authassignment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $item_name
      * @param string $user_id
+     *
      * @return Authassignment the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($item_name, $user_id)

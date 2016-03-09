@@ -2,10 +2,8 @@
 
 namespace backend\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Authitem;
 
 /**
  * AuthitemSearch represents the model behind the search form about `backend\models\Authitem`.
@@ -13,7 +11,7 @@ use backend\models\Authitem;
 class AuthitemSearch extends Authitem
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -24,7 +22,7 @@ class AuthitemSearch extends Authitem
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -33,7 +31,7 @@ class AuthitemSearch extends Authitem
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *

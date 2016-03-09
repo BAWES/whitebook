@@ -2,10 +2,8 @@
 
 namespace backend\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Priorityitem;
 
 /**
  * PriorityitemSearch represents the model behind the search form about `backend\models\Priorityitem`.
@@ -13,18 +11,18 @@ use backend\models\Priorityitem;
 class PriorityitemSearch extends Priorityitem
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
         //    [['item_id',], 'string'],
-            [['priority_level','created_datetime', 'modified_datetime', 'trash'], 'safe'],
+            [['priority_level', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -33,7 +31,7 @@ class PriorityitemSearch extends Priorityitem
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -41,14 +39,13 @@ class PriorityitemSearch extends Priorityitem
      */
     public function search($params)
     {
-        
         $query = Priorityitem::find()
         ->where(['!=', 'trash', 'Deleted'])
-		->orderBy('priority_id');
-		
+        ->orderBy('priority_id');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['priority_id'=>SORT_DESC]]
+            'sort' => ['defaultOrder' => ['priority_id' => SORT_DESC]],
         ]);
 
         $this->load($params);

@@ -2,8 +2,6 @@
 
 namespace backend\models;
 
-use Yii;
-
 /**
  * This is the model class for table "{{%auth_assignment}}".
  *
@@ -11,13 +9,12 @@ use Yii;
  * @property string $user_id
  * @property string $created_datetime
  * @property string $modified_datetime
- *
  * @property AuthItem $itemName
  */
 class Authassignment extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -25,19 +22,19 @@ class Authassignment extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['item_name', 'user_id', 'modified_datetime'], 'required'],
             [['created_datetime', 'modified_datetime'], 'safe'],
-            [['item_name', 'user_id'], 'string', 'max' => 64]
+            [['item_name', 'user_id'], 'string', 'max' => 64],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {

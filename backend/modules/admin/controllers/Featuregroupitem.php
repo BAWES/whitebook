@@ -1,8 +1,8 @@
 <?php
 
 namespace backend\models;
-use backend\models\Featuregroup;
-use Yii;
+
+
 
 /**
  * This is the model class for table "whitebook_feature_group_item".
@@ -12,21 +12,20 @@ use Yii;
  * @property string $item_id
  * @property string $featured_start_date
  * @property string $featured_end_date
- * @property integer $featured_sort
+ * @property int $featured_sort
  * @property string $group_item_status
- * @property integer $created_by
- * @property integer $modified_by
+ * @property int $created_by
+ * @property int $modified_by
  * @property string $created_datetime
  * @property string $modified_datetime
  * @property string $trash
- *
  * @property FeatureGroup $group
  * @property VendorItem $item
  */
 class Featuregroupitem extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -34,20 +33,20 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['vendor_id', 'category_id', 'subcategory_id','item_id', 'featured_start_date', 'featured_end_date', 'featured_sort','group_item_status','featured_sort', ], 'required'],
+            [['vendor_id', 'category_id', 'subcategory_id', 'item_id', 'featured_start_date', 'featured_end_date', 'featured_sort', 'group_item_status', 'featured_sort'], 'required'],
             [['group_id', 'item_id', 'featured_sort', 'created_by', 'modified_by'], 'integer'],
             [['featured_start_date', 'featured_end_date', 'created_datetime', 'modified_datetime'], 'safe'],
-            [['group_item_status', 'trash'], 'string']
+            [['group_item_status', 'trash'], 'string'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -82,12 +81,11 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
-    
+
     public static function getGroupName($id)
-    {		
-		
-		$model = Featuregroup::find()->where(['group_id'=>$id])->one();
+    {
+        $model = Featuregroup::find()->where(['group_id' => $id])->one();
+
         return $model->group_name;
     }
- 
 }

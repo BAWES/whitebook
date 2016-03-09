@@ -2,28 +2,18 @@
 
 namespace backend\models;
 
-use Yii;
-use backend\models\Authassignment;
-use yii\base\NotSupportedException;
-use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
-use yii\web\IdentityInterface;
-use yii\db\BaseActiveRecord;
-use yii\helpers\Security;
-use backend\models\Role;
 use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%auth_item}}".
  *
  * @property string $name
- * @property integer $type
+ * @property int $type
  * @property string $description
  * @property string $rule_name
  * @property string $data
- * @property integer $created_at
- * @property integer $updated_at
- *
+ * @property int $created_at
+ * @property int $updated_at
  * @property AuthAssignment[] $authAssignments
  * @property AuthRule $ruleName
  * @property AuthItemChild[] $authItemChildren
@@ -31,7 +21,7 @@ use yii\helpers\ArrayHelper;
 class Authitem extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -39,7 +29,7 @@ class Authitem extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -48,12 +38,12 @@ class Authitem extends \yii\db\ActiveRecord
             [['type'], 'integer'],
             [['description', 'data'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe'],
-            [['name', 'rule_name'], 'string', 'max' => 64]
+            [['name', 'rule_name'], 'string', 'max' => 64],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -84,12 +74,13 @@ class Authitem extends \yii\db\ActiveRecord
         return $this->hasOne(AuthRule::className(), ['name' => 'rule_name']);
     }
 
-		public static function Authitem()
+    public static function Authitem()
     {
-		$authitem = Authitem::find()->all();     
-        $authitem=ArrayHelper::map($authitem,'name','name');
+        $authitem = self::find()->all();
+        $authitem = ArrayHelper::map($authitem, 'name', 'name');
+
         return $authitem;
-	}
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -97,21 +88,22 @@ class Authitem extends \yii\db\ActiveRecord
     {
         return $this->hasMany(AuthItemChild::className(), ['child' => 'name']);
     }
-    
-            public function AuthitemCheck($type,$controllerid)
-	{
-			$item= Authitem::find()
-			->select(['name'])
-			->where(['id' => $type])
-			->one();
-			$itemname= $item['name']; 
-			$id=Admin::getAdmin('id');
-			$final1=Authassignment::find()
-			->select(['item_name'])
-			->where(['item_name' => $itemname])
-			->andwhere(['user_id' => $id])
-			->andwhere(['controller_id' => $controllerid])
-			->one();
-			return $final1['item_name'];
-	}	
+
+    public function AuthitemCheck($type, $controllerid)
+    {
+        $item = self::find()
+            ->select(['name'])
+            ->where(['id' => $type])
+            ->one();
+        $itemname = $item['name'];
+        $id = Admin::getAdmin('id');
+        $final1 = Authassignment::find()
+            ->select(['item_name'])
+            ->where(['item_name' => $itemname])
+            ->andwhere(['user_id' => $id])
+            ->andwhere(['controller_id' => $controllerid])
+            ->one();
+
+        return $final1['item_name'];
+    }
 }
