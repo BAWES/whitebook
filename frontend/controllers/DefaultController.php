@@ -36,6 +36,17 @@ class DefaultController extends BaseController
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function actions() {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
+    }
+
     public function init()
     {
         parent::init();
