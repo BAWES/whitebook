@@ -7,13 +7,13 @@ class m160308_054156_whitebook_category extends Migration
 {
     public function up()
     {
-         $this->insert('{{%category}}',array(                    
+         $this->insert('whitebook_category',array(
                      'parent_category_id'=>0,
-                      'category_level'=>0, 
-                      'category_name'=>'Venues', 
-                      'category_icon'=>0, 
+                      'category_level'=>0,
+                      'category_name'=>'Venues',
+                      'category_icon'=>0,
                       'category_url'=>'Venues',
-                      'category_allow_sale'=>'',
+                      'category_allow_sale'=>'yes',
                       'top_ad'=>'',
                       'bottom_ad'=>'yes',
                       'sort'=>'0',
@@ -35,13 +35,13 @@ class m160308_054156_whitebook_category extends Migration
 
         return false;
     }
-    
+
     /*
     // Use safeUp/safeDown to run migration code within a transaction
     public function safeUp()
     {
     }
-    
+
     public function safeDown()
     {
     }
