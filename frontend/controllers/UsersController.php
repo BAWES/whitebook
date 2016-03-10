@@ -62,13 +62,8 @@ class UsersController extends BaseController
                 echo json_encode($return_data);
                 exit;
             } else {
-                /*if($event_status==1)
-    {
-        Yii::$app->session->set('create_event_status','1');
-        * $favourite_status=$_POST['favourite_status'];
-    }*/
-    if ($event_status == -1) {
-        //Yii::$app->session->set('event_status',$event_status);
+               
+    if ($event_status == -1) {        
         Yii::$app->session->set('create_event', 1);
     }
                 if ($event_status > 0) {
@@ -113,19 +108,6 @@ class UsersController extends BaseController
 
     public function actionSignup()
     {
-        $send = Yii::$app->mailer->compose()
-				->setFrom('a.mariyappan88@gmail.com')
-				->setTo('mariyappan@technoduce.com')
-				->setSubject('testmail')
-				->setHtmlBody('GReat')
-				->send();
-        if ($send) {
-            echo 'yes';
-        } else {
-            echo 'no';
-        }
-        die;
-
         $model = new Signup();
         $error = array();
         //echo $_POST['_csrf'];
