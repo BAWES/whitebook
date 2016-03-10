@@ -1,14 +1,3 @@
-<?php /*$event_status=Yii::$app->session->get('event_status');    
-if($event_status==-1){
-?>
-<script type="text/javascript">
-function display_event_modal()
-{
-jQuery('#EventModal').modal('show');
-}
-window.onload=display_event_modal;
-</script>
-<?php }*/ ?>
 <?php
 use backend\models\Featuregroup;
 use backend\models\Vendoritem;

@@ -2,9 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\Users;
-//$base_url = Url::toRoute('/',true);
 ?>
-
 <!-- Modal Login -->
 <div class="modal fade" id="myModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog">
