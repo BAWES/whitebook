@@ -56,7 +56,22 @@ class BaseController extends Controller
         Yii::$app->params['SITE_DESCRIPTION'] = $general_settings[0]['site_copyright'];
         Yii::$app->params['SITE_LOGO'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_logo'];
         Yii::$app->params['SITE_FAVICON'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_favicon'];
+        
         Yii::$app->params['SITE_NOIMAGE'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
+        Yii::$app->params['uploadPath'] = realpath(Yii::$app->basePath) . '/uploads/';
+        /* BEGIN Aliases */
+        Yii::setAlias('@frontend_app_images', realpath(dirname(__FILE__).'/frontend/web/images/'));
+        Yii::setAlias('@vendor_images', realpath(dirname(__FILE__).'/backend/web/uploads/vendor_images/'));
+        Yii::setAlias('@sales_guide_images', realpath(dirname(__FILE__).'@app/web/uploads/guide_images/'));
+        Yii::setAlias('@vendor_item_images_210', realpath(dirname(__FILE__).'/backend/web/uploads/vendor_images/'));
+        Yii::setAlias('@sub_category', realpath(dirname(__FILE__).'@app/web/uploads/subcategory_icon/'));
+        Yii::setAlias('@vendor_image', realpath(dirname(__FILE__).'/backend/web/uploads/vendor_images/'));
+        Yii::setAlias('@gif_img', realpath(dirname(__FILE__).'frontend/web/images/ajax-loader.gif'));
+        Yii::setAlias('@sub_category', realpath(dirname(__FILE__).'/web/uploads/subcategory_icon/'));
+        Yii::setAlias('@top_category', realpath(dirname(__FILE__).'/web/uploads/category_ads/top/'));
+        Yii::setAlias('@bottom_category', realpath(dirname(__FILE__).'/web/uploads/category_ads/bottom/'));
+        Yii::setAlias('@home_ads', realpath(dirname(__FILE__).'/web/uploads/home_ads/'));   
+         /* END Aliases */
 
         $social_settings = $model->get_social_network();
 
