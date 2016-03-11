@@ -7,7 +7,7 @@ $params = array_merge(
     require(__DIR__.'/params-local.php')
 );
 
-$k = [
+return [
     'id' => 'app-frontend',
     'name' => 'The Whitebook',
     'basePath' => dirname(__DIR__),
@@ -45,9 +45,7 @@ $k = [
         'errorHandler' => [
             'errorAction' => 'default/error',
         ],
-        
+
     ],
     'params' => $params,
 ];
-
-return $k;
