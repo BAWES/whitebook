@@ -11,12 +11,11 @@ return [
     'id' => 'app-frontend',
     'name' => 'The Whitebook',
     'basePath' => dirname(__DIR__),
+    'defaultRoute' => 'default',
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
-    'homeUrl' => '/frontend/web',
     'components' => [
         'request' => [
-            'baseUrl' => '/',
             'enableCookieValidation' => true,
             'enableCsrfValidation' => false,
         ],
