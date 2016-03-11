@@ -3,6 +3,9 @@
 return [
     'vendorPath' => dirname(dirname(__DIR__)).'/vendor',
     'components' => [
+        'urlManager' => [
+          'class' => 'yii\web\UrlManager',
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

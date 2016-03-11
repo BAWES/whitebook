@@ -7,15 +7,11 @@ $config = [
             'cookieValidationKey' => '',
         ],
         'urlManager' => [
-          'class' => 'yii\web\UrlManager',
           'baseUrl' => '/',
           'enablePrettyUrl' => true,
           'showScriptName' => false,
 
           'rules' => [
-                //'defaultRoute' => '/default/index',
-
-                //'/'=>'/default', /* Line important*/
 
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',

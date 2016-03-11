@@ -7,15 +7,11 @@ $config = [
             'cookieValidationKey' => '',
         ],
         'urlManager' => [
-          'class' => 'yii\web\UrlManager',
           'baseUrl' => '/',
           'enablePrettyUrl' => true,
           'showScriptName' => false,
 
           'rules' => [
-                //'defaultRoute' => '/default/index',
-
-                //'/'=>'/default', /* Line important*/
                 'edit-profile' => 'users/edit_profile',
                 'create-event' => 'users/create_event',
                 'event-slider' => 'product/event_slider',
