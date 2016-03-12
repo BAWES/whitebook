@@ -19,12 +19,12 @@ use yii\helpers\Html;?>
 </ul>
 <!-- END MOBILE HEADER -->
 <!-- BEGIN LOGO -->	
-<a href="<?php echo Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/site/index'); ?>">
+<a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('/admin/site/index'); ?>">
 <img src="<?php echo Siteinfo::logoUrl();?>" class="logo" alt="" data-src="<?php echo Siteinfo::logoUrl();?>" data-src-retina="<?php echo Siteinfo::logoUrl();?>" width="170" height="30"/>
 </a>
 <!-- END LOGO -->
 <ul class="nav pull-right notifcation-center">	
-<li class="dropdown" id="header_task_bar"> <a href="<?php echo Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/site/index'); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
+<li class="dropdown" id="header_task_bar"> <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('/admin/site/index'); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
 <!-- END LOGO NAV BUTTONS -->
 </div>
 <!-- END NAVIGATION HEADER -->
@@ -70,12 +70,12 @@ use yii\helpers\Html;?>
 <div class="iconset top-settings-dark"></div> 	
 </a>
 <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
-<li><a href="<?php echo Yii::$app->urlManagerBackEnd->createAbsoluteUrl(''); ?>admin/site/profile"> My Account</a>
+<li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/profile"> My Account</a>
 </li>
-<li><a href="<?php echo Yii::$app->urlManagerBackEnd->createAbsoluteUrl(''); ?>admin/site/changepassword">Change password</a>
+<li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/changepassword">Change password</a>
 </li>
 <li class="divider"></li>                
-<li><a href="<?php echo Yii::$app->urlManagerBackEnd->createAbsoluteUrl(''); ?>admin/site/logout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+<li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/logout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
 </ul>
 </li>
 <!-- END CHAT SIDEBAR TOGGLE --> 
