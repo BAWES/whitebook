@@ -9,9 +9,7 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['gii'],
-    'modules' => [],
-    'homeUrl' => '/backend/web',     
+    'bootstrap' => ['gii'],    
     'components' => [
 	'request'=>[
 					   'enableCsrfValidation'=>false,
@@ -27,6 +25,7 @@ return [
 			],
 		 'urlManager' => [		 
          'class' => 'yii\web\UrlManager',
+         'baseUrl' => '/backend/web/',
 		 //  Disable index.php
 		  'showScriptName' => false,
 		 //  Disable r= routes
@@ -39,12 +38,6 @@ return [
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',                
 				],		
-        ],
-        'urlManagerBackEnd' => [
-            'class' => 'yii\web\urlManager',
-            'baseUrl' => '/backend/web/',            
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
         ],
         'themeURL' => [
             'class' => 'yii\web\urlManager',
