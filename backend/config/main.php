@@ -86,9 +86,10 @@ return [
        ], 		
 		'modules' => [
 			'gii' => 'yii\gii\Module',
-			'allowedIPs' => ['192.168.1.112','192.168.1.235'] // adjust this to your needs
-		],
-		
+			'allowedIPs' => ['192.168.1.112','192.168.1.235'],// adjust this to your needs
+            'admin' => ['class'=>'backend\modules\admin\Module'],
+            'vendor' => ['class'=>'backend\modules\vendor\Module'],
+    ],
     'params' => $params,
    
 ];
