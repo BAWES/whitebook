@@ -355,6 +355,7 @@ $baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/no_image.jp
 }?> 
 <div class="item">
 <div class="fetu_product_list">
+<?php if($s['slug'] !=''){ ?>
 <a href="<?php echo Yii::$app->params['BASE_URL'];?>/product/<?php echo $s['slug'];?>" title="Products" class="similar">
 <img src="<?php echo $baselink;?>" alt="Slide show images" width="208" height="219">
 <?php if (file_exists($imglink)) {?>
@@ -366,6 +367,7 @@ $baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/no_image.jp
 <p><?= $s['price'];?>KD</p>
 </div>
 </a>
+<?php } ?>
 </div>
 </div>
 <?php } ?>
