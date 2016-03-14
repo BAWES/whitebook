@@ -21,8 +21,5 @@ return [
             ],
         ],
     ],
-    'newcomponent' => [
-            'class' => 'backend\components\NewComponent',
-        ],
     ],
 ];
