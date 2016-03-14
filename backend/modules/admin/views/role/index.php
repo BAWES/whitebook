@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'role_name',
 			     [
 				'attribute'=>'created_datetime',
-				'format' => ['date', DATE],
+				'format' => ['date', Yii::$app->params['dateFormat']],
 				'label'=>'created date',			
 			   ],
             ['class' => 'yii\grid\ActionColumn',

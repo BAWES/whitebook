@@ -1,7 +1,5 @@
 <?php
 /* @var $this yii\web\View */
-
-
 use yii\web\JsExpression;
 use backend\models\Customer;
 use backend\models\Vendoritem;

@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
              'template' => '{update} {delete}{view}{link}',
             'buttons' => [            
             'link' => function ($url, $model) {
-                $url = Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/vendor/vendoritemview?id='.$model->id); 
+                $url = Yii::$app->urlManager->createAbsoluteUrl('/admin/vendor/vendoritemview?id='.$model->id); 
                  return  Html::a('<span class="fa fa-bars"></span>', $url, [
                             'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
                 ]);

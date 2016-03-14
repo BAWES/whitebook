@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],	
 			[
 				'attribute'=>'created_datetime',
-				'format' => ['date', DATE],
+				'format' => ['date', Yii::$app->params['dateFormat']],
 				'label'=>'created date',			
 			],	
             [

@@ -18,34 +18,10 @@ $this->beginPage();
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta content="" name="description" />
 <meta content="" name="author" />
+<?php $this->head() ?>
 <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl();?>" type="image/x-icon" /> 
-<!-- BEGIN CORE CSS FRAMEWORK -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/boostrapv3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/boostrapv3/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>css/animate.min.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css"/>
-<!-- END CORE CSS FRAMEWORK -->
-<!-- BEGIN CSS TEMPLATE -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>css/style.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>css/responsive.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>css/custom-icon-set.css" rel="stylesheet" type="text/css"/>
-<!-- END CSS TEMPLATE -->
 <!-- BEGIN CORE JS FRAMEWORK-->
 <script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-1.8.3.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/boostrapv3/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/breakpoints.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-unveil/jquery.unveil.min.js" type="text/javascript"></script>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css"/>
-</head>
-<!-- END HEAD -->
-<!-- BEGIN BODY -->
-<!-- END CORE JS FRAMEWORK -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-scrollbar/jquery.scrollbar.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-numberAnimate/jquery.animateNumbers.js" type="text/javascript"></script>
-<!-- END CORE PLUGINS -->
 <body class="">
 <?php $this->beginBody() ?>
 <?php $this->beginContent('@app/views/layouts/admin/header.php'); ?>
