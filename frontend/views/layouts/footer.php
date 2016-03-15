@@ -444,19 +444,6 @@ via email, phone or live chat.</p>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="<?php echo Url::toRoute('/js/main.js',true);?>"></script> <!-- Resource jQuery -->
-<script src="<?php echo Url::toRoute('/js/bootstrap.min.js',true);?>"></script>
-<script defer src="<?php echo Url::toRoute('/js/jquery.flexslider.js',true);?>"></script>
-<script src="<?php echo Url::toRoute('/js/classie.js',true);?>"></script>
-<script src="<?php echo Url::toRoute('/js/search.js',true);?>"></script>     
-
-<script src="<?php echo Url::toRoute('/js/owl.carousel.js',true);?>"></script>
-<link href="<?php echo Url::toRoute('/css/datepicker_popup.css',true);?>" rel="stylesheet">
-
-<script src="<?php echo Url::toRoute('/js/bootstrap-datepicker.js',true);?>"></script>
-
-<script src="<?php echo Url::toRoute('/js/bootstrap-select.js',true);?>"></script>        
-
 <!--<script src="js/main.js"></script>-->
 
 <!-- megamenu script -->
@@ -967,8 +954,7 @@ async:false,
 type:"post",
 data:"customer_name="+fname+"&customer_last_name="+lname+"&email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&gender="+gender+"&phone="+phone+"&password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
 success:function(data)
-{
- alert(data);
+{ 
 if(data==0)
 {
 jQuery('#myModal1').modal('hide');
@@ -984,7 +970,6 @@ else if(data==1)
 jQuery('#myModal1').modal('hide');
 window.setTimeout(function(){location.reload()})
 }
-
 }
 });
 }
@@ -2188,7 +2173,6 @@ function show_register_modal_true()
 	jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Registration completed successfully.<br>Confirmation link send to your registered email-id!</span>');
 	window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
 }
-
 </script>
 <?php 
 if(Yii::$app->session->get('register')==1){
@@ -2197,7 +2181,7 @@ if(Yii::$app->session->get('register')==1){
 window.onload=show_register_modal_true();
 /* Registration Completed start*/
 </script>
-<?php Yii::$app->session->set('register','0');} ?>
+<?php Yii::$app->session->set('register',0);} ?>
 
 
 <script type="text/javascript">

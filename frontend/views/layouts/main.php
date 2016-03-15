@@ -32,8 +32,7 @@ $this->beginPage()
   <title><?= Html::encode($this->title) ?></title>
   <?php $this->head() ?>
 		<link rel="shortcut icon" href="<?php echo Url::toRoute('/frontend/web/images/favicon.png',true);?>" type="image/x-icon"/>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
- 	</head>
+		</head>
 	<body class="has-js">
 		<!-- <div class="fullpage" style="width:100%;height:100%"></div> -->
 		<div id="loader2" style="display:none;text-align: center; position: fixed; width: 100%;height: 100%;z-index: 1;opacity: 0.6;background: #fff;"><img style="position:absolute;top:50%;" src="<?php echo Url::toRoute('/images/ajax-loader.gif',true); ?>" title="Loader"></div>
