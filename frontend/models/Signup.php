@@ -29,22 +29,11 @@ class Signup extends Model
             // the name, email, subject and body attributes are required
             [['customer_name', 'customer_last_name', 'email', 'password', 'confirm_password', 'bday', 'bmonth', 'byear', 'gender', 'phone'], 'required'],
             ['email', 'email'],
-            ['email', 'unique_email'],
+           // ['email', 'unique_email'],
             ['confirm_password', 'compare', 'compareAttribute' => 'password'],
         ];
     }
 
-    public function unique_email()
-    {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT customer_id FROM whitebook_customer WHERE customer_email="'.$this->email.'"');
-        $email = $command->queryAll();
-        if (count($email) > 0) {
-            return $this->addError('email', 'Email already exist!');
-        } else {
-            return true;
-        }
-    }
     public function signup_customer($st, $customer_activation_key)
     {
         $customer_password = Yii::$app->getSecurity()->generatePasswordHash($st['password']);

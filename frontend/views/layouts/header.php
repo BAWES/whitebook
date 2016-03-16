@@ -8,12 +8,10 @@ $action = Yii::$app->controller->action->id;
 if(isset(Yii::$app->params['header1']))
 {
 ?>
-
-<!-- END plan page header -->        
-
-<?php } else { ?>
-
-<!-- header main start  -->        
+<!-- END plan page header -->
+<?php } else {   
+  ?>
+<!-- header main start  -->
 <header id="top_header" class="ma5-page">
 <!-- home top header login det -->
 <div class="border-top-yellow" role="navigation">
@@ -27,7 +25,6 @@ if(isset(Yii::$app->params['header1']))
 <!--div class="col-xs-4 responsive-hid"></div-->
 <div class="logo_header col-xs-10 text-center padding-right0">
 <a href="<?= Url::toRoute('/home',true);?>" title="THEWHITEBOOK"><img src="<?php echo Url::toRoute('/images/mobile_logo.svg',true);?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
-
 <div class="search_header col-xs-3">
 <div class="input-group">
 <div id="navigation-bar">
@@ -389,6 +386,3 @@ foreach($event_type as $e) { ?>
 </div>
 </nav> 
 <!--mobile menu navigation end-->
-
-
-

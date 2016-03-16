@@ -1,8 +1,8 @@
 <?php
-
 namespace frontend\controllers;
 
 use Yii;
+use yii\web\Controller;
 use backend\models\Cms;
 use backend\models\Vendoritem;
 use backend\models\Vendor;
@@ -12,6 +12,7 @@ use backend\models\Faq;
 use backend\models\Themes;
 use frontend\models\Website;
 use frontend\models\Users;
+use yii\web\Session;
 
 class DefaultController extends BaseController
 {
@@ -50,7 +51,13 @@ class DefaultController extends BaseController
     public function init()
     {
         parent::init();
-        yii::$app->language = 'en-EN';
+        yii::$app->language = 'en-EN';        
+    }
+
+    public function  beforeAction($action)
+    {
+        $session = Yii::$app->session;
+        return true; 
     }
 
     public function actionIndex()

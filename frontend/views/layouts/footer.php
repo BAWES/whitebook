@@ -44,7 +44,7 @@ use frontend\models\Users;
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="login_button">
 <?php echo Yii::t('frontend','LOGIN');?></button>
 </div>
-<div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::toRoute('ajax-loader.gif',true);?>" title="Loader"></div>
+<div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
 <span class="text-center forgotpwd"><a data-target="#forgotPwdModal" onclick="forgot_modal();"  data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#forgotPwdModal"> Forgot your password</a></span>
 </div>
 </div>
@@ -106,7 +106,7 @@ use frontend\models\Users;
 <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();">NEW USER</button>
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="forgot_button" name="forgot_button">Send</button>
 </div>
-<div id="forgot_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::toRoute('ajax-loader.gif',true);?>" title="Loader"></div>
+<div id="forgot_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
 
 <span class="text-center forgotpwd">
 <a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"> Sign in</a>
@@ -156,7 +156,7 @@ use frontend\models\Users;
 <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_reset_password();">NEW USER</button>
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="reset_button" name="reset_button">Submit</button>
 </div>
-<div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::toRoute('ajax-loader.gif',true);?>" title="Loader"></div>
+<div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
 
 <span class="text-center forgotpwd">
 <a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"> Sign in</a>
@@ -326,9 +326,9 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 </div>
 </div> -->
 
-<div id="register_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::toRoute('/ajax-loader.gif',true);?>" title="Loader"></div>
+<div id="register_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
 <div class="button-signin">                                
-<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::toRoute('/ajax-loader.gif',true);?>" title="Loader"></div>
+<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
 <button type="button" id="register" name="register" class="btn btn-primary btn-lg btn-block login_btn">Register</button>
 </div>
 <span class="text-center forgotpwd">Already a member?<a data-target="#myModal" onclick="show_mydata();" data-toggle="modal" title="Sign in" class="actionButtons" href="">
@@ -1908,29 +1908,6 @@ loop: true,
 autoPlay:false
 });
 
-// jQuery('.twb-slider').each(function()
-// {
-// 	var get_id = jQuery(this).attr('id');
-	
-// 	var viewport = jQuery(window).width();	
-// 	var itemCount = jQuery('#'+get_id).find(".owl-item").length;	
-	
-// if(
-//     (viewport >= 900 && itemCount < 5) //desktop
-//     || ((viewport >= 600 && viewport < 900) && itemCount > 2) //desktopsmall
-//     || ((viewport >= 479 && viewport < 600) && itemCount > 2) //tablet
-//     || (viewport < 479 && itemCount > 2) //mobile
-// )
-// {
-// 	alert('hide');
-//      jQuery('.owl-controls.clickable').hide();
-// } 
-// else
-// {
-// 	//alert('show');
-//      jQuery('.owl-controls.clickable').show();
-// }
-// });
 /*home slider new end*/
 </script>
 <script type="text/javascript">
@@ -2035,11 +2012,7 @@ window.onload=default_session_data(1);
 if(!empty($fav)){?>
 window.onload=default_session_data(<?= Yii::$app->session->get('favourite_status')?>);
 <?php Yii::$app->session->set('favourite_status',''); }?>
-</script>
 
-
-
-<script>
 function display_event_modal()
 { 
 jQuery('#EventModal').modal('show');
@@ -2078,8 +2051,7 @@ window.onload=display_reset_password_modal;
 
 </script>
 <?php } ?>
-
-       <script type="text/javascript">
+<script type="text/javascript">
 /* BEGIN ADD EVENT */
  function addevent1(item_id)
 {
@@ -2092,14 +2064,11 @@ success:function(data)
 jQuery('#addevent').html(data);	
 jQuery('#eventlist'+item_id).selectpicker('refresh');
 jQuery('#add_to_event').modal('show');
-
 }
 });
 } 
-
 /* END ADD EVENT */
 </script>
-
 <?php
 $event_status=Yii::$app->session->get('event_status');
 if($event_status>0){
@@ -2107,8 +2076,8 @@ if($event_status>0){
 <script type="text/javascript">
 var x='<?= $event_status;?>';
 window.onload=addevent1(x);
-       </script>
-       <?php Yii::$app->session->set('event_status','0');} ?>
+</script>
+<?php Yii::$app->session->set('event_status','0');} ?>
        
 
 <script type="text/javascript">
@@ -2162,10 +2131,7 @@ window.onload=show_password_reset_modal_true();
 </script>
 <?php Yii::$app->session->set('key','0');} ?>
 
-
-
 <script type="text/javascript">
-	
 /* Registration Completed start*/
 function show_register_modal_true()
 {
@@ -2174,7 +2140,7 @@ function show_register_modal_true()
 	window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
 }
 </script>
-<?php 
+<?php
 if(Yii::$app->session->get('register')==1){
 ?>
 <script type="text/javascript">
@@ -2182,11 +2148,8 @@ window.onload=show_register_modal_true();
 /* Registration Completed start*/
 </script>
 <?php Yii::$app->session->set('register',0);} ?>
-
-
 <script type="text/javascript">
 /* Registration Completed start*/
-
 function show_event_modal_true()
 { 
 	var event_name='<?=Yii::$app->session->get('event_name');?>';

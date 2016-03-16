@@ -110,7 +110,6 @@ public function actionSignup()
 {
 $model = new Signup();
 $error = array();
-//echo $_POST['_csrf'];
 if ($_POST['_csrf']) {
 $model->attributes = $_POST;
 
@@ -132,7 +131,6 @@ $body = Yii::$app->params['SIGNUP_TEMPLATE'];
 $body = str_replace('%NAME%', $model->customer_name, $body);
 $body = str_replace('%MESSAGE%', $message, $body);
 $to = 'mariyappan@technoduce.com';
-
 Yii::$app->newcomponent->sendmail($to, $subject, $content, $message, $template);
 $this->redirect(Yii::$app->params['BASE_URL']);
 echo '1';
@@ -146,8 +144,6 @@ $this->redirect(Yii::$app->params['BASE_URL']);
 } else {
 $error = $model->errors;
 print_r($model->getErrors());
-die;
-
 die;
 }
 }
