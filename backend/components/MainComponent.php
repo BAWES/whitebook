@@ -7,11 +7,12 @@ use yii\base\InvalidConfigException;
 use backend\models\Admin;
 use backend\models\Vendor;
 use backend\models\Siteinfo;
+use backend\models\Smtp;
 
 class MainComponent extends Component
 {
 public function sendmail($to,$subject,$content = false,$message = false,$template = false )
-{	
+{
 $from = 'a.mariyappan88@gmail.com';
 //add headers
 $headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -23,7 +24,7 @@ if($template == 'USER-REGISTER')
 {
 $siteinfo = Siteinfo::find()->asArray()->all();
 $subject="Customer registered.";
-$msg="New customer registered our whitebook.";
+//$msg="New customer registered our whitebook.";
 $content = '<html>
 <head>
 <title>User Register</title>
@@ -58,7 +59,7 @@ Hi Admin ,
 <tr>
 <td width="20"></td>
 <td style=" font:normal 15px arial; color:#333333;">
-'.$msg.'						
+'.$message.'						
 </td>
 <td width="20"></td>
 </tr>
@@ -335,15 +336,7 @@ $send = Yii::$app->mailer->compose()
 ->setSubject($subject)
 ->setHtmlBody($content)
 ->send();
-}	
-
-if($send) {	
-echo 'yes';
-}	else
-{	
-echo 'no';
 }
-die;
 } 
 // Status Image title
 public function statusTitle($status)

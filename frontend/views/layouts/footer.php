@@ -44,7 +44,7 @@ use frontend\models\Users;
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="login_button">
 <?php echo Yii::t('frontend','LOGIN');?></button>
 </div>
-<div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
+<div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::toRoute('/frontend/web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 <span class="text-center forgotpwd"><a data-target="#forgotPwdModal" onclick="forgot_modal();"  data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#forgotPwdModal"> Forgot your password</a></span>
 </div>
 </div>
@@ -106,7 +106,7 @@ use frontend\models\Users;
 <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();">NEW USER</button>
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="forgot_button" name="forgot_button">Send</button>
 </div>
-<div id="forgot_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
+<div id="forgot_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::toRoute('/frontend/web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 
 <span class="text-center forgotpwd">
 <a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"> Sign in</a>
@@ -156,7 +156,7 @@ use frontend\models\Users;
 <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_reset_password();">NEW USER</button>
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="reset_button" name="reset_button">Submit</button>
 </div>
-<div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
+<div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::toRoute('/frontend/web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 
 <span class="text-center forgotpwd">
 <a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"> Sign in</a>
@@ -326,9 +326,9 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 </div>
 </div> -->
 
-<div id="register_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
+<div id="register_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::toRoute('/frontend/web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 <div class="button-signin">                                
-<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>"  title="Loader"></div>
+<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::toRoute('/frontend/web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 <button type="button" id="register" name="register" class="btn btn-primary btn-lg btn-block login_btn">Register</button>
 </div>
 <span class="text-center forgotpwd">Already a member?<a data-target="#myModal" onclick="show_mydata();" data-toggle="modal" title="Sign in" class="actionButtons" href="">
@@ -451,6 +451,7 @@ via email, phone or live chat.</p>
 .datepicker{z-index:1151 !important;}
 </style>
 <script type="text/javascript">
+var jQuery = $;
 jQuery(document).ready(function () {
  jQuery('#phone,#reg_email').bind("paste",function(e) {
      e.preventDefault();

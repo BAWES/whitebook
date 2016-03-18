@@ -264,12 +264,12 @@ $vendor_name = Vendor::getvendorname($_GET['vid']); ?>
  if(!empty($imagedata)) {
          	$img= $action = '';
          	foreach ($imagedata as $value) { 
-			$img .= '"<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
-			$action .='{   	 					        
-			        url: "'.Url::to(['/admin/vendoritem/deleteitemimage']).'",
-			        key: '.$value->image_id.',       
-			    }'.',';
-				}
+       			$img .= '"<img src='.Yii::getAlias('@vendor_item_images_210').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
+       			$action .='{   	 					        
+       			        url: "'.Url::to(['/admin/vendoritem/deleteitemimage']).'",
+       			        key: '.$value->image_id.',       
+       			    }'.',';
+       				}
 			
 			$img = rtrim($img,',');
 			$action = rtrim($action,',');

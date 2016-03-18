@@ -418,7 +418,7 @@ class Users extends Model
 
     public static function check_email_exist($custemail)
     {
-        $sql = 'SELECT customer_org_password FROM whitebook_customer where customer_activation_key!="" and customer_activation_status="1" and trash="default" and customer_email="'.$custemail.'"';
+        $sql = 'SELECT customer_email FROM whitebook_customer where customer_email="'.$custemail.'"';
         $command = Yii::$app->DB->createCommand($sql);
         $forget = $command->queryAll();
         return $forget;

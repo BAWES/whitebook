@@ -126,12 +126,11 @@ $message = 'Thank you for registration with '.Yii::$app->params['SITE_NAME'].'.<
 //$msg="Thank you for registration with ".SITE_NAME.".</br><a href=".BASE_URL."/confirm-email/".$customer_activation_key.''." title='Click Here'>CLICK HERE</a> to activate your account.";
 $subject = Yii::$app->params['SIGNUP_SUBJECT'];
 $template = 'USER-REGISTER';
-$content = 'test';
 $body = Yii::$app->params['SIGNUP_TEMPLATE'];
 $body = str_replace('%NAME%', $model->customer_name, $body);
 $body = str_replace('%MESSAGE%', $message, $body);
 $to = 'mariyappan@technoduce.com';
-Yii::$app->newcomponent->sendmail($to, $subject, $content, $message, $template);
+Yii::$app->newcomponent->sendmail($to, $subject, $body, $message, $template);
 $this->redirect(Yii::$app->params['BASE_URL']);
 echo '1';
 die;

@@ -266,7 +266,7 @@ foreach($event_type as $e) { ?>
 </div>
 <div id="eventresult" style="color:red"></div>
 <div class="eventErrorMsg error" style="color:red;margin-bottom: 10px;"></div>
-<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::toRoute('/backend/web/uploads/ajax-loader.gif',true);?>" title="Loader"></div>
+<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::toRoute('/frontend/web/images/ajax-loader.gif',true);?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
 <button type="button" id="create_event_button" name="create_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE_EVENT');?>"><?php echo Yii::t('frontend','CREATE_EVENT');?></button>
@@ -386,3 +386,145 @@ foreach($event_type as $e) { ?>
 </div>
 </nav> 
 <!--mobile menu navigation end-->
+
+<script>
+ jQuery(document).ready(function(){  
+jQuery('#basket_list').hide();
+jQuery("#basket_menu").hover(
+  function () {
+    jQuery('#basket_list').show();  
+  }, 
+  function () {
+  // jQuery('#basket_list').hide(); 
+  }
+);
+
+      jQuery('#sear_button,#desk-search-label').click(function(){
+        jQuery('#search_input_header').focus();
+        if(jQuery("#search_input_header").css("display") == "none")
+        {
+          jQuery("#sear_button").hide();
+          jQuery("#sear_button_submit").show();
+        }
+        else
+        {
+          jQuery("#sear_button").show();
+          jQuery("#sear_button_submit").hide(); 
+        }
+        jQuery('#search_input_header').toggle('slide', { direction: 'right' }, 700, function(){          
+          jQuery('#search_input_header').focus();
+        }); 
+        if(jQuery('#search-close1').hasClass('visible'))
+          jQuery('#search-close1').removeClass('visible');
+        return false;
+      });
+      
+      jQuery("html").click(function(){
+        jQuery('#search-close1').removeClass('visible');
+        jQuery('#search_input_header').hide('slide', { direction: 'right' }, 700, function(){
+          jQuery('#search_input_header').val("");
+          jQuery("#sear_button_submit").hide();
+          jQuery("#sear_button").show();
+        });
+      });
+
+      
+      jQuery("#search-close1").click(function(){
+      
+    jQuery( "#search_list_fail1" ).html('');
+        jQuery(this).removeClass('visible');
+        jQuery('#search_input_header').val("").focus();
+        jQuery( "#search_list" ).html('');
+        //jQuery('#search_input_header').focus();
+        return false;
+      });
+      jQuery("#search_input_header").click(function(){  
+        return false;
+      });      
+      jQuery('#desk-search-label').css({'position':'absolute'});      
+});
+/*jQuery('.container_eventslider').click(function(){ 
+jQuery('#search_input_header').toggle('slide', { direction: 'left' }, 900); 
+});*/
+
+</script>
+
+<style>
+.cart-dropdown {
+   border: 1px solid #999;
+  overflow: hidden;
+  -webkit-transition: max-height .8s;
+  -moz-transition: max-height .8s;
+  transition: max-height .8s;
+  background: #fff;
+  box-shadow: 0 0 3px 0 rgba(161,161,161,.5);
+  position: absolute;
+  width: 385px;
+  z-index: 20;
+  margin: 0 0 0 -126px;
+  padding: 10px;
+}
+.cart-dropdown a:last-child {
+  margin-right: 0;
+}
+.cart-dropdown ul li.col1 h5 {
+  text-align: left;
+  margin-bottom: 10px;
+}
+.cart-dropdown ul li.col1 span.row1 {
+  float: left!important;
+  color: #828282!important;
+  width: 40px;
+  text-align: left;
+}
+.cart-dropdown ul li.col1 span.row2 {
+  float: left!important;
+  color: #000!important;
+  width: 65px;
+  text-align: left;
+}
+.cart-dropdown ul li.col1 span.row2 md-select {
+  padding: 0!important;
+  margin-top: -9px;
+}
+md-select .md-select-value {
+  border-bottom-color: rgba(0,0,0,0.12);
+}
+.md-select-value {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 2px 2px 1px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  background-color: transparent;
+  position: relative;
+  box-sizing: content-box;
+  min-width: 64px;
+  min-height: 26px;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+.md-select-value :first-child {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: calc(100% - 2*8px);
+  -webkit-transform: translate3d(0,2px,0);
+  transform: translate3d(0,2px,0);
+}
+.cart-dropdown ul{padding:0; }
+div#style-3 {
+  border-top: 1px solid #999;
+}
+div#style-3 li:first-child{padding:0}
+.cart-button button{height:35px;background:#000;color:#fff;}
+.cart-button button:hover{background:#333;color:#fff;}
+</style>

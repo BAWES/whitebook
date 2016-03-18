@@ -3,7 +3,7 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use app\models\Smtp;
+use backend\models\Smtp;
 use yii\web\Controller;
 use backend\models\Authitem;
 use yii\web\NotFoundHttpException;

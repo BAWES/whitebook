@@ -13,7 +13,8 @@ use backend\models\Themes;
 use frontend\models\Website;
 use frontend\models\Users;
 use yii\web\Session;
-
+use yii\db\Query;
+use backend\models\Smtp;
 class DefaultController extends BaseController
 {
     public function behaviors()
@@ -61,7 +62,7 @@ class DefaultController extends BaseController
     }
 
     public function actionIndex()
-    {
+    {   
         $website_model = new Website();
         $product_list = $website_model->get_featured_product_id();
         $featured_product = $website_model->get_featured_product();

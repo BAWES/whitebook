@@ -21,7 +21,6 @@ $this->beginPage();
 <?php $this->head() ?>
 <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl();?>" type="image/x-icon" /> 
 <!-- BEGIN CORE JS FRAMEWORK-->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-1.8.3.min.js" type="text/javascript"></script>
 <body class="">
 <?php $this->beginBody() ?>
 <?php $this->beginContent('@app/views/layouts/admin/header.php'); ?>
