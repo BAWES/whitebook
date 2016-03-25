@@ -527,7 +527,7 @@ allowPageScroll: "vertical"
 /*Responsive menu script end*/
 });
 
-jQuery('#dp3').datepicker({
+jQuery('#dp3,#delivery_date').datepicker({
 format: 'dd-mm-yyyy',
 startDate:'today',
 autoclose:true,

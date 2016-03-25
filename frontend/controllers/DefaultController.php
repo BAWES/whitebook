@@ -63,6 +63,21 @@ class DefaultController extends BaseController
 
     public function actionIndex()
     {   
+      /*  echo '<pre>';
+        $query = new Query;
+        // compose the query
+        $query->select('category_id, category_name')
+            ->from('whitebook_category')
+            ->limit(10);
+            $rows = $query->all();
+          //  $query = \backend\models\Category::find()->where(['category_id'=>'5']);
+           // echo $query->createCommand()->sql;
+            echo $query->createCommand()->getRawSql();*/
+           // print_r($customers);die;
+       // $s = \backend\models\Category::find()->select('category_id,category_name')->all();
+            
+        // build and execute the query
+       // $rows = $query->all();
         $website_model = new Website();
         $product_list = $website_model->get_featured_product_id();
         $featured_product = $website_model->get_featured_product();

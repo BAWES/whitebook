@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] =ucfirst($model['item_name']);
 </div>
 <div class="col-md-2 padding8">
 <div class="form-group date-time">
-<input class="form-control" type="text" id="delivery_date" placeholder="Delivery Date">
+<input class="form-control required datetimepicker date1" type="text" id="delivery_date" placeholder="Delivery Date">
 </div>
 </div>
 
@@ -723,7 +723,7 @@ function addevent(item_id)
 {	
 jQuery.ajax({
 type:'POST',
-url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('product/addevent'); ?>",
+url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('addeventproduct'); ?>",
 data:{'item_id':item_id},
 success:function(data)
 {
@@ -738,6 +738,7 @@ jQuery('#add_to_event').modal('show');
 /* END ADD EVENT */
 
 /* BEGIN Buy Item */
+<?php if(isset(Yii::$app->params['CUSTOMER_ID'])) {?>
 jQuery('.buy_item').click(function(){    
     var item_id = (jQuery(this).attr('id'));    
     jQuery.ajax({
@@ -750,8 +751,20 @@ jQuery('.buy_item').click(function(){
         }
     });
 });
+<?php } ?>
 /* END BUY Item */
-
+$("#delivery_date").datepicker({
+    onSelect: function(date, instance) {
+        $.ajax
+        ({
+              type: "POST",
+              url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('users/addtobasket'); ?>",
+              data: "date="+date
+              success: function(result)
+              {
+                  //do something
+              }
+         });  
+     }
+});
 </script>
-
-
