@@ -37,15 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
   <div class="tab-content">
 <!-- Begin First Tab -->
    <div class="tab-pane" id="1" >
-   <?php if(!$model->isNewRecord)
-   {
+   <?php /*if(!$model->isNewRecord)
+   {    
    		$time = explode(':',$model->vendor_working_hours);   		
    		 $model->vendor_working_hours = $time[0];
    		 $model->vendor_working_min = $time[1];
    		 $time1 = explode(':',$model->vendor_working_hours_to); 
    		 $model->vendor_working_hours_to = $time1[0];
    		 $model->vendor_working_min_to = $time1[1];
-   }?>
+   }*/ ?>
     <div class="form-group vendor_logo">
 	<?= $form->field($model, 'vendor_logo_path',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
 	])->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))->fileInput()->hint('Logo Size 150 * 250') ?>

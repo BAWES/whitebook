@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
         
 			[
 				'attribute'=>'exception_date',
-				'format' => ['date', DATE],
+				'format' => ['date', Yii::$app->params['dateFormat']],
 				'label'=>'exception date',			
 			],	
             'exception_capacity',

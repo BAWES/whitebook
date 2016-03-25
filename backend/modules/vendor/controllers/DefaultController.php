@@ -209,7 +209,7 @@ class DefaultController extends Controller
 			echo Yii::$app->session->setFlash('danger', "Something went wrong!");
             return $this->render('profile', ['model' => $model]);
 			}
-		}
+		}		
 		return $this->render('profile', ['model' => $model,'vendor_contact_number'=>$vendor_contact_number,'vendor_categories'=>$vendor_categories]);
 	
 	}	

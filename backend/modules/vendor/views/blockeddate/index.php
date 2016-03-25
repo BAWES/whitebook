@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],          
 			[
 				'attribute'=>'block_date',
-				'format' => ['date', DATE],
+				'format' => ['date', Yii::$app->params['dateFormat']],
 				'label'=>'blocked date',			
 			],	
             ['class' => 'yii\grid\ActionColumn'],
