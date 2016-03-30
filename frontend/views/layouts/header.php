@@ -4,13 +4,7 @@ use yii\helpers\Url;
 use frontend\models\Website;
 //define('ACTION',Yii::$app->controller->action->id);
 $action = Yii::$app->controller->action->id;
-
-if(isset(Yii::$app->params['header1']))
-{
 ?>
-<!-- END plan page header -->
-<?php } else {   
-  ?>
 <!-- header main start  -->
 <header id="top_header" class="ma5-page">
 <!-- home top header login det -->
@@ -24,7 +18,7 @@ if(isset(Yii::$app->params['header1']))
  </span></a></div>
 <!--div class="col-xs-4 responsive-hid"></div-->
 <div class="logo_header col-xs-10 text-center padding-right0">
-<a href="<?= Url::toRoute('/home',true);?>" title="THEWHITEBOOK"><img src="<?php echo Url::toRoute('/images/mobile_logo.svg',true);?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
+<a href="<?= Url::toRoute('/home',true);?>" title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
 <div class="search_header col-xs-3">
 <div class="input-group">
 <div id="navigation-bar">
@@ -52,9 +46,9 @@ if(isset(Yii::$app->params['header1']))
 <div class="mobile-logo-text col-xs-12 text-center padding0">
 <?php if(Yii::$app->params['CUSTOMER_ID']=='') { ?>
 
-<a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK"><img src="<?php echo Url::toRoute('/images/mywhitebook_vector.svg',true);?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
+<a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg');?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
 <?php } else { ?>
-<a href="<?= Url::toRoute('/events',true);?>" title="THEWHITEBOOK"><img src="<?php echo Url::toRoute('/images/mywhitebook_vector.svg',true);?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
+<a href="<?= Url::toRoute('/events',true);?>" title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg');?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
 <?php } ?>
 </div>
 
@@ -70,7 +64,7 @@ if(isset(Yii::$app->params['header1']))
 </button>
 </div>
 <div class="logo_header">
-<a href="<?= Url::toRoute('/home',true);?>"  title="THEWHITEBOOK"><img src="<?php echo Url::toRoute('/images/mywhitebook_vector.svg',true);?>" alt="THEWHITEBOOK" title="THEWHITEBOOK" /></a>
+<a href="<?= Url::toRoute('/home',true);?>"  title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg');?>" alt="THEWHITEBOO" title="THEWHITEBOO" /></a>
 </div>
 
 <div class="navbar-collapse collapse">
@@ -205,7 +199,7 @@ if(isset(Yii::$app->params['header1']))
 </div>
 </header>
 <!-- header main end  --> 
-<?php } ?>
+
 
 <!-- BEGIN Create event Modal Box -->
 <div class="modal fade" id="EventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
