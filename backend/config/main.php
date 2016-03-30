@@ -11,7 +11,7 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['gii'],
+    'bootstrap' => ['log'],
     'components' => [
       'request' => [
           'enableCsrfValidation' => false,
@@ -80,9 +80,6 @@ return [
         ],
      ],
     'modules' => [
-        'gii' => [
-          'class' => 'yii\gii\Module',
-        ],
         'admin' => [
           'class' => 'backend\modules\admin\Module'
         ],
