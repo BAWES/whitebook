@@ -18,10 +18,10 @@ $model=new Website();
 <?php $i=1;
 foreach($banner as $b) { ?>
 <div class="item">
-<?php if($b['slide_type']=='video') { ?>
+<?php if($b['slide_type']=='video1') { ?>
 <object width="100%" height="600" data="<?php echo $b['slide_video_url'];?>" id="video_click"></object>	
 <?php } else { ?>
-<img src="<?php echo Url::toRoute('/backend/web/uploads/banner_images/banner_'.$b['slide_id'].'.png',true);?>" 
+<img src="<?php echo Yii::getAlias('@uploads/banner_images/banner_'.$b['slide_id'].'.png',true);?>" 
 class="ls-bg" style="top: 80px;"  alt="<?php echo $b['slide_title'];?>" width="1322" />
 <?php } ?>
 </div>                    
@@ -33,6 +33,7 @@ class="ls-bg" style="top: 80px;"  alt="<?php echo $b['slide_title'];?>" width="1
 </div>
 </section>
 <?php }?>
+
 <!-- banner section end -->
 
 <!-- Content start -->
@@ -42,6 +43,7 @@ class="ls-bg" style="top: 80px;"  alt="<?php echo $b['slide_title'];?>" width="1
 
 <!-- Events slider start -->
 <?php 
+
 $customer_id = Yii::$app->session->get('customer_id');
 if($customer_id!='') {
 require(__DIR__ . '/../product/events_slider.php'); 
@@ -50,13 +52,14 @@ else
 {
 
 ?>
-<span class="first_events"><img src="<?php echo Url::toRoute('/frontend/web/images/my_book_desk.svg',true);?>" alt="My White Book"/></span>	
+<span class="first_events"><img src="<?php echo Yii::getAlias('@frontend_app_images/my_book_desk.svg');?>" alt="My White Book"/></span>	
 <div class="creatfirst_events">
 <p data-example-id="active-anchor-btns" class="bs-example">
 <a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal" onclick="show_login_modal(-1);" title="<?php echo Yii::t('frontend','CREATE_YOUR_FIRST_EVENT');?>"><?php echo Yii::t('frontend','CREATE_YOUR_FIRST_EVENT');?></a>
 </p>
 </div>
 <?php } ?>
+
 <!-- Events slider end -->
 
 </div>
@@ -64,7 +67,7 @@ else
 <ul>
 <li>              
 <div class="plan_list">
-<img src="<?php echo Url::toRoute('/frontend/web/images/plan-home.jpg',true)?>" alt="images"/> 
+<img src="<?php echo Yii::getAlias('@frontend_app_images/plan-home.jpg')?>" alt="images"/> 
 <div class="inner_content_plan">
 <h1>Plan</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
@@ -74,7 +77,7 @@ else
 </li>
 <li>
 <div class="plan_list">
-<img src="<?php echo Url::toRoute('/frontend/web/images/shop-home.jpg',true); ?>" alt="images"/> 
+<img src="<?php echo Yii::getAlias('@frontend_app_images/shop-home.jpg'); ?>" alt="images"/> 
 <div class="inner_content_plan">
 <h1>SHOP</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
@@ -83,7 +86,7 @@ else
 </div>
 </li>
 <li><div class="plan_list">
-<img src="<?php echo Url::toRoute('/frontend/web/images/experience-home.jpg',true);?>" alt="images"/> 
+<img src="<?php echo Yii::getAlias('@frontend_app_images/experience-home.jpg');?>" alt="images"/> 
 <div class="inner_content_plan">
 <h1>Experience</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
@@ -93,6 +96,7 @@ else
 </li>
 </ul>  
 </div>
+
 <!-- BEGIN FEATURE GROUP ITEM-->
 <?php
 
@@ -119,6 +123,7 @@ if(!empty($feature_group_sql_result)){
 <div class="flexslider3">
 <div id="demo">
 <div class="owl-carousel twb-slider" id="feature-group-slider" >   
+
 <?php 
 $i=0;
 
@@ -145,13 +150,11 @@ $sql='SELECT image_path FROM whitebook_image WHERE item_id='.$f['item_id'].' and
 $command = Yii::$app->DB->createCommand($sql);
 $out = $command->queryAll();
 if($out){
-$imglink=Yii::getAlias('@vendor_image').'/'.$out[0]['image_path'];
-$baselink= Url::toRoute(Yii::getAlias('@vendor_image').'/'.$out[0]['image_path'],true);
-/*$imglink=DOCROOT.'backend/web/uploads/vendor_images/'.$out[0]['image_path'];
-$baselink=BASE_URL.'/backend/web/uploads/vendor_images/'.$out[0]['image_path'];*/
+$imglink=Yii::getAlias('@vendor_images').$out[0]['image_path'];
+$baselink= Url::toRoute(Yii::getAlias('@vendor_images').'/'.$out[0]['image_path'],true);
 }else { 
-$imglink=Yii::getAlias('@vendor_image').'/no_image.jpg';
-$baselink= Url::toRoute(Yii::getAlias('@vendor_image').'/no_image.jpg',true);
+$imglink=Yii::getAlias('@vendor_images').'/no_image.png';
+$baselink= Url::toRoute(Yii::getAlias('@vendor_images').'no_image.png',true);
 }?>
 <div class="item">
 <div class="fetu_product_list index_redirect" data-hr='<?php echo Url::toRoute('/product/'.$f["slug"]);?>'>
@@ -175,6 +178,7 @@ $baselink= Url::toRoute(Yii::getAlias('@vendor_image').'/no_image.jpg',true);
 <!-- END FEATURE PRODUCT DESKTOP  -->
 <!-- BEGIN FEATURE PRODUCT RESPONSIVE -->
 <?php }?> 
+
 </div> 
 </section>
 <!-- content main end  -->
@@ -245,6 +249,7 @@ foreach($featured_product as $f) {  ?>
 </div>
 </div>
 <?php } } ?>
+
 <!-- end --> 
 <!-- BEGIN RESPONSIVE FOR HOME PAGE PLAN, SHOP, EXPERIENCE IMAGES WITH A TAG IMPORTANT-->
 <script type="text/javascript">
