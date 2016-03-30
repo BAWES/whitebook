@@ -11,12 +11,13 @@ use frontend\models\Website;
  */
 class BaseController extends Controller
 {
+    public $customer_id;
     public function init()
     {
         parent::init();
         $model = new Website();
         $general_settings = $model->get_general_settings();
-        $customer_id = Yii::$app->session->get('customer_id');
+        $this->customer_id = Yii::$app->session->get('customer_id');
         $customer_email = Yii::$app->session->get('customer_email');
         $customer_name = Yii::$app->session->get('customer_name');
 
@@ -32,11 +33,7 @@ class BaseController extends Controller
         Yii::$app->params['IMAGE_PATH'] = Yii::$app->request->hostInfo.'/images/';
         Yii::$app->params['IMAGE_UPLOAD_PATH'] = Yii::$app->request->hostInfo.'/backend/web/uploads/';
 
-        Yii::$app->params['CUSTOMER_ID'] = $customer_id;
-        Yii::$app->params['CUSTOMER_EMAIL'] = $customer_email;
-        Yii::$app->params['CUSTOMER_NAME'] = $customer_name;
-
-        Yii::$app->params['CUSTOMER_ID'] = $customer_id;
+        Yii::$app->params['CUSTOMER_ID'] = $this->customer_id;
         Yii::$app->params['CUSTOMER_EMAIL'] = $customer_email;
         Yii::$app->params['CUSTOMER_NAME'] = $customer_name;
 
