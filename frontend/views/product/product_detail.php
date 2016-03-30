@@ -6,7 +6,9 @@ use backend\models\Vendoritempricing;
 use backend\models\Itemtype;
 use backend\models\Category;
 use yii\widgets\Breadcrumbs;
-$this->title='Whitebook - '.$model['item_name'];?>
+$this->title='Whitebook - '.$model['item_name'];
+
+?>
 
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com">
@@ -40,7 +42,7 @@ $this->params['breadcrumbs'][] =ucfirst($model['item_name']);
 <!-- Mobile start Here-->
 <div class="product_detail_section responsive-detail-section"><!--product detail start-->
 <div class="col-md-12 padding0">
-<div class="select_items_select desktop-menu">
+<div class="select_items_select desktop-menu" style="display:none">
 <div data-example-id="basic-forms" class="bs-example responsive_inner_top">
 <form>
 <div class="col-md-3 padding-right0 padding-right8">
@@ -65,7 +67,7 @@ $this->params['breadcrumbs'][] =ucfirst($model['item_name']);
 <div class="col-md-2 padding8">
 <div class="form-group">
 <div class="bs-docs-example">
-<select class="selectpicker" data-style="btn-primary" style="display: none;">
+<select class="selectpicker" data-style="btn-primary" style="display: none;" id="delivery-time">
 <option>Select Delivery Time</option>
 <?php
     /*foreach ($vendor_timeslot as $key => $value1) { ?>
@@ -104,11 +106,11 @@ $output = $command->queryAll();
 $img_count=count($output);
 foreach($output as $out){
 if($out){
-$imglink=Yii::getAlias('@vendor_image/').$out['image_path'];
-$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').$out['image_path'];
+$imglink=Yii::getAlias('@vendor_images/').$out['image_path'];
+$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_images/').$out['image_path'];
 }else { 
-$imglink=Yii::getAlias('@vendor_image/').'no_image.jpg';
-$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').'no_image.jpg';
+$imglink=Yii::getAlias('@vendor_images/').'no_image.png';
+$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_images/').'no_image.png';
 }?>
 <div class="item">   <img src="<?php echo $baselink;?>" alt="item detail image" style="width:530px;">
 </div>
@@ -125,17 +127,19 @@ $baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').'no_imag
 <div id="slider" class="flexslider display_none">
 <ul class="slides">
 
-<?php $sql='SELECT image_path FROM whitebook_image WHERE item_id='.$model['item_id'].' and module_type="vendor_item" order by vendorimage_sort_order'; 
+<?php 
+
+$sql='SELECT image_path FROM whitebook_image WHERE item_id='.$model['item_id'].' and module_type="vendor_item" order by vendorimage_sort_order'; 
 $command = Yii::$app->DB->createCommand($sql);
 $output = $command->queryAll();
 $img_count=count($output);
 foreach($output as $out){
 if($out){
-$imglink=Yii::getAlias('@vendor_image/').$out['image_path'];
-$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').$out['image_path'];
+$imglink=Yii::getAlias('@vendor_images/').$out['image_path'];
+$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_images/').$out['image_path'];
 }else { 
-$imglink=Yii::getAlias('@vendor_image/').'no_image.jpg';
-$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').'no_image.jpg';
+$imglink=Yii::getAlias('@vendor_images/').'no_image.jpg';
+$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_images/').'no_image.jpg';
 }?>
 <li>    <img src="<?php echo $baselink;?>" alt="item detail image" style="width:530px !important;">
 </li>
@@ -151,18 +155,18 @@ $command = Yii::$app->DB->createCommand($sql);
 $output = $command->queryAll();
 foreach($output as $out){
 if($out){
-$imglink=Yii::getAlias('@vendor_image/').$out['image_path'];
-$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').$out['image_path'];
+$imglink=Yii::getAlias('@vendor_images/').$out['image_path'];
+$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_images/').$out['image_path'];
 }else { 
-$imglink=Yii::getAlias('@vendor_image/').'no_image.jpg';
-$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').'no_image.jpg';
+$imglink=Yii::getAlias('@vendor_images/').'no_image.png';
+$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_images/').'no_image.png';
 }?>
 <li>    <img src="<?php echo $baselink;?>" alt="item detail image">
 </li>
 <?php }?>           
 </ul>
 </div>
-<?php }?>
+<?php } ?>
 </div>
 </div>
 <div class="col-md-6 product-right-width paddng0">
@@ -177,7 +181,8 @@ $baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').'no_imag
 <div class="responsive_width">
 <!-- add to event start -->
 
-<?php if(Yii::$app->params['CUSTOMER_ID']=='') { ?>
+<?php 
+if(Yii::$app->params['CUSTOMER_ID']=='') { ?>
 <a href="" data-toggle="modal" class="add_events" data-target="#myModal" title="Add to event"  onclick="add_event_login(<?php echo $model['item_id'];?>)"><span class="plus-icon-prod">Add to event</span></a>
 <?php } else { ?>
 <a  href="#" role="button" id="<?php echo $model['item_id'];?>" name="<?php echo $model['item_id'];?>" class="add_events"  data-target="#add_to_event<?php echo $model['item_id'];?>"   onclick="addevent('<?php echo $model['item_id']; ?>')" data-toggle="modal"  class="add_events" title="<?php echo Yii::t('frontend','ADD_EVENT');?>"><span class="plus-icon-prod"><?php echo Yii::t('frontend','ADD_EVENT');?></span></a>
@@ -187,7 +192,8 @@ $baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').'no_imag
 
 <!-- Add to favourite start -->
 
-<?php if(Yii::$app->params['CUSTOMER_ID']==''){?><a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id'];?>);"  title="Add to Favourite"><span class="heart-product"></span></a><?php } else { $k=array();
+<?php 
+if(Yii::$app->params['CUSTOMER_ID']==''){?><a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id'];?>);"  title="Add to Favourite"><span class="heart-product"></span></a><?php } else { $k=array();
 foreach($customer_events_list as $l){
 $k[]=$l['item_id'];
 } 
@@ -347,11 +353,11 @@ $sql='SELECT image_path FROM whitebook_image WHERE item_id='.$s['gid'].' and mod
 $command = Yii::$app->DB->createCommand($sql);
 $out = $command->queryAll(); 
 if($out){
-$imglink=Yii::getAlias('@vendor_image/').$out[0]['image_path'];
-$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/').$out[0]['image_path'];
+$imglink=Yii::getAlias('@vendor_images/').$out[0]['image_path'];
+$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_images/').$out[0]['image_path'];
 }else { 
-$imglink=Yii::getAlias('@vendor_image/no_image.jpg');
-$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_image/no_image.jpg');
+$imglink=Yii::getAlias('@vendor_images/no_image.png');
+$baselink=Yii::$app->params['BASE_URL'].Yii::getAlias('@vendor_images/no_image.png');
 }?> 
 <div class="item">
 <div class="fetu_product_list">
@@ -752,19 +758,19 @@ jQuery('.buy_item').click(function(){
     });
 });
 <?php } ?>
+
+
 /* END BUY Item */
-$("#delivery_date").datepicker({
-    onSelect: function(date, instance) {
-        $.ajax
-        ({
-              type: "POST",
-              url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('users/addtobasket'); ?>",
-              data: "date="+date
-              success: function(result)
-              {
-                  //do something
-              }
-         });  
-     }
+jQuery('#delivery_date').on('change',function(){
+    jQuery.ajax({
+        type:'POST',
+        url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('getdeliverytimeslot'); ?>",       
+        data:{'vendor_id':<?php echo $model['vendor_id'];?>,'sel_date':jQuery(this).val()},
+        success:function(data)
+        {
+          jQuery('.bs-docs-example #delivery-time').selectpicker('refresh');
+          jQuery('.bs-docs-example #delivery-time').html(data);
+        }
+    });
 });
 </script>
