@@ -5,6 +5,7 @@ use backend\models\Vendoritem;
 use backend\models\Vendor;
 use backend\models\Themes;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 $this->title = 'Home | Whitebook';
 
@@ -12,10 +13,10 @@ use frontend\models\Website;
 
 $model = new Website();
 ?>
-<!-- content main start -->  
+<!-- content main start -->
 <!-- banner section start -->
                 <?php if (count($banner) > 0) { ?>
-    <section id="banner_sections">     
+    <section id="banner_sections">
         <div class="banner_slider_content">
             <div class="carousel slide">
                 <div class="carousel-inner owl-carousel" id="home-banner-slider">
@@ -24,16 +25,16 @@ $model = new Website();
                             ?>
                         <div class="item">
                                  <?php if ($b['slide_type'] == 'video1') { ?>
-                                <object width="100%" height="600" data="<?php echo $b['slide_video_url']; ?>" id="video_click"></object>	
+                                <object width="100%" height="600" data="<?php echo $b['slide_video_url']; ?>" id="video_click"></object>
                         <?php } else { ?>
-                                <img src="<?php echo Yii::getAlias('@uploads/banner_images/banner_' . $b['slide_id'] . '.png', true); ?>" 
+                                <img src="<?php echo Yii::getAlias('@uploads/banner_images/banner_' . $b['slide_id'] . '.png', true); ?>"
                                      class="ls-bg" style="top: 80px;"  alt="<?php echo $b['slide_title']; ?>" width="1322" />
         <?php } ?>
-                        </div>                    
+                        </div>
         <?php $i++;
     } ?>
 
-                </div> 
+                </div>
             </div>
         </div>
     </div>
@@ -54,7 +55,9 @@ $model = new Website();
                 require(__DIR__ . '/../product/events_slider.php');
             } else {
                 ?>
-                <span class="first_events"><img src="<?php echo Yii::getAlias('@frontend_app_images/my_book_desk.svg'); ?>" alt="My White Book"/></span>	
+                <span class="first_events">
+                    <?= Html::img('@web/images/my_book_desk.svg', ['alt' => 'My White Book']) ?>
+                </span>
                 <div class="creatfirst_events">
                     <p data-example-id="active-anchor-btns" class="bs-example">
                         <a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal" onclick="show_login_modal(-1);" title="<?php echo Yii::t('frontend', 'CREATE_YOUR_FIRST_EVENT'); ?>"><?php echo Yii::t('frontend', 'CREATE_YOUR_FIRST_EVENT'); ?></a>
@@ -67,36 +70,37 @@ $model = new Website();
         </div>
         <div class="plan_sections">
             <ul>
-                <li>              
+                <li>
                     <div class="plan_list">
-                        <img src="<?php echo Yii::getAlias('@frontend_app_images/plan-home.jpg') ?>" alt="images"/> 
+                        <?= Html::img('@web/images/plan-home.jpg', ['alt' => 'Plan']) ?>
                         <div class="inner_content_plan">
                             <h1>Plan</h1>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
-                            <a href="<?php echo Url::toRoute('/plan', true); ?>" role="button" class="btn btn-default" title="Discover" href="javascript:">Discover</a>
+                            <a href="<?= Url::toRoute('plan/plans'); ?>" role="button" class="btn btn-default" title="Discover">Discover</a>
                         </div>
-                    </div> 
+                    </div>
                 </li>
                 <li>
                     <div class="plan_list">
-                        <img src="<?php echo Yii::getAlias('@frontend_app_images/shop-home.jpg'); ?>" alt="images"/> 
+                        <?= Html::img('@web/images/shop-home.jpg', ['alt' => 'Shop']) ?>
                         <div class="inner_content_plan">
                             <h1>SHOP</h1>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
-                            <a href="<?php echo Url::toRoute('/shop', true); ?>" role="button" class="btn btn-default" title="Discover">Discover</a>
+                            <a href="<?= Url::toRoute('shop'); ?>" role="button" class="btn btn-default" title="Discover">Discover</a>
                         </div>
                     </div>
                 </li>
-                <li><div class="plan_list">
-                        <img src="<?php echo Yii::getAlias('@frontend_app_images/experience-home.jpg'); ?>" alt="images"/> 
+                <li>
+                    <div class="plan_list">
+                        <?= Html::img('@web/images/experience-home.jpg', ['alt' => 'Experience']) ?>
                         <div class="inner_content_plan">
                             <h1>Experience</h1>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
-                            <a role="button" class="btn btn-default" title="Discover" href="<?php echo Url::toRoute('/experience', true); ?>">Discover</a>
+                            <a role="button" class="btn btn-default" title="Discover" href="<?= Url::toRoute('default/experience'); ?>">Discover</a>
                         </div>
                     </div>
                 </li>
-            </ul>  
+            </ul>
         </div>
 
         <!-- BEGIN FEATURE GROUP ITEM-->
@@ -119,11 +123,11 @@ AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_i
     <?php } ?>
             <!-- BEGIN FEATURE PRODUCT DESKTOP  -->
             <div class="feature_product_slider">
-                <div class="most_popular_slider">         
-                    <div class="slider_new_up">         
+                <div class="most_popular_slider">
+                    <div class="slider_new_up">
                         <div class="flexslider3">
                             <div id="demo">
-                                <div class="owl-carousel twb-slider" id="feature-group-slider" >   
+                                <div class="owl-carousel twb-slider" id="feature-group-slider" >
 
                                     <?php
                                     $i = 0;
@@ -149,11 +153,9 @@ AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_i
                                         $command = Yii::$app->DB->createCommand($sql);
                                         $out = $command->queryAll();
                                         if ($out) {
-                                            $imglink = Yii::getAlias('@vendor_images') . $out[0]['image_path'];
-                                            $baselink = Url::toRoute(Yii::getAlias('@vendor_images') . '/' . $out[0]['image_path'], true);
+                                            $imglink = Url::to("@web/images/") . $out[0]['image_path'];
                                         } else {
-                                            $imglink = Yii::getAlias('@vendor_images') . '/no_image.png';
-                                            $baselink = Url::toRoute(Yii::getAlias('@vendor_images') . 'no_image.png', true);
+                                            $imglink = Url::to('@web/images/no_image.png');
                                         }
                                         ?>
                                         <div class="item">
@@ -178,9 +180,9 @@ AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_i
             </div>
             <!-- END FEATURE PRODUCT DESKTOP  -->
             <!-- BEGIN FEATURE PRODUCT RESPONSIVE -->
-<?php } ?> 
+<?php } ?>
 
-    </div> 
+    </div>
 </section>
 <!-- content main end  -->
 <!-- Modal video start -->
@@ -253,7 +255,7 @@ AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_i
     <?php }
 } ?>
 
-<!-- end --> 
+<!-- end -->
 <!-- BEGIN RESPONSIVE FOR HOME PAGE PLAN, SHOP, EXPERIENCE IMAGES WITH A TAG IMPORTANT-->
 <script type="text/javascript">
                         if (jQuery(window).width() < 991) {
@@ -282,7 +284,7 @@ AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_i
                         });
 
                         /* Hide BG FOR EVENT SLIDER IMPORTANT*/
-                        jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){ 
+                        jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){
 jQuery(this).css('background','transparent');
 jQuery('.container_common').css('margin','0');
 jQuery('.event_slider_top').css({'padding':'5px 0 0 0','display':'inline-block','width':'100%','margin':'4px 0 0 0'});

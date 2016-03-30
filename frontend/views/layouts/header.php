@@ -66,7 +66,9 @@ $action = Yii::$app->controller->action->id;
                         </button>
                     </div>
                     <div class="logo_header">
-                        <a href="<?= Url::toRoute('/home', true); ?>"  title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg'); ?>" alt="THEWHITEBOO" title="THEWHITEBOO" /></a>
+                        <a href="<?= Url::toRoute('/home', true); ?>"  title="THEWHITEBOOK">
+                            <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My White Book', 'title' => 'The Whitebook']) ?>
+                        </a>
                     </div>
 
                     <div class="navbar-collapse collapse">
@@ -99,7 +101,7 @@ $action = Yii::$app->controller->action->id;
                                             </a>
                                         </li>
                                         <li>
-                                            <a title="<?php echo Yii::t('frontend', 'SUPPLIES'); ?>" href="<?= Url::toRoute('/products/supplies', true); ?>"> 
+                                            <a title="<?php echo Yii::t('frontend', 'SUPPLIES'); ?>" href="<?= Url::toRoute('/products/supplies', true); ?>">
                                                 <span class="supplies"></span>
                                                 <span><?php echo Yii::t('frontend', 'SUPPLIES'); ?> </span>
                                             </a>
@@ -138,9 +140,9 @@ $action = Yii::$app->controller->action->id;
 } ?>"><a href="<?= Url::toRoute('/experience', true); ?>" title="<?php echo Yii::t('frontend', 'EXPERIENCE'); ?>"><?php echo Yii::t('frontend', 'EXPERIENCE'); ?></a></li>
                             <li class="<?php if ($action == "directory") {
     echo "active";
-} ?>"><a href="<?= Url::toRoute('/directory', true); ?>" title="<?php echo Yii::t('frontend', 'DIRECTORY'); ?>"><?php echo Yii::t('frontend', 'DIRECTORY'); ?></a></li>                                
+} ?>"><a href="<?= Url::toRoute('/directory', true); ?>" title="<?php echo Yii::t('frontend', 'DIRECTORY'); ?>"><?php echo Yii::t('frontend', 'DIRECTORY'); ?></a></li>
                         </ul>
-                    </div> 
+                    </div>
                 </div>
                 <div class="col-md-4 col-xs-12 col-sm-6 padding-left0 <?php if (Yii::$app->params['CUSTOMER_ID'] != '') {
     echo 'new_user_name';
@@ -172,13 +174,13 @@ $action = Yii::$app->controller->action->id;
                                 <form id="search"  method="post" onsubmit="return false;">
                                     <!--
                                     <div id="input" class="left_slider">
-                                    
+
                                     <form id="search"  method="post" onsubmit="return false;">
                                     <div id="input" class="left_slider">
-                                    
+
                                     <input type="search" name="search-terms" id="search-input" onkeyup="show_close3()" placeholder="search" autocomplete="off">
                                     <button id="search-close11" class="search-clear icon-search_clear" type="reset" >Clear</button>
-                                    <div id="search_list"></div>    
+                                    <div id="search_list"></div>
                                     <div id="search_list_fail1"></div>
                                     </div>
                                     <div id="label">
@@ -198,9 +200,9 @@ echo $search_div;
                                     <a id="sear_button" href="#" class=" "></a>
                                     <input type="submit" id="sear_button_submit"/>
                                     <div id="desk-search-label" class="search_for">Search</div>
-                                    <div id="search_list"></div>    
+                                    <div id="search_list"></div>
                                     <div id="search_list_fail1"></div>
-                            </div>    
+                            </div>
                             </form>
                         </div>
 
@@ -211,7 +213,7 @@ echo $search_div;
     </div>
 </div>
 </header>
-<!-- header main end  --> 
+<!-- header main end  -->
 
 
 <!-- BEGIN Create event Modal Box -->
@@ -248,7 +250,7 @@ echo $search_div;
                                         <label for="event_date" class="error"></label>
                                     </div>
                                     <?/*<div class="form-group">
-                                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="datetimepicker2" class="input-append date">             
+                                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="datetimepicker2" class="input-append date">
                                     <!--<div id="datetimepicker2" class="input-group date">-->
                                     <input type="text" name="event_date" id="event_date" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'choose_event_date'); ?>" title="<?php echo Yii::t('frontend', 'choose_event_date'); ?>">
                                     <span class="input-group-addon">
@@ -303,7 +305,7 @@ foreach ($event_type as $e) {
 <!--navigation mobile menu start-->
 <nav class="ma5-menu-mobile mobile-menu">
     <div class="navbar-collapse">
-        <ul class="nav navbar-nav ma5-ul" style=" border:none;">      
+        <ul class="nav navbar-nav ma5-ul" style=" border:none;">
             <li class="ma5-li-1"> <a class="ma5-path-to-active ma5-btn-enter" href="#node1">Plan</a>
 
                 <ul class="ma5-ul-1 navbar-nav">
@@ -314,7 +316,7 @@ foreach ($event_type as $e) {
                             </span>
                             <a style="color:#000;" class="ma5-path-to-active ma5-btn-enter" href="#node1">Back</a>
                         </div></li>
-                    <li class="ma5-li-1-1">                    
+                    <li class="ma5-li-1-1">
                         <a title="<?php echo Yii::t('frontend', 'VENUES'); ?>" href="<?= Url::toRoute('/products/venues', true); ?>">
                             <span class="venus_icon"></span>
                             <span> <?php echo Yii::t('frontend', 'VENUES'); ?></span>
@@ -325,7 +327,7 @@ foreach ($event_type as $e) {
                         <a title=" <?php echo Yii::t('frontend', 'INVITATIONS'); ?>" href="<?= Url::toRoute('/products/invitations', true); ?>">
                             <span class="invit_icon"></span>
                             <span> <?php echo Yii::t('frontend', 'INVITATIONS'); ?></span>
-                        </a>                   
+                        </a>
                     </li>
                     <li class="ma5-li-1-3">
                         <a title="<?php echo Yii::t('frontend', 'FOOD_BEVERAGE'); ?>" href="<?= Url::toRoute('/products/food-beverage', true); ?>">
@@ -390,12 +392,12 @@ foreach ($event_type as $e) {
     } ?>"><a href="<?= Url::toRoute('/account-settings', true); ?>" title="<?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?>"><?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?></a></li>
                     <li><a href="<?= Url::toRoute('/events', true); ?>" title="<?php echo Yii::t('frontend', 'MY_EVENTS'); ?>"><?php echo Yii::t('frontend', 'MY_EVENTS'); ?></a></li>
                     <li><a href="<?= Url::toRoute('/logout', true); ?>" title="<?php echo Yii::t('frontend', 'LOGOUT'); ?>"><?php echo Yii::t('frontend', 'LOGOUT'); ?></a></li>
-<?php } ?> 
+<?php } ?>
 
             </div>
         </ul>
     </div>
-</nav> 
+</nav>
 <!--mobile menu navigation end-->
 
 <script>
@@ -406,7 +408,7 @@ foreach ($event_type as $e) {
                     jQuery('#basket_list').show();
                 },
                 function () {
-                    // jQuery('#basket_list').hide(); 
+                    // jQuery('#basket_list').hide();
                 }
         );
 
@@ -454,8 +456,8 @@ foreach ($event_type as $e) {
         });
         jQuery('#desk-search-label').css({'position': 'absolute'});
     });
-    /*jQuery('.container_eventslider').click(function(){ 
-     jQuery('#search_input_header').toggle('slide', { direction: 'left' }, 900); 
+    /*jQuery('.container_eventslider').click(function(){
+     jQuery('#search_input_header').toggle('slide', { direction: 'left' }, 900);
      });*/
 
 </script>
