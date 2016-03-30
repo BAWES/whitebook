@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 ?>
 <!-- coniner start -->
 
@@ -15,64 +16,64 @@ use yii\helpers\Url;
         <div class="plan_catg">
             <ul>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/venues'; ?>" title="Venues">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'venues']); ?>" title="Venues">
                         <span class="venue"></span>
                         <span class="responsi_common">Venues</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/invitations'; ?>" title="invitations">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'invitations']); ?>" title="Invitations">
                         <span class="invitations "></span>
-                        Invitations 
+                        Invitations
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/food-beverage'; ?>" title="Food &amp; Beverage">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'food-beverage']); ?>" title="Food &amp; Beverage">
                         <span class="food1"></span>
-                        Food &amp; Beverage 
+                        Food &amp; Beverage
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/decor'; ?>" title="Decor">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'decor']); ?>" title="Decor">
                         <span class="decor1"></span>
-                        Decor 
+                        Decor
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/supplies'; ?>" title="Supplies">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'supplies']); ?>" title="Supplies">
                         <span class="supplies1"></span>
-                        Supplies 
+                        Supplies
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/entertainment'; ?>" title="Entertainment">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'entertainment']); ?>" title="Entertainment">
                         <span class="entertainment  "></span>
-                        Entertainment 
+                        Entertainment
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/services'; ?>" title="Services">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'services']); ?>" title="Services">
                         <span class="services  "></span>
-                        Services 
+                        Services
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/others'; ?>" title="Other">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'others']); ?>" title="Other">
                         <span class="other1"></span>
-                        Other     
+                        Other
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Yii::$app->params['BASE_URL'] . '/products/say-thank-you'; ?>" title=" Say Thank you ">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'say-thank-you']); ?>" title="Say Thank you ">
                         <span class="say1"></span>
-                        Say "Thank You"      
+                        Say "Thank You" 
                     </a>
                 </li>
             </ul>
         </div>
 
         <div class="add_banner">
-            <img alt="banner" src="<?php echo Yii::$app->params['BASE_URL']; ?>/frontend/web/images/explore_banner.jpg">
+            <?= Html::img("@web/images/explore_banner.jpg", ['alt' => 'Banner']) ?>
         </div>
 
     </div>
@@ -80,7 +81,7 @@ use yii\helpers\Url;
 <!-- continer end -->
 
 <?php
-// category display dynamic 
+// category display dynamic
 /* foreach ($category as $key => $value) { ?>
   <li>
   <a href="<?= Url::to('products/'.$value['slug']); ?>" title="<?= $value['category_name'] ?>">
