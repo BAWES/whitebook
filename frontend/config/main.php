@@ -26,6 +26,9 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
         ],
+        'session' => [
+            'name' => 'app-frontend',
+        ],
         'newcomponent' => [
             'class' => 'backend\components\MainComponent',
         ],
