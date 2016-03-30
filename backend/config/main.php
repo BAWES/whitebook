@@ -86,23 +86,7 @@ return [
         'vendor' => [
           'class' => 'backend\modules\vendor\Module'
         ],
-      ],
-     'aliases' => [
-        '@vendor_images' => '@app/web/uploads/vendor_images/',
-        '@vendor_item_images_210' => '/backend/web/uploads/vendor_images/210x210/',
-        //'@vendor_item_images_210' => '/backend/web/uploads/vendor_images/',
-        '@sales_guide_images' => '@app/web/uploads/guide_images/',
-        '@sub_category' => '@app/web/uploads/subcategory_icon/',
-        '@vendor_image' => '/backend/web/uploads/vendor_images/',
-        //'@vendor_image' => '/backend/web/uploads/vendor_images/',
-        '@frontend_app_images' => '/frontend/web/images/',
-        '@gif_img' => '/frontend/web/images/ajax-loader.gif',
-        '@sub_category' => '@app/web/uploads/subcategory_icon/',
-        '@top_category' => '@app/web/uploads/category_ads/top/',
-        '@gif_img' => '/frontend/web/images/ajax-loader.gif',
-        '@bottom_category' => '@app/web/uploads/category_ads/bottom/',
-        '@home_ads' => '@app/web/uploads/home_ads/',
-        ],
+    ],
     'params' => $params,
 
 ];
