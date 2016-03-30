@@ -38,7 +38,7 @@ return [
               ],
         ],
         'themeURL' => [
-            'class' => 'yii\web\urlManager',
+            'class' => 'yii\web\UrlManager',
             'baseUrl' => '/backend/web/themes/default',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -47,15 +47,20 @@ return [
             'identityClass' => 'backend\models\Admin',
             'enableAutoLogin' => false,
         ],
+        'session' => [
+            'name' => 'app-backend',
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 'file' => [
                     'class' => 'yii\log\FileTarget',
-                    'categories' => ['yii\web\HttpException:404'],
                     'levels' => ['error', 'warning'],
                  ],
             ],
+        ],
+        'errorHandler' => [
+            'errorAction' => 'site/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
