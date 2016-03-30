@@ -18,18 +18,8 @@ class AjaxAsset extends AssetBundle
     public $sourcePath = '@frontend/web/';
     public $basePath = '@webroot';
     public $baseUrl = '@web';
-    public $js = [        
-        'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js',
-        'https://code.jquery.com/ui/1.11.3/jquery-ui.min.js',
-        'js/modernizr.js',
-        'js/bootstrap.min.js',
-        'js/jquery.flexslider.js',
-        'js/classie.js',
-        'js/main.js',
-        'js/search.js',
-        'js/owl.carousel.js',
-        'js/bootstrap-datepicker.js',
-        'js/bootstrap-select.js'
+    public $js = [
+        'js/application.js'
     ];
     public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $depends = [
