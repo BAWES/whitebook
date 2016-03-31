@@ -27,7 +27,9 @@
         "miloschuman/yii2-highcharts-widget": "*",
         "2amigos/yii2-file-upload-widget": "~1.0",
         "yiisoft/yii2-imagine": "*",
-        "2amigos/yii2-ckeditor-widget": "*"
+        "2amigos/yii2-ckeditor-widget": "*",
+        "understeam/yii2-slack": "*",
+        "2amigos/yii2-resource-manager-component": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
