@@ -305,7 +305,7 @@ class DefaultController extends BaseController
                     if (!empty($cat[$i])) {
                         $url = str_replace('&', 'and', $cat[$i]);
                         $url = str_replace(' ', '-', $url);
-                        $k = $k.'<li><a href='.Yii::$app->params['BASE_URL'].'/search-result/'.$url.'>'.$cat[$i].'</a></li>';
+                        $k = $k.'<li><a href='.Url::toRoute('/search-result/').$url.'>'.$cat[$i].'</a></li>';
                     }
                 }
             }
@@ -322,7 +322,7 @@ class DefaultController extends BaseController
                 for ($i = 0;$i < count($ven_name); ++$i) {
                     if (!empty($ven_name[$i])) {
                         $url2 = str_replace(' ', '-', $ven_name[$i]);
-                        $k = $k.'<li><a href='.Yii::$app->params['BASE_URL'].'/search-result/'.$url2.'>'.$ven_name[$i].'</a></li>';
+                        $k = $k.'<li><a href='.Url::toRoute('/search-result/').$url2.'>'.$ven_name[$i].'</a></li>';
                     }
                 }
             }
@@ -331,7 +331,7 @@ class DefaultController extends BaseController
                 foreach ($item_details as $i) {
                     if (!empty($i['item_name'])) {
                         $url3 = str_replace(' ', '-', $i['item_name']);
-                        $k = $k.'<li><a href='.Yii::$app->params['BASE_URL'].'/search-result/'.$url3.'>'.$i['item_name'].'</a></li>';
+                        $k = $k.'<li><a href='.Url::toRoute('/search-result/').$url3.'>'.$i['item_name'].'</a></li>';
                     }
                 }
 

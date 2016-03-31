@@ -511,38 +511,25 @@ $customer_events = $model->get_customer_events($customer_id, $event_limit, $offs
 //print_r ($customer_events);
 $customer_events_count = $model->get_customer_events_count($customer_id, $type);
 $price = $vendor = $avail_sale = $theme = '';
-//print_r ($customer_events_count);
-/*$category_id=$price=$vendor=$avail_sale=$theme='';
-if(isset($_POST['category']))
-{
-$category_id=$_POST['category'];
-$price=$_POST['price'];
-$vendor=$_POST['vendor'];
-$avail_sale=$_POST['available_for_sale'];
-$theme=$_POST['theme'];
-}*/
-/*$vendor_list=$model->vendor_list();
-$category=$model->get_main_category();
-$themes=$model->get_themes(); 	*/
+
 $themes = $model->get_themes();
 $customer_unique_events = $website_model->get_user_event_types($customer_id);
-//print_r ($customer_unique_events); die;
+
 $customer_event_type = $website_model->get_user_event($customer_id);
-//print_r ($customer_events);die;
+
 $customer_category = $model->get_customer_details($customer_id);
-//print_r ($customer_category);die;
+
 $vendoritem_model = new Vendoritem();
-//print_r ($customer_category);die;
-//if(!empty($customer_category)){
+
 $categorylist = $vendoritem_model->get_category_itemlist($customer_category);
-//print_r ($categorylist);die;
+
 $vendorlist = $vendoritem_model->get_vendor_itemlist($customer_category);
-//echo '<pre>';print_r ($customer_category);//die;
+
 $k = array();
 foreach ($customer_category as $c) {
 $k[] = $c['item_id'];
 }
-//print_r ($k);die;
+
 /* start */
 $result = Themes::loadthemename_item($k);
 $out1[] = array();
@@ -573,25 +560,14 @@ $p[] = $o;
 }
 $p = array_unique($p);
 $themelist = Themes::load_all_themename($p);
-//print_r ($themelist);die;
 
-//$vendor = Vendor::loadvendor_item($k);
 
 /*  end */
-
-//$themelist=$vendoritem_model->get_theme_itemlist($customer_category);
 $avail_sale = $category_id = $vendor = $theme = '';
 $customer_wishlist = $model->get_customer_wishlist($customer_id, $wish_limit, $offset, $category_id, $price, $vendor, $avail_sale, $theme);
 
 $customer_wishlist_count = $model->get_customer_wishlist_count($customer_id, $category_id, $price, $vendor, $avail_sale, $theme);
 
-//print_r ($themelist);die;
-/*}else{
-$categorylist='';
-$vendorlist='';
-$themelist='';
-}*/
-//print_r ($vendorlist);die;
 /* BEGIN load user events */
 $user_events = Events::find()->where(['customer_id' => Yii::$app->params['CUSTOMER_ID']])->asArray()->all();
 /* END load user events */

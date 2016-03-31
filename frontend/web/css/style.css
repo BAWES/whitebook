@@ -948,7 +948,7 @@ div#dp3,#eventdate_icon {
 
 
 /* footer start*/
-#footer_sections{background:#0d0d0d;width:100%;float:left; min-height: 440px; padding: 48px 0;  bottom:0px;}
+#footer_sections{background:#0d0d0d;width:100%;float:left; min-height: 440px; padding: 48px 0; }
 .footer_navication{ display: inline-block; width: 100%; border-bottom: 2px solid #1a1a1a; min-height: 132px; }
 .paddng0{ padding: 0px;}
 .padding_left0{ padding-left: 0px;}

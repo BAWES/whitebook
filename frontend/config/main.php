@@ -47,7 +47,7 @@ return [
         'errorHandler' => [
             'errorAction' => 'default/error',
         ],
-
+        
     ],
     'params' => $params,
 ];

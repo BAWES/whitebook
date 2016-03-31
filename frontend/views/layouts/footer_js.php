@@ -200,7 +200,7 @@ jQuery('#reset_pwd_result').html('Confirm password should be equal to password')
 if((jQuery('#resetForm').valid()) && (k==1))
 {
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/password-reset",
+url:"<?= Url::to('/password-reset'); ?>",
 type:"post",
 data:"id="+userid+"&password="+password+"&_csrf="+_csrf,
 async: false,
@@ -248,7 +248,7 @@ var _csrf=jQuery('#_csrf').val();
 //if(1){
 if(validateEmail(email) == true){
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/login",
+url:"<?= Url::toRoute('/login');?>",
 type:"post",
 async:false,
 data:"email="+email+"&password="+password+"&event_status="+event_status+"&favourite_status="+favourite_status+"&_csrf="+_csrf,
@@ -454,7 +454,7 @@ if(validateEmail(x) == true){
 
 jQuery.ajax({
 
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/emailcheck",
+url:"<?= Url::to('/emailcheck')?>",
 type:"post",
 //data:"email="+x+"&_csrf="+_csrf,
 data:"email="+x,
@@ -502,7 +502,7 @@ var _csrf=jQuery('#_csrf1').val();
 var dob=bday+'-'+bmonth+'-'+byear;
 var customer_name=fname+' '+lname;
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/signup",
+url:"<?= Url::to('/signup'); ?>",
 async:false,
 type:"post",
 data:"customer_name="+fname+"&customer_last_name="+lname+"&email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&gender="+gender+"&phone="+phone+"&password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
@@ -569,7 +569,7 @@ if(item_id!=0)
 }else{
  var item_name='item ';}
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/create-event",
+url:"<?= Url::to('/create-event'); ?>",
 type:"post",
 data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf,
 success:function(data,slider)
@@ -638,7 +638,7 @@ var item_id=jQuery('#item_id').val();
 var event_name=jQuery('#edit_event_name').val();
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/update-event",
+url:"<?= Url::to('/update-event'); ?>",
 type:"post",
 data:"event_id="+jQuery('#edit_event_id').val()+"&event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&event_type="+event_type+"&_csrf="+_csrf,
 success:function(data)
@@ -754,7 +754,7 @@ var x=jQuery("#reg_email").val();
 var _csrf=jQuery('#_csrf').val();
 if(validateEmail(x) == true){
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/emailcheck",
+url:"<?= Url::to('/emailcheck'); ?>",
 type:"post",
 data:"email="+x+"&_csrf="+_csrf,
 success:function(data)
@@ -809,7 +809,7 @@ jQuery('span.forgotpwd').hide();
 jQuery('#forgot_loader').show();
 
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/forget",
+url:"<?= Url::to('/forget'); ?>",
 type:"post",
 async:false,
 data:"email="+reg_email+"&_csrf="+_csrf,
@@ -863,7 +863,7 @@ if (e.keyCode == 13)
  var search1=jQuery("#search_input_header").val();
  var search2 = search1.replace(' ', '-');
  
- var url="<?php echo Yii::$app->params['BASE_URL'];?>/search-result/";
+ var url="<?php echo Url::toRoute('/search-result').'/'; ?>";
  var path=url.concat(search2);
  //alert(path);
  
@@ -879,7 +879,7 @@ jQuery('#sear_button_submit').click(function(e) {
  if(search1!=''){
  var search2 = search1.replace(' ', '-');
  
- var url="<?php echo Yii::$app->params['BASE_URL'];?>/search-result/";
+ var url="<?php echo Url::toRoute('/search-result/').'/'; ?>";
  var path=url.concat(search2);
  //alert(path);
  
@@ -893,7 +893,7 @@ if (e.keyCode == 13)
 {
  var search1=jQuery("#search-terms1").val();
  var search2 = search1.replace(' ', '-');
- var url="<?php echo Yii::$app->params['BASE_URL'];?>/search-result/";
+ var url="<?php echo Url::toRoute('/search-result/').'/'; ?>";
  var path=url.concat(search2);
  window.location.replace(path);
 }
@@ -905,7 +905,7 @@ if (e.keyCode == 13)
  var url1="<?php echo Yii::$app->params['BASE_URL'];?>";
  var search1=jQuery("#search-terms2").val();
  var search2 = search1.replace(' ', '-');
- var url="<?php echo Yii::$app->params['BASE_URL'];?>/search-result/";
+ var url="<?php echo Url::toRoute('/search-result/').'/';?>";
  var path=url.concat(search2);
  
  window.location.replace(path);
@@ -928,12 +928,12 @@ jQuery("#search-terms1").on('keyup',function () {
  search_data(search);
 });
 function search_data(search){
-if((search.length>3) && (search!='')){
+ if((search.length>3) && (search!='')){
 jQuery("#search_list_fail1").html('');
 var _csrf=jQuery('#_csrf').val();
 if(search != ''){
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/search",
+url:"<?= Url::toRoute('/search');?>",
 type:"post",
 async:true,
 data:"search="+search+"&_csrf="+_csrf,
@@ -959,8 +959,8 @@ if(search.length>3){
 var _csrf=jQuery('#_csrf').val();
 if(search != ''){
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/search",
-type:"post",
+url:"<?= Url::toRoute('/search'); ?>",
+type:"POST",
 async:false,
 data:"search="+search+"&_csrf="+_csrf,
 success:function(data)
@@ -1016,7 +1016,7 @@ function add_to_favourite(x)
 {     
 
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/add-to-wishlist",
+url:"<?= Url::to('add-to-wishlist'); ?>",
 type:"post",
 data:"item_id="+x+"&_csrf="+_csrf,
 async: false,
@@ -1058,7 +1058,7 @@ function remove_from_favourite(x)
 if (strconfirm == true)
 {  
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/remove-from-wishlist",
+url:"<?= Url::toRoute('/remove-from-wishlist'); ?>",
 type:"post",
 data:"item_id="+x,
 async: false,
@@ -1109,7 +1109,7 @@ jQuery(jQueryelement).parent().toggleClass("faverited_icons");
 
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/add-to-wishlist",
+url:"<?= Url::toRoute('/add-to-wishlist'); ?>",
 type:"post",
 data:"item_id="+item_id+"&_csrf="+_csrf,
 //async: false,
@@ -1133,7 +1133,7 @@ jQuery(jQueryelement).find('span').toggleClass("heart-product-hover");
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
 
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/add-to-wishlist",
+url:"<?= Url::to('/add-to-wishlist'); ?>",
 type:"post",
 data:"item_id="+item_id+"&_csrf="+_csrf,         
 success:function(data)
@@ -1155,7 +1155,7 @@ if(event_id!=''){
 jQuery('#add_to_event_loader').show();
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/add-event",
+url:"<?= Url::toRoute('/add-event'); ?>",
 type:"post",
 data:"event_id="+event_id+"&item_id="+x+"&_csrf="+_csrf,
 async: false,
@@ -1382,20 +1382,7 @@ else{
 }
 //(jQuery('.mobile-menu').hasClass('open-search-menu'))?jQuery(this).removeClass('open-search-menu'):jQuery(this).addClass('open-search-menu');
 });
-/*
-jQuery('.left_slider.focus .visible').click(function()
-{
- //alert(3);
- jQuery('#search-terms').val('');die;
-//jQuery('.open-search-menu').removeClass('open-search-menu');
-});*/
-/*
-jQuery('#input1 #search-close').click(function()
-{
- alert(3);
- //jQuery('#search-terms').val('');
-//jQuery('.open-search-menu').removeClass('open-search-menu');
-});*/
+
 
 jQuery('#search-close').click(function(){
 jQuery( "#mobile_search_list" ).html('');

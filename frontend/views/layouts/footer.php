@@ -44,7 +44,7 @@ use frontend\models\Users;
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="login_button">
 <?php echo Yii::t('frontend','LOGIN');?></button>
 </div>
-<div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::toRoute('/frontend/web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
+<div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::toRoute('/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 <span class="text-center forgotpwd"><a data-target="#forgotPwdModal" onclick="forgot_modal();"  data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#forgotPwdModal"> Forgot your password</a></span>
 </div>
 </div>

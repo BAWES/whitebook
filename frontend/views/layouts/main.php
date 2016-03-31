@@ -44,11 +44,9 @@ $this->beginPage()
         ?>
 <?php $this->endContent(); ?>
         <!-- Header Section End -->
-
         <!--Content Start-->
 <?= $content ?>
         <!--Content End-->
-
         <!-- Footer Section Start -->
         <?php $this->beginContent('@app/views/layouts/footer.php', ['socialinfo' => Socialinfo::socialinformation(), 'siteinfo' => Siteinfo::siteinformation()]); ?>
 <?php $this->endContent(); ?>

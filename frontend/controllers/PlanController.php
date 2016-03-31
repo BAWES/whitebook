@@ -41,7 +41,6 @@ class PlanController extends BaseController
     {
         $model = new Website();
         $customer_id = Yii::$app->session->get('customer_id');
-        //Yii::$app->params['header1'] = "1"; // uncomment call new header
         if ($slug != '') {
             /* BEGIN CATEGORY*/
         $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $slug])->asArray()->one();
