@@ -430,7 +430,7 @@ url: path,
 data:{event_id:x},
 success:function(data)
 {	
-jQuery("#oner").load("<?php echo Yii::$app->params['BASE_URL'];?>/event-slider");
+jQuery("#oner").load("<?= Url::toRoute('/product/event-slider'); ?>");
 jQuery('a#'+x).parent('li').remove();
 jQuery("#loader1").hide();
 jQuery("#loader1").hide();

@@ -213,7 +213,7 @@ if (is_numeric ($result)) { ?>
 </div><!-- /input-group -->
 </div>
 <div class="prient_common">
-<a href="<?php echo Yii::$app->params['BASE_URL'];?>/excel/<?php echo $slug;?>" title="Export to Excel">Export to Excel</a>
+<a href="<?php echo Url::toRoute('/users/excel/'.$slug);?>" title="Export to Excel">Export to Excel</a>
 <a href="#" title="Print" onclick="window.print()">Print</a>
 </div>
 </div>
@@ -373,7 +373,7 @@ function editevent(event_id)
 {    	
 jQuery.ajax({
 type:'POST',
-url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('pro-eventdetails'); ?>",
+url:"<?= Url::toRoute('/product/eventdetails'); ?>",
 data:{'event_id':event_id},
 //dataType:'JSON',
 success:function(data)

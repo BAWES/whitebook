@@ -21,7 +21,7 @@ $this->title ='Account Setting | Whitebook';
                                 </div>
                                 <div class="account_form">
                                     <div class="bs-example" data-example-id="basic-forms">
-                                       <form method="POST" action="<?php echo Url::toRoute('/edit-profile'); ?>" name="account_setting" id="account_setting" name="account_setting">
+                                       <form method="POST" action="<?php echo Url::toRoute('users/edit_profile'); ?>" name="account_setting" id="account_setting" name="account_setting">
                                             <div class="col-md-6 paddingleft0"> 
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">First Name</label>
@@ -406,7 +406,7 @@ $this->title ='Account Setting | Whitebook';
 		
 		 
 			jQuery.ajax({
-			url:"<?= Url::toRoute('/edit-profile'); ?>",
+			url:"<?= Url::toRoute('/users/edit_profile'); ?>",
 			type:"post",
 			data:"first_name="+fname+"&last_name="+lname+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&phone="+myphone+"&juda="+judda+"&gender="+gender+"&mobile_number="+mobile_number+"&address_name="+customer_address+"&country="+country+"&city="+city+"&block="+block+"&street="+street+"&extra="+extra+"&customer_password="+password+"&customer_password="+conPassword,
 			async: false,

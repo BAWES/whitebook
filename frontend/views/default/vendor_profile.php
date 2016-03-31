@@ -598,7 +598,7 @@ echo '"' . $c_url1[0] . '";';
 
                                                                 var _csrf = jQuery('#_csrf').val();
                                                                 jQuery.ajax({
-                                                                    url: "<?php echo Yii::$app->params['BASE_URL']; ?>/add-to-wishlist",
+                                                                    url: "<?= Url::toRoute('/users/add_to_wishlist'); ?>",
                                                                     type: "post",
                                                                     data: "item_id=" + item_id + "&_csrf=" + _csrf,
 //async: false,

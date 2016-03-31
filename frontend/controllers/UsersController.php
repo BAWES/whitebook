@@ -40,6 +40,7 @@ return $this->render('index');
 
 public function actionLogin()
 {
+ echo 343;die;
 if (isset($_POST['email']) && isset($_POST['password'])) {
 $model = new Users();
 $email = $_POST['email'];
@@ -121,9 +122,8 @@ $siteinfo = Siteinfo::find()->asArray()->all();
 $to = $model['email'];
 $username = $model['customer_name'];
 Yii::$app->session->set('register', '1');
-$message = 'Thank you for registration with '.Yii::$app->params['SITE_NAME'].'.</br><a href='.Yii::$app->params['BASE_URL'].'/confirm-email/'.$customer_activation_key.''." title='Click Here'>Click here </a> to activate your account.";
+$message = 'Thank you for registration with '.Yii::$app->params['SITE_NAME'].'.</br><a href='.Yii::$app->params['BASE_URL'].'/users/confirm_email/'.$customer_activation_key.''." title='Click Here'>Click here </a> to activate your account.";
 
-//$msg="Thank you for registration with ".SITE_NAME.".</br><a href=".BASE_URL."/confirm-email/".$customer_activation_key.''." title='Click Here'>CLICK HERE</a> to activate your account.";
 $subject = Yii::$app->params['SIGNUP_SUBJECT'];
 $template = 'USER-REGISTER';
 $body = Yii::$app->params['SIGNUP_TEMPLATE'];
@@ -188,7 +188,7 @@ Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
 Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
 //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
 //print_r ($login_det);die;
-$this->redirect(Yii::$app->params['BASE_URL'].'/activate');
+$this->redirect(Url::toRoute('/default/activate');
 //$this->redirect(Yii::$app->params['BASE_URL']);
 }
 } else {
@@ -205,7 +205,7 @@ $check_email = $model->check_email_exist($email);
 $id = $model->check_user_exist($email);
 if (count($id) > 0) {
 $time = $model->update_datetime_user($id[0]['customer_activation_key']);
-$message = 'Your requested password reset. '.Yii::$app->params['SITE_NAME'].'.</br><a href='.Yii::$app->params['BASE_URL'].'/reset/'.$id[0]['customer_activation_key'].''." title='Click Here'>Click here </a> to reset your password.";
+$message = 'Your requested password reset. '.Yii::$app->params['SITE_NAME'].'.</br><a href='.Yii::$app->params['BASE_URL'].'/users/reset_confirm/'.$id[0]['customer_activation_key'].''." title='Click Here'>Click here </a> to reset your password.";
 $subject = 'Forgot Password?';
 $body = 'Forgot Password?';
 Yii::$app->maincomponent->sendmail($email, $subject, $body, $message, 'FORGOT-PASSWORD');

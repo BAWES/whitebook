@@ -20,7 +20,7 @@ $action = Yii::$app->controller->action->id;
                         </span></a></div>
                 <!--div class="col-xs-4 responsive-hid"></div-->
                 <div class="logo_header col-xs-10 text-center padding-right0">
-                    <a href="<?= Url::toRoute('/home', true); ?>" title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
+                    <a href="<?= Url::toRoute('default/index', true); ?>" title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
                     <div class="search_header col-xs-3">
                         <div class="input-group">
                             <div id="navigation-bar">
@@ -50,7 +50,7 @@ $action = Yii::$app->controller->action->id;
 
                     <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
                 <?php } else { ?>
-                    <a href="<?= Url::toRoute('/events', true); ?>" title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
+                    <a href="<?= Url::toRoute('/users/events', true); ?>" title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
 <?php } ?>
             </div>
 
@@ -66,7 +66,7 @@ $action = Yii::$app->controller->action->id;
                         </button>
                     </div>
                     <div class="logo_header">
-                        <a href="<?= Url::toRoute('/home', true); ?>"  title="THEWHITEBOOK">
+                        <a href="<?= Url::toRoute('default/index', true); ?>"  title="THEWHITEBOOK">
                             <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My White Book', 'title' => 'The Whitebook']) ?>
                         </a>
                     </div>
@@ -134,13 +134,13 @@ $action = Yii::$app->controller->action->id;
                                 </div>
                             </li>
 
-                            <li class=""><a href="<?= Url::toRoute('/shop', true); ?>" title="<?php echo Yii::t('frontend', 'SHOP'); ?>"><?php echo Yii::t('frontend', 'SHOP'); ?></a></li>
+                            <li class=""><a href="<?= Url::toRoute('/default/shop', true); ?>" title="<?php echo Yii::t('frontend', 'SHOP'); ?>"><?php echo Yii::t('frontend', 'SHOP'); ?></a></li>
                             <li  class="<?php if ($action == "experience") {
     echo "active";
-} ?>"><a href="<?= Url::toRoute('/experience', true); ?>" title="<?php echo Yii::t('frontend', 'EXPERIENCE'); ?>"><?php echo Yii::t('frontend', 'EXPERIENCE'); ?></a></li>
+} ?>"><a href="<?= Url::toRoute('/default/experience', true); ?>" title="<?php echo Yii::t('frontend', 'EXPERIENCE'); ?>"><?php echo Yii::t('frontend', 'EXPERIENCE'); ?></a></li>
                             <li class="<?php if ($action == "directory") {
     echo "active";
-} ?>"><a href="<?= Url::toRoute('/directory', true); ?>" title="<?php echo Yii::t('frontend', 'DIRECTORY'); ?>"><?php echo Yii::t('frontend', 'DIRECTORY'); ?></a></li>
+} ?>"><a href="<?= Url::toRoute('/default/directory', true); ?>" title="<?php echo Yii::t('frontend', 'DIRECTORY'); ?>"><?php echo Yii::t('frontend', 'DIRECTORY'); ?></a></li>
                         </ul>
                     </div>
                 </div>
@@ -154,16 +154,19 @@ $action = Yii::$app->controller->action->id;
                         <?php } ?>
                     <ul class="logout_part">
 <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
-                            <li class="<?php if ($action == "about-us") {
-        echo "active";
-    } ?>"><a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'ABOUT_US'); ?>"><?php echo Yii::t('frontend', 'ABOUT_US'); ?></a></li>
-                            <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'SIGN_IN_REGISTER'); ?>"><?php echo Yii::t('frontend', 'SIGN_IN_REGISTER'); ?></a></li>
+        <li class="<?php if ($action == "about-us") {echo "active";} ?>">
+            <a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'ABOUT_US'); ?>">
+            <?php echo Yii::t('frontend', 'ABOUT_US'); ?></a></li>
+        <li class="">
+        <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" 
+        title="<?php echo Yii::t('frontend', 'SIGN_IN_REGISTER'); ?>"><?php echo Yii::t('frontend', 'SIGN_IN_REGISTER'); ?>
+        </a>
+        </li>
 <?php } else { ?>
-                            <li class="<?php if ($action == "account-settings") {
-        echo "active";
-    } ?>"><a href="<?php echo Url::toRoute('/account-settings', true); ?>" title="<?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?>"><?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?></a></li>
-                            <li><a href="<?php echo Url::toRoute('/events', true); ?>" title="<?php echo Yii::t('frontend', 'MY_EVENTS'); ?>"><?php echo Yii::t('frontend', 'MY_EVENTS'); ?></a></li>
-                            <li><a href="<?php echo Url::toRoute('/logout', true); ?>" title="<?php echo Yii::t('frontend', 'LOGOUT'); ?>"><?php echo Yii::t('frontend', 'LOGOUT'); ?></a></li>
+<li class="<?php if ($action == "account-settings") {echo "active";
+    } ?>"><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?>"><?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?></a></li>
+                            <li><a href="<?php echo Url::toRoute('/users/events', true); ?>" title="<?php echo Yii::t('frontend', 'MY_EVENTS'); ?>"><?php echo Yii::t('frontend', 'MY_EVENTS'); ?></a></li>
+                            <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'LOGOUT'); ?>"><?php echo Yii::t('frontend', 'LOGOUT'); ?></a></li>
 <?php } ?>
 
                     </ul>
@@ -389,9 +392,9 @@ foreach ($event_type as $e) {
 <?php } else { ?>
                     <li class="<?php if ($action == "account-settings") {
         echo "active";
-    } ?>"><a href="<?= Url::toRoute('/account-settings', true); ?>" title="<?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?>"><?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?></a></li>
-                    <li><a href="<?= Url::toRoute('/events', true); ?>" title="<?php echo Yii::t('frontend', 'MY_EVENTS'); ?>"><?php echo Yii::t('frontend', 'MY_EVENTS'); ?></a></li>
-                    <li><a href="<?= Url::toRoute('/logout', true); ?>" title="<?php echo Yii::t('frontend', 'LOGOUT'); ?>"><?php echo Yii::t('frontend', 'LOGOUT'); ?></a></li>
+    } ?>"><a href="<?= Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?>"><?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?></a></li>
+                    <li><a href="<?= Url::toRoute('/users/events', true); ?>" title="<?php echo Yii::t('frontend', 'MY_EVENTS'); ?>"><?php echo Yii::t('frontend', 'MY_EVENTS'); ?></a></li>
+                    <li><a href="<?= Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'LOGOUT'); ?>"><?php echo Yii::t('frontend', 'LOGOUT'); ?></a></li>
 <?php } ?>
 
             </div>

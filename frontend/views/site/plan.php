@@ -19,7 +19,7 @@
                     <div class="col-md-3">
                         <div class="paln_item2">
                             <?php $category_url = $c['category_url']; ?>
-                            <a href="<?php echo Yii::$app->params['BASE_URL'] . '/category/' . $category_url . '.html'; ?>" title="Venue">
+                            <a href="<?php Url::toRoute('category/category_products/'). $category_url . '.html'; ?>" title="Venue">
                                 <span class="plan">
                                     <?php if (file_exists(Yii::$app->params['DOCROOT'])) { ?>
                                         <img src="">

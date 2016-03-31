@@ -200,7 +200,7 @@ jQuery('#reset_pwd_result').html('Confirm password should be equal to password')
 if((jQuery('#resetForm').valid()) && (k==1))
 {
 jQuery.ajax({
-url:"<?= Url::to('/password-reset'); ?>",
+url:"<?= Url::to('/users/password_reset'); ?>",
 type:"post",
 data:"id="+userid+"&password="+password+"&_csrf="+_csrf,
 async: false,
@@ -248,7 +248,7 @@ var _csrf=jQuery('#_csrf').val();
 //if(1){
 if(validateEmail(email) == true){
 jQuery.ajax({
-url:"<?= Url::toRoute('/login');?>",
+url:"<?= Url::toRoute('/users/login');?>",
 type:"post",
 async:false,
 data:"email="+email+"&password="+password+"&event_status="+event_status+"&favourite_status="+favourite_status+"&_csrf="+_csrf,
@@ -454,7 +454,7 @@ if(validateEmail(x) == true){
 
 jQuery.ajax({
 
-url:"<?= Url::to('/emailcheck')?>",
+url:"<?= Url::toRoute('/users/email_check')?>",
 type:"post",
 //data:"email="+x+"&_csrf="+_csrf,
 data:"email="+x,
@@ -502,7 +502,7 @@ var _csrf=jQuery('#_csrf1').val();
 var dob=bday+'-'+bmonth+'-'+byear;
 var customer_name=fname+' '+lname;
 jQuery.ajax({
-url:"<?= Url::to('/signup'); ?>",
+url:"<?= Url::to('/users/signup'); ?>",
 async:false,
 type:"post",
 data:"customer_name="+fname+"&customer_last_name="+lname+"&email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&gender="+gender+"&phone="+phone+"&password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
@@ -569,7 +569,7 @@ if(item_id!=0)
 }else{
  var item_name='item ';}
 jQuery.ajax({
-url:"<?= Url::to('/create-event'); ?>",
+url:"<?= Url::to('/users/create_event'); ?>",
 type:"post",
 data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf,
 success:function(data,slider)
@@ -638,7 +638,7 @@ var item_id=jQuery('#item_id').val();
 var event_name=jQuery('#edit_event_name').val();
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
-url:"<?= Url::to('/update-event'); ?>",
+url:"<?= Url::to('/users/update_event'); ?>",
 type:"post",
 data:"event_id="+jQuery('#edit_event_id').val()+"&event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&event_type="+event_type+"&_csrf="+_csrf,
 success:function(data)
@@ -653,7 +653,7 @@ jQuery('#eventresult').html('Same event name already exists!<a id="boxclose" cla
 }
 else
 {
-jQuery('#event_loader').hide();
+ jQuery('#event_loader').hide();
 jQuery(".eventErrorMsg").html('');
 
 jQuery('#EditeventModal').modal('hide');
@@ -754,7 +754,7 @@ var x=jQuery("#reg_email").val();
 var _csrf=jQuery('#_csrf').val();
 if(validateEmail(x) == true){
 jQuery.ajax({
-url:"<?= Url::to('/emailcheck'); ?>",
+url:"<?= Url::toRoute('/users/email_check'); ?>",
 type:"post",
 data:"email="+x+"&_csrf="+_csrf,
 success:function(data)
@@ -809,7 +809,7 @@ jQuery('span.forgotpwd').hide();
 jQuery('#forgot_loader').show();
 
 jQuery.ajax({
-url:"<?= Url::to('/forget'); ?>",
+url:"<?= Url::to('/users/forget_password'); ?>",
 type:"post",
 async:false,
 data:"email="+reg_email+"&_csrf="+_csrf,
@@ -933,7 +933,7 @@ jQuery("#search_list_fail1").html('');
 var _csrf=jQuery('#_csrf').val();
 if(search != ''){
 jQuery.ajax({
-url:"<?= Url::toRoute('/search');?>",
+url:"<?= Url::toRoute('/default/search');?>",
 type:"post",
 async:true,
 data:"search="+search+"&_csrf="+_csrf,
@@ -959,7 +959,7 @@ if(search.length>3){
 var _csrf=jQuery('#_csrf').val();
 if(search != ''){
 jQuery.ajax({
-url:"<?= Url::toRoute('/search'); ?>",
+url:"<?= Url::toRoute('/default/search'); ?>",
 type:"POST",
 async:false,
 data:"search="+search+"&_csrf="+_csrf,
@@ -1016,7 +1016,7 @@ function add_to_favourite(x)
 {     
 
 jQuery.ajax({
-url:"<?= Url::to('add-to-wishlist'); ?>",
+url:"<?= Url::toRoute('/users/add_to_wishlist'); ?>",
 type:"post",
 data:"item_id="+x+"&_csrf="+_csrf,
 async: false,
@@ -1058,7 +1058,7 @@ function remove_from_favourite(x)
 if (strconfirm == true)
 {  
 jQuery.ajax({
-url:"<?= Url::toRoute('/remove-from-wishlist'); ?>",
+url:"<?= Url::toRoute('/users/remove_from_wishlist'); ?>",
 type:"post",
 data:"item_id="+x,
 async: false,
@@ -1069,7 +1069,7 @@ success:function(data)
 //alert(data);
 if(data==1)
 { 
-jQuery("#oner").load("<?php echo Yii::$app->params['BASE_URL'];?>/event-slider");
+jQuery("#oner").load("<?= Url::toRoute('/product/event-slider'); ?>");
 jQuery('#login_success').modal('show');
 jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Item remove from your favourite list</span>');
 window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
@@ -1109,7 +1109,7 @@ jQuery(jQueryelement).parent().toggleClass("faverited_icons");
 
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
-url:"<?= Url::toRoute('/add-to-wishlist'); ?>",
+url:"<?= Url::toRoute('/users/add_to_wishlist');  ?>",
 type:"post",
 data:"item_id="+item_id+"&_csrf="+_csrf,
 //async: false,
@@ -1133,7 +1133,7 @@ jQuery(jQueryelement).find('span').toggleClass("heart-product-hover");
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
 
-url:"<?= Url::to('/add-to-wishlist'); ?>",
+url:"<?= Url::toRoute('/users/add_to_wishlist');  ?>",
 type:"post",
 data:"item_id="+item_id+"&_csrf="+_csrf,         
 success:function(data)
@@ -1155,7 +1155,7 @@ if(event_id!=''){
 jQuery('#add_to_event_loader').show();
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
-url:"<?= Url::toRoute('/add-event'); ?>",
+url:"<?= Url::toRoute('/users/add_event'); ?>",
 type:"post",
 data:"event_id="+event_id+"&item_id="+x+"&_csrf="+_csrf,
 async: false,
@@ -1163,7 +1163,7 @@ success:function(data)
 {  
 if(data==1)
 {
-jQuery("#event-slider").load("<?php echo Yii::$app->params['BASE_URL'];?>/event-slider");
+jQuery("#event-slider").load("<?= Url::toRoute('/product/event-slider'); ?>");
 jQuery('#add_to_event_loader').hide();
 jQuery('#add_to_event').modal('hide');                                       
 jQuery('#login_success').modal('show');
@@ -1463,7 +1463,7 @@ autoPlay:false
       search_value = jQuery('#inviteesearch1').val(); 
      }
      
-        var path = <?php echo Url::to(['/inviteesearch']); ?> ;
+        var path = <?= Url::toRoute(['/eventinvitees/index']); ?> ;
         jQuery.ajax({
             url:path,
             type:'POST',

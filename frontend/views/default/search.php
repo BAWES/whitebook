@@ -55,7 +55,7 @@ window.onload=addevent1(x);
 <div class="bs-example">
 <!-- <ul class="breadcrumb"> -->
 <?php 
-$this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Yii::$app->params['BASE_URL'].'/products/'.$slug];
+$this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRoute('/plan/plan/'.$slug);];
 //$this->params['breadcrumbs'][] =$model['item_name'];
 ?>
 <?= Breadcrumbs::widget([
@@ -644,7 +644,7 @@ jQuery(jQueryelement).parent().toggleClass("faverited_icons");
 
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
-url:"<?php echo Yii::$app->params['BASE_URL'];?>/add-to-wishlist",
+url:"<?= Url::toRoute('/users/add_to_wishlist'); ?>",
 type:"post",
 data:"item_id="+item_id+"&_csrf="+_csrf,
 //async: false,

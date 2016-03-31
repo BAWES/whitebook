@@ -734,7 +734,7 @@ $image = $baselink;
     {
         jQuery.ajax({
             type: 'POST',
-            url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('addeventproduct'); ?>",
+            url: "<?= Url::toRoute('/product/addevent'); ?>",
             data: {'item_id': item_id},
             success: function (data)
             {
@@ -769,7 +769,7 @@ $image = $baselink;
     jQuery('#delivery_date').on('change', function () {
         jQuery.ajax({
             type: 'POST',
-            url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('getdeliverytimeslot'); ?>",
+            url: "<?= Url::toRoute('/product/getdeliverytimeslot'); ?>",
             data: {'vendor_id':<?php echo $model['vendor_id']; ?>, 'sel_date': jQuery(this).val()},
             success: function (data)
             {
