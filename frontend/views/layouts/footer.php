@@ -368,7 +368,7 @@ Sign in here </a></span>
 <div class="top_footer">
 <div class="col-md-7 padding_left0">
 <span class="footer_logo">
-<a href="<?= Url::toRoute('/default/index');?>" title="Logo"><?= Html::img(Yii::getAlias("@frontend_app_images/footer_logo.png")) ?></a>
+<a href="<?= Url::toRoute('default/index');?>" title="Logo"><?= Html::img("@web/images/footer_logo.png") ?></a>
 </span>
 <p class="bot_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus, sed viverra diam cursus nec. Pellentesque ligula ante, faucibus eget semper ac, auctor ac augue</p>
 </div>
