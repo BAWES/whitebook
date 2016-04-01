@@ -14,9 +14,9 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
-    public $sourcePath = '@backend/web/themes/default/';
     public $basePath = '@webroot';
     public $baseUrl = '@web/themes/default/';
+    
     public $css = [   
     'css/responsive.css',
     'css/custom-icon-set.css',
@@ -36,6 +36,7 @@ class AppAsset extends AssetBundle
      'plugins/jquery-unveil/jquery.unveil.min.js',
      'plugins/jquery-scrollbar/jquery.scrollbar.min.js',
      'plugins/jquery-numberAnimate/jquery.animateNumbers.js',
+     'js/core.js',
     ];
     public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $depends = [
