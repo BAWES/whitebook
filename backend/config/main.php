@@ -23,20 +23,6 @@ return [
            'class' => 'yii\rbac\DbManager',
            'defaultRoles' => ['admin', 'author'],
         ],
-       'urlManager' => [
-          'class' => 'yii\web\UrlManager',
-          'baseUrl' => '/backend/web/',
-          'showScriptName' => false,
-          'enablePrettyUrl' => true,
-          'rules' => [
-                  'login' => 'site/login',
-                  'password' => 'site/password',
-                  'users' => 'users/index',
-                  '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                  '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                  '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-              ],
-        ],
         'themeURL' => [
             'class' => 'yii\web\UrlManager',
             'baseUrl' => '/backend/web/themes/default',
