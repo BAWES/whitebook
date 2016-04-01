@@ -11,10 +11,11 @@ use frontend\models\Website;
  */
 class BaseController extends Controller
 {
+
     public $customer_id;
     public function init()
     {
-        parent::init();
+        parent::init();         
         $model = new Website();
         $general_settings = $model->get_general_settings();
         $this->customer_id = Yii::$app->session->get('customer_id');

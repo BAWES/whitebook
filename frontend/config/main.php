@@ -44,9 +44,9 @@ return [
                 ],
             ],
         ],
-        'errorHandler' => [
+        /*'errorHandler' => [
             'errorAction' => 'default/error',
-        ],
+        ],*/
         
     ],
     'params' => $params,

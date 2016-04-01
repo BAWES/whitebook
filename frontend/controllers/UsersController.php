@@ -25,6 +25,7 @@ use backend\models\Events;
 /**
 * Site controller.
 */
+
 class UsersController extends BaseController
 {
 public function init()
@@ -35,12 +36,11 @@ Yii::$app->language = 'en-EN';
 
 public function actionIndex()
 {
-return $this->render('index');
+ return $this->render('index');
 }
 
 public function actionLogin()
 {
- echo 343;die;
 if (isset($_POST['email']) && isset($_POST['password'])) {
 $model = new Users();
 $email = $_POST['email'];
@@ -188,7 +188,7 @@ Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
 Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
 //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
 //print_r ($login_det);die;
-$this->redirect(Url::toRoute('/default/activate');
+$this->redirect(Url::toRoute('/default/activate'));
 //$this->redirect(Yii::$app->params['BASE_URL']);
 }
 } else {

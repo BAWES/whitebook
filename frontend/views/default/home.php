@@ -153,7 +153,7 @@ AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_i
                                         $command = Yii::$app->DB->createCommand($sql);
                                         $out = $command->queryAll();
                                         if ($out) {
-                                            $imglink = Url::to("@web/images/") . $out[0]['image_path'];
+                                            $imglink = Url::to("@vendor_images/") . $out[0]['image_path'];
                                         } else {
                                             $imglink = Url::to('@web/images/no_image.png');
                                         }
