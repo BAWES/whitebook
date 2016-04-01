@@ -2,6 +2,7 @@
 use frontend\models\Website;
 use frontend\models\Users;
 use yii\helpers\Url;
+use yii\helpers\Html;
 if(Yii::$app->params['CUSTOMER_ID']!='') {
 $wishlist = Users::loadcustomerwishlist(Yii::$app->params['CUSTOMER_ID']);
 $customer_events=Website::get_customer_events(Yii::$app->params['CUSTOMER_ID']);
@@ -19,7 +20,7 @@ $customer_events=Website::get_customer_events(Yii::$app->params['CUSTOMER_ID']);
 <div class="directory_slider" id="oner">
 <div class="event_slider_top">
 <div class="col-md-3">
-<img class="top_whit" src="<?php echo Url::toRoute('/images/my_book_desk.svg') ?>" alt="My White Book"/>
+<?= Html::img('@web/images/my_book_desk.svg', ['alt' => 'My White Book','class'=>'top_whit']) ?>
 </div>
 <div class="col-md-8">
 <div class="inner_slider_event">

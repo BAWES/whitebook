@@ -111,6 +111,7 @@ class DefaultController extends BaseController
 
     public function actionDirectory()
     {
+        
         $website_model = new Website();
         $category_url = Yii::$app->request->get('name');
         $main_category = $website_model->get_main_category();

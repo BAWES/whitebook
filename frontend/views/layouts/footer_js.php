@@ -249,7 +249,7 @@ var _csrf=jQuery('#_csrf').val();
 if(validateEmail(email) == true){
 jQuery.ajax({
 url:"<?= Url::toRoute('/users/login');?>",
-type:"post",
+type:"POST",
 async:false,
 data:"email="+email+"&password="+password+"&event_status="+event_status+"&favourite_status="+favourite_status+"&_csrf="+_csrf,
 success:function(data)
