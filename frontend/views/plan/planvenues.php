@@ -9,7 +9,9 @@ use yii\widgets\Breadcrumbs;
 $controller = get_class($this->context);
 $c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 $s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s);?>
+$c_url1 = explode("?",$s);
+$c_url1[0] = $slug;
+?>
 
 <!-- coniner start -->
 <section id="inner_pages_white_back">
@@ -89,7 +91,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 /* BEGIN get current category to load sub category */
 $c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 $s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s);                           
+$c_url1 = explode("?",$s);
+$c_url1[0] = $slug;
 /* Get slug name to find category */
 $subcategory = SubCategory::loadsubcat($c_url1[0]);
 $col=1;

@@ -28,12 +28,12 @@ class SubCategory extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
-     */   
+     */
 
     public $subcategory_icon;
     public static function tableName()
     {
-        return '{{%category}}'; 
+        return '{{%category}}';
     }
 
     public function behaviors()
@@ -41,10 +41,10 @@ class SubCategory extends \yii\db\ActiveRecord
             return [
                 [
                     'class' => SluggableBehavior::className(),
-                    'attribute' => 'category_name',              
+                    'attribute' => 'category_name',
                 ],
             ];
-      }      
+      }
 
     /**
      * @inheritdoc
@@ -118,27 +118,27 @@ class SubCategory extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
     }
-    
+
         public static function statusImageurl($sale)
-	{			
-		if($sale == 'yes')			
+	{
+		if($sale == 'yes')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
 		public static function statusTitle($sale)
-	{			
-		if($sale == 'yes')		
+	{
+		if($sale == 'yes')
 		return 'Active';
 		return 'Deactive';
 	}
 		public static function getCategoryName($id)
-    {		
+    {
 		$model = Category::find()->where(['category_id'=>$id])->one();
         return $model->category_name;
     }
 
   public static function loadsubcategoryname()
-	{       
+	{
 			$subcategoryname= SubCategory::find()
 			->where(['!=', 'category_allow_sale', 'no'])
 			->andwhere(['!=', 'trash', 'Deleted'])
@@ -146,10 +146,10 @@ class SubCategory extends \yii\db\ActiveRecord
 			->all();
 			$subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name');
 			return $subcategoryname;
-	}	
-	
+	}
+
 	public static function loadsubcategory($id)
-	{       
+	{
 			$subcategoryname= SubCategory::find()
 			->where(['parent_category_id'=>$id])
 			->andwhere(['!=', 'category_allow_sale', 'no'])
@@ -159,12 +159,12 @@ class SubCategory extends \yii\db\ActiveRecord
 			->all();
 			$subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name');
 			return $subcategoryname;
-	}	
+	}
 
-  // load sub category front-end plan page 
+  // load sub category front-end plan page
   public static function loadsubcat($slug)
-  {    
-      $subcategory_slug= SubCategory::find()->where(['slug'=>$slug])->one();   
+  {
+      $subcategory_slug= SubCategory::find()->where(['slug'=>$slug])->one();
       $subcategory = Yii::$app->db->createCommand('SELECT wvi.subcategory_id as category_id ,wc.category_name,wc.slug FROM whitebook_vendor_item as wvi  INNER JOIN whitebook_category as wc ON wc.category_allow_sale= "yes" and wc.trash="Default" and wc.category_level = 1 and wvi.subcategory_id = wc.category_id and wvi.item_for_sale="Yes" and wvi.item_approved="Yes" and wvi.item_status = "Active" and parent_category_id = '.$subcategory_slug['category_id'].' group by wvi.subcategory_id')->queryAll(); 
      return $subcategory;
   }
