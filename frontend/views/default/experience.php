@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 ?>
 <!-- coniner start -->
 
@@ -18,7 +19,7 @@ use yii\helpers\Url;
         </div>
 
         <div class="add_banner">
-            <img alt="banner" src="<?php echo Yii::$app->params['BASE_URL']; ?>/frontend/web/images/explore_banner.jpg">
+            <?= Html::img("@web/images/explore_banner.jpg") ?>
         </div>
 
     </div>
@@ -26,7 +27,7 @@ use yii\helpers\Url;
 <!-- continer end -->
 
 <?php
-// category display dynamic 
+// category display dynamic
 /* foreach ($category as $key => $value) { ?>
   <li>
   <a href="<?= Url::to('products/'.$value['slug']); ?>" title="<?= $value['category_name'] ?>">

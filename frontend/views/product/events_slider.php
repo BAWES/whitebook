@@ -9,10 +9,11 @@ $customer_events=Website::get_customer_events(Yii::$app->params['CUSTOMER_ID']);
 ?>
 <?php if(count($customer_events) == 0) {  ?>
 <div class="container_eventslider">
-<span class="first_events"><img src="<?php echo Url::toRoute('/images/my_book_desk.svg') ?>" alt="My White Book"/></span>
+<span class="first_events">
+    <img src="<?php echo Url::to('@web/images/my_book_desk.svg') ?>" alt="My White Book"/></span>
 <div class="creatfirst_events">
 <p data-example-id="active-anchor-btns" class="bs-example">
-<a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?php echo Yii::t('frontend','CREATE_YOUR_FIRST_EVENT');?>"><?php echo Yii::t('frontend','CREATE_YOUR_FIRST_EVENT');?></a>
+<a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?php echo Yii::t('frontend','Create your first event');?>"><?php echo Yii::t('frontend','Create your first event');?></a>
 </p>
 </div>
 </div>
@@ -34,10 +35,10 @@ Things I like</a>
 <?php } else {?>
 <a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" data-target="#EventModal" title="CREATE YOUR FIRST EVENT" style="   float: left;    margin-left: 225px;    margin-top: 45px;    min-height: 30px;">CREATE YOUR FIRST EVENT</a>
 <?php } ?>
-</div>                                    
-<?php                                                                 
+</div>
+<?php
 foreach ($customer_events as $key => $value) { ?>
-<a href="<?=  Url::toRoute('/users/eventdetails'); ?><?= '/'.$value['slug']; ?>">
+<a href="<?=  Url::toRoute('users/eventdetails'); ?><?= '/'.$value['slug']; ?>">
 <div class="item">
 <h4><?php if(strlen($value['event_name'])>12){echo substr($value['event_name'], 0, 12).' ...';}else{ echo$value['event_name'];} ?></h4>
 <p><?= $value['event_date']; ?></p>
@@ -45,7 +46,7 @@ foreach ($customer_events as $key => $value) { ?>
 </p>
 </div>
 </a>
-<?php }  ?>                       
+<?php }  ?>
 </div>
 </div>
 </div>
@@ -61,12 +62,12 @@ foreach ($customer_events as $key => $value) { ?>
 <?php } }else {
 ?>
 <div class="container_eventslider">
-<span class="first_events"><img src="<?php echo Url::toRoute('/images/my_book_desk.svg') ?>" alt="My White Book"/></span>
+<span class="first_events"><img src="<?php echo Url::to('@web/images/my_book_desk.svg') ?>" alt="My White Book"/></span>
 <div class="creatfirst_events">
 <p data-example-id="active-anchor-btns" class="bs-example">
 <?php if(Yii::$app->params['CUSTOMER_ID']=='') { ?>
 <a href="javascript:"  role="button" class="btn btn-default"  data-toggle="modal"  onclick="show_login_modal(-1);" data-target="#myModal" title="<?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?>"><?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?></a>
-<?php } else { 
+<?php } else {
 if(count($customer_events) > 0) {?>
 <a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?>"><?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?></a>
 <?php }else {?>
@@ -127,5 +128,3 @@ jQuery('.directory_slider > .col-md-8').css("width", "66%");
 
 });
 </script>
-
-

@@ -40,7 +40,7 @@
                             <div id="accordion" class="panel-group">
                                 <div class="panel panel-default" >
                                     <div class="panel-heading">
-                                        <a href="#bakery" id="sub_category_cakes" data-parent="#accordion" data-toggle="collapse" class="collapsed"> 
+                                        <a href="#bakery" id="sub_category_cakes" data-parent="#accordion" data-toggle="collapse" class="collapsed">
                                             <h4 class="panel-title">Drinks
                                                 <span class="minus_acc">  </span>
                                             </h4>
@@ -95,8 +95,8 @@
                                 <div class="panel panel-default" >
                                     <div class="panel-heading">
                                         <a href="#vendor" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_vendor">
-                                            <h4 class="panel-title">Vendor <i style="font-size:11px;">- Clear</i> 
-                                                <span class="plus_acc"></span>   
+                                            <h4 class="panel-title">Vendor <i style="font-size:11px;">- Clear</i>
+                                                <span class="plus_acc"></span>
 
                                             </h4></a>
                                     </div>
@@ -148,7 +148,7 @@
                                         <a href="#theme" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_theme">
                                             <h4 class="panel-title" style="text-align:left;">Theme<span class="plus_acc"> </span>
                                             </h4>
-                                        </a> 
+                                        </a>
                                     </div>
                                     <div class="panel-collapse collapse" style="height: 0px;" id="theme">
                                         <div class="panel-body">
@@ -197,7 +197,7 @@
                                             <h4 class="panel-title">Price
                                                 <span class="plus_acc">
                                                 </span>
-                                            </h4></a> 
+                                            </h4></a>
                                     </div>
                                     <div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
                                         <div class="panel-body">
@@ -247,7 +247,7 @@
             </div>
             <div class="col-md-9 paddingright0">
                 <div class="banner_section_plan">
-                    <img src="images/banner_plan.png" alt="images"/>
+                    <?= Html::img("@web/images/banner_plan.png") ?>
                 </div>
                 <div class="listing_right">
 
@@ -530,7 +530,7 @@
                             <button title="Load More" class="btn btn-danger" type="button">Load More</button>
                         </div>
                         <div class="banner_section_plan">
-                            <img alt="images" src="images/banner_plan.png">
+                            <?= Html::img("@web/images/banner_plan.png") ?>
                         </div>
                     </div>
                 </div>

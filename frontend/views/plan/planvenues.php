@@ -333,7 +333,7 @@ if($min_kd > 0 )
 </div>
 <div class="col-md-9 paddingright0">
 <div class="banner_section_plan">
-<img src="<?php echo Yii::$app->params['BASE_URL'];?>/frontend/web/images/banner_plan.png" alt="images"/>
+	<?= Html::img("@web/images/banner_plan.png") ?>
 </div>
 <!-- BEGIN Item lists -->
 <div class="listing_right">
@@ -396,7 +396,7 @@ echo "No records found";
 </div>
 <?php } ?>
 <div class="banner_section_plan">
-<img alt="images" src="<?php echo Yii::$app->params['BASE_URL'];?>/frontend/web/images/banner_plan.png" alt="item detail image">
+<?= Html::img("@web/images/banner_plan.png") ?>
 </div>
 </div>
 </div>
