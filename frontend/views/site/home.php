@@ -7,10 +7,10 @@ $model = new Website();
 ?>
 <link href="<?php echo Yii::$app->params['CSS_PATH']; ?>bootstrap-datetimepicker.min.css" rel="stylesheet">
 <link href="<?php echo Yii::$app->params['CSS_PATH']; ?>/layerslider.css" rel="stylesheet">
-<!-- content main start -->  
+<!-- content main start -->
 <!-- banner section start -->
 <?php if (count($banner) > 0) { ?>
-    <section id="banner_sections">     
+    <section id="banner_sections">
         <div class="banner_slider_content">
             <div class="carousel slide" id="myCarousel">
                 <ol class="carousel-indicators">
@@ -28,7 +28,7 @@ $model = new Website();
                         <?php } else { ?>
                                 <img src="<?php echo Yii::$app->params['BASE_URL']; ?>/backend/web/uploads/banner_images/banner_<?php echo $b['slide_id'] . '.png'; ?>" class="ls-bg" style="top: 80px;"  alt="<?php echo $b['slide_title']; ?>" width="1322" height="522"/>
         <?php } ?>
-                        </div>                    
+                        </div>
         <?php $i++;
     } ?>
                 </div>
@@ -46,37 +46,47 @@ $model = new Website();
 <section id="content_section">
     <div class="container_plan">
         <div class="container_common">
-            <span class="first_events"><img src="<?php echo Yii::$app->params['BASE_URL']; ?>/frontend/web/images/my_book.png" alt="My White Book"/></span>
+            <span class="first_events">
+                <?= Html::img('@web/images/my_book.png', ['alt' => 'My White Book', 'title' => 'My Whitebook']) ?>
+            </span>
             <div class="creatfirst_events">
                 <p data-example-id="active-anchor-btns" class="bs-example">
-                    <a role="button" class="btn btn-default" title="Create your first event" href="#">Create your first event</a>
+                    <?= Html::a(Yii::t("frontend", "Create your first event"), "#", [
+                        "title" => Yii::t("frontend", "Create your first event"),
+                        "class" => "btn btn-default",
+                        "role" => "button",
+                        ]) ?>
                 </p>
             </div>
         </div>
         <div class="plan_sections">
             <ul>
-                <li>              
+                <li>
                     <div class="plan_list">
-                        <img src="<?php echo Yii::$app->params['BASE_URL']; ?>/frontend/web/images/plan.jpg" alt="images"/> 
+                        <?= Html::img('@web/images/plan.jpg') ?>
                         <div class="inner_content_plan">
                             <h1>Plan</h1>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
-                            <a role="button" class="btn btn-default" title="Discover" href="#">Discover</a>
+                            <a role="button" class="btn btn-default" title="Discover" href="#">
+                                <?= Yii::t("frontend", "Discover") ?>
+                            </a>
                         </div>
-                    </div> 
+                    </div>
                 </li>
                 <li>
                     <div class="plan_list">
-                        <img src="<?php echo Yii::$app->params['BASE_URL']; ?>/frontend/web/images/shop.jpg" alt="images"/> 
+                        <?= Html::img('@web/images/shop.jpg') ?>
                         <div class="inner_content_plan">
                             <h1>SHOP</h1>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
-                            <a role="button" class="btn btn-default" title="Discover" href="#">Discover</a>
+                            <a role="button" class="btn btn-default" title="Discover" href="#">
+                                <?= Yii::t("frontend", "Discover") ?>
+                            </a>
                         </div>
                     </div>
                 </li>
                 <li><div class="plan_list">
-                        <img src="<?php echo Yii::$app->params['BASE_URL']; ?>/frontend/web/images/plan.jpg" alt="images"/> 
+                        <?= Html::img('@web/images/plan.jpg') ?>
                         <div class="inner_content_plan">
                             <h1>Experience</h1>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
@@ -84,7 +94,7 @@ $model = new Website();
                         </div>
                     </div>
                 </li>
-            </ul>  
+            </ul>
         </div>
         <div class="feature_product_title">
             <h2>Featured Products</h2>
@@ -153,11 +163,11 @@ $model = new Website();
         <div class="add_banner">
             <img src="<?php echo Yii::$app->params['BASE_URL']; ?>/frontend/web/images/explore_banner.jpg" alt="banner"/>
         </div>
-    </div> 
-</section>	
+    </div>
+</section>
 
 
-<!-- content main end  -->  
+<!-- content main end  -->
 
 
 <!-- Modal video start -->
