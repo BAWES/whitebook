@@ -15,7 +15,6 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
-    public $sourcePath = '@frontend/web/';
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
@@ -26,9 +25,9 @@ class AppAsset extends AssetBundle
         'css/owl.carousel.css',
         'css/ma5-mobile-menu.css',
         'css/bootstrap-select.min.css',
-        'css/datepicker_popup.css'        
+        'css/datepicker_popup.css'
     ];
-    public $js = [        
+    public $js = [
         'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js',
         'https://code.jquery.com/ui/1.11.3/jquery-ui.min.js',
         'js/modernizr.js',
@@ -40,8 +39,8 @@ class AppAsset extends AssetBundle
         'js/owl.carousel.js',
         'js/bootstrap-datepicker.js',
         'js/bootstrap-select.js'
-        
-        
+
+
     ];
     public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $depends = [
