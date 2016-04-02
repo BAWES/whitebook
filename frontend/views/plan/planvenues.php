@@ -7,9 +7,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 $controller = get_class($this->context);
-$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");                           
+$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 $s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s);?>  
+$c_url1 = explode("?",$s);?>
 
 <!-- coniner start -->
 <section id="inner_pages_white_back">
@@ -21,23 +21,23 @@ $c_url1 = explode("?",$s);?>
 <div class="breadcrumb_common">
 <div class="bs-example">
 <!-- <ul class="breadcrumb"> -->
-<?php 
+<?php
 $category_det=Category::category_value($slug);
 if($category_det['category_name']!='Say thank you'){
 $this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Yii::$app->params['BASE_URL'].'/products/'.$slug];
 }else{
-$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$app->params['BASE_URL'].'/products/'.$slug];	
+$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$app->params['BASE_URL'].'/products/'.$slug];
 }
 //$this->params['breadcrumbs'][] =$model['item_name'];
 ?>
 <?= Breadcrumbs::widget([
 'options' => ['class' => 'new breadcrumb'],
-'homeLink' => [ 
+'homeLink' => [
 'label' => Yii::t('yii', 'Home'),
 'url' => Yii::$app->params['BASE_URL'],
 ],
 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-]); 
+]);
 ?>
 
 <!-- </ul> -->
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 </div>
 <div class="plan_venues" id="wrapper">
 <?php
-/* BEGIN get current category to load sub category */                      
+/* BEGIN get current category to load sub category */
 
 ?>
 <div class="overlay"></div>
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 <option data-icon="invitation-category" <?php  if($c_url1[0] == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="invitations"><a href="#">Invitations</a></option>
 <option data-icon="food-category" name="category" value="food-beverage" <?php  if($c_url1[0] == 'food-beverage') { ?> selected="selected"<?php } ?>><a href="#">Food & Beverage</a></option>
 <option data-icon="decor-category" name="category" value="decor" <?php  if($c_url1[0] == 'decor') { ?> selected="selected"<?php } ?>><a href="#">Decor</a></option>
-<option data-icon="supply-category" value="supplies" <?php  if($c_url1[0] == 'supplies') { ?> selected="selected"<?php } ?>><a href="#">Supplies</a></option>                                
+<option data-icon="supply-category" value="supplies" <?php  if($c_url1[0] == 'supplies') { ?> selected="selected"<?php } ?>><a href="#">Supplies</a></option>
 <option data-icon="enter-category" value="entertainment" <?php  if($c_url1[0] == 'entertainment') { ?> selected="selected"<?php } ?>><a href="#">Entertainment</a></option>
 <option data-icon="service-category" value="services" <?php  if($c_url1[0] == 'services') { ?> selected="selected"<?php } ?>><a href="#">Services</a></option>
 <option data-icon="others-category" <?php  if($c_url1[0] == 'others') { ?> selected="selected"<?php } ?> name="category" value="others"><a href="#">Others</a></option>
@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 </select>
 </div>
 </div>
-<div class="responsive-category-bottom">                       
+<div class="responsive-category-bottom">
 <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
 <div class="filter_title">
 <span class="title_filter color_yellow">Filter by</span>
@@ -84,18 +84,18 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 <nav class="row-offcanvas row-offcanvas-left">
 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 <div id="accordion" class="panel-group">
-<!-- BEGIN CATEGORY FILTER  -->					   
-<?php        
-/* BEGIN get current category to load sub category */                      
-$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");                           
+<!-- BEGIN CATEGORY FILTER  -->
+<?php
+/* BEGIN get current category to load sub category */
+$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 $s = $c_url[count($c_url)-1];
 $c_url1 = explode("?",$s);                           
-/* Get slug name to find category */                             
-$subcategory = SubCategory::loadsubcat($c_url1[0]); 
-$col=1;                                 
-foreach ($subcategory as $key => $value) {                                   
+/* Get slug name to find category */
+$subcategory = SubCategory::loadsubcat($c_url1[0]);
+$col=1;
+foreach ($subcategory as $key => $value) {
 $t = $in ='';
-if($col==1){                     
+if($col==1){
 $s_class='minus_acc';$t='area-expanded="true"';$in='in';
 }else{
 $s_class='plus_acc';
@@ -105,7 +105,7 @@ $s_class='plus_acc';
 <div class="panel-heading">
 <div class="clear_left"><p><?= $value['category_name']; ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
 <div class="clear_right">
-<a href="#<?= $value['category_id']; ?>" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed"> 
+<a href="#<?= $value['category_id']; ?>" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
 <h4 class="panel-title">
 <span class="<?= $s_class;?>"></span>
 </h4>
@@ -115,36 +115,36 @@ $s_class='plus_acc';
 <div id="<?= $value['category_id']; ?>" <?= $t; ?> class="panel-collapse collapse <?= $in; ?>"  >
 <div class="panel-body">
 <div class="table">
-<?php $childcategory = ChildCategory::loadchildcategoryslug($value['category_id']); 
+<?php $childcategory = ChildCategory::loadchildcategoryslug($value['category_id']);
 /* Display scroll for more than three li */
-if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";} 
+if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 /* Display scroll for more than three li */
 ?>
 <ul class="<?= $class; ?>">
-<?php                                    
-foreach ($childcategory as $key => $value) {  
+<?php
+foreach ($childcategory as $key => $value) {
 if(isset($_GET['category']) && $_GET['category'] !="")
 {
 $val = explode(' ',$_GET['category']);
 
 if(in_array($value['slug'],$val))
 {
-	$checked = 'checked=checked';                                    
+	$checked = 'checked=checked';
 }
 else
 {
-$checked = '';   
+$checked = '';
 }
 }
-/* END check category checbox values */ 
-?>                                   
+/* END check category checbox values */
+?>
 <li>
 <label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
-<input name="items" data-element="input" class="items" id="checkbox-<?= $value['category_name'] ?>" 
-value="<?= $value['slug'] ?>" step="<?= $value['category_id'] ?>" 
+<input name="items" data-element="input" class="items" id="checkbox-<?= $value['category_name'] ?>"
+value="<?= $value['slug'] ?>" step="<?= $value['category_id'] ?>"
 type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
 <?= ucfirst(strtolower($value['category_name'])); ?></label>
-</li>                                                    
+</li>
 <?php }  ?>
 </ul>
 </div>
@@ -158,46 +158,46 @@ type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; 
 <div class="panel-heading">
 <div class="clear_left"><p>Themes <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
 <div class="clear_right">
-<a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed"> 
+<a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
 <h4 class="panel-title">
 <span class="plus_acc"></span>
 </h4>
 </a>
-</div>     
-</div>                                   
+</div>
+</div>
 <div id="themes" class="panel-collapse collapse" aria-expanded="false">
 <div class="panel-body">
 <div class="table">
-<?php 
+<?php
 /* BEGIN Display scroll for more than three li */
 if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 /* END Display scroll for more than three li */
 ?>
 <ul class="<?= $class; ?>">
-<?php foreach ($themes as $key => $value) { 
+<?php foreach ($themes as $key => $value) {
 if(isset($_GET['themes']) && $_GET['themes'] !="")
 {
 $val = explode(' ',$_GET['themes']);
 
 if(in_array($value['slug'],$val))
 {
-	$checked1 = 'checked=checked';                                    
+	$checked1 = 'checked=checked';
 }
 else
 {
-$checked1 = '';   
+$checked1 = '';
 }
 }
 ?>
 <li>
 <label class="label_check" for="checkbox-<?= $value['theme_name'] ?>"><input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> ><?= ucfirst(strtolower($value['theme_name'])); ?></label>
 </li>
-<?php } ?>                                                   
+<?php } ?>
 </ul>
 </div>
 </div>
-</div>                               
-</div>                                
+</div>
+</div>
 <!--  END THEME FILTER -->
 
 <!--  BEGIN VENDOR FILTER -->
@@ -205,47 +205,47 @@ $checked1 = '';
 <div class="panel-heading">
 <div class="clear_left"><p>Vendor <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
 <div class="clear_right">
-<a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed"> 
+<a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
 <h4 class="panel-title">
 <span class="plus_acc"></span>
 </h4>
 </a>
 </div>
-</div>                                   
+</div>
 <div id="vendor" class="panel-collapse collapse" area-expanded="false" >
 <div class="panel-body">
 <div class="table">
-<?php 
+<?php
 /* BEGIN Display scroll for more than three li */
 if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 /* END Display scroll for more than three li */
 ?>
 <ul class="<?= $class; ?>">
-<?php foreach ($vendor as $key => $value) { 
+<?php foreach ($vendor as $key => $value) {
 if(isset($_GET['vendor']) && $_GET['vendor'] !="")
 {
-	
+
 $val = explode(' ',$_GET['vendor']);
 
 if(in_array($value['slug'],$val))
-{	
-	$checked2 = 'checked=checked';                                    
+{
+	$checked2 = 'checked=checked';
 }
 else
 {
-$checked2 = '';   
+$checked2 = '';
 }
 }
 ?>
 <li>
 <label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>"><input name="vendor" data-element="input" class="items" id="checkbox-<?= $value['vendor_name'] ?>" step="<?= $value['vendor_name'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked2) && $checked2 !="") ?  $checked2 : ''; ?> ><?= ucfirst(strtolower($value['vendor_name'])); ?></label>
 </li>
-<?php } ?>                                                   
+<?php } ?>
 </ul>
 </div>
 </div>
-</div>                               
-</div>                                
+</div>
+</div>
 <!--  END VENDOR FILTER-->
 <!--  BEGIN PRICE FILTER -->
 <div class="panel panel-default" >
@@ -256,7 +256,7 @@ $checked2 = '';
 <h4 class="panel-title">
 <span class="plus_acc">
 </span>
-</h4></a> 
+</h4></a>
 </div>
 </div>
 <div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
@@ -265,7 +265,7 @@ $checked2 = '';
 <ul class="test_scroll">
 <?php
 
-/* Get max price_per_unit in item table */ 
+/* Get max price_per_unit in item table */
 $min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
 $max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
 $max = $max_price[0]['price'];
@@ -278,7 +278,7 @@ $min_kd = round($x-$divide);
 
 //if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
 if($min_kd > 0 )
-{	
+{
 	foreach ($imageData as $key => $value) {
 	/* Check checkbox based on URL */
 	if(isset($_GET['price']) && $_GET['price'] !="")
@@ -287,11 +287,11 @@ if($min_kd > 0 )
 
 	if(in_array($value['slug'],$val))
 	{
-		$checked3 = 'checked=checked';                                    
+		$checked3 = 'checked=checked';
 	}
 	else
 	{
-	$checked3 = '';   
+	$checked3 = '';
 	}
 	}
 	/* Check checkbox based on URL */
@@ -301,17 +301,17 @@ if($min_kd > 0 )
 
 	$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
 
-	if($check_range ==1)	{	
+	if($check_range ==1)	{
 	?>
 	<li>
 	<label class="label_check" for="checkbox-<?php echo $x;?>">
 	<input name="price" id="checkbox-<?php echo $x;?>" value="<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?>-<?php echo $x = ceil($x / 100) * 100;?>" type="checkbox">
 	<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
 	</li>
-	<?php 
-	break;	
+	<?php
+	break;
 	}
-	$i++; } 
+	$i++; }
 	}
 }
 	?>
@@ -319,12 +319,12 @@ if($min_kd > 0 )
 </div>
 </div>
 </div>
-</div>                                
+</div>
 <!--  END PRICE FILTER-->
 <!-- END FILTER  -->
 </div>
 </nav>
-</div>                            
+</div>
 </div>
 </div>
 </div>
@@ -333,20 +333,20 @@ if($min_kd > 0 )
 <img src="<?php echo Yii::$app->params['BASE_URL'];?>/frontend/web/images/banner_plan.png" alt="images"/>
 </div>
 <!-- BEGIN Item lists -->
-<div class="listing_right">                               
+<div class="listing_right">
 <div class="events_listing">
 <ul>
-<?php      
+<?php
 if(!empty($imageData))
-{                          
-foreach ($imageData as $key => $value) {  
+{
+foreach ($imageData as $key => $value) {
 	// echo $value['image_path'];die;
-if($value['image_path'] !="")  {                   
+if($value['image_path'] !="")  {
 ?>
 <li>
 <div class="events_items">
 <div class="events_images">
-<div class="hover_events">			
+<div class="hover_events">
 <div class="pluse_cont">
 <?php if(Yii::$app->params['CUSTOMER_ID']=='') { ?>
 <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','ADD_EVENT');?>"></a>
@@ -361,13 +361,13 @@ if($value['image_path'] !="")  {
 <?php } else {$k=array();
 foreach($customer_events_list as $l){
 $k[]=$l['item_id'];
-} 
+}
 $result=array_search($value['item_id'],$k);
 if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
 <div class="faver_icons">
 <?php }?>
-<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','ADD_FAV');?>"></a></div>                           
-<?php } ?> 
+<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','ADD_FAV');?>"></a></div>
+<?php } ?>
 </div>
 
 <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('').'product/';?><?php echo $value['slug'];?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
@@ -378,11 +378,11 @@ if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php 
 <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
 </div>
 </div>
-</li>  
+</li>
 <?php } }  } else {
 echo "No records found";
 }
-?>                                   
+?>
 </ul>
 <div id="planloader"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader" style="margin-top: 15%;"></div>
 </div>
@@ -414,7 +414,7 @@ echo "No records found";
 
 <!-- megamenu script -->
 <!-- plan last:child script -->
-<script type="text/javascript">        
+<script type="text/javascript">
 $(document).ready(function () {
 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
 jQuery('.thing_items li:nth-child(8n)').addClass("margin-rightnone");
@@ -461,18 +461,18 @@ jQuery('.label_check').each(function () {
 jQuery(this).removeClass('c_on');
 
 	if(jQuery(this).parents('.panel-body').find('label.c_on').length == 0){
-		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','none'); 		
+		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','none');
 	}else{
-		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block'); 
+		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block');
 	}
-	
-}); 
-jQuery('.label_check input:checked').each(function () {    		
+
+});
+jQuery('.label_check input:checked').each(function () {
 	jQuery(this).parent('label').addClass('c_on');
 	if(jQuery(this).parents('.panel-body').find('label.c_on').length == 0){
-		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','none'); 		
-	}else{		
-		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block'); 
+		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','none');
+	}else{
+		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block');
 	}
 });
 }
@@ -497,7 +497,7 @@ jQuery(".custom-select").change(function () {
 var selectedOption = jQuery(this).find(":selected").text();
 jQuery(this).next(".holder").text(selectedOption);
 }).trigger('change');
-});	
+});
 
 
 /*jQuery('#accordion a').click(function () {
@@ -540,16 +540,16 @@ $("#"+cat).parent().parent().find('#bakery').hide();
 $('#open_search').click(function () {
 jQuery("#open_search").toggleClass("active");
 });
-/* Mega menu */                             
+/* Mega menu */
 jQuery(document).ready(function(){
-jQuery(".dropdown").hover(            
+jQuery(".dropdown").hover(
 function() {
 jQuery('.dropdown-menu', this).stop( true, true ).slideDown("fast");
-jQuery(this).toggleClass('open');        
+jQuery(this).toggleClass('open');
 },
 function() {
 jQuery('.dropdown-menu', this).stop( true, true ).slideUp("fast");
-jQuery(this).toggleClass('open');       
+jQuery(this).toggleClass('open');
 }
 );
 });
@@ -557,7 +557,7 @@ jQuery(this).toggleClass('open');
 (function(jQuery){
 jQuery(window).load(function(){
 jQuery(".test_scroll").mCustomScrollbar(
-{theme:"rounded-dark" ,                
+{theme:"rounded-dark" ,
 mouseWheelPixels: 50,
 scrollInertia: 0
 });
@@ -566,21 +566,21 @@ scrollInertia: 0
 
 
 /* BEGIN filter item list */
-var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");  
+var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");
 var url = window.location.href;     // Returns full URL
-setupLabel();	
+setupLabel();
 jQuery('.label_check input').on('change',function()
-{ 
+{
 	filter();
-});  
+});
 
 /* BEGIN GET SLUG FROM URL */
 var url = window.location.href;
-var newUrl = url.substring(0, url.indexOf('?'));  
+var newUrl = url.substring(0, url.indexOf('?'));
 var slug;
 if(newUrl !='')
 {
-	 slug = newUrl.substring(newUrl.lastIndexOf('/') + 1); 	
+	 slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
 }
 else
 {
@@ -599,34 +599,34 @@ jQuery.ajax({
 type:'POST',
 url:path,
 data:{limit:limit, slug:slug, _csrf : csrfToken},
-success:function(data){       	
-jQuery('.events_listing ul li:last-child').after(data);   
-// Every fourth li change margin 
-jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone"); 	
+success:function(data){
+jQuery('.events_listing ul li:last-child').after(data);
+// Every fourth li change margin
+jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
 jQuery("#planloader").hide();
 }
 })
-});   
+});
 
 /* BEGIN load category and reload the page */
-jQuery('#main-category').change(function(){  
+jQuery('#main-category').change(function(){
 //alert(jQuery('option[name=category]').val());
-var s = jQuery('#main-category :selected').val();		
-var hostname = window.location.host;        
+var s = jQuery('#main-category :selected').val();
+var hostname = window.location.host;
 location.href = 'http://'+hostname+'/products/'+jQuery(this).val();
 });
 /* END load category and reload the page */
 var loadmore=0;
-function filter(){	
+function filter(){
 jQuery("#planloader").show();
 jQuery(".events_listing").css({"opacity":"0.5","position":"relative"});
 var category_name = jQuery("input[name=items]:checked").map(function() {
 return this.value;
-}).get().join('+');   
+}).get().join('+');
 
 var theme_name = jQuery("input[name=themes]:checked").map(function() {
 return this.value;
-}).get().join('+'); 
+}).get().join('+');
 
 var vendor_name = jQuery("input[name=vendor]:checked").map(function() {
 return this.value;
@@ -634,41 +634,41 @@ return this.value;
 
 var price_val = jQuery("input[name=price]:checked").map(function() {
 return this.value;
-}).get().join('+'); 
+}).get().join('+');
 /* URL format */
 
-var url_path; 
+var url_path;
 /* BEGIN GET SLUG FROM URL */
 var url = window.location.href;
-var newUrl = url.substring(0, url.indexOf('?'));  
+var newUrl = url.substring(0, url.indexOf('?'));
 
 var slug;
 if(newUrl !='')
 {
-	 slug = newUrl.substring(newUrl.lastIndexOf('/') + 1); 	
+	 slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
 }
 else
 {
-	slug = url.substring(url.lastIndexOf('/') + 1); 	
+	slug = url.substring(url.lastIndexOf('/') + 1);
 
 }
-/* END GET SLUG FROM URL */	
+/* END GET SLUG FROM URL */
 
-/* if all checkbox uncheck load items based on category */ 	
+/* if all checkbox uncheck load items based on category */
 if(category_name =="" && theme_name =="" && vendor_name =="")
-{			
-window.history.pushState("test", "Title", newUrl);  
-slug = <?php  $c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");                           
+{
+window.history.pushState("test", "Title", newUrl);
+slug = <?php  $c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 $s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s); 
+$c_url1 = explode("?",$s);
 echo '"'.$c_url1[0].'";';
-?>   
-} 
+?>
+}
 
 if(category_name !="" || theme_name !="" || vendor_name !="" || price_val !="")
-{             
-url_path = '?category='+category_name+'&themes='+theme_name+'&vendor='+vendor_name+'&price='+price_val; 
-}      
+{
+url_path = '?category='+category_name+'&themes='+theme_name+'&vendor='+vendor_name+'&price='+price_val;
+}
 
 var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loaditems'); ?> ";
 <?php $giflink=Yii::$app->params['BASE_URL'].Yii::getAlias('@gif_img');?>
@@ -676,17 +676,17 @@ jQuery.ajax({
 type:'POST',
 url:path,
 data:{item_ids: category_name, themes : theme_name,vendor : vendor_name,price : price_val,slug: slug, _csrf : csrfToken},
-success:function(data){     
-window.history.pushState("test", "Title", url_path);  
-jQuery('.events_listing ul').html(data); 
-// Every fourth li change margin 
+success:function(data){
+window.history.pushState("test", "Title", url_path);
+jQuery('.events_listing ul').html(data);
+// Every fourth li change margin
 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
 jQuery("#planloader").hide();
 jQuery(".events_listing").css({"opacity":"1.0","position":"relative"});
 }
 }).done(function(){
 	jQuery(".add_to_favourite").click(function(){
-	
+
 jQuery('#loading_img_list').show();
 jQuery('#loading_img_list').html('<img id="loading-image" src="<?= $giflink;?>" alt="Loading..." />');
 
@@ -702,15 +702,15 @@ data:"item_id="+item_id+"&_csrf="+_csrf,
 success:function(data)
 {
 jQuery('#heart_fave').html(data);
-jQuery('#loading_img_list').hide(); 
+jQuery('#loading_img_list').hide();
 }
-});           
+});
 });
 });
 }
 
 /* BEGIN CLEAR FILTER */
-jQuery('a#filter-clear').on('click',function(){	
+jQuery('a#filter-clear').on('click',function(){
 	jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
 	jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
 	jQuery(this).hide();
@@ -724,16 +724,16 @@ overlay = jQuery('.overlay'),
 isClosed = false;
 
 trigger.click(function () {
-filter_butt();   /* FUNCTION REFERENCE main.js */   
+filter_butt();   /* FUNCTION REFERENCE main.js */
 });
 
 jQuery('.search_header').click(function(){
-if (isClosed == true) {          
+if (isClosed == true) {
 overlay.hide();
 trigger.removeClass('ses_act');
 trigger.addClass('ses_dct');
 isClosed = false;
-} else {   
+} else {
 overlay.show();
 trigger.removeClass('ses_act');
 trigger.addClass('ses_dct');
@@ -747,14 +747,14 @@ jQuery('#wrapper').toggleClass('toggled');
 
 
 jQuery("#left_side_cate nav").removeClass ("navbar navbar-fixed-top ");
-jQuery("#left_side_cate ul").removeClass ("nav sidebar-nav ");  
-jQuery("#left_side_cate nav").removeAttr ("id") 
+jQuery("#left_side_cate ul").removeClass ("nav sidebar-nav ");
+jQuery("#left_side_cate nav").removeAttr ("id")
 if (jQuery(window).width() < 991) {
 jQuery("#left_side_cate nav").addClass ("navbar navbar-fixed-top ");
-jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");  
+jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");
 jQuery("#left_side_cate nav").attr ('id','sidebar-wrapper')
 }
 
 /* END RESPONSIVE FILTER NAVIGATION */
 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
-</script> 
+</script>

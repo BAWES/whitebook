@@ -84,74 +84,78 @@ $action = Yii::$app->controller->action->id;
 
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li class="dropdown mega-dropdown"><a href="<?= Url::toRoute('/plan', true); ?>" title="Home">Plan</a>
+                            <li class="dropdown mega-dropdown">
+                                <?= Html::a(Yii::t('frontend', 'Plan'), ['plan/plans'], ['title' => Yii::t('frontend', 'Plan')]); ?>
                                 <div class="dropdown-menu mega-dropdown-menu category_listing_nav">
                                     <ul class="nav-list list-inline">
                                         <li>
-                                            <a title="<?php echo Yii::t('frontend', 'VENUES'); ?>  " href="<?= Url::toRoute('products/venues', true); ?>">
+                                            <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["plan/plan", 'slug' => 'venues']); ?>">
                                                 <span class="venus_icon"></span>
-                                                <span> <?php echo Yii::t('frontend', 'VENUES'); ?></span>
+                                                <span> <?php echo Yii::t('frontend', 'Venues'); ?></span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a title=" <?php echo Yii::t('frontend', 'INVITATIONS'); ?>" href="<?= Url::toRoute('/products/invitations', true); ?>">
+                                            <a title=" <?php echo Yii::t('frontend', 'Invitations'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'invitations']); ?>">
                                                 <span class="invit_icon"></span>
-                                                <span> <?php echo Yii::t('frontend', 'INVITATIONS'); ?></span>
+                                                <span> <?php echo Yii::t('frontend', 'Invitations'); ?></span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a title="<?php echo Yii::t('frontend', 'FOOD_BEVERAGE'); ?>" href="<?= Url::toRoute('/products/food-beverage', true); ?>">
+                                            <a title="<?php echo Yii::t('frontend', 'Food and Beverage'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'food-beverage']); ?>">
                                                 <span class="food_map"></span>
-                                                <span><?php echo Yii::t('frontend', 'FOOD_BEVERAGE') ?></span>
+                                                <span><?php echo Yii::t('frontend', 'Food and Beverage') ?></span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a title="<?php echo Yii::t('frontend', 'DECOR_SUPPLIES'); ?>" href="<?= Url::toRoute('/products/decor', true); ?>">
+                                            <a title="<?php echo Yii::t('frontend', 'Decor'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'decor']); ?>">
                                                 <span class="decor"></span>
-                                                <span><?php echo Yii::t('frontend', 'DECOR_SUPPLIES'); ?> </span>
+                                                <span><?php echo Yii::t('frontend', 'Decor'); ?> </span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a title="<?php echo Yii::t('frontend', 'SUPPLIES'); ?>" href="<?= Url::toRoute('/products/supplies', true); ?>">
+                                            <a title="<?php echo Yii::t('frontend', 'Supplies'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'supplies']); ?>">
                                                 <span class="supplies"></span>
-                                                <span><?php echo Yii::t('frontend', 'SUPPLIES'); ?> </span>
+                                                <span><?php echo Yii::t('frontend', 'Supplies'); ?> </span>
                                             </a>
                                         </li>
 
 
                                         <li>
-                                            <a title="<?php echo Yii::t('frontend', 'ENTERTAINMENT'); ?>" href="<?= Url::toRoute('/products/entertainment', true); ?>">
+                                            <a title="<?php echo Yii::t('frontend', 'Entertainment'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'entertainment']); ?>">
                                                 <span class="entert"></span>
-                                                <span><?php echo Yii::t('frontend', 'ENTERTAINMENT'); ?></span>
+                                                <span><?php echo Yii::t('frontend', 'Entertainment'); ?></span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a title=" <?php echo Yii::t('frontend', 'SERVICES'); ?>" href="<?= Url::toRoute('/products/services', true); ?>">
+                                            <a title=" <?php echo Yii::t('frontend', 'Services'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'services']); ?>">
                                                 <span class="serv"></span>
-                                                <span> <?php echo Yii::t('frontend', 'SERVICES'); ?></span>
+                                                <span> <?php echo Yii::t('frontend', 'Services'); ?></span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a title="<?php echo Yii::t('frontend', 'OTHERS'); ?>" href="<?= Url::toRoute('/products/others', true); ?>">
+                                            <a title="<?php echo Yii::t('frontend', 'Other'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'others']); ?>">
                                                 <span class="other"></span>
-                                                <span><?php echo Yii::t('frontend', 'OTHERS'); ?></span>
+                                                <span><?php echo Yii::t('frontend', 'Other'); ?></span>
                                             </a>
                                         </li>
-                                        <li><a title="<?php echo Yii::t('frontend', 'SAY_THANK_YOU'); ?>" href="<?= Url::toRoute('/products/say-thank-you', true); ?>">
+                                        <li><a title="<?php echo Yii::t('frontend', 'Say Thank you'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'say-thank-you']); ?>">
                                                 <span class="say_thank"></span>
-                                                <span><?php echo Yii::t('frontend', 'SAY_THANK_YOU'); ?></span>
+                                                <span><?php echo Yii::t('frontend', 'Say Thank you'); ?></span>
                                             </a></li>
                                     </ul>
                                 </div>
                             </li>
 
-                            <li class=""><a href="<?= Url::toRoute('/default/shop', true); ?>" title="<?php echo Yii::t('frontend', 'SHOP'); ?>"><?php echo Yii::t('frontend', 'SHOP'); ?></a></li>
+                            <li class="">
+                                <?= Html::a(Yii::t('frontend', 'Shop'), ['default/shop'], ['title' => Yii::t('frontend', 'Shop')]); ?>
+                            </li>
+
                             <li  class="<?php if ($action == "experience") {
     echo "active";
-} ?>"><a href="<?= Url::toRoute('/default/experience', true); ?>" title="<?php echo Yii::t('frontend', 'EXPERIENCE'); ?>"><?php echo Yii::t('frontend', 'EXPERIENCE'); ?></a></li>
+} ?>"><a href="<?= Url::toRoute('default/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
                             <li class="<?php if ($action == "directory") {
     echo "active";
-} ?>"><a href="<?= Url::toRoute('/default/directory', true); ?>" title="<?php echo Yii::t('frontend', 'DIRECTORY'); ?>"><?php echo Yii::t('frontend', 'DIRECTORY'); ?></a></li>
+} ?>"><a href="<?= Url::toRoute('default/directory', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
                         </ul>
                     </div>
                 </div>
@@ -166,18 +170,18 @@ $action = Yii::$app->controller->action->id;
                     <ul class="logout_part">
 <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
         <li class="<?php if ($action == "about-us") {echo "active";} ?>">
-            <a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'ABOUT_US'); ?>">
-            <?php echo Yii::t('frontend', 'ABOUT_US'); ?></a></li>
+            <a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'About us'); ?>">
+            <?php echo Yii::t('frontend', 'About us'); ?></a></li>
         <li class="">
         <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
-        title="<?php echo Yii::t('frontend', 'SIGN_IN_REGISTER'); ?>"><?php echo Yii::t('frontend', 'SIGN_IN_REGISTER'); ?>
+        title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?>
         </a>
         </li>
 <?php } else { ?>
 <li class="<?php if ($action == "account-settings") {echo "active";
-    } ?>"><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?>"><?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?></a></li>
-                            <li><a href="<?php echo Url::toRoute('/users/events', true); ?>" title="<?php echo Yii::t('frontend', 'MY_EVENTS'); ?>"><?php echo Yii::t('frontend', 'MY_EVENTS'); ?></a></li>
-                            <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'LOGOUT'); ?>"><?php echo Yii::t('frontend', 'LOGOUT'); ?></a></li>
+} ?>"><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'My Account'); ?>"><?php echo Yii::t('frontend', 'My Account'); ?></a></li>
+                            <li><a href="<?php echo Url::toRoute('/users/events', true); ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
+                            <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
 
                     </ul>
