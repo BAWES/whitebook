@@ -21,7 +21,7 @@ $this->beginPage();
         <meta content="" name="description" />
         <meta content="" name="author" />
 <?php $this->head() ?>
-        <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" /> 
+        <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />
         <!-- BEGIN CORE JS FRAMEWORK-->
     <body class="">
         <?php $this->beginBody() ?>
@@ -34,7 +34,7 @@ $this->beginPage();
             <!-- You may need to put some content here -->
 <?php $this->endContent(); ?>
             <!-- BEGIN PAGE CONTAINER-->
-            <div class="page-content"> 
+            <div class="page-content">
                 <div class="content">
                     <?php
                     if ($flash = Yii::$app->session->getFlash('success')) {

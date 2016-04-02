@@ -19,7 +19,7 @@ use backend\models\UploadForm;
  * Site controller.
  */
 class SiteController extends Controller
-{    
+{
     /**
      * {@inheritdoc}
      */
@@ -36,7 +36,7 @@ class SiteController extends Controller
     {
         if (Yii::$app->user->isGuest) { // chekck the admin logged in
             $this->redirect('login');
-        }        
+        }
         Yii::$app->newcomponent->activity('Admin', 'Login successfully');
         $vendoritemcnt = Vendoritem::itemcount();
         $monthitemcnt = Vendoritem::itemmonthcount();
@@ -56,6 +56,7 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
+        $this->layout = "/login";
         Yii::$app->session->setFlash('danger', '');
         $model = new LoginForm();
         if (!Yii::$app->user->isGuest) {
@@ -64,7 +65,7 @@ class SiteController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->login()) {
                 $this->redirect('index');
             } else {
-                return $this->renderPartial('login', [
+                return $this->render('login', [
                 'model' => $model,
             ]);
             }
