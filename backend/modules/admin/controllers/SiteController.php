@@ -37,7 +37,7 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) { // chekck the admin logged in
             $this->redirect('login');
         }
-        Yii::info('Admin Login successfully', __METHOD__);
+
         $vendoritemcnt = Vendoritem::itemcount();
         $monthitemcnt = Vendoritem::itemmonthcount();
         $dateitemcnt = Vendoritem::itemdatecount();

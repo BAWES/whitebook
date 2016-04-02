@@ -54,8 +54,10 @@ class LoginForm extends Model
      */
     public function login()
     {
-		
-        if ($this->validate()) {			
+
+        if ($this->validate()) {
+            Yii::info('Admin Login successfully', __METHOD__);
+            
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
             return false;
@@ -68,25 +70,25 @@ class LoginForm extends Model
      * @return User|null
      */
     public function getUser()
-    {	
+    {
         if ($this->_user === false) {
 			$session = Yii::$app->session;
-			$session->open();			
+			$session->open();
 			$session['language'] = 'en-US';
 			$session['email'] = $this->admin_email;
-			$session['type'] = 'Admin'; 
-            $this->_user = Admin::findByUsername($this->admin_email);            
+			$session['type'] = 'Admin';
+            $this->_user = Admin::findByUsername($this->admin_email);
         }
 
         return $this->_user;
     }
-    
+
      public function attributeLabels()
     {
         return [
             'admin_email' => 'Email',
             'admin_password' => 'Password',
-            
+
         ];
-    }    
+    }
 }
