@@ -78,7 +78,13 @@ $action = Yii::$app->controller->action->id;
                     </div>
                     <div class="logo_header">
                         <a href="<?= Url::toRoute('default/index', true); ?>"  title="THEWHITEBOOK">
-                            <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My White Book', 'title' => 'The Whitebook']) ?>
+                            <?= Html::img('@web/images/logo.svg', [
+                                'alt' => 'The White Book',
+                                'title' => 'The Whitebook',
+                                'width' => 239,
+                                'height' => 33,
+                                'style' => 'width:239px;height:33px;'
+                            ]) ?>
                         </a>
                     </div>
 
