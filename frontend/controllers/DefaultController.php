@@ -52,13 +52,13 @@ class DefaultController extends BaseController
     public function init()
     {
         parent::init();
-        yii::$app->language = 'en-EN';        
+        yii::$app->language = 'en-EN';
     }
 
     public function  beforeAction($action)
     {
         $session = Yii::$app->session;
-        return true; 
+        return true;
     }
 
     public function actionIndex()
@@ -73,7 +73,7 @@ class DefaultController extends BaseController
         $customer_events = array();
         if ($customer_id != '') {
             $customer_events = $website_model->get_customer_events($customer_id);
-        }        
+        }
         return $this->render('home', [
       'featured_product' => $featured_product,
       'banner' => $banner,
@@ -111,7 +111,7 @@ class DefaultController extends BaseController
 
     public function actionDirectory()
     {
-        
+
         $website_model = new Website();
         $category_url = Yii::$app->request->get('name');
         $main_category = $website_model->get_main_category();

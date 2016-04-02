@@ -4,6 +4,15 @@ return [
     'name' => 'The White Book',
     'vendorPath' => dirname(dirname(__DIR__)).'/vendor',
     'components' => [
+        'log' => [
+            'targets' => [
+                [
+                    'class' => 'yii\log\DbTarget',
+                    'levels' => ['info', 'error', 'warning'],
+                    'categories' => ['backend\*', 'frontend\*', 'common\*'],
+                ],
+            ],
+        ],
         'urlManager' => [
           'class' => 'yii\web\UrlManager',
         ],
