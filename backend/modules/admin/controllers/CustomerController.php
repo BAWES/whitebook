@@ -127,7 +127,7 @@ class CustomerController extends Controller
                 if ($model->save(false)) {
                     $model1->customer_id = $model->customer_id; // no need for validation rule on user_id as you set it yourself
             $model1->save();
-                    Yii::$app->newcomponent->activity('Admin', 'created  customer '.$model->customer_name);
+                    Yii::info('Admin created customer '.$model->customer_name, __METHOD__);
                 }
                 echo Yii::$app->session->setFlash('success', 'Customer detail added successfully!');
 
@@ -169,7 +169,7 @@ class CustomerController extends Controller
                 $model->save();
                 $model1->save();
                 echo Yii::$app->session->setFlash('success', 'Customer detail updated successfully!');
-                Yii::$app->newcomponent->activity('Admin', 'updated  customer '.$model->customer_name.' information');
+                Yii::info('Admin updated customer '.$model->customer_name.' information', __METHOD__);
 
                 return $this->redirect(['index']);
             } else {

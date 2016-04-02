@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\ActivitylogSearch */
+/* @var $model  */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?php \yii\widgets\Pjax::begin(['id' => 'itemtype']); ?>
@@ -28,14 +28,14 @@ GridView::widget([
                     $url = '';
                     return Html::a('<a href="javascript:void(0)" onclick="deleteinvitee(' . $model->invitees_id . ')"><span class="glyphicon glyphicon-trash"></span></a>', $url, [
                                 'title' => Yii::t('app', 'Gallery'),
-                                    //'class'=>'btn btn-primary btn-xs',                                  
+                                    //'class'=>'btn btn-primary btn-xs',
                     ]);
                 },
                         'update' => function ($url, $model) {
                     $url = '';
                     return Html::a('<a href="javascript:void(0)"  onclick="updateinvitee(' . $model->invitees_id . ')"><span class="glyphicon glyphicon-pencil" style="margin-left:10px;"></span></a>', $url, [
                                 'title' => Yii::t('app', 'Gallery'),
-                                    //'class'=>'btn btn-primary btn-xs',                                  
+                                    //'class'=>'btn btn-primary btn-xs',
                     ]);
                 },
                     ],],

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\ActivitylogSearch */
+/* @var $model  */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="col-md-4 padding-right0 responsive-number">
@@ -26,4 +26,3 @@ use yii\widgets\ActiveForm;
         <a class="btn btn-default search-hide" onClick="window.location.reload()" type="button" title="Reset">RESET</a>
     </div>
 </div>
-

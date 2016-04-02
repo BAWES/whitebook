@@ -255,7 +255,7 @@ class VendoritemController extends Controller
             /*  Upload image table End */
 
             echo Yii::$app->session->setFlash('success', 'Vendor item added successfully!');
-                    Yii::$app->newcomponent->activity('Admin', 'created new item '.addslashes($model->item_name));
+                    Yii::info('Admin created new item '.addslashes($model->item_name), __METHOD__);
                     if ($model->type_id == 2) {
                         return $this->redirect(['vendoritem/update?id='.$itemid.'&create='.$itemid]);
                     } elseif (isset($_GET['vid']) != '') {
@@ -524,7 +524,7 @@ class VendoritemController extends Controller
                 }
                 }
                 echo Yii::$app->session->setFlash('success', 'Vendor item updated successfully!');
-                Yii::$app->newcomponent->activity('Admin', 'updated '.addslashes($model->item_name).' item information');
+                Yii::info('Admin updated '.addslashes($model->item_name).' item information', __METHOD__);
                 if (isset($_GET['vid']) != '') {
                     return $this->redirect(['vendor/view?id='.$_GET['vid']]);
                 } else {

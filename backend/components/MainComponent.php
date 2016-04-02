@@ -370,21 +370,5 @@ class MainComponent extends Component
         return $status = ['Normal' => 'Normal', 'Super' => 'Super'];
     }
 
-    public function Activity($user_type,$user_action,$management = '',$management_id = '')
-    {
-        if($user_type !='')
-        {
-            if($user_type == 'Admin') {	 $user_id= Admin::getAdmin('id');  $username = Admin::getAdmin('admin_name');}
-            if($user_type == 'Vendor') {	$user_id= Vendor::getVendor('id'); $username = Vendor::getVendor('vendor_name');}
-
-            $template = $username.' '.$user_action;
-            $time=date("Y-m-d h:i:s");
-            $ip = Yii::$app->getRequest()->getUserIP();
-            $command = \Yii::$app->DB->createCommand(
-            'INSERT INTO `whitebook_activity_log`(`log_user_id`,`log_username`,`log_user_type`,`management`,`management_id`,`log_datetime`,`log_action`,`log_ip`)
-            VALUES ("'.$user_id.'","'.$username.'","'.$user_type.'","'.$management.'","'.$management_id.'","'.$time.'","'.$template.'","'.$ip.'")');
-            $command->execute();
-        }
-    }
 }
 ?>

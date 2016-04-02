@@ -171,7 +171,7 @@ class VendorController extends Controller
                     }
                 }
                 if ($model->save(false)) {
-                    Yii::$app->newcomponent->activity('Admin', 'created new vendor '.$model['vendor_name']);
+                    Yii::info('Admin created new vendor '.$model['vendor_name'], __METHOD__);
                     $subject = 'Welcome '.$model['vendor_name'];
                     $body = 'Hi '.$model['vendor_name'].',
 						Admin created your username password. Once you subscribe the package you can access account.

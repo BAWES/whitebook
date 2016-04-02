@@ -48,10 +48,11 @@ class DefaultController extends Controller
                     Yii::$app->user->logout();
                     $session->destroy();
                     Yii::$app->session->setFlash('danger', "Kindly contact admin account deactivated!");
+                    Yii::warning('Vendor needs contact admin account deactivated', __METHOD__);
                     return $this->redirect('login');
                 }
                 if($package){
-                    Yii::$app->newcomponent->activity('Vendor', 'Login successfully');
+                    Yii::info('Vendor Login successfully', __METHOD__);
                     return $this->redirect('index');
                 }
                 else
@@ -60,6 +61,7 @@ class DefaultController extends Controller
                     Yii::$app->user->logout();
                     $session->destroy();
                     Yii::$app->session->setFlash('danger', "Kindly contact admin package expired!");
+                    Yii::warning('Vendor needs contact admin package expired', __METHOD__);
                     return $this->redirect('login');
                 }
             } else {
@@ -204,7 +206,7 @@ class DefaultController extends Controller
             if($model->save())
             {
                 $v_name = $model['vendor_name'];
-                Yii::$app->newcomponent->activity('Vendor', 'updated profile information');
+                Yii::info('Vendor updated profile information', __METHOD__);
                 echo Yii::$app->session->setFlash('success', "Successfully updated your profile!");
                 return $this->redirect(['dashboard']);
             } else {
