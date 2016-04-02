@@ -15,9 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row login-container">
     <div class="margin text-center" style="margin-top: 50px;  margin-bottom: 25px;">
-        <a href="#" target="_blank">
             <?= Html::img("@web/uploads/app_img/logo_login.png") ?>
-        </a>
     </div>
     <div class="col-md-5 col-md-offset-4" style="padding: 1% 8% 3% 8%;  background: white;  width: 40%; border-radius:20px; margin-left:30%;">
         <h2>Vendor Sign In</h2> <br>
