@@ -4,12 +4,26 @@ return [
     'name' => 'The White Book',
     'vendorPath' => dirname(dirname(__DIR__)).'/vendor',
     'components' => [
+        'slack' => [
+            'class' => 'understeam\slack\Client',
+            'url' => 'https://hooks.slack.com/services/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',
+            'username' => 'TWB',
+        ],
+        'httpclient' => [
+            'class' =>'understeam\httpclient\Client',
+        ],
         'log' => [
             'targets' => [
                 [
                     'class' => 'yii\log\DbTarget',
                     'levels' => ['info', 'error', 'warning'],
                     'categories' => ['backend\*', 'frontend\*', 'common\*'],
+                ],
+                [
+                    'class' => 'common\components\SlackLogger',
+                    'logVars' => [],
+                    'levels' => ['info', 'error', 'warning'],
+                    'categories' => ['backend\*', 'employer\*', 'frontend\*', 'common\*'],
                 ],
             ],
         ],
