@@ -16,11 +16,16 @@ $action = Yii::$app->controller->action->id;
             <div class="mobile-menu" id="mobile-sid">
                 <div class="logo-sec">
                     <a href="#0" class="ma5-toggle-menu">
-                        <span class="demo"><img src="<?php echo Url::toRoute('/images/responsive-button.png', true); ?>" alt="click here">
-                        </span></a></div>
+                        <span class="demo">
+                            <?= Html::img('@web/images/responsive-button.png', ['alt' => 'Menu']); ?>
+                        </span>
+                    </a>
+                </div>
                 <!--div class="col-xs-4 responsive-hid"></div-->
                 <div class="logo_header col-xs-10 text-center padding-right0">
-                    <a href="<?= Url::toRoute('default/index', true); ?>" title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
+                    <a href="<?= Url::toRoute('default/index', true); ?>" title="THEWHITEBOOK">
+                        <?= Html::img('@web/images/mobile_logo.svg', ['alt' => 'Whitebook']); ?>
+                    </a>
                     <div class="search_header col-xs-3">
                         <div class="input-group">
                             <div id="navigation-bar">
@@ -48,9 +53,15 @@ $action = Yii::$app->controller->action->id;
             <div class="mobile-logo-text col-xs-12 text-center padding0">
                 <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
 
-                    <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
+                    <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK">
+                        <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
+                    </a>
+
                 <?php } else { ?>
-                    <a href="<?= Url::toRoute('/users/events', true); ?>" title="THEWHITEBOOK"><img src="<?php echo Yii::getAlias('@frontend_app_images/mywhitebook_vector.svg'); ?>" alt="Whitebook" title="THEWHITEBOOK" /></a>
+
+                    <a href="<?= Url::toRoute('/users/events', true); ?>" title="THEWHITEBOOK">
+                        <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
+                    </a>
 <?php } ?>
             </div>
 
@@ -158,7 +169,7 @@ $action = Yii::$app->controller->action->id;
             <a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'ABOUT_US'); ?>">
             <?php echo Yii::t('frontend', 'ABOUT_US'); ?></a></li>
         <li class="">
-        <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" 
+        <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
         title="<?php echo Yii::t('frontend', 'SIGN_IN_REGISTER'); ?>"><?php echo Yii::t('frontend', 'SIGN_IN_REGISTER'); ?>
         </a>
         </li>
