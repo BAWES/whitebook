@@ -15,7 +15,7 @@
 		<?php $controller = get_class($this->context);
 		$action = $this->context->action->id;
 		$menu = explode('\\',$controller);
-		$menu_act = $menu[4];
+		$menu_act = $menu[2];
 		$first_menu = array('SiteinfoController','SmtpController','EmailtemplateController','ContactsController','SocialinfoController',
 				   'ImageresizeController','SlideController','RoleController','AdminController','AccesscontrolController','FaqController','AdverthomeController');
 		$second_menu = array('CountryController','CityController','LocationController','AddresstypeController','AddressquestionController');
