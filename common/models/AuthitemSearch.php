@@ -56,7 +56,7 @@ class AuthitemSearch extends Authitem
         }
 
         $query->andFilterWhere([
-            'type' => $this->type,      
+            'type' => $this->type,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

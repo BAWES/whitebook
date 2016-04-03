@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Cms */
+/* @var $model common\models\Cms */
 
 $this->title = 'Create static page';
 $this->params['breadcrumbs'][] = ['label' => 'static page', 'url' => ['index']];

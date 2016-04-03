@@ -1,12 +1,12 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * AreaSearch represents the model behind the search form about `backend\models\Area`.
+ * AreaSearch represents the model behind the search form about `common\models\Area`.
  */
 class AreaSearch extends Area
 {

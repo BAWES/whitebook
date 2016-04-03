@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Slide */
+/* @var $model common\models\Slide */
 
 $this->title = 'Create Slide';
 $this->params['breadcrumbs'][] = ['label' => 'Slides', 'url' => ['index']];

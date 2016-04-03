@@ -4,7 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendor */
+/* @var $model common\models\Vendor */
 /* @var $form yii\widgets\ActiveForm */
 ?>
  <div class="col-md-8 col-sm-8 col-xs-8">

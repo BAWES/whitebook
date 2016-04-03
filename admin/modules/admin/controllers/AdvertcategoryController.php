@@ -3,12 +3,12 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Image;
-use backend\models\Admin;
-use backend\models\Authitem;
-use backend\models\Advertcategory;
-use backend\models\Category;
-use backend\models\AdvertcategorySearch;
+use common\models\Image;
+use common\models\Admin;
+use common\models\Authitem;
+use common\models\Advertcategory;
+use common\models\Category;
+use common\models\AdvertcategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -2,7 +2,7 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
-use backend\models\Image;
+use common\models\Image;
 
 //print_r($wishlist);die;
 if (!empty($wishlist)) {

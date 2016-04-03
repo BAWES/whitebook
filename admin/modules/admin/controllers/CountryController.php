@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Country;
-use backend\models\Authitem;
-use backend\models\CountrySearch;
+use common\models\Country;
+use common\models\Authitem;
+use common\models\CountrySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

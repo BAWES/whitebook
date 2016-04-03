@@ -7,7 +7,7 @@ use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\AccesscontrolSearch */
+/* @var $searchModel common\models\AccesscontrolSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Access controls';
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute'=>'role_id',
 				'label'=>'Role',			
 				'value'=>'role.role_name',
-				'filter' => Html::activeDropDownList($searchModel, 'role_id', ArrayHelper::map(backend\models\Role::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'role_id','role_name'),['class'=>'form-control','prompt' => 'All']),		
+				'filter' => Html::activeDropDownList($searchModel, 'role_id', ArrayHelper::map(common\models\Role::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'role_id','role_name'),['class'=>'form-control','prompt' => 'All']),		
 			], 
 			 [
 				'attribute'=>'admin_id',
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value'=>function($data){
 				return $data->getAdminName($data->admin_id);
 				},
-				'filter' => Html::activeDropDownList($searchModel, 'admin_id', ArrayHelper::map(backend\models\Admin::find()->where(['!=','trash','Deleted'])
+				'filter' => Html::activeDropDownList($searchModel, 'admin_id', ArrayHelper::map(common\models\Admin::find()->where(['!=','trash','Deleted'])
 				->andwhere(['=','admin_status','Active'])->asArray()->all(), 'id','admin_name'),['class'=>'form-control','prompt' => 'All']),		
 			],
 			[

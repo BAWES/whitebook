@@ -4,28 +4,28 @@ namespace backend\modules\vendor\controllers;
 
 use Yii;
 use yii\base\Model;
-use backend\models\Vendoritem;
-use backend\models\Vendoritemthemes;
-use backend\models\Vendoritemquestion;
-use backend\models\Vendoritemquestionansweroption;
-use backend\models\Vendoritemquestionguide;
-use backend\models\Vendor;
-use backend\models\Image;
-use backend\models\Category;
-use backend\models\SubCategory;
-use backend\models\VendoritemSearch;
-use backend\models\Itemtype;
+use common\models\Vendoritem;
+use common\models\Vendoritemthemes;
+use common\models\Vendoritemquestion;
+use common\models\Vendoritemquestionansweroption;
+use common\models\Vendoritemquestionguide;
+use common\models\Vendor;
+use common\models\Image;
+use common\models\Category;
+use common\models\SubCategory;
+use common\models\VendoritemSearch;
+use common\models\Itemtype;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use backend\models\Themes;
-use backend\models\Featuregroup;
-use backend\models\Featuregroupitem;
-use backend\models\ChildCategory;
-use backend\models\Vendoritempricing;
+use common\models\Themes;
+use common\models\Featuregroup;
+use common\models\Featuregroupitem;
+use common\models\ChildCategory;
+use common\models\Vendoritempricing;
 
 /**
  * VendoritemController implements the CRUD actions for Vendoritem model.

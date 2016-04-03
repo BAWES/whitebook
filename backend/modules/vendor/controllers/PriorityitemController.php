@@ -2,12 +2,12 @@
 
 namespace backend\modules\vendor\controllers;
 use Yii;
-use backend\models\Priorityitem;
-use backend\models\Vendoritem;
-use backend\models\Vendor;
-use backend\models\Category;
-use backend\models\SubCategory;
-use backend\models\PriorityitemSearch;
+use common\models\Priorityitem;
+use common\models\Vendoritem;
+use common\models\Vendor;
+use common\models\Category;
+use common\models\SubCategory;
+use common\models\PriorityitemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

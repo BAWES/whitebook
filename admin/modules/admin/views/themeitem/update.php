@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Featuregroupitem */
+/* @var $model common\models\Featuregroupitem */
 
 $this->title = 'Update theme group item';
 $this->params['breadcrumbs'][] = ['label' => 'Featuregroupitems', 'url' => ['index']];

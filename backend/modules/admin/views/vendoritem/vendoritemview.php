@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendor */
+/* @var $model common\models\Vendor */
 
 $this->title = $model->vendor_name.' info ';
 $this->params['breadcrumbs'][] = ['label' => 'Vendors', 'url' => ['index']];
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>function($data){
                     return $data->getCategoryName($data->category_id);
                     },  
-                'filter' => Html::activeDropDownList($searchModel, 'category_id', ArrayHelper::map(backend\models\Category::find()->where(['category_allow_sale'=>'Yes','parent_category_id'=>null,'trash' =>'Default'])->orderBy('category_name')->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),                      
+                'filter' => Html::activeDropDownList($searchModel, 'category_id', ArrayHelper::map(common\models\Category::find()->where(['category_allow_sale'=>'Yes','parent_category_id'=>null,'trash' =>'Default'])->orderBy('category_name')->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),                      
             ],
            
             
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>function($data){
                     return $data->getItemType($data->type_id);
                     },
-                'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(backend\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),                                                             
+                'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),                                                             
             ],          
                          [
              'label'=>'Status',

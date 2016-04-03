@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 use yii\db\ActiveQuery;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Category;
-use backend\models\SubCategory;
+use common\models\Category;
+use common\models\SubCategory;
 
 /**
- * CategorySearch represents the model behind the search form about `backend\models\Category`.
+ * CategorySearch represents the model behind the search form about `common\models\Category`.
  */
 class CategorySearch extends Category
 {

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Location */
+/* @var $model common\models\Location */
 
 $this->title = 'Create Area';
 $this->params['breadcrumbs'][] = ['label' => 'Locations', 'url' => ['index']];

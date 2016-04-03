@@ -3,11 +3,11 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Adverthome;
-use backend\models\Admin;
-use backend\models\Authitem;
-use backend\models\AdverthomeSearch;
-use backend\models\Image;
+use common\models\Adverthome;
+use common\models\Admin;
+use common\models\Authitem;
+use common\models\AdverthomeSearch;
+use common\models\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

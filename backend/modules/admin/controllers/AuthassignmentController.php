@@ -3,8 +3,8 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Authassignment;
-use backend\models\AuthassignmentSearch;
+use common\models\Authassignment;
+use common\models\AuthassignmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

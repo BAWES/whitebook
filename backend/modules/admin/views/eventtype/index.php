@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\ItemtypeSearch */
+/* @var $searchModel common\models\ItemtypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Event type';

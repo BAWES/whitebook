@@ -3,8 +3,8 @@
 namespace backend\modules\vendor\controllers;
 
 use Yii;
-use backend\models\Area;
-use backend\models\AreaSearch;
+use common\models\Area;
+use common\models\AreaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

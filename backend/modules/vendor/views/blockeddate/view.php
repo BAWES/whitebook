@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Blockeddate */
+/* @var $model common\models\Blockeddate */
 
 $this->title = $model->block_id;
 $this->params['breadcrumbs'][] = ['label' => 'Blockeddates', 'url' => ['index']];

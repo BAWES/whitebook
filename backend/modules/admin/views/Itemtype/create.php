@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Itemtype */
+/* @var $model common\models\Itemtype */
 
 $this->title = 'Create item type';
 $this->params['breadcrumbs'][] = ['label' => 'Itemtypes', 'url' => ['index']];

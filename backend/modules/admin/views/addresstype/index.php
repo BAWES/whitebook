@@ -5,8 +5,8 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 
 
-use backend\models\Addresstype;
-use backend\models\AddresstypeSearch;
+use common\models\Addresstype;
+use common\models\AddresstypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -17,7 +17,7 @@ use yii\data\ActiveDataProvider;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\AddresstypeSearch */
+/* @var $searchModel common\models\AddresstypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Address type';

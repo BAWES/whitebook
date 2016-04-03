@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Deliverytimeslot */
+/* @var $model common\models\Deliverytimeslot */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

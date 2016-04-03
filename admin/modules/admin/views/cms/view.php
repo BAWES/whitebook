@@ -2,10 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use backend\models\Cms;
+use common\models\Cms;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Cms */
+/* @var $model common\models\Cms */
 
 $this->title = $model->page_name;
 $this->params['breadcrumbs'][] = ['label' => 'Static page', 'url' => ['index']];

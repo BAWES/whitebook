@@ -1,14 +1,14 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Vendor;
+use common\models\Vendor;
 
 /**
- * VendorSearch represents the model behind the search form about `backend\models\Vendor`.
+ * VendorSearch represents the model behind the search form about `common\models\Vendor`.
  */
 class VendorSearch extends Vendor
 {

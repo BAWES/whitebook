@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Authassignment */
+/* @var $model common\models\Authassignment */
 
 $this->title = 'Create Authassignment';
 $this->params['breadcrumbs'][] = ['label' => 'Authassignments', 'url' => ['index']];

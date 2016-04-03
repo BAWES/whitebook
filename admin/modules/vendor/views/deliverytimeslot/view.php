@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Deliverytimeslot */
+/* @var $model common\models\Deliverytimeslot */
 
 $this->title = $model->timeslot_id;
 $this->params['breadcrumbs'][] = ['label' => 'Deliverytimeslots', 'url' => ['index']];

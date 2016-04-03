@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Socialinfo */
+/* @var $model common\models\Socialinfo */
 
 $this->title = 'Update social info';
 $this->params['breadcrumbs'][] = ['label' => 'Socialinfos', 'url' => ['index']];

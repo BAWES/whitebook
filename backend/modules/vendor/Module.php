@@ -13,7 +13,7 @@ class Module extends \yii\base\Module
  	 	 $this->layout = '/vendor/main.php';  
 	 	  Yii::$app->set('user', [
         'class' => 'yii\web\User',
-        'identityClass' => 'backend\models\Vendor',
+        'identityClass' => 'common\models\Vendor',
         'enableAutoLogin' => false,       
     ]);
 		  

@@ -3,10 +3,10 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Category;
-use backend\models\Authitem;
-use backend\models\Categoryads;
-use backend\models\CategoryadsSearch;
+use common\models\Category;
+use common\models\Authitem;
+use common\models\Categoryads;
+use common\models\CategoryadsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

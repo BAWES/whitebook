@@ -1,12 +1,12 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * PriorityitemSearch represents the model behind the search form about `backend\models\Priorityitem`.
+ * PriorityitemSearch represents the model behind the search form about `common\models\Priorityitem`.
  */
 class PriorityitemSearch extends Priorityitem
 {

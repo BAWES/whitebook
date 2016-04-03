@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendor */
+/* @var $model common\models\Vendor */
 
 $this->title = 'Create vendor';
 $this->params['breadcrumbs'][] = ['label' => 'Manage vendor', 'url' => ['index']];

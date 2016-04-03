@@ -1,8 +1,8 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
-use backend\models\Subscribe;
+use common\models\Subscribe;
 use Yii;
 
 /**

@@ -7,7 +7,7 @@ use yii\grid\Column;
 use yii\grid\DataColumn;
 use yii\base;
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\SearchCustomer */
+/* @var $searchModel common\models\SearchCustomer */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Customers';

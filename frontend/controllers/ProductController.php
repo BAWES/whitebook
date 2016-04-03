@@ -4,11 +4,11 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use backend\models\Vendoritem;
-use backend\models\Vendor;
-use backend\models\Featuregroupitem;
+use common\models\Vendoritem;
+use common\models\Vendor;
+use common\models\Featuregroupitem;
 use frontend\models\Users;
-use backend\models\Location;
+use common\models\Location;
 use yii\helpers\Json;
 
 /**

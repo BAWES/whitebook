@@ -4,12 +4,12 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-use backend\models\AddressQuestion;
-use backend\models\Addresstype;
+use common\models\AddressQuestion;
+use common\models\Addresstype;
 use yii\widgets\DetailView;
 use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
-/* @var $model backend\models\AddressQuestion */
+/* @var $model common\models\AddressQuestion */
 
 $this->title = 'Address Questions';
 $this->params['breadcrumbs'][] = ['label' => 'Address Questions', 'url' => ['index']];

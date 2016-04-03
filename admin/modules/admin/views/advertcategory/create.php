@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Advertcategory */
+/* @var $model common\models\Advertcategory */
 
 $this->title = 'Create top category ads';
 $this->params['breadcrumbs'][] = ['label' => 'Top categories ads', 'url' => ['index']];

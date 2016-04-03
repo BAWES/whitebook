@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Admin */
+/* @var $model common\models\Admin */
 
 $this->title = 'Update admin';
 $this->params['breadcrumbs'][] = ['label' => 'Admins', 'url' => ['index']];

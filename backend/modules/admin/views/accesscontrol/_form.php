@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\ActiveField;
 /* @var $this yii\web\View */
-/* @var $model backend\models\Accesscontrol */
+/* @var $model common\models\Accesscontrol */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?= Html::csrfMetaTags() ?>

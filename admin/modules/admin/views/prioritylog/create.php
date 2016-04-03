@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Prioritylog */
+/* @var $model common\models\Prioritylog */
 
 $this->title = 'Create Prioritylog';
 $this->params['breadcrumbs'][] = ['label' => 'Prioritylogs', 'url' => ['index']];

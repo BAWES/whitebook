@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Adverthome */
+/* @var $model common\models\Adverthome */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="col-md-8 col-sm-8 col-xs-8">	

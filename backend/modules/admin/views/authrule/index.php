@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\AuthruleSearch */
+/* @var $searchModel common\models\AuthruleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Authrules';

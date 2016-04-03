@@ -2,10 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use backend\models\Accesscontroller;
-use backend\models\Role;
+use common\models\Accesscontroller;
+use common\models\Role;
 /* @var $this yii\web\View */
-/* @var $model backend\models\Accesscontrol */
+/* @var $model common\models\Accesscontrol */
 
 $this->title = 'View access control';
 $this->params['breadcrumbs'][] = ['label' => 'Accesscontrols', 'url' => ['index']];

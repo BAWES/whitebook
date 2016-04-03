@@ -1,8 +1,8 @@
 <?php
 
-use backend\models\ChildCategory;
-use backend\models\SubCategory;
-use backend\models\Vendor;
+use common\models\ChildCategory;
+use common\models\SubCategory;
+use common\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;

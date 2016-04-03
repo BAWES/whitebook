@@ -3,7 +3,7 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Authitem;
+use common\models\Authitem;
 use app\models\Emailtemplate;
 use app\models\EmailtemplateSearch;
 use yii\web\Controller;

@@ -1,7 +1,7 @@
 <?php
 
-namespace backend\models;
-use backend\models\Vendoritem;
+namespace common\models;
+use common\models\Vendoritem;
 use yii\helpers\ArrayHelper;
 
 use Yii;

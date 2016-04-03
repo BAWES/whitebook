@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Slide */
+/* @var $model common\models\Slide */
 
 $this->title = 'Update Slide';
 $this->params['breadcrumbs'][] = ['label' => 'Slides', 'url' => ['index']];

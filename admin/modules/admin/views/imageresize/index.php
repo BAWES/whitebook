@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\ImageresizeSearch */
+/* @var $searchModel common\models\ImageresizeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Imageresizes';

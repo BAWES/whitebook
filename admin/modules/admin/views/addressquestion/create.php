@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\AddressQuestion */
+/* @var $model common\models\AddressQuestion */
 
 $this->title = 'Create Address Question';
 $this->params['breadcrumbs'][] = ['label' => 'Address Questions', 'url' => ['index']];

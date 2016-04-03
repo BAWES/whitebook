@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Authrule */
+/* @var $model common\models\Authrule */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Authrules', 'url' => ['index']];

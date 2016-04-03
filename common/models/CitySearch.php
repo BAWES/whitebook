@@ -1,14 +1,14 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\City;
+use common\models\City;
 
 /**
- * CitySearch represents the model behind the search form about `backend\models\City`.
+ * CitySearch represents the model behind the search form about `common\models\City`.
  */
 class CitySearch extends City
 {

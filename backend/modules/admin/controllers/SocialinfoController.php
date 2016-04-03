@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Socialinfo;
-use backend\models\Authitem;
-use backend\models\SocialinfoSearch;
+use common\models\Socialinfo;
+use common\models\Authitem;
+use common\models\SocialinfoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

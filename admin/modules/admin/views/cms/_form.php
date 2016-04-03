@@ -4,7 +4,7 @@ use yii\widgets\ActiveForm;
 use dosamigos\ckeditor\CKEditor;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Cms */
+/* @var $model common\models\Cms */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

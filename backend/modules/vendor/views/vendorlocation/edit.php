@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
-use backend\models\Location;
-use backend\models\Vendorlocation;
+use common\models\Location;
+use common\models\Vendorlocation;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\vendorlocation */
+/* @var $model common\models\vendorlocation */
 /* @var $form yii\widgets\ActiveForm */
 $this->title = 'Area';
 $this->params['breadcrumbs'][] = ['label' => 'Locations', 'url' => ['index']];

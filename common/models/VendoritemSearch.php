@@ -1,16 +1,16 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Vendoritem;
-use backend\models\Vendor;
+use common\models\Vendoritem;
+use common\models\Vendor;
 use yii\db\Expression;
 
 /**
- * VendoritemSearch represents the model behind the search form about `backend\models\Vendoritem`.
+ * VendoritemSearch represents the model behind the search form about `common\models\Vendoritem`.
  */
 class VendoritemSearch extends Vendoritem
 {

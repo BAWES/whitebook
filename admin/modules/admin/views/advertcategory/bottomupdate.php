@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Advertcategory */
+/* @var $model common\models\Advertcategory */
 
 $this->title = 'Update Bottom category ads';
 $this->params['breadcrumbs'][] = ['label' => 'Bottom categories ads', 'url' => ['index']];

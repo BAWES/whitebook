@@ -9,11 +9,11 @@ use yii\widgets\Pjax;
 use yii\base;
 use yii\base\Object;
 use yii\helpers\ArrayHelper;
-use backend\models\Priorityitem;
+use common\models\Priorityitem;
 use yii\grid\CheckboxColumn;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\PriorityitemSearch */
+/* @var $searchModel common\models\PriorityitemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Priority items';

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Contacts */
+/* @var $model common\models\Contacts */
 
 $this->title = 'Update contacts: ' . ' ' . $model->contact_name;
 $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];

@@ -2,9 +2,9 @@
 namespace backend\modules\vendor\controllers;
 
 use Yii;
-use backend\models\Blockeddate;
-use backend\models\Vendor;
-use backend\models\BlockeddateSearch;
+use common\models\Blockeddate;
+use common\models\Vendor;
+use common\models\BlockeddateSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\helpers\Setdateformat;

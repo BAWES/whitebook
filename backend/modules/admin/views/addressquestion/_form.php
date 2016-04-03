@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\AddressQuestion */
+/* @var $model common\models\AddressQuestion */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="address-question-form">

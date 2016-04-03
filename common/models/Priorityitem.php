@@ -1,8 +1,8 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 use Yii;
-use backend\models\Vendoritem;
+use common\models\Vendoritem;
 use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "whitebook_priority_item".

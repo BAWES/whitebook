@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Socialinfo */
+/* @var $model common\models\Socialinfo */
 
 $this->title = $model->store_social_id;
 $this->params['breadcrumbs'][] = ['label' => 'Socialinfos', 'url' => ['index']];

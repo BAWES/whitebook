@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Authitem;
-use backend\models\CustomerAddress;
-use backend\models\SearchCustomerAddress;
+use common\models\Authitem;
+use common\models\CustomerAddress;
+use common\models\SearchCustomerAddress;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

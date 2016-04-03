@@ -1,9 +1,9 @@
 <?php
 
-use backend\models\Featuregroup;
-use backend\models\Vendoritem;
-use backend\models\Vendor;
-use backend\models\Themes;
+use common\models\Featuregroup;
+use common\models\Vendoritem;
+use common\models\Vendor;
+use common\models\Themes;
 use yii\helpers\Url;
 use yii\helpers\Html;
 

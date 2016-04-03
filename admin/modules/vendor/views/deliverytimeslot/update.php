@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Deliverytimeslot */
+/* @var $model common\models\Deliverytimeslot */
 
 $this->title = 'Update delivery time slot';
 $this->params['breadcrumbs'][] = ['label' => 'Delivery time slots', 'url' => ['index']];

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Priorityitem */
+/* @var $model common\models\Priorityitem */
 
 $this->title = 'Update priority item';
 $this->params['breadcrumbs'][] = ['label' => 'Priorityitems', 'url' => ['index']];

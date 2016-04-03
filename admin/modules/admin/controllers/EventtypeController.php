@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Eventtype;
-use backend\models\Authitem;
-use backend\models\EventtypeSearch;
+use common\models\Eventtype;
+use common\models\Authitem;
+use common\models\EventtypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

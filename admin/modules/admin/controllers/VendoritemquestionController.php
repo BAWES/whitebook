@@ -3,15 +3,15 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Vendoritemquestion;
-use backend\models\VendoritemquestionSearch;
+use common\models\Vendoritemquestion;
+use common\models\VendoritemquestionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\Category;
-use backend\models\SubCategory;
-use backend\models\Vendor;
-use backend\models\Vendoritem;
+use common\models\Category;
+use common\models\SubCategory;
+use common\models\Vendor;
+use common\models\Vendoritem;
 
 /**
  * VendoritemquestionController implements the CRUD actions for Vendoritemquestion model.

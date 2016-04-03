@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\SearchCategory */
+/* @var $searchModel common\models\SearchCategory */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Sub categories';
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value'=>function($data){
 					return '<b>'.ucfirst($data->getCategoryName($data->parent_category_id)).'</b>';
 					},	
-				'filter' => Html::activeDropDownList($searchModel, 'parent_category_id', ArrayHelper::map(backend\models\Category::find()->where(['!=','trash','Deleted'])
+				'filter' => Html::activeDropDownList($searchModel, 'parent_category_id', ArrayHelper::map(common\models\Category::find()->where(['!=','trash','Deleted'])
 				->andwhere(['parent_category_id' => null])
 				->andwhere(['=','category_allow_sale','Yes'])->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),
 			],

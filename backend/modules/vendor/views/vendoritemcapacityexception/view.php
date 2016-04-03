@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendoritemcapacityexception */
+/* @var $model common\models\Vendoritemcapacityexception */
 
 $this->title = $model->exception_id;
 $this->params['breadcrumbs'][] = ['label' => 'Vendoritemcapacityexceptions', 'url' => ['index']];

@@ -2,11 +2,11 @@
 namespace backend\modules\vendor\controllers;
 use yii\web\Session;
 use Yii;
-use backend\models\Vendor;
-use backend\models\Vendoraddress;
-use backend\models\VendoraddressSearch;
-use backend\models\VendorSearch;
-use backend\models\Location;
+use common\models\Vendor;
+use common\models\Vendoraddress;
+use common\models\VendoraddressSearch;
+use common\models\VendorSearch;
+use common\models\Location;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

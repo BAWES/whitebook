@@ -3,15 +3,15 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-use backend\models\Category;
-use backend\models\SubCategory;
-use backend\models\CategorySearch;
+use common\models\Category;
+use common\models\SubCategory;
+use common\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
-/* @var $model backend\models\Category */
+/* @var $model common\models\Category */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

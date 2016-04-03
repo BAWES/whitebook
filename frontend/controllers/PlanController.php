@@ -6,11 +6,11 @@ use Yii;
 use yii\web\Controller;
 use frontend\models\Users;
 use frontend\models\Website;
-use backend\models\SubCategory;
-use backend\models\Category;
-use backend\models\Vendoritem;
-use backend\models\Themes;
-use backend\models\Vendor;
+use common\models\SubCategory;
+use common\models\Category;
+use common\models\Vendoritem;
+use common\models\Themes;
+use common\models\Vendor;
 
 /**
  * Category controller.

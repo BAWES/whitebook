@@ -1,4 +1,4 @@
-<?php use backend\models\Siteinfo; 
+<?php use common\models\Siteinfo; 
 use yii\helpers\Html;?>
 <!-- BEGIN HEADER -->
 <div class="header navbar navbar-inverse"> 

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Imageresize */
+/* @var $model common\models\Imageresize */
 
 $this->title = 'Create image resize';
 $this->params['breadcrumbs'][] = ['label' => 'Imageresizes', 'url' => ['index']];

@@ -3,11 +3,11 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-use backend\models\Location;
-use backend\models\Addresstype;
-use backend\models\City;
+use common\models\Location;
+use common\models\Addresstype;
+use common\models\City;
 /* @var $this yii\web\View */
-/* @var $model backend\models\Customer */
+/* @var $model common\models\Customer */
 
 $this->title = 'Customer Details';
 $this->params['breadcrumbs'][] = ['label' => 'Customers', 'url' => ['index']];

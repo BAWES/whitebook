@@ -4,10 +4,10 @@ namespace backend\components;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
-use backend\models\Admin;
-use backend\models\Vendor;
-use backend\models\Siteinfo;
-use backend\models\Smtp;
+use common\models\Admin;
+use common\models\Vendor;
+use common\models\Siteinfo;
+use common\models\Smtp;
 
 class MainComponent extends Component
 {

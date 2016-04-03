@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Addresstype */
+/* @var $model common\models\Addresstype */
 
 $this->title = 'Update addresstype: ';
 $this->params['breadcrumbs'][] = ['label' => 'Addresstypes', 'url' => ['index']];

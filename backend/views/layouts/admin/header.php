@@ -1,6 +1,6 @@
 <?php
 
-use backend\models\Siteinfo;
+use common\models\Siteinfo;
 use yii\helpers\Html;
 ?>
 <!-- BEGIN HEADER -->

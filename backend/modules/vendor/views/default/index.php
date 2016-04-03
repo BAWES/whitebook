@@ -2,7 +2,7 @@
 /* @var $this yii\web\View */
 use yii\bootstrap\Alert;
 use yii\web\Session;
-use backend\models\Vendor; 
+use common\models\Vendor; 
 $this->title = 'Whitebook Application';
  
 ?>

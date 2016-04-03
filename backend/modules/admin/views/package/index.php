@@ -5,10 +5,10 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
-use backend\models\Priorityitem;
-use backend\models\Package;
+use common\models\Priorityitem;
+use common\models\Package;
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\PackageSearch */
+/* @var $searchModel common\models\PackageSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Packages';

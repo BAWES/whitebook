@@ -1,11 +1,11 @@
 <?php
 
 use yii\helpers\Url;
-use backend\models\Vendor;
+use common\models\Vendor;
 use yii\helpers\Html;
-use backend\models\Vendoritempricing;
-use backend\models\Itemtype;
-use backend\models\Category;
+use common\models\Vendoritempricing;
+use common\models\Itemtype;
+use common\models\Category;
 use yii\widgets\Breadcrumbs;
 
 $this->title = 'Whitebook - ' . $model['item_name'];

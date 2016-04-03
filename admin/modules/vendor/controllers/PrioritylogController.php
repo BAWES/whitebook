@@ -3,8 +3,8 @@ namespace backend\modules\vendor\controllers;
 //namespace app\modules\admin\controllers;
 
 use Yii;
-use backend\models\Prioritylog;
-use backend\models\PrioritylogSearch;
+use common\models\Prioritylog;
+use common\models\PrioritylogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

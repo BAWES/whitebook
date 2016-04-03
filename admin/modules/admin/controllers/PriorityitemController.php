@@ -3,14 +3,14 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Priorityitem;
-use backend\models\Vendoritem;
-use backend\models\Vendor;
-use backend\models\Category;
-use backend\models\ChildCategory;
-use backend\models\Authitem;
-use backend\models\SubCategory;
-use backend\models\PriorityitemSearch;
+use common\models\Priorityitem;
+use common\models\Vendoritem;
+use common\models\Vendor;
+use common\models\Category;
+use common\models\ChildCategory;
+use common\models\Authitem;
+use common\models\SubCategory;
+use common\models\PriorityitemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

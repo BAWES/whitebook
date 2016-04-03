@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Itemtype;
-use backend\models\Authitem;
-use backend\models\ItemtypeSearch;
+use common\models\Itemtype;
+use common\models\Authitem;
+use common\models\ItemtypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

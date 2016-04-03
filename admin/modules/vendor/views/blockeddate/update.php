@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Blockeddate */
+/* @var $model common\models\Blockeddate */
 
 $this->title = 'Update Blocked date ';
 $this->params['breadcrumbs'][] = ['label' => 'Blocked dates', 'url' => ['index']];

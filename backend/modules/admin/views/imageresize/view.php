@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Imageresize */
+/* @var $model common\models\Imageresize */
 
 $this->title = 'Image';
 $this->params['breadcrumbs'][] = ['label' => 'Image resizes', 'url' => ['index']];

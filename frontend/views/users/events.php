@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Users;
-use backend\models\Image;
+use common\models\Image;
 $this->title = 'Events/Wishlist | Whitebook'; 
 $type="sss";
 if(isset($_GET['type']))

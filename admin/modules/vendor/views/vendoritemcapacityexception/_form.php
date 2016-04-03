@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendoritemcapacityexception */
+/* @var $model common\models\Vendoritemcapacityexception */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?php //  echo $exist_dates;die; ?>
@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 <?= Html::csrfMetaTags() ?>
 
 <div class="form-group"><?= $form->field($model, 'item_id',['template' => "{label}<div class='controls'><div class='input-group transparent col-md-12'>{input}</div></div>{hint}
-{error}"])->dropDownList(backend\models\Vendoritem::loaditems() , ['multiple'=>'multiple']) ?>
+{error}"])->dropDownList(common\models\Vendoritem::loaditems() , ['multiple'=>'multiple']) ?>
 <div id="date_error" calss="help-block" style="color:#a94442"></div>
 </div>
 <div class="form-group"> 

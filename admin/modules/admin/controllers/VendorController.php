@@ -4,22 +4,22 @@ namespace backend\modules\admin\controllers;
 
 use Yii;
 use yii\helpers\Html;
-use backend\models\Prioritylog;
-use backend\models\PrioritylogSearch;
-use backend\models\Siteinfo;
-use backend\models\Vendor;
-use backend\models\Authitem;
-use backend\models\Category;
-use backend\models\VendorSearch;
-use backend\models\Package;
-use backend\models\VendoritemcapacityexceptionSearch;
-use backend\models\VendoritemSearch;
+use common\models\Prioritylog;
+use common\models\PrioritylogSearch;
+use common\models\Siteinfo;
+use common\models\Vendor;
+use common\models\Authitem;
+use common\models\Category;
+use common\models\VendorSearch;
+use common\models\Package;
+use common\models\VendoritemcapacityexceptionSearch;
+use common\models\VendoritemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
-use backend\models\VendorpackagesSearch;
+use common\models\VendorpackagesSearch;
 
 /**
  * VendorController implements the CRUD actions for Vendor model.

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Cms */
+/* @var $model common\models\Cms */
 
 $this->title = 'Update static page';
 $this->params['breadcrumbs'][] = ['label' => 'Static page', 'url' => ['index']];

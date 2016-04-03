@@ -2,10 +2,10 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
-use backend\models\Deliverytimeslot;
+use common\models\Deliverytimeslot;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\DeliverytimeslotSearch */
+/* @var $searchModel common\models\DeliverytimeslotSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Delivery time slots';

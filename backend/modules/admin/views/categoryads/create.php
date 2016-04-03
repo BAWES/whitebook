@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Categoryads */
+/* @var $model common\models\Categoryads */
 
 $this->title = 'Create Category ads';
 $this->params['breadcrumbs'][] = ['label' => 'Categoryads', 'url' => ['index']];

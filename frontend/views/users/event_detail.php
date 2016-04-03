@@ -2,8 +2,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
-use backend\models\Vendoritem;
-use backend\models\Category;
+use common\models\Vendoritem;
+use common\models\Category;
 use yii\grid\GridView;
 ?>
 <!-- coniner start -->

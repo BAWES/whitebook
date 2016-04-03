@@ -1,14 +1,14 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Blockeddate;
+use common\models\Blockeddate;
 
 /**
- * BlockeddateSearch represents the model behind the search form about `backend\models\Blockeddate`.
+ * BlockeddateSearch represents the model behind the search form about `common\models\Blockeddate`.
  */
 class BlockeddateSearch extends Blockeddate
 {

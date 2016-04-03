@@ -30,7 +30,7 @@ return [
             'showScriptName' => false,
         ],
         'user' => [
-            'identityClass' => 'backend\models\Admin',
+            'identityClass' => 'common\models\Admin',
             'enableAutoLogin' => false,
         ],
         'session' => [

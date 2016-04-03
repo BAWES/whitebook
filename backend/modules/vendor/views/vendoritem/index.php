@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\VendoritemSearch */
+/* @var $searchModel common\models\VendoritemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Manage items';
 $this->params['breadcrumbs'][] = $this->title;
@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value'=>function($data){
 					return $data->getItemType($data->type_id);
 					},
-				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(backend\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),																
+				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),																
 			],
      [
              'label'=>'Status',

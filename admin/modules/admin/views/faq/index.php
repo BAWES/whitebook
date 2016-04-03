@@ -4,7 +4,7 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\FaqSearch */
+/* @var $searchModel common\models\FaqSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'FAQ';

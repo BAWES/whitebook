@@ -1,12 +1,12 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * AuthruleSearch represents the model behind the search form about `backend\models\Authrule`.
+ * AuthruleSearch represents the model behind the search form about `common\models\Authrule`.
  */
 class AuthruleSearch extends Authrule
 {

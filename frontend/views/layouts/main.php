@@ -1,7 +1,7 @@
 <?php
 
 //use yii;
-use backend\models\Vendor;
+use common\models\Vendor;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -9,8 +9,8 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
 use yii\helpers\Url;
-use backend\models\Socialinfo;
-use backend\models\Siteinfo;
+use common\models\Socialinfo;
+use common\models\Siteinfo;
 
 /* @var $this \yii\web\View */
 /* @var $content string */

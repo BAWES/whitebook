@@ -3,12 +3,12 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Vendoritemquestionansweroption;
-use backend\models\VendoritemquestionansweroptionSearch;
+use common\models\Vendoritemquestionansweroption;
+use common\models\VendoritemquestionansweroptionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\Vendoritemquestion;
+use common\models\Vendoritemquestion;
 use yii\helpers\ArrayHelper;
 
 /**

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Image */
+/* @var $model common\models\Image */
 
 $this->title = 'Update Image: ' . ' ' . $model->image_id;
 $this->params['breadcrumbs'][] = ['label' => 'Images', 'url' => ['index']];

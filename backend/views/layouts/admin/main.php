@@ -6,7 +6,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use yii\bootstrap\Alert;
-use backend\models\Siteinfo;
+use common\models\Siteinfo;
 
 AppAsset::register($this);
 $this->beginPage();

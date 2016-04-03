@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Authassignment */
+/* @var $model common\models\Authassignment */
 
 $this->title = $model->item_name;
 $this->params['breadcrumbs'][] = ['label' => 'Authassignments', 'url' => ['index']];

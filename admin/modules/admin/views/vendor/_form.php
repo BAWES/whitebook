@@ -4,7 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendor */
+/* @var $model common\models\Vendor */
 /* @var $form yii\widgets\ActiveForm */
 ?>
  <div class="col-md-12 col-sm-12 col-xs-12">
@@ -122,7 +122,7 @@ use yii\helpers\Url;
 	<div class="tab-pane" id="2">
 	<input type="hidden" id="test1" value="0" name="tests">
 	 <div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-{error}"])->dropDownList(backend\models\Category::loadcategory() , ['multiple'=>'multiple']) ?>
+{error}"])->dropDownList(common\models\Category::loadcategory() , ['multiple'=>'multiple']) ?>
 </div>
 		
 	<input type='hidden' id='test' value='0' name='tests1'>

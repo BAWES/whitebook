@@ -1,13 +1,13 @@
 <?php
 /* @var $this yii\web\View */
 use yii\web\JsExpression;
-use backend\models\Customer;
-use backend\models\Vendoritem;
+use common\models\Customer;
+use common\models\Vendoritem;
 use yii\helpers\Url;
 use miloschuman\highcharts\SeriesDataHelper;
 use yii\bootstrap\Alert;
 use  yii\web\Session;
-use backend\models\Package;
+use common\models\Package;
 use yii\helpers\Html;
 use miloschuman\highcharts\Highcharts;
 use yii\grid\GridView;

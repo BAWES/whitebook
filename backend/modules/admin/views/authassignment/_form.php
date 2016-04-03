@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Authassignment */
+/* @var $model common\models\Authassignment */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

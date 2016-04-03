@@ -1,5 +1,5 @@
 <?php
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\NotSupportedException;
@@ -8,9 +8,9 @@ use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
-use backend\models\Role;
+use common\models\Role;
 use yii\helpers\ArrayHelper;
-use backend\models\Vendorpackages;
+use common\models\Vendorpackages;
 use yii\behaviors\SluggableBehavior;
 /**
  * This is the model class for table "{{%vendor}}".

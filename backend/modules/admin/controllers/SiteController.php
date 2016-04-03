@@ -6,14 +6,14 @@ use Yii;
 use yii\web\Controller;
 use yii\db\Query;
 use yii\web\Session;
-use backend\models\Customer;
-use backend\models\Vendor;
-use backend\models\Vendoritem;
+use common\models\Customer;
+use common\models\Vendor;
+use common\models\Vendoritem;
 use yii\web\UploadedFile;
-use backend\models\PasswordForm;
-use backend\models\LoginForm;
-use backend\models\Admin;
-use backend\models\UploadForm;
+use common\models\PasswordForm;
+use common\models\LoginForm;
+use common\models\Admin;
+use common\models\UploadForm;
 
 /**
  * Site controller.

@@ -1,13 +1,13 @@
 <?php
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Prioritylog;
+use common\models\Prioritylog;
 
 /**
- * PrioritylogSearch represents the model behind the search form about `backend\models\Prioritylog`.
+ * PrioritylogSearch represents the model behind the search form about `common\models\Prioritylog`.
  */
 class PrioritylogSearch extends Prioritylog
 {

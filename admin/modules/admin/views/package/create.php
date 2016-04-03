@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Package */
+/* @var $model common\models\Package */
 
 $this->title = 'Create package';
 $this->params['breadcrumbs'][] = ['label' => 'Packages', 'url' => ['index']];

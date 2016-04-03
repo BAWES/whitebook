@@ -3,12 +3,12 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Usercontroller;
-use backend\models\Accesscontroller;
-use backend\models\Admin;
-use backend\models\AccesscontrolSearch;
+use common\models\Usercontroller;
+use common\models\Accesscontroller;
+use common\models\Admin;
+use common\models\AccesscontrolSearch;
 use yii\web\Controller;
-use backend\models\Authitem;
+use common\models\Authitem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;

@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Authitem;
-use backend\models\Role;
-use backend\models\RoleSearch;
+use common\models\Authitem;
+use common\models\Role;
+use common\models\RoleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

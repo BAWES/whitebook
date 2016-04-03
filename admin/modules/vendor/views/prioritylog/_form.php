@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Prioritylog */
+/* @var $model common\models\Prioritylog */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

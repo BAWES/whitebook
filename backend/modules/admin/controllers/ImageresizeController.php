@@ -3,11 +3,11 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Imageresize;
-use backend\models\Admin;
-use backend\models\ImageresizeSearch;
+use common\models\Imageresize;
+use common\models\Admin;
+use common\models\ImageresizeSearch;
 use yii\web\Controller;
-use backend\models\Authitem;
+use common\models\Authitem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;

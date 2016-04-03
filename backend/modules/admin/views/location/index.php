@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\LocationSearch */
+/* @var $searchModel common\models\LocationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Area';

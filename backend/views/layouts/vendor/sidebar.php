@@ -1,7 +1,7 @@
   <?php 
  use yii\helpers\Html; 
- use backend\models\Vendor; 
- use backend\models\Vendoritem; 
+ use common\models\Vendor; 
+ use common\models\Vendoritem; 
  ?>
  	<!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Themes */
+/* @var $model common\models\Themes */
 
 $this->title = 'Update themes';
 $this->params['breadcrumbs'][] = ['label' => 'Themes', 'url' => ['index']];

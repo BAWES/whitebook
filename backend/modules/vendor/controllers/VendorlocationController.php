@@ -3,14 +3,14 @@
 namespace backend\modules\vendor\controllers;
 
 use Yii;
-use backend\models\vendorlocation;
-use backend\models\vendorlocationSearch;
+use common\models\vendorlocation;
+use common\models\vendorlocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\Country;
-use backend\models\Location;
-use backend\models\City;
+use common\models\Country;
+use common\models\Location;
+use common\models\City;
 use yii\helpers\ArrayHelper;
 
 /**

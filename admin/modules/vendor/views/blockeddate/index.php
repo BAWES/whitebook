@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\helpers\Setdateformat;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\BlockeddateSearch */
+/* @var $searchModel common\models\BlockeddateSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Blocked date';

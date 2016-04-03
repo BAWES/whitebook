@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Subscribe */
+/* @var $model common\models\Subscribe */
 
 $this->title = 'Create Subscribe';
 $this->params['breadcrumbs'][] = ['label' => 'Subscribes', 'url' => ['index']];

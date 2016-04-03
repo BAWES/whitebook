@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\FeaturegroupitemSearch */
+/* @var $searchModel common\models\FeaturegroupitemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Theme group items';

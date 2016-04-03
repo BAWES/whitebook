@@ -4,9 +4,9 @@ namespace backend\modules\admin\controllers;
 
 use Yii;
 use arturoliveira\ExcelView;
-use backend\models\Authitem;
-use backend\models\Subscribe;
-use backend\models\SubscribeSearch;
+use common\models\Authitem;
+use common\models\Subscribe;
+use common\models\SubscribeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendoritemquestionansweroption */
+/* @var $model common\models\Vendoritemquestionansweroption */
 
 $this->title = 'Create Vendor item question answer';
 $this->params['breadcrumbs'][] = ['label' => 'Vendoritemquestionansweroptions', 'url' => ['index']];

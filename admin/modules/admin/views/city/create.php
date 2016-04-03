@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\City */
+/* @var $model common\models\City */
 
 $this->title = 'Create Governorate';
 $this->params['breadcrumbs'][] = ['label' => 'Governorate', 'url' => ['index']];

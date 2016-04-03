@@ -1,14 +1,14 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Themes;
+use common\models\Themes;
 
 /**
- * themesSearch represents the model behind the search form about `backend\models\Themes`.
+ * themesSearch represents the model behind the search form about `common\models\Themes`.
  */
 class themesSearch extends Themes
 {

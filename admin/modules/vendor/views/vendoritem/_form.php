@@ -3,9 +3,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use dosamigos\fileupload\FileUploadUI;
-use backend\models\Vendoritemquestion;
+use common\models\Vendoritemquestion;
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendoritem */
+/* @var $model common\models\Vendoritem */
 /* @var $form yii\widgets\ActiveForm */
 if($model->isNewRecord){
 $childcategory = array();

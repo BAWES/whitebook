@@ -1,7 +1,7 @@
 <?php
 
-namespace backend\models;
-use backend\models\Featuregroup;
+namespace common\models;
+use common\models\Featuregroup;
 use yii\db\Query;
 use Yii;
 

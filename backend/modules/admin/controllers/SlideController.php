@@ -3,12 +3,12 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Slide;
-use backend\models\SlideSearch;
+use common\models\Slide;
+use common\models\SlideSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\Authitem;
+use common\models\Authitem;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 

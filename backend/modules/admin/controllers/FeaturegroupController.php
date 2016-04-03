@@ -3,10 +3,10 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Featuregroup;
-use backend\models\FeaturegroupSearch;
+use common\models\Featuregroup;
+use common\models\FeaturegroupSearch;
 use yii\web\Controller;
-use backend\models\Authitem;
+use common\models\Authitem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;

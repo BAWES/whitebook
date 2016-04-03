@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 
@@ -33,12 +33,12 @@ class Adverthome extends \yii\db\ActiveRecord
         return [
            [['advert_code'], 'required'],
            [['advert_code', 'trash'], 'string'],
-            [['created_by', 'modified_by'], 'integer'],            
+            [['created_by', 'modified_by'], 'integer'],
             [['created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
-       
+
         ];
     }
-    
+
     /**
      * @inheritdoc
      */

@@ -1,8 +1,8 @@
 <?php
 
-namespace backend\models;
-use backend\models\Vendoritemthemes;
-use backend\models\vendoritemthemesSearch;
+namespace common\models;
+use common\models\Vendoritemthemes;
+use common\models\vendoritemthemesSearch;
 use Yii;
 use yii\helpers\ArrayHelper;
 /**

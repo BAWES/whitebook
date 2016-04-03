@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Area */
+/* @var $model common\models\Area */
 
 $this->title = $model->area_id;
 $this->params['breadcrumbs'][] = ['label' => 'Areas', 'url' => ['index']];

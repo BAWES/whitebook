@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Accesscontrol */
+/* @var $model common\models\Accesscontrol */
 
 $this->title = 'Create access control';
 $this->params['breadcrumbs'][] = ['label' => 'Accesscontrols', 'url' => ['index']];

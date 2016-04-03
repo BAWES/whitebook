@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Banner;
-use backend\models\BannerSearch;
-use backend\models\Authitem;
+use common\models\Banner;
+use common\models\BannerSearch;
+use common\models\Authitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

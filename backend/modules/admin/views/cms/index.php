@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\CmsSearch */
+/* @var $searchModel common\models\CmsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Static page';

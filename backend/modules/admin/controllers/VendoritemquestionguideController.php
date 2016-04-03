@@ -3,15 +3,15 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Vendoritemquestionguide;
-use backend\models\Vendoritemquestion;
-use backend\models\VendoritemquestionguideSearch;
+use common\models\Vendoritemquestionguide;
+use common\models\Vendoritemquestion;
+use common\models\VendoritemquestionguideSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
-use backend\models\Image;
+use common\models\Image;
 /**
  * VendoritemquestionguideController implements the CRUD actions for Vendoritemquestionguide model.
  */

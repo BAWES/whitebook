@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
-use backend\models\AdminSearch;
+use common\models\AdminSearch;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\AdminSearch */
+/* @var $searchModel common\models\AdminSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Admin';

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Prioritylog */
+/* @var $model common\models\Prioritylog */
 
 $this->title = 'Update Prioritylog: ' . ' ' . $model->log_id;
 $this->params['breadcrumbs'][] = ['label' => 'Prioritylogs', 'url' => ['index']];

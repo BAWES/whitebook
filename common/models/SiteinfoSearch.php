@@ -1,11 +1,11 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Siteinfo;
+use common\models\Siteinfo;
 
 /**
  * SiteinfoSearch represents the model behind the search form about `app\models\Siteinfo`.

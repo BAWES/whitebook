@@ -3,9 +3,9 @@
 namespace backend\modules\vendor\controllers;
 
 use Yii;
-use backend\models\Vendor;
-use backend\models\Deliverytimeslot;
-use backend\models\DeliverytimeslotSearch;
+use common\models\Vendor;
+use common\models\Deliverytimeslot;
+use common\models\DeliverytimeslotSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Contacts */
+/* @var $model common\models\Contacts */
 
 $this->title = $model->contact_name;
 $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];

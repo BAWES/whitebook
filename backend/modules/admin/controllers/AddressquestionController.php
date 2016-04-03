@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Addresstype;
-use backend\models\AddressQuestion;
-use backend\models\AddressQuestionSearch;
+use common\models\Addresstype;
+use common\models\AddressQuestion;
+use common\models\AddressQuestionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

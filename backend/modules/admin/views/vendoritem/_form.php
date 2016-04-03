@@ -3,12 +3,12 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\sortable\Sortable;
-use backend\models\Vendor;
-use backend\models\Vendoritemquestion;
+use common\models\Vendor;
+use common\models\Vendoritemquestion;
 use dosamigos\fileupload\FileUploadUI;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendoritem */
+/* @var $model common\models\Vendoritem */
 /* @var $form yii\widgets\ActiveForm */
 if($model->isNewRecord){
 $categoryname = array();

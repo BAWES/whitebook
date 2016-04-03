@@ -6,9 +6,9 @@ use yii\bootstrap\Alert;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-use backend\models\Vendoritem;
+use common\models\Vendoritem;
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\VendorSearch */
+/* @var $searchModel common\models\VendorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Manage vendor';

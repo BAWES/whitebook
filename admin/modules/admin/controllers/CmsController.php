@@ -3,10 +3,10 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Admin;
-use backend\models\Authitem;
-use backend\models\Cms;
-use backend\models\CmsSearch;
+use common\models\Admin;
+use common\models\Authitem;
+use common\models\Cms;
+use common\models\CmsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

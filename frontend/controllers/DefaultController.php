@@ -3,18 +3,18 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use backend\models\Cms;
-use backend\models\Vendoritem;
-use backend\models\Vendor;
-use backend\models\Category;
-use backend\models\Siteinfo;
-use backend\models\Faq;
-use backend\models\Themes;
+use common\models\Cms;
+use common\models\Vendoritem;
+use common\models\Vendor;
+use common\models\Category;
+use common\models\Siteinfo;
+use common\models\Faq;
+use common\models\Themes;
 use frontend\models\Website;
 use frontend\models\Users;
 use yii\web\Session;
 use yii\db\Query;
-use backend\models\Smtp;
+use common\models\Smtp;
 class DefaultController extends BaseController
 {
     public function behaviors()

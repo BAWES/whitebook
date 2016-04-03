@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Category */
+/* @var $model common\models\Category */
 
 $this->title = 'Create child category';
 $this->params['breadcrumbs'][] = ['label' => 'Child category', 'url' => ['index']];

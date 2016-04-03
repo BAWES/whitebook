@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-use backend\models\Vendor; 
+use common\models\Vendor; 
 
 $this->title = 'Payment status';
 $this->params['breadcrumbs'][] = $this->title;

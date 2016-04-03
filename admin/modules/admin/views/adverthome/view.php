@@ -1,11 +1,11 @@
 <?php
 use yii\helpers\Url;
-use backend\models\Image;
+use common\models\Image;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Adverthome */
+/* @var $model common\models\Adverthome */
 
 $this->title = 'Home ads';
 $this->params['breadcrumbs'][] = ['label' => 'Home ads', 'url' => ['index']];

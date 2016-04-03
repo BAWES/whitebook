@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\bootstrap\Alert;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\VendorSearch */
+/* @var $searchModel common\models\VendorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Vendors contact details';

@@ -3,21 +3,21 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Image;
-use backend\models\Admin;
-use backend\models\Authitem;
-use backend\models\Category;
-use backend\models\Vendor;
-use backend\models\ChildCategory;
-use backend\models\SubCategory;
-use backend\models\CategorySearch;
+use common\models\Image;
+use common\models\Admin;
+use common\models\Authitem;
+use common\models\Category;
+use common\models\Vendor;
+use common\models\ChildCategory;
+use common\models\SubCategory;
+use common\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use backend\models\Vendoritem;
+use common\models\Vendoritem;
 
 /**
  * CategoryController implements the CRUD actions for Category model.

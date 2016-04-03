@@ -3,13 +3,13 @@
 namespace backend\modules\vendor\controllers;
 
 use Yii;
-use backend\models\Vendoritemcapacityexception;
-use backend\models\VendoritemcapacityexceptionSearch;
+use common\models\Vendoritemcapacityexception;
+use common\models\VendoritemcapacityexceptionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Setdateformat;
-use backend\models\Vendor;
+use common\models\Vendor;
 /**
  * VendoritemcapacityexceptionController implements the CRUD actions for Vendoritemcapacityexception model.
  */

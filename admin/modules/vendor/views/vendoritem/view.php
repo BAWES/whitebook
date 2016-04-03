@@ -2,10 +2,10 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use backend\models\Vendoritem;
+use common\models\Vendoritem;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendoritem */
+/* @var $model common\models\Vendoritem */
 
 $this->title = 'Item details';
 $this->params['breadcrumbs'][] = ['label' => 'Vendoritems', 'url' => ['index']];

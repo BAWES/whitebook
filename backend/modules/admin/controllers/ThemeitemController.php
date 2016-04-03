@@ -3,16 +3,16 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Featuregroup;
-use backend\models\Featuregroupitem;
-use backend\models\VendoritemthemesSearch;
-use backend\models\Vendoritem;
-use backend\models\Authitem;
-use backend\models\Vendoritemthemes;
-use backend\models\Themes;
-use backend\models\Vendor;
-use backend\models\Category;
-use backend\models\SubCategory;
+use common\models\Featuregroup;
+use common\models\Featuregroupitem;
+use common\models\VendoritemthemesSearch;
+use common\models\Vendoritem;
+use common\models\Authitem;
+use common\models\Vendoritemthemes;
+use common\models\Themes;
+use common\models\Vendor;
+use common\models\Category;
+use common\models\SubCategory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

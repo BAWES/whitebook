@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Image;
-use backend\models\Authitem;
-use backend\models\ImageSearch;
+use common\models\Image;
+use common\models\Authitem;
+use common\models\ImageSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

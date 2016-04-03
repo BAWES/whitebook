@@ -4,7 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
 /* @var $this yii\web\View */
-/* @var $model backend\models\Advertcategory */
+/* @var $model common\models\Advertcategory */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?= Html::csrfMetaTags() ?>

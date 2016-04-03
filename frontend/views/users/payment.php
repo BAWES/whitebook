@@ -1,15 +1,15 @@
 <?php 
 use yii\helpers\Url;
-use backend\models\Vendor;
-use backend\models\Country;
-use backend\models\City;
-use backend\models\Location;
-use backend\models\Area;
-use backend\models\Addresstype;
+use common\models\Vendor;
+use common\models\Country;
+use common\models\City;
+use common\models\Location;
+use common\models\Area;
+use common\models\Addresstype;
 use yii\helpers\Html;
-use backend\models\Vendoritempricing;
-use backend\models\Itemtype;
-use backend\models\Category;
+use common\models\Vendoritempricing;
+use common\models\Itemtype;
+use common\models\Category;
 use yii\widgets\Breadcrumbs;
 $this->title='Whitebook - Checkout';?>
 

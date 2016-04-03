@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Priorityitem */
+/* @var $model common\models\Priorityitem */
 
 $this->title = $model->priority_id;
 $this->params['breadcrumbs'][] = ['label' => 'Priorityitems', 'url' => ['index']];

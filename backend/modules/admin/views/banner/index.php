@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\CountrySearch */
+/* @var $searchModel common\models\CountrySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Banner';

@@ -3,15 +3,15 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\City;
-use backend\models\CitySearch;
-use backend\models\Admin;
-use backend\models\Authitem;
+use common\models\City;
+use common\models\CitySearch;
+use common\models\Admin;
+use common\models\Authitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use backend\models\Country;
+use common\models\Country;
 use yii\filters\AccessControl;
 
 /**

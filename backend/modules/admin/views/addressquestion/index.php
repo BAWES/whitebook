@@ -1,12 +1,12 @@
 <?php
 
-use backend\models\Addresstype;
+use common\models\Addresstype;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\AddressQuestionSearch */
+/* @var $searchModel common\models\AddressQuestionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Address Questions';

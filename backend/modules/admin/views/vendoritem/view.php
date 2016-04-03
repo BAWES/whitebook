@@ -2,18 +2,18 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use backend\models\Vendoritem;
-use backend\models\Vendoritemthemes;
-use backend\models\Vendoritempricing;
-use backend\models\Featuregroupitem;
+use common\models\Vendoritem;
+use common\models\Vendoritemthemes;
+use common\models\Vendoritempricing;
+use common\models\Featuregroupitem;
 
 
-use backend\models\Image;
-use backend\models\Vendoritemquestion;
-use backend\models\Vendoritemquestionguide;
+use common\models\Image;
+use common\models\Vendoritemquestion;
+use common\models\Vendoritemquestionguide;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendoritem */
+/* @var $model common\models\Vendoritem */
 
 $this->title = 'Vendor Item Details';
 //$this->title = $model->item_name;

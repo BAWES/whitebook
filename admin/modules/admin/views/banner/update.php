@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Country */
+/* @var $model common\models\Country */
 
 $this->title = 'Update Banner: ' . ' ' . $model->banner_title;
 $this->params['breadcrumbs'][] = ['label' => 'Banners', 'url' => ['index']];

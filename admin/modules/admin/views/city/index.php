@@ -6,7 +6,7 @@ use yii\helpers\Url;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\CitySearch */
+/* @var $searchModel common\models\CitySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Governorate';

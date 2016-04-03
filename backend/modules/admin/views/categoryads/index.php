@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\CategoryadsSearch */
+/* @var $searchModel common\models\CategoryadsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Categoryads';

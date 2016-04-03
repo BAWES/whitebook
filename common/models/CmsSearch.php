@@ -1,14 +1,14 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Cms;
+use common\models\Cms;
 
 /**
- * CmsSearch represents the model behind the search form about `backend\models\Cms`.
+ * CmsSearch represents the model behind the search form about `common\models\Cms`.
  */
 class CmsSearch extends Cms
 {

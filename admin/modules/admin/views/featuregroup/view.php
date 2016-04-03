@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Featuregroup */
+/* @var $model common\models\Featuregroup */
 
 $this->title = $model->group_id;
 $this->params['breadcrumbs'][] = ['label' => 'Featuregroups', 'url' => ['index']];

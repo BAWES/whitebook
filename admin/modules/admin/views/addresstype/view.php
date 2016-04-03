@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Addresstype */
+/* @var $model common\models\Addresstype */
 
 $this->title = $model->type_id;
 $this->params['breadcrumbs'][] = ['label' => 'Addresstypes', 'url' => ['index']];

@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 /**
  * This is the model class for table "{{%auth_rule}}".

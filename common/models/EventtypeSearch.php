@@ -1,14 +1,14 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Eventtype;
+use common\models\Eventtype;
 
 /**
- * ItemtypeSearch represents the model behind the search form about `backend\models\Itemtype`.
+ * ItemtypeSearch represents the model behind the search form about `common\models\Itemtype`.
  */
 class EventtypeSearch extends Eventtype
 {

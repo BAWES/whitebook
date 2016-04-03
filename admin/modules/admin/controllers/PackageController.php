@@ -3,9 +3,9 @@
 namespace backend\modules\admin\controllers;
 
 use Yii;
-use backend\models\Authitem;
-use backend\models\Package;
-use backend\models\PackageSearch;
+use common\models\Authitem;
+use common\models\Package;
+use common\models\PackageSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

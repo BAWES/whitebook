@@ -1,11 +1,11 @@
 <?php
 use yii\helpers\Url;
-use backend\models\Vendoritem;
-use backend\models\Itemtype;
-use backend\models\Category;
-use backend\models\Package;
-use backend\models\Deliverytimeslot;
-use backend\models\DeliverytimeslotSearch;
+use common\models\Vendoritem;
+use common\models\Itemtype;
+use common\models\Category;
+use common\models\Package;
+use common\models\Deliverytimeslot;
+use common\models\DeliverytimeslotSearch;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
@@ -13,7 +13,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendor */
+/* @var $model common\models\Vendor */
 
 $this->title = $model->vendor_name.' info ';
 $this->params['breadcrumbs'][] = ['label' => 'Manage Vendors', 'url' => ['index']];

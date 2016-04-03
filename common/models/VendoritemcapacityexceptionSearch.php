@@ -1,14 +1,14 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 use yii\helpers\Setdateformat;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Vendoritemcapacityexception;
+use common\models\Vendoritemcapacityexception;
 
 /**
- * VendoritemcapacityexceptionSearch represents the model behind the search form about `backend\models\Vendoritemcapacityexception`.
+ * VendoritemcapacityexceptionSearch represents the model behind the search form about `common\models\Vendoritemcapacityexception`.
  */
 class VendoritemcapacityexceptionSearch extends Vendoritemcapacityexception
 {

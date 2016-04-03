@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Vendor */
+/* @var $model common\models\Vendor */
 
 $this->title = 'Update address';
 $this->params['breadcrumbs'][] = ['label' => 'Vendors', 'url' => ['index']];
