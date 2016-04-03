@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\admin\controllers;
+namespace admin\controllers;
 
 //namespace app\modules\admin\controllers;
 
