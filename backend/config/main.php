@@ -30,7 +30,7 @@ return [
             'showScriptName' => false,
         ],
         'user' => [
-            'identityClass' => 'common\models\Admin',
+            'identityClass' => 'common\models\Vendor',
             'enableAutoLogin' => false,
         ],
         'session' => [
@@ -62,14 +62,6 @@ return [
             ],
         ],
      ],
-    'modules' => [
-        'admin' => [
-          'class' => 'backend\modules\admin\Module'
-        ],
-        'vendor' => [
-          'class' => 'backend\modules\vendor\Module'
-        ],
-    ],
     'params' => $params,
 
 ];
