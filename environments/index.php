@@ -33,6 +33,8 @@ return [
             'backend/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
+            'admin/runtime',
+            'admin/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -40,6 +42,7 @@ return [
         'setCookieValidationKey' => [
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
+            'admin/config/main-local.php',
         ],
     ],
     'Development [Technoduce]' => [
@@ -49,6 +52,8 @@ return [
             'backend/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
+            'admin/runtime',
+            'admin/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -56,6 +61,7 @@ return [
         'setCookieValidationKey' => [
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
+            'admin/config/main-local.php',
         ],
     ],
     'Production' => [
@@ -65,6 +71,8 @@ return [
             'backend/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
+            'admin/runtime',
+            'admin/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -72,6 +80,7 @@ return [
         'setCookieValidationKey' => [
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
+            'admin/config/main-local.php',
         ],
     ],
 ];
