@@ -19,7 +19,7 @@
 		$controller = get_class($this->context);
 		$action = $this->context->action->id;
 		$menu = explode('\\',$controller);
-		$menu_act = $menu[2];		
+		$menu_act = $menu[2];
 		$second_menu = array('vendoraddressController','LocationController');
 		$first_menu = array('VendoritemController');
 
@@ -32,7 +32,7 @@
 		 <p class="menu-title"><span class="pull-right"><a href="javascript:;"></a></span></p>
 		<ul>
 			<li class="<?php if ($menu_act == 'DefaultController'  && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['default/dashboard'], ['class'=>'link-title']) ?>
+				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/dashboard'], ['class'=>'link-title']) ?>
 			</li>
 			<li class="<?php if($menu_act == 'VendoritemController') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="fa fa-certificate"></i><span class="title">Manage Item</span>', ['vendoritem/index'], ['class'=>'link-title']) ?>
