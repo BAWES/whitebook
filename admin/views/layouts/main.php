@@ -6,7 +6,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use yii\bootstrap\Alert;
-use admin\models\Siteinfo;
+use common\models\Siteinfo;
 
 AppAsset::register($this);
 $this->beginPage();
@@ -25,12 +25,12 @@ $this->beginPage();
         <!-- BEGIN CORE JS FRAMEWORK-->
     <body class="">
         <?php $this->beginBody() ?>
-        <?php $this->beginContent('@app/views/layouts/admin/header.php'); ?>
+        <?php $this->beginContent('@app/views/layouts/header.php'); ?>
         <!-- You may need to put some content here -->
             <?php $this->endContent(); ?>
         <!-- BEGIN CONTENT -->
         <div class="page-container row-fluid">
-            <?php $this->beginContent('@app/views/layouts/admin/sidebar.php'); ?>
+            <?php $this->beginContent('@app/views/layouts/sidebar.php'); ?>
             <!-- You may need to put some content here -->
 <?php $this->endContent(); ?>
             <!-- BEGIN PAGE CONTAINER-->
@@ -70,7 +70,7 @@ $this->beginPage();
                 </div>
             </div>
             <!-- END PAGE CONTAINER -->
-            <?php $this->beginContent('@app/views/layouts/admin/footer.php'); ?>
+            <?php $this->beginContent('@app/views/layouts/footer.php'); ?>
             <!-- You may need to put some content here -->
 <?php $this->endContent(); ?>
 <?php $this->endBody() ?>
