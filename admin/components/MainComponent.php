@@ -4,6 +4,7 @@ namespace admin\components;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
+use yii\helpers\Url;
 use common\models\Admin;
 use common\models\Vendor;
 use common\models\Siteinfo;
@@ -348,9 +349,10 @@ class MainComponent extends Component
     // Status Image URL
     public static function statusImageurl($img_status)
     {
-        if($img_status == 'Active')
-        return \Yii::$app->params['appImageUrl'].'active.png';
-        return \Yii::$app->params['appImageUrl'].'inactive.png';
+        if($img_status == 'Active'){
+            return Url::to('@web/uploads/app_img/active.png');
+        }
+        return Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Vendor Item Gridview Status Filter
