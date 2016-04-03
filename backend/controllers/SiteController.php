@@ -25,8 +25,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $vendorLink = Url::to("vendor/default/login");
-        $adminLink = Url::to("admin/site/login");
+        $vendorLink = Url::to(["vendor/default/index"]);
+        $adminLink = Url::to(["admin/site/index"]);
 
         echo Html::a("Link to Vendor Backend", $vendorLink); //vendor/default/login
         echo "<br/>";
