@@ -1,10 +1,10 @@
 <?php
 
 $params = array_merge(
-    require(__DIR__.'/../../common/config/params.php'),
-    require(__DIR__.'/../../common/config/params-local.php'),
-    require(__DIR__.'/params.php'),
-    require(__DIR__.'/params-local.php')
+require(__DIR__.'/../../common/config/params.php'),
+require(__DIR__.'/../../common/config/params-local.php'),
+require(__DIR__.'/params.php'),
+require(__DIR__.'/params-local.php')
 );
 
 return [
@@ -13,15 +13,15 @@ return [
     'controllerNamespace' => 'admin\controllers',
     'bootstrap' => ['log'],
     'components' => [
-      'request' => [
-          'enableCsrfValidation' => false,
-       ],
-      'cache' => [
-                  'class' => 'yii\caching\FileCache',
-       ],
-      'authManager' => [
-           'class' => 'yii\rbac\DbManager',
-           'defaultRoles' => ['admin', 'author'],
+        'request' => [
+            'enableCsrfValidation' => false,
+        ],
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'defaultRoles' => ['admin', 'author'],
         ],
         'themeURL' => [
             'class' => 'yii\web\UrlManager',
@@ -30,7 +30,7 @@ return [
             'showScriptName' => false,
         ],
         'user' => [
-            'identityClass' => 'admin\models\Admin',
+            'identityClass' => 'common\models\Admin',
             'enableAutoLogin' => false,
         ],
         'session' => [
@@ -42,7 +42,7 @@ return [
                 'file' => [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
-                 ],
+                ],
             ],
         ],
         'errorHandler' => [
@@ -57,11 +57,11 @@ return [
                     'sourcePath' => null,   // do not publish the bundle
                     'js' => [
                         YII_ENV_DEV ? '' : '',
-                     ],
-                  ],
+                    ],
+                ],
             ],
         ],
-     ],
+    ],
     'params' => $params,
 
 ];
