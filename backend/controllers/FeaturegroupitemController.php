@@ -32,21 +32,15 @@ class FeaturegroupitemController extends Controller
                     //'delete' => ['post'],
                 ],
             ],
-              'access' => [
-               'class' => AccessControl::className(),
-               'rules' => [
-                   [  
-						'actions' => [''],             
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [   
-						'actions' => ['create', 'update','index', 'view','delete','loadcategory','loaditems','loadsubcategory'],                     
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [//allow authenticated users only
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-               ],
-           ],
+                ],
+            ],
         ];
     }
 
@@ -124,10 +118,10 @@ class FeaturegroupitemController extends Controller
 			 if($exists){
 		echo Yii::$app->session->setFlash('danger', "Feature group  item already exists!");
         return $this->redirect(['index']);
-				 }	
+				 }
 			$model->save();
 			echo Yii::$app->session->setFlash('success', "Feature group item created successfully!");
-			
+
             return $this->redirect(['index']);
         } else {
             return $this->render('create',[
@@ -169,7 +163,7 @@ class FeaturegroupitemController extends Controller
 		$id=Vendoritemthemes ::getthemeid($model->vendor_id,$model->item_id);
 		$id = array('0'=>$id);
 		$id=$id['0'];
-        $featuregroupitem=Vendoritem ::groupvendoritem($model->vendor_id,$model->category_id,$model->subcategory_id); 
+        $featuregroupitem=Vendoritem ::groupvendoritem($model->vendor_id,$model->category_id,$model->subcategory_id);
         if ($model->load(Yii::$app->request->post())&&($model->validate())) {
 			//print_r ($_POST);die;
 			 $model->featured_start_date = Setdateformat::convert($model->featured_start_date);
@@ -189,7 +183,7 @@ class FeaturegroupitemController extends Controller
 			 if($exists){
 		echo Yii::$app->session->setFlash('danger', "Feature group  item already exists!");
         return $this->redirect(['index']);
-				 }	
+				 }
 			$model->save();
 			 $command = \Yii::$app->DB->createCommand(
 			'UPDATE whitebook_vendor_item_theme SET theme_id="'.$theme_id.'",item_id="'.$item_id.'" WHERE id='.$id);
@@ -212,7 +206,7 @@ class FeaturegroupitemController extends Controller
      * @return mixed
      */
     public function actionDelete($id)
-    {   
+    {
 		$model = $this->findModel($id);
 		$command = \Yii::$app->DB->createCommand(
 		'UPDATE whitebook_feature_group_item SET trash="Deleted" WHERE featured_id='.$id);
@@ -220,11 +214,11 @@ class FeaturegroupitemController extends Controller
 		echo Yii::$app->session->setFlash('success', "Feature group item deleted successfully!");
         return $this->redirect(['index']);
     }
-    
+
     public static function actionLoadcategory()
     {
 		  if(Yii::$app->request->isAjax)
-		  $data = Yii::$app->request->post();	 	
+		  $data = Yii::$app->request->post();
 		  $categoryid = Vendor::find()->select('category_id')->where(['vendor_id' => 1])->one();
 		  //echo $k=$categoryid->category_id;
 		  print_r ($categoryid);
@@ -234,25 +228,25 @@ class FeaturegroupitemController extends Controller
 		 foreach($category as $key=>$val)
 		 {
 			echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-		 }  
+		 }
 	}
     public function actionLoadsubcategory()
-    {	
+    {
 		  if(Yii::$app->request->isAjax)
-		  $data = Yii::$app->request->post();		 	
+		  $data = Yii::$app->request->post();
 		  $subcategory = Category::find()->select('category_id,category_name')->where(['parent_category_id' => $data['id']])->all();
 		  echo  '<option value="">Select...</option>';
 		 foreach($subcategory as $key=>$val)
 		 {
 			echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-		 }  
+		 }
 	}
-	
+
 	    public function actionLoaditems()
-		{	
+		{
 		  if(Yii::$app->request->isAjax)
 		  $vendorid=Yii::$app->user->identity->id;
-		  $data = Yii::$app->request->post();		 	
+		  $data = Yii::$app->request->post();
 		  $vendoritem = Vendoritem::find()->select('item_id,item_name')->where(['vendor_id' => $vendorid
 		  ,'category_id' => $data['category_id'],'subcategory_id' => $data['subcategory_id']])->all();
 		 echo  '<option value="">Select...</option>';

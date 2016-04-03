@@ -13,6 +13,8 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Security;
+use yii\filters\AccessControl;
+
 /**
  * VendorController implements the CRUD actions for Vendor model.
  */
@@ -25,6 +27,15 @@ class vendoraddressController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                  //   'delete' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [//allow authenticated users only
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -59,7 +70,7 @@ class vendoraddressController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Vendoraddress();	
+        $model = new Vendoraddress();
        // $model->scenario = 'register';
 		$area = Location::loadlocation();
 		//print_r ($area);die;
@@ -77,7 +88,7 @@ class vendoraddressController extends Controller
 
     public function actionUpdate($id)
     {
-		$model = $this->findModel($id);	
+		$model = $this->findModel($id);
 		$area = Location::loadlocation();
 		//print_r ($area);die;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -119,11 +130,11 @@ class vendoraddressController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
+
         public function actionLoadcategory()
-    {	
+    {
 		  if(Yii::$app->request->isAjax)
-		  $data = Yii::$app->request->post();		 		
+		  $data = Yii::$app->request->post();
 		  $categoryid = Vendor::find()->select('category_id')->where(['vendor_id' => $data['id']])->one();
 		  $k=$categoryid->category_id;
 		  $category = Category::find()->select('category_id,category_name')->where(['category_id' => $k])->all();
@@ -131,24 +142,24 @@ class vendoraddressController extends Controller
 		 foreach($category as $key=>$val)
 		 {
 			echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-		 }  
+		 }
 	}
     public function actionLoadsubcategory()
-    {	
+    {
 		  if(Yii::$app->request->isAjax)
-		  $data = Yii::$app->request->post();		 	
+		  $data = Yii::$app->request->post();
 		  $subcategory = Category::find()->select('category_id,category_name')->where(['parent_category_id' => $data['id']])->all();
 		  echo  '<option value="">Select...</option>';
 		 foreach($subcategory as $key=>$val)
 		 {
 			echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-		 }  
+		 }
 	}
 		public function actionBlock()
-    {			
+    {
 		if(Yii::$app->request->isAjax)
-		$data = Yii::$app->request->post();		
-		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active'); 	
+		$data = Yii::$app->request->post();
+		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
 		$command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor SET vendor_status="'.$status.'" WHERE vendor_id='.$data['id']);
 		$command->execute();
 
@@ -163,7 +174,7 @@ class vendoraddressController extends Controller
 			return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
 			}
 	}
-	
-		
-    
+
+
+
 }

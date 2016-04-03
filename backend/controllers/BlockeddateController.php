@@ -16,6 +16,21 @@ use yii\filters\VerbFilter;
  */
 class BlockeddateController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [//allow authenticated users only
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
    /**
      * Lists all Blockeddate models.
      * @return mixed

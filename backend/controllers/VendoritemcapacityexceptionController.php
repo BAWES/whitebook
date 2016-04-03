@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Setdateformat;
 use common\models\Vendor;
+use yii\filters\AccessControl;
+
 /**
  * VendoritemcapacityexceptionController implements the CRUD actions for Vendoritemcapacityexception model.
  */
@@ -22,6 +24,15 @@ class VendoritemcapacityexceptionController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                   //  'delete' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [//allow authenticated users only
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -41,7 +52,7 @@ class VendoritemcapacityexceptionController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'startdate' => $startdate,            
+            'startdate' => $startdate,
         ]);
     }
 
@@ -64,26 +75,26 @@ class VendoritemcapacityexceptionController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Vendoritemcapacityexception();    
+        $model = new Vendoritemcapacityexception();
         $vendor_id = Vendor::getVendor('vendor_id');
 
         $exist_date = \Yii::$app->db->createCommand('Select exception_date FROM whitebook_vendor_item_capacity_exception where created_by='.$vendor_id);
-        $exist_date = $exist_date->queryAll();   
+        $exist_date = $exist_date->queryAll();
         if(empty($exist_date))
         {
 			$exist_dates = '';
 		}	else  {
-			
+
 			foreach($exist_date as $date)
 			{
-				$dat[] = date('n/j/Y', strtotime($date['exception_date']));			
-				
+				$dat[] = date('n/j/Y', strtotime($date['exception_date']));
+
 			}
-		
+
 			$exist_dates = implode('","',$dat);
-		}	
-			
-			if ($model->load(Yii::$app->request->post()) && $model->validate()) {			
+		}
+
+			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 			 $item = Yii::$app->request->post('Vendoritemcapacityexception');
 			 $model->item_id = implode(',',$model->item_id);
 			 $model->exception_date = Setdateformat::convert($model->exception_date);
@@ -111,13 +122,13 @@ class VendoritemcapacityexceptionController extends Controller
 		$model->item_id = explode(',',$model->item_id);
 		$vendor_id = Vendor::getVendor('vendor_id');
         $exist_date = \Yii::$app->db->createCommand('Select exception_date FROM whitebook_vendor_item_capacity_exception where created_by='.$vendor_id);
-        $exist_date = $exist_date->queryAll();   
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {			
+        $exist_date = $exist_date->queryAll();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 			$item = Yii::$app->request->post('Vendoritemcapacityexception');
 			 $model->item_id = implode(',',$model->item_id);
 			 $model->exception_date = Setdateformat::convert($model->exception_date);
-			 $model->save();		
-             echo Yii::$app->session->setFlash('success', "Exception date updated successfully!");	
+			 $model->save();
+             echo Yii::$app->session->setFlash('success', "Exception date updated successfully!");
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
@@ -141,8 +152,8 @@ class VendoritemcapacityexceptionController extends Controller
 
     public static function actionCheckitems()
     {
-    if(Yii::$app->request->isAjax)             
-           $data = Yii::$app->request->post();     
+    if(Yii::$app->request->isAjax)
+           $data = Yii::$app->request->post();
            $item_id=$data['item_id'];
            $exception_date=$data['exception_date'];
            $exception_date= date ("Y-m-d",strtotime("0 day", strtotime($exception_date)));
@@ -173,9 +184,9 @@ $not_exists = Yii::$app->db->createCommand('SELECT item_id FROM whitebook_vendor
             if(!is_numeric($r['item_id']))
             {
              $out2[]= explode(',',$r['item_id']);
-            } 
-        }       
-        $p=array();     
+            }
+        }
+        $p=array();
         foreach($out2 as $id)
         {
             foreach($id as $key)
@@ -184,7 +195,7 @@ $not_exists = Yii::$app->db->createCommand('SELECT item_id FROM whitebook_vendor
 
         foreach($item_id as $i)
         {
-            
+
 if (in_array($i, $p)) {
    echo $already=2;die;
 }

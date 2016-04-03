@@ -12,12 +12,45 @@ use common\models\VendorPassword;
 use common\models\Siteinfo;
 use yii\db\Query;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\helpers\Security;
 use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error', 'Recoverypassword'],
+                        'allow' => true,
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $vendor_id=Yii::$app->user->getId();
@@ -30,7 +63,7 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-        $this->layout = "/login";
+        $this->layout = "login";
 
         $model = new VendorLogin();
         if(!Yii::$app->user->isGuest){
@@ -78,6 +111,7 @@ class SiteController extends Controller
         $session = Yii::$app->session;
         Yii::$app->user->logout();
         $session->destroy();
+
         return $this->redirect('login');
     }
 

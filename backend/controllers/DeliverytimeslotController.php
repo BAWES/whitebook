@@ -26,21 +26,15 @@ class DeliverytimeslotController extends Controller
                     //'delete' => ['post'],
                 ],
             ],
-              'access' => [
-               'class' => AccessControl::className(),
-               'rules' => [
-                   [  
-						'actions' => [''],             
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [   
-						'actions' => ['create', 'update','index', 'view','delete','checktime'],                     
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [//allow authenticated users only
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-               ],
-           ],
+                ],
+            ],
         ];
     }
 
@@ -55,7 +49,7 @@ class DeliverytimeslotController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]); 
+        ]);
     }
 
     /**
@@ -145,8 +139,8 @@ class DeliverytimeslotController extends Controller
 
         public static function actionChecktime()
     {
-          if(Yii::$app->request->isAjax)             
-           $data = Yii::$app->request->post();     
+          if(Yii::$app->request->isAjax)
+           $data = Yii::$app->request->post();
            $day='"'.$data['day'].'"';
            $start=$data['start'];
            $end=$data['end'];
@@ -159,16 +153,16 @@ class DeliverytimeslotController extends Controller
             $start_day=substr($start, 6, 2);
             $end_day=substr($end, 6, 2);
 
-// convert values into UNIX timestamp integers 
-$Ymd = date('Y-m-d'); // just in case we try to process across midnight 
-$start_ts = strtotime("$Ymd $start_hour:$start_minute $start_day"); 
-$end_ts = strtotime("$Ymd $end_hour:$end_minute $end_day"); 
-// test if end time is later than start time 
-if($end_ts > $start_ts) { 
-  
-} 
-else { 
-   echo "1"; 
+// convert values into UNIX timestamp integers
+$Ymd = date('Y-m-d'); // just in case we try to process across midnight
+$start_ts = strtotime("$Ymd $start_hour:$start_minute $start_day");
+$end_ts = strtotime("$Ymd $end_hour:$end_minute $end_day");
+// test if end time is later than start time
+if($end_ts > $start_ts) {
+
+}
+else {
+   echo "1";
    die;
 }
           $update=$data['update'];
@@ -223,6 +217,6 @@ die;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }   
-    
+    }
+
 }

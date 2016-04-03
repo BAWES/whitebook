@@ -12,9 +12,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Setdateformat;
-
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
+
 /**
  * PriorityitemController implements the CRUD actions for Priorityitem model.
  */
@@ -29,21 +29,15 @@ class PriorityitemController extends Controller
                     //'delete' => ['post'],
                 ],
             ],
-              'access' => [
-               'class' => AccessControl::className(),
-               'rules' => [
-                   [  
-						'actions' => [''],             
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [   
-						'actions' => ['create', 'update','index', 'view','delete','loadcategory','loadsubcategory','loaditems'],                     
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [//allow authenticated users only
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-               ],
-           ],
+                ],
+            ],
         ];
     }
 
@@ -96,7 +90,7 @@ class PriorityitemController extends Controller
 		->andwhere(['!=', 'trash', 'Deleted'])
 		->all();
 		$subcategory=ArrayHelper::map($subcategory,'category_id','category_name');
-		$priorityitem= Vendoritem::loadvendoritem();     
+		$priorityitem= Vendoritem::loadvendoritem();
 		if ($model->load(Yii::$app->request->post())&&($model->vendor_id=$vendorid)&&($model->validate())) {
 			 $item_id=implode(",",$model->item_id);
 			 $model->item_id=$item_id;
@@ -139,8 +133,8 @@ class PriorityitemController extends Controller
 		->all();
 		$subcategory=ArrayHelper::map($subcategory,'category_id','category_name');
 		$vendoritem= Vendoritem::loadvendoritem();
-		
-        $priorityitem=Vendoritem ::groupvendoritem($model->vendor_id,$model->category_id,$model->subcategory_id); 
+
+        $priorityitem=Vendoritem ::groupvendoritem($model->vendor_id,$model->category_id,$model->subcategory_id);
         if ($model->load(Yii::$app->request->post()) &&($model->validate())) {
 			if($model->item_id){
 			 $item_id=implode(",",$model->item_id);
@@ -151,8 +145,8 @@ class PriorityitemController extends Controller
             $model->save();
 		echo Yii::$app->session->setFlash('success', "Priority item updated successfully!");
         return $this->redirect(['index']);
-            
-            
+
+
         } else {
             return $this->render('update', [
                  'model' => $model,'vendoritem'=>$vendoritem,'vendorname'=>$vendorname,'category'=>$category,
@@ -167,15 +161,15 @@ class PriorityitemController extends Controller
      * @param string $id
      * @return mixed
      */
-     
-     
+
+
          public function actionDelete($id)
     {
 		$model = $this->findModel($id);
 		$model->trash = 'Deleted';
 		((Yii::$app->request->post()));
 		$model->load(Yii::$app->request->post());
-		$model->save();  
+		$model->save();
 		echo Yii::$app->session->setFlash('success', "Priority item deleted successfully!");
         return $this->redirect(['index']);
     }
@@ -196,9 +190,9 @@ class PriorityitemController extends Controller
         }
     }
         public static function actionLoadcategory()
-    {	
+    {
 		  if(Yii::$app->request->isAjax)
-		  $data = Yii::$app->request->post();		 		
+		  $data = Yii::$app->request->post();
 		  $categoryid = Vendor::find()->select('category_id')->where(['vendor_id' => $data['id']])->one();
 		  //$k=$categoryid->category_id;
 		$k=explode (',',$categoryid['category_id']);
@@ -207,25 +201,25 @@ class PriorityitemController extends Controller
 		 foreach($category as $key=>$val)
 		 {
 			echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-		 }  
+		 }
 	}
     public function actionLoadsubcategory()
-    {	
+    {
 		  if(Yii::$app->request->isAjax)
-		  $data = Yii::$app->request->post();		 	
+		  $data = Yii::$app->request->post();
 		  $subcategory = Category::find()->select('category_id,category_name')->where(['parent_category_id' => $data['id']])->all();
 		  echo  '<option value="">Select...</option>';
 		 foreach($subcategory as $key=>$val)
 		 {
 			echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-		 }  
+		 }
 	}
 
     public function actionLoaditems()
     {
 		  if(Yii::$app->request->isAjax)
 		  $vendorid=Yii::$app->user->identity->id;
-		  $data = Yii::$app->request->post();		 	
+		  $data = Yii::$app->request->post();
 		  $vendoritem = Vendoritem::find()->select('item_id,item_name')->where(['vendor_id' => $vendorid
 		  ,'category_id' => $data['category_id'],'subcategory_id' => $data['subcategory_id']])->all();
 		 echo  '<option value="">Select...</option>';

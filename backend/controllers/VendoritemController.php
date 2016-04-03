@@ -35,17 +35,10 @@ class VendoritemController extends Controller
     public function behaviors()
     {
         return [
-			'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    [
-						'actions' => [''],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-						'actions' => ['create', 'update','index', 'view','delete','block','imagedelete','imageapprove','imageunapprove',
-						'sort_vendor_item','status','vendoritemgallery','imageorder','renderquestion','viewrenderquestion'],
+                    [//allow authenticated users only
                         'allow' => true,
                         'roles' => ['@'],
                     ],

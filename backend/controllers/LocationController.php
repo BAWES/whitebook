@@ -22,20 +22,14 @@ class LocationController extends Controller
     public function behaviors()
     {
         return [
-			'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
-               'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' =>['?'],
-                   ],
-                   [
-                       'actions'=>['create', 'update','index', 'view','delete','block','city','area'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
+                'rules' => [
+                    [//allow authenticated users only
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
