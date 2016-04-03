@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row-fluid">
    <div class="span12">
        <div class="grid simple">
-		   <div class="tools"> 	
+		   <div class="tools">
 			<?= Html::a('Create vendor contact details', ['create'], ['class' => 'btn btn-success']) ?>
 			</div>
 
@@ -36,14 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script type="text/javascript">
 	function change(status, id)
-	{		
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/admin/vendor/block']); ?> ";
-        $.ajax({  
-        type: 'POST',      
-        url: path, 
+	{
+		var csrfToken = $('meta[name="csrf-token"]').attr("content");
+        var path = "<?php echo Url::to(['vendor/block']); ?> ";
+        $.ajax({
+        type: 'POST',
+        url: path,
         data: { status: status, id: id,_csrf : csrfToken},
-        success: function(data) {	
+        success: function(data) {
          }
         });
      }

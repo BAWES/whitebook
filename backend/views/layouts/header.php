@@ -1,5 +1,8 @@
-<?php use common\models\Siteinfo;
-use yii\helpers\Html;?>
+<?php
+use common\models\Siteinfo;
+use yii\helpers\Html;
+use yii\helpers\Url;
+?>
 <!-- BEGIN HEADER -->
 <div class="header navbar navbar-inverse">
 	<!-- BEGIN TOP NAVIGATION BAR -->
@@ -16,13 +19,13 @@ use yii\helpers\Html;?>
 			</ul>
 			<!-- END MOBILE HEADER -->
 			<!-- BEGIN LOGO -->
-			<a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('site/dashboard'); ?>">
+			<a href="<?php echo Url::to(['site/dashboard']); ?>">
 				<img src="<?php echo Siteinfo::logoUrl();?>" class="logo" alt="" data-src="<?php echo Siteinfo::logoUrl();?>" data-src-retina="<?php echo Siteinfo::logoUrl();?>" width="170" height="30"/>
 			</a>
 			<!-- END LOGO -->
 			<ul class="nav pull-right notifcation-center">
-			<li class="dropdown" id="header_task_bar"> <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('site/dashboard'); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
-		  </ul>
+				<li class="dropdown" id="header_task_bar"> <a href="<?= Url::to(['site/dashboard']); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
+			</ul>
 			<!-- END LOGO NAV BUTTONS -->
 		</div>
 		<!-- END NAVIGATION HEADER -->
@@ -64,13 +67,23 @@ use yii\helpers\Html;?>
 							<div class="iconset top-settings-dark"></div>
 						</a>
 						<ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
-						  <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>vendor/default/profile"> My Account</a>
-						  </li>
-						  <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>vendor/default/changepassword">Change password</a>
-						  </li>
-						  <li class="divider"></li>
-						  <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>vendor/default/logout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
-					   </ul>
+							<li>
+								<a href="<?= Url::to(["site/profile"]) ?>">
+									My Account
+								</a>
+							</li>
+							<li>
+								<a href="<?= Url::to(["site/changepassword"]) ?>">
+									Change password
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a href="<?= Url::to(["site/logout"]) ?>">
+									<i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out
+								</a>
+							</li>
+						</ul>
 					</li>
 					<!-- END SETTINGS -->
 					<!-- END CHAT SIDEBAR TOGGLE -->
@@ -85,7 +98,7 @@ use yii\helpers\Html;?>
 </div>
 <!-- END HEADER -->
 <div class="processing_image" style="display: none;">
-<p style="color:#f78f1e; font:normal 26px kreonbold;">
-<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
-</p>
+	<p style="color:#f78f1e; font:normal 26px kreonbold;">
+		<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
+	</p>
 </div>

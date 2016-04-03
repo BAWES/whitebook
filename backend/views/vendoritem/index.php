@@ -15,15 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="vendoritem-index">
 <p>
         <?= Html::a('Create item', ['create'], ['class' => 'btn btn-success']) ?>
-        
-       <?= Html::a('Delete', [''], ['class' => 'btn btn-info','id'=>'Delete','onclick'=>'return Status("Delete")', 'style'=>'float:right;']) ?>			
-        
-        <?= Html::a('Deactivate', [''], ['class' => 'btn btn-info','id'=>'Deactive','onclick'=>'return Status("Deactivate")', 'style'=>'float:right;']) ?>			
-        
-		<?= Html::a('Activate', [''], ['class' => 'btn btn-info','id'=>'Reject','onclick'=>'return Status("Activate")', 'style'=>'float:right;']) ?>			
+
+       <?= Html::a('Delete', [''], ['class' => 'btn btn-info','id'=>'Delete','onclick'=>'return Status("Delete")', 'style'=>'float:right;']) ?>
+
+        <?= Html::a('Deactivate', [''], ['class' => 'btn btn-info','id'=>'Deactive','onclick'=>'return Status("Deactivate")', 'style'=>'float:right;']) ?>
+
+		<?= Html::a('Activate', [''], ['class' => 'btn btn-info','id'=>'Reject','onclick'=>'return Status("Activate")', 'style'=>'float:right;']) ?>
 
     </p>
-    
+
 	<?php Pjax::begin(['enablePushState' => false]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -35,22 +35,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'item_name',
             [
 				'attribute'=>'category_id',
-				'label'=>'Category Name',			
+				'label'=>'Category Name',
 				'value'=>function($data){
 					return $data->getCategoryName($data->category_id);
-					},	
-					
-				'filter' => $vendor_category,						
+					},
+
+				'filter' => $vendor_category,
 			],
-           
-            
+
+
 			[
 				'attribute'=>'type_id',
-				'label'=>'Item Type',			
+				'label'=>'Item Type',
 				'value'=>function($data){
 					return $data->getItemType($data->type_id);
 					},
-				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),																
+				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),
 			],
      [
              'label'=>'Status',
@@ -62,24 +62,24 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'attribute'=>'sort',
-				'label'=>'Sort Order',	
-				'format' => 'raw',		
+				'label'=>'Sort Order',
+				'format' => 'raw',
 				'value'=>function($data){
 					return '<b><input type="hidden" id="hidden_'.$data->item_id.'" value="'.$data->sort.'"><input type="text" value="'.$data->sort.'" onblur="change_sort_order(this.value,'.$data->item_id.')"></b>';
 					},
 				 'contentOptions'=>['class'=>'sort','style'=>'max-width: 100px;'] // <-- right here
-			],	
+			],
    [
-				'attribute'=>'item_approved',				
+				'attribute'=>'item_approved',
 				'label'=>'Item approved',
-				'filter'=>'',			
-			],	
-		
+				'filter'=>'',
+			],
+
 			[
 				'attribute'=>'created_datetime',
 				'format' => ['date', Yii::$app->params['dateFormat']],
-				'label'=>'created date',			
-			],	
+				'label'=>'created date',
+			],
 			['class' => 'yii\grid\ActionColumn',
             'header'=>'Action',
             'template' => ' {view} {update} {delete}',
@@ -91,54 +91,54 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 </div>
 
-<p>       
-        <?= Html::a('Delete', [''], ['class' => 'btn btn-info','id'=>'Delete','onclick'=>'return Status("Delete")', 'style'=>'float:right;']) ?>			
-        
-        <?= Html::a('Deactivate', [''], ['class' => 'btn btn-info','id'=>'Deactive','onclick'=>'return Status("Deactivate")', 'style'=>'float:right;']) ?>			
-        
-		<?= Html::a('Activate', [''], ['class' => 'btn btn-info','id'=>'Reject','onclick'=>'return Status("Activate")', 'style'=>'float:right;']) ?>			
+<p>
+        <?= Html::a('Delete', [''], ['class' => 'btn btn-info','id'=>'Delete','onclick'=>'return Status("Delete")', 'style'=>'float:right;']) ?>
+
+        <?= Html::a('Deactivate', [''], ['class' => 'btn btn-info','id'=>'Deactive','onclick'=>'return Status("Deactivate")', 'style'=>'float:right;']) ?>
+
+		<?= Html::a('Activate', [''], ['class' => 'btn btn-info','id'=>'Reject','onclick'=>'return Status("Activate")', 'style'=>'float:right;']) ?>
 </p>
 <script type="text/javascript">
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");		
+	var csrfToken = $('meta[name="csrf-token"]').attr("content");
 	var txt;
-	
+
 	/* Change status for respective vendor items */
-	
+
 		function Status(status){
-						
-		var keys = $('#items').yiiGridView('getSelectedRows');		
-		var pathUrl = "<?php echo Url::to(['/vendor/vendoritem/status']); ?>";		
+
+		var keys = $('#items').yiiGridView('getSelectedRows');
+		var pathUrl = "<?php echo Url::to(['vendoritem/status']); ?>";
 		if(keys.length == 0) { alert ('Select atleast one item'); return false;}
-		var r = confirm("Are you sure want to " +status+ "?");		
+		var r = confirm("Are you sure want to " +status+ "?");
 			status = (status=='Activate')?'Active':((status=='Deactivate'))?'Deactive':status;
-		if (r == true) {			
+		if (r == true) {
 			$.ajax({
-			   url: pathUrl, 
-			   type : 'POST',			 
+			   url: pathUrl,
+			   type : 'POST',
 			   data: {keylist: keys, status:status},
 			   success : function(data)
-			   {					 		  
-					location.reload(true); 
+			   {
+					location.reload(true);
 			   }
-			
+
 			});
 			return false;
-        }         
+        }
 		return false;
     }
-    
+
 	function change(status, id)
-	{				
-        var path = "<?php echo Url::to(['/vendor/vendoritem/block']); ?> ";
-        $.ajax({  
-        type: 'POST',      
+	{
+        var path = "<?php echo Url::to(['vendoritem/block']); ?> ";
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { status: status, id: id,_csrf : csrfToken}, //data to be send
-        success: function(data) {	
+        success: function(data) {
          }
         });
      }
-     
+
      function change_sort_order(sort_val,item_id)
      {
 		 var exist_sort=$('#hidden_'+item_id).val();
@@ -149,13 +149,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				alert("Please enter greater than 0!");
 				return false;
 			}
-			
+
 			if(isNumeric(sort_val))
 			{
-				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/vendor/vendoritem/sort_vendor_item']); ?> ";
-				$.ajax({  
-				type: 'POST',      
+				var csrfToken = $('meta[name="csrf-token"]').attr("content");
+				var path = "<?php echo Url::to(['vendoritem/sort_vendor_item']); ?> ";
+				$.ajax({
+				type: 'POST',
 				url: path, //url to be called
 				data: { sort_val: sort_val,item_id: item_id,_csrf : csrfToken}, //data to be send
 				success: function(data) {

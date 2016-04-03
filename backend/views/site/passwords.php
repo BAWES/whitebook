@@ -12,7 +12,7 @@ $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 ?>
-<?= Html::csrfMetaTags() ?> 
+<?= Html::csrfMetaTags() ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html>
@@ -39,12 +39,12 @@ AppAsset::register($this);
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <body class="error-body no-top">
-<div class="container">	
-  <div class="row login-container">         
+<div class="container">
+  <div class="row login-container">
            <div class="margin text-center" style="margin-top: 50px;  margin-bottom: 25px;">
 			<a href="#" target="_blank"><img src="/backend/web/uploads/app_img/logo_login.png" class="logo" alt="" data-src="/backend/web/uploads/app_img/logo_login.png" data-src-retina="/backend/web/uploads/app_img/logo_login.png" width="" height=""/></a>
-			</div>  
-   
+			</div>
+
        <div class="col-md-5 col-md-offset-4" style="padding: 1% 8% 3% 8%;  background: white;  width: auto; border-radius:20px; margin-left:30%;">
 	   <h2>Recovery Password</h2>  <br>
 				<?php
@@ -54,24 +54,24 @@ AppAsset::register($this);
 			  if($flash = Yii::$app->session->getFlash('danger')){
 				echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash,'closeButton'=>['label'=>'']]);
 			} ?>
-			       
-			<?php $form = ActiveForm::begin(['id' => 'login-forms', 'action' => '/backend/web/vendor/default/recoverypassword']); ?> 		
-		
+
+			<?php $form = ActiveForm::begin(['id' => 'login-forms', 'action' => 'site/recoverypassword']); ?> 		
+
 		<div class="row">
-		<div class="form-group col-md-12">		
+		<div class="form-group col-md-12">
 		<?= $form->field($model, 'vendor_contact_email', [
 		'template' => "{label}<div class='controls'><div class='input-with-icon  right'><i class=''></i></div></div>{input}\n{hint}\n{error}"
-		])->textInput(array('placeholder' => 'Enter your email id','class'=> 'form-control','id' => 'txtemail'));  ?>        
+		])->textInput(array('placeholder' => 'Enter your email id','class'=> 'form-control','id' => 'txtemail'));  ?>
         </div>
         <div class="col-md-5">
-			<?= Html::submitButton('Recovery password',['class' => 'btn btn-lg btn-success btn-block', 'name' => 'login-button']) ?> 
-		</div> 		
+			<?= Html::submitButton('Recovery password',['class' => 'btn btn-lg btn-success btn-block', 'name' => 'login-button']) ?>
+		</div>
 		 <div class="col-md-5">
 		 <?= Html::a('Cancel', ['default/login', ], ['class' => 'btn btn-danger']) ?>
 		 </div>
-        <?php ActiveForm::end(); ?>    	
-	 
- </div>      
+        <?php ActiveForm::end(); ?>
+
+ </div>
 </div>
 <!-- END CONTAINER -->
 <!-- BEGIN CORE JS FRAMEWORK-->

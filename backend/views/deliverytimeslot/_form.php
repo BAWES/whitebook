@@ -9,11 +9,11 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="deliverytimeslot-form">
-	<div class="col-md-8 col-sm-8 col-xs-8">	
-    <?php     
+	<div class="col-md-8 col-sm-8 col-xs-8">
+    <?php
     $form = ActiveForm::begin();?>
-  
-        
+
+
 <?php if(!$model->isNewRecord){?>
 
        <?php   $model->start_hr  = date("h", strtotime($model->timeslot_start_time));
@@ -22,17 +22,17 @@ use yii\widgets\ActiveForm;
           $model->end_hr  = date("h", strtotime($model->timeslot_end_time));
        date("a", strtotime($model->timeslot_start_time))=='pm'?$model->start_med='PM':$model->start_med='AM'
      ?>
-     <?php 
+     <?php
 date("a", strtotime($model->timeslot_end_time))=='pm'?$model->end_med='PM':$model->end_med='AM'
      ?>
      <?php } ?>
 <div id="result"></div>
-<div class="form-group">  
+<div class="form-group">
  <?= $form->field($model, 'timeslot_day',['template' => "{label}<div class='controls'>{input}</div>
 {hint}{error}"])->dropDownList($days, ['prompt'=>'Select...']); ?>
 </div>
 
-<div class="form-group"> 
+<div class="form-group">
  <?= $form->field($model, 'timeslot_maximum_orders',['template' => "{label}<div class='controls'>{input}</div>
 {hint}{error}"])->textInput() ?>
 </div>
@@ -63,14 +63,14 @@ date("a", strtotime($model->timeslot_end_time))=='pm'?$model->end_med='PM':$mode
     </div>
 </div>
 
-<div class="form-group" style="display:none">  
-    <?= $form->field($model, 'timeslot_start_time')->textInput(['value'=>'']); ?>  
+<div class="form-group" style="display:none">
+    <?= $form->field($model, 'timeslot_start_time')->textInput(['value'=>'']); ?>
 </div>
-<div class="form-group" style="display:none">  
-    <?= $form->field($model, 'default',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['value'=>'']) ?>  
+<div class="form-group" style="display:none">
+    <?= $form->field($model, 'default',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['value'=>'']) ?>
 </div>
-<div class="form-group" style="display:none">  
-    <?= $form->field($model, 'timeslot_end_time',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['value'=>'']) ?>  
+<div class="form-group" style="display:none">
+    <?= $form->field($model, 'timeslot_end_time',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['value'=>'']) ?>
 </div>
 	<div class="col-sm-offset-2 col-sm-10">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['id'=> 'submit1','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -91,7 +91,7 @@ date("a", strtotime($model->timeslot_end_time))=='pm'?$model->end_med='PM':$mode
 
 <script>
 $('#submit1').click(function()
-{       
+{
         var day = $('#deliverytimeslot-timeslot_day').val();
         var start_hr = $('#deliverytimeslot-start_hr').val();
         var start_min = $('#deliverytimeslot-start_min').val();
@@ -101,8 +101,8 @@ $('#submit1').click(function()
         var end_min = $('#deliverytimeslot-end_min').val();
         var end_med = $('#deliverytimeslot-end_med').val();
 
-        var slot = $('#deliverytimeslot-timeslot_maximum_orders').val();      
-        var path = "<?php echo Url::to(['/vendor/deliverytimeslot/checktime']); ?> ";
+        var slot = $('#deliverytimeslot-timeslot_maximum_orders').val();
+        var path = "<?php echo Url::to(['deliverytimeslot/checktime']); ?> ";
         var update = "<?php if($model->isNewRecord){echo '0';}else{echo $model->timeslot_id;} ?> ";
 if(start_hr!='' && start_min!=''  && start_med!='' && end_hr!='' && end_min!=''&& end_med!='' && day!='' && slot!=''){
     var sta=start_hr.concat(colon);
@@ -112,13 +112,13 @@ if(start_hr!='' && start_min!=''  && start_med!='' && end_hr!='' && end_min!=''&
     var en=end_hr.concat(colon);
     var res2 = en.concat(end_min);
     var end_time=res2.concat(end_med);
-$.ajax({  
+$.ajax({
         type: 'POST',
-        async:false,      
+        async:false,
         url: path, //url to be called
         data: { day: day ,start: start_time ,end: end_time,update: update}, //data to be send
         success: function( data ) {
-            
+
             if(data==1)
             {
             $('#deliverytimeslot-default').val('');
@@ -129,9 +129,9 @@ $.ajax({
             $('#deliverytimeslot-default').val('');
             return false;
         }else{
-          $('#deliverytimeslot-default').val('1');  
-          $('#deliverytimeslot-timeslot_start_time').val(start_time);  
-          $('#deliverytimeslot-timeslot_end_time').val(end_time);  
+          $('#deliverytimeslot-default').val('1');
+          $('#deliverytimeslot-timeslot_start_time').val(start_time);
+          $('#deliverytimeslot-timeslot_end_time').val(end_time);
           return false;
         }
         }

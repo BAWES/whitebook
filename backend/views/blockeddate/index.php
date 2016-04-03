@@ -11,23 +11,23 @@ use yii\helpers\Setdateformat;
 $this->title = 'Blocked date';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="blockeddate-index">	
+<div class="blockeddate-index">
 	<div class="row-fluid">
        <div class="span12">
          <div class="grid simple ">
 		<div class="tools">
-        <?= Html::a('Create blocked date', ['create'], ['class' => 'btn btn-success']) ?>  
+        <?= Html::a('Create blocked date', ['create'], ['class' => 'btn btn-success']) ?>
 
 		<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],          
+            ['class' => 'yii\grid\SerialColumn'],
 			[
 				'attribute'=>'block_date',
 				'format' => ['date', Yii::$app->params['dateFormat']],
-				'label'=>'blocked date',			
-			],	
+				'label'=>'blocked date',
+			],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
@@ -53,8 +53,8 @@ $('#dp5').datepicker({
          var curr_date = d.getDate();
          var curr_month = d.getMonth() + 1; //Months are zero based
          var curr_year = d.getFullYear();
-         var formattedDate = curr_date + "/" + curr_month + "/" + curr_year  
-        
+         var formattedDate = curr_date + "/" + curr_month + "/" + curr_year
+
        if ($.inArray(formattedDate, active_dates) != -1){
                return {
                   classes: 'activeClass'
@@ -63,16 +63,15 @@ $('#dp5').datepicker({
      return;
   }
  });
- /* $('#dp5').on('changeDate', function(ev){	       
-   var path = "<?php echo Url::toRoute(['/vendor/blockeddate/block']); ?> ";
-        $.ajax({  
-        type: 'POST',      
+ /* $('#dp5').on('changeDate', function(ev){
+   var path = "<?php echo Url::toRoute(['blockeddate/block']); ?> ";
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { date: ev.format() ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {			
+        success: function( data ) {
              alert(data +'blocked');
 		}
-    })	
+    })
 })	*/
 </script>
-

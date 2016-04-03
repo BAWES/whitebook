@@ -17,11 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
   <ul class="nav nav-tabs">
     <li class="active">
       <a href="#1" data-toggle="tab">Priority Log</a>
-    </li>   
-    <?php if($model->item_for_sale=='Yes'){ ?> 
+    </li>
+    <?php if($model->item_for_sale=='Yes'){ ?>
     <li>
       <a href="#2" data-toggle="tab">Question Answer Details</a>
-    </li>  <?php } ?> 
+    </li>  <?php } ?>
     <li>
       <a href="#3" data-toggle="tab">Gallery</a>
     </li>
@@ -43,45 +43,45 @@ $this->params['breadcrumbs'][] = $this->title;
   </div>
 
 <!--End Second Tab -->
-<?php if($model->item_for_sale=='Yes'){ ?> 
-<div class="tab-pane" id="2">  
-<?php 
+<?php if($model->item_for_sale=='Yes'){ ?>
+<div class="tab-pane" id="2">
+<?php
 $t=0;
 foreach($model_question as $question_records)
      {?>
-         <div class="form-group superbox" id="delete_<?= $t;?>"> 
-     
-        <div class="form-group superbox-s" id="delete_<?= $t;?>"> 
+         <div class="form-group superbox" id="delete_<?= $t;?>">
+
+        <div class="form-group superbox-s" id="delete_<?= $t;?>">
 
         <li class="parent_question"><?= ucfirst($question_records['question_text']); ?><span  class="plus"><a href="#" onclick="questionView('<?= $question_records['question_id']; ?>',this)"></a></span><div class="show_ques<?= $question_records['question_id']; ?>"></div></li>
-    
+
     </div>
     </div>
-    <?php $t++;}    ?>      
-</div> 
+    <?php $t++;}    ?>
+</div>
 <?php } ?>
 <!--End third Tab -->
 
-<div class="tab-pane" id="3" > 
+<div class="tab-pane" id="3" >
 <ul class="row">
             <?php foreach ($imagedata as $image) { ?>
-            <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4"> 
-                <?= Html::img(Yii::getAlias('@vendor_images/').$image->image_path, ['class'=>'img-responsive','width'=>'125px','height'=>'125px','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@vendor_images/').$image->image_path]);?> 
+            <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
+                <?= Html::img(Yii::getAlias('@vendor_images/').$image->image_path, ['class'=>'img-responsive','width'=>'125px','height'=>'125px','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@vendor_images/').$image->image_path]);?>
             </li>
-             <?php } ?>     
+             <?php } ?>
 </ul>
 </div>
 </div>
 </div>
 </div>
  <style>
-      ul {         
+      ul {
           padding:0 0 0 0;
           margin:0 0 0 0;
       }
-      ul li {     
+      ul li {
           list-style:none;
-          margin-bottom:25px;           
+          margin-bottom:25px;
       }
       ul li img {
           cursor: pointer;
@@ -96,12 +96,12 @@ foreach($model_question as $question_records)
           text-align:center;
           margin:0 auto;
       }
-    .controls{          
+    .controls{
         width:50px;
         display:block;
         font-size:11px;
         padding-top:8px;
-        font-weight:bold;          
+        font-weight:bold;
     }
     .next {
         float:right;
@@ -116,7 +116,7 @@ foreach($model_question as $question_records)
           .modal-dialog {
               width:500px;
               padding-top: 90px;
-          }          
+          }
       }
       @media screen and (max-width:1500px){
           #ads {
@@ -129,18 +129,18 @@ foreach($model_question as $question_records)
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 // single question view
 function questionView(q_id,tis){
-    
+
     var check = $('.show_ques'+q_id).html();
     if(check==''){
-    var path = "<?php echo Url::to(['/vendor/vendoritem/viewrenderquestion']); ?> "; 
+    var path = "<?php echo Url::to(['vendoritem/viewrenderquestion']); ?> "; 
     $.ajax({
         type : 'POST',
         url :  path,
-        data: { q_id: q_id ,_csrf : csrfToken}, 
-        success: function( data ) {        
+        data: { q_id: q_id ,_csrf : csrfToken},
+        success: function( data ) {
         $('.show_ques'+q_id).html(data);
         $(tis).toggleClass("expanded");
-        return false;       
+        return false;
         }
     })
     }else{
@@ -150,21 +150,21 @@ function questionView(q_id,tis){
 
 }
 
-    
+
  /* Begin when loading page first tab opened */
  $(function (){
         $('.nav-tabs li:first').addClass("active");
         $(".tab-content div:first").addClass("active");
     });
         /* End when loading page first tab opened */
- </script>   
+ </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-modal-box/photo-gallery.js"></script>
-    
+
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog" style="z-index: 99999;">
-        <div class="modal-content">         
-          <div class="modal-body">                
+        <div class="modal-content">
+          <div class="modal-body">
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

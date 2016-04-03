@@ -19,31 +19,31 @@ $exist_groups = array();
 <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
 <div class="loadingmessage" style="display: none;">
 <p>
-<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?> 
+<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
 </p>
 </div>
- <div class="tabbable">     	 
+ <div class="tabbable">
   <ul class="nav nav-tabs">
     <li class="active">
       <a href="#1" data-toggle="tab">Item Info </a>
-    </li>   
+    </li>
     <li>
       <a href="#2" data-toggle="tab" id="validone1">Item description</a>
-    </li>   
+    </li>
     <li>
       <a href="#3" data-toggle="tab" id="validtwo2"> Item price </a>
-    </li>      
+    </li>
     <li>
       <a href="#5" data-toggle="tab" id="validthree3">Images</a>
-    </li>          
-  </ul> 
+    </li>
+  </ul>
  <div class="tab-content">
 <!-- Begin First Tab -->
 <div class="tab-pane" id="1" >
 
 <div class="form-group">
 	<?= $form->field($model, 'item_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 
 <div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
 {error}"])->dropDownList($categoryname, ['prompt'=>'Select...']) ?></div>
@@ -70,11 +70,11 @@ $exist_groups = array();
 <div class="form-group">
 	<?= $form->field($model, 'item_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
 	->label('Item description'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?>
-</div> 
+</div>
 
 <div class="form-group">
 	<?= $form->field($model, 'item_additional_info',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-</div> 
+</div>
 
 <input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 <input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
@@ -85,25 +85,25 @@ $exist_groups = array();
 <!--BEGIN Third Tab -->
 <div class="tab-pane" id="3">
 <input type="hidden" id="test" value="0" name="tests">
-<div class="form-group">   
-<?= $form->field($model, 'item_for_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+<div class="form-group">
+<?= $form->field($model, 'item_for_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 ])->checkbox(['Yes' => 'Yes'])?>
 </div>
 
 <div class="form-group">
 	<?= $form->field($model, 'item_amount_in_stock',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
 	->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 
 <div class="form-group">
 	<?= $form->field($model, 'item_default_capacity',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
 	->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 
 <div class="form-group">
 	<?= $form->field($model, 'item_how_long_to_make',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
 	->label('No of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 
 <div class="form-group">
 	<?= $form->field($model, 'item_minimum_quantity_to_order',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
@@ -112,32 +112,32 @@ $exist_groups = array();
 
 <div class="form-group">
 	<?= $form->field($model, 'item_price_per_unit',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 <?php if($model->isNewRecord) { ?>
 
 <div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">
-	<div class="multi_pricing">Price range From - To </div> 
+	<div class="multi_pricing">Price range From - To </div>
 	<div class="controls1"><input type="text" id="vendoritem-item_from" class="form-control from_range_1" name="vendoritem-item_price[from][]" multiple="multiple" placeholder="From range"><input type="text" id="vendoritem-item_to" class="form-control to_range_1" name="vendoritem-item_price[to][]" multiple="multiple" placeholder="To range"><input type="text" id="item_price_per_unit" class="form-control price_kd_1" name="vendoritem-item_price[price][]" multiple="multiple" placeholder="Price">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onclick="removePrice(this)"></div>
-	<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" /> 
+	<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
 </div>
 <?php } else { ?>
 	<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">
-	<div class="multi_pricing">Price  From - To </div> 
+	<div class="multi_pricing">Price  From - To </div>
 
-	<?php $t=0; 
+	<?php $t=0;
 	foreach ($loadpricevalues as $value) {  ?>
-			
+
 	<div class="controls<?= $t; ?>"><input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From range" value="<?= $value['range_from'];?>"><input type="text" id="vendoritem-item_to" class="form-control to_range_<?= $t; ?>" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To range" value="<?= $value['range_to'];?>"><input type="text" id="item_price_per_unit" class="form-control price_kd_<?= $t; ?>" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price" value="<?= $value['pricing_price_per_unit'];?>">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>
 
 	<?php $t++; }?>
-	<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" /> 
+	<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
 </div>
 <?php } ?>
 
 
 <div class="form-group">
 	<?= $form->field($model, 'item_price_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea([])?>
-</div> 
+</div>
 
 <div class="form-group custom_description">
 	<?= $form->field($model, 'item_customization_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
@@ -145,36 +145,36 @@ $exist_groups = array();
 
 <!-- guide image -->
 <div class="form-group guide_image">
-<?= $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}" 
-		])->fileInput(['multiple' => true]) ?> 
-		
+<?= $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
+		])->fileInput(['multiple' => true]) ?>
+
 </div>
 <!-- BEGIN display exist images -->
-<?php 
- if(!empty($guideimagedata)) { 	
+<?php
+ if(!empty($guideimagedata)) {
          	$img1 = $action1 = '';
-         	foreach ($guideimagedata as $value) { 
+         	foreach ($guideimagedata as $value) {
 			$img1 .= '"<img src='.Yii::getAlias('@web/uploads/guide_images/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
-			$action1 .='{   	 					        
+			$action1 .='{
 			        url: "'.Url::to(['/admin/vendoritem/deleteserviceguideimage']).'",
-			        key: '.$value->image_id.',       
+			        key: '.$value->image_id.',
 			    }'.',';
 				}
-			
+
 			$img1 = rtrim($img1,',');
 			$action1 = rtrim($action1,',');
-			}			
+			}
  ?>
 <!-- END display exist images -->
-	
+
 <input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 <input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 </div>
 <!--End Third Tab -->
 
 <div class="tab-pane" id="4">
-<div class="file-block" style="color:red"> Please upload aleast one file</div> 
-<?= $form->field($model, 'item_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+<div class="file-block" style="color:red"> Please upload aleast one file</div>
+<?= $form->field($model, 'item_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 ])->checkbox(['Value' => true,'disabled'=>'disabled'])?>
 
 <input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
@@ -184,7 +184,7 @@ $exist_groups = array();
 
 <div class="tab-pane" id="5">
 <div class="form-group">
-<div class="file-block" style="color:red"> Please upload aleast one file</div>  
+<div class="file-block" style="color:red"> Please upload aleast one file</div>
 <?= $form->field($model, 'image_path[]')->fileInput(['multiple' => true]) ?>
 
 <?php    if(!$model->isNewRecord){
@@ -192,19 +192,19 @@ $exist_groups = array();
  if(!empty($imagedata)) {
 
          	$img= $action = '';
-         	foreach ($imagedata as $value) { 
-			$img .= '"<img src='.Yii::getAlias('@web/uploads/vendor_images/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.','; 
-			$action .='{   	 					        
+         	foreach ($imagedata as $value) {
+			$img .= '"<img src='.Yii::getAlias('@web/uploads/vendor_images/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
+			$action .='{
 			        url: "'.Url::to(['/admin/vendoritem/deleteitemimage']).'",
-			        key: '.$value->image_id.',       
+			        key: '.$value->image_id.',
 			    }'.',';
 				}
-			
+
 			$img = rtrim($img,',');
 			$action = rtrim($action,',');
 			}
  }?>
-</div> 
+</div>
 
  <div class="form-group">
 
@@ -218,7 +218,7 @@ $exist_groups = array();
 <?php ActiveForm::end(); ?>
 
 <script type="text/javascript">
-	
+
 	/* Begin Tabs NEXT & PREV buttons */
 	$('.btnNext').click(function(){
 	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
@@ -226,62 +226,62 @@ $exist_groups = array();
 
 	  $('.btnPrevious').click(function(){
 	  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-	});   
+	});
 
 	/* End Tabs NEXT & PREV buttons */
 
-    $(function (){ 
+    $(function (){
  	/* Begin when loading page first tab opened */
  	$('.nav-tabs li:first').addClass("active");
  	$(".tab-content div:first").addClass("active");
  	});
 
 	var csrfToken = $('meta[name="csrf-token"]').attr("content");
-	
-	 $(function (){ 
+
+	 $(function (){
 	$('#option').hide();
-    $(".vendoritemquestion-question_answer_type").live('change',function (){						
+    $(".vendoritemquestion-question_answer_type").live('change',function (){
 		var type = $(this).val();
-		
+
 		if(type =='selection')
-		{	
+		{
 			$(this).next('.price_val').remove();
 			var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
-			$('#option').show();	
-			$(this).after('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" data-option-count="1" name="Addss" value="Add Selection"></div>');				 					
+			$('#option').show();
+			$(this).after('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" data-option-count="1" name="Addss" value="Add Selection"></div>');
 		}
 		else if(type =='image' ||  type =='text')
-		{			
+		{
 			$(this).next('.selection').remove();
-			$(this).next('.price_val').remove();			
+			$(this).next('.price_val').remove();
 			var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
-			$('#option').show();	
-			$(this).after('<div class="price_val"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');	
+			$('#option').show();
+			$(this).after('<div class="price_val"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
 		}
-		
-		
+
+
 		// Add selection for questions //
 		});
 		var p = 1;
-		
-		$('.add_question').live('click',function(){ 
+
+		$('.add_question').live('click',function(){
 			var j = $(this).attr('id').replace(/add_question/, '');
 			var p = $(this).attr('data-option-count');
 			$(this).before('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:45%;float:left;"></div>');p++;
 			$(this).attr('data-option-count',p);
-		})				
+		})
 });
- 
- 	
-$(function (){ 
-    $("#vendoritem-category_id").change(function (){		
+
+
+$(function (){
+    $("#vendoritem-category_id").change(function (){
         var id = $('#vendoritem-category_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadsubcategory']); ?> ";       
+        var path = "<?php echo Url::to(['/admin/priorityitem/loadsubcategory']); ?> ";
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',      
-        url: path, 
-        data: { id: id ,_csrf : csrfToken}, 
+        $.ajax({
+        type: 'POST',
+        url: path,
+        data: { id: id ,_csrf : csrfToken},
         success: function( data ) {
         	$('.loadingmessage').hide();
              $('#vendoritem-subcategory_id').html(data);
@@ -291,60 +291,60 @@ $(function (){
  });
 
 
-//* Load Child Category *// 
-$(function (){ 
-    $("#vendoritem-subcategory_id").change(function (){		
+//* Load Child Category *//
+$(function (){
+    $("#vendoritem-subcategory_id").change(function (){
 		var id = $('#vendoritem-subcategory_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadchildcategory']); ?> ";        
+        var path = "<?php echo Url::to(['/admin/priorityitem/loadchildcategory']); ?> ";
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',      
-        url: path, 
-        data: { id: id ,_csrf : csrfToken}, 
+        $.ajax({
+        type: 'POST',
+        url: path,
+        data: { id: id ,_csrf : csrfToken},
         success: function( data ) {
-												$('.loadingmessage').hide();		
+												$('.loadingmessage').hide();
             $('#vendoritem-child_category').html(data);
          }
-        })        
+        })
      });
  });
 
-function deletePhoto(image_id, loc){	
-	
-	var path = "<?php echo Url::to(['/vendor/vendoritem/imagedelete']); ?> ";
-        $.ajax({  
-        type: 'POST',      
-        url: path, 
-        data: { id: image_id ,_csrf : csrfToken, loc : loc}, 
+function deletePhoto(image_id, loc){
+
+	var path = "<?php echo Url::to(['vendoritem/imagedelete']); ?> ";
+        $.ajax({
+        type: 'POST',
+        url: path,
+        data: { id: image_id ,_csrf : csrfToken, loc : loc},
         success: function( data ) {
 			if(data == 'Deleted')
 			{
-				$('img#'+image_id).parent().remove();							
+				$('img#'+image_id).parent().remove();
 			}
 			return false;
          }
         })
 }
 
-function deleteAddress(d,question_id) {	
+function deleteAddress(d,question_id) {
 	if(question_id != '')
-	{		
-		var r = confirm("Are you sure want to delete?");				
+	{
+		var r = confirm("Are you sure want to delete?");
 		if (r == true) {
-		$("#"+d).remove();					
-		var path = "<?php echo Url::to(['/vendor/vendoritem/removequestion']); ?> ";
-        $.ajax({  
-        type: 'POST',      
-        url: path, 
-        data: { question_id: question_id ,_csrf : csrfToken}, 
+		$("#"+d).remove();
+		var path = "<?php echo Url::to(['vendoritem/removequestion']); ?> ";
+        $.ajax({
+        type: 'POST',
+        url: path,
+        data: { question_id: question_id ,_csrf : csrfToken},
         success: function( data ) {
              alert(data);
          }
         })
         return false;
-	 }	
-	 return false;	
-	}	
+	 }
+	 return false;
+	}
   }
 
 $(function()
@@ -374,23 +374,23 @@ $(function(){
   $('#vendoritem-groups').multiselect({
 		'enableFiltering': true,
         'filterPlaceholder': 'Search for something...'
-        });       
+        });
 
 });
 /* Price chart for item */
 var j= 2;
 function addPrice(tis)
-{		
+{
 $(tis).before('<div class="controls'+j+'"><input type="text" id="vendoritem-item_from" class="form-control from_range_'+j+'" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From range"><input type="text" id="vendoritem-item_to" class="form-control to_range_'+j+'" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To range"><input type="text" id="item_price_per_unit" class="form-control price_kd'+j+'" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>');
-j++;	
+j++;
 }
 function removePrice(tis)
-{			
-	var r = confirm("Are you sure want to delete?");				
+{
+	var r = confirm("Are you sure want to delete?");
 		if (r == true) {
-		$(tis).parent().remove(); 		
+		$(tis).parent().remove();
         return false;
-	 	}	
+	 	}
 }
 /* Price chart for item */
 
@@ -398,81 +398,81 @@ function removePrice(tis)
 /* BEGIN bootstrap file input widget for image preview */
 $(document).on('ready', function() {
 	$('.file-block').hide();
-	/* Sort item image */ 
-    $("#vendoritem-image_path").fileinput({    	
+	/* Sort item image */
+    $("#vendoritem-image_path").fileinput({
     	showUpload:false,
 		showRemove:false,
 		<?php if(!empty($imagedata)) { ?>
 		initialPreview: [
 			<?php echo $img; ?>,
-			],	
+			],
 
-		initialPreviewConfig: [   
-		   <?php echo $action; ?>,    
-		],  
+		initialPreviewConfig: [
+		   <?php echo $action; ?>,
+		],
 		<?php } ?>
 		overwriteInitial: false,
-    	uploadUrl : '/dummy/dummy', 	
-	});   
+    	uploadUrl : '/dummy/dummy',
+	});
 
-	/* Sort guide image */ 
-	$("#vendoritem-guide_image").fileinput({    	
+	/* Sort guide image */
+	$("#vendoritem-guide_image").fileinput({
     	showUpload:false,
 		showRemove:false,
 		<?php if(!empty($guideimagedata)) { ?>
 		initialPreview: [
 			<?php echo $img1; ?>,
-			],	
+			],
 
-		initialPreviewConfig: [   
-		   <?php echo $action1; ?>,    
-		],  
+		initialPreviewConfig: [
+		   <?php echo $action1; ?>,
+		],
 		<?php } ?>
 		overwriteInitial: false,
-    	uploadUrl : '/dummy/dummy',    	
-   		});  
+    	uploadUrl : '/dummy/dummy',
+   		});
 
 		/* BEGIN SORT code for item and guide images */
 		var path = "<?php echo Url::to(['/admin/image/imageorder']); ?> ";
 		$(".file-preview-thumbnails").sortable({
 			items:'> div.file-preview-initial',
-        stop : function(event, ui){    
+        stop : function(event, ui){
 		var newArray = $(this).sortable("toArray",{key:'s'});
 		sort = [];
-		var id = newArray.filter(function(v){return v!==''});	
+		var id = newArray.filter(function(v){return v!==''});
 			for(var p=0;p<id.length;p++){
 				sort.push($('div#'+id[p]+'').attr('data-key'));
 			}
-		$.ajax({  
-        type: 'POST',      
+		$.ajax({
+        type: 'POST',
         url: path,
-        data: { id: id,sort:sort,_csrf : csrfToken}, 
+        data: { id: id,sort:sort,_csrf : csrfToken},
         success: function( data ) {
             // fine
-         }          	
-		})  
+         }
+		})
 	  }
 	});
 	/* END SORT code for item and guide images */
 
 	$(".file-preview-initial > img").each(function(){
 		$(this).parent().attr('data-key',$(this).attr('data-key'));
-	});	
+	});
 });
 
 <?php if($model->isNewRecord)	{	?>
        $('#vendoritem-item_for_sale').prop('checked', true);
-    <?php }  else  
-    			{ 
+    <?php }  else
+    			{
 	      		 if($model->item_for_sale=='Yes')	{	?>
-	       		 $('#vendoritem-item_for_sale').prop('checked', true);        
+	       		 $('#vendoritem-item_for_sale').prop('checked', true);
 	        	<?php } else { ?>
-	       		$('#vendoritem-item_for_sale').prop('checked', false);                
-	     		<?php } 
+	       		$('#vendoritem-item_for_sale').prop('checked', false);
+	     		<?php }
 	     		 if($model->item_status=='Active')	{	?>
-	       		 $('#vendoritem-item_status').prop('checked', true);        
+	       		 $('#vendoritem-item_status').prop('checked', true);
 	        	<?php } else { ?>
-	       		$('#vendoritem-item_status').prop('checked', false);                
+	       		$('#vendoritem-item_status').prop('checked', false);
 	     		<?php }
   		} ?>
 /* END bootstrap file input widget for image preview */
@@ -486,7 +486,7 @@ $("#validone1").click(function() {
 		return false;
 	}
 
-	
+
   if($("#vendoritem-item_name").val()=='')
 	{
 			$(".field-vendoritem-item_name").addClass('has-error');
@@ -512,48 +512,48 @@ $("#validone1").click(function() {
 			return false;
   }
    //validate email already exist or not
- 	var item_len = $("#vendoritem-item_name").val().length; 
+ 	var item_len = $("#vendoritem-item_name").val().length;
      if($("#vendoritem-item_name").val()=='')
-	 {		
+	 {
 	 	$(".field-vendoritem-item_name").addClass('has-error');
-			$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');			
+			$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
 			return false;
 	 }
-	 else if(item_len < 4){	
-	 			
+	 else if(item_len < 4){
+
 	 			$(".field-vendoritem-item_name").addClass('has-error');
 	 			$(".field-vendoritem-item_name").find('.help-block').html('Item name minimum 4 letters.');
 				return false;
-	 } else if(item_len > 3)	
-	{		
+	 } else if(item_len > 3)
+	{
 
-		var mail=$("#vendoritem-item_name").val();		
+		var mail=$("#vendoritem-item_name").val();
         var path = "<?php echo Url::to(['/admin/vendoritem/itemnamecheck']); ?> ";
         $('.loadingmessage').show();
         var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] :  '0'; ?>;
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { item: mail , item_id : item_id, _csrf : csrfToken}, //data to be send
-        success: function( data ) {	
-			$("#test").val(mail);	
+        success: function( data ) {
+			$("#test").val(mail);
             if(data>0)
-            {            
+            {
 			$('.loadingmessage').hide();
 			$(".field-vendoritem-item_name").removeClass('has-success');
 			$(".field-vendoritem-item_name").addClass('has-error');
 			$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
 			$(".field-vendoritem-item_name" ).focus();
-			$('#test').val(1);				
+			$('#test').val(1);
 			}
 			else
-			{						
+			{
 			$(".field-vendoritem-item_name").find('.help-block').html('');
 			$('.loadingmessage').hide();
-			$('#test').val(0);			
+			$('#test').val(0);
 			}
          }
-        });	
+        });
   	}
 	else
 	  {
@@ -562,7 +562,7 @@ $("#validone1").click(function() {
 	});
 
 /* BEGIN TAB 2 */
-$("#validtwo2").click(function() { 
+$("#validtwo2").click(function() {
 
   if($("#vendoritem-item_name").val()=='')
 	{
@@ -601,15 +601,15 @@ $("#validtwo2").click(function() {
         $(".field-vendoritem-item_description").addClass('has-error');
 		$(".field-vendoritem-item_description").find('.help-block').html('Item description cannot be blank.');
 		return false;
-     } 	  
+     }
   else
   {return true;}
 });
 
 
 /* BEGIN TAB 3 */
-$("#validthree3").click(function() { 
-	
+$("#validthree3").click(function() {
+
   if($("#vendoritem-item_name").val()=='')
 	{
 			$(".field-vendoritem-item_name").addClass('has-error');
@@ -636,7 +636,7 @@ $("#validthree3").click(function() {
   }
 	/* BEGIN Validate item for sale yes or no */
   if($("#vendoritem-item_for_sale").prop('checked') == true)
-  {  	
+  {
 	if($("#vendoritem-item_amount_in_stock").val()=='')
 	{
 			$(".field-vendoritem-item_amount_in_stock").addClass('has-error');
@@ -659,15 +659,15 @@ $("#validthree3").click(function() {
 	{
 			$(".field-vendoritem-item_minimum_quantity_to_order").addClass('has-error');
 			$(".field-vendoritem-item_minimum_quantity_to_order").find('.help-block').html('Item minimum quantity to order cannot be blank.');
-			return false;			
+			return false;
   	}
-   }  
+   }
   if($("#vendoritem-type_id").val()=='')
 	{
 			$(".field-vendoritem-type_id").addClass('has-error');
 			$(".field-vendoritem-type_id").find('.help-block').html('Item type cannot be blank.');
 			return false;
-  } 
+  }
 
   else
   {return true;}
@@ -675,47 +675,47 @@ $("#validthree3").click(function() {
 
 
 $('.complete').click(function()
-{		
+{
 	if($(".file-preview-thumbnails img").length <= 0)
-	{		
+	{
 		$(".field-vendoritem-image_path").addClass('has-error');
 			$(".field-vendoritem-image_path").find('.help-block').html('Upload atleast one image.');
 			return false;
-	}	
+	}
  });
 
 /* Guide images and descrition show / hide */
 
-$(function(){	
+$(function(){
 	$('.custom_description').hide();
 	$('.guide_image').hide();
 	$('.mandatory').show();
-	
+
 	$('#vendoritem-item_for_sale').click(function()
 	{
 		if($(this).is(':checked'))
-		{			
-		$('.custom_description').hide();		
+		{
+		$('.custom_description').hide();
 		$('.guide_image').hide();
-		$('.mandatory').show();		
+		$('.mandatory').show();
 		}
 		else
-		{		
-			$('.mandatory').hide();	
-			$('.custom_description').show();		
-			$('.guide_image').show();			
+		{
+			$('.mandatory').hide();
+			$('.custom_description').show();
+			$('.guide_image').show();
 		}
 	});
 
 	<?php if(!$model->isNewRecord) { ?>
 		if($("#vendoritem-item_for_sale").prop('checked') == true){
-				$('.custom_description').hide();		
+				$('.custom_description').hide();
 				$('.guide_image').hide();
-				$('.mandatory').show(); 		
-			} 
+				$('.mandatory').show();
+			}
 			else
-			{ 	
-				$('.custom_description').show();		
+			{
+				$('.custom_description').show();
 				$('.guide_image').show();
 				$('.mandatory').hide();
 			}
@@ -729,22 +729,22 @@ $(function(){
 <!-- multi select begin -->
 <script>
 
-/* BEGIN Vendor item check exist or not */ 
+/* BEGIN Vendor item check exist or not */
  $(function () {
- 	
+
  $("#vendoritem-item_name").on('keyup keypress focusout',function () {
-	if($("#vendoritem-item_name").val().length > 3)	
+	if($("#vendoritem-item_name").val().length > 3)
 	{
-		var mail=$("#vendoritem-item_name").val();		
+		var mail=$("#vendoritem-item_name").val();
         var path = "<?php echo Url::to(['/admin/vendoritem/itemnamecheck']); ?> ";
         $('.loadingmessage').show();
         var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
-        $.ajax({  
-        type: 'POST',      
-        url: path, 
-        data: { item: mail ,item_id : item_id, _csrf : csrfToken}, 
-        success: function( data ) {	
-			$("#test").val(mail);	
+        $.ajax({
+        type: 'POST',
+        url: path,
+        data: { item: mail ,item_id : item_id, _csrf : csrfToken},
+        success: function( data ) {
+			$("#test").val(mail);
             if(data>0)
             {
 			$('.loadingmessage').hide();
@@ -752,34 +752,34 @@ $(function(){
 			$(".field-vendoritem-item_name").addClass('has-error');
 			$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
 			$(".field-vendoritem-item_name" ).focus();
-			$('#test').val(1);						
+			$('#test').val(1);
 			}
 			else
-			{				
+			{
 			$(".field-vendoritem-item_name").find('.help-block').html('');
 			$('.loadingmessage').hide();
-			$('#test').val(0);			
+			$('#test').val(0);
 			}
          }
         });
   }
 });
-}); 
-/* END Vendor item check exist or not */ 
+});
+/* END Vendor item check exist or not */
 
 // single question view
 function questionView(q_id,tis){
 	var check = $('.show_ques'+q_id).html();
 	if(check==''){
-	var path = "<?php echo Url::to(['/vendor/vendoritem/renderquestion']); ?> ";	
+	var path = "<?php echo Url::to(['vendoritem/renderquestion']); ?> ";
 	$.ajax({
 		type : 'POST',
 		url :  path,
-		data: { q_id: q_id ,_csrf : csrfToken}, 
-        success: function( data ) {        
+		data: { q_id: q_id ,_csrf : csrfToken},
+        success: function( data ) {
         $('.show_ques'+q_id).html(data);
         $(tis).toggleClass("expanded");
-        return false;    	
+        return false;
         }
 	})
 	}else{
@@ -804,4 +804,3 @@ input#price{	margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
 .price_val{  width: 100%;  float: left;}
 .question-section input[type="text"] { margin:10px 0px;}
 </style>
-
