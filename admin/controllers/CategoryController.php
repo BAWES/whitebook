@@ -212,7 +212,7 @@ class CategoryController extends Controller
                 }
 
                 echo Yii::$app->session->setFlash('success', 'Category created successfully!');
-                Yii::info('Admin created new category '.$model->category_name, __METHOD__);
+                Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
 
                 return $this->redirect(['index']);
             } else {
@@ -259,7 +259,7 @@ class CategoryController extends Controller
                     $command->execute();
                 }
                 echo Yii::$app->session->setFlash('success', 'Subcategory added successfully!');
-                Yii::info('Admin created new sub category '.$model->category_name, __METHOD__);
+                Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
 
                 return $this->redirect(['manage_subcategory']);
             } else {
@@ -313,7 +313,7 @@ class CategoryController extends Controller
                     $command->execute();
                 }
                 echo Yii::$app->session->setFlash('success', 'Child category added successfully!');
-                Yii::info('Admin created new sub category '.$model->category_name, __METHOD__);
+                Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
 
                 return $this->redirect(['child_category_index']);
             } else {
@@ -366,7 +366,7 @@ class CategoryController extends Controller
                 $command->execute();
             }
             echo Yii::$app->session->setFlash('success', 'Category updated successfully!');
-            Yii::info('Admin updated category '.$model->category_name, __METHOD__);
+            Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
 
             return $this->redirect(['index']);
             //return $this->redirect(['view', 'id' => $model->category_id]);
@@ -407,7 +407,7 @@ class CategoryController extends Controller
                 }
 
                 echo Yii::$app->session->setFlash('success', 'Subcategory updated successfully!');
-                Yii::info('Admin updated sub category '.$model->category_name, __METHOD__);
+                Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
 
                 return $this->redirect(['manage_subcategory']);
             } else {
@@ -456,7 +456,7 @@ class CategoryController extends Controller
                 }
 
                 echo Yii::$app->session->setFlash('success', 'Child category updated successfully!');
-                Yii::info('Admin updated sub category '.$model->category_name, __METHOD__);
+                Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
 
                 return $this->redirect(['child_category_index']);
             } else {

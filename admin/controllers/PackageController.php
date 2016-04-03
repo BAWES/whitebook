@@ -105,7 +105,7 @@ class PackageController extends Controller
                 $model->save();
                 $pack = Yii::$app->request->post();
                 echo Yii::$app->session->setFlash('success', 'Package created successfully!');
-                Yii::info('Admin created new '.$model->package_name.' package', __METHOD__);
+                Yii::info('[Package Created] Admin created new '.$model->package_name.' package', __METHOD__);
 
                 return $this->redirect(['index']);
             } else {
@@ -135,7 +135,7 @@ class PackageController extends Controller
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 echo Yii::$app->session->setFlash('success', 'Package Updated successfully!');
-                Yii::info('Admin updated '.$model->package_name.' package information', __METHOD__);
+                Yii::info('[Package Updated] Admin updated '.$model->package_name.' package information', __METHOD__);
 
                 return $this->redirect(['index']);
             } else {

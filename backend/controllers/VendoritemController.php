@@ -246,7 +246,7 @@ class VendoritemController extends Controller
             }
             /*  Upload image table End */
 		    echo Yii::$app->session->setFlash('success', "Item added successfully. Admin will check and approve it.");
-		    Yii::info('Admin created new item '.$model->item_name, __METHOD__);
+		    Yii::info('[New Item] Admin created new item '.$model->item_name, __METHOD__);
             return $this->redirect(['index']);
 			}
         } else {
@@ -382,7 +382,7 @@ class VendoritemController extends Controller
 				}
 				//END Manage item pricing table
  		echo Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
-		Yii::info('Vendor updated '.$model->item_name.' item information '. $id, __METHOD__);
+		Yii::info('[Item Updated] Vendor updated '.$model->item_name.' item information '. $id, __METHOD__);
 		return $this->redirect(['index']);
 		}
 		else {
