@@ -14,33 +14,33 @@ use backend\models\Role;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "{{%auth_item}}".
- *
- * @property string $name
- * @property integer $type
- * @property string $description
- * @property string $rule_name
- * @property string $data
- * @property integer $created_at
- * @property integer $updated_at
- *
- * @property AuthAssignment[] $authAssignments
- * @property AuthRule $ruleName
- * @property AuthItemChild[] $authItemChildren
- */
+* This is the model class for table "{{%auth_item}}".
+*
+* @property string $name
+* @property integer $type
+* @property string $description
+* @property string $rule_name
+* @property string $data
+* @property integer $created_at
+* @property integer $updated_at
+*
+* @property AuthAssignment[] $authAssignments
+* @property AuthRule $ruleName
+* @property AuthItemChild[] $authItemChildren
+*/
 class Authitem extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%auth_item}}';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -53,8 +53,8 @@ class Authitem extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -69,62 +69,64 @@ class Authitem extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getAuthAssignments()
     {
         return $this->hasMany(AuthAssignment::className(), ['item_name' => 'name']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getRuleName()
     {
         return $this->hasOne(AuthRule::className(), ['name' => 'rule_name']);
     }
 
-		public static function Authitem()
+    public static function Authitem()
     {
-		$authitem = Authitem::find()->all();     
+        $authitem = Authitem::find()->all();
         $authitem=ArrayHelper::map($authitem,'name','name');
         return $authitem;
-	}
+    }
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getAuthItemChildren()
     {
         return $this->hasMany(AuthItemChild::className(), ['child' => 'name']);
     }
-    
-            public static function AuthitemCheck($type,$controllerid)
-	{
-			$item= Authitem::find()
-			->select(['name'])
-			->where(['id' => $type])
-			->one();
-			$itemname= $item['name']; 
-			$id=Admin::getAdmin('id');
-			$final1=Authassignment::find()
-			->select(['item_name'])
-			->where(['item_name' => $itemname])
-			->andwhere(['user_id' => $id])
-			->andwhere(['controller_id' => $controllerid])
-			->one();
-			return $final1['item_name'];
-	}
-	
-	   
-            public static function AuthitemviewCheck($itemname,$controllerid)
-	{
-			$id=Admin::getAdmin('id');
-			$final1=Authassignment::find()
-			->select(['item_name'])
-			->where(['item_name' => $itemname])
-			->andwhere(['user_id' => $id])
-			->andwhere(['controller_id' => $controllerid])
-			->one();
-			return $final1['item_name'];
-	}	
+
+    public static function AuthitemCheck($type,$controllerid)
+    {
+        $item= Authitem::find()
+            ->select(['name'])
+            ->where(['id' => $type])
+            ->one();
+            
+        $itemname= $item['name'];
+        $id=Admin::getAdmin('id');
+
+        $final1=Authassignment::find()
+            ->select(['item_name'])
+            ->where(['item_name' => $itemname])
+            ->andwhere(['user_id' => $id])
+            ->andwhere(['controller_id' => $controllerid])
+            ->one();
+        return $final1['item_name'];
+    }
+
+
+    public static function AuthitemviewCheck($itemname,$controllerid)
+    {
+        $id=Admin::getAdmin('id');
+        $final1=Authassignment::find()
+            ->select(['item_name'])
+            ->where(['item_name' => $itemname])
+            ->andwhere(['user_id' => $id])
+            ->andwhere(['controller_id' => $controllerid])
+            ->one();
+        return $final1['item_name'];
+    }
 }

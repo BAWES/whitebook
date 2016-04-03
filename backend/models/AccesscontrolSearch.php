@@ -8,24 +8,24 @@ use yii\data\ActiveDataProvider;
 use backend\models\Accesscontroller;
 
 /**
- * AccesscontrolSearch represents the model behind the search form about `backend\models\Accesscontrol`.
- */
+* AccesscontrolSearch represents the model behind the search form about `backend\models\Accesscontrol`.
+*/
 class AccesscontrolSearch extends Accesscontroller
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
             [['access_id', 'role_id', 'admin_id', 'created_by', 'modified_by'], 'integer'],
-          //  [['created_datetime', 'modified_datetime'], 'safe'],
+            //  [['created_datetime', 'modified_datetime'], 'safe'],
         ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -33,20 +33,20 @@ class AccesscontrolSearch extends Accesscontroller
     }
 
     /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
+    * Creates data provider instance with search query applied
+    *
+    * @param array $params
+    *
+    * @return ActiveDataProvider
+    */
     public function search($params)
     {
         $query = Accesscontroller::find()
-		->where(['=', 'default', '0'])
-		->groupBy('admin_id');
+            ->where(['=', 'default', '0'])
+            ->groupBy('admin_id');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['access_id'=>SORT_DESC]]
+            'sort'=> ['defaultOrder' => ['access_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
