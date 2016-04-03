@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\vendor\controllers;
+namespace backend\controllers;
 
 use Yii;
 use common\models\Vendoritemcapacityexception;

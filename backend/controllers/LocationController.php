@@ -1,5 +1,5 @@
 <?php
-namespace backend\modules\vendor\controllers;
+namespace backend\controllers;
 
 use Yii;
 use common\models\Location;
@@ -17,8 +17,8 @@ use yii\filters\AccessControl;
  * LocationController implements the CRUD actions for Location model.
  */
 class LocationController extends Controller
-{	
-	
+{
+
     public function behaviors()
     {
         return [
@@ -26,12 +26,12 @@ class LocationController extends Controller
                 'class' => AccessControl::className(),
                'rules' => [
                    [
-                       'actions' => [],             
+                       'actions' => [],
                        'allow' => true,
                        'roles' =>['?'],
                    ],
-                   [             
-                       'actions'=>['create', 'update','index', 'view','delete','block','city','area'],          
+                   [
+                       'actions'=>['create', 'update','index', 'view','delete','block','city','area'],
                        'allow' => true,
                        'roles' => ['@'],
                    ],
@@ -52,7 +52,7 @@ class LocationController extends Controller
      */
     public function actionIndex()
     {
-		
+
         $searchModel = new LocationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -81,16 +81,16 @@ class LocationController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Location();	
-		
+        $model = new Location();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             echo Yii::$app->session->setFlash('success', "Area info created successfully!");
             return $this->redirect(['index']);
         } else {
-			$countries=Country::find()->all();			
+			$countries=Country::find()->all();
 			$country=ArrayHelper::map($countries,'country_id','country_name');
             return $this->render('create', [
-                'model' => $model,'country' => $country,            
+                'model' => $model,'country' => $country,
             ]);
         }
     }
@@ -103,17 +103,17 @@ class LocationController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);        
+        $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			echo Yii::$app->session->setFlash('success', "Area info updated successfully!");
             return $this->redirect(['index']);
              } else {
-			$countries=Country::find()->all();			
+			$countries=Country::find()->all();
 			$country=ArrayHelper::map($countries,'country_id','country_name');
-			$cities=City::find()->all();			
-			$city=ArrayHelper::map($cities,'city_id','city_name');			
+			$cities=City::find()->all();
+			$city=ArrayHelper::map($cities,'city_id','city_name');
             return $this->render('update', [
-                'model' => $model,'city' => $city, 'country' => $country, 
+                'model' => $model,'city' => $city, 'country' => $country,
             ]);
         }
     }
@@ -129,7 +129,7 @@ class LocationController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-   
+
     }
 
     /**
@@ -150,20 +150,20 @@ class LocationController extends Controller
     public function actionCity()
     {
 		if(Yii::$app->request->isAjax)
-		 $data = Yii::$app->request->post();		 		
+		 $data = Yii::$app->request->post();
 		 $city = City::find()->select('city_id,city_name')->where(['country_id' => $data['country_id']])->all();
 		 echo  '<option value="">Select</option>';
 		 foreach($city as $key=>$val)
 		 {
 			echo  '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
-		 }		 
+		 }
 	}
-		
+
 	public function actionBlock()
-    {			
+    {
 		if(Yii::$app->request->isAjax)
-		$data = Yii::$app->request->post();		
-		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active'); 	
+		$data = Yii::$app->request->post();
+		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
 		$command = \Yii::$app->db->createCommand('UPDATE whitebook_location SET status="'.$status.'" WHERE id='.$data['lid']);
 		$command->execute();
 		if($status == 'Active')
@@ -178,9 +178,9 @@ class LocationController extends Controller
 			}
 	}
 	public function actionArea()
-    {	
+    {
 		if(Yii::$app->request->isAjax)
-		 $data = Yii::$app->request->post();		 		
+		 $data = Yii::$app->request->post();
 		 $location = Location::find()->select('id,location')->where(['city_id' => $data['city_id']])->all();
 		 echo  '<option value="">Select</option>';
 		 foreach($location as $key=>$val)

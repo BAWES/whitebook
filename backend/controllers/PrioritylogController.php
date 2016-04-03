@@ -1,6 +1,5 @@
 <?php
-namespace backend\modules\vendor\controllers;
-//namespace app\modules\admin\controllers;
+namespace backend\controllers;
 
 use Yii;
 use common\models\Prioritylog;

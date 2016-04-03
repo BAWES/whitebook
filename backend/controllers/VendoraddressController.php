@@ -1,5 +1,5 @@
 <?php
-namespace backend\modules\vendor\controllers;
+namespace backend\controllers;
 use yii\web\Session;
 use Yii;
 use common\models\Vendor;

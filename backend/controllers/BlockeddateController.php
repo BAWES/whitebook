@@ -1,5 +1,5 @@
 <?php
-namespace backend\modules\vendor\controllers;
+namespace backend\controllers;
 
 use Yii;
 use common\models\Blockeddate;
@@ -50,7 +50,7 @@ class BlockeddateController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Blockeddate();    
+        $model = new Blockeddate();
         $model->scenario = 'insert';
         $model->vendor_id = Vendor::getVendor('vendor_id');
         $blockdays=Vendor::Vendorblockeddays($model->vendor_id);
@@ -58,9 +58,9 @@ class BlockeddateController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->validate())
         {
         $model->block_date = Setdateformat::convert($model->block_date);
-		$model->save();	
+		$model->save();
             echo Yii::$app->session->setFlash('success', "Blocked date created successfully!");
-			return $this->redirect(['index']);		
+			return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,'block'=>$block
@@ -70,15 +70,15 @@ class BlockeddateController extends Controller
 
     public function actionCreateweek()
     {
-        $model = new Blockeddate();    
+        $model = new Blockeddate();
         $model->vendor_id = Vendor::getVendor('vendor_id');
         $blockdays=Vendor::Vendorblockeddays($model->vendor_id);
         $block=($blockdays['blocked_days']);
         if($model->load(Yii::$app->request->post()))
-        {       
+        {
         if($model->sunday=='7')
         {  $model->sunday='7'.',';}else{$model->sunday=null;}
-         
+
          if($model->monday!=1)
         { $model->monday=null;}
         else
@@ -101,11 +101,11 @@ class BlockeddateController extends Controller
         {$model->friday='5'.',';}
         if($model->saturday!=6)
         { $model->saturday=null;}
-        $days=$model->sunday.$model->monday.$model->tuesday.$model->wednesday.$model->thursday.$model->friday.$model->saturday; 
+        $days=$model->sunday.$model->monday.$model->tuesday.$model->wednesday.$model->thursday.$model->friday.$model->saturday;
         $sql='UPDATE whitebook_vendor SET blocked_days="'.$days.'" WHERE vendor_id='.$model->vendor_id;
         $command = \Yii::$app->db->createCommand($sql)->execute();
            echo Yii::$app->session->setFlash('success', "Blocked weekday created successfully!");
-            return $this->redirect(['createweek']);      
+            return $this->redirect(['createweek']);
         } else {
             return $this->render('blocked_week_form', [
                 'model' => $model,'block'=>$block
@@ -167,19 +167,19 @@ class BlockeddateController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
+
     public function actionBlock()
-    {			
+    {
 	   if(Yii::$app->request->isAjax)
 	   {
-	    $data = Yii::$app->request->post();	
+	    $data = Yii::$app->request->post();
 	    $model = new Blockeddate();
 	    $model = Vendor::getVendor('vendor_id');
-          	
+
         } else {
 		return $this->render('dateblocked');
 	   }
 	}
-	
-	 
+
+
 }
