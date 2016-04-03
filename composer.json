@@ -18,6 +18,7 @@
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
+        "yiisoft/yii2-httpclient": "dev-master",
         "openbuildings/swiftmailer-css-inliner": "*",
         "costa-rico/yii2-images": "dev-master",
         "dektrium/yii2-user": "*",
@@ -28,7 +29,6 @@
         "2amigos/yii2-file-upload-widget": "~1.0",
         "yiisoft/yii2-imagine": "*",
         "2amigos/yii2-ckeditor-widget": "*",
-        "understeam/yii2-httpclient": "0.3",
         "understeam/yii2-slack": "*",
         "2amigos/yii2-resource-manager-component": "*"
     },

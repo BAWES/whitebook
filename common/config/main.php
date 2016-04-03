@@ -10,20 +10,20 @@ return [
             'username' => 'TWB',
         ],
         'httpclient' => [
-            'class' =>'understeam\httpclient\Client',
+            'class' => 'yii\httpclient\Client',
         ],
         'log' => [
             'targets' => [
                 [
                     'class' => 'yii\log\DbTarget',
                     'levels' => ['info', 'error', 'warning'],
-                    'categories' => ['backend\*', 'frontend\*', 'common\*'],
+                    'categories' => ['backend\*', 'admin\*', 'frontend\*', 'common\*'],
                 ],
                 [
                     'class' => 'common\components\SlackLogger',
                     'logVars' => [],
                     'levels' => ['info', 'error', 'warning'],
-                    'categories' => ['backend\*', 'employer\*', 'frontend\*', 'common\*'],
+                    'categories' => ['backend\*', 'admin\*', 'frontend\*', 'common\*'],
                 ],
             ],
         ],
