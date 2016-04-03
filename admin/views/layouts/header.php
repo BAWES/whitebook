@@ -21,7 +21,7 @@ use yii\helpers\Html;
             </ul>
             <!-- END MOBILE HEADER -->
             <!-- BEGIN LOGO -->
-            <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('/admin/site/index'); ?>">
+            <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('site/index'); ?>">
                 <img src="<?php echo Siteinfo::logoUrl(); ?>" class="logo" alt="" data-src="<?php echo Siteinfo::logoUrl(); ?>" data-src-retina="<?php echo Siteinfo::logoUrl(); ?>" width="170" height="30"/>
             </a>
             <!-- END LOGO -->
