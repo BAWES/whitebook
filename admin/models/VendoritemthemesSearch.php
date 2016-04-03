@@ -1,15 +1,13 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Featuregroupitem;
-use backend\models\Vendoritemthemes;
 
 /**
- * FeaturegroupitemSearch represents the model behind the search form about `backend\models\Featuregroupitem`.
+ * FeaturegroupitemSearch represents the model behind the search form about `admin\models\Featuregroupitem`.
  */
 class vendoritemthemesSearch extends Vendoritemthemes
 {
@@ -39,7 +37,7 @@ class vendoritemthemesSearch extends Vendoritemthemes
      * @return ActiveDataProvider
      */
     public function search($params)
-    {        
+    {
         $query = Vendoritemthemes::find()
         ->where(['!=', 'trash', 'Deleted']);
         $dataProvider = new ActiveDataProvider([

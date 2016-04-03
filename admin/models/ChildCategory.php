@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 
 use Yii;
@@ -30,10 +30,10 @@ class ChildCategory extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-     
+
     public $childcategory_icon;
     public $subcategory_id;
-    public $grand_category_id;    
+    public $grand_category_id;
     public static function tableName()
     {
         return '{{%category}}';
@@ -46,7 +46,7 @@ class ChildCategory extends \yii\db\ActiveRecord
         return [
             [['parent_category_id','category_level', 'created_by', 'modified_by'], 'integer'],
             [['category_allow_sale', 'trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad','slug'], 'string'],
-            [['parent_category_id','category_name','category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],			
+            [['parent_category_id','category_name','category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
 			['childcategory_icon', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => true,'minWidth' => 200, 'maxWidth' => 300,'minHeight' => 40, 'maxHeight' =>70],
             [['category_name'], 'string', 'max' => 128]
         ];
@@ -61,7 +61,7 @@ class ChildCategory extends \yii\db\ActiveRecord
             'category_id' => 'Category name',
             'parent_category_id' => 'Parent Category',
             'category_name' => 'Category name',
-            'category_allow_sale' => 'Category Allow status',            
+            'category_allow_sale' => 'Category Allow status',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
@@ -109,40 +109,40 @@ class ChildCategory extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
     }
-    
-    
+
+
     public static function statusImageurl($sale)
-	{			
-		if($sale == 'yes')			
+	{
+		if($sale == 'yes')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
 		public static function statusTitle($sale)
-	{			
-		if($sale == 'yes')		
+	{
+		if($sale == 'yes')
 		return 'Active';
 		return 'Deactive';
 	}
 		 public static function getCategoryName($id)
-    {		
+    {
 		$model = Category::find()->where(['category_id'=>$id])->one();
         return $model->category_name;
     }
 		public static function getGrandCategoryName($id)
-    {	
+    {
 		$model = Category::find()
 		->select(['parent_category_id'])
 		->where(['category_id'=>$id])
 		->one();
-		  $parent=$model['parent_category_id']; 
-		
+		  $parent=$model['parent_category_id'];
+
 		$model = Category::find()
 		->select(['category_name'])
 		->where(['category_id'=>$parent])
 		->one();
 		return $parent=$model['category_name'];
     }
-    
+
 		public static function subcategoryvalidation($attribute_name,$params)
 	{
 		if(!empty($this->category_name) ){
@@ -156,7 +156,7 @@ class ChildCategory extends \yii\db\ActiveRecord
 		}
 	}
 	public static function loadsubcategoryname()
-	{       
+	{
 			$subcategoryname= SubCategory::find()
 			->where(['!=', 'category_allow_sale', 'no'])
 			->andwhere(['!=', 'trash', 'Deleted'])
@@ -164,10 +164,10 @@ class ChildCategory extends \yii\db\ActiveRecord
 			->all();
 			$subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name');
 			return $subcategoryname;
-	}	
-	
+	}
+
 	 public static function loadsubcategory($id)
-	{       
+	{
 			$subcategoryname= SubCategory::find()
 			->where(['parent_category_id'=>$id])
 			->andwhere(['!=', 'category_allow_sale', 'no'])
@@ -177,9 +177,9 @@ class ChildCategory extends \yii\db\ActiveRecord
 			$subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name');
 			return $subcategoryname;
 	}
-	
+
 	public static function loadchildcategory($id)
-   {       
+   {
          $childcategoryname= ChildCategory::find()
          ->where(['parent_category_id'=>$id])
          ->andwhere(['!=', 'category_allow_sale', 'no'])
@@ -190,9 +190,9 @@ class ChildCategory extends \yii\db\ActiveRecord
          $childcategory=ArrayHelper::map($childcategoryname,'category_id','category_name');
          return $childcategory;
      }
-     
+
     public static function loadchild()
-    {       
+    {
          $childcategoryname= ChildCategory::find()
          ->where(['!=', 'category_allow_sale', 'no'])
          ->andwhere(['!=', 'trash', 'Deleted'])
@@ -206,8 +206,8 @@ class ChildCategory extends \yii\db\ActiveRecord
     /* load child category used by frontend*/
     public static function loadchildcategoryslug($id)
    {
-      $childcategory = Yii::$app->db->createCommand('SELECT wvi.child_category as category_id ,wc.category_name,wc.slug FROM whitebook_vendor_item as wvi  INNER JOIN whitebook_category as wc ON wc.category_allow_sale= "yes" and wc.trash="Default" and wc.category_level = 2 and wvi.child_category = wc.category_id and wvi.item_for_sale="Yes" and wvi.item_approved="Yes" and wvi.item_status = "Active" and parent_category_id = '.$id.' group by wvi.child_category')->queryAll();  
+      $childcategory = Yii::$app->db->createCommand('SELECT wvi.child_category as category_id ,wc.category_name,wc.slug FROM whitebook_vendor_item as wvi  INNER JOIN whitebook_category as wc ON wc.category_allow_sale= "yes" and wc.trash="Default" and wc.category_level = 2 and wvi.child_category = wc.category_id and wvi.item_for_sale="Yes" and wvi.item_approved="Yes" and wvi.item_status = "Active" and parent_category_id = '.$id.' group by wvi.child_category')->queryAll();
         return $childcategory;
-   }	
+   }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -33,7 +33,7 @@ class Country extends \yii\db\ActiveRecord
           return [
               [
                   'class' => SluggableBehavior::className(),
-                  'attribute' => 'country_name',                 
+                  'attribute' => 'country_name',
               ],
           ];
       }
@@ -67,33 +67,33 @@ class Country extends \yii\db\ActiveRecord
             'default' => 'Default',
         ];
     }
-    
+
     public static function statusImageurl($status)
-	{			
-		if($status == 'Active')		
+	{
+		if($status == 'Active')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-	
-	
+
+
 	public static function loadcountry()
-	{       
+	{
 			$Country= Country::find()
 			->where(['!=', 'status', 'Deactive'])
 			->where(['!=', 'trash', 'Deleted'])
 			->all();
 			$Country=ArrayHelper::map($Country,'country_id','country_name');
 			return $Country;
-	}		
-	
+	}
+
 	public static function getStatus($status)
     {
-		$query = new Query;	
+		$query = new Query;
 		$query->select('name')
 			  ->from('whitebook_status1')
 			  ->where(['status' => $status]);
 		$command = $query->createCommand();
-		$data = $command->queryOne();	
+		$data = $command->queryOne();
 		return $data['name'];
     }
 }

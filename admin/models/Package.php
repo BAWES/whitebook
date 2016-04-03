@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -23,7 +23,7 @@ use yii\helpers\ArrayHelper;
  */
 class Package extends \yii\db\ActiveRecord
 {
-	public $package_value;	
+	public $package_value;
     public $arr = array();
     /**
      * @inheritdoc
@@ -78,61 +78,54 @@ class Package extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Vendor::className(), ['package_id' => 'package_id']);
     }
-    
+
         public static function statusImageurl($img_status)
-	{			
-		if($img_status == 'Active')		
+	{
+		if($img_status == 'Active')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-	
-		
+
+
 	public static function loadpackage()
 	{
 		$packages=Package::find()->where(['package_status' => 'Active','trash'=>'Default'])
-		->all();			
+		->all();
 		$package=ArrayHelper::map($packages,'package_id','package_name');
 		return $package;
 	}
-	
+
 	public static function PackageData($pack_id)
-	{	
+	{
 		if($pack_id){
-		$package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();	
+		$package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();
 		//return $package_data;
 		return $package_data[0]['package_name'];
 	}else {
 		return '----';
 	}
 	}
-	
-	
+
+
 	public static function loadpackageall()
 	{
-		$packages=Package::find()->where(['package_status' => 'Active','trash'=>'default'])->all();			
+		$packages=Package::find()->where(['package_status' => 'Active','trash'=>'default'])->all();
 		return $packages;
 	}
 
     public static function loadpackageprice($pack_id)
     {
-        $package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();  
+        $package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();
         foreach($package_data as $pack => $data)
-        {                       
-             return  $package_price = $data['package_pricing'];                             
-        }        
-       
+        {
+             return  $package_price = $data['package_pricing'];
+        }
+
     }
-    
+
     public static function packagecount($pack_id)
-	{	
-		 return $package_data= Vendor::find()->where(['package_id' => $pack_id])->count();  
-		 
+	{
+		 return $package_data= Vendor::find()->where(['package_id' => $pack_id])->count();
+
 	}
 }
-
-	
-
-	
-	
-	
-

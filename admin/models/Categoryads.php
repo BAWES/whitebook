@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -36,10 +36,10 @@ class categoryads extends \yii\db\ActiveRecord
     {
         return [
             [['category_id' ], 'required'],
-            [['top_ad','bottom_ad'],'checkOne','skipOnEmpty' => false, 'skipOnError' => false],          
+            [['top_ad','bottom_ad'],'checkOne','skipOnEmpty' => false, 'skipOnError' => false],
             [['status'], 'string'],
             [['sort', 'created_by', 'modified_by'], 'integer'],
-            [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],           
+            [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
         ];
     }
 
@@ -64,19 +64,19 @@ class categoryads extends \yii\db\ActiveRecord
     }
 
     public function checkOne($attribute, $params)
-    {        
+    {
        if($this->top_ad =='' && $this->bottom_ad =='') {
-             $this->addError($attribute, 'Enter advertisement code atleast one field.');                   
+             $this->addError($attribute, 'Enter advertisement code atleast one field.');
         }
     }
 
     public static function statusImageurl($status)
-    {           
-        if($status == 'Unblock')        
+    {
+        if($status == 'Unblock')
         return \Yii::$app->params['appImageUrl'].'active.png';
         return \Yii::$app->params['appImageUrl'].'inactive.png';
     }
-    
+
     public function get_category_name($category_id)
     {
         $cat_id=explode(',',$category_id);
@@ -93,7 +93,7 @@ class categoryads extends \yii\db\ActiveRecord
     else
     {
         $cate=Yii::$app->DB->createcommand("Select category_name from whitebook_category where category_id=$category_id")->queryAll();
-        return $cate[0]['category_name']; 
+        return $cate[0]['category_name'];
     }
     }
 }

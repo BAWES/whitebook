@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Adverthome;
 
 /**
  * AdverthomeSearch represents the model behind the search form about `backend\models\Adverthome`.
@@ -45,7 +44,7 @@ class AdverthomeSearch extends Adverthome
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['advert_id'=>SORT_DESC]]            
+			'sort'=> ['defaultOrder' => ['advert_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);

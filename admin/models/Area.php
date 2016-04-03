@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 
@@ -54,6 +54,6 @@ class Area extends \yii\db\ActiveRecord
 	{
 		 $area=Area::find()->all();
 		return $area=ArrayHelper::map($area,'area_id','area_name');
-		
+
 	}
 }

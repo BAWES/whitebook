@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 use Yii;
 use yii\helpers\Url;
 use yii\validators\Validator;
@@ -59,14 +59,14 @@ class Advertcategory extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
     }
-    
+
     public static function statusImageurl($status)
-	{			
-		if($status == 'Unblock')		
+	{
+		if($status == 'Unblock')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-	
+
 	public function get_category_name($category_id)
 	{
 		$cat_id=explode(',',$category_id);
@@ -83,7 +83,7 @@ class Advertcategory extends \yii\db\ActiveRecord
 	else
 	{
 		$cate=Yii::$app->DB->createcommand("Select category_name from whitebook_category where category_id=$category_id")->queryAll();
-		return $cate[0]['category_name']; 
+		return $cate[0]['category_name'];
 	}
 	}
 }

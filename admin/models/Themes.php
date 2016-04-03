@@ -1,6 +1,7 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
+
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\behaviors\SluggableBehavior;
@@ -34,7 +35,7 @@ class Themes extends \yii\db\ActiveRecord
           return [
               [
                   'class' => SluggableBehavior::className(),
-                  'attribute' => 'theme_name',                 
+                  'attribute' => 'theme_name',
               ],
           ];
       }
@@ -88,14 +89,14 @@ class Themes extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItem::className(), ['item_id' => 'item_id'])->viaTable('whitebook_vendor_item_theme', ['theme_id' => 'theme_id']);
     }
-    
+
     public static function statusImageurl($img_status)
-	{			
-		if($img_status == 'Active')		
+	{
+		if($img_status == 'Active')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-	
+
 	public  function themevalidation($attribute_name,$params)
 	{
 		if(!empty($this->theme_name) ){
@@ -106,29 +107,29 @@ class Themes extends \yii\db\ActiveRecord
         }
 		}
 	}
-	
+
 	public static function loadthemename()
-	{       
+	{
 			$theme_name= Themes::find()
 			->where(['!=', 'theme_status', 'Deactive'])
 			->andwhere(['!=', 'trash', 'Deleted'])
 			->all();
 			$themename=ArrayHelper::map($theme_name,'theme_id','theme_name');
 			return $themename;
-	}	
-	
+	}
+
 	public static function loadthemenameupdate($id)
 	{
        $ids = explode(",", $id);
        $id = implode("','", $ids);
        $val = "'".$id."'";
-     
+
         $theme_name =  Themes::find()->where(['theme_id' => [$val]])->all();
 		$themename=ArrayHelper::map($theme_name,'theme_id','theme_name');
 		return $themename;
 	}
 	public static function load_all_themename($id)
-	{     
+	{
         $theme_name =  Themes::find()
         ->select(['theme_id','theme_name','slug'])
         ->where(['!=', 'theme_status', 'Deactive'])
@@ -140,24 +141,24 @@ class Themes extends \yii\db\ActiveRecord
 	public static function loadthemename_item($themeData)
 	{
 		$k=array();
-		foreach ($themeData as $data){		
+		foreach ($themeData as $data){
 		$k[]=$data;
 		}
 		$id = implode("','", $k);
 		$val = "'".$id."'";
 		$themes = Yii::$app->db->createCommand('SELECT theme_id FROM {{%vendor_item_theme}} WHERE trash="default" and item_id IN('.$val.')');
-        $theme = $themes->queryAll();  
+        $theme = $themes->queryAll();
          return ($theme);die;
 	}
 
-    // load themes front-end plan page 
+    // load themes front-end plan page
     public static function loadthemenames()
-    {       
+    {
             $theme_name= Themes::find()
             ->where(['!=', 'theme_status', 'Deactive'])
             ->andwhere(['!=', 'trash', 'Deleted'])
             ->asArray()
-            ->all();            
+            ->all();
             return $theme_name;
     }
 

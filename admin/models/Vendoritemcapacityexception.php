@@ -1,10 +1,10 @@
 <?php
 
-namespace backend\models;
-use backend\models\Vendoritem;
-use yii\helpers\ArrayHelper;
+namespace admin\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+
 
 /**
  * This is the model class for table "{{%vendor_item_capacity_exception}}".

@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -53,9 +53,9 @@ class Imageresize extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'logo_width' => 'Logo width (Pixels)',
-            'logo_height' => 'Logo height (Pixels)', 
+            'logo_height' => 'Logo height (Pixels)',
             'item_list_width' =>'Item list width (Pixels)',
-            'item_list_height' =>'Item list height (Pixels)',          
+            'item_list_height' =>'Item list height (Pixels)',
             'item_detail_width' =>'Item detail width (Pixels)',
             'item_detail_height' => 'Item detail height (Pixels)',
 			'item_cart_width' =>'Item cart width (Pixels)',

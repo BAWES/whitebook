@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 /**
  * This is the ActiveQuery class for [[Vendoritempricing]].

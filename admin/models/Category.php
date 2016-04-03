@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use yii\helpers\ArrayHelper;
 use Yii;
@@ -35,7 +35,7 @@ class Category extends \yii\db\ActiveRecord
     public $category_icon;
     public static function tableName()
     {
-    	return '{{%category}}';        
+    	return '{{%category}}';
     }
 
 	public function behaviors()
@@ -43,7 +43,7 @@ class Category extends \yii\db\ActiveRecord
 	      return [
 	          [
 	              'class' => SluggableBehavior::className(),
-	              'attribute' => 'category_name',	             
+	              'attribute' => 'category_name',
 	          ],
 	      ];
 	}
@@ -54,21 +54,21 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-			         ['category_name','categoryvalidation','on' => 'insert',],			
+			         ['category_name','categoryvalidation','on' => 'insert',],
             [['parent_category_id', 'created_by', 'modified_by',], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_allow_sale', 'default', 'value' => true],
-            ['category_icon', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'minWidth' => 200, 'maxWidth' => 300,'minHeight' => 40, 'maxHeight' =>70,'on' => 'register'],            
+            ['category_icon', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'minWidth' => 200, 'maxWidth' => 300,'minHeight' => 40, 'maxHeight' =>70,'on' => 'register'],
             [['parent_category_id','category_name',], 'required','on' => 'sub_update',],
             [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
             [['category_name'], 'string', 'max' => 128]
         ];
     }
-    
+
     public function scenarios()
     {
-		      $scenarios = parent::scenarios();      
+		      $scenarios = parent::scenarios();
         $scenarios['sub_update'] = ['parent_category_id','category_name',];//Scenario Values Only Accepted
         return $scenarios;
     }
@@ -133,21 +133,21 @@ class Category extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
     }
-    
+
     public static function statusImageurl($sale)
-	{			
-		if($sale == 'yes')		
+	{
+		if($sale == 'yes')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-	
+
 	public static function statusTitle($sale)
-	{			
-		if($sale == 'yes')		
+	{
+		if($sale == 'yes')
 		return 'Active';
 		return 'Deactive';
 	}
-	
+
 	public  function categoryvalidation($attribute_name,$params)
 	{
 		if(!empty($this->category_name) ){
@@ -159,7 +159,7 @@ class Category extends \yii\db\ActiveRecord
         }
 		}
 	}
-	
+
 	public static function loadcategoryname()
 	{
 			$category= Category::find()
@@ -180,12 +180,12 @@ class Category extends \yii\db\ActiveRecord
 			->andwhere(['!=', 'trash', 'Deleted'])
 			->andwhere(['=', 'category_level', '0'])
 			->andwhere(['parent_category_id' => null])
-			->all();			
+			->all();
 			return $category;
 	}
-	/* END LOAD CATEGORY FOR EVENT DETAIL PAGE*/	
-	
-	
+	/* END LOAD CATEGORY FOR EVENT DETAIL PAGE*/
+
+
 	public static function loadcategory()
 	{
 		$categories=Category::find()
@@ -197,7 +197,7 @@ class Category extends \yii\db\ActiveRecord
 		return $category;
 	}
 
-	
+
 		public static function loadgrandcategory()
 	{
 		$categories=Category::find()
@@ -209,7 +209,7 @@ class Category extends \yii\db\ActiveRecord
 		$category=ArrayHelper::map($categories,'category_id','category_name');
 		return $category;
 	}
-	
+
 	public static function vendorcategoryname($id)
 	{
 		$categories=Category::find()
@@ -220,19 +220,19 @@ class Category extends \yii\db\ActiveRecord
 		$category=ArrayHelper::map($categories,'category_id','category_name');
 		return $category;
 	}
-	
+
 		public static function categorylevel($id)
 	{
-		
+
 		$categories=Category::find()
 		->select(['category_level'])
 		->where(['category_allow_sale' => 'yes'])
 		->andwhere(['=', 'category_id', $id])
 		->andwhere(['!=', 'trash', 'Deleted'])
 		->one();
-		return  $categories['category_level']; 
+		return  $categories['category_level'];
 	}
-	
+
 	// for advert category joi two array
 	public static function loadcategoryset($cat)
 	{
@@ -246,36 +246,36 @@ class Category extends \yii\db\ActiveRecord
 		->andwhere(['!=', 'trash', 'Deleted'])
 		->andwhere(['=', 'category_id', $c])
 		->all();
-		
+
 		 $categ[]=ArrayHelper::map($categories,'category_id','category_name');
-		} 
-		return ($categ); 
+		}
+		return ($categ);
 	}
 		else
-	{   
+	{
 		$categories=Category::find()
 		->select(['category_id','category_name'])
 		->where(['category_allow_sale' => 'yes'])
 		->andwhere(['!=', 'trash', 'Deleted'])
 		->andwhere(['=', 'category_id', $cat[0]])
 		->all();
-		  $cat[]=ArrayHelper::map($categories,'category_id','category_name'); 
-	} 
+		  $cat[]=ArrayHelper::map($categories,'category_id','category_name');
+	}
 	}
 
     public static function vendorcategory($id)
-    {      
+    {
          $vendor = Vendor::find()->select(['category_id'])->where(['vendor_id' => $id])->all();
-         $vendor_id = $vendor[0]['category_id'];         
+         $vendor_id = $vendor[0]['category_id'];
          $vendor_exp = explode(',',$vendor_id);
          $vendor_imp = implode('","',$vendor_exp);
          $categories = Yii::$app->db->createCommand('SELECT category_id, category_name FROM {{%category}} WHERE category_id IN("'.$vendor_imp.'")');
-         $categories = $categories->queryAll();             
+         $categories = $categories->queryAll();
          $category =ArrayHelper::map($categories,'category_id','category_name');
          return $category;
- 
-    }   
-    
+
+    }
+
     public static function viewcategoryname($id)
 	{
 		$categories=Category::find()
@@ -285,8 +285,8 @@ class Category extends \yii\db\ActiveRecord
 		->one();
 		return $categories['category_name'];
 	}
-	
-	// frontend function 
+
+	// frontend function
 	public static function category_slug($id)
 	{
 		$categories=Category::find()
@@ -296,7 +296,7 @@ class Category extends \yii\db\ActiveRecord
 		->one();
 		return $categories;
 	}
-		// frontend function 
+		// frontend function
 	public static function category_value($slug)
 	{
 		$categoryid=Category::find()
@@ -309,12 +309,12 @@ class Category extends \yii\db\ActiveRecord
     public static function adsbottomupdate($id)
     {
         foreach ($id as $key ) {
-             $c_id[] = '"'.$key.'"';               
+             $c_id[] = '"'.$key.'"';
         }
         $c_id = implode($c_id,',');
-        
+
         $categories = Yii::$app->db->createCommand('SELECT category_name FROM {{%category}} WHERE category_id IN('.$c_id.')');
-        $categories = $categories->queryAll();             
+        $categories = $categories->queryAll();
         return $categories;
     }
 
@@ -327,22 +327,22 @@ class Category extends \yii\db\ActiveRecord
             return false;
         }
     }
-    
+
     public static function category_search_details($name)
 	{
-		 $sql="Select category_id, category_name FROM {{%category}} 
+		 $sql="Select category_id, category_name FROM {{%category}}
 			WHERE trash='Default' and category_allow_sale='Yes' and category_name like '%".$name."%'";
 			return $categories = Yii::$app->db->createCommand($sql)->queryAll();
 	}
 
 	public static function Vendorcategorylist($ids)
-	{	
+	{
 		$c = explode(",", $ids);
 		$ids = implode("','", $c);
-		$val = "'".$ids."'";		
-		$categories = Yii::$app->db->createCommand('Select category_id, category_name, slug FROM {{%category}} 
+		$val = "'".$ids."'";
+		$categories = Yii::$app->db->createCommand('Select category_id, category_name, slug FROM {{%category}}
 			WHERE category_id IN('.$val.') and trash="Default" and category_level=0
 			and category_allow_sale="Yes"')->queryAll();
-			return $categories; 
-	}    
+			return $categories;
+	}
 }

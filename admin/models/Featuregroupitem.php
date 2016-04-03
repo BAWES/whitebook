@@ -1,7 +1,6 @@
 <?php
 
-namespace backend\models;
-use backend\models\Featuregroup;
+namespace admin\models;
 use yii\db\Query;
 use Yii;
 
@@ -84,20 +83,20 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
-    
+
     public static function getGroupName($id)
-    {		
+    {
 		$model = Featuregroup::find()->where(['group_id'=>$id])->one();
         return $model->group_name;
     }
- 
+
  		public static function groupdetails($t)
 	{
 			$id= Featuregroupitem::find()
 			->select(['group_id'])
 			->where(['=', 'item_id', $t])
 			->one();
-			 $id=$id['group_id']; 
+			 $id=$id['group_id'];
 			//print_r ($id);die;
 			 $k=explode(',',$id);
 			 foreach ($k as $key=>$value)
@@ -117,8 +116,8 @@ class Featuregroupitem extends \yii\db\ActiveRecord
 			 }
 			 return implode(", ",$grouplist);
 	}
-	
-	
+
+
  	public static function loadcategoryname()
 	{
 			$output= Featuregroupitem::find()
@@ -133,25 +132,25 @@ class Featuregroupitem extends \yii\db\ActiveRecord
 	{
 		$query = new Query;
 		$query->select([
-		'whitebook_feature_group_item.item_id AS gid', 
-		'whitebook_vendor.vendor_name AS vname', 
+		'whitebook_feature_group_item.item_id AS gid',
+		'whitebook_vendor.vendor_name AS vname',
 		'whitebook_vendor_item.item_name AS iname',
-		'whitebook_vendor_item.slug AS slug', 
+		'whitebook_vendor_item.slug AS slug',
 		'whitebook_vendor_item.item_price_per_unit AS price']
-		)  
+		)
 	->from('whitebook_feature_group_item')
 	->join('LEFT OUTER JOIN', 'whitebook_vendor',
-				'whitebook_vendor.vendor_id =whitebook_feature_group_item.vendor_id')		
-	->join('LEFT OUTER JOIN', 'whitebook_vendor_item', 
+				'whitebook_vendor.vendor_id =whitebook_feature_group_item.vendor_id')
+	->join('LEFT OUTER JOIN', 'whitebook_vendor_item',
 				'whitebook_feature_group_item.item_id =whitebook_vendor_item.item_id')
-	->where('whitebook_feature_group_item.group_item_status ="Active"')			
-	->andwhere('whitebook_feature_group_item.trash ="Default"')			
-	->LIMIT(50)	; 
-		
+	->where('whitebook_feature_group_item.group_item_status ="Active"')
+	->andwhere('whitebook_feature_group_item.trash ="Default"')
+	->LIMIT(50)	;
+
 $command = $query->createCommand();
-$data = $command->queryAll();	
+$data = $command->queryAll();
 return ($data);
 
 	}
-	
+
 }

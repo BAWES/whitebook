@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
@@ -57,7 +57,7 @@ class AdminSearch extends Admin
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'role_id' => $this->role_id,            
+            'role_id' => $this->role_id,
         ]);
 
         $query->andFilterWhere(['like', 'admin_name', $this->admin_name])

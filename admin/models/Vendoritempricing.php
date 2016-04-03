@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -76,10 +76,10 @@ class Vendoritempricing extends \yii\db\ActiveRecord
         $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
         return $model;
     }
-    
+
     // this function is used in frontend and backend ...
     public static function loadviewprice($item_id,$type_id,$item_price_per_unit)
-    {       
+    {
           $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
           if(empty($model))
           {echo 'No price chart data!';}
@@ -88,17 +88,17 @@ class Vendoritempricing extends \yii\db\ActiveRecord
             echo '<table class="table table-striped table-bordered detail-view price_range"><tbody>';
              echo '<tr style="font-size: 16px;"><th colspan=3>Item price per unit range</th></tr>';
             echo '<tr><th>Range from<th>Range To<th>Price (KD) </th></tr>';
-            foreach ($model as $key => $value) { 
+            foreach ($model as $key => $value) {
                  echo '<tr><td>'.$value['range_from'].'<td>'.$value['range_to'].'<td>'.$value['pricing_price_per_unit'].'</td></tr>';
-            }        
+            }
             echo "</tbody></table>";
 		}
-		
+
 	}
-	
+
 	// This function is used in frontend
     public static function checkprice($item_id,$type_id,$item_price_per_unit)
-    {       
+    {
           $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
           if(empty($model))
           {return 0; }

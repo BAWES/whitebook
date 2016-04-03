@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\helpers\Url;
@@ -27,20 +27,20 @@ class Cms extends \yii\db\ActiveRecord
     {
         return '{{%cms}}';
     }
-    
+
 	public function behaviors()
 	{
 	      return [
 	          [
 	              'class' => SluggableBehavior::className(),
-	              'attribute' => 'page_name',	
-	              
+	              'attribute' => 'page_name',
+
             'immutable' => false,
-            
+
             'ensureUnique'=>true,
 	              'value' => function ($event) {
 				 return str_replace(' ', '-', $this->slug);
-        },             
+        },
 	          ],
 	      ];
 	}
@@ -79,7 +79,7 @@ class Cms extends \yii\db\ActiveRecord
             'cms_meta_description' => 'Page meta description',
         ];
     }
-    
+
     	public static function getContent($id)
 	{
 		$content=Cms::find()
@@ -88,7 +88,7 @@ class Cms extends \yii\db\ActiveRecord
 		->all();
 		 $k=($content[0]['page_content']);
 		 return   substr($k, 0, 150);
-		
+
 	}
     	public static function cms_details($slug)
 	{
@@ -102,12 +102,12 @@ class Cms extends \yii\db\ActiveRecord
 		->one();
 		return ($content);
 		}
-				
+
 	}
-	
-    
+
+
         public static function content($content)
-	{       
-			return strip_tags($content); 
-	}	
+	{
+			return strip_tags($content);
+	}
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Customer;
 
 /**
  * SearchCustomer represents the model behind the search form about `backend\models\Customer`.
@@ -19,7 +18,7 @@ class CustomerSearch extends Customer
     {
         return [
             [['customer_id', 'created_by',], 'integer'],
-            [['customer_name', 'customer_email', 'customer_password', 'customer_dateofbirth', 
+            [['customer_name', 'customer_email', 'customer_password', 'customer_dateofbirth',
             'customer_gender', 'customer_mobile', 'customer_last_login', 'customer_ip_address', 'modified_by',], 'safe'],
         ];
     }

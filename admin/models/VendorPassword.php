@@ -1,5 +1,5 @@
 <?php
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
@@ -19,7 +19,7 @@ class VendorPassword extends Model
     public $old_password;
     public $new_password;
     public $confirm_password;
-   
+
     /**
      * @inheritdoc
      */
@@ -27,27 +27,27 @@ class VendorPassword extends Model
     {
         return [
             // username and password are both required
-            [['vendor_contact_email'], 'required'],           
+            [['vendor_contact_email'], 'required'],
             ['vendor_contact_email', 'email'],
             [['old_password','new_password','confirm_password'],'required','on' => 'change'],
         ];
-    }       
+    }
 
-    
+
     public function scenarios()
     {
 		$scenarios = parent::scenarios();
         $scenarios['change'] = ['old_password','new_password','confirm_password'];//Scenario Values Only Accepted
         return $scenarios;
     }
-    
+
 
     /**
      * Finds user by [[username]]
      *
      * @return User|null
      */
-     
+
     public function getUsers()
     {
         if ($this->_user === false) {
@@ -56,7 +56,7 @@ class VendorPassword extends Model
 
         return $this->_user;
     }
-    
-    
-    
+
+
+
 }

@@ -1,5 +1,5 @@
 <?php
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
@@ -54,8 +54,8 @@ class VendorLogin extends Model
      */
     public function login()
     {
-		
-        if ($this->validate()) {			
+
+        if ($this->validate()) {
             return Yii::$app->user->login($this->getUsers(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
             return false;
@@ -68,25 +68,25 @@ class VendorLogin extends Model
      * @return User|null
      */
     public function getUsers()
-    {			
+    {
         if ($this->_user === false) {
 			$session = Yii::$app->session;
 			$session->open();
-			$session['language'] = 'en-US';	
-			$session['email'] = $this->vendor_contact_email;	
-			$session['type'] = 'Vendor'; 	
-			$this->_user = Vendor::findByUsername($this->vendor_contact_email);  				
+			$session['language'] = 'en-US';
+			$session['email'] = $this->vendor_contact_email;
+			$session['type'] = 'Vendor';
+			$this->_user = Vendor::findByUsername($this->vendor_contact_email);
         }
 
         return $this->_user;
     }
-    
+
      public function attributeLabels()
     {
         return [
             'vendor_contact_email' => 'Email',
             'vendor_password' => 'Password',
-            
+
         ];
     }
 }

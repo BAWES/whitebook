@@ -1,5 +1,5 @@
 <?php
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\helpers\Url;
@@ -165,7 +165,7 @@ class SubCategory extends \yii\db\ActiveRecord
   public static function loadsubcat($slug)
   {
       $subcategory_slug= SubCategory::find()->where(['slug'=>$slug])->one();
-      $subcategory = Yii::$app->db->createCommand('SELECT wvi.subcategory_id as category_id ,wc.category_name,wc.slug FROM whitebook_vendor_item as wvi  INNER JOIN whitebook_category as wc ON wc.category_allow_sale= "yes" and wc.trash="Default" and wc.category_level = 1 and wvi.subcategory_id = wc.category_id and wvi.item_for_sale="Yes" and wvi.item_approved="Yes" and wvi.item_status = "Active" and parent_category_id = '.$subcategory_slug['category_id'].' group by wvi.subcategory_id')->queryAll(); 
+      $subcategory = Yii::$app->db->createCommand('SELECT wvi.subcategory_id as category_id ,wc.category_name,wc.slug FROM whitebook_vendor_item as wvi  INNER JOIN whitebook_category as wc ON wc.category_allow_sale= "yes" and wc.trash="Default" and wc.category_level = 1 and wvi.subcategory_id = wc.category_id and wvi.item_for_sale="Yes" and wvi.item_approved="Yes" and wvi.item_status = "Active" and parent_category_id = '.$subcategory_slug['category_id'].' group by wvi.subcategory_id')->queryAll();
      return $subcategory;
   }
 }

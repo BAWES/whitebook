@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -31,7 +31,7 @@ class Smtp extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['smtp_host', 'smtp_username', 'smtp_password', 'smtp_port', 'transport_layer_security'], 'required'],           
+            [['smtp_host', 'smtp_username', 'smtp_password', 'smtp_port', 'transport_layer_security'], 'required'],
             [['smtp_host', 'smtp_username', 'smtp_password'], 'string', 'max' => 100],
             [['smtp_port', 'transport_layer_security'], 'string', 'max' => 25]
         ];
@@ -48,7 +48,7 @@ class Smtp extends \yii\db\ActiveRecord
             'smtp_username' => 'SMTP Username',
             'smtp_password' => 'SMTP Password',
             'smtp_port' => 'SMTP Port',
-            'transport_layer_security' => 'Transport Layer Security',           
+            'transport_layer_security' => 'Transport Layer Security',
         ];
     }
 }

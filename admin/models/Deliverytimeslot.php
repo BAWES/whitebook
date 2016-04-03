@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -75,7 +75,7 @@ class Deliverytimeslot extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
-    
+
     public static function getVendor()
     {
         return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
@@ -94,6 +94,5 @@ class Deliverytimeslot extends \yii\db\ActiveRecord
     {
         return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id])->asArray()->count();
     }
-    
-}
 
+}

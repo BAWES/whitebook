@@ -8,9 +8,9 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-backend',
+    'id' => 'app-admin',
     'basePath' => dirname(__DIR__),
-    'controllerNamespace' => 'backend\controllers',
+    'controllerNamespace' => 'admin\controllers',
     'bootstrap' => ['log'],
     'components' => [
       'request' => [
@@ -25,16 +25,16 @@ return [
         ],
         'themeURL' => [
             'class' => 'yii\web\UrlManager',
-            'baseUrl' => '/backend/web/themes/default',
+            'baseUrl' => '/admin/web/themes/default',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],
         'user' => [
-            'identityClass' => 'backend\models\Admin',
+            'identityClass' => 'admin\models\Admin',
             'enableAutoLogin' => false,
         ],
         'session' => [
-            'name' => 'app-backend',
+            'name' => 'app-admin',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -49,7 +49,7 @@ return [
             'errorAction' => 'site/error',
         ],
         'newcomponent' => [
-            'class' => 'backend\components\MainComponent',
+            'class' => 'admin\components\MainComponent',
         ],
         'assetManager' => [
             'bundles' => [
@@ -62,14 +62,6 @@ return [
             ],
         ],
      ],
-    'modules' => [
-        'admin' => [
-          'class' => 'backend\modules\admin\Module'
-        ],
-        'vendor' => [
-          'class' => 'backend\modules\vendor\Module'
-        ],
-    ],
     'params' => $params,
 
 ];

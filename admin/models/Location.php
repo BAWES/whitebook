@@ -1,8 +1,10 @@
 <?php
 
-namespace backend\models;
-use yii\helpers\ArrayHelper;
+namespace admin\models;
+
 use Yii;
+use yii\helpers\ArrayHelper;
+
 
 /**
  * This is the model class for table "{{%location}}".
@@ -66,35 +68,35 @@ class Location extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Country::className(), ['country_id' => 'country_id']);
     }
-    
+
     public static function statusImageurl($status)
-	{			
-		if($status == 'Active')		
+	{
+		if($status == 'Active')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-	
+
 	  	public static function loadlocation()
-	{       
+	{
 			$location= Location::find()
 			->where(['!=', 'status', 'Deactive'])
 			->andwhere(['!=', 'trash', 'Deleted'])
 			->all();
 			$location=ArrayHelper::map($location,'id','location');
 			return $location;
-	}		
-	
+	}
+
 	    	public static function locationdetails($id)
-	{       
+	{
 			$location= Location::find()
 			->where(['!=', 'trash', 'Deleted'])
 			->where(['=', 'id', $id])
 			->all();
 			$location=ArrayHelper::map($location,'id','location');
 			return $location;
-	}	
+	}
     public static function getlocation($id)
-    {		
+    {
 		$model = Location::find()->where(['id'=>$id])->one();
         return $model->location;
     }

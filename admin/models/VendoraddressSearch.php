@@ -1,14 +1,13 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Vendoraddress;
 
 /**
- * VendorSearch represents the model behind the search form about `backend\models\Vendor`.
+ * VendorSearch represents the model behind the search form about `admin\models\Vendor`.
  */
 class VendoraddressSearch extends Vendoraddress
 {
@@ -63,7 +62,7 @@ class VendoraddressSearch extends Vendoraddress
         ]);
 
         $query->andFilterWhere(['like', 'vendor_contact_no', $this->vendor_contact_no]);
-            
+
         return $dataProvider;
     }
 }

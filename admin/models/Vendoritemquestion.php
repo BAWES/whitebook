@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -52,17 +52,17 @@ class Vendoritemquestion extends \yii\db\ActiveRecord
     {
         return [
             'question_id' => 'Question',
-            'item_id' => 'Item ',           
+            'item_id' => 'Item ',
             'question_text' => 'Question Text',
             'question_answer_type' => 'Question Type',
             'question_max_characters' => 'Answer Max Characters',
-            'question_sort_order' => 'Question Sort Order',                     
+            'question_sort_order' => 'Question Sort Order',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
             'modified_datetime' => 'Modified Datetime',
             'trash' => 'Trash',
-            
+
         ];
     }
 }

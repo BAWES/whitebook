@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\City;
 
 /**
  * CitySearch represents the model behind the search form about `backend\models\City`.
@@ -58,7 +57,7 @@ class CitySearch extends City
 
         $query->andFilterWhere([
             'city_id' => $this->city_id,
-            'country_id' => $this->country_id,            
+            'country_id' => $this->country_id,
         ]);
 
         $query->andFilterWhere(['like', 'city_name', $this->city_name])

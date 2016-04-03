@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Deliverytimeslot;
 
 /**
  * DeliverytimeslotSearch represents the model behind the search form about `backend\models\Deliverytimeslot`.
@@ -42,16 +41,16 @@ class DeliverytimeslotSearch extends Deliverytimeslot
     public function search($params,$vendor_id=false)
     {
         if(empty($vendor_id))
-        {          
+        {
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
         $query = Deliverytimeslot::find()
-        ->where(['!=', 'trash', 'Deleted'])   
+        ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['vendor_id'=> $vendor_id]);
 
         if(empty($vendor_id))
-        {          
+        {
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
@@ -85,17 +84,17 @@ class DeliverytimeslotSearch extends Deliverytimeslot
 
         return $dataProvider;
     }
-    
-    
+
+
         public function deliverysearch($vendor_id)
     {
         if(empty($vendor_id))
-        {          
+        {
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
         $query = Deliverytimeslot::find()
-        ->where(['!=', 'trash', 'Deleted'])   
+        ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['vendor_id'=> $vendor_id]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

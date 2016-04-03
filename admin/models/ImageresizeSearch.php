@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Imageresize;
 
 /**
  * ImageresizeSearch represents the model behind the search form about `backend\models\Imageresize`.
@@ -59,7 +58,7 @@ class ImageresizeSearch extends Imageresize
         $query->andFilterWhere([
             'id' => $this->id,
             'logo_width' => $this->logo_width,
-            'logo_height' => $this->logo_height,            
+            'logo_height' => $this->logo_height,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,
             'created_datetime' => $this->created_datetime,

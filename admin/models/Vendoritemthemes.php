@@ -1,8 +1,7 @@
 <?php
 
-namespace backend\models;
-use backend\models\Vendoritemthemes;
-use backend\models\vendoritemthemesSearch;
+namespace admin\models;
+
 use Yii;
 use yii\helpers\ArrayHelper;
 /**
@@ -79,8 +78,8 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
             'subcategory_id' => 'subcategory Name',
         ];
     }
-    
-    
+
+
 	public static function getthemelist($t)
 	{
 			$themeid= Vendoritemthemes::find()
@@ -100,17 +99,17 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
 			->one();
 			return $id=$id['id'];
 	}
-	
+
 		public static function themedetails($t)
 	{
 			$id= Vendoritemthemes::find()
 			->select(['theme_id'])
 			->where(['=', 'item_id', $t])
 			->one();
-			 $id=$id['theme_id']; 
+			 $id=$id['theme_id'];
 			//print_r ($id);die;
 			 $k=explode(',',$id);
-			 
+
 			 foreach ($k as $key=>$value)
 			 {
 			 $theme_name[]= Themes::find()
@@ -120,7 +119,7 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
 			->andwhere(['theme_id' => $value])
 			->one();
 			}
-			
+
 			$i=0;
 			 foreach ($theme_name as $key=>$value)
 			 {
@@ -129,20 +128,20 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
 			 }
 			 return implode(", ",$themelist);
 	}
-	
-	
+
+
 		public function getThemeName($id)
-	{        
+	{
 			$theme_name= Themes::find()
 			->select('theme_name')
 			->where(['!=', 'theme_status', 'Deactive'])
 			->andwhere(['!=', 'trash', 'Deleted'])
 			->andwhere(['theme_id' => $id])
 			->one();
-			return $theme_name['theme_name'];  
-	}	
+			return $theme_name['theme_name'];
+	}
    /**
      * @return \yii\db\ActiveQuery
      */
-	
+
 }

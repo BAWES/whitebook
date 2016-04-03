@@ -1,5 +1,5 @@
 <?php
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -62,6 +62,6 @@ class Socialinfo extends \yii\db\ActiveRecord
         foreach($model as $key=>$val)
         {
              return $val;
-        }        
-    }    
+        }
+    }
 }

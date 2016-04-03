@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use yii\helpers\ArrayHelper;
 use Yii;
@@ -66,17 +66,17 @@ class Featuregroup extends \yii\db\ActiveRecord
     {
         return $this->hasMany(FeatureGroupItem::className(), ['group_id' => 'group_id']);
     }
-    
+
         public static function statusImageurl($img_status)
-	{			
-		if($img_status == 'Active')		
+	{
+		if($img_status == 'Active')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-	
-	   
+
+
     	    public static function loadfeaturegroup()
-	{       
+	{
 			$featuregroup= Featuregroup::find()
 			->where(['!=', 'group_status', 'Deactive'])
 			->andwhere(['!=', 'trash', 'Deleted'])

@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -60,7 +60,7 @@ class Role extends \yii\db\ActiveRecord
 			->select ('role_name')
 			->where(['=', 'role_id', $id])
 			->one();
-			return ($rolename['role_name']); 
-	}       
-    
+			return ($rolename['role_name']);
+	}
+
 }

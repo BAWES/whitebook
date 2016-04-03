@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 
@@ -59,8 +59,8 @@ class Vendoraddress extends \yii\db\ActiveRecord
 		 $address=Vendoraddress::find()->all();
 		return $address=ArrayHelper::map($area,'address_id','address_text');
 	}
-	
-	
+
+
 	public static function areashow($id)
 	{
 		echo $id;

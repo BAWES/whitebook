@@ -1,6 +1,5 @@
 <?php
-namespace backend\models;
-use backend\models\Addresstype;
+namespace admin\models;
 use Yii;
 
 /**
@@ -57,36 +56,36 @@ class AddressQuestion extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
-    
+
     	public static function  getAddresstype($id)
-    {		
+    {
 		$model = Addresstype::find()->where(['type_id'=>$id])->one();
         return $model->type_name;
     }
-    
+
         	public static function  loadAddressquestion($addresstypeid)
-    {		
+    {
 		$question = AddressQuestion::find()
 		->select(['ques_id','address_type_id','question'])
 		->where(['address_type_id'=>$addresstypeid])->all();
        return $question;
     }
-    
+
        public static function  loadquestion($addresstypeid)
-    {		
+    {
 		$question = AddressQuestion::find()
 		->select(['question'])
-		->where(['address_type_id'=>$addresstypeid])->all();		
+		->where(['address_type_id'=>$addresstypeid])->all();
 		foreach ($question as $q)
 		{
-			$ques[]=$q['question'];			
-		}		
+			$ques[]=$q['question'];
+		}
 		$ques=implode ('<br>',$ques);
 		return($ques);
     }
         public static function statusImageurl($img_status)
 	{
-		if($img_status == 'Active')		
+		if($img_status == 'Active')
 		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/active.png');
 		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/inactive.png');
 	}

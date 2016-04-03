@@ -1,8 +1,9 @@
 <?php
 
-namespace backend\models;
-use yii\helpers\ArrayHelper;
+namespace admin\models;
+
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 /**
@@ -70,7 +71,7 @@ class Itemtype extends \yii\db\ActiveRecord
 	}
 		}
 	}
-	
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -78,33 +79,32 @@ class Itemtype extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItem::className(), ['type_id' => 'type_id']);
     }
-    
+
     	    public static function loaditemtype()
-	{       
+	{
 			$itemtype= Itemtype::find()
 			->where(['!=', 'trash', 'Deleted'])
 			->all();
 			$itemtype=ArrayHelper::map($itemtype,'type_id','type_name');
 			return $itemtype;
-	}	
-	
+	}
+
 	        public static function loadvendorname()
-	{       
+	{
 			$vendorname= Vendor::find()
 			->where(['!=', 'trash', 'Deleted'])
 			->all();
 			$vendorname=ArrayHelper::map($vendorname,'vendor_id','vendor_name');
 			return $vendorname;
-	}	
-	
+	}
+
 	//Item type name should in vendor view tab
 	    	public static function itemtypename($id)
-	{       
+	{
 			$itemtype= Itemtype::find()
 			->where(['!=', 'trash', 'Deleted'])
 			->andwhere(['=', 'type_id', $id])
 			->one();
 			return $itemtype['type_name'];
-	}	
+	}
 }
-

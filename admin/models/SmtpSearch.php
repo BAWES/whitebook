@@ -1,14 +1,13 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Smtp;
 
 /**
- * SmtpSearch represents the model behind the search form about `app\models\Smtp`.
+ * SmtpSearch represents the model behind the search form about `admin\models\Smtp`.
  */
 class SmtpSearch extends Smtp
 {

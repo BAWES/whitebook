@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -14,7 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property string $currency_code
  * @property string $currency_symbol
  * @property string $country_status
-  @property integer $default
+ * @property integer $default
  */
 
 class Banner extends \yii\db\ActiveRecord
@@ -39,9 +39,9 @@ class Banner extends \yii\db\ActiveRecord
             [['sort'], 'integer'],
             [['banner_title'], 'string', 'max' => 100],
             //[['banner_status'], 'string', 'max' => 5],
-            [['banner_type','banner_video_url'], 'safe'],				
+            [['banner_type','banner_video_url'], 'safe'],
 		          ['banner_image', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'minWidth' => 1300, 'maxWidth' => 1300,'minHeight' => 550, 'maxHeight' =>550,'on' => 'register'],
-		
+
         ];
     }
     /**
@@ -61,33 +61,33 @@ class Banner extends \yii\db\ActiveRecord
             'sort' => 'Sort',
         ];
     }
-    
+
     public static function statusImageurl($status)
-	{			
-		if($status == 'Active')		
+	{
+		if($status == 'Active')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-	
-	
+
+
 	public static function loadbanner()
-	{       
+	{
 			$Banner= Banner::find()
 			->where(['!=', 'banner_status', 'Deactive'])
 			->andwhere(['!=', 'trash', 'Deleted'])
 			->all();
 			$Banner=ArrayHelper::map($Banner,'banner_id','banner_title');
 			return $Banner;
-	}		
-	
+	}
+
 	public static function getStatus($status)
     {
-		$query = new Query;	
+		$query = new Query;
 		$query->select('name')
 			  ->from('whitebook_status1')
 			  ->where(['status' => $status]);
 		$command = $query->createCommand();
-		$data = $command->queryOne();	
+		$data = $command->queryOne();
 		return $data['name'];
     }
 }

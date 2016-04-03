@@ -1,14 +1,13 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Vendorpackages;
 
 /**
- * VendorpackagesSearch represents the model behind the search form about `backend\models\Vendorpackages`.
+ * VendorpackagesSearch represents the model behind the search form about `admin\models\Vendorpackages`.
  */
 class VendorpackagesSearch extends Vendorpackages
 {
@@ -41,9 +40,9 @@ class VendorpackagesSearch extends Vendorpackages
      * @return ActiveDataProvider
      */
     public function search($params)
-    {        
-        $query = Vendorpackages::find()        
-        ->where(['vendor_id'=>Vendor::getVendor('vendor_id')])    
+    {
+        $query = Vendorpackages::find()
+        ->where(['vendor_id'=>Vendor::getVendor('vendor_id')])
         ->orderBy(['created_datetime' => SORT_DESC]);
 
         $dataProvider = new ActiveDataProvider([
@@ -71,10 +70,10 @@ class VendorpackagesSearch extends Vendorpackages
 
         return $dataProvider;
     }
-    
+
         public function vendorviewsearch($params,$vendorid)
-    {        
-        $query = Vendorpackages::find()        
+    {
+        $query = Vendorpackages::find()
         ->where(['vendor_id'=>$vendorid,'trash'=>'Default'])
         ->orderBy(['id' => SORT_DESC])
         ->all();

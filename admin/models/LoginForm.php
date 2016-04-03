@@ -1,5 +1,6 @@
 <?php
-namespace backend\models;
+namespace admin\models;
+
 use Yii;
 use yii\base\Model;
 
@@ -57,7 +58,7 @@ class LoginForm extends Model
 
         if ($this->validate()) {
             Yii::info('Admin Login successfully', __METHOD__);
-            
+
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
             return false;

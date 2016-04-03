@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -58,10 +58,10 @@ class Faq extends \yii\db\ActiveRecord
             'sort' => 'Sort Order',
         ];
     }
-    
+
     public static function statusImageurl($img_status)
 	{
-		if($img_status == 'Active')		
+		if($img_status == 'Active')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
@@ -69,11 +69,11 @@ class Faq extends \yii\db\ActiveRecord
 	{
         $faq= Faq::find()
 			->select(['question','answer'])
-            ->where(['faq_status'=>'active'])           
+            ->where(['faq_status'=>'active'])
             ->andwhere(['trash'=>'default'])
-            ->all();   
+            ->all();
             return $faq;
      }
-	
-    
+
+
 }

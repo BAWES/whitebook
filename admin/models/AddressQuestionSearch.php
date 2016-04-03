@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\AddressQuestion;
 
 /**
  * AddressQuestionSearch represents the model behind the search form about `backend\models\AddressQuestion`.
@@ -18,7 +17,7 @@ class AddressQuestionSearch extends AddressQuestion
     public function rules()
     {
         return [
-            [['ques_id', 'address_type_id', 'created_by', 'modified_by'], 'integer'],            
+            [['ques_id', 'address_type_id', 'created_by', 'modified_by'], 'integer'],
             [['question', 'status', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
@@ -42,7 +41,7 @@ class AddressQuestionSearch extends AddressQuestion
     public function search($params)
     {
         $query = AddressQuestion::find();
-        
+
 		$query = Addressquestion::find()
         ->where(['!=', 'trash', 'Deleted'])
 		->orderBy('address_type_id');

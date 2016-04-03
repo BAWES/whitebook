@@ -1,16 +1,14 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
-use backend\models\Authassignment;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
-use backend\models\Role;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -104,7 +102,7 @@ class Authitem extends \yii\db\ActiveRecord
             ->select(['name'])
             ->where(['id' => $type])
             ->one();
-            
+
         $itemname= $item['name'];
         $id=Admin::getAdmin('id');
 

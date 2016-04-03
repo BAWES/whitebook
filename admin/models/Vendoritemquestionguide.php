@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -57,7 +57,7 @@ class Vendoritemquestionguide extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -65,5 +65,5 @@ class Vendoritemquestionguide extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorItemQuestion::className(), ['question_id' => 'question_id']);
     }
-    
+
 }

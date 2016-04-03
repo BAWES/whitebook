@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Featuregroup;
 
 /**
  * FeaturegroupSearch represents the model behind the search form about `backend\models\Featuregroup`.
@@ -44,7 +43,7 @@ class FeaturegroupSearch extends Featuregroup
         $query = Featuregroup::find()
         ->where(['!=', 'trash', 'Deleted'])
 		->orderBy('group_id');
-		
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

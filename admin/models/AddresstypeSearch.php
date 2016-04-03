@@ -1,11 +1,9 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
-use backend\models\Addresstype;
-use backend\models\AddresstypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,7 +21,7 @@ class AddresstypeSearch extends Addresstype
      */
     public function rules()
     {
-        return [           
+        return [
             [['type_name'], 'safe'],
         ];
     }
@@ -48,7 +46,7 @@ class AddresstypeSearch extends Addresstype
     {
 		$query = Addresstype::find()
         ->where(['!=', 'trash', 'Deleted'])
-		->orderBy('type_id');		
+		->orderBy('type_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

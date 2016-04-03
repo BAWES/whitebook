@@ -1,14 +1,15 @@
 <?php
 
-namespace backend\models;
-use yii\helpers\Setdateformat;
+namespace admin\models;
+
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Vendoritemcapacityexception;
+use yii\helpers\Setdateformat;
 
 /**
- * VendoritemcapacityexceptionSearch represents the model behind the search form about `backend\models\Vendoritemcapacityexception`.
+ * VendoritemcapacityexceptionSearch represents the model behind the search form about `admin\models\Vendoritemcapacityexception`.
  */
 class VendoritemcapacityexceptionSearch extends Vendoritemcapacityexception
 {
@@ -44,18 +45,18 @@ class VendoritemcapacityexceptionSearch extends Vendoritemcapacityexception
     public function search($params,$vendor_id=false)
     {
         if(empty($vendor_id))
-        {          
+        {
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
         $query = Vendoritemcapacityexception::find()
         ->orderBy(['exception_id' => SORT_DESC]);
-        
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $query->leftJoin('{{%vendor_item}}','FIND_IN_SET({{%vendor_item}}.item_id,{{%vendor_item_capacity_exception}}.item_id)'); 
+        $query->leftJoin('{{%vendor_item}}','FIND_IN_SET({{%vendor_item}}.item_id,{{%vendor_item_capacity_exception}}.item_id)');
         $this->load($params);
 
         if (!$this->validate()) {
@@ -65,7 +66,7 @@ class VendoritemcapacityexceptionSearch extends Vendoritemcapacityexception
         }
 		if($this->exception_date!=''){
 		$this->exception_date = Setdateformat::convert($this->exception_date);
-		}		
+		}
         $query->andFilterWhere([
             'exception_id' => $this->exception_id,
             'exception_date' => $this->exception_date,

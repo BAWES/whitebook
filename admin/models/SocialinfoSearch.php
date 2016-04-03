@@ -1,14 +1,13 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Socialinfo;
 
 /**
- * SocialinfoSearch represents the model behind the search form about `backend\models\Socialinfo`.
+ * SocialinfoSearch represents the model behind the search form about `admin\models\Socialinfo`.
  */
 class SocialinfoSearch extends Socialinfo
 {

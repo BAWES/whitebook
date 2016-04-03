@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -56,10 +56,9 @@ class Usercontroller extends \yii\db\ActiveRecord
 		}else{
 			$controller = Usercontroller::find()->all();
 		}
-		     
+
         $controller=ArrayHelper::map($controller,'id','controller');
         return $controller;
 	}
 
 }
-

@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 
 use yii\helpers\ArrayHelper;
@@ -34,21 +34,21 @@ class City extends \yii\db\ActiveRecord
     {
         return [
             [['country_id', 'city_name'], 'required'],
-            [['country_id'], 'integer'],            
+            [['country_id'], 'integer'],
             [['city_name'], 'string', 'max' => 100],
         ];
     }
 
         	public static function loadcity()
-	{       
+	{
 			$city= City::find()
 			->where(['!=', 'status', 'Deactive'])
 			->andwhere(['!=', 'trash', 'Deleted'])
 			->all();
 			$city=ArrayHelper::map($city,'city_id','city_name');
 			return $city;
-	}	
-	
+	}
+
     /**
      * @inheritdoc
      */
@@ -58,7 +58,7 @@ class City extends \yii\db\ActiveRecord
             'city_id' => 'Governorate ID',
             'country_id' => 'Country Name',
             'city_name' => 'Governorate',
-            'status' => 'Governorate Status',           
+            'status' => 'Governorate Status',
         ];
     }
 
@@ -66,18 +66,18 @@ class City extends \yii\db\ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public static function getCountryName($id)
-    {		
+    {
 		$model = Country::find()->where(['country_id'=>$id])->one();
         return $model->country_name;
     }
     public static function getCityname($id)
-    {		
+    {
 		$model = City::find()->where(['city_id'=>$id])->one();
         return $model->city_name;
     }
-    
+
         public static function listcityname($id)
-    {		
+    {
 		$model = City::find()
 		->select(['city_id','city_name'])
 		->where(['country_id'=>$id])->all();
@@ -85,30 +85,30 @@ class City extends \yii\db\ActiveRecord
 		return $city;
     }
         public static function fullcityname()
-    {		
+    {
 		$model = City::find()
 		->select(['city_id','city_name'])
 		->all();
 		$city=ArrayHelper::map($model,'city_id','city_name');
 		return $city;
     }
-    
-    
+
+
     public static function statusImageurl($status)
-	{			
-		if($status == 'Active')		
+	{
+		if($status == 'Active')
 		return \Yii::$app->params['appImageUrl'].'active.png';
 		return \Yii::$app->params['appImageUrl'].'inactive.png';
 	}
-    
+
     public static function getStatus($status)
     {
-		$query = new Query;	
+		$query = new Query;
 		$query->select('name')
 			  ->from('whitebook_status1')
 			  ->where(['status' => $status]);
 		$command = $query->createCommand();
-		$data = $command->queryOne();	
+		$data = $command->queryOne();
 		return $data['name'];
     }
 }

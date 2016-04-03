@@ -1,8 +1,7 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
-use backend\models\Usercontroller;
 use Yii;
 
 /**

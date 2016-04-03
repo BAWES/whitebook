@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -43,7 +43,7 @@ class Image extends \yii\db\ActiveRecord
     {
         return [
             //[['image_user_id', 'image_file_size', 'image_width', 'image_height', 'image_datetime', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
-            [['image_path'], 'file','extensions' => ['png', 'jpg', 'gif','jpeg']], 
+            [['image_path'], 'file','extensions' => ['png', 'jpg', 'gif','jpeg']],
             [['image_user_id', 'created_by', 'modified_by'], 'integer'],
             [['image_user_type', 'trash'], 'string'],
             [['image_file_size', 'image_width', 'image_height'], 'number'],
@@ -56,7 +56,7 @@ class Image extends \yii\db\ActiveRecord
     {
         $scenarios = parent::scenarios();
         $scenarios['Vendoritemupdate'] = ['image_path'];
-        return $scenarios;      
+        return $scenarios;
     }
 
     /**
@@ -105,7 +105,7 @@ class Image extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItemQuestionGuide::className(), ['guide_image_id' => 'image_id']);
     }
-    
+
 	public static function deleteImage() {
     $image = Yii::$app->basePath . '/uploads/vendor_images' . $this->image_file;
     if (unlink($image)) {
@@ -136,6 +136,6 @@ class Image extends \yii\db\ActiveRecord
         $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'guides'])->all();
         return $model;
     }
-	
-	
+
+
 }

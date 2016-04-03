@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -32,7 +32,7 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-     
+
     public $newsmail;
     public $content;
     public static function tableName()
@@ -49,9 +49,9 @@ class Customer extends \yii\db\ActiveRecord
             [['customer_name', 'customer_email', 'customer_password', 'customer_mobile','customer_dateofbirth','customer_gender','customer_address'], 'required'],
             [['created_by', 'message_status'], 'integer'],
             [['customer_email'], 'unique'],
-            [['newsmail','content'], 'required', 'on'=>'newsletter'],            
+            [['newsmail','content'], 'required', 'on'=>'newsletter'],
             [['customer_mobile'],'match', 'pattern' => '/^[0-9+ -]+$/','message' => 'Phone number accept only numbers and +,-'],
-            [['customer_email'],'email'],            
+            [['customer_email'],'email'],
             [['customer_address'], 'string', 'max' => 512]
         ];
     }
@@ -83,7 +83,7 @@ class Customer extends \yii\db\ActiveRecord
     }
     public function scenarios()
     {
-		$scenarios = parent::scenarios();      
+		$scenarios = parent::scenarios();
         $scenarios['newsletter'] = ['newsmail','content'];//Scenario Values Only Accepted
         return $scenarios;
     }
@@ -118,13 +118,13 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Order::className(), ['customer_id' => 'customer_id']);
     }
-    
+
     public static function customercount()
-	{	
+	{
         return Customer::find()->where(['trash' => 'Default'])->count();
 	}
 		 public static function customermonthcount()
-	{		
+	{
 		$month=date('m');
 		$year=date('Y');
         return  Customer::find()
@@ -132,7 +132,7 @@ class Customer extends \yii\db\ActiveRecord
         ->andwhere(['YEAR(created_datetime)' => $year])
         ->andwhere(['customer_status' => 'Active'])
         ->count();
-	}	
+	}
 	 public static function customerdatecount()
 	{
 		$date=date('d');
@@ -144,9 +144,9 @@ class Customer extends \yii\db\ActiveRecord
         ->andwhere(['DAYOFMONTH(created_datetime)' => $date])
         ->andwhere(['customer_status' => 'Active'])
         ->count();
-	}	
+	}
 
-	
+
 		 public static function status($id)
 	{
         $read=Customer::find()
@@ -154,6 +154,6 @@ class Customer extends \yii\db\ActiveRecord
         ->where(['customer_id' => $id])
         ->one();
         return $read['message_status'];
-	}	
-    
+	}
+
 }

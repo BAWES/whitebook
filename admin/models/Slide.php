@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -22,7 +22,7 @@ use Yii;
  */
 class Slide extends \yii\db\ActiveRecord
 {
-	
+
     /**
      * @inheritdoc
      */

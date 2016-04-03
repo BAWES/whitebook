@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
@@ -34,7 +34,7 @@ class Eventtype extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-        
+
 			['type_name','typenamevalidation','on' => 'insert',],
             [['type_name'], 'required'],
             [['created_by', 'modified_by'], 'integer'],
@@ -59,7 +59,7 @@ class Eventtype extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
-    
+
     	public  function typenamevalidation($attribute_name)
 	{
 		if(!empty($this->type_name) )
@@ -73,4 +73,3 @@ class Eventtype extends \yii\db\ActiveRecord
 		}
 	}
 }
-

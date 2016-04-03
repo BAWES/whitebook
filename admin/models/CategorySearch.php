@@ -1,12 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 use yii\db\ActiveQuery;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Category;
-use backend\models\SubCategory;
 
 /**
  * CategorySearch represents the model behind the search form about `backend\models\Category`.
@@ -49,8 +47,8 @@ class CategorySearch extends Category
 		 $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'sort'=> ['defaultOrder' => ['category_id'=>SORT_DESC]]
-        ]);			
-        
+        ]);
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -59,7 +57,7 @@ class CategorySearch extends Category
         $query->andFilterWhere(['like', 'category_name', $this->category_name]);
         return $dataProvider;
     }
-    
+
           public function subcategory_search($params)
     {
         $query = SubCategory::find()
@@ -82,7 +80,7 @@ class CategorySearch extends Category
         $query->andFilterWhere(['=', 'parent_category_id', $this->parent_category_id]);
         return $dataProvider;
     }
-    
+
     public function childcategory_search($params)
     {
         $query = ChildCategory::find()
@@ -100,7 +98,7 @@ class CategorySearch extends Category
             return $dataProvider;
         }
         $query->andFilterWhere(['like', 'category_name', $this->category_name]);
-        $query->andFilterWhere(['=', 'parent_category_id', $this->parent_category_id]);        
+        $query->andFilterWhere(['=', 'parent_category_id', $this->parent_category_id]);
         return $dataProvider;
     }
 }

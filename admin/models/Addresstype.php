@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 
@@ -35,7 +35,7 @@ class Addresstype extends \yii\db\ActiveRecord
         return [
         [['type_name'],'unique'],
         [['type_name'], 'required'],
-        [['created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],           
+        [['created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
         [['type_name'], 'string', 'max' => 128]
         ];
     }
@@ -63,14 +63,14 @@ class Addresstype extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CustomerAddress::className(), ['address_type_id' => 'type_id']);
     }
-    
+
         public static function statusImageurl($img_status)
-	{			
-		if($img_status == 'Active')		
+	{
+		if($img_status == 'Active')
 		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('theme/barebone/assets/img/active.png');
 		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('theme/barebone/assets/img/inactive.png');
 	}
-	
+
 	public static function loadAddresstype()
 	{
 		$command = \Yii::$app->DB->createCommand('SELECT type_id,type_name FROM whitebook_address_type where status="Active" and trash="Default" and not exists (SELECT null FROM whitebook_address_question where address_type_id = whitebook_address_type.type_id and trash="Default")');
@@ -86,10 +86,10 @@ class Addresstype extends \yii\db\ActiveRecord
 		return $Addresstype;
 	}
 	public static function getAddresstype($id)
-    {		
+    {
 		$model = Addresstype::find()->where(['type_id'=>$id])->one();
         return $model->type_name;
     }
-    	
-		
+
+
 }

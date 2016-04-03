@@ -1,8 +1,8 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
+
 use Yii;
-use backend\models\Vendoritem;
 use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "whitebook_priority_item".
@@ -30,7 +30,7 @@ class Priorityitem extends \yii\db\ActiveRecord
     public $filter_start;
     public $filter_end;
     public $item_status;
-    
+
     public static function tableName()
     {
         return 'whitebook_priority_item';
@@ -42,7 +42,7 @@ class Priorityitem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-        
+
             [['item_id',  'priority_start_date', 'priority_end_date', 'priority_level'], 'required'],
             [['category_id','subcategory_id','child_category'], 'default', 'value' => 0],
             [['created_by','category_id', 'subcategory_id','child_category', 'modified_by'], 'integer'],
@@ -101,10 +101,10 @@ class Priorityitem extends \yii\db\ActiveRecord
         $item[]=$model['item_name'];
 		}
 		return $item=implode(',',$item);
-    }   
+    }
 
     public static function grouppriorityitem($vendor_id,$categoryid,$subcategory)
-	{       
+	{
 			$priority_item= Priorityitem::find()
 			->where(['=', 'vendor_id',$vendor_id])
 			->where(['=', 'category_id', $categoryid])

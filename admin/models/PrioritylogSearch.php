@@ -1,13 +1,12 @@
 <?php
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Prioritylog;
 
 /**
- * PrioritylogSearch represents the model behind the search form about `backend\models\Prioritylog`.
+ * PrioritylogSearch represents the model behind the search form about `admin\models\Prioritylog`.
  */
 class PrioritylogSearch extends Prioritylog
 {
@@ -69,21 +68,21 @@ class PrioritylogSearch extends Prioritylog
         $query->andFilterWhere(['like', 'priority_level', $this->priority_level])
             ->andFilterWhere(['like', 'trash', $this->trash]);
         return $dataProvider;
-        
+
     }
-    
+
         public function vendorsearch($params,$vendor_id=false)
     {
 		        if(empty($vendor_id))
-        {          
-            $vendor_id = Vendor::getVendor('vendor_id'); 
+        {
+            $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
-        
+
         $query = Prioritylog::find()
         ->andwhere(['vendor_id'=> $vendor_id])
         ->orderBy(['log_id' => SORT_DESC]);
-        
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -112,7 +111,7 @@ class PrioritylogSearch extends Prioritylog
             ->andFilterWhere(['like', 'trash', $this->trash]);
         return $dataProvider;
     }
-    
+
             public function vendorviewsearch($params,$vendor_id)
     {
         $query = Prioritylog::find()
@@ -132,15 +131,15 @@ class PrioritylogSearch extends Prioritylog
         }
         return $dataProvider;
     }
-    
-    
-    
+
+
+
             public function vendoritemsearch($item_id)
     {
         $query = Prioritylog::find()
         ->where(['item_id'=> $item_id])
         ->orderBy(['log_id' => SORT_DESC])
         ->all();
-        return $query; 
+        return $query;
     }
 }

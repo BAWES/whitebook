@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -86,16 +86,16 @@ class Prioritylog extends \yii\db\ActiveRecord
 			$enddate= Prioritylog::find()
 			->select ('priority_end_date')
 			->where(['=', 'log_id', $id])
-			->one(); 
+			->one();
 			if($enddate['priority_end_date']=='0000-00-00 00:00:00')
 			{
 				return null;
 				}
 				else {
-					
+
 					return date("d/m/Y", strtotime($enddate['priority_end_date']));
 			}
-			
+
     }
 
 }

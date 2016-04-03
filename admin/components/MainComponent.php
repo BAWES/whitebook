@@ -1,5 +1,5 @@
 <?php
-namespace backend\components;
+namespace admin\components;
 
 use Yii;
 use yii\base\Component;

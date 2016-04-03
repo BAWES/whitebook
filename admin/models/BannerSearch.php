@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Banner;
 
 /**
  * CountrySearch represents the model behind the search form about `backend\models\Country`.
@@ -49,7 +48,7 @@ class BannerSearch extends Banner
 			'pagination' =>[
 				'pageSize'=> 40,
 				],
-        ]);          
+        ]);
 
         $this->load($params);
 

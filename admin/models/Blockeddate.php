@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -36,7 +36,7 @@ class Blockeddate extends \yii\db\ActiveRecord
             [['vendor_id', 'block_date'], 'required',],
             ['block_date', 'createblockvalidation','on' => 'insert',],
             ['block_date','blockvalidation','on' => 'update',],
-            
+
           //  [['block_date'],'unique'],
             [['vendor_id', 'created_by', 'modified_by'], 'integer'],
             [['created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'safe'],
@@ -68,7 +68,7 @@ class Blockeddate extends \yii\db\ActiveRecord
         if(!empty($this->block_date) ){
             //echo '111';die;
             $block_date= date ("Y-m-d",strtotime("0 day", strtotime($this->block_date)));
-            
+
 
         $model = Blockeddate::find()
         ->where(['block_date'=>$block_date])
@@ -87,7 +87,7 @@ class Blockeddate extends \yii\db\ActiveRecord
     {
         if(!empty($this->block_date) ){
             $block_date= date ("Y-m-d",strtotime("0 day", strtotime($this->block_date)));
-            
+
 
         $model = Blockeddate::find()
         ->where(['block_date'=>$block_date])

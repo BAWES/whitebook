@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Blockeddate;
 
 /**
  * BlockeddateSearch represents the model behind the search form about `backend\models\Blockeddate`.
@@ -42,17 +41,17 @@ class BlockeddateSearch extends Blockeddate
     public function search($params,$vendor_id=false)
     {
         if(empty($vendor_id))
-        {          
+        {
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
         $query = Blockeddate::find()
-        ->where(['!=', 'trash', 'Deleted'])   
+        ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['created_by'=> $vendor_id]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['block_id'=>SORT_DESC]]            
+			'sort'=> ['defaultOrder' => ['block_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);

@@ -1,5 +1,5 @@
 <?php
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 use yii\base\NotSupportedException;
@@ -8,9 +8,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
-use backend\models\Role;
 use yii\helpers\ArrayHelper;
-use backend\models\Accesscontroller;
 
 /**
  * This is the model class for table "{{%admin}}".
@@ -26,7 +24,7 @@ use backend\models\Accesscontroller;
  * @property integer $modified_by
  * @property string $created_date
  * @property string $modified_date
- */ 
+ */
 class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 {
 	public $auth_key;
@@ -48,9 +46,9 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['role_id', 'admin_status', 'admin_name', 'admin_email', 'admin_password','address','phone' ], 'required'],
-            [['role_id'], 'integer'],     
+            [['role_id'], 'integer'],
             [['admin_email'],'email'],
-            [['created_datetime', 'modified_datetime','created_by','modified_by','admin_last_login','trash','address','phone'], 'safe'],    
+            [['created_datetime', 'modified_datetime','created_by','modified_by','admin_last_login','trash','address','phone'], 'safe'],
             [['role_id', 'admin_status', 'admin_name', 'admin_email'], 'required','on' => 'profile'],
             [['admin_password'], 'required', 'on' => 'change'],
             ['phone','match', 'pattern' => '/^[0-9+ -]+$/','message' => 'Phone number accept only numbers and +,-']
@@ -69,10 +67,10 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
             'admin_name' => ' Username',
             'admin_email' => ' Email',
             'admin_password' => 'Password',
-            'admin_status' => 'Status',           
+            'admin_status' => 'Status',
         ];
     }
-    
+
     public function scenarios()
     {
 		$scenarios = parent::scenarios();
@@ -80,7 +78,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
         $scenarios['profile'] = ['admin_name', 'admin_email','address','phone'];//Scenario Values Only Accepted
         return $scenarios;
     }
-    
+
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
         /**
      * @inheritdoc
@@ -107,7 +105,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($email)
     {
-        return static::findOne(['admin_email' => $email,'admin_status'=>'Active']);        
+        return static::findOne(['admin_email' => $email,'admin_status'=>'Active']);
     }
 
     /**
@@ -162,9 +160,9 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($passwords)
-    {		
+    {
           return  Yii::$app->getSecurity()->validatePassword($passwords, $this->admin_password);
-              
+
     }
 
     /**
@@ -201,20 +199,20 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
     /** EXTENSION MOVIE * */
-    
+
     public function getRole()
     {
         return $this->hasOne(Role::className(), ['role_id' => 'role_id']);
-    } 
-	
+    }
+
 	public static function Roles()
     {
-		$roles = Role::find()->all();     
+		$roles = Role::find()->all();
         $role=ArrayHelper::map($roles,'role_id','role_name');
         return $role;
 	}
-	
-	
+
+
 	public static function Accessroles()
     {
 		$command = \Yii::$app->DB->createCommand(
@@ -225,10 +223,10 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
         //print_r ($roles);die;
         return $roles;
 	}
-	
+
 	public static function Admin()
     {
-		
+
 		$accessdata = Accesscontroller::find()
 		->select(['admin_id'])
 		->groupBy('admin_id')
@@ -238,30 +236,30 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 		{
 			$data[]=$accessdata[$i]['admin_id'];
 		}
-		
-		$data=implode(',',$data);		
+
+		$data=implode(',',$data);
 		$sql="SELECT CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id,admin_name FROM whitebook_admin WHERE admin_status='Active' and id NOT IN (".$data.")";
 		$command = \Yii::$app->DB->createCommand($sql);
-		$admin=$command->queryall();		
+		$admin=$command->queryall();
 		$admin=ArrayHelper::map($admin,'id','admin_name');
         return $admin;
 	}
-	
+
 		public static function Adminupdate()
-    {	
-		
+    {
+
 		$sql="SELECT CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id,admin_name FROM whitebook_admin WHERE admin_status='Active'";
 		$command = \Yii::$app->DB->createCommand($sql);
-		$admin=$command->queryall();		
+		$admin=$command->queryall();
 		$admin=ArrayHelper::map($admin,'id','admin_name');
         return $admin;
-	}	
+	}
 
-    
+
     public static function getAdmin($arr='')
 	{
-		$session = Yii::$app->session;	
-		$query = Admin::find()->where('admin_email = "'.$session['email'].'"')->one();		
+		$session = Yii::$app->session;
+		$query = Admin::find()->where('admin_email = "'.$session['email'].'"')->one();
 		return (isset($query["$arr"]))?$query["$arr"]:'';
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace admin\models;
 
 use Yii;
 
@@ -32,7 +32,7 @@ class Contacts extends \yii\db\ActiveRecord
         return [
             [['contact_name', 'contact_email', 'contact_phone', 'subject', 'message'], 'required'],
             [['created_datetime', 'modified_datetime','created_by','modified_by','trash'], 'safe'],
-            [['message'], 'string'],            
+            [['message'], 'string'],
             [['contact_name', 'contact_email'], 'string', 'max' => 50],
             [['contact_phone'], 'string', 'max' => 25],
             [['subject'], 'string', 'max' => 250],
