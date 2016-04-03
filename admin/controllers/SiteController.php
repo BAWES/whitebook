@@ -56,7 +56,8 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-        $this->layout = "/login";
+        $this->layout = "login";
+
         Yii::$app->session->setFlash('danger', '');
         $model = new LoginForm();
         if (!Yii::$app->user->isGuest) {
