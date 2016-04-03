@@ -122,8 +122,8 @@ class SubCategory extends \yii\db\ActiveRecord
         public static function statusImageurl($sale)
 	{
 		if($sale == 'yes')
-		return \Yii::$app->params['appImageUrl'].'active.png';
-		return \Yii::$app->params['appImageUrl'].'inactive.png';
+		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
 	}
 		public static function statusTitle($sale)
 	{

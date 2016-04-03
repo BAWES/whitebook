@@ -445,12 +445,12 @@ class VendoritemController extends Controller
 		if($status == 'Active')
 			{
 				echo Yii::$app->session->setFlash('success', "Category status updated!");
-				return \Yii::$app->params['appImageUrl'].'active.png';
+				return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
 		 	}
 			else
 			{
 					echo Yii::$app->session->setFlash('success', "Category status updated!");
-					return \Yii::$app->params['appImageUrl'].'inactive.png';
+					return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
 			}
 	}
 

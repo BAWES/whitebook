@@ -676,9 +676,9 @@ class CategoryController extends Controller
             $command->execute();
         }
         if ($status == 'yes') {
-            return \Yii::$app->params['appImageUrl'].'active.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
-            return \Yii::$app->params['appImageUrl'].'inactive.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 
@@ -694,9 +694,9 @@ class CategoryController extends Controller
         $command = \Yii::$app->db->createCommand('UPDATE whitebook_category SET category_allow_sale="'.$status.'" WHERE parent_category_id='.$data['cid']);
         $command->execute();
         if ($status == 'yes') {
-            return \Yii::$app->params['appImageUrl'].'active.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
-            return \Yii::$app->params['appImageUrl'].'inactive.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 

@@ -340,9 +340,9 @@ class FeaturegroupitemController extends Controller
         $command = \Yii::$app->db->createCommand('UPDATE {{%feature_group_item}} SET group_item_status="'.$status.'" WHERE featured_id='.$data['id']);
         $command->execute();
         if ($status == 'Active') {
-            return \Yii::$app->params['appImageUrl'].'active.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
-            return \Yii::$app->params['appImageUrl'].'inactive.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 }

@@ -206,9 +206,9 @@ class AddresstypeController extends Controller
         $command = \Yii::$app->db->createCommand('UPDATE whitebook_address_type SET status="'.$status.'" WHERE type_id='.$data['cid']);
         $command->execute();
         if ($status == 'Active') {
-            return \Yii::$app->params['appImageUrl'].'active.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
-            return \Yii::$app->params['appImageUrl'].'inactive.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 }

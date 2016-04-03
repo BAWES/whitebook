@@ -349,8 +349,8 @@ class MainComponent extends Component
     public static function statusImageurl($img_status)
     {
         if($img_status == 'Active')
-        return \Yii::$app->params['appImageUrl'].'active.png';
-        return \Yii::$app->params['appImageUrl'].'inactive.png';
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Vendor Item Gridview Status Filter

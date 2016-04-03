@@ -378,9 +378,9 @@ class VendorController extends Controller
         $command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor SET vendor_status="'.$status.'" WHERE vendor_id='.$data['id']);
         $command->execute();
         if ($status == 'Active') {
-            return \Yii::$app->params['appImageUrl'].'active.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
-            return \Yii::$app->params['appImageUrl'].'inactive.png';
+            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 

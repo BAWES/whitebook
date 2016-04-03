@@ -65,8 +65,8 @@ class Banner extends \yii\db\ActiveRecord
     public static function statusImageurl($status)
 	{			
 		if($status == 'Active')		
-		return \Yii::$app->params['appImageUrl'].'active.png';
-		return \Yii::$app->params['appImageUrl'].'inactive.png';
+		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
 	}
 	
 	
