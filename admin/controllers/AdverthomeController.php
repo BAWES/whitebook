@@ -70,9 +70,9 @@ class AdverthomeController extends Controller
                 $first_id = $val['advert_id'];
             }
             if (count($model) == 1) {
-                $this->redirect('adverthome/update?id='.$first_id);
+                $this->redirect('update?id='.$first_id);
             } else {
-                $this->redirect('adverthome/create');
+                $this->redirect('create');
             }
 
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

@@ -68,9 +68,9 @@ class ImageresizeController extends Controller
                 $first_id = $val['id'];
             }
             if (count($model) == 1) {
-                $this->redirect('imageresize/update?id='.$first_id);
+                $this->redirect('update?id='.$first_id);
             } else {
-                $this->redirect('imageresize/create');
+                $this->redirect('create');
             }
 
             $searchModel = new ImageresizeSearch();

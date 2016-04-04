@@ -39,10 +39,10 @@
 				</a>
 				<ul class="sub-menu">
 					<li class="<?php if ($menu_act == 'SiteinfoController') {echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('Site Info', ['siteinfo/'], ['class'=>'link-title']) ?>
+						<?= Html::a('Site Info', ['siteinfo/index'], ['class'=>'link-title']) ?>
 					</li>
 					<li class="<?php if ($menu_act == 'SmtpController') {echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('SMTP Info', ['smtp/'], ['class'=>'link-title']) ?>
+						<?= Html::a('SMTP Info', ['smtp/index'], ['class'=>'link-title']) ?>
 					</li>
 					<li class="<?php if ($menu_act == 'EmailtemplateController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Email Templates', ['emailtemplate/index'], ['class'=>'link-title']) ?>
@@ -54,7 +54,7 @@
 						<?= Html::a('Social media', ['socialinfo/index'], ['class'=>'link-title']) ?>
 				   </li>
 					<li class="<?php if ($menu_act == 'ImageresizeController') {echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('Manage Image Resize', ['imageresize/'], ['class'=>'link-title']) ?>
+						<?= Html::a('Manage Image Resize', ['imageresize/index'], ['class'=>'link-title']) ?>
 					</li>
 					<li class="<?php if ($menu_act == 'SlideController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Manage Banner Slides ', ['slide/index'], ['class'=>'link-title']) ?>
@@ -72,7 +72,7 @@
 						<?= Html::a('Manage FAQ', ['faq/index'], ['class'=>'link-title']) ?>
 					</li>
 					<li class="<?php if ($menu_act == 'AdverthomeController') {echo "active"; } else  {echo "noactive";}?>">
-					<?= Html::a('Home Ads', ['adverthome/'], ['class'=>'link-title']) ?>
+					<?= Html::a('Home Ads', ['adverthome/index'], ['class'=>'link-title']) ?>
 					</li>
 				</ul>
 			</li>

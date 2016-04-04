@@ -66,9 +66,9 @@ class SmtpController extends Controller
                 $first_id = $val['id'];
             }
             if (count($model) == 1) {
-                $this->redirect('smtp/update?id='.$first_id);
+                $this->redirect('update?id='.$first_id);
             } else {
-                $this->redirect('smtp/create');
+                $this->redirect('create');
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');

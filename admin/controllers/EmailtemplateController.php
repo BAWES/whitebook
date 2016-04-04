@@ -4,8 +4,8 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Authitem;
-use app\models\Emailtemplate;
-use app\models\EmailtemplateSearch;
+use common\models\Emailtemplate;
+use common\models\EmailtemplateSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

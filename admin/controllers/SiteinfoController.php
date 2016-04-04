@@ -63,19 +63,20 @@ class SiteinfoController extends Controller
         $access = Authitem::AuthitemCheck('4', '10');
         if (yii::$app->user->can($access)) {
             $model = Siteinfo::find()->all();
+
             foreach ($model as $key => $val) {
-                $first_id = $val['id'];
+             $first_id = $val['id'];
             }
 
             if (count($model) == 1) {
-                $this->redirect('siteinfo/update?id='.$first_id);
+                $this->redirect('update?id='.$first_id);
             } else {
-                $this->redirect('siteinfo/create');
+                $this->redirect('create');
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            return $this->redirect(['index']);
         }
     }
 
