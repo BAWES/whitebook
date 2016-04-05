@@ -153,15 +153,15 @@ AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_i
                                         $command = Yii::$app->DB->createCommand($sql);
                                         $out = $command->queryAll();
                                         if ($out) {
-                                            $imglink = Url::to("@vendor_images/") . $out[0]['image_path'];
+                                            $imglink = Yii::getAlias("@vendor_images/") . $out[0]['image_path'];
                                         } else {
-                                            $imglink = Url::to('@web/images/no_image.png');
+                                            $imglink = Yii::getAlias("@web/images/no_image.png");
                                         }
                                         ?>
                                         <div class="item">
                                             <div class="fetu_product_list index_redirect" data-hr='<?php echo Url::toRoute('/product/' . $f["slug"]); ?>'>
-                                                <a href="<?php echo Url::toRoute('/product/' . $f['slug'], true); ?>" title="" class='index_redirect' data-hr='<?php echo Url::toRoute('/product/' . $getitemdetails['slug'], true); ?>'>
-                                                    <img src="<?php echo $imglink; ?>" alt="Slide show images" width="208" height="219">
+                                                <a href="<?php echo Url::toRoute('/product/' . $f['slug'], true); ?>" title="" class='index_redirect' data-hr='<?php echo Url::toRoute('/product/' . $getitemdetails['slug'], true); ?>'>                                                    
+                                                    <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
                                                     <div class="deals_listing_cont">
                                                         <?php echo $getvendordetails['vendor_name']; ?>
                                                         <h3><?php echo $f['item_name']; ?></h3>
