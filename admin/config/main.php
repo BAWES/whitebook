@@ -21,7 +21,6 @@ return [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
-            'defaultRoles' => ['admin', 'author'],
         ],
         'themeURL' => [
             'class' => 'yii\web\UrlManager',
