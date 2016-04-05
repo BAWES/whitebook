@@ -27,7 +27,7 @@ if($event_status>0){
 {	
 	jQuery.ajax({
 		type:'POST',
-		url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('/product/addevent'); ?>",
+		url:"<?= Url::toRoute('/product/addevent'); ?>",
 		data:{'item_id':item_id},
 		success:function(data)
 		{
@@ -55,7 +55,7 @@ window.onload=addevent1(x);
 <div class="bs-example">
 <!-- <ul class="breadcrumb"> -->
 <?php 
-$this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRoute('/plan/plan/'.$slug);];
+$this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRoute('/plan/plan/'.$slug)];
 //$this->params['breadcrumbs'][] =$model['item_name'];
 ?>
 <?= Breadcrumbs::widget([
@@ -664,7 +664,7 @@ jQuery('#loading_img_list').hide();
 {	
 	jQuery.ajax({
 		type:'POST',
-		url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('product/addevent'); ?>",
+		url:"<?php Url::toRoute('product/addevent'); ?>",
 		data:{'item_id':item_id},
 		success:function(data)
 		{

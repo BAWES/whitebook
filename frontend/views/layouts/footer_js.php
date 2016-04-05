@@ -569,7 +569,7 @@ if(item_id!=0)
 }else{
  var item_name='item ';}
 jQuery.ajax({
-url:"<?= Url::to('/users/create_event'); ?>",
+url:"<?= Url::toRoute('/users/create_event'); ?>",
 type:"post",
 data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf,
 success:function(data,slider)
@@ -1480,7 +1480,7 @@ autoPlay:false
 { 
  jQuery.ajax({
   type:'POST',
-  url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('product/addevent'); ?>",
+  url:"<?= Url::toRoute('product/addevent'); ?>",
   data:{'item_id':item_id},
   success:function(data)
   {
@@ -1560,7 +1560,7 @@ window.onload=display_reset_password_modal;
 {
 jQuery.ajax({
 type:'POST',
-url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('product/addevent'); ?>",
+url:"<?= Url::toRoute('product/addevent'); ?>",
 data:{'item_id':item_id},
 success:function(data)
 {

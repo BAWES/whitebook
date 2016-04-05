@@ -38,7 +38,7 @@ Things I like</a>
 </div>
 <?php
 foreach ($customer_events as $key => $value) { ?>
-<a href="<?=  Url::toRoute('users/eventdetails'); ?><?= '/'.$value['slug']; ?>">
+<a href="<?=  Url::toRoute(['/users/eventdetails','slug'=>$value['slug']]); ?>">
 <div class="item">
 <h4><?php if(strlen($value['event_name'])>12){echo substr($value['event_name'], 0, 12).' ...';}else{ echo$value['event_name'];} ?></h4>
 <p><?= $value['event_date']; ?></p>

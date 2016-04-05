@@ -1,9 +1,10 @@
 <?php
 Yii::setAlias('uploads', '/backend/web/uploads/'); // backend
+Yii::setAlias('directory', realpath(dirname(__FILE__).'/../../'));
 
 Yii::setAlias('vendor_images', '@uploads/vendor_images/');
 Yii::setAlias('sales_guide_images', '@uploads/guide_images/');
-Yii::setAlias('vendor_item_images_210', '@uploads/vendor_images/');
+Yii::setAlias('@vendor_item_images_210', '@directory'.Yii::getAlias('@uploads').'/vendor_images/');
 Yii::setAlias('sub_category', '@uploads/subcategory_icon/');
 Yii::setAlias('gif_img', '@frontend_app_images/ajax-loader.gif');
 Yii::setAlias('sub_category', '@uploads/subcategory_icon/');

@@ -30,7 +30,7 @@ if ($event_status > 0) {
 
             jQuery.ajax({
                 type: 'POST',
-                url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('product/addevent'); ?>",
+                url: "<?php Url::toRoute('product/addevent'); ?>",
                 data: {'item_id': item_id},
                 success: function (data)
                 {

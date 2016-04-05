@@ -366,7 +366,7 @@ window.location="<?php echo Yii::$app->params['BASE_URL'];?>/events.html?type="+
 /* BEGIN load vendor based on category */
 jQuery('#loadvendor').change(function()
 {   
-var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('default/loadvendorlist'); ?>";   
+var path = "<?= Url::toRoute('default/loadvendorlist'); ?>";   
 jQuery.ajax({
 type:'POST',
 url: path,
@@ -388,7 +388,7 @@ jQuery('#customer_event_type').change(function()
 	if(jQuery(this).val()!=''){
 jQuery("#loader1").show();
 
-var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('default/loadeventlist'); ?>";   
+var path = "<?= Url::toRoute('default/loadeventlist'); ?>";   
 jQuery.ajax({
 type:'POST',
 url: path,
@@ -423,7 +423,7 @@ if (strconfirm == true)
 if(x!=''){
 jQuery("#loader1").show();
 
-var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('default/deleteevent'); ?>";   
+var path = "<?= Url::toRoute('default/deleteevent'); ?>";   
 jQuery.ajax({
 type:'POST',
 url: path,
@@ -455,7 +455,7 @@ function wishlistfilter()
 	var t_id= jQuery('#loadthemes').val();
 	if (c_id == "" || v_id == "" || a_id == "" || t_id == "")
 {
-var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('/default/loadwishlist'); ?>";   
+var path = "<?= Url::toRoute('/default/loadwishlist'); ?>";   
 jQuery("#loader2").show();
 jQuery("body").css({'position':'relative','display':'inline-block'});
 jQuery.ajax({
@@ -481,7 +481,7 @@ jQuery('#wishlist li:nth-child(5n)').addClass("margin-rightnone");
 {   
     jQuery.ajax({
         type:'POST',
-        url:"<?php echo Yii::$app->urlManager->createAbsoluteUrl('/product/addevent'); ?>",
+        url:"<?= Url::toRoute('/product/addevent'); ?>",
         data:{'item_id':item_id},
         success:function(data)
         {

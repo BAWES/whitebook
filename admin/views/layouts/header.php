@@ -72,7 +72,7 @@ use yii\helpers\Html;
                             <div class="iconset top-settings-dark"></div>
                         </a>
                         <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
-                            <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/profile"> My Account</a>
+                            <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/profile"> My Account</a>                            
                             </li>
                             <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/changepassword">Change password</a>
                             </li>
