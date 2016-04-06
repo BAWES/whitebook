@@ -6,11 +6,6 @@ use common\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
-$controller = get_class($this->context);
-$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-$s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s);
-$c_url1[0] = $slug;
 ?>
 
 <!-- coniner start -->
@@ -60,21 +55,15 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 <span class="title_filter">Categories</span>
 
 <select class="selectpicker" style="display: none;" id="main-category">
-<!-- <option name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
-<option name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
-<option name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">food-beverage</option> -->
-<!-- <option data-icon="venue-category">Venues</option> -->
-<option data-icon="venues-category" <?php  if($c_url1[0] == 'venues') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
-<option data-icon="invitation-category" <?php  if($c_url1[0] == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
-<option data-icon="food-category" name="category" value="food-beverage" <?php  if($c_url1[0] == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
-<option data-icon="decor-category" name="category" value="decor" <?php  if($c_url1[0] == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
-<option data-icon="supply-category" value="supplies" <?php  if($c_url1[0] == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
-<option data-icon="enter-category" value="entertainment" <?php  if($c_url1[0] == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
-<option data-icon="service-category" value="services" <?php  if($c_url1[0] == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
-<option data-icon="others-category" <?php  if($c_url1[0] == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
-<option data-icon="saythankyou-category" <?php  if($c_url1[0] == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'say-thank-you']) ?>">Say "Thank You"</option> 
-<!-- <option data-icon="other-category">Others</option>
-<option data-icon="say-category">Say Thank you</option> -->
+<option data-icon="venues-category" <?php  if($slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
+<option data-icon="invitation-category" <?php  if($slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
+<option data-icon="food-category" name="category" value="food-beverage" <?php  if($slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
+<option data-icon="decor-category" name="category" value="decor" <?php  if($slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
+<option data-icon="supply-category" value="supplies" <?php  if($slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
+<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
+<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
+<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
+<option data-icon="saythankyou-category" <?php  if($slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'say-thank-you']) ?>">Say "Thank You"</option> 
 </select>
 </div>
 </div>
@@ -92,7 +81,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 <!-- BEGIN CATEGORY FILTER  -->
 <?php
 /* Get slug name to find category */
-$subcategory = SubCategory::loadsubcat($cur_url);
+$subcategory = SubCategory::loadsubcat($slug);
 $col=1;
 foreach ($subcategory as $key => $value) {
 $t = $in ='';

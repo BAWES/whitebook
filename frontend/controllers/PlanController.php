@@ -114,29 +114,22 @@ class PlanController extends BaseController
 
         /* VENDOR HAVIG ATLEAST ONE PRODUCT */
         $vendor = Yii::$app->db->createCommand('SELECT wv.vendor_id,wv.vendor_name,wv.slug FROM `whitebook_vendor_item` as wvi inner join `whitebook_vendor` as wv ON wvi.vendor_id = wv.vendor_id and wvi.vendor_id IN("'.$active_vendors.'") and wv.vendor_status ="Active" and wv.approve_status = "Yes" and wvi.item_status="Active" and wvi.item_approved = "Yes" and wvi.trash="Default" and wvi.item_for_sale group by wvi.vendor_id')->queryAll();
-
-        /* BEGIN get current category to load sub category */
-        $c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-        //print_r($c_url);die;
-        $s = $c_url[count($c_url)-1];
-        $c_url1 = explode("?",$s);
-        $cur_url[0] = $slug;
         /* END get current category to load sub category */
 
         /* END GET VENDORS */
         if ($customer_id == '') {
             return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug,'cur_url'=>$cur_url[0]]);
+            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug]);
         } else {
             $usermodel = new Users();
             if (!empty($customer_id)) {
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
 
                 return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list,'cur_url'=>$cur_url[0]]);
+            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list]);
             } else {
                 return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug,'cur_url'=>$cur_url[0] ]);
+            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug]);
             }
         }
     }
