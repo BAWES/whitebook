@@ -557,42 +557,6 @@ class VendoritemController extends Controller
 		}
 	}
 
-	/* Vendor Item gallery images */
-	public function actionVendoritemgallery($id)
-	{
-		 $base = Yii::$app->basePath;
-		 $len = rand(1,1000);
-		 $model = new Image();
-		  $imagedata = Image::find()->where('item_id = :id', 'module_type = :status', [':id' => $id, ':status' => 'vendor_item'])->orderby(['vendorimage_sort_order'=>SORT_ASC])->all();
-		 if($model->load(Yii::$app->request->post()))
-		 {
-			$file = UploadedFile::getInstances($model, 'image_path');
-
-            if ($file) {
-				$i = count($imagedata)+1;
-                foreach ($file as $files) {
-					 $files->saveAs($base.'/web/uploads/vendor_images/' . $files->baseName . '_' . $len .'.' . $files->extension);
-                     $model->image_path=$files->baseName . '_' . $len .'.' . $files->extension;
-                     $model->item_id=$id;
-					 $model->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
-					 $model->image_user_type=1;
-					 $k= Yii::$app->db->createCommand()
-						->insert('whitebook_image', [
-								'image_path' => $model->image_path,
-								'item_id' => $id,
-								'image_user_id' =>$model->image_user_id,
-								'module_type'=>'vendor_item',
-								'vendorimage_sort_order' =>$i])
-						->execute();
-					$i++;
-                }
-            }
-             return $this->redirect(['vendoritemgallery?id='.$id]);
-		 }
-		 return $this->render('itemgallery', ['model'=>$model,'imagedata'=>$imagedata,]);
-
-	}
-
 	/* Vendor Item Image Drag SORT Order*/
 	public function actionImageorder()
     {
