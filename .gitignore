@@ -31,3 +31,8 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
+
+# Generated Robot Files
+frontend/web/robots.txt
+backend/web/robots.txt
+admin/web/robots.txt
