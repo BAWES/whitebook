@@ -2,6 +2,7 @@
 
 use common\models\Siteinfo;
 use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
 <!-- BEGIN HEADER -->
 
@@ -72,12 +73,12 @@ use yii\helpers\Html;
                             <div class="iconset top-settings-dark"></div>
                         </a>
                         <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
-                            <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/profile"> My Account</a>                            
+                            <li><a href="<?= Url::toRoute('site/profile'); ?>"> My Account</a>                            
                             </li>
-                            <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/changepassword">Change password</a>
+                            <li><a href="<?= Url::toRoute('/site/changepassword'); ?>">Change password</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(''); ?>admin/site/logout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                            <li><a href="<?= Url::toRoute('/site/logout'); ?>"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
                         </ul>
                     </li>
                     <!-- END CHAT SIDEBAR TOGGLE -->
