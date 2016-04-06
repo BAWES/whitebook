@@ -1,4 +1,4 @@
-<?php 
+<?php
 use Yii\helpers\Url;
 ?>
 
@@ -7,7 +7,7 @@ var jQuery = $;
 jQuery(document).ready(function () {
  jQuery('#phone,#reg_email').bind("paste",function(e) {
      e.preventDefault();
- }); 
+ });
 
 jQuery("#search_list_fail1").hide();
 /*Popup modal script start*/
@@ -19,11 +19,11 @@ jQuery('#myModal').modal('hide');
 alert("hi");
 });*/
 /* mobile hover menu start */
-jQuery(".mobile-menu .dropdown").click(function () {                            
+jQuery(".mobile-menu .dropdown").click(function () {
 //  jQuery('.dropdown-menu1', this).stop(true, true).slideDown("fast");
 //jQuery(this).toggleClass('open');
 jQuery(this).addClass('open');
-}, 
+},
 function () {
 //  jQuery('.dropdown-menu1', this).stop(true, true).slideUp("fast");
 //jQuery(this).toggleClass('open');
@@ -33,19 +33,19 @@ jQuery(this).removeClass('open');
 /* mobile hover menu end */
 
 <!-- web hover menu start -->
-jQuery(".desktop-menu .dropdown").hover(function () {                            
+jQuery(".desktop-menu .dropdown").hover(function () {
 jQuery('.dropdown-menu1', this).stop(true, true).slideDown("fast");
 jQuery(this).addClass('open');
-}, 
+},
 function () {
 jQuery('.dropdown-menu1', this).stop(true, true).slideUp("fast");
 jQuery(this).removeClass('open');
-}); 
+});
 /* web hover menu end */
 
 /* registration form checkbox  start  */
 jQuery('label#label_check1').click(function()
-{ 
+{
 
 if (jQuery('#agree_terms').attr('checked')) {
 jQuery("#agree_terms").attr("checked",false);
@@ -130,7 +130,7 @@ jQuery('body').removeClass('loading');
 jQuery('.index_redirect').click(function()
 {
 var a = jQuery(this).attr('data-hr');
-window.location.href = a; //Will take you to Google.             
+window.location.href = a; //Will take you to Google.
 });
 
 
@@ -164,7 +164,7 @@ resetpwdcheck();
 
 
 jQuery('#resetForm input ').keydown(function(e) {
-if (e.keyCode == 13) 
+if (e.keyCode == 13)
 {  resetpwdcheck();
 //jQuery('#login_msg').hide();
 }
@@ -185,9 +185,9 @@ var k=0;
 {
 jQuery('#reset_pwd_result').show();
 jQuery('#reset_pwd_result').html('Password should contain minimum six letters');return false;
-} 
+}
 if(password==conPassword)
-{ 
+{
 jQuery('#reset_pwd_result').hide();
 k=1;
 }
@@ -228,7 +228,7 @@ logincheck();
 });
 
 jQuery('#loginForm input ').keydown(function(e) {
-if (e.keyCode == 13) 
+if (e.keyCode == 13)
 {  logincheck();
 //jQuery('#login_msg').hide();
 }
@@ -236,9 +236,9 @@ if (e.keyCode == 13)
 function logincheck()
 {
 
-jQuery.noConflict();  
+jQuery.noConflict();
 if(jQuery('#loginForm').valid())
-{       
+{
 jQuery('#login_loader').show();
 var email=jQuery('#email').val();
 var password=jQuery('#password').val();
@@ -342,7 +342,7 @@ jQuery('#result').html('Enter registered email-id!<a id="boxclose" class="boxclo
 // Register save function ajax
 jQuery("#register").click(function()
 {
- 
+
 
 jQuery.noConflict();
 var gender=jQuery('#gender').val();
@@ -359,7 +359,7 @@ var i=j=k=l=m=z=0;
 var c=jQuery('input[type=checkbox]:checked').length;
 
 if(jQuery('input[type=checkbox]:checked').length == 0)
-{   
+{
  if(jQuery('#agree_terms').val()==0)
 {
 jQuery('#agree').show();
@@ -372,7 +372,7 @@ jQuery('#agree').hide();
 jQuery('#agree').html('');
 m=1;
 }
-if(password_length>=6){  
+if(password_length>=6){
 z=1;
 }else{
 z=0;
@@ -392,7 +392,7 @@ if((k==1)&&(z==1))
  else{
  jQuery('#con_pass').show();
  jQuery('#con_pass').html('Password and Confirm password should be minimum six letters and same');
-  
+
   }
 
 
@@ -478,7 +478,7 @@ jQuery("#loader1").hide();
 }
 });
 }
-else 
+else
 {
 if(x != ''){
 l=0;
@@ -486,7 +486,7 @@ jQuery("#customer_email").show();
 jQuery("#customer_email").html('Enter a valid email id');
 }
 }
-jQuery.noConflict(); 
+jQuery.noConflict();
 var form = jQuery("#register_form");
 if(form.valid() && i==1 && j==1 && l==1 && m==1 && k==1&& z==1)
 {
@@ -507,7 +507,7 @@ async:false,
 type:"post",
 data:"customer_name="+fname+"&customer_last_name="+lname+"&email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&gender="+gender+"&phone="+phone+"&password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
 success:function(data)
-{ 
+{
 if(data==0)
 {
 jQuery('#myModal1').modal('hide');
@@ -544,8 +544,8 @@ return false;
 <script>
 
 /* BEGIN ADD TO EVENT */
-jQuery('#create_event_button').click(function(){   
-jQuery.noConflict();  
+jQuery('#create_event_button').click(function(){
+jQuery.noConflict();
 var i=0;
 //var element = jQuery(this).parents('form');
 var event_type=jQuery('#event_type').val();
@@ -554,10 +554,10 @@ jQuery('#type_error').html('Kindly select Event type');
 i=1;
 }else{
 i=0;
-jQuery('#type_error').hide();        
+jQuery('#type_error').hide();
 }
 if(jQuery('#create_event').valid()&& (i==0))
-{       
+{
 jQuery('#event_loader').show();
 var event_date=jQuery('#event_date').val();
 var item_id=jQuery('#item_id').val();
@@ -575,7 +575,7 @@ data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&it
 success:function(data,slider)
 {
 
-jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){ 
+jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){
 jQuery(this).css('background','transparent','important');
 });
 /* Hide BG FOR EVENT SLIDER*/
@@ -586,17 +586,17 @@ jQuery('#eventresult').addClass('alert-success alert fade in');
 jQuery('#eventresult').html('Same event name already exists!<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
 }
 else if(data==1)
-{ 
+{
 jQuery(".eventErrorMsg").html('');
 jQuery('#EventModal').modal('hide');
-window.setTimeout(function(){location.reload()});  
+window.setTimeout(function(){location.reload()});
 }
 else if(data==2)
 {
 jQuery('#event_loader').hide();
 jQuery(".eventErrorMsg").html('');
 jQuery('#EventModal').modal('hide');
-window.setTimeout(function(){location.reload()});  
+window.setTimeout(function(){location.reload()});
 }
 },
 error:function(data)
@@ -610,28 +610,28 @@ error:function(data)
 
 
 jQuery('#cancel_button').click(function(){
- 
+
 var create_event = jQuery( "#create_event" ).validate();
 create_event.resetForm();
 jQuery(':input','#create_event')
 .not(':button, :submit, :reset, :hidden')
 jQuery('#type_error').html('');
- 
-});   
+
+});
 
 /* BEGIN EDIT TO EVENT */
 jQuery(document).on('click',"#update_event_button",function()
-{   
+{
 var event_type = jQuery('#edit_event_type').val();
-if(event_type==''){        
+if(event_type==''){
 jQuery('#type_error').html('Kindly select Event type');
 i=1;
 }else{
 i=0;
-jQuery('#type_error').hide();        
+jQuery('#type_error').hide();
 }
 if(jQuery('#update_event').valid()&& (i==0))
-{      
+{
 jQuery('#event_loader').show();
 var event_date=jQuery('#edit_event_date').val();
 var item_id=jQuery('#item_id').val();
@@ -661,7 +661,7 @@ jQuery('#login_success').modal('show');
 jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Event updated successfully!</span>');
 setTimeout(function() {$('#login_success').modal('hide');}, 2000);
 //jQuery('#EventModal').modal('hide');
-setTimeout(function(){locat(data)},2000);  
+setTimeout(function(){locat(data)},2000);
 }
 },
 error:function(data)
@@ -674,13 +674,13 @@ error:function(data)
 /* END EDIT TO EVENT */
 function locat(loc)
 {
- window.location = "<?= Yii::$app->params['BASE_URL']; ?>/event-details/"+loc; 
+ window.location = "<?= Yii::$app->params['BASE_URL']; ?>/event-details/"+loc;
 }
 </script>
 <script type="text/javascript">
 function show_register_modal()
 {
-jQuery.noConflict(); 
+jQuery.noConflict();
 jQuery('#myModal').modal('hide');
 jQuery('#forgotPwdModal').modal('hide');
 }
@@ -688,14 +688,14 @@ jQuery('#forgotPwdModal').modal('hide');
 
 function show_login_modal(x)
 {
-jQuery.noConflict(); 
+jQuery.noConflict();
 jQuery('#register').modal('hide');
 jQuery('#forgotPwdModal').modal('hide');
 jQuery('#event_status').val(x);
 }
 function show_login_modal_wishlist(x)
 {
-jQuery.noConflict(); 
+jQuery.noConflict();
 jQuery('#register').modal('hide');
 jQuery('#forgotPwdModal').modal('hide');
 jQuery('#favourite_status').val(x);
@@ -705,7 +705,7 @@ jQuery('#favourite_status').val(x);
 
 function show_mydata()
 {
-jQuery.noConflict(); 
+jQuery.noConflict();
 jQuery('#event_status').val(0);
 jQuery('#forgotPwdModal').modal('hide');
 jQuery('#myModal1').modal('hide');
@@ -717,7 +717,7 @@ jQuery('#item_id').val(0);
 
 function forgot_modal()
 {
-jQuery.noConflict(); 
+jQuery.noConflict();
 jQuery('#event_status').val(0);
 jQuery('#myModal').modal('hide');
 jQuery('#Signupmodel').modal('hide');
@@ -740,7 +740,7 @@ jQuery('#event_status').val(x);
 
 function show_create_event_form()
 {
-jQuery.noConflict(); 
+jQuery.noConflict();
 jQuery('#forgotPwdModal').modal('hide');
 jQuery('#myModal').modal('hide');
 jQuery('#Signupmodel').modal('hide');
@@ -748,7 +748,7 @@ jQuery('#Signupmodel').modal('hide');
 
 var reg_email=jQuery('#reg_email').val();
 jQuery(function () {
-jQuery.noConflict(); 
+jQuery.noConflict();
 jQuery("#reg_email").on('keyup keypress focusout',function () {
 var x=jQuery("#reg_email").val();
 var _csrf=jQuery('#_csrf').val();
@@ -760,7 +760,7 @@ data:"email="+x+"&_csrf="+_csrf,
 success:function(data)
 {
 if(data==1)
-{ 
+{
 jQuery("#customer_email").show();
 jQuery("#customer_email").html('Entered email id is already exists');
 }
@@ -783,7 +783,7 @@ jQuery("#forgot_button").click( function()
 forgot_password();
 });
 jQuery('#forgotForm input ').keydown(function(e) {
-if (e.keyCode == 13) 
+if (e.keyCode == 13)
 {
 if(validateEmail(reg_email)==false)
 {jQuery('#forgot_loader').hide();
@@ -798,13 +798,13 @@ forgot_password();
 
 function forgot_password()
 {
-jQuery.noConflict(); 
+jQuery.noConflict();
 var form = jQuery("#forgotForm");
 var reg_email=jQuery('#forget_email').val();
 var _csrf=jQuery('#_csrf').val();
 i=0;
 if(validateEmail(reg_email)==true)
-{ 
+{
 jQuery('span.forgotpwd').hide();
 jQuery('#forgot_loader').show();
 
@@ -844,12 +844,12 @@ jQuery('#forgot_loader').hide();
 jQuery('#forgot_result').addClass('alert-success alert fade in');
 jQuery('#forgot_result').html('Enter registered Email-id!<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
 
-//jQuery("#forgerErrorMsg").show(); 
-//jQuery("#forgerErrorMsg").html('Enter registered mail id');      
+//jQuery("#forgerErrorMsg").show();
+//jQuery("#forgerErrorMsg").html('Enter registered mail id');
 }
 }
 
-function validateEmail(email) { 
+function validateEmail(email) {
 // http://stackoverflow.com/a/46181/11236
 var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
 return re.test(email);
@@ -858,15 +858,15 @@ return re.test(email);
 
 jQuery('#search_input_header').keydown(function(e) {
  jQuery("#search_list_fail1").html('');
-if (e.keyCode == 13) 
-{ 
+if (e.keyCode == 13)
+{
  var search1=jQuery("#search_input_header").val();
  var search2 = search1.replace(' ', '-');
- 
+
  var url="<?php echo Url::toRoute('/search-result').'/'; ?>";
  var path=url.concat(search2);
  //alert(path);
- 
+
  window.location.href=path;
 }
 });
@@ -874,22 +874,22 @@ if (e.keyCode == 13)
 
 jQuery('#sear_button_submit').click(function(e) {
  jQuery("#search_list_fail1").html('');
- 
+
  var search1=jQuery("#search_input_header").val();
  if(search1!=''){
  var search2 = search1.replace(' ', '-');
- 
+
  var url="<?php echo Url::toRoute('/search-result/').'/'; ?>";
  var path=url.concat(search2);
  //alert(path);
- 
+
  window.location.href=path;
 }
 
 });
 jQuery('#search-terms1').keydown(function(e) {
 jQuery("#search_list_fail1").html('');
-if (e.keyCode == 13) 
+if (e.keyCode == 13)
 {
  var search1=jQuery("#search-terms1").val();
  var search2 = search1.replace(' ', '-');
@@ -900,27 +900,27 @@ if (e.keyCode == 13)
 });
 jQuery('#search-terms2').keydown(function(e) {
 jQuery("#search_list_fail1").html('');
-if (e.keyCode == 13) 
+if (e.keyCode == 13)
 {
  var url1="<?php echo Yii::$app->params['BASE_URL'];?>";
  var search1=jQuery("#search-terms2").val();
  var search2 = search1.replace(' ', '-');
  var url="<?php echo Url::toRoute('/search-result/').'/';?>";
  var path=url.concat(search2);
- 
+
  window.location.replace(path);
- 
+
 }
 });
 
 jQuery("#search_input_header").keyup(function(e){if(e.keyCode == 8)
 {
- 
+
   jQuery("#search_list_fail1").html('');
  var search=jQuery("#search_input_header").val();
  search_data(search);
  }
-});  
+});
 jQuery("#search-terms1").on('keyup',function () {
   jQuery("#search_list_fail1").html('');
  var search=jQuery("#search-terms1").val();
@@ -946,7 +946,7 @@ success:function(data)
   }
   else
   {jQuery("#search_list").html(data);
-   jQuery("#search_list_fail1").html('');}   
+   jQuery("#search_list_fail1").html('');}
 
 }
 });
@@ -964,10 +964,10 @@ type:"POST",
 async:false,
 data:"search="+search+"&_csrf="+_csrf,
 success:function(data)
-{ 
+{
   if(data==0)
   {jQuery("#mobile_search_list").html('No data found');
-  }  
+  }
   else
   {jQuery("#mobile_search_list").html(data);}
 }
@@ -989,7 +989,7 @@ jQuery("#search-terms2").keyup(function(e){if(e.keyCode == 8)
  var search=jQuery("#search-terms2").val();
  mobile_search_data(search);
  }
-});  
+});
 jQuery("#search-terms2").on('keyup',function () {
  var search=jQuery("#search-terms2").val();
  mobile_search_data(search);
@@ -997,7 +997,7 @@ jQuery("#search-terms2").on('keyup',function () {
 
 
 jQuery("#search_input_header").on('keyup',function () {
- 
+
  var search=jQuery("#search_input_header").val();
 // if(search.length>1){
  search_data(search);
@@ -1005,7 +1005,7 @@ jQuery("#search_input_header").on('keyup',function () {
 });
 
 jQuery('#search-labl').bind('click',function(){
- 
+
 jQuery("#search_list").html('');
 });
 
@@ -1013,7 +1013,7 @@ jQuery("#search_list").html('');
 
 
 function add_to_favourite(x)
-{     
+{
 
 jQuery.ajax({
 url:"<?= Url::toRoute('/users/add_to_wishlist'); ?>",
@@ -1022,7 +1022,7 @@ data:"item_id="+x+"&_csrf="+_csrf,
 async: false,
 success:function(data)
 {
- 
+
 var modal_name='add_to_event'+x;
 if(data==1)
 {
@@ -1056,7 +1056,7 @@ function remove_from_favourite(x)
 {
  var strconfirm = confirm("Are you sure you want to delete?");
 if (strconfirm == true)
-{  
+{
 jQuery.ajax({
 url:"<?= Url::toRoute('/users/remove_from_wishlist'); ?>",
 type:"post",
@@ -1068,7 +1068,7 @@ success:function(data)
  jQuery('#wishlist #'+x).remove();
 //alert(data);
 if(data==1)
-{ 
+{
 jQuery("#oner").load("<?= Url::toRoute('/product/event-slider'); ?>");
 jQuery('#login_success').modal('show');
 jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Item remove from your favourite list</span>');
@@ -1099,7 +1099,7 @@ else if(data==-1)
 <?php $giflink=Yii::$app->params['BASE_URL'].Yii::getAlias('@gif_img');?>
 
 jQuery(".add_to_favourite").click(function(){
- 
+
 jQuery('#loading_img_list').show();
 jQuery('#loading_img_list').html('<img id="loading-image" src="<?= $giflink;?>" alt="Loading..." />');
 
@@ -1116,9 +1116,9 @@ data:"item_id="+item_id+"&_csrf="+_csrf,
 success:function(data)
 {
 jQuery('#heart_fave').html(data);
-jQuery('#loading_img_list').hide(); 
+jQuery('#loading_img_list').hide();
 }
-});           
+});
 });
 
 
@@ -1135,18 +1135,18 @@ jQuery.ajax({
 
 url:"<?= Url::toRoute('/users/add_to_wishlist');  ?>",
 type:"post",
-data:"item_id="+item_id+"&_csrf="+_csrf,         
+data:"item_id="+item_id+"&_csrf="+_csrf,
 success:function(data)
 {
 jQuery('#heart_fave').html(data);
 jQuery('#loading_img').hide();
 }
-});      
-<?php }?>    
-});       
+});
+<?php }?>
+});
 
 function add_to_event(x)
-{         
+{
  //alert(jQuery(data).find('desc_popup_cont').text());
 var item_name=jQuery('.desc_popup_cont h3').text();
 var event_id=jQuery('#eventlist'+x).val();
@@ -1160,12 +1160,12 @@ type:"post",
 data:"event_id="+event_id+"&item_id="+x+"&_csrf="+_csrf,
 async: false,
 success:function(data)
-{  
+{
 if(data==1)
 {
 jQuery("#event-slider").load("<?= Url::toRoute('/product/event-slider'); ?>");
 jQuery('#add_to_event_loader').hide();
-jQuery('#add_to_event').modal('hide');                                       
+jQuery('#add_to_event').modal('hide');
 jQuery('#login_success').modal('show');
 jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">"'+item_name+'" successfully added to "'+event_name+'" category!</span>');
 window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
@@ -1252,11 +1252,11 @@ jQuery('#result').hide();
 window.setTimeout(function(){location.reload()},1000)
 });*/
 
-jQuery(".close").click(function () { 
+jQuery(".close").click(function () {
  all_form_reset();
 });
 function all_form_reset(){
-  
+
 var loginForm = jQuery( "#loginForm" ).validate();
 loginForm.resetForm();
 jQuery(':input','#loginForm')
@@ -1342,7 +1342,7 @@ jQuery(this).parent().find(".glyphicon-menu-down").removeClass("glyphicon-menu-d
 function show_close(){
  if(jQuery('#search-terms').val()!='')
  {
-  
+
  jQuery('#search-close').addClass('visible');
  }
  else
@@ -1354,16 +1354,16 @@ function show_close(){
 
 function show_close3(){
  if(jQuery('#search_input_header').val()!='')
- { 
-    
+ {
+
  jQuery('#search-close1').addClass('visible');
  }
- 
+
 
 }
 /*clear search 16/dec/2015 */
 /*jQuery('.icon-search_clear').click(function(){
-   jQuery('#search-close1').removeClass('visible');  
+   jQuery('#search-close1').removeClass('visible');
 });*//**/
 /*Onkey press search close script end 19-10-2015*/
 
@@ -1372,13 +1372,13 @@ jQuery('.search-lbl-mobile').click(function()
 {
 if(jQuery('.mobile-menu').hasClass('open-search-menu'))
 {
-  
+
   jQuery("#mobile-sid").removeClass('open-search-menu')
- 
+
 }
 else{
- 
- jQuery("#mobile-sid").addClass('open-search-menu');  
+
+ jQuery("#mobile-sid").addClass('open-search-menu');
 }
 //(jQuery('.mobile-menu').hasClass('open-search-menu'))?jQuery(this).removeClass('open-search-menu'):jQuery(this).addClass('open-search-menu');
 });
@@ -1387,8 +1387,8 @@ else{
 jQuery('#search-close').click(function(){
 jQuery( "#mobile_search_list" ).html('');
 jQuery( "#mobile_search_fail" ).html('');
-jQuery( "#search-terms2" ).val(''); 
- 
+jQuery( "#search-terms2" ).val('');
+
 });
 
 jQuery('.js-search-cancel,#search_list ul li a').click(function()
@@ -1452,18 +1452,18 @@ autoPlay:false
 </script>
 <script type="text/javascript">
     function Searchinvitee(event_id)
-    {      
+    {
      var search_value;
      if(jQuery('#inviteesearch').val() !="")
      {
-      search_value = jQuery('#inviteesearch').val(); 
+      search_value = jQuery('#inviteesearch').val();
      }
      else if( jQuery('#inviteesearch1').val()!="")
      {
-      search_value = jQuery('#inviteesearch1').val(); 
+      search_value = jQuery('#inviteesearch1').val();
      }
-     
-        var path = <?= Url::toRoute(['/eventinvitees/index']); ?> ;
+
+        var path = "<?= Url::toRoute(['eventinvitees/index']); ?>" ;
         jQuery.ajax({
             url:path,
             type:'POST',
@@ -1473,24 +1473,24 @@ autoPlay:false
                 jQuery('.add_contact_table').html(data);
             }
         });
-    }   
+    }
 
 /* BEGIN ADD EVENT */
  function addevent(item_id)
-{ 
+{
  jQuery.ajax({
   type:'POST',
   url:"<?= Url::toRoute('product/addevent'); ?>",
   data:{'item_id':item_id},
   success:function(data)
   {
-   jQuery('#addevent').html(data); 
+   jQuery('#addevent').html(data);
    jQuery('#eventlist'+item_id).selectpicker('refresh');
    jQuery('#add_to_event').modal('show');
-    
+
   }
  });
-} 
+}
 /* END ADD EVENT */
 
  function default_session_data(x)
@@ -1499,7 +1499,7 @@ autoPlay:false
  if(x==1)
  {jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Your Login successfully</span>');
  window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);}
- else 
+ else
  {
  jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Success! Your are login and "'+x+'" add to favourite successfully!</span>');}
 /*  jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" >Your Login successfully</span>');*/
@@ -1517,17 +1517,17 @@ window.onload=default_session_data(<?= Yii::$app->session->get('favourite_status
 <?php Yii::$app->session->set('favourite_status',''); }?>
 
 function display_event_modal()
-{ 
+{
 jQuery('#EventModal').modal('show');
 }
- 
+
 
 <?php if(Yii::$app->session->get('create_event')==1) { ?>
 window.onload=display_event_modal();
 <?php Yii::$app->session->set('create_event','0'); } ?>
 </script>
 
-<?php 
+<?php
 echo $reset_password=Yii::$app->session->get('reset_password_mail');
 echo $final_reset=Yii::$app->session->get('final_reset');
 //if((!empty($reset_password))&&($reset_password!=0)){
@@ -1535,14 +1535,14 @@ if((!empty($reset_password))){
 ?>
 <script type="text/javascript">
 function display_reset_password_modal()
-{ 
+{
  var x='<?=$reset_password; ?>';
  if(x!=1){
 jQuery('#resetPwdModal').modal('show');
 jQuery('#userid1').val('<?= $reset_password;?>');
 <?php $reset_password=Yii::$app->session->set('reset_password_mail',''); ?>
 }else{
- 
+
 jQuery('#login_success').modal('show');
 jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Password reset failed!</span>');
 window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
@@ -1564,12 +1564,12 @@ url:"<?= Url::toRoute('product/addevent'); ?>",
 data:{'item_id':item_id},
 success:function(data)
 {
-jQuery('#addevent').html(data); 
+jQuery('#addevent').html(data);
 jQuery('#eventlist'+item_id).selectpicker('refresh');
 jQuery('#add_to_event').modal('show');
 }
 });
-} 
+}
 /* END ADD EVENT */
 </script>
 <?php
@@ -1581,7 +1581,7 @@ var x='<?= $event_status;?>';
 window.onload=addevent1(x);
 </script>
 <?php Yii::$app->session->set('event_status','0');} ?>
-       
+
 
 <script type="text/javascript">
 function show_activate_modal_true()
@@ -1612,7 +1612,7 @@ if (documentClick){
 
 /* END RESPONSIVE MENU SINGLE CLICK TO OPEN SUB MENUS */
 </script>
-<?php 
+<?php
 if(Yii::$app->session->get('key')==1){
 ?>
 <script type="text/javascript">
@@ -1620,7 +1620,7 @@ window.onload=show_activate_modal_true();
 </script>
 <?php Yii::$app->session->set('key','0');} ?>
 
-<?php 
+<?php
 if(Yii::$app->session->get('key')==2){
 ?>
 <script type="text/javascript">
@@ -1654,7 +1654,7 @@ window.onload=show_register_modal_true();
 <script type="text/javascript">
 /* Registration Completed start*/
 function show_event_modal_true()
-{ 
+{
  var event_name='<?=Yii::$app->session->get('event_name');?>';
  var item_name='<?=Yii::$app->session->get('item_name');?>';
  jQuery('#login_success').modal('show');
