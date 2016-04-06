@@ -45,7 +45,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    //'logout' => ['post'],
                 ],
             ],
         ];
@@ -65,10 +65,6 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            $this->redirect('login');
-        }
-
         $vendoritemcnt = Vendoritem::itemcount();
         $monthitemcnt = Vendoritem::itemmonthcount();
         $dateitemcnt = Vendoritem::itemdatecount();
@@ -109,16 +105,11 @@ class SiteController extends Controller
         $session = Yii::$app->session;
         Yii::$app->user->logout();
         $session->destroy();
-
         return $this->redirect('login');
     }
 
     public function actionRecoverypassword()
     {
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            $this->redirect('login');
-        }
-
         $model = new PasswordForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $form = Yii::$app->request->post('PasswordForm');
@@ -149,10 +140,6 @@ class SiteController extends Controller
     }
     public function actionChangepassword()
     {
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            $this->redirect('login');
-        }
-
         $model = new PasswordForm();
         $model->scenario = 'change';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -200,10 +187,6 @@ class SiteController extends Controller
      */
     public function actionProfile($id = false)
     {
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            $this->redirect('login');
-        }
-
         $query = Admin::find()->where('id = '.Yii::$app->user->getId())->one();
         $query->scenario = 'profile';
         if ($query->load(Yii::$app->request->post())) {
@@ -256,10 +239,6 @@ class SiteController extends Controller
 
     public function actionGalleryitem()
     {
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            $this->redirect('login');
-        }
-
         $model = new UploadForm();
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
