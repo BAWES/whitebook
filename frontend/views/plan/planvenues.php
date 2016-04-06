@@ -60,16 +60,19 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 <span class="title_filter">Categories</span>
 
 <select class="selectpicker" style="display: none;" id="main-category">
+<!-- <option name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
+<option name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
+<option name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">food-beverage</option> -->
 <!-- <option data-icon="venue-category">Venues</option> -->
-<option data-icon="venues-category" <?php  if($c_url1[0] == 'venues') { ?> selected="selected"<?php } ?> name="category" value="venues"><a href="#">Venues</a></option>
-<option data-icon="invitation-category" <?php  if($c_url1[0] == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="invitations"><a href="#">Invitations</a></option>
-<option data-icon="food-category" name="category" value="food-beverage" <?php  if($c_url1[0] == 'food-beverage') { ?> selected="selected"<?php } ?>><a href="#">Food & Beverage</a></option>
-<option data-icon="decor-category" name="category" value="decor" <?php  if($c_url1[0] == 'decor') { ?> selected="selected"<?php } ?>><a href="#">Decor</a></option>
-<option data-icon="supply-category" value="supplies" <?php  if($c_url1[0] == 'supplies') { ?> selected="selected"<?php } ?>><a href="#">Supplies</a></option>
-<option data-icon="enter-category" value="entertainment" <?php  if($c_url1[0] == 'entertainment') { ?> selected="selected"<?php } ?>><a href="#">Entertainment</a></option>
-<option data-icon="service-category" value="services" <?php  if($c_url1[0] == 'services') { ?> selected="selected"<?php } ?>><a href="#">Services</a></option>
-<option data-icon="others-category" <?php  if($c_url1[0] == 'others') { ?> selected="selected"<?php } ?> name="category" value="others"><a href="#">Others</a></option>
-<option data-icon="saythankyou-category" <?php  if($c_url1[0] == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="say-thank-you"><a href="#">Say "Thank You"</a></option>
+<option data-icon="venues-category" <?php  if($c_url1[0] == 'venues') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
+<option data-icon="invitation-category" <?php  if($c_url1[0] == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
+<option data-icon="food-category" name="category" value="food-beverage" <?php  if($c_url1[0] == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
+<option data-icon="decor-category" name="category" value="decor" <?php  if($c_url1[0] == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
+<option data-icon="supply-category" value="supplies" <?php  if($c_url1[0] == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
+<option data-icon="enter-category" value="entertainment" <?php  if($c_url1[0] == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
+<option data-icon="service-category" value="services" <?php  if($c_url1[0] == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
+<option data-icon="others-category" <?php  if($c_url1[0] == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
+<option data-icon="saythankyou-category" <?php  if($c_url1[0] == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'say-thank-you']) ?>">Say "Thank You"</option> 
 <!-- <option data-icon="other-category">Others</option>
 <option data-icon="say-category">Say Thank you</option> -->
 </select>
@@ -88,13 +91,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 <div id="accordion" class="panel-group">
 <!-- BEGIN CATEGORY FILTER  -->
 <?php
-/* BEGIN get current category to load sub category */
-$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-$s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s);
-$c_url1[0] = $slug;
 /* Get slug name to find category */
-$subcategory = SubCategory::loadsubcat($c_url1[0]);
+$subcategory = SubCategory::loadsubcat($cur_url);
 $col=1;
 foreach ($subcategory as $key => $value) {
 $t = $in ='';
@@ -373,7 +371,7 @@ if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php 
 <?php } ?>
 </div>
 
-<a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('').'product/';?><?php echo $value['slug'];?>" title="" ><?= Html::img(Yii::getAlias("@vendor_images1/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
+<a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('').'product/';?><?php echo $value['slug'];?>" title="" ><?= Html::img(Yii::getAlias("@vendor_images/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
 </div>
 <div class="events_descrip">
 <a href="<?php echo Yii::$app->params['BASE_URL'];?>/product/<?php echo $value['slug'];?>" title=""><?= $value['vendor_name']  ?>
@@ -615,8 +613,9 @@ jQuery("#planloader").hide();
 jQuery('#main-category').change(function(){
 //alert(jQuery('option[name=category]').val());
 var s = jQuery('#main-category :selected').val();
-var hostname = window.location.host;
-location.href = 'http://'+hostname+'/products/'+jQuery(this).val();
+var hostname = window.location.href;
+var newUrl1 = url.substring(0, url.indexOf('products'));
+window.location.href = jQuery(this).val();
 });
 /* END load category and reload the page */
 var loadmore=0;
