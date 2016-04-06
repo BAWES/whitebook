@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		<div class="row">
 			<div class="control-group  col-md-5" style="width: 100%;">
-				<div class="checkbox checkbox check-success"> <?= Html::a('Forgot Password', ['/admin/site/recoverypassword'], ['class'=>'link-title']) ?>&nbsp;&nbsp;
+				<div class="checkbox checkbox check-success"> <?= Html::a('Forgot Password', ['/site/recoverypassword'], ['class'=>'link-title']) ?>&nbsp;&nbsp;
 					<br>
 					<?= $form->field($model, 'rememberMe')->checkbox(array('label'=>'rememberMe')); ?>
 				</div>

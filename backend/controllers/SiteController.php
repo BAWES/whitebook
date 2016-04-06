@@ -27,7 +27,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'Recoverypassword'],
+                        'actions' => ['login', 'error', 'recoverypassword'],
                         'allow' => true,
                     ],
                     [
@@ -178,11 +178,15 @@ class SiteController extends Controller
                 $randomString = substr(str_shuffle(md5(time())),0,$length);
                 $password = Yii::$app->getSecurity()->generatePasswordHash($randomString);
                 $subject = 'Password Recovery';
-                $body = 'User id : '.$form['vendor_contact_email'] . ', Your New Password : '.$randomString;
-                $message = 'Check your email. New password send to your email id.';
-                Yii::$app->newcomponent->sendmail($form['vendor_contact_email'], $subject, $body, $message);
+                $message = 'User id : '.$form['vendor_contact_email'] . ', Your New Password : '.$randomString;
+                $body = '';
+                Yii::$app->newcomponent->sendmail($form['vendor_contact_email'], $subject, $body, $message,'FORGOT-PASSWORD');
                 $command = Yii::$app->db->createCommand('UPDATE whitebook_vendor SET vendor_password="'.$password.'" WHERE vendor_contact_email="'.$form['vendor_contact_email'].'"');
                 $command->execute();
+                 if($command)
+                {
+                    echo Yii::$app->session->setFlash('success', 'New password send to your registered email-id.');
+                }
                 return $this->redirect('recoverypassword');
             }
             else{

@@ -24,16 +24,15 @@ AppAsset::register($this);
 <meta content="" name="description" />
 <meta content="" name="author" />
 <!-- BEGIN CORE CSS FRAMEWORK -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/boostrapv3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/boostrapv3/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>css/animate.min.css" rel="stylesheet" type="text/css"/>
+<link href="<?= Yii::getAlias('@themes'.'/plugins/pace/pace-theme-flash.css') ?>" rel="stylesheet" type="text/css" media="screen"/>
+<link href="<?= Yii::getAlias('@themes'.'/plugins/boostrapv3/css/bootstrap.min.css') ?>" rel="stylesheet" type="text/css"/>
+<link href="<?= Yii::getAlias('@themes'.'/plugins/boostrapv3/css/bootstrap-theme.min.css') ?>" rel="stylesheet" type="text/css"/>
+<link href="<?= Yii::getAlias('@themes'.'/css/animate.min.css'); ?>" rel="stylesheet" type="text/css"/>
 <!-- END CORE CSS FRAMEWORK -->
 <!-- BEGIN CSS TEMPLATE -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>css/style.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>css/responsive.css" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>css/custom-icon-set.css" rel="stylesheet" type="text/css"/>
+<link href="<?= Yii::getAlias('@themes'.'/css/style.css'); ?>" rel="stylesheet" type="text/css"/>
+<link href="<?= Yii::getAlias('@themes'.'/css/responsive.css'); ?>" rel="stylesheet" type="text/css"/>
+<link href="<?= Yii::getAlias('@themes'.'/css/custom-icon-set.css'); ?>" rel="stylesheet" type="text/css"/>
 <!-- END CSS TEMPLATE -->
 </head>
 <!-- END HEAD -->
@@ -42,7 +41,7 @@ AppAsset::register($this);
 <div class="container">
   <div class="row login-container">
            <div class="margin text-center" style="margin-top: 50px;  margin-bottom: 25px;">
-			<a href="#" target="_blank"><img src="/backend/web/uploads/app_img/logo_login.png" class="logo" alt="" data-src="/backend/web/uploads/app_img/logo_login.png" data-src-retina="/backend/web/uploads/app_img/logo_login.png" width="" height=""/></a>
+			<a href="#" target="_blank"><?= Html::img("@web/uploads/app_img/logo_login.png") ?></a>
 			</div>
 
        <div class="col-md-5 col-md-offset-4" style="padding: 1% 8% 3% 8%;  background: white;  width: auto; border-radius:20px; margin-left:30%;">
@@ -55,7 +54,7 @@ AppAsset::register($this);
 				echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash,'closeButton'=>['label'=>'']]);
 			} ?>
 
-			<?php $form = ActiveForm::begin(['id' => 'login-forms', 'action' => 'site/recoverypassword']); ?> 		
+			<?php $form = ActiveForm::begin(['id' => 'login-forms']); ?> 		
 
 		<div class="row">
 		<div class="form-group col-md-12">
@@ -67,20 +66,12 @@ AppAsset::register($this);
 			<?= Html::submitButton('Recovery password',['class' => 'btn btn-lg btn-success btn-block', 'name' => 'login-button']) ?>
 		</div>
 		 <div class="col-md-5">
-		 <?= Html::a('Cancel', ['default/login', ], ['class' => 'btn btn-danger']) ?>
+		 <?= Html::a('Cancel', ['site/login', ], ['class' => 'btn btn-danger']) ?>
 		 </div>
         <?php ActiveForm::end(); ?>
 
  </div>
 </div>
 <!-- END CONTAINER -->
-<!-- BEGIN CORE JS FRAMEWORK-->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-1.8.3.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/pace/pace.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>js/login.js" type="text/javascript"></script>
-<!-- BEGIN CORE TEMPLATE JS -->
-<!-- END CORE TEMPLATE JS -->
 </body>
 </html>

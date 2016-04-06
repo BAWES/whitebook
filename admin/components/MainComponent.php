@@ -157,7 +157,7 @@ class MainComponent extends Component
             <tr>
             <td width="20"></td>
             <td style=" font:normal 14px/21px arial; color:#333333;">
-            Hi customer,
+            Hi user,
 
             </td>
             <td width="20"></td>

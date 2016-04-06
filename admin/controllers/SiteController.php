@@ -32,7 +32,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'Recoverypassword'],
+                        'actions' => ['login', 'error', 'recoverypassword'],
                         'allow' => true,
                     ],
                     [
@@ -122,12 +122,15 @@ class SiteController extends Controller
                 $randomString = substr(str_shuffle(md5(time())), 0, $length);
                 $password = Yii::$app->getSecurity()->generatePasswordHash($randomString);
                 $subject = 'Password Recovery';
-                $body = 'User id : '.$form['admin_email'].', Your New Password : '.$randomString;
-                $message = 'Check your email. New password send to your email id.';
-                Yii::$app->newcomponent->sendmail($form['admin_email'], $subject, $body, $message);
+                $body = '';
+                $message = 'User id : '.$form['admin_email'].', Your New Password : '.$randomString;
+                Yii::$app->newcomponent->sendmail($form['admin_email'], $subject, $body, $message,'FORGOT-PASSWORD');
                 $command = Yii::$app->db->createCommand('UPDATE whitebook_admin SET admin_password="'.$password.'" WHERE admin_email="'.$form['admin_email'].'"');
                 $command->execute();
-
+                if($command)
+                {
+                    echo Yii::$app->session->setFlash('success', 'New password send to your registered email-id.');
+                }
                 return $this->redirect('recoverypassword');
             } else {
                 echo Yii::$app->session->setFlash('danger', 'Email id is not registered!');
