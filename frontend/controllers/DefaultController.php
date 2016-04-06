@@ -138,10 +138,10 @@ class DefaultController extends BaseController
         $result = array_unique($result);
 
         return $this->render('/default/directory', [
-      'category' => $main_category,
-      'directory' => $directory,
-      'first_letter' => $result,
-    ]);
+          'category' => $main_category,
+          'directory' => $directory,
+          'first_letter' => $result,
+        ]);
     }
 
     public function actionSearchdirectory()
@@ -389,7 +389,7 @@ class DefaultController extends BaseController
 
                 return $this->render('/default/vendor_profile', [
               'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes, 'vendorData' => $vendorData,
-              'category' => $main_category, 'customer_events' => $customer_events, 'customer_events_list' => $customer_events_list,
+              'category' => $main_category, 'customer_events' => $customer_events, 'customer_events_list' => $customer_events_list,'slug'=>$slug
             ]);
             }
         }

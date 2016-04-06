@@ -9,10 +9,6 @@ if(isset($_GET['type']))
 {
 $type=$_GET['type'];
 }
-
-$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");                           
-$s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s); 
 ?>
 <section id="inner_pages_white_back">
 <div class="container paddng0">
@@ -26,16 +22,16 @@ $c_url1 = explode("?",$s);
 <div class="tab_sections"> 
 <div id="exTab2"> 
 <ul class="nav nav-tabs">
-<li class="col-md-6 col-xs-6 padding0 first-event-tab <?php if($c_url1[0]=='events'){echo 'active';}?>">
+<li class="col-md-6 col-xs-6 padding0 first-event-tab <?php if($slug=='events'){echo 'active';}?>">
 <a data-toggle="tab" href="#1" aria-expanded="false">EVENTS</a>
 </li>
-<li class="col-md-6 col-xs-6 padding0 second-event-tab <?php if($c_url1[0]=='thingsilike'){echo 'active';}?>"><a data-toggle="tab" href="#2" aria-expanded="true"><span class="heart-icon">THINGS I LIKE</span></a>
+<li class="col-md-6 col-xs-6 padding0 second-event-tab <?php if($slug=='thingsilike'){echo 'active';}?>"><a data-toggle="tab" href="#2" aria-expanded="true"><span class="heart-icon">THINGS I LIKE</span></a>
 </li>
 </ul>
 
 <div class="tab-content">
 <!-- <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader"></div> -->
-<div id="1" class="tab-pane <?php if($c_url1[0]=='events'){echo 'active';}?>">
+<div id="1" class="tab-pane <?php if($slug=='events'){echo 'active';}?>">
 <div class="cat_events_items">
 <div class="select_category_sec">
 <div class="select_boxes">                                   
@@ -68,7 +64,7 @@ foreach ($customer_events as $key => $value) { ?>
 </a>                
 <?php }  ?>                                                     
 <li>
-<div class="thing_inner_items border_none <?php if($c_url1[0]=='thingsilike'){echo 'active';}?>">
+<div class="thing_inner_items border_none <?php if($slug=='thingsilike'){echo 'active';}?>">
 <a href="#" data-toggle="modal" data-target="#EventModal" title="">&nbsp;</a>
 </div>
 </li>
@@ -78,7 +74,7 @@ foreach ($customer_events as $key => $value) { ?>
 
 </div>
 
-<div id="2" class="tab-pane second_event <?php if($c_url1[0]=='thingsilike'){echo 'active';}?>">
+<div id="2" class="tab-pane second_event <?php if($slug=='thingsilike'){echo 'active';}?>">
 <a class="filter-link" id="filter-toggle" style="display:none;">Filter</a>
 <div class="category_select_box panel-collapse collapse" id="collapseFilter"><form>
 

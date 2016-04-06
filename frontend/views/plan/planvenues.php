@@ -649,10 +649,7 @@ else
 if(category_name =="" && theme_name =="" && vendor_name =="")
 {
 window.history.pushState("test", "Title", newUrl);
-slug = <?php  $c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-$s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s);
-echo '"'.$c_url1[0].'";';
+slug = <?php echo $slug; ?>
 ?>
 }
 

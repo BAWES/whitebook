@@ -561,7 +561,6 @@ $p[] = $o;
 $p = array_unique($p);
 $themelist = Themes::load_all_themename($p);
 
-
 /*  end */
 $avail_sale = $category_id = $vendor = $theme = '';
 $customer_wishlist = $model->get_customer_wishlist($customer_id, $wish_limit, $offset, $category_id, $price, $vendor, $avail_sale, $theme);
@@ -573,7 +572,7 @@ $user_events = Events::find()->where(['customer_id' => Yii::$app->params['CUSTOM
 /* END load user events */
 
 return $this->render('events', ['event_type' => $event_type, 'customer_event_type' => $customer_event_type, 'customer_events' => $customer_events, 'customer_events_count' => $customer_events_count, 'customer_wishlist' => $customer_wishlist, 'customer_wishlist_count' => $customer_wishlist_count, 'vendor' => $vendor, 'category' => $categorylist,
-'themes' => $themes, 'customer_unique_events' => $customer_unique_events, 'categorylist' => $categorylist, 'vendorlist' => $vendorlist, 'themelist' => $themelist, ]);
+'themes' => $themes, 'customer_unique_events' => $customer_unique_events, 'categorylist' => $categorylist, 'vendorlist' => $vendorlist, 'themelist' => $themelist,'slug'=>'events' ]);
 }
 
 public function actionRemove_from_wishlist()

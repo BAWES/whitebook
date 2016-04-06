@@ -72,16 +72,6 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRou
 </div>
 </div>
 <div class="plan_venues" id="wrapper">
-<?php
-/* BEGIN get current category to load sub category */                      
-$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");                           
-$s = $c_url[count($c_url)-1];
-//$c_url1 = explode("?",$s);                             
-$c_url1[0] = $slug;                             
-
-?>
-<?php //if(!empty($imageData)){
-if(1){ ?>
 <div class="overlay"></div>
 <div class="col-md-3 paddingleft0" id="left_side_cate">
 <div class="filter_content">
@@ -98,14 +88,6 @@ if(1){ ?>
 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 <div id="accordion" class="panel-group">
 	
-<!-- BEGIN CATEGORY FILTER  -->					   
-<?php        
-/* BEGIN get current category to load sub category */                      
-/*$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");                           
-$s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s);     */                      
-/* Get slug name to find category */   
-?>
 <!--  END CATEGORY FILTER-->
 <!--  BEGIN THEME FILTER-->
 <div class="panel panel-default" >
@@ -238,7 +220,7 @@ if($min_kd > 0 )
 </div>
 </div>
 </div>
-<?php } ?>
+
 <div class="col-md-9 paddingright0">
 <div class="banner_section_plan">
 	<h3>Search Result for:<?= $search?> (<?= count($imageData);?>)</h3>
@@ -600,13 +582,6 @@ if(theme_name =="" && vendor_name =="")
 {			
 window.history.pushState("test", "Title", newUrl);  
 slug = '<?= $slug;?>';
-//slug = 
-<?php /* $c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");                           
-$s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s); 
-echo '"'.$c_url1[0].'";';
-*/ ?>   
-
 } 
 
 if(theme_name !="" || vendor_name !="" || price_val !="")

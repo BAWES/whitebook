@@ -1,12 +1,5 @@
 <?php use yii\helpers\Url;?>
 <!-- coniner start -->
-<?php  
-$c_url = explode("/","http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");                           
-$s = $c_url[count($c_url)-1];
-$c_url1 = explode("?",$s); 
-?>
-
-
 <section id="inner_pages_white_back">
 <div class="container paddng0">
 <!-- Events slider start -->

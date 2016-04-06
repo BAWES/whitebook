@@ -188,14 +188,9 @@ if ($event_status > 0) {
                                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                                     <div id="accordion" class="panel-group">
                                         <!-- BEGIN CATEGORY FILTER  -->					   
-                                        <?php
-                                        /* BEGIN get current category to load sub category */
-                                        $c_url = explode("/", "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-                                        $s = $c_url[count($c_url) - 1];
-                                        $c_url1 = explode("?", $s);
-                                        /* Get slug name to find category */
+                                        <?php  
                                         $subcategory = SubCategory::loadsubcat('invitations');
-                                        $category_ids = Vendor::Vendorcategories($c_url1[0]);
+                                        $category_ids = Vendor::Vendorcategories($slug);
                                         $category_list = Category::Vendorcategorylist($category_ids['category_id']);
                                         if (count($category_list) > 3) {
                                             $class = "test_scroll";
@@ -558,12 +553,7 @@ if ($event_status > 0) {
                                                         if (category_name == "" && theme_name == "")
                                                         {
                                                             window.history.pushState("test", "Title", newUrl);
-                                                            slug = <?php
-$c_url = explode("/", "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-$s = $c_url[count($c_url) - 1];
-$c_url1 = explode("?", $s);
-echo '"' . $c_url1[0] . '";';
-?>
+                                                            slug = <?php echo $slug; ?>
                                                         }
 
                                                         if (category_name != "" || theme_name != "" || price_val != "")
