@@ -61,7 +61,7 @@ class VendoritemController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'check', 'itemactive', 'status', 'vendoritemgallery', 'removequestion', 'sort_vendor_item', 'addquestion', 'renderquestion', 'renderanswer', 'guideimage', 'viewrenderquestion', 'itemgallery', 'uploadhandler', 'uploadhandler1', 'galleryupload', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck'],
+                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'check', 'itemactive', 'status', 'removequestion', 'sort_vendor_item', 'addquestion', 'renderquestion', 'renderanswer', 'guideimage', 'viewrenderquestion', 'itemgallery', 'uploadhandler', 'uploadhandler1', 'galleryupload', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -647,43 +647,6 @@ class VendoritemController extends Controller
                                 }
                             }
                         }
-                        public function actionVendoritemgallery($id)
-                        {
-                            $base = Yii::$app->basePath;
-                            $len = rand(1, 1000);
-                            $model = new Vendoritem();
-                            $model1 = new Image();
-                            $imagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'vendor_item'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
-                            $item_name = Vendoritem::find()->where(['item_id' => $id])->one();
-
-                            if ($model->load(Yii::$app->request->post())) {
-                                $file = UploadedFile::getInstances($model, 'image_path');
-
-                                if ($file) {
-                                    $i = count($imagedata) + 1;
-                                    foreach ($file as $files) {
-                                        $files->saveAs($base.'/web/uploads/vendor_images/'.$files->baseName.'_'.$len.'.'.$files->extension);
-                                        $model1->image_path = $files->baseName.'_'.$len.'.'.$files->extension;
-                                        $model1->item_id = $id;
-                                        $model1->image_user_id = '1';// no need for validation rule on user_id as you set it yourself
-                                        $model1->image_user_type = 1;
-                                        $k = Yii::$app->db->createCommand()
-                                        ->insert('whitebook_image', [
-                                            'image_path' => $model1->image_path,
-                                            'item_id' => $id,
-                                            'image_user_id' => $model1->image_user_id,
-                                            'module_type' => 'vendor_item',
-                                            'vendorimage_sort_order' => $i, ])
-                                            ->execute();
-                                            ++$i;
-                                        }
-                                    }
-
-                                    return $this->redirect(['vendoritem/vendoritemgallery?id='.$id]);
-                                }
-
-                                return $this->render('itemgallery', ['model' => $model, 'imagedata' => $imagedata, 'item_name' => $item_name['item_name']]);
-                            }
 
                             public function actionUploadhandler()
                             {
