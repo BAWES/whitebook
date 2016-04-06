@@ -6,13 +6,13 @@ return [
     'components' => [
         'resourceManager' => [
             'class' => 'common\components\S3ResourceManager',
-            'key' => 'AKIAJJCSTGJVP4LXDOJQ',
-            'secret' => '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',
-            'bucket' => 'whitebook-files'
+            'key' => 'AKIAIQ4T42MGVRUZSFCQ',
+            'secret' => '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',
+            'bucket' => 'thewhitebook'
             /**
              * You can access the bucket with:
-             * https://whitebook-files.s3.amazonaws.com/
-             * https://whitebook-files.s3.amazonaws.com/folderName/fileName.jpg
+             * https://thewhitebook.s3.amazonaws.com/
+             * https://thewhitebook.s3.amazonaws.com/folderName/fileName.jpg
              */
         ],
         'slack' => [
