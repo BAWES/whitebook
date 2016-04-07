@@ -809,7 +809,7 @@ jQuery('span.forgotpwd').hide();
 jQuery('#forgot_loader').show();
 
 jQuery.ajax({
-url:"<?= Url::to('/users/forget_password'); ?>",
+url:"<?= Url::toRoute('users/forget_password'); ?>",
 type:"post",
 async:false,
 data:"email="+reg_email+"&_csrf="+_csrf,

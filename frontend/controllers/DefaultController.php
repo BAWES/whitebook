@@ -435,9 +435,11 @@ class DefaultController extends BaseController
             </table>';
 
             if (count($model) == 1) {
-                $subject = 'WHITEBOOK - Contact enquiry information.';
-                $message = 'WHITEBOOK enquiry from user.';
-                Yii::$app->newcomponent->sendmail('a.mariyappan88@gmail.com', $subject, $body, $message);
+                $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$body,"user"=>$data['username']])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($form['admin_email'])
+                ->setSubject('Enquiry from user')
+                ->send(); 
             }
             if ($k) {
                 echo '1';
@@ -603,27 +605,29 @@ class DefaultController extends BaseController
     }
                     // END wish list manage page load vendorss based on category
 
-                    /*
-                    *  BEGIN Cron Job  for if pending items of items table
-                    */
-                    public function actionPending_items()
-                    {
-                        $model = Yii::$app->db->createCommand('SELECT item_name FROM `whitebook_vendor_item` WHERE item_approved="Pending" and item_status = "Active" and trash = "Default"');
-                        $vendor = $model->queryAll();
-                        $i = 1;
-                        $message = 'Items waiting for an approval - Pending items <br/><br/>';
-                        $message .= '<table class="tftable" border="1">
-                      <tr><th>S.No</th><th>Product Names</th></tr>';
-                        foreach ($vendor as $key => $value) {
-                            $message .= '<tr><td>'.$i.'</td><td>'.$value['item_name'].'</td></tr>';
-                            ++$i;
-                        }
-                        $message .= '</table>';
-                        $subject = 'PENDING-ITEMS';
-                        $body = 'TWB - PENDING-PRODUCTS';
-                        $send = Yii::$app->maincomponent->sendmail('mariyappan@technoduce.com', $subject, $body, $message, 'PENDING-ITEMS');
-                    }
-                    /*
-                    *  END Cron Job  for if pending items of items table
-                    */
+    /*
+    *  BEGIN Cron Job  for if pending items of items table
+    */
+    public function actionPending_items()
+    {
+        $model = Yii::$app->db->createCommand('SELECT item_name FROM `whitebook_vendor_item` WHERE item_approved="Pending" and item_status = "Active" and trash = "Default"');
+        $vendor = $model->queryAll();
+        $i = 1;
+        $message = 'Items waiting for an approval - Pending items <br/><br/>';
+        $message .= '<table class="tftable" border="1">
+      <tr><th>S.No</th><th>Product Names</th></tr>';
+        foreach ($vendor as $key => $value) {
+            $message .= '<tr><td>'.$i.'</td><td>'.$value['item_name'].'</td></tr>';
+            ++$i;
+        }
+        $message .= '</table>';
+        $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$message,"user"=>"Admin"])
+        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setTo(Yii::$app->params['adminEmail'])
+        ->setSubject('PENDING-PRODUCTS')
+        ->send();
+    }
+    /*
+    *  END Cron Job  for if pending items of items table
+    */
 }

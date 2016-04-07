@@ -288,11 +288,11 @@ class CustomerController extends Controller
                 $k = $model->newsmail;
                 foreach ($k as $mail) {
                     if ($model->content) {
-                        echo $mail;
-                        $subject = 'News letter from Whitebook';
-                        $message = 'News letter send Successfully';
-                        $body = $model->content;
-                        Yii::$app->newcomponent->sendmail($mail, $subject, $body, $message);
+                        $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$message])
+                        ->setFrom(Yii::$app->params['supportEmail'])
+                        ->setTo($mail)
+                        ->setSubject('News letter from Whitebook')
+                        ->send(); 
                     }
                 }
 

@@ -19,12 +19,12 @@ use yii\helpers\Url;
 			</ul>
 			<!-- END MOBILE HEADER -->
 			<!-- BEGIN LOGO -->
-			<a href="<?php echo Url::to(['site/dashboard']); ?>">
+			<a href="<?php echo Url::to(['site/index']); ?>">
 				<img src="<?php echo Siteinfo::logoUrl();?>" class="logo" alt="" data-src="<?php echo Siteinfo::logoUrl();?>" data-src-retina="<?php echo Siteinfo::logoUrl();?>" width="170" height="30"/>
 			</a>
 			<!-- END LOGO -->
 			<ul class="nav pull-right notifcation-center">
-				<li class="dropdown" id="header_task_bar"> <a href="<?= Url::to(['site/dashboard']); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
+				<li class="dropdown" id="header_task_bar"> <a href="<?= Url::to(['site/index']); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
 			</ul>
 			<!-- END LOGO NAV BUTTONS -->
 		</div>

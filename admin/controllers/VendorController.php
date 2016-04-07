@@ -175,10 +175,13 @@ class VendorController extends Controller
                     $subject = 'Welcome '.$model['vendor_name'];
                     $body = 'Hi '.$model['vendor_name'].',
 						Admin created your username password. Once you subscribe the package you can access account.
-
 						User Id : '.$model->vendor_contact_email.'  Password : '.$vendor['vendor_password'].'';
                     $message = $model->vendor_name.' account created successfully and mail sent.';
-                    Yii::$app->newcomponent->sendmail($vendor['vendor_contact_email'], $subject, $body, $message);
+                    $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$body,"user"=>$model->vendor_name])
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo($model->vendor_contact_email)
+                    ->setSubject('Vendor package subscribe')
+                    ->send();
                 }
                 $command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor SET vendor_password="'.$vendor_password.'" WHERE vendor_id='.$model->id);
                 $command->execute();

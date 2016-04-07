@@ -123,14 +123,15 @@ $to = $model['email'];
 $username = $model['customer_name'];
 Yii::$app->session->set('register', '1');
 $message = 'Thank you for registration with '.Yii::$app->params['SITE_NAME'].'.</br><a href='.Yii::$app->params['BASE_URL'].'/users/confirm_email/'.$customer_activation_key.''." title='Click Here'>Click here </a> to activate your account.";
-
-$subject = Yii::$app->params['SIGNUP_SUBJECT'];
-$template = 'USER-REGISTER';
 $body = Yii::$app->params['SIGNUP_TEMPLATE'];
-$body = str_replace('%NAME%', $model->customer_name, $body);
-$body = str_replace('%MESSAGE%', $message, $body);
-$to = 'mariyappan@technoduce.com';
+$body .= str_replace('%NAME%', $model->customer_name, $body);
+$body .= str_replace('%MESSAGE%', $message, $body);
 Yii::$app->newcomponent->sendmail($to, $subject, $body, $message, $template);
+ $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$body,"user"=>"Admin"])
+->setFrom(Yii::$app->params['supportEmail'])
+->setTo(Yii::$app->params['adminEmail'])
+->setSubject('USER-REGISTER')
+->send();
 $this->redirect(Yii::$app->params['BASE_URL']);
 echo '1';
 die;
@@ -205,10 +206,12 @@ $check_email = $model->check_email_exist($email);
 $id = $model->check_user_exist($email);
 if (count($id) > 0) {
 $time = $model->update_datetime_user($id[0]['customer_activation_key']);
-$message = 'Your requested password reset. '.Yii::$app->params['SITE_NAME'].'.</br><a href='.Yii::$app->params['BASE_URL'].'/users/reset_confirm/'.$id[0]['customer_activation_key'].''." title='Click Here'>Click here </a> to reset your password.";
-$subject = 'Forgot Password?';
-$body = 'Forgot Password?';
-Yii::$app->maincomponent->sendmail($email, $subject, $body, $message, 'FORGOT-PASSWORD');
+$message = 'Your requested password reset.</br><a href='.Yii::$app->urlManager->createAbsoluteUrl("/users/reset_confirm/".$id[0]["customer_activation_key"]).' title="Click Here">Click here </a> to reset your password';
+$send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$message,"user"=>"Customer"])
+->setFrom(Yii::$app->params['supportEmail'])
+->setTo($email)
+->setSubject('Requested forgot Password')
+->send();
 Yii::$app->session->setFlash('success', Yii::t('frontend', 'PASS_SENT'));
 echo 1;
 exit;

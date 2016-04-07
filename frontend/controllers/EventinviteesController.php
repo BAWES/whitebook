@@ -144,8 +144,6 @@ class EventinviteesController extends BaseController
         }
         $exist = Yii::$app->db->createCommand('Select count(invitees_id) AS count FROM whitebook_event_invitees where email= "'.$data['email'].'"
             and event_id ='.$data['event_id'].'')->queryone();
-        /*    echo 'Select count(invitees_id) FROM whitebook_event_invitees where email= "'.$data['email'].'"
-            and event_id ='.$data['event_id'].'';die;  */
 
           if ($exist['count'] == 0) {
               $insert = Yii::$app->db->createCommand()
@@ -162,8 +160,7 @@ class EventinviteesController extends BaseController
                   $to = $data['email'];
                   $message = 'Hi '.$data['name'].',<br/><br/> '.$customer_info[0]['customer_name'].' is invite you '.$data['event_name'].' event ';
                   $subject = 'Event Invitation';
-                  $content = 'test';
-              //  Yii::$app->newcomponent->sendmail($to, $subject, $content,$message,'EVENT-INVITEES');
+                  $content = 'test';              
               } else {
                   echo 'not';
               }

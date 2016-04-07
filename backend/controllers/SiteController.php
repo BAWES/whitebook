@@ -61,6 +61,7 @@ class SiteController extends Controller
         return $this->render('index', ['vendoritemcnt' => $vendoritemcnt,'monthitemcnt'=>$monthitemcnt,'dateitemcnt'=>$dateitemcnt,'packageenddate'=>$packageenddate]);
     }
 
+
     public function actionLogin()
     {
         $this->layout = "login";
@@ -115,15 +116,7 @@ class SiteController extends Controller
         return $this->redirect('login');
     }
 
-    public function actionDashboard()
-    {
 
-        $vendoritemcnt=Vendoritem::vendoritemcount();
-        $monthitemcnt=Vendoritem::vendoritemmonthcount();
-        $dateitemcnt=Vendoritem::vendoritemdatecount();
-        $packageenddate=Vendor::getVendor('package_end_date');
-        return $this->render('index', ['vendoritemcnt' => $vendoritemcnt,'monthitemcnt'=>$monthitemcnt,'dateitemcnt'=>$dateitemcnt,'packageenddate'=>$packageenddate]);
-    }
 
     public function actionChangepassword()
     {
@@ -177,10 +170,12 @@ class SiteController extends Controller
                 $length = 10;
                 $randomString = substr(str_shuffle(md5(time())),0,$length);
                 $password = Yii::$app->getSecurity()->generatePasswordHash($randomString);
-                $subject = 'Password Recovery';
                 $message = 'User id : '.$form['vendor_contact_email'] . ', Your New Password : '.$randomString;
-                $body = '';
-                Yii::$app->newcomponent->sendmail($form['vendor_contact_email'], $subject, $body, $message,'FORGOT-PASSWORD');
+                $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$message,"user"=>'Vendor'])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($form['vendor_contact_email'])
+                ->setSubject('Vendor password recovery')
+                ->send(); 
                 $command = Yii::$app->db->createCommand('UPDATE whitebook_vendor SET vendor_password="'.$password.'" WHERE vendor_contact_email="'.$form['vendor_contact_email'].'"');
                 $command->execute();
                  if($command)

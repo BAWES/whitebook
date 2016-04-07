@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Vendor login details</title>
+<title>The White book</title>
 </head>
 <body style="margin:0; padding:0;">
 <table border="0" style="width:600px; background:#fff; border:none; border-radius:6px; border-left:1px solid #ccc;border-right:1px solid #ccc;" cellpadding="0" cellspacing="0">
@@ -9,7 +9,7 @@
 <td valign="top">
 <table style="width:600px; background:#fff; height:110px; border-bottom:2px solid #ccc;">
 <td width="20"></td>
-<td width="140"><img style="height:33px; width:233px;margin-left:125px;" src="http://www.demositeapp.com/backend/web/uploads/app_img/logo.png" alt=""/></td>
+<td width="140"><img style="height:33px; width:233px;margin-left:125px;" src="/backend/web/uploads/app_img/logo.png" alt=""/></td>
 <td width="20"></td>
 </table>
 </td>
@@ -23,7 +23,7 @@
 <tr>
 <td width="20"></td>
 <td style=" font:normal 14px/21px arial; color:#333333;">
-Hi,
+Hi <?= $user; ?>,
 
 </td>
 <td width="20"></td>
