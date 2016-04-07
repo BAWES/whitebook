@@ -121,11 +121,18 @@ class SiteController extends Controller
                 $length = 10;
                 $randomString = substr(str_shuffle(md5(time())), 0, $length);
                 $password = Yii::$app->getSecurity()->generatePasswordHash($randomString);
-                $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$message,"user"=>'Admin'])
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo($form['admin_email'])
-                ->setSubject('Admin password recovery')
-                ->send(); 
+
+                Yii::$app->mailer->compose([
+                        "html" => "admin/password-reset"
+                            ],[
+                        "message" => $message,
+                        "user" => 'Admin'
+                    ])
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo($form['admin_email'])
+                    ->setSubject('Admin Password Recovery')
+                    ->send();
+
                 $command = Yii::$app->db->createCommand('UPDATE whitebook_admin SET admin_password="'.$password.'" WHERE admin_email="'.$form['admin_email'].'"');
                 $command->execute();
                 if($command)

@@ -171,11 +171,18 @@ class SiteController extends Controller
                 $randomString = substr(str_shuffle(md5(time())),0,$length);
                 $password = Yii::$app->getSecurity()->generatePasswordHash($randomString);
                 $message = 'User id : '.$form['vendor_contact_email'] . ', Your New Password : '.$randomString;
-                $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$message,"user"=>'Vendor'])
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo($form['vendor_contact_email'])
-                ->setSubject('Vendor password recovery')
-                ->send(); 
+
+                Yii::$app->mailer->compose([
+                        "html" => "vendor/password-reset"
+                            ],[
+                        "message" => $message,
+                        "user" => 'Vendor'
+                    ])
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo($form['vendor_contact_email'])
+                    ->setSubject('Vendor password recovery')
+                    ->send();
+
                 $command = Yii::$app->db->createCommand('UPDATE whitebook_vendor SET vendor_password="'.$password.'" WHERE vendor_contact_email="'.$form['vendor_contact_email'].'"');
                 $command->execute();
                  if($command)

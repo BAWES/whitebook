@@ -62,7 +62,7 @@ class DefaultController extends BaseController
     }
 
     public function actionIndex()
-    {           
+    {
         $website_model = new Website();
         $product_list = $website_model->get_featured_product_id();
         $featured_product = $website_model->get_featured_product();
@@ -435,11 +435,16 @@ class DefaultController extends BaseController
             </table>';
 
             if (count($model) == 1) {
-                $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$body,"user"=>$data['username']])
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo($form['admin_email'])
-                ->setSubject('Enquiry from user')
-                ->send(); 
+                Yii::$app->mailer->compose([
+                        "html" => "customer/contact-inquiry"
+                            ],[
+                        "message" => $body,
+                        "user" => $data['username']
+                    ])
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo($form['admin_email'])
+                    ->setSubject('Enquiry from user')
+                    ->send();
             }
             if ($k) {
                 echo '1';
@@ -621,11 +626,17 @@ class DefaultController extends BaseController
             ++$i;
         }
         $message .= '</table>';
-        $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$message,"user"=>"Admin"])
-        ->setFrom(Yii::$app->params['supportEmail'])
-        ->setTo(Yii::$app->params['adminEmail'])
-        ->setSubject('PENDING-PRODUCTS')
-        ->send();
+
+        Yii::$app->mailer->compose([
+                "html" => "mailfolder/mail"
+                    ], [
+                "message" => $message,
+                "user" => "Admin"
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('PENDING-PRODUCTS')
+            ->send();
     }
     /*
     *  END Cron Job  for if pending items of items table

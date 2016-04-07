@@ -12,17 +12,18 @@ return [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
+            'htmlLayout' => 'layouts/whitebook-html',
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
             'useFileTransport' => false,
-             'transport' => [
-            'class' => 'Swift_SmtpTransport',
-            'host' => 'smtp.gmail.com',
-            'username' => 'a.mariyappan88@gmail.com',
-            'password' => 'TN20aq8298',
-            'port' => '465',
-            'encryption' => 'ssl',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com',
+                'username' => 'a.mariyappan88@gmail.com',
+                'password' => 'TN20aq8298',
+                'port' => '465',
+                'encryption' => 'ssl',
             ],
         ],
     ],
