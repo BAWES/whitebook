@@ -15,24 +15,24 @@ use common\models\Country;
 use yii\filters\AccessControl;
 
 /**
- * CityController implements the CRUD actions for City model.
- */
+* CityController implements the CRUD actions for City model.
+*/
 class CityController extends Controller
 {
     /**
-      * Lists all City models.
-      *
-      * @return mixed
-      */
-     public function init()
-     {
-         parent::init();
-         if (Yii::$app->user->isGuest) { // chekck the admin logged in
+    * Lists all City models.
+    *
+    * @return mixed
+    */
+    public function init()
+    {
+        parent::init();
+        if (Yii::$app->user->isGuest) { // chekck the admin logged in
             //$this->redirect('login');
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
-             Yii::$app->getResponse()->redirect($url);
-         }
-     }
+            Yii::$app->getResponse()->redirect($url);
+        }
+    }
 
     public function behaviors()
     {
@@ -44,21 +44,21 @@ class CityController extends Controller
                 ],
             ],
 
-             'access' => [
-               'class' => AccessControl::className(),
-               'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-           ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => [],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
 
         ];
     }
@@ -71,9 +71,9 @@ class CityController extends Controller
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
@@ -82,13 +82,13 @@ class CityController extends Controller
     }
 
     /**
-     * Displays a single City model.
-     *
-     * @param int $city_id
-     * @param int $country_id
-     *
-     * @return mixed
-     */
+    * Displays a single City model.
+    *
+    * @param int $city_id
+    * @param int $country_id
+    *
+    * @return mixed
+    */
     public function actionView($city_id, $country_id)
     {
         return $this->render('view', [
@@ -97,11 +97,11 @@ class CityController extends Controller
     }
 
     /**
-     * Creates a new City model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     *
-     * @return mixed
-     */
+    * Creates a new City model.
+    * If creation is successful, the browser will be redirected to the 'view' page.
+    *
+    * @return mixed
+    */
     public function actionCreate()
     {
         $access = Authitem::AuthitemCheck('1', '12');
@@ -116,8 +116,8 @@ class CityController extends Controller
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
                 return $this->render('create', [
-                'model' => $model, 'country' => $country,
-            ]);
+                    'model' => $model, 'country' => $country,
+                ]);
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -127,14 +127,14 @@ class CityController extends Controller
     }
 
     /**
-     * Updates an existing City model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param int $city_id
-     * @param int $country_id
-     *
-     * @return mixed
-     */
+    * Updates an existing City model.
+    * If update is successful, the browser will be redirected to the 'view' page.
+    *
+    * @param int $city_id
+    * @param int $country_id
+    *
+    * @return mixed
+    */
     public function actionUpdate($city_id, $country_id)
     {
         $access = Authitem::AuthitemCheck('2', '12');
@@ -149,8 +149,8 @@ class CityController extends Controller
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
                 return $this->render('update', [
-                'model' => $model, 'country' => $country,
-            ]);
+                    'model' => $model, 'country' => $country,
+                ]);
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -160,14 +160,14 @@ class CityController extends Controller
     }
 
     /**
-     * Deletes an existing City model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param int $city_id
-     * @param int $country_id
-     *
-     * @return mixed
-     */
+    * Deletes an existing City model.
+    * If deletion is successful, the browser will be redirected to the 'index' page.
+    *
+    * @param int $city_id
+    * @param int $country_id
+    *
+    * @return mixed
+    */
     public function actionDelete($city_id, $country_id)
     {
         $access = Authitem::AuthitemCheck('3', '12');
@@ -184,16 +184,16 @@ class CityController extends Controller
     }
 
     /**
-     * Finds the City model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param int $city_id
-     * @param int $country_id
-     *
-     * @return City the loaded model
-     *
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    * Finds the City model based on its primary key value.
+    * If the model is not found, a 404 HTTP exception will be thrown.
+    *
+    * @param int $city_id
+    * @param int $country_id
+    *
+    * @return City the loaded model
+    *
+    * @throws NotFoundHttpException if the model cannot be found
+    */
     protected function findModel($city_id, $country_id)
     {
         if (($model = City::findOne(['city_id' => $city_id, 'country_id' => $country_id])) !== null) {

@@ -12,8 +12,8 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * AddressquestionController implements the CRUD actions for AddressQuestion model.
- */
+* AddressquestionController implements the CRUD actions for AddressQuestion model.
+*/
 class AddressquestionController extends Controller
 {
     public function init()
@@ -31,32 +31,32 @@ class AddressquestionController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                   // 'delete' => ['post'],
+                    // 'delete' => ['post'],
                 ],
             ],
-               'access' => [
-               'class' => AccessControl::className(),
-               'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'sort_addressquestion', 'block'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-           ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => [],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'sort_addressquestion', 'block'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
     /**
-     * Lists all AddressQuestion models.
-     *
-     * @return mixed
-     */
+    * Lists all AddressQuestion models.
+    *
+    * @return mixed
+    */
     public function actionIndex()
     {
         $searchModel = new AddressQuestionSearch();
@@ -101,12 +101,12 @@ class AddressquestionController extends Controller
     }
 
     /**
-     * Displays a single AddressQuestion model.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
+    * Displays a single AddressQuestion model.
+    *
+    * @param int $id
+    *
+    * @return mixed
+    */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -115,11 +115,11 @@ class AddressquestionController extends Controller
     }
 
     /**
-     * Creates a new AddressQuestion model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     *
-     * @return mixed
-     */
+    * Creates a new AddressQuestion model.
+    * If creation is successful, the browser will be redirected to the 'view' page.
+    *
+    * @return mixed
+    */
     public function actionCreate()
     {
         $model = new AddressQuestion();
@@ -145,13 +145,13 @@ class AddressquestionController extends Controller
     }
 
     /**
-     * Updates an existing AddressQuestion model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
+    * Updates an existing AddressQuestion model.
+    * If update is successful, the browser will be redirected to the 'view' page.
+    *
+    * @param int $id
+    *
+    * @return mixed
+    */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -164,7 +164,7 @@ class AddressquestionController extends Controller
                     $model->address_type_id;
                     $model->question[$i];
                     $command = \Yii::$app->db->createCommand('UPDATE whitebook_address_question SET question="'.$model->question[$i].'",
-					 address_type_id="'.$model->address_type_id.'"  WHERE ques_id="'.$Addressquestion[$i]['ques_id'].'"');
+                    address_type_id="'.$model->address_type_id.'"  WHERE ques_id="'.$Addressquestion[$i]['ques_id'].'"');
                     $command->execute();
                 } elseif ($ques) {
                     $models = new AddressQuestion();
@@ -184,35 +184,35 @@ class AddressquestionController extends Controller
         }
     }
 
-        /**
-         * Deletes an existing AddressQuestion model.
-         * If deletion is successful, the browser will be redirected to the 'index' page.
-         *
-         * @param int $id
-         *
-         * @return mixed
-         */
-        public function actionDelete($id)
-        {
-            $model = $this->findModel($id);
-            $model->trash = 'Deleted';
-            $model->load(Yii::$app->request->post());
-            $model->save();  // equivalent to $model->update();
+    /**
+    * Deletes an existing AddressQuestion model.
+    * If deletion is successful, the browser will be redirected to the 'index' page.
+    *
+    * @param int $id
+    *
+    * @return mixed
+    */
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        $model->trash = 'Deleted';
+        $model->load(Yii::$app->request->post());
+        $model->save();  // equivalent to $model->update();
         echo Yii::$app->session->setFlash('success', 'Address Question Deleted successfully!');
 
-            return $this->redirect(['index']);
-        }
+        return $this->redirect(['index']);
+    }
 
     /**
-     * Finds the AddressQuestion model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param int $id
-     *
-     * @return AddressQuestion the loaded model
-     *
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    * Finds the AddressQuestion model based on its primary key value.
+    * If the model is not found, a 404 HTTP exception will be thrown.
+    *
+    * @param int $id
+    *
+    * @return AddressQuestion the loaded model
+    *
+    * @throws NotFoundHttpException if the model cannot be found
+    */
     protected function findModel($id)
     {
         if (($model = AddressQuestion::findOne($id)) !== null) {

@@ -13,8 +13,8 @@ use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 
 /**
- * SlideController implements the CRUD actions for Slide model.
- */
+* SlideController implements the CRUD actions for Slide model.
+*/
 class SlideController extends Controller
 {
     public function init()
@@ -30,35 +30,35 @@ class SlideController extends Controller
     public function behaviors()
     {
         return [
-                   'access' => [
-               'class' => AccessControl::className(),
+            'access' => [
+                'class' => AccessControl::className(),
                 'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'sort_slide', 'status'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-           ],
+                    [
+                        'actions' => [],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'sort_slide', 'status'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-            //        'delete' => ['post'],
+                    //        'delete' => ['post'],
                 ],
             ],
         ];
     }
 
     /**
-     * Lists all Slide models.
-     *
-     * @return mixed
-     */
+    * Lists all Slide models.
+    *
+    * @return mixed
+    */
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('1', '32');
@@ -67,9 +67,9 @@ class SlideController extends Controller
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
@@ -78,12 +78,12 @@ class SlideController extends Controller
     }
 
     /**
-     * Displays a single Slide model.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
+    * Displays a single Slide model.
+    *
+    * @param int $id
+    *
+    * @return mixed
+    */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -91,26 +91,26 @@ class SlideController extends Controller
         ]);
     }
 
-         /**
-          * Creates a new Slide model.
-          * If creation is successful, the browser will be redirected to the 'view' page.
-          *
-          * @return mixed
-          */
-         public function actionBlock()
-         {
-             if (Yii::$app->request->isAjax) {
-                 $data = Yii::$app->request->post();
-             }
-             $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-             $command = \Yii::$app->db->createCommand('UPDATE whitebook_slide SET slide_status="'.$status.'" WHERE slide_id='.$data['cid']);
-             $command->execute();
-             if ($status == 'Active') {
-                 return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-             }
+    /**
+    * Creates a new Slide model.
+    * If creation is successful, the browser will be redirected to the 'view' page.
+    *
+    * @return mixed
+    */
+    public function actionBlock()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+        $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
+        $command = \Yii::$app->db->createCommand('UPDATE whitebook_slide SET slide_status="'.$status.'" WHERE slide_id='.$data['cid']);
+        $command->execute();
+        if ($status == 'Active') {
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        }
 
-             return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-         }
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
 
     public function actionCreate()
     {
@@ -121,8 +121,8 @@ class SlideController extends Controller
                 $model->slide_status = (Yii::$app->request->post()['Slide']['slide_status']) ? 'Active' : 'Deactive';
                 $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_slide` where trash = 'Default'")->asArray()->all();
                 $sort = ($max_sort[0]['sort'] + 1);
-            // }
-            $model->sort = $sort;
+                // }
+                $model->sort = $sort;
                 $model->save(false);
 
                 if ($model->slide_type == 'video') {
@@ -132,31 +132,31 @@ class SlideController extends Controller
                 }
                 $slide_id = $model->slide_id;
                 $base = Yii::$app->basePath;
-            //echo $file[2];die;
-            /*
-            echo '<pre>';
-            print_r ($file);die;
-            die;*/
-            if ($file) {
-                foreach ($file as $files) {
-                    $img_ext = array('jpg', 'jpeg', 'png');
-                    $ext = $files->extension;
-                    if (in_array($ext, $img_ext)) {
-                        $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.png');
-                    } elseif ($ext == 'mp4') {
-                        $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.mp4');
-                    } elseif ($ext == 'avi') {
-                        $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.avi');
+                //echo $file[2];die;
+                /*
+                echo '<pre>';
+                print_r ($file);die;
+                die;*/
+                if ($file) {
+                    foreach ($file as $files) {
+                        $img_ext = array('jpg', 'jpeg', 'png');
+                        $ext = $files->extension;
+                        if (in_array($ext, $img_ext)) {
+                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.png');
+                        } elseif ($ext == 'mp4') {
+                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.mp4');
+                        } elseif ($ext == 'avi') {
+                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.avi');
+                        }
                     }
                 }
-            }
                 echo Yii::$app->session->setFlash('success', 'Slides created successfully!');
 
                 return $this->redirect(['index']);
             } else {
                 return $this->render('create', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -166,13 +166,13 @@ class SlideController extends Controller
     }
 
     /**
-     * Updates an existing Slide model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
+    * Updates an existing Slide model.
+    * If update is successful, the browser will be redirected to the 'view' page.
+    *
+    * @param int $id
+    *
+    * @return mixed
+    */
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '32');
@@ -217,8 +217,8 @@ class SlideController extends Controller
                 return $this->redirect(['index']);
             } else {
                 return $this->render('update', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -261,13 +261,13 @@ class SlideController extends Controller
     }
 
     /**
-     * Deletes an existing Slide model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
+    * Deletes an existing Slide model.
+    * If deletion is successful, the browser will be redirected to the 'index' page.
+    *
+    * @param int $id
+    *
+    * @return mixed
+    */
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('1', '32');
@@ -293,15 +293,15 @@ class SlideController extends Controller
     }
 
     /**
-     * Finds the Slide model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param int $id
-     *
-     * @return Slide the loaded model
-     *
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    * Finds the Slide model based on its primary key value.
+    * If the model is not found, a 404 HTTP exception will be thrown.
+    *
+    * @param int $id
+    *
+    * @return Slide the loaded model
+    *
+    * @throws NotFoundHttpException if the model cannot be found
+    */
     protected function findModel($id)
     {
         if (($model = Slide::findOne($id)) !== null) {
