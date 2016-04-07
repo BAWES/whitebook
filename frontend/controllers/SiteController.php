@@ -15,7 +15,8 @@ use frontend\models\Users;
 use yii\web\Session;
 use yii\db\Query;
 use common\models\Smtp;
-class DefaultController extends BaseController
+
+class SiteController extends BaseController
 {
     public function behaviors()
     {
@@ -71,17 +72,18 @@ class DefaultController extends BaseController
         $event_type = $website_model->get_event_types();
         $customer_id = Yii::$app->session->get('customer_id');
         $customer_events = array();
+
         if ($customer_id != '') {
             $customer_events = $website_model->get_customer_events($customer_id);
         }
-        return $this->render('home', [
-      'featured_product' => $featured_product,
-      'banner' => $banner,
-      'event_type' => $event_type,
-      'ads' => $ads,
-      'customer_events' => $customer_events,
-      'key' => '0',
-    ]);
+        return $this->render('index', [
+          'featured_product' => $featured_product,
+          'banner' => $banner,
+          'event_type' => $event_type,
+          'ads' => $ads,
+          'customer_events' => $customer_events,
+          'key' => '0',
+        ]);
     }
 
     public function actionActivate()

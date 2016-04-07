@@ -11,7 +11,6 @@ return [
     'id' => 'app-frontend',
     'name' => 'The Whitebook',
     'basePath' => dirname(__DIR__),
-    'defaultRoute' => 'default',
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
@@ -47,7 +46,7 @@ return [
         /*'errorHandler' => [
             'errorAction' => 'default/error',
         ],*/
-        
+
     ],
     'params' => $params,
 ];
