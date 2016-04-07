@@ -45,7 +45,7 @@ return [
             'errorAction' => 'site/error',
         ],
         'newcomponent' => [
-            'class' => 'backend\components\MainComponent',
+            'class' => 'common\components\MainComponent',
         ],
         'assetManager' => [
             'bundles' => [
