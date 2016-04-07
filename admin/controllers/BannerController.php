@@ -121,10 +121,14 @@ class BannerController extends Controller
             $model->scenario = 'register';
             if ($model->load(Yii::$app->request->post())) {
                 $model->banner_status = (Yii::$app->request->post()['Banner']['banner_status']) ? 'Active' : 'Deactive';
+
+                //Get the last sorted item to have the newly uploaded banner stored after
                 $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_banner` where trash = 'Default'")->asArray()->all();
                 $sort = ($max_sort[0]['sort'] + 1);
                 $model->sort = $sort;
+
                 $model->save(false);
+                
                 $banner_id = $model->banner_id;
                 $base = Yii::$app->basePath;
                 $file = UploadedFile::getInstances($model, 'banner_image');
