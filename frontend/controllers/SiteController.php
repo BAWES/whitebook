@@ -465,7 +465,7 @@ class SiteController extends BaseController
         if ($slug != '') {
             $cms = new Cms();
             $cms_details = $cms->cms_details($slug);
-            $seo_content = \Yii::$app->common->SEOdata('cms', 'page_id', $cms_details['page_id'], array('page_name', 'cms_meta_title', 'cms_meta_keywords', 'cms_meta_description'));
+            $seo_content = Website::SEOdata('cms', 'page_id', $cms_details['page_id'], array('page_name', 'cms_meta_title', 'cms_meta_keywords', 'cms_meta_description'));
 
             \Yii::$app->view->title = ($seo_content[0]['cms_meta_title']) ? $seo_content[0]['cms_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['page_name'];
             \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['cms_meta_description']) ? $seo_content[0]['cms_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
@@ -611,36 +611,4 @@ class SiteController extends BaseController
         }
     }
                     // END wish list manage page load vendorss based on category
-
-    /*
-    *  BEGIN Cron Job  for if pending items of items table
-    */
-    public function actionPending_items()
-    {
-        $model = Yii::$app->db->createCommand('SELECT item_name FROM `whitebook_vendor_item` WHERE item_approved="Pending" and item_status = "Active" and trash = "Default"');
-        $vendor = $model->queryAll();
-        $i = 1;
-        $message = 'Items waiting for an approval - Pending items <br/><br/>';
-        $message .= '<table class="tftable" border="1">
-      <tr><th>S.No</th><th>Product Names</th></tr>';
-        foreach ($vendor as $key => $value) {
-            $message .= '<tr><td>'.$i.'</td><td>'.$value['item_name'].'</td></tr>';
-            ++$i;
-        }
-        $message .= '</table>';
-
-        Yii::$app->mailer->compose([
-                "html" => "mailfolder/mail"
-                    ], [
-                "message" => $message,
-                "user" => "Admin"
-            ])
-            ->setFrom(Yii::$app->params['supportEmail'])
-            ->setTo(Yii::$app->params['adminEmail'])
-            ->setSubject('PENDING-PRODUCTS')
-            ->send();
-    }
-    /*
-    *  END Cron Job  for if pending items of items table
-    */
 }

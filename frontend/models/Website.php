@@ -273,4 +273,16 @@ class Website extends Model {
         return $event_type;
     }
 
+    // GET SEO DATA
+    public function SEOdata($table_name='',$field='',$value='',$data=''){ 
+        if(is_array($data)){
+            $select = implode(',',$data);
+        }
+        if($table_name && $field && $value && $data){
+            return Website::getSEOdata($table_name,$field,$value,$select);
+        }else{
+            return;
+        }
+    }
+
 }

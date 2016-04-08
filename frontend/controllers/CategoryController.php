@@ -41,7 +41,7 @@ class CategoryController extends BaseController
         }
         $event_type = $this->category_model->get_event_types();
 
-        $seo_content = \Yii::$app->common->SEOdata('category', 'category_id', 8, array('category_meta_title', 'category_meta_keywords', 'category_meta_description'));
+        $seo_content = Website::SEOdata('category', 'category_id', 8, array('category_meta_title', 'category_meta_keywords', 'category_meta_description'));
 
         \Yii::$app->view->title = ($seo_content[0]['category_meta_title']) ? $seo_content[0]['category_meta_title'] : SITE_NAME.'|'.$cat_name;
 

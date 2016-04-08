@@ -176,7 +176,7 @@ $action = Yii::$app->controller->action->id;
                     <ul class="logout_part">
 <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
         <li class="<?php if ($action == "about-us") {echo "active";} ?>">
-            <a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'About us'); ?>">
+            <a href="<?= Url::toRoute('plan/cmspages', true); ?>" title="<?php echo Yii::t('frontend', 'About us'); ?>">
             <?php echo Yii::t('frontend', 'About us'); ?></a></li>
         <li class="">
         <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"

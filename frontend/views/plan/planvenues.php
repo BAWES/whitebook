@@ -650,7 +650,6 @@ if(category_name =="" && theme_name =="" && vendor_name =="")
 {
 window.history.pushState("test", "Title", newUrl);
 slug = <?php echo $slug; ?>
-?>
 }
 
 if(category_name !="" || theme_name !="" || vendor_name !="" || price_val !="")
