@@ -193,9 +193,7 @@ class SiteController extends Controller
         return $this->render('changepasswords', ['model' => $model]);
     }
 
-    /*
-     *  Cron Job  for if Vendor package expire with in two days
-     */
+
     public function actionProfile($id = false)
     {
         $query = Admin::find()->where('id = '.Yii::$app->user->getId())->one();
@@ -224,28 +222,6 @@ class SiteController extends Controller
         }
 
         return $this->render('profile', ['model' => $query]);
-    }
-
-    /*
-     *  Cron Job  for if Vendor package expire with in two days
-     */
-    public function actionCron()
-    {
-        $model = Yii::$app->db->createCommand('SELECT vendor_id, vendor_contact_email, vendor_password, vendor_contact_email, vendor_end_date from whitebook_vendor
-												where vendor_status="Active" and expire_notification = 0 and
-												vendor_end_date = DATE_ADD(CURDATE(), INTERVAL 2 DAY)');
-        $vendor = $model->queryAll();
-        foreach ($vendor as $data => $vendor_data) {
-            $command = Yii::$app->db->createCommand('UPDATE whitebook_vendor SET expire_notification=1 WHERE vendor_id='.$vendor_data['vendor_id']);
-            $command->execute();
-
-            $send = Yii::$app->mailer->compose()
-                     ->setFrom('a.mariyappan88@gmail.com')
-                     ->setTo($vendor_data['vendor_contact_email'])
-                     ->setSubject('Welcome to Whitebook')
-                     ->setTextBody('Your username : '.$vendor_data['vendor_contact_email'])
-                     ->send();
-        }
     }
 
     public function actionGalleryitem()
