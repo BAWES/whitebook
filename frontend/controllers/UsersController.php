@@ -188,7 +188,7 @@ Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
 Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
 //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
 //print_r ($login_det);die;
-$this->redirect(Url::toRoute('/default/activate'));
+$this->redirect(Url::toRoute('/site/activate'));
 //$this->redirect(Yii::$app->params['BASE_URL']);
 }
 } else {

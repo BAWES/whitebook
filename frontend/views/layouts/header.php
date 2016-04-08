@@ -23,7 +23,7 @@ $action = Yii::$app->controller->action->id;
                 </div>
                 <!--div class="col-xs-4 responsive-hid"></div-->
                 <div class="logo_header col-xs-10 text-center padding-right0">
-                    <a href="<?= Url::toRoute('default/index', true); ?>" title="THEWHITEBOOK">
+                    <a href="<?= Url::toRoute('site/index', true); ?>" title="THEWHITEBOOK">
                         <?= Html::img('@web/images/mobile_logo.svg', ['alt' => 'Whitebook']); ?>
                     </a>
                     <div class="search_header col-xs-3">
@@ -77,7 +77,7 @@ $action = Yii::$app->controller->action->id;
                         </button>
                     </div>
                     <div class="logo_header">
-                        <a href="<?= Url::toRoute('default/index', true); ?>"  title="THEWHITEBOOK">
+                        <a href="<?= Url::toRoute('site/index', true); ?>"  title="THEWHITEBOOK">
                             <?= Html::img('@web/images/logo.svg', [
                                 'alt' => 'The White Book',
                                 'title' => 'The Whitebook',
@@ -153,15 +153,15 @@ $action = Yii::$app->controller->action->id;
                             </li>
 
                             <li class="">
-                                <?= Html::a(Yii::t('frontend', 'Shop'), ['default/shop'], ['title' => Yii::t('frontend', 'Shop')]); ?>
+                                <?= Html::a(Yii::t('frontend', 'Shop'), ['site/shop'], ['title' => Yii::t('frontend', 'Shop')]); ?>
                             </li>
 
                             <li  class="<?php if ($action == "experience") {
     echo "active";
-} ?>"><a href="<?= Url::toRoute('default/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
+} ?>"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
                             <li class="<?php if ($action == "directory") {
     echo "active";
-} ?>"><a href="<?= Url::toRoute('default/directory', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
+} ?>"><a href="<?= Url::toRoute('site/directory', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
                         </ul>
                     </div>
                 </div>

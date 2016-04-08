@@ -182,7 +182,7 @@ jQuery('#filter_category').change(function(){
 var x= jQuery('#filter_category').val();
 var ajaxdata= jQuery('#ajaxdata').val();
 
-var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('default/searchdirectory'); ?> ";
+var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('site/searchdirectory'); ?> ";
 jQuery.ajax({
 type:'POST',
 url:path,

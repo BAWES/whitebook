@@ -362,7 +362,7 @@ window.location="<?php echo Yii::$app->params['BASE_URL'];?>/events.html?type="+
 /* BEGIN load vendor based on category */
 jQuery('#loadvendor').change(function()
 {   
-var path = "<?= Url::toRoute('default/loadvendorlist'); ?>";   
+var path = "<?= Url::toRoute('site/loadvendorlist'); ?>";   
 jQuery.ajax({
 type:'POST',
 url: path,
@@ -384,7 +384,7 @@ jQuery('#customer_event_type').change(function()
 	if(jQuery(this).val()!=''){
 jQuery("#loader1").show();
 
-var path = "<?= Url::toRoute('default/loadeventlist'); ?>";   
+var path = "<?= Url::toRoute('site/loadeventlist'); ?>";   
 jQuery.ajax({
 type:'POST',
 url: path,
@@ -419,7 +419,7 @@ if (strconfirm == true)
 if(x!=''){
 jQuery("#loader1").show();
 
-var path = "<?= Url::toRoute('default/deleteevent'); ?>";   
+var path = "<?= Url::toRoute('site/deleteevent'); ?>";   
 jQuery.ajax({
 type:'POST',
 url: path,
@@ -451,7 +451,7 @@ function wishlistfilter()
 	var t_id= jQuery('#loadthemes').val();
 	if (c_id == "" || v_id == "" || a_id == "" || t_id == "")
 {
-var path = "<?= Url::toRoute('/default/loadwishlist'); ?>";   
+var path = "<?= Url::toRoute('/site/loadwishlist'); ?>";   
 jQuery("#loader2").show();
 jQuery("body").css({'position':'relative','display':'inline-block'});
 jQuery.ajax({

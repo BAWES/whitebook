@@ -76,7 +76,7 @@ class SiteController extends BaseController
         if ($customer_id != '') {
             $customer_events = $website_model->get_customer_events($customer_id);
         }
-        return $this->render('index', [
+        return $this->render('home', [
           'featured_product' => $featured_product,
           'banner' => $banner,
           'event_type' => $event_type,
@@ -101,7 +101,7 @@ class SiteController extends BaseController
             $customer_events = $website_model->get_customer_events($customer_id);
         }
 
-        return $this->render('/default/home', [
+        return $this->render('home', [
       'featured_product' => $featured_product,
       'banner' => $banner,
       'event_type' => $event_type,
@@ -139,7 +139,7 @@ class SiteController extends BaseController
         }
         $result = array_unique($result);
 
-        return $this->render('/default/directory', [
+        return $this->render('directory', [
           'category' => $main_category,
           'directory' => $directory,
           'first_letter' => $result,
@@ -183,11 +183,11 @@ class SiteController extends BaseController
                 $result = array_unique($result);
             }
             if ($_POST['ajaxdata'] == '0') {
-                return $this->renderPartial('/default/searchdirectory', [
+                return $this->renderPartial('searchdirectory', [
         'directory' => $directory,
         'first_letter' => $result, ]);
             } else {
-                return $this->renderPartial('/default/searchresponsedirectory', [
+                return $this->renderPartial('searchresponsedirectory', [
         'directory' => $directory,
         'first_letter' => $result, ]);
             }
@@ -308,7 +308,7 @@ class SiteController extends BaseController
                     if (!empty($cat[$i])) {
                         $url = str_replace('&', 'and', $cat[$i]);
                         $url = str_replace(' ', '-', $url);
-                        $k = $k.'<li><a href='.Url::toRoute('/default/searchresult/').$url.'>'.$cat[$i].'</a></li>';
+                        $k = $k.'<li><a href='.Url::toRoute('searchresult/').$url.'>'.$cat[$i].'</a></li>';
                     }
                 }
             }
@@ -325,7 +325,7 @@ class SiteController extends BaseController
                 for ($i = 0;$i < count($ven_name); ++$i) {
                     if (!empty($ven_name[$i])) {
                         $url2 = str_replace(' ', '-', $ven_name[$i]);
-                        $k = $k.'<li><a href='.Url::toRoute('/default/searchresult/').$url2.'>'.$ven_name[$i].'</a></li>';
+                        $k = $k.'<li><a href='.Url::toRoute('searchresult/').$url2.'>'.$ven_name[$i].'</a></li>';
                     }
                 }
             }
@@ -334,7 +334,7 @@ class SiteController extends BaseController
                 foreach ($item_details as $i) {
                     if (!empty($i['item_name'])) {
                         $url3 = str_replace(' ', '-', $i['item_name']);
-                        $k = $k.'<li><a href='.Url::toRoute('/default/searchresult/').$url3.'>'.$i['item_name'].'</a></li>';
+                        $k = $k.'<li><a href='.Url::toRoute('searchresult/').$url3.'>'.$i['item_name'].'</a></li>';
                     }
                 }
 
@@ -376,7 +376,7 @@ class SiteController extends BaseController
           and wvi.item_for_sale="Yes" AND wi.module_type = "vendor_item" AND wv.slug="'.$slug.'" Group By wvi.item_id limit 12')->queryAll();
 
             if ($customer_id == '') {
-                return $this->render('/default/vendor_profile', [
+                return $this->render('vendor_profile', [
               'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes,
               'category' => $main_category, 'vendorData' => $vendorData,
             ]);
@@ -389,7 +389,7 @@ class SiteController extends BaseController
                 $customer_events_list = $model->get_customer_wishlist_details($customer_id);
                 $customer_events = $model->get_customer_events($customer_id, $event_limit, $offset, $type);
 
-                return $this->render('/default/vendor_profile', [
+                return $this->render('vendor_profile', [
               'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes, 'vendorData' => $vendorData,
               'category' => $main_category, 'customer_events' => $customer_events, 'customer_events_list' => $customer_events_list,'slug'=>$slug
             ]);
@@ -457,7 +457,7 @@ class SiteController extends BaseController
             }
         }
 
-        return $this->render('/default/contact', ['faq' => $faq_details]);
+        return $this->render('contact', ['faq' => $faq_details]);
     }
 
     public function actionCmspages($slug = '')
@@ -471,7 +471,7 @@ class SiteController extends BaseController
             \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['cms_meta_description']) ? $seo_content[0]['cms_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
             \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['cms_meta_keywords']) ? $seo_content[0]['cms_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
 
-            return $this->render('/default/cmspages', ['title' => $cms_details['page_name'], 'content' => $cms_details['page_content']]);
+            return $this->render('cmspages', ['title' => $cms_details['page_name'], 'content' => $cms_details['page_content']]);
         }
     }
 

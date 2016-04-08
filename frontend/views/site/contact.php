@@ -175,7 +175,7 @@
             var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");
             jQuery.ajax({
                 type: 'POST',
-                url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('default/contact'); ?>",
+                url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('site/contact'); ?>",
                 //type: 'post',
                 data: {username: jQuery("#username").val(), useremail: jQuery("#useremail").val(), msg: jQuery("#usermessgae").val(), csrf: csrfToken},
                 success: function (data) {

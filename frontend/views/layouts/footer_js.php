@@ -933,7 +933,7 @@ jQuery("#search_list_fail1").html('');
 var _csrf=jQuery('#_csrf').val();
 if(search != ''){
 jQuery.ajax({
-url:"<?= Url::toRoute('/default/search');?>",
+url:"<?= Url::toRoute('/site/search');?>",
 type:"post",
 async:true,
 data:"search="+search+"&_csrf="+_csrf,
@@ -959,7 +959,7 @@ if(search.length>3){
 var _csrf=jQuery('#_csrf').val();
 if(search != ''){
 jQuery.ajax({
-url:"<?= Url::toRoute('/default/search'); ?>",
+url:"<?= Url::toRoute('/site/search'); ?>",
 type:"POST",
 async:false,
 data:"search="+search+"&_csrf="+_csrf,
