@@ -3,25 +3,28 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "{{%slide}}".
  *
  * @property integer $slide_id
  * @property string $slide_title
+ * @property string $slide_type
  * @property string $slide_image
  * @property string $slide_video_url
  * @property string $slide_url
  * @property string $slide_status
  * @property integer $sort
- * @property integer $created_by
- * @property integer $modified_by
  * @property string $created_datetime
  * @property string $modified_datetime
  * @property string $trash
  */
 class Slide extends \yii\db\ActiveRecord
 {
+    const UPLOADFOLDER = "slider_uploads/";
 
     /**
      * @inheritdoc
@@ -40,21 +43,18 @@ class Slide extends \yii\db\ActiveRecord
             [['slide_title','slide_type'], 'required'],
             [['slide_status', 'trash'], 'string'],
             [['slide_url'], 'url'],
-            [['sort', 'created_by', 'modified_by'], 'integer'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
-            ['slide_video_url',  'file', 'maxFiles'=>0,'extensions' => 'mp4,avi','skipOnEmpty' => false,'maxSize' => 1024 * 1024 * 20,  'when' => function ($model) {
-			        return $model->slide_type == 'video';
-			    }, 'whenClient' => "function (attribute, value) {
-			        return $('#slide-slide_type').val() == 'video';
-			    }"
-			],
-	        ['slide_image',  'image', 'maxFiles'=>0,'extensions' => 'png,jpg, jpeg','skipOnEmpty' => false,'maxSize' => 1024 * 1024 * 20,
-		         'when' => function ($model) {
-		        	return $model->slide_type == 'image';
-			    }, 'whenClient' => "function (attribute, value) {
-			        return $('#slide-slide_type').val() == 'image';
-			    }"
-			],
+            [['sort'], 'integer'],
+        ];
+    }
+
+	public function behaviors() {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
         ];
     }
 
@@ -72,11 +72,29 @@ class Slide extends \yii\db\ActiveRecord
             'slide_status' => 'Slide Status',
             'slide_type'=>'slide type',
             'sort' => 'Sort',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
             'modified_datetime' => 'Modified Datetime',
             'trash' => 'Trash',
         ];
+    }
+
+    /**
+     * @return string path to the image
+     */
+    public function getImage(){
+        if($this->slide_image){
+            //Return link to photo uploaded in S3 bucket
+            return Url::to("@".self::UPLOADFOLDER.$this->slide_image);
+        }else return false;
+    }
+
+    /**
+     * @return string path to the video
+     */
+    public function getVideo(){
+        if($this->slide_video_url){
+            //Return link to photo uploaded in S3 bucket
+            return Url::to("@".self::UPLOADFOLDER.$this->slide_video_url);
+        }else return false;
     }
 }

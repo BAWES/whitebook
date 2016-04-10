@@ -18,7 +18,7 @@ class SlideSearch extends Slide
     public function rules()
     {
         return [
-            [['slide_id', 'created_by', 'modified_by'], 'integer'],
+            [['slide_id'], 'integer'],
             [['slide_title', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
@@ -61,8 +61,6 @@ class SlideSearch extends Slide
         $query->andFilterWhere([
             'slide_id' => $this->slide_id,
             'sort' => $this->sort,
-            'created_by' => $this->created_by,
-            'modified_by' => $this->modified_by,
             'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
         ]);

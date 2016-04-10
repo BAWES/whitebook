@@ -10,6 +10,8 @@ Yii::setAlias('frontend_app_images', '/frontend/web/images'); // frontend
 
 //Amazon S3 Alias
 Yii::setAlias('s3','https://thewhitebook.s3.amazonaws.com');
-Yii::setAlias('salesguides','@s3/sales_guide_images');
-Yii::setAlias('vendorimages','@s3/vendor_images');
-Yii::setAlias('vendoritem','@s3/vendor_item_images_210');
+Yii::setAlias('banner_images','@s3/banner_images');
+Yii::setAlias('sales_guide_images','@s3/sales_guide_images');
+Yii::setAlias('slider_uploads','@s3/slider_uploads');
+Yii::setAlias('vendor_images','@s3/vendor_images');
+Yii::setAlias('vendor_item_images_210','@s3/vendor_item_images_210');

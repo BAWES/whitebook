@@ -3,7 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Slide;
+use admin\models\Slide;
 use common\models\SlideSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -116,48 +116,33 @@ class SlideController extends Controller
     {
         $access = Authitem::AuthitemCheck('1', '1');
         if (yii::$app->user->can($access)) {
-            $model = new Slide();
+            $model = new \admin\models\Slide();
+            $model->scenario = "create";
+
             if ($model->load(Yii::$app->request->post())) {
-                $model->slide_status = (Yii::$app->request->post()['Slide']['slide_status']) ? 'Active' : 'Deactive';
+
+                //Switch value from checkbox input into Active or Inactive strings
+                $model->slide_status = $model->slide_status ? 'Active' : 'Deactive';
+
+                //Get Maximum sort order, then increment by 1 for this upload
                 $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_slide` where trash = 'Default'")->asArray()->all();
-                $sort = ($max_sort[0]['sort'] + 1);
-                // }
-                $model->sort = $sort;
-                $model->save(false);
+                $model->sort = ($max_sort[0]['sort'] + 1);
 
-                if ($model->slide_type == 'video') {
-                    $file = UploadedFile::getInstances($model, 'slide_video_url');
-                } else {
-                    $file = UploadedFile::getInstances($model, 'slide_image');
-                }
-                $slide_id = $model->slide_id;
-                $base = Yii::$app->basePath;
-                //echo $file[2];die;
-                /*
-                echo '<pre>';
-                print_r ($file);die;
-                die;*/
-                if ($file) {
-                    foreach ($file as $files) {
-                        $img_ext = array('jpg', 'jpeg', 'png');
-                        $ext = $files->extension;
-                        if (in_array($ext, $img_ext)) {
-                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.png');
-                        } elseif ($ext == 'mp4') {
-                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.mp4');
-                        } elseif ($ext == 'avi') {
-                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$slide_id.'.avi');
-                        }
-                    }
-                }
-                echo Yii::$app->session->setFlash('success', 'Slides created successfully!');
+                //Get Uploaded Instances
+                $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
+                $model->slide_image = UploadedFile::getInstance($model, 'slide_image');
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', 'Slide created successfully!');
+
+                    return $this->redirect(['index']);
+                }
             }
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
@@ -180,46 +165,45 @@ class SlideController extends Controller
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post())) {
-                $model->slide_status = (Yii::$app->request->post()['Slide']['slide_status']) ? 'Active' : 'Deactive';
-                $model->save(false);
-                $base = Yii::$app->basePath;
-                if ($model->slide_type == 'video') {
-                    $file = UploadedFile::getInstances($model, 'slide_video_url');
-                } else {
-                    $file = UploadedFile::getInstances($model, 'slide_image');
-                }
-                if ($file) {
-                    if (file_exists($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.png')) {
-                        unlink($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.png');
-                    }
-                    if (file_exists($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.mp4')) {
-                        unlink($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.mp4');
-                    }
-                    if (file_exists($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.avi')) {
-                        unlink($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.avi');
-                    }
-                }
-                if ($file) {
-                    foreach ($file as $files) {
-                        $img_ext = array('jpg', 'jpeg', 'png');
-                        $ext = $files->extension;
-                        if (in_array($ext, $img_ext)) {
-                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$id.'.png');
-                        } elseif ($ext == 'mp4') {
-                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$id.'.mp4');
-                        } elseif ($ext == 'avi') {
-                            $files->saveAs($base.'/web/uploads/banner_images/'.'banner_'.$id.'.avi');
-                        }
-                    }
-                }
-                echo Yii::$app->session->setFlash('success', 'Slides updated successfully!');
+                //Change value from checkbox input into Active or Inactive strings
+                $model->slide_status = $model->slide_status ? 'Active' : 'Deactive';
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+                //If there's uploaded files, replace old ones
+                if(UploadedFile::getInstance($model, 'slide_video_url') || UploadedFile::getInstance($model, 'slide_image')){
+                    //Set scenario to Update
+                    $model->scenario = "update";
+
+                    //Store old values in case we need to delete them
+                    $oldVideo = $model->slide_video_url;
+                    $oldImage = $model->slide_image;
+
+                    //Get Uploaded Instances
+                    $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
+                    $model->slide_image = UploadedFile::getInstance($model, 'slide_image');
+
+                    if ($model->save()) {
+                        //Delete Old Uploads
+                        Yii::$app->resourceManager->delete("slider_uploads/" . $oldVideo);
+                        Yii::$app->resourceManager->delete("slider_uploads/" . $oldImage);
+
+                        //Redirect
+                        Yii::$app->session->setFlash('success', 'Slides updated successfully!');
+                        return $this->redirect(['view', 'id' => $model->slide_id]);
+                    }
+
+                }else{//Otherwise, just change the data and redirect
+                    if ($model->save()) { //ISSUE HERE!! MASSIVELY ASSIGNED BLANK IMAGE/VIDEO<MAYBE SCENARIO?
+                        Yii::$app->session->setFlash('success', 'Slides updated successfully!');
+                        return $this->redirect(['view', 'id' => $model->slide_id]);
+                    }
+                }
+
             }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
@@ -272,15 +256,6 @@ class SlideController extends Controller
     {
         $access = Authitem::AuthitemCheck('1', '32');
         if (yii::$app->user->can($access)) {
-            if (file_exists($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.png')) {
-                unlink($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.png');
-            }
-            if (file_exists($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.mp4')) {
-                unlink($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.mp4');
-            }
-            if (file_exists($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.avi')) {
-                unlink($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/banner_images/banner_'.$id.'.avi');
-            }
 
             $this->findModel($id)->delete();
 
