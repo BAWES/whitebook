@@ -22,7 +22,7 @@ use Yii;
  */
 class Slide extends \yii\db\ActiveRecord
 {
-	
+
     /**
      * @inheritdoc
      */
@@ -43,16 +43,18 @@ class Slide extends \yii\db\ActiveRecord
             [['sort', 'created_by', 'modified_by'], 'integer'],
             [['created_datetime', 'modified_datetime'], 'safe'],
             ['slide_video_url',  'file', 'maxFiles'=>0,'extensions' => 'mp4,avi','skipOnEmpty' => false,'maxSize' => 1024 * 1024 * 20,  'when' => function ($model) {
-        return $model->slide_type == 'video';
-    }, 'whenClient' => "function (attribute, value) {
-        return $('#slide-slide_type').val() == 'video';
-    }"],
-        ['slide_image',  'image', 'maxFiles'=>0,'extensions' => 'png,jpg, jpeg','skipOnEmpty' => false,'maxSize' => 1024 * 1024 * 20,
-         'when' => function ($model) {
-        return $model->slide_type == 'image';
-    }, 'whenClient' => "function (attribute, value) {
-        return $('#slide-slide_type').val() == 'image';
-    }"],
+			        return $model->slide_type == 'video';
+			    }, 'whenClient' => "function (attribute, value) {
+			        return $('#slide-slide_type').val() == 'video';
+			    }"
+			],
+	        ['slide_image',  'image', 'maxFiles'=>0,'extensions' => 'png,jpg, jpeg','skipOnEmpty' => false,'maxSize' => 1024 * 1024 * 20,
+		         'when' => function ($model) {
+		        	return $model->slide_type == 'image';
+			    }, 'whenClient' => "function (attribute, value) {
+			        return $('#slide-slide_type').val() == 'image';
+			    }"
+			],
         ];
     }
 
