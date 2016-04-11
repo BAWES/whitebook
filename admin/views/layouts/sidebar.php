@@ -16,7 +16,7 @@
 		$action = $this->context->action->id;
 		$menu = explode('\\',$controller);
 		$menu_act = $menu[2];
-		$first_menu = array('SiteinfoController','SmtpController','EmailtemplateController','ContactsController','SocialinfoController',
+		$first_menu = array('SiteinfoController','ContactsController','SocialinfoController',
 				   'ImageresizeController','SlideController','RoleController','AdminController','AccesscontrolController','FaqController','AdverthomeController');
 		$second_menu = array('CountryController','CityController','LocationController','AddresstypeController','AddressquestionController');
 		$third_menu = array('CategoryController');
@@ -40,12 +40,6 @@
 				<ul class="sub-menu">
 					<li class="<?php if ($menu_act == 'SiteinfoController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Site Info', ['siteinfo/index'], ['class'=>'link-title']) ?>
-					</li>
-					<li class="<?php if ($menu_act == 'SmtpController') {echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('SMTP Info', ['smtp/index'], ['class'=>'link-title']) ?>
-					</li>
-					<li class="<?php if ($menu_act == 'EmailtemplateController') {echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('Email Templates', ['emailtemplate/index'], ['class'=>'link-title']) ?>
 					</li>
 					<li class="<?php if ($menu_act == 'ContactsController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Contact Enquiries', ['contacts/index'], ['class'=>'link-title']) ?>
