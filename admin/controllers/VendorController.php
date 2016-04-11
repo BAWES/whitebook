@@ -131,8 +131,6 @@ class VendorController extends Controller
      */
     public function actionCreate()
     {
-        $base = Yii::$app->basePath;
-        $len = rand(1, 1000);
         $access = Authitem::AuthitemCheck('1', '22');
 
         $package = Package::loadpackage();
@@ -163,11 +161,30 @@ class VendorController extends Controller
 
                 if ($file) {
                     foreach ($file as $files) {
-                        $model->vendor_logo_path = $files->baseName.'_'.$len.'.'.$files->extension;
-                        $k = $base.'/web/uploads/vendor_logo/'.$model->vendor_logo_path;
-                        $files->saveAs($k);
-                        \yii\imagine\Image::thumbnail($k, 120, 120)
-                      ->save(($k), ['quality' => 90]);
+                        if($files instanceof yii\web\UploadedFile){
+                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+
+                            //Resize file using imagine
+                            $resize = true;
+
+                            if($resize){
+                                $newTmpName = $files->tempName . "." . $files->extension;
+
+                                $imagine = new \Imagine\Gd\Imagine();
+                                $image = $imagine->open($files->tempName);
+                                $image->resize($image->getSize()->widen(250));
+                                $image->save($newTmpName);
+
+                                //Overwrite old filename for S3 uploading
+                                $files->tempName = $newTmpName;
+                            }
+
+                            //Save to S3
+                            $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
+                            if($awsResult){
+                                $model->vendor_logo_path = $filename;
+                            }
+                        }
                     }
                 }
                 if ($model->save(false)) {

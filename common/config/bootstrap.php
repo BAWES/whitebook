@@ -14,4 +14,5 @@ Yii::setAlias('banner_images','@s3/banner_images');
 Yii::setAlias('sales_guide_images','@s3/sales_guide_images');
 Yii::setAlias('slider_uploads','@s3/slider_uploads');
 Yii::setAlias('vendor_images','@s3/vendor_images');
+Yii::setAlias('vendor_logo','@s3/vendor_logo');
 Yii::setAlias('vendor_item_images_210','@s3/vendor_item_images_210');

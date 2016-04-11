@@ -53,13 +53,15 @@ use yii\behaviors\SluggableBehavior;
  */
 class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    const UPLOADFOLDER = "vendor_logo/";
+
     public $auth_key;
     public $password_hash;
     public $password_reset_token;
     public $area_id;
     public $confirm_password;
-    public $pack; // vendor package    
-    public $vendor_working_min;    
+    public $pack; // vendor package
+    public $vendor_working_min;
     public $vendor_working_min_to;
 
     /**
@@ -75,7 +77,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
           return [
               [
                   'class' => SluggableBehavior::className(),
-                  'attribute' => 'vendor_name',              
+                  'attribute' => 'vendor_name',
               ],
           ];
     }
@@ -91,11 +93,11 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             [['category_id','vendor_name','vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number', 'vendor_contact_address'], 'required', 'on'=>'vendorUpdate'],
             [['package_id', 'created_by', 'modified_by'], 'integer'],
             [['vendor_brief', 'vendor_return_policy', 'vendor_name','vendor_contact_name',], 'string'],
-            [['package_start_date', 'package_end_date', 'created_datetime', 'modified_datetime','pack'], 'safe'],           
+            [['package_start_date', 'package_end_date', 'created_datetime', 'modified_datetime','pack'], 'safe'],
             [['package_end_date'], 'default', 'value' => null],
-            [['vendor_delivery_charge'], 'number'],        
+            [['vendor_delivery_charge'], 'number'],
             [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus'],'url', 'defaultScheme' => 'http'],
-            /* Validation Rules */           
+            /* Validation Rules */
             [['confirm_password'], 'compare', 'compareAttribute'=>'vendor_password','message'=>'Password and confirm password not same' ],
             [['vendor_contact_email'],'email'],
             ['vendor_contact_email', 'unique'],
@@ -103,10 +105,10 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             ['vendor_logo_path', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'on' => 'register'],
         ];
     }
-    
+
     public function scenarios()
     {
-        $scenarios = parent::scenarios();                                           
+        $scenarios = parent::scenarios();
         $scenarios['register'] = ['category_id','vendor_name','vendor_password','confirm_password','vendor_contact_name','vendor_contact_email','vendor_contact_number','vendor_contact_address','vendor_return_policy','vendor_status','vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus','vendor_skype','vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no','vendor_fax','vendor_logo_path','short_description'];//Scenario Values Only Accepted
         $scenarios['vendorUpdate'] = ['category_id','vendor_name','vendor_contact_name','vendor_contact_email','vendor_contact_number','vendor_contact_address','vendor_return_policy','vendor_status','vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus','vendor_skype','vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no','vendor_fax','short_description','vendor_logo_path'];//Scenario Values Only Accepted
         $scenarios['change'] = ['vendor_password'];//Scenario Values Only Accepted
@@ -120,7 +122,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             'vendor_id' => 'Vendor',
             'package_id' => 'Package Name',
-           // 'commision' => 'Commision ( % )',      
+           // 'commision' => 'Commision ( % )',
             'image_id' => 'Image ',
             'category_id' => 'Category',
             'subcategory_id' => 'Sub category',
@@ -163,13 +165,13 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             'package_end_date'=> 'Vendor End Date',
             'approve_status'=>'Approve vendor',
             'vendor_logo_path'=>'vendor logo',
-            
+
         ];
     }
-    
+
     /**   Relation function begin here
-     * 
-     *  
+     *
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getSuborders()
@@ -231,14 +233,14 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     public function getVendorItems()
     {
         return $this->hasMany(VendorItem::className(), ['vendor_id' => 'vendor_id']);
-    }   
-     
+    }
+
     /*
      *  Relation functions END here
      */
-        
-    
-     
+
+
+
      /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
         /**
      * @inheritdoc
@@ -256,7 +258,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     {
           return static::findOne(['access_token' => $token]);
     }
- 
+
     /**
      * Finds user by username
      *
@@ -265,7 +267,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($email)
     {
-        return static::findOne(['vendor_contact_email' => $email,'approve_status'=>'Yes']);        
+        return static::findOne(['vendor_contact_email' => $email,'approve_status'=>'Yes']);
     }
 
 
@@ -280,8 +282,8 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     }
     }
 
-    
-    
+
+
     public static function statusCheck($id){
     $result= Vendor::find()->select('vendor_id')->where(['vendor_id' => $id,'vendor_status' => 'Active'])->one();
     if($result){
@@ -298,15 +300,15 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         // $check_vendor variable for frontend filter IMPORATNT
         $today=date('Y-m-d');
         $datetime = Yii::$app->db->createCommand('SELECT vendor_id, DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date ,DATE_FORMAT(package_end_date,"%Y-%m-%d") AS package_end_date FROM whitebook_vendor_packages where  vendor_id='.$id);
-        $datetime = $datetime->queryAll(); 
+        $datetime = $datetime->queryAll();
 
         $blocked_dates=array();
-         if(!empty($datetime)){ 
+         if(!empty($datetime)){
          foreach ($datetime as $d)
          {
            $date = $date1 = $d['package_start_date'];
-           $end_date = $end_date1 =$d['package_end_date']; 
-          
+           $end_date = $end_date1 =$d['package_end_date'];
+
            while (strtotime($date) <= strtotime($end_date)) {
             $blocked_dates[]=$date;
             $date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
@@ -315,7 +317,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
 
         $available = in_array($today, $blocked_dates);
         if($available)
-        {                   
+        {
             /* if vendor package not expired */
             if($check_vendor !="")
             {
@@ -325,13 +327,13 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         }
         else
         {
-            
+
             return "0";die;
         }
 
     }
 }
-    
+
 
 
     public function findById($email)
@@ -391,9 +393,9 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($passwords)
-    {       
+    {
           return  Yii::$app->getSecurity()->validatePassword($passwords, $this->vendor_password);
-              
+
     }
 
     /**
@@ -429,39 +431,39 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-    /** EXTENSION MOVIE * */    
-    
+    /** EXTENSION MOVIE * */
+
     public static function loadvendorname()
-    {       
+    {
         $vendorname= Vendor::find()
         ->where(['!=', 'vendor_status', 'Deactive'])
         ->andwhere(['!=', 'trash', 'Deleted'])
-        ->all();            
+        ->all();
         $vendorname=ArrayHelper::map($vendorname,'vendor_id','vendor_name');
         return $vendorname;
-    }   
+    }
         public static function statusImageurl($status)
-    {           
-        if($status == 'Active')     
+    {
+        if($status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-    }   
-    
+    }
+
     public static function getVendor_packagedate($id)
     {
-        $id = 1;  // id for testing // check while dynamic 
+        $id = 1;  // id for testing // check while dynamic
 
         $datetime = Yii::$app->db->createCommand('SELECT DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date ,DATE_FORMAT(package_end_date,"%Y-%m-%d") AS package_end_date FROM whitebook_vendor_packages where  vendor_id='.$id);
 
 
-         $datetime = $datetime->queryAll(); 
+         $datetime = $datetime->queryAll();
         $blocked_dates=array();
-         if(!empty($datetime)){ 
+         if(!empty($datetime)){
          foreach ($datetime as $d)
          {
            $date = $date1 = $d['package_start_date'];
-           $end_date = $end_date1 =$d['package_end_date']; 
-          
+           $end_date = $end_date1 =$d['package_end_date'];
+
            while (strtotime($date) <= strtotime($end_date)) {
             $blocked_dates[]=$date;
         $date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
@@ -477,58 +479,58 @@ die;
     }
     public static function getVendor($arr='')
     {
-        $session = Yii::$app->session;  
-        $query = Vendor::find()->where('vendor_contact_email = "'.$session['email'].'"')->one();        
+        $session = Yii::$app->session;
+        $query = Vendor::find()->where('vendor_contact_email = "'.$session['email'].'"')->one();
         return (isset($query["$arr"]))?$query["$arr"]:'';
     }
 
 
     public static function getvendorname($id){
         $vendorname= Vendor::find()
-            ->where(['vendor_id'=>$id])           
-            ->all();   
-            $vendorname=ArrayHelper::map($vendorname,'vendor_id','vendor_name');            
+            ->where(['vendor_id'=>$id])
+            ->all();
+            $vendorname=ArrayHelper::map($vendorname,'vendor_id','vendor_name');
             return $vendorname;
     }
         // Pass vendor slug to frontend
         public static function vendorslug($id){
         $vendorname= Vendor::find()
             ->select(['vendor_name','slug'])
-            ->where(['vendor_id'=>$id])           
-            ->one();   
+            ->where(['vendor_id'=>$id])
+            ->one();
             return $vendorname;
         }
         // Pass vendor contact address to frontend
         public static function vendorcontactaddress($id){
         $vendordetail= Vendor::find()
             ->select(['vendor_contact_address','vendor_contact_number'])
-            ->where(['vendor_id'=>$id])           
-            ->one();   
+            ->where(['vendor_id'=>$id])
+            ->one();
             return $vendordetail;
         }
-        
+
      // Pass vendor social details to frontend
         public static function sociallist($id){
         $socialdetail= Vendor::find()
             ->select(['vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus','vendor_contact_email'])
-            ->where(['vendor_id'=>$id])           
-            ->one();   
+            ->where(['vendor_id'=>$id])
+            ->one();
             return $socialdetail;
         }
-    
+
              public static function vendorcount()
-    {   
+    {
         return Vendor::find()->where(['trash' => 'Default'])->count();
     }
          public static function vendormonthcount()
-    {        
+    {
         $month=date('m');
         $year=date('Y');
         return  Vendor::find()
         ->where(['MONTH(created_datetime)' => $month])
         ->andwhere(['YEAR(created_datetime)' => $year])
         ->count();
-    }   
+    }
      public static function vendordatecount()
     {
         $date=date('d');
@@ -539,79 +541,79 @@ die;
         ->andwhere(['YEAR(created_datetime)' => $year])
         ->andwhere(['DAYOFMONTH(created_datetime)' => $date])
         ->count();
-    }   
-    
+    }
+
          public static function vendorperiod()
     {
         $contractDateBegin=date('Y-m-d');
         $date = strtotime(date("Y-m-d", strtotime($contractDateBegin)) . " +60 days");
-        $contractDateEnd = date('Y-m-d',$date);  
+        $contractDateEnd = date('Y-m-d',$date);
         $sql="SELECT * FROM whitebook_vendor WHERE `package_end_date` >= '".$contractDateBegin."' AND`package_end_date` >= '".$contractDateBegin."' AND `package_end_date` <=  '".$contractDateEnd."'";
         $command = Yii::$app->db->createCommand($sql);
-        $period=$command->queryall();       
+        $period=$command->queryall();
         return  $period;
-    }   
-    
+    }
+
          public static function vendorexpiry()
     {
-        
+
         for ($x = 1; $x <= 5; $x++) {
         echo "The number is: $x <br>";
         }
         $year = date("Y");
-        
+
         $previousyear = $year -1;
         $contractDateBegin=date('Y-m-d');
         $date = strtotime(date("Y-m-d", strtotime($contractDateBegin)) . " +60 days");
-        $contractDateEnd = date('Y-m-d',$date);  
+        $contractDateEnd = date('Y-m-d',$date);
         $sql="SELECT * FROM whitebook_vendor WHERE `package_end_date` >= '".$contractDateBegin."' AND `package_end_date` <=  '".$contractDateEnd."'";
         $command = Yii::$app->db->createCommand($sql);
-        $period=$command->queryall();       
+        $period=$command->queryall();
         return  $period;
-    }   
-    
+    }
+
     public static function Commision()
-    {       
+    {
         $model_siteinfo = Siteinfo::find()->all();
         foreach($model_siteinfo as $key=>$val)
         {
             return $first_id = $val['commision'];
-        }       
+        }
     }
 
     /* load vendor details for front end */
     public static function loadvendornames()
-    {       
+    {
             $vendorname= Vendor::find()
             ->where(['!=', 'vendor_status', 'Deactive'])
             ->andwhere(['!=', 'trash', 'Deleted'])
             ->asArray()
-            ->all();                        
+            ->all();
             return $vendorname;
     }
 
     public static function loadvalidvendors()
     {
         /* STEP 1 GET ACTIVE VENDORS*/
-        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id, wvi.vendor_id from whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND wvi.item_approved = "Yes"')->queryAll();        
-        
+        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id, wvi.vendor_id from whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND wvi.item_approved = "Yes"')->queryAll();
+
         /* STEP 2 CHECK PACKAGE */
         foreach ($vendor as $key => $value) {
             $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
         }
 
-        return $active_vendors = implode('","', array_filter($package)); 
+        return $active_vendors = implode('","', array_filter($package));
     }
     public static function loadvendor_item($item)
     {
 				$k=array();
-		foreach ($item as $data){		
+		foreach ($item as $data){
 		$k[]=$data;
 		}
 		$id = implode("','", $k);
 		$val = "'".$id."'";
         /* STEP 1 GET ACTIVE VENDORS*/
-        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id,wv.vendor_name,wv.slug  from whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND wvi.item_approved = "Yes" AND wvi.item_id IN('.$val.')')->queryAll();        
+        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id,wv.vendor_name,wv.slug  from whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND wvi.item_approved = "Yes" AND wvi.item_id IN('.$val.')')->queryAll();
         /* STEP 2 CHECK PACKAGE */
         foreach ($vendor as $key => $value) {
             $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
@@ -619,27 +621,27 @@ die;
         $active_vendors = implode('","', array_filter($package));
         $query = Vendor::find()
         ->select(['vendor_id','slug','vendor_name'])
-        ->where('vendor_id IN ("'.$active_vendors.'")')->asArray()->all();  
+        ->where('vendor_id IN ("'.$active_vendors.'")')->asArray()->all();
 		return ($query);
-      //  
+      //
     }
 
     public static function loadvalidvendorids($cat_id=false)
     {
         /* STEP 1 GET ACTIVE VENDORS*/
         $sql = 'Select group_concat(vendor_id) as vendor_id from {{%vendor_blocked_date}} where DATE(NOW()) = DATE(block_date)';
-        $blocked_vendors = Yii::$app->db->createCommand($sql)->queryOne();                      
+        $blocked_vendors = Yii::$app->db->createCommand($sql)->queryOne();
         $condn = '';
         if($blocked_vendors['vendor_id'] !='')
         {
             $condn = 'wv.vendor_id NOT IN('.$blocked_vendors['vendor_id'].') AND';
         }
-        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id, wvi.vendor_id from 
+        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id, wvi.vendor_id from
         whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id
-        where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" 
-        AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND 
-        wvi.item_approved = "Yes" AND wvi.type_id=2 AND '.$condn.' wvi.category_id='.$cat_id)->queryAll();        
-        
+        where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default"
+        AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND
+        wvi.item_approved = "Yes" AND wvi.type_id=2 AND '.$condn.' wvi.category_id='.$cat_id)->queryAll();
+
         $package = array();
         /* STEP 2 CHECK PACKAGE */
         foreach ($vendor as $key => $value) {
@@ -649,24 +651,24 @@ die;
         {
             return '';
         }
-        return $active_vendors = implode('","', array_filter($package)); 
+        return $active_vendors = implode('","', array_filter($package));
     }
 
     /* Load who vendor having category */
     public static function Vendorcategories($slug){
         $vendor_category = Vendor::find()
             ->select(['category_id'])
-            ->where(['slug'=>$slug])           
+            ->where(['slug'=>$slug])
             ->asArray()
-            ->one();   
+            ->one();
             return $vendor_category;
         }
     public static function Vendorid_item($slug){
         $vendor_category = Vendor::find()
             ->select(['vendor_id'])
-            ->where(['slug'=>$slug])           
+            ->where(['slug'=>$slug])
             ->asArray()
-            ->one();   
+            ->one();
             return $vendor_category;
         }
 }
