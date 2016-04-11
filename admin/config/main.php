@@ -22,12 +22,6 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
-        'themeURL' => [
-            'class' => 'yii\web\UrlManager',
-            'baseUrl' => '/admin/web/themes/default',
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-        ],
         'user' => [
             'identityClass' => 'common\models\Admin',
             'enableAutoLogin' => false,

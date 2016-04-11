@@ -9,17 +9,17 @@ use yii\bootstrap\ActiveField;
 ?>
 <?= Html::csrfMetaTags() ?>
 <div class="accesscontrol-form">
-	<div class="col-md-8 col-sm-8 col-xs-8">	
+	<div class="col-md-8 col-sm-8 col-xs-8">
 	<? $form = ActiveForm::begin(array('options' => array('id' => 'myform','onsubmit'=>'return check_validation();'))); ?>
-	<div class="form-group">   
+	<div class="form-group">
 	<?php if ($model->isNewRecord) { ?>
-	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->label('Select a user')->dropDownList($admin,['prompt'=>'Select...']) ?>
 	<?php } else { ?>
-	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->label('Select a user')->dropDownList($admin,['prompt'=>'Select...','disabled' => true,]) ?><?php } ?>
-	</div>	
-	<div class="form-group">   
+	</div>
+	<div class="form-group">
 	 <div id="no-more-tables">
             <table class="col-md-12 table-bordered table-striped table-condensed cf">
         		<thead class="cf">
@@ -47,7 +47,7 @@ use yii\bootstrap\ActiveField;
         				<td>N/A</td>
         				<?php }?>
         			</tr>
-        			<?php } } else {  
+        			<?php } } else {
         			foreach($accesslist as $al){	?>
 				<tr>
         				<td><input type="checkbox" id="ctrl" name="Accesscontroller[controller][<?php echo $al['controller'];?>][controller_id]" class="checkbox_all" value="<?php echo $al['id'];?>" <?php if(($al['id'])){echo 'checked';}?>>&nbsp;<?php echo $al['controller'];?></td>
@@ -78,9 +78,9 @@ use yii\bootstrap\ActiveField;
         				<td>N/A</td>
         				<?php }?>
         			</tr>
-        			
+
         			<?php } ?>
-        			
+
         			<?php } ?>
 				</tbody>
 	</table>
@@ -88,7 +88,7 @@ use yii\bootstrap\ActiveField;
         			 <div class="ctrlnew" style="color:#a94442; margin-top:8px;">Select atleast one module</div>
         			 <div class="functionnew" style="color:#a94442; margin-top:8px;">Select atleast one function</div>
 </div>
-	
+
 	 <div class="form-group mrg_top">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
@@ -97,10 +97,10 @@ use yii\bootstrap\ActiveField;
 	</div>
 </div>
 <!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-select2/select2.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-select2/select2.min.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.css") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <script>
 $("#auth_item").select2({
@@ -110,7 +110,7 @@ $("#auth_item").select2({
 </script>
 
 <script type="text/javascript">
-$(function (){ 
+$(function (){
 	$(".admin").hide();
 	$(".ctrlnew").hide();
 	$(".functionnew").hide();
@@ -118,7 +118,7 @@ $(function (){
 </script>
 <?php if(!$model->isNewRecord){ ?>
 <script>
-	$(function (){ 
+	$(function (){
 		check_checkbox_all(); // when page load check the checkbox count and make check all to be checked
 		$('.checkbox_all,.create,.update,.delete,.manage').on('click',function(){ // when click any one of the checkbox and make check all to be checked or not
 				check_checkbox_all();
@@ -136,19 +136,19 @@ $(function (){
 
 
 <script type="text/javascript">
-$(function (){ 
-    $("#accesscontroller-admin_id").change(function (){   
+$(function (){
+    $("#accesscontroller-admin_id").change(function (){
 		$('#myTable').addClass('has-error');
    });
  });
 </script>
 
 <script type="text/javascript">
-$(function (){ 
-    $("#accesscontroller-controller").change(function (){   
+$(function (){
+    $("#accesscontroller-controller").change(function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var admin_id = $('#accesscontroller-admin_id').val();  
-        var controller_id = $('#accesscontroller-controller').val();  
+        var admin_id = $('#accesscontroller-admin_id').val();
+        var controller_id = $('#accesscontroller-controller').val();
         var path = "<?php echo Url::to(['/admin/accesscontrol/authitem']); ?> ";
         $.ajax({
         type: 'POST',
@@ -160,8 +160,8 @@ $(function (){
         })
      });
  });
- 
- 
+
+
  function check_validation()
  {
 	var ids = $("input[id=ctrl]:checked").get();
@@ -172,7 +172,7 @@ $(function (){
 	var view = $("input[id=view]:checked").get();
     if(ids.length == 0)
     {
-		$(".ctrlnew").show(); 
+		$(".ctrlnew").show();
 		$('#myTable').addClass('has-error');
 		return false;
     }
@@ -189,5 +189,5 @@ $(function (){
     }
     return false;
  }
- //33 
+ //33
 </script>

@@ -38,11 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
+
+
 <script>
 var active_dates = ["5/1/2015","10/1/2015"];
 var today = new Date();

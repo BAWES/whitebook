@@ -19,12 +19,6 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'themeURL' => [
-            'class' => 'yii\web\UrlManager',
-            'baseUrl' => '/backend/web/themes/default',
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-        ],
         'user' => [
             'identityClass' => 'common\models\Vendor',
             'enableAutoLogin' => false,

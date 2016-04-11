@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 <?php //  echo $exist_dates;die; ?>
 <div class="vendoritemcapacityexception-form">
-	<div class="col-md-8 col-sm-8 col-xs-8">	
+	<div class="col-md-8 col-sm-8 col-xs-8">
     <?php $form = ActiveForm::begin(); ?>
 
 <?= Html::csrfMetaTags() ?>
@@ -18,20 +18,20 @@ use yii\widgets\ActiveForm;
 {error}"])->dropDownList(common\models\Vendoritem::loaditems() , ['multiple'=>'multiple']) ?>
 <div id="date_error" calss="help-block" style="color:#a94442"></div>
 </div>
-<div class="form-group"> 
+<div class="form-group">
 <?php if(!$model->isNewRecord){?>
    <?= $form->field($model, 'exception_date',['template' => "{label}<div class='controls'><div class='input-group col-md-12'>{input}</div></div>{hint}{error}"])->textInput(['maxlenght' => 255, 'value' => date( 'd-m-Y', strtotime( $model->exception_date ) )]) ?>
    <?php }else{ ?>
     <?= $form->field($model, 'exception_date',['template' => "{label}<div class='controls'><div class='input-group col-md-12'>{input}</div></div>{hint}{error}"])->textInput(['maxlenght' => 255]) ?>
    <?php } ?>
 </div>
-<div class="form-group">  
+<div class="form-group">
   <?= $form->field($model, 'exception_capacity',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput() ?>
 </div>
 
 
-<div class="form-group" style="Display:none">  
-    <?= $form->field($model, 'default',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['value'=>'1']) ?>  
+<div class="form-group" style="Display:none">
+    <?= $form->field($model, 'default',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['value'=>'1']) ?>
 </div>
 
     <div class="form-group">
@@ -43,22 +43,22 @@ use yii\widgets\ActiveForm;
 </div>
 
 <!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-select2/select2.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-select2/select2.min.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.min.js") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 
 <!-- multi select begin -->
-<script type="text/javascript" src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js") ?>"></script>
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css") ?>" rel="stylesheet" type="text/css" />
 <!-- multi select end -->
 
 <script>
-	
+
 var forbidden = ["<?php //echo $exist_dates; ?>"];
 $('#vendoritemcapacityexception-exception_date').datepicker({
 	startDate: 'today',
@@ -68,10 +68,10 @@ $('#vendoritemcapacityexception-exception_date').datepicker({
         //
         var curr_day = Date.getDate();
         var curr_month = Date.getMonth()+1;
-        var curr_year = Date.getFullYear();        
-        var curr_date=curr_month+'/'+curr_day+'/'+curr_year;        
+        var curr_year = Date.getFullYear();
+        var curr_date=curr_month+'/'+curr_day+'/'+curr_year;
 
-        if (forbidden.indexOf(curr_date)>-1) return false;        
+        if (forbidden.indexOf(curr_date)>-1) return false;
     }
 });
 
@@ -81,23 +81,23 @@ $('#vendoritemcapacityexception-exception_date').datepicker({
             'enableFiltering': true,
             'buttonWidth': '660px',
             'filterPlaceholder': 'Select Item...'
-            });       
+            });
     });
 </script>
 
 <script>
 $('#submit1').click(function()
-{       
+{
         //var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var item_id = $('#vendoritemcapacityexception-item_id').val();
         var exception_date = $('#vendoritemcapacityexception-exception_date').val();
-        var exception_date = exception_date.split("-").reverse().join("-");   
+        var exception_date = exception_date.split("-").reverse().join("-");
         var path = "<?php echo Url::to(['/vendor/vendoritemcapacityexception/checkitems']); ?> ";
         var update = "<?php if($model->isNewRecord){echo '0';}else{echo $model->exception_id;} ?> ";
-$.ajax({  
+$.ajax({
         type: 'POST',
-        async:false,      
-        url: path, 
+        async:false,
+        url: path,
         data: { item_id: item_id ,exception_date: exception_date ,update: update}, //data to be send
         success: function( data ) {
             if(data==2){
@@ -108,7 +108,7 @@ $.ajax({
             $('#vendoritemcapacityexception-default').val('');
             return false;
         }else{
-          $('#vendoritemcapacityexception-default').val('1');  
+          $('#vendoritemcapacityexception-default').val('1');
         }
         return false;
          }

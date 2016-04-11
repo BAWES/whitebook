@@ -37,17 +37,17 @@ $this->params['breadcrumbs'][] = $model->item_name;
     </li>
     <li>
       <a href="#2" data-toggle="tab">Priority Log</a>
-    </li>   
-    <?php if($model->type_id=='2'){ ?> 
+    </li>
+    <?php if($model->type_id=='2'){ ?>
     <li>
       <a href="#3" data-toggle="tab">Question Answer Details</a>
-    </li>  <?php } ?> 
+    </li>  <?php } ?>
     <li>
       <a href="#4" data-toggle="tab">Gallery</a>
     </li>
   </ul>
   <div class="tab-content">
-	  
+
 <!-- Begin First Tab -->
 <div class="tab-pane" id="1" ><div class="admin" style="text-align: center;padding:0px 0px 25px 0px;">
 <?php if(isset($model->vendor_logo_path)) {
@@ -60,11 +60,11 @@ $this->params['breadcrumbs'][] = $model->item_name;
         'attributes' => [
             //'item_id',
             [
-            'label'=>'Vendor Type',			
+            'label'=>'Vendor Type',
 			'value'  => Vendoritem::getItemType($model->type_id),
 			],
             [
-            'label'=>'Vendor',			
+            'label'=>'Vendor',
 			'value'  => Vendoritem::getVendorName($model->vendor_id),
 			],
 			[
@@ -72,72 +72,72 @@ $this->params['breadcrumbs'][] = $model->item_name;
 			'value'  => Vendoritem::getCategoryName($model->category_id),
 			],
 			[
-            'label'=>'Subparent Category Name',			
+            'label'=>'Subparent Category Name',
 			'value'  => Vendoritem::getCategoryName($model->subcategory_id),
 			],
 			[
-            'label'=>'Child Category Name',			
+            'label'=>'Child Category Name',
 			'value'  => Vendoritem::getCategoryName($model->child_category),
 			],
             'item_name',
             [
-            'label'=>'Item customization description',	
-            'format'=>'raw',			
+            'label'=>'Item customization description',
+            'format'=>'raw',
 			'value'  =>strip_tags($model->item_description),
 			],
             [
-            'label'=>'Item customization description',		
-            'format'=>'raw',	
+            'label'=>'Item customization description',
+            'format'=>'raw',
 			'value'  =>strip_tags($model->item_additional_info),
 			],
             'item_amount_in_stock',
-            'item_default_capacity', 
+            'item_default_capacity',
 
 			[
-            'label'=>'Item customization description',		
-            'format'=>'raw',		
+            'label'=>'Item customization description',
+            'format'=>'raw',
 			'value'  =>strip_tags($model->item_customization_description),
 			],
 			[
-            'label'=>'Item price description',			
+            'label'=>'Item price description',
 			'value'  =>strip_tags($model->item_price_description),
 			],
             'item_for_sale',
             'item_how_long_to_make',
-            'item_minimum_quantity_to_order',          
-            'item_approved',			
-			
+            'item_minimum_quantity_to_order',
+            'item_approved',
+
             [
-            'label'=>'Themes',			
+            'label'=>'Themes',
 			'value'  => Vendoritemthemes::themedetails($model->item_id),
 			],
-			
+
 			[
-            'label'=>'Group',			
+            'label'=>'Group',
 			'value'  => Featuregroupitem::groupdetails($model->item_id),
 			],
 			[
 				'attribute'=>'created_datetime',
 				'format' => ['date', 'php:d/m/Y'],
-				'label'=>'created date',			
+				'label'=>'created date',
 			],
       ],
-    ]) ?>    
+    ]) ?>
       <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-              'item_price_per_unit',           
+              'item_price_per_unit',
         ],
-      ]);    
+      ]);
       Vendoritempricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit);
       ?>
-</div> 
+</div>
 </div>
 
 <!--End First Tab -->
 
 
-<div class="tab-pane" id="2">  
+<div class="tab-pane" id="2">
 
 <table class="table table-striped table-bordered detail-view">
 	<tbody>
@@ -152,36 +152,36 @@ $this->params['breadcrumbs'][] = $model->item_name;
 	</tbody>
 </table>
 
-</div> 
+</div>
 
 <?php if($model_question=='2') {?>
 <!--End Second Tab -->
-<div class="tab-pane" id="3">  
-<?php 
+<div class="tab-pane" id="3">
+<?php
 $t=0;
 foreach($model_question as $question_records)
 	 {?>
-		 <div class="form-group superbox" id="delete_<?= $t;?>"> 
+		 <div class="form-group superbox" id="delete_<?= $t;?>">
 
-	 
-	 	<div class="form-group superbox-s" id="delete_<?= $t;?>"> 
+
+	 	<div class="form-group superbox-s" id="delete_<?= $t;?>">
 
 		<li class="parent_question"><?= ucfirst($question_records['question_text']); ?><span  class="plus"><a href="#" onclick="questionView('<?= $question_records['question_id']; ?>',this)"></a></span><div class="show_ques<?= $question_records['question_id']; ?>"></div></li>
-	
+
 	</div>
 	</div>
-	<?php $t++;}	?>		
-</div> 
+	<?php $t++;}	?>
+</div>
 <!--End third Tab -->
 <?php } ?>
 
-<div class="tab-pane" id="4" > 
+<div class="tab-pane" id="4" >
 <ul class="row">
   			<?php foreach ($imagedata as $image) { ?>
             <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-               <?= Html::img(Yii::getAlias('@web/uploads/vendor_images/').$image->image_path, ['class'=>'img-responsive','width'=>'125px','height'=>'125px','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?> 
+               <?= Html::img(Yii::getAlias('@web/uploads/vendor_images/').$image->image_path, ['class'=>'img-responsive','width'=>'125px','height'=>'125px','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
             </li>
-             <?php } ?>     
+             <?php } ?>
 </ul>
 </div>
 
@@ -189,7 +189,7 @@ foreach($model_question as $question_records)
 </div>
 
 <script>
-	
+
 	var csrfToken = $('meta[name="csrf-token"]').attr("content");
  /* Begin when loading page first tab opened */
  $(function (){
@@ -201,18 +201,18 @@ foreach($model_question as $question_records)
 
 // single question view
 function questionView(q_id,tis){
-	
+
 	var check = $('.show_ques'+q_id).html();
 	if(check==''){
-	var path = "<?php echo Url::to(['/admin/vendoritem/viewrenderquestion']); ?> ";	
+	var path = "<?php echo Url::to(['/admin/vendoritem/viewrenderquestion']); ?> ";
 	$.ajax({
 		type : 'POST',
 		url :  path,
 		data: { q_id: q_id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {        
+        success: function( data ) {
         $('.show_ques'+q_id).html(data);
         $(tis).toggleClass("expanded");
-        return false;    	
+        return false;
         }
 	})
 	}else{
@@ -223,13 +223,13 @@ function questionView(q_id,tis){
 }
 </script>
  <style>
-      ul {         
+      ul {
           padding:0 0 0 0;
           margin:0 0 0 0;
       }
-      ul li {     
+      ul li {
           list-style:none;
-          margin-bottom:25px;           
+          margin-bottom:25px;
       }
       ul li img {
           cursor: pointer;
@@ -244,12 +244,12 @@ function questionView(q_id,tis){
           text-align:center;
           margin:0 auto;
       }
-    .controls{          
+    .controls{
         width:50px;
         display:block;
         font-size:11px;
         padding-top:8px;
-        font-weight:bold;          
+        font-weight:bold;
     }
     .next {
         float:right;
@@ -264,7 +264,7 @@ function questionView(q_id,tis){
           .modal-dialog {
               width:500px;
               padding-top: 90px;
-          }          
+          }
       }
       @media screen and (max-width:1500px){
           #ads {
@@ -273,15 +273,15 @@ function questionView(q_id,tis){
       }
   </style>
 
- 
-    
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-modal-box/photo-gallery.js"></script>
-    
+    <script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js") ?>"></script>
+
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog" style="z-index: 99999;">
-        <div class="modal-content">         
-          <div class="modal-body">                
+        <div class="modal-content">
+          <div class="modal-body">
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

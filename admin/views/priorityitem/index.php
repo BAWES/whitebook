@@ -23,28 +23,28 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="priorityitem-index">
 <div class="loadingmessage" style="display: none;">
 <p>
-<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?> 
+<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
 </p>
 </div>
-<p>        <?= Html::a('Create Priority item', ['create'], ['class' => 'btn btn-success']) ?>       
-        
-        <?= Html::a('Normal', [''], ['class' => 'btn btn-info','id'=>'Normal','onclick'=>'return Status("Normal")', 'style'=>'float:right;']) ?>			
-        
-		<?= Html::a('Super', [''], ['class' => 'btn btn-info','id'=>'Super','onclick'=>'return Status("Super")', 'style'=>'float:right;']) ?>			
+<p>        <?= Html::a('Create Priority item', ['create'], ['class' => 'btn btn-success']) ?>
+
+        <?= Html::a('Normal', [''], ['class' => 'btn btn-info','id'=>'Normal','onclick'=>'return Status("Normal")', 'style'=>'float:right;']) ?>
+
+		<?= Html::a('Super', [''], ['class' => 'btn btn-info','id'=>'Super','onclick'=>'return Status("Super")', 'style'=>'float:right;']) ?>
 </p>
 	<div class="filter-date">
 
-	<input type="text" name="filter_start" id="filter_start"  placeholder='Priority start date'class="filter" style="margin-left:10px;"/>    
+	<input type="text" name="filter_start" id="filter_start"  placeholder='Priority start date'class="filter" style="margin-left:10px;"/>
 
- 	<input type="text" name="filter_end" id="filter_end"  placeholder='Priority end date' class="filter" style="margin-left:10px;"/>        
-	
+ 	<input type="text" name="filter_end" id="filter_end"  placeholder='Priority end date' class="filter" style="margin-left:10px;"/>
+
 	<select id="status" style="width:100px;">
 		<option value="All">All</option>
 		<option value="Active">Active</option>
 		<option value="Inactive">Inactive</option>
 	</select>
 
-    
+
     <select id="level" style="width:100px;">
         <option value="All">All</option>
         <option value="Normal">Normal</option>
@@ -52,12 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
     </select>
 
     <input type="button" name="filter" id="filter" value="Filter" onClick="prioritydatefilter()" class="btn btn-info" style="margin-left:10px;"/>
-    <input type="button" name="clear" id="clear" value="clear" class="btn btn-info" style="margin-left:10px;"/>        
+    <input type="button" name="clear" id="clear" value="clear" class="btn btn-info" style="margin-left:10px;"/>
 
     </div>
 
     <br>
-    
+
 	<?php Pjax::begin(['enablePushState' => false]); ?>
 
     <?= GridView::widget([
@@ -74,49 +74,49 @@ $this->params['breadcrumbs'][] = $this->title;
             [
 				'attribute'=>'priority_start_date',
 				'format' => ['date', 'php:d/m/Y'],
-				'label'=>'Priority start date',			
-			],			
+				'label'=>'Priority start date',
+			],
             [
 				'attribute'=>'priority_end_date',
 				'format' => ['date', 'php:d/m/Y'],
-				'label'=>'Priority end date',			
+				'label'=>'Priority end date',
 			],
-			
+
 			[
 				'attribute'=>'created_datetime',
 				'format' => ['date', 'php:d/m/Y'],
-				'label'=>'created date',			
+				'label'=>'created date',
 			],
 			[
-			  'header'=>'status',			
+			  'header'=>'status',
 			  'format' => 'raw',
 			  'value'=>function($data) {
-				return HTML::a('<img src='.Yii::$app->newcomponent->statusImageurl($data->status).' id="image-'.$data->priority_id.'" title='.Yii::$app->newcomponent->statusTitle($data->status).'>','javascript:void(0)',['id'=>'status', 
+				return HTML::a('<img src='.Yii::$app->newcomponent->statusImageurl($data->status).' id="image-'.$data->priority_id.'" title='.Yii::$app->newcomponent->statusTitle($data->status).'>','javascript:void(0)',['id'=>'status',
 				'onclick'=>'change("'.$data->status.'","'.$data->priority_id.'")']);
 				},
-			
-			 ],			
-			
+
+			 ],
+
             ['class' => 'yii\grid\ActionColumn',
             'header'=>'Action',
             'template' => ' {update} {delete}',
-			],  
-			],   
+			],
+			],
     ]); ?>
-    
+
     <?php Pjax::end(); ?>
 </div>
 <!-- Filter items append this div-->
 <div id="filteritems"></div>
 
 <!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <script>
-    $('#one').click(function() {		
+    $('#one').click(function() {
         var names = [];
         $('#selection input:checked').each(function() {
             names.push(this.name);
@@ -125,30 +125,30 @@ $this->params['breadcrumbs'][] = $this->title;
     });
 
     $('#clear').click(function()
-    {    	
+    {
 			$('#filter_start').val("");
 			$('#filter_end').val("");
 			$('#status').val("All");
             $('#level').val("All");
 
-    var csrfToken = $('meta[name="csrf-token"]').attr("content");		          
-        // start and end date values 
+    var csrfToken = $('meta[name="csrf-token"]').attr("content");
+        // start and end date values
         var start = $('#filter_start').val();
-        var start = start.split("-").reverse().join("-");   
-        var end = $('#filter_end').val(); 
-        var end = end.split("-").reverse().join("-");   
-        var status = $('#status').val();       
-        var level = $('#level').val();       
+        var start = start.split("-").reverse().join("-");
+        var end = $('#filter_end').val();
+        var end = end.split("-").reverse().join("-");
+        var status = $('#status').val();
+        var level = $('#level').val();
         $('.loadingmessage').show();
         var path = "<?php echo Url::to(['/admin/priorityitem/index']); ?> ";
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { start:start, end:end, status: status, level: level, _csrf : csrfToken}, //data to be send
-        success: function( data ) {     
+        success: function( data ) {
             $('.loadingmessage').hide();
-             $('#w0').remove(); 
-            $('#filteritems').html(data); 
+             $('#w0').remove();
+            $('#filteritems').html(data);
          }
         })
 
@@ -159,28 +159,28 @@ $this->params['breadcrumbs'][] = $this->title;
 </script>
 
 <script type="text/javascript">
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");		
+	var csrfToken = $('meta[name="csrf-token"]').attr("content");
 	var txt;
-	
-	/* Change status for respective vendor items */	
-		function Status(status){							
+
+	/* Change status for respective vendor items */
+		function Status(status){
 		var keys = $('#priority').yiiGridView('getSelectedRows');
-		var pathUrl = "<?php echo Url::to(['/admin/priorityitem/status']); ?>";		
+		var pathUrl = "<?php echo Url::to(['/admin/priorityitem/status']); ?>";
 		if(keys.length == 0) { alert ('Select Your priority item'); return false;}
 		var r = confirm("Are you sure want to " +status+ "?");
-		if (r == true) {			
+		if (r == true) {
 			$.ajax({
-			   url: pathUrl, 
-			   type : 'POST',			 
+			   url: pathUrl,
+			   type : 'POST',
 			   data: {keylist: keys, status:status},
 			   success : function(data)
-			   {				  
-					window.location.reload(true); 
+			   {
+					window.location.reload(true);
 			   }
-			
+
 			});
 			return false;
-        }         
+        }
 		return false;
     }
 
@@ -188,48 +188,48 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $('input#filter_start,input#filter_end').datepicker({
     format: 'dd-mm-yyyy',
-    autoclose: true,    
+    autoclose: true,
 });
 
 function prioritydatefilter()
-{             
-    var csrfToken = $('meta[name="csrf-token"]').attr("content");		          
-        // start and end date values 
+{
+    var csrfToken = $('meta[name="csrf-token"]').attr("content");
+        // start and end date values
         var start = $('#filter_start').val();
-        var end = $('#filter_end').val(); 
-        var status = $('#status').val();  
-        var level = $('#level').val();       
+        var end = $('#filter_end').val();
+        var status = $('#status').val();
+        var level = $('#level').val();
         $('.loadingmessage').show();
         var path = "<?php echo Url::to(['/admin/priorityitem/index']); ?> ";
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { start:start, end:end, status: status, level: level, _csrf : csrfToken}, //data to be send
-        success: function( data ) {     
+        success: function( data ) {
             $('.loadingmessage').hide();
-             $('#w0').remove(); 
-            $('#filteritems').html(data); 
+             $('#w0').remove();
+            $('#filteritems').html(data);
          }
         })
-    
-}	
+
+}
 /* END priority start and end date picker & filter */
 
 function change(status, aid)
-	{		
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
+	{
+		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var path = "<?php echo Url::to(['/admin/priorityitem/blockpriority']); ?> ";
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { status: status, aid: aid, _csrf : csrfToken}, //data to be send
         success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+			var status1 = (status == 'Active') ? 'Deactive' : 'Active';
 			$('#image-'+aid).attr('src',data);
-			$('#image-'+aid).parent('a').attr('onclick', 
+			$('#image-'+aid).parent('a').attr('onclick',
 			"change('"+status1+"', '"+aid+"')");
          }
         });
      }
- 
+
 </script>

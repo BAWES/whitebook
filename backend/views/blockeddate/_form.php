@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="blockeddate-form">
-	<div class="col-md-8 col-sm-8 col-xs-8">	
+	<div class="col-md-8 col-sm-8 col-xs-8">
     <?php $form = ActiveForm::begin(); ?>
     <div class="form-group">
 	<div class="form-group">
@@ -24,8 +24,8 @@ foreach ($b as $b1){
    <?= $form->field($model, 'block_date',['template' => "{label}<div class='controls'><div class='input-group col-md-12'>{input}</div></div>{hint}{error}"])->textInput(['maxlenght' => 255, 'value' => date( 'd-m-Y', strtotime( $model->block_date ) )]) ?>
    <?php }else{ ?>
     <?= $form->field($model, 'block_date',['template' => "{label}<div class='controls'><div class='input-group col-md-12'>{input}</div></div>{hint}{error}"])->textInput(['maxlenght' => 255]) ?>
-   <?php } ?>		
-</div> 
+   <?php } ?>
+</div>
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
@@ -36,10 +36,10 @@ foreach ($b as $b1){
 </div>
 
 <!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <script>

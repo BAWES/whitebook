@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="loadingmessage" style="display: none;">
 <p>
-<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?> 
+<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
 </p>
 </div>
 <?= Html::csrfMetaTags() ?>
@@ -34,16 +34,16 @@ $this->params['breadcrumbs'][] = $this->title;
     </li>
     <li>
       <a href="#3" data-toggle="tab">Package Log</a>
-    </li>    
+    </li>
     <li>
       <a href="#4" data-toggle="tab">Vendor Item Details</a>
-    </li>  
+    </li>
     <li>
       <a href="#5" data-toggle="tab">Delivery timeslot</a>
-    </li>  
+    </li>
     <li>
       <a href="#6" data-toggle="tab">Exception dates</a>
-    </li>  
+    </li>
   </ul>
   <div class="tab-content">
 <!-- Begin First Tab -->
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
               ['label'=>'package_id',
              'value'=> isset($model->package->package_name) ? $model->package->package_name : 'Not set' ,
             ],
-            'vendor_brief',  
+            'vendor_brief',
             ['label'=>'vendor_return_policy',
             'value'=>strip_tags($model->vendor_return_policy)
             ],
@@ -80,10 +80,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'vendor_emergency_contact_name',
             'vendor_emergency_contact_email',
             'vendor_emergency_contact_number',
-            'vendor_website',           
-            'vendor_delivery_charge',          
-            'vendor_status',]]);?>   
-</div> 
+            'vendor_website',
+            'vendor_delivery_charge',
+            'vendor_status',]]);?>
+</div>
 </div>
 <!--End First Tab -->
 
@@ -98,13 +98,13 @@ $this->params['breadcrumbs'][] = $this->title;
 	<td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date',])->label(false);?></td>
 	<td style="float:left;"><?php echo Html::Button($model->isNewRecord ? 'Add' : 'Add', [ 'onclick' => 'return check_validation();','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary-ads','style'=>'float:right;margin-top:10px;']);
 	echo $form->field($model, 'vendor_id')->hiddenInput()->label('');
-	ActiveForm::end(); 
+	ActiveForm::end();
 			?></td><td></td><td></td>
 			<div id="result"></div>
 			<div id="information" style="color:green; margin-top:8px;"></div>
 			<div id="information_fail" style="color:red; margin-top:8px;"></div>
 			</tr>
-			
+
 		<tr class="edit"><td><?php $package = Package::loadpackage();
 			   $model->package_id='';$model->package_start_date='';$model->package_end_date='';
 	echo $form->field($model, 'package_id')->dropdownList($package,['prompt'=>'Select Package',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"], 'class'=>'form-control edit_package','style' => 'margin-top:10px;'])->label(false); ?></td>
@@ -114,10 +114,10 @@ $this->params['breadcrumbs'][] = $this->title;
 	echo $form->field($model, 'vendor_id')->hiddenInput()->label(''); ?></td>
 	<td><?php echo Html::Button($model->isNewRecord ? 'Cancel' : 'Cancel', [ 'onclick' => 'return cancel();','class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-info','style'=>'float:right;margin-top:10px;']);
 	echo $form->field($model, 'vendor_id')->hiddenInput()->label(''); ?></td><td></td><td></td>
-			
+
 		<div id="update_information" style="color:green; margin-top:8px;"></div>
 		<div id="update_information_fail" style="color:red; margin-top:8px;"></div>
-			</tr>	
+			</tr>
 	</tbody>
 	</table>
 			<table class="table table-striped table-bordered detail-view" id="myTable">
@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <!--Start Fourth Tab -->
 <div class="tab-pane" id="4">
-	
+
 <table class="table table-striped table-bordered detail-view">
 	<tbody>
 		<tr>
@@ -156,11 +156,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="tab-pane" id="5">
-	
-	<?php $timeslot_val = array(); 
+
+	<?php $timeslot_val = array();
   $delivery_data = Deliverytimeslot::vendor_delivery_details($model->vendor_id);
     if($delivery_data>0){?>
-    
+
 	<div class="vendor-admin-new">
 	<div class="day_head">SUNDAY</div>
     <div class="day_head">MONDAY</div>
@@ -169,116 +169,116 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="day_head">THURSDAY</div>
     <div class="day_head">FRIDAY</div>
     <div class="day_head">SATURDAY</div>
-    
+
     <div class="delivery_days">
       <div class="sun">
       <ul>
-      <?php  $sun = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Sunday'); 
+      <?php  $sun = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Sunday');
       foreach ($sun as $key => $value) {
          $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
          $start = date('g:ia', strtotime($value['timeslot_start_time']));
          $end =  date('g:ia', strtotime($value['timeslot_end_time']));
          $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'.'</a>'; 
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>'; 
+        echo '<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
         echo '</div>';
-      } ?>        
+      } ?>
     </ul>
-         
+
       </div>
       <div class="mon">
         <ul>
-      <?php  $mon = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Monday'); 
+      <?php  $mon = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Monday');
       foreach ($mon as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'; 
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>'; 
+        echo '<li>'. $start .' - '. $end .'</li>';
+        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
         echo '</div>';
-      } ?>        
+      } ?>
     </ul>
       </div>
       <div class="tue">
           <ul>
-      <?php  $tue = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Tuesday'); 
-      
+      <?php  $tue = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Tuesday');
+
       foreach ($tue as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'; 
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>'; 
+        echo '<li>'. $start .' - '. $end .'</li>';
+        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
         echo '</div>';
-      } ?>        
+      } ?>
     </ul>
       </div>
       <div class="wed">
           <ul>
-      <?php  $wed = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Wednesday'); 
+      <?php  $wed = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Wednesday');
       foreach ($wed as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'; 
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>'; 
+        echo '<li>'. $start .' - '. $end .'</li>';
+        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
         echo '</div>';
-      } ?>        
+      } ?>
     </ul>
       </div>
       <div class="thu">
           <ul>
-      <?php  $thu = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Thursday'); 
-      
+      <?php  $thu = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Thursday');
+
       foreach ($thu as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'.'</a>'; 
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>'; 
+        echo '<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
         echo '</div>';
-      } ?>        
+      } ?>
     </ul>
       </div>
       <div class="fri">
           <ul>
-      <?php  $fri = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Friday'); 
+      <?php  $fri = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Friday');
       foreach ($fri as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
           $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'; 
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>'; 
+        echo '<li>'. $start .' - '. $end .'</li>';
+        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
         echo '</div>';
-      } ?>        
+      } ?>
     </ul>
       </div>
       <div class="sat">
           <ul>
-      <?php  $sat = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Saturday'); 
+      <?php  $sat = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Saturday');
       foreach ($sat as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'; 
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>'; 
+        echo '<li>'. $start .' - '. $end .'</li>';
+        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
         echo '</div>';
-      } ?>        
+      } ?>
     </ul>
-      </div>      
+      </div>
     </div>
 </div>
 <?php } else {
@@ -290,7 +290,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <!--Start sixth Tab -->
 <div class="tab-pane" id="6">
-	
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider3,
         'filterModel' => $searchModel3,
@@ -298,17 +298,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
         [
         'attribute'=>'item_name',
-        'label'=>'Item Name',     
+        'label'=>'Item Name',
         'value'=>function($data){
           return $data->getItemName($data->item_id);
-          }       
+          }
 		],
-        
+
 			[
 				'attribute'=>'exception_date',
 				'format' => ['date', DATE],
-				'label'=>'exception date',			
-			],	
+				'label'=>'exception date',
+			],
             'exception_capacity',
         ],
     ]); ?>
@@ -316,18 +316,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <!-- BEGIN PLUGIN CSS -->
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
-<!-- END PLUGIN CSS -->
 
-   
+
 
 <script>
-	
+
 	/* Begin Tabs NEXT & PRVE buttons */
 	$('.btnNext').click(function(){
 	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
@@ -335,14 +333,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	  $('.btnPrevious').click(function(){
 	  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-	});   
+	});
 	/* End Tabs NEXT & PRVE buttons */
-		
- $(function (){ 
+
+ $(function (){
 
  	/* Begin when loading page first tab opened */
   	$('.nav-tabs li:first').addClass("active");
- 	$(".tab-content div:first").addClass("active"); 
+ 	$(".tab-content div:first").addClass("active");
  	/* End when loading page first tab opened */
 
  	/* For themes and groups list checkbox alignment*/
@@ -350,77 +348,77 @@ $this->params['breadcrumbs'][] = $this->title;
  	/* For themes and groups list checkbox alignment*/
 
 	$('#option').hide();
-    $(".vendoritemquestion-question_answer_type").live('change',function (){						
+    $(".vendoritemquestion-question_answer_type").live('change',function (){
 		var type = $(this).val();
-		
+
 		if(type =='selection')
-		{	
+		{
 			$(this).next('.price_val').remove();
 			var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
-			$('#option').show();	
-			$(this).after('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" name="Addss" value="Add Selection"></div>');				 					
+			$('#option').show();
+			$(this).after('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" name="Addss" value="Add Selection"></div>');
 		}
 		else if(type =='image' ||  type =='text')
-		{			
+		{
 			$(this).next('.selection').remove();
-			$(this).next('.price_val').remove();			
+			$(this).next('.price_val').remove();
 			var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
-			$('#option').show();	
-			$(this).after('<div class="price_val"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');	
+			$('#option').show();
+			$(this).after('<div class="price_val"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
 		}
-		
+
   	// Add selection for questions //
 		});
 		var p = 1;
-		$('.add_question').live('click',function(){ 
+		$('.add_question').live('click',function(){
 			var j = $(this).attr('id').replace(/add_question/, '');
-			$(this).before('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');	p++;			 					
-		})				
+			$(this).before('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');	p++;
+		})
 	});
 
 </script>
 <script type="text/javascript">
-	$(function (){ 	
-	$(".edit").hide(); 
-	
+	$(function (){
+	$(".edit").hide();
+
 	var start_date = $('#vendor-package_start_date').val();
 	var end_date = $('#vendor-package_end_date').val();
 	if(start_date=='0000-00-00'){
-		$('#vendor-package_start_date').val('');		
+		$('#vendor-package_start_date').val('');
 	}
 	if(end_date=='0000-00-00'){
 		$('#vendor-package_end_date').val('');
 	}
 	});
-	
-	
+
+
  function check_validation()
  {
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");	
+	var csrfToken = $('meta[name="csrf-token"]').attr("content");
 	var id = $('#vendor-package_id').val();
 	var vid = $('#vendor-vendor_id').val();
-	var start_dat = $('#vendor-package_start_date').val(); // 
-	var start_date = start_dat.split("-").reverse().join("-");	// change date format 
-	var end_dat = $('#vendor-package_end_date').val(); // 
-	var end_date = end_dat.split("-").reverse().join("-");	// change date format 
+	var start_dat = $('#vendor-package_start_date').val(); //
+	var start_date = start_dat.split("-").reverse().join("-");	// change date format
+	var end_dat = $('#vendor-package_end_date').val(); //
+	var end_date = end_dat.split("-").reverse().join("-");	// change date format
 	var package_pricing = $('#vendor-package_pricing').val();
 	if((id==null)||(id=='')||(start_date==null)||(start_date=='')||(end_date==null)||(end_date=='')){
 	$("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>Kindly Enter Valid value!</div>');
           $('.alert .close').on("click", function(e){
                 $(this).parent().fadeTo(500, 0).slideUp(500);
              });
-	
+
     return false;
 	}
         var path = "<?php echo Url::to(['/admin/vendor/changepackage']); ?> ";
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { id: id ,vid: vid ,start_date: start_date ,end_date: end_date,package_pricing: package_pricing ,_csrf : csrfToken}, //data to be send
-        success: function( data ){			
+        success: function( data ){
 			$('.loadingmessage').hide();
-			if(data==1){			
+			if(data==1){
 					$("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>Blocked dates available in between start date and end date!</div>');
           $('.alert .close').on("click", function(e){
                 $(this).parent().fadeTo(500, 0).slideUp(500);
@@ -443,7 +441,7 @@ $this->params['breadcrumbs'][] = $this->title;
           $('.alert .close').on("click", function(e){
                 $(this).parent().fadeTo(500, 0).slideUp(500);
              });
-			
+
 			$('#vendor-package_id').val('');
 			$('#vendor-package_start_date').val('');
 			$('#vendor-package_end_date').val('');
@@ -460,23 +458,23 @@ $this->params['breadcrumbs'][] = $this->title;
              });
 			$('#myTable tr').removeClass("update_row");
 			$("#myTable tbody tr:first").after(data);
-			
+
 		}
 }
 })
-} 
- 
+}
+
 function packagedelete(id)
-	{	
-		var r = confirm("Are you sure want to delete?");                                
+	{
+		var r = confirm("Are you sure want to delete?");
         if (r == true) {
-			
+
 		var vid = $('#vendor-vendor_id').val();
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
+		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var path = "<?php echo Url::to(['/admin/package/packagedelete']); ?> ";
-        $('.loadingmessage').show();        
-        $.ajax({  
-        type: 'POST',      
+        $('.loadingmessage').show();
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { packid: id,vid:vid,_csrf : csrfToken}, //data to be send
         success: function(data) {
@@ -489,9 +487,9 @@ function packagedelete(id)
              });
 		$(".add").show();
 		$(".edit").hide();
-			$('.edit_package').attr('value','');	
-			$('.edit_start').val('');	
-			$('.edit_end').val('');	
+			$('.edit_package').attr('value','');
+			$('.edit_start').val('');
+			$('.edit_end').val('');
 
 			$("#vendor-package_start_date").attr("disabled","disabled");
 			$("#vendor-package_end_date").attr("disabled","disabled");
@@ -503,71 +501,71 @@ function packagedelete(id)
         });
      }
  }
- 
- 
+
+
 function packageedit(id)
-	{	
-		$('#information_fail').html('');	
+	{
+		$('#information_fail').html('');
 		$("#information").html('');
-		$('#update_information_fail').html('');	
+		$('#update_information_fail').html('');
 		$("#update_information").html('');
-		
+
 		$(".add").hide();
 		$(".edit").show();
 		$("#information").html('');
 		$("#vendor-package_start_date").datepicker("refresh");
-		var vid = $('#vendor-vendor_id').val();	
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
+		var vid = $('#vendor-vendor_id').val();
+		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var path = "<?php echo Url::to(['/admin/vendor/packageupdate']); ?> ";
-        $('.loadingmessage').show();        
-        $.ajax({  
-        type: 'POST',      
+        $('.loadingmessage').show();
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { packid: id,vid:vid,_csrf : csrfToken}, //data to be send
-        success: function(data) { 
+        success: function(data) {
 			obj = JSON.parse(data);
 			$('.loadingmessage').hide();
-			var packageid=obj.packid; 
+			var packageid=obj.packid;
 			var start=obj.start;
-			var start = start.split("-").reverse().join("-");	
-			var end=obj.end; 
-			var end = end.split("-").reverse().join("-");	
-			var forbidden=obj.date; 
-			var input1=obj.input1; 			
-			var input2=obj.input2; 
+			var start = start.split("-").reverse().join("-");
+			var end=obj.end;
+			var end = end.split("-").reverse().join("-");
+			var forbidden=obj.date;
+			var input1=obj.input1;
+			var input2=obj.input2;
 			$('#packedit').val(id);
 			$('.mystart').html(data.input1);
-			$('.myend').html(data.input2);			
-			$('.edit_package').attr('value',packageid);							
+			$('.myend').html(data.input2);
+			$('.edit_package').attr('value',packageid);
 			$('.edit_start').remove();
-			$('.mystart1').html('<input type="text" id="vendor-package_start_date" class="edit_start" name="Vendor[package_start_date]" value="" maxlength="128" placeholder="Start">');			
+			$('.mystart1').html('<input type="text" id="vendor-package_start_date" class="edit_start" name="Vendor[package_start_date]" value="" maxlength="128" placeholder="Start">');
 			$('.edit_start').val(start);
 			$('.edit_end').remove();
-			$('.myend1').html('<input type="text" id="vendor-package_end_date" class="edit_end" name="Vendor[package_end_date]" value="" maxlength="128" placeholder="End date">');						
-			$('.edit_end').val(end);	
+			$('.myend1').html('<input type="text" id="vendor-package_end_date" class="edit_end" name="Vendor[package_end_date]" value="" maxlength="128" placeholder="End date">');
+			$('.edit_end').val(end);
 			$('.edit_start,.edit_end').datepicker({
 				format: 'dd-mm-yyyy',
 				autoclose: true,
 				startDate:'d',
 				beforeShowDay:function(Date){
-					var curr_date = Date.toJSON().substring(0,10);					
-					if (forbidden.indexOf(curr_date)>-1) return false;        
+					var curr_date = Date.toJSON().substring(0,10);
+					if (forbidden.indexOf(curr_date)>-1) return false;
 				}
       });
     }
   });
  }
- 
- 
-$(function (){ 
+
+
+$(function (){
     $("#vendor-package_id").live("change",function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var id = $('#vendor-vendor_id').val();
         var path = "<?php echo Url::to(['/admin/vendor/loadpackagedate']); ?> ";
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',    
-		dataType:"json",  
+        $.ajax({
+        type: 'POST',
+		dataType:"json",
         url: path, //url to be called
         data: { id: id ,_csrf : csrfToken}, //data to be send
         success: function( data ) {
@@ -581,17 +579,17 @@ $('#vendor-package_start_date,#vendor-package_end_date').datepicker({
 	autoclose: true,
 	startDate:'d',
     beforeShowDay:function(Date){
-        var curr_date = Date.toJSON().substring(0,10);        
-        if (forbidden.indexOf(curr_date)>-1) return false;        
+        var curr_date = Date.toJSON().substring(0,10);
+        if (forbidden.indexOf(curr_date)>-1) return false;
     }
 })
 }
 }
 });
-}); 
-}); 
- 
- 
+});
+});
+
+
  function check_edit_validation()
  {
 	var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -600,7 +598,7 @@ $('#vendor-package_start_date,#vendor-package_end_date').datepicker({
 	var packedit = $('#packedit').val();
 	var start_date = $('.edit_start').val();
 	var end_date = $('.edit_end').val();
-	
+
 
 	if((id==null)||(id=='')||(start_date==null)||(start_date=='')||(end_date==null)||(end_date=='')){
 			$("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>Kindly enter valid value!</div>');
@@ -610,18 +608,18 @@ $('#vendor-package_start_date,#vendor-package_end_date').datepicker({
     return false;
 	}else
 	{
-	var start_date = start_date.split("-").reverse().join("-");	// change date format 
-	var end_date = end_date.split("-").reverse().join("-");	// change date format 
+	var start_date = start_date.split("-").reverse().join("-");	// change date format
+	var end_date = end_date.split("-").reverse().join("-");	// change date format
 
         var path = "<?php echo Url::to(['/admin/vendor/changeeditpackage']); ?> ";
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { id: id ,vid: vid ,packedit:packedit,start_date: start_date ,end_date: end_date ,_csrf : csrfToken}, //data to be send
         success: function( data ){
         	$('.loadingmessage').hide();
-			if(data==1){				
+			if(data==1){
 			$("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>Blocked dates available in between start date and end date!</div>');
           $('.alert .close').on("click", function(e){
                 $(this).parent().fadeTo(500, 0).slideUp(500);
@@ -633,7 +631,7 @@ $('#vendor-package_start_date,#vendor-package_end_date').datepicker({
           $('.alert .close').on("click", function(e){
                 $(this).parent().fadeTo(500, 0).slideUp(500);
              });
-			
+
 			return false;
 			}
 			else{
@@ -653,30 +651,25 @@ $('#vendor-package_start_date,#vendor-package_end_date').datepicker({
 			$("#myTable tbody tr:first").after(data);
 			$(".add").show();
 			$(".edit").hide();
-			$('.edit_package').attr('value','');	
-			$('.edit_start').val('');	
+			$('.edit_package').attr('value','');
+			$('.edit_start').val('');
 			$('.edit_end').val('');
 			}
 }
 });
 }
 }
-  
+
  function cancel()
  {
-	 	$(".add").show();		
+	 	$(".add").show();
 			$('#vendor-package_id').val('');
 			$('#vendor-package_start_date').val('');
 			$('#vendor-package_end_date').val('');
 		$(".edit").hide();
-		
-			$('.edit_package').attr('value','');	
-			$('.edit_start').val('');	
-			$('.edit_end').val('');	
+
+			$('.edit_package').attr('value','');
+			$('.edit_start').val('');
+			$('.edit_end').val('');
  }
 </script>
-
-
-
-
-

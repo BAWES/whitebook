@@ -6,54 +6,54 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="loadingmessage" style="display: none;">
 <p>
-<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?> 
+<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
 </p>
-</div>     
+</div>
 
     <?php $form = ActiveForm::begin(array('options' => array('id' => 'formId','name' => 'formId'),'enableClientValidation'=>false)); ?>
     <h4>    Category filter</h4>
-    <?= $form->field($model, 'category_id',['template' => "<div class='controls'>{input}</div> {hint} {error}" 
+    <?= $form->field($model, 'category_id',['template' => "<div class='controls'>{input}</div> {hint} {error}"
     ])->dropDownList($category, ['prompt'=>'Select category...','class'=>'filter','style'=>'float:left;margin-left: 15px;  width: 215px;  margin-top: 10px;']); ?>
 
-    <?= $form->field($model, 'subcategory_id',['template' => "<div class='controls'>{input}</div> {hint} {error}" 
+    <?= $form->field($model, 'subcategory_id',['template' => "<div class='controls'>{input}</div> {hint} {error}"
     ])->dropDownList($subcategory, ['prompt'=>'Select sub category...','class'=>'filter','style'=>'float:left;margin-left: 5px;  width: 215px;']); ?>
-    
-    <?= $form->field($model, 'child_category',['template' => "<div class='controls'>{input}</div> {hint} {error}" 
-    ])->dropDownList($childcategory, ['prompt'=>'Select child category...','class'=>'filter','style'=>'float:left;margin-left: 5px;  width: 215px;']);?>    
-  
-  <div class="col-md-8 col-sm-8 col-xs-8"> 
+
+    <?= $form->field($model, 'child_category',['template' => "<div class='controls'>{input}</div> {hint} {error}"
+    ])->dropDownList($childcategory, ['prompt'=>'Select child category...','class'=>'filter','style'=>'float:left;margin-left: 5px;  width: 215px;']);?>
+
+  <div class="col-md-8 col-sm-8 col-xs-8">
   <br><br/>
-    <?= $form->field($model, 'item_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-    ])->dropDownList($priorityitem,['prompt'=>'Select...']); ?> 
+    <?= $form->field($model, 'item_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+    ])->dropDownList($priorityitem,['prompt'=>'Select...']); ?>
 
     <?= $form->field($model, 'priority_level')->dropDownList([ 'Normal' => 'Normal', 'Super' => 'Super', ], ['prompt' => 'Select']) ?>
 
         <?php if($model->isNewRecord){?>
-      <div class="form-group"> 
-        <?= $form->field($model, 'priority_start_date',[ 'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+      <div class="form-group">
+        <?= $form->field($model, 'priority_start_date',[ 'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
     ])->textInput([['maxlenght' => 255,]]) ?>
         </div>
         <?php }else { ?>
-          <div class="form-group"> 
-    <?= $form->field($model, 'priority_start_date',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+          <div class="form-group">
+    <?= $form->field($model, 'priority_start_date',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
     ])->textInput(['maxlenght' => 255, 'value' => date( 'd-m-Y', strtotime( $model->priority_start_date ) )]) ?>
     </div>
         <?php }?>
 
     <?php if($model->isNewRecord){?>
-      <div class="form-group"> 
-        <?= $form->field($model, 'priority_end_date',[ 'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+      <div class="form-group">
+        <?= $form->field($model, 'priority_end_date',[ 'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
     ])->textInput([['maxlenght' => 255,]]) ?>
         </div>
         <?php }else { ?>
-          <div class="form-group"> 
-    <?= $form->field($model, 'priority_end_date',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+          <div class="form-group">
+    <?= $form->field($model, 'priority_end_date',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
     ])->textInput(['maxlenght' => 255, 'value' => date( 'd-m-Y', strtotime( $model->priority_end_date ) )]) ?>
     </div>
         <?php }?>
 
     <div id="blocked_error" style="color:red">Blocked dates available in between start date and end date</div>
-    <input type="hidden" name="blocked_dates" id="blocked_dates" value=""> 
+    <input type="hidden" name="blocked_dates" id="blocked_dates" value="">
     <div class="form-group">
     <?php if($model->priority_id){?>
            <input type="button" name="submit1" id="submit1" value="Update" class="btn btn-primary" />
@@ -64,24 +64,24 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
-    
+
 </div>
 
 <script type="text/javascript">
 $('#blocked_error').hide();
 var csrfToken = $('meta[name="csrf-token"]').attr("content");
-$(function (){ 
+$(function (){
     $("#priorityitem-category_id").change(function (){
         var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var id = $('#priorityitem-category_id').val();
         var path = "<?php echo Url::to(['/admin/priorityitem/loadsubcategory']); ?> ";
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { id: id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) { 
-            $('.loadingmessage').hide();        
+        success: function( data ) {
+            $('.loadingmessage').hide();
              $('#priorityitem-subcategory_id').html(data);
          }
         })
@@ -102,14 +102,14 @@ $(function (){
 
 
 <script>
-//* Load Sub Category *// 
-$(function (){ 
-    $("#priorityitem-category_id").change(function (){      
+//* Load Sub Category *//
+$(function (){
+    $("#priorityitem-category_id").change(function (){
         var id = $('#priorityitem-category_id').val();
         var path = "<?php echo Url::to(['/admin/priorityitem/loadsubcategory']); ?> ";
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { id: id ,_csrf : csrfToken}, //data to be send
         success: function( data ) {
@@ -120,14 +120,14 @@ $(function (){
      });
  });
 
-//* Load Child Category *// 
-$(function (){ 
-    $("#priorityitem-subcategory_id").change(function (){       
+//* Load Child Category *//
+$(function (){
+    $("#priorityitem-subcategory_id").change(function (){
         var id = $('#priorityitem-subcategory_id').val();
         var path = "<?php echo Url::to(['/admin/priorityitem/loadchildcategory']); ?> ";
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { id: id ,_csrf : csrfToken}, //data to be send
         success: function( data ) {
@@ -140,7 +140,7 @@ $(function (){
 </script>
 
 <script type="text/javascript">
-$(function (){ 
+$(function (){
     $("#priorityitem-child_category").change(function (){
         var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var id2 = $('#priorityitem-category_id').val();
@@ -148,31 +148,31 @@ $(function (){
         var id4 = $('#priorityitem-child_category').val();
         $('.loadingmessage').show();
         var path = "<?php echo Url::to(['/admin/priorityitem/loaditems']); ?> ";
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { id2: id2 ,id3: id3 ,id4: id4 ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {     
+        success: function( data ) {
             $('.loadingmessage').hide();
              $('#priorityitem-item_id').html(data);
          }
         })
      });
- }); 
+ });
 
 </script>
 
-<script>    
-$(function (){ 
+<script>
+$(function (){
     $("#priorityitem-item_id").on("change",function (){
         var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var item = $('#priorityitem-item_id').val();
         var path = "<?php echo Url::to(['/admin/priorityitem/loaddatetime']); ?> ";
         var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',    
-        dataType:"json",  
+        $.ajax({
+        type: 'POST',
+        dataType:"json",
         url: path, //url to be called
         data: { item: item ,priority_id : priority_id,_csrf : csrfToken}, //data to be send
         success: function( data ) {
@@ -181,9 +181,9 @@ $(function (){
             $('.field-priorityitem-priority_start_date').find('label').after(data.input1);
             $('.field-priorityitem-priority_end_date').find('input').remove();
             $('.field-priorityitem-priority_end_date').find('label').after(data.input2);
-            // 
+            //
             $('#blocked_dates').attr('value',data.date1);
-            
+
             var forbidden=data.date;
 
 $('#priorityitem-priority_start_date,#priorityitem-priority_end_date').datepicker({
@@ -192,14 +192,14 @@ $('#priorityitem-priority_start_date,#priorityitem-priority_end_date').datepicke
     autoclose: true,
     beforeShowDay:function(Date){
         var curr_date = Date.toJSON().substring(0,10);
-        
-        if (forbidden.indexOf(curr_date)>-1) return false;        
+
+        if (forbidden.indexOf(curr_date)>-1) return false;
     }
 })
 }
 });
-}); 
-}); 
+});
+});
 </script>
 
 
@@ -213,27 +213,27 @@ $('#priorityitem-priority_start_date,#priorityitem-priority_end_date').datepicke
         var item = $('#priorityitem-item_id').val();
         var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
             $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',    
-        dataType:"json",  
+        $.ajax({
+        type: 'POST',
+        dataType:"json",
         url: path, //url to be called
         data: { item: item ,priority_id : priority_id, _csrf : csrfToken}, //data to be send
         success: function( data ) {
-            
+
             $('.loadingmessage').hide();
             $('.field-priorityitem-priority_start_date').find('input').remove();
             $('.field-priorityitem-priority_start_date').find('label').after(data.input1);
-            
+
             var forbidden=data.date;
 
 $('input#priorityitem-priority_start_date').datepicker({
     format: 'dd-mm-yyyy',
     autoclose: true,
     beforeShowDay:function(Date){
-        var curr_date = Date.toJSON().substring(0,10);        
+        var curr_date = Date.toJSON().substring(0,10);
         if (forbidden.indexOf(curr_date)>-1) return false;
     }
-});    
+});
     }
 
 });
@@ -244,16 +244,16 @@ $('input#priorityitem-priority_start_date').datepicker({
         var item = $('#priorityitem-item_id').val();
         var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
         $('.loadingmessage').show();
-        $.ajax({  
-        type: 'POST',    
-        dataType:"json",  
+        $.ajax({
+        type: 'POST',
+        dataType:"json",
         url: path, //url to be called
         data: { item: item ,priority_id : priority_id, _csrf : csrfToken}, //data to be send
         success: function( data ) {
             $('.loadingmessage').hide();
             $('.field-priorityitem-priority_end_date').find('input').remove();
             $('.field-priorityitem-priority_end_date').find('label').after(data.input2);
-            
+
             var forbidden=data.date;
 
 $('input#priorityitem-priority_end_date').datepicker({
@@ -261,24 +261,22 @@ $('input#priorityitem-priority_end_date').datepicker({
     autoclose: true,
     beforeShowDay:function(Date){
         var curr_date = Date.toJSON().substring(0,10);
-        
-        if (forbidden.indexOf(curr_date)>-1) return false;        
+
+        if (forbidden.indexOf(curr_date)>-1) return false;
     }
-});    
+});
 }
 });
 });
-</script>   
+</script>
     <?php } ?>
 
 <!-- BEGIN PLUGIN CSS -->
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
-<!-- END PLUGIN CSS -->
 
 <script>
 // BEGIN priority item date function
@@ -288,15 +286,15 @@ $(function(){
     var path = "<?php echo Url::to(['/admin/priorityitem/loaddatetime']); ?> ";
     var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
     $.ajax({
-        type: 'POST',    
-        dataType:"json",  
+        type: 'POST',
+        dataType:"json",
         url: path, //url to be called
         data: { item: item, priority_id: priority_id, _csrf : csrfToken}, //data to be send
-        success: function( data ) {      
+        success: function( data ) {
                 $('.loadingmessage').hide();
                 $('#blocked_dates').attr('value',data.date1);
             }
-            
+
         })
     });
 <?php } ?>
@@ -327,31 +325,31 @@ $(function(){
                 $(".field-priorityitem-priority_end_date").addClass('has-error');
                 $(".field-priorityitem-priority_end_date").find('.help-block').html('Select end date');
                 return false;
-        }              
-     
+        }
+
     var va='';
         var path = "<?php echo Url::to(['/admin/priorityitem/checkprioritydate']); ?> ";
         var blocked_dates = $('#blocked_dates').val();
         var item = $('#priorityitem-item_id').val();
         var start = $('#priorityitem-priority_start_date').val();
-        var start = start.split("-").reverse().join("-");   
+        var start = start.split("-").reverse().join("-");
         var end = $('#priorityitem-priority_end_date').val();
-        var end = end.split("-").reverse().join("-");   
+        var end = end.split("-").reverse().join("-");
         var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
-        $.ajax({  
-        type: 'POST',    
-        dataType:"json",  
+        $.ajax({
+        type: 'POST',
+        dataType:"json",
 
         url: path, //url to be called
         data: { item: item, start: start,end: end,blocked_dates : blocked_dates,priority_id : priority_id,_csrf : csrfToken}, //data to be send
-        success: function( data ) {           
+        success: function( data ) {
             if(data==1)
             {
                 $('.loadingmessage').hide();
                 $('#blocked_error').show();
                 $("#priorityitem-priority_end_date").removeClass('has-success');
                 $("#priorityitem-priority_end_date").addClass('has-error');
-                var va = false;  
+                var va = false;
             }
             else if(data==0){
                 $('#blocked_error').hide();

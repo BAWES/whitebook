@@ -11,17 +11,17 @@ use yii\widgets\ActiveForm;
 <div class="col-md-8 col-sm-8 col-xs-8">
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="form-group">   
-    <?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+    <div class="form-group">
+    <?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
     ])->listbox($category,['multiple'=>true,'size' => 7]); ?>
     </div>
-    <div class="form-group">  
+    <div class="form-group">
     <?= $form->field($model, 'top_ad')->textArea(['maxlength' => true]) ?>
     </div>
 
-    <div class="form-group">  
+    <div class="form-group">
     <?= $form->field($model, 'bottom_ad')->textArea(['maxlength' => true]) ?>
-    </div>  
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -30,8 +30,8 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-select2/select2.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-select2/select2.min.js" type="text/javascript"></script>
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.css") ?>" rel="stylesheet" type="text/css" />
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.min.js") ?>" type="text/javascript"></script>
 <script type="text/javascript">
 
 $("#categoryads-category_id").select2({

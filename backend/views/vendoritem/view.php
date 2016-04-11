@@ -132,7 +132,7 @@ function questionView(q_id,tis){
 
     var check = $('.show_ques'+q_id).html();
     if(check==''){
-    var path = "<?php echo Url::to(['vendoritem/viewrenderquestion']); ?> "; 
+    var path = "<?php echo Url::to(['vendoritem/viewrenderquestion']); ?> ";
     $.ajax({
         type : 'POST',
         url :  path,
@@ -159,7 +159,7 @@ function questionView(q_id,tis){
         /* End when loading page first tab opened */
  </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-modal-box/photo-gallery.js"></script>
+    <script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js") ?>"></script>
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog" style="z-index: 99999;">

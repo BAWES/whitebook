@@ -10,33 +10,33 @@ use yii\web\View;
 ?>
 
 <div class="customer-form">
-<div class="col-md-8 col-sm-8 col-xs-8">    
-    <?php $form = ActiveForm::begin();  
+<div class="col-md-8 col-sm-8 col-xs-8">
+    <?php $form = ActiveForm::begin();
     if($model->isNewRecord){$city = array(); $location = array();}?>
 
 <div class="form-group">
 	<?= $form->field($model, 'customer_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 
 <div class="form-group">
 	<?= $form->field($model, 'customer_email',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 
 
 <?php if($model->isNewRecord) { ?>
 
 <div class="form-group">
 	<?= $form->field($model, 'customer_password',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->passwordInput(['maxlength' => 128])?>
-</div> 
+</div>
 
 <div class="form-group">
 	<?= $form->field($model, 'customer_dateofbirth',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 <?php } else { ?>
 
 <div class="form-group">
 	<?= $form->field($model, 'customer_dateofbirth',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlenght' => 255, 'value' => date( 'd-m-Y', strtotime( $model->customer_dateofbirth ) )])?>
-</div> 
+</div>
 <?php } ?>
 <div class="form-group">
 	<?= $form->field($model, 'customer_gender',[
@@ -44,22 +44,22 @@ use yii\web\View;
 {hint}
 {error}"
                     ])->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', ], ['prompt' => 'Select Gender']) ?>
-</div>  
+</div>
 
 <div class="form-group">
 	<?= $form->field($model, 'customer_mobile',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+</div>
 
     <?= $form->field($model1, 'address_type_id')->dropDownList($addresstype, ['prompt'=>'Select...']); ?>
-    
+
     <?= $form->field($model1, 'country_id')->dropDownList($country, ['prompt'=>'Select...']); ?>
 
 	<?= $form->field($model1, 'city_id')->dropDownList($city, ['prompt'=>'Select...']); ?>
-    
+
     <?= $form->field($model1, 'area_id')->dropDownList($location, ['prompt'=>'Select...']); ?>
-    
+
 <div class="form-group">
-	<?= $form->field($model, 'customer_address',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}" 
+	<?= $form->field($model, 'customer_address',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
 	])->textArea(['rows' => 6]) ?>
 </div>
 
@@ -75,16 +75,16 @@ use yii\web\View;
 
 
 <script type="text/javascript">
-$(function (){ 
-    $("#customeraddress-country_id").change(function (){ 
+$(function (){
+    $("#customeraddress-country_id").change(function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var country_id = $('#customeraddress-country_id').val();       
+        var country_id = $('#customeraddress-country_id').val();
         var path = "<?php echo Url::to(['/admin/location/city']); ?> ";
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { country_id: country_id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {			
+        success: function( data ) {
              $('#customeraddress-city_id').html(data);
          }
         })
@@ -93,16 +93,16 @@ $(function (){
 </script>
 
 <script type="text/javascript">
-$(function (){ 
-    $("#customeraddress-city_id").change(function (){  
+$(function (){
+    $("#customeraddress-city_id").change(function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var city_id = $('#customeraddress-city_id').val();    
+        var city_id = $('#customeraddress-city_id').val();
         var path = "<?php echo Url::to(['/admin/location/area']); ?> ";
-        $.ajax({  
-        type: 'POST',      
+        $.ajax({
+        type: 'POST',
         url: path, //url to be called
         data: { city_id: city_id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {			
+        success: function( data ) {
              $('#customeraddress-area_id').html(data);
          }
         })
@@ -111,10 +111,10 @@ $(function (){
  });
 </script>
 <!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <script>
 $('#customer-customer_dateofbirth').datepicker({  format: 'dd-mm-yyyy',});

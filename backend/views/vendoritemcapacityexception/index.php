@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //$this->exception_date='';
 ?>
 <div class="vendoritemcapacityexception-index">
-<p>		
+<p>
 	<div class="row-fluid">
        <div class="span12">
          <div class="grid simple ">
@@ -25,17 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
         [
         'attribute'=>'item_name',
-        'label'=>'Item Name',     
+        'label'=>'Item Name',
         'value'=>function($data){
           return $data->getItemName($data->item_id);
-          }       
+          }
       ],
-        
+
 			[
 				'attribute'=>'exception_date',
 				'format' => ['date', Yii::$app->params['dateFormat']],
-				'label'=>'exception date',			
-			],	
+				'label'=>'exception date',
+			],
             'exception_capacity',
             ['class' => 'yii\grid\ActionColumn'],
         ],
@@ -48,10 +48,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <!-- BEGIN PLUGIN CSS -->
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-datepicker/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <script>
@@ -61,4 +61,3 @@ $("[name='VendoritemcapacityexceptionSearch[exception_date]']").datepicker({
 	format: 'dd-mm-yyyy',
 });
 </script>
-

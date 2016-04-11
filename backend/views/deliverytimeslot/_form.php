@@ -81,9 +81,9 @@ date("a", strtotime($model->timeslot_end_time))=='pm'?$model->end_med='PM':$mode
 
 </div>
 
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") ?>" rel="stylesheet" type="text/css" />
 
-<script type="text/javascript" src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js") ?>"></script>
 
 <script>
 	$('#deliverytimeslot-timeslot_start_time,#deliverytimeslot-timeslot_end_time').timepicker();

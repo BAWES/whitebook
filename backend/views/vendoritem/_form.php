@@ -788,16 +788,18 @@ function questionView(q_id,tis){
 	}
 }
 </script>
-<script type="text/javascript" src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
-<link href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js") ?>"></script>
+<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css") ?>" rel="stylesheet" type="text/css" />
 <!-- multi select end -->
 
 <!-- Bootatrap file input widget -->
-<link rel="stylesheet" href="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-fileinput/fileinput.min.css" rel="stylesheet" type="text/css" media="screen">
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/bootstrap-fileinput/fileinput.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="<?= Url::to("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css") ?>" rel="stylesheet" type="text/css" media="screen">
+<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.js") ?>" type="text/javascript"></script>
 <!-- Bootatrap file input widget -->
 
-<script src="<?php echo Yii::$app->themeURL->createAbsoluteUrl(''); ?>plugins/ckeditor/ckeditor.js" type="text/javascript"></script>
+<script src="<?= Url::to("@web/themes/default/plugins/ckeditor/ckeditor.js") ?>" type="text/javascript"></script>
+
+
 <style>
 input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
 input#price{	margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
