@@ -126,7 +126,17 @@ $this->params['breadcrumbs'][] = $this->title;
 			</tr>
 			<?php $i=0;foreach ($dataProvider2->query as $log) { $sel = ($i==0)?'':''; ?>
 			<tr id="tr-<?php echo $log['id']; ?>">
-			<td><?= Package::PackageData($log['package_id']);  ?></td><td><?php $sd=($log['package_start_date']); echo date("d/m/Y", strtotime($sd));?></td><td><?php $sd=($log['package_end_date']);echo date("d/m/Y", strtotime($sd)); ?></td><td><?php print_r($log['package_price']); ?><input type="hidden" id="packedit" value="<?=$log['id'];?>"></td><td><?php  $url=Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/package/packagedelete?id='.$log['package_id']); echo Html::a('<span class="glyphicon glyphicon-trash"></span>','#', ['onclick' => 'packagedelete('.$log['id'].');','title'=>'Delete','class' =>$sel]); echo Html::a('<span class="glyphicon glyphicon-pencil"></span>','#', ['onclick' => 'packageedit('.$log['id'].');','title'=>'Edit','class' =>$sel]);?></td>
+			<td><?= Package::PackageData($log['package_id']);  ?></td>
+            <td><?php $sd=($log['package_start_date']); echo date("d/m/Y", strtotime($sd));?></td>
+            <td><?php $sd=($log['package_end_date']);echo date("d/m/Y", strtotime($sd)); ?></td>
+            <td><?php print_r($log['package_price']); ?><input type="hidden" id="packedit" value="<?=$log['id'];?>"></td>
+            <td>
+                <?php
+                $url = Url::to(['package/packagedelete', 'id' => $log['package_id']]);
+                echo Html::a('<span class="glyphicon glyphicon-trash"></span>','#', ['onclick' => 'packagedelete('.$log['id'].');','title'=>'Delete','class' =>$sel]);
+                echo Html::a('<span class="glyphicon glyphicon-pencil"></span>','#', ['onclick' => 'packageedit('.$log['id'].');','title'=>'Edit','class' =>$sel]);
+                ?>
+            </td>
 			</tr>
 			<?php $i++;}?>
 	</tbody>
@@ -146,7 +156,18 @@ $this->params['breadcrumbs'][] = $this->title;
 			</tr>
 			<?php foreach ($dataProvider->query as $log) {?>
 			<tr>
-			<td><?= Itemtype::itemtypename($log['type_id']); ?></td><td><?= Vendoritem::vendoritemname($log['item_id']); ?></td><td><?= Category::viewcategoryname($log['category_id']); ?></td><td><?= ($log['item_status']); ?></td><td><?= ($log['priority']); ?></td><td><?= ($log['item_approved']); ?></td><td><?php $url=Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/vendoritem/view?id='.$log['item_id']); echo Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View')]); ?></td>
+			<td><?= Itemtype::itemtypename($log['type_id']); ?></td>
+            <td><?= Vendoritem::vendoritemname($log['item_id']); ?></td>
+            <td><?= Category::viewcategoryname($log['category_id']); ?></td>
+            <td><?= ($log['item_status']); ?></td>
+            <td><?= ($log['priority']); ?></td>
+            <td><?= ($log['item_approved']); ?></td>
+            <td>
+                <?php
+                $url = Url::to(['vendoritem/view', 'id' => $log['item_id']]);
+                echo Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View')]);
+                ?>
+            </td>
 			</tr>
 			<?php } ?>
 	</tbody>
