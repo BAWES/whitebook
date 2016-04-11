@@ -69,7 +69,7 @@ class SiteinfoController extends Controller
             }
 
             if (count($model) == 1) {
-                $this->redirect('update?id='.$first_id);
+                $this->redirect(['update', 'id' => $first_id]);
             } else {
                 $this->redirect('create');
             }
