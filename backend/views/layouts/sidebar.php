@@ -62,7 +62,7 @@
 				<?= Html::a('<i class="fa fa-book"></i><span class="title">My Package</span>', ['vendorpackages/index'], ['class'=>'link-title']) ?>
 			</li>
 			<li class="<?php if ($menu_act == 'DefaultController'  && $action == 'profile') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="fa fa-university"></i><span class="title">My Profile</span>', ['default/profile'], ['class'=>'link-title']) ?>
+				<?= Html::a('<i class="fa fa-university"></i><span class="title">My Profile</span>', ['site/profile'], ['class'=>'link-title']) ?>
 			</li>
 		</ul>
 			<div class="clearfix"></div>
