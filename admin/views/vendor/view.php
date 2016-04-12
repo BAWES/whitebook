@@ -327,7 +327,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			[
 				'attribute'=>'exception_date',
-				'format' => ['date', DATE],
+				'format' => ['date', Yii::$app->params['dateFormat']],
 				'label'=>'exception date',
 			],
             'exception_capacity',
@@ -431,7 +431,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     return false;
 	}
-        var path = "<?php echo Url::to(['/admin/vendor/changepackage']); ?> ";
+        var path = "<?php echo Url::to(['/vendor/changepackage']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -492,7 +492,7 @@ function packagedelete(id)
 
 		var vid = $('#vendor-vendor_id').val();
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['/admin/package/packagedelete']); ?> ";
+        var path = "<?php echo Url::to(['/package/packagedelete']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -537,7 +537,7 @@ function packageedit(id)
 		$("#vendor-package_start_date").datepicker("refresh");
 		var vid = $('#vendor-vendor_id').val();
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['/admin/vendor/packageupdate']); ?> ";
+        var path = "<?php echo Url::to(['/vendor/packageupdate']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -582,7 +582,7 @@ $(function (){
     $("#vendor-package_id").live("change",function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var id = $('#vendor-vendor_id').val();
-        var path = "<?php echo Url::to(['/admin/vendor/loadpackagedate']); ?> ";
+        var path = "<?php echo Url::to(['/vendor/loadpackagedate']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -632,7 +632,7 @@ $('#vendor-package_start_date,#vendor-package_end_date').datepicker({
 	var start_date = start_date.split("-").reverse().join("-");	// change date format
 	var end_date = end_date.split("-").reverse().join("-");	// change date format
 
-        var path = "<?php echo Url::to(['/admin/vendor/changeeditpackage']); ?> ";
+        var path = "<?php echo Url::to(['/vendor/changeeditpackage']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',

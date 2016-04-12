@@ -4,6 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use common\models\Prioritylog;
 use common\models\PrioritylogSearch;
 use common\models\Siteinfo;
@@ -456,7 +457,7 @@ class VendorController extends Controller
                                 'package_end_date' => $data['end_date'], ])
                                 ->execute();
             $packageid = Yii::$app->db->getLastInsertID();
-            $url = Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/package/packagedelete?id='.$packageid);
+            $url = Url::to('/package/packagedelete?id='.$packageid);
             $startshow = date('d/m/Y', strtotime($data['start_date']));
             $endshow = date('d/m/Y', strtotime($data['end_date']));
             $output = '<tr id="tr-'.$packageid.'"><td>'.$package_name.'</td><td>'.$startshow.'</td><td>'.$endshow.'</td><td>'.$package_pricing.'<input type="hidden" id="packedit" value='.$packageid.'></td><td>'.Html::a('<span class="glyphicon glyphicon-trash"></span>', '#', ['onclick' => 'packagedelete('.$packageid.');', 'title' => 'Delete']).''.Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', ['onclick' => 'packageedit('.$packageid.');', 'title' => 'Edit']).'</td></tr>';
@@ -516,7 +517,7 @@ class VendorController extends Controller
             $command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor_packages SET package_id="'.$data['id'].'" ,package_start_date="'.$start1.'",package_end_date="'.$end1.'" WHERE id='.$packedit);
             $command->execute();
 
-            $url = Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/package/packagedelete?id='.$packedit);
+            $url = Url::to('/package/packagedelete?id='.$packedit);
             $startshow = date('d/m/Y', strtotime($data['start_date']));
             $endshow = date('d/m/Y', strtotime($data['end_date']));
             $output = '<tr id="tr-'.$packedit.'" class="update_row"><td>'.$package_name.'</td><td>'.$startshow.'</td><td>'.$endshow.'<input type="hidden" id="packedit" value='.$packedit.'></td><td>'.$package_pricing.'</td><td>'.Html::a('<span class="glyphicon glyphicon-trash"></span>', '#', ['onclick' => 'packagedelete('.$packedit.');', 'title' => 'Delete']).''.Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', ['onclick' => 'packageedit('.$packedit.');', 'title' => 'Edit']).'</td></tr>';
