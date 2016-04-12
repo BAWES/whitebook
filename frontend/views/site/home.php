@@ -10,8 +10,8 @@ use yii\helpers\Html;
 $this->title = 'Home | Whitebook';
 
 use frontend\models\Website;
-
 $model = new Website();
+//echo '<pre>';print_r($banner);die;
 ?>
 <!-- content main start -->
 <!-- banner section start -->
@@ -24,11 +24,11 @@ $model = new Website();
                         foreach ($banner as $b) {
                             ?>
                         <div class="item">
-                                 <?php if ($b['slide_type'] == 'video1') { ?>
+                                 <?php if ($b['slide_type'] == 'video') { ?>
                                 <object width="100%" height="600" data="<?php echo $b['slide_video_url']; ?>" id="video_click"></object>
                         <?php } else { ?>
-                                <img src="<?php echo Yii::getAlias('@uploads/banner_images/banner_' . $b['slide_id'] . '.png', true); ?>"
-                                     class="ls-bg" style="top: 80px;"  alt="<?php echo $b['slide_title']; ?>" width="1322" />
+                         <?= Html::img(Yii::getAlias('@uploads/banner_images/banner_' . $b['slide_id'] . '.png'), ['alt' => 'My White Book']) ?>
+
         <?php } ?>
                         </div>
         <?php $i++;
