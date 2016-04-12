@@ -12,6 +12,7 @@ use common\models\Role;
 use yii\helpers\ArrayHelper;
 use common\models\Vendorpackages;
 use yii\behaviors\SluggableBehavior;
+use yii\db\Query;
 /**
  * This is the model class for table "{{%vendor}}".
  *
@@ -671,4 +672,31 @@ die;
             ->one();
             return $vendor_category;
         }
+
+    public static function get_directory_list() {
+        $today = date('Y-m-d H:i:s');
+
+        $query = new Query();
+        $query->select([
+                    'whitebook_vendor.vendor_id AS vid',
+                    'whitebook_vendor.vendor_name AS vname',
+                    'whitebook_vendor.slug AS slug',
+                        ]
+                )
+                ->from('whitebook_vendor')
+                ->join('LEFT OUTER JOIN', 'whitebook_vendor_packages', 'whitebook_vendor.vendor_id =whitebook_vendor_packages.vendor_id')
+                ->where('whitebook_vendor_packages.package_start_date <="' . $today . '"')
+                ->andwhere('whitebook_vendor_packages.package_start_date <="' . $today . '"')
+                ->andwhere('whitebook_vendor.vendor_status ="Active"')
+                ->andwhere('whitebook_vendor.trash ="Default"')
+                ->andwhere('whitebook_vendor.approve_status ="yes"')
+                ->orderBy('whitebook_vendor.vendor_name ASC')
+                ->groupBy('whitebook_vendor.vendor_id')
+                ->LIMIT(50);
+
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+
+        return $data;
+    }
 }

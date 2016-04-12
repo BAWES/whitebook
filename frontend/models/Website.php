@@ -41,37 +41,6 @@ class Website extends Model {
         return $general;
     }
 
-    public static function get_featured_product_id() {
-        $db = Yii::$app->db;
-
-        return $p_id = $db->cache(function ($db) {
-            $today = date('Y-m-d H:i:s');
-            $today_date = date('Y-m-d');
-            $db->createCommand(
-                    'SELECT whitebook_feature_group_item.item_id FROM whitebook_feature_group_item
-		JOIN whitebook_vendor on whitebook_vendor.vendor_id=whitebook_feature_group_item.vendor_id
-		WHERE whitebook_feature_group_item.group_item_status="Active"
-		AND whitebook_vendor.vendor_Status="Active"
-		AND whitebook_vendor.trash="Default"
-		AND whitebook_vendor.approve_status="Yes"
-		AND whitebook_vendor.package_start_date<="' . $today . '"
-		AND whitebook_vendor.package_end_date>="' . $today . '"
-		AND whitebook_feature_group_item.featured_start_date<="' . $today_date . '"
-		AND whitebook_feature_group_item.featured_end_date>="' . $today_date . '"')->queryAll();
-        });
-    }
-
-    public static function get_featured_product() {
-        $today = date('Y-m-d H:i:s');
-        $sql = 'SELECT item_id,whitebook_vendor_item.slug as slug,item_name,item_price_per_unit,vendor_name FROM whitebook_vendor_item
-		JOIN whitebook_vendor on whitebook_vendor.vendor_id=whitebook_vendor_item.vendor_id
-		JOIN whitebook_category on whitebook_category.category_id=whitebook_vendor_item.category_id
-			WHERE whitebook_vendor_item.item_status="Active"';
-        $command = Yii::$app->DB->createCommand($sql);
-        $feature = $command->queryAll();
-
-        return $feature;
-    }
 
     public static function get_home_ads() {
         $command = Yii::$app->DB->createCommand(
@@ -87,33 +56,6 @@ class Website extends Model {
         $ads = $command->queryAll();
 
         return $ads;
-    }
-
-    public static function get_directory_list() {
-        $today = date('Y-m-d H:i:s');
-
-        $query = new Query();
-        $query->select([
-                    'whitebook_vendor.vendor_id AS vid',
-                    'whitebook_vendor.vendor_name AS vname',
-                    'whitebook_vendor.slug AS slug',
-                        ]
-                )
-                ->from('whitebook_vendor')
-                ->join('LEFT OUTER JOIN', 'whitebook_vendor_packages', 'whitebook_vendor.vendor_id =whitebook_vendor_packages.vendor_id')
-                ->where('whitebook_vendor_packages.package_start_date <="' . $today . '"')
-                ->andwhere('whitebook_vendor_packages.package_start_date <="' . $today . '"')
-                ->andwhere('whitebook_vendor.vendor_status ="Active"')
-                ->andwhere('whitebook_vendor.trash ="Default"')
-                ->andwhere('whitebook_vendor.approve_status ="yes"')
-                ->orderBy('whitebook_vendor.vendor_name ASC')
-                ->groupBy('whitebook_vendor.vendor_id')
-                ->LIMIT(50);
-
-        $command = $query->createCommand();
-        $data = $command->queryAll();
-
-        return $data;
     }
 
     public static function get_search_directory_list($categoryid) {

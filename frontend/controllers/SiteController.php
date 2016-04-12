@@ -10,6 +10,7 @@ use common\models\Category;
 use common\models\Siteinfo;
 use common\models\Faq;
 use common\models\Themes;
+use common\models\Featuregroupitem;
 use frontend\models\Website;
 use frontend\models\Users;
 use yii\web\Session;
@@ -65,8 +66,9 @@ class SiteController extends BaseController
     public function actionIndex()
     {
         $website_model = new Website();
-        $product_list = $website_model->get_featured_product_id();
-        $featured_product = $website_model->get_featured_product();
+        $featuremodel = new Featuregroupitem();
+        $product_list = $featuremodel->get_featured_product_id();
+        $featured_product = $featuremodel->get_featured_product();
         $banner = $website_model->get_banner_details();
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
@@ -126,8 +128,8 @@ class SiteController extends BaseController
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Directory';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-
-        $directory = $website_model->get_directory_list();
+        $vendor = new Vendor();
+        $directory = $vendor->get_directory_list();
         $prevLetter = '';
         $result = array();
         foreach ($directory as $d) {
