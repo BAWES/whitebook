@@ -22,12 +22,12 @@ use yii\helpers\Url;
             </ul>
             <!-- END MOBILE HEADER -->
             <!-- BEGIN LOGO -->
-            <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('site/index'); ?>">
-                <img src="<?php echo Siteinfo::logoUrl(); ?>" class="logo" alt="" data-src="<?php echo Siteinfo::logoUrl(); ?>" data-src-retina="<?php echo Siteinfo::logoUrl(); ?>" width="170" height="30"/>
+            <a href="<?php echo Url::to(['site/index']); ?>">
+            <?= Html::img(Yii::getAlias('@web/uploads/app_img/').Siteinfo::logoUrl(),['class'=>"logo",'width'=>"200",'height'=>"50"]) ?>
             </a>
             <!-- END LOGO -->
             <ul class="nav pull-right notifcation-center">
-                <li class="dropdown" id="header_task_bar"> <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('/admin/site/index'); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
+                <li class="dropdown" id="header_task_bar"> <a href="<?= Url::to(['site/index']); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
                 <!-- END LOGO NAV BUTTONS -->
         </div>
         <!-- END NAVIGATION HEADER -->

@@ -69,8 +69,8 @@ class Siteinfo extends \yii\db\ActiveRecord
 		$model = Siteinfo::find()->all();        
 		foreach($model as $key=>$val)
 		{
-			 $logo = $val['site_logo'];
-			 echo Yii::getAlias('@web/uploads/app_img').'/'.$logo;
+			 return $logo = $val['site_logo'];
+			 //return Yii::getAlias('@web/uploads/app_img').'/'.$logo;
 		}
 	}
 	
