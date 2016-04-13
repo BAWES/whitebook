@@ -23,7 +23,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                 <?php
                 $vendor_det = Vendor::vendorslug($model['vendor_id']);
                 $category_det = Category::category_slug($model['category_id']);
-                $this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Yii::$app->params['BASE_URL'] . '/products/' . $category_det['slug']];
+                $this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Yii::$app->homeUrl . '/products/' . $category_det['slug']];
                 $this->params['breadcrumbs'][] = ucfirst($model['item_name']);
                 ?>
 
@@ -32,7 +32,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                     'options' => ['class' => 'new breadcrumb'],
                     'homeLink' => [
                         'label' => Yii::t('yii', 'Home'),
-                        'url' => Yii::$app->params['BASE_URL'],
+                        'url' => Yii::$app->homeUrl,
                     ],
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 ]);
@@ -55,7 +55,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                             <?php foreach ($vendor_area as $key => $value) { ?>
                                                 <option><?= $value['location']; ?></option>
 <?php } ?>
-                                        </select>            
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                             <?php /* foreach ($vendor_timeslot as $key => $value1) { ?>
                                               <option><?= $value1['timeslot_start_time'].' - '.$value1['timeslot_end_time'];?></option>
                                               <?php } */ ?>
-                                        </select>            
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -108,15 +108,15 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                 foreach ($output as $out) {
                                     if ($out) {
                                         $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                        $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_images/') . $out['image_path'];
+                                        $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $out['image_path'];
                                     } else {
                                         $imglink = Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                        $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_images/') . 'no_image.png';
+                                        $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
                                     }
                                     ?>
                                     <div class="item">   <img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px;">
                                     </div>
-<?php } ?>  
+<?php } ?>
                             </div>
                             <!--23-10-2015 slider end-->
 
@@ -137,15 +137,15 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                     foreach ($output as $out) {
                                         if ($out) {
                                             $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                            $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_images/') . $out['image_path'];
+                                            $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $out['image_path'];
                                         } else {
                                             $imglink = Yii::getAlias('@vendor_images/') . 'no_image.jpg';
-                                            $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_images/') . 'no_image.jpg';
+                                            $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg';
                                         }
                                         ?>
                                         <li>    <img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px !important;">
                                         </li>
-                            <?php } ?>           
+                            <?php } ?>
                                 </ul>
                             </div>
 <?php if ($img_count > 1) { ?>
@@ -159,15 +159,15 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                         foreach ($output as $out) {
                                             if ($out) {
                                                 $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                                $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_images/') . $out['image_path'];
+                                                $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $out['image_path'];
                                             } else {
                                                 $imglink = Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                                $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_images/') . 'no_image.png';
+                                                $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
                                             }
                                             ?>
                                             <li>    <img src="<?php echo $baselink; ?>" alt="item detail image">
                                             </li>
-    <?php } ?>           
+    <?php } ?>
                                     </ul>
                                 </div>
 <?php } ?>
@@ -177,7 +177,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                         <div class="right_descr_product">
                             <div class="product_name">
                                 <div class="left_descrip desktop-view">
-                                    <a title="<?= $vendor_det['vendor_name']; ?>" href="<?php echo Yii::$app->params['BASE_URL']; ?>/experience/<?php echo $vendor_det['slug']; ?>"><?php echo '<h2>' . $vendor_det['vendor_name'] . '</h2>'; ?></a>
+                                    <a title="<?= $vendor_det['vendor_name']; ?>" href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $vendor_det['slug']; ?>"><?php echo '<h2>' . $vendor_det['vendor_name'] . '</h2>'; ?></a>
                                     <label><?= $model['item_name']; ?></label>
                                     <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
                                 </div>
@@ -202,7 +202,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                                 $k[] = $l['item_id'];
                                             }
                                             $result = array_search($model['item_id'], $k);
-                                            ?> 
+                                            ?>
                                             <a class="faver_evnt_product" href="javascript:;"  title="Add to Favourite" id="<?php echo $model['item_id']; ?>"><span class="<?php if (is_numeric($result)) {
                                                 echo "heart-product heart-product-hover";
                                             } else {
@@ -210,10 +210,10 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                             } ?>"></span></a>
                                         <?php } ?>
                                         <div id="loading_img" style='display:none'>
-                                        <?php $giflink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@gif_img'); ?>
+                                        <?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
                                             <img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />
                                         </div>
-                                        <!-- Add to Event End here -->             
+                                        <!-- Add to Event End here -->
 <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
                                             <div class="buy_events"><a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal">Buy </a></div>
 <?php } else if (empty($avlbl_stock)) { ?>
@@ -233,7 +233,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                                 <h4 class="panel-title">
                                                     <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                         Product Description <span class="produ_type">( Product type: <?= Itemtype::itemtypename($model['type_id']); ?> )</span>
-                                                        <span class="glyphicon glyphicon-menu-down text-align pull-right"></span></a> 
+                                                        <span class="glyphicon glyphicon-menu-down text-align pull-right"></span></a>
                                                 </h4>
                                             </div>
                                             <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
@@ -250,7 +250,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                                 <h4 class="panel-title">
                                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" id="additional_click" aria-controls="collapseTwo">
                                                         Additional Information
-                                                        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> 
+                                                        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
                                                 </h4>
                                             </div>
                                             <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
@@ -269,7 +269,7 @@ if (($vendordetail['vendor_contact_number']) || ($vendordetail['vendor_contact_a
                                             <div class="panel-heading" role="tab" id="headingThree">
                                                 <h4 class="panel-title">
                                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="contact_click" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                        Contact Info  <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> 
+                                                        Contact Info  <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
                                                 </h4>
                                             </div>
                                             <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
@@ -289,7 +289,7 @@ if (($vendordetail['vendor_contact_number']) || ($vendordetail['vendor_contact_a
                                             <div class="panel-heading" role="tab" id="headingFour">
                                                 <h4 class="panel-title">
                                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="price_click" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                                        Price Cart  <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> 
+                                                        Price Cart  <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
                                                 </h4>
                                             </div>
                                             <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
@@ -305,7 +305,7 @@ if (($vendordetail['vendor_contact_number']) || ($vendordetail['vendor_contact_a
                                             <div class="panel-heading" role="tab" id="headingFive">
                                                 <h4 class="panel-title">
                                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="custom_click" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                                        Customization  <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> 
+                                                        Customization  <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
                                                 </h4>
                                             </div>
                                             <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
@@ -321,13 +321,13 @@ if (($vendordetail['vendor_contact_number']) || ($vendordetail['vendor_contact_a
                             <div class="social_share">
 <?php
 $title = 'Whitebook Application' . ucfirst($vendor_det['vendor_name']);
-$url = urlencode(Yii::$app->params['BASE_URL'] . $_SERVER['REQUEST_URI']);
+$url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
 $summary = 'Whitebook Application' . ucfirst($vendor_det['vendor_name']) . ucfirst($model['item_name']);
-//$image='http://demositeapp.com/backend/web/uploads/vendor_images/445_blueberry_coffee_cake_61.jpg'; 
+//$image='http://demositeapp.com/backend/web/uploads/vendor_images/445_blueberry_coffee_cake_61.jpg';
 $image = $baselink;
 ?>
                                 <h3>Share this</h3>
-                                <ul>   
+                                <ul>
                                     <li><a title="Facebook" onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=<?php echo $title; ?>&amp;p[summary]=<?php echo $summary; ?>&amp;p[url]=<?php echo $url; ?>&amp;&p[images][0]=<?php echo $image; ?>', 'sharer', 'toolbar=0,status=0,width=620,height=280');" href="javascript: void(0)"><span class="flaticon-facebook55"></span></a></li>
 
                                     <li><a  title="Twitter" href="https://twitter.com/share" class="twitter" target="_blank" data-url="<?php echo $url; ?>" data-text="<?php echo $title; ?>" data-lang="en" data-size="medium" data-count="none"><span class="flaticon-twitter13"></span></a></li>
@@ -355,7 +355,7 @@ $image = $baselink;
                             <div class="slider_new_up">
                                 <div class="flexslider4">
                                     <div id="demo">
-                                        <div class="owl-carousel" id="similar-products-slider">   
+                                        <div class="owl-carousel" id="similar-products-slider">
                                             <?php
                                             foreach ($similiar_item as $s) {
                                                 $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
@@ -363,16 +363,16 @@ $image = $baselink;
                                                 $out = $command->queryAll();
                                                 if ($out) {
                                                     $imglink = Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
-                                                    $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
+                                                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
                                                 } else {
                                                     $imglink = Yii::getAlias('@vendor_images/no_image.png');
-                                                    $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_images/no_image.png');
+                                                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
                                                 }
-                                                ?> 
+                                                ?>
                                                 <div class="item">
                                                     <div class="fetu_product_list">
     <?php if ($s['slug'] != '') { ?>
-                                                            <a href="<?php echo Yii::$app->params['BASE_URL']; ?>/product/<?php echo $s['slug']; ?>" title="Products" class="similar">
+                                                            <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $s['slug']; ?>" title="Products" class="similar">
                                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219">
         <?php if (file_exists($imglink)) { ?>
                                                                     <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219">
@@ -393,9 +393,9 @@ $image = $baselink;
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
 
-                </div>                         
+                </div>
             </div><!--product detail end-->
         </div>
         <!-- one end -->

@@ -1,7 +1,7 @@
 <?php if (!empty($directory)) { ?>
     <div class="mobile-view col-xs-12 padding0 directory-responsive">
         <?php $fl = $first_letter; ?>
-        <div class="tabContainer">                                                       
+        <div class="tabContainer">
             <ul id="demoOne" class="demo">
                 <?php foreach ($fl as $f) {
                     ?>
@@ -11,7 +11,7 @@
                         $ltr = strtoupper(substr($d['vname'], 0, 1));
                         if ($ltr == $f) {
                             ?>
-                            <li><a href="<?php echo Yii::$app->params['BASE_URL']; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
+                            <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
                         <?php }
                     } ?>
     <?php } ?>
@@ -19,9 +19,9 @@
         </div>
     </div>
 
-<?php } else { ?>                     
+<?php } else { ?>
     <div class="resposive-clearfix">
-        <!-- first section start here-->							                     
+        <!-- first section start here-->
         <div class="col-md-3 resposive-clearfix">
             <h5>No Records found</h5>
         </div>

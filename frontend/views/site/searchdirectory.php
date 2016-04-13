@@ -9,7 +9,7 @@ if ((!empty($directory)) && ($total > 1)) {
     $l = $first_letter;
     ?>
     <div class="resposive-clearfix">
-        <!-- first section start here-->							                     
+        <!-- first section start here-->
         <div class="col-md-3 resposive-clearfix">
             <?php $i = 0;
             foreach ($first_letter as $f) {
@@ -24,7 +24,7 @@ if ((!empty($directory)) && ($total > 1)) {
                                 if ($first_letter == $f) {
                                     if ($i < $first) {
                                         ?>
-                                        <li><a href="<?php echo Yii::$app->params['BASE_URL']; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
+                                        <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
                     <?php }
                 }
             } ?>
@@ -32,9 +32,9 @@ if ((!empty($directory)) && ($total > 1)) {
                     </div>
                 <?php }$i++;
             } ?>
-        </div>   
-        <!-- first section end here-->							                     
-        <!-- second section start here-->							                     
+        </div>
+        <!-- first section end here-->
+        <!-- second section start here-->
         <div class="col-md-3">
                     <?php $i = 0;
                     foreach ($k as $f) {
@@ -55,8 +55,8 @@ if ((!empty($directory)) && ($total > 1)) {
                     </div>
                         <?php }$i++;
                     } ?></div>
-        <!-- second section end here-->							
-        <!-- Third section start here-->							
+        <!-- second section end here-->
+        <!-- Third section start here-->
         <div class="col-md-3 paddingright0">
 
                     <?php $i = 0;
@@ -71,7 +71,7 @@ if ((!empty($directory)) && ($total > 1)) {
                 $first_letter = strtoupper(substr($d['vname'], 0, 1));
                 if ($first_letter == $f) {
                     ?>
-                                    <li><a href="<?php echo Yii::$app->params['BASE_URL']; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
+                                    <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
                 <?php }
             } ?>
 
@@ -79,16 +79,13 @@ if ((!empty($directory)) && ($total > 1)) {
                     </div>
         <?php }$i++;
     } ?></div>
-        <!-- Third section end here-->		
+        <!-- Third section end here-->
     </div>
-<?php } else { ?>                     
+<?php } else { ?>
     <div class="resposive-clearfix">
-        <!-- first section start here-->							                     
+        <!-- first section start here-->
         <div class="col-md-3 resposive-clearfix">
             <h5>No Records found</h5>
         </div>
     </div>
 <?php } ?>
-				   
-
-

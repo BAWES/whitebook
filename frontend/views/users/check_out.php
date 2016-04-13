@@ -22,7 +22,7 @@ $this->title = 'Delivery Address | Whitebook';
                         </div>
                         <div class="account_form">
                             <div class="bs-example" data-example-id="basic-forms">
-                                <form method="POST" action="<?php echo Yii::$app->params['BASE_URL']; ?>/delivery" name="delivery" id="delivery" name="account_setting">
+                                <form method="POST" action="<?php echo Yii::$app->homeUrl; ?>/delivery" name="delivery" id="delivery" name="account_setting">
 
 
                                     <div class="address_informations">
@@ -33,9 +33,9 @@ $this->title = 'Delivery Address | Whitebook';
                                             <div class="col-md-6 paddingright0">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">Address Type</label>
-                                                    <div class="select_boxes"> 
+                                                    <div class="select_boxes">
                                                         <select class="selectpicker " data-style="btn-primary" id="address_type" name="address_type" >
-                                                            <option value="">Select Address Type</option>	
+                                                            <option value="">Select Address Type</option>
                                                             <?php
                                                             foreach ($addresstype as $key => $val) {
                                                                 echo '<option value="' . $key . '">' . $val . '</option>';
@@ -43,12 +43,12 @@ $this->title = 'Delivery Address | Whitebook';
                                                             ?>
                                                         </select>
                                                         <div id="address_type_err" class="error"></div>
-                                                    </div>                                                      
+                                                    </div>
                                                 </div>
 
                                             </div>
 
-                                            <div class="col-md-6 paddingleft0"> 
+                                            <div class="col-md-6 paddingleft0">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Country</label>
                                                     <select class="selectpicker" data-style="btn-primary" style="display: none;" id="country" name="country">
@@ -57,18 +57,18 @@ $this->title = 'Delivery Address | Whitebook';
                                                         foreach ($loadcountry as $key => $val) {
                                                             echo '<option value="' . $key . '">' . $val . '</option>';
                                                         }
-                                                        ?>		
+                                                        ?>
                                                     </select>
                                                     <div id="country_er"  class="error"></div>
                                                 </div>
-                                            </div>  
+                                            </div>
 
                                             <div class="col-md-6 paddingright0">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">Area</label>
-                                                    <div class="select_boxes"> 
+                                                    <div class="select_boxes">
                                                         <select class="selectpicker " data-style="btn-primary" id="city" name="city" >
-                                                            <option value="">Select city</option>	
+                                                            <option value="">Select city</option>
                                                             <?php
                                                             foreach ($loadcity as $key => $val) {
 
@@ -77,15 +77,15 @@ $this->title = 'Delivery Address | Whitebook';
                                                             ?>
                                                         </select>
                                                         <div id="city_er" class="error"></div>
-                                                    </div>                                                      
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 paddingright0">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">Address Area</label>
-                                                    <div class="select_boxes"> 
+                                                    <div class="select_boxes">
                                                         <select class="selectpicker " data-style="btn-primary" id="area" name="area">
-                                                            <option value="">Select Area</option>	
+                                                            <option value="">Select Area</option>
 <?php
 foreach ($area as $key => $val) {
     echo '<option value="' . $key . '">' . $val . '</option>';
@@ -93,11 +93,11 @@ foreach ($area as $key => $val) {
 ?>
                                                         </select>
                                                         <div id="area_er" class="error"></div>
-                                                    </div>                                                      
+                                                    </div>
                                                 </div>
 
                                             </div>
-                                            <div class="col-md-6 paddingleft0"> 
+                                            <div class="col-md-6 paddingleft0">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Address Details</label>
                                                     <input type="text" placeholder="Enter your address name here" id="address_data" name="address_data" class="form-control required" value="">
@@ -199,7 +199,7 @@ foreach ($area as $key => $val) {
                         jQuery('#login_success').modal('show');
                         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Delivery informastion added successfully!</span>');
                         window.setTimeout(function () {
-                            window.location.replace("<?php echo Yii::$app->params['BASE_URL'] . '/basket'; ?>")
+                            window.location.replace("<?php echo Yii::$app->homeUrl . '/basket'; ?>")
                         }, 2000)
                     }
                 }
@@ -236,7 +236,7 @@ foreach ($area as $key => $val) {
         }
     });
 
-</script> 
+</script>
 
 
 <script type="text/javascript">
@@ -268,7 +268,7 @@ foreach ($area as $key => $val) {
             var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('/admin/location/area'); ?> ";
             jQuery.ajax({
                 type: 'POST',
-//async: false,      
+//async: false,
                 url: path, //url to be called
                 data: {city_id: city_id, _csrf: csrfToken}, //data to be send
                 success: function (data) {

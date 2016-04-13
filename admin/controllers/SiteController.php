@@ -102,10 +102,9 @@ class SiteController extends Controller
 
     public function actionLogout()
     {
-        $session = Yii::$app->session;
         Yii::$app->user->logout();
-        $session->destroy();
-        return $this->redirect('login');
+
+        return $this->goHome();
     }
 
     public function actionRecoverypassword()

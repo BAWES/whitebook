@@ -25,7 +25,7 @@ class PlanController extends BaseController
 
     public function actionPlans()
     {
-        \Yii::$app->view->title = Yii::$app->params['Sitename'].' | Plan';
+        \Yii::$app->view->title = 'The White Book | Plan';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
         $db = Yii::$app->db;// or Category::getDb()

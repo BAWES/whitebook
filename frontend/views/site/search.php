@@ -18,26 +18,26 @@ jQuery('#EventModal').modal('show');
 }
 window.onload=display_event_modal;
 </script>
-<?php } 
+<?php }
 if($event_status>0){
 ?>
 <script type="text/javascript">
 /* BEGIN ADD EVENT */
  function addevent1(item_id)
-{	
+{
 	jQuery.ajax({
 		type:'POST',
 		url:"<?= Url::toRoute('/product/addevent'); ?>",
 		data:{'item_id':item_id},
 		success:function(data)
 		{
-			jQuery('#addevent').html(data);	
+			jQuery('#addevent').html(data);
 			jQuery('#eventlist'+item_id).selectpicker('refresh');
 			jQuery('#add_to_event').modal('show');
-				
+
 		}
 	});
-} 
+}
 
 /* END ADD EVENT */
 var x='<?= $event_status;?>';
@@ -54,18 +54,18 @@ window.onload=addevent1(x);
 <div class="breadcrumb_common">
 <div class="bs-example">
 <!-- <ul class="breadcrumb"> -->
-<?php 
+<?php
 $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRoute('/plan/plan/'.$slug)];
 //$this->params['breadcrumbs'][] =$model['item_name'];
 ?>
 <?= Breadcrumbs::widget([
 'options' => ['class' => 'new breadcrumb'],
-'homeLink' => [ 
+'homeLink' => [
 'label' => Yii::t('yii', 'Home'),
-'url' => Yii::$app->params['BASE_URL'],
+'url' => Yii::$app->homeUrl,
 ],
 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-]); 
+]);
 ?>
 
 <!-- </ul> -->
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRou
 <div class="col-md-3 paddingleft0" id="left_side_cate">
 <div class="filter_content">
 <div class="filter_section">
-<div class="responsive-category-bottom search-list col-xs-12 teat-right pull-right">                       
+<div class="responsive-category-bottom search-list col-xs-12 teat-right pull-right">
 <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0 pull-right" data-toggle="offcanvas">Filter</span>
 <div class="filter_title">
 <span class="title_filter color_yellow">Filter by</span>
@@ -87,23 +87,23 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRou
 <nav class="row-offcanvas row-offcanvas-left">
 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 <div id="accordion" class="panel-group">
-	
+
 <!--  END CATEGORY FILTER-->
 <!--  BEGIN THEME FILTER-->
 <div class="panel panel-default" >
 <div class="panel-heading">
 <div class="clear_left"><p>Themes <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right"><a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed"> 
+<div class="clear_right"><a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
 <h4 class="panel-title">
 <span class="plus_acc"></span>
 </h4>
 </a>
-</div>   
-</div>                                
+</div>
+</div>
 <div id="themes" class="panel-collapse collapse" aria-expanded="false">
 <div class="panel-body">
 <div class="table">
-<?php 
+<?php
 /* BEGIN Display scroll for more than three li */
 if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 /* END Display scroll for more than three li */
@@ -113,29 +113,29 @@ if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 <li>
 <label class="label_check" for="checkbox-<?= $value['theme_name'] ?>"><input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> ><?= $value['theme_name']; ?></label>
 </li>
-<?php }} ?>                                                   
+<?php }} ?>
 </ul>
 </div>
 </div>
-</div>                               
-</div>                                
+</div>
+</div>
 <!--  END THEME FILTER -->
 
 <!--  BEGIN VENDOR FILTER -->
 <div class="panel panel-default" >
 <div class="panel-heading">
 <div class="clear_left"><p>Vendor <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right"><a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed"> 
+<div class="clear_right"><a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
 <h4 class="panel-title">
 <span class="plus_acc"></span>
 </h4>
 </a>
-</div>   
-</div>                                
+</div>
+</div>
 <div id="vendor" class="panel-collapse collapse" area-expanded="false" >
 <div class="panel-body">
 <div class="table">
-<?php 
+<?php
 /* BEGIN Display scroll for more than three li */
 if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 /* END Display scroll for more than three li */
@@ -145,12 +145,12 @@ if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 <li>
 <label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>"><input name="vendor" data-element="input" class="items" id="checkbox-<?= $value['vendor_name'] ?>" step="<?= $value['vendor_name'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> ><?= $value['vendor_name']; ?></label>
 </li>
-<?php }} ?>                                                   
+<?php }} ?>
 </ul>
 </div>
 </div>
-</div>                               
-</div>                                
+</div>
+</div>
 <!--  END VENDOR FILTER-->
 <!--  BEGIN PRICE FILTER -->
 <div class="panel panel-default" >
@@ -160,7 +160,7 @@ if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 <h4 class="panel-title">
 <span class="plus_acc">
 </span>
-</h4></a> 
+</h4></a>
 </div>
 </div>
 <div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
@@ -169,10 +169,10 @@ if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 	<?php if(!empty($imageData)){?>
 <ul class="test_scroll">
 <?php
-foreach ($imageData as $key => $value) {	
-	$price_val[] = $value['item_price_per_unit'];	
+foreach ($imageData as $key => $value) {
+	$price_val[] = $value['item_price_per_unit'];
 }
-/* Get max price_per_unit in item table */ 
+/* Get max price_per_unit in item table */
 $min_price = min($price_val);
 $max_price = max($price_val);
 $max = $max_price;
@@ -185,24 +185,24 @@ $min_kd = round($x-$divide);
 
 //if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
 if($min_kd > 0 )
-{	
+{
 	foreach ($imageData as $key => $value) {
 	# code...
 	$item_price = $value['item_price_per_unit'];
 
 	$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
 
-	if($check_range ==1)	{	
+	if($check_range ==1)	{
 	?>
 	<li>
 	<label class="label_check" for="checkbox-<?php echo $x;?>">
 	<input name="price" id="checkbox-<?php echo $x;?>" value=<?php echo $min_kd.'-'.$x;?> type="checkbox">
 	<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
 	</li>
-	<?php 
-	break;	
+	<?php
+	break;
 	}
-	$i++; } 
+	$i++; }
 	}
 }
 	?>
@@ -210,13 +210,13 @@ if($min_kd > 0 )
 </div>
 </div>
 </div>
-</div>                                
+</div>
 <!--  END PRICE FILTER-->
 
 <!-- END FILTER  -->
 </div>
 </nav>
-</div>                            
+</div>
 </div>
 </div>
 </div>
@@ -226,19 +226,19 @@ if($min_kd > 0 )
 	<h3>Search Result for:<?= $search?> (<?= count($imageData);?>)</h3>
 </div>
 <!-- BEGIN Item lists -->
-<div class="listing_right">                               
+<div class="listing_right">
 <div class="events_listing">
 <ul>
-<?php      
+<?php
 if(!empty($imageData))
-{                          
-foreach ($imageData as $key => $value) {  
-if($value['image_path'] !="")  {                   
+{
+foreach ($imageData as $key => $value) {
+if($value['image_path'] !="")  {
 ?>
 <li>
 <div class="events_items">
 <div class="events_images">
-<div class="hover_events">			
+<div class="hover_events">
 <div class="pluse_cont">
 <?php if(Yii::$app->params['CUSTOMER_ID']=='') { ?>
 <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','ADD_EVENT');?>"></a>
@@ -259,8 +259,8 @@ $result=array_search($value['item_id'],$k);
 if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
 <div class="faver_icons">
 <?php }?>
-<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','ADD_FAV');?>"></a></div>                           
-<?php } ?> 
+<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','ADD_FAV');?>"></a></div>
+<?php } ?>
 </div>
 
 <a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
@@ -271,17 +271,17 @@ if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php 
 <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
 </div>
 </div>
-</li>  
+</li>
 <?php } }  } else {
 echo "No records found";
 }
-?>                                   
+?>
 </ul>
 <div id="planloader"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader" style="margin-top: 15%;"></div>
 </div>
-<?/* 
+<?/*
 <div class="add_more_commons">
-<?php 
+<?php
 if((!empty($imageData)) && (count($imageData) > 20)) { ?>
 <div class="lode_more_buttons">
 <button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
@@ -305,7 +305,7 @@ if((!empty($imageData)) && (count($imageData) > 20)) { ?>
 
 <!-- megamenu script -->
 <!-- plan last:child script -->
-<script type="text/javascript">        
+<script type="text/javascript">
 $(document).ready(function () {
 
 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
@@ -365,18 +365,18 @@ jQuery('.label_check').each(function () {
 jQuery(this).removeClass('c_on');
 
 	if(jQuery(this).parents('.panel-body').find('label.c_on').length == 0){
-		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','none'); 		
+		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','none');
 	}else{
-		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block'); 
+		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block');
 	}
-	
-}); 
-jQuery('.label_check input:checked').each(function () {    		
+
+});
+jQuery('.label_check input:checked').each(function () {
 	jQuery(this).parent('label').addClass('c_on');
 	if(jQuery(this).parents('.panel-body').find('label.c_on').length == 0){
-		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','none'); 		
-	}else{		
-		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block'); 
+		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','none');
+	}else{
+		jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block');
 	}
 });
 }
@@ -404,7 +404,7 @@ jQuery(this).next(".holder").text(selectedOption);
 }).trigger('change');
 
 
-});	
+});
 
 
 /*jQuery('#accordion a').click(function () {
@@ -460,16 +460,16 @@ $("#"+cat).parent().parent().find('#bakery').hide();
 $('#open_search').click(function () {
 jQuery("#open_search").toggleClass("active");
 });
-/* Mega menu */                             
+/* Mega menu */
 jQuery(document).ready(function(){
-jQuery(".dropdown").hover(            
+jQuery(".dropdown").hover(
 function() {
 jQuery('.dropdown-menu', this).stop( true, true ).slideDown("fast");
-jQuery(this).toggleClass('open');        
+jQuery(this).toggleClass('open');
 },
 function() {
 jQuery('.dropdown-menu', this).stop( true, true ).slideUp("fast");
-jQuery(this).toggleClass('open');       
+jQuery(this).toggleClass('open');
 }
 );
 });
@@ -477,7 +477,7 @@ jQuery(this).toggleClass('open');
 (function(jQuery){
 jQuery(window).load(function(){
 jQuery(".test_scroll").mCustomScrollbar(
-{theme:"rounded-dark" ,                
+{theme:"rounded-dark" ,
 mouseWheelPixels: 50,
 scrollInertia: 0
 
@@ -488,11 +488,11 @@ scrollInertia: 0
 
 
 /* BEGIN filter item list */
-var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");  
+var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");
 var url = window.location.href;     // Returns full URL
-setupLabel();	
+setupLabel();
 jQuery('.label_check input').on('change',function()
-{  	   	
+{
 
 	filter();
 	/* BEGIN FILTER CLEAR BUTTON */
@@ -505,31 +505,31 @@ jQuery('.loadingmessage').show(); */
 /* URL format */
 
 
-});  
+});
 
 var limit = 1;
 jQuery('button#loadmore').click(function(event)
 {
 setupLabel();
-limit = limit+1;      
+limit = limit+1;
 var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loadmoreitems'); ?> ";
 jQuery.ajax({
 type:'POST',
 url:path,
 data:{limit:limit, _csrf : csrfToken},
-success:function(data){       	
-jQuery('.events_listing ul li:last-child').after(data);   
-// Every fourth li change margin 
-jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone"); 	
+success:function(data){
+jQuery('.events_listing ul li:last-child').after(data);
+// Every fourth li change margin
+jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
 }
 })
-});   
+});
 
 /* BEGIN load category and reload the page */
-jQuery('#main-category').change(function(){  
+jQuery('#main-category').change(function(){
 //alert(jQuery('option[name=category]').val());
-var s = jQuery('#main-category :selected').val();		
-var hostname = window.location.host;        
+var s = jQuery('#main-category :selected').val();
+var hostname = window.location.host;
 location.href = 'http://'+hostname+'/products/'+jQuery(this).val();
 });
 /* END load category and reload the page */
@@ -540,7 +540,7 @@ jQuery(".events_listing").css({"opacity":"0.5","position":"relative"});
 
 var theme_name = jQuery("input[name=themes]:checked").map(function() {
 return this.value;
-}).get().join('+'); 
+}).get().join('+');
 
 var vendor_name = jQuery("input[name=vendor]:checked").map(function() {
 return this.value;
@@ -548,22 +548,22 @@ return this.value;
 
 var price_val = jQuery("input[name=price]:checked").map(function() {
 return this.value;
-}).get().join('+'); 
+}).get().join('+');
 /* URL format */
 
-var url_path; 
+var url_path;
 var url = window.location.href;
-var newUrl = url.substring(0, url.indexOf('?'));  
+var newUrl = url.substring(0, url.indexOf('?'));
 //alert(newUrl);
 // BEGIN Get main category from url
 var slug;
 if(newUrl !='')
 {
-	 slug = newUrl.substring(newUrl.lastIndexOf('/') + 1); 	
+	 slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
 }
 else
 {
-	slug = url.substring(url.lastIndexOf('/') + 1); 	
+	slug = url.substring(url.lastIndexOf('/') + 1);
 
 }
 // END Get main category from url
@@ -575,41 +575,41 @@ var main_cat = lastSlash.substring(lastSlash.lastIndexOf('?') + 1); */
 
 //alert(url.substring(lastSlash+1));
 //alert(slug);
-//var slug = '';  	
+//var slug = '';
 
-/* if all checkbox uncheck load items based on category */ 	
+/* if all checkbox uncheck load items based on category */
 if(theme_name =="" && vendor_name =="")
-{			
-window.history.pushState("test", "Title", newUrl);  
+{
+window.history.pushState("test", "Title", newUrl);
 slug = '<?= $slug;?>';
-} 
+}
 
 if(theme_name !="" || vendor_name !="" || price_val !="")
-{             
-url_path = '?themes='+theme_name+'&vendor='+vendor_name+'&price='+price_val; 
+{
+url_path = '?themes='+theme_name+'&vendor='+vendor_name+'&price='+price_val;
 
-}      
+}
 var slug = "<?php echo $search;?>";
 var search = "<?php echo $search;?>";
 var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loadsearchresultitems'); ?> ";
-<?php $giflink=Yii::$app->params['BASE_URL'].Yii::getAlias('@gif_img');?>
+<?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img');?>
 jQuery.ajax({
 type:'POST',
 url:path,
 data:{themes : theme_name,vendor : vendor_name,price : price_val,slug: slug,search: search, _csrf : csrfToken},
-success:function(data){     
-window.history.pushState("test", "Title", url_path);  
-jQuery('.events_listing ul').html(data); 
+success:function(data){
+window.history.pushState("test", "Title", url_path);
+jQuery('.events_listing ul').html(data);
 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
 jQuery("#planloader").hide();
 jQuery(".events_listing").css({"opacity":"1.0","position":"relative"});
-// Every fourth li change margin 
+// Every fourth li change margin
 
 }
 }).done(function() {
-	
+
 	jQuery(".add_to_favourite").click(function(){
-	
+
 jQuery('#loading_img_list').show();
 jQuery('#loading_img_list').html('<img id="loading-image" src="<?= $giflink;?>" alt="Loading..." />');
 
@@ -626,34 +626,34 @@ data:"item_id="+item_id+"&_csrf="+_csrf,
 success:function(data)
 {
 jQuery('#heart_fave').html(data);
-jQuery('#loading_img_list').hide(); 
+jQuery('#loading_img_list').hide();
 }
-});           
 });
-	
+});
+
 });
 }
 
 /* BEGIN ADD EVENT */
  function addevent(item_id)
-{	
+{
 	jQuery.ajax({
 		type:'POST',
 		url:"<?php Url::toRoute('product/addevent'); ?>",
 		data:{'item_id':item_id},
 		success:function(data)
 		{
-			jQuery('#addevent').html(data);	
+			jQuery('#addevent').html(data);
 			jQuery('#eventlist'+item_id).selectpicker('refresh');
 			jQuery('#add_to_event').modal('show');
-				
+
 		}
 	});
-} 
+}
 /* END ADD EVENT */
 
 /* BEGIN CLEAR FILTER */
-jQuery('a#filter-clear').on('click',function(){	
+jQuery('a#filter-clear').on('click',function(){
 	jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
 	jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
 	jQuery(this).hide();
@@ -668,17 +668,17 @@ overlay = jQuery('.overlay'),
 isClosed = false;
 
 trigger.click(function () {
-filter_butt();      
+filter_butt();
 });
 
 function filter_butt() {
 
-if (isClosed == true) {          
+if (isClosed == true) {
 overlay.hide();
 trigger.removeClass('ses_act');
 trigger.addClass('ses_dct');
 isClosed = false;
-} else {   
+} else {
 overlay.show();
 trigger.removeClass('ses_act');
 trigger.addClass('ses_dct');
@@ -692,15 +692,13 @@ jQuery('#wrapper').toggleClass('toggled');
 
 
 jQuery("#left_side_cate nav").removeClass ("navbar navbar-fixed-top ");
-jQuery("#left_side_cate ul").removeClass ("nav sidebar-nav ");  
-jQuery("#left_side_cate nav").removeAttr ("id") 
+jQuery("#left_side_cate ul").removeClass ("nav sidebar-nav ");
+jQuery("#left_side_cate nav").removeAttr ("id")
 if (jQuery(window).width() < 991) {
 jQuery("#left_side_cate nav").addClass ("navbar navbar-fixed-top ");
-jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");  
+jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");
 jQuery("#left_side_cate nav").attr ('id','sidebar-wrapper')
 }
 
 /* END RESPONSIVE FILTER NAVIGATION */
 </script>
-
-

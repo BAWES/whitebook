@@ -21,9 +21,9 @@ use yii\widgets\Breadcrumbs;
 <?php
 $category_det=Category::category_value($slug);
 if($category_det['category_name']!='Say thank you'){
-$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Yii::$app->params['BASE_URL'].'/products/'.$slug];
+$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Yii::$app->homeUrl.'/products/'.$slug];
 }else{
-$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$app->params['BASE_URL'].'/products/'.$slug];
+$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$app->homeUrl.'/products/'.$slug];
 }
 //$this->params['breadcrumbs'][] =$model['item_name'];
 ?>
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 'options' => ['class' => 'new breadcrumb'],
 'homeLink' => [
 'label' => Yii::t('yii', 'Home'),
-'url' => Yii::$app->params['BASE_URL'],
+'url' => Yii::$app->homeUrl,
 ],
 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
 ]);
@@ -50,23 +50,23 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 <div class="col-md-3 paddingleft0" id="left_side_cate">
 <div class="filter_content">
 <div class="filter_section">
-<div class="responsive-category-top">
-<div class="listing_sub_cat1">
-<span class="title_filter">Categories</span>
+	<div class="responsive-category-top">
+		<div class="listing_sub_cat1">
+			<span class="title_filter">Categories</span>
 
-<select class="selectpicker" style="display: none;" id="main-category">
-<option data-icon="venues-category" <?php  if($slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
-<option data-icon="invitation-category" <?php  if($slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
-<option data-icon="food-category" name="category" value="food-beverage" <?php  if($slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
-<option data-icon="decor-category" name="category" value="decor" <?php  if($slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
-<option data-icon="supply-category" value="supplies" <?php  if($slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
-<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
-<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
-<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
-<option data-icon="saythankyou-category" <?php  if($slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'say-thank-you']) ?>">Say "Thank You"</option> 
-</select>
-</div>
-</div>
+			<select class="selectpicker" style="display: none;" id="main-category">
+				<option data-icon="venues-category" <?php  if($slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
+				<option data-icon="invitation-category" <?php  if($slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
+				<option data-icon="food-category" name="category" value="food-beverage" <?php  if($slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
+				<option data-icon="decor-category" name="category" value="decor" <?php  if($slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
+				<option data-icon="supply-category" value="supplies" <?php  if($slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
+				<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
+				<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
+				<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
+				<option data-icon="saythankyou-category" <?php  if($slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'say-thank-you']) ?>">Say "Thank You"</option>
+			</select>
+		</div>
+	</div>
 <div class="responsive-category-bottom">
 <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
 <div class="filter_title">
@@ -363,7 +363,7 @@ if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php 
 <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('').'product/';?><?php echo $value['slug'];?>" title="" ><?= Html::img(Yii::getAlias("@vendor_images/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
 </div>
 <div class="events_descrip">
-<a href="<?php echo Yii::$app->params['BASE_URL'];?>/product/<?php echo $value['slug'];?>" title=""><?= $value['vendor_name']  ?>
+<a href="<?php echo Yii::$app->homeUrl;?>/product/<?php echo $value['slug'];?>" title=""><?= $value['vendor_name']  ?>
 <h3><?= $value['item_name']  ?></h3>
 <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
 </div>
@@ -658,7 +658,7 @@ url_path = '?category='+category_name+'&themes='+theme_name+'&vendor='+vendor_na
 }
 
 var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loaditems'); ?> ";
-<?php $giflink=Yii::$app->params['BASE_URL'].Yii::getAlias('@gif_img');?>
+<?php $giflink= Yii::$app->homeUrl . Yii::getAlias('@gif_img');?>
 jQuery.ajax({
 type:'POST',
 url:path,

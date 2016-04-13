@@ -674,7 +674,7 @@ error:function(data)
 /* END EDIT TO EVENT */
 function locat(loc)
 {
- window.location = "<?= Yii::$app->params['BASE_URL']; ?>/event-details/"+loc;
+ window.location = "<?= Yii::app()->baseUrl; ?>/event-details/"+loc;
 }
 </script>
 <script type="text/javascript">
@@ -902,7 +902,7 @@ jQuery('#search-terms2').keydown(function(e) {
 jQuery("#search_list_fail1").html('');
 if (e.keyCode == 13)
 {
- var url1="<?php echo Yii::$app->params['BASE_URL'];?>";
+ var url1="<?= Yii::$app->homeUrl; ?>";
  var search1=jQuery("#search-terms2").val();
  var search2 = search1.replace(' ', '-');
  var url="<?php echo Url::toRoute('/search-result/').'/';?>";
@@ -1096,7 +1096,7 @@ else if(data==-1)
 
 
 //Add or remove favourites
-<?php $giflink=Yii::$app->params['BASE_URL'].Yii::getAlias('@gif_img');?>
+<?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
 
 jQuery(".add_to_favourite").click(function(){
 
@@ -1588,11 +1588,11 @@ function show_activate_modal_true()
 {
 jQuery('#login_activate').modal('show');
 setTimeout(function(){
-   window.location.replace("<?php echo Yii::$app->params['BASE_URL']; ?>");
+   window.location.replace("<?= Yii::$app->homeUrl; ?>");
 }, 1000);
 /* jQuery('#success').text('Your Account Activated successfully!'); */
 jQuery("#reload_page1 ,#reload_page2").click(function () {
-/* window.location.replace("<?php echo Yii::$app->params['BASE_URL']; ?>"); */
+/* window.location.replace("<?= Yii::$app->homeUrl; ?>"); */
 });
 }
 

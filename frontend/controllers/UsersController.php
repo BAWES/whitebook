@@ -103,9 +103,9 @@ class UsersController extends BaseController
 
     public function actionLogout()
     {
-        Yii::$app->session->destroy();
+        Yii::$app->user->logout();
 
-        return $this->redirect(Yii::$app->params['BASE_URL']);
+        return $this->goHome();
     }
 
     public function actionSignup()
@@ -164,7 +164,7 @@ class UsersController extends BaseController
             } else {
                 Yii::$app->session->set('reset_password_mail', '1');
             }
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
     }
     public function actionConfirm_email()
@@ -176,7 +176,7 @@ class UsersController extends BaseController
             $check_key = $model->check_valid_key($key);
             if ($check_key == 1) {
                 //Yii::$app->session->setFlash('error', "Invalid key!");
-                $this->redirect(Yii::$app->params['BASE_URL']);
+                return $this->goHome();
             } else {
                 $login_det = $model->customer_logindetail($key);
                 $email = $login_det[0]['customer_email'];
@@ -189,11 +189,11 @@ class UsersController extends BaseController
                 Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
                 //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
                 //print_r ($login_det);die;
-                $this->redirect(Url::toRoute('/site/activate'));
-                //$this->redirect(Yii::$app->params['BASE_URL']);
+                return $this->redirect(Url::toRoute('/site/activate'));
+                //return $this->goHome();
             }
         } else {
-            return $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
     }
 
@@ -274,7 +274,7 @@ class UsersController extends BaseController
     {
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if ($customer_id == '') {
-            return $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         $country = Country::loadcountry();
 
@@ -296,7 +296,7 @@ class UsersController extends BaseController
     {
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if ($customer_id == '') {
-            return $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         $model = new Users();
         if (isset($_POST)) {
@@ -314,7 +314,7 @@ class UsersController extends BaseController
     {
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if ($customer_id == '') {
-            return $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         $model = new Users();
         if (isset($_POST)) {
@@ -333,7 +333,7 @@ class UsersController extends BaseController
     {
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if ($customer_id == '') {
-            return $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         $model = new Users();
         if (Yii::$app->request->isAjax) {
@@ -359,7 +359,7 @@ class UsersController extends BaseController
     {
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if ($customer_id == '') {
-            return $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         $model = new Users();
         if (isset($_POST)) {
@@ -369,7 +369,7 @@ class UsersController extends BaseController
             if ($update_customer) {
                 echo 1;
                 //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
-                //$this->redirect('account-settings');
+                //return $this->redirect('account-settings');
             }
         }
     }
@@ -377,7 +377,7 @@ class UsersController extends BaseController
     public function actionCreate_event()
     {
         if (Yii::$app->params['CUSTOMER_ID'] == '') {
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         if (isset($_POST['event_name']) && isset($_POST['event_type']) && isset($_POST['event_date'])) {
             $model = new Users();
@@ -418,7 +418,7 @@ class UsersController extends BaseController
     public function actionUpdate_event()
     {
         if (Yii::$app->params['CUSTOMER_ID'] == '') {
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         if (isset($_POST['event_name']) && isset($_POST['event_type']) && isset($_POST['event_date'])) {
             $model = new Users();
@@ -445,7 +445,7 @@ class UsersController extends BaseController
     public function actionAdd_event()
     {
         if (Yii::$app->params['CUSTOMER_ID'] == '') {
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         if (isset($_POST['event_id']) && isset($_POST['item_id'])) {
             $model = new Users();
@@ -485,7 +485,7 @@ class UsersController extends BaseController
                 exit;
             }
         } else {
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
     }
 
@@ -494,7 +494,7 @@ class UsersController extends BaseController
         //Yii::$app->params['header1'] = "1"; // uncomment call new header
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if ($customer_id == '') {
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         }
         $website_model = new Website();
         $event_type = $website_model->get_event_types();
@@ -590,7 +590,7 @@ class UsersController extends BaseController
                     exit;
                 }
             } else {
-                $this->redirect(Yii::$app->params['BASE_URL']);
+                return $this->goHome();
             }
         }
     }
@@ -763,7 +763,7 @@ class UsersController extends BaseController
     public function actionBasket()
     {
         if (Yii::$app->params['CUSTOMER_ID'] == '') {
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         } else {
             $customer_id = Yii::$app->params['CUSTOMER_ID'];
 
@@ -790,7 +790,7 @@ class UsersController extends BaseController
     public function actionPayment()
     {
         if (Yii::$app->params['CUSTOMER_ID'] == '') {
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         } else {
             $customer_id = Yii::$app->params['CUSTOMER_ID'];
             $command = Yii::$app->DB->createCommand(
@@ -820,7 +820,7 @@ class UsersController extends BaseController
     public function actionCashondelivery()
     {
         if (Yii::$app->params['CUSTOMER_ID'] == '') {
-            $this->redirect(Yii::$app->params['BASE_URL']);
+            return $this->goHome();
         } else {
             $ip = Yii::$app->request->getUserIP();
 
@@ -927,7 +927,7 @@ class UsersController extends BaseController
                 $command = Yii::$app->DB->createCommand(
                 "DELETE  FROM {{%basket}} where customer_id = '".$customer_id."'");
                 $basket = $command->queryAll();
-                $this->redirect(Yii::$app->params['BASE_URL']);
+                return $this->goHome();
 
                 return $this->render('/users/payment', ['customer_details' => $customer_details]);
             }

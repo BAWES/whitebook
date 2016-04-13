@@ -67,7 +67,7 @@ $this->title = 'Whitebook - Checkout';
                         <tr><td><?= $customer_details['block'] ?></td></tr>
                         <tr><td><?= $customer_details['street'] ?></td></tr>
                         <tr><td><?= $customer_details['juda'] ?></td></tr>
-                        <tr><td><?= $customer_details['customer_address'] ?></td></tr>	
+                        <tr><td><?= $customer_details['customer_address'] ?></td></tr>
                         <tr><td><?= City::getCity($customer_details['area']) ?></td></tr>
                         <tr><td><?= Country::getCountry($customer_details['country']) ?></td></tr>
                         <tr><td><?= $customer_details['phone'] ?></td></tr></table>
@@ -83,7 +83,7 @@ $this->title = 'Whitebook - Checkout';
                                 <tr><td><?= Country::getCountry($key['country_id']) ?></td></tr>
 <?php } ?>
 
-                            <a href="<?php echo Yii::$app->params['BASE_URL']; ?>/checkout" id="check_out">Add Delivery Address</a></div>
+                            <a href="<?php echo Yii::$app->homeUrl; ?>/checkout" id="check_out">Add Delivery Address</a></div>
 
                     </table>
 
@@ -98,7 +98,7 @@ $this->title = 'Whitebook - Checkout';
                                 <div class="slider_new_up">
                                     <div class="flexslider4">
                                         <div id="demo">
-                                            <div class="owl-carousel" id="similar-products-slider">   
+                                            <div class="owl-carousel" id="similar-products-slider">
                                                 <?php
                                                 foreach ($similiar_item as $s) {
                                                     $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
@@ -106,15 +106,15 @@ $this->title = 'Whitebook - Checkout';
                                                     $out = $command->queryAll();
                                                     if ($out) {
                                                         $imglink = Yii::getAlias('@vendor_image/') . $out[0]['image_path'];
-                                                        $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_image/') . $out[0]['image_path'];
+                                                        $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_image/') . $out[0]['image_path'];
                                                     } else {
                                                         $imglink = Yii::getAlias('@vendor_image/no_image.jpg');
-                                                        $baselink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@vendor_image/no_image.jpg');
+                                                        $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_image/no_image.jpg');
                                                     }
-                                                    ?> 
+                                                    ?>
                                                     <div class="item">
                                                         <div class="fetu_product_list">
-                                                            <a href="<?php echo Yii::$app->params['BASE_URL']; ?>/product/<?php echo $s['slug']; ?>" title="Products" class="similar">
+                                                            <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $s['slug']; ?>" title="Products" class="similar">
                                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219">
     <?php if (file_exists($imglink)) { ?>
                                                                     <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219">
@@ -134,9 +134,9 @@ $this->title = 'Whitebook - Checkout';
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
 
-                    </div>                         
+                    </div>
                 </div><!--product detail end-->
             </div>
             <!-- one end -->
@@ -202,7 +202,7 @@ function calculate_total1($quantity, $price) {
         }
         else
         {
-            window.location.replace("<?php echo Yii::$app->params['BASE_URL'] . '/payment'; ?>");
+            window.location.replace("<?php echo Yii::$app->homeUrl . '/payment'; ?>");
 
         }
     }

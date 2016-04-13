@@ -41,10 +41,10 @@ if (!empty($imageData)) {
                                     ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
                                         <div class="faver_icons">
                 <?php } ?>
-                                        <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a></div>                           
-            <?php } ?> 
+                                        <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a></div>
+            <?php } ?>
                             </div>
-                            <a href="<?php echo Yii::$app->params['BASE_URL']; ?>/product/<?php echo $value['slug']; ?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $value['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?></a>
+                            <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $value['slug']; ?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $value['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?></a>
                         </div>
 
                         <div class="events_descrip">
@@ -53,7 +53,7 @@ if (!empty($imageData)) {
                                 <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
                         </div>
                     </div>
-            </li>  
+            </li>
         <?php
         }
     }

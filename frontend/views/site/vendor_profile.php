@@ -68,7 +68,7 @@ if ($event_status > 0) {
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h4 class="panel-title">
                                                 <a class="collapsed" id="description_click" data-toggle="collapse" data-parent="#sub_accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-    <?php echo Yii::t('frontend', 'description'); ?>    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a> 
+    <?php echo Yii::t('frontend', 'description'); ?>    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a>
                                             </h4>
 
                                         </div>
@@ -85,7 +85,7 @@ if ($event_status > 0) {
                                             <h4 class="panel-title">
                                                 <a class="collapsed" data-toggle="collapse" data-parent="#sub_accordion" id="policy_click" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
     <?php echo Yii::t('frontend', 'return_policy'); ?>
-                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a> 
+                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a>
                                             </h4>
                                         </div>
                                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
@@ -102,7 +102,7 @@ if ($event_status > 0) {
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#sub_accordion"  id="contact_click" href="#collapseFive" aria-expanded="true" aria-controls="collapseOne">
     <?php echo Yii::t('frontend', 'contact_info'); ?>
-                                                    <span class="glyphicon glyphicon-menu-down text-align pull-right"></span></a> </a> 
+                                                    <span class="glyphicon glyphicon-menu-down text-align pull-right"></span></a> </a>
                                             </h4>
                                         </div>
                                         <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
@@ -153,7 +153,7 @@ if ($event_status > 0) {
                                                     <?php if ($vendor_detail[0]['vendor_instagram'] != '') { ?>
                                                         <li><a target="_blank" href="<?php echo $vendor_detail[0]['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-tumblr14"></span></a></li>
         <?php } ?>
-                                            <?php $vendor_url = Yii::$app->params['BASE_URL'] . '/vendor/' . $vendor_detail[0]['vendor_contact_name'] . '.html'; ?>
+                                            <?php $vendor_url = Yii::$app->homeUrl . '/vendor/' . $vendor_detail[0]['vendor_contact_name'] . '.html'; ?>
                                                     <li><a href="mailto:<?php echo $vendor_detail[0]['vendor_contact_email']; ?>?subject=Vendor Profile&body=<?php echo $vendor_url; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                                 </ul>
                                             </div>
@@ -176,7 +176,7 @@ if ($event_status > 0) {
 
                 <div class="filter_content">
                     <div class="filter_section">
-                        <div class="responsive-category-bottom">                       
+                        <div class="responsive-category-bottom">
                             <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
                             <div class="filter_title">
                                 <span class="title_filter color_yellow">Filter by</span>
@@ -187,8 +187,8 @@ if ($event_status > 0) {
                             <nav class="row-offcanvas row-offcanvas-left">
                                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                                     <div id="accordion" class="panel-group">
-                                        <!-- BEGIN CATEGORY FILTER  -->					   
-                                        <?php  
+                                        <!-- BEGIN CATEGORY FILTER  -->
+                                        <?php
                                         $subcategory = SubCategory::loadsubcat('invitations');
                                         $category_ids = Vendor::Vendorcategories($slug);
                                         $category_list = Category::Vendorcategorylist($category_ids['category_id']);
@@ -202,12 +202,12 @@ if ($event_status > 0) {
                                             <div class="panel-heading">
                                                 <div class="clear_left"><p>Categories <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
                                                 <div class="clear_right">
-                                                    <a href="#bakery" id="sub_category_cakes" data-parent="#accordion" data-toggle="collapse" class="collapsed"> 
+                                                    <a href="#bakery" id="sub_category_cakes" data-parent="#accordion" data-toggle="collapse" class="collapsed">
                                                         <h4 class="panel-title">
                                                             <span class="plus_acc"></span>
                                                         </h4>
                                                     </a>
-                                                </div>     
+                                                </div>
                                             </div>
                                             <div id="bakery" class="panel-collapse collapse" area-expanded="true" aria-expanded="true">
                                                 <div class="panel-body">
@@ -227,7 +227,7 @@ if ($event_status > 0) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <?php /* Hide Subcategory filters here 
+                                        <?php /* Hide Subcategory filters here
                                           $col=1;
                                           foreach ($subcategory as $key => $value) {
                                           $t = $in ='';
@@ -292,13 +292,13 @@ if ($event_status > 0) {
                                             <div class="panel-heading">
                                                 <div class="clear_left"><p>Themes <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
                                                 <div class="clear_right">
-                                                    <a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed"> 
+                                                    <a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
                                                         <h4 class="panel-title">
                                                             <span class="plus_acc"></span>
                                                         </h4>
                                                     </a>
-                                                </div>     
-                                            </div>                                   
+                                                </div>
+                                            </div>
                                             <div id="themes" class="panel-collapse collapse" aria-expanded="false">
                                                 <div class="panel-body">
                                                     <div class="table">
@@ -316,12 +316,12 @@ if ($event_status > 0) {
                                                                 <li>
                                                                     <label class="label_check" for="checkbox-<?= $value['theme_name'] ?>"><input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> ><?= $value['theme_name']; ?></label>
                                                                 </li>
-<?php } ?>                                                   
+<?php } ?>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                            </div>                               
-                                        </div>                                
+                                            </div>
+                                        </div>
                                         <!--  END THEME FILTER -->
                                         <!--  BEGIN PRICE FILTER -->
                                         <div class="panel panel-default" >
@@ -332,7 +332,7 @@ if ($event_status > 0) {
                                                         <h4 class="panel-title">
                                                             <span class="plus_acc">
                                                             </span>
-                                                        </h4></a> 
+                                                        </h4></a>
                                                 </div>
                                             </div>
                                             <div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
@@ -379,12 +379,12 @@ if ($event_status > 0) {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>                               
+                                        </div>
                                         <!--  END PRICE FILTER-->
                                         <!-- END FILTER  -->
                                     </div>
                             </nav>
-                        </div>                            
+                        </div>
                     </div>
                 </div>
 
@@ -402,7 +402,7 @@ if ($event_status > 0) {
                                         <li>
                                             <div class="events_items">
                                                 <div class="events_images">
-                                                    <div class="hover_events">			
+                                                    <div class="hover_events">
                                                         <div class="pluse_cont">
                                                         <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
                                                                 <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id']; ?>);" data-target="#myModal" title="<?php echo Yii::t('frontend', 'ADD_EVENT'); ?>"></a>
@@ -425,19 +425,19 @@ if ($event_status > 0) {
                     ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
                                                                     <div class="faver_icons">
                                             <?php } ?>
-                                                                    <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a></div>                           
-                                        <?php } ?> 
+                                                                    <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a></div>
+                                        <?php } ?>
                                                         </div>
 
-                                                        <a href="<?php echo Yii::$app->params['BASE_URL']; ?>/product/<?php echo $value['slug']; ?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $value['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?></a>
+                                                        <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $value['slug']; ?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $value['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?></a>
                                                     </div>
                                                     <div class="events_descrip">
-                                                        <a href="<?php echo Yii::$app->params['BASE_URL']; ?>/product/<?php echo $value['slug']; ?>" title=""><?= $value['vendor_name'] ?>
+                                                        <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $value['slug']; ?>" title=""><?= $value['vendor_name'] ?>
                                                             <h3><?= $value['item_name']; ?></h3>
                                                             <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
                                                     </div>
                                                 </div>
-                                        </li>  
+                                        </li>
         <?php
         }
     }
@@ -562,7 +562,7 @@ if ($event_status > 0) {
                                                         }
 
                                                         var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loadvendoritems'); ?> ";
-<?php $giflink = Yii::$app->params['BASE_URL'] . Yii::getAlias('@gif_img'); ?>
+<?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
 
                                                         jQuery.ajax({
                                                             type: 'POST',
@@ -571,7 +571,7 @@ if ($event_status > 0) {
                                                             success: function (data) {
                                                                 window.history.pushState("test", "Title", url_path);
                                                                 jQuery('.events_listing ul').html(data);
-                                                                // Every fourth li change margin 
+                                                                // Every fourth li change margin
                                                                 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
                                                                 jQuery("#planloader").hide();
                                                                 jQuery(".events_listing").css({"opacity": "1.0", "position": "relative"});
@@ -631,5 +631,3 @@ if ($event_status > 0) {
                                                         });
                                                     })(jQuery);
 </script>
-
-

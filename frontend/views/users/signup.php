@@ -4,14 +4,14 @@
 		 <div class="container ">
 			 <div class="col-md-12">
 				<div class="common_titles">
-					<div class="text-center"><span class="yellow_top"></span> </div> 
+					<div class="text-center"><span class="yellow_top"></span> </div>
 					<h1> <b><?php echo Yii::t('frontend','signup');?></b></h1>
 					<p class="col-md-12 text-center"><?php echo Yii::t('frontend','signup_content');?></p>
 				</div>
 			</div>
 		</div>
-	</div>   
-	<!-- Account registration form --> 
+	</div>
+	<!-- Account registration form -->
 	<div class="container container_innner">
 	   <div class="col-md-12 col-xs-12">
 		<div class="signup_common">
@@ -38,7 +38,7 @@
 							<p class="error"><?php if(isset($error['confirm_password'])){ echo $error['confirm_password'][0]; } ?></p>
 						</div>
 				</div>
-					
+
 				<div class="account_title MTB15 ">
 					<h2><?php echo Yii::t('frontend','user_info'); ?></h2>
 				</div>
@@ -61,7 +61,7 @@
 										<?php
 										}
 										?>
-								</select>  
+								</select>
 						</li>
 						<li>
 								  <select name="bmonth"  id="bmonth" class="selectpicker" data-style="btn-primary" style="display: none;">
@@ -78,17 +78,17 @@
 								  <option value="10" <?php if(isset($model['bmonth']) && $model['bmonth']==10) { echo "selected=selected"; } ?>>Oct</option>
 								  <option value="11" <?php if(isset($model['bmonth']) && $model['bmonth']==11) { echo "selected=selected"; } ?>>Nov</option>
 								  <option value="12" <?php if(isset($model['bmonth']) && $model['bmonth']==12) { echo "selected=selected"; } ?>>Dec</option>
-							</select>  
+							</select>
 						</li>
 						<li>
 								<select  name="byear" id="byear" class="selectpicker" data-style="btn-primary" style="display: none;">
 								  <option value="">Year</option>
 								  <?php
 									for($i=date('Y'); $i>1950; $i--) {
-										if(isset($model['byear']) && $model['byear']==$i) 
-										{ 
-											$sel= "selected=selected"; 
-										} 
+										if(isset($model['byear']) && $model['byear']==$i)
+										{
+											$sel= "selected=selected";
+										}
 										else
 										{
 											$sel='';
@@ -97,17 +97,17 @@
 									}
 									?>
 							</select>
-						</li>  
+						</li>
 						</ul>
 						<label id="dob_er" class="error" style="display:none;"><?php echo Yii::t('frontend','choose_gender');?></label>
 						<p class="error"><?php if(isset($error['bday'])){ echo $error['bday'][0]; } ?></p>
 						<p class="error"><?php if(isset($error['bmonth'])){ echo $error['bmonth'][0]; } ?></p>
 						<p class="error"><?php if(isset($error['byear'])){ echo $error['byear'][0]; } ?></p>
-						</div> 
+						</div>
 
 						<label class="MT20 col-md-4"><?php echo Yii::t('frontend','gender');?></label>
 						<div class="col-md-8 padding0">
-						
+
 						<select name="gender" id="gender" class="selectpicker" data-style="btn-primary" style="display: none;">
 							  <option value=""><?php echo Yii::t('frontend','choose_gender');?></option>
 							  <option value="Male" <?php if(isset($model['gender']) && $model['gender']=='Male') { echo "selected=selected"; } ?>>Male</option>
@@ -126,7 +126,7 @@
 
 				 <div class="col-md-12 signup_sav MT20">
 				 <div class="MT40">
-					 <label for="checkbox-01" class="label_check c_on"><input type="checkbox" checked="" value="1" id="checkbox-01" name="sample-checkbox-01"><?php echo Yii::t('frontend','privacy_policy_and_terms_of_service');?></label><a href="<?php echo Yii::$app->params['BASE_URL'];?>">Privacy Policy</a> & <a href="<?php echo Yii::$app->params['BASE_URL'];?>">Terms of service</a>
+					 <label for="checkbox-01" class="label_check c_on"><input type="checkbox" checked="" value="1" id="checkbox-01" name="sample-checkbox-01"><?php echo Yii::t('frontend','privacy_policy_and_terms_of_service');?></label><a href="<?php echo Yii::$app->homeUrl;?>">Privacy Policy</a> & <a href="<?php echo Yii::$app->homeUrl;?>">Terms of service</a>
 					  </div>
 				<div class="clearfix">
 					<button type="button" name="signup_submit" onclick="submit_signup_form();" class="btn btn-default MTB15"><?php echo Yii::t('frontend','create_account');?></button> </div>
@@ -135,7 +135,7 @@
 			</div> <!-- account common ends -->
 		  </div>
 	  </div>
-	</div> <!-- container ends-->  
+	</div> <!-- container ends-->
   <div class="common_space_content">   </div>
 </section>
 <script src="<?php echo Yii::$app->params['JS_PATH'];?>bootstrap-select.js"></script>
