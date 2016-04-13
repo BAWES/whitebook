@@ -3,13 +3,15 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Users;
 use common\models\Image;
+
 $this->title = 'Events/Wishlist | Whitebook';
 $type="sss";
 if(isset($_GET['type']))
 {
-$type=$_GET['type'];
+	$type=$_GET['type'];
 }
 ?>
+
 <section id="inner_pages_white_back">
 <div class="container paddng0">
 <?php if(Yii::$app->params['CUSTOMER_ID']!='') { ?>
@@ -30,7 +32,7 @@ $type=$_GET['type'];
 </ul>
 
 <div class="tab-content">
-<!-- <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader"></div> -->
+<!-- <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div> -->
 <div id="1" class="tab-pane <?php if($slug=='events'){echo 'active';}?>">
 <div class="cat_events_items">
 <div class="select_category_sec">
@@ -142,7 +144,7 @@ foreach($themelist as $t){?>
 <div id="search_data">
 <div class="events_listing_inner">
 <div class="events_listing new-event">
-<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader"></div>
+<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <ul id="wishlist">
 <?php
 $wishlist = Users::loadcustomerwishlist(Yii::$app->params['CUSTOMER_ID']);
@@ -228,7 +230,7 @@ $image = Image::find()->select('image_path')->where(['item_id'=>$value['item_id'
 </div>
 </div>
 <div class="eventErrorMsg" style="color:red;margin-bottom: 10px;"></div>
-<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader"></div>
+<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
 <button type="button" onclick="submit_create_event_form('create_event')" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE_EVENT');?>"><?php echo Yii::t('frontend','CREATE_EVENT');?></button>
@@ -267,7 +269,7 @@ foreach($customer_wishlist as $f) {  ?>
 <div class="product_popup_signup">
 <div class="product_popup_prod">
 <span class="prod_popu">
-<a href="#" title=""><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>/sig_ban.png" alt=""/></a>
+<a href="#" title=""><img src="<?php echo Url::to("@web/images/sig_ban.png");?>" alt=""/></a>
 </span>
 <div class="desc_popup_cont">
 <h4><?php echo $f['vendor_name'];?></h4>
@@ -293,7 +295,7 @@ foreach($customer_wishlist as $f) {  ?>
 </div>
 </div>
 <div class="eventErrorMsg" style="color:red;margin-bottom: 10px;"></div>
-<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader"></div>
+<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
 <button type="button" class="btn btn-default" title="<?php echo Yii::t('frontend','ADD_NOW');?>" onclick="submit_add_event(<?php echo $f['item_id'];?>)"><?php echo Yii::t('frontend','ADD_NOW');?></button>
@@ -329,7 +331,7 @@ foreach($customer_wishlist as $f) {  ?>
 </div>
 </div>
 <div class="eventErrorMsg" style="color:red;margin-bottom: 10px;"></div>
-<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader"></div>
+<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
 <button type="button" onclick="submit_create_new_event_form(<?php echo $f['item_id'];?>)" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE_EVENT');?>"><?php echo Yii::t('frontend','CREATE_EVENT');?></button>

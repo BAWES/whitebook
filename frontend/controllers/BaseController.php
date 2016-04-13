@@ -22,7 +22,6 @@ class BaseController extends Controller
         $customer_email = Yii::$app->session->get('customer_email');
         $customer_name = Yii::$app->session->get('customer_name');
 
-        Yii::$app->params['IMAGE_PATH'] = Yii::$app->request->hostInfo.'/images/';
         Yii::$app->params['IMAGE_UPLOAD_PATH'] = Yii::$app->request->hostInfo.'/backend/web/uploads/';
 
         Yii::$app->params['CUSTOMER_ID'] = $this->customer_id;

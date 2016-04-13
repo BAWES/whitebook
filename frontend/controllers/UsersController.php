@@ -650,7 +650,7 @@ class UsersController extends BaseController
                 echo '<div class="col-md-4" id="favourite_'.$w['item_id'].'" style="  margin-bottom: 10px;">
                 <div class="items_similar1">
                 <span class="smil_img">
-                <a title="" href="#"><img alt="" src="'.IMAGE_PATH.'/similar1.png"></a>
+                <a title="" href="#"><img alt="" src="'.Url::to("@web/images/similar1.png").'"></a>
                 </span>
                 <div class="similar_descript">
                 <div class="box_item1">

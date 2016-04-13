@@ -1,4 +1,4 @@
-<?php 
+<?php
 use yii\helpers\Html;
 foreach ($model as $key => $value) { ?>
 <div class="product_popup_signup">
@@ -24,21 +24,21 @@ foreach ($model as $key => $value) { ?>
 <?php if(Yii::$app->params['CUSTOMER_ID'] !=''){ ?>
 <div class="form-group new_popup_common">
 <div class="bs-docs-example">
-<select name="eventlist<?php echo $value['item_id'];?>" id="eventlist<?php echo $value['item_id'];?>">	
+<select name="eventlist<?php echo $value['item_id'];?>" id="eventlist<?php echo $value['item_id'];?>">
 <option value=''>Select Event</option>
-<?php 	
+<?php
 foreach($customer_events as $e) { ?>
 <option value="<?php echo $e['event_id'];?>"><?php echo $e['event_name'];?></option>
 <?php } ?>
 </select>
 
-</div> 
+</div>
 <div class="error" id="add_to_event_error<?php echo $value['item_id'];?>"></div>
 </div>
 <?php } ?>
 <div class="error err-message" id="add_to_event_failure<?php echo $value['item_id'];?>" style="color:red;margin-bottom: 10px;"></div>
 <div id="add_to_event_success<?php echo $value['item_id'];?>" style="color:red;margin-bottom: 10px;"></div>
-<div class="event_loader" id="add_to_event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader"></div>
+<div class="event_loader" id="add_to_event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
 <button type="button" id="add_event_button" name="add_event_button" onclick="add_to_event(<?php echo $value['item_id'];?>);" class="btn btn-default" title="<?php echo Yii::t('frontend','ADD_EVENT');?>"><?php echo Yii::t('frontend','ADD_EVENT');?></button>
@@ -53,4 +53,3 @@ foreach($customer_events as $e) { ?>
 
 
 <?php } ?>
-

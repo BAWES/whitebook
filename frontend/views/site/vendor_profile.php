@@ -54,7 +54,7 @@ if ($event_status > 0) {
 
             <div class="product_detials_vender aother_dates">
                 <div class="col-md-6 padding0">
-                    <a href="#" title=""><img src="<?php echo Yii::$app->params['IMAGE_PATH']; ?>/no_banner.png" alt=""/></a>
+                    <a href="#" title=""><img src="<?php echo Url::to("@web/images/no_banner.png"); ?>" alt=""/></a>
                 </div>
                 <div class="col-md-6 paddingcommon">
                     <div class="right_descr_product">
@@ -182,7 +182,7 @@ if ($event_status > 0) {
                                 <span class="title_filter color_yellow">Filter by</span>
                             </div>
                             <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
-                                <img width="32" height="35" src="<?php echo Yii::$app->params['IMAGE_PATH']; ?>cross92.svg" alt="click here">
+                                <img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg"); ?>" alt="click here">
                             </div>
                             <nav class="row-offcanvas row-offcanvas-left">
                                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
@@ -447,7 +447,7 @@ if ($event_status > 0) {
 ?>
                         </ul>
                     </div>
-                    <div id="planloader"><img src="<?php echo Yii::$app->params['IMAGE_PATH']; ?>ajax-loader.gif" title="Loader" style="margin-top: 15%;"></div>
+                    <div id="planloader"><img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader" style="margin-top: 15%;"></div>
                     <div class="add_more_commons">
 <?php if (!empty($vendor_item_details)) { ?>
                             <div class="lode_more_buttons">

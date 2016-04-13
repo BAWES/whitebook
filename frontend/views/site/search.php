@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRou
 <span class="title_filter color_yellow">Filter by</span>
 </div>
 <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
-<img width="32" height="35" src="<?php echo Yii::$app->params['IMAGE_PATH'] ;?>cross92.svg" alt="click here">
+<img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
 </div>
 <nav class="row-offcanvas row-offcanvas-left">
 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
@@ -277,7 +277,7 @@ echo "No records found";
 }
 ?>
 </ul>
-<div id="planloader"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader" style="margin-top: 15%;"></div>
+<div id="planloader"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;"></div>
 </div>
 <?/*
 <div class="add_more_commons">

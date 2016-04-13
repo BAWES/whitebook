@@ -1,4 +1,4 @@
-<?php 
+<?php
 use yii\helpers\Url;
 $this->title ='Account Setting | Whitebook';
 
@@ -9,7 +9,7 @@ $this->title ='Account Setting | Whitebook';
                 <div class="title_main">
                     <h1><?php echo Yii::t('frontend','account_settings'); ?></h1>
                 </div>
-                
+
                 <div class="account_setings_sections">
                     <div class="col-md-2 hidde_res"></div>
                     <div class="col-md-8">
@@ -22,7 +22,7 @@ $this->title ='Account Setting | Whitebook';
                                 <div class="account_form">
                                     <div class="bs-example" data-example-id="basic-forms">
                                        <form method="POST" action="<?php echo Url::toRoute('users/edit_profile'); ?>" name="account_setting" id="account_setting" name="account_setting">
-                                            <div class="col-md-6 paddingleft0"> 
+                                            <div class="col-md-6 paddingleft0">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">First Name</label>
                                                     <input type="hidden" id="_csrf" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
@@ -34,20 +34,20 @@ $this->title ='Account Setting | Whitebook';
                                                     <input type="text" class="form-control required" maxlength="50" name="last_name" id="last_name" placeholder="<?php echo Yii::t('frontend','enter_last_name');?>" title="<?php echo Yii::t('frontend','enter_last_name');?>" value="<?php echo $user_detail[0]['customer_last_name'];?>">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 paddingleft0"> 
+                                            <div class="col-md-6 paddingleft0">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Email Address</label>
                                                    <input type="text" class="form-control required email" maxlength="100" name="customer_email" id="customer_email" placeholder="<?php echo Yii::t('frontend','enter_your_email_address');?>" title="<?php echo Yii::t('frontend','enter_your_email_address');?>" value="<?php echo $user_detail[0]['customer_email'];?>" readonly>
                                                 </div></div>
                                                 <?php $dob=$user_detail[0]['customer_dateofbirth'];
 														$year= date('Y', strtotime($dob));
-														$month= date('m', strtotime($dob)); 
+														$month= date('m', strtotime($dob));
 														$day= date('d', strtotime($dob));
                                                 ?>
                                             <div class="col-md-6 paddingright0">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">Date of Birth </label>
-                                                    <div class="col-md-3 col-xs-3 paddingleft0"><div class="select_boxes">                                   
+                                                    <div class="col-md-3 col-xs-3 paddingleft0"><div class="select_boxes">
  <select name="bday_detail" id="bday_detail" class="selectpicker" data-style="btn-primary" style="display: none;">
 									  <option value="">Day</option>
 										<?php for($i=1;$i<=31;$i++)
@@ -56,9 +56,9 @@ $this->title ='Account Setting | Whitebook';
 										<?php
 										}
 										?>
-								</select>  
+								</select>
                                                     </div></div>
-                                                    <div class="col-md-4 col-xs-4 paddingcommon"><div class="select_boxes">                                   
+                                                    <div class="col-md-4 col-xs-4 paddingcommon"><div class="select_boxes">
                                                    <select class="selectpicker" data-style="btn-primary" style="display: none;" id="bmonth_detail" name="bmonth_detail">
                                                         <option value="">Month</option>
 								  <option value="1" <?php if(isset($month) && $month==1) { echo "selected=selected"; } ?>>Jan</option>
@@ -73,20 +73,20 @@ $this->title ='Account Setting | Whitebook';
 								  <option value="10" <?php if(isset($month) && $month==10) { echo "selected=selected"; } ?>>Oct</option>
 								  <option value="11" <?php if(isset($month) && $month==11) { echo "selected=selected"; } ?>>Nov</option>
 								  <option value="12" <?php if(isset($month) && $month==12) { echo "selected=selected"; } ?>>Dec</option>
-                                                       
+
                                                    </select>
                                                     </div></div>
-                                                    <div class="col-md-5 col-xs-5 paddingright0"><div class="select_boxes">                                   
+                                                    <div class="col-md-5 col-xs-5 paddingright0"><div class="select_boxes">
                                                    <select class="selectpicker" id="byear_detail" name="byear_detail" data-style="btn-primary" style="display: none;">
 													<option value="">Year</option>
-									<?php 
+									<?php
 									$current= date('Y');
                                     $current= $current-5;
                                     for($i=$current; $i>1950; $i--) {
-										if(isset($year) && $year==$i) 
-										{ 
-											$sel= "selected=selected"; 
-										} 
+										if(isset($year) && $year==$i)
+										{
+											$sel= "selected=selected";
+										}
 										else
 										{
 											$sel='';
@@ -95,26 +95,26 @@ $this->title ='Account Setting | Whitebook';
 									}
 									?>
                                                    </select>
-                                               
+
                                                     </div>  </div>
                                                       <div id="dob_error" class="error"></div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 paddingleft0"> 
+                                            <div class="col-md-6 paddingleft0">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Gender</label>
-                                                    <div class="select_boxes">                                   
+                                                    <div class="select_boxes">
                                                    <select class="selectpicker" data-style="btn-primary" style="display: none;" id="gender_detail" name="gender_detail">
                                                         <option value=""><?php echo Yii::t('frontend','choose_gender');?></option>
 							  <option value="Male" <?php if(isset($user_detail[0]['customer_gender']) && $user_detail[0]['customer_gender']=='Male') { echo "selected=selected"; } ?>>Male</option>
 							  <option value="Female" <?php if(isset($user_detail[0]['customer_gender']) && $user_detail[0]['customer_gender']=='Female') { echo "selected=selected"; } ?>>Female</option>
                                                    </select>
                                                     </div>
-                                          
+
                                                 </div>
                                                 <div id="gen_error" class="error"></div>
                                             </div>
-                                            
+
                                             <div class="col-md-6 paddingright0">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">Mobile Number</label>
@@ -133,23 +133,23 @@ $this->title ='Account Setting | Whitebook';
                                                    <input type="password" class="form-control required" equalto="#customer_password" placeholder="<?php echo Yii::t('frontend','enter_your_confirm_password');?>" title="<?php echo Yii::t('frontend','confirm_should_be');?>" value="<?php echo $user_detail[0]['customer_org_password'];?>">
                                                 </div>
                                             </div>
-                                            
-                                            
+
+
                                     <div class="address_informations">
                                         <div class="address_title">
                                             <h3>Address information</h3>
                                         </div>
                                         <div data-example-id="basic-forms" class="bs-example">
-                                            
-                                             <div class="col-md-6 paddingleft0"> 
+
+                                             <div class="col-md-6 paddingleft0">
                                                     <div class="form-group">
                                                         <label for="exampleInputEmail1">Address Name</label>
                                                         <input type="text" placeholder="Enter your address name here" id="customer_address" name="customer_address" class="form-control required" value="<?php echo $user_detail[0]['customer_address'];?>">
                                                     </div>
                                                     </div>
-                                                    
-                                                    
-                                             <div class="col-md-6 paddingleft0"> 
+
+
+                                             <div class="col-md-6 paddingleft0">
                                                     <div class="form-group">
                                                         <label for="exampleInputEmail1">Block</label>
                                                         <input type="text" placeholder="Enter your block name" id="block" name="block" class="form-control required" value="<?php echo $user_detail[0]['block'];?>">
@@ -160,7 +160,7 @@ $this->title ='Account Setting | Whitebook';
                                                         <input type="text" placeholder="Enter your street name" id="street" name="street" class="form-control required" value="<?php echo $user_detail[0]['street'];?>">
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="col-md-6 paddingleft0">
                                                     <div class="form-group">
                                                         <label for="exampleInputPassword1">Judda</label>
@@ -180,9 +180,9 @@ $this->title ='Account Setting | Whitebook';
                                                     </div>
                                                 </div>
                                                     </div>
-                                                  
-                                                  
-                                                <div class="col-md-6 paddingleft0"> 
+
+
+                                                <div class="col-md-6 paddingleft0">
                                                     <div class="form-group">
                                                         <label for="exampleInputEmail1">Country</label>
 													<select class="selectpicker" data-style="btn-primary" style="display: none;" id="country" name="country">
@@ -191,18 +191,18 @@ $this->title ='Account Setting | Whitebook';
 													 {$count=$user_detail[0]['country'];
 														if(isset($count) && $count==$key) { $selected='selected'; }else {$selected='';}
 														echo  '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
-													 }?>		
+													 }?>
 													</select>
 													<div id="country_er"  class="error"></div>
                                                     </div>
-                                                    </div>  
-                                                    
+                                                    </div>
+
                                                     <div class="col-md-6 paddingright0">
                                                     <div class="form-group">
                                                         <label for="exampleInputPassword1">Area</label>
-                                                     <div class="select_boxes"> 
+                                                     <div class="select_boxes">
                                                    <select class="selectpicker " data-style="btn-primary" id="city" name="city" >
-													<option value="">Select city</option>	
+													<option value="">Select city</option>
 													<?php foreach($loadcity as $key=>$val)
 													 {
 														$city_count=$user_detail[0]['area'];
@@ -211,25 +211,25 @@ $this->title ='Account Setting | Whitebook';
 													 }?>
                                                    </select>
                                                    <div id="city_er" class="error"></div>
-                                                    </div>                                                      
                                                     </div>
-                                                    
+                                                    </div>
+
                                                     <!--select class="selectpicker" data-style="btn-primary" id="city" name="cityy">
-													<option value="">Select</option>	
+													<option value="">Select</option>
                                                    </select-->
-                                                    
-                                                    
+
+
                                                     </div>
                                     </div>
- 
-                                                
+
+
                                                 <div class="submitt_buttons">
-													
+
                                                     <button class="btn btn-default" type="button" title="Save Changes" id="saved" name="saved"> Save Changes</button>
                                                 </div>
                                             </form>
                                     </div>
-                                    <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH'];?>ajax-loader.gif" title="Loader"></div>
+                                    <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
                                     <div class="save_address">
                                     <!--          <div class="account_title">
                                     <h4>Saved Addresses</h4>
@@ -273,7 +273,7 @@ $this->title ='Account Setting | Whitebook';
                                                 </div>
                                         </div>
                                     </div>-->
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -281,7 +281,7 @@ $this->title ='Account Setting | Whitebook';
                     <div class="col-md-2 hidde_res"></div>
                 </div>
             </div>
- 
+
         </section>
 
 
@@ -294,24 +294,24 @@ $this->title ='Account Setting | Whitebook';
 				jQuery('#login_loader141').hide();
             });*/
         </script>
-        
 
-        
+
+
       <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
-	  <script type="text/javascript"> 
+	  <script type="text/javascript">
 	$('#saved').on('click', function() {
-		
-		jQuery.noConflict(); 
+
+		jQuery.noConflict();
 		var gender=jQuery('#gender').val().length;
 		var country=jQuery('#country').val().length;
 		var city=jQuery('#city').val().length;
-		
-		
+
+
 		var bday=jQuery("#bday_detail").val();
 		var bmonth=jQuery("#bmonth_detail").val();
 		var byear=jQuery("#byear_detail").val();
 		var gender=jQuery("#gender_detail").val();
-		
+
 		var country=jQuery('#country').val();
 		var city=jQuery('#city').val();
 		var i=j=K=l=m=0;
@@ -383,14 +383,14 @@ $this->title ='Account Setting | Whitebook';
 			jQuery('#dob_error').hide();
 			j=1;
 		}
-		
+
 		if(jQuery('#account_setting').valid() && i==1 && j==1&& l==1&& m==1)
-		{	
+		{
 		jQuery('#login_loader').show();
 		//jQuery("#loader1").show();
 		//var x=document.getElementById("customer_email").value;
 		var fname=jQuery("#first_name").val();
-		
+
 		var lname=jQuery("#last_name").val();
 		var mobile_number=jQuery("#mobile_number_detail").val();
 		var password=jQuery("#customer_password").val();
@@ -399,12 +399,12 @@ $this->title ='Account Setting | Whitebook';
 
 		var judda=jQuery("#judda").val();
 		var myphone=jQuery("#phone_detail1").val();
-		
+
 		var block=jQuery("#block").val();
 		var street=jQuery("#street").val();
 		var extra=jQuery("#extra").val();
-		
-		 
+
+
 			jQuery.ajax({
 			url:"<?= Url::toRoute('/users/edit_profile'); ?>",
 			type:"post",
@@ -413,31 +413,31 @@ $this->title ='Account Setting | Whitebook';
 			success:function(data)
 			{
 				if(data==1)
-				{   
-                    jQuery('#login_loader').hide(); 
+				{
+                    jQuery('#login_loader').hide();
 					jQuery('#login_success').modal('show');
 					jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Account information saved successfully!</span>');
-                   
+
                    // window.setTimeout(function(){location.reload()},2000)
 				}
 			}
 			});
-			
-		
-		
+
+
+
 		}
 		});
-		
-		
-		function validateEmail(mail)   
-{  
- if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form1.useremail.value))  
-  {  
-    return (1);  
-  }  
-   
-    return (0);  
-}  
+
+
+		function validateEmail(mail)
+{
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form1.useremail.value))
+  {
+    return (1);
+  }
+
+    return (0);
+}
 	 jQuery("#phone_detail1").keypress(function (e) {
      //if the letter is not digit then display error and don't type anything
      if (  e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57 )) {
@@ -456,32 +456,32 @@ $this->title ='Account Setting | Whitebook';
     }
    });
 
-	  </script> 
+	  </script>
 
 
 <script type="text/javascript">
-$(function (){ 
+$(function (){
     $("#country").change(function (){
 		jQuery('#country_er').html('');
 		var csrfToken = jQuery('#_csrf').val();
-        var country_id = jQuery('#country').val();       
+        var country_id = jQuery('#country').val();
         var path = "<?php echo Url::to(['/admin/location/city']); ?> ";
-        jQuery.ajax({  
+        jQuery.ajax({
         type: 'POST',
-        asynch: false,      
+        asynch: false,
         url: path, //url to be called
         data: { country_id: country_id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {	
-            jQuery('#city').html(data);  
+        success: function( data ) {
+            jQuery('#city').html(data);
             jQuery('#city').selectpicker('refresh');
          }
         })
      });
-     
-     
+
+
     $("#city").change(function (){
 		jQuery('#city_er').html('');
 	});
-		
+
  });
 </script>

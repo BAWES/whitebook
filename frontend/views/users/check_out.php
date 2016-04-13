@@ -113,7 +113,7 @@ foreach ($area as $key => $val) {
                                     </div>
                                 </form>
                             </div>
-                            <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH']; ?>ajax-loader.gif" title="Loader"></div>
+                            <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
                             <div class="save_address">
 
 

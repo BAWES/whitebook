@@ -40,7 +40,7 @@ use frontend\models\Website;
                                             <?php
                                             $event_type = Website::get_event_types();
                                             foreach ($event_type as $e) {
-                                                ?>                                                
+                                                ?>
                                                 <option value="<?php echo $e['type_name']; ?>" <?php if ($edit_eventinfo[0]['event_type'] == $e['type_name']) {
                                                 echo "selected=selected";
                                             } else {
@@ -54,7 +54,7 @@ use frontend\models\Website;
                                 </div>
                                 <div id="eventresult" style="color:red"></div>
                                 <div class="eventErrorMsg error" style="color:red;margin-bottom: 10px;"></div>
-                                <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Yii::$app->params['IMAGE_PATH']; ?>ajax-loader.gif" title="Loader"></div>
+                                <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
                                 <div class="buttons">
                                     <div class="creat_evn_sig">
                                         <button type="button" id="update_event_button" name="update_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'UPDATE_EVENT'); ?>"><?php echo Yii::t('frontend', 'UPDATE_EVENT'); ?></button>
@@ -79,4 +79,3 @@ use frontend\models\Website;
         autoclose: true,
     });
 </script>
-
