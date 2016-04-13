@@ -162,8 +162,8 @@ if($first_letter==$f)
 </div>
 </section>
 <!-- continer end -->
-<script src="<?php echo Yii::$app->params['JS_PATH'];?>jquery-listnav.js"></script>
-<link href="<?php echo Yii::$app->params['CSS_PATH'];?>listnav.css" rel="stylesheet">
+<script src="<?= Url::to("@web/js/jquery-listnav.js") ?>"></script>
+<link href="<?= Url::to("@web/css/listnav.css") ?>" rel="stylesheet">
 <script>
 
 

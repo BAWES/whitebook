@@ -297,10 +297,10 @@ if((!empty($imageData)) && (count($imageData) > 20)) { ?>
 </section>
 
 <!-- continer end -->
-<link href="<?php echo Yii::$app->params['CSS_PATH'];?>owl.carousel.css" rel="stylesheet">
-<link href="<?php echo Yii::$app->params['CSS_PATH'];?>bootstrap-select.min.css" rel="stylesheet">
-<link href="<?php echo Yii::$app->params['CSS_PATH'];?>jquery.mCustomScrollbar.css" rel="stylesheet">
-<script src="<?php echo Yii::$app->params['JS_PATH'];?>/jquery.mCustomScrollbar.concat.min.js"></script>
+<link href="<?= Url::to("@web/css/owl.carousel.css") ?>" rel="stylesheet">
+<link href="<?= Url::to("@web/css/bootstrap-select.min.css") ?>" rel="stylesheet">
+<link href="<?= Url::to("@web/css/jquery.mCustomScrollbar.css") ?>" rel="stylesheet">
+<script src="<?= Url::to("@web/js/jquery.mCustomScrollbar.concat.min.js") ?>"></script>
 
 
 <!-- megamenu script -->

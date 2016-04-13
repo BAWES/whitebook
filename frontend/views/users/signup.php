@@ -138,6 +138,6 @@
 	</div> <!-- container ends-->
   <div class="common_space_content">   </div>
 </section>
-<script src="<?php echo Yii::$app->params['JS_PATH'];?>bootstrap-select.js"></script>
-<link href="<?php echo Yii::$app->params['CSS_PATH'];?>bootstrap-select.min.css" rel="stylesheet">
-<script src="<?php echo Yii::$app->params['JS_PATH'];?>script.js"></script>
+<script src="<?= Url::to("@web/js/bootstrap-select.js") ?>"></script>
+<link href="<?= Url::to("@web/css/bootstrap-select.min.css") ?>" rel="stylesheet">
+<script src="<?= Url::to("@web/js/script.js") ?>"></script>
