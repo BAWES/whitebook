@@ -27,8 +27,6 @@ $analytics = "
   ga('send', 'pageview');
 ";
 $this->registerJs($analytics);
-
-
 $this->beginPage()
 ?>
 <html lang="<?= Yii::$app->language ?>">
@@ -46,7 +44,7 @@ $this->beginPage()
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
 <?php $this->head() ?>
-        <link rel="shortcut icon" href="<?php echo Url::toRoute('/frontend/web/images/favicon.png', true); ?>" type="image/x-icon"/>
+        <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />
     </head>
     <body class="has-js">
         <!-- <div class="fullpage" style="width:100%;height:100%"></div> -->
@@ -62,7 +60,7 @@ $this->beginPage()
 <?= $content ?>
         <!--Content End-->
         <!-- Footer Section Start -->
-        <?php $this->beginContent('@app/views/layouts/footer.php', ['socialinfo' => Socialinfo::socialinformation(), 'siteinfo' => Siteinfo::siteinformation()]); ?>
+<?php $this->beginContent('@app/views/layouts/footer.php', ['socialinfo' => Socialinfo::socialinformation(), 'siteinfo' => Siteinfo::siteinformation()]); ?>
 <?php $this->endContent(); ?>
 <?php $this->endBody() ?>
         <!-- Footer Section End -->

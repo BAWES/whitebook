@@ -196,20 +196,6 @@ $action = Yii::$app->controller->action->id;
                         <div class="input-group">
                             <div id="navigation-bar">
                                 <form id="search"  method="post" onsubmit="return false;">
-                                    <!--
-                                    <div id="input" class="left_slider">
-
-                                    <form id="search"  method="post" onsubmit="return false;">
-                                    <div id="input" class="left_slider">
-
-                                    <input type="search" name="search-terms" id="search-input" onkeyup="show_close3()" placeholder="search" autocomplete="off">
-                                    <button id="search-close11" class="search-clear icon-search_clear" type="reset" >Clear</button>
-                                    <div id="search_list"></div>
-                                    <div id="search_list_fail1"></div>
-                                    </div>
-                                    <div id="label">
-                                    <div id="search-labl" class="search_for">search</div>
-                                    <label for="search-terms" id="search-label"></label></div> -->
 <?php
 if (Yii::$app->params['CUSTOMER_ID'] != "") {
     $search_div = '<div class="form-group has-feedback" style="margin-bottom:0px">';

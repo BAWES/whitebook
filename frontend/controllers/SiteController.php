@@ -70,6 +70,7 @@ class SiteController extends BaseController
         $product_list = $featuremodel->get_featured_product_id();
         $featured_product = $featuremodel->get_featured_product();
         $banner = $website_model->get_banner_details();
+        //echo  '<pre>';print_r($banner);die;
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
         $customer_id = Yii::$app->session->get('customer_id');

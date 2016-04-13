@@ -20,6 +20,7 @@ use frontend\models\Website;
 use yii\web\Controller;
 use frontend\models\EventinviteesSearch;
 use yii\helpers\Arrayhelper;
+use yii\helpers\Url;
 use common\models\Events;
 
 /**
@@ -122,7 +123,7 @@ $siteinfo = Siteinfo::find()->asArray()->all();
 $to = $model['email'];
 $username = $model['customer_name'];
 Yii::$app->session->set('register', '1');
-$message = 'Thank you for registration with us.</br><a href='.Yii::$app->urlManager->createAbsoluteUrl('/users/confirm_email/'.$customer_activation_key).' title="Click Here">Click here </a> to activate your account.';
+$message = 'Thank you for registration with us.</br><a href='.Url::to('/users/confirm_email/'.$customer_activation_key).' title="Click Here">Click here </a> to activate your account.';
 $body = Yii::$app->params['SIGNUP_TEMPLATE'];
 $body .= str_replace('%NAME%', $model->customer_name, $body);
 $body .= str_replace('%MESSAGE%', $message, $body);
@@ -131,14 +132,14 @@ $body .= str_replace('%MESSAGE%', $message, $body);
 ->setTo(Yii::$app->params['adminEmail'])
 ->setSubject('USER-REGISTER')
 ->send();
-$this->redirect(Yii::$app->params['BASE_URL']);
+$this->redirect(Url::to('site/index');
 echo '1';
 die;
 } else {
 Yii::$app->session->setFlash('error', 'Signup Failed!');
 echo '0';
 die;
-$this->redirect(Yii::$app->params['BASE_URL']);
+$this->redirect(Url::to('site/index'));
 }
 } else {
 $error = $model->errors;
@@ -228,18 +229,12 @@ public function actionPassword_reset()
 {
 if (Yii::$app->request->isAjax) {
 if ((isset($_POST['id'])) && (isset($_POST['password']))) {
-//$model=new Users();
-//$check_user=$model->customer_password_reset($password,$customer_activation_key);
 $reset_password = Yii::$app->session->set('reset_password_mail', '');
 $final_reset = Yii::$app->session->set('final_reset', '');
 $model = new Users();
-
 $customer_activation_key = $_POST['id'];
 $password = $_POST['password'];
-
-//$check_user=$model->customer_password_reset($password,$customer_activation_key);
 $check_user = $model->customer_password_reset($password, $customer_activation_key);
-
 if (count($check_user) > 0) {
 $signup = new Signup();
 $login_det = $signup->customer_logindetail($customer_activation_key);

@@ -80,7 +80,7 @@ class Siteinfo extends \yii\db\ActiveRecord
 		foreach($model as $key=>$val)
 		{
 			 $logo = $val['site_favicon'];
-			 echo Yii::getAlias('@web/uploads/app_img').'/'.$logo;
+			 echo Yii::getAlias('/admin/web/uploads/app_img').'/'.$logo;
 		}
 	}
 
