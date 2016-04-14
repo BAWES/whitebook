@@ -1123,7 +1123,7 @@ jQuery('#loading_img_list').hide();
 
 
 jQuery(".faver_evnt_product").click(function(){
- <?php if(Yii::$app->params['CUSTOMER_ID']!=''){?>
+ <?php if(!Yii::$app->user->isGuest){?>
 jQuery('#loading_img').show();
 
 item_id=(jQuery(this).attr('id'));

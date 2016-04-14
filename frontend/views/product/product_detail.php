@@ -185,7 +185,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                     <div class="responsive_width">
                                         <!-- add to event start -->
 
-                                        <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
+                                        <?php if (Yii::$app->user->isGuest) { ?>
                                             <a href="" data-toggle="modal" class="add_events" data-target="#myModal" title="Add to event"  onclick="add_event_login(<?php echo $model['item_id']; ?>)"><span class="plus-icon-prod">Add to event</span></a>
 <?php } else { ?>
                                             <a  href="#" role="button" id="<?php echo $model['item_id']; ?>" name="<?php echo $model['item_id']; ?>" class="add_events"  data-target="#add_to_event<?php echo $model['item_id']; ?>"   onclick="addevent('<?php echo $model['item_id']; ?>')" data-toggle="modal"  class="add_events" title="<?php echo Yii::t('frontend', 'ADD_EVENT'); ?>"><span class="plus-icon-prod"><?php echo Yii::t('frontend', 'ADD_EVENT'); ?></span></a>
@@ -195,7 +195,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
 
                                         <!-- Add to favourite start -->
 
-                                        <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?><a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id']; ?>);"  title="Add to Favourite"><span class="heart-product"></span></a><?php
+                                        <?php if (Yii::$app->user->isGuest) { ?><a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id']; ?>);"  title="Add to Favourite"><span class="heart-product"></span></a><?php
                                         } else {
                                             $k = array();
                                             foreach ($customer_events_list as $l) {
@@ -214,7 +214,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                             <img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />
                                         </div>
                                         <!-- Add to Event End here -->
-<?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
+<?php if (Yii::$app->user->isGuest) { ?>
                                             <div class="buy_events"><a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal">Buy </a></div>
 <?php } else if (empty($avlbl_stock)) { ?>
                                             <div class="buy_events"><a href="#" id="<?php echo $model['item_id']; ?>" class="stock" title="Buy">Out of stock</a></div>
@@ -749,7 +749,7 @@ $image = $baselink;
     /* END ADD EVENT */
 
     /* BEGIN Buy Item */
-<?php if (isset(Yii::$app->params['CUSTOMER_ID'])) { ?>
+<?php if (!Yii::$app->user->isGuest) { ?>
         jQuery('.buy_item').click(function () {
             var item_id = (jQuery(this).attr('id'));
             jQuery.ajax({

@@ -100,7 +100,7 @@ class ProductController extends BaseController
 
     public function actionEvent_slider()
     {
-        if (Yii::$app->params['CUSTOMER_ID'] == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         } else {
             return $this->renderPartial('events_slider');

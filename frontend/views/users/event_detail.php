@@ -9,7 +9,7 @@ use yii\grid\GridView;
 <!-- coniner start -->
 <section id="inner_pages_white_back">
 <div class="container paddng0">
-<?php if(Yii::$app->params['CUSTOMER_ID']!='') { ?>
+<?php if(!Yii::$app->user->isGuest) { ?>
 <!-- Events slider start -->
 <?php require(__DIR__ . '/../product/events_slider.php'); ?>
 <!-- Events slider end -->

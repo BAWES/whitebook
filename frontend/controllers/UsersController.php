@@ -376,7 +376,7 @@ class UsersController extends BaseController
 
     public function actionCreate_event()
     {
-        if (Yii::$app->params['CUSTOMER_ID'] == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         if (isset($_POST['event_name']) && isset($_POST['event_type']) && isset($_POST['event_date'])) {
@@ -417,7 +417,7 @@ class UsersController extends BaseController
 
     public function actionUpdate_event()
     {
-        if (Yii::$app->params['CUSTOMER_ID'] == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         if (isset($_POST['event_name']) && isset($_POST['event_type']) && isset($_POST['event_date'])) {
@@ -444,7 +444,7 @@ class UsersController extends BaseController
 
     public function actionAdd_event()
     {
-        if (Yii::$app->params['CUSTOMER_ID'] == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         if (isset($_POST['event_id']) && isset($_POST['item_id'])) {
@@ -762,7 +762,7 @@ class UsersController extends BaseController
     }
     public function actionBasket()
     {
-        if (Yii::$app->params['CUSTOMER_ID'] == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         } else {
             $customer_id = Yii::$app->params['CUSTOMER_ID'];
@@ -789,7 +789,7 @@ class UsersController extends BaseController
 
     public function actionPayment()
     {
-        if (Yii::$app->params['CUSTOMER_ID'] == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         } else {
             $customer_id = Yii::$app->params['CUSTOMER_ID'];
@@ -819,7 +819,7 @@ class UsersController extends BaseController
 
     public function actionCashondelivery()
     {
-        if (Yii::$app->params['CUSTOMER_ID'] == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         } else {
             $ip = Yii::$app->request->getUserIP();
@@ -1027,7 +1027,7 @@ class UsersController extends BaseController
 
                     public function actionUserorderdetails()
                     {
-                        if (Yii::$app->params['CUSTOMER_ID'] != '') {
+                        if (!Yii::$app->user->isGuest) {
                             $order_details = Yii::$app->db->createCommand('SELECT wsip.item_id, wvi.item_name,wv.vendor_id,
                             wv.vendor_name,	wo.order_total_with_delivery, wo.order_datetime,wsip.purchase_quantity, wvi.item_price_per_unit,ws.status_name,wo.order_id from whitebook_suborder_item_purchase as wsip
                             LEFT JOIN whitebook_suborder as wso ON wso.suborder_id = wsip.suborder_id

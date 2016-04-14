@@ -21,17 +21,17 @@ foreach ($model as $key => $value) { ?>
 <div class="form-group">
 <input type="hidden" name="item_id" value="<?php echo $value['item_id'];?>" />
 </div>
-<?php if(Yii::$app->params['CUSTOMER_ID'] !=''){ ?>
+
+<?php if(!Yii::$app->user->isGuest){ ?>
 <div class="form-group new_popup_common">
 <div class="bs-docs-example">
-<select name="eventlist<?php echo $value['item_id'];?>" id="eventlist<?php echo $value['item_id'];?>">
-<option value=''>Select Event</option>
-<?php
-foreach($customer_events as $e) { ?>
-<option value="<?php echo $e['event_id'];?>"><?php echo $e['event_name'];?></option>
-<?php } ?>
-</select>
-
+    <select name="eventlist<?php echo $value['item_id'];?>" id="eventlist<?php echo $value['item_id'];?>">
+        <option value=''>Select Event</option>
+        <?php
+        foreach($customer_events as $e) { ?>
+        <option value="<?php echo $e['event_id'];?>"><?php echo $e['event_name'];?></option>
+        <?php } ?>
+    </select>
 </div>
 <div class="error" id="add_to_event_error<?php echo $value['item_id'];?>"></div>
 </div>

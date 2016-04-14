@@ -51,7 +51,7 @@ $action = Yii::$app->controller->action->id;
                 <div id="desktop_search_fail"></div>
             </div>
             <div class="mobile-logo-text col-xs-12 text-center padding0">
-                <?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
+                <?php if (Yii::$app->user->isGuest) { ?>
 
                     <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK">
                         <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
@@ -165,16 +165,16 @@ $action = Yii::$app->controller->action->id;
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-4 col-xs-12 col-sm-6 padding-left0 <?php if (Yii::$app->params['CUSTOMER_ID'] != '') {
+                <div class="col-md-4 col-xs-12 col-sm-6 padding-left0 <?php if (!Yii::$app->user->isGuest) {
     echo 'new_user_name';
 } ?>">
-                        <?php if (Yii::$app->params['CUSTOMER_ID'] != '') { ?>
+                        <?php if (!Yii::$app->user->isGuest) { ?>
                         <div class="user_name_cont">
                             <p><?= 'Hi ' . Yii::$app->params['CUSTOMER_NAME'] . ','; ?></p>
                         </div>
                         <?php } ?>
                     <ul class="logout_part">
-<?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
+<?php if (Yii::$app->user->isGuest) { ?>
         <li class="<?php if ($action == "about-us") {echo "active";} ?>">
             <a href="<?= Url::toRoute('plan/cmspages', true); ?>" title="<?php echo Yii::t('frontend', 'About us'); ?>">
             <?php echo Yii::t('frontend', 'About us'); ?></a></li>
@@ -197,7 +197,7 @@ $action = Yii::$app->controller->action->id;
                             <div id="navigation-bar">
                                 <form id="search"  method="post" onsubmit="return false;">
 <?php
-if (Yii::$app->params['CUSTOMER_ID'] != "") {
+if (!Yii::$app->user->isGuest) {
     $search_div = '<div class="form-group has-feedback" style="margin-bottom:0px">';
 } else {
     $search_div = '<div class="form-group has-feedback">';
@@ -391,7 +391,7 @@ foreach ($event_type as $e) {
 
 
             <div class="logout_part" style="border:none;">
-<?php if (Yii::$app->params['CUSTOMER_ID'] == '') { ?>
+<?php if (Yii::$app->user->isGuest) { ?>
                     <li class="<?php if ($action == "about-us") {
         echo "active";
     } ?>"><a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'ABOUT_US'); ?>"><?php echo Yii::t('frontend', 'ABOUT_US'); ?></a></li>

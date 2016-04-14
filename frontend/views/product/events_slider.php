@@ -3,10 +3,13 @@ use frontend\models\Website;
 use frontend\models\Users;
 use yii\helpers\Url;
 use yii\helpers\Html;
-if(Yii::$app->params['CUSTOMER_ID']!='') {
-$wishlist = Users::loadcustomerwishlist(Yii::$app->params['CUSTOMER_ID']);
-$customer_events=Website::get_customer_events(Yii::$app->params['CUSTOMER_ID']);
+
+if(!Yii::$app->user->isGuest) {
+    $wishlist = Users::loadcustomerwishlist(Yii::$app->params['CUSTOMER_ID']);
+    $customer_events = Website::get_customer_events(Yii::$app->params['CUSTOMER_ID']);
+
 ?>
+
 <?php if(count($customer_events) == 0) {  ?>
 <div class="container_eventslider">
 <span class="first_events">
@@ -65,7 +68,8 @@ foreach ($customer_events as $key => $value) { ?>
 <span class="first_events"><img src="<?php echo Url::to('@web/images/my_book_desk.svg') ?>" alt="My White Book"/></span>
 <div class="creatfirst_events">
 <p data-example-id="active-anchor-btns" class="bs-example">
-<?php if(Yii::$app->params['CUSTOMER_ID']=='') { ?>
+
+<?php if(Yii::$app->user->isGuest) { ?>
 <a href="javascript:"  role="button" class="btn btn-default"  data-toggle="modal"  onclick="show_login_modal(-1);" data-target="#myModal" title="<?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?>"><?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?></a>
 <?php } else {
 if(count($customer_events) > 0) {?>

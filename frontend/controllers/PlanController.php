@@ -222,7 +222,8 @@ class PlanController extends BaseController
             and wvi.item_for_sale="Yes" '.$condition.' Group By wvi.item_id limit 5')->queryAll();   */
         }
         $customer_events_list = array();
-        if (Yii::$app->params['CUSTOMER_ID'] != '') {
+
+        if (!Yii::$app->user->isGuest) {
             $usermodel = new Users();
             $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->params['CUSTOMER_ID']);
         }
@@ -340,7 +341,8 @@ class PlanController extends BaseController
             and wvi.item_for_sale="Yes" '.$condition.' Group By wvi.item_id limit 5')->queryAll();   */
             //}
             $customer_events_list = array();
-        if (Yii::$app->params['CUSTOMER_ID'] != '') {
+
+        if (!Yii::$app->user->isGuest) {
             $usermodel = new Users();
             $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->params['CUSTOMER_ID']);
         }
