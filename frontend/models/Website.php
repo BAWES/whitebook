@@ -33,7 +33,7 @@ class Website extends Model {
 
     public static function get_banner_details() {
         return $ads = Slide::find()->select('*')->where(['trash'=>'Default','slide_status'=>"Active"])->asArray()->all();
-    }    
+    }
 
     public static function get_search_directory_list($categoryid) {
         $today = date('Y-m-d H:i:s');
@@ -158,8 +158,8 @@ class Website extends Model {
     public static function get_user_event_types($customer_id) {
         $query = new Query;
         $query  ->select([
-                'whitebook_events.event_name', 
-                'whitebook_events.event_id'])  
+                'whitebook_events.event_name',
+                'whitebook_events.event_id'])
             ->from('whitebook_events')
             ->join('INNER JOIN', 'whitebook_event_type',
                         'whitebook_events.event_type =whitebook_event_type.type_name')
@@ -176,7 +176,7 @@ class Website extends Model {
     }
 
     // GET SEO DATA
-    public function SEOdata($table_name='',$field='',$value='',$data=''){ 
+    public static function SEOdata($table_name='',$field='',$value='',$data=''){ 
         if(is_array($data)){
             $select = implode(',',$data);
         }
