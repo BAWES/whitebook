@@ -5,60 +5,60 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "whitebook_customer".
- *
- * @property string $customer_id
- * @property string $customer_name
- * @property string $customer_email
- * @property string $customer_password
- * @property string $customer_dateofbirth
- * @property string $customer_gender
- * @property string $customer_mobile
- * @property string $customer_last_login
- * @property string $customer_ip_address
- * @property integer $created_by
- * @property string $modified_by
- * @property integer $created_date
- * @property string $modified_date
- * @property string $trash
- *
- * @property CustomerAddress[] $customerAddresses
- * @property CustomerCart[] $customerCarts
- * @property FeatureEvent[] $featureEvents
- * @property Order[] $orders
- */
-class Customer extends \yii\db\ActiveRecord
+* This is the model class for table "whitebook_customer".
+*
+* @property string $customer_id
+* @property string $customer_name
+* @property string $customer_email
+* @property string $customer_password
+* @property string $customer_dateofbirth
+* @property string $customer_gender
+* @property string $customer_mobile
+* @property string $customer_last_login
+* @property string $customer_ip_address
+* @property integer $created_by
+* @property string $modified_by
+* @property integer $created_date
+* @property string $modified_date
+* @property string $trash
+*
+* @property CustomerAddress[] $customerAddresses
+* @property CustomerCart[] $customerCarts
+* @property FeatureEvent[] $featureEvents
+* @property Order[] $orders
+*/
+class Customer extends \yii\db\ActiveRecord implements IdentityInterface
 {
     /**
-     * @inheritdoc
-     */
-     
+    * @inheritdoc
+    */
     public $newsmail;
     public $content;
+
     public static function tableName()
     {
         return 'whitebook_customer';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
             [['customer_name', 'customer_email', 'customer_password', 'customer_mobile','customer_dateofbirth','customer_gender','customer_address'], 'required'],
             [['created_by', 'message_status'], 'integer'],
             [['customer_email'], 'unique'],
-            [['newsmail','content'], 'required', 'on'=>'newsletter'],            
+            [['newsmail','content'], 'required', 'on'=>'newsletter'],
             [['customer_mobile'],'match', 'pattern' => '/^[0-9+ -]+$/','message' => 'Phone number accept only numbers and +,-'],
-            [['customer_email'],'email'],            
+            [['customer_email'],'email'],
             [['customer_address'], 'string', 'max' => 512]
         ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -83,77 +83,200 @@ class Customer extends \yii\db\ActiveRecord
     }
     public function scenarios()
     {
-		$scenarios = parent::scenarios();      
+        $scenarios = parent::scenarios();
         $scenarios['newsletter'] = ['newsmail','content'];//Scenario Values Only Accepted
         return $scenarios;
     }
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getCustomerAddresses()
     {
         return $this->hasMany(CustomerAddress::className(), ['customer_id' => 'customer_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getCustomerCarts()
     {
         return $this->hasMany(CustomerCart::className(), ['customer_id' => 'customer_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getFeatureEvents()
     {
         return $this->hasMany(FeatureEvent::className(), ['customer_id' => 'customer_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getOrders()
     {
         return $this->hasMany(Order::className(), ['customer_id' => 'customer_id']);
     }
-    
+
     public static function customercount()
-	{	
+    {
         return Customer::find()->where(['trash' => 'Default'])->count();
-	}
-		 public static function customermonthcount()
-	{		
-		$month=date('m');
-		$year=date('Y');
+    }
+
+    public static function customermonthcount()
+    {
+        $month=date('m');
+        $year=date('Y');
         return  Customer::find()
         ->where(['MONTH(created_datetime)' => $month])
         ->andwhere(['YEAR(created_datetime)' => $year])
         ->andwhere(['customer_status' => 'Active'])
         ->count();
-	}	
-	 public static function customerdatecount()
-	{
-		$date=date('d');
-		$month=date('m');
-		$year=date('Y');
+    }
+
+    public static function customerdatecount()
+    {
+        $date=date('d');
+        $month=date('m');
+        $year=date('Y');
         return  Customer::find()
         ->where(['MONTH(created_datetime)' => $month])
         ->andwhere(['YEAR(created_datetime)' => $year])
         ->andwhere(['DAYOFMONTH(created_datetime)' => $date])
         ->andwhere(['customer_status' => 'Active'])
         ->count();
-	}	
+    }
 
-	
-		 public static function status($id)
-	{
+
+    public static function status($id)
+    {
         $read=Customer::find()
         ->select(['message_status'])
         ->where(['customer_id' => $id])
         ->one();
         return $read['message_status'];
-	}	
-    
+    }
+
+    /*
+     * Start Identity Code
+     */
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentity($id) {
+        return static::findOne(['student_id' => $id]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentityByAccessToken($token, $type = null) {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+
+    /**
+     * Finds student by email
+     *
+     * @param string $email
+     * @return static|null
+     */
+    public static function findByEmail($email) {
+        return static::findOne(['student_email' => $email]);
+    }
+
+    /**
+     * Finds student by password reset token
+     *
+     * @param string $token password reset token
+     * @return static|null
+     */
+    public static function findByPasswordResetToken($token) {
+        if (!static::isPasswordResetTokenValid($token)) {
+            return null;
+        }
+
+        return static::findOne([
+                    'student_password_reset_token' => $token,
+        ]);
+    }
+
+    /**
+     * Finds out if password reset token is valid
+     *
+     * @param string $token password reset token
+     * @return boolean
+     */
+    public static function isPasswordResetTokenValid($token) {
+        if (empty($token)) {
+            return false;
+        }
+        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
+        $parts = explode('_', $token);
+        $timestamp = (int) end($parts);
+        return $timestamp + $expire >= time();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getId() {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAuthKey() {
+        return $this->student_auth_key;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateAuthKey($authKey) {
+        return $this->getAuthKey() === $authKey;
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return boolean if password provided is valid for current user
+     */
+    public function validatePassword($password) {
+        return Yii::$app->security->validatePassword($password, $this->student_password_hash);
+    }
+
+    /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password) {
+        $this->student_password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    /**
+     * Generates "remember me" authentication key
+     */
+    public function generateAuthKey() {
+        $this->student_auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    /**
+     * Generates new password reset token
+     */
+    public function generatePasswordResetToken() {
+        $this->student_password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Removes password reset token
+     */
+    public function removePasswordResetToken() {
+        $this->student_password_reset_token = null;
+    }
+
 }
