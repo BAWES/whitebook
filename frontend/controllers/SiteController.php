@@ -79,7 +79,7 @@ class SiteController extends BaseController
         if ($customer_id != '') {
             $customer_events = $website_model->get_customer_events($customer_id);
         }
-        return $this->render('home', [
+        return $this->render('index', [
           'featured_product' => $featured_product,
           'banner' => $banner,
           'event_type' => $event_type,
@@ -98,8 +98,10 @@ class SiteController extends BaseController
         $banner = $website_model->get_banner_details();
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
+        
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         $customer_events = array();
+
         if ($customer_id != '') {
             $customer_events = $website_model->get_customer_events($customer_id);
         }

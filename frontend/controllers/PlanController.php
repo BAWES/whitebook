@@ -40,7 +40,7 @@ class PlanController extends BaseController
     public function actionPlan($slug = '')
     {
         $model = new Website();
-        $customer_id = Yii::$app->session->get('customer_id');
+        $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if ($slug != '') {
             /* BEGIN CATEGORY*/
         $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $slug])->asArray()->one();
