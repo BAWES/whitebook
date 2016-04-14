@@ -16,7 +16,9 @@ class BaseController extends Controller
     public function init()
     {
         parent::init();
+
         $model = new Website();
+
         $general_settings = $model->get_general_settings();
         $this->customer_id = Yii::$app->session->get('customer_id');
         $customer_email = Yii::$app->session->get('customer_email');
@@ -49,28 +51,5 @@ class BaseController extends Controller
         Yii::$app->params['uploadPath'] = realpath(Yii::$app->basePath) . '/uploads/';
 
 
-        $social_settings = $model->get_social_network();
-
-        Yii::$app->params['FACEBOOK'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
-        Yii::$app->params['TWITTER'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
-        Yii::$app->params['GOOGLE_SHARE'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
-        Yii::$app->params['LINKEDIN'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
-
-        Yii::$app->params['GOOGLE_ANALYTICS'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
-        Yii::$app->params['LIVE_SCRIPT'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
-        Yii::$app->params['INSTAGRAM'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
-        Yii::$app->params['VIMEO'] = Yii::$app->params['IMAGE_UPLOAD_PATH'].'app_img/'.$general_settings[0]['site_noimage'];
-        Yii::$app->params['THEME'] = 'theme1';
-
-        $email_template = $model->get_email_template();
-
-        if (count($email_template) > 0) {
-            foreach ($email_template as $et) {
-                if ($et['email_template_id'] == 2) {
-                    Yii::$app->params['SIGNUP_TEMPLATE'] = $et['email_content'];
-                    Yii::$app->params['SIGNUP_SUBJECT'] = $et['email_subject'];
-                }
-            }
-        }
     }
 }

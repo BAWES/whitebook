@@ -674,7 +674,7 @@ error:function(data)
 /* END EDIT TO EVENT */
 function locat(loc)
 {
- window.location = "<?= Yii::app()->baseUrl; ?>/event-details/"+loc;
+ window.location = "<?= Yii::$app->homeUrl; ?>/event-details/"+loc;
 }
 </script>
 <script type="text/javascript">
