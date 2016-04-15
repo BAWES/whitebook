@@ -40,7 +40,7 @@ use yii\helpers\Url;
 	<?php  if(!$model->isNewRecord) { ?>
 	<!-- Venodr logo begin -->
 	<?php if(isset($model->vendor_logo_path)) {
-		echo Html::img(Yii::getAlias('@web/uploads/vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
+		echo Html::img(Yii::getAlias('@vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
 		} ?>
 	<!-- Venodr logo end -->
 

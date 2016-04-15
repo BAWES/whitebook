@@ -268,20 +268,45 @@ class VendorController extends Controller
                 $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
                 $model->category_id = implode(',', $model->category_id);                            /*
                 /*--- Vendor logo ---*/
+
                 $file = UploadedFile::getInstances($model, 'vendor_logo_path');
-                if (!empty($file)) {
+                if (!empty($file)) {                   
                     foreach ($file as $files) {
-                        $model->vendor_logo_path = $files->baseName.'_'.$len.'.'.$files->extension;
-                        $k = $base.'/web/uploads/vendor_logo/'.$model->vendor_logo_path;
-                        $files->saveAs($k);
-                        \yii\imagine\Image::thumbnail($k, 120, 120)
-                      ->save(($k), ['quality' => 90]);
+                        if($files instanceof yii\web\UploadedFile){
+                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+
+                            //Resize file using imagine
+                            $resize = true;
+
+                            if($resize){
+                                $newTmpName = $files->tempName . "." . $files->extension;
+
+                                $imagine = new \Imagine\Gd\Imagine();
+                                $image = $imagine->open($files->tempName);
+                                $image->resize($image->getSize()->widen(250));
+                                $image->save($newTmpName);
+
+                                //Overwrite old filename for S3 uploading
+                                $files->tempName = $newTmpName;
+                            }
+
+                            //Save to S3
+                            $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
+                            if($awsResult){
+                                $model->vendor_logo_path = $filename;
+                            }
+                        }
                     }
-                } else {
+                }
+                else {
                     $model->vendor_logo_path = $exist_logo_image;
                 }
-                $model->save(false);
-                echo Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+                if($model->save(false))
+                {
+                    Yii::$app->resourceManager->delete("vendor_logo/" . $exist_logo_image);
+                    echo Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+                }
+                
 
                 return $this->redirect(['index']);
             } else {
