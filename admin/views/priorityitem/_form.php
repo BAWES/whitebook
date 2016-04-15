@@ -74,7 +74,7 @@ $(function (){
     $("#priorityitem-category_id").change(function (){
         var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var id = $('#priorityitem-category_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadsubcategory']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loadsubcategory']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -106,7 +106,7 @@ $(function (){
 $(function (){
     $("#priorityitem-category_id").change(function (){
         var id = $('#priorityitem-category_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadsubcategory']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loadsubcategory']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -124,7 +124,7 @@ $(function (){
 $(function (){
     $("#priorityitem-subcategory_id").change(function (){
         var id = $('#priorityitem-subcategory_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadchildcategory']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loadchildcategory']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -147,7 +147,7 @@ $(function (){
         var id3 = $('#priorityitem-subcategory_id').val();
         var id4 = $('#priorityitem-child_category').val();
         $('.loadingmessage').show();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loaditems']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loaditems']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -167,7 +167,7 @@ $(function (){
     $("#priorityitem-item_id").on("change",function (){
         var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var item = $('#priorityitem-item_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loaddatetime']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loaddatetime']); ?> ";
         var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
         $('.loadingmessage').show();
         $.ajax({
@@ -209,7 +209,7 @@ $('#priorityitem-priority_start_date,#priorityitem-priority_end_date').datepicke
 <script>
     $( "#priorityitem-priority_start_date" ).click(function() {
 //  $( document ).ready(function() {
-        var path = "<?php echo Url::to(['/admin/priorityitem/loaddatetime']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loaddatetime']); ?> ";
         var item = $('#priorityitem-item_id').val();
         var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
             $('.loadingmessage').show();
@@ -240,7 +240,7 @@ $('input#priorityitem-priority_start_date').datepicker({
 });
 
     $( "#priorityitem-priority_end_date" ).click(function() {
-        var path = "<?php echo Url::to(['/admin/priorityitem/loaddatetime']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loaddatetime']); ?> ";
         var item = $('#priorityitem-item_id').val();
         var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
         $('.loadingmessage').show();
@@ -283,7 +283,7 @@ $('input#priorityitem-priority_end_date').datepicker({
 <?php if(!$model->isNewRecord) {?>
 $(function(){
     var item = $("#priorityitem-item_id").val();
-    var path = "<?php echo Url::to(['/admin/priorityitem/loaddatetime']); ?> ";
+    var path = "<?php echo Url::to(['/priorityitem/loaddatetime']); ?> ";
     var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
     $.ajax({
         type: 'POST',
@@ -328,7 +328,7 @@ $(function(){
         }
 
     var va='';
-        var path = "<?php echo Url::to(['/admin/priorityitem/checkprioritydate']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/checkprioritydate']); ?> ";
         var blocked_dates = $('#blocked_dates').val();
         var item = $('#priorityitem-item_id').val();
         var start = $('#priorityitem-priority_start_date').val();

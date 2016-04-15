@@ -204,7 +204,7 @@ function questionView(q_id,tis){
 
 	var check = $('.show_ques'+q_id).html();
 	if(check==''){
-	var path = "<?php echo Url::to(['/admin/vendoritem/viewrenderquestion']); ?> ";
+	var path = "<?php echo Url::to(['/vendoritem/viewrenderquestion']); ?> ";
 	$.ajax({
 		type : 'POST',
 		url :  path,

@@ -46,7 +46,7 @@ $(function (){
     $("#location-country_id").change(function (){  
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var country_id = $('#location-country_id').val();       
-        var path = "<?php echo Url::to(['/admin/location/city']); ?> ";
+        var path = "<?php echo Url::to(['/location/city']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called

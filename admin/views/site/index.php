@@ -245,7 +245,7 @@ $this->title = 'Dashboard';
 									<td>&nbsp; </td>
 									<td>&nbsp; </td>
 									<td>&nbsp; </td>
-									<td class="v-align-middle bold text-success"><?php if(count($vendorperiod)>5){ $url = Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/vendor/index');
+									<td class="v-align-middle bold text-success"><?php if(count($vendorperiod)>5){ $url = Url::to(['/vendor/index']);
 										echo Html::a('<span>View more >></span>', $url, [
 											'title' => Yii::t('app', 'View more')]);}?></td>
 

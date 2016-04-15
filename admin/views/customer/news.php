@@ -44,7 +44,7 @@ $(function (){
     $("#customeraddress-country_id").change(function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var country_id = $('#customeraddress-country_id').val();
-        var path = "<?php echo Url::to(['/admin/location/city']); ?> ";
+        var path = "<?php echo Url::to(['/location/city']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -62,7 +62,7 @@ $(function (){
     $("#customeraddress-city_id").change(function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var city_id = $('#customeraddress-city_id').val();
-        var path = "<?php echo Url::to(['/admin/location/area']); ?> ";
+        var path = "<?php echo Url::to(['/location/area']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called

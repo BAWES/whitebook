@@ -8,6 +8,7 @@ use common\models\Socialinfo;
 use common\models\Category;
 use common\models\Adverthome;
 use common\models\Slide;
+use common\models\Events;
 use common\models\Eventtype;
 use yii\base\Model;
 use Yii;

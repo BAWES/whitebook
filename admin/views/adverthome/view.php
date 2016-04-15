@@ -34,7 +34,7 @@ $(function() {
 	var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
 	$(document).ready(function(){
-		var path = "<?php echo Url::to(['/admin/image/imageorder']); ?> ";
+		var path = "<?php echo Url::to(['/image/imageorder']); ?> ";
 	<!-- Begin Sortable images -->
     $(".superbox").sortable({
         stop : function(event, ui){

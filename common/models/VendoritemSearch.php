@@ -49,7 +49,6 @@ class VendoritemSearch extends Vendoritem
     {
 		$paramss = array('No','Yes','Rejected');
 		$v = array_reverse(array_keys($paramss));
-	//	var_dump($v);die;
 		$query = Vendoritem::find()
         ->where(['!=', 'whitebook_vendor_item.trash', 'Deleted'])       
         ->orderBy(['item_id' => SORT_DESC])

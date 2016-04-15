@@ -24,7 +24,7 @@ use dosamigos\fileupload\FileUploadUI;
          	foreach ($guideimagedata as $value) { 
 			$img .= '"<img src='.Yii::getAlias('@web/uploads/guide_images/').$value->image_path.' width=\'175\'>"'.',';
 			$action .='{   	 					        
-			        url: "'.Url::to(['/admin/vendoritem/deletesalesimage']).'",
+			        url: "'.Url::to(['/vendoritem/deletesalesimage']).'",
 			        key: '.$value->image_id.',       
 			    }'.',';
 				}
@@ -50,7 +50,7 @@ $(function() {
 	],  
 	<?php } ?>
 	overwriteInitial: false, 	
-	uploadUrl : "<?php echo Url::to(['/admin/vendoritem/salesguideimage?id="+qid+"']); ?>",	
+	uploadUrl : "<?php echo Url::to(['/vendoritem/salesguideimage?id="+qid+"']); ?>",	
 	});
 });
 </script>

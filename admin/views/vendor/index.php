@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
              'template' => '{update} {delete}{view}{link}',
             'buttons' => [            
             'link' => function ($url, $model) {
-                $url = Yii::$app->urlManager->createAbsoluteUrl('/admin/vendor/vendoritemview?id='.$model->id); 
+                $url = Url::to(['/vendor/vendoritemview?id='.$model->id]); 
                  return  Html::a('<span class="fa fa-bars"></span>', $url, [
                             'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
                 ]);
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	function change(status, id)
 	{		
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/admin/vendor/block']); ?> ";
+        var path = "<?php echo Url::to(['/vendor/block']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called

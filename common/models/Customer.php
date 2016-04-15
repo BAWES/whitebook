@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
 * This is the model class for table "whitebook_customer".

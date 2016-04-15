@@ -103,7 +103,7 @@ use common\models\Vendoritemquestionguide;
 function viewQuestion(q_id,tis)
 {		
 	var question_id_append = q_id - 1; 
-	var path = "<?php echo Url::to(['/admin/vendoritem/renderanswer']); ?> ";
+	var path = "<?php echo Url::to(['/vendoritem/renderanswer']); ?> ";
 	$.ajax({
 		type : 'POST',
 		url :  path,

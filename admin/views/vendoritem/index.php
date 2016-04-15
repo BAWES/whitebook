@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		function Status(status){
 						
 		var keys = $('#items').yiiGridView('getSelectedRows');		
-		var pathUrl = "<?php echo Url::to(['/admin/vendoritem/status']); ?>";		
+		var pathUrl = "<?php echo Url::to(['/vendoritem/status']); ?>";		
 		if(keys.length == 0) { alert ('Select atleast one item'); return false;}
 		var r = confirm("Are you sure want to " +status+ "?");	
 		status = (status=='Activate')?'Active':((status=='Deactivate'))?'Deactive':status;			
@@ -131,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
     function change(status, id)
 	{			
-        var path = "<?php echo Url::to(['/admin/vendoritem/block']); ?> ";
+        var path = "<?php echo Url::to(['/vendoritem/block']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called
@@ -158,7 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			if(isNumeric(sort_val))
 			{
 				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/admin/vendoritem/sort_vendor_item']); ?> ";
+				var path = "<?php echo Url::to(['/vendoritem/sort_vendor_item']); ?> ";
 				$.ajax({  
 				type: 'POST',      
 				url: path, //url to be called

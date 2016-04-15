@@ -87,7 +87,7 @@ $(function (){
 		}
     $("#featuregroupitem-category_id").change(function (){
         var id = $('#featuregroupitem-category_id').val();
-        var path = "<?php echo Url::to(['/admin/featuregroupitem/loadsubcategory']); ?> ";
+        var path = "<?php echo Url::to(['/featuregroupitem/loadsubcategory']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -105,7 +105,7 @@ $(function (){
     $("#featuregroupitem-subcategory_id").change(function (){
         var id2 = $('#featuregroupitem-category_id').val();
         var id3 = $('#featuregroupitem-subcategory_id').val();
-        var path = "<?php echo Url::to(['/admin/featuregroupitem/loaditems']); ?> ";
+        var path = "<?php echo Url::to(['/featuregroupitem/loaditems']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called

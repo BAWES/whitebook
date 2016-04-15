@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	function change(status, cid)
 	{		
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/admin/category/block']); ?> ";
+        var path = "<?php echo Url::to(['/category/block']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			if(isNumeric(sort_val))
 			{
 				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/admin/category/sort_category']); ?> ";
+				var path = "<?php echo Url::to(['/category/sort_category']); ?> ";
 				$.ajax({  
 				type: 'POST',      
 				url: path, //url to be called

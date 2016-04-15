@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="tools">
         <?= Html::a('Create Email Subscribe', ['create'], ['class' => 'btn btn-success']) ?>
     <?php if($count>0){?>    
-        <?= Html::a('Export Email Subscribe list', ['/admin/subscribe/export'], ['class' => 'btn btn-info','id'=>'export', 'style'=>'float:right;']) ?>			
+        <?= Html::a('Export Email Subscribe list', ['/subscribe/export'], ['class' => 'btn btn-info','id'=>'export', 'style'=>'float:right;']) ?>			
     <?php }?>    
     </p>
     

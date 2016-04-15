@@ -140,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
         var status = $('#status').val();
         var level = $('#level').val();
         $('.loadingmessage').show();
-        var path = "<?php echo Url::to(['/admin/priorityitem/index']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/index']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -165,7 +165,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	/* Change status for respective vendor items */
 		function Status(status){
 		var keys = $('#priority').yiiGridView('getSelectedRows');
-		var pathUrl = "<?php echo Url::to(['/admin/priorityitem/status']); ?>";
+		var pathUrl = "<?php echo Url::to(['/priorityitem/status']); ?>";
 		if(keys.length == 0) { alert ('Select Your priority item'); return false;}
 		var r = confirm("Are you sure want to " +status+ "?");
 		if (r == true) {
@@ -200,7 +200,7 @@ function prioritydatefilter()
         var status = $('#status').val();
         var level = $('#level').val();
         $('.loadingmessage').show();
-        var path = "<?php echo Url::to(['/admin/priorityitem/index']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/index']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -218,7 +218,7 @@ function prioritydatefilter()
 function change(status, aid)
 	{
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['/admin/priorityitem/blockpriority']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/blockpriority']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called

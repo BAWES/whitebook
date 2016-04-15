@@ -95,7 +95,7 @@ $(function (){
     $("#childcategory-parent_category_id").change(function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var id = $('#childcategory-parent_category_id').val();
-        var path = "<?php echo Url::to(['/admin/category/loadsubcategory']); ?> ";
+        var path = "<?php echo Url::to(['/category/loadsubcategory']); ?> ";
         $.ajax({
         type: 'POST',      
         url: path, //url to be called

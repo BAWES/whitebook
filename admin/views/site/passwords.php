@@ -16,7 +16,6 @@ AppAsset::register($this);
 ?>
 <?= Html::csrfMetaTags() ?> 
 <?php $this->beginPage() ?>
-<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />

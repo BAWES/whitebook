@@ -423,7 +423,7 @@ $( ".onevalid1" ).click(function() {
 	{
 		if(validateEmail($("#vendor-vendor_contact_email").val()) == true){
 			var mail=$("#vendor-vendor_contact_email").val();
-			var path = "<?php echo Url::to(['/admin/vendor/emailcheck']); ?> ";
+			var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
 			$('.loadingmessage').show();
 			$.ajax({
 			type: 'POST',
@@ -600,7 +600,7 @@ $( ".twovalid2" ).click(function() {
 	{
 		if(validateEmail($("#vendor-vendor_contact_email").val()) == true){
 			var mail=$("#vendor-vendor_contact_email").val();
-			var path = "<?php echo Url::to(['/admin/vendor/emailcheck']); ?> ";
+			var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
 			//$('.loadingmessage').show();
 			$.ajax({
 			type: 'POST',
@@ -665,7 +665,7 @@ $(function () {
 		$('.loadingmessage').show();
 		var mail=$("#vendor-vendor_contact_email").val();
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['/admin/vendor/emailcheck']); ?> ";
+        var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -713,7 +713,7 @@ $(document).ready(function(){
 	if($("#vendor-vendor_name").val().length > 3)
 	{
 		var mail=$("#vendor-vendor_name").val();
-        var path = "<?php echo Url::to(['/admin/vendor/vendornamecheck']); ?> ";
+        var path = "<?php echo Url::to(['/vendor/vendornamecheck']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',

@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	function change(status, id)
 	{		
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/admin/featuregroup/block']); ?> ";
+        var path = "<?php echo Url::to(['/featuregroup/block']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called

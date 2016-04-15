@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	function change(status, id)
 	{		
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/admin/featuregroupitem/block']); ?> ";
+        var path = "<?php echo Url::to(['/featuregroupitem/block']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called
@@ -102,7 +102,7 @@ function change_sort_order(sort_val,featured_id)
 			if(isNumeric(sort_val))
 			{
 				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/admin/featuregroupitem/sort_feature_group']); ?> ";
+				var path = "<?php echo Url::to(['/featuregroupitem/sort_feature_group']); ?> ";
 				$.ajax({  
 				type: 'POST',      
 				url: path, //url to be called

@@ -3,7 +3,11 @@
 namespace frontend\models;
 
 use common\models\User;
+use common\models\Customer;
+use common\models\Events;
+use common\models\Themes;
 use yii\base\Model;
+use Yii\db\Query;
 use Yii;
 
 /**
@@ -54,37 +58,22 @@ class Users extends Model
 
     public function get_customer_details($customer_id)
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT item_id FROM whitebook_wishlist where customer_id='.$customer_id.'');
-        $ads = $command->queryAll();
-
-        return $ads;
-        die;
-        $k = array();
-        if (!empty($ads)) {
-            foreach ($ads as $a) {
-                $k[] = $e['item_id'];
-            }
-        }
-
-        return $k;
+     return $ads = (new Query())
+            ->select('item_id')
+            ->from('{{%_wishlist}}')
+            ->where(['customer_id'=>$customer_id])
+            ->all();
     }
 
     public static function get_user_details($customer_id)
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT * FROM whitebook_customer where customer_id='.$customer_id.'');
-        $ads = $command->queryAll();
-
-        return $ads;
+        return $ads = Customer::find()->select('*')->where(['customer_id'=>$customer_id])->asArray()->all();
     }
 
     public function check_authorization($email, $password)
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT customer_id,customer_activation_status,customer_status,trash,customer_name,customer_email FROM whitebook_customer where  trash="Default" and customer_email="'.$email.'" and customer_org_password="'.$password.'"');
-
-        $user = $command->queryAll();
+      $user = Customer::find()->select('customer_id,customer_activation_status,customer_status,trash,customer_name,customer_email')->where(['trash'=>"Default",'customer_email'=>$email,
+            'customer_org_password'=>$password])->asArray()->all();
         if (count($user) > 0) {
             if ($user[0]['customer_activation_status'] == 0) {
                 return -1;
@@ -127,9 +116,7 @@ class Users extends Model
         $event_date = date('Y-m-d', strtotime($event_date));
         $string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
         $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-        $command = Yii::$app->DB->createCommand(
-        'SELECT event_id FROM whitebook_events WHERE event_name="'.$event_name.'" and customer_id="'.$customer_id.'"');
-        $check = $command->queryAll();
+        $check = Events::find()->select('event_id')->where(['customer_id'=>$customer_id,'event_name'=>$event_name])->asArray()->all();
         if (count($check) > 0) {
             return -1;
         } else {
@@ -147,9 +134,8 @@ class Users extends Model
         $event_date = date('Y-m-d', strtotime($event_date));
         $string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
         $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-        $command = Yii::$app->DB->createCommand(
-        'SELECT event_id FROM whitebook_events WHERE event_id!="'.$event_id.'" and event_name="'.$event_name.'" and event_id="'.$event_id.'" and customer_id="'.$customer_id.'"');
-        $check = $command->queryAll();
+        $check = Events::find()->select('event_id')->where(['event_id'=>$event_id,'event_name'=>$event_name,
+            'customer_id'=>$customer_id])->asArray()->all();
         if (count($check) > 0) {
             return -1;
         } else {
@@ -164,9 +150,12 @@ class Users extends Model
     public function insert_item_to_event($item_id, $event_id)
     {
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
-        $command = Yii::$app->DB->createCommand(
-        'SELECT link_id FROM whitebook_event_item_link WHERE event_id="'.$event_id.'" and item_id="'.$item_id.'"');
-        $check = $command->queryAll();
+        $check = (new Query())
+                ->select('link_id')
+                ->from('whitebook_event_item_link')
+                ->where('event_id' => $event_id)
+                ->andwhere('item_id' => $item_id)
+                ->all();
         if (count($check) > 0) {
             return -2;
         } else {
@@ -181,9 +170,12 @@ class Users extends Model
 
     public function update_wishlist($item_id, $customer_id)
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT wish_status FROM whitebook_wishlist WHERE item_id="'.$item_id.'" and customer_id="'.$customer_id.'"');
-        $user_fav = $command->queryAll();
+     $user_fav = (new Query())
+                ->select('wish_status')
+                ->from('whitebook_wishlist')
+                ->where('customer_id' => $customer_id)
+                ->andwhere('item_id' => $item_id)
+                ->all();
         if (count($user_fav) > 0) {
             $command = Yii::$app->DB->createCommand(
             'DELETE from whitebook_wishlist where item_id='.$item_id.' and customer_id='.$customer_id);
@@ -201,14 +193,16 @@ class Users extends Model
 
     public function update_wishlist_succcess($item_id, $customer_id)
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT wish_status FROM whitebook_wishlist WHERE item_id="'.$item_id.'" and customer_id="'.$customer_id.'"');
-        $user_fav = $command->queryAll();
+        $user_fav = (new Query())
+                ->select('wish_status')
+                ->from('whitebook_wishlist')
+                ->where('customer_id' => $customer_id)
+                ->andwhere('item_id' => $item_id)
+                ->all();
         if (count($user_fav) > 0) {
             $sql = 'UPDATE whitebook_wishlist set wish_status="1" where customer_id="'.$customer_id.'" and  item_id="'.$item_id.'"';
             $command = Yii::$app->DB->createCommand($sql);
             $customer = $command->execute();
-
             return 1;
         } else {
             $command = Yii::$app->DB->createCommand(
@@ -261,10 +255,12 @@ class Users extends Model
 
     public static function get_customer_wishlist_details($customer_id)
     {
-        $command1 = Yii::$app->db->createCommand('SELECT item_id FROM whitebook_wishlist where customer_id="'.$customer_id.'"')->queryAll();
-
-        return $command1;
-        die;
+        return $command1 = (new Query())
+                ->select('item_id')
+                ->from('whitebook_wishlist')
+                ->where('customer_id' => $customer_id)
+                ->all();
+                 die;
     }
 
     public function get_customer_wishlist_count($customer_id, $category, $price, $vendor, $avail_sale, $theme)
@@ -373,80 +369,88 @@ class Users extends Model
     /* BEGIN Get customer wish list */
     public static function loadcustomerwishlist($customer_id)
     {
-        return $command = Yii::$app->DB->createCommand('SELECT  wvi.item_id,wvi.slug, wvi.item_name, wvi.item_price_per_unit,wv.vendor_name  FROM whitebook_wishlist as ww
-			LEFT JOIN whitebook_vendor_item as wvi ON wvi.item_id = ww.item_id
-			LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-			WHERE ww.customer_id="'.$customer_id.'" AND
-			wvi.item_status="Active" AND wvi.item_for_sale="Yes"
-			AND wvi.trash="default" AND type_id=2 AND ww.wish_status=1 AND ww.wish_status=1')->queryAll();
+        $query = new Query;
+        $query  ->select([
+                'wvi.item_id','wvi.slug', 'wvi.item_name', 'wvi.item_price_per_unit','wv.vendor_name', 
+                'whitebook_events.event_id'])  
+            ->from('whitebook_wishlist AS ww')
+            ->join('LEFT JOIN', 'whitebook_vendor_item AS wvi',
+                        'wvi.item_id =ww.item_id')
+            ->join('LEFT JOIN', 'whitebook_vendor AS wv',
+                        'wv.vendor_id=wvi.vendor_id')
+            ->where('ww.customer_id="default"')
+            ->andwhere('wvi.item_status="Active"')
+            ->andwhere('wvi.item_for_sale="Yes"')
+            ->andwhere('wvi.trash="default"')
+            ->andwhere('type_id=2')
+            ->andwhere('wvi.wish_status=1');
+        $command = $query->createCommand();
+        return $event_type1 = $command->queryAll();
     }
     /* END Get customer wish list */
 
     public static function vendor_list()
     {
         $today = date('Y-m-d H:i:s');
-        $command = Yii::$app->DB->createCommand(
-        'SELECT vendor_id,vendor_name FROM whitebook_vendor
-		WHERE whitebook_vendor.vendor_Status="Active"
-		AND whitebook_vendor.trash="Default"
-		AND whitebook_vendor.approve_status="Yes"
-		AND whitebook_vendor.package_start_date<="'.$today.'"
-		AND whitebook_vendor.package_end_date>="'.$today.'"
-		order by vendor_name asc');
-        $vendor = $command->queryAll();
-
-        return $vendor;
+        return $vendor = Vendor::find()->select('vendor_id,vendor_name')
+                        ->where(['vendor_Status'=>'Active','trash'=>"Default",'approve_status'=>"Yes",
+                            'package_start_date'=>"Yes"])
+                        ->andwhere(['<=','package_end_date',$today])
+                        ->andwhere(['>=','package_end_date',$today])
+                        ->orderBy('vendor_name ASC')
+                        ->asArray()
+                        ->all();
     }
 
     public static function get_main_category()
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT category_id,category_name,category_url FROM whitebook_category WHERE parent_category_id IS NULL and trash="Default" and category_allow_sale="yes"');
-        $general = $command->queryAll();
-
-        return $general;
+        return $general = Category::find()->select('category_id,category_name,category_url')
+                        ->where(['parent_category_id'=>'IS NULL'])
+                        ->andwhere(['trash'=>'Default'])
+                        ->andwhere(['category_allow_sale'=>'yes'])
+                        ->asArray()
+                        ->all();
     }
 
     public static function get_themes()
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT theme_id,theme_name FROM whitebook_theme WHERE trash="Default" and theme_status="Active"');
-        $general = $command->queryAll();
-
-        return $general;
+        return $general = Theme::find()->select('theme_id,theme_name')
+                        ->where(['trash'=>'Default'])
+                        ->andWhere(['theme_status'=>'Active'])
+                        ->asArray()
+                        ->all();
     }
 
     public static function check_email_exist($custemail)
     {
-        $sql = 'SELECT customer_email FROM whitebook_customer where customer_email="'.$custemail.'"';
-        $command = Yii::$app->DB->createCommand($sql);
-        $forget = $command->queryAll();
-        return $forget;
+          return $exist = Customer::find()->select('customer_email')
+                        ->where(['customer_email'=>$custemail])
+                        ->asArray()
+                        ->all();
+
     }
     public static function check_user_exist($custemail)
     {
-        $command = Yii::$app->DB->createCommand('SELECT customer_activation_key FROM whitebook_customer where customer_email="'.$custemail.'"');
-        $forget = $command->queryAll();
-
-        return $forget;
+         return $exist = Customer::find()->select('customer_activation_key')
+                        ->where(['customer_email'=>$custemail])
+                        ->asArray()
+                        ->all();
     }
 
     public function update_datetime_user($key)
     {
         $time = date('Y-m-d H:i:s');
-        $sql = 'UPDATE whitebook_customer set modified_datetime="'.$time.'" where customer_activation_key="'.$key.'"';
-        $command = Yii::$app->DB->createCommand($sql);
-        $customer = $command->execute();
-
-        return $customer;
+        return Yii::$app->db->createCommand()
+            ->update('whitebook_customer', ['modified_datetime' => $time], 'customer_activation_key ='.$key)
+            ->execute();
     }
     public static function check_customer_validtime($key)
     {
         $time = date('Y-m-d H:i:s');
-        $sql = "SELECT customer_activation_key FROM `whitebook_customer` WHERE customer_activation_key = '$key' AND TIMESTAMPDIFF(MINUTE,modified_datetime,'$time') <= '1440'";
-        $command = Yii::$app->DB->createCommand($sql);
-        $forget = $command->queryAll();
-
-        return $forget;
+        return $validtime = Customer::find()->select('customer_activation_key')
+                        ->where(['customer_email'=>$custemail])
+                        ->andWhere(['<=','TIMESTAMPDIFF(MINUTE,modified_datetime,"$time")','1440'])
+                        ->asArray()
+                        ->all();
     }
 }

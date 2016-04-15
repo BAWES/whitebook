@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="customer-index">
    <?= Html::a('Create customer', ['create'], ['class' => 'btn btn-success']) ?>
     <?php $a=1; if($count>0){?>
-    <?= Html::a('Export customer list', ['/admin/customer/export'], ['class' => 'btn btn-info','id'=>'export', 'style'=>'float:right;']) ?>
+    <?= Html::a('Export customer list', ['/customer/export'], ['class' => 'btn btn-info','id'=>'export', 'style'=>'float:right;']) ?>
     <?php }?>
 
     <?= GridView::widget([
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	function change(status, id)
 	{		
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/admin/customer/block']); ?> ";
+        var path = "<?php echo Url::to(['/customer/block']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called

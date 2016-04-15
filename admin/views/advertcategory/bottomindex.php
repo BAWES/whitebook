@@ -51,12 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '{update} {delete}{link}',
 			'buttons' => [
 				'update' => function ($url,$data) {
-				$url = URL::to(['/admin/advertcategory/bottomupdate/?id='.$data['advert_id']]);
+				$url = URL::to(['/advertcategory/bottomupdate/?id='.$data['advert_id']]);
 				return Html::a(
 					'<span class="glyphicon glyphicon-pencil"></span>',$url);
 					},
 				'delete' => function ($url,$data) {
-				$url = URL::to(['/admin/advertcategory/bottomdelete/?id='.$data['advert_id']]);
+				$url = URL::to(['/advertcategory/bottomdelete/?id='.$data['advert_id']]);
 				return Html::a(
 					'<span class="glyphicon glyphicon-trash"></span>',$url,['title'=>'Delete','data-confirm'=>'Are you sure you want to delete this item?']);
 					},
@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	function change(status, aid)
 	{		
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/admin/advertcategory/block']); ?> ";
+        var path = "<?php echo Url::to(['/advertcategory/block']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called
@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			if(isNumeric(sort_val))
 			{
 				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/admin/advertcategory/sort_banner']); ?> ";
+				var path = "<?php echo Url::to(['/advertcategory/sort_banner']); ?> ";
 				$.ajax({  
 				type: 'POST',      
 				url: path, //url to be called

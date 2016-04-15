@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 		function Status(status){		
 		var keys = $('#banners').yiiGridView('getSelectedRows');		
-		var pathUrl = "<?php echo Url::to(['/admin/banner/status']); ?>";		
+		var pathUrl = "<?php echo Url::to(['/banner/status']); ?>";		
 		if(keys.length == 0) { alert ('Select atleast one item'); return false;}
 		var r = confirm("Are you sure want to " +status+ "?");				
 		if (r == true) {			
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	function change(status, cid)
 	{			
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/admin/banner/block']); ?> ";
+        var path = "<?php echo Url::to(['/banner/block']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called
@@ -158,7 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			if(isNumeric(sort_val))
 			{
 				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/admin/banner/sort_banner']); ?> ";
+				var path = "<?php echo Url::to(['/banner/sort_banner']); ?> ";
 				$.ajax({  
 				type: 'POST',      
 				url: path, //url to be called

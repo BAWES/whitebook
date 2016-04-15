@@ -47,10 +47,12 @@ use yii\helpers\ArrayHelper;
  */
 class Vendoritem extends \yii\db\ActiveRecord
 {
+    const UPLOADFOLDER = "vendor_item_images_210/";
     public $themes;
     public $groups;
     public $image_path;
     public $guide_image;
+
     /**
      * @inheritdoc
      */
@@ -70,8 +72,9 @@ class Vendoritem extends \yii\db\ActiveRecord
             [['type_id', 'vendor_id', 'category_id','subcategory_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','child_category', 'created_by', 'modified_by'], 'integer'],
             [['item_description', 'item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale', 'item_approved', 'trash'], 'string'],
             [['item_price_per_unit'], 'number'],
-            [['created_datetime', 'modified_datetime','item_status'], 'safe'],
-            [['item_name'], 'string', 'max' => 128],                  
+            [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
+            [['item_name'], 'string', 'max' => 128],
+            ['image_path','image', 'extensions' => 'png,jpg,jpeg', 'skipOnEmpty' => false],
             
             // set scenario for vendor item add functionality
             [['type_id', 'category_id',  'item_description', 'item_additional_info', 'item_amount_in_stock',
