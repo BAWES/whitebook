@@ -9,7 +9,7 @@ Yii::setAlias('themes', '/admin/web/themes/default/'); // backend
 Yii::setAlias('frontend_app_images', '/frontend/web/images'); // frontend
 
 //Remove The Following Aliases Later
-Yii::setAlias('uploads', '@web/uploads'); // backend
+Yii::setAlias('uploads', '/uploads'); // backend
 Yii::setAlias('sub_category', '@uploads/subcategory_icon/');
 Yii::setAlias('gif_img', '@frontend_app_images/ajax-loader.gif');
 Yii::setAlias('top_category', '@uploads/category_ads/top/');
