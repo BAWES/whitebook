@@ -15,12 +15,16 @@ use yii\web\IdentityInterface;
 * @property string $customer_dateofbirth
 * @property string $customer_gender
 * @property string $customer_mobile
+* @property integer $customer_activation_status
+* @property integer $customer_activation_key
+* @property integer $customer_status
+* @property integer $message_status
 * @property string $customer_last_login
 * @property string $customer_ip_address
 * @property integer $created_by
 * @property string $modified_by
-* @property integer $created_date
-* @property string $modified_date
+* @property string $created_datetime
+* @property string $modified_datetime
 * @property string $trash
 *
 * @property CustomerAddress[] $customerAddresses
@@ -30,6 +34,10 @@ use yii\web\IdentityInterface;
 */
 class Customer extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    //Email verification values for `customer_email_verification`
+    const EMAIL_VERIFIED = 1;
+    const EMAIL_NOT_VERIFIED = 0;
+
     /**
     * @inheritdoc
     */

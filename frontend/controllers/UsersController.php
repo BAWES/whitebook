@@ -8,7 +8,7 @@ use frontend\models\Users;
 use frontend\models\Signup;
 use frontend\models\Basket;
 use common\models\Country;
-use common\models\Customer;
+use frontend\models\Customer;
 use common\models\CustomerAddress;
 use common\models\Siteinfo;
 use common\models\Themes;
@@ -42,59 +42,71 @@ class UsersController extends BaseController
 
     public function actionLogin()
     {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new frontend\models\LoginForm();
+
         if (isset($_POST['email']) && isset($_POST['password'])) {
-            $model = new Users();
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            
+            $model->email = $_POST['email'];
+            $model->password = $_POST['password'];
+
             // create_event = 1 , add_event=2
             $event_status = $_POST['event_status'];
             $favourite_status = $_POST['favourite_status'];
 
-            $authorization = $model->check_authorization($email, $password);
-            if ($authorization == -1) {
-                $return_data['status'] = '-1';
-                echo json_encode($return_data);
-                exit;
-            } elseif ($authorization == -2) {
-                $return_data['status'] = '-2';
-                echo json_encode($return_data);
-                exit;
-            } elseif ($authorization == -3) {
-                $return_data['status'] = '-3';
-                echo json_encode($return_data);
-                exit;
-            } else {
 
-                if ($event_status == -1) {
-                    Yii::$app->session->set('create_event', 1);
-                }
-                if ($event_status > 0) {
-                    Yii::$app->session->set('event_status', $event_status);
-                }
-                if ($event_status == -2) {
-                    Yii::$app->session->set('default', 1);
-                }
+            if($model->login()){
+                $authorization = $model->customer->checkAuthorization();
 
-                Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
-                Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
-                Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
-                //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
+                if ($authorization == -1) {
+                    $return_data['status'] = '-1';
+                    echo json_encode($return_data);
+                    exit;
+                } elseif ($authorization == -2) {
+                    $return_data['status'] = '-2';
+                    echo json_encode($return_data);
+                    exit;
+                } elseif ($authorization == -3) {
+                    $return_data['status'] = '-3';
+                    echo json_encode($return_data);
+                    exit;
+                } else {
 
-                if ($favourite_status > 0) {
-                    $update_wishlist = $model->update_wishlist_succcess($favourite_status, $authorization[0]['customer_id']);
-                    // add toi favourite
+                    if ($event_status == -1) {
+                        Yii::$app->session->set('create_event', 1);
+                    }
+                    if ($event_status > 0) {
+                        Yii::$app->session->set('event_status', $event_status);
+                    }
+                    if ($event_status == -2) {
+                        Yii::$app->session->set('default', 1);
+                    }
+
+                    Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
+                    Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
+                    Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
+                    //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
+
+                    if ($favourite_status > 0) {
+                        $userModel = new Users();
+                        $update_wishlist = $userModel->update_wishlist_succcess($favourite_status, $authorization[0]['customer_id']);
+                        // add toi favourite
+                        $return_data['status'] = '1';
+                        $vendoritem_model = new Vendoritem();
+                        $item_name = $vendoritem_model->vendoritemname($favourite_status);
+                        $return_data['item_name'] = $item_name;
+                        Yii::$app->session->set('favourite_status', $item_name);
+                        echo json_encode($return_data);
+                        exit;
+                    }
+
                     $return_data['status'] = '1';
-                    $vendoritem_model = new Vendoritem();
-                    $item_name = $vendoritem_model->vendoritemname($favourite_status);
-                    $return_data['item_name'] = $item_name;
-                    Yii::$app->session->set('favourite_status', $item_name);
                     echo json_encode($return_data);
                     exit;
                 }
-
-                $return_data['status'] = '1';
-                echo json_encode($return_data);
-                exit;
             }
         } else {
             return $this->redirect(Yii::$app->request->urlReferrer);
@@ -241,6 +253,7 @@ class UsersController extends BaseController
                     $email = $login_det[0]['customer_email'];
                     $password = $login_det[0]['customer_org_password'];
                     $authorization = $model->check_authorization($email, $password);
+
                     Yii::$app->session->set('key', '2');
                     Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
                     Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);

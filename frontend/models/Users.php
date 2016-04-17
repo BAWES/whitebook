@@ -371,8 +371,8 @@ class Users extends Model
     {
         $query = new Query;
         $query  ->select([
-                'wvi.item_id','wvi.slug', 'wvi.item_name', 'wvi.item_price_per_unit','wv.vendor_name', 
-                'whitebook_events.event_id'])  
+                'wvi.item_id','wvi.slug', 'wvi.item_name', 'wvi.item_price_per_unit','wv.vendor_name',
+                'whitebook_events.event_id'])
             ->from('whitebook_wishlist AS ww')
             ->join('LEFT JOIN', 'whitebook_vendor_item AS wvi',
                         'wvi.item_id =ww.item_id')

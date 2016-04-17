@@ -22,7 +22,7 @@ return [
                     'class' => 'yii\caching\FileCache',
          ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'common\models\Customer',
             'enableAutoLogin' => true,
         ],
         'session' => [

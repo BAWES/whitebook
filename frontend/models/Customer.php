@@ -42,5 +42,23 @@ class Customer extends \common\models\Customer {
         return $scenarios;
     }
 
+    /**
+     * Check Authorization of current user
+     */
+    public function checkAuthorization()
+    {
+      if($this->trash == "Default"){
+          if ($this->customer_activation_status == 0) {
+              return -1;
+          } elseif ($this->customer_status == 'Deactive') {
+              return -2;
+          } else {
+              return self;
+          }
+      }
+
+      return -3;
+    }
+
 
 }
