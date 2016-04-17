@@ -167,7 +167,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      * @inheritdoc
      */
     public static function findIdentity($id) {
-        return static::findOne(['student_id' => $id]);
+        return static::findOne(['customer_id' => $id]);
     }
 
     /**
@@ -184,11 +184,11 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      * @return static|null
      */
     public static function findByEmail($email) {
-        return static::findOne(['student_email' => $email]);
+        return static::findOne(['customer_email' => $email]);
     }
 
     /**
-     * Finds student by password reset token
+     * Finds customer by password reset token
      *
      * @param string $token password reset token
      * @return static|null
@@ -199,7 +199,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
         }
 
         return static::findOne([
-                    'student_password_reset_token' => $token,
+                    'customer_password_reset_token' => $token,
         ]);
     }
 
@@ -230,7 +230,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      * @inheritdoc
      */
     public function getAuthKey() {
-        return $this->student_auth_key;
+        return $this->customer_auth_key;
     }
 
     /**
@@ -247,7 +247,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($password) {
-        return Yii::$app->security->validatePassword($password, $this->student_password_hash);
+        return Yii::$app->security->validatePassword($password, $this->customer_password_hash);
     }
 
     /**
@@ -256,28 +256,28 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      * @param string $password
      */
     public function setPassword($password) {
-        $this->student_password_hash = Yii::$app->security->generatePasswordHash($password);
+        $this->customer_password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**
      * Generates "remember me" authentication key
      */
     public function generateAuthKey() {
-        $this->student_auth_key = Yii::$app->security->generateRandomString();
+        $this->customer_auth_key = Yii::$app->security->generateRandomString();
     }
 
     /**
      * Generates new password reset token
      */
     public function generatePasswordResetToken() {
-        $this->student_password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->customer_password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
     /**
      * Removes password reset token
      */
     public function removePasswordResetToken() {
-        $this->student_password_reset_token = null;
+        $this->customer_password_reset_token = null;
     }
 
 }
