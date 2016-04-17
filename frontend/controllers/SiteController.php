@@ -77,7 +77,7 @@ class SiteController extends BaseController
         $customer_events = array();
 
         if ($customer_id != '') {
-            $customer_events = $website_model->get_customer_events($customer_id);
+            $customer_events = $website_model->getCustomerEvents($customer_id);
         }
         return $this->render('index', [
           'featured_product' => $featured_product,
@@ -98,12 +98,12 @@ class SiteController extends BaseController
         $banner = $website_model->get_banner_details();
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
-        
+
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         $customer_events = array();
 
         if ($customer_id != '') {
-            $customer_events = $website_model->get_customer_events($customer_id);
+            $customer_events = $website_model->getCustomerEvents($customer_id);
         }
 
         return $this->render('home', [
@@ -392,7 +392,7 @@ class SiteController extends BaseController
                 $type = '';
                 $model = new Users();
                 $customer_events_list = $model->get_customer_wishlist_details($customer_id);
-                $customer_events = $model->get_customer_events($customer_id, $event_limit, $offset, $type);
+                $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
 
                 return $this->render('vendor_profile', [
               'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes, 'vendorData' => $vendorData,

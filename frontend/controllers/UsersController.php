@@ -49,7 +49,7 @@ class UsersController extends BaseController
         $model = new frontend\models\LoginForm();
 
         if (isset($_POST['email']) && isset($_POST['password'])) {
-            
+
             $model->email = $_POST['email'];
             $model->password = $_POST['password'];
 
@@ -489,11 +489,11 @@ class UsersController extends BaseController
 
             $update_wishlist = $model->update_wishlist($item_id, $customer_id);
             if ($update_wishlist == 1) {
-                $wishlist = Users::loadcustomerwishlist(Yii::$app->params['CUSTOMER_ID']);
+                $wishlist = Users::loadCustomerWishlist(Yii::$app->params['CUSTOMER_ID']);
                 echo count($wishlist);
                 exit;
             } else {
-                $wishlist = Users::loadcustomerwishlist(Yii::$app->params['CUSTOMER_ID']);
+                $wishlist = Users::loadCustomerWishlist(Yii::$app->params['CUSTOMER_ID']);
                 echo count($wishlist);
                 exit;
             }
@@ -519,7 +519,7 @@ class UsersController extends BaseController
         if (isset($_GET['type'])) {
             $type = $_GET['type'];
         }
-        $customer_events = $model->get_customer_events($customer_id, $event_limit, $offset, $type);
+        $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
         //print_r ($customer_events);
         $customer_events_count = $model->get_customer_events_count($customer_id, $type);
         $price = $vendor = $avail_sale = $theme = '';
@@ -615,7 +615,7 @@ class UsersController extends BaseController
         $type = $_GET['type'];
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         $model = new Users();
-        $customer_events = $model->get_customer_events($customer_id, $limit, $offset, $type);
+        $customer_events = $model->getCustomerEvents($customer_id, $limit, $offset, $type);
         if (count($customer_events) > 0) {
             foreach ($customer_events as $ce) {
                 echo '<div class="col-md-6">

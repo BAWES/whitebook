@@ -147,7 +147,7 @@ foreach($themelist as $t){?>
 <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <ul id="wishlist">
 <?php
-$wishlist = Users::loadcustomerwishlist(Yii::$app->params['CUSTOMER_ID']);
+$wishlist = Users::loadCustomerWishlist(Yii::$app->params['CUSTOMER_ID']);
 foreach ($wishlist as $key => $value) {
 ?>
 <li id="<?php echo $value['item_id'];?>">

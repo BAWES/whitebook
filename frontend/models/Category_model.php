@@ -94,7 +94,7 @@ class Category_model extends Model
         return $vendor;
     }
 
-    public function get_customer_events($customer_id)
+    public function getCustomerEvents($customer_id)
     {
         $command = Yii::$app->DB->createCommand(
         'SELECT event_id,event_name,event_type,event_date FROM whitebook_events WHERE customer_id="'.$customer_id.'" order by event_date asc');

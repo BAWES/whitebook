@@ -5,8 +5,8 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 if(!Yii::$app->user->isGuest) {
-    $wishlist = Users::loadcustomerwishlist(Yii::$app->params['CUSTOMER_ID']);
-    $customer_events = Website::get_customer_events(Yii::$app->params['CUSTOMER_ID']);
+    $wishlist = Users::loadCustomerWishlist(Yii::$app->params['CUSTOMER_ID']);
+    $customer_events = Website::getCustomerEvents(Yii::$app->params['CUSTOMER_ID']);
 
 ?>
 

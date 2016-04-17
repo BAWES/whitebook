@@ -118,7 +118,7 @@ class Website extends Model {
         return $event_type = Eventtype::find()->select('type_name,type_id')->asArray()->all();
     }
 
-    public static function get_customer_events($customer_id) {
+    public static function getCustomerEvents($customer_id) {
      return $events = Events::find()->select('event_id,event_name,event_type,event_date,slug')->where(['customer_id'=>$customer_id])->OrderBy('event_date ASC')->asArray()->all();
     }
 
@@ -177,7 +177,7 @@ class Website extends Model {
     }
 
     // GET SEO DATA
-    public static function SEOdata($table_name='',$field='',$value='',$data=''){ 
+    public static function SEOdata($table_name='',$field='',$value='',$data=''){
         if(is_array($data)){
             $select = implode(',',$data);
         }

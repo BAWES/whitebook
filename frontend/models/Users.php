@@ -239,7 +239,7 @@ class Users extends Model
         return count($events);
     }
 
-    public function get_customer_events($customer_id, $limit, $offset, $type)
+    public function getCustomerEvents($customer_id, $limit, $offset, $type)
     {
         $condn = '';
         if ($type != '') {
@@ -367,7 +367,7 @@ class Users extends Model
     }
 
     /* BEGIN Get customer wish list */
-    public static function loadcustomerwishlist($customer_id)
+    public static function loadCustomerWishlist($customer_id)
     {
         $query = new Query;
         $query  ->select([
