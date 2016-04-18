@@ -308,7 +308,7 @@ class VendoritemController extends Controller
                         $image_tbl = Yii::$app->db->createCommand()
                         ->insert('whitebook_image', [
                         'image_path' => $filename,'item_id' => $model->item_id,
-                        'image_user_id' => Yii::$app->user->getId(),'module_type' => 'vendor_item',
+                        'image_user_id' => Yii::$app->user->getId(),'module_type' => 'admin',
                         'image_user_type' => 'admin','vendorimage_sort_order' => $i, ])
                         ->execute();++$i;
                        }
