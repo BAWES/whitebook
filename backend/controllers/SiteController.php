@@ -233,13 +233,35 @@ class SiteController extends Controller
             $model->vendor_working_hours_to = $_POST['Vendor']['vendor_working_hours_to'].':'.$_POST['Vendor']['vendor_working_min_to'];
 
             $file = UploadedFile::getInstances($model, 'vendor_logo_path');
-            if (!empty($file)) {
-                foreach ($file as $files) {
-                    $model->vendor_logo_path=$files->baseName . '_' . $len .'.' . $files->extension;
-                    $k=$base.'/web/uploads/vendor_logo/' .$model->vendor_logo_path;
-                    $files->saveAs($k);
+            if ($file) {
+                    foreach ($file as $files) {
+                        if($files instanceof yii\web\UploadedFile){
+                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+
+                            //Resize file using imagine
+                            $resize = true;
+
+                            if($resize){
+                                $newTmpName = $files->tempName . "." . $files->extension;
+
+                                $imagine = new \Imagine\Gd\Imagine();
+                                $image = $imagine->open($files->tempName);
+                                $image->resize($image->getSize()->widen(250));
+                                $image->save($newTmpName);
+
+                                //Overwrite old filename for S3 uploading
+                                $files->tempName = $newTmpName;
+                            }
+
+                            //Save to S3
+                            $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
+                            if($awsResult){
+                                $model->vendor_logo_path = $filename;
+                            }
+                        }
+                    }
                 }
-            }else {  $model->vendor_logo_path = $exist_logo_image;}
+                else {  $model->vendor_logo_path = $exist_logo_image;}
 
             if($model->save())
             {
