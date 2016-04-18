@@ -217,9 +217,9 @@ $vendor_name = Vendor::getvendorname($_GET['vid']); ?>
 
          	$img1 = $action1 = '';
          	foreach ($guideimagedata as $value) {
-			$img1 .= '"<img src='.Yii::getAlias('@web/uploads/guide_images/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
+			$img1 .= '"<img src='.Yii::getAlias('@slider_uploads/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
 			$action1 .='{
-			        url: "'.Url::to(['/admin/vendoritem/deleteserviceguideimage']).'",
+			        url: "'.Url::to(['/vendoritem/deleteserviceguideimage']).'",
 			        key: '.$value->image_id.',
 			    }'.',';
 				}
@@ -253,7 +253,7 @@ $vendor_name = Vendor::getvendorname($_GET['vid']); ?>
 <!--End fourth Tab -->
 
 <div class="tab-pane" id="5">
-<div class="file-block" style="color:red"> Please upload aleast one file</div>
+<div class="file-block" style="color:red"> Please upload aleast a file</div>
  <div class="form-group">
 <?= $form->field($model, 'image_path[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
 		])->fileInput(['multiple' => true]) ?>
@@ -264,9 +264,9 @@ $vendor_name = Vendor::getvendorname($_GET['vid']); ?>
  if(!empty($imagedata)) {
          	$img= $action = '';
          	foreach ($imagedata as $value) {
-       			$img .= '"<img src='.Yii::getAlias('@vendor_item_images_210').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
+       			$img .= '"<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
        			$action .='{
-       			        url: "'.Url::to(['/admin/vendoritem/deleteitemimage']).'",
+       			        url: "'.Url::to(['/vendoritem/deleteitemimage']).'",
        			        key: '.$value->image_id.',
        			    }'.',';
        				}
@@ -460,7 +460,7 @@ $(function()
 			var ques_txt =(new_n+'['+p+'][]');
 			var ques_ans =(new_p+'[price]['+p+'][]');
 
-			$(this).before('<div class="selection"><input type="text" class="form-control question" name="'+ques_txt+'" placeholder="Answer" id="question" style="width:40%;float:left;"><input type="text" class="form-control"  placeholder="Price (Optional)" name="'+ques_ans+'" id="price" style="width:40%;float:left;"><input type="hidden" class="form-control answer" name="Vendoritemquestion[0][hidden][0][]" style="width:5%;float:left;"><img src="<?php echo Yii::$app->params['appImageUrl']."remove.png"; ?>" class="selection_delete" onclick="deletequestionselection(this)"><input type="hidden" id="subquestion" value="Add" class="add-sub-question temp_qa" data-name="'+ques_txt+'"  onclick="addsubquestions(this)"><input type="button" id="viewquestion" value="View" class="add-sub-question temp_qa" data-name="'+ques_txt+'" onclick="viewsubquestions(this)"></div>');	p++;
+			$(this).before('<div class="selection"><input type="text" class="form-control question" name="'+ques_txt+'" placeholder="Answer" id="question" style="width:40%;float:left;"><input type="text" class="form-control"  placeholder="Price (Optional)" name="'+ques_ans+'" id="price" style="width:40%;float:left;"><input type="hidden" class="form-control answer" name="Vendoritemquestion[0][hidden][0][]" style="width:5%;float:left;"><img src="<?=Yii::getAlias('appImageUrl')."remove.png"; ?>" class="selection_delete" onclick="deletequestionselection(this)"><input type="hidden" id="subquestion" value="Add" class="add-sub-question temp_qa" data-name="'+ques_txt+'"  onclick="addsubquestions(this)"><input type="button" id="viewquestion" value="View" class="add-sub-question temp_qa" data-name="'+ques_txt+'" onclick="viewsubquestions(this)"></div>');	p++;
 			$('input#subquestion').hide(); //hide before add
 			$('input#viewquestion').hide();
 
@@ -485,7 +485,7 @@ function savequestion(typ,q_parent,tis)
 	}
 		var serial_div = $("#"+parent_div+" :input").serializeArray();
 
-	var path = "<?php echo Url::to(['/admin/vendoritem/addquestion']); ?> ";
+	var path = "<?php echo Url::to(['/vendoritem/addquestion']); ?> ";
 	$.ajax({
         type: 'POST',
         dataType: 'json',
@@ -520,7 +520,7 @@ function savequestion(typ,q_parent,tis)
 		        form_data.append('question_id',data[0].response.parent_id);
 		        form_data.append('item_id',<?= $item_id; ?>);
 
-		        var path = "<?php echo Url::to(['/admin/vendoritem/guideimage']); ?> ";
+		        var path = "<?php echo Url::to(['/vendoritem/guideimage']); ?> ";
 			    $.ajax({
 		        type: 'POST',
 		        dataType: 'json',  // what to expect back from the PHP script, if anything
@@ -562,7 +562,7 @@ function deleteAddress(question_id,tis) {
 		var r = confirm("Are you sure want to delete?");
 		if (r == true) {
 		$(tis).parent().parent().parent().parent().hide();
-		var path = "<?php echo Url::to(['/admin/vendoritem/removequestion']); ?> ";
+		var path = "<?php echo Url::to(['/vendoritem/removequestion']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -599,7 +599,7 @@ function hideQuestion(question_id,tis) {
 function vendor_load(){
 
 	var vendor_id = $('#vendoritem-vendor_id').val();
-        var path = "<?php echo Url::to(['/admin/category/vendorcategory']); ?> ";
+        var path = "<?php echo Url::to(['/category/vendorcategory']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -613,7 +613,7 @@ function vendor_load(){
 $(function (){
     $("#vendoritem-category_id").change(function (){
 		var id = $('#vendoritem-category_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadsubcategory']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loadsubcategory']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -631,7 +631,7 @@ $(function (){
 $(function (){
     $("#vendoritem-subcategory_id").change(function (){
 		var id = $('#vendoritem-subcategory_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadchildcategory']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loadchildcategory']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -658,7 +658,7 @@ function addAddress(tis)
 function questionView(q_id,tis){
 	var check = $('.show_ques'+q_id).html();
 	if(check==''){
-	var path = "<?php echo Url::to(['/admin/vendoritem/renderquestion']); ?> ";
+	var path = "<?php echo Url::to(['/vendoritem/renderquestion']); ?> ";
 	$.ajax({
 		type : 'POST',
 		url :  path,
@@ -857,7 +857,7 @@ $(document).on('ready', function() {
 		overwriteInitial: false,
     	uploadUrl : '/dummy/dummy',
    		});
-var path = "<?php echo Url::to(['/admin/image/imageorder']); ?> ";
+var path = "<?php echo Url::to(['/image/imageorder']); ?> ";
 		$(".file-preview-thumbnails").sortable({
 			items:'> div.file-preview-initial',
         stop : function(event, ui){
@@ -945,7 +945,7 @@ $("#validone1").click(function() {
 	{
 
 		var mail=$("#vendoritem-item_name").val();
-        var path = "<?php echo Url::to(['/admin/vendoritem/itemnamecheck']); ?> ";
+        var path = "<?php echo Url::to(['/vendoritem/itemnamecheck']); ?> ";
         $('.loadingmessage').show();
         var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] :  '0'; ?>;
         $.ajax({
@@ -1174,6 +1174,18 @@ $("#validfour4").click(function() {
 });
 
 $("#validfive5").click(function() {
+ if($(".file-preview-thumbnails img").length <= 0)
+ {
+   $('.file-block').show();
+   $('.kv-fileinput-caption').css({'border':'1px solid red'});
+  return false;
+ }
+ else if($(".file-preview-thumbnails img").length >= 1)
+  {
+   $('.file-block').hide();
+   $('.kv-fileinput-caption').css({'border':'1px solid #ccc'});
+   return true;
+  }
 	if($("#vendoritem-vendor_id").val()=='')
 	{
 			$(".field-vendoritem-vendor_id").addClass('has-error');
@@ -1381,7 +1393,7 @@ $(document).ready(function(){
 {
 	var question_id = $(tis).parent().find('input.saves').attr('id');
 
-	var path = "<?php echo Url::to(['/admin/vendoritem/salesguideimage']); ?> ";
+	var path = "<?php echo Url::to(['/vendoritem/salesguideimage']); ?> ";
 	$.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -1398,7 +1410,7 @@ function deletequestionselection(selection_val)
 	$(selection_val).parent().remove();
 	if(option != undefined)
 	{
-		var path = "<?php echo Url::to(['/admin/vendoritemquestionansweroption/deletequestionoptions']); ?> ";
+		var path = "<?php echo Url::to(['/vendoritemquestionansweroption/deletequestionoptions']); ?> ";
 		$.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -1430,7 +1442,7 @@ function deletequestionselection(selection_val)
 	if($("#vendoritem-item_name").val().length > 3)
 	{
 		var mail=$("#vendoritem-item_name").val();
-        var path = "<?php echo Url::to(['/admin/vendoritem/itemnamecheck']); ?> ";
+        var path = "<?php echo Url::to(['/vendoritem/itemnamecheck']); ?> ";
         $('.loadingmessage').show();
         var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
         $.ajax({
