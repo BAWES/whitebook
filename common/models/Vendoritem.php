@@ -47,7 +47,10 @@ use yii\helpers\ArrayHelper;
  */
 class Vendoritem extends \yii\db\ActiveRecord
 {
-    const UPLOADFOLDER = "vendor_item_images_210/";
+    const UPLOADFOLDER_210 = "vendor_item_images_210/";
+    const UPLOADFOLDER_530 = "vendor_item_images_530/";
+    const UPLOADFOLDER_1000 = "vendor_item_images_1000/";
+    const UPLOADSALESGUIDE = "sales_guide_images/";
     public $themes;
     public $groups;
     public $image_path;
@@ -74,7 +77,7 @@ class Vendoritem extends \yii\db\ActiveRecord
             [['item_price_per_unit'], 'number'],
             [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
             [['item_name'], 'string', 'max' => 128],
-            ['image_path','image', 'extensions' => 'png,jpg,jpeg', 'skipOnEmpty' => false],
+            [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
             
             // set scenario for vendor item add functionality
             [['type_id', 'category_id',  'item_description', 'item_additional_info', 'item_amount_in_stock',
@@ -489,6 +492,14 @@ class Vendoritem extends \yii\db\ActiveRecord
         ->andwhere(['vendor_id' => $id])
         ->andwhere(['DAYOFMONTH(created_datetime)' => $date])
         ->count();
-	}  
-    
+	}
+
+   /**
+     * Deletes uploaded files related to this model from S3
+     */
+    public static function deleteFiles($image_key){
+        Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $image_key);
+        Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $image_key);
+        Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $image_key);
+    }
 }
