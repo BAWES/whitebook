@@ -154,7 +154,7 @@ $exist_groups = array();
  if(!empty($guideimagedata)) {
          	$img1 = $action1 = '';
          	foreach ($guideimagedata as $value) {
-			$img1 .= '"<img src='.Yii::getAlias('@web/uploads/guide_images/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
+			$img1 .= '"<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
 			$action1 .='{
 			        url: "'.Url::to(['/admin/vendoritem/deleteserviceguideimage']).'",
 			        key: '.$value->image_id.',
@@ -193,9 +193,9 @@ $exist_groups = array();
 
          	$img= $action = '';
          	foreach ($imagedata as $value) {
-			$img .= '"<img src='.Yii::getAlias('@web/uploads/vendor_images/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
+			$img .= '"<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
 			$action .='{
-			        url: "'.Url::to(['/admin/vendoritem/deleteitemimage']).'",
+			        url: "'.Url::to(['/vendoritem/deleteitemimage']).'",
 			        key: '.$value->image_id.',
 			    }'.',';
 				}

@@ -200,50 +200,109 @@ class VendoritemController extends Controller
 
 			}
 			//END Manage item pricing table
-			/* Begin Upload image table  */
-			$file = UploadedFile::getInstances($model, 'guide_image');
-   if($file) {
-				$i = 0;
-    foreach ($file as $files) {
-					 $files->saveAs($base.'/web/uploads/guide_images/' . $files->baseName . '_' . $len .'.' . $files->extension);
-                     $model1->image_path=$files->baseName . '_' . $len .'.' . $files->extension;
-                     $model1->item_id=$itemid;
-					 $model1->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
-					 $model1->image_user_type=1;
+            /* Begin Upload guide image table  */
 
-					 $k= Yii::$app->db->createCommand()->insert('whitebook_image', [
-								'image_path' => $model1->image_path,
-								'item_id' => $itemid,
-								'image_user_id' =>$model1->image_user_id,
-								'module_type'=>'guides',
-								'vendorimage_sort_order' =>$i])
-						->execute();
-					$i++;
-                }
-            }
+                        $guide_image = UploadedFile::getInstances($model, 'guide_image');
+
+                        if ($guide_image) {
+                         $i = 0;
+                         foreach ($guide_image as $files) {
+                            if($files instanceof yii\web\UploadedFile){
+                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+
+                            //Resize file using imagine
+                            $resize = true;
+
+                            if($resize){
+                            $newTmpName = $files->tempName . "." . $files->extension;
+
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image = $imagine->open($files->tempName);
+                            $image->resize($image->getSize()->widen(210));
+                            $image->save($newTmpName);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName;
+                            }
+
+                        //Save to S3
+                        $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADSALESGUIDE . $filename);
+                        if($awsResult){
+                            $model->guide_image = $filename;
+                        }
+
+                        $guide_tbl = Yii::$app->db->createCommand()->insert('whitebook_image', [
+                            'image_path' => $filename,
+                            'item_id' => $itemid,
+                            'image_user_id' => Yii::$app->user->getId(),
+                            'module_type' => 'guides',
+                            'vendorimage_sort_order' => $i, ])
+                            ->execute();
+                            ++$i;
+                            }
+                       }
+                 }
 
 
-			$file = UploadedFile::getInstances($model, 'image_path');
+                /* Begin Upload guide image table  */
+                    $product_file = UploadedFile::getInstances($model, 'image_path');
+                    if($product_file){
+                        $i = 0;
+                        foreach ($product_file as $files) {
+                            if($files instanceof yii\web\UploadedFile){
+                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+                            
+                            //Resize file using imagine
+                            $resize = true;
 
-            if ($file) {
-				$i = 0;
-                foreach ($file as $files) {
-					 $files->saveAs($base.'/web/uploads/vendor_images/' . $files->baseName . '_' . $len .'.' . $files->extension);
-                     $model1->image_path=$files->baseName . '_' . $len .'.' . $files->extension;
-                     $model1->item_id=$itemid;
-					 $model1->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
-					 $model1->image_user_type=1;
+                        if($resize){
+                            /* Begin Product image resolution 1000 */
+                            $newTmpName2 = $files->tempName . "." . $files->extension;
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image_1000 = $imagine->open($files->tempName);
+                            $image_1000->resize($image_1000->getSize()->widen(1000));
+                            $image_1000->save($newTmpName2);
 
-					 $k= Yii::$app->db->createCommand()->insert('whitebook_image', [
-								'image_path' => $model1->image_path,
-								'item_id' => $itemid,
-								'image_user_id' =>$model1->image_user_id,
-								'module_type'=>'vendor_item',
-								'vendorimage_sort_order' =>$i])
-						->execute();
-					$i++;
-                }
-            }
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName2;
+                            $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_1000 . $filename);
+                            
+                            /* Begin Product image resolution 530 */
+                            $newTmpName1 = $files->tempName . "." . $files->extension;
+                            $image_530 = $imagine->open($files->tempName);
+                            $image_530->resize($image_530->getSize()->widen(530));
+                            $image_530->save($newTmpName1);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName1;
+                            $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_530 . $filename);
+
+                            /* Begin Product image resolution 210 */
+                            $newTmpName = $files->tempName . "." . $files->extension;
+                            $image = $imagine->open($files->tempName);
+                            $image->resize($image->getSize()->widen(210));
+                            $image->save($newTmpName);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName;
+
+                            //Save to S3
+                            $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename);
+                        }
+                        
+                        if($awsResult){
+                            $model->image_path = $filename;
+                        }
+                        }
+            
+                        $image_tbl = Yii::$app->db->createCommand()
+                        ->insert('whitebook_image', [
+                        'image_path' => $filename,'item_id' => $model->item_id,
+                        'image_user_id' => Yii::$app->user->getId(),'module_type' => 'vendor_item',
+                        'image_user_type' => 'admin','vendorimage_sort_order' => $i, ])
+                        ->execute();++$i;
+                       }
+                    }
             /*  Upload image table End */
 		    echo Yii::$app->session->setFlash('success', "Item added successfully. Admin will check and approve it.");
 		    Yii::info('[New Item] Admin created new item '.$model->item_name, __METHOD__);
@@ -309,28 +368,47 @@ class VendoritemController extends Controller
 			{
 				$itemid=$model->item_id;
 				$file = UploadedFile::getInstances($model, 'image_path');
-
 			 	/* Begin Upload guide image table  */
-			 $file = UploadedFile::getInstances($model, 'guide_image');
-    if($file) {
-				$i = 0;
-     foreach ($file as $files) {
-					 $files->saveAs($base.'/web/uploads/guide_images/' . $files->baseName . '_' . $len .'.' . $files->extension);
- 				 $model1->image_path=$files->baseName . '_' . $len .'.' . $files->extension;
-                     $model1->item_id=$itemid;
-					 $model1->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
-					 $model1->image_user_type=1;
+                        $guide_image = UploadedFile::getInstances($model, 'guide_image');
 
-					 $k= Yii::$app->db->createCommand()->insert('whitebook_image', [
-								'image_path' => $model1->image_path,
-								'item_id' => $itemid,
-								'image_user_id' =>$model1->image_user_id,
-								'module_type'=>'guides',
-								'vendorimage_sort_order' =>$i])
-						->execute();
-					$i++;
-                }
-            }
+                        if ($guide_image) {
+                         $i = 0;
+                         foreach ($guide_image as $files) {
+                            if($files instanceof yii\web\UploadedFile){
+                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+
+                            //Resize file using imagine
+                            $resize = true;
+
+                            if($resize){
+                            $newTmpName = $files->tempName . "." . $files->extension;
+
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image = $imagine->open($files->tempName);
+                            $image->resize($image->getSize()->widen(210));
+                            $image->save($newTmpName);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName;
+                            }
+
+                        //Save to S3
+                        $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADSALESGUIDE . $filename);
+                        if($awsResult){
+                            $model->guide_image = $filename;
+                        }
+
+                        $guide_tbl = Yii::$app->db->createCommand()->insert('whitebook_image', [
+                            'image_path' => $filename,
+                            'item_id' => $itemid,
+                            'image_user_id' => Yii::$app->user->getId(),
+                            'module_type' => 'guides',
+                            'vendorimage_sort_order' => $i, ])
+                            ->execute();
+                            ++$i;
+                            }
+                       }
+                 }
       /* Begin Upload guide image table  */
 
 			 	/* Delete item price table records if its available any price for item type rental or service */
@@ -338,32 +416,70 @@ class VendoritemController extends Controller
 			 	{
 			 		Vendoritempricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
 			 	}
-			 	$file = UploadedFile::getInstances($model, 'image_path');
 
-			 	/* Upload gallery for items */
-			 	if ($file) {
-				$i = count($imagedata)+1;
-                foreach ($file as $files) {
-					 $files->saveAs($base.'/web/uploads/vendor_images/' . $files->baseName . '_' . $len .'.' . $files->extension);
-                     $model1->image_path=$files->baseName . '_' . $len .'.' . $files->extension;
-                     $model1->item_id=$id;
-					 $model1->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
-					 $model1->image_user_type=1;
-					 $k= Yii::$app->db->createCommand()
-						->insert('whitebook_image', [
-								'image_path' => $model1->image_path,
-								'item_id' => $id,
-								'image_user_id' =>$model1->image_user_id,
-								'module_type'=>'vendor_item',
-								'vendorimage_sort_order' =>$i])
-						->execute();
-						$i++;
-              		  }
-           		 }
-      }
-      /* Upload gallery for items */
+                /* Begin Upload guide image table  */
+                    $product_file = UploadedFile::getInstances($model, 'image_path');
+                    if($product_file){
+                        $i = 0;
+                        foreach ($product_file as $files) {
+                            if($files instanceof yii\web\UploadedFile){
+                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+                            
+                            //Resize file using imagine
+                            $resize = true;
 
-   //BEGIN Manage item pricing table
+                        if($resize){
+                            /* Begin Product image resolution 1000 */
+                            $newTmpName2 = $files->tempName . "." . $files->extension;
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image_1000 = $imagine->open($files->tempName);
+                            $image_1000->resize($image_1000->getSize()->widen(1000));
+                            $image_1000->save($newTmpName2);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName2;
+                            $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_1000 . $filename);
+                            
+                            /* Begin Product image resolution 530 */
+                            $newTmpName1 = $files->tempName . "." . $files->extension;
+                            $image_530 = $imagine->open($files->tempName);
+                            $image_530->resize($image_530->getSize()->widen(530));
+                            $image_530->save($newTmpName1);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName1;
+                            $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_530 . $filename);
+
+                            /* Begin Product image resolution 210 */
+                            $newTmpName = $files->tempName . "." . $files->extension;
+                            $image = $imagine->open($files->tempName);
+                            $image->resize($image->getSize()->widen(210));
+                            $image->save($newTmpName);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName;
+
+                            //Save to S3
+                            $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename);
+                        }
+                        
+                        if($awsResult){
+                            $model->image_path = $filename;
+                        }
+                        }
+            
+                        $image_tbl = Yii::$app->db->createCommand()
+                        ->insert('whitebook_image', [
+                        'image_path' => $filename,'item_id' => $model->item_id,
+                        'image_user_id' => Yii::$app->user->getId(),'module_type' => 'vendor_item',
+                        'image_user_type' => 'admin','vendorimage_sort_order' => $i, ])
+                        ->execute();++$i;
+                       }
+                    }
+            /*  Upload image table End */
+         }
+
+               //BEGIN Manage item pricing table
 				if(isset($_POST['vendoritem-item_price']['from']) && $_POST['vendoritem-item_price']['from'] !='')
 				{
 					Vendoritempricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
@@ -402,7 +518,7 @@ class VendoritemController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-		      echo Yii::$app->session->setFlash('success', "Item deleted successfully!");
+		echo Yii::$app->session->setFlash('success', "Item deleted successfully!");
         return $this->redirect(['index']);
     }
 
@@ -610,5 +726,23 @@ class VendoritemController extends Controller
 		return $this->renderPartial('viewquestionanswer',['question'=>$question, 'answers'=>$answers]);
 		}
 	}
+
+            // Delete item image
+        public function actionDeleteitemimage()
+        {
+            $model1 = new Image();
+            if (Yii::$app->request->isAjax) {
+                $data = Yii::$app->request->post();
+                if (isset($data['key']) &&  $data['key'] != '') {
+                    $image_path = Image::loadguideimageids($data['key']);
+                    Vendoritem::deleteFiles($image_path);
+                    $image = \Yii::$app->db->createCommand('DELETE FROM whitebook_image WHERE image_id=:image_id');
+                    $image->bindParam(':image_id', $image_id);
+                    $image_id = $data['key'];
+                    $image->execute();
+                    die; // dont remove die, action used by vendor module also.
+                }
+            }
+        }
 
 }
