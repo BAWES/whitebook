@@ -126,8 +126,8 @@ class Image extends \yii\db\ActiveRecord
     // Delete item images
     public static function loadguideimageids($image_id)
     {
-        $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'vendor_item'])->all();
-        return $model;
+        $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'vendor_item'])->one();
+        return $model['image_path'];
     }
 
     // Only for Service and Rental
