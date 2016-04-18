@@ -81,7 +81,7 @@ $(function (){
     $("#vendoritemquestion-vendor_id").change(function (){
 		
         var id = $('#vendoritemquestion-vendor_id').val();
-        var path = "<?php echo Url::to(['/admin/featuregroupitem/loadcategory']); ?> ";
+        var path = "<?php echo Url::to(['/featuregroupitem/loadcategory']); ?> ";
         $.ajax({
         type: 'POST',      
         url: path, //url to be called
@@ -97,7 +97,7 @@ $(function (){
     $("#vendoritemquestion-category_id").change(function (){
 		
         var id = $('#vendoritemquestion-category_id').val();
-        var path = "<?php echo Url::to(['/admin/featuregroupitem/loadsubcategory']); ?> ";
+        var path = "<?php echo Url::to(['/featuregroupitem/loadsubcategory']); ?> ";
         $.ajax({
         type: 'POST',      
         url: path, //url to be called
@@ -114,7 +114,7 @@ $(function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var id2 = $('#vendoritemquestion-category_id').val();
         var id3 = $('#vendoritemquestion-subcategory_id').val();
-        var path = "<?php echo Url::to(['/admin/featuregroupitem/loadvendoritems']); ?> ";
+        var path = "<?php echo Url::to(['/featuregroupitem/loadvendoritems']); ?> ";
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called
@@ -134,7 +134,7 @@ $(function (){
         var id = $('#vendoritemquestion-question_answer_type').val();
         if(id=='selection'){
 			addAddress();
-        var path = "<?php echo Url::to(['/admin/featuregroupitem/loadsubcategory']); ?>";
+        var path = "<?php echo Url::to(['/featuregroupitem/loadsubcategory']); ?>";
         
      }
      });
