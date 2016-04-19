@@ -9,10 +9,12 @@ use yii\web\IdentityInterface;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
 use common\models\Role;
+use common\models\Blockeddate;
 use yii\helpers\ArrayHelper;
 use common\models\Vendorpackages;
 use yii\behaviors\SluggableBehavior;
 use yii\db\Query;
+use yii\db\Expression;
 /**
  * This is the model class for table "{{%vendor}}".
  *
@@ -549,9 +551,13 @@ die;
         $contractDateBegin=date('Y-m-d');
         $date = strtotime(date("Y-m-d", strtotime($contractDateBegin)) . " +60 days");
         $contractDateEnd = date('Y-m-d',$date);
-        $sql="SELECT * FROM whitebook_vendor WHERE `package_end_date` >= '".$contractDateBegin."' AND`package_end_date` >= '".$contractDateBegin."' AND `package_end_date` <=  '".$contractDateEnd."'";
+        $period= Vendor::find()
+            ->where(['>=', 'package_end_date', $contractDateBegin])
+            ->andwhere(['<=', 'package_end_date', $contractDateBegin])
+            ->one();
+        /*$sql="SELECT * FROM whitebook_vendor WHERE `package_end_date` >= '".$contractDateBegin."' AND`package_end_date` >= '".$contractDateBegin."' AND `package_end_date` <=  '".$contractDateEnd."'";
         $command = Yii::$app->db->createCommand($sql);
-        $period=$command->queryall();
+        $period=$command->queryall();*/
         return  $period;
     }
 
@@ -567,9 +573,10 @@ die;
         $contractDateBegin=date('Y-m-d');
         $date = strtotime(date("Y-m-d", strtotime($contractDateBegin)) . " +60 days");
         $contractDateEnd = date('Y-m-d',$date);
-        $sql="SELECT * FROM whitebook_vendor WHERE `package_end_date` >= '".$contractDateBegin."' AND `package_end_date` <=  '".$contractDateEnd."'";
-        $command = Yii::$app->db->createCommand($sql);
-        $period=$command->queryall();
+        $period= Vendor::find()
+            ->select()
+            ->where(['vendor_id' => $id,['>=', 'package_end_date', $contractDateBegin],['<=', 'package_end_date', $contractDateBegin]])
+            ->one();
         return  $period;
     }
 
@@ -594,9 +601,13 @@ die;
     }
 
     public static function loadvalidvendors()
-    {
-        /* STEP 1 GET ACTIVE VENDORS*/
-        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id, wvi.vendor_id from whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND wvi.item_approved = "Yes"')->queryAll();
+    {	
+	$vendor = Vendor::find()
+    ->select('{{%vendor}}.vendor_id')
+    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+    ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
+    ->distinct()
+    ->all();
 
         /* STEP 2 CHECK PACKAGE */
         foreach ($vendor as $key => $value) {
@@ -614,7 +625,14 @@ die;
 		$id = implode("','", $k);
 		$val = "'".$id."'";
         /* STEP 1 GET ACTIVE VENDORS*/
-        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id,wv.vendor_name,wv.slug  from whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND wvi.item_approved = "Yes" AND wvi.item_id IN('.$val.')')->queryAll();
+        	$vendor = Vendor::find()
+    ->select('{{%vendor}}.vendor_id','{{%vendor}}.vendor_name','{{%vendor}}.slug')
+    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+    ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
+    ->distinct()
+    ->all();
+    
+    /*  $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id,wv.vendor_name,wv.slug  from whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND wvi.item_approved = "Yes" AND wvi.item_id IN('.$val.')')->queryAll();*/
         /* STEP 2 CHECK PACKAGE */
         foreach ($vendor as $key => $value) {
             $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
@@ -629,20 +647,34 @@ die;
 
     public static function loadvalidvendorids($cat_id=false)
     {
-        /* STEP 1 GET ACTIVE VENDORS*/
-        $sql = 'Select group_concat(vendor_id) as vendor_id from {{%vendor_blocked_date}} where DATE(NOW()) = DATE(block_date)';
-        $blocked_vendors = Yii::$app->db->createCommand($sql)->queryOne();
-        $condn = '';
-        if($blocked_vendors['vendor_id'] !='')
-        {
-            $condn = 'wv.vendor_id NOT IN('.$blocked_vendors['vendor_id'].') AND';
-        }
-        $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id, wvi.vendor_id from
-        whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id
-        where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default"
-        AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND
-        wvi.item_approved = "Yes" AND wvi.type_id=2 AND '.$condn.' wvi.category_id='.$cat_id)->queryAll();
+        $expression = new Expression('NOW()');
+		$now = (new \yii\db\Query)->select($expression)->scalar();  // SELECT NOW();
 
+		//echo $date=DATE(NOW());die;
+		$blocked_vendors = Blockeddate::find()
+    ->select('GROUP_CONCAT(vendor_id) as vendor_id')
+    //->where([ DATE(NOW()) => 'DATE(block_date)'])
+    ->where(['DATE(block_date)' =>$now ])
+    ->all();
+            $condn = '';
+        if($blocked_vendors[0]['vendor_id'] !='')
+        {
+            //$condn = "'not in', '{{%vendor}}.vendor_id' ,$blocked_vendors['vendor_id'])";
+            $condn = ",'"."not in"."',";
+            $condn .= "'"."{{%vendor}}.vendor_id"."',";
+            $condn .= $blocked_vendors['vendor_id'];
+            //$condn = 'wv.vendor_id NOT IN('.$blocked_vendors['vendor_id'].') AND';
+        }
+        
+            
+		 $vendor = Vendor::find()
+    ->select('{{%vendor}}.*')
+    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+    ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.category_id' => $cat_id,'{{%vendor_item}}.type_id' => '2'.$condn])
+    //->andwhere([$condn])
+    ->distinct()
+    ->all();
+    
         $package = array();
         /* STEP 2 CHECK PACKAGE */
         foreach ($vendor as $key => $value) {
@@ -675,14 +707,10 @@ die;
 
     public static function get_directory_list() {
         $today = date('Y-m-d H:i:s');
-
         $query = new Query();
-        $query->select([
-                    'whitebook_vendor.vendor_id AS vid',
+        $query->select(['whitebook_vendor.vendor_id AS vid',
                     'whitebook_vendor.vendor_name AS vname',
-                    'whitebook_vendor.slug AS slug',
-                        ]
-                )
+                    'whitebook_vendor.slug AS slug'])
                 ->from('whitebook_vendor')
                 ->join('LEFT OUTER JOIN', 'whitebook_vendor_packages', 'whitebook_vendor.vendor_id =whitebook_vendor_packages.vendor_id')
                 ->where('whitebook_vendor_packages.package_start_date <="' . $today . '"')
