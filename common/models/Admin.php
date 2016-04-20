@@ -217,18 +217,16 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 
 	public static function Accessroles()
     {
-		$command = \Yii::$app->DB->createCommand(
-		'SELECT role_id, role_name FROM whitebook_role');
-		$role=$command->queryall();
-		//print_r ($role[0]);die;
+		$role = Role::find()
+		->select(['role_id','role_name'])
+		->asArray()
+		->all();
         $roles=ArrayHelper::map($role,'role_id','role_name');
-        //print_r ($roles);die;
         return $roles;
 	}
 
 	public static function Admin()
     {
-
 		$accessdata = Accesscontroller::find()
 		->select(['admin_id'])
 		->groupBy('admin_id')
@@ -240,19 +238,24 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 		}
 
 		$data=implode(',',$data);
-		$sql="SELECT CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id,admin_name FROM whitebook_admin WHERE admin_status='Active' and id NOT IN (".$data.")";
-		$command = \Yii::$app->DB->createCommand($sql);
-		$admin=$command->queryall();
+		$admin=Admin::find()
+		->select(["CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id",'admin_name'])
+		->where(['admin_status'=>'Active'])
+		->andwhere(['not in','id',$data])
+		->asArray()
+		->all();
+		
 		$admin=ArrayHelper::map($admin,'id','admin_name');
         return $admin;
 	}
 
 		public static function Adminupdate()
     {
-
-		$sql="SELECT CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id,admin_name FROM whitebook_admin WHERE admin_status='Active'";
-		$command = \Yii::$app->DB->createCommand($sql);
-		$admin=$command->queryall();
+		$admin=Admin::find()
+		->select(["CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id",'admin_name'])
+		->where(['admin_status'=>'Active'])
+		->asArray()
+		->all();
 		$admin=ArrayHelper::map($admin,'id','admin_name');
         return $admin;
 	}
