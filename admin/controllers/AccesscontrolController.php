@@ -3,6 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
+use yii\db\Query;
 use common\models\Usercontroller;
 use common\models\Accesscontroller;
 use common\models\Admin;
@@ -59,12 +60,11 @@ class AccesscontrolController extends Controller
     * @return mixed
     */
     public function actionIndex()
-    {
-        $access = Authitem::AuthitemCheck('4', '29');
+    {        
+	 $access = Authitem::AuthitemCheck('4', '29');
         if (yii::$app->user->can($access)) {
             $searchModel = new AccesscontrolSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
@@ -109,16 +109,14 @@ class AccesscontrolController extends Controller
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
-                $command = \Yii::$app->DB->createCommand("DELETE FROM whitebook_access_control WHERE admin_id = $adminid");
-                $command->execute();
-
-                $command = \Yii::$app->DB->createCommand("DELETE FROM whitebook_auth_assignment WHERE user_id = $adminid");
-                $command->execute();
+                $command =Accesscontroller::deleteAll(['admin_id' => $admin_id]);
+                $command =Authassignment::deleteAll(['user_id' => $admin_id]);
                 $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
                 $p = 1;
                 foreach ($model->controller as $key => $val) {
                     if (count($val) > 1) {
                         $controller_id = $create = $update = $view = $delete = $manage = '';
+                        $auth_assign = new Authassignment;
                         foreach ($val as $k => $v) {
                             switch ($k) {
                                 case 'controller_id':
@@ -127,42 +125,47 @@ class AccesscontrolController extends Controller
                                 case 'create':
                                 $create = $v;
                                 if ($controller_id != '') {
-                                    $sql = 'INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$create.'",'.$adminid.','.$controller_id.')';
-                                    $command = \Yii::$app->DB->createCommand($sql);
-                                    $command->execute();
+									$auth_assign->item_name = $create;
+									$auth_assign->user_id = $adminid;
+									$auth_assign->controller_id = $controller_id;
+									$auth_assign->insert();
                                 }
                                 break;
                                 case 'update':
                                 $update = $v;
                                 if ($controller_id != '') {
-                                    $sql = 'INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$update.'",'.$adminid.','.$controller_id.')';
-                                    $command = \Yii::$app->DB->createCommand($sql);
-                                    $command->execute();
+                                $auth_assign->item_name = $v;
+								$auth_assign->user_id = $adminid;
+								$auth_assign->controller_id = $controller_id;
+								$auth_assign->insert();
                                 }
                                 break;
                                 case 'delete':
                                 $delete = $v;
                                 if ($controller_id != '') {
-                                    $sql = 'INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$delete.'",'.$adminid.','.$controller_id.')';
-                                    $command = \Yii::$app->DB->createCommand($sql);
-                                    $command->execute();
+                                $auth_assign->item_name = $v;
+								$auth_assign->user_id = $adminid;
+								$auth_assign->controller_id = $controller_id;
+								$auth_assign->insert();
                                 }
                                 break;
                                 case 'manage':
                                 $manage = $v;
                                 if ($controller_id != '') {
-                                    $sql = 'INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$manage.'",'.$adminid.','.$controller_id.')';
-                                    $command = \Yii::$app->DB->createCommand($sql);
-                                    $command->execute();
+                                $auth_assign->item_name = $v;
+								$auth_assign->user_id = $adminid;
+								$auth_assign->controller_id = $controller_id;
+								$auth_assign->insert();
                                 }
                                 break;
 
                                 case 'view':
                                 $view = $v;
                                 if ($controller_id != '') {
-                                    $sql = 'INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$view.'",'.$adminid.','.$controller_id.')';
-                                    $command = \Yii::$app->DB->createCommand($sql);
-                                    $command->execute();
+                                $auth_assign->item_name = $v;
+								$auth_assign->user_id = $adminid;
+								$auth_assign->controller_id = $controller_id;
+								$auth_assign->insert();
                                 }
                                 break;
                             }
@@ -170,9 +173,18 @@ class AccesscontrolController extends Controller
                         $timenow = date('Y-m-d h:i:sa');
                         $userid = Admin::getAdmin('id');
                         if ($controller_id != '') {
-                            $sql = 'INSERT whitebook_access_control(`role_id`,`admin_id`,`controller`,`create`,`update`,`delete`,`manage`,`view`,`created_by`,`created_datetime`) values ("'.$roleid.'","'.$adminid.'","'.$controller_id.'","'.$create.'","'.$update.'","'.$delete.'","'.$manage.'","'.$view.'","'.$userid.'","'.$timenow.'")';
-                            $command = \Yii::$app->DB->createCommand($sql);
-                            $command->execute();
+						$access_ctrl=new Accesscontroller;
+                        $access_ctrl->role_id = $roleid;
+						$access_ctrl->admin_id = $adminid;
+						$access_ctrl->controller = $controller_id;
+                        $access_ctrl->create = $create;
+                        $access_ctrl->update = $update;
+						$access_ctrl->delete = $delete;
+						$access_ctrl->manage = $manage;
+                        $access_ctrl->view = $view;
+						$access_ctrl->created_by = $userid;
+						$access_ctrl->created_datetime = $timenow;
+						$auth_assign->insert();
                         }
                     }
                 }
@@ -214,17 +226,14 @@ class AccesscontrolController extends Controller
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
-                $command = \Yii::$app->DB->createCommand("DELETE FROM whitebook_access_control WHERE admin_id = $admin_id AND role_id = $model->role_id ");
-                $command->execute();
-
-                $command = \Yii::$app->DB->createCommand("DELETE FROM whitebook_auth_assignment WHERE user_id = $admin_id");
-                $command->execute();
-
+                $command =Accesscontroller::deleteAll(['admin_id' => $admin_id,'role_id' => $model->role_id]);
+                $command =Authassignment::deleteAll(['user_id' => $admin_id]);
                 $model->load(Yii::$app->request->post());
                 $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
                 foreach ($model->controller as $key => $val) {
                     if (count($val) > 1 && isset($val['controller_id'])) {
                         $controller_id = $create = $update = $delete = $view = $manage = '';
+                        $auth_assign = new Authassignment;
                         foreach ($val as $k => $v) {
                             switch ($k) {
                                 case 'controller_id':
@@ -232,40 +241,61 @@ class AccesscontrolController extends Controller
                                 break;
 
                                 case 'create':
-                                $create = $v;
-                                $command = \Yii::$app->DB->createCommand('INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$create.'",'.$adminid.','.$controller_id.')');
-                                $command->execute();
+									$create = $v;
+									$auth_assign->item_name = $create;
+									$auth_assign->user_id = $adminid;
+									$auth_assign->controller_id = $controller_id;
+									$auth_assign->insert();
+
                                 break;
                                 case 'update':
                                 $update = $v;
-                                $command = \Yii::$app->DB->createCommand('INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$update.'",'.$adminid.','.$controller_id.')');
-                                $command->execute();
+                                $auth_assign->item_name = $v;
+								$auth_assign->user_id = $adminid;
+								$auth_assign->controller_id = $controller_id;
+								$auth_assign->insert();
                                 break;
                                 case 'delete':
                                 $delete = $v;
-                                $command = \Yii::$app->DB->createCommand('INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$delete.'",'.$adminid.','.$controller_id.')');
-                                $command->execute();
+                                $auth_assign->item_name = $v;
+								$auth_assign->user_id = $adminid;
+								$auth_assign->controller_id = $controller_id;
+								$auth_assign->insert();
+                                
                                 break;
                                 case 'manage':
                                 $manage = $v;
-                                $command = \Yii::$app->DB->createCommand('INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$manage.'",'.$adminid.','.$controller_id.')');
-                                $command->execute();
+								$auth_assign->item_name = $v;
+								$auth_assign->user_id = $adminid;
+								$auth_assign->controller_id = $controller_id;
+								$auth_assign->insert();
                                 break;
                                 case 'view':
                                 $view = $v;
-                                $command = \Yii::$app->DB->createCommand('INSERT whitebook_auth_assignment(`item_name`,`user_id`,`controller_id`) values ("'.$view.'",'.$adminid.','.$controller_id.')');
-                                $command->execute();
+								$auth_assign->item_name = $v;
+								$auth_assign->user_id = $adminid;
+								$auth_assign->controller_id = $controller_id;
+								$auth_assign->insert();
                                 break;
                             }
                         }
                         $timenow = date('Y-m-d h:i:sa');
                         $userid = Admin::getAdmin('id');
-                        $command = \Yii::$app->DB->createCommand('INSERT whitebook_access_control(`role_id`,`admin_id`,`controller`,`create`,`update`,`delete`,`manage`,`view`,`created_by`,`created_datetime`) values ("'.$roleid.'","'.$adminid.'","'.$controller_id.'","'.$create.'","'.$update.'","'.$delete.'","'.$manage.'","'.$view.'","'.$userid.'","'.$timenow.'")');
-                        $command->execute();
+                        $access_ctrl=new Accesscontroller;
+                        $access_ctrl->role_id = $roleid;
+						$access_ctrl->admin_id = $adminid;
+						$access_ctrl->controller = $controller_id;
+                        $access_ctrl->create = $create;
+                        $access_ctrl->update = $update;
+						$access_ctrl->delete = $delete;
+						$access_ctrl->manage = $manage;
+                        $access_ctrl->view = $view;
+						$access_ctrl->created_by = $userid;
+						$access_ctrl->created_datetime = $timenow;
+						$auth_assign->insert();
                     }
                 }
                 echo Yii::$app->session->setFlash('success', 'Access controller Updated successfully!');
-
                 return $this->redirect(['index']);
             } else {
                 return $this->render('update', [
@@ -293,13 +323,10 @@ class AccesscontrolController extends Controller
         if (yii::$app->user->can($access)) {
             $admin_id = Accesscontroller::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
             $admin_id = $admin_id['admin_id'];
-            $command = \Yii::$app->DB->createCommand(
-            'DELETE FROM `whitebook_auth_assignment` WHERE `user_id`="'.$admin_id.'"');
-            $deletevalue = $command->execute();
-
-            $command = \Yii::$app->DB->createCommand(
-            'DELETE FROM `whitebook_access_control` WHERE `admin_id`="'.$admin_id.'"');
-            $deleteaccess = $command->execute();
+            
+            $command =Accesscontroller::deleteAll(['admin_id' => $admin_id]);
+            $command =Authassignment::deleteAll(['user_id' => $admin_id]);
+                
             echo Yii::$app->session->setFlash('success', 'Access controller deleted successfully!');
 
             return $this->redirect(['index']);
@@ -334,9 +361,22 @@ class AccesscontrolController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $command = \Yii::$app->DB->createCommand('SELECT id,admin_name FROM whitebook_admin where role_id="'.$data['id'].'" and not exists (SELECT null FROM whitebook_access_control where admin_id = whitebook_admin.id)');
-        $city = $command->queryall();
-        if ($city) {
+		$subQuery = (new Query())
+                ->select('*')
+                ->from('{{%access_control}} t')
+                ->where('t.admin_id = p2.id');
+		$query = (new Query())
+                ->select('*')
+                ->from('{{%admin}} p2')
+                ->where(['exists', $subQuery]);
+            $command = $query->createCommand();
+			$city=($command->queryall());
+			
+			    
+                  
+			
+			
+        if (!empty($city)) {
             echo  '<option value="">Select</option>';
             foreach ($city as $key => $val) {
                 echo  '<option value="'.$val['id'].'">'.$val['admin_name'].'</option>';
@@ -352,9 +392,10 @@ class AccesscontrolController extends Controller
             $data = Yii::$app->request->post();
         }
         $admin_id = $data['admin_id'];
-        $command = \Yii::$app->DB->createCommand('SELECT controller_id FROM whitebook_auth_assignment
-            where user_id = "'.$admin_id.'" group by controller_id');
-            $control_id = $command->queryall();
+        $control_id = Authassignment::find()->select('controller_id')->where(['user_id' => $admin_id])
+        ->groupBy(['controller_id'])
+		->all();
+        
             if (!empty($control_id)) {
                 foreach ($control_id as $controll_id) {
                     $controller_id[] = "'".$controll_id['controller_id']."'";
@@ -380,14 +421,25 @@ class AccesscontrolController extends Controller
             }
             $admin_id = $data['admin_id'];
             $controller_id = $data['controller_id'];
-            $command = \Yii::$app->DB->createCommand('SELECT name FROM whitebook_auth_item
-                where NOT EXISTS (
-                    select item_name from whitebook_auth_assignment where whitebook_auth_item.name=whitebook_auth_assignment.item_name and
-                    whitebook_auth_assignment.user_id="'.$admin_id.'" and
-                    whitebook_auth_assignment.controller_id="'.$controller_id.'")');
-                    $role = $command->queryall();
+            
+			$subQuery = (new Query())
+                ->select('item_name')
+                ->from('{{%auth_assignment}} t')
+                ->where('t.item_name = p2.name')
+                ->andwhere('t.item_name = p2.name')
+                ->andwhere('t.user_id = '.$admin_id.'')
+                ->andwhere('t.controller_id = '.$controller_id.'');
+			$role = (new Query())
+                ->select('name')
+                ->from('{{%auth_item}} p2')
+                ->where(['exists', $subQuery]);
+            
+            $command = $role->createCommand();
+			$role=($command->queryall());
+			//echo die;
                     foreach ($role as $key => $val) {
                         echo  '<option value="'.$val['name'].'">'.$val['name'].'</option>';
                     }
+
                 }
             }
