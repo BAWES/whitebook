@@ -54,7 +54,7 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-			         ['category_name','categoryvalidation','on' => 'insert',],			
+			['category_name','categoryvalidation','on' => 'insert',],			
             [['parent_category_id', 'created_by', 'modified_by',], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
@@ -269,8 +269,10 @@ class Category extends \yii\db\ActiveRecord
          $vendor_id = $vendor[0]['category_id'];         
          $vendor_exp = explode(',',$vendor_id);
          $vendor_imp = implode('","',$vendor_exp);
-         $categories = Yii::$app->db->createCommand('SELECT category_id, category_name FROM {{%category}} WHERE category_id IN("'.$vendor_imp.'")');
-         $categories = $categories->queryAll();             
+		$categories = User::Category()
+		->select(['category_id','category_name'])
+		->where(['IN', 'category_id', $vendor_imp])
+		->all();
          $category =ArrayHelper::map($categories,'category_id','category_name');
          return $category;
  
@@ -312,9 +314,10 @@ class Category extends \yii\db\ActiveRecord
              $c_id[] = '"'.$key.'"';               
         }
         $c_id = implode($c_id,',');
-        
-        $categories = Yii::$app->db->createCommand('SELECT category_name FROM {{%category}} WHERE category_id IN('.$c_id.')');
-        $categories = $categories->queryAll();             
+        $categories = User::Category()
+		->select(['category_name'])
+		->where(['IN', 'category_id', $c_id])
+		->all();
         return $categories;
     }
 
@@ -330,19 +333,26 @@ class Category extends \yii\db\ActiveRecord
     
     public static function category_search_details($name)
 	{
-		 $sql="Select category_id, category_name FROM {{%category}} 
-			WHERE trash='Default' and category_allow_sale='Yes' and category_name like '%".$name."%'";
-			return $categories = Yii::$app->db->createCommand($sql)->queryAll();
+			        $categories = User::Category()
+					->select(['category_id','category_name'])
+					->where(['trash' =>'Default'])
+					->andwhere(['category_allow_sale' => 'Yes'])
+					->andwhere(['like', 'category_name', $name])
+					->all();
 	}
 
 	public static function Vendorcategorylist($ids)
 	{	
 		$c = explode(",", $ids);
 		$ids = implode("','", $c);
-		$val = "'".$ids."'";		
-		$categories = Yii::$app->db->createCommand('Select category_id, category_name, slug FROM {{%category}} 
-			WHERE category_id IN('.$val.') and trash="Default" and category_level=0
-			and category_allow_sale="Yes"')->queryAll();
+		$val = "'".$ids."'";
+				$categories = User::Category()
+					->select(['category_id','category_name','slug'])
+					->where(['trash' =>'Default'])
+					->andwhere(['category_allow_sale' => 'Yes'])
+					->andwhere(['category_level' => '0'])
+					->andwhere(['IN', 'category_id', $val])
+					->all();
 			return $categories; 
 	}    
 }
