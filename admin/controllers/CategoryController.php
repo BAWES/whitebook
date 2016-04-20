@@ -142,10 +142,9 @@ class CategoryController extends Controller
         $sort = $_POST['sort_val'];
         $cat_id = $_POST['cat_id'];
         $p_cat_id = $_POST['p_cat_id'];
-        $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_category SET sort="'.$sort.'" WHERE category_id='.$cat_id.' and parent_category_id='.$p_cat_id);
-
-        if ($command->execute()) {
+        $category=Category::updateAll(['sort' => $sort],['category_id= '.$cat_id,'parent_category_id= '.$p_cat_id]);
+        
+        if ($category) {
             Yii::$app->session->setFlash('success', 'Category sort order updated successfully!');
             echo 1;
             exit;
@@ -159,10 +158,8 @@ class CategoryController extends Controller
     {
         $sort = $_POST['sort_val'];
         $cat_id = $_POST['cat_id'];
-        $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_category SET sort="'.$sort.'" WHERE category_id='.$cat_id);
-
-        if ($command->execute()) {
+        $category=Category::updateAll(['sort' => $sort],['category_id= '.$cat_id]);
+        if ($category) {
             Yii::$app->session->setFlash('success', 'Category sort order updated successfully!');
             echo 1;
             exit;
@@ -192,7 +189,16 @@ class CategoryController extends Controller
             if ($model->load(Yii::$app->request->post())) {
                 $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
                 $model->category_name = strtolower($model->category_name);
-                $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_category` where trash = 'Default' AND parent_category_id IS NULL AND category_level = 0 ")->asArray()->all();
+                
+                
+                 $max_sort = Category::find()
+                 ->select('max(id)')
+				->where(['parent_category_id' => null])
+				->andwhere(['trash' => 'default'])
+				->andwhere(['category_level' => '0'])
+				->one();
+            
+                /*$max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_category` where trash = 'Default' AND parent_category_id IS NULL AND category_level = 0 ")->asArray()->all();*/
                 $sort = ($max_sort[0]['sort'] + 1);
                 $model->sort = $sort;
                 $model->save(false);
@@ -206,11 +212,8 @@ class CategoryController extends Controller
                 }
                 if ($file) {
                     $file_name = 'category_'.$categoryid.'.png';
-                    $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_category SET category_icon="'.$file_name.'" WHERE category_id='.$categoryid);
-                    $command->execute();
+                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
                 }
-
                 echo Yii::$app->session->setFlash('success', 'Category created successfully!');
                 Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
 
@@ -236,8 +239,14 @@ class CategoryController extends Controller
                 $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
             //$sort = Yii::$app->request->post()['Category']['sort'];
             //if(empty($sort)){ // get the max sort order
-                $parent_category_id = Yii::$app->request->post()['SubCategory']['parent_category_id'];
-                $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_category` where trash = 'Default' AND parent_category_id = $parent_category_id AND category_level = 1 ")->asArray()->all();
+            
+		         $max_sort = Category::find()
+                 ->select('max(sort)')
+				->where(['parent_category_id' => $parent_category_id])
+				->andwhere(['trash' => 'default'])
+				->andwhere(['category_level' => '1'])
+				->asArray()
+				->all();
                 $sort = ($max_sort[0]['sort'] + 1);
             // }
             $model->sort = $sort;
@@ -254,9 +263,7 @@ class CategoryController extends Controller
                 }
                 if ($file) {
                     $file_name = 'sub_category_'.$categoryid.'.png';
-                    $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_category SET category_icon="'.$file_name.'" WHERE category_id='.$categoryid);
-                    $command->execute();
+                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
                 }
                 echo Yii::$app->session->setFlash('success', 'Subcategory added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
@@ -293,7 +300,13 @@ class CategoryController extends Controller
                 $model->parent_category_id = Yii::$app->request->post()['ChildCategory']['subcategory_id'];
                 $model->category_level = '2';
                 $parent_category_id = Yii::$app->request->post()['ChildCategory']['subcategory_id'];
-                $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_category` where trash = 'Default' AND parent_category_id = $parent_category_id AND category_level = 2 ")->asArray()->all();
+                $max_sort = Category::find()
+                 ->select('max(sort)')
+				->where(['parent_category_id' => $parent_category_id])
+				->andwhere(['trash' => 'default'])
+				->andwhere(['category_level' => '2'])
+				->asArray()
+				->all();
                 $sort = ($max_sort[0]['sort'] + 1);
             // }
             $model->sort = $sort;
@@ -361,9 +374,7 @@ class CategoryController extends Controller
             }
             if ($file) {
                 $file_name = 'category_'.$categoryid.'.png';
-                $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_category SET category_icon="'.$file_name.'" WHERE category_id='.$categoryid);
-                $command->execute();
+                $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
             }
             echo Yii::$app->session->setFlash('success', 'Category updated successfully!');
             Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
@@ -402,8 +413,7 @@ class CategoryController extends Controller
                 }
                 if ($file) {
                     $file_name = 'sub_category_'.$categoryid.'.png';
-                    $command = \Yii::$app->DB->createCommand('UPDATE whitebook_category SET category_icon="'.$file_name.'" WHERE category_id='.$categoryid);
-                    $command->execute();
+                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
                 }
 
                 echo Yii::$app->session->setFlash('success', 'Subcategory updated successfully!');
@@ -451,8 +461,7 @@ class CategoryController extends Controller
                 }
                 if ($file) {
                     $file_name = 'child_category_'.$categoryid.'.png';
-                    $command = \Yii::$app->DB->createCommand('UPDATE whitebook_category SET category_icon="'.$file_name.'" WHERE category_id='.$categoryid);
-                    $command->execute();
+                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
                 }
 
                 echo Yii::$app->session->setFlash('success', 'Child category updated successfully!');
@@ -513,17 +522,15 @@ class CategoryController extends Controller
             $subcategory = array();
             if (count($parentcategory) && (!empty($parentcategory))) {
                 $subcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $parentcategory[0]['category_id']])->all();
-                $command = \Yii::$app->DB->createCommand('UPDATE whitebook_category SET trash="Deleted" WHERE category_id='.$parentcategory[0]['category_id']);
-                $command->execute();
+                $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$parentcategory[0]['category_id']]);
             }
 
             if (count($subcategory) && (!empty($subcategory))) {
                 $childcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $subcategory[0]['category_id']])->all();
-                $command = \Yii::$app->DB->createCommand('UPDATE whitebook_category SET trash="Deleted" WHERE category_id='.$subcategory[0]['category_id']);
-                $command->execute();
+                $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$subcategory[0]['category_id']]);
             }
-            $command = \Yii::$app->DB->createCommand('UPDATE whitebook_category SET trash="Deleted" WHERE category_id='.$id);
-            if ($command->execute()) {
+            $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$id]);
+            if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Category deleted successfully!');
 
                 return $this->redirect(['index']);
@@ -572,11 +579,12 @@ class CategoryController extends Controller
             $parentcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $id])->all();
             if (count($parentcategory)) {
                 $subcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $parentcategory[0]['category_id']])->all();
+                
                 $command = \Yii::$app->DB->createCommand('UPDATE whitebook_category SET trash="Deleted" WHERE category_id='.$parentcategory[0]['category_id']);
                 $command->execute();
             }
-            $command = \Yii::$app->DB->createCommand('UPDATE whitebook_category SET trash="Deleted" WHERE category_id='.$id);
-            if ($command->execute()) {
+            $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$id]);
+            if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Subcategory deleted successfully!');
 
                 return $this->redirect(['manage_subcategory']);
@@ -604,9 +612,9 @@ class CategoryController extends Controller
             }
 
             $model = $this->findModel($id);
-            $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_category SET trash="Deleted" WHERE category_id='.$id);
-            if ($command->execute()) {
+            $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$id]);
+            
+            if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Child category deleted successfully!');
 
                 return $this->redirect(['child_category_index']);
@@ -664,16 +672,14 @@ class CategoryController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'yes' ? 'no' : 'yes');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_category SET category_allow_sale="'.$status.'" WHERE category_id='.$data['cid']);
-        $command->execute();
-
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_category SET category_allow_sale="'.$status.'" WHERE parent_category_id='.$data['cid']);
-        $command->execute();
+        $category=Category::updateAll(['category_allow_sale' => $status],['category_id= '.$data['cid']]);
+        $category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id= '.$data['cid']]);
 
         $sub_category = Category::find()->select('category_id')->where(['parent_category_id' => $data['cid']])->all();
         foreach ($sub_category as $cat) {
-            $command = \Yii::$app->db->createCommand('UPDATE whitebook_category SET category_allow_sale="'.$status.'" WHERE parent_category_id='.$cat['category_id']);
-            $command->execute();
+		
+			$category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id= '.$cat['category_id']]);	
+			
         }
         if ($status == 'yes') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
@@ -688,11 +694,9 @@ class CategoryController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'yes' ? 'no' : 'yes');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_category SET category_allow_sale="'.$status.'" WHERE category_id='.$data['cid']);
-        $command->execute();
-
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_category SET category_allow_sale="'.$status.'" WHERE parent_category_id='.$data['cid']);
-        $command->execute();
+        
+        $category=Category::updateAll(['category_allow_sale' => $status],['category_id= '.$data['cid']]);
+        $category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id= '.$data['cid']]);
         if ($status == 'yes') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
@@ -722,8 +726,11 @@ class CategoryController extends Controller
         $vendor_id = $vendor[0]['category_id'];
         $vendor_exp = explode(',', $vendor_id);
         $vendor_imp = implode('","', $vendor_exp);
-        $category = Yii::$app->db->createCommand('SELECT category_id, category_name FROM {{%category}} WHERE category_id IN("'.$vendor_imp.'")');
-        $categories = $category->queryAll();
+        $category = Category::findAll([100, 101, 123, 124]);
+        $category  = Customer::find()
+        ->select(['category_id', 'category_name'])
+        ->where(['category_id' => $vendor_imp])
+        ->all();
         echo  '<option value="">Select</option>';
         foreach ($categories as $key => $val) {
             echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
