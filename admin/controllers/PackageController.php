@@ -136,7 +136,6 @@ class PackageController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 echo Yii::$app->session->setFlash('success', 'Package Updated successfully!');
                 Yii::info('[Package Updated] Admin updated '.$model->package_name.' package information', __METHOD__);
-
                 return $this->redirect(['index']);
             } else {
                 return $this->render('update', [
@@ -145,7 +144,6 @@ class PackageController extends Controller
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
             return $this->redirect(['site/index']);
         }
     }
@@ -171,7 +169,6 @@ class PackageController extends Controller
             return $this->redirect(['index']);
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
             return $this->redirect(['site/index']);
         }
     }
@@ -180,9 +177,13 @@ class PackageController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $command = \Yii::$app->db->createCommand('DELETE  FROM whitebook_vendor_packages WHERE id='.$data['packid']);
-
-            return $command->execute();
+            return $sql =Yii::$app->DB->createCommand()->delete('{{%vendor_packages}}', 'id = :packid',['packid' =>$data['packid']])->execute();
+	
+            //$sql =(new \yii\db\Query())->delete('whitebook_vendor_packages', 'id = '.$data['packid']);
+            
+            /*$package = Package::findOne($data['packid']);
+            print_r ($package);die;
+			$package->delete();*/
         }
     }
 
@@ -190,8 +191,8 @@ class PackageController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $command = \Yii::$app->db->createCommand('SELECT * FROM whitebook_vendor_packages WHERE id='.$data['packid']);
-            $output = $command->queryall();
+            $pack_id=$data['packid'];
+            $output= Package::find()->where(['id'=>$pack_id])->asArray()->all();
             foreach ($output as $o) {
                 $id = $o['package_id'];
                 $start = $o['package_start_date'];
@@ -228,8 +229,8 @@ class PackageController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-            $command = \Yii::$app->db->createCommand('UPDATE whitebook_package SET package_status="'.$status.'" WHERE package_id='.$data['id']);
-            $command->execute();
+            Package::updateAll(['package_status' => $status],'package_id= '.$data['id']);
+
             if ($status == 'Active') {
                 return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
             } else {
