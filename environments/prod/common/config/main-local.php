@@ -16,8 +16,8 @@ return [
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.sendgrid.net',
-                'username' => 'sendgridusername',
-                'password' => 'sgridpassword',
+                'username' => 'whitebook',
+                'password' => 'twbsmtpaccesspassword12',
                 'port' => '587',
                 'encryption' => 'tls',
                 'plugins' => [
