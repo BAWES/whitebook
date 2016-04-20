@@ -3,7 +3,9 @@
 namespace admin\controllers;
 
 use Yii;
+use common\models\Vendor;
 use common\models\Featuregroup;
+use common\models\Blockeddate;
 use common\models\FeaturegroupSearch;
 use yii\web\Controller;
 use common\models\Authitem;
@@ -59,7 +61,7 @@ class FeaturegroupController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {
+    {   
         $access = Authitem::AuthitemCheck('4', '17');
         if (yii::$app->user->can($access)) {
             $searchModel = new FeaturegroupSearch();
@@ -203,8 +205,7 @@ class FeaturegroupController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_feature_group SET group_status="'.$status.'" WHERE group_id='.$data['id']);
-        $command->execute();
+        $command=Featuregroup::updateAll(['group_status' => $status],'vendor_id= '.$data['id']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
