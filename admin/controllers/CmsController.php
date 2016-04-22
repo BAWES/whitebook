@@ -197,8 +197,7 @@ class CmsController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_cms SET page_status="'.$status.'" WHERE page_id='.$data['id']);
-        $command->execute();
+        $command=Cms::updateAll(['page_status' => $status],'page_id= '.$data['id']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
