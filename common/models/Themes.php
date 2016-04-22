@@ -145,9 +145,12 @@ class Themes extends \yii\db\ActiveRecord
 		}
 		$id = implode("','", $k);
 		$val = "'".$id."'";
-		$themes = Yii::$app->db->createCommand('SELECT theme_id FROM {{%vendor_item_theme}} WHERE trash="default" and item_id IN('.$val.')');
-        $theme = $themes->queryAll();  
-         return ($theme);die;
+		$theme =  Vendoritemthemes::find()
+        ->select(['theme_id'])
+        ->andwhere(['!=', 'trash', 'Deleted'])
+         ->andwhere(['IN', 'item_id', $val])
+         ->all();
+		return $theme;die;
 	}
 
     // load themes front-end plan page 
