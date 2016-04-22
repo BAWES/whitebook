@@ -103,8 +103,7 @@ class SlideController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_slide SET slide_status="'.$status.'" WHERE slide_id='.$data['cid']);
-        $command->execute();
+        $command=Slide::updateAll(['slide_status' => $status],'slide_id= '.$data['cid']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         }
@@ -125,9 +124,12 @@ class SlideController extends Controller
                 $model->slide_status = $model->slide_status ? 'Active' : 'Deactive';
 
                 //Get Maximum sort order, then increment by 1 for this upload
-                $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_slide` where trash = 'Default'")->asArray()->all();
+                
+                $max_sort = Slide::find()->select('max(sort) as sort')
+				->where(['trash' => 'default'])
+				->asarray()
+				->all();
                 $model->sort = ($max_sort[0]['sort'] + 1);
-
                 //Get Uploaded Instances
                 $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
                 $model->slide_image = UploadedFile::getInstance($model, 'slide_image');
@@ -218,12 +220,10 @@ class SlideController extends Controller
         }
         $ids = implode('","', $data['keylist']);
         if ($data['status'] == 'Delete') {
-            $command = \Yii::$app->db->createCommand('UPDATE whitebook_slide SET trash="Deleted" WHERE slide_id IN("'.$ids.'")');
-            $command->execute();
+			$command=Slide::updateAll(['trash' => 'Deleted'],['IN','slide_id',$ids]);
             echo ($command) ? Yii::$app->session->setFlash('success', 'Slide deleted successfully!') : Yii::$app->session->setFlash('danger', 'Something went wrong');
         } else {
-            $command = \Yii::$app->db->createCommand('UPDATE whitebook_slide SET slide_status="'.$data['status'].'" WHERE slide_id IN("'.$ids.'")');
-            $command->execute();
+            $command=Slide::updateAll(['slide_status' => $data['status']],['IN','slide_id',$ids]);
             echo ($command) ? Yii::$app->session->setFlash('success', 'Slide status updated successfully!') : Yii::$app->session->setFlash('danger', 'Something went wrong');
         }
     }
@@ -232,9 +232,8 @@ class SlideController extends Controller
     {
         $sort = $_POST['sort_val'];
         $slide_id = $_POST['slide_id'];
-        $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_slide SET sort="'.$sort.'" WHERE slide_id='.$slide_id);
-        if ($command->execute()) {
+        $command=Slide::updateAll(['sort' => $sort],['IN','slide_id',$slide_id]);
+        if ($command) {
             Yii::$app->session->setFlash('success', 'Slide sort order updated successfully!');
             echo 1;
             exit;
