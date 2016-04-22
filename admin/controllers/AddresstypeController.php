@@ -2,6 +2,7 @@
 
 namespace admin\controllers;
 
+use yii\helpers\ArrayHelper;
 use Yii;
 use common\models\Addresstype;
 use common\models\Admin;
@@ -61,7 +62,7 @@ class AddresstypeController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {
+    {		
         $access = Authitem::AuthitemCheck('4', '14');
         if (yii::$app->user->can($access)) {
             $searchModel = new AddresstypeSearch();
@@ -203,7 +204,7 @@ class AddresstypeController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_address_type SET status="'.$status.'" WHERE type_id='.$data['cid']);
+        $command=Addresstype::updateAll(['status' => $status],'type_id= '.$data['cid']);
         $command->execute();
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
