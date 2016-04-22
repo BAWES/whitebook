@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use Yii;
 
@@ -73,15 +74,30 @@ class Addresstype extends \yii\db\ActiveRecord
 
 	public static function loadAddresstype()
 	{
-		$command = \Yii::$app->DB->createCommand('SELECT type_id,type_name FROM whitebook_address_type where status="Active" and trash="Default" and not exists (SELECT null FROM whitebook_address_question where address_type_id = whitebook_address_type.type_id and trash="Default")');
-		$Addresstype=$command->queryall();
+		
+		$subQuery = (new Query())
+                ->select('*')
+                ->from('{{%address_question}} t')
+                ->where('t.address_type_id = p2.type_id')
+                ->andwhere('t.trash = "Default"');
+		$query = (new Query())
+                ->select(['type_id','type_name'])
+                ->from('{{%address_type}} p2')
+                ->where(['exists', $subQuery])
+                ->andwhere(['status'=> 'Active'])
+                ->andwhere(['trash'=> 'Default']);
+        $command = $query->createCommand();
+		$Addresstype=($command->queryall());
+		
 		$Addresstype=ArrayHelper::map($Addresstype,'type_id','type_name');
 		return $Addresstype;
 	}
 		public static function loadAddress()
 	{
-		$command = \Yii::$app->DB->createCommand('SELECT type_id,type_name FROM whitebook_address_type where status="Active" ');
-		$Addresstype=$command->queryall();
+		$Addresstype = Addresstype::find()
+		->select(['type_id','type_name'])
+		->where(['status'=>'Active'])->asarray()->all();
+		
 		$Addresstype=ArrayHelper::map($Addresstype,'type_id','type_name');
 		return $Addresstype;
 	}
@@ -90,6 +106,4 @@ class Addresstype extends \yii\db\ActiveRecord
 		$model = Addresstype::find()->where(['type_id'=>$id])->one();
         return $model->type_name;
     }
-
-
 }
