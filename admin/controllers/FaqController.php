@@ -102,8 +102,12 @@ class FaqController extends Controller
         if (yii::$app->user->can($access)) {
             $model = new Faq();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_faq` where trash = 'Default'")->asArray()->all();
-                $sort = ($max_sort[0]['sort'] + 1);
+				
+				$max_sort = Faq::find()
+                ->select('max(sort) as sort')
+				->where(['trash' => 'default'])
+				->one();
+                $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'FAQ Created successfully!');
@@ -181,10 +185,8 @@ class FaqController extends Controller
     {
         $sort = $_POST['sort_val'];
         $faq_id = $_POST['faq_id'];
-        $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_faq SET sort="'.$sort.'" WHERE faq_id='.$faq_id);
-
-        if ($command->execute()) {
+        $command=Faq::updateAll(['sort' => $sort],'faq_id= '.$faq_id);
+        if ($command) {
             Yii::$app->session->setFlash('success', 'FAQ sort order updated successfully!');
             echo 1;
             exit;
@@ -219,8 +221,7 @@ class FaqController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_faq SET faq_status="'.$status.'" WHERE faq_id='.$data['id']);
-        $command->execute();
+        $command=Faq::updateAll(['faq_status' => $status],'faq_id= '.$data['id']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         }
