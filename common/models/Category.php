@@ -68,7 +68,7 @@ class Category extends \yii\db\ActiveRecord
     
     public function scenarios()
     {
-		      $scenarios = parent::scenarios();      
+		$scenarios = parent::scenarios();      
         $scenarios['sub_update'] = ['parent_category_id','category_name',];//Scenario Values Only Accepted
         return $scenarios;
     }
