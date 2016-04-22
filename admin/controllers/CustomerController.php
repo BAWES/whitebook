@@ -97,10 +97,7 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
-        $command = \Yii::$app->DB->createCommand(
-        'UPDATE `whitebook_customer` SET `message_status`="0" WHERE customer_id='.$id);
-        $command->execute();
-
+		$command=Customer::updateAll(['message_status' => 0],'customer_id= '.$id);
         $model1 = CustomerAddress::find()
         ->where('customer_id = :customer_id', [':customer_id' => $id])->one();
 
@@ -202,9 +199,7 @@ class CustomerController extends Controller
           $access = Authitem::AuthitemCheck('3', '26');
           if (yii::$app->user->can($access)) {
               $model = $this->findModel($id);
-              $sql = 'DELETE from  whitebook_customer WHERE customer_id='.$id;
-              $command = \Yii::$app->DB->createCommand($sql);
-              if ($command->execute()) {
+              if ($this->findModel($id)->delete()) {
                   echo Yii::$app->session->setFlash('success', 'Customer deleted successfully!');
 
                   return $this->redirect(['index']);
@@ -239,8 +234,7 @@ class CustomerController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_customer SET customer_status="'.$status.'" WHERE customer_id='.$data['id']);
-        $command->execute();
+        $command=Customer::updateAll(['customer_status' => $status],'customer_id= '.$data['id']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
