@@ -204,8 +204,7 @@ class ThemesController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_theme SET theme_status="'.$status.'" WHERE theme_id='.$data['id']);
-        $command->execute();
+		$command=Themes::updateAll(['theme_status' => $status],'theme_id= '.$data['id']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
