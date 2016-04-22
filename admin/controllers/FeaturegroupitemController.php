@@ -88,10 +88,8 @@ class FeaturegroupitemController extends Controller
     {
         $sort = $_POST['sort_val'];
         $featured_id = $_POST['featured_id'];
-        $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_feature_group_item SET featured_sort="'.$sort.'" WHERE featured_id='.$featured_id);
-
-        if ($command->execute()) {
+         $command=Featuregroupitem::updateAll(['featured_sort' => $sort],'featured_id= '.$featured_id);
+        if ($command) {
             Yii::$app->session->setFlash('success', 'Sort order updated successfully!');
             echo 1;
             exit;
@@ -145,9 +143,15 @@ class FeaturegroupitemController extends Controller
 
                     return $this->redirect(['index']);
                 }
+                
                 $model->featured_start_date = Setdateformat::convert($model->featured_start_date);
                 $model->featured_end_date = Setdateformat::convert($model->featured_end_date);
-                $max_sort = $model->findBysql("SELECT MAX(`featured_sort`) as sort FROM `whitebook_feature_group_item` where trash = 'Default' ")->asArray()->all();
+                $max_sort = Featuregroupitem::find()
+                ->select('max(featured_sort) as sort')
+				->where(['parent_category_id' => null])
+				->andwhere(['trash' => 'default'])
+				->andwhere(['category_level' => '0'])
+				->one();
                 $sort = ($max_sort[0]['sort'] + 1);
             // }
             $model->featured_sort = $sort;
@@ -337,8 +341,7 @@ class FeaturegroupitemController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE {{%feature_group_item}} SET group_item_status="'.$status.'" WHERE featured_id='.$data['id']);
-        $command->execute();
+        $command=Featuregroupitem::updateAll(['group_item_status' => $status],'featured_id= '.$data['id']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
