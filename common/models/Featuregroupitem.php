@@ -151,7 +151,6 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     $command = $query->createCommand();
     $data = $command->queryAll();	
     return ($data);
-
 	}
 
     public static function get_featured_product_id() {
@@ -159,7 +158,18 @@ class Featuregroupitem extends \yii\db\ActiveRecord
         return $p_id = $db->cache(function ($db) {
             $today = date('Y-m-d H:i:s');
             $today_date = date('Y-m-d');
-            $db->createCommand(
+            
+            $vendor = Featuregroupitem::find()
+    ->select('{{%feature_group_item}}.item_id')
+    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%feature_group_item}}.vendor_id')
+    ->where(['{{%feature_group_item}}.group_item_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor}}.approve_status' => 'Yes'])
+    ->andwhere(['<=','{{%vendor}}.package_start_date',$today])
+    ->andwhere(['>=','{{%vendor}}.package_end_date',$today])
+    ->andwhere(['<=','{{%feature_group_item}}.featured_start_date',$today_date])
+    ->andwhere(['>=','{{%feature_group_item}}.featured_end_date',$today_date])
+    ->all();
+    
+           /* $db->createCommand(
                     'SELECT whitebook_feature_group_item.item_id FROM whitebook_feature_group_item
         JOIN whitebook_vendor on whitebook_vendor.vendor_id=whitebook_feature_group_item.vendor_id
         WHERE whitebook_feature_group_item.group_item_status="Active"
@@ -169,18 +179,26 @@ class Featuregroupitem extends \yii\db\ActiveRecord
         AND whitebook_vendor.package_start_date<="' . $today . '"
         AND whitebook_vendor.package_end_date>="' . $today . '"
         AND whitebook_feature_group_item.featured_start_date<="' . $today_date . '"
-        AND whitebook_feature_group_item.featured_end_date>="' . $today_date . '"')->queryAll();
+        AND whitebook_feature_group_item.featured_end_date>="' . $today_date . '"')->queryAll();*/
         });
     }
 
     public static function get_featured_product() {
         $today = date('Y-m-d H:i:s');
+        
+        $feature = Vendoritem::find()
+    ->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.slug as slug','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit','{{%vendor}}.vendor_name'])
+    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
+    ->where(['{{%vendor_item}}.item_status' => 'Active'])
+    ->all();
+        /*
         $sql = 'SELECT item_id,whitebook_vendor_item.slug as slug,item_name,item_price_per_unit,vendor_name FROM whitebook_vendor_item
         JOIN whitebook_vendor on whitebook_vendor.vendor_id=whitebook_vendor_item.vendor_id
         JOIN whitebook_category on whitebook_category.category_id=whitebook_vendor_item.category_id
             WHERE whitebook_vendor_item.item_status="Active"';
         $command = Yii::$app->DB->createCommand($sql);
-        $feature = $command->queryAll();
+        $feature = $command->queryAll();*/
 
         return $feature;
     }
