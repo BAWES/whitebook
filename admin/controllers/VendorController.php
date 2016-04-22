@@ -435,7 +435,6 @@ class VendorController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        // Upload from siva
         $user_start_date = ($data['start_date']);
         $user_end_date = ($data['end_date']);
         if (strtotime($data['start_date']) <= strtotime($data['end_date'])) {
