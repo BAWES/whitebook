@@ -220,8 +220,8 @@ class LocationController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_location SET status="'.$status.'" WHERE id='.$data['lid']);
-        $command->execute();
+        $command=Location::updateAll(['status' => $status],'id= '.$data['lid']);
+        
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
