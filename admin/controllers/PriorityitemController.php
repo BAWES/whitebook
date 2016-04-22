@@ -124,9 +124,11 @@ class PriorityitemController extends Controller
             $category = Category::loadcategoryname();
             $subcategory = Subcategory::loadsubcategoryname();
             $childcategory = ChildCategory::loadchild();
-            $sql = 'SELECT item_id,item_name FROM whitebook_vendor_item where item_status="Active" and item_for_sale="yes" and trash="Default"';
-            $priority = Yii::$app->db->createCommand($sql);
-            $priority = $priority->queryAll();
+            $priority = Vendoritem::find()->select('item_id','item_name')
+            ->where(['item_status' => 'Active'])
+            ->andwhere(['item_for_sale' => 'yes'])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+			->all();
             $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
                 $model->priority_start_date = Setdateformat::convert($model->priority_start_date);
@@ -166,8 +168,12 @@ class PriorityitemController extends Controller
             $subcategory = Subcategory::loadsubcategoryname();
             $childcategory = ChildCategory::loadchild();
             $vendorpriorityitem = Vendoritem::vendorpriorityitemitem($model->item_id);
-            $priorityitemdetail = Yii::$app->db->createCommand('SELECT item_id,item_name FROM whitebook_vendor_item where item_for_sale="yes" and item_status="Active" and trash="Default"');
-            $priority = $priorityitemdetail->queryAll();
+            
+            $priority = Vendoritem::find()->select('item_id','item_name')
+            ->where(['item_status' => 'Active'])
+            ->andwhere(['item_for_sale' => 'yes'])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+			->all();
             $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
                 $model->priority_start_date = Setdateformat::convert($model->priority_start_date);
@@ -201,14 +207,11 @@ class PriorityitemController extends Controller
          {
              $access = Authitem::AuthitemCheck('3', '19');
              if (yii::$app->user->can($access)) {
-                 $command = \Yii::$app->db->createCommand('UPDATE whitebook_priority_item SET trash="Deleted" WHERE priority_id =("'.$id.'")');
-                 $command->execute();
+				 $command=Priorityitem::updateAll(['trash' => 'Deleted'],'priority_id= '.$id);
                  echo Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');
-
                  return $this->redirect(['index']);
              } else {
                  echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
                  return $this->redirect(['site/index']);
              }
          }
@@ -292,12 +295,15 @@ class PriorityitemController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $category = Yii::$app->db->createCommand('SELECT item_id,item_name FROM whitebook_vendor_item where whitebook_vendor_item.item_status="Active" and whitebook_vendor_item.trash="Default"
-		 and whitebook_vendor_item.category_id='.$data['id2'].'
-		 and whitebook_vendor_item.subcategory_id='.$data['id3'].'
-		 and whitebook_vendor_item.child_category='.$data['id4'].'
-         and 1');
-        $itemlist = $category->queryAll();
+        $itemlist = Vendoritem::find()->select('item_id','item_name')
+            ->where(['item_status' => 'Active'])
+            ->andwhere(['item_for_sale' => 'yes'])
+            ->andwhere(['category_id' => $data['id2']])
+            ->andwhere(['subcategory_id' => $data['id3']])
+            ->andwhere(['child_category' => $data['id4']])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+			->all();
+        //$itemlist = $category->queryAll();
         $count = count($itemlist);
         if (($count < 20) && ($count > 0)) {
         } else {
@@ -314,8 +320,12 @@ class PriorityitemController extends Controller
             $data = Yii::$app->request->post();
         }
         if ($data['item']):
-         $datetime = Yii::$app->db->createCommand("SELECT priority_start_date,priority_end_date FROM whitebook_priority_item where trash='Default' and priority_id != ".$data['priority_id'].' and item_id='.$data['item']);
-        $datetime = $datetime->queryAll();
+			
+			$datetime = Vendoritem::find()->select('priority_start_date','priority_end_date')
+            ->where(['priority_id' => $data['priority_id']])
+            ->andwhere(['item_id' => $data['item']])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+			->all();
         $k = '';
         $k1 = '';
         foreach ($datetime as $d) {
@@ -385,17 +395,15 @@ class PriorityitemController extends Controller
         }
         $ids = implode('","', $data['keylist']);
         if ($data['status'] == 'Normal') {
-            $command = \Yii::$app->db->createCommand('UPDATE whitebook_priority_item SET priority_level="Normal" WHERE priority_id IN("'.$ids.'")');
-            $command->execute();
+			$command=Priorityitem::updateAll(['priority_level' => 'Normal'],['IN', 'priority_id', $ids]);
             if ($command) {
                 echo Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
                 echo Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } elseif ($data['status'] == 'Super') {
-            $command = \Yii::$app->db->createCommand('UPDATE whitebook_priority_item SET priority_level="Super" WHERE priority_id IN("'.$ids.'")');
-            $command->execute();
-            if ($command) {
+			$command=Priorityitem::updateAll(['priority_level' => 'Super'],['IN', 'priority_id', $ids]);
+			if ($command) {
                 echo Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
                 echo Yii::$app->session->setFlash('danger', 'Something went wrong');
@@ -409,8 +417,7 @@ class PriorityitemController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Inactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_priority_item SET status="'.$status.'" WHERE priority_id='.$data['aid']);
-        $command->execute();
+        $command=Priorityitem::updateAll(['priority_level' => $status],['priority_id'=>$data['aid']]);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
