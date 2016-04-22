@@ -61,7 +61,6 @@ class EventtypeController extends Controller
         if (yii::$app->user->can($access)) {
             $searchModel = new EventtypeSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
             return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
