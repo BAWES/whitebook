@@ -72,10 +72,9 @@ class AddressquestionController extends Controller
     {
         $sort = $_POST['sort_val'];
         $ques_id = $_POST['ques_id'];
-        $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_address_question SET sort="'.$sort.'" WHERE ques_id='.$ques_id);
+         $command=Addressquestion::updateAll(['sort' => $sort],'ques_id= '.$ques_id);
 
-        if ($command->execute()) {
+        if ($command) {
             Yii::$app->session->setFlash('success', 'Questions sort order updated successfully!');
             echo 1;
             exit;
@@ -91,8 +90,7 @@ class AddressquestionController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_address_question SET status="'.$status.'" WHERE ques_id='.$data['cid']);
-        $command->execute();
+        $command=Addressquestion::updateAll(['status' => $status],'ques_id= '.$data['cid']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
@@ -163,9 +161,7 @@ class AddressquestionController extends Controller
                 if ($ques && $i < count($Addressquestion)) {
                     $model->address_type_id;
                     $model->question[$i];
-                    $command = \Yii::$app->db->createCommand('UPDATE whitebook_address_question SET question="'.$model->question[$i].'",
-                    address_type_id="'.$model->address_type_id.'"  WHERE ques_id="'.$Addressquestion[$i]['ques_id'].'"');
-                    $command->execute();
+                    $command=Addressquestion::updateAll(['question' => $model->question[$i],'address_type_id'=>$model->address_type_id],'ques_id= '.$Addressquestion[$i]['ques_id']);
                 } elseif ($ques) {
                     $models = new AddressQuestion();
                     $models->address_type_id = $model->address_type_id;
