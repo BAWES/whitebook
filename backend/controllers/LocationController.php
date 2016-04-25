@@ -158,8 +158,7 @@ class LocationController extends Controller
 		if(Yii::$app->request->isAjax)
 		$data = Yii::$app->request->post();
 		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-		$command = \Yii::$app->db->createCommand('UPDATE whitebook_location SET status="'.$status.'" WHERE id='.$data['lid']);
-		$command->execute();
+		$command=Location::updateAll(['status' => $status],['id= '.$data['id']]);
 		if($status == 'Active')
 			{
 			echo Yii::$app->session->setFlash('success', "Area status updated!");
