@@ -78,8 +78,8 @@ class DeliverytimeslotController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
              $start  = date("H:i", strtotime($model->timeslot_start_time));
              $end  = date("H:i", strtotime($model->timeslot_end_time));
-            echo $model->timeslot_start_time=$start;
-            echo $model->timeslot_end_time=$end;
+             $model->timeslot_start_time=$start;
+             $model->timeslot_end_time=$end;
              $model->save();
             echo Yii::$app->session->setFlash('success', "Delivery time slot created successfully!");
             return $this->redirect(['index']);
@@ -165,17 +165,21 @@ else {
    echo "1";
    die;
 }
-          $update=$data['update'];
-          if($update==0){
-            $sql="SELECT DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start , DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1 FROM `whitebook_vendor_delivery_timeslot` WHERE timeslot_day=".$day;
-$not_exists = Yii::$app->db->createCommand($sql);
-}else{
 
-            $sql="SELECT DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start , DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1 FROM `whitebook_vendor_delivery_timeslot` WHERE timeslot_day=".$day." and timeslot_id!=".$update;
-    $not_exists = Yii::$app->db->createCommand($sql);
-    $not_exists = Yii::$app->db->createCommand($sql);
+
+		
+          if($update==0){
+				$result = Deliverytimeslot::find()->select(["DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start","DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1"])
+				->where(['timeslot_day' => $day])
+				->asArray()
+				->one();
+}else{
+	$result = Deliverytimeslot::find()->select(["DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start","DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1"])
+		->where(['timeslot_day' => $day])
+		->andwhere(['!=','timeslot_day', $day])
+		->asArray()->one();
 }
-       $result = $not_exists->queryAll();
+       
  $dt1 = $data['start'];
  $dt2 = $data['end'];
 $k=array();
