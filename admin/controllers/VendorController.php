@@ -11,6 +11,7 @@ use common\models\Vendor;
 use common\models\Authitem;
 use common\models\Category;
 use common\models\VendorSearch;
+use common\models\Vendorpackages;
 use common\models\Package;
 use common\models\VendoritemcapacityexceptionSearch;
 use common\models\VendoritemSearch;
@@ -448,9 +449,9 @@ class VendorController extends Controller
         }
         $package_pricing = Package::loadpackageprice($data['id']);
         $package_name = Package::PackageData($data['id']);
-        
-        $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select()->where(['vendor_id' => $data['vid']])->all();
-        
+        $datetime = Vendorpackages::find()->where(['vendor_id' => $data['vid']])->asArray()->all();
+        /*$datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select()->where(['vendor_id' => $data['vid']])->all();*/
+        //print_r($datetime);die;
         
         foreach ($datetime as $d) {
             $date = $date1 = $d['package_start_date'];
@@ -556,7 +557,7 @@ class VendorController extends Controller
         }
         if ($data['id']):
         
-        $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['package_start_date','package_end_date','customer_name'])->where(['vendor_id' => $data['vid']])->all();
+        $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['package_start_date','package_end_date'])->where(['vendor_id' => $data['id']])->all();
         $k = array();
         foreach ($datetime as $d) {
             $date = $d['package_start_date'];
