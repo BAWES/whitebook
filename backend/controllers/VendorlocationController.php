@@ -13,7 +13,7 @@ use common\models\Location;
 use common\models\City;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
-
+use yii\db\Query;
 
 /**
  * VendorlocationController implements the CRUD actions for vendorlocation model.
@@ -47,7 +47,7 @@ class VendorlocationController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new vendorlocationSearch();
+		$searchModel = new vendorlocationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -97,8 +97,17 @@ class VendorlocationController extends Controller
             $city_tbl = City::find()->where(['country_id' => 136])->all();
             $city=ArrayHelper::map($city_tbl,'city_id','city_name');
 
-            $cities = Yii::$app->db->createCommand('SELECT * FROM whitebook_city as wc JOIN whitebook_location as wl ON wc.city_id = wl.city_id
-                    where wc.status = "Active" and wl.trash = "Default" and wl.status = "Active" group by wl.city_id')->queryAll();
+		$query = new Query;
+		$query->select()  
+	->from('{{%city}}')
+	->join('LEFT JOIN', '{{%location}}','{{%city}}.city_id ={{%location}}.city_id')
+	->where('{{%city}}.status ="Active"')			
+	->andwhere('{{%location}}.trash ="Default"')			
+	->andwhere('{{%location}}.status ="Active"')
+	->groupby('{{%location}}.city_id');
+	$command = $query->createCommand();
+	$cities = $command->queryAll();
+
 
             $country=ArrayHelper::map($countries,'country_id','country_name');
             return $this->render('create', [
@@ -116,10 +125,17 @@ class VendorlocationController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+		$query = new Query;
+		$query->select()  
+	->from('{{%city}}')
+	->join('LEFT JOIN', '{{%location}}','{{%city}}.city_id ={{%location}}.city_id')
+	->where('{{%city}}.status ="Active"')			
+	->groupby('{{%location}}.city_id');
+	$command = $query->createCommand();
+	$cities = $command->queryAll();
+	
         if ($model->load(Yii::$app->request->post())) {
-            $cities = Yii::$app->db->createCommand('SELECT * FROM whitebook_city as wc JOIN whitebook_vendor_location as wvl ON wc.city_id = wvl.city_id
-        where wc.status = "Active"  group by wvl.city_id')->queryAll();
+
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -169,11 +185,16 @@ class VendorlocationController extends Controller
             return $this->redirect(['edit']);
 
         }
-
-        $cities = Yii::$app->db->createCommand('SELECT * FROM whitebook_city as wc JOIN whitebook_location as wl ON wc.city_id = wl.city_id
-                    where wc.status = "Active" and wl.trash = "Default" and wl.status = "Active" group by wl.city_id')->queryAll();
-
-
+		$query = new Query;
+		$query->select(['{{%city}}.*'])
+		->from('{{%city}}')
+		->join('LEFT JOIN', '{{%location}}','{{%city}}.city_id ={{%location}}.city_id')
+		->where('{{%city}}.status ="Active"')			
+		->andwhere('{{%location}}.trash ="Default"')			
+		->andwhere('{{%location}}.status ="Active"')
+		->groupby('{{%location}}.city_id');
+	$command = $query->createCommand();
+	$cities = $command->queryAll();
             return $this->render('edit', [
                 'model' => $model, 'cities' => $cities,
             ]);
