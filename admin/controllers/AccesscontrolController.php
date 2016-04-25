@@ -6,6 +6,7 @@ use Yii;
 use yii\db\Query;
 use common\models\Usercontroller;
 use common\models\Accesscontroller;
+use common\models\Authassignment;
 use common\models\Admin;
 use common\models\AccesscontrolSearch;
 use yii\web\Controller;
@@ -105,12 +106,16 @@ class AccesscontrolController extends Controller
             $admin = Admin::admin();
             $authitem = Authitem::Authitem();
             if ($_POST) {
+				//print_r ($_POST);die;
+				$model->load(Yii::$app->request->post());
+				//print_r ($_POST['Accesscontroller']['admin_id']);die;
+				//print_r ($model->admin_id);die;
                 $model->load(Yii::$app->request->post());
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
-                $command =Accesscontroller::deleteAll(['admin_id' => $admin_id]);
-                $command =Authassignment::deleteAll(['user_id' => $admin_id]);
+                $command =Accesscontroller::deleteAll(['admin_id' => $adminid]);
+                $command1 =Authassignment::deleteAll(['user_id' => $adminid]);
                 $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
                 $p = 1;
                 foreach ($model->controller as $key => $val) {
@@ -118,6 +123,7 @@ class AccesscontrolController extends Controller
                         $controller_id = $create = $update = $view = $delete = $manage = '';
                         $auth_assign = new Authassignment;
                         foreach ($val as $k => $v) {
+							$timenow = date('Y-m-d h:i:sa');
                             switch ($k) {
                                 case 'controller_id':
                                 $controller_id = $v;
@@ -128,7 +134,8 @@ class AccesscontrolController extends Controller
 									$auth_assign->item_name = $create;
 									$auth_assign->user_id = $adminid;
 									$auth_assign->controller_id = $controller_id;
-									$auth_assign->insert();
+									//$auth_assign->modified_datetime = $timenow;
+									$auth_assign->save();
                                 }
                                 break;
                                 case 'update':
@@ -137,7 +144,7 @@ class AccesscontrolController extends Controller
                                 $auth_assign->item_name = $v;
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
-								$auth_assign->insert();
+								$auth_assign->save();
                                 }
                                 break;
                                 case 'delete':
@@ -146,7 +153,7 @@ class AccesscontrolController extends Controller
                                 $auth_assign->item_name = $v;
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
-								$auth_assign->insert();
+								$auth_assign->save();
                                 }
                                 break;
                                 case 'manage':
@@ -155,7 +162,7 @@ class AccesscontrolController extends Controller
                                 $auth_assign->item_name = $v;
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
-								$auth_assign->insert();
+								$auth_assign->save();
                                 }
                                 break;
 
@@ -165,7 +172,7 @@ class AccesscontrolController extends Controller
                                 $auth_assign->item_name = $v;
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
-								$auth_assign->insert();
+								$auth_assign->save();
                                 }
                                 break;
                             }
@@ -174,17 +181,18 @@ class AccesscontrolController extends Controller
                         $userid = Admin::getAdmin('id');
                         if ($controller_id != '') {
 						$access_ctrl=new Accesscontroller;
-                        $access_ctrl->role_id = $roleid;
-						$access_ctrl->admin_id = $adminid;
-						$access_ctrl->controller = $controller_id;
-                        $access_ctrl->create = $create;
-                        $access_ctrl->update = $update;
-						$access_ctrl->delete = $delete;
-						$access_ctrl->manage = $manage;
-                        $access_ctrl->view = $view;
-						$access_ctrl->created_by = $userid;
-						$access_ctrl->created_datetime = $timenow;
-						$auth_assign->insert();
+                         $access_ctrl->role_id = $roleid;
+						 $access_ctrl->admin_id = $adminid;
+						 $access_ctrl->controller = $controller_id;
+                         $access_ctrl->create = $create;
+                         $access_ctrl->update = $update;
+						 $access_ctrl->delete = $delete;
+						 $access_ctrl->manage = $manage;
+                         $access_ctrl->view = $view;
+						 $access_ctrl->created_by = $userid;
+						 $access_ctrl->created_datetime = $timenow;
+						$access_ctrl->validate();
+						$access_ctrl->save();
                         }
                     }
                 }
@@ -223,6 +231,7 @@ class AccesscontrolController extends Controller
             $accesslist = \Yii::$app->DB->createCommand("SELECT whitebook_controller.controller,whitebook_controller.id,`create`,`update`,`delete`,`manage`,`view` FROM whitebook_access_control LEFT JOIN whitebook_controller ON whitebook_controller.id = whitebook_access_control.controller WHERE admin_id = $admin_id AND role_id =$model->role_id ORDER BY whitebook_access_control.controller ASC")->queryall();
             $model->admin_id = $model->admin_id.'_'.$model->role_id;
             if ($_POST) {
+				$model->load(Yii::$app->request->post());
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
@@ -245,7 +254,7 @@ class AccesscontrolController extends Controller
 									$auth_assign->item_name = $create;
 									$auth_assign->user_id = $adminid;
 									$auth_assign->controller_id = $controller_id;
-									$auth_assign->insert();
+									$auth_assign->save();
 
                                 break;
                                 case 'update':
@@ -253,14 +262,14 @@ class AccesscontrolController extends Controller
                                 $auth_assign->item_name = $v;
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
-								$auth_assign->insert();
+								$auth_assign->save();
                                 break;
                                 case 'delete':
                                 $delete = $v;
                                 $auth_assign->item_name = $v;
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
-								$auth_assign->insert();
+								$auth_assign->save();
                                 
                                 break;
                                 case 'manage':
@@ -268,20 +277,20 @@ class AccesscontrolController extends Controller
 								$auth_assign->item_name = $v;
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
-								$auth_assign->insert();
+								$auth_assign->save();
                                 break;
                                 case 'view':
                                 $view = $v;
 								$auth_assign->item_name = $v;
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
-								$auth_assign->insert();
+								$auth_assign->save();
                                 break;
                             }
                         }
                         $timenow = date('Y-m-d h:i:sa');
                         $userid = Admin::getAdmin('id');
-                        $access_ctrl=new Accesscontroller;
+                        $access_ctrl=new Accesscontroller();
                         $access_ctrl->role_id = $roleid;
 						$access_ctrl->admin_id = $adminid;
 						$access_ctrl->controller = $controller_id;
@@ -292,7 +301,7 @@ class AccesscontrolController extends Controller
                         $access_ctrl->view = $view;
 						$access_ctrl->created_by = $userid;
 						$access_ctrl->created_datetime = $timenow;
-						$auth_assign->insert();
+						$access_ctrl->save();
                     }
                 }
                 echo Yii::$app->session->setFlash('success', 'Access controller Updated successfully!');
