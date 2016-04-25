@@ -395,6 +395,7 @@ class CategoryController extends Controller
 
     public function actionSubcategory_update($id)
     {
+		
         $access = Authitem::AuthitemCheck('2', '3');
         if (yii::$app->user->can($access)) {
             $model = $this->findsubModel($id);
@@ -423,8 +424,10 @@ class CategoryController extends Controller
             } else {
                 $subcategory = SubCategory::find()
             ->where(['parent_category_id' => null])
+            //->asArray()
             ->all();
                 $subcategory = ArrayHelper::map($subcategory, 'category_id', 'category_name');
+                //print_r ($subcategory);die;
 
                 return $this->render('subcategory_update', ['model' => $model, 'subcategory' => $subcategory, 'userid' => $userid, 'id' => $id]);
             }
@@ -536,7 +539,6 @@ class CategoryController extends Controller
                 return $this->redirect(['index']);
             } else {
                 echo Yii::$app->session->setFlash('success', 'Category delete failed!');
-
                 return $this->redirect(['index']);
             }
         } else {
@@ -579,9 +581,7 @@ class CategoryController extends Controller
             $parentcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $id])->all();
             if (count($parentcategory)) {
                 $subcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $parentcategory[0]['category_id']])->all();
-                
-                $command = \Yii::$app->DB->createCommand('UPDATE whitebook_category SET trash="Deleted" WHERE category_id='.$parentcategory[0]['category_id']);
-                $command->execute();
+                $command=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$parentcategory[0]['category_id']]);
             }
             $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$id]);
             if ($category) {
