@@ -185,9 +185,7 @@ class FeaturegroupitemController extends Controller
         return $this->redirect(['index']);
 				 }
 			$model->save();
-			 $command = \Yii::$app->DB->createCommand(
-			'UPDATE whitebook_vendor_item_theme SET theme_id="'.$theme_id.'",item_id="'.$item_id.'" WHERE id='.$id);
-			$command->execute();
+			$command=Vendoritemthemes::updateAll(['theme_id' => $theme_id,'item_id' => $item_id],['id= '.$id]);
 			echo Yii::$app->session->setFlash('success', "Feature Froup item Updated successfully!");
             return $this->redirect(['index']);
         } else {
@@ -208,9 +206,7 @@ class FeaturegroupitemController extends Controller
     public function actionDelete($id)
     {
 		$model = $this->findModel($id);
-		$command = \Yii::$app->DB->createCommand(
-		'UPDATE whitebook_feature_group_item SET trash="Deleted" WHERE featured_id='.$id);
-		$command->execute();
+		$command=Featuregroupitem::updateAll(['trash' => 'Deleted'],['featured_id= '.$id]);
 		echo Yii::$app->session->setFlash('success', "Feature group item deleted successfully!");
         return $this->redirect(['index']);
     }
