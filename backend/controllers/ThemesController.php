@@ -141,8 +141,7 @@ class ThemesController extends Controller
         if(Yii::$app->request->isAjax)
         $data = Yii::$app->request->post();
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_theme SET theme_status="'.$status.'" WHERE theme_id='.$data['id']);
-        $command->execute();
+        $command=Themes::updateAll(['theme_status' => $status],['vendor_id= '.$data['id']]);
         if($status == 'Active')
         {
             echo Yii::$app->session->setFlash('success', "Theme status updated!");
@@ -153,6 +152,5 @@ class ThemesController extends Controller
             echo Yii::$app->session->setFlash('success', "Theme status updated!");
             return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/inactive.png');
         }
-
     }
 }
