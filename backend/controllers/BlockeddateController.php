@@ -117,8 +117,8 @@ class BlockeddateController extends Controller
         if($model->saturday!=6)
         { $model->saturday=null;}
         $days=$model->sunday.$model->monday.$model->tuesday.$model->wednesday.$model->thursday.$model->friday.$model->saturday;
-        $sql='UPDATE whitebook_vendor SET blocked_days="'.$days.'" WHERE vendor_id='.$model->vendor_id;
-        $command = \Yii::$app->db->createCommand($sql)->execute();
+        $category=Vendor::updateAll(['blocked_days' => $days],['vendor_id'=>$model->vendor_id]);
+
            echo Yii::$app->session->setFlash('success', "Blocked weekday created successfully!");
             return $this->redirect(['createweek']);
         } else {
