@@ -59,13 +59,14 @@ class VendoritemController extends Controller
      */
     public function actionIndex()
     {
-
         $searchModel = new VendoritemSearch();
         $dataProvider = $searchModel->searchVendor(Yii::$app->request->queryParams);
         $vendr_id=Vendor::getVendor('vendor_id');
-
-        $not_exists = Yii::$app->db->createCommand('SELECT category_id FROM whitebook_vendor where vendor_id!='.$vendr_id);
-        $result = $not_exists->queryAll();
+		$result= Vendor::find()
+			->select(['category_id'])
+			->where(['!=','vendor_id', $vendr_id])
+			->asArray()
+			->All();
         $out1[]= array();
         $out2[]= array();
         foreach ($result as $r)
@@ -95,11 +96,12 @@ class VendoritemController extends Controller
         }
         }
         $res= "('" . implode("','", $p) . "')";
-         $sql1='SELECT category_id,category_name FROM whitebook_category where  whitebook_category.category_allow_sale="Yes" and whitebook_category.category_level="0" and  whitebook_category.trash = "Default"
-         and category_id  IN '.$res;
-        $category_sql1 = Yii::$app->db->createCommand($sql1);
-
-        $cat_id1 = $category_sql1->queryAll();
+        $cat_id1= Category::find()
+			->select(['category_id','category_name'])
+			->where(['category_level' => '0'])
+			->andwhere(['trash' => 'Default'])
+			->andwhere(['IN', 'category_id', $res])
+			->asArray()->all();
         $cat_val1[]=0;
         foreach($cat_id1 as $key=>$val)
         {
@@ -120,10 +122,9 @@ class VendoritemController extends Controller
      */
     public function actionView($id)
     {
-
-		$command = \Yii::$app->DB->createCommand('SELECT priority_level,priority_start_date,priority_end_date FROM whitebook_priority_item where FIND_IN_SET('.$id.', item_id)');
-		$dataProvider1=$command->queryall();
-
+			$dataProvider1=Priorityitem::find()
+			->select(['priority_level','priority_start_date','priority_end_date'])
+			->where(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
 		$model_question = Vendoritemquestion::find()
 		->where(['item_id'=>$id,'answer_id'=>null,'question_answer_type'=>'selection'])
 		->orwhere(['item_id'=>$id,'question_answer_type'=>'text','answer_id'=>null])
@@ -135,7 +136,6 @@ class VendoritemController extends Controller
         return $this->render('view', [
             'model'=> $this->findModel($id),'dataProvider1'=>$dataProvider1,'model_question'=>$model_question,'imagedata'=>$imagedata,
         ]);
-
     }
 
     /**
@@ -150,9 +150,8 @@ class VendoritemController extends Controller
         $vendor = Vendor::find()->select('category_id')->where(['vendor_id'=>Vendor::getVendor('vendor_id')])->one();
         $cat_id = explode(',',$vendor['category_id']);
 
-        $load_category = Yii::$app->db->createCommand('SELECT category_id, category_name FROM whitebook_category
-								WHERE category_allow_sale="Yes" and trash = "Default" and category_level="0" and category_id IN('.$vendor['category_id'].')');
-        $load_category = $load_category->queryAll();
+		$load_category = Category::find()->select('category_id','category_name')->where(['category_allow_sale'=>'Yes','category_level'=>'0','trash'=>'Default'])
+		->andwhere(['IN','category_id',$vendor['category_id']])->asArray()->queryAll();
         $categoryname=ArrayHelper::map($load_category,'category_id','category_name');
 
         $model1 = new Image();
@@ -175,7 +174,7 @@ class VendoritemController extends Controller
 			}
 			/* END Scenario if item for sale is no not required below four fields */
     // get the max sort order
-			$max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_vendor_item` where trash = 'Default' and vendor_id=".$model->vendor_id)->asArray()->all();
+			$max_sort = Vendoritem::find()->select('MAX(`sort`) as sort')->where(['trash'=>'Default','vendor_id'=>$model->vendor_id])->asArray()->all();
 			$sort = ($max_sort[0]['sort'] + 1);
 			$model->item_status='Deactive';
 			$model->sort = $sort;
@@ -230,14 +229,14 @@ class VendoritemController extends Controller
                         if($awsResult){
                             $model->guide_image = $filename;
                         }
-
-                        $guide_tbl = Yii::$app->db->createCommand()->insert('whitebook_image', [
-                            'image_path' => $filename,
-                            'item_id' => $itemid,
-                            'image_user_id' => Yii::$app->user->getId(),
-                            'module_type' => 'guides',
-                            'vendorimage_sort_order' => $i, ])
-                            ->execute();
+						
+						$image_tbl = new Image();
+						$image_tbl->image_path = $filename;
+						$image_tbl->item_id = $itemid;
+						$image_tbl->module_type = 'guides';
+						$image_tbl->vendorimage_sort_order = $i;
+						$image_tbl->image_user_id = Yii::$app->user->getId();
+						$image_tbl->save();
                             ++$i;
                             }
                        }
@@ -398,14 +397,14 @@ class VendoritemController extends Controller
                             $model->guide_image = $filename;
                         }
 
-                        $guide_tbl = Yii::$app->db->createCommand()->insert('whitebook_image', [
-                            'image_path' => $filename,
-                            'item_id' => $itemid,
-                            'image_user_id' => Yii::$app->user->getId(),
-                            'module_type' => 'guides',
-                            'vendorimage_sort_order' => $i, ])
-                            ->execute();
-                            ++$i;
+                        $image_tbl = new Image();
+						$image_tbl->image_path = $filename;
+						$image_tbl->item_id = $itemid;
+						$image_tbl->module_type = 'guides';
+						$image_tbl->vendorimage_sort_order = $i;
+						$image_tbl->image_user_id = Yii::$app->user->getId();
+						$image_tbl->save();
+                        ++$i;
                             }
                        }
                  }
@@ -468,12 +467,16 @@ class VendoritemController extends Controller
                         }
                         }
             
-                        $image_tbl = Yii::$app->db->createCommand()
-                        ->insert('whitebook_image', [
-                        'image_path' => $filename,'item_id' => $model->item_id,
-                        'image_user_id' => Yii::$app->user->getId(),'module_type' => 'vendor_item',
-                        'image_user_type' => 'admin','vendorimage_sort_order' => $i, ])
-                        ->execute();++$i;
+						$image_tbl = new Image();
+						$image_tbl->image_path = $filename;
+						$image_tbl->item_id = $model->item_id;
+						$image_tbl->module_type = 'vendor_item';
+						$image_tbl->image_user_type = 'admin';
+						$image_tbl->vendorimage_sort_order = $i;
+						$image_tbl->image_user_id = Yii::$app->user->getId();
+						$image_tbl->save();
+						
+                       ++$i;
                        }
                     }
             /*  Upload image table End */
@@ -549,8 +552,7 @@ class VendoritemController extends Controller
 		if(Yii::$app->request->isAjax)
 		$data = Yii::$app->request->post();
 		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-		$command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor_item SET item_status="'.$status.'" WHERE item_id='.$data['id']);
-		$command->execute();
+		$command=Vendoritem::updateAll(['item_status' => $status],['item_id= '.$data['id']]);
 		if($status == 'Active')
 			{
 				echo Yii::$app->session->setFlash('success', "Category status updated!");
@@ -571,12 +573,10 @@ class VendoritemController extends Controller
 		$data = Yii::$app->request->post();
 		$id = explode(',',$data['id']);
 		$ids = implode('","',$id);
-		$command = \Yii::$app->db->createCommand('DELETE FROM whitebook_image WHERE image_id IN("'.$ids.'")');
-		$command->execute();
+		$command=Image::deleteAll(['IN','image_id',$ids]);
 		if($command){
-		   echo 'Deleted';	die;
+		   echo 'Deleted';	//die;
 		}
-
 		foreach($images as $img)
 		{
 			unlink(Yii::getAlias('@vendor_images').$img);
@@ -616,10 +616,8 @@ class VendoritemController extends Controller
 	{
 		$sort=$_POST['sort_val'];
 		$item_id=$_POST['item_id'];
-		$command = \Yii::$app->DB->createCommand(
-		'UPDATE whitebook_vendor_item SET sort="'.$sort.'" WHERE item_id='.$item_id);
-
-		if($command->execute())
+		$command=Vendoritem::updateAll(['sort' => $sort],['item_id= '.$item_id]);
+		if($command)
 		{
 			Yii::$app->session->setFlash('success', "Item sort order updated successfully!");
 			echo 1;exit;
@@ -638,8 +636,7 @@ class VendoritemController extends Controller
 		$ids = implode('","',$data['keylist']);
 		if($data['status'] == 'Delete')
 		{
-			$command = \Yii::$app->db->createCommand('DELETE FROM whitebook_vendor_item  WHERE item_id IN("'.$ids.'")');
-			$command->execute();
+			$command=Vendoritem::deleteAll(['IN','item_id',$ids]);
 			if($command)
 			{
 				echo Yii::$app->session->setFlash('success', "Item deleted successfully!");
@@ -650,8 +647,7 @@ class VendoritemController extends Controller
 		}
 		else if($data['status'] == 'Reject')
 		{
-			$command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor_item SET item_approved="rejected" WHERE item_id IN("'.$ids.'")');
-			$command->execute();
+			$command=Vendoritem::updateAll(['item_approved' => 'rejected'],['IN','item_id',$ids]);
 			if($command)
 			{
 				echo Yii::$app->session->setFlash('success', "Item rejected successfully!");
@@ -660,8 +656,7 @@ class VendoritemController extends Controller
 				echo Yii::$app->session->setFlash('danger', "Something went wrong");
 			}
 		} else {
-		$command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor_item SET item_status="'.$data['status'].'" WHERE item_id IN("'.$ids.'")');
-		$command->execute();
+		$command=Vendoritem::updateAll(['item_status' => $data['status']],['IN','item_id',$ids]);	
 		if($command)
 			{
 				echo Yii::$app->session->setFlash('success', "Item status updated!");
@@ -683,8 +678,7 @@ class VendoritemController extends Controller
 		foreach($data['id'] as $order=>$value)
 		{
 		 $ids = explode('images_',$value);
-		 $command = \Yii::$app->db->createCommand('UPDATE whitebook_image SET vendorimage_sort_order='.$i.' WHERE image_id ='.$ids[1].'');
-		$command->execute();
+		 $command=Image::updateAll(['vendorimage_sort_order' => $i],['image_id'=>$ids[1]]);
 		 $i++;
 		}
 	}
@@ -736,10 +730,7 @@ class VendoritemController extends Controller
                 if (isset($data['key']) &&  $data['key'] != '') {
                     $image_path = Image::loadguideimageids($data['key']);
                     Vendoritem::deleteFiles($image_path);
-                    $image = \Yii::$app->db->createCommand('DELETE FROM whitebook_image WHERE image_id=:image_id');
-                    $image->bindParam(':image_id', $image_id);
-                    $image_id = $data['key'];
-                    $image->execute();
+               		$image=Image::deleteAll(['image_id'=>$image_id]);
                     die; // dont remove die, action used by vendor module also.
                 }
             }
