@@ -75,7 +75,7 @@ class SiteController extends Controller
         $customercnt = Customer::customercount();
         $customermonth = Customer::customermonthcount();
         $customerday = Customer::customerdatecount();
-
+//print_r ($vendorperiod);die;
         return $this->render('index', ['vendoritemcnt' => $vendoritemcnt, 'monthitemcnt' => $monthitemcnt, 'dateitemcnt' => $dateitemcnt,
         'vendorcnt' => $vendorcnt, 'vendormonth' => $vendormonth, 'vendorday' => $vendorday,
         'customercnt' => $customercnt, 'customermonth' => $customermonth, 'customerday' => $customerday, 'vendorperiod' => $vendorperiod, ]);
@@ -131,9 +131,7 @@ class SiteController extends Controller
                     ->setTo($form['admin_email'])
                     ->setSubject('Admin Password Recovery')
                     ->send();
-
-                $command = Yii::$app->db->createCommand('UPDATE whitebook_admin SET admin_password="'.$password.'" WHERE admin_email="'.$form['admin_email'].'"');
-                $command->execute();
+				$command=Admin::updateAll(['admin_password' => $password],['admin_email= '.$form['admin_email']]);
                 if($command)
                 {
                     echo Yii::$app->session->setFlash('success', 'New password send to your registered email-id.');
