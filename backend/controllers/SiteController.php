@@ -5,6 +5,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Session;
 use common\models\Package;
+use common\models\Category;
 use common\models\Vendor;
 use common\models\Vendoritem;
 use common\models\VendorLogin;
@@ -70,8 +71,6 @@ class SiteController extends Controller
         if(!Yii::$app->user->isGuest){
             $this->redirect('index');
         }else{
-
-
             if ($model->load(Yii::$app->request->post()) && $model->login()) {
                 $vendor_id=Yii::$app->user->getId();
                 $package=Vendor::packageCheck($vendor_id);
@@ -180,9 +179,7 @@ class SiteController extends Controller
                     ->setTo($form['vendor_contact_email'])
                     ->setSubject('Vendor password recovery')
                     ->send();
-
-                $command = Yii::$app->db->createCommand('UPDATE whitebook_vendor SET vendor_password="'.$password.'" WHERE vendor_contact_email="'.$form['vendor_contact_email'].'"');
-                $command->execute();
+				$command=Vendor::updateAll(['vendor_password' => $password],['vendor_contact_email= '.$form['vendor_contact_email']]);
                  if($command)
                 {
                     echo Yii::$app->session->setFlash('success', 'New password send to your registered email-id.');
@@ -199,6 +196,8 @@ class SiteController extends Controller
 
     public function actionProfile($id=false)
     {
+		
+		
         $siteinfo = Siteinfo::find()->all();
         $to = $siteinfo[0]['email_id']; // admin email
 
@@ -209,9 +208,8 @@ class SiteController extends Controller
         $model->scenario = 'vendorprofile';
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
-
-        $v_category = Yii::$app->db->createCommand('select category_name FROM whitebook_category where category_id IN('.$model['category_id'].')')->queryAll();
-
+        $v_category = Category::find()->select('category_name')->where(['IN','category_id',$model['category_id']])->asArray()->all();
+		
         foreach ($v_category as $key => $value) {
             $vendor_categories[] = $value['category_name'];
         }
