@@ -64,14 +64,12 @@ class ItemtypeController extends Controller
         if (yii::$app->user->can($access)) {
             $searchModel = new ItemtypeSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
+            return $this->render('index',[
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
             return $this->redirect(['site/index']);
         }
     }
