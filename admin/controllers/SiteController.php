@@ -8,13 +8,13 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\db\Query;
 use yii\web\Session;
+use common\models\Admin;
 use common\models\Customer;
 use common\models\Vendor;
 use common\models\Vendoritem;
 use yii\web\UploadedFile;
 use common\models\PasswordForm;
 use common\models\LoginForm;
-use common\models\Admin;
 use common\models\UploadForm;
 
 /**
@@ -112,10 +112,11 @@ class SiteController extends Controller
         $model = new PasswordForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $form = Yii::$app->request->post('PasswordForm');
-            $query = new Query();
+            $rows= Admin::find()->select(['admin_email'])->where(['admin_email'=>$form['admin_email']])->asArray()->all();
+            /*$query = new Query();
             $query->select('admin_email')->from('whitebook_admin')->where(['admin_email' => $form['admin_email']]);
             $command = $query->createCommand();
-            $rows = $command->queryAll();
+            $rows = $command->queryAll();*/
             if (!empty($rows)) {
                 $length = 10;
                 $randomString = substr(str_shuffle(md5(time())), 0, $length);

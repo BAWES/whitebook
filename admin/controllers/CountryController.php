@@ -196,8 +196,7 @@ class CountryController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command = \Yii::$app->db->createCommand('UPDATE whitebook_country SET country_status="'.$status.'" WHERE country_id='.$data['cid']);
-        $command->execute();
+        $command = Country::updateAll(['country_status' => $status],'country_id= '.$data['cid']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {

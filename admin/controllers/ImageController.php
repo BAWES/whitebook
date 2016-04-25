@@ -170,8 +170,7 @@ class ImageController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $command = \Yii::$app->db->createCommand('DELETE FROM whitebook_image WHERE image_id='.$data['id']);
-            $command->execute();
+            $command =Image::deleteAll(['image_id' => $data['id']]);
         }
     }
 
@@ -201,8 +200,7 @@ class ImageController extends Controller
         }
         $i = 1;
         foreach ($data['sort'] as $order => $value) {
-            $command = \Yii::$app->db->createCommand('UPDATE whitebook_image SET vendorimage_sort_order='.$i.' WHERE image_id ='.$value.'');
-            echo $command->execute();
+	        $command = Image::updateAll(['vendorimage_sort_order' => $i],'image_id= '.$value);
             ++$i;
         }
         die;

@@ -177,14 +177,8 @@ class PackageController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            return $sql =Yii::$app->DB->createCommand()->delete('{{%vendor_packages}}', 'id = :packid',['packid' =>$data['packid']])->execute();
-	
-            //$sql =(new \yii\db\Query())->delete('whitebook_vendor_packages', 'id = '.$data['packid']);
-            
-            /*$package = Package::findOne($data['packid']);
-            print_r ($package);die;
-			$package->delete();*/
-        }
+            return $command =Vendorpackages::deleteAll(['id' => $data['packid']]);
+	        }
     }
 
     public function actionPackageupdate()
