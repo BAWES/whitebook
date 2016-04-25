@@ -321,7 +321,7 @@ class PriorityitemController extends Controller
         }
         if ($data['item']):
 			
-			$datetime = Vendoritem::find()->select('priority_start_date','priority_end_date')
+			$datetime = Priorityitem::find()->select('priority_start_date','priority_end_date')
             ->where(['priority_id' => $data['priority_id']])
             ->andwhere(['item_id' => $data['item']])
             ->andwhere(['!=', 'trash', 'Deleted'])
