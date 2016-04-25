@@ -104,8 +104,9 @@ class VendoritemController extends Controller
     {
         $access = Authitem::AuthitemviewCheck('view', '23');
         if (yii::$app->user->can($access)) {
-            $command = \Yii::$app->DB->createCommand('SELECT priority_level,priority_start_date,priority_end_date FROM whitebook_priority_item where FIND_IN_SET('.$id.', item_id)');
-            $dataProvider1 = $command->queryall();
+			$dataProvider1=Priorityitem::find()
+			->select(['priority_level','priority_start_date','priority_end_date'])
+			->where(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
 
             $model_question = Vendoritemquestion::find()
             ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
