@@ -472,14 +472,17 @@ class VendorController extends Controller
             }
         }
         if ($available == 0) {			    
-            $k = Yii::$app->db->createCommand()->insert('whitebook_vendor_packages', [
-                                'vendor_id' => $data['vid'],
-                                'package_id' => $data['id'],
-                                'package_price' => $package_pricing,
-                                'package_start_date' => $data['start_date'],
-                                'package_end_date' => $data['end_date'], ])
-                                ->execute();
-            $packageid = Yii::$app->db->getLastInsertID();
+
+
+        $vendor_pack = new Vendorpackages();	
+        $vendor_pack->vendor_id = $data['vid'];
+        $vendor_pack->package_id = $data['id'];
+        $vendor_pack->package_price = $package_pricing;
+        $vendor_pack->package_start_date = $data['start_date'];
+        $vendor_pack->package_end_date = $data['end_date'];
+		$vendor_pack->save();
+		$packageid = $vendor_pack->id;
+
             $url = Url::to('/package/packagedelete?id='.$packageid);
             $startshow = date('d/m/Y', strtotime($data['start_date']));
             $endshow = date('d/m/Y', strtotime($data['end_date']));
@@ -509,7 +512,13 @@ class VendorController extends Controller
 
         $package_pricing = Package::loadpackageprice($data['id']);
         $package_name = Package::PackageData($data['id']);
-        $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") AS package_end_date','customer_name'])->where(['vendor_id' => $data['vid'],['!=', 'id', $packedit]])->all();
+                $datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
+          ->where(['vendor_id' => $data['id']])
+          ->andwhere(['!=','id',$packedit])
+          ->asArray()
+          ->all();
+          
+      /*  $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") AS package_end_date'])->where(['vendor_id' => $data['vid'],['!=', 'id', $packedit]])->all();*/
         
         $blocked_dates = array();
         if (!empty($datetime)) {
@@ -538,8 +547,8 @@ class VendorController extends Controller
             $user_start_date = ($data['start_date']);
             $user_start_date = ($data['start_date']);
 
-            $command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor_packages SET package_id="'.$data['id'].'" ,package_start_date="'.$start1.'",package_end_date="'.$end1.'" WHERE id='.$packedit);
-            $command->execute();
+            $command=Vendorpackages::updateAll(['package_id' => $data['id'],'package_start_date' => $start1,'package_end_date' => $end1],'id= '.$packedit);
+
 
             $url = Url::to('/package/packagedelete?id='.$packedit);
             $startshow = date('d/m/Y', strtotime($data['start_date']));
@@ -557,7 +566,10 @@ class VendorController extends Controller
         }
         if ($data['id']):
         
-        $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['package_start_date','package_end_date'])->where(['vendor_id' => $data['id']])->all();
+        $datetime = Vendorpackages::find()->select(['package_start_date','package_end_date'])
+          ->where(['vendor_id' => $data['id']])
+          ->asArray()
+          ->all();
         $k = array();
         foreach ($datetime as $d) {
             $date = $d['package_start_date'];
@@ -583,7 +595,12 @@ class VendorController extends Controller
             $data = Yii::$app->request->post();
         }
         if ($data['packid']):
-        $packdate = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['package_id','package_start_date','package_end_date'])->where(['vendor_id' => $data['vid'],['id' => $data['packid']]])->all();
+        
+        $packdate = Vendorpackages::find()->select(['package_id','package_start_date','package_end_date'])
+          ->where(['vendor_id' => $data['vid']])
+          ->andwhere(['id' =>$data['packid']])
+          ->asArray()->all();
+        
         $package_id = $packdate[0]['package_id'];
         $edit_start_date = date('Y-m-d', strtotime('+0 day', strtotime($packdate[0]['package_start_date'])));
         $edit_end_date = date('Y-m-d', strtotime('+0 day', strtotime($packdate[0]['package_end_date'])));
@@ -591,7 +608,10 @@ class VendorController extends Controller
             return '2';
             die;
         }
-        $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['package_start_date','package_end_date'])->where(['vendor_id' => $data['vid'],['id' => $data['packid']]])->all();
+        $datetime = Vendorpackages::find()->select(['package_id','package_start_date','package_end_date'])
+          ->where(['vendor_id' => $data['vid']])
+          ->andwhere(['id' =>$data['packid']])
+          ->asArray()->all();
         $k = array();
         foreach ($datetime as $d) {
             $date = $d['package_start_date'];
