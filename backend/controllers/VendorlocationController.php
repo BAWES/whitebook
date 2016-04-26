@@ -83,12 +83,11 @@ class VendorlocationController extends Controller
             foreach ($_POST['location'] as $key => $value) {
                  $get_city_id = Location::find()->select('city_id')->where(['id'=>$value])->one();
 
-                 $vendor_location = Yii::$app->db->createCommand()
-                        ->insert('whitebook_vendor_location', [
-                                'vendor_id' => Yii::$app->user->getId(),
-                                'city_id' =>$get_city_id['city_id'],
-                                'area_id'=>$value])
-                        ->execute();
+                 $location_tbl = new Vendorlocation();
+                 $location_tbl->vendor_id = Yii::$app->user->getId(),
+                 $location_tbl->city_id =>$get_city_id['city_id'],
+                 $location_tbl->area_id = $value
+                 $location->save();
             }
             return $this->redirect(['view', 'id' => $model->id]);
         } else
@@ -98,15 +97,15 @@ class VendorlocationController extends Controller
             $city=ArrayHelper::map($city_tbl,'city_id','city_name');
 
 		$query = new Query;
-		$query->select()  
-	->from('{{%city}}')
-	->join('LEFT JOIN', '{{%location}}','{{%city}}.city_id ={{%location}}.city_id')
-	->where('{{%city}}.status ="Active"')			
-	->andwhere('{{%location}}.trash ="Default"')			
-	->andwhere('{{%location}}.status ="Active"')
-	->groupby('{{%location}}.city_id');
-	$command = $query->createCommand();
-	$cities = $command->queryAll();
+	      $query->select()  
+        	->from('{{%city}}')
+        	->join('LEFT JOIN', '{{%location}}','{{%city}}.city_id ={{%location}}.city_id')
+        	->where('{{%city}}.status ="Active"')			
+        	->andwhere('{{%location}}.trash ="Default"')			
+        	->andwhere('{{%location}}.status ="Active"')
+        	->groupby('{{%location}}.city_id');
+        	$command = $query->createCommand();
+        	$cities = $command->queryAll();
 
 
             $country=ArrayHelper::map($countries,'country_id','country_name');
@@ -127,10 +126,10 @@ class VendorlocationController extends Controller
         $model = $this->findModel($id);
 		$query = new Query;
 		$query->select()  
-	->from('{{%city}}')
-	->join('LEFT JOIN', '{{%location}}','{{%city}}.city_id ={{%location}}.city_id')
-	->where('{{%city}}.status ="Active"')			
-	->groupby('{{%location}}.city_id');
+        	->from('{{%city}}')
+        	->join('LEFT JOIN', '{{%location}}','{{%city}}.city_id ={{%location}}.city_id')
+        	->where('{{%city}}.status ="Active"')			
+        	->groupby('{{%location}}.city_id');
 	$command = $query->createCommand();
 	$cities = $command->queryAll();
 	
@@ -169,13 +168,11 @@ class VendorlocationController extends Controller
             foreach ($_POST['location'] as $key => $value) {
                  $get_city_id = Location::find()->select('city_id')->where(['id'=>$value])->one();
 
-                $vendor_location = Yii::$app->db->createCommand()
-                    ->insert('whitebook_vendor_location', [
-                            'vendor_id' => Yii::$app->user->getId(),
-                            'city_id' =>$get_city_id['city_id'],
-                            'area_id'=>$value])
-                    ->execute();
-
+                 $vendor_location_tbl = new Vendorlocation;
+                 $vendor_location_tbl->vendor_id = Yii::$app->user->getId(),
+                 $vendor_location_tbl->city_id = $get_city_id['city_id'],
+                 $vendor_location_tbl->area_id = $value;
+                 $vendor_location_tbl->save();
                 }
 
             $model->save();
@@ -193,11 +190,11 @@ class VendorlocationController extends Controller
 		->andwhere('{{%location}}.trash ="Default"')			
 		->andwhere('{{%location}}.status ="Active"')
 		->groupby('{{%location}}.city_id');
-	$command = $query->createCommand();
-	$cities = $command->queryAll();
-            return $this->render('edit', [
-                'model' => $model, 'cities' => $cities,
-            ]);
+    	$command = $query->createCommand();
+    	$cities = $command->queryAll();
+                return $this->render('edit', [
+                    'model' => $model, 'cities' => $cities,
+                ]);
     }
 
     /**
