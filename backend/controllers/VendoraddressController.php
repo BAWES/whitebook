@@ -161,9 +161,6 @@ class vendoraddressController extends Controller
 		$data = Yii::$app->request->post();
 		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
 		$command=Vendor::updateAll(['vendor_status' => $status],['vendor_id= '.$data['id']]);
-
-		/*$command = \Yii::$app->db->createCommand('UPDATE whitebook_vendor SET vendor_status="'.$status.'" WHERE vendor_id='.$data['id']);
-		$command->execute();*/
 		if($status == 'Active')
 			{
 			echo Yii::$app->session->setFlash('success', "Vendor Address Status Updated!");
