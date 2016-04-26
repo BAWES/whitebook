@@ -157,11 +157,7 @@ class SiteController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->validate())
         {
             $form = Yii::$app->request->post('VendorPassword');
-
-            $query = new Query;
-            $query->select('vendor_contact_email')->from('whitebook_vendor')->where(['vendor_contact_email' => $form['vendor_contact_email']]);
-            $command = $query->createCommand();
-            $rows = $command->queryAll();
+            $query = new Vendor::find()->select('vendor_contact_email')->where(['vendor_contact_email' => $form['vendor_contact_email']])->all();
             if(!empty($rows))
             {
                 $length = 10;
