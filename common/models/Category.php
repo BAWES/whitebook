@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
 use yii\behaviors\SluggableBehavior;
+use common\models\User;
 
 /**
  * This is the model class for table "whitebook_category".

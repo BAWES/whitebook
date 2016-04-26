@@ -55,7 +55,6 @@ class Vendoritem extends \yii\db\ActiveRecord
     public $groups;
     public $image_path;
     public $guide_image;
-
     /**
      * @inheritdoc
      */

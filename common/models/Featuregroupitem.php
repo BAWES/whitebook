@@ -143,32 +143,31 @@ class Featuregroupitem extends \yii\db\ActiveRecord
 
     public static function get_featured_product_id() {
         $db = Yii::$app->db;
-        return $p_id = $db->cache(function ($db) {
+   //     return $p_id = $db->cache(function ($db) {
             $today = date('Y-m-d H:i:s');
             $today_date = date('Y-m-d');
             
-            $vendor = Featuregroupitem::find()
-    ->select('{{%feature_group_item}}.item_id')
-    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%feature_group_item}}.vendor_id')
-    ->where(['{{%feature_group_item}}.group_item_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor}}.approve_status' => 'Yes'])
-    ->andwhere(['<=','{{%vendor}}.package_start_date',$today])
-    ->andwhere(['>=','{{%vendor}}.package_end_date',$today])
-    ->andwhere(['<=','{{%feature_group_item}}.featured_start_date',$today_date])
-    ->andwhere(['>=','{{%feature_group_item}}.featured_end_date',$today_date])
-    ->all();
-        });
+            return $vendor = Featuregroupitem::find()
+                    ->select('{{%feature_group_item}}.item_id')
+                    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%feature_group_item}}.vendor_id')
+                    ->where(['{{%feature_group_item}}.group_item_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor}}.approve_status' => 'Yes'])
+                    ->andwhere(['<=','{{%vendor}}.package_start_date',$today])
+                    ->andwhere(['>=','{{%vendor}}.package_end_date',$today])
+                    ->andwhere(['<=','{{%feature_group_item}}.featured_start_date',$today_date])
+                    ->andwhere(['>=','{{%feature_group_item}}.featured_end_date',$today_date])
+                    ->all();
     }
 
     public static function get_featured_product() {
         $today = date('Y-m-d H:i:s');
         
-        $feature = Vendoritem::find()
-    ->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.slug as slug','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit','{{%vendor}}.vendor_name'])
-    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-    ->where(['{{%vendor_item}}.item_status' => 'Active'])
-    ->all();
-        return $feature;
+        return $feature = Vendoritem::find()
+                    ->select(['{{%vendor}}.vendor_name','{{%vendor_item}}.item_id','{{%vendor_item}}.slug as slug','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit'])
+                    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
+                    ->where(['{{%vendor_item}}.item_status' => 'Active'])
+                    ->asArray()
+                    ->all();
     }
 	
 }
