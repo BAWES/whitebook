@@ -88,16 +88,15 @@ class VendoritemquestionguideController extends Controller
 			foreach ($file as $files) {
 				     $files->saveAs($base.'/web/uploads/vendor_images/' . $files->baseName . '_' . $len .'.' . $files->extension);
                      $image_path = $files->baseName . '_' . $len .'.' . $files->extension;
-                } 						
-			$image = Yii::$app->db->createCommand()
-							->insert('whitebook_image', [
-									'image_path' => $image_path,
-									'item_id' => $model->question_id,
-									'image_user_id' => 1,
-									'module_type' =>'guides'])
-							->execute();               
-			
-				return $this->redirect(['index']);
+                }
+
+        $image_tbl = new Image();
+        $image_tbl->image_path = $image_path;
+        $image_tbl->item_id = $model->question_id;
+        $image_tbl->image_user_id = 1;
+        $image_tbl->module_type ='guides';
+        $image_tbl->save();
+    	return $this->redirect(['index']);
 			}
         } else {
             return $this->render('create', [
