@@ -142,19 +142,18 @@ class EventinviteesController extends BaseController
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $exist = Yii::$app->db->createCommand('Select count(invitees_id) AS count FROM whitebook_event_invitees where email= "'.$data['email'].'"
-            and event_id ='.$data['event_id'].'')->queryone();
-
-          if ($exist['count'] == 0) {
-              $insert = Yii::$app->db->createCommand()
-                        ->insert('whitebook_event_invitees', [
-                                'name' => $data['name'],
-                                'email' => $data['email'],
-                                'event_id' => $data['event_id'],
-                                'customer_id' => Yii::$app->params['CUSTOMER_ID'],
-                                'phone_number' => $data['phone_number'], ])
-                        ->execute();
-
+        $exist = Eventinvitees::find()->select('invitees_id')->where(['event_id ='.$data['event_id']])
+        ->andWhere(['email'=>$data['email']])
+        ->count();
+        // Check count
+         if ($exist == 0) {
+                $event_invite = new Eventinvitees;
+                $event_invite->name = $data['name'];
+                $event_invite->email = $data['email'];
+                $event_invite->event_id = $data['event_id'];
+                $event_invite->customer_id = Yii::$app->params['CUSTOMER_ID'];
+                $event_invite->phone_number = $data['phone_number'];
+                $eventinvitees->save();
               if ($insert) {
                   $customer_info = Users::get_user_details(Yii::$app->params['CUSTOMER_ID']);
                   $to = $data['email'];
@@ -175,13 +174,12 @@ class EventinviteesController extends BaseController
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $update = Yii::$app->db->createCommand()
-                        ->update('whitebook_event_invitees', [
-                                'name' => $data['name'],
-                                'email' => $data['email'],
-                                'phone_number' => $data['phone_number'], ], 'invitees_id='.$data['invitees_id'])
-                        ->execute();
-        if ($update) {
+        $event_invite = Eventinvitees::findOne($data['invitees_id']);
+        $event_invite->name = $data['name'];
+        $event_invite->email = $data['email'];
+        $event_invite->phone_number = $data['phone_number'];
+        $event_invite->save();
+        if ($event_invite) {
             echo 'done';
         } else {
             echo 'not';
@@ -193,9 +191,7 @@ class EventinviteesController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $details = Yii::$app->db->createCommand('Select * from whitebook_event_invitees where invitees_id='
-            .$data['id'])->queryAll();
-
+            $event_invite = Eventinvitees::find()->where(['invitees_id'=>$data['id']]);
             return json_encode($details[0]);
         }
     }

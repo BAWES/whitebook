@@ -20,6 +20,7 @@ use yii\widgets\Breadcrumbs;
 <!-- <ul class="breadcrumb"> -->
 <?php
 $category_det=Category::category_value($slug);
+
 if($category_det['category_name']!='Say thank you'){
 $this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Yii::$app->homeUrl.'/products/'.$slug];
 }else{
@@ -80,8 +81,10 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 <div id="accordion" class="panel-group">
 <!-- BEGIN CATEGORY FILTER  -->
 <?php
+
 /* Get slug name to find category */
 $subcategory = SubCategory::loadsubcat($slug);
+
 $col=1;
 foreach ($subcategory as $key => $value) {
 $t = $in ='';
@@ -112,6 +115,7 @@ if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 ?>
 <ul class="<?= $class; ?>">
 <?php
+
 foreach ($childcategory as $key => $value) {
 if(isset($_GET['category']) && $_GET['category'] !="")
 {
@@ -212,6 +216,7 @@ if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 ?>
 <ul class="<?= $class; ?>">
 <?php foreach ($vendor as $key => $value) {
+
 if(isset($_GET['vendor']) && $_GET['vendor'] !="")
 {
 
@@ -226,11 +231,13 @@ else
 $checked2 = '';
 }
 }
+
 ?>
 <li>
 <label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>"><input name="vendor" data-element="input" class="items" id="checkbox-<?= $value['vendor_name'] ?>" step="<?= $value['vendor_name'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked2) && $checked2 !="") ?  $checked2 : ''; ?> ><?= ucfirst(strtolower($value['vendor_name'])); ?></label>
 </li>
-<?php } ?>
+<?php }?>
+
 </ul>
 </div>
 </div>
@@ -259,6 +266,7 @@ $checked2 = '';
 $min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
 $max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
 $max = $max_price[0]['price'];
+
 $divide = round($max / 5);
 //$maxx = $max+
 $i = 0;
@@ -304,6 +312,7 @@ if($min_kd > 0 )
 	$i++; }
 	}
 }
+
 	?>
 </ul>
 </div>
@@ -330,6 +339,7 @@ if($min_kd > 0 )
 if(!empty($imageData))
 {
 foreach ($imageData as $key => $value) {
+
 	// echo $value['image_path'];die;
 if($value['image_path'] !="")  {
 ?>
@@ -338,6 +348,7 @@ if($value['image_path'] !="")  {
 <div class="events_images">
 <div class="hover_events">
 <div class="pluse_cont">
+
 <?php if(Yii::$app->user->isGuest) { ?>
 <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','ADD_EVENT');?>"></a>
 <?php } else { ?>
@@ -349,6 +360,7 @@ if($value['image_path'] !="")  {
 <a href=""  role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','ADD_FAV');?>"></a>
 </div>
 <?php } else {$k=array();
+
 foreach($customer_events_list as $l){
 $k[]=$l['item_id'];
 }

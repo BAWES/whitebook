@@ -63,20 +63,30 @@ class PlanController extends BaseController
         /* BEGIN GET VENDORS */
         $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
 
-            if (!is_null($model1)) {
-                $imageData = Yii::$app->db->createCommand('select wi.image_path, wvi.item_price_per_unit, wvi.item_name,wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-            and wvi.item_for_sale="Yes" AND wi.module_type = "vendor_item" AND wvi.vendor_id IN("'.$active_vendors.'") AND wvi.category_id='.$model1['category_id'].' Group By wvi.item_id limit 4')->queryAll();
+        if (!is_null($model1)) {
+
+            $imageData = Vendoritem::find()
+                    ->select('wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, wv.vendor_name')
+                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
+                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
+                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
+                    ->where(['{{%vendor_item}}.trash' => "Default"])
+                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
+                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
+                    ->andWhere(['wi.module_type' => "vendor_item"])
+                    ->andWhere(['{{%vendor_item}}.vendor_id' =>[$active_vendors]])
+                    ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
+                    ->groupBy('{{%vendor_item}}.item_id')
+                    ->asArray()
+                    ->all();
             }
         }
 
         /* END CATEGORY */
 
-      //  $themes = Themes::loadthemenames();
-        foreach ($imageData as $data) {
+          foreach ($imageData as $data) {
             $k[] = $data['item_id'];
         }
         $p = array();
@@ -91,8 +101,6 @@ class PlanController extends BaseController
                 }
                 if (!is_numeric($r['theme_id'])) {
                     $out2[] = explode(',', $r['theme_id']);
-
-            //$out1[]=0;
                 }
             }
             foreach ($out2 as $id) {
@@ -113,7 +121,21 @@ class PlanController extends BaseController
         $themes = Themes::load_all_themename($p);
 
         /* VENDOR HAVIG ATLEAST ONE PRODUCT */
-        $vendor = Yii::$app->db->createCommand('SELECT wv.vendor_id,wv.vendor_name,wv.slug FROM `whitebook_vendor_item` as wvi inner join `whitebook_vendor` as wv ON wvi.vendor_id = wv.vendor_id and wvi.vendor_id IN("'.$active_vendors.'") and wv.vendor_status ="Active" and wv.approve_status = "Yes" and wvi.item_status="Active" and wvi.item_approved = "Yes" and wvi.trash="Default" and wvi.item_for_sale group by wvi.vendor_id')->queryAll();
+        $vendor = Vendoritem::find()
+            ->select('wv.vendor_id,wv.vendor_name,wv.slug')
+            ->join('INNER JOIN', '{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
+            ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
+            ->where(['{{%vendor_item}}.vendor_id' => [$active_vendors]])
+            ->andWhere(['wv.vendor_status' => "Active"])
+            ->andWhere(['wv.approve_status' => "Yes"])
+            ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+            ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+            ->andWhere(['{{%vendor_item}}.trash' => "Default"])
+            ->andWhere(['{{%vendor_item}}.item_for_sale' =>'Yes'])
+            ->groupBy('{{%vendor_item}}.vendor_id')
+            ->asArray()
+            ->all();
+            //print_r($vendor);die;
         /* END get current category to load sub category */
 
         /* END GET VENDORS */
@@ -150,17 +172,19 @@ class PlanController extends BaseController
             if ($data['themes'] != '') {
                 $theme = explode('+', $data['themes']);
                 foreach ($theme as $key => $value) {
-                    $themes[] = Yii::$app->db->createCommand('SELECT theme_id FROM whitebook_theme WHERE slug IN("'.$value.'")')->queryAll();
+                    $themes[] = Themes::find()->select('theme_id')->where(['slug'=>[$value]])->asArray()->all();
                 }
 
                 $all_valid_themes = array();
                 foreach ($themes as $key => $value) {
-                    $get_themes = Yii::$app->db->createCommand('SELECT  theme_id, item_id FROM `whitebook_vendor_item_theme` WHERE trash="Default" AND FIND_IN_SET('.$value[0]['theme_id'].', theme_id)')->queryAll();
-                //$all_valid_themes[] = implode(',', $get_themes[0]);
-
-             foreach ($get_themes as $key => $value) {
+                    $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
+                    ->where(['trash'=>"Default"])
+                    ->andWhere(['theme_id'=>[$value[0]['theme_id']]])
+                    ->asArray()
+                    ->all();
+                foreach ($get_themes as $key => $value) {
                  $all_valid_themes[] = $value['item_id'];
-             }
+                    }
                 }
 
                 if (count($all_valid_themes) <= 1) {
@@ -170,8 +194,7 @@ class PlanController extends BaseController
                 }
              /* END Multiple themes match comma seperate values in table*/
 
-          //  $join .= ' inner join whitebook_theme as wt ON wt.slug REGEXP "'.$theme_ids.'" ';
-              $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'") ';
+             $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'") ';
             }
                 if ($data['vendor'] != '') {
                     $vendor = explode('+', $data['vendor']);
@@ -197,29 +220,27 @@ class PlanController extends BaseController
 
             $model1 = Category::find()->select('category_id')->where(['slug' => $data['slug']])->asArray()->one();
                 if (!is_null($model1)) {
-                    /*echo 'select wvi.category_id, wi.image_path, wvi.item_price_per_unit, wvi.item_name,wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category '.$join.'
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-            and wvi.item_for_sale="Yes" and wi.module_type = "vendor_item"  '.$condition.' Group By wvi.item_id
-            HAVING wvi.category_id='.$model1['category_id'].' limit 12';      die;
-           */
-            $imageData = Yii::$app->db->createCommand('select wvi.category_id, wi.image_path, wvi.item_price_per_unit, wvi.item_name,wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category '.$join.'
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-            and wvi.item_for_sale="Yes" and wi.module_type = "vendor_item"  AND wvi.vendor_id IN("'.$active_vendors.'") '.$condition.' Group By wvi.item_id HAVING wvi.category_id='.$model1['category_id'].' limit 12')->queryAll();
+                $imageData = Vendoritem::find()
+                    ->select('{{%vendor_item}}.category_id, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
+                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
+                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
+                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
+                    ->where(['{{%vendor_item}}.trash' => "Default"])
+                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
+                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
+                    ->andWhere(['wi.module_type' => "vendor_item"])
+                    ->andWhere(['{{%vendor_item}}.vendor_id' =>[$active_vendors]])
+                    ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
+                    ->andWhere([$condition])
+                    ->groupBy('{{%vendor_item}}.item_id')
+                    ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
+                    ->limit(12)
+                    ->asArray()
+                    ->all();
                 }
             }
-
-          /*   $imageData = Yii::$app->db->createCommand('select wi.image_path, wvi.item_price_per_unit, wvi.item_name, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category '.$join.'
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active"
-            and wvi.item_for_sale="Yes" '.$condition.' Group By wvi.item_id limit 5')->queryAll();   */
         }
         $customer_events_list = array();
 
@@ -238,13 +259,6 @@ class PlanController extends BaseController
             $condition = '';
             $join = '';
             if (!empty($data['slug'])) {
-                /* CATEGORY FILTER
-            if($data['item_ids'] !='')
-            {
-            $values = $this->qstring($data['item_ids']);
-            $condition .= 'AND wc.slug IN('.$values.')';
-            }*/
-
             if ($data['search'] != '') {
                 $values = $this->qstring($data['search']);
                 $search = $data['search'];
@@ -255,17 +269,19 @@ class PlanController extends BaseController
             if ($data['themes'] != '') {
                 $theme = explode('+', $data['themes']);
                 foreach ($theme as $key => $value) {
-                    $themes[] = Yii::$app->db->createCommand('SELECT  theme_id FROM whitebook_theme WHERE slug IN("'.$value.'")')->queryAll();
+                    $themes[] = Themes::find()->select('theme_id')->where(['slug'=>[$value]])->asArray()->all();
                 }
 
                 $all_valid_themes = array();
                 foreach ($themes as $key => $value) {
-                    $get_themes = Yii::$app->db->createCommand('SELECT  theme_id, item_id FROM `whitebook_vendor_item_theme` WHERE trash="Default" AND FIND_IN_SET('.$value[0]['theme_id'].', theme_id)')->queryAll();
-                //$all_valid_themes[] = implode(',', $get_themes[0]);
-
-             foreach ($get_themes as $key => $value) {
+                        $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
+                                    ->where(['trash'=>"Default"])
+                                    ->andWhere(['theme_id'=>[$value[0]['theme_id']]])
+                                    ->asArray()
+                                    ->all();
+                foreach ($get_themes as $key => $value) {
                  $all_valid_themes[] = $value['item_id'];
-             }
+                    }
                 }
 
                 if (count($all_valid_themes) <= 1) {
@@ -302,19 +318,7 @@ class PlanController extends BaseController
                 $condition .= str_replace('OR AND', 'OR', $condition1);
             }
             /* END PRICE FILTER */
-
-            //$model1 = Category::find()->select('category_id')->where(['slug'=>$data['slug']])->asArray()->one();
-
-            /* echo 'select wvi.category_id, wi.image_path, wvi.item_price_per_unit, wvi.item_name,wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category '.$join.'
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-            and wvi.item_for_sale="Yes" '.$condition.' Group By wvi.item_id HAVING wvi.category_id='.$model1['category_id'].' limit 5';
-            die; */
-
             $cat_item_details = $model->category_search_details($search);
-            //print_r ($cat_item_details);die;
 
             $category = new Category();
                 if (!empty($data['search'])) {
@@ -324,23 +328,27 @@ class PlanController extends BaseController
                     $cat_id = '';
                 }
 
-                $imageData = Yii::$app->db->createCommand('select wvi.category_id, wi.image_path, wvi.item_price_per_unit, wvi.item_name,wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category '.$join.'
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-            and wvi.item_for_sale="Yes" and wi.module_type = "vendor_item"  '.$condition.' Group By wvi.item_id HAVING wvi.category_id='.$model1['category_id'].' limit 12')->queryAll();
+            $imageData = Vendoritem::find()
+                    ->select('{{%vendor_item}}.category_id, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
+                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
+                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
+                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
+                    ->where(['{{%vendor_item}}.trash' => "Default"])
+                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
+                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
+                    ->andWhere(['wi.module_type' => "vendor_item"])
+                    ->andWhere([$condition])
+                    ->groupBy('{{%vendor_item}}.item_id')
+                    ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
+                    ->limit(12)
+                    ->asArray()
+                    ->all();
             }
         }
 
-          /*   $imageData = Yii::$app->db->createCommand('select wi.image_path, wvi.item_price_per_unit, wvi.item_name, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category '.$join.'
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active"
-            and wvi.item_for_sale="Yes" '.$condition.' Group By wvi.item_id limit 5')->queryAll();   */
-            //}
-            $customer_events_list = array();
+          $customer_events_list = array();
 
         if (!Yii::$app->user->isGuest) {
             $usermodel = new Users();
@@ -364,13 +372,21 @@ class PlanController extends BaseController
 
             $limit = $data['limit'];
 
-            $imageData = Yii::$app->db->createCommand('select wvi.slug, wi.image_path, wvi.item_price_per_unit, wvi.item_name, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-        LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-        LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-        LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category
-        WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active"
-        and wvi.item_for_sale="Yes" AND wvi.category_id='.$model1['category_id'].' Group By wvi.item_id limit 4 offset '.$limit.'')->queryAll();
-
+            $imageData = Vendoritem::find()
+                    ->select('{{%vendor_item}}.slug, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
+                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
+                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
+                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
+                    ->where(['{{%vendor_item}}.trash' => "Default"])
+                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
+                    ->groupBy('{{%vendor_item}}.item_id')
+                    ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
+                    ->limit(4)
+                    //limit 4 offset '.$limit.'
+                    ->asArray()
+                    ->all();
             return $this->renderPartial('loaditems', ['imageData' => $imageData]);
         }
     }
@@ -393,14 +409,16 @@ class PlanController extends BaseController
         if ($data['themes'] != '') {
             $theme = explode('+', $data['themes']);
             foreach ($theme as $key => $value) {
-                $themes[] = Yii::$app->db->createCommand('SELECT  theme_id FROM whitebook_theme WHERE slug IN("'.$value.'")')->queryAll();
+                    $themes[] = Themes::find()->select('theme_id')->where(['slug'=>[$value]])->asArray()->all();
             }
 
             $all_valid_themes = array();
             foreach ($themes as $key => $value) {
-                $get_themes = Yii::$app->db->createCommand('SELECT  theme_id, item_id FROM `whitebook_vendor_item_theme` WHERE trash="Default" AND FIND_IN_SET('.$value[0]['theme_id'].', theme_id)')->queryAll();
-            //$all_valid_themes[] = implode(',', $get_themes[0]);
-
+                    $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
+                                    ->where(['trash'=>"Default"])
+                                    ->andWhere(['theme_id'=>[$value[0]['theme_id']]])
+                                    ->asArray()
+                                    ->all();
          foreach ($get_themes as $key => $value) {
              $all_valid_themes[] = $value['item_id'];
          }
@@ -414,8 +432,7 @@ class PlanController extends BaseController
 
             /* END Multiple themes match comma seperate values in table*/
 
-          //  $join .= ' inner join whitebook_theme as wt ON wt.slug REGEXP "'.$theme_ids.'" ';
-              $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'") ';
+           $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'") ';
         }
         /* END THEME FILTER */
 
@@ -432,15 +449,23 @@ class PlanController extends BaseController
             }
             /* END PRICE FILTER */
 
-        $vendorData = Yii::$app->db->createCommand('select wi.image_path, wvi.item_price_per_unit, wvi.item_name,
-            wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.category_id
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-            and wvi.item_for_sale="Yes" AND wi.module_type = "vendor_item"
-            '.$condition.' AND wv.slug = "'.$data['slug'].'"
-            Group By wvi.item_id limit 12')->queryAll();
+           $vendorData = Vendoritem::find()
+                ->select('{{%vendor_item}}.category_id, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
+                ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
+                ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
+                ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
+                ->where(['{{%vendor_item}}.trash' => "Default"])
+                ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+                ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+                ->andWhere(['{{%vendor_item}}.type_id' => "2"])
+                ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
+                ->andWhere(['wi.module_type' => "vendor_item"])
+                ->andWhere([$condition])
+                ->andWhere(['wv.slug' => $data['slug']])
+                ->groupBy('{{%vendor_item}}.item_id')
+                ->limit(12)
+                ->asArray()
+                ->all();
             $customer_id = Yii::$app->params['CUSTOMER_ID'];
             if (!empty($customer_id)) {
                 $usermodel = new Users();
@@ -465,8 +490,8 @@ class PlanController extends BaseController
                 $cat_item_details = Category::category_search_details($data['slug']);
                 if (!empty($cat_item_details)) {
                     $cat_id = $cat_item_details[0]['category_id'];
-                    $join .= ' (wvi.category_id  = ("'.$cat_id.'")
-			or wvi.subcategory_id  = ("'.$cat_id.'") or wvi.child_category  = ("'.$cat_id.'") OR wvi.item_name
+                    $join .= ' ({{%vendor_item}}.category_id  = ("'.$cat_id.'")
+			or {{%vendor_item}}.subcategory_id  = ("'.$cat_id.'") or {{%vendor_item}}.child_category  = ("'.$cat_id.'") OR {{%vendor_item}}.item_name
 			LIKE "%'.$data['slug'].'%" )';
                 }
 
@@ -480,24 +505,26 @@ class PlanController extends BaseController
                 $v = implode('","', $vendor_ids);
 
                // $active_vendors = Vendor::loadvalidvendors();
-                $condition .= ' AND wvi.vendor_id IN("'.$v.'")';
+                $condition .= ' AND {{%vendor_item}}.vendor_id IN("'.$v.'")';
                 }
 
             /* THEMES FILTER */
             if ($data['themes'] != '') {
                 $theme = explode('+', $data['themes']);
                 foreach ($theme as $key => $value) {
-                    $themes[] = Yii::$app->db->createCommand('SELECT theme_id FROM whitebook_theme WHERE slug IN("'.$value.'")')->queryAll();
+                    $themes[] = Themes::find()->select('theme_id')->where(['slug'=>[$value]])->asArray()->all();
                 }
 
                 $all_valid_themes = array();
                 foreach ($themes as $key => $value) {
-                    $get_themes = Yii::$app->db->createCommand('SELECT  theme_id, item_id FROM `whitebook_vendor_item_theme` WHERE trash="Default" AND FIND_IN_SET('.$value[0]['theme_id'].', theme_id)')->queryAll();
-                //$all_valid_themes[] = implode(',', $get_themes[0]);
-
-             foreach ($get_themes as $key => $value) {
-                 $all_valid_themes[] = $value['item_id'];
-             }
+                    $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
+                                    ->where(['trash'=>"Default"])
+                                    ->andWhere(['theme_id'=>[$value[0]['theme_id']]])
+                                    ->asArray()
+                                    ->all();
+                foreach ($get_themes as $key => $value) {
+                     $all_valid_themes[] = $value['item_id'];
+                 }
                 }
 
                 if (count($all_valid_themes) <= 1) {
@@ -508,7 +535,7 @@ class PlanController extends BaseController
              /* END Multiple themes match comma seperate values in table*/
 
           //  $join .= ' inner join whitebook_theme as wt ON wt.slug REGEXP "'.$theme_ids.'" ';
-              $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'") ';
+              $condition .= ' AND {{%vendor_item}}.item_id IN("'.$all_valid_themes.'") ';
             }
 
              /* BEGIN PRICE FILTER */
@@ -517,20 +544,28 @@ class PlanController extends BaseController
                 foreach ($price as $key => $value) {
                     $prices[] = $value;
                     $price_val = explode('-', $value);
-                    $price_val1[] = 'AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
+                    $price_val1[] = 'AND ({{%vendor_item}}.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
                 }
                 $condition1 = implode(' OR ', $price_val1);
                 $condition .= str_replace('OR AND', 'OR', $condition1);
             }
             /* END PRICE FILTER */
-
-            $sql = 'select wi.image_path, wvi.item_price_per_unit,wvi.item_id,
-            wvi.item_name,wvi.slug,wvi.category_id, wv.vendor_name ,count(*) as total FROM whitebook_vendor_item as wvi
-			LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-			LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-			WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-			and wvi.item_for_sale="Yes"  AND wi.module_type = "vendor_item" AND '.$join.$condition.' Group By wi.item_id';
-                $imageData = Yii::$app->db->createCommand($sql)->queryAll();
+            $imageData = Vendoritem::find()
+                    ->select('{{%vendor_item}}.category_id, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name,{{%vendor_item}}.category_id, count(*) as total')
+                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
+                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
+                    ->where(['{{%vendor_item}}.trash' => "Default"])
+                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
+                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
+                    ->andWhere(['wi.module_type' => "vendor_item"])
+                    ->andWhere([$join.$condition])
+                    ->andWhere(['wv.slug' => $data['slug']])
+                    ->groupBy('wi.item_id')
+                    ->limit(12)
+                    ->asArray()
+                    ->all();
                 $customer_id = Yii::$app->params['CUSTOMER_ID'];
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
