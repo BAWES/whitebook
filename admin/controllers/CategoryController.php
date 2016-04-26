@@ -321,9 +321,7 @@ class CategoryController extends Controller
                 }
                 if ($file) {
                     $file_name = 'child_category_'.$categoryid.'.png';
-                    $command = \Yii::$app->DB->createCommand(
-        'UPDATE whitebook_category SET category_icon="'.$file_name.'" WHERE category_id='.$categoryid);
-                    $command->execute();
+                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
                 }
                 echo Yii::$app->session->setFlash('success', 'Child category added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
