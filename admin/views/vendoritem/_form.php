@@ -66,9 +66,10 @@ $vendor_name = Vendor::getvendorname($_GET['vid']); ?>
 {error}"])->dropDownList($vendor_name) ?></div>
 
 <!-- if its update form disable particular vendor-->
-<?php } else if (!$model->isNewRecord) {?>
+<?php } else if (!$model->isNewRecord) { ?>
 <div class="form-group"><?= $form->field($model, 'vendor_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-{error}"])->dropDownList($vendorname, ['prompt'=>'Select...', "disabled"=>"disabled"]) ?></div>
+{error}"])->dropDownList($vendorname, ['prompt'=>'Select...','disabled'=>'disabled']) ?></div>
+<?= $form->field($model,'vendor_id')->hiddenInput(); ?>
 <?php } else { ?>
 
 <!-- if its create form-->
