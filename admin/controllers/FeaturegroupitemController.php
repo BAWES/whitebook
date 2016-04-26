@@ -17,7 +17,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\helpers\Setdateformat;
 
 /**
  * FeaturegroupitemController implements the CRUD actions for Featuregroupitem model.
@@ -143,9 +142,8 @@ class FeaturegroupitemController extends Controller
 
                     return $this->redirect(['index']);
                 }
-                
-                $model->featured_start_date = Setdateformat::convert($model->featured_start_date);
-                $model->featured_end_date = Setdateformat::convert($model->featured_end_date);
+                $model->featured_start_date = Yii::$app->formatter->asDate($model->featured_start_date, 'php:Y-m-d');
+      			$model->featured_end_date = Yii::$app->formatter->asDate($model->featured_end_date, 'php:Y-m-d');
                 $max_sort = Featuregroupitem::find()
                 ->select('max(featured_sort) as sort')
 				->where(['parent_category_id' => null])
@@ -199,8 +197,10 @@ class FeaturegroupitemController extends Controller
             $themid = $themid['0'];
             $featuregroupitem = Vendoritem ::groupvendoritem($model->category_id, $model->subcategory_id);
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-                $model->featured_start_date = Setdateformat::convert($model->featured_start_date);
-                $model->featured_end_date = Setdateformat::convert($model->featured_end_date);
+				
+				$model->featured_start_date = Yii::$app->formatter->asDate($model->featured_start_date, 'php:Y-m-d');
+      			$model->featured_end_date = Yii::$app->formatter->asDate($model->featured_end_date, 'php:Y-m-d');
+      			
                 if (count($model->item_id) >= 2) {
                     $item_id = implode(',', $model->item_id);
                 } else {

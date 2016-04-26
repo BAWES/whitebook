@@ -18,7 +18,6 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use arturoliveira\ExcelView;
-use yii\helpers\Setdateformat;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -119,7 +118,7 @@ class CustomerController extends Controller
             $model = new Customer();
             $model1 = new CustomerAddress();
             if ($model->load(Yii::$app->request->post()) && $model1->load(Yii::$app->request->post()) && Model::validateMultiple([$model, $model1])) {
-                $model->customer_dateofbirth = Setdateformat::convert($model->customer_dateofbirth);
+                $model->customer_dateofbirth=Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
                 $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
                 if ($model->save(false)) {
                     $model1->customer_id = $model->customer_id; // no need for validation rule on user_id as you set it yourself
@@ -161,7 +160,7 @@ class CustomerController extends Controller
         ->where('customer_id = :customer_id', [':customer_id' => $id])->one();
 
             if ($model->load(Yii::$app->request->post()) && $model1->load(Yii::$app->request->post()) && Model::validateMultiple([$model, $model1])) {
-                $model->customer_dateofbirth = Setdateformat::convert($model->customer_dateofbirth);
+                $model->customer_dateofbirth = Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
                 $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
                 $model->save();
                 $model1->save();
@@ -174,7 +173,6 @@ class CustomerController extends Controller
                 $country = Country::loadcountry();
                 $city = City::loadcity();
                 $location = Location::loadlocation();
-
                 return $this->render('update', [
                 'model' => $model, 'model1' => $model1, 'addresstype' => $addresstype, 'country' => $country, 'location' => $location, 'city' => $city,
             ]);

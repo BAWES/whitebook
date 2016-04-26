@@ -17,7 +17,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\helpers\Setdateformat;
 
 /**
  * FeaturegroupitemController implements the CRUD actions for Featuregroupitem model.
@@ -117,8 +116,8 @@ class ThemeitemController extends Controller
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
                 $item_id = implode(',', $model->item_id);
                 echo $model->item_id = $item_id;
-                $model->theme_start_date = Setdateformat::convert($model->theme_start_date);
-                $model->theme_end_date = Setdateformat::convert($model->theme_end_date);
+      			$model->theme_start_date = Yii::$app->formatter->asDate($model->theme_start_date, 'php:Y-m-d');
+      			$model->theme_end_date = Yii::$app->formatter->asDate($model->theme_end_date, 'php:Y-m-d');
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Theme group item created successfully!');
 
@@ -155,8 +154,9 @@ class ThemeitemController extends Controller
             $themelist = Themes::loadthemename();
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-                $model->theme_start_date = Setdateformat::convert($model->theme_start_date);
-                $model->theme_end_date = Setdateformat::convert($model->theme_end_date);
+				
+				$model->theme_start_date = Yii::$app->formatter->asDate($model->theme_start_date, 'php:Y-m-d');
+      			$model->theme_end_date = Yii::$app->formatter->asDate($model->theme_end_date, 'php:Y-m-d');
                 if ($model->item_id) {
                     $item_id = implode(',', $model->item_id);
                 } else {

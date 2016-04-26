@@ -113,10 +113,6 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $form = Yii::$app->request->post('PasswordForm');
             $rows= Admin::find()->select(['admin_email'])->where(['admin_email'=>$form['admin_email']])->asArray()->all();
-            /*$query = new Query();
-            $query->select('admin_email')->from('whitebook_admin')->where(['admin_email' => $form['admin_email']]);
-            $command = $query->createCommand();
-            $rows = $command->queryAll();*/
             if (!empty($rows)) {
                 $length = 10;
                 $randomString = substr(str_shuffle(md5(time())), 0, $length);

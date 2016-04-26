@@ -14,7 +14,6 @@ use common\models\PriorityitemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\Setdateformat;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 
@@ -131,8 +130,8 @@ class PriorityitemController extends Controller
 			->all();
             $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-                $model->priority_start_date = Setdateformat::convert($model->priority_start_date);
-                $model->priority_end_date = Setdateformat::convert($model->priority_end_date);
+				$model->priority_start_date = Yii::$app->formatter->asDate($model->priority_start_date, 'php:Y-m-d');
+      			$model->priority_end_date = Yii::$app->formatter->asDate($model->priority_end_date, 'php:Y-m-d');
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Priority item added successfully!');
 
@@ -176,8 +175,11 @@ class PriorityitemController extends Controller
 			->all();
             $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-                $model->priority_start_date = Setdateformat::convert($model->priority_start_date);
-                $model->priority_end_date = Setdateformat::convert($model->priority_end_date);
+				
+				$model->priority_start_date = Yii::$app->formatter->asDate($model->priority_start_date, 'php:Y-m-d');
+      			$model->priority_end_date = Yii::$app->formatter->asDate($model->priority_end_date, 'php:Y-m-d');
+      			
+      			
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Priority item updated successfully!');
 
