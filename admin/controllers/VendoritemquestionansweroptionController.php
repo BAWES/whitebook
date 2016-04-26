@@ -153,7 +153,7 @@ class VendoritemquestionansweroptionController extends Controller
             $data = Yii::$app->request->post();
         }
         if ($data['option'] != '') {
-            $command = \Yii::$app->db->createCommand('DELETE FROM whitebook_vendor_item_question_answer_option  WHERE answer_id ='.$data['option'].'')->execute();
+            $command = Vendoritemquestionansweroption::deleteAll('answer_id='.$data['option']);
             if ($command) {
                 echo 'Option deleted successfully';
                 die;
