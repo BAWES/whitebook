@@ -268,7 +268,7 @@ class VendorController extends Controller
                 /*--- Vendor logo ---*/
 
                 $file = UploadedFile::getInstances($model, 'vendor_logo_path');
-                if (!empty($file)) {                   
+                if (!empty($file)) {
                     foreach ($file as $files) {
                         if($files instanceof yii\web\UploadedFile){
                             $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;

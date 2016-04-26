@@ -295,24 +295,25 @@ class PriorityitemController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $itemlist = Vendoritem::find()->select('item_id','item_name')
+        $itemlist = Vendoritem::find()->select(['item_id','item_name'])
             ->where(['item_status' => 'Active'])
             ->andwhere(['item_for_sale' => 'yes'])
             ->andwhere(['category_id' => $data['id2']])
             ->andwhere(['subcategory_id' => $data['id3']])
             ->andwhere(['child_category' => $data['id4']])
             ->andwhere(['!=', 'trash', 'Deleted'])
-			->all();
-        //$itemlist = $category->queryAll();
+			      ->all();
+        $item = '';
         $count = count($itemlist);
         if (($count < 20) && ($count > 0)) {
         } else {
-            echo '<div class="admin" style="color:red">No Items Avilable</div>';
+            $item .= '<div class="admin" style="color:red">No Items Avilable</div>';
         }
-        echo  '<option value="">Select</option>';
+            $item .= '<option value="">Select</option>';
         foreach ($itemlist as $key => $val) {
-            echo  '<option value="'.$val['item_id'].'">'.$val['item_name'].'</option>';
+            $item .= '<option value="'.$val['item_id'].'">'.$val['item_name'].'</option>';
         }
+        return $item;
     }
     public function actionLoaddatetime()
     {

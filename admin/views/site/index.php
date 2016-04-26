@@ -225,7 +225,9 @@ $this->title = 'Dashboard';
 					</tr>
 				</thead>
 				<tbody>
-					<?php $j=0; foreach ($vendorperiod as $i){ if($j<5){
+					<?php $j=0; 
+	 if(!empty($vendorperiod)){
+	foreach ($vendorperiod as $i){ if($j<5){
 						$p= Package::PackageData($i['package_id']);
 						if((($i['package_id'])>0)&&($p)) {?>
 							<tr>
@@ -238,7 +240,7 @@ $this->title = 'Dashboard';
 									'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
 								]);?></td>
 
-							</tr><?php $j++; }}} ?>
+							</tr><?php $j++; }}}} ?>
 							<?php if(count($vendorperiod)>5){ ?>
 								<tr>
 									<td class="v-align-middle">&nbsp;</td>

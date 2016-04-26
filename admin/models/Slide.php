@@ -1,5 +1,4 @@
 <?php
-
 namespace admin\models;
 
 use Yii;
