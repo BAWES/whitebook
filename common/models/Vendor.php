@@ -302,8 +302,12 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
 
         // $check_vendor variable for frontend filter IMPORATNT
         $today=date('Y-m-d');
-        $datetime = Yii::$app->db->createCommand('SELECT vendor_id, DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date ,DATE_FORMAT(package_end_date,"%Y-%m-%d") AS package_end_date FROM whitebook_vendor_packages where  vendor_id='.$id);
-        $datetime = $datetime->queryAll();
+        
+        $datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date','vendor_id'])
+          ->where(['vendor_id' => $id])
+          ->asArray()
+          ->all();
+          
 
         $blocked_dates=array();
          if(!empty($datetime)){
@@ -455,11 +459,12 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getVendor_packagedate($id)
     {
         $id = 1;  // id for testing // check while dynamic
-
-        $datetime = Yii::$app->db->createCommand('SELECT DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date ,DATE_FORMAT(package_end_date,"%Y-%m-%d") AS package_end_date FROM whitebook_vendor_packages where  vendor_id='.$id);
-
-
-         $datetime = $datetime->queryAll();
+$datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
+          ->where(['vendor_id' => $data['id']])
+          ->andwhere(['!=','id',$packedit])
+          ->asArray()
+          ->all();
+          
         $blocked_dates=array();
          if(!empty($datetime)){
          foreach ($datetime as $d)
@@ -555,9 +560,6 @@ die;
             ->where(['>=', 'package_end_date', $contractDateBegin])
             ->andwhere(['<=', 'package_end_date', $contractDateBegin])
             ->one();
-        /*$sql="SELECT * FROM whitebook_vendor WHERE `package_end_date` >= '".$contractDateBegin."' AND`package_end_date` >= '".$contractDateBegin."' AND `package_end_date` <=  '".$contractDateEnd."'";
-        $command = Yii::$app->db->createCommand($sql);
-        $period=$command->queryall();*/
         return  $period;
     }
 
@@ -632,8 +634,7 @@ die;
     ->distinct()
     ->all();
     
-    /*  $vendor = Yii::$app->db->createCommand('Select DISTINCT wv.vendor_id,wv.vendor_name,wv.slug  from whitebook_vendor as wv LEFT JOIN whitebook_vendor_item as wvi ON wv.vendor_id = wvi.vendor_id where wv.vendor_status ="Active" AND wv.trash ="Default" AND wvi.trash="Default" AND wvi.item_status ="Active" AND wvi.item_for_sale = "Yes" AND wvi.item_approved = "Yes" AND wvi.item_id IN('.$val.')')->queryAll();*/
-        /* STEP 2 CHECK PACKAGE */
+
         foreach ($vendor as $key => $value) {
             $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
         }
@@ -707,23 +708,22 @@ die;
 
     public static function get_directory_list() {
         $today = date('Y-m-d H:i:s');
-        $query = new Query();
-        $query->select(['whitebook_vendor.vendor_id AS vid',
-                    'whitebook_vendor.vendor_name AS vname',
-                    'whitebook_vendor.slug AS slug'])
-                ->from('whitebook_vendor')
-                ->join('LEFT OUTER JOIN', 'whitebook_vendor_packages', 'whitebook_vendor.vendor_id =whitebook_vendor_packages.vendor_id')
-                ->where('whitebook_vendor_packages.package_start_date <="' . $today . '"')
-                ->andwhere('whitebook_vendor_packages.package_start_date <="' . $today . '"')
-                ->andwhere('whitebook_vendor.vendor_status ="Active"')
-                ->andwhere('whitebook_vendor.trash ="Default"')
-                ->andwhere('whitebook_vendor.approve_status ="yes"')
-                ->orderBy('whitebook_vendor.vendor_name ASC')
-                ->groupBy('whitebook_vendor.vendor_id')
-                ->LIMIT(50);
-
-        $command = $query->createCommand();
-        $data = $command->queryAll();
+        
+      
+        $data=Vendor::find()
+        ->select(['{{%vendor}}.vendor_id AS vid',
+                    '{{%vendor}}.vendor_name AS vname',
+                    '{{%vendor}}.slug AS slug'])
+        ->leftJoin('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
+        ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
+        ->andwhere(['>=','{{%vendor_packages}}.package_end_date',$today])
+			->andwhere(['{{%vendor}}.trash'=>'Default'])
+			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
+			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
+			->orderby(['{{%vendor}}.vendor_name', ASC])
+			->groupby(['{{%vendor}}.vendor_id'])
+			->asArray()
+			->all();
 
         return $data;
     }

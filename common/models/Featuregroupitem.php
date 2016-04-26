@@ -131,25 +131,13 @@ class Featuregroupitem extends \yii\db\ActiveRecord
 	}
  	public static function similiar_details()
 	{
-		$query = new Query;
-		$query->select([
-		'whitebook_feature_group_item.item_id AS gid', 
-		'whitebook_vendor.vendor_name AS vname', 
-		'whitebook_vendor_item.item_name AS iname',
-		'whitebook_vendor_item.slug AS slug', 
-		'whitebook_vendor_item.item_price_per_unit AS price']
-		)  
-	->from('whitebook_feature_group_item')
-	->join('LEFT OUTER JOIN', 'whitebook_vendor',
-				'whitebook_vendor.vendor_id =whitebook_feature_group_item.vendor_id')		
-	->join('LEFT OUTER JOIN', 'whitebook_vendor_item', 
-				'whitebook_feature_group_item.item_id =whitebook_vendor_item.item_id')
-	->where('whitebook_feature_group_item.group_item_status ="Active"')			
-	->andwhere('whitebook_feature_group_item.trash ="Default"')			
-	->LIMIT(50)	; 
-		
-    $command = $query->createCommand();
-    $data = $command->queryAll();	
+		$data=Featuregroupitem::find()->select(['{{%feature_group_item}}.item_id as gid','{{%vendor}}.vendor_name as vname','{{%vendor_item}}.item_name as iname','{{%vendor_item}}.slug as slug'])
+		->leftJoin('{{%vendor}}', '{{%feature_group_item}}.vendor_id = {{%vendor}}.vendor_id')
+		->leftJoin('{{%vendor}}', '{{%vendor_item}}.item_id = {{%feature_group_item}}.item_id')
+		->where(['{{%feature_group_item}}.group_item_status'=>'Active'])
+		->andwhere(['{{%feature_group_item}}.trash'=>'Default'])
+		->asArray()
+		->all();
     return ($data);
 	}
 
@@ -168,18 +156,6 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     ->andwhere(['<=','{{%feature_group_item}}.featured_start_date',$today_date])
     ->andwhere(['>=','{{%feature_group_item}}.featured_end_date',$today_date])
     ->all();
-    
-           /* $db->createCommand(
-                    'SELECT whitebook_feature_group_item.item_id FROM whitebook_feature_group_item
-        JOIN whitebook_vendor on whitebook_vendor.vendor_id=whitebook_feature_group_item.vendor_id
-        WHERE whitebook_feature_group_item.group_item_status="Active"
-        AND whitebook_vendor.vendor_Status="Active"
-        AND whitebook_vendor.trash="Default"
-        AND whitebook_vendor.approve_status="Yes"
-        AND whitebook_vendor.package_start_date<="' . $today . '"
-        AND whitebook_vendor.package_end_date>="' . $today . '"
-        AND whitebook_feature_group_item.featured_start_date<="' . $today_date . '"
-        AND whitebook_feature_group_item.featured_end_date>="' . $today_date . '"')->queryAll();*/
         });
     }
 
@@ -192,14 +168,6 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
     ->where(['{{%vendor_item}}.item_status' => 'Active'])
     ->all();
-        /*
-        $sql = 'SELECT item_id,whitebook_vendor_item.slug as slug,item_name,item_price_per_unit,vendor_name FROM whitebook_vendor_item
-        JOIN whitebook_vendor on whitebook_vendor.vendor_id=whitebook_vendor_item.vendor_id
-        JOIN whitebook_category on whitebook_category.category_id=whitebook_vendor_item.category_id
-            WHERE whitebook_vendor_item.item_status="Active"';
-        $command = Yii::$app->DB->createCommand($sql);
-        $feature = $command->queryAll();*/
-
         return $feature;
     }
 	

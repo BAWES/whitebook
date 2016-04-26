@@ -101,14 +101,5 @@ class City extends \yii\db\ActiveRecord
 		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
 	}
     
-    public static function getStatus($status)
-    {
-		$query = new Query;	
-		$query->select('name')
-			  ->from('whitebook_status1')
-			  ->where(['status' => $status]);
-		$command = $query->createCommand();
-		$data = $command->queryOne();	
-		return $data['name'];
-    }
+
 }

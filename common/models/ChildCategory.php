@@ -206,7 +206,20 @@ class ChildCategory extends \yii\db\ActiveRecord
     /* load child category used by frontend*/
     public static function loadchildcategoryslug($id)
    {
-      $childcategory = Yii::$app->db->createCommand('SELECT wvi.child_category as category_id ,wc.category_name,wc.slug FROM whitebook_vendor_item as wvi  INNER JOIN whitebook_category as wc ON wc.category_allow_sale= "yes" and wc.trash="Default" and wc.category_level = 2 and wvi.child_category = wc.category_id and wvi.item_for_sale="Yes" and wvi.item_approved="Yes" and wvi.item_status = "Active" and parent_category_id = '.$id.' group by wvi.child_category')->queryAll();  
+	   
+	   $childcategory=Category::find()->select(['{{%category}}.category_id','{{%category}}.category_name'])
+			->leftJoin('{{%vendor_item}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
+			->where(['{{%category}}.category_allow_sale'=>'Yes'])
+			->andwhere(['{{%category}}.trash'=>'Default'])
+			->andwhere(['{{%category}}.category_level'=>'2'])
+			->andwhere(['{{%vendor_item}}.item_for_sale'=>'Yes'])
+			->andwhere(['{{%vendor_item}}.item_approved'=>'Yes'])
+			->andwhere(['{{%vendor_item}}.item_status'=>'Active'])
+			->andwhere(['{{%vendor_item}}.parent_category_id'=>$id])
+			->groupby(['{{%vendor_item}}.child_category'])
+			->asArray()
+			->all();
+			
         return $childcategory;
    }	
 

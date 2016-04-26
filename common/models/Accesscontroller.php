@@ -35,8 +35,9 @@ class Accesscontroller extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['admin_id','controller','create','update','delete','manage','view',], 'required'],
-            //[['role_id', 'admin_id'], 'integer'],
+           // [['create','update','delete','manage','view'], 'required'],
+            [['admin_id','controller',], 'required'],
+            [['role_id', 'admin_id'], 'integer'],
             [['created_datetime', 'modified_datetime'], 'safe'],
         ];
     }

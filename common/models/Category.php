@@ -269,7 +269,7 @@ class Category extends \yii\db\ActiveRecord
          $vendor_id = $vendor[0]['category_id'];         
          $vendor_exp = explode(',',$vendor_id);
          $vendor_imp = implode('","',$vendor_exp);
-		$categories = User::Category()
+		$categories = Category::find()
 		->select(['category_id','category_name'])
 		->where(['IN', 'category_id', $vendor_imp])
 		->all();

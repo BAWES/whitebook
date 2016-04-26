@@ -64,11 +64,11 @@ class Vendoraddress extends \yii\db\ActiveRecord
 	public static function areashow($id)
 	{
 		echo $id;
-		$command = \Yii::$app->DB->createCommand(
-		'SELECT (`area_name`) FROM whitebook_area WHERE area_id='.$id);
-		$area = $command->queryAll();
-		$k= ($area[0]['area_name']);
-		return $k;
+		 $area=Area::find()->select('area_name')
+		 ->where(['area_id'=> $id])
+		 ->asArray()
+		 ->all();
+		 return ($area[0]['area_name']);
 	}
 
 }

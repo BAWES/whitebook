@@ -52,7 +52,6 @@ class SubCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-			      ['category_name','subcategoryvalidation'],
             [['parent_category_id','category_level', 'created_by', 'modified_by'], 'integer'],
             [['category_allow_sale', 'trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad'], 'string'],
             [['parent_category_id','category_name','category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
@@ -164,8 +163,16 @@ class SubCategory extends \yii\db\ActiveRecord
   // load sub category front-end plan page
   public static function loadsubcat($slug)
   {
-      $subcategory_slug= SubCategory::find()->where(['slug'=>$slug])->one();
-      $subcategory = Yii::$app->db->createCommand('SELECT wvi.subcategory_id as category_id ,wc.category_name,wc.slug FROM whitebook_vendor_item as wvi  INNER JOIN whitebook_category as wc ON wc.category_allow_sale= "yes" and wc.trash="Default" and wc.category_level = 1 and wvi.subcategory_id = wc.category_id and wvi.item_for_sale="Yes" and wvi.item_approved="Yes" and wvi.item_status = "Active" and parent_category_id = '.$subcategory_slug['category_id'].' group by wvi.subcategory_id')->queryAll(); 
-     return $subcategory;
+	  
+     $subcategory_slug= SubCategory::find()->where(['slug'=>$slug])->one();
+     if(!empty($subcategory_slug['category_id'])){
+    return $subcategory = Vendoritem::find()
+    ->select(['{{%vendor_item}}.subcategory_id as category_id','{{%category}}.category_name as category_name','{{%category}}.slug as slug'])
+    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.subcategory_id = {{%category}}.category_id')
+    ->where(['{{%category}}.category_allow_sale' => 'yes','{{%category}}.trash' => 'Default','{{%category}}.category_level' => '1','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%category}}.parent_category_id' => $subcategory_slug['category_id'],'{{%vendor_item}}.item_approved' => 'Yes'])
+    ->groupby(['{{%vendor_item}}.subcategory_id'])
+    ->asArray()
+    ->all();
+		}
   }
 }

@@ -14,7 +14,7 @@ use Yii;
  * @property string $created_datetime
  * @property string $modified_datetime
  */
-class vendorlocation extends \yii\db\ActiveRecord
+class Vendorlocation extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

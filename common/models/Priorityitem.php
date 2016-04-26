@@ -41,8 +41,7 @@ class Priorityitem extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-        
+        return [        
             [['item_id',  'priority_start_date', 'priority_end_date', 'priority_level'], 'required'],
             [['category_id','subcategory_id','child_category'], 'default', 'value' => 0],
             [['created_by','category_id', 'subcategory_id','child_category', 'modified_by'], 'integer'],

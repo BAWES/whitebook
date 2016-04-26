@@ -45,19 +45,35 @@ class PriorityitemSearch extends Priorityitem
 
         if($start =="" && $end !="")
         {
-$startdate = Yii::$app->db->createCommand('SELECT priority_start_date FROM whitebook_priority_item where trash ="Default" order by priority_start_date asc' )->queryAll();
+		 $startdate= Priorityitem::find()
+		 ->select('priority_start_date')
+         ->where(['trash'=>'Default'])
+         ->orderby(['priority_start_date'=>SORT_ASC])
+         ->asArray()
+         ->all();
          $start = date ("Y-m-d", strtotime($startdate[0]['priority_start_date']));
             //$start = '01-01-2010';
         }
         elseif($start !="" && $end =="")
         {         
-        $enddate = Yii::$app->db->createCommand('SELECT priority_end_date FROM whitebook_priority_item where trash ="Default" order by priority_end_date desc' )->queryAll();
+		 $enddate= Priorityitem::find()
+		 ->select('priority_end_date')
+         ->where(['trash'=>'Default'])
+         ->orderby(['priority_end_date'=>SORT_DESC])
+         ->asArray()
+         ->all();
+         
         $end = date ("Y-m-d", strtotime($enddate[0]['priority_end_date']));
         }    
         if($start !="" && $end !="" && $status !="" && $level !="")
         {
-        $all_priority = Yii::$app->db->createCommand('SELECT priority_id, priority_start_date, priority_end_date  FROM whitebook_priority_item where trash ="Default"')->queryAll();
-
+		 $enddate= Priorityitem::find()
+		 ->select(['priority_end_date','priority_start_date','priority_id'])
+         ->where(['trash'=>'Default'])
+         ->orderby(['priority_end_date'=>SORT_DESC])
+         ->asArray()
+         ->all();
+         
         /* BEGIN GET BETWEEN DATES FROM START DATE AND END DATE */     
             if(strtotime($start) <= strtotime($end)) {
             while (strtotime($start) <= strtotime($end)) {

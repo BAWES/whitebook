@@ -30,8 +30,8 @@ class Authassignment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_name', 'user_id', 'modified_datetime'], 'required'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
+            [['item_name', 'user_id'], 'required'],
+           // [['created_datetime', 'modified_datetime'], 'safe'],
             [['item_name', 'user_id'], 'string', 'max' => 64]
         ];
     }

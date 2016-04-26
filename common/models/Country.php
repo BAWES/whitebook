@@ -86,14 +86,5 @@ class Country extends \yii\db\ActiveRecord
 			return $Country;
 	}		
 	
-	public static function getStatus($status)
-    {
-		$query = new Query;	
-		$query->select('name')
-			  ->from('whitebook_status1')
-			  ->where(['status' => $status]);
-		$command = $query->createCommand();
-		$data = $command->queryOne();	
-		return $data['name'];
-    }
+
 }
