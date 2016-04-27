@@ -7,7 +7,6 @@ use common\models\Vendor;
 use common\models\BlockeddateSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\helpers\Setdateformat;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
@@ -72,7 +71,7 @@ class BlockeddateController extends Controller
         $block=($blockdays['blocked_days']);
         if($model->load(Yii::$app->request->post()) && $model->validate())
         {
-        $model->block_date = Setdateformat::convert($model->block_date);
+        $model->block_date =Yii::$app->formatter->asDate($model->block_date, 'php:Y-m-d');
 		$model->save();
             echo Yii::$app->session->setFlash('success', "Blocked date created successfully!");
 			return $this->redirect(['index']);
@@ -143,7 +142,8 @@ class BlockeddateController extends Controller
         $blockdays=Vendor::Vendorblockeddays($model->vendor_id);
         $block=($blockdays['blocked_days']);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-			$model->block_date = Setdateformat::convert($model->block_date);
+			
+			$model->block_date =Yii::$app->formatter->asDate($model->block_date, 'php:Y-m-d'); 
 			$model->save();
             echo Yii::$app->session->setFlash('success', "Blocked date updated successfully!");
             return $this->redirect(['index']);

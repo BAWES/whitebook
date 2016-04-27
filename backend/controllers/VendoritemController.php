@@ -293,16 +293,17 @@ class VendoritemController extends Controller
                             $model->image_path = $filename;
                         }
                         }
-                        
-                        $image_tbl = new Image();
-                        $image_tbl->image_path = $filename;
-                        $image_tbl->item_id = $model->item_id;
-                        $image_tbl->image_user_id = Yii::$app->user->getId();
-                        $image_tbl->module_type ='vendor_item';
-                        $image_tbl->image_user_type ='admin';
-                        $image_tbl->vendorimage_sort_order = $i;
-                        $image_tbl->save();
-                        ++$i;
+            
+						$image_tbl = new Image();
+						$image_tbl->image_path = $filename;
+						$image_tbl->item_id = $model->item_id;
+						$image_tbl->module_type = 'vendor_item';
+						$image_tbl->image_user_type = 'admin';
+						$image_tbl->vendorimage_sort_order = $i;
+						$image_tbl->image_user_id = Yii::$app->user->getId();
+						$image_tbl->save();
+						
+++$i;
                        }
                     }
             /*  Upload image table End */
