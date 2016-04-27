@@ -4,8 +4,8 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Authitem;
-use common\models\Role;
-use common\models\RoleSearch;
+use admin\models\Role;
+use admin\models\RoleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
