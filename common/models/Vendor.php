@@ -460,8 +460,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $id = 1;  // id for testing // check while dynamic
 $datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
-          ->where(['vendor_id' => $data['id']])
-          ->andwhere(['!=','id',$packedit])
+          ->where(['vendor_id' => $id])
           ->asArray()
           ->all();
           

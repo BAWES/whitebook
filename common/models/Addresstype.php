@@ -74,7 +74,6 @@ class Addresstype extends \yii\db\ActiveRecord
 
 	public static function loadAddresstype()
 	{
-		
 		$subQuery = (new Query())
                 ->select('*')
                 ->from('{{%address_question}} t')
