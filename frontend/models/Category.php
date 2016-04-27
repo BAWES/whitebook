@@ -4,7 +4,6 @@ namespace frontend\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
-use yii\behaviors\SluggableBehavior;
 use common\models\User;
 
 /**
