@@ -3,9 +3,9 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Contacts;
+use admin\models\Contacts;
 use common\models\Authitem;
-use common\models\ContactsSearch;
+use admin\models\ContactsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
