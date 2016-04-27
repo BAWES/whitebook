@@ -6,7 +6,7 @@ use Yii;
 use common\models\Location;
 use common\models\City;
 use common\models\Authitem;
-use common\models\LocationSearch;
+use admin\models\LocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

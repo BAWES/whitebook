@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\City;
-use common\models\CitySearch;
+use admin\models\CitySearch;
 use common\models\Admin;
 use common\models\Authitem;
 use yii\web\Controller;
