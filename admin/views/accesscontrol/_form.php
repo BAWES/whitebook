@@ -149,7 +149,7 @@ $(function (){
 		var csrfToken = $('meta[name="csrf-token"]').attr("content");
         var admin_id = $('#accesscontroller-admin_id').val();
         var controller_id = $('#accesscontroller-controller').val();
-        var path = "<?php echo Url::to([/accesscontrol/authitem']); ?> ";
+        var path = "<?php echo Url::to(['/accesscontrol/authitem']); ?> ";
         $.ajax({
         type: 'POST',
         url: path, //url to be called
