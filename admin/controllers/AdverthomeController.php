@@ -3,10 +3,9 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Adverthome;
+use admin\models\Adverthome;
 use common\models\Admin;
 use common\models\Authitem;
-use common\models\AdverthomeSearch;
 use common\models\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -64,7 +63,6 @@ class AdverthomeController extends Controller
     {
         $access = Authitem::AuthitemCheck('2', '24');
         if (yii::$app->user->can($access)) {
-            $searchModel = new AdverthomeSearch();
             $model = Adverthome::find()->all();
             foreach ($model as $key => $val) {
                 $first_id = $val['advert_id'];
@@ -75,13 +73,6 @@ class AdverthomeController extends Controller
                 $this->redirect('create');
             }
 
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ]);
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
