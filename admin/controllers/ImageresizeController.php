@@ -3,9 +3,8 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Imageresize;
+use admin\models\Imageresize;
 use common\models\Admin;
-use common\models\ImageresizeSearch;
 use yii\web\Controller;
 use common\models\Authitem;
 use yii\web\NotFoundHttpException;
@@ -73,13 +72,6 @@ class ImageresizeController extends Controller
                 $this->redirect('create');
             }
 
-            $searchModel = new ImageresizeSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
