@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute'=>'role_id',
 				'label'=>'Role',			
 				'value'=>'role.role_name',
-				'filter' => Html::activeDropDownList($searchModel, 'role_id', ArrayHelper::map(common\models\Role::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'role_id','role_name'),['class'=>'form-control','prompt' => 'All']),		
+				'filter' => Html::activeDropDownList($searchModel, 'role_id', ArrayHelper::map(admin\models\Role::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'role_id','role_name'),['class'=>'form-control','prompt' => 'All']),		
 			], 
 			 [
 				'attribute'=>'admin_id',
