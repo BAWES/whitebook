@@ -10,7 +10,6 @@ use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
 use common\models\Role;
 use yii\helpers\ArrayHelper;
-use common\models\Accesscontroller;
 
 /**
  * This is the model class for table "{{%admin}}".
@@ -227,7 +226,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 
 	public static function Admin()
     {
-		$accessdata = Accesscontroller::find()
+		$accessdata = \admin\models\Accesscontroller::find()
 		->select(['admin_id'])
 		->groupBy('admin_id')
 		 ->asArray()
