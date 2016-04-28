@@ -6,7 +6,7 @@ use yii\web\Controller;
 use yii\web\Session;
 use common\models\Package;
 use common\models\Category;
-use common\models\Vendor;
+use backend\models\Vendor;
 use common\models\Vendoritem;
 use common\models\VendorLogin;
 use common\models\VendorPassword;
