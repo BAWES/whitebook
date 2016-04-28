@@ -78,6 +78,17 @@ class Category extends \common\models\Category
     }
   } 
 
+  public static function loadcategory()
+  {
+    $categories=Category::find()
+    ->where(['category_allow_sale' => 'yes'])
+    ->andwhere(['!=', 'trash', 'Deleted'])
+    ->andwhere(['parent_category_id' => null])
+    ->all();
+    $category=ArrayHelper::map($categories,'category_id','category_name');
+    return $category;
+  }
+
   public static function loadcategoryname()
   {
   			$category= Category::find()
