@@ -1,0 +1,53 @@
+<?php
+
+namespace frontend\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "{{%wishlist}}".
+ *
+ * @property integer $invitees_id
+ * @property integer $event_id
+ * @property string $name
+ * @property string $email
+ * @property string $phone_number
+ * @property string $created_datetime
+ * @property string $modified_datetime
+ * @property integer $created_by
+ * @property integer $modified_by
+ */
+class Wishlist extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return '{{%wishlist}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['customer_id', 'item_id', 'wish_status'], 'required'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'customer_id' => 'Invitees ID',
+            'item_id' => 'Item ID',
+            'wish_status' => 'Status',
+            'wishlist_id' => 'Wishlist ID',
+            'last_updated_date' => 'Last updated date',
+        ];
+    }
+}
