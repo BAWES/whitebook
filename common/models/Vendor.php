@@ -2,19 +2,11 @@
 namespace common\models;
 
 use Yii;
-use yii\base\NotSupportedException;
-use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
-use common\models\Role;
-use common\models\Blockeddate;
-use yii\helpers\ArrayHelper;
-use common\models\Vendorpackages;
 use yii\behaviors\SluggableBehavior;
-use yii\db\Query;
-use yii\db\Expression;
+
 /**
  * This is the model class for table "{{%vendor}}".
  *
@@ -256,7 +248,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-/* modified */
+    /* modified */
     public static function findIdentityByAccessToken($token, $type = null)
     {
           return static::findOne(['access_token' => $token]);
@@ -272,76 +264,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return static::findOne(['vendor_contact_email' => $email,'approve_status'=>'Yes']);
     }
-
-
-    public static function Vendorblockeddays($id)
-    {
-        $result= Vendor::find()->select('blocked_days')->where(['vendor_id' => $id,'approve_status' => 'Yes'])->one();
-    if($result){
-        return $result;
-    }
-    else{
-        return 0;
-    }
-    }
-
-
-
-    public static function statusCheck($id){
-    $result= Vendor::find()->select('vendor_id')->where(['vendor_id' => $id,'vendor_status' => 'Active'])->one();
-    if($result){
-        return 1;
-    }
-    else{
-        return 0;
-    }
-
-
-        }
-    public static function packageCheck($id, $check_vendor = false){
-
-        // $check_vendor variable for frontend filter IMPORATNT
-        $today=date('Y-m-d');
-        
-        $datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date','vendor_id'])
-          ->where(['vendor_id' => $id])
-          ->asArray()
-          ->all();
-          
-
-        $blocked_dates=array();
-         if(!empty($datetime)){
-         foreach ($datetime as $d)
-         {
-           $date = $date1 = $d['package_start_date'];
-           $end_date = $end_date1 =$d['package_end_date'];
-
-           while (strtotime($date) <= strtotime($end_date)) {
-            $blocked_dates[]=$date;
-            $date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
-            }
-        }
-
-        $available = in_array($today, $blocked_dates);
-        if($available)
-        {
-            /* if vendor package not expired */
-            if($check_vendor !="")
-            {
-                return $datetime[0]['vendor_id'];die;
-            }
-            return "1"; die;
-        }
-        else
-        {
-
-            return "0";die;
-        }
-
-    }
-}
-
-
 
     public function findById($email)
     {
@@ -440,290 +362,28 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     }
     /** EXTENSION MOVIE * */
 
+    /* admin and vendor */
     public static function loadvendorname()
     {
         $vendorname= Vendor::find()
         ->where(['!=', 'vendor_status', 'Deactive'])
         ->andwhere(['!=', 'trash', 'Deleted'])
         ->all();
-        $vendorname=ArrayHelper::map($vendorname,'vendor_id','vendor_name');
+        $vendorname= \yii\helpers\ArrayHelper::map($vendorname,'vendor_id','vendor_name');
         return $vendorname;
     }
-        public static function statusImageurl($status)
+
+    public static function statusImageurl($status)
     {
         if($status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
-
-    public static function getVendor_packagedate($id)
-    {
-        $id = 1;  // id for testing // check while dynamic
-$datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
-          ->where(['vendor_id' => $id])
-          ->asArray()
-          ->all();
-          
-        $blocked_dates=array();
-         if(!empty($datetime)){
-         foreach ($datetime as $d)
-         {
-           $date = $date1 = $d['package_start_date'];
-           $end_date = $end_date1 =$d['package_end_date'];
-
-           while (strtotime($date) <= strtotime($end_date)) {
-            $blocked_dates[]=$date;
-        $date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
-
-            }
-        }
-    }
-    $max = max(array_map('strtotime', $blocked_dates));
-return date('d-m-Y', $max);die;
-die;
-
-
-    }
+    
     public static function getVendor($arr='')
     {
         $session = Yii::$app->session;
         $query = Vendor::find()->where('vendor_contact_email = "'.$session['email'].'"')->one();
         return (isset($query["$arr"]))?$query["$arr"]:'';
-    }
-
-
-    public static function getvendorname($id){
-        $vendorname= Vendor::find()
-            ->where(['vendor_id'=>$id])
-            ->all();
-            $vendorname=ArrayHelper::map($vendorname,'vendor_id','vendor_name');
-            return $vendorname;
-    }
-        // Pass vendor slug to frontend
-        public static function vendorslug($id){
-        $vendorname= Vendor::find()
-            ->select(['vendor_name','slug'])
-            ->where(['vendor_id'=>$id])
-            ->one();
-            return $vendorname;
-        }
-        // Pass vendor contact address to frontend
-        public static function vendorcontactaddress($id){
-        $vendordetail= Vendor::find()
-            ->select(['vendor_contact_address','vendor_contact_number'])
-            ->where(['vendor_id'=>$id])
-            ->one();
-            return $vendordetail;
-        }
-
-     // Pass vendor social details to frontend
-        public static function sociallist($id){
-        $socialdetail= Vendor::find()
-            ->select(['vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus','vendor_contact_email'])
-            ->where(['vendor_id'=>$id])
-            ->one();
-            return $socialdetail;
-        }
-
-             public static function vendorcount()
-    {
-        return Vendor::find()->where(['trash' => 'Default'])->count();
-    }
-         public static function vendormonthcount()
-    {
-        $month=date('m');
-        $year=date('Y');
-        return  Vendor::find()
-        ->where(['MONTH(created_datetime)' => $month])
-        ->andwhere(['YEAR(created_datetime)' => $year])
-        ->count();
-    }
-     public static function vendordatecount()
-    {
-        $date=date('d');
-        $month=date('m');
-        $year=date('Y');
-        return  Vendor::find()
-        ->where(['MONTH(created_datetime)' => $month])
-        ->andwhere(['YEAR(created_datetime)' => $year])
-        ->andwhere(['DAYOFMONTH(created_datetime)' => $date])
-        ->count();
-    }
-
-         public static function vendorperiod()
-    {
-        $contractDateBegin=date('Y-m-d');
-        $date = strtotime(date("Y-m-d", strtotime($contractDateBegin)) . " +60 days");
-        $contractDateEnd = date('Y-m-d',$date);
-        $period= Vendor::find()
-            ->where(['>=', 'package_end_date', $contractDateBegin])
-            ->andwhere(['<=', 'package_end_date', $contractDateBegin])
-            ->one();
-        return  $period;
-    }
-
-         public static function vendorexpiry()
-    {
-
-        for ($x = 1; $x <= 5; $x++) {
-        echo "The number is: $x <br>";
-        }
-        $year = date("Y");
-
-        $previousyear = $year -1;
-        $contractDateBegin=date('Y-m-d');
-        $date = strtotime(date("Y-m-d", strtotime($contractDateBegin)) . " +60 days");
-        $contractDateEnd = date('Y-m-d',$date);
-        $period= Vendor::find()
-            ->select()
-            ->where(['vendor_id' => $id,['>=', 'package_end_date', $contractDateBegin],['<=', 'package_end_date', $contractDateBegin]])
-            ->one();
-        return  $period;
-    }
-
-    public static function Commision()
-    {
-        $model_siteinfo = Siteinfo::find()->all();
-        foreach($model_siteinfo as $key=>$val)
-        {
-            return $first_id = $val['commision'];
-        }
-    }
-
-    /* load vendor details for front end */
-    public static function loadvendornames()
-    {
-            $vendorname= Vendor::find()
-            ->where(['!=', 'vendor_status', 'Deactive'])
-            ->andwhere(['!=', 'trash', 'Deleted'])
-            ->asArray()
-            ->all();
-            return $vendorname;
-    }
-
-    public static function loadvalidvendors()
-    {	
-	$vendor = Vendor::find()
-    ->select('{{%vendor}}.vendor_id')
-    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-    ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
-    ->distinct()
-    ->all();
-
-        /* STEP 2 CHECK PACKAGE */
-        foreach ($vendor as $key => $value) {
-            $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
-        }
-
-        return $active_vendors = implode('","', array_filter($package));
-    }
-    public static function loadvendor_item($item)
-    {
-				$k=array();
-		foreach ($item as $data){
-		$k[]=$data;
-		}
-		$id = implode("','", $k);
-		$val = "'".$id."'";
-        /* STEP 1 GET ACTIVE VENDORS*/
-        	$vendor = Vendor::find()
-    ->select('{{%vendor}}.vendor_id','{{%vendor}}.vendor_name','{{%vendor}}.slug')
-    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-    ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
-    ->distinct()
-    ->all();
-    
-
-        foreach ($vendor as $key => $value) {
-            $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
-        }
-        $active_vendors = implode('","', array_filter($package));
-        $query = Vendor::find()
-        ->select(['vendor_id','slug','vendor_name'])
-        ->where('vendor_id IN ("'.$active_vendors.'")')->asArray()->all();
-		return ($query);
-      //
-    }
-
-    public static function loadvalidvendorids($cat_id=false)
-    {
-        $expression = new Expression('NOW()');
-		$now = (new \yii\db\Query)->select($expression)->scalar();  // SELECT NOW();
-
-		//echo $date=DATE(NOW());die;
-		$blocked_vendors = Blockeddate::find()
-    ->select('GROUP_CONCAT(vendor_id) as vendor_id')
-    //->where([ DATE(NOW()) => 'DATE(block_date)'])
-    ->where(['DATE(block_date)' =>$now ])
-    ->all();
-            $condn = '';
-        if($blocked_vendors[0]['vendor_id'] !='')
-        {
-            //$condn = "'not in', '{{%vendor}}.vendor_id' ,$blocked_vendors['vendor_id'])";
-            $condn = ",'"."not in"."',";
-            $condn .= "'"."{{%vendor}}.vendor_id"."',";
-            $condn .= $blocked_vendors['vendor_id'];
-            //$condn = 'wv.vendor_id NOT IN('.$blocked_vendors['vendor_id'].') AND';
-        }
-        
-            
-		 $vendor = Vendor::find()
-    ->select('{{%vendor}}.*')
-    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-    ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.category_id' => $cat_id,'{{%vendor_item}}.type_id' => '2'.$condn])
-    //->andwhere([$condn])
-    ->distinct()
-    ->all();
-    
-        $package = array();
-        /* STEP 2 CHECK PACKAGE */
-        foreach ($vendor as $key => $value) {
-            $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
-        }
-        if($package =='')
-        {
-            return '';
-        }
-        return $active_vendors = implode('","', array_filter($package));
-    }
-
-    /* Load who vendor having category */
-    public static function Vendorcategories($slug){
-        $vendor_category = Vendor::find()
-            ->select(['category_id'])
-            ->where(['slug'=>$slug])
-            ->asArray()
-            ->one();
-            return $vendor_category;
-        }
-    public static function Vendorid_item($slug){
-        $vendor_category = Vendor::find()
-            ->select(['vendor_id'])
-            ->where(['slug'=>$slug])
-            ->asArray()
-            ->one();
-            return $vendor_category;
-        }
-
-    public static function get_directory_list() {
-        $today = date('Y-m-d H:i:s');
-        
-      
-        $data=Vendor::find()
-        ->select(['{{%vendor}}.vendor_id AS vid',
-                    '{{%vendor}}.vendor_name AS vname',
-                    '{{%vendor}}.slug AS slug'])
-        ->leftJoin('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
-        ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
-        ->andwhere(['>=','{{%vendor_packages}}.package_end_date',$today])
-			->andwhere(['{{%vendor}}.trash'=>'Default'])
-			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
-			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
-			->orderby(['{{%vendor}}.vendor_name', ASC])
-			->groupby(['{{%vendor}}.vendor_id'])
-			->asArray()
-			->all();
-
-        return $data;
     }
 }
