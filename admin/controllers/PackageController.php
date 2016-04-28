@@ -4,8 +4,8 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Authitem;
-use common\models\Package;
-use common\models\PackageSearch;
+use admin\models\Package;
+use admin\models\PackageSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -10,7 +10,7 @@ use yii\db\Query;
 use yii\web\Session;
 use common\models\Admin;
 use common\models\Customer;
-use common\models\Vendor;
+use admin\models\Vendor;
 use common\models\Vendoritem;
 use yii\web\UploadedFile;
 use common\models\PasswordForm;

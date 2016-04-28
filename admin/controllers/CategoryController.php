@@ -6,7 +6,7 @@ use Yii;
 use common\models\Image;
 use common\models\Admin;
 use common\models\Authitem;
-use common\models\Category;
+use admin\models\Category;
 use common\models\Vendor;
 use common\models\ChildCategory;
 use common\models\SubCategory;
@@ -180,6 +180,7 @@ class CategoryController extends Controller
         if (yii::$app->user->can($access)) {
             $model = new Category();
             $model->scenario = 'register';
+
             if (isset($_FILES['Category']['name']['category_icon'])) {
                 $file = UploadedFile::getInstances($model, 'category_icon');
                 $model->category_icon = $file[0]->tempName;
