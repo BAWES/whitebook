@@ -3,6 +3,8 @@ namespace common\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use common\models\Vendor;
+
 /**
  * This is the model class for table "whitebook_vendor_item".
  *
@@ -233,6 +235,17 @@ class Vendoritem extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItemTheme::className(), ['item_id' => 'item_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+
+    public function getThemes()
+    {
+        return $this->hasMany(Theme::className(), ['theme_id' => 'theme_id'])->viaTable('whitebook_vendor_item_theme', ['item_id' => 'item_id']);
+    }
+
+    
     public static function getCategoryName($id)
     {		
 		if($id){
@@ -242,24 +255,14 @@ class Vendoritem extends \yii\db\ActiveRecord
         {return null;}
     }
     
-        public static function getVendorName($id)
-    {		
-		$model = Vendor::find()->where(['vendor_id'=>$id])->one();
-        return $model->vendor_name;
-    }
-            public static function getItemType($id)
+    
+    public static function getItemType($id)
     {		
 		$model = Itemtype::find()->where(['type_id'=>$id])->one();
         return $model->type_name;
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getThemes()
-    {
-        return $this->hasMany(Theme::className(), ['theme_id' => 'theme_id'])->viaTable('whitebook_vendor_item_theme', ['item_id' => 'item_id']);
-    }
+
     
     public static function loadvendoritem()
 	{       
@@ -270,8 +273,9 @@ class Vendoritem extends \yii\db\ActiveRecord
 			return $item;
 	}
 	
-	    public static function vendoritemname($id)
-	{       
+    
+	public static function vendoritemname($id)
+	{
 			$item= Vendoritem::find()
 			->select(['item_name'])
 			->where(['=', 'item_id',$id])
@@ -279,73 +283,8 @@ class Vendoritem extends \yii\db\ActiveRecord
 			->one();
 			return $item['item_name']; 
 	}
-	    public static function vendoritem_search_data($name)
-	{       
-			$item= Vendoritem::find()
-			->select(['item_id','item_name','slug'])
-			->where(['like', 'item_name',$name])
-			->orwhere(['like', 'item_description',$name])
-			->andwhere(['trash' =>'Default','item_for_sale' =>'Yes','item_status'=>'Active'])
-			->all();
-			return $item; 
-	}
-	    public static function vendoritem_search_details($name)
-	{       /* 	SELECT `item_name`,`whitebook_vendor_item`.`slug` FROM `whitebook_vendor_item` LEFT JOIN `whitebook_category` ON `whitebook_vendor_item`.`category_id` = `whitebook_category`.`category_id` WHERE ((`item_name` LIKE '%food%') OR (`item_description` LIKE '%food%') AND (`whitebook_vendor_item`.`trash`='Default') AND (`whitebook_category`.`trash`='Default') AND (`item_for_sale`='Yes') AND (`item_status`='Active') OR (`category_name` LIKE '%food%'))*/
-	
-			$item= Vendoritem::find()
-			->joinWith(['category'])
-			->joinWith(['vendor'])
-			->select(['item_name','whitebook_vendor_item.category_id','whitebook_vendor_item.vendor_id','whitebook_vendor_item.item_id','whitebook_vendor_item.slug as wvislug','whitebook_category.category_name','whitebook_category.slug as wcslug','whitebook_vendor.vendor_name','whitebook_vendor.slug as wvslug'])
-			->where(['like', 'item_name',$name])
-			->orWhere(['like', 'category_name', $name])
-			->orWhere(['like', 'vendor_name', $name])
-			->andwhere(['whitebook_vendor_item.trash' =>'Default','whitebook_category.trash' =>'Default','item_for_sale' =>'Yes','item_status'=>'Active'])
-			->distinct()
-			->asArray()			
-			->all();
-			
-			return($item);
-			
-	}
 
-     public static function vendoritemtitle($id)
-    {       
-        $item= Vendoritem::find()
-        ->select(['item_name'])
-        ->where(['=', 'item_id',$id])
-        ->one();
-        return $item['item_name']; 
-    }
-
-     public static function findvendoritem($slug)
-    {       
-        $item= Vendoritem::find()
-        ->where(['=', 'slug',$slug])
-        ->one();
-        return $item; 
-    }
-
-
-		    public static function vendorpriorityitemitem($id)
-	{       
-			$item= Vendoritem::find()
-			->select(['item_id','item_name'])
-			->where(['=', 'item_id',$id])
-			->andwhere(['trash' =>'Default','item_for_sale' =>'Yes'])
-			->all();
-			$item=ArrayHelper::map($item,'item_id','item_name');
-			return $item;
-	}
-	    public static function loadsubcategoryvendoritem($subcategory)
-	{       
-			$item= Vendoritem::find()
-			->where(['trash' =>'Default','item_for_sale' =>'Yes','subcategory_id'=>$subcategory])
-			->all();
-			$item=ArrayHelper::map($item,'item_id','item_name');
-			return $item;
-	}
-	
-	    public static function groupvendoritem($categoryid,$subcategory)
+	public static function groupvendoritem($categoryid,$subcategory)
 	{       
 			$vendor_item= Vendoritem::find()
 			->where(['=', 'category_id', $categoryid])
@@ -357,7 +296,7 @@ class Vendoritem extends \yii\db\ActiveRecord
 	
 	
 	/* Load vendor items for vendor capacity exception dates*/
-	
+	/* backend */
 	public static function loaditems()
 	{       
 			$item= Vendoritem::find()
@@ -369,128 +308,12 @@ class Vendoritem extends \yii\db\ActiveRecord
 			return $items;
 	}
 	
+    /* common */
 	 public static function statusImageurl($status)
 	{			
 		if($status == 'Active')		
 		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
 		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-	}	
-	
-		 public static function itemcount()
-	{	
-        return Vendoritem::find()->where(['trash' => 'Default'])->count();
-	}
-		 public static function itemmonthcount()
-	{
-		$month=date('m');
-		$year=date('Y');
-        return  Vendoritem::find()
-        ->where(['MONTH(created_datetime)' => $month])
-        ->andwhere(['YEAR(created_datetime)' => $year])
-        ->count();
-	}	
-	 public static function itemdatecount()
-	{
-		$date=date('d');
-		$month=date('m');
-		$year=date('Y');
-        return  Vendoritem::find()
-        ->where(['MONTH(created_datetime)' => $month])
-        ->andwhere(['YEAR(created_datetime)' => $year])
-        ->andwhere(['DAYOFMONTH(created_datetime)' => $date])
-        ->count();
-	}
-	
-	public static function vendoritemcount($vid='')
-	{	       
-        if(!isset($vid) && $vid =='') {
-            $vid=Vendor::getVendor('vendor_id');
-        }
-       return $s = Vendoritem::find()
-        ->where(['trash' => 'Default'])
-        ->where(['vendor_id' => $vid])
-        ->count();
-	}
-	public static function get_category_itemlist($itemid)
-	{
-		$k=array();
-		if(!empty($itemid)){
-		foreach($itemid as $i)
-		{ 	 
-		$categories[]= Vendoritem::find()
-		->select(['category_id'])
-        ->where(['item_id' => $i])
-        ->one();
-		}
-		foreach($categories as  $cat)
-		{
-			$k[]=$cat['category_id'];
-		}
-		}
-		if(!empty($k)){
-		$k1=(array_unique($k));
-		
-		foreach($k1 as $c)
-		{	
-		$category_result[]= Category::find()
-		->select(['category_id','category_name'])
-        ->where(['category_id' => $c])
-        ->one();
-		} 
-		return ($category_result);
-		}
-	
-	}
-	public static function get_vendor_itemlist($itemid)
-	{
-		if(!empty($itemid)){
-		foreach($itemid as $i)
-		{	
-		$vendorlist[]= Vendoritem::find()
-		->select(['vendor_id'])
-        ->where(['item_id' => $i])
-        ->one();
-		}
-		foreach($vendorlist as  $ven)
-		{
-			$k[]=$ven['vendor_id'];
-		}
-		$k1=(array_unique($k));
-		foreach($k1 as $v)
-		{
-		$vendor_result[]= Vendor::find()
-		->select(['vendor_id','vendor_name'])
-        ->where(['vendor_id' => $v])
-        ->one();
-		}
-		return $vendor_result;
-		}
-	}
-	
-
-    public static function vendoritemmonthcount()
-	{
-		$month=date('m');
-		$year=date('Y');
-		$id=Vendor::getVendor('vendor_id');
-        return  Vendoritem::find()
-        ->where(['MONTH(created_datetime)' => $month])
-        ->andwhere(['vendor_id' => $id])
-        ->andwhere(['YEAR(created_datetime)' => $year])
-        ->count();
-	}	
-	public static function vendoritemdatecount()
-	{
-		$date=date('d');
-		$month=date('m');
-		$year=date('Y');
-		$id=Vendor::getVendor('vendor_id');
-        return  Vendoritem::find()
-        ->where(['MONTH(created_datetime)' => $month])
-        ->andwhere(['YEAR(created_datetime)' => $year])
-        ->andwhere(['vendor_id' => $id])
-        ->andwhere(['DAYOFMONTH(created_datetime)' => $date])
-        ->count();
 	}
 
    /**
@@ -501,4 +324,6 @@ class Vendoritem extends \yii\db\ActiveRecord
         Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $image_key);
         Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $image_key);
     }
+
+
 }
