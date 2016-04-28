@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Themes;
-use common\models\themesSearch;
+use admin\models\themesSearch;
 use common\models\Authitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
