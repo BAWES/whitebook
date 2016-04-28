@@ -79,7 +79,7 @@ class Itemtype extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItem::className(), ['type_id' => 'type_id']);
     }
     
-    	    public static function loaditemtype()
+    public static function loaditemtype()
 	{       
 			$itemtype= Itemtype::find()
 			->where(['!=', 'trash', 'Deleted'])
