@@ -225,13 +225,17 @@ class SiteController extends BaseController
             $slug = '';
             $imageData = '';
 
-            $sql1 = 'select wvi.item_price_per_unit,wi.image_path, wvi.item_price_per_unit,wvi.item_id, wvi.item_name,wvi.slug,wvi.category_id, wv.vendor_name ,count(*) as total FROM whitebook_vendor_item as wvi
-      LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-      LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-      WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-      and wvi.item_for_sale="Yes"  AND wi.module_type = "vendor_item" AND (wvi.category_id  = ("'.$cat_id.'") or wvi.subcategory_id  = ("'.$cat_id.'") or wvi.child_category  = ("'.$cat_id.'") or wvi.item_name LIKE "%'.$search.'%" or wv.vendor_name LIKE "%'.$search.'%") Group By wi.item_id';
-
-            $imageData = Yii::$app->db->createCommand($sql1)->queryAll();
+        	$imageData = Vendor::find()
+			->select('{{%vendor_item}}.item_price_per_unit','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_id','{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.category_id','{{%vendor}}.vendor_name','count({{%vendor_item}}.*) as total')
+			->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
+			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+			->Where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.type_id' => '2','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%image}}.module_type' => 'vendor_item','{{%vendor_item}}.category_id' => $cat_id,'{{%vendor_item}}.subcategory_id' => $cat_id,'{{%vendor_item}}.child_category' => $cat_id])
+			->orWhere(['like','{{%vendor_item}}.item_name',$search])
+			->orWhere(['like','{{%vendor}}.vendor_name',$search])
+			->groupBy('{{%image}}.item_id')
+			->asArray()
+			->all();
+			
             foreach ($imageData as $data) {
                 $k[] = $data['item_id'];
             }
@@ -369,10 +373,33 @@ class SiteController extends BaseController
             \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
         // FOR FILTER
-        $themes = Yii::$app->db->createCommand('SELECT wt.theme_id,wt.slug,wt.theme_name FROM `whitebook_vendor_item_theme` as wvit
-          LEFT JOIN `whitebook_theme` as wt ON FIND_IN_SET(wt.theme_id,wvit.theme_id)
-          WHERE wt.theme_status = "Active" AND wvit.vendor_id = "'.$vendor_details[0]['vendor_id'].'" GROUP BY wt.theme_id')->queryAll();
+        $themes = \common\models\Vendoritemthemes::find()
+			->select(['wt.theme_id','wt.slug','wt.theme_name'])
+			->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
+			->Where(['wt.theme_status'=>'Active'])
+			->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details[0]['vendor_id']])
+			->groupby(['wt.theme_id'])
+			->asArray()
+			->all();
 
+			$themes = Vendoritemthemes::find()
+			->select('wt.theme_id','wt.slug','wt.theme_name')
+			->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
+			->Where(['wt.theme_status'=>'Active'])
+			->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details[0]['vendor_id']])
+			->groupby(['wt.theme_id'])
+			->asArray()
+			->all();
+			
+			$themes = Vendor::find()
+			->select('{{%theme}}.theme_id','{{%theme}}.slug','{{%theme}}.theme_name')
+			->leftJoin('{{%theme}}', '{{%vendor_item_theme}}.theme_id = {{%theme}}.theme_id')
+			->Where(['{{%theme}}.theme_status'=>'Active'])
+			->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details[0]['vendor_id']])
+			->groupby(['{{%theme}}.theme_id'])
+			->asArray()
+			->all();
+			
             $vendorData = Yii::$app->db->createCommand('select wi.image_path, wvi.item_price_per_unit, wvi.item_name,wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
           LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
           LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id

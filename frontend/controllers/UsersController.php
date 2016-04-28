@@ -14,6 +14,7 @@ use common\models\Siteinfo;
 use common\models\Themes;
 use common\models\Vendoritem;
 use common\models\Featuregroupitem;
+use common\models\LoginForm;
 use common\models\Vendor;
 use common\models\City;
 use frontend\models\Website;
@@ -45,18 +46,14 @@ class UsersController extends BaseController
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
-        $model = new frontend\models\LoginForm();
+        $model = new LoginForm();
 
         if (isset($_POST['email']) && isset($_POST['password'])) {
+            $model->admin_email = $_POST['email'];
+            $model->admin_password = $_POST['password'];
 
-            $model->email = $_POST['email'];
-            $model->password = $_POST['password'];
-
-            // create_event = 1 , add_event=2
             $event_status = $_POST['event_status'];
             $favourite_status = $_POST['favourite_status'];
-
 
             if($model->login()){
                 $authorization = $model->customer->checkAuthorization();
@@ -144,7 +141,7 @@ class UsersController extends BaseController
                     ->setTo(Yii::$app->params['adminEmail'])
                     ->setSubject('USER-REGISTER')
                     ->send();
-                    $this->redirect(Url::to('site/index');
+                    $this->redirect(Url::to('site/index'));
                     echo '1';
                     die;
                 } else {
@@ -717,10 +714,10 @@ class UsersController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $command = Yii::$app->DB->createCommand(
-            'SELECT * FROM whitebook_events where customer_id = '.$data['cid']." AND event_type LIKE '".$data['type']."'");
-            $user_event_list = $command->queryAll();
-
+            $user_event_list = Events::find()
+            ->where(['customer_id' => $data['cid']])
+            ->andwhere(['like','event_type',$data['type']])
+            ->asArray()->all();
             return $this->renderPartial('user_event_list', ['user_event_list' => $user_event_list]);
         }
     }
@@ -811,19 +808,21 @@ class UsersController extends BaseController
             $address_id = $command->queryAll();
             //echo $address_id[0]['delivery_address_id'];die;
             if ($address_id[0]['delivery_address_id'] == 0) {
-                $command = Yii::$app->DB->createCommand(
-                "SELECT customer_name,customer_last_name,customer_email,customer_mobile,customer_address,country,area,block,street,juda FROM {{%customer}} where customer_id = '".$customer_id."'");
-                $customer_details = $command->queryOne();
+			$customer_details = Customer::find()
+			->select(['customer_name','customer_last_name','customer_email','customer_mobile','customer_address','country','area','block','street','juda'])
+            ->where(['customer_id' => $customer_id])
+            ->asArray()->all();
             } else {
-                $command = Yii::$app->DB->createCommand(
-                "SELECT customer_name,customer_last_name,customer_email,customer_mobile
-                FROM {{%customer}} where customer_id = '".$customer_id."'");
-                $customer_details1 = $command->queryOne();
-
-                $command = Yii::$app->DB->createCommand(
-                "SELECT address_type_id,country_id,city_id,area_id,address_data FROM {{%customer_address}} where address_id = '".$address_id[0]['delivery_address_id']."'");
-                $address_details = $command->queryOne();
-                $customer_details = (array_merge($customer_details1, $address_details));
+				$customer_details1 = Customer::find()
+				->select(['customer_name','customer_last_name','customer_email','customer_mobile'])
+				->where(['customer_id' => $customer_id])
+				->asArray()->all();
+            
+            $address_details = CustomerAddress::find()
+				->select(['address_type_id','country_id','city_id','area_id','address_data'])
+				->where(['address_id' => $address_id[0]['delivery_address_id']])
+				->asArray()->all();
+            $customer_details = (array_merge($customer_details1, $address_details));
             }
 
             return $this->render('/users/payment', ['customer_details' => $customer_details]);

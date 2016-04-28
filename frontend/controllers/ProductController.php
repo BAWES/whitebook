@@ -36,10 +36,15 @@ class ProductController extends BaseController
             $similiar_item = $similiar->similiar_details();
             $item = new Vendoritem();
             $model = Vendoritem::findvendoritem($slug);
-            $avlbl_stock = Yii::$app->db->createCommand('select wvi.item_amount_in_stock as stock FROM whitebook_vendor_item as wvi
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-            and wvi.item_for_sale="Yes" AND wvi.item_amount_in_stock > 0
-            AND wvi.slug = "'.$slug.'"')->queryOne();
+            $avlbl_stock = Vendoritem::find()->select(['item_amount_in_stock AS stock'])
+			->where(['item_approved' => 'Yes'])
+			->andwhere(['trash' => 'Default'])
+			->andwhere(['item_status' => 'Active'])
+			->andwhere(['type_id' => '2'])
+			->andwhere(['item_for_sale' => 'Yes'])
+			->andwhere(['>','item_amount_in_stock','0'])
+			->asArray()
+			->all();
 
             if (empty($model)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
@@ -48,9 +53,13 @@ class ProductController extends BaseController
             $vendor_det = Vendor::vendorslug($model['vendor_id']);
             $social_vendor = $vendor->sociallist($model->vendor_id);
 
-            $sql = 'SELECT image_path FROM whitebook_image WHERE item_id='.$model['item_id'].' and module_type="vendor_item" order by vendorimage_sort_order';
-            $command = Yii::$app->DB->createCommand($sql);
-            $output = $command->queryAll();
+			$output = Image::find()->select(['image_path'])
+			->where(['item_id' => $model['item_id']])
+			->andwhere(['module_type' => 'vendor_item'])
+			->orderby(['vendorimage_sort_order'=>SORT_ASC])
+			->asArray()
+			->all();
+			
             $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
             foreach ($output as $out) {
                 if ($out) {
@@ -63,10 +72,13 @@ class ProductController extends BaseController
             }
 
             /* BEGIN DELIVERY AREAS --VENDOR */
-            $sql = 'SELECT wl.location, wvl.area_id FROM `whitebook_vendor_location` as wvl
-            LEFT JOIN whitebook_location as wl ON wl.id = wvl.area_id
-            where wl.trash="Default" limit 100';
-            $vendr_area = Yii::$app->db->createCommand($sql)->queryAll();
+            
+			$vendr_area = Vendorlocation::find()
+			->select(['{{%vendor_location}}.area_id','{{%location}}.*'])
+			->leftJoin('{{%vendor_location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
+			->where(['{{%location}}.trash' => 'Default'])
+			->asArray()
+			->all();
             /* END DELIVERY AREAS --VENDOR */
 
             $title = 'Whitebook Application '.ucfirst($vendor_det['vendor_name']);
@@ -111,12 +123,18 @@ class ProductController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $model = Yii::$app->db->createCommand('select wvi.item_id,wi.image_path, wvi.item_price_per_unit, wvi.item_name, wv.vendor_name FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id  and wi.module_type="vendor_item"
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id where wvi.item_id='.$data['item_id'].' limit 1')->queryAll();
+            
+            $model = Vendoritem::find()
+			->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name'])
+			->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+			->where(['{{%image}}.module_type' => 'vendor_item'])
+			->andwhere(['{{%vendor_item}}.item_id' => $data['item_id']])
+			->asArray()
+			->all();
+			
             $user = new Users();
-            $customer_events = Yii::$app->db->createCommand('select * from whitebook_events where customer_id='.Yii::$app->params['CUSTOMER_ID'])->queryAll();
-
+            $customer_events = Events::find()->where(['customer_id' => Yii::$app->params['CUSTOMER_ID']])->asArray()->all();
             return $this->renderPartial('add_event', array('model' => $model, 'customer_events' => $customer_events));
         }
     }
@@ -126,8 +144,7 @@ class ProductController extends BaseController
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $edit_eventinfo = Yii::$app->db->createCommand('select * from whitebook_events where event_id='.$data['event_id'])->queryAll();
-
+            $edit_eventinfo = Events::find()->where(['event_id' => $data['event_id']])->asArray()->all();
             return $this->renderPartial('edit_event', array('edit_eventinfo' => $edit_eventinfo));
         }
     }
@@ -135,8 +152,10 @@ class ProductController extends BaseController
     /* BEGIN DELIVERY TIME SLOT -- VENDOR */
     public function actionGetdeliverytime()
     {
-        $sql1 = 'SELECT timeslot_id,timeslot_start_time,timeslot_end_time FROM {{%vendor_delivery_timeslot}} WHERE vendor_id='.$model['vendor_id'];
-        $vendor_timeslot = Yii::$app->db->createCommand($sql1)->queryAll();
+		$vendor_timeslot = Deliverytimeslot::find()
+		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+		->where(['vendor_id' => $model['vendor_id']])
+		->asArray()->all();
     }
     /* END DELIVERY TIME SLOT -- VENDOR */
     public function actionGetdeliverytimeslot()
@@ -146,8 +165,12 @@ class ProductController extends BaseController
             $string = $data['sel_date'];
             $timestamp = strtotime($string);
 
-            $sql1 = 'SELECT timeslot_id,timeslot_start_time,timeslot_end_time FROM {{%vendor_delivery_timeslot}} WHERE vendor_id='.$data["vendor_id"].' and timeslot_day="'.date("l", $timestamp).'"';
-            $vendor_timeslot = Yii::$app->db->createCommand($sql1)->queryAll();
+		$vendor_timeslot = Deliverytimeslot::find()
+		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+		->where(['vendor_id' => $model['vendor_id']])
+		->andwhere(['timeslot_day' => date("l", $timestamp)])
+		->asArray()->all();
+		
             foreach ($vendor_timeslot as $key => $value) {
                 echo '<option value="'.$key['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
             }
