@@ -90,78 +90,9 @@ class Themes extends \yii\db\ActiveRecord
     }
     
     public static function statusImageurl($img_status)
-	{			
-		if($img_status == 'Active')		
-		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-	}
-	
-	public  function themevalidation($attribute_name,$params)
-	{
-		if(!empty($this->theme_name) ){
-		$model = Themes::find()
-		->where(['theme_name'=>$this->theme_name])->one();
-        if($model){
-        $this->addError('theme_name','Please enter a unique theme name');
-        }
-		}
-	}
-	
-	public static function loadthemename()
-	{       
-			$theme_name= Themes::find()
-			->where(['!=', 'theme_status', 'Deactive'])
-			->andwhere(['!=', 'trash', 'Deleted'])
-			->all();
-			$themename=ArrayHelper::map($theme_name,'theme_id','theme_name');
-			return $themename;
-	}	
-	
-	public static function loadthemenameupdate($id)
-	{
-       $ids = explode(",", $id);
-       $id = implode("','", $ids);
-       $val = "'".$id."'";
-     
-        $theme_name =  Themes::find()->where(['theme_id' => [$val]])->all();
-		$themename=ArrayHelper::map($theme_name,'theme_id','theme_name');
-		return $themename;
-	}
-	public static function load_all_themename($id)
-	{     
-        $theme_name =  Themes::find()
-        ->select(['theme_id','theme_name','slug'])
-        ->where(['!=', 'theme_status', 'Deactive'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-        ->andwhere(['theme_id' => $id])->all();
-		return $theme_name;
-	}
-
-	public static function loadthemename_item($themeData)
-	{
-		$k=array();
-		foreach ($themeData as $data){		
-		$k[]=$data;
-		}
-		$id = implode("','", $k);
-		$val = "'".$id."'";
-		$theme =  Vendoritemthemes::find()
-        ->select(['theme_id'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-         ->andwhere(['IN', 'item_id', $val])
-         ->all();
-		return $theme;die;
-	}
-
-    // load themes front-end plan page 
-    public static function loadthemenames()
-    {       
-            $theme_name= Themes::find()
-            ->where(['!=', 'theme_status', 'Deactive'])
-            ->andwhere(['!=', 'trash', 'Deleted'])
-            ->asArray()
-            ->all();            
-            return $theme_name;
-    }
-
+  	{			
+  		if($img_status == 'Active')		
+  		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+  		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+  	}	
 }
