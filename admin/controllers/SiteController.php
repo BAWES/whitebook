@@ -11,7 +11,7 @@ use yii\web\Session;
 use common\models\Admin;
 use common\models\Customer;
 use admin\models\Vendor;
-use common\models\Vendoritem;
+use admin\models\Vendoritem;
 use yii\web\UploadedFile;
 use common\models\PasswordForm;
 use common\models\LoginForm;
