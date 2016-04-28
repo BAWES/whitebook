@@ -12,6 +12,7 @@ use common\models\Faq;
 use common\models\Themes;
 use common\models\Featuregroupitem;
 use frontend\models\Website;
+use frontend\models\Wishlist;
 use frontend\models\Users;
 use yii\web\Session;
 use yii\db\Query;
@@ -118,7 +119,6 @@ class SiteController extends BaseController
 
     public function actionDirectory()
     {
-
         $website_model = new Website();
         $category_url = Yii::$app->request->get('name');
         $main_category = $website_model->get_main_category();
@@ -365,7 +365,6 @@ class SiteController extends BaseController
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
             $vendor_item_details = $website_model->vendor_item_details($vendor_details[0]['vendor_id']);
-
             $main_category = $website_model->get_main_category();
 
             \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$vendor_details[0]['vendor_name'];
@@ -373,7 +372,7 @@ class SiteController extends BaseController
             \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
         // FOR FILTER
-        $themes = \common\models\Vendoritemthemes::find()
+			$themes = \common\models\Vendoritemthemes::find()
 			->select(['wt.theme_id','wt.slug','wt.theme_name'])
 			->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
 			->Where(['wt.theme_status'=>'Active'])
@@ -382,30 +381,17 @@ class SiteController extends BaseController
 			->asArray()
 			->all();
 
-			$themes = Vendoritemthemes::find()
-			->select('wt.theme_id','wt.slug','wt.theme_name')
-			->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
-			->Where(['wt.theme_status'=>'Active'])
-			->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details[0]['vendor_id']])
-			->groupby(['wt.theme_id'])
+			$vendorData = Vendoritem::find()
+			->select('{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name')
+			->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
+			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+			->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
+			->Where(['{{%vendor_item}}.trash'=> 'Default','{{%vendor_item}}.item_approved'=> 'Yes','{{%vendor_item}}.item_status'=> 'Active','{{%vendor_item}}.type_id'=> '2','{{%vendor_item}}.item_for_sale'=> 'Yes','{{%image}}.module_type'=> 'vendor_item','{{%vendor}}.slug'=> $slug])
+			->groupby(['{{%vendor_item}}.item_id'])
 			->asArray()
 			->all();
 			
-			$themes = Vendor::find()
-			->select('{{%theme}}.theme_id','{{%theme}}.slug','{{%theme}}.theme_name')
-			->leftJoin('{{%theme}}', '{{%vendor_item_theme}}.theme_id = {{%theme}}.theme_id')
-			->Where(['{{%theme}}.theme_status'=>'Active'])
-			->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details[0]['vendor_id']])
-			->groupby(['{{%theme}}.theme_id'])
-			->asArray()
-			->all();
-			
-            $vendorData = Yii::$app->db->createCommand('select wi.image_path, wvi.item_price_per_unit, wvi.item_name,wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name FROM whitebook_vendor_item as wvi
-          LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-          LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-          LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.category_id
-          WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-          and wvi.item_for_sale="Yes" AND wi.module_type = "vendor_item" AND wv.slug="'.$slug.'" Group By wvi.item_id limit 12')->queryAll();
+
 
             if ($customer_id == '') {
                 return $this->render('vendor_profile', [
@@ -436,12 +422,12 @@ class SiteController extends BaseController
         if (Yii::$app->request->isAjax) {
             $date = date('Y/m/d');
             $data = Yii::$app->request->post();
-            $k = Yii::$app->db->createCommand()->insert('whitebook_contacts', [
-            'contact_name' => $data['username'],
-            'contact_email' => $data['useremail'],
-            'created_datetime' => $date,
-            'message' => $data['msg'], ])
-            ->execute();
+            $model = \admin\models\Contacts();
+            $model->contact_name=$data['username'];
+            $model->contact_email=$data['useremail'];
+            $model->created_datetime=$date;
+            $model->message=$data['msg'];
+            $model->save();
             $db = Yii::$app->db;// or Category::getDb()
             $result = $db->cache(function ($db) use ($id) {
               return Siteinfo::find()->all();
@@ -488,7 +474,6 @@ class SiteController extends BaseController
                 die;
             }
         }
-
         return $this->render('contact', ['faq' => $faq_details]);
     }
 
@@ -535,8 +520,16 @@ class SiteController extends BaseController
         {
             if (Yii::$app->request->isAjax) {
                 $data = Yii::$app->request->post();
-                $loadvendor = Yii::$app->db->createCommand('SELECT DISTINCT vendor_id, vendor_name FROM whitebook_vendor
-              WHERE vendor_id IN ( SELECT vendor_id FROM whitebook_vendor_item where category_id ='.$data['cat_id'].')')->queryAll();
+                 $loadvendorid = \common\models\Vendoritem::find()
+					->select(['vendor_id'])
+					->Where(['category_id'=>$data['cat_id']])
+					->asArray()
+					->all();
+                 $loadvendor = \common\models\Vendor::find()
+					->select(['DISTINCT(vendor_id)','vendor_name'])
+					->Where(['IN','vendor_id'=>$loadvendorid])
+					->asArray()
+					->all();
                 foreach ($loadvendor as $key => $value) {
                     echo '<option value='.$value['vendor_id'].'>'.$value['vendor_name'].'</option>';
                 }
@@ -550,10 +543,13 @@ class SiteController extends BaseController
           {
               if (Yii::$app->request->isAjax) {
                   $data = Yii::$app->request->post();
-                  $loadtheme_ids = Yii::$app->db->createCommand('SELECT DISTINCT theme_id FROM whitebook_vendor_item_theme WHERE vendor_id = (
-                SELECT GROUP_CONCAT(DISTINCT theme_id) FROM whitebook_vendor_item_theme WHERE vendor_id = '.$data['v_id'].' )')->queryAll();
+                  $themes = \common\models\Vendoritemthemes::find()
+					->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
+					->Where(['vendor_id'=>$data['v_id']])
+					->asArray()
+					->all();
+					$loadtheme_ids=array_unique($themes);
                   $loadthemes = Themes::find()->select('theme_id, theme_name')->where(['theme_id' => $loadtheme_ids[0]['theme_id']])->asArray()->all();
-
                   foreach ($loadthemes as $key => $value) {
                       echo '<option value='.$value['theme_id'].'>'.$value['theme_name'].'</option>';
                   }
@@ -567,26 +563,42 @@ class SiteController extends BaseController
                 $customer_id = Yii::$app->params['CUSTOMER_ID'];
                 if (Yii::$app->request->isAjax) {
                     $data = Yii::$app->request->post();
-                    $condition = 'ww.wish_status=1 and ww.customer_id= "'.$customer_id.'" ';
 
-                    if (!empty($data['c_id'])) {
-                        $condition .= ' AND wvi.category_id= "'.$data['c_id'].'" ';
-                    }
-                    if (!empty($data['v_id'])) {
-                        $condition .= ' AND wvi.vendor_id= "'.$data['v_id'].'" ';
-                    }
-                    if (!empty($data['a_id'])) {
-                        $condition .= ' AND wvi.item_for_sale="'.$data['a_id'].'"';
-                    }
-                    if (!empty($data['t_id'])) {
-                        $condition .= ' AND FIND_IN_SET('.$data['t_id'].' , wvt.theme_id)';
-                    }
-                    $sql = 'SELECT  wvi.item_id, wvi.item_name, wvi.item_price_per_unit,wv.vendor_name  FROM whitebook_wishlist as ww
-                LEFT JOIN whitebook_vendor_item as wvi ON wvi.item_id = ww.item_id
-                LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-                LEFT JOIN whitebook_vendor_item_theme as wvt ON wvt.item_id = wvi.item_id
-                WHERE '.$condition.' group by wvi.item_id';
-                    $wishlist = Yii::$app->DB->createCommand($sql)->queryAll();
+   		$condition ='';
+		$condition = "'"."1"."'";
+		$condition .= " AND ".""."{{%wishlist}}.wish_status"."";
+		$condition .= "=";
+		$condition .= "'"."1"."'";
+		$condition .= " AND ".""."{{%wishlist}}.customer_id"."";
+		$condition .= "=";
+		$condition .= "'".$customer_id."'";
+		$condition .= " AND ".""."{{%vendor_item}}.trash"."";
+		$condition .= "=";
+		$condition .= "'"."Default"."'";
+		if (!empty($data['v_id'])) {
+		$condition .= " AND ".""."{{%vendor_item}}.vendor_id"."";
+		$condition .= "=";
+		$condition .= "'".$data['v_id']."'";
+		}
+		if (!empty($data['a_id'])) {
+		$condition .= " AND ".""."{{%vendor_item}}.item_for_sale"."";
+		$condition .= "=";
+		$condition .= "'".$data['a_id']."'";
+		}
+		if (!empty($data['t_id'])) {
+		$condition .= " AND FIND_IN_SET ("."'".$data['t_id']."'";
+		$condition .= ",";
+		$condition .= ""." {{%vendor_item_theme}}.theme_id"."";
+		$condition .= ")";
+		}
+		$wishlist = \frontend\models\Wishlist::find()
+					->select(['{{%wishlist}}.*'])
+					->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
+					->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+					->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item_theme}}.item_id = {{%vendor_item}}.item_id')
+					->Where($condition)
+					->asArray()
+					->all();
 
                     return $this->renderPartial('/users/user_wish_list', ['wishlist' => $wishlist]);
                 }
@@ -598,22 +610,23 @@ class SiteController extends BaseController
             $data = Yii::$app->request->post();
             $event = $data['event_name'];
             if ($event == 'all') {
-                $command = Yii::$app->DB->createCommand("SELECT event_name,event_id,event_date,event_type,slug
-                    FROM whitebook_events
-                    INNER JOIN whitebook_event_type
-                    ON whitebook_events.event_type=whitebook_event_type.type_name
-                    WHERE whitebook_event_type.trash='default' and whitebook_events.customer_id='".$customer_id."'");
-                $user_event_list = $command->queryAll();
-
+				$user_event_list = \common\models\Events::find()
+			->select(['event_name','event_id','event_date','event_type','slug'])
+			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
+			->Where(['et.trash'=>'default'])
+			->andWhere(['{{%events}}.customer_id'=>$customer_id])
+			->asArray()
+			->all();
                 return $this->renderPartial('/users/user_event_list', ['user_event_list' => $user_event_list]);
             }
-            $command = Yii::$app->DB->createCommand("SELECT event_name,event_id,event_date,event_type,slug
-                    FROM whitebook_events
-                    INNER JOIN whitebook_event_type
-                    ON whitebook_events.event_type=whitebook_event_type.type_name
-                    WHERE whitebook_event_type.trash='default' and whitebook_events.event_type='".$event."'and whitebook_events.customer_id='".$customer_id."'");
-            $user_event_list = $command->queryAll();
-
+            $user_event_list = \common\models\Events::find()
+			->select(['event_name','event_id','event_date','event_type','slug'])
+			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
+			->Where(['et.trash'=>'default'])
+			->andWhere(['{{%events}}.event_type'=>$event])
+			->andWhere(['{{%events}}.customer_id'=>$customer_id])
+			->asArray()
+			->all();
             return $this->renderPartial('/users/user_event_list', ['user_event_list' => $user_event_list]);
         }
     }
@@ -624,16 +637,16 @@ class SiteController extends BaseController
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (!empty($data['event_id'])) {
-                $command = Yii::$app->DB->createCommand("DELETE FROM whitebook_events WHERE event_id='".$data['event_id']."'");
-                if ($command->execute()) {
-                    $command = Yii::$app->DB->createCommand("SELECT event_name,event_id,event_date,event_type,slug
-                          FROM whitebook_events
-                          INNER JOIN whitebook_event_type
-                          ON whitebook_events.event_type=whitebook_event_type.type_name
-                          WHERE whitebook_event_type.trash='default' and whitebook_events.customer_id='".$customer_id."'");
-                    $user_event_list = $command->queryAll();
-
-                    return $this->renderPartial('/users/user_event_list', ['user_event_list' => $user_event_list]);
+				$command = Events::deleteAll('event_id='.$data['event_id']);
+                if ($command) {
+                    $user_event_list = \common\models\Events::find()
+					->select(['event_name','event_id','event_date','event_type','slug'])
+					->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
+					->Where(['et.trash'=>'default'])
+					->andWhere(['{{%events}}.customer_id'=>$customer_id])
+					->asArray()
+					->all();
+			        return $this->renderPartial('/users/user_event_list', ['user_event_list' => $user_event_list]);
                     die;
                 } else {
                     return 0;
@@ -644,3 +657,6 @@ class SiteController extends BaseController
     }
                     // END wish list manage page load vendorss based on category
 }
+
+
+//SELECT `wvi`.`item_id`, `wvi`.`item_name`, `wvi`.`item_price_per_unit`, `wv`.`vendor_name` FROM `whitebook_wishlist` LEFT JOIN `whitebook_vendor_item` `wvi` ON wvi.item_id = `whitebook_wishlist`.item_id LEFT JOIN `whitebook_vendor` `wv` ON wv.vendor_id = wvi.vendor_id LEFT JOIN `whitebook_vendor_item_theme` `wvt` ON wvt.item_id = wvi.item_id WHERE '1' AND 'wvi.trash'='Default' AND 'wvi.vendor_id'='1' AND 'wvi.item_for_sale'='Yes'

@@ -339,32 +339,7 @@ class UsersController extends BaseController
         }
     }
 
-    public function actionCustomerdeliveryaddress()
-    {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
-        if ($customer_id == '') {
-            return $this->goHome();
-        }
-        $model = new Users();
-        if (Yii::$app->request->isAjax) {
 
-            $deliveryid = $_POST['deliveryid'];
-            if ($deliveryid == 0) {
-                $deliveryid = '';
-            }
-
-            $update_delivery = Yii::$app->db->createCommand()
-            ->update('whitebook_basket', [
-                'delivery_address_id' => $deliveryid,
-            ], 'customer_id='.$customer_id)
-            ->execute();
-
-            if ($update_delivery) {
-                echo 1;
-                die;
-            }
-        }
-    }
     public function actionAddress_info()
     {
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
@@ -722,228 +697,8 @@ class UsersController extends BaseController
         }
     }
 
-    public function actionBasket_update()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-
-            $vendoritem_model = new Vendoritem();
-            $vendoritem_quantity = $vendoritem_model->vendoritem_quantity($data['item_id']);
-            $amt_stock = $vendoritem_quantity['item_amount_in_stock'];
-            $default_capacity = $vendoritem_quantity['item_default_capacity'];
-
-            if ($data['quantity_val'] > $default_capacity) {
-                echo '0';
-                die;
-            }
-
-            if ($data['quantity_val'] > $amt_stock) {
-                echo '0';
-                die;
-            }
-            $update = Yii::$app->db->createCommand()
-            ->update('whitebook_basket', [
-                'basket_quantity' => $data['quantity_val'],
-            ],
-            'item_id='.$data['item_id'])->execute();
-
-            if ($update) {
-                echo '1';
-            } else {
-                echo '0';
-            }
-            die;
-        }
-    }
-
-    public function actionBasket_delete()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-
-            $command = Yii::$app->DB->createCommand("DELETE FROM whitebook_basket WHERE item_id='".$data['item_id']."'");
-            if ($command->execute()) {
-                echo '1';
-            } else {
-                echo '0';
-            }
-            die;
-        }
-    }
-    public function actionBasket()
-    {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        } else {
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
-
-            $similiar = new Featuregroupitem();
-            $customer_details = new Customer();
-            $customer_address = new CustomerAddress();
-            $cust_details = $customer_details->customer_details($customer_id);
-            //echo '<pre>';//print_r ($cust_details);die;
-            $address = $customer_address->customer_address_details($customer_id);
-            //print_r ($address);die;
-            $similiar_item = $similiar->similiar_details();
-            $sql1 = 'select distinct wvi.item_price_per_unit,wi.image_path, wvi.item_price_per_unit,wvi.item_id,wb.basket_quantity, wvi.item_name,wvi.slug, wv.vendor_name ,count(*) as total FROM whitebook_vendor_item as wvi
-            LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
-            LEFT JOIN whitebook_basket as wb ON wvi.item_id = wb.item_id
-            LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
-            WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-            and wvi.item_for_sale="Yes"  AND wi.module_type = "vendor_item" AND wb.customer_id="'.$customer_id.'" Group By wb.basket_id';
-            $basketData = Yii::$app->db->createCommand($sql1)->queryAll();
-
-            return $this->render('/users/basket', ['basketData' => $basketData, 'similiar_item' => $similiar_item, 'customer_details' => $cust_details, 'address' => $address]);
-        }
-    }
-
-    public function actionPayment()
-    {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        } else {
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
-            $command = Yii::$app->DB->createCommand(
-            "SELECT DISTINCT delivery_address_id FROM {{%basket}} where customer_id = '".$customer_id."'");
-            $address_id = $command->queryAll();
-            //echo $address_id[0]['delivery_address_id'];die;
-            if ($address_id[0]['delivery_address_id'] == 0) {
-			$customer_details = Customer::find()
-			->select(['customer_name','customer_last_name','customer_email','customer_mobile','customer_address','country','area','block','street','juda'])
-            ->where(['customer_id' => $customer_id])
-            ->asArray()->all();
-            } else {
-				$customer_details1 = Customer::find()
-				->select(['customer_name','customer_last_name','customer_email','customer_mobile'])
-				->where(['customer_id' => $customer_id])
-				->asArray()->all();
-            
-            $address_details = CustomerAddress::find()
-				->select(['address_type_id','country_id','city_id','area_id','address_data'])
-				->where(['address_id' => $address_id[0]['delivery_address_id']])
-				->asArray()->all();
-            $customer_details = (array_merge($customer_details1, $address_details));
-            }
-
-            return $this->render('/users/payment', ['customer_details' => $customer_details]);
-        }
-    }
-
-    public function actionCashondelivery()
-    {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        } else {
-            $ip = Yii::$app->request->getUserIP();
-
-            // main order to store in db
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
-            $item_details1 = Yii::$app->db->createCommand('SELECT SUM(wb.basket_quantity * wvi.item_price_per_unit) as without_del,SUM(wvi.item_price_per_unit) as deliver_charg,SUM(wb.basket_quantity * wvi.item_price_per_unit+wvi.item_price_per_unit) as final FROM {{%basket}} as wb
-            INNER JOIN {{%vendor_item}} as wvi ON wvi.item_id = wb.item_id
-            where wvi.item_status = "Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes" AND wvi.type_id="2" AND wb.customer_id="'.$customer_id.'"')->queryAll();
-            echo '<pre>';
-            print_r($item_details1);
-
-            $date = date('Y-m-d h:i:s');
-            $command = Yii::$app->DB->createCommand()
-            ->insert('{{%order}}', [
-                'customer_id' => $customer_id,
-                'order_total_delivery_charge' => $item_details1[0]['without_del'],
-                'order_total_with_delivery' => $item_details1[0]['final'],
-                'order_total_without_delivery' => $item_details1[0]['deliver_charg'],
-                'order_payment_method' => 'COD',
-                'order_transaction_id' => '123456789',
-                'order_gateway_percentage' => '2',
-                'order_gateway_total' => $item_details1[0]['deliver_charg'],
-                'order_datetime' => $date,
-                'order_ip_address' => $ip,
-                'created_by' => $customer_id,
-                'created_date' => $date,
-            ])
-            ->execute();
-
-            $command = Yii::$app->DB->createCommand(
-            "SELECT order_id FROM {{%order}} where customer_id = '".$customer_id."' order by order_id DESC");
-            $order_id = $command->queryAll();
-
-            $item_details = Yii::$app->db->createCommand('SELECT wb.item_id,wb.basket_quantity * wvi.item_price_per_unit as without_del,wb.basket_quantity * wvi.item_price_per_unit * 10 as with_del,10 as delivery,wvi.vendor_id FROM {{%basket}} as wb
-                INNER JOIN {{%vendor_item}} as wvi ON wvi.item_id = wb.item_id
-                where wvi.item_status = "Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes" AND wvi.type_id="2" AND wb.customer_id="'.$customer_id.'"')->queryAll();
-                $command = Yii::$app->DB->createCommand(
-                "SELECT * FROM {{%basket}} where customer_id = '".$customer_id."'");
-                $basket = $command->queryAll();
-
-                $items = array();
-                foreach ($basket as $bas) {
-                    $items[] = $bas['item_id'];
-                    $item_quantity[] = $bas['basket_quantity'];
-                    $delivery_ids[] = $bas['delivery_address_id'];
-                    $de[] = $bas['delivery_address_id'];
-                }
-                $vendor_detail = Vendoritem::get_vendor_itemlist($items);
-
-                $price_detail = Vendoritem::get_item_pricelist($items);
-
-                echo '<pre>';
-                $i = 0;
-                foreach ($vendor_detail as $vid) {
-                    $item_quantity1 = $item_quantity[$i];
-                    $commission = 2;
-                    $delivery_charge = 10;
-                    $without = ($price_detail[$i]['item_price_per_unit'] * $item_quantity1);
-                    $with_deli = ($price_detail[$i]['item_price_per_unit'] * $item_quantity1) + $delivery_charge;
-                    $comm = $with_deli * 2 / 100;
-                    $command = Yii::$app->DB->createCommand()
-                    ->insert('{{%suborder}}', [
-                        'order_id' => $order_id[0]['order_id'],
-                        'vendor_id' => $vid['vendor_id'],
-                        'status_id' => 1,
-                        'suborder_delivery_charge' => $delivery_charge,
-                        'suborder_total_without_delivery' => $without,
-                        'suborder_total_with_delivery' => $with_deli,
-                        'suborder_commission_percentage' => $commission,
-                        'suborder_commission_total' => $comm,
-                        'suborder_vendor_total' => $date,
-                        'suborder_datetime' => $date,
-                        'created_by' => $customer_id,
-                        'created_datetime' => $date,
-                    ])
-                    ->execute();
-
-                    ++$i;
-                }
-
-                $command = Yii::$app->DB->createCommand(
-                "SELECT * FROM {{%suborder}} where order_id = '".$order_id[0]['order_id']."'");
-                $suborder = $command->queryAll();
-                $i = 0;
-                foreach ($suborder as $so) {
 
 
-                    $command = Yii::$app->DB->createCommand()
-                    ->insert('{{%suborder_item_purchase}}', [
-                        'suborder_id' => $so['suborder_id'],
-                        'timeslot_id' => '1',
-                        'item_id' => $items[$i],
-                        'address_id' => $delivery_ids[$i],
-                        'purchase_delivery_date' => $date,
-                        'area_id' => '1',
-                        'purchase_quantity' => $item_quantity[$i],
-                        'created_by' => $customer_id,
-                        'created_datetime' => $date,
-                    ])
-                    ->execute();
-
-                    ++$i;
-                }
-                $command = Yii::$app->DB->createCommand(
-                "DELETE  FROM {{%basket}} where customer_id = '".$customer_id."'");
-                $basket = $command->queryAll();
-                return $this->goHome();
-
-                return $this->render('/users/payment', ['customer_details' => $customer_details]);
-            }
-        }
 
         public function actionEventdetails($slug = '')
         {
@@ -952,10 +707,12 @@ class UsersController extends BaseController
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
             $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->params['CUSTOMER_ID']);
-
-            $eventitem_details = Yii::$app->db->createCommand('SELECT weil.item_id FROM {{%event_item_link}} as weil
-            INNER JOIN {{%vendor_item}} as wvi ON wvi.item_id = weil.item_id
-            where wvi.item_status = "Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes" AND wvi.type_id="2" AND weil.event_id='.$event_details[0]['event_id'])->queryAll();
+			
+			$eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
+			->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
+			->Where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%event_item_link}}.event_id'=>$event_details[0]['event_id']])
+			->asArray()
+			->all();
             $searchModel = new EventinviteesSearch();
             $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $slug);
 
@@ -994,11 +751,13 @@ class UsersController extends BaseController
             {
                 if (Yii::$app->request->isAjax) {
                     $data = Yii::$app->request->post();
-                    $command = Yii::$app->DB->createCommand(
-                    'DELETE from whitebook_event_item_link where link_id='.$data['item_link_id']);
-                    if ($command->execute()) {
-                        $cat_list1 = Yii::$app->db->createCommand('SELECT wvi.item_id FROM `whitebook_vendor_item` as wvi INNER JOIN whitebook_event_item_link as wei
-                            ON wvi.item_id = wei.item_id and wei.trash="default" and wvi.category_id ='.$data['category_id'].' and wei.event_id = '.$data['event_id'].'')->queryAll();
+                    $command = Eventitemlink::deleteAll('link_id='.$data['item_link_id']);
+                    if ($command) {
+						$cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
+						->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
+						->Where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%vendor_item}}.category_id'=>$data['category_id'],'{{%event_item_link}}.event_id'=>$data['event_id']])
+						->asArray()
+						->all();
                             echo count($cat_list1);
                     } else {
                         echo -1;
@@ -1006,52 +765,4 @@ class UsersController extends BaseController
                 }
             }
 
-                /* BEGIN ADD to cart*/
-                public function actionAddtobasket()
-                {
-                    if (Yii::$app->request->isAjax) {
-                        $data = Yii::$app->request->post();
-                        $item_id = $data['item_id'];
-                        $cust_id = $data['cust_id'];
-                        $item_exist = Basket::find()->select('basket_id, basket_quantity')->where(['item_id' => $item_id,  'customer_id' => $cust_id])->asArray()->limit(1)->one();
-                        if (!empty($item_exist)) {
-                            $basket = Basket::findIdentity($item_exist['basket_id']);
-                            $basket->basket_quantity = $item_exist['basket_quantity'] + 1;
-                            $basket->save();
-                        }
-                        elseif (empty($item_exist)) {
-                            $command = Yii::$app->DB->createCommand()
-                                ->insert('{{%basket}}', [
-                                'item_id' => $item_id,
-                                'customer_id' => $cust_id,
-                                'basket_quantity' => 1, ])
-                                ->execute();
-
-                            if ($command) {
-                                echo 1;
-                            } else {
-                                echo 0;
-                            }
-                        }
-                    }
-                }
-                    /* END ADD to cart*/
-
-                    public function actionUserorderdetails()
-                    {
-                        if (!Yii::$app->user->isGuest) {
-                            $order_details = Yii::$app->db->createCommand('SELECT wsip.item_id, wvi.item_name,wv.vendor_id,
-                            wv.vendor_name,	wo.order_total_with_delivery, wo.order_datetime,wsip.purchase_quantity, wvi.item_price_per_unit,ws.status_name,wo.order_id from whitebook_suborder_item_purchase as wsip
-                            LEFT JOIN whitebook_suborder as wso ON wso.suborder_id = wsip.suborder_id
-                            LEFT JOIN whitebook_order as wo ON wo.order_id = wso.order_id
-                            LEFT JOIN whitebook_vendor_item as wvi ON wvi.item_id = wsip.item_id
-                            LEFT JOIN whitebook_vendor as wv ON wvi.vendor_id = wv.vendor_id
-                            LEFT JOIN whitebook_status as ws ON ws.status_id = wso.status_id
-                            WHERE wsip.trash="default" AND wo.customer_id ='.CUSTOMER_ID)->queryAll();
-
-                            return $this->render('user_order_details', ['order_details' => $order_details]);
-                        } else {
-                            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-                        }
-                    }
 }
