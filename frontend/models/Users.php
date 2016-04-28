@@ -95,7 +95,6 @@ class Users extends Model
         $sql = 'UPDATE whitebook_customer set customer_org_password="'.$password.'",customer_password="'.$gen_password.'" where customer_activation_key="'.$customer_activation_key.'"';
         $command = Yii::$app->DB->createCommand($sql);
         $customer = $command->execute();
-
         return $customer;
     }
 
