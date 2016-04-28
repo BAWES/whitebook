@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Themes;
-use admin\models\themesSearch;
+use admin\models\ThemesSearch;
 use common\models\Authitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -62,7 +62,7 @@ class ThemesController extends Controller
     {
         $access = Authitem::AuthitemCheck('4', '20');
         if (yii::$app->user->can($access)) {
-            $searchModel = new themesSearch();
+            $searchModel = new ThemesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
