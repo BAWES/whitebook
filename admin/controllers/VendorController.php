@@ -10,7 +10,7 @@ use common\models\Siteinfo;
 use common\models\Vendor;
 use common\models\Authitem;
 use common\models\Category;
-use common\models\VendorSearch;
+use admin\models\VendorSearch;
 use common\models\Vendorpackages;
 use common\models\Package;
 use common\models\VendoritemcapacityexceptionSearch;
