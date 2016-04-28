@@ -12,10 +12,10 @@ use common\models\Vendoritemthemes;
 use common\models\Featuregroupitem;
 use common\models\Featuregroup;
 use common\models\Authitem;
-use common\models\Vendor;
+use admin\models\Vendor;
 use common\models\Themes;
 use common\models\Image;
-use common\models\Category;
+use admin\models\Category;
 use common\models\SubCategory;
 use common\models\ChildCategory;
 use common\models\VendoritemSearch;
@@ -418,7 +418,7 @@ public function actionUpdate($id, $vid = false)
     if ($model->save()) {
 
     /* Begin Upload guide image table  */
-        $guide_image = UploadedFile::getInstances($model, 'guide_image');
+    $guide_image = UploadedFile::getInstances($model, 'guide_image');
 
     if ($guide_image) {
     $i = 0;
