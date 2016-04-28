@@ -128,11 +128,12 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Order::className(), ['customer_id' => 'customer_id']);
     }
 
+    /* admin */
     public static function customercount()
     {
         return Customer::find()->where(['trash' => 'Default'])->count();
     }
-
+    /* admin */
     public static function customermonthcount()
     {
         $month=date('m');
@@ -144,6 +145,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
         ->count();
     }
 
+    /* admin */
     public static function customerdatecount()
     {
         $date=date('d');
