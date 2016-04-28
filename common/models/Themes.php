@@ -95,4 +95,15 @@ class Themes extends \yii\db\ActiveRecord
   		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
   		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
   	}	
+
+  public  function themevalidation($attribute_name,$params)
+  {
+    if(!empty($this->theme_name) ){
+    $model = Themes::find()
+    ->where(['theme_name'=>$this->theme_name])->one();
+        if($model){
+        $this->addError('theme_name','Please enter a unique theme name');
+        }
+    }
+  }
 }
