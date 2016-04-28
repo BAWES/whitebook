@@ -1,10 +1,10 @@
 <?php
 
-namespace common\models;
+namespace admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Package;
+use admin\models\Package;
 
 /**
  * PackageSearch represents the model behind the search form about `common\models\Package`.

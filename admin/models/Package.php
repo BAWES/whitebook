@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models;
-
+namespace admin\models;
 use Yii;
 use yii\helpers\ArrayHelper;
+use common\models\Vendor;
 
 /**
  * This is the model class for table "whitebook_package".
