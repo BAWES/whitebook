@@ -3,10 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
 
-use common\models\Priorityitem;
-use common\models\Package;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\PackageSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -50,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                  'label'=>'Package added',
                  'format'=>'raw',
                  'value'=>function ($model) {                      
-                            return Package::packagecount($model->package_id);
+                            return \admin\models\Package::packagecount($model->package_id);
                         },         
              ],
             ['class' => 'yii\grid\ActionColumn',
