@@ -4,9 +4,9 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Vendor;
-use common\models\Featuregroup;
+use admin\models\Featuregroup;
 use common\models\Blockeddate;
-use common\models\FeaturegroupSearch;
+use admin\models\FeaturegroupSearch;
 use yii\web\Controller;
 use common\models\Authitem;
 use yii\web\NotFoundHttpException;
