@@ -7,7 +7,7 @@ use Yii;
 use common\models\Addresstype;
 use common\models\Admin;
 use common\models\Authitem;
-use common\models\AddresstypeSearch;
+use admin\models\AddresstypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
