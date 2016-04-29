@@ -8,13 +8,12 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 $this->title = 'Home | Whitebook';
-
 use frontend\models\Website;
 $model = new Website();
 ?>
 <!-- content main start -->
 <!-- banner section start -->
-                <?php if (count($banner) > 0) { ?>
+    <?php if (count($banner) > 0) { ?>
     <section id="banner_sections">
         <div class="banner_slider_content">
             <div class="carousel slide">
