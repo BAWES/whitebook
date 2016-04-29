@@ -8,7 +8,7 @@ use common\models\Package;
 use common\models\Category;
 use backend\models\Vendor;
 use backend\models\Vendoritem;
-use common\models\VendorLogin;
+use backend\models\VendorLogin;
 use common\models\VendorPassword;
 use common\models\Siteinfo;
 use yii\db\Query;
