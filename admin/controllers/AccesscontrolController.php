@@ -4,13 +4,13 @@ namespace admin\controllers;
 
 use Yii;
 use yii\db\Query;
-use common\models\Usercontroller;
+use admin\models\Usercontroller;
 use admin\models\Accesscontroller;
-use common\models\Authassignment;
-use common\models\Admin;
+use admin\models\Authassignment;
+use admin\models\Admin;
 use admin\models\AccesscontrolSearch;
 use yii\web\Controller;
-use common\models\Authitem;
+use admin\models\Authitem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;

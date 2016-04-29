@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value'=>function($data){
 				return $data->getAdminName($data->admin_id);
 				},
-				'filter' => Html::activeDropDownList($searchModel, 'admin_id', ArrayHelper::map(common\models\Admin::find()->where(['!=','trash','Deleted'])
+				'filter' => Html::activeDropDownList($searchModel, 'admin_id', ArrayHelper::map(admin\models\Admin::find()->where(['!=','trash','Deleted'])
 				->andwhere(['=','admin_status','Active'])->asArray()->all(), 'id','admin_name'),['class'=>'form-control','prompt' => 'All']),		
 			],
 			[

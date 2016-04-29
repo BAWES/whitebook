@@ -3,7 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Authitem;
+use admin\models\Authitem;
 use admin\models\Role;
 use admin\models\RoleSearch;
 use yii\web\Controller;

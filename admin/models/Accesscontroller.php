@@ -2,8 +2,8 @@
 
 namespace admin\models;
 
-use common\models\Usercontroller;
-use common\models\Admin;
+use admin\models\Usercontroller;
+use admin\models\Admin;
 use Yii;
 
 /**

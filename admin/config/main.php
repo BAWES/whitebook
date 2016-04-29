@@ -23,7 +23,7 @@ return [
             'class' => 'yii\rbac\DbManager',
         ],
         'user' => [
-            'identityClass' => 'common\models\Admin',
+            'identityClass' => 'admin\models\Admin',
             'enableAutoLogin' => false,
         ],
         'session' => [

@@ -4,9 +4,9 @@ namespace admin\controllers;
 
 use yii\helpers\ArrayHelper;
 use Yii;
-use common\models\Addresstype;
-use common\models\Admin;
-use common\models\Authitem;
+use admin\models\Addresstype;
+use admin\models\Admin;
+use admin\models\Authitem;
 use admin\models\AddresstypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
