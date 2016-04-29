@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
 use common\models\Location;
-use common\models\Vendorlocation;
+use backend\models\Vendorlocation;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\vendorlocation */
