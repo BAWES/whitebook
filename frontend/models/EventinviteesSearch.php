@@ -79,8 +79,12 @@ class EventinviteesSearch extends Eventinvitees
 
     public function loadsearch($params, $slug)
     {
-        $event_details = Yii::$app->db->createCommand('SELECT event_id FROM whitebook_events where slug = "'.$slug.'"')->queryAll();
-
+		$event_details = \common\models\Events::find()
+			->select(['event_id'])
+			->Where(['slug'=>$slug])
+			->asArray()
+			->all();
+			
         $query = Eventinvitees::find()
         ->andwhere(['event_id' => $event_details[0]['event_id']]);
 
