@@ -2,7 +2,7 @@
 namespace backend\models;
 
 use Yii;
-use common\models\Vendorpackages;
+use backend\models\Vendorpackages;
 
 class Vendor extends \common\models\Vendor
 {
