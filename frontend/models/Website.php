@@ -9,7 +9,7 @@ use common\models\Category;
 use admin\models\Adverthome;
 use common\models\Slide;
 use common\models\Events;
-use common\models\Eventtype;
+use admin\models\Eventtype;
 use yii\base\Model;
 use Yii;
 use yii\db\Query;
@@ -38,50 +38,39 @@ class Website extends Model {
 
     public static function get_search_directory_list($categoryid) {
         $today = date('Y-m-d H:i:s');
-        $query = new Query();
-        $query->select([
-                    'whitebook_vendor.vendor_id AS vid',
-                    'whitebook_vendor.vendor_name AS vname',
-                    'whitebook_vendor.slug AS slug',
-                ])
-                ->from('whitebook_vendor')
-                ->join('LEFT OUTER JOIN', 'whitebook_vendor_packages', 'whitebook_vendor.vendor_id =whitebook_vendor_packages.vendor_id')
-                ->where('whitebook_vendor_packages.package_start_date <="' . $today . '"')
-                ->andwhere('whitebook_vendor_packages.package_start_date <="' . $today . '"')
-                ->andwhere('whitebook_vendor.vendor_status ="Active"')
-                ->andwhere('whitebook_vendor.trash ="Default"')
-                ->andwhere('whitebook_vendor.approve_status ="yes"')
-                ->andwhere('FIND_IN_SET(' . $categoryid . ', whitebook_vendor.category_id)')
-                ->orderBy('whitebook_vendor.vendor_name ASC')
-                ->groupBy('whitebook_vendor.vendor_id')
-                ->LIMIT(50);
-        $command = $query->createCommand();
-        $data = $command->queryAll();
-
-        return $data;
+        		return $data=Vendor::find()
+        ->select(['{{%vendor}}.vendor_id AS vid',
+                    '{{%vendor}}.vendor_name AS vname',
+                    '{{%vendor}}.slug AS slug'])
+            ->LEFTJOIN('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
+            ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
+            ->andwhere(['>=','{{%vendor_packages}}.package_end_date',$today])
+			->andwhere(['{{%vendor}}.trash'=>'Default'])
+			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
+			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
+			->andwhere(new \yii\db\Expression('FIND_IN_SET({{%vendor}}.category_id,'.$categoryid.')'))
+			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
+			->groupby(['{{%vendor}}.vendor_id'])
+			->asArray()
+			->all();
     }
 
     public static function get_search_directory_all_list() {
-        $today = date('Y-m-d H:i:s');
-        $query = new Query();
-        $query->select([
-                    'whitebook_vendor.vendor_id AS vid',
-                    'whitebook_vendor.vendor_name AS vname',
-                    'whitebook_vendor.slug AS slug',
-                ])
-                ->from('whitebook_vendor')
-                ->join('LEFT OUTER JOIN', 'whitebook_vendor_packages', 'whitebook_vendor.vendor_id =whitebook_vendor_packages.vendor_id')
-                ->where('whitebook_vendor_packages.package_start_date <="' . $today . '"')
-                ->andwhere('whitebook_vendor_packages.package_start_date <="' . $today . '"')
-                ->andwhere('whitebook_vendor.vendor_status ="Active"')
-                ->andwhere('whitebook_vendor.trash ="Default"')
-                ->andwhere('whitebook_vendor.approve_status ="yes"')
-                ->orderBy('whitebook_vendor.vendor_name ASC')
-                ->groupBy('whitebook_vendor.vendor_id')
-                ->LIMIT(50);
-        $command = $query->createCommand();
-        $data = $command->queryAll();
-        return $data;
+		 $today = date('Y-m-d H:i:s');
+        		return $data=Vendor::find()
+        ->select(['{{%vendor}}.vendor_id AS vid',
+                    '{{%vendor}}.vendor_name AS vname',
+                    '{{%vendor}}.slug AS slug'])
+            ->LEFTJOIN('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
+            ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
+            ->andwhere(['>=','{{%vendor_packages}}.package_end_date',$today])
+			->andwhere(['{{%vendor}}.trash'=>'Default'])
+			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
+			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
+			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
+			->groupby(['{{%vendor}}.vendor_id'])
+			->asArray()
+			->all();
     }
 
     public static function get_category_id($category_url) {
@@ -134,41 +123,44 @@ class Website extends Model {
 
     public static function get_products_list($limit, $offset) {
         $today = date('Y-m-d H:i:s');
-        $command = Yii::$app->DB->createCommand(
-                'SELECT wvi.item_id,wvi.item_name,wvi.item_description,wvi.item_price_per_unit,wv.vendor_name,wc.category_id FROM {{%vendor_item}} wvi
-		LEFT JOIN {{%vendor}} wv on wv.vendor_id=wvi.vendor_id
-		LEFT JOIN {{%category}} wc on wc.category_id = wvi.category_id
-			WHERE wvi.item_amount_in_stock>0
-			AND wvi.item_approved="yes"
-			AND wvi.item_archived="no"
-			AND wvi.trash="Default"
-			AND wvi.item_status="Active"
-			AND wvi.item_for_sale="yes"
-			AND wv.package_start_date<="' . $today . '"
-			AND wv.package_end_date>="' . $today . '"
-			AND wv.vendor_Status="Active"
-			AND wv.trash="Default"
-			AND wv.approve_status="Yes"
-			AND wc.trash="Default"
-			AND wc.category_allow_sale = "yes" LIMIT ' . $offset . ',' . $limit . '');
-        $result = $command->queryAll();
-
-        return $result;
+                		return $data=Vendoritem::find()
+        ->select(['{{%vendor_item}}.item_id AS item_id','{{%vendor_item}}.item_name AS item_name',
+        '{{%vendor_item}}.item_description AS item_description','{{%vendor_item}}.item_price_per_unit AS item_price_per_unit',
+                    '{{%vendor}}.vendor_name AS vendor_name',
+                    '{{%category}}.category_id AS category_id'])
+            ->LEFTJOIN('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
+            ->LEFTJOIN('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
+            ->where(['>','{{%vendor_item}}.item_amount_in_stock','0'])
+			->andwhere(['{{%vendor}}.trash'=>'Default'])
+			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
+			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
+			->andwhere(['<=','{{%vendor}}.package_start_date',$today])
+            ->andwhere(['>=','{{%vendor}}.package_end_date',$today])
+			->andwhere(['{{%vendor_item}}.item_approved'=>'yes'])
+			->andwhere(['{{%vendor_item}}.item_archived'=>'no'])
+			->andwhere(['{{%vendor_item}}.trash'=>'Default'])
+			->andwhere(['{{%vendor_item}}.item_status'=>'Active'])
+			->andwhere(['{{%vendor_item}}.item_for_sale'=>'yes'])
+			->andwhere(['{{%category}}.trash'=>'default'])
+			->andwhere(['{{%category}}.category_allow_sale'=>'Yes'])
+			->andwhere(new \yii\db\Expression('FIND_IN_SET({{%vendor}}.category_id,'.$categoryid.')'))
+			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
+			->groupby(['{{%vendor}}.vendor_id'])
+			->limit($offset,$limit)
+			->asArray()
+			->all();
     }
 
     public static function get_user_event_types($customer_id) {
-        $query = new Query;
-        $query  ->select([
-                'whitebook_events.event_name',
-                'whitebook_events.event_id'])
-            ->from('whitebook_events')
-            ->join('INNER JOIN', 'whitebook_event_type',
-                        'whitebook_events.event_type =whitebook_event_type.type_name')
-            ->andwhere('whitebook_vendor_item.trash ="default"')
-            ->andwhere('whitebook_events.customer_id ='.$customer_id)
-            ->orderBy(['item_id' => SORT_DESC]);
-        $command = $query->createCommand();
-        return $event_type1 = $command->queryAll();
+		return $data=Events::find()
+        ->select(['{{%events}}.event_name AS event_name','{{%vendor_events}}.event_id AS event_id'])
+            ->INNERJOIN('{{%event_type}}', '{{%event_type}}.type_name = {{%events}}.event_type')
+            ->where(['{{%events}}.customer_id'=>$customer_id])
+			->andwhere(['{{%event_type}}.trash'=>'Default'])
+			->orderby(['{{%vendor_events}}.event_id'=>SORT_DESC])
+			->asArray()
+			->all();
+			
     }
 
     // user event type birthday, wedding,etc
