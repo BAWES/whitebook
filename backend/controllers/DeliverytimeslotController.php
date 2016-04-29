@@ -3,9 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Vendor;
-use common\models\Deliverytimeslot;
-use common\models\DeliverytimeslotSearch;
+use backend\models\Vendor;
+use backend\models\Deliverytimeslot;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -44,12 +43,9 @@ class DeliverytimeslotController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new DeliverytimeslotSearch();
+        /*$searchModel = new DeliverytimeslotSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        */return $this->render('index');
     }
 
     /**
