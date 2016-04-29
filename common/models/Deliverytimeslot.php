@@ -81,15 +81,7 @@ class Deliverytimeslot extends \yii\db\ActiveRecord
         return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }
 
-
-    public static function deliverytimeslot($day)
-    {
-        return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>Yii::$app->user->getId(), 'timeslot_day'=>$day])->asArray()->all();;
-    }
-    public static function vendor_deliverytimeslot($id,$day)
-    {
-        return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id, 'timeslot_day'=>$day])->asArray()->all();;
-    }
+    /* common */
     public static function vendor_delivery_details($id)
     {
         return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id])->asArray()->count();
