@@ -1,5 +1,4 @@
 <?php
-
 namespace admin\controllers;
 
 use Yii;
@@ -10,10 +9,10 @@ use common\models\Vendoritemquestionansweroption;
 use common\models\Vendoritemquestionguide;
 use common\models\Vendoritemthemes;
 use common\models\Featuregroupitem;
-use common\models\Featuregroup;
+use admin\models\Featuregroup;
 use common\models\Authitem;
 use admin\models\Vendor;
-use common\models\Themes;
+use admin\models\Themes;
 use common\models\Image;
 use admin\models\Category;
 use common\models\SubCategory;

@@ -5,7 +5,7 @@ namespace admin\controllers;
 use Yii;
 use common\models\Addresstype;
 use common\models\AddressQuestion;
-use common\models\AddressQuestionSearch;
+use admin\models\AddressQuestionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

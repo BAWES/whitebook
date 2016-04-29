@@ -6,7 +6,7 @@ use yii\bootstrap\Alert;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-use common\models\Vendoritem;
+use admin\models\Vendoritem;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\VendorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */

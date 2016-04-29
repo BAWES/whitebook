@@ -7,7 +7,7 @@ use yii\web\Session;
 use common\models\Package;
 use common\models\Category;
 use backend\models\Vendor;
-use common\models\Vendoritem;
+use backend\models\Vendoritem;
 use common\models\VendorLogin;
 use common\models\VendorPassword;
 use common\models\Siteinfo;
