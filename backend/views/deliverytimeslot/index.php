@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
-use common\models\Deliverytimeslot;
+use backend\models\Deliverytimeslot;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\DeliverytimeslotSearch */
