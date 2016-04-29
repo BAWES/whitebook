@@ -103,10 +103,9 @@ class Cms extends \yii\db\ActiveRecord
 		return ($content);
 		}
 				
-	}
-	
+	}    
     
-        public static function content($content)
+    public static function content($content)
 	{       
 			return strip_tags($content); 
 	}	

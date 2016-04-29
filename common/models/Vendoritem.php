@@ -245,6 +245,17 @@ class Vendoritem extends \yii\db\ActiveRecord
         return $this->hasMany(Theme::className(), ['theme_id' => 'theme_id'])->viaTable('whitebook_vendor_item_theme', ['item_id' => 'item_id']);
     }
 
+    public static function vendoritemcount($vid='')
+    {          
+        if(!isset($vid) && $vid =='') {
+            $vid=Vendor::getVendor('vendor_id');
+        }
+       return $s = Vendoritem::find()
+        ->where(['trash' => 'Default'])
+        ->where(['vendor_id' => $vid])
+        ->count();
+    }
+
     
     public static function getCategoryName($id)
     {		

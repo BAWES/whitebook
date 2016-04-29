@@ -128,48 +128,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Order::className(), ['customer_id' => 'customer_id']);
     }
 
-    /* admin */
-    public static function customercount()
-    {
-        return Customer::find()->where(['trash' => 'Default'])->count();
-    }
-    /* admin */
-    public static function customermonthcount()
-    {
-        $month=date('m');
-        $year=date('Y');
-        return  Customer::find()
-        ->where(['MONTH(created_datetime)' => $month])
-        ->andwhere(['YEAR(created_datetime)' => $year])
-        ->andwhere(['customer_status' => 'Active'])
-        ->count();
-    }
-
-    /* admin */
-    public static function customerdatecount()
-    {
-        $date=date('d');
-        $month=date('m');
-        $year=date('Y');
-        return  Customer::find()
-        ->where(['MONTH(created_datetime)' => $month])
-        ->andwhere(['YEAR(created_datetime)' => $year])
-        ->andwhere(['DAYOFMONTH(created_datetime)' => $date])
-        ->andwhere(['customer_status' => 'Active'])
-        ->count();
-    }
-
-
-    public static function status($id)
-    {
-        $read=Customer::find()
-        ->select(['message_status'])
-        ->where(['customer_id' => $id])
-        ->one();
-        return $read['message_status'];
-    }
-
-    /*
+   /*
      * Start Identity Code
      */
 
