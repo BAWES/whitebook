@@ -4,14 +4,14 @@ namespace admin\controllers;
 
 use Yii;
 use yii\base\Model;
-use common\models\Customer;
+use admin\models\Customer;
 use common\models\City;
 use common\models\Country;
 use common\models\Authitem;
 use common\models\Location;
 use common\models\Addresstype;
 use common\models\CustomerAddress;
-use common\models\CustomerSearch;
+use admin\models\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
