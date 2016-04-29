@@ -34,27 +34,20 @@ class Signup extends Model
         ];
     }
 
-    public function signup_customer($st, $customer_activation_key)
-    {
-        $customer_password = Yii::$app->getSecurity()->generatePasswordHash($st['password']);
-        $customer_dateofbirth = $st['byear'].'-'.$st['bmonth'].'-'.$st['bday'];
-        $created_date = date('Y-m-d H:i:s');
-        $user = Yii::$app->DB->createCommand("INSERT INTO whitebook_customer (`customer_name`,`customer_last_name`,`customer_email`,`customer_password`,`customer_org_password`,`customer_dateofbirth`,`customer_gender`,`customer_mobile`,`customer_activation_key`,`created_datetime`) VALUES ('$st[customer_name]','$st[customer_last_name]','$st[email]','$customer_password','$st[password]','$customer_dateofbirth','$st[gender]','$st[phone]','$customer_activation_key','$created_date')")
-                ->execute();
-
-        return $user;
-    }
+   
 
     public function check_valid_key($key)
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT customer_id FROM whitebook_customer WHERE customer_activation_status=0 and customer_activation_key="'.$key.'"');
-        $check_key = $command->queryAll();
+		$check_key = Customer::find()
+		->select(['customer_id'])
+		->where(['customer_activation_status'=>0])
+		->andwhere(['customer_activation_key'=>$key])
+		->asArray()
+		->all();
         if (count($check_key) > 0) {
-            $command = Yii::$app->DB->createCommand(
-                'UPDATE whitebook_customer set customer_activation_status=1 where customer_activation_key="'.$key.'"');
-            $customer = $command->execute();
-            if ($customer) {
+			$model = new Signup();
+			$command=Signup::updateAll(['customer_activation_status' => 1],'customer_activation_key= '.$key);
+            if ($command) {
                 return 2;
             }
         } else {
@@ -63,9 +56,10 @@ class Signup extends Model
     }
     public function customer_logindetail($key)
     {
-        $command = Yii::$app->DB->createCommand(
-        'SELECT customer_email,customer_org_password FROM whitebook_customer WHERE customer_activation_key="'.$key.'"');
-
-        return $check_key = $command->queryAll();
+		return$check_key = Customer::find()
+		->select(['customer_email','customer_org_password'])
+		->where(['customer_activation_key'=>$key])
+		->asArray()
+		->all();
     }
 }
