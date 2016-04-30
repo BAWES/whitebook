@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Eventtype;
-use common\models\Authitem;
+use admin\models\Authitem;
 use admin\models\EventtypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
