@@ -4,11 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use common\models\Vendoritem;
-use common\models\Vendor;
+use frontend\models\Vendoritem;
+use frontend\models\Vendor;
 use common\models\Featuregroupitem;
 use frontend\models\Users;
 use common\models\Location;
+use common\models\Vendorlocation;
+use common\models\Image;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
@@ -75,7 +77,7 @@ class ProductController extends BaseController
             
 			$vendr_area = Vendorlocation::find()
 			->select(['{{%vendor_location}}.area_id','{{%location}}.*'])
-			->leftJoin('{{%vendor_location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
+			->leftJoin('{{%location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
 			->where(['{{%location}}.trash' => 'Default'])
 			->asArray()
 			->all();

@@ -3,7 +3,7 @@ namespace frontend\models;
 
 use Yii;
 
-class Vendor extends \common\model\Vendor
+class Vendor extends \common\models\Vendor
 {
 
     // Pass vendor contact address  
@@ -83,10 +83,10 @@ class Vendor extends \common\model\Vendor
 
     public static function loadvalidvendorids($cat_id=false)
     {
-        $expression = new yii\db\Expression('NOW()');
+        $expression = new \yii\db\Expression('NOW()');
 		$now = (new \yii\db\Query)->select($expression)->scalar();  // SELECT NOW();
 
-		$blocked_vendors = \common\models\BlockeddateBlockeddate::find()
+		$blocked_vendors = \common\models\Blockeddate::find()
                     ->select('GROUP_CONCAT(vendor_id) as vendor_id')
                     //->where([ DATE(NOW()) => 'DATE(block_date)'])
                     ->where(['DATE(block_date)' =>$now ])
@@ -154,10 +154,19 @@ class Vendor extends \common\model\Vendor
 			->andwhere(['{{%vendor}}.trash'=>'Default'])
 			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
 			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
-			->orderby(['{{%vendor}}.vendor_name', ASC])
+			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
 			->groupby(['{{%vendor}}.vendor_id'])
 			->asArray()
 			->all();
         return $data;
     }
+
+   // Pass vendor slug to frontend
+   public static function vendorslug($id){
+        $vendorname= Vendor::find()
+            ->select(['vendor_name','slug'])
+            ->where(['vendor_id'=>$id])
+            ->one();
+            return $vendorname;
+        }
 }

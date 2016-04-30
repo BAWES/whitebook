@@ -5,7 +5,7 @@ use Yii;
 use yii\web\Controller;
 use common\models\Cms;
 use common\models\Vendoritem;
-use common\models\Vendor;
+use frontend\models\Vendor;
 use common\models\Category;
 use common\models\Siteinfo;
 use common\models\Faq;

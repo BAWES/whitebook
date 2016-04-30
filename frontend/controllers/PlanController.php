@@ -9,8 +9,8 @@ use frontend\models\Website;
 use common\models\SubCategory;
 use common\models\Category;
 use common\models\Vendoritem;
-use common\models\Themes;
-use common\models\Vendor;
+use frontend\models\Themes;
+use frontend\models\Vendor;
 
 /**
  * Category controller.

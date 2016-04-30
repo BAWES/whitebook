@@ -2,7 +2,7 @@
 
 namespace frontend\models;
 use Yii;
-
+use common\models\Vendoritemthemes;
 
 /**
  * This is the model class for table "whitebook_theme".

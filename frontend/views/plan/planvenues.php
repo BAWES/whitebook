@@ -1,7 +1,7 @@
 <?php
 use common\models\ChildCategory;
 use common\models\SubCategory;
-use common\models\Category;
+use frontend\models\Category;
 use common\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
