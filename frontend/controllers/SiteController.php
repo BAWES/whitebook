@@ -226,7 +226,7 @@ class SiteController extends BaseController
             $imageData = '';
 
         	$imageData = Vendor::find()
-			->select('{{%vendor_item}}.item_price_per_unit','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_id','{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.category_id','{{%vendor}}.vendor_name','count({{%vendor_item}}.*) as total')
+			->select('{{%vendor_item}}.item_price_per_unit','{{%image}}.image_path','{{%vendor_item}}.item_id','{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.category_id','{{%vendor}}.vendor_name','count({{%vendor_item}}.*) as total')
 			->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
 			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			->Where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.type_id' => '2','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%image}}.module_type' => 'vendor_item','{{%vendor_item}}.category_id' => $cat_id,'{{%vendor_item}}.subcategory_id' => $cat_id,'{{%vendor_item}}.child_category' => $cat_id])

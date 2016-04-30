@@ -123,11 +123,25 @@ class UsersController extends BaseController
         $error = array();
         if ($_POST['_csrf']) {
             $model->attributes = $_POST;
-
             if ($model->validate()) {
+				$st=$model->attributes;
+				$created_date = date('Y-m-d H:i:s');
+				$customer_password = Yii::$app->getSecurity()->generatePasswordHash($st['password']);
+		        $customer_dateofbirth = $st['byear'].'-'.$st['bmonth'].'-'.$st['bday'];
                 $customer_activation_key = $this->generateRandomString();
-                $signup = $model->signup_customer($model->attributes, $customer_activation_key);
-                if ($signup) {
+                $model->customer_name=$st['customer_name'];
+                $model->customer_last_name=$st['customer_last_name'];
+                $model->customer_email=$st['email'];
+                $model->customer_password=$customer_password;
+                $model->customer_org_password=$st['password'];
+                $model->customer_dateofbirth=$customer_dateofbirth;
+                $model->customer_gender=$st['gender'];
+                $model->customer_mobile=$st['mobile'];
+                $model->customer_activation_key=$customer_activation_key;
+                $model->created_datetime=$created_date;
+                $model-save();
+                
+                if ($model-save()) {
                     $siteinfo = Siteinfo::find()->asArray()->all();
                     $to = $model['email'];
                     $username = $model['customer_name'];
@@ -371,8 +385,28 @@ class UsersController extends BaseController
             $event_date = $_POST['event_date'];
             Yii::$app->session->set('event_name', $event_name);
             $customer_id = Yii::$app->params['CUSTOMER_ID'];
-            $add_event = $model->create_event($event_name, $event_type, $event_date);
-            if ($add_event == -1) {
+            // Creating event start
+            
+            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+			$event_date1 = date('Y-m-d', strtotime($event_date));
+			$string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
+			$slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+			$check = Events::find()->select('event_id')->where(['customer_id'=>$customer_id,'event_name'=>$event_name])->asArray()->all();
+			if (count($check) > 0) {
+				$result='-1';
+			} else {
+			$event_modal=new Events;
+			$event_modal->customer_id=$customer_id;
+			$event_modal->event_name=$event_name;
+			$event_modal->event_date=$event_date;
+			$event_modal->event_type=$event_type;
+			$event_modal->slug=$slug;
+			$event_modal->save();
+			$result=$event_modal->event_id;
+			}
+            // Creating event end
+            
+            if ($result == -1) {
                 echo -1;
                 exit;
             } else {
@@ -380,15 +414,26 @@ class UsersController extends BaseController
                     Yii::$app->session->set('item_name', $_POST['item_name']);
                     $item_id = $_POST['item_id'];
                     $event_id = $add_event;
-                    $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);
-                    if ($insert_item_to_event == -2) {
-                        echo -2;
-                        exit;
-                    } elseif ($insert_item_to_event == 1) {
-                        Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_AD_SUCC'));
-                        echo 2;
-                        exit;
-                    }
+                   $check = Eventitemlink::find()->select(['link_id'])
+                   ->where(['event_id'=> $event_id])
+                   ->andwhere(['item_id'=> $item_id])
+                   ->count();
+        if($check > 0) {
+			 echo -2;
+			 exit;
+        } else {
+            $event_date = date('Y-m-d H:i:s');
+			$event_item_modal=new Eventitemlink;
+			$event_item_modal->event_id=$event_id;
+			$event_item_modal->item_id=$item_id;
+			$event_item_modal->link_datetime=$event_date;
+			$event_item_modal->created_datetime=$event_date;
+			$event_item_modal->modified_datetime=$event_date;
+			$event_item_modal->save();
+            Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_AD_SUCC'));
+            echo 2;
+            exit;
+        }
                 }
                 Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_SUCC'));
                 echo 1;
