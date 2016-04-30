@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <table class="table table-striped  detail-view">
 	<tbody>
 		<tr class="add"><td><?php $package = Package::loadpackage();
-			  $form = ActiveForm::begin([]); $model->package_id='';$model->package_start_date='';$model->package_end_date='';
+	$form = ActiveForm::begin([]); $model->package_id='';$model->package_start_date='';$model->package_end_date='';
 	echo $form->field($model, 'package_id')->dropdownList($package,['prompt'=>'Select Package',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"],'style' => 'margin-top:10px;'])->label(false); ?></td>
 	<td><?= $form->field($model, 'package_start_date',['template' => "{label}<div class='controls mystart'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'Start date',])->label(false);?></td>
 	<td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date',])->label(false);?></td>
