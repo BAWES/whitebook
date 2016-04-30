@@ -16,52 +16,8 @@ use Yii;
  * @property string $modified_datetime
  * @property string $trash
  */
-class Blockeddate extends \yii\db\ActiveRecord
+class Blockeddate extends \common\models\Blockeddate
 {
-    /**
-     * @inheritdoc
-     */
-    public $sunday,$monday,$tuesday,$wednesday,$thursday,$friday,$saturday;
-    public static function tableName()
-    {
-        return '{{%vendor_blocked_date}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['vendor_id', 'block_date'], 'required',],
-            ['block_date', 'createblockvalidation','on' => 'insert',],
-            ['block_date','blockvalidation','on' => 'update',],
-            
-          //  [['block_date'],'unique'],
-            [['vendor_id', 'created_by', 'modified_by'], 'integer'],
-            [['created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'safe'],
-            [['trash','sunday','monday','tuesday','wednesday','thursday','friday','saturday'], 'string']
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'block_id' => 'Block ID',
-
-
-            'vendor_id' => 'Vendor ID',
-            'block_date' => 'Block Date',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
-            'created_datetime' => 'Created Datetime',
-            'modified_datetime' => 'Modified Datetime',
-            'trash' => 'Trash',
-        ];
-    }
 
         public  function blockvalidation($attribute_name,$params)
     {
@@ -81,9 +37,7 @@ class Blockeddate extends \yii\db\ActiveRecord
         }
     }
 
-
-
-        public  function createblockvalidation($attribute_name,$params)
+    public  function createblockvalidation($attribute_name,$params)
     {
         if(!empty($this->block_date) ){
             $block_date= date ("Y-m-d",strtotime("0 day", strtotime($this->block_date)));
