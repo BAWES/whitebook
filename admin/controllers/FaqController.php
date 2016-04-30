@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Faq;
-use common\models\Authitem;
+use admin\models\Authitem;
 use admin\models\FaqSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

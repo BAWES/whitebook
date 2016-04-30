@@ -4,11 +4,11 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Slide;
-use common\models\SlideSearch;
+use admin\models\SlideSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\Authitem;
+use admin\models\Authitem;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 

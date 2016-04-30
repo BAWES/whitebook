@@ -2,8 +2,8 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Country;
-use common\models\Authitem;
+use admin\models\Country;
+use admin\models\Authitem;
 use admin\models\CountrySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

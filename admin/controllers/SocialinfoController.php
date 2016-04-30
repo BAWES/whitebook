@@ -4,8 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Socialinfo;
-use common\models\Authitem;
-use common\models\SocialinfoSearch;
+use admin\models\Authitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

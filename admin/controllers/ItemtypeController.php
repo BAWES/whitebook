@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Itemtype;
-use common\models\Authitem;
+use admin\models\Authitem;
 use admin\models\ItemtypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

@@ -8,7 +8,7 @@ use admin\models\Featuregroup;
 use common\models\Blockeddate;
 use admin\models\FeaturegroupSearch;
 use yii\web\Controller;
-use common\models\Authitem;
+use admin\models\Authitem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;

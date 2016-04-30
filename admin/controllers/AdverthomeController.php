@@ -4,9 +4,9 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Adverthome;
-use common\models\Admin;
-use common\models\Authitem;
-use common\models\Image;
+use admin\models\Admin;
+use admin\models\Authitem;
+use admin\models\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

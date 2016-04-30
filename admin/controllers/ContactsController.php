@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Contacts;
-use common\models\Authitem;
+use admin\models\Authitem;
 use admin\models\ContactsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

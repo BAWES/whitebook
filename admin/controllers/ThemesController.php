@@ -5,7 +5,7 @@ namespace admin\controllers;
 use Yii;
 use common\models\Themes;
 use admin\models\ThemesSearch;
-use common\models\Authitem;
+use admin\models\Authitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -4,9 +4,8 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Imageresize;
-use common\models\Admin;
 use yii\web\Controller;
-use common\models\Authitem;
+use admin\models\Authitem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
