@@ -151,7 +151,7 @@ class VendoritemController extends Controller
         $cat_id = explode(',',$vendor['category_id']);
 
 		$load_category = Category::find()->select('category_id','category_name')->where(['category_allow_sale'=>'Yes','category_level'=>'0','trash'=>'Default'])
-		->andwhere(['IN','category_id',$vendor['category_id']])->asArray()->queryAll();
+		->andwhere(['IN','category_id',$vendor['category_id']])->asArray()->all();
         $categoryname=ArrayHelper::map($load_category,'category_id','category_name');
 
         $model1 = new Image();
