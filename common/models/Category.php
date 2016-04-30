@@ -141,4 +141,19 @@ class Category extends \yii\db\ActiveRecord
    		return 'Active';
    		return 'Deactive';
    	}
+
+    public static function vendorcategory($id)
+    {      
+         $vendor = Vendor::find()->select(['category_id'])->where(['vendor_id' => $id])->all();
+         $vendor_id = $vendor[0]['category_id'];         
+         $vendor_exp = explode(',',$vendor_id);
+         $vendor_imp = implode('","',$vendor_exp);
+        $categories = Category::find()
+        ->select(['category_id','category_name'])
+        ->where(['IN', 'category_id', $vendor_imp])
+        ->all();
+         $category =ArrayHelper::map($categories,'category_id','category_name');
+         return $category;
+ 
+    }
 }

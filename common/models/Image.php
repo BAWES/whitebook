@@ -115,27 +115,4 @@ class Image extends \yii\db\ActiveRecord
     }
     return false;
 	}
-
-    // Only for Item type sales
-    public static function loadimageids($image_id)
-    {
-        $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'sales_guides'])->all();
-        return $model;
-    }
-
-    // Delete item images
-    public static function loadguideimageids($image_id)
-    {
-        $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'vendor_item'])->one();
-        return $model['image_path'];
-    }
-
-    // Only for Service and Rental
-    public static function loadserviceguideimageids($image_id)
-    {
-        $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'guides'])->all();
-        return $model;
-    }
-	
-	
 }
