@@ -23,7 +23,7 @@
 		$fourth_menu = array('FeaturegroupController','EventtypeController','ThemesController','ItemtypeController','PriorityitemController',);
 		$fifth_menu = array('PackageController','VendorController','VendoritemController','PrioritylogController');
 		$seventh_menu = array('CategoryadsController','AdverthomeController');
-		$eighth_menu = array('CustomerController','SubscribeController');
+		$eighth_menu = array('CustomerController');
 
 		?>
 		 <p class="menu-title"><span class="pull-right"><a href="javascript:;"></a></span></p>
@@ -175,9 +175,6 @@
 					<ul class="sub-menu">
 					<li class="<?php if(($menu_act=='CustomerController') && ($action == 'index')){echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Customer', ['customer/index'], ['class'=>'link-title']) ?>
-					</li>
-					<li class="<?php if ($menu_act=='SubscribeController'){echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('Subscribed Customers', ['subscribe/index'], ['class'=>'link-title']) ?>
 					</li>
 				</ul>
 			</li>
