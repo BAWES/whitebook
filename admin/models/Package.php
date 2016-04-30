@@ -21,65 +21,10 @@ use common\models\Vendor;
  *
  * @property Vendor[] $vendors
  */
-class Package extends \yii\db\ActiveRecord
+class Package extends \common\models\Package
 {
-	public $package_value;	
-    public $arr = array();
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'whitebook_package';
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            //[['package_name','package_max_number_of_listings', 'package_sales_commission', 'package_pricing',], 'required'],
-            [['package_name','package_max_number_of_listings','package_sales_commission', 'package_pricing',], 'required'],
-            [['package_max_number_of_listings', 'created_by', 'modified_by'], 'integer'],
-            [['package_sales_commission'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
-
-            [['package_pricing'], 'number'],
-            [['trash'], 'string'],
-            [['package_name'], 'string', 'max' => 128]
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'package_id' => 'Package ID',
-            'package_name' => 'Package ',
-            'package_max_number_of_listings' => 'Maximum no of List',
-            'package_sales_commission' => 'Sales Commission ( % )',
-            'package_pricing' => 'Pricing ',
-            'package_type'=>'Package Period',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
-            'created_datetime' => 'Created Datetime',
-            'modified_datetime' => 'Modified Datetime',
-            'trash' => 'Trash',
-            'package_value'=>'',
-        ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getVendors()
-    {
-        return $this->hasMany(Vendor::className(), ['package_id' => 'package_id']);
-    }
-    
-        public static function statusImageurl($img_status)
+    public static function statusImageurl($img_status)
 	{			
 		if($img_status == 'Active')		
 		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
