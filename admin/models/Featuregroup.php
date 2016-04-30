@@ -18,46 +18,8 @@ use Yii;
  *
  * @property FeatureGroupItem[] $featureGroupItems
  */
-class Featuregroup extends \yii\db\ActiveRecord
+class Featuregroup extends \common\models\Featuregroup
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'whitebook_feature_group';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['group_name',], 'required'],
-            [['group_name',],'unique'],
-            [['created_by', 'modified_by'], 'integer'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
-            [['trash'], 'string'],
-            [['group_name'], 'string', 'max' => 128]
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'group_id' => 'Group Name',
-            'group_name' => 'Group Name',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
-            'created_datetime' => 'Created Datetime',
-            'modified_datetime' => 'Modified Datetime',
-            'trash' => 'Trash',
-        ];
-    }
 
     /**
      * @return \yii\db\ActiveQuery
