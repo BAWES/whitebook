@@ -5,7 +5,7 @@ use yii\db\Migration;
 class m160430_130653_whitebook_customer extends Migration
 {
     public function up()
-    {
+    {        
         $this->dropColumn('whitebook_customer', 'customer_address');
         $this->dropColumn('whitebook_customer', 'country');
         $this->dropColumn('whitebook_customer', 'area');

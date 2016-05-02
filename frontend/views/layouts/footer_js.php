@@ -151,11 +151,6 @@ jQuery('.accor-link-min').click(function()
 <!-- -->
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 <script>
-//jQuery('#loginForm').keydown(function() {
-//jQuery(document).ready(function () {
-//jQuery("#login_button").click( function()
-
-
 /* Forgot password completed start  */
 jQuery("#reset_button").click( function()
 {
@@ -502,7 +497,7 @@ jQuery("#register").click(function()
         var dob=bday+'-'+bmonth+'-'+byear;
         var customer_name=fname+' '+lname;
         jQuery.ajax({
-            url:"<?= Url::to('/users/signup'); ?>",
+            url:"<?= Url::toRoute('/users/signup'); ?>",
             async:false,
             type:"post",
             data:"customer_name="+fname+"&customer_last_name="+lname+"&email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&gender="+gender+"&phone="+phone+"&password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,

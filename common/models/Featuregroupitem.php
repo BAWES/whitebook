@@ -142,8 +142,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
 	}
 
     public static function get_featured_product_id() {
-        $db = Yii::$app->db;
-   //     return $p_id = $db->cache(function ($db) {
+            $db = Yii::$app->db;
             $today = date('Y-m-d H:i:s');
             $today_date = date('Y-m-d');
             

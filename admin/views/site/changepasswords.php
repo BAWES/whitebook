@@ -22,7 +22,7 @@ AppAsset::register($this);
       
 <div class="col-md-8 col-sm-8 col-xs-8"> 
       <div id="forgot" class="tab-pane">
-            <?php $form = ActiveForm::begin(['id' => 'login-forms', 'action' => '/backend/web/admin/site/changepassword']); ?>            
+            <?php $form = ActiveForm::begin(['id' => 'login-forms']); ?>            
           
             <?= $form->field($model, 'old_password')->passwordInput(array('class'=> 'form-control bottom',)); ?>           
            

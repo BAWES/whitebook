@@ -72,6 +72,7 @@ class SiteController extends Controller
         $vendormonth = Vendor::vendormonthcount();
         $vendorday = Vendor::vendordatecount();
         $vendorperiod = Vendor::vendorperiod();
+        print_r($vendorperiod);die;
         $customercnt = Customer::customercount();
         $customermonth = Customer::customermonthcount();
         $customerday = Customer::customerdatecount();
@@ -147,6 +148,8 @@ class SiteController extends Controller
     {
         $model = new PasswordForm();
         $model->scenario = 'change';
+        /*$model->validate();
+        print_r($model->getErrors());die;*/
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $form = Yii::$app->request->post('PasswordForm');
             $users_tbl = Admin::find()->where(['id' => Yii::$app->user->getId()])->one();
