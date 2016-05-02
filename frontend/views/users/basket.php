@@ -41,9 +41,6 @@ $this->title = 'Whitebook - Checkout';
                             $i = 1;
                             $total = 0;
                             foreach ($basketData as $basket) {
-                                /* 	$basket_item_id=$basket['basket_quantity'];
-                                  $quantity = Yii::$app->db->createCommand('SELECT count(item_id) as quantity FROM `whitebook_basket` WHERE item_id='.$basket_item_id.' and customer_id='.CUSTOMER_ID.'')->queryAll();
-                                  echo $quantity[0]['quantity']; */
                                 ?>
                                 <tr><td><?= $i ?></td><td><img src="<?php echo $basket['image_path']; ?>" width="150px" height="150px"></td><td><h2><?= $basket['vendor_name']; ?></h2></td><td><?= $basket['item_name']; ?></td><td><b><?php echo number_format($basket['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b></td><td><select id="basket_quantity" name="basket_quantity" onChange="quantity_check(this,<?= $basket['item_id'] ?>)"><?php for ($x = 1; $x <= 20; $x++) { ?>
                                                 <option value="<?= $x ?>"<?= $x == $basket['basket_quantity'] ? ' selected="selected"' : '' ?>><?= $x ?></option><?php } ?>
@@ -101,10 +98,14 @@ $this->title = 'Whitebook - Checkout';
                                             <div class="owl-carousel" id="similar-products-slider">
                                                 <?php
                                                 foreach ($similiar_item as $s) {
-                                                    $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
-                                                    $command = Yii::$app->DB->createCommand($sql);
-                                                    $out = $command->queryAll();
-                                                    if ($out) {
+													$out=\admin\models\image::find()
+														->select(['image_path'])
+														->where(['item_id'=>$s['gid']])
+														->andwhere(['module_type'=>'vendor_item'])
+														->orderby(['vendorimage_sort_order'])
+														->asArray()
+														->all();
+                                                    if (!empty($out)){
                                                         $imglink = Yii::getAlias('@vendor_image/') . $out[0]['image_path'];
                                                         $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_image/') . $out[0]['image_path'];
                                                     } else {

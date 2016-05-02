@@ -62,13 +62,16 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Yii::$app-
 <?php
 $cust_id = Yii::$app->params['CUSTOMER_ID'];
 /* Load level 1 category */
-//$cat_exist = Category::loadcategoryevents();
-$cat_exist = Yii::$app->db->createCommand('SELECT * FROM {{%category}} WHERE `category_level` = 0 and `category_allow_sale`="yes" and trash="Default" and category_level = 0
- 	order by FIELD(category_name,"Venues","Invitations","Food & Beverages","Decor","Supplies","Entertainment","Services","Others","Say thank you")')->queryAll();
+$cat_exist = Category::find()
+		->where(['category_level' =>0,'category_allow_sale' =>'Yes','trash' =>'Default','category_level' =>'0'])
+		->orderBy(new \yii\db\Expression('FIELD ("category_name", "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Say thank you")'))
+		->asArray()->all();
 
 foreach ($cat_exist as $key => $value1) {
-	$cat_list1 = Yii::$app->db->createCommand('SELECT wvi.item_id FROM `whitebook_vendor_item` as wvi INNER JOIN whitebook_event_item_link as wei
-ON wvi.item_id = wei.item_id  WHERE wvi.item_status = "Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes" AND wvi.type_id="2" and wei.trash="default" and wvi.category_id ='.$value1['category_id'].' and wei.event_id = '.$event_details[0]['event_id'].'')->queryAll();
+	$cat_list1=Vendoritem::find()->select(['{{%vendor_item}}.item_id'])
+	->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
+	->where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%vendor_item}}.trash'=>'Default','{{%event_item_link}}.trash'=>'Default','{{%event_item_link}}.event_id'=>$event_details[0]['event_id'],'{{%category}}.category_id'=>$value['category_id']])->asArray()->All();
+	
 ?>
 <div class="panel panel-default">
 <div class="panel-heading" role="tab" id="heading<?= $key ?>">
