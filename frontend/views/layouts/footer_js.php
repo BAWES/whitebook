@@ -240,7 +240,6 @@ function logincheck()
         var event_status=jQuery('#event_status').val();
         var favourite_status=jQuery('#favourite_status').val();
         var _csrf=jQuery('#_csrf').val();
-        //if(1){
         if(validateEmail(email) == true){
             jQuery.ajax({
                 url:"<?= Url::toRoute('/users/login');?>",
@@ -254,43 +253,38 @@ function logincheck()
                     for(var x in parsed){
                         arr.push(parsed[x]);
                     }
+
                     status=arr[0];
                     item_name=arr[1];
-
 
                     if(status==-1)
                     {
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
                         jQuery('#result').html('Looks like you are not activated your account!!<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
-                        //jQuery('#loginErrorMsg').removeClass('hide');
                         jQuery('#login_forget').show();
                         jQuery('#loader').hide();
                     }
                     else if(status==-2)
                     {
                         jQuery('#login_loader').hide();
-                        //jQuery('#loginErrorMsg').addClass('alert-success alert fade in');
-
                         jQuery('#result').html('User blocked!<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
-                        //jQuery('#loginErrorMsg').removeClass('hide');
-                        //jQuery('#login_forget').show();
-                        //jQuery('#loader').hide();
                     }
                     else if(status==-3)
                     {
                         jQuery('#login_loader').hide();
-                        //jQuery('#loginErrorMsg').addClass('alert-failure alert fade in');
                         jQuery('#result').addClass('alert-success alert fade in');
-                        //jQuery('#boxclose').addClass('boxclose');
+                        jQuery('#result').html('Your email does not exist<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                    }
+                    else if(status==-4)
+                    {
+                        jQuery('#login_loader').hide();
+                        jQuery('#result').addClass('alert-success alert fade in');
                         jQuery('#result').html('Email and password does not match<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==1)
                     {
                         jQuery('#login_loader').hide();
-                        //jQuery('#loginErrorMsg').addClass('alert-failure alert fade in');
-                        /*jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html('Login successful <a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();*/
                         jQuery('#myModal').modal('hide');
 
 
@@ -299,18 +293,12 @@ function logincheck()
                             jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Success! Your are login and "'+item_name+'" add to favourite successfully!</span>');
                             window.setTimeout(function(){location.reload()},1000)
                         } else if(event_status==-1){
-                            /*jQuery('#login_success').modal('show');
-                            jQuery('#success').html('<span class="msg-success">Success! Your are login successfully!</span>');*/
                             window.setTimeout(function(){location.reload()})
                         }
                         else if(event_status>0){
-                            /*jQuery('#login_success').modal('show');
-                            jQuery('#success').html('<span class="msg-success">Success! Your are login successfully!</span>');*/
                             window.setTimeout(function(){location.reload()})
                         }
                         else{
-                            //jQuery('#login_success').modal('show');
-                            //jQuery('#success').html('<span class="msg-success">Success! Your are login successfully!</span>');
                             window.setTimeout(function(){location.reload()},1000)
                         }
                     }
@@ -500,7 +488,7 @@ jQuery("#register").click(function()
             url:"<?= Url::toRoute('/users/signup'); ?>",
             async:false,
             type:"post",
-            data:"customer_name="+fname+"&customer_last_name="+lname+"&email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&gender="+gender+"&phone="+phone+"&password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
+            data:"customer_name="+fname+"&customer_last_name="+lname+"&customer_email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&customer_gender="+gender+"&customer_mobile="+phone+"&customer_password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
             success:function(data)
             {
                 if(data==0)

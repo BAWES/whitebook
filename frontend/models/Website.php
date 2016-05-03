@@ -153,11 +153,11 @@ class Website extends Model {
 
     public static function get_user_event_types($customer_id) {
 		return $data=Events::find()
-        ->select(['{{%events}}.event_name AS event_name','{{%vendor_events}}.event_id AS event_id'])
+        ->select(['{{%events}}.event_name AS event_name','{{%events}}.event_id AS event_id'])
             ->INNERJOIN('{{%event_type}}', '{{%event_type}}.type_name = {{%events}}.event_type')
             ->where(['{{%events}}.customer_id'=>$customer_id])
 			->andwhere(['{{%event_type}}.trash'=>'Default'])
-			->orderby(['{{%vendor_events}}.event_id'=>SORT_DESC])
+			->orderby(['{{%events}}.event_id'=>SORT_DESC])
 			->asArray()
 			->all();
 			

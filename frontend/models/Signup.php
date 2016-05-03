@@ -7,16 +7,6 @@ use yii\base\Model;
 
 class Signup extends Model
 {
-    public $customer_last_name;
-    public $customer_name;
-    public $email;
-    public $password;
-    public $confirm_password;
-    public $bday;
-    public $bmonth;
-    public $byear;
-    public $gender;
-    public $phone;
 
     public function tableName()
     {
@@ -38,15 +28,15 @@ class Signup extends Model
 
     public function check_valid_key($key)
     {
-		$check_key = Customer::find()
-		->select(['customer_id'])
-		->where(['customer_activation_status'=>0])
-		->andwhere(['customer_activation_key'=>$key])
-		->asArray()
-		->all();
+   		$check_key = Customer::find()
+    		->select(['customer_id'])
+    		->where(['customer_activation_status'=>0])
+    		->andwhere(['customer_activation_key'=>$key])
+    		->asArray()
+    		->all();
         if (count($check_key) > 0) {
-			$model = new Signup();
-			$command=Signup::updateAll(['customer_activation_status' => 1],'customer_activation_key= '.$key);
+       			$model = new Signup();
+       			$command=Signup::updateAll(['customer_activation_status' => 1],'customer_activation_key= '.$key);
             if ($command) {
                 return 2;
             }

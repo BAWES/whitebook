@@ -6,16 +6,15 @@ use yii\web\Controller;
 use common\models\Cms;
 use common\models\Vendoritem;
 use frontend\models\Vendor;
-use common\models\Category;
+use frontend\models\Category;
 use common\models\Siteinfo;
 use common\models\Faq;
-use common\models\Themes;
+use frontend\models\Themes;
 use common\models\Featuregroupitem;
 use frontend\models\Website;
 use frontend\models\Wishlist;
 use frontend\models\Users;
 use yii\web\Session;
-
 use yii\db\Query;
 use common\models\Smtp;
 
@@ -67,6 +66,7 @@ class SiteController extends BaseController
 
     public function actionIndex()
     {
+        
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();
@@ -204,7 +204,7 @@ class SiteController extends BaseController
     {
         if ($search != '') {
             //item type sale
-      $sale = 2;
+            $sale = 2;
             $search = str_replace('and', '&', $search);
             $search = str_replace('-', ' ', $search);
             $searchlength = strlen($search);
@@ -226,8 +226,8 @@ class SiteController extends BaseController
             $slug = '';
             $imageData = '';
 
-        	$imageData = Vendor::find()
-			->select('{{%vendor_item}}.item_price_per_unit','{{%image}}.image_path','{{%vendor_item}}.item_id','{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.category_id','{{%vendor}}.vendor_name','count({{%vendor_item}}.*) as total')
+        	$imageData = Vendoritem::find()
+			->select('{{%vendor_item}}.item_price_per_unit,{{%image}}.image_path,{{%vendor_item}}.item_id,{{%vendor_item}}.item_name,{{%vendor_item}}.slug,{{%vendor_item}}.category_id,{{%vendor}}.vendor_name,count({{%vendor_item}}.item_id) as total')
 			->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
 			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			->Where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.type_id' => '2','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%image}}.module_type' => 'vendor_item','{{%vendor_item}}.category_id' => $cat_id,'{{%vendor_item}}.subcategory_id' => $cat_id,'{{%vendor_item}}.child_category' => $cat_id])

@@ -4,7 +4,6 @@ namespace frontend\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
-use common\models\User;
 
 /**
  * This is the model class for table "whitebook_category".
@@ -65,7 +64,7 @@ class Category extends \common\models\Category
   /* Function used frontend  */
  public static function category_search_details($name)
  {
-           $categories = User::Category()
+    $categories = Category::find()
      ->select(['category_id','category_name'])
      ->where(['trash' =>'Default'])
      ->andwhere(['category_allow_sale' => 'Yes'])
@@ -79,7 +78,7 @@ class Category extends \common\models\Category
   $c = explode(",", $ids);
   $ids = implode("','", $c);
   $val = "'".$ids."'";
-    $categories = User::Category()
+    $categories = Category::find()
      ->select(['category_id','category_name','slug'])
      ->where(['trash' =>'Default'])
      ->andwhere(['category_allow_sale' => 'Yes'])

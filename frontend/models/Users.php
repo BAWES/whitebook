@@ -2,10 +2,9 @@
 
 namespace frontend\models;
 
-use common\models\User;
-use common\models\Customer;
+use frontend\models\Users;
 use common\models\Events;
-use common\models\Themes;
+use frontend\models\Themes;
 use yii\base\Model;
 use Yii\db\Query;
 use Yii;
@@ -28,7 +27,7 @@ class Users extends Model
         return [
             [['email', 'password', 'confirm_password', 'username', 'bday', 'bmonth', 'byear', 'gender', 'phone', 'customer_dateofbirth'], 'required'],
             [['country', 'area', 'created_by', 'created_datetime'], 'integer'],
-            [['customer_address', 'block', 'street', 'juda', 'phone', 'extra'], 'string'],
+            [['block', 'street', 'juda', 'phone', 'extra'], 'string'],
             [['email'], 'unique'],
             [['phone'], 'match', 'pattern' => '/^[0-9+ -]+$/', 'message' => 'Phone number accept only numbers and +,-'],
             [['email'], 'email'],
@@ -60,14 +59,17 @@ class Users extends Model
     {
      return $ads = (new Query())
             ->select('item_id')
-            ->from('{{%_wishlist}}')
+            ->from('{{%wishlist}}')
             ->where(['customer_id'=>$customer_id])
             ->all();
     }
 
     public static function get_user_details($customer_id)
     {
-        return $ads = Customer::find()->select('*')->where(['customer_id'=>$customer_id])->asArray()->all();
+        return $ads = Customer::find()
+        ->joinWith('customerAddress')
+        ->asArray()
+        ->one();
     }
 
     public function check_authorization($email, $password)
@@ -99,26 +101,37 @@ class Users extends Model
     {
         $password = Yii::$app->getSecurity()->generatePasswordHash($post['customer_password']);
         $customer_dateofbirth = $post['byear'].'-'.$post['bmonth'].'-'.$post['bday'];
-        return $command=Signup::updateAll(['customer_name' => $post['first_name'],'customer_last_name' => $post['last_name'],'customer_org_password' => $post['customer_password'],'customer_password' => $password,'customer_gender' => $post['gender'],'customer_dateofbirth' => $customer_dateofbirth,'customer_mobile' => $post['mobile_number'],'customer_address' => $post['address_name'],'country' => $post['country'],'area' => $post['city'],'block' => $post['block'],'street' => $post['street'],'juda' => $post['juda'],'phone' => $post['phone'],'extra' => $post['extra']],'customer_id= '.$customer_id);
+         Customer::updateAll(['customer_name' => $post['first_name'],'customer_last_name' => $post['last_name'],'customer_gender' => $post['gender'],'customer_dateofbirth' => $customer_dateofbirth,'customer_mobile' => $post['mobile_number'],'customer_mobile' => $post['phone']],'customer_id= '.$customer_id);
+         return $command = \common\models\CustomerAddress::updateAll(['country_id' => $post['country'],'city_id' => $post['city']],'customer_id= '.$customer_id);
     }
 
-/*    public function create_event($event_name, $event_type, $event_date)
+    public function check_valid_key($key)
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
-        $event_date = date('Y-m-d', strtotime($event_date));
-        $string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
-        $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-        $check = Events::find()->select('event_id')->where(['customer_id'=>$customer_id,'event_name'=>$event_name])->asArray()->all();
-        if (count($check) > 0) {
-            return -1;
+        $check_key = Customer::find()
+        ->select(['customer_id'])
+        ->where(['customer_activation_status'=>0])
+        ->andwhere(['customer_activation_key'=>$key])
+        ->asArray()
+        ->all();
+        if (count($check_key) > 0) {
+            $model = new Signup();
+            $command=Signup::updateAll(['customer_activation_status' => 1],'customer_activation_key= '.$key);
+            if ($command) {
+                return 2;
+            }
         } else {
-        $command = Yii::$app->DB->createCommand(
-        'INSERT into whitebook_events(customer_id,event_name,event_date,event_type,slug) values("'.$customer_id.'","'.$event_name.'","'.$event_date.'","'.$event_type.'","'.$slug.'")');
-            $event = $command->execute();
-        return Yii::$app->DB->lastInsertID;
+            return 1;
         }
     }
-*/
+    public function customer_logindetail($key)
+    {
+        return$check_key = Customer::find()
+        ->select(['customer_email','customer_org_password'])
+        ->where(['customer_activation_key'=>$key])
+        ->asArray()
+        ->all();
+    }
+
     public function update_event($event_name, $event_type, $event_date, $event_id)
     {
         $customer_id = Yii::$app->params['CUSTOMER_ID'];
@@ -188,32 +201,43 @@ class Users extends Model
 		if ($type != '') {
 			$condn.= '["{{events}}.event_type"=> $type]';
         }
-		return $events=Events::find()
-		->select(['{{events}}.*'])
-		->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.event_id = {{%events}}.event_id')
-		->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
-		->where(['{{%events}}.customer_id'=>$customer_id,'{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_type'=>2])
-		->andwhere($condn)
-		->asArray()
-		->count();
+        return $events = Events::find()
+        ->select(['{{%event_item_link}}.event_id as item_count','{{%events}}.event_id','{{%events}}.event_name','{{%events}}.slug','{{%events}}.event_type','{{%events}}.event_date'])
+        ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.event_id = {{%events}}.event_id')
+        ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
+        ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
+        ->Where(['{{%events}}.customer_id'=>$customer_id]);
+            if(!empty($type)) $events->andWhere([$condn]);
+            $events->groupby(['{{%events}}.event_id'])
+            ->orderby(['{{%events}}.event_date' => SORT_ASC])
+            ->limit($offset,$limit)
+            ->asArray()
+    		->count();
     }
 
     public function getCustomerEvents($customer_id, $limit, $offset, $type)
     {
 		$condn='';
         if ($type != '') {
-			$condn.= '["{{events}}.event_type"=> $type]';
+			$condn.= "{{events}}.event_type=".$type;
         }
-        return $events = Events::find()
+        else
+        {
+            $condn.= "{{events}}.type_id=";
+        }
+        $events = Events::find()
         ->select(['{{%event_item_link}}.event_id as item_count','{{%events}}.event_id','{{%events}}.event_name','{{%events}}.slug','{{%events}}.event_type','{{%events}}.event_date'])
+        ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.event_id = {{%events}}.event_id')
+        ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
         ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->Where(['{{%events}}.customer_id'=>$customer_id])
-        ->andWhere([$condn])
-        ->groupby(['{{%events}}.event_id'])
+        ->Where(['{{%events}}.customer_id'=>$customer_id]);
+        if(!empty($type)) $events->andWhere([$condn]);
+        $events->groupby(['{{%events}}.event_id'])
         ->orderby(['{{%events}}.event_date' => SORT_ASC])
         ->limit($offset,$limit)
         ->asArray()
         ->all();
+        return $events;
     }
 
     public static function get_customer_wishlist_details($customer_id)
@@ -258,26 +282,25 @@ class Users extends Model
 			$order_by .= '["{{vendor_item}}.item_name"=> ASC_DESC]';
         }
         $today = date('Y-m-d H:i:s');
-        return $wishlist=Wishlist::find()->select(['{{wishlist}}.item_id'])
+        return $wishlist=Wishlist::find()->select(['{{%wishlist}}.customer_id','{{%wishlist}}.item_id','{{%vendor_item}}.item_name','{{%vendor_item}}.item_description','{{%vendor_item}}.item_price_per_unit','{{%vendor}}.vendor_name'])
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
         ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
         ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->where(['{{wishlist}}.customer_id'=> $customer_id])
-        ->andwhere(['{{vendor}}.trash'=> 'Default'])
-        ->andwhere(['{{vendor}}.approve_status'=> 'Yes'])
-        ->andwhere(['<=','{{vendor}}.package_start_date',$today])
-        ->andwhere(['>=','{{vendor}}.package_end_date',$today])
-        ->andwhere(['>','{{vendor_item}}.item_amount_in_stock',0])
-        ->andwhere(['{{vendor_item}}.item_approved'=>'yes'])
-        ->andwhere(['{{vendor_item}}.item_archived'=>'no'])
-        ->andwhere(['{{category}}.category_allow_sale'=>'yes'])
-        ->andwhere(['{{category}}.trash'=>'Default'])
-        ->andwhere(['{{vendor_item}}.trash'=>'Default'])
-        ->andwhere(['{{vendor_item}}.item_status'=>'Active'])
-        ->andwhere($condn)
-        ->andwhere($vendr)
-        ->andwhere($availsafe)
-        ->orderby($order_by)
+        ->where(['{{%wishlist}}.customer_id'=> $customer_id])
+        ->andwhere(['{{%vendor}}.trash'=> 'Default'])
+        ->andWhere(['{{%vendor}}.approve_status'=> 'Yes'])
+        ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
+        ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
+        ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0])
+        ->andWhere(['{{%vendor_item}}.item_approved'=>'yes'])
+        ->andWhere(['{{%vendor_item}}.item_archived'=>'no'])
+        ->andWhere(['{{%category}}.category_allow_sale'=>'yes'])
+        ->andWhere(['{{%category}}.trash'=>'Default'])
+        ->andWhere(['{{%vendor_item}}.trash'=>'Default'])
+        ->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
+        ->andWhere($condn)
+        ->andWhere($vendr)
+        ->andWhere($availsafe)
         ->asArray()
         ->count();
     }
@@ -313,29 +336,29 @@ class Users extends Model
 				$order_by .= '["{{vendor_item}}.item_price_per_unit"=> SORT_DESC]';
             }
         } else {
-			$order_by .= '["{{vendor_item}}.item_name"=> ASC_DESC]';
+			$order_by .= '["{{vendor_item}}.item_name"=> SORT_ASC]';
         }
         $today = date('Y-m-d H:i:s');
-        return $wishlist=Wishlist::find()->select(['{{wishlist}}.item_id','{{vendor_item}}.item_name','{{vendor_item}}.item_description','{{vendor_item}}.item_price_per_unit','{{vendor}}.vendor_name'])
+        return $wishlist=Wishlist::find()->select(['{{%wishlist}}.customer_id','{{%wishlist}}.item_id','{{%vendor_item}}.item_name','{{%vendor_item}}.item_description','{{%vendor_item}}.item_price_per_unit','{{%vendor}}.vendor_name'])
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
         ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
         ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->where(['{{wishlist}}.customer_id'=> $customer_id])
-        ->andwhere(['{{vendor}}.trash'=> 'Default'])
-        ->andwhere(['{{vendor}}.approve_status'=> 'Yes'])
-        ->andwhere(['<=','{{vendor}}.package_start_date',$today])
-        ->andwhere(['>=','{{vendor}}.package_end_date',$today])
-        ->andwhere(['>','{{vendor_item}}.item_amount_in_stock',0])
-        ->andwhere(['{{vendor_item}}.item_approved'=>'yes'])
-        ->andwhere(['{{vendor_item}}.item_archived'=>'no'])
-        ->andwhere(['{{category}}.category_allow_sale'=>'yes'])
-        ->andwhere(['{{category}}.trash'=>'Default'])
-        ->andwhere(['{{vendor_item}}.trash'=>'Default'])
-        ->andwhere(['{{vendor_item}}.item_status'=>'Active'])
-        ->andwhere($condn)
-        ->andwhere($vendr)
-        ->andwhere($availsafe)
-        ->orderby($order_by)
+        ->where(['{{%wishlist}}.customer_id'=> $customer_id])
+        ->andwhere(['{{%vendor}}.trash'=> 'Default'])
+        ->andWhere(['{{%vendor}}.approve_status'=> 'Yes'])
+        ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
+        ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
+        ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0])
+        ->andWhere(['{{%vendor_item}}.item_approved'=>'yes'])
+        ->andWhere(['{{%vendor_item}}.item_archived'=>'no'])
+        ->andWhere(['{{%category}}.category_allow_sale'=>'yes'])
+        ->andWhere(['{{%category}}.trash'=>'Default'])
+        ->andWhere(['{{%vendor_item}}.trash'=>'Default'])
+        ->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
+        ->andWhere($condn)
+        ->andWhere($vendr)
+        ->andWhere($availsafe)
+        //->orderby($order_by)
         ->asArray()
         ->all();
     }
@@ -349,16 +372,15 @@ class Users extends Model
                     '{{%vendor_item}}.slug',
                     '{{%vendor_item}}.item_id',
                     '{{%vendor_item}}.item_name',
-                    '{{%vendor_item}}.item_price_per_unit',
-                    '{{%events}}.event_id'])
+                    '{{%vendor_item}}.item_price_per_unit'])
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
             ->where(['{{%wishlist}}.customer_id'=>$customer_id])
 			->andwhere(['{{%vendor_item}}.item_for_sale'=>'Yes'])
-			->andwhere(['{{%vendor_item}}.item_status'=>'Active'])
-			->andwhere(['{{%vendor_item}}.trash'=>'Default'])
-			->andwhere(['{{%vendor_item}}.type_id'=>'2'])
-			->andwhere(['{{%wishlist}}.wish_status'=>'1'])
+			->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
+			->andWhere(['{{%vendor_item}}.trash'=>'Default'])
+			->andWhere(['{{%vendor_item}}.type_id'=>'2'])
+			->andWhere(['{{%wishlist}}.wish_status'=>'1'])
 			->asArray()
 			->all();
         return $data;
@@ -372,7 +394,7 @@ class Users extends Model
                         ->where(['vendor_Status'=>'Active','trash'=>"Default",'approve_status'=>"Yes",
                             'package_start_date'=>"Yes"])
                         ->andwhere(['<=','package_end_date',$today])
-                        ->andwhere(['>=','package_end_date',$today])
+                        ->andWhere(['>=','package_end_date',$today])
                         ->orderBy('vendor_name ASC')
                         ->asArray()
                         ->all();
@@ -390,7 +412,7 @@ class Users extends Model
 
     public static function get_themes()
     {
-        return $general = Theme::find()->select('theme_id,theme_name')
+        return $general = Themes::find()->select('theme_id,theme_name')
                         ->where(['trash'=>'Default'])
                         ->andWhere(['theme_status'=>'Active'])
                         ->asArray()

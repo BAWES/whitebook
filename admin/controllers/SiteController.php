@@ -72,7 +72,6 @@ class SiteController extends Controller
         $vendormonth = Vendor::vendormonthcount();
         $vendorday = Vendor::vendordatecount();
         $vendorperiod = Vendor::vendorperiod();
-        print_r($vendorperiod);die;
         $customercnt = Customer::customercount();
         $customermonth = Customer::customermonthcount();
         $customerday = Customer::customerdatecount();

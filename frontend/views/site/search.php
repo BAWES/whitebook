@@ -2,7 +2,7 @@
 
 use common\models\ChildCategory;
 use common\models\SubCategory;
-use common\models\Vendor;
+use frontend\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;

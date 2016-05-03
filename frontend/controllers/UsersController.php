@@ -4,15 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use arturoliveira\ExcelView;
-use frontend\models\Users;
-use frontend\models\Signup;
 use frontend\models\Basket;
 use common\models\Country;
 use frontend\models\Customer;
 use common\models\CustomerAddress;
 use common\models\Siteinfo;
-use common\models\Themes;
-use common\models\Vendoritem;
+use frontend\models\Themes;
+use frontend\models\Vendoritem;
 use common\models\Featuregroupitem;
 use common\models\LoginForm;
 use common\models\Vendor;
@@ -23,6 +21,7 @@ use frontend\models\EventinviteesSearch;
 use yii\helpers\Arrayhelper;
 use yii\helpers\Url;
 use common\models\Events;
+use frontend\models\Users;
 
 /**
 * Site controller.
@@ -46,51 +45,20 @@ class UsersController extends BaseController
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        $model = new LoginForm();
+        $model = new Customer();
+        $model->scenario = 'login';
 
         if (isset($_POST['email']) && isset($_POST['password'])) {
-            $model->admin_email = $_POST['email'];
-            $model->admin_password = $_POST['password'];
-
+            $model->customer_email = $_POST['email'];
+            $model->customer_password = $_POST['password'];
             $event_status = $_POST['event_status'];
             $favourite_status = $_POST['favourite_status'];
-
-            if($model->login()){
-                $authorization = $model->customer->checkAuthorization();
-
-                if ($authorization == -1) {
-                    $return_data['status'] = '-1';
-                    echo json_encode($return_data);
-                    exit;
-                } elseif ($authorization == -2) {
-                    $return_data['status'] = '-2';
-                    echo json_encode($return_data);
-                    exit;
-                } elseif ($authorization == -3) {
-                    $return_data['status'] = '-3';
-                    echo json_encode($return_data);
-                    exit;
-                } else {
-
-                    if ($event_status == -1) {
-                        Yii::$app->session->set('create_event', 1);
-                    }
-                    if ($event_status > 0) {
-                        Yii::$app->session->set('event_status', $event_status);
-                    }
-                    if ($event_status == -2) {
-                        Yii::$app->session->set('default', 1);
-                    }
-
-                    Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
-                    Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
-                    Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
-                    //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
-
+            if($model->login() == 1) {
+                    Customer::setEventSession($event_status,$model->customer_email);
                     if ($favourite_status > 0) {
                         $userModel = new Users();
                         $update_wishlist = $userModel->update_wishlist_succcess($favourite_status, $authorization[0]['customer_id']);
-                        // add toi favourite
+                        // add to favourite
                         $return_data['status'] = '1';
                         $vendoritem_model = new Vendoritem();
                         $item_name = $vendoritem_model->vendoritemname($favourite_status);
@@ -99,12 +67,15 @@ class UsersController extends BaseController
                         echo json_encode($return_data);
                         exit;
                     }
-
                     $return_data['status'] = '1';
                     echo json_encode($return_data);
                     exit;
                 }
-            }
+                else
+                {
+                    $return_data['status'] = $model->login();
+                    echo json_encode($return_data);
+                }
         } else {
             return $this->redirect(Yii::$app->request->urlReferrer);
         }
@@ -113,37 +84,28 @@ class UsersController extends BaseController
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
 
     public function actionSignup()
     {
-        $model = new Signup();
+        $model = new Customer();
+        $model->scenarios = 'signup';
         $error = array();
-        if ($_POST['_csrf']) {
-            $model->attributes = $_POST;
-            if ($model->validate()) {
-				$st=$model->attributes;
-				$created_date = date('Y-m-d H:i:s');
-				$customer_password = Yii::$app->getSecurity()->generatePasswordHash($st['password']);
-		        $customer_dateofbirth = $st['byear'].'-'.$st['bmonth'].'-'.$st['bday'];
-                $customer_activation_key = $this->generateRandomString();
-                $model->customer_name=$st['customer_name'];
-                $model->customer_last_name=$st['customer_last_name'];
-                $model->customer_email=$st['email'];
-                $model->customer_password=$customer_password;
-                $model->customer_org_password=$st['password'];
-                $model->customer_dateofbirth=$customer_dateofbirth;
-                $model->customer_gender=$st['gender'];
-                $model->customer_mobile=$st['mobile'];
-                $model->customer_activation_key=$customer_activation_key;
-                $model->created_datetime=$created_date;
-                $model-save();
-                
-                if ($model-save()) {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['password']);
+            $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];
+            $model->customer_activation_key = $this->generateRandomString();
+            $model->created_datetime = date('Y-m-d H:i:s');
+            $model->customer_name=$data['customer_name'];
+            $model->customer_last_name=$data['customer_last_name'];
+            $model->customer_email=$data['customer_email'];
+            $model->customer_gender=$data['customer_gender'];
+            $model->customer_mobile=$data['customer_phone'];
+            if ($model->validate() && $model->save()) {
                     $siteinfo = Siteinfo::find()->asArray()->all();
-                    $to = $model['email'];
+                    $to = $model['customer_email'];
                     $username = $model['customer_name'];
                     Yii::$app->session->set('register', '1');
                     $message = 'Thank you for registration with us.</br><a href='.Url::to('/users/confirm_email/'.$customer_activation_key).' title="Click Here">Click here </a> to activate your account.';
@@ -158,20 +120,14 @@ class UsersController extends BaseController
                     $this->redirect(Url::to('site/index'));
                     echo '1';
                     die;
-                } else {
+                    } else {
                     Yii::$app->session->setFlash('error', 'Signup Failed!');
                     echo '0';
                     die;
                     $this->redirect(Url::to('site/index'));
                 }
-            } else {
-                $error = $model->errors;
-                print_r($model->getErrors());
-                die;
-            }
-        }
-
-        return $this->render('/users/signup', [
+            } 
+            return $this->render('/users/signup', [
             'model' => $model,
             'error' => $error,
         ]);
@@ -304,16 +260,16 @@ class UsersController extends BaseController
 
         $model = new Users();
         $user_detail = $model->get_user_details($customer_id);
-        if (!empty($user_detail[0]['country'])) {
-            $city = City::listcityname($user_detail[0]['country']);
+        $customer_details = array_merge($user_detail, $user_detail['customerAddress'][0]);
+        unset($customer_details['customerAddress']);
+        
+
+        if (!empty($user_detail['country'])) {
+            $city = City::listcityname($user_detail['country']);
         } else {
             $city = City::fullcityname();
         }
-
-        //echo $count=$user_detail[0]['country'];die;
-        //		echo $user_detail[0]['customer_gender'];die;
-        //		print_r ($user_detail);die;
-        return $this->render('account-settings', ['user_detail' => $user_detail, 'loadcountry' => $country, 'loadcity' => $city]);
+        return $this->render('account-settings', ['user_detail' => $customer_details, 'loadcountry' => $country, 'loadcity' => $city]);
     }
 
     public function actionEdit_profile()

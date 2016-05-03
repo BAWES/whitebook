@@ -43,6 +43,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     */
     public $newsmail;
     public $content;
+    public $customer_auth_key;
 
     public static function tableName()
     {
@@ -55,13 +56,14 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['customer_name','customer_last_name', 'customer_email', 'customer_password', 'customer_mobile','customer_dateofbirth','customer_gender','customer_address'], 'required'],
+            [['customer_name','customer_last_name', 'customer_email', 'customer_password', 'customer_mobile','customer_dateofbirth','customer_gender'], 'required'],
             [['created_by', 'message_status'], 'integer'],
-            [['customer_email'], 'unique'],
+            [['customer_email'], 'unique', 'on'=>'signup'],
             [['newsmail','content'], 'required', 'on'=>'newsletter'],
             [['customer_mobile'],'match', 'pattern' => '/^[0-9+ -]+$/','message' => 'Phone number accept only numbers and +,-'],
             [['customer_email'],'email'],
-            [['customer_address'], 'string', 'max' => 512]
+            ['trash', 'safe'],
+            //[['customer_address'], 'string', 'max' => 512]
         ];
     }
 
@@ -152,9 +154,6 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      * @param string $email
      * @return static|null
      */
-    public static function findByEmail($email) {
-        return static::findOne(['customer_email' => $email]);
-    }
 
     /**
      * Finds customer by password reset token
@@ -215,18 +214,20 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      * @param string $password password to validate
      * @return boolean if password provided is valid for current user
      */
+    /* Mari
     public function validatePassword($password) {
         return Yii::$app->security->validatePassword($password, $this->customer_password_hash);
-    }
+    }*/
 
     /**
      * Generates password hash from password and sets it to the model
      *
      * @param string $password
      */
+    /* Mari
     public function setPassword($password) {
         $this->customer_password_hash = Yii::$app->security->generatePasswordHash($password);
-    }
+    } */
 
     /**
      * Generates "remember me" authentication key

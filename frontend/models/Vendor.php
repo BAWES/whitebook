@@ -64,10 +64,10 @@ class Vendor extends \common\models\Vendor
 		$val = "'".$id."'";
         /* STEP 1 GET ACTIVE VENDORS*/
         $vendor = Vendor::find()
-        ->select('{{%vendor}}.vendor_id','{{%vendor}}.vendor_name','{{%vendor}}.slug')
+        ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
         ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
-        ->distinct()
+       // ->distinct()
         ->all();
     
 
