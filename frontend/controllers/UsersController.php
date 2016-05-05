@@ -52,22 +52,8 @@ class UsersController extends BaseController
         if (isset($_POST['email']) && isset($_POST['password'])) {
             $model->customer_email = $_POST['email'];
             $model->customer_password = $_POST['password'];
-            $event_status = $_POST['event_status'];
-            $favourite_status = $_POST['favourite_status'];
             if($model->login() == 1) {
-                    Customer::setEventSession($event_status,$model->customer_email);
-                    if ($favourite_status > 0) {
-                        $userModel = new Users();
-                        $update_wishlist = $userModel->update_wishlist_succcess($favourite_status, $authorization[0]['customer_id']);
-                        // add to favourite
-                        $return_data['status'] = '1';
-                        $vendoritem_model = new Vendoritem();
-                        $item_name = $vendoritem_model->vendoritemname($favourite_status);
-                        $return_data['item_name'] = $item_name;
-                        Yii::$app->session->set('favourite_status', $item_name);
-                        echo json_encode($return_data);
-                        exit;
-                    }
+                    Customer::setEventSession($model->customer_email);
                     $return_data['status'] = '1';
                     echo json_encode($return_data);
                     exit;

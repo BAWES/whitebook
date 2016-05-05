@@ -237,15 +237,13 @@ function logincheck()
         jQuery('#login_loader').show();
         var email=jQuery('#email').val();
         var password=jQuery('#password').val();
-        var event_status=jQuery('#event_status').val();
-        var favourite_status=jQuery('#favourite_status').val();
         var _csrf=jQuery('#_csrf').val();
         if(validateEmail(email) == true){
             jQuery.ajax({
                 url:"<?= Url::toRoute('/users/login');?>",
                 type:"POST",
                 async:false,
-                data:"email="+email+"&password="+password+"&event_status="+event_status+"&favourite_status="+favourite_status+"&_csrf="+_csrf,
+                data:"email="+email+"&password="+password+"&_csrf="+_csrf,
                 success:function(data)
                 {
                     var parsed = JSON.parse(data);
@@ -286,8 +284,7 @@ function logincheck()
                     {
                         jQuery('#login_loader').hide();
                         jQuery('#myModal').modal('hide');
-
-
+                        
                         if(favourite_status>0){
                             jQuery('#login_success').modal('show');
                             jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Success! Your are login and "'+item_name+'" add to favourite successfully!</span>');

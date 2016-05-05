@@ -85,24 +85,14 @@ class Customer extends \common\models\Customer {
     /*
      * Set event sessions
      */
-    public function setEventSession($event_status,$user_email)
+    public function setEventSession($user_email)
     {
        $session = Yii::$app->session;
        $session->open();
-       if ($event_status == -1) {
-           Yii::$app->session->set('create_event', 1);
-           $sesion['create_event'] = 1;
-       }
-       if ($event_status > 0) {
-           $sesion['event_status'] = $event_status;
-       }
-       if ($event_status == -2) {
-           $sesion['default'] = 1;
-       }
-           $cus_model =  Customer::find()->where(['customer_email'=>$user_email])->one();
-           $session['customer_id'] = $cus_model['customer_id'];
-           $session['customer_email'] = $user_email;
-           $session['customer_name'] = $cus_model['customer_name'];
+       $cus_model =  Customer::find()->where(['customer_email'=>$user_email])->one();
+       $session['customer_id'] = $cus_model['customer_id'];
+       $session['customer_email'] = $user_email;
+       $session['customer_name'] = $cus_model['customer_name'];
     }
 
     /**
