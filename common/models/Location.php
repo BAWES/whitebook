@@ -17,6 +17,8 @@ use Yii;
  */
 class Location extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
     /**
      * @inheritdoc
      */
@@ -67,14 +69,7 @@ class Location extends \yii\db\ActiveRecord
         return $this->hasOne(Country::className(), ['country_id' => 'country_id']);
     }
     
-    public static function statusImageurl($status)
-	{			
-		if($status == 'Active')		
-		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-	}
-	
-	  	public static function loadlocation()
+ 	public static function loadlocation()
 	{       
 			$location= Location::find()
 			->where(['!=', 'status', 'Deactive'])
@@ -97,5 +92,20 @@ class Location extends \yii\db\ActiveRecord
     {		
 		$model = Location::find()->where(['id'=>$id])->one();
         return $model->location;
+    }
+
+    public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
+
+    // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')     
+        return 'Activate';
+        return 'Deactivate';
     }
 }

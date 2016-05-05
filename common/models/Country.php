@@ -20,6 +20,8 @@ use yii\behaviors\SluggableBehavior;
  */
 class Country extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
     /**
      * @inheritdoc
      */
@@ -66,22 +68,30 @@ class Country extends \yii\db\ActiveRecord
             'country_status' => 'Country Status',
             'default' => 'Default',
         ];
+    }    
+
+  	public static function loadcountry()
+  	{       
+  			$country= Country::find()
+  			->where(['!=', 'status', 'Deactive'])
+  			->where(['!=', 'trash', 'Deleted'])
+  			->all();
+  			$country=ArrayHelper::map($Country,'country_id','country_name');
+  			return $country;
+  	}
+
+    public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
-    
-  public static function statusImageurl($status)
-	{
-		if($status == 'Active')		
-		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-	}
-	
-	public static function loadcountry()
-	{       
-			$Country= Country::find()
-			->where(['!=', 'status', 'Deactive'])
-			->where(['!=', 'trash', 'Deleted'])
-			->all();
-			$Country=ArrayHelper::map($Country,'country_id','country_name');
-			return $Country;
-	}
+
+    // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')     
+        return 'Activate';
+        return 'Deactivate';
+    }
 }

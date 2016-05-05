@@ -48,6 +48,9 @@ use yii\behaviors\SluggableBehavior;
  */
 class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
+
     const UPLOADFOLDER = "vendor_logo/";
 
     public $auth_key;
@@ -373,12 +376,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         return $vendorname;
     }
 
-    public static function statusImageurl($status)
-    {
-        if($status == 'Active')
-        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-    }
+
     
     public static function getVendor($arr='')
     {

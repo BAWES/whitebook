@@ -29,12 +29,6 @@ class Addresstype extends \common\models\Addresstype
         return $this->hasMany(CustomerAddress::className(), ['address_type_id' => 'type_id']);
     }
 
-    public static function statusImageurl($img_status)
-   	{
-   		if($img_status == 'Active')
-   		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('theme/barebone/assets/img/active.png');
-   		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('theme/barebone/assets/img/inactive.png');
-   	}
     
     
   	public static function loadAddresstype()

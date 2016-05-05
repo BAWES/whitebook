@@ -18,6 +18,8 @@ use Yii;
  */
 class AddressQuestion extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
     /**
      * @inheritdoc
      */
@@ -64,7 +66,7 @@ class AddressQuestion extends \yii\db\ActiveRecord
         return $model->type_name;
     }
 
-        	public static function  loadAddressquestion($addresstypeid)
+    public static function  loadAddressquestion($addresstypeid)
     {
 		$question = AddressQuestion::find()
 		->select(['ques_id','address_type_id','question'])
@@ -84,10 +86,4 @@ class AddressQuestion extends \yii\db\ActiveRecord
 		$ques=implode ('<br>',$ques);
 		return($ques);
     }
-        public static function statusImageurl($img_status)
-	{
-		if($img_status == 'Active')
-		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/active.png');
-		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/inactive.png');
-	}
 }

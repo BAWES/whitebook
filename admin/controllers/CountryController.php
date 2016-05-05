@@ -2,7 +2,7 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Country;
+use common\models\Country;
 use admin\models\Authitem;
 use admin\models\CountrySearch;
 use yii\web\Controller;

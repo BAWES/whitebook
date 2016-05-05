@@ -671,13 +671,13 @@ class CategoryController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'yes' ? 'no' : 'yes');
-        $category=Category::updateAll(['category_allow_sale' => $status],['category_id= '.$data['cid']]);
-        $category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id= '.$data['cid']]);
+        $category=Category::updateAll(['category_allow_sale' => $status],['category_id'=>$data['cid']]);
+        $category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id'=>$data['cid']]);
 
         $sub_category = Category::find()->select('category_id')->where(['parent_category_id' => $data['cid']])->all();
         foreach ($sub_category as $cat) {
 		
-			$category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id= '.$cat['category_id']]);	
+			$category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id'=>$cat['category_id']]);	
 			
         }
         if ($status == 'yes') {
@@ -694,8 +694,8 @@ class CategoryController extends Controller
         }
         $status = ($data['status'] == 'yes' ? 'no' : 'yes');
         
-        $category=Category::updateAll(['category_allow_sale' => $status],['category_id= '.$data['cid']]);
-        $category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id= '.$data['cid']]);
+        $category=Category::updateAll(['category_allow_sale' => $status],['category_id'=>$data['cid']]);
+        $category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id'=>$data['cid']]);
         if ($status == 'yes') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {

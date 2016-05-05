@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
              'label'=>'Status',
              'format'=>'raw',
 			  'value'=>function($data) {
-				return HTML::a('<img src='.Yii::$app->newcomponent->statusImageurl($data->faq_status).' id="image-'.$data->faq_id.'" alt="Status Image"title='.Yii::$app->newcomponent->statusTitle($data->faq_status).'>','javascript:void(0)',['id'=>'status', 
+				return HTML::a('<img src='.$data->statusImageurl($data->faq_status).' id="image-'.$data->faq_id.'" alt="Status Image"title='.$data->statusTitle($data->faq_status).'>','javascript:void(0)',['id'=>'status', 
 				'onclick'=>'change("'.$data->faq_status.'","'.$data->faq_id.'")']);
 				},
 			],
@@ -70,11 +70,11 @@ $this->params['breadcrumbs'][] = $this->title;
         url: path, //url to be called
         data: { status: status, id: id, _csrf : csrfToken}, //data to be send
         success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-			$('#image-'+id).attr('src',data);
-			$('#image-'+id).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+id+"')");
-         }
+      			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+      			$('#image-'+id).attr('src',data);
+      			$('#image-'+id).parent('a').attr('onclick', 
+      			"change('"+status1+"', '"+id+"')");
+           }
         });
      }
 	 

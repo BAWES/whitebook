@@ -42,4 +42,20 @@ class Themes extends \common\models\Themes
      $themename=ArrayHelper::map($theme_name,'theme_id','theme_name');
      return $themename;
   }
+
+  public function statusImageurl($img_status)
+  {
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+  }
+
+  // Status Image title
+  public function statusTitle($status)
+  {           
+  if($status == 'Active')     
+      return 'Activate';
+      return 'Deactivate';
+  }
+
 }

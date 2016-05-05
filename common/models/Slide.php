@@ -24,6 +24,8 @@ use yii\helpers\Url;
  */
 class Slide extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
     const UPLOADFOLDER = "slider_uploads/";
 
     /**

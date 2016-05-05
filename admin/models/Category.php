@@ -52,20 +52,6 @@ class Category extends \common\models\Category
         return $scenarios;
     }
 
-   public static function statusImageurl($sale)
-   {
-   		if($sale == 'yes')		
-   		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-   		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-   }
-   	
-   public static function statusTitle($sale)
-   	{			
-   		if($sale == 'yes')		
-   		return 'Active';
-   		return 'Deactive';
-   	}
-
   public  function categoryvalidation($attribute_name,$params)
   {
    if(!empty($this->category_name) ){
@@ -110,4 +96,20 @@ class Category extends \common\models\Category
  		->one();
  		return $categories['category_name'];
  	}
+
+
+    public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
+
+    // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')     
+        return 'Activate';
+        return 'Deactivate';
+    }
 }

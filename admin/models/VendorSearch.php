@@ -5,7 +5,7 @@ namespace admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Vendor;
+use admin\models\Vendor;
 
 /**
  * VendorSearch represents the model behind the search form about `common\models\Vendor`.
@@ -15,7 +15,7 @@ class VendorSearch extends Vendor
     /**
      * @inheritdoc
      */
-     public $package_name;
+    public $package_name;
     public function rules()
     {
         return [

@@ -38,10 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
              'label'=>'Status',
              'format'=>'raw',
-			  'value'=>function($model) {
-				return HTML::a('<img src='.Yii::$app->newcomponent->statusImageurl($model->customer_status).' id="image-'.$model->customer_id.'" alt="Status Image" 
-				title='.Yii::$app->newcomponent->statusTitle($model->customer_status).'>','javascript:void(0)',['id'=>'status', 
-				'onclick'=>'change("'.$model->customer_status.'","'.$model->customer_id.'")']);
+			  'value'=>function($data) {
+				return HTML::a('<img src='.$data->statusImageurl($data->customer_status).' id="image-'.$data->customer_id.'" alt="Status Image" 
+				title='.$data->statusTitle($data->customer_status).'>','javascript:void(0)',['id'=>'status', 
+				'onclick'=>'change("'.$data->customer_status.'","'.$data->customer_id.'")']);
 				},
 			],
 			[

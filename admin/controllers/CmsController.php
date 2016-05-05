@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Admin;
-use common\models\Authitem;
+use admin\models\Authitem;
 use admin\models\Cms;
 use admin\models\CmsSearch;
 use yii\web\Controller;

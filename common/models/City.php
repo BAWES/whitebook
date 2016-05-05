@@ -19,6 +19,8 @@ use yii\db\Query;
  */
 class City extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
     /**
      * @inheritdoc
      */
@@ -93,13 +95,18 @@ class City extends \yii\db\ActiveRecord
 		return $city;
     }
     
-    
-    public static function statusImageurl($status)
-	{			
-		if($status == 'Active')		
-		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-	}
-    
+    public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
 
+    // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')
+        return 'Activate';
+        return 'Deactivate';
+    }
 }

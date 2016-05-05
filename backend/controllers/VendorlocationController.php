@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Vendorlocation;
+use common\models\Vendorlocation;
 use common\models\VendorlocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

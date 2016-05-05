@@ -3,7 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Location;
+use common\models\Location;
 use admin\models\City;
 use admin\models\Authitem;
 use admin\models\LocationSearch;

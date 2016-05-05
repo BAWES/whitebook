@@ -21,6 +21,9 @@ use yii\behaviors\SluggableBehavior;
  */
 class Themes extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
+    
     /**
      * @inheritdoc
      */
@@ -89,13 +92,6 @@ class Themes extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItem::className(), ['item_id' => 'item_id'])->viaTable('whitebook_vendor_item_theme', ['theme_id' => 'theme_id']);
     }
     
-    public static function statusImageurl($img_status)
-  	{			
-  		if($img_status == 'Active')		
-  		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-  		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-  	}	
-
   public  function themevalidation($attribute_name,$params)
   {
     if(!empty($this->theme_name) ){

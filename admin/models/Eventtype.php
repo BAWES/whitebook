@@ -68,9 +68,9 @@ class Eventtype extends \yii\db\ActiveRecord
 		->where(['type_name'=>$this->type_name])
 		->one();
         if($modelq){
-        $this->addError('type_name','Please enter a unique event name');
+            $this->addError('type_name','Please enter a unique event name');
+	   }
 	}
-		}
 	}
 }
 

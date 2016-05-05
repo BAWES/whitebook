@@ -205,7 +205,7 @@ class FeaturegroupController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command=Featuregroup::updateAll(['group_status' => $status],'vendor_id= '.$data['id']);
+        $command=Featuregroup::updateAll(['group_status' => $status],'group_id= '.$data['id']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {

@@ -5,7 +5,7 @@ use yii\db\ActiveQuery;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Category;
+use admin\models\Category;
 use common\models\SubCategory;
 use common\models\ChildCategory;
 

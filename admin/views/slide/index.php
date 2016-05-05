@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			  'header'=>'status',
 			  'format' => 'raw',
 			  'value'=>function($data) {
-				return HTML::a('<img src='.Yii::$app->newcomponent->statusImageurl($data->slide_status).' id="image-'.$data->slide_id.'" title='.Yii::$app->newcomponent->statusTitle($data->slide_status).'>','javascript:void(0)',['id'=>'status',
+				return HTML::a('<img src='.$data->statusImageurl($data->slide_status).' id="image-'.$data->slide_id.'" title='.Yii::$app->newcomponent->statusTitle($data->slide_status).'>','javascript:void(0)',['id'=>'status',
 				'onclick'=>'change("'.$data->slide_status.'","'.$data->slide_id.'")']);
 				},
 			 ],

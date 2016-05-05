@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
              'label'=>'Status',
              'format'=>'raw',
 			  'value'=>function($data) {
-				return HTML::a('<img src='.Yii::$app->newcomponent->statusImageurl($data->package_status).' id="image-'.$data->package_id.'" alt="Status Image" title='.Yii::$app->newcomponent->statusTitle($data->package_status).'>','javascript:void(0)',['id'=>'status', 
+				return HTML::a('<img src='.$data->statusImageurl($data->package_status).' id="image-'.$data->package_id.'" alt="Status Image" title='.Yii::$app->newcomponent->statusTitle($data->package_status).'>','javascript:void(0)',['id'=>'status', 
 				'onclick'=>'change("'.$data->package_status.'","'.$data->package_id.'")']);
 				},
 				'filter' => Yii::$app->newcomponent->Activestatus()

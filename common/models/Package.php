@@ -23,6 +23,9 @@ use yii\helpers\ArrayHelper;
  */
 class Package extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
+
 	public $package_value;	
     public $arr = array();
     /**
@@ -78,13 +81,6 @@ class Package extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Vendor::className(), ['package_id' => 'package_id']);
     }
-    
-        public static function statusImageurl($img_status)
-	{			
-		if($img_status == 'Active')		
-		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-	}
 	
 		
 	public static function loadpackage()

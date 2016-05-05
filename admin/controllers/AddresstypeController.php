@@ -205,7 +205,6 @@ class AddresstypeController extends Controller
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
         $command=Addresstype::updateAll(['status' => $status],'type_id= '.$data['cid']);
-        $command->execute();
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {

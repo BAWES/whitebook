@@ -17,7 +17,7 @@ use Yii;
  */
 class AddressQuestion extends \common\models\AddressQuestion
 {
-
+    
     public static function  loadAddressquestion($addresstypeid)
     {
         $question = AddressQuestion::find()
@@ -38,11 +38,19 @@ class AddressQuestion extends \common\models\AddressQuestion
         $ques=implode ('<br>',$ques);
         return($ques);
     }
-    
-    public static function statusImageurl($img_status)
+
+    public function statusImageurl($img_status)
     {
-        if($img_status == 'Active')
-        return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/active.png');
-        return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/inactive.png');
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
+
+    // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')
+        return 'Activate';
+        return 'Deactivate';
     }
 }

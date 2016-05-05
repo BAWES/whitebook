@@ -20,6 +20,8 @@ use Yii;
  */
 class Addresstype extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
     /**
      * @inheritdoc
      */
@@ -65,13 +67,6 @@ class Addresstype extends \yii\db\ActiveRecord
         return $this->hasMany(CustomerAddress::className(), ['address_type_id' => 'type_id']);
     }
 
-        public static function statusImageurl($img_status)
-	{
-		if($img_status == 'Active')
-		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('theme/barebone/assets/img/active.png');
-		return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('theme/barebone/assets/img/inactive.png');
-	}
-
 	public static function loadAddresstype()
 	{
 		$subQuery = (new Query())
@@ -105,4 +100,20 @@ class Addresstype extends \yii\db\ActiveRecord
 		$model = Addresstype::find()->where(['type_id'=>$id])->one();
         return $model->type_name;
     }
+
+    public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
+
+    // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')     
+        return 'Activate';
+        return 'Deactivate';
+    }
+
 }

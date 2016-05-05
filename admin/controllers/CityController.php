@@ -209,7 +209,7 @@ class CityController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command=Vendor::updateAll(['status' => $status],'city_id= '.$data['cid']);
+        $command=\common\models\City::updateAll(['status' => $status],'city_id= '.$data['cid']);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {

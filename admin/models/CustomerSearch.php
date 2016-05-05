@@ -5,12 +5,11 @@ namespace admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use admin\models\Customer;
 
 /**
  * SearchCustomer represents the model behind the search form about `common\models\Customer`.
  */
-class CustomerSearch extends Customer
+class CustomerSearch extends \admin\models\Customer
 {
     /**
      * @inheritdoc

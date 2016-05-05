@@ -29,21 +29,21 @@ class Featuregroup extends \common\models\Featuregroup
         return $this->hasMany(FeatureGroupItem::className(), ['group_id' => 'group_id']);
     }
     
-        public static function statusImageurl($img_status)
-	{			
-		if($img_status == 'Active')		
-		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-	}
+    public static function statusImageurl($img_status)
+   	{			
+   		if($img_status == 'Active')		
+   		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+   		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+   	}
 	
 	   
-    	    public static function loadfeaturegroup()
-	{       
-			$featuregroup= Featuregroup::find()
-			->where(['!=', 'group_status', 'Deactive'])
-			->andwhere(['!=', 'trash', 'Deleted'])
-			->all();
-			$featuregroup=ArrayHelper::map($featuregroup,'group_id','group_name');
-			return $featuregroup;
-	}
+    public static function loadfeaturegroup()
+   	{       
+   			$featuregroup= Featuregroup::find()
+   			->where(['!=', 'group_status', 'Deactive'])
+   			->andwhere(['!=', 'trash', 'Deleted'])
+   			->all();
+   			$featuregroup=ArrayHelper::map($featuregroup,'group_id','group_name');
+   			return $featuregroup;
+   	}
 }

@@ -3,7 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Themes;
+use admin\models\Themes;
 use admin\models\ThemesSearch;
 use admin\models\Authitem;
 use yii\web\Controller;

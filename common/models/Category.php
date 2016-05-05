@@ -29,6 +29,8 @@ use common\models\User;
  */
 class Category extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
     /**
      * @inheritdoc
      */
@@ -128,19 +130,6 @@ class Category extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
     }
     
-    public static function statusImageurl($sale)
-   	{			
-   		if($sale == 'yes')		
-   		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-   		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-   	}
-   	
-   	public static function statusTitle($sale)
-   	{			
-   		if($sale == 'yes')		
-   		return 'Active';
-   		return 'Deactive';
-   	}
 
     public static function vendorcategory($id)
     {      

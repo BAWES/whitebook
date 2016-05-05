@@ -54,5 +54,20 @@ class Vendor extends \common\models\Vendor
             return $vendorname;
     }
 
+        public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
+
+    // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')     
+        return 'Activate';
+        return 'Deactivate';
+    }
+
 
 }

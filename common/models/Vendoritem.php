@@ -49,6 +49,8 @@ use common\models\Vendor;
  */
 class Vendoritem extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = "Active";
+    const STATUS_DEACTIVE = "Deactive";
     const UPLOADFOLDER_210 = "vendor_item_images_210/";
     const UPLOADFOLDER_530 = "vendor_item_images_530/";
     const UPLOADFOLDER_1000 = "vendor_item_images_1000/";
@@ -319,13 +321,20 @@ class Vendoritem extends \yii\db\ActiveRecord
 			return $items;
 	}
 	
-    /* common */
-	 public static function statusImageurl($status)
-	{			
-		if($status == 'Active')		
-		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-	}
+    public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')     
+        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
+
+    // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')     
+        return 'Activate';
+        return 'Deactivate';
+    }
 
    /**
      * Deletes uploaded files related to this model from S3

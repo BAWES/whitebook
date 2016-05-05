@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			  'format' => 'raw',
 			  'value'=>function($data) {
 				return HTML::a('<img 
-				src='.Yii::$app->newcomponent->statusImageurl($data->country_status).' id="image-'.$data->country_id.'" title='.Yii::$app->newcomponent->statusTitle($data->country_status).'>','javascript:void(0)',['id'=>'status',
+				src='.$data->statusImageurl($data->country_status).' id="image-'.$data->country_id.'" title='.Yii::$app->newcomponent->statusTitle($data->country_status).'>','javascript:void(0)',['id'=>'status',
 				'onclick'=>'change("'.$data->country_status.'","'.$data->country_id.'")']);
 				},
 			 ],  
