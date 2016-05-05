@@ -7,21 +7,21 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use yii\bootstrap\Alert;
 use common\models\Siteinfo;
-
+AppAsset::register($this);
 $this->beginPage();
 ?>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <meta charset="utf-8" />
     <?= Html::csrfMetaTags() ?>
-    <title>Whitebook</title>
+    <title>Whiteboook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta content="" name="description" />
     <meta content="" name="author" />
     <?php $this->head() ?>
-    <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />
-    <?php AppAsset::register($this); ?>
+    <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />    
 </head>
 <body class="">
     <?php $this->beginBody() ?>
@@ -74,4 +74,6 @@ $this->beginPage();
         <!-- You may need to put some content here -->
         <?php $this->endContent(); ?>
         <?php $this->endBody() ?>
+            </body>
+    </html>
 <?php $this->endPage() ?>
