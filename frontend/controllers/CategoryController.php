@@ -34,7 +34,7 @@ class CategoryController extends BaseController
         $bottom_ad = $this->category_model->get_category_bottom_ads();
         $vendors = $this->category_model->vendor_list();
         $themes = $this->category_model->get_themes();
-        $customer_id = CUSTOMER_ID;
+        $customer_id = Yii::$app->user->identity->customer_id;
         $customer_events = array();
         if ($customer_id != '') {
             $customer_events = $this->category_model->getCustomerEvents($customer_id);

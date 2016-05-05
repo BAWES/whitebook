@@ -96,14 +96,14 @@ class ProductController extends BaseController
             \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => $summary]);
             \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => $baselink]);
 
-            if ($this->customer_id == '') {
+            if (Yii::$app->user->isGuest) {
                 return $this->render('/product/product_detail', ['avlbl_stock' => $avlbl_stock, 'model' => $model, 'similiar_item' => $similiar_item, 'social_vendor' => $social_vendor,
                 'vendor_area' => $vendr_area, ]);
                 /*return $this->render('/product/product_detail',['avlbl_stock'=>$avlbl_stock,'model'=>$model,'similiar_item'=>$similiar_item,'social_vendor'=>$social_vendor,
                 'vendor_area'=>$vendr_area,'vendor_timeslot'=>$vendor_timeslot]);*/
             } else {
                 $user = new Users();
-                $customer_events_list = $user->get_customer_wishlist_details($this->customer_id);
+                $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
                 return $this->render('/product/product_detail', ['model' => $model, 'similiar_item' => $similiar_item,
                 'avlbl_stock' => $avlbl_stock, 'social_vendor' => $social_vendor, 'customer_events_list' => $customer_events_list,
@@ -136,14 +136,13 @@ class ProductController extends BaseController
 			->all();
 			
             $user = new Users();
-            $customer_events = Events::find()->where(['customer_id' => Yii::$app->params['CUSTOMER_ID']])->asArray()->all();
+            $customer_events = Events::find()->where(['customer_id' => Yii::$app->user->identity->customer_id])->asArray()->all();
             return $this->renderPartial('add_event', array('model' => $model, 'customer_events' => $customer_events));
         }
     }
 
     public function actionEventdetails()
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $edit_eventinfo = Events::find()->where(['event_id' => $data['event_id']])->asArray()->all();

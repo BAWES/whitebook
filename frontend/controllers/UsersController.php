@@ -252,7 +252,7 @@ class UsersController extends BaseController
     }
     public function actionAccount_settings()
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         if ($customer_id == '') {
             return $this->goHome();
         }
@@ -274,7 +274,7 @@ class UsersController extends BaseController
 
     public function actionEdit_profile()
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         if ($customer_id == '') {
             return $this->goHome();
         }
@@ -292,7 +292,7 @@ class UsersController extends BaseController
     }
     public function actionDelivery_address()
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         if ($customer_id == '') {
             return $this->goHome();
         }
@@ -312,7 +312,7 @@ class UsersController extends BaseController
 
     public function actionAddress_info()
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         if ($customer_id == '') {
             return $this->goHome();
         }
@@ -340,10 +340,10 @@ class UsersController extends BaseController
             $event_type = $_POST['event_type'];
             $event_date = $_POST['event_date'];
             Yii::$app->session->set('event_name', $event_name);
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+            $customer_id = Yii::$app->user->identity->customer_id;
             // Creating event start
             
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+            $customer_id = Yii::$app->user->identity->customer_id;
 			$event_date1 = date('Y-m-d', strtotime($event_date));
 			$string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
 			$slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
@@ -412,7 +412,7 @@ class UsersController extends BaseController
             $event_type = $_POST['event_type'];
             $event_date = $_POST['event_date'];
             $event_id = $_POST['event_id'];
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+            $customer_id = Yii::$app->user->identity->customer_id;
             $add_event = $model->update_event($event_name, $event_type, $event_date, $event_id);
             if ($add_event == -1) {
                 echo -1;
@@ -437,7 +437,7 @@ class UsersController extends BaseController
             $model = new Users();
             $event_id = $_POST['event_id'];
             $item_id = $_POST['item_id'];
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+            $customer_id = Yii::$app->user->identity->customer_id;
             $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);
             if ($insert_item_to_event == -2) {
                 echo -2;
@@ -458,15 +458,15 @@ class UsersController extends BaseController
         if (isset($_POST['item_id'])) {
             $model = new Users();
             $item_id = $_POST['item_id'];
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+            $customer_id = Yii::$app->user->identity->customer_id;
 
             $update_wishlist = $model->update_wishlist($item_id, $customer_id);
             if ($update_wishlist == 1) {
-                $wishlist = Users::loadCustomerWishlist(Yii::$app->params['CUSTOMER_ID']);
+                $wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
                 echo count($wishlist);
                 exit;
             } else {
-                $wishlist = Users::loadCustomerWishlist(Yii::$app->params['CUSTOMER_ID']);
+                $wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
                 echo count($wishlist);
                 exit;
             }
@@ -477,8 +477,8 @@ class UsersController extends BaseController
 
     public function actionEvents()
     {
-        //Yii::$app->params['header1'] = "1"; // uncomment call new header
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+
+        $customer_id = Yii::$app->user->identity->customer_id;
         if ($customer_id == '') {
             return $this->goHome();
         }
@@ -553,7 +553,7 @@ class UsersController extends BaseController
         $customer_wishlist_count = $model->get_customer_wishlist_count($customer_id, $category_id, $price, $vendor, $avail_sale, $theme);
 
         /* BEGIN load user events */
-        $user_events = Events::find()->where(['customer_id' => Yii::$app->params['CUSTOMER_ID']])->asArray()->all();
+        $user_events = Events::find()->where(['customer_id' => Yii::$app->user->identity->customer_id])->asArray()->all();
         /* END load user events */
 
         return $this->render('events', ['event_type' => $event_type, 'customer_event_type' => $customer_event_type, 'customer_events' => $customer_events, 'customer_events_count' => $customer_events_count, 'customer_wishlist' => $customer_wishlist, 'customer_wishlist_count' => $customer_wishlist_count, 'vendor' => $vendor, 'category' => $categorylist,
@@ -566,7 +566,7 @@ class UsersController extends BaseController
             if (isset($_POST['item_id'])) {
                 $model = new Users();
                 $item_id = $_POST['item_id'];
-                $customer_id = Yii::$app->params['CUSTOMER_ID'];
+                $customer_id = Yii::$app->user->identity->customer_id;
                 $delete_wishlist = $model->delete_wishlist($item_id, $customer_id);
                 if ($delete_wishlist == 1) {
                     echo '1';
@@ -586,7 +586,7 @@ class UsersController extends BaseController
         $limit = $_GET['limit'];
         $offset = $_GET['offset'];
         $type = $_GET['type'];
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         $model = new Users();
         $customer_events = $model->getCustomerEvents($customer_id, $limit, $offset, $type);
         if (count($customer_events) > 0) {
@@ -627,7 +627,7 @@ class UsersController extends BaseController
         $avail_sale = $_GET['available_for_sale'];
         $theme = $_GET['theme'];
 
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         $model = new Users();
         $customer_wishlist = $model->get_customer_wishlist($customer_id, $limit, $offset, $category_id, $price, $vendor, $avail_sale, $theme);
         if (count($customer_wishlist) > 0) {
@@ -659,7 +659,7 @@ class UsersController extends BaseController
                 <div class="favourite">
                 <div class="favourite_left"><span class="add_but"><a href="#" title="">+</a></span></div>
                 <span class="bot_prize">'.$w['item_price_per_unit'].Yii::$app->params['CURRENCY_CODE'].'</span>
-                <div class="favourite_right"><a href="javascript:void(0);" title="Delete" onclick="remove_from_fav('.Yii::$app->params['CUSTOMER_ID'].','.$w['item_id'].');"> <span class="flaticon-paperbin6"></span></a></div>
+                <div class="favourite_right"><a href="javascript:void(0);" title="Delete" onclick="remove_from_fav('.Yii::$app->user->identity->customer_id.','.$w['item_id'].');"> <span class="flaticon-paperbin6"></span></a></div>
                 </div>
                 </div>
                 </div>
@@ -703,11 +703,11 @@ class UsersController extends BaseController
 
         public function actionEventdetails($slug = '')
         {
-            $event_details = Events::find()->where(['customer_id' => Yii::$app->params['CUSTOMER_ID'], 'slug' => $slug])->asArray()->all();
+            $event_details = Events::find()->where(['customer_id' => Yii::$app->user->identity->customer_id, 'slug' => $slug])->asArray()->all();
             if (empty($event_details)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
-            $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->params['CUSTOMER_ID']);
+            $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 			
 			$eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
 			->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
@@ -728,8 +728,8 @@ class UsersController extends BaseController
 
             public function actionExcel($slug = '')
             {
-                $event_details = Events::find()->where(['customer_id' => Yii::$app->params['CUSTOMER_ID'], 'slug' => $slug])->asArray()->all();
-                $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->params['CUSTOMER_ID']);
+                $event_details = Events::find()->where(['customer_id' => Yii::$app->user->identity->customer_id, 'slug' => $slug])->asArray()->all();
+                $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
                 $searchModel = new EventinviteesSearch();
                 $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $slug);
 

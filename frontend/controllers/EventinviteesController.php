@@ -151,11 +151,11 @@ class EventinviteesController extends BaseController
                 $event_invite->name = $data['name'];
                 $event_invite->email = $data['email'];
                 $event_invite->event_id = $data['event_id'];
-                $event_invite->customer_id = Yii::$app->params['CUSTOMER_ID'];
+                $event_invite->customer_id = Yii::$app->user->identity->customer_id;
                 $event_invite->phone_number = $data['phone_number'];
                 $eventinvitees->save();
               if ($insert) {
-                  $customer_info = Users::get_user_details(Yii::$app->params['CUSTOMER_ID']);
+                  $customer_info = Users::get_user_details(Yii::$app->user->identity->customer_id);
                   $to = $data['email'];
                   $message = 'Hi '.$data['name'].',<br/><br/> '.$customer_info[0]['customer_name'].' is invite you '.$data['event_name'].' event ';
                   $subject = 'Event Invitation';

@@ -72,14 +72,11 @@ class SiteController extends BaseController
         $product_list = $featuremodel->get_featured_product_id();
         $featured_product = $featuremodel->get_featured_product();
         $banner = $website_model->get_banner_details();
-        //echo  '<pre>';print_r($banner);die;
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
-        $customer_id = Yii::$app->session->get('customer_id');
         $customer_events = array();
-
-        if ($customer_id != '') {
-            $customer_events = $website_model->getCustomerEvents($customer_id);
+        if (!Yii::$app->user->isGuest) {
+            $customer_events = $website_model->getCustomerEvents(Yii::$app->user->identity->customer_id);
         }
         return $this->render('index', [
           'featured_product' => $featured_product,
@@ -101,7 +98,7 @@ class SiteController extends BaseController
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
 
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         $customer_events = array();
 
         if ($customer_id != '') {
@@ -109,12 +106,12 @@ class SiteController extends BaseController
         }
 
         return $this->render('home', [
-      'featured_product' => $featured_product,
-      'banner' => $banner,
-      'event_type' => $event_type,
-      'ads' => $ads,
-      'customer_events' => $customer_events,
-      'key' => '1',
+          'featured_product' => $featured_product,
+          'banner' => $banner,
+          'event_type' => $event_type,
+          'ads' => $ads,
+          'customer_events' => $customer_events,
+          'key' => '1',
     ]);
     }
 
@@ -208,7 +205,7 @@ class SiteController extends BaseController
             $search = str_replace('and', '&', $search);
             $search = str_replace('-', ' ', $search);
             $searchlength = strlen($search);
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+            $customer_id = Yii::$app->user->identity->customer_id;
             $model = new Category();
             $active_vendors = Vendor::loadvalidvendors();
 
@@ -359,7 +356,7 @@ class SiteController extends BaseController
     public function actionVendor_profile($slug = '')
     {
         if ($slug != '') {
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+            $customer_id = Yii::$app->user->identity->customer_id;
             $website_model = new Website();
             $vendor_details = $website_model->vendor_details($slug);
             if (empty($vendor_details)) {
@@ -561,7 +558,7 @@ class SiteController extends BaseController
             // BEGIN wish list manage page load vendorss based on category
             public function actionLoadwishlist()
             {
-                $customer_id = Yii::$app->params['CUSTOMER_ID'];
+                $customer_id = Yii::$app->user->identity->customer_id;
                 if (Yii::$app->request->isAjax) {
                     $data = Yii::$app->request->post();
 
@@ -606,7 +603,7 @@ class SiteController extends BaseController
             }
     public function actionLoadeventlist()
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $event = $data['event_name'];
@@ -634,7 +631,7 @@ class SiteController extends BaseController
 
     public function actionDeleteevent()
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (!empty($data['event_id'])) {

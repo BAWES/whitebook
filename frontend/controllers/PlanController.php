@@ -40,7 +40,6 @@ class PlanController extends BaseController
     public function actionPlan($slug = '')
     {
         $model = new Website();
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
         if ($slug != '') {
             /* BEGIN CATEGORY*/
         $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $slug])->asArray()->one();
@@ -139,7 +138,7 @@ class PlanController extends BaseController
         /* END get current category to load sub category */
 
         /* END GET VENDORS */
-        if ($customer_id == '') {
+        if (Yii::$app->user->isGuest == '') {
             return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
             'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug]);
         } else {
@@ -246,7 +245,7 @@ class PlanController extends BaseController
 
         if (!Yii::$app->user->isGuest) {
             $usermodel = new Users();
-            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->params['CUSTOMER_ID']);
+            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
         }
 
         return $this->renderPartial('loaditems', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
@@ -352,7 +351,7 @@ class PlanController extends BaseController
 
         if (!Yii::$app->user->isGuest) {
             $usermodel = new Users();
-            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->params['CUSTOMER_ID']);
+            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
         }
 
         return $this->renderPartial('loaditems', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
@@ -466,7 +465,7 @@ class PlanController extends BaseController
                 ->limit(12)
                 ->asArray()
                 ->all();
-            $customer_id = Yii::$app->params['CUSTOMER_ID'];
+            $customer_id = Yii::$app->user->identity->customer_id;
             if (!empty($customer_id)) {
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
@@ -566,7 +565,7 @@ class PlanController extends BaseController
                     ->limit(12)
                     ->asArray()
                     ->all();
-                $customer_id = Yii::$app->params['CUSTOMER_ID'];
+                $customer_id = Yii::$app->user->identity->customer_id;
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
                 if (!empty($customer_id)) {

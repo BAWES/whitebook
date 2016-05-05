@@ -108,7 +108,11 @@ class Website extends Model {
     }
 
     public static function getCustomerEvents($customer_id) {
-     return $events = Events::find()->select('event_id,event_name,event_type,event_date,slug')->where(['customer_id'=>$customer_id])->OrderBy('event_date ASC')->asArray()->all();
+     return $events = Events::find()->select('event_id,event_name,event_type,event_date,slug')
+                     ->where(['customer_id'=>$customer_id])
+                     ->OrderBy('event_date ASC')
+                     ->asArray()
+                     ->all();
     }
 
     public static function check_user_fav($item_id) {

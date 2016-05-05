@@ -134,7 +134,7 @@ class Users extends Model
 
     public function update_event($event_name, $event_type, $event_date, $event_id)
     {
-        $customer_id = Yii::$app->params['CUSTOMER_ID'];
+        $customer_id = Yii::$app->user->identity->customer_id;
         $event_date = date('Y-m-d', strtotime($event_date));
         $string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
         $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
@@ -230,9 +230,9 @@ class Users extends Model
         ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.event_id = {{%events}}.event_id')
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
         ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->Where(['{{%events}}.customer_id'=>$customer_id]);
-        if(!empty($type)) $events->andWhere([$condn]);
-        $events->groupby(['{{%events}}.event_id'])
+        ->with('{{%events}}');
+            if(!empty($type)) $events->Where([$condn]);
+            $events->groupby(['{{%events}}.event_id'])
         ->orderby(['{{%events}}.event_date' => SORT_ASC])
         ->limit($offset,$limit)
         ->asArray()

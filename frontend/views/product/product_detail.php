@@ -755,7 +755,7 @@ $image = $baselink;
             jQuery.ajax({
                 type: 'POST',
                 url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('users/addtobasket'); ?>",
-                data: {'item_id': item_id, 'cust_id':<?= Yii::$app->params['CUSTOMER_ID']; ?>},
+                data: {'item_id': item_id, 'cust_id':<?= Yii::$app->user->identity->customer_id; ?>},
                 success: function (data)
                 {
                     // alert(data);

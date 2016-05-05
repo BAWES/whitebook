@@ -20,14 +20,7 @@ class BaseController extends Controller
         $model = new Website();
 
         $general_settings = $model->get_general_settings();
-        $this->customer_id = Yii::$app->session->get('customer_id');
-        $customer_email = Yii::$app->session->get('customer_email');
-        $customer_name = Yii::$app->session->get('customer_name');
-
-        Yii::$app->params['CUSTOMER_ID'] = $this->customer_id;
-        Yii::$app->params['CUSTOMER_EMAIL'] = $customer_email;
-        Yii::$app->params['CUSTOMER_NAME'] = $customer_name;
-
-
+        if(!Yii::$app->user->isGuest)
+        Yii::$app->params['CUSTOMER_NAME'] = Yii::$app->user->identity->customer_name;
     }
 }

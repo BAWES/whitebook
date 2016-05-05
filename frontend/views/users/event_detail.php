@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Yii::$app-
 <div class="panel-group row" id="accordion">
 
 <?php
-$cust_id = Yii::$app->params['CUSTOMER_ID'];
+$cust_id = Yii::$app->user->identity->customer_id;
 /* Load level 1 category */
 $cat_exist = Category::find()
 		->where(['category_level' =>0,'category_allow_sale' =>'Yes','trash' =>'Default','category_level' =>'0'])
