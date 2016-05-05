@@ -1,4 +1,5 @@
-<?php use yii\helpers\Url;?>
+<?php use yii\helpers\Url;
+use yii\helpers\Html;?>
 <!-- coniner start -->
 <section id="inner_pages_white_back">
 <div class="container paddng0">
@@ -54,34 +55,13 @@
 $ltr = strtoupper(substr($d['vname'],0,1));
 if($ltr==$f)
 {?>
-<li><a href="<?php echo Yii::$app->homeUrl;?>/experience/<?php echo $d['slug'];?>" title="<?php echo strtoupper($d['vname']);?>"><?php echo strtoupper($d['vname']);?></a></li>
+<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/experience/','slug'=>$d['slug']])) ?></li>
 <?php } }?>
 <?php }?>
 </ul>
 </div>
 </div>
 </div>
-<?php /*$fl=$first_letter;?>
-<div class="mobile-view col-xs-12 padding0 directory-responsive">
-<div class="tabContainer">
-<ul id="demoOne" class="demo">
-<?php foreach($fl as $f)
-{ ?>
-<li><h2><?php echo $f;?></h2></li>
-
-<?php foreach($directory as $d) {
-$ltr = strtoupper(substr($d['vname'],0,1));
-if($ltr==$f)
-{?>
-<li><a href="<?php echo Yii::$app->homeUrl;?>/experience/<?php echo $d['slug'];?>" title="<?php echo strtoupper($d['vname']);?>"><?php echo strtoupper($d['vname']);?></a></li>
-<?php } }?>
-
-</ul><?php }?>
-</div>
-</div>
-*/?>
-
-
 
 <div id="filter">
 <?php $total=count($directory);
@@ -105,7 +85,7 @@ $l=$first_letter;?>
 $first_letter = strtoupper(substr($d['vname'],0,1));
 if($first_letter==$f)
 {if($i<$first){ ?>
-<li><a href="<?php echo Url::toRoute('/experience/',true);?><?php echo $d['slug'];?>" title="<?php echo strtoupper($d['vname']);?>"><?php echo strtoupper($d['vname']);?></a></li>
+<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/experience/','slug'=>$d['slug']])) ?></li>
 <?php }  } }?>
 </ul>
 </div>
@@ -124,7 +104,7 @@ foreach($directory as $d) {
 $first_letter = strtoupper(substr($d['vname'],0,1));
 if($first_letter==$f)
 { ?>
-<li><a href="<?php echo Url::toRoute('/experience',true);?>/<?php echo $d['slug'];?>" title="<?php echo strtoupper($d['vname']);?>"><?php echo strtoupper($d['vname']);?></a></li>
+<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/experience/','slug'=>$d['slug']])) ?></li>
 <?php  } }?>
 
 </ul>
@@ -146,7 +126,7 @@ foreach($directory as $d) {
 $first_letter = strtoupper(substr($d['vname'],0,1));
 if($first_letter==$f)
 {?>
-<li><a href="<?php echo Url::toRoute('/experience/',true);?><?php echo $d['slug'];?>" title="<?php echo strtoupper($d['vname']);?>"><?php echo strtoupper($d['vname']);?></a></li>
+<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/experience/','slug'=>$d['slug']])) ?></li>
 <?php  } }?>
 
 </ul>

@@ -61,16 +61,18 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Yii::$app-
 
 <?php
 $cust_id = Yii::$app->user->identity->customer_id;
-/* Load level 1 category */
-$cat_exist = Category::find()
-		->where(['category_level' =>0,'category_allow_sale' =>'Yes','trash' =>'Default','category_level' =>'0'])
-		->orderBy(new \yii\db\Expression('FIELD ("category_name", "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Say thank you")'))
-		->asArray()->all();
-
-foreach ($cat_exist as $key => $value1) {
+ foreach ($cat_exist as $key => $value1) {
 	$cat_list1=Vendoritem::find()->select(['{{%vendor_item}}.item_id'])
-	->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
-	->where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%vendor_item}}.trash'=>'Default','{{%event_item_link}}.trash'=>'Default','{{%event_item_link}}.event_id'=>$event_details[0]['event_id'],'{{%category}}.category_id'=>$value['category_id']])->asArray()->All();
+ ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
+ ->leftJoin('{{%category}}', '{{%category}}.category_id ='.$value1['category_id'])
+	->where(['{{%vendor_item}}.item_status'=>'Active'])
+ ->andWhere(['{{%vendor_item}}.trash'=>'Default'])
+ ->andWhere(['{{%vendor_item}}.item_for_sale'=>'Yes'])
+ ->andWhere(['{{%vendor_item}}.type_id'=>'2'])
+ ->andWhere(['{{%event_item_link}}.trash'=>'Default'])
+ ->andWhere(['{{%event_item_link}}.event_id'=>$event_details[0]['event_id']])
+ ->asArray()
+ ->all();
 	
 ?>
 <div class="panel panel-default">
@@ -99,13 +101,33 @@ ON wvi.item_id = wei.item_id and wei.trash="default" and wvi.category_id ='.$val
 if(!empty($cat_list))
 {
 foreach ($cat_list as $key => $cat_list_value) {
+  $imageData[]=Vendoritem::find()->select(['{{%vendor_item}}.item_id','{{%event_item_link}}.link_id',
+   '{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
+    '{{%vendor_item}}.item_name','{{%vendor_item}}.slug', '{{%vendor_item}}.child_category', '{{%vendor_item}}.item_id'
+    ])
+  ->with(['{{%image}}','{{%vendor}}'])
+ ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%category}}.child_category')
+ ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.item_id ={{%vendor_item}}.item_id')
+ ->where(['{{%vendor_item}}.item_approved'=>'Yes'])
+ ->andWhere(['{{%vendor_item}}.trash'=>'Default'])
+ ->andWhere(['{{%vendor_item}}.item_for_sale'=>'Yes'])
+ ->andWhere(['{{%vendor_item}}.type_id'=>'2'])
+ ->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
+ ->andWhere(['{{%image}}.module_type'=>'vendor_item'])
+ ->andWhere(['{{%event_item_link}}.event_id'=>$event_details[0]['event_id']])
+ ->andWhere(['{{%vendor_item}}.item_id'=>$cat_list_value['item_id']])
+ ->groupBy('{{%vendor_item}}.item_id')
+ ->limit(5)
+ ->asArray()
+ ->all();
+/*
 $imageData[] = Yii::$app->db->createCommand('select wvi.item_id, wei.link_id, wi.image_path, wvi.item_price_per_unit, wvi.item_name,wvi.slug, wvi.child_category, wvi.item_id FROM whitebook_vendor_item as wvi
 LEFT JOIN whitebook_image as wi ON wvi.item_id = wi.item_id
 LEFT JOIN whitebook_vendor as wv ON wv.vendor_id = wvi.vendor_id
 LEFT JOIN whitebook_category as wc ON wc.category_id = wvi.child_category
 LEFT JOIN whitebook_event_item_link as wei ON wei.item_id = wvi.item_id
 WHERE wvi.trash="Default" and wvi.item_approved="Yes" and wvi.item_status="Active" and wvi.type_id="2"
-and wvi.item_for_sale="Yes" AND wi.module_type="vendor_item" AND wei.event_id='.$event_details[0]['event_id'].' AND wvi.item_id='.$cat_list_value['item_id'].' Group By wvi.item_id limit 5')->queryOne();
+and wvi.item_for_sale="Yes" AND wi.module_type="vendor_item" AND wei.event_id='.$event_details[0]['event_id'].' AND wvi.item_id='.$cat_list_value['item_id'].' Group By wvi.item_id limit 5')->queryOne();*/
 }
 
 if(!empty($imageData))
@@ -129,10 +151,10 @@ if (is_numeric ($result)) { ?>
 <?php }?>
 <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','ADD_FAV');?>"></a></div>
 </div>
-<a href="<?php echo Yii::$app->homeUrl;?>/product/<?php echo $value['slug'];?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
+<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
 </div>
 <div class="events_descrip">
-<a href="<?php echo Yii::$app->homeUrl;?>/product/<?php echo $value['slug'];?>" title=""><?php //$value['vendor_name']  ?></a>
+<?= Html::a(Url::toRoute(['/product/product/','slug'=>$value['slug']]), Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])) ?>
 <h3><?= $value['item_name']  ?></h3>
 <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p>
 </div>

@@ -8,7 +8,7 @@ use frontend\models\Vendoritem;
 use frontend\models\Vendor;
 use common\models\Featuregroupitem;
 use frontend\models\Users;
-use common\models\Location;
+use common\models\Events;
 use common\models\Vendorlocation;
 use common\models\Image;
 use yii\helpers\Json;
@@ -127,7 +127,8 @@ class ProductController extends BaseController
             $data = Yii::$app->request->post();
             
             $model = Vendoritem::find()
-			->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name'])
+			->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name',
+                '{{%image}}.image_path'])
 			->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
 			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			->where(['{{%image}}.module_type' => 'vendor_item'])
@@ -135,7 +136,6 @@ class ProductController extends BaseController
 			->asArray()
 			->all();
 			
-            $user = new Users();
             $customer_events = Events::find()->where(['customer_id' => Yii::$app->user->identity->customer_id])->asArray()->all();
             return $this->renderPartial('add_event', array('model' => $model, 'customer_events' => $customer_events));
         }

@@ -359,9 +359,11 @@ if($value['image_path'] !="")  {
 <div class="faver_icons">
 <a href=""  role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','ADD_FAV');?>"></a>
 </div>
-<?php } else {$k=array();
+<?php } else {
+$k=array();
+$customer_events_list = array();
 
-foreach($customer_events_list as $l){
+foreach((array)$customer_events_list as $l){
 $k[]=$l['item_id'];
 }
 $result=array_search($value['item_id'],$k);
@@ -375,7 +377,7 @@ if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php 
 <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('').'product/';?><?php echo $value['slug'];?>" title="" ><?= Html::img(Yii::getAlias("@vendor_images/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
 </div>
 <div class="events_descrip">
-<a href="<?php echo Yii::$app->homeUrl;?>/product/<?php echo $value['slug'];?>" title=""><?= $value['vendor_name']  ?>
+<?= Html::a($value['vendor_name'],Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
 <h3><?= $value['item_name']  ?></h3>
 <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
 </div>

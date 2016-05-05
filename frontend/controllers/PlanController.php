@@ -145,7 +145,7 @@ class PlanController extends BaseController
             $usermodel = new Users();
             if (!empty($customer_id)) {
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
-
+                
                 return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
             'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list]);
             } else {

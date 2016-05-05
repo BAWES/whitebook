@@ -126,7 +126,7 @@
 
 				 <div class="col-md-12 signup_sav MT20">
 				 <div class="MT40">
-					 <label for="checkbox-01" class="label_check c_on"><input type="checkbox" checked="" value="1" id="checkbox-01" name="sample-checkbox-01"><?php echo Yii::t('frontend','privacy_policy_and_terms_of_service');?></label><a href="<?php echo Yii::$app->homeUrl;?>">Privacy Policy</a> & <a href="<?php echo Yii::$app->homeUrl;?>">Terms of service</a>
+					 <label for="checkbox-01" class="label_check c_on"><input type="checkbox" checked="" value="1" id="checkbox-01" name="sample-checkbox-01"><?php echo Yii::t('frontend','privacy_policy_and_terms_of_service');?></label><?= Url::to('Privacy Policy','#') ?> & <?= Url::to('Terms of service','#') ?></a>
 					  </div>
 				<div class="clearfix">
 					<button type="button" name="signup_submit" onclick="submit_signup_form();" class="btn btn-default MTB15"><?php echo Yii::t('frontend','create_account');?></button> </div>

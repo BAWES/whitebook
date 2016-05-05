@@ -18,6 +18,7 @@ use common\models\City;
 use frontend\models\Website;
 use yii\web\Controller;
 use frontend\models\EventinviteesSearch;
+use frontend\models\Eventitemlink;
 use yii\helpers\Arrayhelper;
 use yii\helpers\Url;
 use common\models\Events;
@@ -717,12 +718,19 @@ class UsersController extends BaseController
             $searchModel = new EventinviteesSearch();
             $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $slug);
 
+            /* Load level 1 category */
+            $cat_exist = \frontend\models\Category::find()
+            ->where(['category_level' =>0,'category_allow_sale' =>'Yes','trash' =>'Default','category_level' =>'0'])
+            ->orderBy(new \yii\db\Expression('FIELD ("category_name", "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Say thank you")'))
+            ->asArray()->all();
+
             return $this->render('event_detail', [
                     'slug' => $slug,
                     'event_details' => $event_details,
                     'customer_events_list' => $customer_events_list,
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
+                    'cat_exist'=>$cat_exist
                 ]);
         }
 

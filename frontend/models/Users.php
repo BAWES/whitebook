@@ -449,4 +449,30 @@ class Users extends Model
                         ->asArray()
                         ->all();
     }
+
+    public function insert_item_to_event($item_id, $event_id)
+    {
+        $customer_id = Yii::$app->user->identity->customer_id;
+
+        $check = Eventitemlink::find()->select('link_id')
+                        ->where(['event_id'=>$event_id])
+                        ->andWhere(['item_id'=>$item_id])
+                        ->count();
+        if (count($check) > 0) {
+            return -2;
+        } else {
+            $event_date = date('Y-m-d H:i:s');
+            $command = new Eventitemlink();
+            $command->event_id = $event_id;
+            $command->item_id = $item_id;
+            $command->link_datetime = $event_date;
+            $command->created_datetime = $event_date;
+            $command->modified_datetime = $event_date;
+            if($command->save())
+            {
+            return 1;
+            }
+        }
+    }
+
 }
