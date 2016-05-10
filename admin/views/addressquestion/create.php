@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="address-question-create">
 
     <?= $this->render('_form', [
-        'model' => $model,'Addresstype'=>$Addresstype,
+        'model' => $model,'addresstype'=>$addresstype,
     ]) ?>
 
 </div>

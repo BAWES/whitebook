@@ -18,6 +18,7 @@ use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use admin\models\Vendoritem;
+use common\models\Customer;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -193,14 +194,14 @@ class CategoryController extends Controller
                 
                 
                  $max_sort = Category::find()
-                 ->select('max(id)')
-				->where(['parent_category_id' => null])
-				->andwhere(['trash' => 'default'])
-				->andwhere(['category_level' => '0'])
+                 ->select('MAX(category_id) as sort')
+				->where(['trash' => 'Default'])
+				->andWhere(['category_level' =>0])
+                ->asArray()
 				->one();
             
                 /*$max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_category` where trash = 'Default' AND parent_category_id IS NULL AND category_level = 0 ")->asArray()->all();*/
-                $sort = ($max_sort[0]['sort'] + 1);
+                $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
                 $model->save(false);
                 $categoryid = $model->category_id;
@@ -213,7 +214,7 @@ class CategoryController extends Controller
                 }
                 if ($file) {
                     $file_name = 'category_'.$categoryid.'.png';
-                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
+                    $category=Category::updateAll(['category_icon' => $file_name],['category_id'=>$categoryid]);
                 }
                 echo Yii::$app->session->setFlash('success', 'Category created successfully!');
                 Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
@@ -238,18 +239,17 @@ class CategoryController extends Controller
             $model = new SubCategory();
             if ($model->load(Yii::$app->request->post())) {
                 $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
-            //$sort = Yii::$app->request->post()['Category']['sort'];
-            //if(empty($sort)){ // get the max sort order
             
+                // get the max sort order
 		         $max_sort = Category::find()
-                 ->select('max(sort)')
-				->where(['parent_category_id' => $parent_category_id])
-				->andwhere(['trash' => 'default'])
-				->andwhere(['category_level' => '1'])
+                 ->select('max(sort) as sort')
+				->where(['parent_category_id' => Yii::$app->request->post()['SubCategory']['parent_category_id']])
+				->andWhere(['trash' => 'default'])
+				->andWhere(['category_level' => '1'])
 				->asArray()
-				->all();
-                $sort = ($max_sort[0]['sort'] + 1);
-            // }
+				->one();
+                $sort = ($max_sort['sort'] + 1);
+
             $model->sort = $sort;
                 $model->category_level = '1';
                 $model->save(false);
@@ -302,13 +302,13 @@ class CategoryController extends Controller
                 $model->category_level = '2';
                 $parent_category_id = Yii::$app->request->post()['ChildCategory']['subcategory_id'];
                 $max_sort = Category::find()
-                 ->select('max(sort)')
+                 ->select('max(sort) as sort')
 				->where(['parent_category_id' => $parent_category_id])
 				->andwhere(['trash' => 'default'])
 				->andwhere(['category_level' => '2'])
 				->asArray()
-				->all();
-                $sort = ($max_sort[0]['sort'] + 1);
+				->one();
+                $sort = ($max_sort['sort'] + 1);
             // }
             $model->sort = $sort;
                 $model->save(false);
@@ -580,9 +580,9 @@ class CategoryController extends Controller
             $parentcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $id])->all();
             if (count($parentcategory)) {
                 $subcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $parentcategory[0]['category_id']])->all();
-                $command=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$parentcategory[0]['category_id']]);
+                $command=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$parentcategory[0]['category_id']]);
             }
-            $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$id]);
+            $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$id]);
             if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Subcategory deleted successfully!');
 
@@ -721,15 +721,16 @@ class CategoryController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $vendor = Vendor::find()->select(['category_id'])->where(['vendor_id' => $data['vendor_id']])->all();
+        $vendor = Vendor::find()->select('category_id')->where(['vendor_id' => $data['vendor_id']])->all();
+        //print_r($vendor);die;
         $vendor_id = $vendor[0]['category_id'];
         $vendor_exp = explode(',', $vendor_id);
         $vendor_imp = implode('","', $vendor_exp);
-        $category = Category::findAll([100, 101, 123, 124]);
-        $category  = Customer::find()
+        //$category = Category::findAll([100, 101, 123, 124]);
+        $categories  = Category::find()
         ->select(['category_id', 'category_name'])
         ->where(['category_id' => $vendor_imp])
-        ->all();
+        ->all();        
         echo  '<option value="">Select</option>';
         foreach ($categories as $key => $val) {
             echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';

@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- Begin First Tab -->
 <div class="tab-pane" id="1" ><div class="admin" style="text-align: center;padding:0px 0px 25px 0px;">
 <?php if(isset($model->vendor_logo_path)) {
-		echo Html::img(Yii::getAlias('@web/uploads/vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
+		echo Html::img(Yii::getAlias('@vendor_logo').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
 		}  ?>
 		</div>
 <div class="form-group">
@@ -286,7 +286,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </ul>
       </div>
       <div class="sat">
-          <ul>
+      <ul>
       <?php  $sat = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Saturday');
       foreach ($sat as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);

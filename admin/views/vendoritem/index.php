@@ -119,7 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			   type : 'POST',			 
 			   data: {keylist: keys, status:status},
 			   success : function(data)
-			   {					 		  
+			   {
+       alert(data);
 					window.location.reload(true); 
 			   }
 			

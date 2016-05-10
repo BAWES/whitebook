@@ -21,6 +21,25 @@ use Yii;
 class Addresstype extends \common\models\Addresstype
 {
 
+     /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
+    }
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -31,33 +50,34 @@ class Addresstype extends \common\models\Addresstype
 
     
     
-  	public static function loadAddresstype()
-  	{
-  		$subQuery = (new Query())
-                  ->select('*')
-                  ->from('{{%address_question}} t')
-                  ->where('t.address_type_id = p2.type_id')
-                  ->andwhere('t.trash = "Default"');
-  		$query = (new Query())
-                  ->select(['type_id','type_name'])
-                  ->from('{{%address_type}} p2')
-                  ->where(['exists', $subQuery])
-                  ->andwhere(['status'=> 'Active'])
-                  ->andwhere(['trash'=> 'Default']);
-          $command = $query->createCommand();
-  		$Addresstype=($command->queryall());
-  		
-  		$Addresstype=ArrayHelper::map($Addresstype,'type_id','type_name');
-  		return $Addresstype;
-  	}
+  public static function loadAddresstype()
+  {
+    $subQuery = (new Query())
+                ->select('*')
+                ->from('{{%address_question}} t')
+                ->where('t.address_type_id = p2.type_id')
+                ->andwhere('t.trash = "Default"');
+    $query = (new Query())
+                ->select(['type_id','type_name'])
+                ->from('{{%address_type}} p2')
+                ->where(['not exists', $subQuery])
+                ->andwhere(['p2.status'=> 'Active'])
+                ->andwhere(['p2.trash'=> 'Default']);
+        $command = $query->createCommand();
+    $addresstype=($command->queryall());
+    
+    $addresstype=ArrayHelper::map($addresstype,'type_id','type_name');
+    return $addresstype;
+  }
 
   	public static function loadAddress()
   	{
-  		$Addresstype = Addresstype::find()
+  		$addresstype = Addresstype::find()
   		->select(['type_id','type_name'])
-  		->where(['status'=>'Active'])->asarray()->all();
+  		->where(['status'=>'Active'])
+      ->andWhere(['trash'=>'Default'])
+      ->asarray()->all();
   		
-  		$Addresstype=ArrayHelper::map($Addresstype,'type_id','type_name');
-  		return $Addresstype;
+  		return $addresstype=ArrayHelper::map($addresstype,'type_id','type_name');
   	}
 }

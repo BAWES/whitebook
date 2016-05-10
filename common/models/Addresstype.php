@@ -3,6 +3,7 @@
 namespace common\models;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Setdateformat;
 use Yii;
 
 /**
@@ -67,26 +68,25 @@ class Addresstype extends \yii\db\ActiveRecord
         return $this->hasMany(CustomerAddress::className(), ['address_type_id' => 'type_id']);
     }
 
-	public static function loadAddresstype()
-	{
-		$subQuery = (new Query())
-                ->select('*')
-                ->from('{{%address_question}} t')
-                ->where('t.address_type_id = p2.type_id')
-                ->andwhere('t.trash = "Default"');
-		$query = (new Query())
-                ->select(['type_id','type_name'])
-                ->from('{{%address_type}} p2')
-                ->where(['exists', $subQuery])
-                ->andwhere(['status'=> 'Active'])
-                ->andwhere(['trash'=> 'Default']);
-        $command = $query->createCommand();
-		$Addresstype=($command->queryall());
-		
-		$Addresstype=ArrayHelper::map($Addresstype,'type_id','type_name');
-		return $Addresstype;
-	}
-		public static function loadAddress()
+   /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
+    }
+
+    public static function loadAddress()
 	{
 		$Addresstype = Addresstype::find()
 		->select(['type_id','type_name'])

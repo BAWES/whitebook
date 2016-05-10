@@ -54,7 +54,7 @@ class Role extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
-            public static function getRoleName($id)
+    public static function getRoleName($id)
 	{
 			$rolename= Role::find()
 			->select ('role_name')
@@ -63,4 +63,21 @@ class Role extends \yii\db\ActiveRecord
 			return ($rolename['role_name']); 
 	}       
     
+    /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
+    }
 }

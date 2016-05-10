@@ -3,6 +3,7 @@ namespace admin\models;
 
 use Yii;
 use yii\db\Expression;
+use yii\helpers\Setdateformat;
 
 /**
  * This is the model class for table "Slide".
@@ -51,9 +52,12 @@ class Slide extends \common\models\Slide {
 
     public function beforeSave($insert) {
         if (parent::beforeSave($insert)) {
-            if ($insert) {
-                //if new record
-            }
+             if ($insert) {
+                  $this->created_datetime = Setdateformat::convert(time(),'datetime');
+                } 
+               else {
+                   $this->modified_datetime = Setdateformat::convert(time(),'datetime');
+                }
 
             //All validations pass, upload the files to S3
             if ($this->slide_type == 'video') {

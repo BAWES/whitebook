@@ -66,12 +66,12 @@ class PriorityitemSearch extends Priorityitem
         }    
         if($start !="" && $end !="" && $status !="" && $level !="")
         {
-		 $enddate= Priorityitem::find()
-		 ->select(['priority_end_date','priority_start_date','priority_id'])
-         ->where(['trash'=>'Default'])
-         ->orderby(['priority_end_date'=>SORT_DESC])
-         ->asArray()
-         ->all();
+  		    $all_priority= Priorityitem::find()
+  		     ->select(['priority_end_date','priority_start_date','priority_id'])
+           ->where(['trash'=>'Default'])
+           ->orderby(['priority_end_date'=>SORT_DESC])
+           ->asArray()
+           ->all();
          
         /* BEGIN GET BETWEEN DATES FROM START DATE AND END DATE */     
             if(strtotime($start) <= strtotime($end)) {

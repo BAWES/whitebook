@@ -3,8 +3,8 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Addresstype;
-use common\models\AddressQuestion;
+use admin\models\Addresstype;
+use admin\models\AddressQuestion;
 use admin\models\AddressQuestionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -134,10 +134,10 @@ class AddressquestionController extends Controller
 
             return $this->redirect(['index']);
         } else {
-            $Addresstype = Addresstype::loadAddresstype();
+            $addresstype = Addresstype::loadAddresstype();
 
             return $this->render('create', [
-                'model' => $model, 'Addresstype' => $Addresstype,
+                'model' => $model, 'addresstype' => $addresstype,
             ]);
         }
     }
@@ -153,15 +153,17 @@ class AddressquestionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $Addresstype = Addresstype::loadAddress();
-        $Addressquestion = AddressQuestion::loadAddressquestion($model->address_type_id);
+        $addresstype = Addresstype::loadAddress();
+        
+        $addressquestion = AddressQuestion::loadAddressquestion($model->address_type_id);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            //print_r($model->question);die;
             $i = 0;
             foreach ($model->question as $ques) {
-                if ($ques && $i < count($Addressquestion)) {
+                if ($ques && $i < count($addressquestion)) {
                     $model->address_type_id;
                     $model->question[$i];
-                    $command=Addressquestion::updateAll(['question' => $model->question[$i],'address_type_id'=>$model->address_type_id],'ques_id= '.$Addressquestion[$i]['ques_id']);
+                    $command=Addressquestion::updateAll(['question' => $model->question[$i],'address_type_id'=>$model->address_type_id],'ques_id= '.$addressquestion[$i]['ques_id']);
                 } elseif ($ques) {
                     $models = new AddressQuestion();
                     $models->address_type_id = $model->address_type_id;
@@ -175,7 +177,7 @@ class AddressquestionController extends Controller
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
-                'model' => $model, 'Addresstype' => $Addresstype, 'Addressquestion' => $Addressquestion,
+                'model' => $model, 'addresstype' => $addresstype, 'addressquestion' => $addressquestion,
             ]);
         }
     }

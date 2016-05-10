@@ -8,9 +8,9 @@ use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
-use common\models\Role;
+use admin\models\Role;
 use yii\helpers\ArrayHelper;
-use common\models\Accesscontroller;
+use admin\models\Accesscontroller;
 
 /**
  * This is the model class for table "{{%admin}}".
@@ -79,6 +79,25 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 		$scenarios['change'] = ['admin_password'];//Scenario Values Only Accepted
         $scenarios['profile'] = ['admin_name', 'admin_email','address','phone'];//Scenario Values Only Accepted
         return $scenarios;
+    }
+
+
+   /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
     }
 
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/

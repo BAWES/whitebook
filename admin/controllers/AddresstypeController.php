@@ -36,7 +36,6 @@ class AddresstypeController extends Controller
                     //'delete' => ['post'],
                 ],
             ],
-
              'access' => [
                'class' => AccessControl::className(),
                'rules' => [
@@ -104,13 +103,17 @@ class AddresstypeController extends Controller
         $access = Authitem::AuthitemCheck('1', '14');
         if (yii::$app->user->can($access)) {
             $model = new Addresstype();
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if($model->load(Yii::$app->request->post()))
+            {            
+            if ($model->validate()) {
                 $model->status = (Yii::$app->request->post()['Addresstype']['status']) ? 'Active' : 'Deactive';
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Address Type created successfully!');
 
                 return $this->redirect(['index']);
-            } else {
+                }
+            } 
+            else {
                 return $this->render('create', [
                 'model' => $model,
             ]);
@@ -145,9 +148,6 @@ class AddresstypeController extends Controller
                 return $this->render('update', [
                 'model' => $model,
             ]);
-            }
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

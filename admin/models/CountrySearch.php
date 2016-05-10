@@ -41,6 +41,7 @@ class CountrySearch extends Country
      */
     public function search($params)
     {
+        //print_r($params);die;
         $query = Country::find();
 
         $dataProvider = new ActiveDataProvider([

@@ -20,7 +20,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
-use common\models\VendorpackagesSearch;
+use admin\models\VendorpackagesSearch;
 
 /**
  * VendorController implements the CRUD actions for Vendor model.
@@ -100,7 +100,7 @@ class VendorController extends Controller
 
         $searchModel3 = new VendoritemcapacityexceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
-
+        //echo '<pre>';print_r($dataProvider3);die;
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,

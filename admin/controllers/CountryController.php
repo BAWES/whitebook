@@ -63,7 +63,7 @@ class CountryController extends Controller
         if (yii::$app->user->can($access)) {
             $searchModel = new CountrySearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+            //echo '<pre>';print_r($dataProvider);die;
             return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

@@ -1,7 +1,7 @@
 <?php
 namespace common\models;
 use Yii;
-
+use yii\helpers\Setdateformat;
 
 class Siteinfo extends \yii\db\ActiveRecord
 {
@@ -39,6 +39,24 @@ class Siteinfo extends \yii\db\ActiveRecord
 		$scenarios = parent::scenarios();        
         $scenarios['update'] = ['app_name', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision','currency_symbol'];//Scenario Values Only Accepted
         return $scenarios;
+    }
+
+   /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
     }
 
     /**

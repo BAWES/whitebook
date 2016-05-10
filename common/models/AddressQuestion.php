@@ -42,6 +42,24 @@ class AddressQuestion extends \yii\db\ActiveRecord
         ];
     }
 
+       /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
+    }
+
     /**
      * @inheritdoc
      */
@@ -66,13 +84,6 @@ class AddressQuestion extends \yii\db\ActiveRecord
         return $model->type_name;
     }
 
-    public static function  loadAddressquestion($addresstypeid)
-    {
-		$question = AddressQuestion::find()
-		->select(['ques_id','address_type_id','question'])
-		->where(['address_type_id'=>$addresstypeid])->all();
-       return $question;
-    }
 
        public static function  loadquestion($addresstypeid)
     {

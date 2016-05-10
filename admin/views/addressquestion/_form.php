@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\AddressQuestion */
+/* @var $model common\models\addressquestion */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="address-question-form">
 <div class="col-md-8 col-sm-8 col-xs-8">    
 <?php $form = ActiveForm::begin(); ?>
 <div class="form-group"><?= $form->field($model, 'address_type_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-{error}"])->dropDownList($Addresstype, ['prompt'=>'Select...']) ?></div>
+{error}"])->dropDownList($addresstype, ['prompt'=>'Select...']) ?></div>
 
 <?php if($model->isNewRecord){?>
 <div class="form-group">    <?=  $form->field($model, 'question[]',['template' => "{label}<div >{input}</div>
@@ -24,12 +24,12 @@ use yii\widgets\ActiveForm;
 <?php }else { ?>
 <?php
 $i=0;
-foreach ($Addressquestion as $ques){ $value=$ques['question'];?>
+foreach ($addressquestion as $ques){ $value=$ques['question'];?>
 <div class="form-group">    <?=  $form->field($model, 'question[]',['template' => "{label}<div >{input}</div>
 {hint}
 {error}"])->textInput(['value'=>$value,'multiple' => 'multiple']) ?>
 
-<input type="hidden" name="AddressQuestion[quesid][]" value="<?php echo $ques['ques_id']; ?>" multiple="multiple" />
+<input type="hidden" name="addressquestion[quesid][]" value="<?php echo $ques['ques_id']; ?>" multiple="multiple" />
 </div><?php $i++;}?> 
 <div class="form-group">
 <input type="button" name="add_item" value="Add More" onclick="addAddress(<?php echo $i;?>,this);" />
@@ -48,7 +48,7 @@ foreach ($Addressquestion as $ques){ $value=$ques['question'];?>
 	var j=0;
 function addAddress(r,tis)
 { 
-	$(tis).parent().before('<div class="form-group append_address'+j+'"><input id="addressquestion-question'+j+'" class="form-control required" name="AddressQuestion[question][]" multiple = "multiple"/><label class="form-label" style="margin-top: 10px;"><input type="button" class="delete_'+j+'" onclick=deleteAddress("'+j+'") value=Remove></label></div>');
+	$(tis).parent().before('<div class="form-group append_address'+j+'">Question <span style="color:red"> *</span><input type="text" id="addressquestion-question'+j+'" class="form-control required" name="AddressQuestion[question][]" multiple = "multiple"/><label class="form-label" style="margin-top: 10px;"><input type="button" class="delete_'+j+'" onclick=deleteAddress("'+j+'") value=Remove></label></div>');
 	j++;	
 }
 function deleteAddress(d) {

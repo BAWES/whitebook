@@ -2,7 +2,7 @@
 namespace common\models;
 
 use Yii;
-
+use yii\helpers\Setdateformat;
 
 /**
  * This is the model class for table "store_social_info".
@@ -54,6 +54,25 @@ class Socialinfo extends \yii\db\ActiveRecord
             'live_script' => 'Live Script',
         ];
     }
+
+   /* 
+    *
+    *   To save created, modified user & date time 
+    */ 
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
+    }
+
 
     // loading info to frontend
     public static function socialinformation()

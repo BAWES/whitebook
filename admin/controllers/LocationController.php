@@ -4,15 +4,16 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Location;
-use admin\models\City;
+use common\models\City;
 use admin\models\Authitem;
 use admin\models\LocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use admin\models\Country;
+use common\models\Country;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
+
 
 /**
  * LocationController implements the CRUD actions for Location model.

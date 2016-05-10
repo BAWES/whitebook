@@ -7,7 +7,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use yii\bootstrap\Alert;
 use common\models\Siteinfo;
-AppAsset::register($this);
+
 $this->beginPage();
 ?>
 <!DOCTYPE html>
@@ -20,8 +20,12 @@ $this->beginPage();
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta content="" name="description" />
     <meta content="" name="author" />
-    <?php $this->head() ?>
+    <script src="/admin/web/themes/default/plugins/jquery-1.8.3.min.js"></script>
+    <?php $this->head();
+     AppAsset::register($this);
+     ?>
     <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />    
+    
 </head>
 <body class="">
     <?php $this->beginBody() ?>

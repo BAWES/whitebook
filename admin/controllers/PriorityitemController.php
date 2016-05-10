@@ -127,7 +127,7 @@ class PriorityitemController extends Controller
             ->where(['item_status' => 'Active'])
             ->andwhere(['item_for_sale' => 'yes'])
             ->andwhere(['!=', 'trash', 'Deleted'])
-			->all();
+			      ->all();
             $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
 				$model->priority_start_date = Yii::$app->formatter->asDate($model->priority_start_date, 'php:Y-m-d');
@@ -299,11 +299,11 @@ class PriorityitemController extends Controller
         }
         $itemlist = Vendoritem::find()->select(['item_id','item_name'])
             ->where(['item_status' => 'Active'])
-            ->andwhere(['item_for_sale' => 'yes'])
-            ->andwhere(['category_id' => $data['id2']])
-            ->andwhere(['subcategory_id' => $data['id3']])
-            ->andwhere(['child_category' => $data['id4']])
-            ->andwhere(['!=', 'trash', 'Deleted'])
+            ->andWhere(['item_for_sale' => 'yes'])
+            ->andWhere(['category_id' => $data['id2']])
+            ->andWhere(['subcategory_id' => $data['id3']])
+            ->andWhere(['child_category' => $data['id4']])
+            ->andWhere(['!=', 'trash', 'Deleted'])
 			      ->all();
         $item = '';
         $count = count($itemlist);

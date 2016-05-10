@@ -7,8 +7,8 @@ use admin\models\Vendoritem;
 use common\models\Vendoritemquestion;
 use admin\models\Vendoritemquestionansweroption;
 use admin\models\Vendoritemquestionguide;
-use admin\models\Vendoritemthemes;
-use admin\models\Featuregroupitem;
+use common\models\Vendoritemthemes;
+use common\models\Featuregroupitem;
 use admin\models\Featuregroup;
 use admin\models\Authitem;
 use admin\models\Vendor;
@@ -77,6 +77,7 @@ public function behaviors()
 */
 public function actionIndex()
 {
+
     $access = Authitem::AuthitemCheck('4', '23');
     if (yii::$app->user->can($access)) {
         $searchModel = new VendoritemSearch();
@@ -727,32 +728,29 @@ public function actionStatus()
     if (Yii::$app->request->isAjax) {
         $data = Yii::$app->request->post();
     }
-    $ids = implode('","', $data['keylist']);
+
+    //$ids = implode('","', $data['keylist']);
     if ($data['status'] == 'Delete') {
-        $command = Vendoritem::deleteAll('item_id='.[$ids]);
-    if ($command) {
-        echo Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
-    } else {
-        echo Yii::$app->session->setFlash('danger', 'Something went wrong');
-    }
+        $command = Vendoritem::deleteAll(['item_id'=>$data['keylist']]);
+        if ($command) {
+            echo Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
+        } else {
+            echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+        }
     } elseif ($data['status'] == 'Reject') {
-        $command = Vendoritem::findAll($ids);
-        $command->item_approved="rejected";
-        $command->update();
+        $command = Vendoritem::updateAll(['item_approved' => "rejected"],['item_id' =>$data['keylist']]);
     if($command) {
         echo Yii::$app->session->setFlash('success', 'Vendor item rejected successfully!');
     } else {
     echo Yii::$app->session->setFlash('danger', 'Something went wrong');
     }
     } else {
-        $command = Vendoritem::findAll($ids);
-        $command->item_status=$data['status'];
-        $command->update();
-    if ($command) {
+        $command = Vendoritem::updateAll(['item_status' => $data['status']],['item_id' =>$data['keylist']]);
+        if ($command) {
         echo Yii::$app->session->setFlash('success', 'Vendor item status updated!');
-    } else {
+        } else {
         echo Yii::$app->session->setFlash('danger', 'Something went wrong');
-    }
+        }
     }
 }
 

@@ -29,7 +29,6 @@ class AppAsset extends AssetBundle
     'css/style.css',
     ];
     public $js = [
-     'plugins/jquery-1.8.3.min.js',
      'plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js',
      'plugins/boostrapv3/js/bootstrap.min.js',
      'plugins/breakpoints.js',
