@@ -8,6 +8,8 @@ use common\models\Vendoritem;
 use frontend\models\Vendor;
 use frontend\models\Category;
 use common\models\Siteinfo;
+use common\models\Events;
+use common\models\City;
 use common\models\Faq;
 use frontend\models\Themes;
 use common\models\Featuregroupitem;
@@ -205,7 +207,7 @@ class SiteController extends BaseController
             $search = str_replace('and', '&', $search);
             $search = str_replace('-', ' ', $search);
             $searchlength = strlen($search);
-            $customer_id = Yii::$app->user->identity->customer_id;
+            
             $model = new Category();
             $active_vendors = Vendor::loadvalidvendors();
 
@@ -271,8 +273,7 @@ class SiteController extends BaseController
                 $vendor = Vendor::loadvendor_item($k);
             }
             $usermodel = new Users();
-
-            if ($customer_id == '') {
+            if (Yii::$app->user->isGuest) {
                 return $this->render('search', ['imageData' => $imageData,
         'themes' => $themes1, 'vendor' => $vendor, 'slug' => $slug, 'search' => $search, ]);
             } else {
@@ -652,6 +653,23 @@ class SiteController extends BaseController
                 }
             }
         }
+    }
+
+
+   public function actionCity()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+        $city = City::find()->select('city_id,city_name')->where(['country_id' => $data['country_id']])->all();
+        $options = '<option value="">Select</option>';
+        if (!empty($city)) {
+            foreach ($city as $key => $val) {
+                $options .=  '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
+            }
+        }
+        echo $options;
+        die;
     }
                     // END wish list manage page load vendorss based on category
 }

@@ -108,7 +108,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                 foreach ($output as $out) {
                                     if ($out) {
                                         $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                        $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $out['image_path'];
+                                        $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $out['image_path'];
                                     } else {
                                         $imglink = Yii::getAlias('@vendor_images/') . 'no_image.png';
                                         $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
@@ -137,7 +137,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                     foreach ($output as $out) {
                                         if ($out) {
                                             $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                            $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $out['image_path'];
+                                            $baselink = Yii::getAlias("@s3/vendor_item_images_530/"). $out['image_path'];
                                         } else {
                                             $imglink = Yii::getAlias('@vendor_images/') . 'no_image.jpg';
                                             $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg';
@@ -159,7 +159,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                         foreach ($output as $out) {
                                             if ($out) {
                                                 $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                                $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $out['image_path'];
+                                                $baselink = Yii::getAlias("@s3/vendor_item_images_530/"). $out['image_path'];
                                             } else {
                                                 $imglink = Yii::getAlias('@vendor_images/') . 'no_image.png';
                                                 $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
@@ -363,7 +363,7 @@ $image = $baselink;
                                                 $out = $command->queryAll();
                                                 if ($out) {
                                                     $imglink = Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
-                                                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
+                                                    $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $out[0]['image_path'];
                                                 } else {
                                                     $imglink = Yii::getAlias('@vendor_images/no_image.png');
                                                     $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');

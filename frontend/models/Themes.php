@@ -23,12 +23,15 @@ class Themes extends \common\models\Themes
 
   public static function load_all_themename($id)
   {     
-        $theme_name =  Themes::find()
+
+        return $theme_name =  Themes::find()
         ->select(['theme_id','theme_name','slug'])
         ->where(['!=', 'theme_status', 'Deactive'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-        ->andwhere(['theme_id' => $id])->all();
-    return $theme_name;
+        ->andWhere(['!=', 'trash', 'Deleted'])
+        ->andWhere(['theme_id' => $id])
+        ->asArray()
+        ->all();
+        
   }
 
 
@@ -40,12 +43,12 @@ class Themes extends \common\models\Themes
     }
     $id = implode("','", $k);
     $val = "'".$id."'";
-    $theme =  Vendoritemthemes::find()
+    return $theme =  Vendoritemthemes::find()
         ->select(['theme_id'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-         ->andwhere(['IN', 'item_id', $val])
+        ->where('trash="default" and item_id IN('.$val.')')
+         ->asArray()
          ->all();
-    return $theme;die;
+
   }
 
   public static function loadthemenames()

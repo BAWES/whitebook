@@ -33,7 +33,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'whitebook_customer_address';
+        return '{{%customer_address}}';
     }
 
     /**
@@ -42,7 +42,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['address_type_id', 'country_id', 'city_id', 'area_id'], 'required'],
+            [['country_id', 'city_id'], 'required'],
             [['customer_id', 'address_type_id', 'country_id', 'city_id', 'area_id', 'created_by', 'modified_by'], 'integer'],
             [['address_archived', 'trash'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe']
@@ -89,10 +89,10 @@ class CustomerAddress extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAddressType()
+/*    public function getAddressType()
     {
         return $this->hasOne(AddressType::className(), ['type_id' => 'address_type_id']);
-    }
+    }*/
 
     /**
      * @return \yii\db\ActiveQuery
@@ -108,5 +108,24 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function getSuborderItemPurchases()
     {
         return $this->hasMany(SuborderItemPurchase::className(), ['address_id' => 'address_id']);
+    }
+
+
+       /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
     }
 }

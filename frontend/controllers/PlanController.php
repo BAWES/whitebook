@@ -9,6 +9,7 @@ use frontend\models\Website;
 use common\models\SubCategory;
 use common\models\Category;
 use common\models\Vendoritem;
+use common\models\Vendoritemthemes;
 use frontend\models\Themes;
 use frontend\models\Vendor;
 
@@ -116,7 +117,6 @@ class PlanController extends BaseController
             }
             $p = array_unique($p);
         }
-
         $themes = Themes::load_all_themename($p);
 
         /* VENDOR HAVIG ATLEAST ONE PRODUCT */
@@ -138,22 +138,17 @@ class PlanController extends BaseController
         /* END get current category to load sub category */
 
         /* END GET VENDORS */
-        if (Yii::$app->user->isGuest == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
             'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug]);
         } else {
-            $usermodel = new Users();
-            if (!empty($customer_id)) {
-                $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
-                
+                $usermodel = new Users();
+                $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
                 return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list]);
-            } else {
-                return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug]);
-            }
+                'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list]);
+            } 
         }
-    }
+
 
     public function actionLoaditems()
     {
@@ -165,7 +160,7 @@ class PlanController extends BaseController
                 /* CATEGORY FILTER */
             if ($data['item_ids'] != '') {
                 $values = $this->qstring($data['item_ids']);
-                $condition .= 'AND wc.slug IN('.$values.')';
+               // $condition .= "AND wc.slug IN('.$values.')";
             }
             /* THEMES FILTER */
             if ($data['themes'] != '') {
@@ -174,6 +169,7 @@ class PlanController extends BaseController
                     $themes[] = Themes::find()->select('theme_id')->where(['slug'=>[$value]])->asArray()->all();
                 }
 
+
                 $all_valid_themes = array();
                 foreach ($themes as $key => $value) {
                     $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
@@ -181,6 +177,7 @@ class PlanController extends BaseController
                     ->andWhere(['theme_id'=>[$value[0]['theme_id']]])
                     ->asArray()
                     ->all();
+
                 foreach ($get_themes as $key => $value) {
                  $all_valid_themes[] = $value['item_id'];
                     }
@@ -191,16 +188,18 @@ class PlanController extends BaseController
                 } else {
                     $all_valid_themes = implode('","', $all_valid_themes);
                 }
+                
              /* END Multiple themes match comma seperate values in table*/
+                //print_r($all_valid_themes);die;
+                //$condition .= ' AND wvi.item_id IN('.$all_valid_themes.') ';
+                }
 
-             $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'") ';
-            }
                 if ($data['vendor'] != '') {
                     $vendor = explode('+', $data['vendor']);
                     $v = implode('","', $vendor);
-
-                    $condition .= 'AND wv.slug IN("'.$v.'") AND wv.vendor_id IS NOT NULL';
+                    //$condition .= 'AND wv.slug IN("'.$v.'") AND wv.vendor_id IS NOT NULL';
                 }
+                
                 $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
                 $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
 
@@ -220,7 +219,8 @@ class PlanController extends BaseController
             $model1 = Category::find()->select('category_id')->where(['slug' => $data['slug']])->asArray()->one();
                 if (!is_null($model1)) {
                 $imageData = Vendoritem::find()
-                    ->select('{{%vendor_item}}.category_id, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
+                    ->select(['{{%vendor_item}}.category_id','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
+                        '{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
                     ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
                     ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
                     ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
@@ -232,7 +232,7 @@ class PlanController extends BaseController
                     ->andWhere(['wi.module_type' => "vendor_item"])
                     ->andWhere(['{{%vendor_item}}.vendor_id' =>[$active_vendors]])
                     ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
-                    ->andWhere([$condition])
+                    //->andWhere([$condition])
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
                     ->limit(12)

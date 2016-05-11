@@ -25,6 +25,7 @@ use common\models\Events;
 use frontend\models\Users;
 
 
+
 /**
 * Site controller.
 */
@@ -43,7 +44,7 @@ class UsersController extends BaseController
     }
 
     public function actionLogin()
-    {
+    {   
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -77,12 +78,12 @@ class UsersController extends BaseController
 
     public function actionSignup()
     {
+
         $model = new Customer();
         $model->scenario = 'signup';
         $error = array();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            //print_r($data);die;
             $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['customer_password']);
             $model->confirm_password=$data['confirm_password'];
             $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];
@@ -95,17 +96,25 @@ class UsersController extends BaseController
             $model->customer_mobile=$data['customer_mobile'];
             if ($model->validate() && $model->save()) {
                     $siteinfo = Siteinfo::find()->asArray()->all();
-                    $to = $model['customer_email'];
                     $username = $model['customer_name'];
                     Yii::$app->session->set('register', '1');
-                    $message = 'Thank you for registration with us.</br><a href='.Url::to('/users/confirm_email/'.$customer_activation_key).' title="Click Here">Click here </a> to activate your account.';
-                    $body = Yii::$app->params['SIGNUP_TEMPLATE'];
-                    $body .= str_replace('%NAME%', $model->customer_name, $body);
-                    $body .= str_replace('%MESSAGE%', $message, $body);
-                    $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$body,"user"=>"Admin"])
+                    $message = 'Thank you for registration with us.</br><a href='.Yii::$app->request->hostInfo.'/frontend/web/index.php'.Url::to('/users/confirm_email?key='.$model->customer_activation_key).' title="Click Here">Click here </a> to activate your account.';
+                    //Send Email to user
+                    $send_user = Yii::$app->mailer->compose
+                    (["html"=>"customer/welcome"],
+                     ["message"=>$message,"user"=>$model->customer_name])
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo($model['customer_email'])
+                    ->setSubject('TheWhiteBook registration successfull')
+                    ->send();
+                 //Send Email to admin
+                    $message_admin = $model->customer_name.' registered in TheWhiteBook';
+                    $send_admin = Yii::$app->mailer->compose
+                    (["html"=>"customer/user-register"],
+                     ["message"=>$message_admin])
                     ->setFrom(Yii::$app->params['supportEmail'])
                     ->setTo(Yii::$app->params['adminEmail'])
-                    ->setSubject('USER-REGISTER')
+                    ->setSubject('User registered')
                     ->send();
                     $this->redirect(Url::to('site/index'));
                     echo '1';
@@ -139,8 +148,7 @@ class UsersController extends BaseController
     public function actionConfirm_email()
     {
         if (isset($_GET['key'])) {
-            $model = new Signup();
-            $model1 = new Users();
+            $model = new Users();
             $key = $_GET['key'];
             $check_key = $model->check_valid_key($key);
             if ($check_key == 1) {
@@ -149,9 +157,10 @@ class UsersController extends BaseController
             } else {
                 $login_det = $model->customer_logindetail($key);
                 $email = $login_det[0]['customer_email'];
-                $password = $login_det[0]['customer_org_password'];
+                //$password = $login_det[0]['customer_org_password'];
 
-                $authorization = $model1->check_authorization($email, $password);
+                $authorization = $model->check_authorization($email);
+                print_r($authorization);die;
                 Yii::$app->session->set('key', '1');
                 Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
                 Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
@@ -250,16 +259,17 @@ class UsersController extends BaseController
 
         $model = new Users();
         $user_detail = $model->get_user_details($customer_id);
-        $customer_details = array_merge($user_detail, $user_detail['customerAddress'][0]);
-        unset($customer_details['customerAddress']);
-        
 
-        if (!empty($user_detail['country'])) {
-            $city = City::listcityname($user_detail['country']);
+        $customer_details = array_merge($user_detail, $user_detail[0]['customerAddress']);
+        unset($customer_details[0]['customerAddress']);
+        $customer_detail = array_merge($customer_details[0], $customer_details[1]);
+
+        if (!empty($customer_detail['country_id'])) {
+            $city = City::listcityname($customer_detail['country_id']);
         } else {
             $city = City::fullcityname();
         }
-        return $this->render('account-settings', ['user_detail' => $customer_details, 'loadcountry' => $country, 'loadcity' => $city]);
+        return $this->render('account-settings', ['user_detail' => $customer_detail, 'loadcountry' => $country, 'loadcity' => $city]);
     }
 
     public function actionEdit_profile()
@@ -328,7 +338,7 @@ class UsersController extends BaseController
             $model = new Users();
             $event_name = $_POST['event_name'];
             $event_type = $_POST['event_type'];
-            $event_date = $_POST['event_date'];
+            $event_date = \yii\helpers\Setdateformat::convert($_POST['event_date'],'date');
             Yii::$app->session->set('event_name', $event_name);
             $customer_id = Yii::$app->user->identity->customer_id;
             // Creating event start

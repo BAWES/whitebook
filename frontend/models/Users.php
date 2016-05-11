@@ -2,12 +2,13 @@
 
 namespace frontend\models;
 
-use frontend\models\Users;
-use common\models\Events;
-use frontend\models\Themes;
 use yii\base\Model;
 use Yii\db\Query;
 use Yii;
+use frontend\models\Users;
+use common\models\Events;
+use frontend\models\Themes;
+use common\models\CustomerAddress;
 
 /**
  * Signup form.
@@ -17,7 +18,7 @@ class Users extends Model
     public $content;
     public static function tableName()
     {
-        return 'whitebook_customer';
+        return '{{%customer}}';
     }
     /**
      * {@inheritdoc}
@@ -68,14 +69,17 @@ class Users extends Model
     {
         return $ads = Customer::find()
         ->joinWith('customerAddress')
+        ->where(['{{%customer_address}}.customer_id'=>Yii::$app->user->identity->customer_id])
         ->asArray()
-        ->one();
+        ->all();
     }
 
-    public function check_authorization($email, $password)
+    public function check_authorization($email)
     {
-      $user = Customer::find()->select('customer_id,customer_activation_status,customer_status,trash,customer_name,customer_email')->where(['trash'=>"Default",'customer_email'=>$email,
-            'customer_org_password'=>$password])->asArray()->all();
+      $user = Customer::find()->select('customer_id,customer_activation_status,customer_status,
+        trash,customer_name,customer_email')->where(['trash'=>"Default",'customer_email'=>$email])
+      ->asArray()
+      ->one();
         if (count($user) > 0) {
             if ($user[0]['customer_activation_status'] == 0) {
                 return -1;
@@ -99,38 +103,26 @@ class Users extends Model
 
     public function update_customer_profile($post, $customer_id)
     {
-        $password = Yii::$app->getSecurity()->generatePasswordHash($post['customer_password']);
         $customer_dateofbirth = $post['byear'].'-'.$post['bmonth'].'-'.$post['bday'];
-         Customer::updateAll(['customer_name' => $post['first_name'],'customer_last_name' => $post['last_name'],'customer_gender' => $post['gender'],'customer_dateofbirth' => $customer_dateofbirth,'customer_mobile' => $post['mobile_number'],'customer_mobile' => $post['phone']],'customer_id= '.$customer_id);
-         return $command = \common\models\CustomerAddress::updateAll(['country_id' => $post['country'],'city_id' => $post['city']],'customer_id= '.$customer_id);
+        $customer = Customer::updateAll(['customer_name' => $post['first_name'],'customer_last_name' => $post['last_name'],'customer_gender' => $post['gender'],'customer_dateofbirth' => $customer_dateofbirth,'customer_mobile' => $post['mobile_number']],['customer_id'=>$customer_id]);
+        $address_count = CustomerAddress::find()->where(['customer_id'=>$customer_id])->count();
+        if($address_count == 0)
+        {
+           $command = new CustomerAddress();
+           $command->country_id = $post['country'];
+           $command->city_id = $post['city'];
+           //$command->address_data = $post['address_name'];
+           $command->city_id = $post['city'];
+           $command->customer_id = $customer_id;
+           return $command->save();
+        }
+        else
+        {
+            return $command = CustomerAddress::updateAll(['country_id' => $post['country'],'city_id' => $post['city']],['customer_id'=>$customer_id]);
+        }
+       
     }
 
-    public function check_valid_key($key)
-    {
-        $check_key = Customer::find()
-        ->select(['customer_id'])
-        ->where(['customer_activation_status'=>0])
-        ->andwhere(['customer_activation_key'=>$key])
-        ->asArray()
-        ->all();
-        if (count($check_key) > 0) {
-            $model = new Signup();
-            $command=Signup::updateAll(['customer_activation_status' => 1],'customer_activation_key= '.$key);
-            if ($command) {
-                return 2;
-            }
-        } else {
-            return 1;
-        }
-    }
-    public function customer_logindetail($key)
-    {
-        return$check_key = Customer::find()
-        ->select(['customer_email','customer_org_password'])
-        ->where(['customer_activation_key'=>$key])
-        ->asArray()
-        ->all();
-    }
 
     public function update_event($event_name, $event_type, $event_date, $event_id)
     {
@@ -152,9 +144,9 @@ class Users extends Model
     public function update_wishlist($item_id, $customer_id)
     {
      
-     $user_fav = Wishlist::find()->select(['wish_status'])
+        $user_fav = Wishlist::find()->select(['wish_status'])
 				->where(['customer_id'=>$customer_id])
-				->andwhere(['item_id'=>$item_id])
+				->andWhere(['item_id'=>$item_id])
 				->count();
         if ($user_fav > 0) {
 			$command = Wishlist::deleteAll(['item_id'=>$item_id,'customer_id'=>$customer_id]);
@@ -245,7 +237,7 @@ class Users extends Model
 		return $result = Wishlist::find()->select(['item_id'])
 						->where(['customer_id' => $customer_id])					
 						->asArray()
-						->All();die;
+						->all();
     }
 
     public function get_customer_wishlist_count($customer_id, $category, $price, $vendor, $avail_sale, $theme)
@@ -473,6 +465,34 @@ class Users extends Model
             return 1;
             }
         }
+    }
+
+
+    public function check_valid_key($key)
+    {
+     $check_key = Customer::find()
+      ->select(['customer_id'])
+      ->where(['customer_activation_status'=>0])
+      ->andWhere(['customer_activation_key'=>$key])
+      ->asArray()
+      ->all();
+        if (count($check_key) > 0) {
+          $command=Customer::updateAll(['customer_activation_status' => 1],['customer_activation_key'=>$key]);
+            if ($command) {
+                return 2;
+            }
+        } else {
+            return 1;
+        }
+    }
+
+    public function customer_logindetail($key)
+    {
+      return$check_key = Customer::find()
+      ->select(['customer_email'])
+      ->where(['customer_activation_key'=>$key])
+      ->asArray()
+      ->all();
     }
 
 }

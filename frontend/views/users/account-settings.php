@@ -127,16 +127,6 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 <div class="address_title">
 <h3>Address information</h3>
 </div>
-<div data-example-id="basic-forms" class="bs-example">
-
-<div class="col-md-6 paddingright0">
-<div class="form-group">
-<label for="exampleInputPassword1">Phone Number</label>
-<input type="text" placeholder="Example +965 56 555 5555" id="phone_detail1" name="phone_detail1" class="form-control required" value="<?php echo $user_detail['customer_mobile'];?>">
-</div>
-</div>
-
-</div>
 
 
 <div class="col-md-6 paddingleft0">
@@ -144,8 +134,9 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 <label for="exampleInputEmail1">Country</label>
 <select class="selectpicker" data-style="btn-primary" style="display: none;" id="country" name="country">
 <option value="">Select country</option>
-<?php foreach($loadcountry as $key=>$val)
-{$count=$user_detail['country_id'];
+<?php 
+foreach($loadcountry as $key=>$val)
+{$count= isset($user_detail['country_id']) ? $user_detail['country_id'] : '';
 if(isset($count) && $count==$key) { $selected='selected'; }else {$selected='';}
 echo  '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
 }?>
@@ -162,7 +153,7 @@ echo  '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
 <option value="">Select city</option>
 <?php foreach($loadcity as $key=>$val)
 {
-$city_count=$user_detail['area_id'];
+$city_count=isset($user_detail['city_id']) ? $user_detail['city_id'] : '';
 if(isset($city_count) && $city_count==$key) { $selected='selected'; }else {$selected='';}
 echo  '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
 }?>
@@ -422,7 +413,7 @@ $("#country").change(function (){
 jQuery('#country_er').html('');
 var csrfToken = jQuery('#_csrf').val();
 var country_id = jQuery('#country').val();
-var path = "<?php echo Url::to(['/admin/location/city']); ?> ";
+var path = "<?php echo Url::to(['/site/city']); ?> ";
 jQuery.ajax({
 type: 'POST',
 asynch: false,

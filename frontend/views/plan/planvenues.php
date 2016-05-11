@@ -361,12 +361,12 @@ if($value['image_path'] !="")  {
 </div>
 <?php } else {
 $k=array();
-$customer_events_list = array();
-
 foreach((array)$customer_events_list as $l){
 $k[]=$l['item_id'];
 }
+//print_r($k);die;
 $result=array_search($value['item_id'],$k);
+
 if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
 <div class="faver_icons">
 <?php }?>
@@ -374,7 +374,7 @@ if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php 
 <?php } ?>
 </div>
 
-<a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('').'product/';?><?php echo $value['slug'];?>" title="" ><?= Html::img(Yii::getAlias("@vendor_images/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
+<a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl('').'product/';?><?php echo $value['slug'];?>" title="" ><?= Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
 </div>
 <div class="events_descrip">
 <?= Html::a($value['vendor_name'],Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>

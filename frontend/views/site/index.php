@@ -105,12 +105,15 @@ require(__DIR__ . '/../product/events_slider.php');
 $featured_produc = Featuregroup::find()->select(['group_id', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
 $i = 1;
 foreach ($featured_produc as $key => $value) {
-$sql1 = 'SELECT wvi.*,wfgi.vendor_id FROM whitebook_feature_group_item as wfgi INNER JOIN whitebook_vendor_item as wvi ON wfgi.item_id = wvi.item_id
-where wfgi.group_item_status="Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes" AND type_id=2 AND item_status="Active"
+$sql1 = 'SELECT wvi.*,wfgi.vendor_id FROM whitebook_feature_group_item as wfgi 
+INNER JOIN whitebook_vendor_item as wvi ON wfgi.item_id = wvi.item_id
+where wfgi.group_item_status="Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes" 
+AND type_id=2 AND item_status="Active"
 AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_id)';
 
 $feature_group_sql = Yii::$app->db->createCommand($sql1);
 $feature_group_sql_result = $feature_group_sql->queryAll();
+
 $count_items = count($feature_group_sql_result);
 if (!empty($feature_group_sql_result)) {
 ?>
@@ -128,7 +131,7 @@ if (!empty($feature_group_sql_result)) {
 
 <?php
 $i = 0;
-
+//echo '<pre>';print_r($feature_group_sql_result);die;
 foreach ($feature_group_sql_result as $f) { //echo $f[$i]['vendor_id'];die;
 $a = $f['item_id'];
 $b = $f['vendor_id'];
@@ -150,14 +153,14 @@ $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $f['item_id'] .
 $command = Yii::$app->DB->createCommand($sql);
 $out = $command->queryAll();
 if ($out) {
-$imglink = Yii::getAlias("@vendor_images/") . $out[0]['image_path'];
+$imglink = Yii::getAlias("@s3/vendor_item_images_210/") . $out[0]['image_path'];
 } else {
 $imglink = Yii::getAlias("@web/images/no_image.png");
 }
 ?>
 <div class="item">
-<div class="fetu_product_list index_redirect" data-hr='<?php echo Url::toRoute('/product/' . $f["slug"]); ?>'>
-<a href="<?php echo Url::toRoute('/product/' . $f['slug'], true); ?>" title="" class='index_redirect' data-hr='<?php echo Url::toRoute('/product/' . $getitemdetails['slug'], true); ?>'>
+<div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $f["slug"], true]); ?>'>
+<a href="<?= Url::toRoute(['/product/product','slug'=>$f["slug"], true]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['/product/product', $getitemdetails['slug'], true]); ?>'>
 <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
 <div class="deals_listing_cont">
 <?php echo $getvendordetails['vendor_name']; ?>
