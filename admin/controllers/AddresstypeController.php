@@ -150,6 +150,7 @@ class AddresstypeController extends Controller
             ]);
 
             return $this->redirect(['site/index']);
+            }
         }
     }
 

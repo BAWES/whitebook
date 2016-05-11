@@ -9,7 +9,7 @@ use common\models\Category;
 use backend\models\Vendor;
 use backend\models\Vendoritem;
 use backend\models\VendorLogin;
-use common\models\VendorPassword;
+use backend\models\VendorPassword;
 use common\models\Siteinfo;
 use yii\db\Query;
 use yii\filters\AccessControl;
@@ -121,10 +121,17 @@ class SiteController extends Controller
         $users_tbl = Vendor::find()->where(['vendor_contact_email' => Vendor::getVendor('vendor_contact_email')])->one();
         $model = new VendorPassword;
         $model->scenario = 'change';
+        $vendoritemcnt=Vendoritem::vendoritemcount();
+        $monthitemcnt=Vendoritem::vendoritemmonthcount();
+        $dateitemcnt=Vendoritem::vendoritemdatecount();
+        $packageenddate=Vendor::getVendor_packagedate(Yii::$app->user->identity->id);
+        /*$model->load(Yii::$app->request->post());
+        $model->validate();
+        print_r($model->getErrors());die;*/
         if ($model->load(Yii::$app->request->post()) && $model->validate())
         {
-            $form = Yii::$app->request->post('VendorPassword');
 
+            $form = Yii::$app->request->post('VendorPassword');
 
             if(!Yii::$app->getSecurity()->validatePassword($form['old_password'], $users_tbl['vendor_password']))
             {
@@ -145,7 +152,8 @@ class SiteController extends Controller
                 $users_tbl->vendor_password = Yii::$app->getSecurity()->generatePasswordHash($form['new_password']);
                 $users_tbl->save();
                 echo Yii::$app->session->setFlash('success', "SuccessFully changed your password!");
-                return $this->render('index');
+                return $this->render('index',['vendoritemcnt'=>$vendoritemcnt,'monthitemcnt'=>$monthitemcnt,
+                    'dateitemcnt'=>$dateitemcnt,'packageenddate'=>$packageenddate]);
             }
         }
         return $this->render('changepasswords', ['model'=> $model]);
@@ -265,7 +273,7 @@ class SiteController extends Controller
                 $v_name = $model['vendor_name'];
                 Yii::info('[Vendor Profile Updated] Vendor updated profile information', __METHOD__);
                 echo Yii::$app->session->setFlash('success', "Successfully updated your profile!");
-                return $this->redirect(['dashboard']);
+                return $this->redirect(['index']);
             } else {
                 echo Yii::$app->session->setFlash('danger', "Something went wrong!");
                 return $this->render('profile', ['model' => $model]);
@@ -273,5 +281,18 @@ class SiteController extends Controller
         }
         return $this->render('profile', ['model' => $model,'vendor_contact_number'=>$vendor_contact_number,'vendor_categories'=>$vendor_categories]);
 
+    }
+
+     public function actionImageorder()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+        $i = 1;
+        foreach ($data['sort'] as $order => $value) {
+            $command = \common\models\Image::updateAll(['vendorimage_sort_order' => $i],'image_id= '.$value);
+            ++$i;
+        }
+        die;
     }
 }

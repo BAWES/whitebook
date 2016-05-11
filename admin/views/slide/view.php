@@ -10,7 +10,7 @@ $this->title = $model->slide_id;
 $this->params['breadcrumbs'][] = ['label' => 'Slides', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="slide-view">
+<div class="slide-view" style="width=1000px !important; overflow:hidden">
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->slide_id], ['class' => 'btn btn-primary']) ?>

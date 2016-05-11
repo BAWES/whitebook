@@ -45,9 +45,9 @@ class VendoritemcapacityexceptionController extends Controller
     {
         $searchModel = new VendoritemcapacityexceptionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $startdate=Vendoritemcapacityexception::find()->select('exception_date')
-		->where(['trash'=>'Default'])
-		
+		->where(['trash'=>'Default'])		
 		->orderby(['exception_date'=>SORT_ASC])
 		->asArray()
 		->all();
@@ -105,7 +105,7 @@ class VendoritemcapacityexceptionController extends Controller
 			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 			 $item = Yii::$app->request->post('Vendoritemcapacityexception');
 			 $model->item_id = implode(',',$model->item_id);
-			 $model->exception_date = Setdateformat::convert($model->exception_date);
+			 $model->exception_date = \yii\helpers\Setdateformat::convert($model->exception_date);
 			 $model->save();
             echo Yii::$app->session->setFlash('success', "Exception date created successfully!");
 

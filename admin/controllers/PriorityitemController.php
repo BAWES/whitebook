@@ -123,14 +123,14 @@ class PriorityitemController extends Controller
             $category = Category::loadcategoryname();
             $subcategory = Subcategory::loadsubcategoryname();
             $childcategory = ChildCategory::loadchild();
-            $priority = Vendoritem::find()->select('item_id','item_name')
+            $priority = Vendoritem::find()->select(['item_id','item_name'])
             ->where(['item_status' => 'Active'])
             ->andwhere(['item_for_sale' => 'yes'])
             ->andwhere(['!=', 'trash', 'Deleted'])
 			      ->all();
             $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-				$model->priority_start_date = Yii::$app->formatter->asDate($model->priority_start_date, 'php:Y-m-d');
+				    $model->priority_start_date = Yii::$app->formatter->asDate($model->priority_start_date, 'php:Y-m-d');
       			$model->priority_end_date = Yii::$app->formatter->asDate($model->priority_end_date, 'php:Y-m-d');
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Priority item added successfully!');
@@ -168,11 +168,11 @@ class PriorityitemController extends Controller
             $childcategory = ChildCategory::loadchild();
             $vendorpriorityitem = Vendoritem::vendorpriorityitemitem($model->item_id);
             
-            $priority = Vendoritem::find()->select('item_id','item_name')
+            $priority = Vendoritem::find()->select(['item_id','item_name'])
             ->where(['item_status' => 'Active'])
             ->andwhere(['item_for_sale' => 'yes'])
             ->andwhere(['!=', 'trash', 'Deleted'])
-			->all();
+            ->all();
             $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
 				
@@ -267,11 +267,10 @@ class PriorityitemController extends Controller
           ->andwhere(['!=', 'category_allow_sale', 'no'])
           ->andwhere(['!=', 'trash', 'Deleted'])
           ->andwhere(['!=', 'parent_category_id', 'null'])->all();
-        echo  '<option value="">Select...</option>';
+          echo  '<option value="">Select subcategory...</option>';
         foreach ($subcategory as $key => $val) {
             echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
         }
-        die; // dont remove die, action used by vendor module also.
     }
 
     public function actionLoadchildcategory()
@@ -285,7 +284,7 @@ class PriorityitemController extends Controller
           ->andwhere(['category_level' => 2])
           ->andwhere(['!=', 'category_allow_sale', 'no'])
           ->andwhere(['!=', 'trash', 'Deleted'])->all();
-        echo  '<option value="">Select...</option>';
+        echo  '<option value="">Select child category...</option>';
         foreach ($subcategory as $key => $val) {
             echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
         }

@@ -147,56 +147,51 @@ class DeliverytimeslotController extends Controller
             $start_day=substr($start, 6, 2);
             $end_day=substr($end, 6, 2);
 
-// convert values into UNIX timestamp integers
-$Ymd = date('Y-m-d'); // just in case we try to process across midnight
-$start_ts = strtotime("$Ymd $start_hour:$start_minute $start_day");
-$end_ts = strtotime("$Ymd $end_hour:$end_minute $end_day");
-// test if end time is later than start time
-if($end_ts > $start_ts) {
+            // convert values into UNIX timestamp integers
+            $Ymd = date('Y-m-d'); // just in case we try to process across midnight
+            $start_ts = strtotime("$Ymd $start_hour:$start_minute $start_day");
+            $end_ts = strtotime("$Ymd $end_hour:$end_minute $end_day");
+            // test if end time is later than start time
+            if($end_ts < $start_ts) {
+                return 1;
+            }
 
-}
-else {
-   echo "1";
-   die;
-}
-
-
-		
+		  $update=$data['update'];
           if($update==0){
 				$result = Deliverytimeslot::find()->select(["DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start","DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1"])
 				->where(['timeslot_day' => $day])
 				->asArray()
-				->one();
-}else{
-	$result = Deliverytimeslot::find()->select(["DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start","DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1"])
-		->where(['timeslot_day' => $day])
-		->andwhere(['!=','timeslot_day', $day])
-		->asArray()->one();
-}
-       
- $dt1 = $data['start'];
- $dt2 = $data['end'];
-$k=array();
-foreach ($result as $r)
-{
-    $range=range(strtotime($r['start']),strtotime($r['end1']),01*60);
-foreach($range as $time){
-        $k[]=date("h:i a",$time)."\n";
-}
-}
+				->all();
+            }else{
+            	$result = Deliverytimeslot::find()->select(["DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start","DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1"])
+            		->where(['timeslot_day' => $day])
+            		->andwhere(['!=','timeslot_day', $day])
+            		->asArray()->all();
+            }
+                   
+             $dt1 = $data['start'];
+             $dt2 = $data['end'];
+            $k=array();
+            foreach ($result as $r)
+            {
+                $range=range(strtotime($r['start']),strtotime($r['end1']),01*60);
+            foreach($range as $time){
+                    $k[]=date("h:i a",$time)."\n";
+            }
+            }
 
-foreach ($k as $dt) {
-$dt = str_replace(' ', '', $dt);
- $a=(strtotime($dt1));
- $b=(strtotime($dt2));
- $c=(strtotime($dt));
-    if($a == $c){
-        echo 2;die;
-    }else if($b == $c){
-        echo 2;die;
-    }
-}
-die;
+            foreach ($k as $dt) {
+            $dt = str_replace(' ', '', $dt);
+             $a=(strtotime($dt1));
+             $b=(strtotime($dt2));
+             $c=(strtotime($dt));
+                if($a == $c){
+                    return  2;
+                }else if($b == $c){
+                    return  2;
+                }
+            }
+
 
   }
 

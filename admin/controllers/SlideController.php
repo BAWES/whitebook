@@ -136,7 +136,6 @@ class SlideController extends Controller
 
                 if($model->save()){
                     Yii::$app->session->setFlash('success', 'Slide created successfully!');
-
                     return $this->redirect(['index']);
                 }
             }

@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use common\models\Vendoritem;
+use admin\models\Vendoritem;
 use common\models\Vendoritemthemes;
 use common\models\Vendoritempricing;
 use common\models\Featuregroupitem;
@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
 <!-- Begin First Tab -->
 <div class="tab-pane" id="1" ><div class="admin" style="text-align: center;padding:0px 0px 25px 0px;">
 <?php if(isset($model->vendor_logo_path)) {
-		echo Html::img(Yii::getAlias('@web/uploads/vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
+		echo Html::img(Yii::getAlias('@s3/vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
 		} ?>
 		</div>
 <div class="form-group">
@@ -179,7 +179,7 @@ foreach($model_question as $question_records)
 <ul class="row">
   			<?php foreach ($imagedata as $image) { ?>
             <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-               <?= Html::img(Yii::getAlias('@web/uploads/vendor_images/').$image->image_path, ['class'=>'img-responsive','width'=>'125px','height'=>'125px','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
+               <?= Html::img(Yii::getAlias('@vendor_item_images_210/').$image->image_path, ['class'=>'img-responsive','width'=>'125px','height'=>'125px','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
             </li>
              <?php } ?>
 </ul>

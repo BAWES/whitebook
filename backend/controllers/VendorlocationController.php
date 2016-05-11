@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\Vendorlocation;
+use common\models\Location;
 use common\models\VendorlocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -54,19 +55,18 @@ class VendorlocationController extends Controller
 
             $selected_areas = implode(',',$_POST['location']);
             Vendorlocation::deleteAll('vendor_id = :vendor_id', [':vendor_id' => Yii::$app->user->getId()]);
-
             foreach ($_POST['location'] as $key => $value) {
 				
-                 $get_city_id = Location::find()->select('city_id')->where(['id'=>$value])->one();
-
+                 $get_city_id = Location::find()->select('city_id')->where(['id'=>$value])->asArray()->one();
                  $vendor_location_tbl = new Vendorlocation;
                  $vendor_location_tbl->vendor_id = Yii::$app->user->getId();
                  $vendor_location_tbl->city_id = $get_city_id['city_id'];
                  $vendor_location_tbl->area_id = $value;
                  $vendor_location_tbl->validate();
+                 $vendor_location_tbl->save();
 
                  //print_r ($vendor_location_tbl->getErrors());die;
-                 $vendor_location_tbl->save();
+
 			}
             $model->save();
             }
@@ -76,13 +76,13 @@ class VendorlocationController extends Controller
 
         }
         	$cities=City::find()->select(['{{%city}}.*'])
-		->leftJoin('{{%location}}', '{{%location}}.city_id = {{%city}}.city_id')
-		->where(['{{%city}}.status'=>'Active'])
-		->andwhere(['{{%location}}.trash'=>'Default'])
-		->andwhere(['{{%location}}.status'=>'Active'])
-		->groupby(['{{%location}}.city_id'])
-		->asArray()
-		->all();
+            		->leftJoin('{{%location}}', '{{%location}}.city_id = {{%city}}.city_id')
+            		->where(['{{%city}}.status'=>'Active'])
+            		->andwhere(['{{%location}}.trash'=>'Default'])
+            		->andwhere(['{{%location}}.status'=>'Active'])
+            		->groupby(['{{%location}}.city_id'])
+            		->asArray()
+            		->all();
 	
             return $this->render('edit', [
                 'model' => $model, 'cities' => $cities,

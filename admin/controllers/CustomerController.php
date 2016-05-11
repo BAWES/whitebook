@@ -8,7 +8,7 @@ use admin\models\Customer;
 use common\models\City;
 use common\models\Country;
 use admin\models\Authitem;
-use admin\models\Location;
+use common\models\Location;
 use admin\models\Addresstype;
 use common\models\CustomerAddress;
 use admin\models\CustomerSearch;
@@ -116,13 +116,15 @@ class CustomerController extends Controller
         $access = Authitem::AuthitemCheck('1', '26');
         if (yii::$app->user->can($access)) {
             $model = new Customer();
+            $model->scenario = 'createAdmin';
             $model1 = new CustomerAddress();
+            
             if ($model->load(Yii::$app->request->post()) && $model1->load(Yii::$app->request->post()) && Model::validateMultiple([$model, $model1])) {
                 $model->customer_dateofbirth=Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
                 $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
                 if ($model->save(false)) {
                     $model1->customer_id = $model->customer_id; // no need for validation rule on user_id as you set it yourself
-            $model1->save();
+                    $model1->save();
                     Yii::info('[Customer Created] Admin created customer '.$model->customer_name, __METHOD__);
                 }
                 echo Yii::$app->session->setFlash('success', 'Customer detail added successfully!');
@@ -156,9 +158,10 @@ class CustomerController extends Controller
         $access = Authitem::AuthitemCheck('2', '26');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
+            $model->scenario = 'createAdmin';
+           
             $model1 = CustomerAddress::find()
-        ->where('customer_id = :customer_id', [':customer_id' => $id])->one();
-
+            ->where('customer_id = :customer_id', [':customer_id' => $id])->one();
             if ($model->load(Yii::$app->request->post()) && $model1->load(Yii::$app->request->post()) && Model::validateMultiple([$model, $model1])) {
                 $model->customer_dateofbirth = Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
                 $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);

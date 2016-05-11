@@ -228,4 +228,21 @@ class PriorityitemController extends Controller
 			echo  '<option value="'.$val['item_id'].'">'.$val['item_name'].'</option>';
 		 }
 	}
+
+    public function actionLoadchildcategory()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+
+        $subcategory = Category::find()->select('category_id,category_name')
+          ->where(['parent_category_id' => $data['id']])
+          ->andwhere(['category_level' => 2])
+          ->andwhere(['!=', 'category_allow_sale', 'no'])
+          ->andwhere(['!=', 'trash', 'Deleted'])->all();
+            echo  '<option value="">Select child category...</option>';
+        foreach ($subcategory as $key => $val) {
+            echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
+        }
+    }
 }

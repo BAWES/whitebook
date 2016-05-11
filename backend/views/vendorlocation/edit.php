@@ -45,8 +45,8 @@ $vendor_count = Location::find()->where(['status'=>'Active', 'trash' => 'Default
       
       foreach ($area as $key => $value) {  
 
-      $vendor_area = Vendorlocation::find()->select(['area_id'])->where(['area_id'=>$value['id']])->one();
-      
+      $vendor_area = Vendorlocation::find()->select('area_id')->where(['area_id'=>$value['id']])->one();
+
      ?>
      <input type="checkbox" name="location[]" id="loc" value=<?= $value['id']; ?>  <?php echo ($value['id'] == $vendor_area['area_id'] ? 'checked' : '');?> style=" margin-left:25px;"><?= $value['location']; ?></br>
      <?php  }  

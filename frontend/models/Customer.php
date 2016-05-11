@@ -14,6 +14,7 @@ class Customer extends \common\models\Customer {
     public $bday;
     public $bmonth;
     public $byear;
+    public $confirm_password;
 
     public $rememberMe = true;
 
@@ -24,9 +25,12 @@ class Customer extends \common\models\Customer {
     public function rules() {
         return array_merge(parent::rules(), [
             [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_gender', 'customer_mobile'], 'required'],
+            [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'confirm_password', 'customer_gender', 'customer_mobile'], 'required', 'on'=>'signup'],
+            ['customer_email','email'],
+          //  ['confirm_password', 'compare', 'compareAttribute' => 'customer_password','required', 'on'=>'signup'],
             [['customer_email', 'customer_password',], 'required', 'on'=>'login'],
             // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
+            ['rememberMe', 'boolean']
             //[['step', 'majorsSelected', 'languagesSelected'], 'required'],
         ]);
     }
@@ -46,6 +50,7 @@ class Customer extends \common\models\Customer {
     public function scenarios() {
         $scenarios = parent::scenarios();
           $scenarios['login'] = ['customer_email','customer_password'];//Scenario Values Only Accepted
+          $scenarios['signup'] = ['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'confirm_password', 'bday', 'bmonth', 'byear', 'customer_gender', 'customer_mobile'];
         //$scenarios['changeEmailPreference'] = ['employer_email_preference'];
         return $scenarios;
     }

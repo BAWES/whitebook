@@ -201,6 +201,7 @@ class SiteController extends Controller
                 $monthitemcnt = Vendoritem::itemmonthcount();
                 $dateitemcnt = Vendoritem::itemdatecount();
                 $vendorcnt = Vendor::vendorcount();
+                $vendorperiod = Vendor::vendorperiod();
                 $vendormonth = Vendor::vendormonthcount();
                 $vendorday = Vendor::vendordatecount();
                 $customercnt = Customer::customercount();
@@ -209,7 +210,7 @@ class SiteController extends Controller
 
                 return $this->render('index', ['vendoritemcnt' => $vendoritemcnt, 'monthitemcnt' => $monthitemcnt, 'dateitemcnt' => $dateitemcnt,
         'vendorcnt' => $vendorcnt, 'vendormonth' => $vendormonth, 'vendorday' => $vendorday,
-        'customercnt' => $customercnt, 'customermonth' => $customermonth, 'customerday' => $customerday, ]);
+        'customercnt' => $customercnt,'vendorperiod' => $vendorperiod,  'customermonth' => $customermonth, 'customerday' => $customerday, ]);
             } else {
                 echo Yii::$app->session->setFlash('danger', 'Something went wrong!');
 

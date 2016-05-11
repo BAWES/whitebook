@@ -59,7 +59,7 @@ use yii\web\View;
     <?= $form->field($model1, 'area_id')->dropDownList($location, ['prompt'=>'Select...']); ?>
 
 <div class="form-group">
-	<?= $form->field($model, 'customer_address',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
+	<?= $form->field($model1, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
 	])->textArea(['rows' => 6]) ?>
 </div>
 

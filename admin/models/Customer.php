@@ -35,6 +35,44 @@ use yii\web\IdentityInterface;
 class Customer extends \common\models\Customer
 {
    
+   public function rules()
+   {
+    return array_merge(parent::rules(),[
+    [['customer_name','customer_email', 'customer_password', 'customer_mobile','customer_dateofbirth','customer_gender'], 'required' ,'on'=>'createAdmin'],
+    ]);
+   }
+
+   /**
+     * Scenarios for validation and massive assignment
+     */
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+
+        $scenarios['createAdmin'] = ['customer_name','customer_email', 'customer_password', 'customer_mobile','customer_dateofbirth','customer_gender'];
+
+        return $scenarios;
+    }
+
+
+   /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
+    }
+    
+
     public static function customercount()
     {
         return Customer::find()->where(['trash' => 'Default'])->count();

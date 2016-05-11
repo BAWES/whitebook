@@ -156,7 +156,7 @@ $exist_groups = array();
          	foreach ($guideimagedata as $value) {
 			$img1 .= '"<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
 			$action1 .='{
-			        url: "'.Url::to(['/admin/vendoritem/deleteserviceguideimage']).'",
+			        url: "'.Url::to(['/vendoritem/deleteserviceguideimage']).'",
 			        key: '.$value->image_id.',
 			    }'.',';
 				}
@@ -276,7 +276,7 @@ $exist_groups = array();
 $(function (){
     $("#vendoritem-category_id").change(function (){
         var id = $('#vendoritem-category_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadsubcategory']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loadsubcategory']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -295,7 +295,7 @@ $(function (){
 $(function (){
     $("#vendoritem-subcategory_id").change(function (){
 		var id = $('#vendoritem-subcategory_id').val();
-        var path = "<?php echo Url::to(['/admin/priorityitem/loadchildcategory']); ?> ";
+        var path = "<?php echo Url::to(['/priorityitem/loadchildcategory']); ?> ";
         $('.loadingmessage').show();
         $.ajax({
         type: 'POST',
@@ -433,7 +433,7 @@ $(document).on('ready', function() {
    		});
 
 		/* BEGIN SORT code for item and guide images */
-		var path = "<?php echo Url::to(['/admin/image/imageorder']); ?> ";
+		var path = "<?php echo Url::to(['/site/imageorder']); ?> ";
 		$(".file-preview-thumbnails").sortable({
 			items:'> div.file-preview-initial',
         stop : function(event, ui){
@@ -528,7 +528,7 @@ $("#validone1").click(function() {
 	{
 
 		var mail=$("#vendoritem-item_name").val();
-        var path = "<?php echo Url::to(['/admin/vendoritem/itemnamecheck']); ?> ";
+        var path = "<?php echo Url::to(['/vendoritem/itemnamecheck']); ?> ";
         $('.loadingmessage').show();
         var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] :  '0'; ?>;
         $.ajax({
@@ -736,7 +736,7 @@ $(function(){
 	if($("#vendoritem-item_name").val().length > 3)
 	{
 		var mail=$("#vendoritem-item_name").val();
-        var path = "<?php echo Url::to(['/admin/vendoritem/itemnamecheck']); ?> ";
+        var path = "<?php echo Url::to(['/vendoritem/itemnamecheck']); ?> ";
         $('.loadingmessage').show();
         var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
         $.ajax({

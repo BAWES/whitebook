@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\base\Model;
-use common\models\Vendoritem;
+use backend\models\Vendoritem;
 use common\models\Vendoritemthemes;
 use common\models\Vendoritemquestion;
 use common\models\Vendoritemquestionansweroption;
@@ -150,9 +150,10 @@ class VendoritemController extends Controller
         $vendor = Vendor::find()->select('category_id')->where(['vendor_id'=>Vendor::getVendor('vendor_id')])->one();
         $cat_id = explode(',',$vendor['category_id']);
 
-		$load_category = Category::find()->select('category_id','category_name')->where(['category_allow_sale'=>'Yes','category_level'=>'0','trash'=>'Default'])
+		$load_category = Category::find()->select(['category_id','category_name'])->where(['category_allow_sale'=>'Yes','category_level'=>'0','trash'=>'Default'])
 		->andwhere(['IN','category_id',$vendor['category_id']])->asArray()->all();
         $categoryname=ArrayHelper::map($load_category,'category_id','category_name');
+        //print_r($load_category);die;
 
         $model1 = new Image();
         $base = Yii::$app->basePath;
@@ -243,7 +244,7 @@ class VendoritemController extends Controller
                  }
 
 
-                /* Begin Upload guide image table  */
+                /* Begin Upload product image table  */
                     $product_file = UploadedFile::getInstances($model, 'image_path');
                     if($product_file){
                         $i = 0;
@@ -302,8 +303,7 @@ class VendoritemController extends Controller
 						$image_tbl->vendorimage_sort_order = $i;
 						$image_tbl->image_user_id = Yii::$app->user->getId();
 						$image_tbl->save();
-						
-++$i;
+						++$i;
                        }
                     }
             /*  Upload image table End */
@@ -734,10 +734,64 @@ class VendoritemController extends Controller
                 if (isset($data['key']) &&  $data['key'] != '') {
                     $image_path = Image::loadguideimageids($data['key']);
                     Vendoritem::deleteFiles($image_path);
-               		$image=Image::deleteAll(['image_id'=>$image_id]);
-                    die; // dont remove die, action used by vendor module also.
+               		return $image=Image::deleteAll(['image_id'=>$image_id]);
                 }
             }
         }
+
+    /*
+    *   To check Item name 
+    */
+    public function actionItemnamecheck()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+        if ($data['item_id'] == 0) {
+            $itemname = Vendoritem::find()->select('item_name')
+            ->where(['item_name' => $data['item']])
+            ->andwhere(['trash' => 'Default'])
+            ->all();
+        } else {
+        $itemname = Vendoritem::find()->select('item_name')
+            ->where(['item_name' => $data['item']])
+            ->where(['item_id' => $data['item_id']])
+            ->andwhere(['trash' => 'Default'])
+            ->all();
+        if (count($itemname) > 0) {
+            return  $result = 0;
+        die;
+        } else {
+            return  $result = 1;
+        die;
+        }
+        }
+        return $result = count($itemname);
+    
+    }
+
+        // Delete item type service or rental image
+    public function actionDeleteserviceguideimage()
+    {
+        $model1 = new Image();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        if (isset($data['key']) &&  $data['key'] != '') {
+            $image_path = \common\models\Image::loadserviceguideimageids($data['key']);
+            unlink(Yii::getAlias('@sales_guide_images').$image_path[0]['image_path']);
+            Image::deleteAll('image_id='.$data['key']);
+            }
+        }
+    }
+
+    public function actionRenderanswer()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $question = Vendoritemquestion::find()->where('answer_id = "'.$data['q_id'].'"')->asArray()->all();
+            $answers = Vendoritemquestionansweroption::find()->where(['question_id' => $question[0]['question_id']])->asArray()->all();
+            return $this->renderPartial('questionanswer', ['question' => $question, 'answers' => $answers]);
+        }
+    }
 
 }

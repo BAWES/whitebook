@@ -24,6 +24,7 @@ use yii\helpers\Url;
 use common\models\Events;
 use frontend\models\Users;
 
+
 /**
 * Site controller.
 */
@@ -77,11 +78,13 @@ class UsersController extends BaseController
     public function actionSignup()
     {
         $model = new Customer();
-        $model->scenarios = 'signup';
+        $model->scenario = 'signup';
         $error = array();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['password']);
+            //print_r($data);die;
+            $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['customer_password']);
+            $model->confirm_password=$data['confirm_password'];
             $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];
             $model->customer_activation_key = $this->generateRandomString();
             $model->created_datetime = date('Y-m-d H:i:s');
@@ -89,7 +92,7 @@ class UsersController extends BaseController
             $model->customer_last_name=$data['customer_last_name'];
             $model->customer_email=$data['customer_email'];
             $model->customer_gender=$data['customer_gender'];
-            $model->customer_mobile=$data['customer_phone'];
+            $model->customer_mobile=$data['customer_mobile'];
             if ($model->validate() && $model->save()) {
                     $siteinfo = Siteinfo::find()->asArray()->all();
                     $to = $model['customer_email'];

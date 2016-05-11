@@ -43,12 +43,22 @@ class Image extends \common\models\Image
         return $model['image_path'];
     }
 
-    // Only for Service and Rental
-    public static function loadserviceguideimageids($image_id)
+    
+   /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function beforeSave($insert)
     {
-        $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'guides'])->all();
-        return $model;
+        if($this->isNewRecord)
+        {
+           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->created_by = \Yii::$app->user->identity->id;
+        } 
+        else {
+           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
+           $this->modified_by = \Yii::$app->user->identity->id;
+        }
+           return parent::beforeSave($insert);
     }
-	
-	
 }

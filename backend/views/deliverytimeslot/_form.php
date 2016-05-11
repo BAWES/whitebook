@@ -104,7 +104,7 @@ $('#submit1').click(function()
         var slot = $('#deliverytimeslot-timeslot_maximum_orders').val();
         var path = "<?php echo Url::to(['deliverytimeslot/checktime']); ?> ";
         var update = "<?php if($model->isNewRecord){echo '0';}else{echo $model->timeslot_id;} ?> ";
-if(start_hr!='' && start_min!=''  && start_med!='' && end_hr!='' && end_min!=''&& end_med!='' && day!='' && slot!=''){
+    if(start_hr!='' && start_min!=''  && start_med!='' && end_hr!='' && end_min!=''&& end_med!='' && day!='' && slot!=''){
     var sta=start_hr.concat(colon);
     var res1 = sta.concat(start_min);
     var start_time=res1.concat(start_med);
@@ -112,7 +112,7 @@ if(start_hr!='' && start_min!=''  && start_med!='' && end_hr!='' && end_min!=''&
     var en=end_hr.concat(colon);
     var res2 = en.concat(end_min);
     var end_time=res2.concat(end_med);
-$.ajax({
+    $.ajax({
         type: 'POST',
         async:false,
         url: path, //url to be called

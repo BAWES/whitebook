@@ -8367,7 +8367,7 @@ label.control-label > span.required { color:red;}
 .delivery_days{    min-height: 100px;    border: 1px double #292727;    float: left;    background-color: #E5E9EC; width:100%; }
 
 .delivery_days .sun,.mon,.tue,.wed,.thu,.fri,.sat{   
-  min-height:100px;   float:left; width:146px;
+  min-height:100px;   float:left; width:144px;
   }
   .day_head{
    float: left;   width: 140px; height: 30px; text-align: center; font-weight: bold; color: #1B1E24;    line-height: 31px;
@@ -8381,8 +8381,8 @@ label.control-label > span.required { color:red;}
         font-size: 12px; font-weight: bold;
    }
   .delivery_delete{
-    width: 21px;    line-height: 70px;    padding: 0px 5px 0px 5px;    cursor: pointer;    background:rgb(255, 255, 255); }
-a.delivery_href:hover{
+    width: 18px;    line-height: 70px;    padding: 0px 5px 0px 2px;    cursor: pointer;    background: #FFF; }
+    a.delivery_href:hover{
     background: #000;
   }
   .timeslot_orders{       width: 50px;    display: block;    padding: 12px;    height: 45px;    background-color: #E5E9EC;    border-radius: 38px;

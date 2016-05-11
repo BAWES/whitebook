@@ -115,4 +115,12 @@ class Image extends \yii\db\ActiveRecord
     }
     return false;
 	}
+
+    
+    // Only for Service and Rental
+    public static function loadserviceguideimageids($image_id)
+    {
+        $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'guides'])->all();
+        return $model;
+    }
 }

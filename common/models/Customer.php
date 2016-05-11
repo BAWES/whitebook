@@ -66,7 +66,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
             [['customer_mobile'],'match', 'pattern' => '/^[0-9+ -]+$/','message' => 'Phone number accept only numbers and +,-'],
             [['customer_email'],'email'],
             ['trash', 'safe'],
-            //[['customer_address'], 'string', 'max' => 512]
+
         ];
     }
 

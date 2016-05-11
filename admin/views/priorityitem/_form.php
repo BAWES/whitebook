@@ -23,8 +23,15 @@ use yii\widgets\ActiveForm;
 
   <div class="col-md-8 col-sm-8 col-xs-8">
   <br><br/>
-    <?= $form->field($model, 'item_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-    ])->dropDownList($priorityitem,['prompt'=>'Select...']); ?>
+  <?php if($model->isNewRecord) {
+    echo $form->field($model, 'item_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+    ])->dropDownList($priorityitem,['prompt'=>'Select...']); 
+    } else {
+     echo $form->field($model, 'item_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+    ])->dropDownList($priorityitem);
+    }
+    ?>
+
 
     <?= $form->field($model, 'priority_level')->dropDownList([ 'Normal' => 'Normal', 'Super' => 'Super', ], ['prompt' => 'Select']) ?>
 
@@ -43,7 +50,7 @@ use yii\widgets\ActiveForm;
     <?php if($model->isNewRecord){?>
       <div class="form-group">
         <?= $form->field($model, 'priority_end_date',[ 'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-    ])->textInput([['maxlenght' => 255,]]) ?>
+    ])->textInput([['maxlength' => 255,]]) ?>
         </div>
         <?php }else { ?>
           <div class="form-group">
@@ -282,6 +289,7 @@ $('input#priorityitem-priority_end_date').datepicker({
 // BEGIN priority item date function
 <?php if(!$model->isNewRecord) {?>
 $(function(){
+
     var item = $("#priorityitem-item_id").val();
     var path = "<?php echo Url::to(['/priorityitem/loaddatetime']); ?> ";
     var priority_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
@@ -360,4 +368,5 @@ $(function(){
 
 });
 });
+
 </script>

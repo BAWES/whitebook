@@ -95,7 +95,7 @@ class Country extends \yii\db\ActiveRecord
   			->where(['!=', 'status', 'Deactive'])
   			->where(['!=', 'trash', 'Deleted'])
   			->all();
-  			$country=ArrayHelper::map($Country,'country_id','country_name');
+  			$country=ArrayHelper::map($country,'country_id','country_name');
   			return $country;
   	}
 
