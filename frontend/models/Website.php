@@ -184,4 +184,9 @@ class Website extends Model {
         }
     }
 
+    public function printdata($table)
+    {      
+     var_dump($table->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
+    }
+
 }

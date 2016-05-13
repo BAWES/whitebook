@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\sortable\Sortable;
-use common\models\Vendor;
+use admin\models\Vendor;
 use common\models\Vendoritemquestion;
 use dosamigos\fileupload\FileUploadUI;
 

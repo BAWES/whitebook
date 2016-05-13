@@ -121,26 +121,6 @@ class ProductController extends BaseController
         }
     }
 
-    public function actionAddevent()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            
-            $model = Vendoritem::find()
-			->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name',
-                '{{%image}}.image_path'])
-			->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
-			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-			->where(['{{%image}}.module_type' => 'vendor_item'])
-			->andwhere(['{{%vendor_item}}.item_id' => $data['item_id']])
-			->asArray()
-			->all();
-			
-            $customer_events = Events::find()->where(['customer_id' => Yii::$app->user->identity->customer_id])->asArray()->all();
-            return $this->renderPartial('add_event', array('model' => $model, 'customer_events' => $customer_events));
-        }
-    }
-
     public function actionEventdetails()
     {
         if (Yii::$app->request->isAjax) {

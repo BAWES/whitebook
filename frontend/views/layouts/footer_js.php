@@ -195,8 +195,8 @@ function resetpwdcheck()
     if((jQuery('#resetForm').valid()) && (k==1))
     {
         jQuery.ajax({
-            url:"<?= Url::to('/users/password_reset'); ?>",
-            type:"post",
+            url:"<?= Url::toRoute(['/users/password_reset']); ?>",
+            type:"POST",
             data:"id="+userid+"&password="+password+"&_csrf="+_csrf,
             async: false,
             success:function(data)
@@ -205,7 +205,10 @@ function resetpwdcheck()
                 {
                     jQuery('#reset_loader').hide();
                     jQuery('#resetPwdModal').modal('hide');
-                    window.setTimeout(function(){location.reload()});
+                    jQuery('#login_success').modal('show');
+                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Password reset successfully. Please go ahead login.</span>');
+                    window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
+                    //window.setTimeout(function(){location.reload()});
                     //window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
                     all_form_reset();
                 }
@@ -618,7 +621,7 @@ jQuery('#create_event_button').click(function(){
             var event_name=jQuery('#edit_event_name').val();
             var _csrf=jQuery('#_csrf').val();
             jQuery.ajax({
-                url:"<?= Url::to('/users/update_event'); ?>",
+                url:"<?= Url::toRoute('/users/update_event'); ?>",
                 type:"post",
                 data:"event_id="+jQuery('#edit_event_id').val()+"&event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&event_type="+event_type+"&_csrf="+_csrf,
                 success:function(data)
@@ -1460,7 +1463,7 @@ function addevent(item_id)
 {
     jQuery.ajax({
         type:'POST',
-        url:"<?= Url::toRoute('product/addevent'); ?>",
+        url:"<?= Url::toRoute(['/eventinvitees/addevent']); ?>",
         data:{'item_id':item_id},
         success:function(data)
         {

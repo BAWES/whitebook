@@ -184,22 +184,21 @@ class UsersController extends BaseController
             $id = $model->check_user_exist($email);
             if (count($id) > 0) {
                 $time = $model->update_datetime_user($id[0]['customer_activation_key']);
-                $message = 'Your requested password reset.</br><a href='.Yii::$app->urlManager->createAbsoluteUrl("/users/reset_confirm/".$id[0]["customer_activation_key"]).' title="Click Here">Click here </a> to reset your password';
-                $send = Yii::$app->mailer->compose("mail-template/mail",["message"=>$message,"user"=>"Customer"])
+                $message = 'Your requested password reset.</br><a href='.Yii::$app->request->hostInfo.'/frontend/web/index.php'.Url::to("/users/reset_confirm?cust_id=".$id[0]["customer_activation_key"]).' title="Click Here">Click here </a> to reset your password';
+                $send = Yii::$app->mailer->compose("customer/password-reset",
+                    ["message"=>$message,"user"=>"Customer"])
                 ->setFrom(Yii::$app->params['supportEmail'])
                 ->setTo($email)
                 ->setSubject('Requested forgot Password')
                 ->send();
                 Yii::$app->session->setFlash('success', Yii::t('frontend', 'PASS_SENT'));
-                echo 1;
-                exit;
+                return 1;
             } else {
-                echo -1;
-                exit;
+                return -1;
             }
         } else {
-            echo -1;
-            exit;
+            return -1;
+
         }
     }
 
@@ -213,23 +212,11 @@ class UsersController extends BaseController
                 $customer_activation_key = $_POST['id'];
                 $password = $_POST['password'];
                 $check_user = $model->customer_password_reset($password, $customer_activation_key);
+                $val = -1;
                 if (count($check_user) > 0) {
-                    $signup = new Signup();
-                    $login_det = $signup->customer_logindetail($customer_activation_key);
-                    $email = $login_det[0]['customer_email'];
-                    $password = $login_det[0]['customer_org_password'];
-                    $authorization = $model->check_authorization($email, $password);
-
-                    Yii::$app->session->set('key', '2');
-                    Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
-                    Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
-                    Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
-                    echo '1';
-                    die;
-                } else {
-                    echo -1;
-                    exit;
+                   $val = 1;
                 }
+                return $val; 
             }
         }
     }
@@ -284,7 +271,7 @@ class UsersController extends BaseController
             $update_customer = $model->update_customer_profile($post, $customer_id);
             //echo '<pre>';print_r ($update_customer);die;
             if ($update_customer) {
-                echo 1;
+                return 1;
                 //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
                 //$this->redirect('account-settings');
             }
@@ -438,7 +425,7 @@ class UsersController extends BaseController
             $event_id = $_POST['event_id'];
             $item_id = $_POST['item_id'];
             $customer_id = Yii::$app->user->identity->customer_id;
-            $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);
+            echo $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);die;
             if ($insert_item_to_event == -2) {
                 echo -2;
                 exit;

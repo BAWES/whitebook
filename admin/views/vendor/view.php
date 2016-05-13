@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use common\models\Vendoritem;
 use common\models\Itemtype;
-use common\models\Category;
+use admin\models\Category;
 use common\models\Package;
 use common\models\Deliverytimeslot;
 use common\models\DeliverytimeslotSearch;

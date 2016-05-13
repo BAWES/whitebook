@@ -728,25 +728,6 @@ $image = $baselink;
         });
     });
 
-    /* BEGIN ADD EVENT */
-
-    function addevent(item_id)
-    {
-        jQuery.ajax({
-            type: 'POST',
-            url: "<?= Url::toRoute('/product/addevent'); ?>",
-            data: {'item_id': item_id},
-            success: function (data)
-            {
-                jQuery('#addevent').html(data);
-                jQuery('#eventlist' + item_id).selectpicker('refresh');
-                jQuery('#add_to_event').modal('show');
-
-            }
-        });
-    }
-
-    /* END ADD EVENT */
 
     /* BEGIN Buy Item */
 <?php if (!Yii::$app->user->isGuest) { ?>

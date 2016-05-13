@@ -98,7 +98,7 @@ class Users extends Model
     public function customer_password_reset($password, $customer_activation_key)
     {
         $gen_password = Yii::$app->getSecurity()->generatePasswordHash($password);
-		return $command=Signup::updateAll(['customer_org_password' => $password,'customer_password' => $gen_password],'customer_activation_key= '.$key);
+		return $command = Customer::updateAll(['customer_password' => $gen_password],['customer_activation_key'=>$customer_activation_key]);
     }
 
     public function update_customer_profile($post, $customer_id)
@@ -416,7 +416,7 @@ class Users extends Model
           return $exist = Customer::find()->select('customer_email')
                         ->where(['customer_email'=>$custemail])
                         ->asArray()
-                        ->all();
+                        ->one();
 
     }
     public static function check_user_exist($custemail)
@@ -430,14 +430,14 @@ class Users extends Model
     public function update_datetime_user($key)
     {
         $time = date('Y-m-d H:i:s');
-        return $command=Signup::updateAll(['modified_datetime' => $time],'customer_activation_key= '.$key);
+        return $command=Customer::updateAll(['modified_datetime' => $time],['customer_activation_key'=>$key]);
     }
     public static function check_customer_validtime($key)
     {
         $time = date('Y-m-d H:i:s');
-        return $validtime = Customer::find()->select('customer_activation_key')
-                        ->where(['customer_email'=>$custemail])
-                        ->andWhere(['<=','TIMESTAMPDIFF(MINUTE,modified_datetime,"$time")','1440'])
+        return $validtime = Customer::find()->select(['customer_id'])
+                        ->where(['customer_activation_key'=>$key])
+                        ->andWhere('TIMESTAMPDIFF(MINUTE,modified_datetime,'.$time.')' <= 1440)
                         ->asArray()
                         ->all();
     }
@@ -450,7 +450,7 @@ class Users extends Model
                         ->where(['event_id'=>$event_id])
                         ->andWhere(['item_id'=>$item_id])
                         ->count();
-        if (count($check) > 0) {
+        if ($check > 0) {
             return -2;
         } else {
             $event_date = date('Y-m-d H:i:s');

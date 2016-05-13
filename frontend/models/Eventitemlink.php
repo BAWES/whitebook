@@ -33,7 +33,7 @@ class Eventitemlink extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['event_id', 'link_id'], 'required'],
+            [['event_id', 'item_id'], 'required'],
         ];
     }
 

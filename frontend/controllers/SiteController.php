@@ -557,11 +557,11 @@ class SiteController extends BaseController
             // END wish list manage page load vendorss based on category
 
             // BEGIN wish list manage page load vendorss based on category
-            public function actionLoadwishlist()
-            {
-                $customer_id = Yii::$app->user->identity->customer_id;
-                if (Yii::$app->request->isAjax) {
-                    $data = Yii::$app->request->post();
+        public function actionLoadwishlist()
+        {
+            $customer_id = Yii::$app->user->identity->customer_id;
+            if (Yii::$app->request->isAjax) {
+                $data = Yii::$app->request->post();
 
    		$condition ='';
 		$condition = "'"."1"."'";
@@ -591,14 +591,13 @@ class SiteController extends BaseController
 		$condition .= ")";
 		}
 		$wishlist = \frontend\models\Wishlist::find()
-					->select(['{{%wishlist}}.*'])
+					->select(['{{%wishlist}}.*','{{%vendor}}.vendor_name','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit'])
 					->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
 					->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 					->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item_theme}}.item_id = {{%vendor_item}}.item_id')
 					->Where($condition)
 					->asArray()
 					->all();
-
                     return $this->renderPartial('/users/user_wish_list', ['wishlist' => $wishlist]);
                 }
             }

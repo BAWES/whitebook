@@ -23,4 +23,10 @@ class BaseController extends Controller
         if(!Yii::$app->user->isGuest)
         Yii::$app->params['CUSTOMER_NAME'] = Yii::$app->user->identity->customer_name;
     }
+
+    public function printdata($table)
+    {
+
+     var_dump($table->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
+    }
 }

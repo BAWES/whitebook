@@ -210,6 +210,7 @@ $checked1 = '';
 <div class="panel-body">
 <div class="table">
 <?php
+print_r($vendor);die;
 /* BEGIN Display scroll for more than three li */
 if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 /* END Display scroll for more than three li */
@@ -665,7 +666,7 @@ else
 if(category_name =="" && theme_name =="" && vendor_name =="")
 {
 window.history.pushState("test", "Title", newUrl);
-slug = <?php echo $slug; ?>
+slug = <?= '"'.$slug.'"'; ?>;
 }
 
 if(category_name !="" || theme_name !="" || vendor_name !="" || price_val !="")
