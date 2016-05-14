@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$a
 
 /* Get slug name to find category */
 $subcategory = SubCategory::loadsubcat($slug);
-
+//echo '<pre>';print_r($subcategory);die;
 $col=1;
 foreach ($subcategory as $key => $value) {
 $t = $in ='';
@@ -117,6 +117,7 @@ if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 <?php
 
 foreach ($childcategory as $key => $value) {
+
 if(isset($_GET['category']) && $_GET['category'] !="")
 {
 $val = explode(' ',$_GET['category']);
@@ -210,7 +211,7 @@ $checked1 = '';
 <div class="panel-body">
 <div class="table">
 <?php
-print_r($vendor);die;
+
 /* BEGIN Display scroll for more than three li */
 if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 /* END Display scroll for more than three li */

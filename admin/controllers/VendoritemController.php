@@ -378,6 +378,7 @@ public function actionUpdate($id, $vid = false)
     $itemtype = Itemtype::loaditemtype();
     $vendorname = Vendor::loadvendorname();
     $categoryname = Category::vendorcategory($model->vendor_id);
+    //print_r($categoryname);die;
     $subcategory = Subcategory::loadsubcategory($cat_id);
     $childcategory = Childcategory::loadchildcategory($subcat_id);
     $loadpricevalues = Vendoritempricing::loadpricevalues($item_id);

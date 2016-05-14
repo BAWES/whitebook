@@ -66,23 +66,28 @@ class PlanController extends BaseController
         if (!is_null($model1)) {
 
             $imageData = Vendoritem::find()
-                    ->select('wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, wv.vendor_name')
-                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
-                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
-                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
+                    ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
+                        {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, 
+                        {{%vendor}}.vendor_name'])
+                    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+                    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
                     ->where(['{{%vendor_item}}.trash' => "Default"])
                     ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                     ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
                     ->andWhere(['{{%vendor_item}}.type_id' => "2"])
                     ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-                    ->andWhere(['wi.module_type' => "vendor_item"])
-                    ->andWhere(['{{%vendor_item}}.vendor_id' =>[$active_vendors]])
+                    //->andWhere(['{{%image}}.module_type' => "vendor_item"])
+                    ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
                     ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->asArray()
                     ->all();
+                    
             }
         }
+//print_r($imageData);die;
+        //var_dump($imageData->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
 
         /* END CATEGORY */
 
@@ -121,12 +126,12 @@ class PlanController extends BaseController
 
         /* VENDOR HAVIG ATLEAST ONE PRODUCT */
         $vendor = Vendoritem::find()
-            ->select('wv.vendor_id,wv.vendor_name,wv.slug')
-            ->join('INNER JOIN', '{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
-            ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
-            ->where(['{{%vendor_item}}.vendor_id' => [$active_vendors]])
-            ->andWhere(['wv.vendor_status' => "Active"])
-            ->andWhere(['wv.approve_status' => "Yes"])
+            ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
+            ->join('INNER JOIN', '{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
+            ->where(['{{%vendor_item}}.vendor_id' => $active_vendors])
+            ->andWhere(['{{%vendor}}.vendor_status' => "Active"])
+            ->andWhere(['{{%vendor}}.approve_status' => "Yes"])
             ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
             ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
             ->andWhere(['{{%vendor_item}}.trash' => "Default"])
@@ -134,7 +139,7 @@ class PlanController extends BaseController
             ->groupBy('{{%vendor_item}}.vendor_id')
             ->asArray()
             ->all();
-            //print_r($vendor);die;
+            //print_r(parent::printdata($vendor));die;
         /* END get current category to load sub category */
 
         /* END GET VENDORS */
@@ -153,14 +158,18 @@ class PlanController extends BaseController
     public function actionLoaditems()
     {
         if (Yii::$app->request->isAjax) {
+
             $data = Yii::$app->request->post();
-            $condition = '';
+            $condition = '{{%vendor_item}}.trash = "Default"';
             $join = '';
             if ($data['slug'] != '') {
-                /* CATEGORY FILTER */
+
+
+                  /* CATEGORY FILTER */
             if ($data['item_ids'] != '') {
-                $values = $this->qstring($data['item_ids']);
-               // $condition .= "AND wc.slug IN('.$values.')";
+                //print_r($data['item_ids']);die;
+                //$values = $this->qstring($data['item_ids']);
+                $condition .= ' AND {{%category}}.slug IN("'.$data['item_ids'].'")';
             }
             /* THEMES FILTER */
             if ($data['themes'] != '') {
@@ -168,7 +177,6 @@ class PlanController extends BaseController
                 foreach ($theme as $key => $value) {
                     $themes[] = Themes::find()->select('theme_id')->where(['slug'=>[$value]])->asArray()->all();
                 }
-
 
                 $all_valid_themes = array();
                 foreach ($themes as $key => $value) {
@@ -183,70 +191,70 @@ class PlanController extends BaseController
                     }
                 }
 
-                if (count($all_valid_themes) <= 1) {
+                if (count($all_valid_themes)==1) {
                     $all_valid_themes = $all_valid_themes[0];
                 } else {
                     $all_valid_themes = implode('","', $all_valid_themes);
                 }
                 
              /* END Multiple themes match comma seperate values in table*/
-                //print_r($all_valid_themes);die;
-                //$condition .= ' AND wvi.item_id IN('.$all_valid_themes.') ';
+                $condition .= ' AND {{%vendor_item}}.item_id IN("'.$all_valid_themes.'")';
                 }
 
                 if ($data['vendor'] != '') {
                     $vendor = explode('+', $data['vendor']);
                     $v = implode('","', $vendor);
-                    //$condition .= 'AND wv.slug IN("'.$v.'") AND wv.vendor_id IS NOT NULL';
+                    $condition .= ' AND {{%vendor}}.slug IN("'.$v.'") AND {{%vendor}}.vendor_id IS NOT NULL';
                 }
-                
+                /* BEGIN PRICE FILTER */
+                if ($data['price'] != '') {
+                    $price = explode('+', $data['price']);
+                    foreach ($price as $key => $value) {
+                        $prices[] = $value;
+                        $price_val = explode('-', $value);
+                        $price_val1[] = ' AND ({{%vendor_item}}.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
+                    }
+                    $condition1 = implode(' OR ', $price_val1);
+                    $condition .= str_replace('OR AND', 'OR', $condition1);
+                }
+                /* END PRICE FILTER */
+
                 $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
                 $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
-
-            /* BEGIN PRICE FILTER */
-            if ($data['price'] != '') {
-                $price = explode('+', $data['price']);
-                foreach ($price as $key => $value) {
-                    $prices[] = $value;
-                    $price_val = explode('-', $value);
-                    $price_val1[] = 'AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
-                }
-                $condition1 = implode(' OR ', $price_val1);
-                $condition .= str_replace('OR AND', 'OR', $condition1);
-            }
-            /* END PRICE FILTER */
-
-            $model1 = Category::find()->select('category_id')->where(['slug' => $data['slug']])->asArray()->one();
+                // echo $condition;die;
                 if (!is_null($model1)) {
                 $imageData = Vendoritem::find()
                     ->select(['{{%vendor_item}}.category_id','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
                         '{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
-                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
-                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
-                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
-                    ->where(['{{%vendor_item}}.trash' => "Default"])
+                    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+                    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
+                    ->where($condition)
                     ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                     ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
                     ->andWhere(['{{%vendor_item}}.type_id' => "2"])
                     ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-                    ->andWhere(['wi.module_type' => "vendor_item"])
-                    ->andWhere(['{{%vendor_item}}.vendor_id' =>[$active_vendors]])
+                    //->andWhere(['{{%image}}.module_type' => "admin"])
+                    ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
                     ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
-                    //->andWhere([$condition])
+                    //->andWhere($condition)
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
                     ->limit(12)
                     ->asArray()
                     ->all();
+                  
+                    //var_dump($imageData->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);
+                     //die;
+                    }
                 }
             }
-        }
-        $customer_events_list = array();
+            $customer_events_list = array();
 
-        if (!Yii::$app->user->isGuest) {
-            $usermodel = new Users();
-            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
-        }
+            if (!Yii::$app->user->isGuest) {
+                $usermodel = new Users();
+                $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
+            }
 
         return $this->renderPartial('loaditems', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
     }
@@ -490,8 +498,8 @@ class PlanController extends BaseController
                 if (!empty($cat_item_details)) {
                     $cat_id = $cat_item_details[0]['category_id'];
                     $join .= ' ({{%vendor_item}}.category_id  = ("'.$cat_id.'")
-			or {{%vendor_item}}.subcategory_id  = ("'.$cat_id.'") or {{%vendor_item}}.child_category  = ("'.$cat_id.'") OR {{%vendor_item}}.item_name
-			LIKE "%'.$data['slug'].'%" )';
+   or {{%vendor_item}}.subcategory_id  = ("'.$cat_id.'") or {{%vendor_item}}.child_category  = ("'.$cat_id.'") OR {{%vendor_item}}.item_name
+   LIKE "%'.$data['slug'].'%" )';
                 }
 
                 if (!empty($data['vendor'])) {
@@ -587,9 +595,9 @@ class PlanController extends BaseController
     public function qstring($val)
     {
         $cat = explode('+', $val);
-        $categories = implode('","', $cat);
-
-        return $ids = '"'.$categories.'"';
+       // $categories = implode('","', $cat);
+        print_r($cat);die;
+        return $ids = '"'.$cat.'"';
     }
 
     public function actionAddevent()

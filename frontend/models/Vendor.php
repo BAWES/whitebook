@@ -83,7 +83,6 @@ class Vendor extends \common\models\Vendor
 
     public static function loadvalidvendorids($cat_id=false)
     {
-
         $expression = new \yii\db\Expression('NOW()');
 		$now = (new \yii\db\Query)->select($expression)->scalar();  // SELECT NOW();
 
@@ -128,7 +127,7 @@ class Vendor extends \common\models\Vendor
             return '';
         }
         
-        return $active_vendors = implode('","', array_filter($package));
+        return $active_vendors = array_filter($package);
         //print_r($active_vendors);die;
     }
 

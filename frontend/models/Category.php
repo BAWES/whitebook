@@ -57,6 +57,7 @@ class Category extends \common\models\Category
    $categoryid=Category::find()
    ->where(['slug' => $slug])
    ->andwhere(['!=', 'trash', 'Deleted'])
+   ->asArray()
    ->one();
    return $categoryid;
   }
