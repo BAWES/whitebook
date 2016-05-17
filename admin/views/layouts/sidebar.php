@@ -1,5 +1,5 @@
  <?php use yii\helpers\Html; ?>
- 	<!-- BEGIN SIDEBAR -->
+<!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->
 	<div class="page-sidebar" id="main-menu">
 		  <div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">
