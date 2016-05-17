@@ -22,19 +22,20 @@ use yii\widgets\Breadcrumbs;
 $category_det=Category::category_value($slug);
 
 if($category_det['category_name']!='Say thank you'){
-$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Yii::$app->homeUrl.'/products/'.$slug];
+	$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $slug])];
 }else{
-$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Yii::$app->homeUrl.'/products/'.$slug];
+	$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Url::to(["plan/plan", 'slug' => $slug]) ];
 }
-//$this->params['breadcrumbs'][] =$model['item_name'];
+
 ?>
+
 <?= Breadcrumbs::widget([
-'options' => ['class' => 'new breadcrumb'],
-'homeLink' => [
-'label' => Yii::t('yii', 'Home'),
-'url' => Yii::$app->homeUrl,
-],
-'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+	'options' => ['class' => 'new breadcrumb'],
+	'homeLink' => [
+		'label' => Yii::t('yii', 'Home'),
+		'url' => Yii::$app->homeUrl,
+	],
+	'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
 ]);
 ?>
 
