@@ -372,7 +372,7 @@ $image = $baselink;
                                                 <div class="item">
                                                     <div class="fetu_product_list">
     <?php if ($s['slug'] != '') { ?>
-                                                            <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $s['slug']; ?>" title="Products" class="similar">
+                                                            <a href="<?= Url::to(["product/product", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
                                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219">
         <?php if (file_exists($imglink)) { ?>
                                                                     <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219">
