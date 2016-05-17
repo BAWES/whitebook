@@ -6,6 +6,19 @@ class m160430_123635_whitebook_user extends Migration
 {
     public function up()
     {
+
+         // drops foreign key for table `user`
+        $this->dropForeignKey(
+            'fk-user_id',
+            'whitebook_user'
+        );
+
+        // drops index for column `user_id`
+        $this->dropIndex(
+            'idx-user_id',
+            'whitebook_user'
+        );
+
         $this->dropTable('whitebook_user');
     }
 
