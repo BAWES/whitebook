@@ -9,7 +9,7 @@ use yii\helpers\Html;
     <div class="container paddng0">
         <div class="exp_sect">
             <div class="plan_inner_sec">
-                <h2>Expereince</h2>
+                <h2>Experience</h2>
                 <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</h5>
             </div>
         </div>
