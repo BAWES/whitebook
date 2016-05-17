@@ -23,7 +23,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                 <?php
                 $vendor_det = Vendor::vendorslug($model['vendor_id']);
                 $category_det = Category::category_slug($model['category_id']);
-                $this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Yii::$app->homeUrl . '/products/' . $category_det['slug']];
+                $this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $category_det['slug']])];
                 $this->params['breadcrumbs'][] = ucfirst($model['item_name']);
                 ?>
 
