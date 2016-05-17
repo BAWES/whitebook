@@ -177,7 +177,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                         <div class="right_descr_product">
                             <div class="product_name">
                                 <div class="left_descrip desktop-view">
-                                    <a title="<?= $vendor_det['vendor_name']; ?>" href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $vendor_det['slug']; ?>"><?php echo '<h2>' . $vendor_det['vendor_name'] . '</h2>'; ?></a>
+                                    <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $vendor_det['slug']]) ?>"><?php echo '<h2>' . $vendor_det['vendor_name'] . '</h2>'; ?></a>
                                     <label><?= $model['item_name']; ?></label>
                                     <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
                                 </div>
