@@ -158,9 +158,7 @@ class SiteController extends BaseController
             $website_model = new Website();
             if ($_POST['slug'] != 'All') {
                 $categoryid = Category::category_value($_POST['slug']);
-
                 $directory = $website_model->get_search_directory_list($categoryid['category_id']);
-                print_r($directory);die;
                 $prevLetter = '';
                 $result = array();
                 foreach ($directory as $d) {

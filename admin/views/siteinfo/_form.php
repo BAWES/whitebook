@@ -56,22 +56,6 @@ use yii\widgets\ActiveForm;
     </div>
     
     <div class="form-group">
-    <?= $form->field($model, 'site_logo',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 	
-    	])->fileInput(['maxlength' => 200])->hint('Logo Size 320 * 44') ?>
-    <?php if(!$model->isNewRecord) { ?> 	
-		<div class="image"><?php echo Html::img('@web/uploads/app_img/'.$model->site_logo) ?></div>
-	<?php } ?>
-    </div>
-
-	<div class="form-group">
-    <?= $form->field($model, 'site_favicon',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 	
-    	])->fileInput(['maxlength' => 200]) ?>
-    <?php if(!$model->isNewRecord) { ?> 
-    	<div class="image"><?php echo Html::img('@web/uploads/app_img/'.$model->site_favicon) ?></div>
-    <?php } ?>
-    </div>	
-   
-    <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
      <?= Html::a('Back', ['site/index'], ['class' => 'btn btn-default']) ?>
      </div>

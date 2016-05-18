@@ -23,7 +23,7 @@ $this->beginPage();
     <?php $this->head();
      AppAsset::register($this);
      ?>
-    <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />
+    <link rel="shortcut icon" src="/favicon.png" type="image/x-icon" />
 
 </head>
 <body class="">

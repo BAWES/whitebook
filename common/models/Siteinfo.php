@@ -21,13 +21,12 @@ class Siteinfo extends \yii\db\ActiveRecord
         return [
             [['app_name', 'app_desc', 'meta_keyword', 'meta_desc', 'email_id', 'site_location', 'site_copyright','currency_symbol'], 'required'],
             [['app_name', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision'],'required', 'on' => 'update'],
-            [['app_desc', 'meta_desc'], 'string'],            
-            [['commision'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
-            [['site_logo', 'site_favicon'],'image','extensions' => ['png', 'jpg', 'jpeg']],
+            [['app_desc', 'meta_desc'], 'string'],
+            [['commision'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],            
             [['app_name'], 'string', 'max' => 100],
             [['meta_keyword'], 'string', 'max' => 250],
             [['email_id'], 'string', 'max' => 50],
-            [['site_copyright'], 'string', 'max' => 200],            
+            [['site_copyright'], 'string', 'max' => 200],
             /* Validation Rules */
             [['email_id'],'email'],
             ['phone_number','match', 'pattern' => '/^[0-9+ -]+$/','message' => 'Phone number accept only numbers and +,-']
@@ -74,34 +73,13 @@ class Siteinfo extends \yii\db\ActiveRecord
             'phone_number' => 'Phone Number',            
             'site_location' => 'Site Location',            
             'site_copyright' => 'Site Copyright',
-            'site_logo' => 'Site Logo',            
-            'site_favicon' => 'Site Favicon',                      
             'facebook_key' => 'Facebook Key',        
             'commision' => 'Commision percentage',
             'currency_symbol'=>'Currency symbol',      
            
         ];
     }
-    public static function logoUrl()
-    {
-		$model = Siteinfo::find()->all();        
-		foreach($model as $key=>$val)
-		{
-			 return $logo = $val['site_logo'];
-			 //return Yii::getAlias('@web/uploads/app_img').'/'.$logo;
-		}
-	}
-	
-	public static function faviconUrl()
-    {
-		$model = Siteinfo::find()->all();
-		foreach($model as $key=>$val)
-		{
-			 $logo = $val['site_favicon'];
-			 echo Yii::getAlias('/admin/web/uploads/app_img').'/'.$logo;
-		}
-	}
-
+    
     // Datas using frontend
     public static function siteinformation()
     {

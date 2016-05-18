@@ -6,6 +6,7 @@ use Yii;
 use common\models\Siteinfo;
 use admin\models\Authitem;
 use yii\web\Controller;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -38,7 +39,7 @@ class SiteinfoController extends Controller
                        'roles' => ['?'],
                    ],
                    [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete'],
+                       'actions' => ['create', 'update', 'index', 'view', 'delete','hi'],
                        'allow' => true,
                        'roles' => ['@'],
                    ],
@@ -60,6 +61,8 @@ class SiteinfoController extends Controller
      */
     public function actionIndex()
     {
+        $this->hi();
+        exit;
         $access = Authitem::AuthitemCheck('4', '10');
         if (yii::$app->user->can($access)) {
             $model = Siteinfo::find()->all();
@@ -245,4 +248,10 @@ class SiteinfoController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function Hi()
+    {
+        return Yii::$app->getResponse()->redirect([Url::to('google.com',true), 302]);
+    }
+    
 }

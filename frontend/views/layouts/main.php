@@ -44,7 +44,7 @@ $this->beginPage()
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
 <?php $this->head() ?>
-        <link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />
+        <link rel="shortcut icon" src="/favicon.png" type="image/x-icon" />
     </head>
     <body class="has-js">
         <!-- <div class="fullpage" style="width:100%;height:100%"></div> -->
