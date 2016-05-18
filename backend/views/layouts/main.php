@@ -20,7 +20,6 @@ $this->beginPage();
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
-	<script src="/backend/web/themes/default/plugins/jquery-1.8.3.min.js"></script>
 	<?php $this->head();
 	AppAsset::register($this); ?>
 	<link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />
