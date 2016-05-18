@@ -430,10 +430,10 @@ if ($event_status > 0) {
                                         <?php } ?>
                                                         </div>
 
-                                                        <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $value['slug']; ?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $value['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?></a>
+                                                        <a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $value['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?></a>
                                                     </div>
                                                     <div class="events_descrip">
-                                                        <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $value['slug']; ?>" title=""><?= $value['vendor_name'] ?>
+                                                        <a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title=""><?= $value['vendor_name'] ?>
                                                             <h3><?= $value['item_name']; ?></h3>
                                                             <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
                                                     </div>
