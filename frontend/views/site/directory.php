@@ -104,7 +104,7 @@ foreach($directory as $d) {
 $first_letter = strtoupper(substr($d['vname'],0,1));
 if($first_letter==$f)
 { ?>
-<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/experience/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
 <?php  } }?>
 
 </ul>
@@ -126,7 +126,7 @@ foreach($directory as $d) {
 $first_letter = strtoupper(substr($d['vname'],0,1));
 if($first_letter==$f)
 {?>
-<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/experience/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
 <?php  } }?>
 
 </ul>
