@@ -38,17 +38,17 @@ class Website extends Model {
 
     public static function get_search_directory_list($categoryid) {
         $today = date('Y-m-d H:i:s');
-        		return $data=Vendor::find()
-        ->select(['{{%vendor}}.vendor_id AS vid',
+            return $data=Vendor::find()
+                    ->select(['{{%vendor}}.vendor_id AS vid',
                     '{{%vendor}}.vendor_name AS vname',
                     '{{%vendor}}.slug AS slug'])
             ->LEFTJOIN('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
             ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
-            ->andwhere(['>=','{{%vendor_packages}}.package_end_date',$today])
-			->andwhere(['{{%vendor}}.trash'=>'Default'])
-			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
-			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
-			->andwhere(new \yii\db\Expression('FIND_IN_SET({{%vendor}}.category_id,'.$categoryid.')'))
+            ->andWhere(['>=','{{%vendor_packages}}.package_end_date',$today])
+			->andWhere(['{{%vendor}}.trash'=>'Default'])
+			->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
+			->andWhere(['{{%vendor}}.vendor_status'=>'Active'])
+			->andWhere(new \yii\db\Expression('FIND_IN_SET('.$categoryid.',{{%vendor}}.category_id)'))
 			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
 			->groupby(['{{%vendor}}.vendor_id'])
 			->asArray()

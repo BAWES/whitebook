@@ -19,7 +19,7 @@ class CountrySearch extends Country
     {
         return [
             [['country_id', 'default'], 'integer'],
-            [['country_name', 'iso_country_code', 'currency_code', 'currency_symbol', 'country_status'], 'safe'],
+            [['country_name', 'iso_country_code', 'currency_code', 'currency_symbol'], 'safe'],
         ];
     }
 

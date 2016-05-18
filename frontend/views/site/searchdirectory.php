@@ -1,4 +1,3 @@
-
 <?php
 $total = count($directory);
 if ((!empty($directory)) && ($total > 1)) {

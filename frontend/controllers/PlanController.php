@@ -86,8 +86,6 @@ class PlanController extends BaseController
                     
             }
         }
-//print_r($imageData);die;
-        //var_dump($imageData->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
 
         /* END CATEGORY */
 
@@ -164,13 +162,11 @@ class PlanController extends BaseController
             $join = '';
             if ($data['slug'] != '') {
 
-
                   /* CATEGORY FILTER */
             if ($data['item_ids'] != '') {
-                //print_r($data['item_ids']);die;
-                //$values = $this->qstring($data['item_ids']);
                 $condition .= ' AND {{%category}}.slug IN("'.$data['item_ids'].'")';
             }
+
             /* THEMES FILTER */
             if ($data['themes'] != '') {
                 $theme = explode('+', $data['themes']);
@@ -241,9 +237,9 @@ class PlanController extends BaseController
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
                     ->limit(12)
-                    ->asArray()
-                    ->all();
-                  
+                    ->asArray();
+                    //->all();
+                  print_r($imageData->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
                     //var_dump($imageData->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);
                      //die;
                     }
@@ -263,13 +259,14 @@ class PlanController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $condition = '';
+            $condition = '{{%vendor_item}}.trash = "Default"';
             $join = '';
+
             if (!empty($data['slug'])) {
             if ($data['search'] != '') {
                 $values = $this->qstring($data['search']);
                 $search = $data['search'];
-                $condition .= 'AND wvi.item_name LIKE "%'.$search.'%"';
+                $condition .= 'AND {{%vendor_item}}.item_name LIKE "%'.$search.'%"';
             }
 
             /* THEMES FILTER */
@@ -281,7 +278,7 @@ class PlanController extends BaseController
 
                 $all_valid_themes = array();
                 foreach ($themes as $key => $value) {
-                        $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
+                $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
                                     ->where(['trash'=>"Default"])
                                     ->andWhere(['theme_id'=>[$value[0]['theme_id']]])
                                     ->asArray()
@@ -299,18 +296,15 @@ class PlanController extends BaseController
 
             /* END Multiple themes match comma seperate values in table*/
 
-          //  $join .= ' inner join whitebook_theme as wt ON wt.slug REGEXP "'.$theme_ids.'" ';
-              $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'") ';
+              $condition .= ' AND {{%vendor_item}}.item_id IN("'.$all_valid_themes.'") ';
             }
                 if (!empty($data['vendor'])) {
                     $vendor = explode('+', $data['vendor']);
                     $v = implode('","', $vendor);
 
-                //SELECT * FROM `whitebook_vendor` WHERE slug IN('whitebook-vendor','thomas')
-
             /* BEGIN GET VENDORS */
                 $active_vendors = Vendor::loadvalidvendors();
-                    $condition .= 'AND wvi.vendor_id IN("'.$active_vendors.'") AND wv.slug IN("'.$v.'") AND wv.vendor_id IS NOT NULL';
+                    $condition .= 'AND {{%vendor_item}}.vendor_id IN("'.$active_vendors.'") AND {{%vendor}}.slug IN("'.$v.'") AND {{%vendor}}.vendor_id IS NOT NULL';
                 }
 
             /* BEGIN PRICE FILTER */
@@ -319,7 +313,7 @@ class PlanController extends BaseController
                 foreach ($price as $key => $value) {
                     $prices[] = $value;
                     $price_val = explode('-', $value);
-                    $price_val1[] = 'AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
+                    $price_val1[] = 'AND ({{%vendor_item}}.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
                 }
                 $condition1 = implode(' OR ', $price_val1);
                 $condition .= str_replace('OR AND', 'OR', $condition1);
@@ -336,10 +330,10 @@ class PlanController extends BaseController
                 }
 
             $imageData = Vendoritem::find()
-                    ->select('{{%vendor_item}}.category_id, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
-                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
-                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
-                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
+                    ->select(['{{%vendor_item}}.category_id, {{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, {{%vendor}}.vendor_name'])
+                    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+                    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
                     ->where(['{{%vendor_item}}.trash' => "Default"])
                     ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                     ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
@@ -371,7 +365,7 @@ class PlanController extends BaseController
             $data = Yii::$app->request->post();
             if ($data['slug'] != '') {
                 /* BEGIN CATEGORY*/
-        $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
+                $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
                 if (empty($model1)) {
                     throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
                 }
@@ -403,13 +397,14 @@ class PlanController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $condition = '';
+            $condition = '{{%vendor_item}}.trash = "Default" ';
             $join = '';
         /* CATEGORY */
         if ($data['category_name'] != '') {
             $category_val = explode('+', $data['category_name']);
             $cat = implode('","', $category_val);
-            $condition .= 'AND wc.slug IN("'.$cat.'")';
+
+            $condition .= 'AND {{%category}}.slug IN("'.$cat.'")';
         }
 
         /* THEMES FILTER */
@@ -439,7 +434,7 @@ class PlanController extends BaseController
 
             /* END Multiple themes match comma seperate values in table*/
 
-           $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'") ';
+           $condition .= ' AND {{%vendor_item}}.item_id IN("'.$all_valid_themes.'") ';
         }
         /* END THEME FILTER */
 
@@ -449,38 +444,37 @@ class PlanController extends BaseController
                 foreach ($price as $key => $value) {
                     $prices[] = $value;
                     $price_val = explode('-', $value);
-                    $price_val1[] = 'AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
+                    $price_val1[] = 'AND ({{%vendor_item}}.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
                 }
                 $condition1 = implode(' OR ', $price_val1);
                 $condition .= str_replace('OR AND', 'OR', $condition1);
             }
             /* END PRICE FILTER */
 
-           $vendorData = Vendoritem::find()
-                ->select('{{%vendor_item}}.category_id, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
-                ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
-                ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
-                ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
-                ->where(['{{%vendor_item}}.trash' => "Default"])
+            $vendorData = Vendoritem::find()
+                ->select(['{{%vendor_item}}.category_id, {{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, {{%vendor}}.vendor_name'])
+                ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+                ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+                ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
+                ->where($condition)
                 ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                 ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
                 ->andWhere(['{{%vendor_item}}.type_id' => "2"])
                 ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-                ->andWhere(['wi.module_type' => "vendor_item"])
-                ->andWhere([$condition])
-                ->andWhere(['wv.slug' => $data['slug']])
+                ->andWhere(['{{%vendor}}.slug' => $data['slug']])
                 ->groupBy('{{%vendor_item}}.item_id')
-                ->limit(12)
+                //->limit(12)
                 ->asArray()
                 ->all();
-            $customer_id = Yii::$app->user->identity->customer_id;
-            if (!empty($customer_id)) {
+              
+            //print_r($vendorData->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
+            if (!Yii::$app->user->isGuest) {
                 $usermodel = new Users();
-                $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
+                $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
-                return $this->renderPartial('loaditems', ['imageData' => $vendorData]);
+                return $this->renderPartial('loaditems', ['imageData' => $vendorData,'customer_events_list' => $customer_events_list]);
             } else {
-                return $this->renderPartial('loaditems', ['imageData' => $vendorData, 'customer_events_list' => $customer_events_list]);
+                return $this->renderPartial('loaditems', ['imageData' => $vendorData]);
             }
         }
     }

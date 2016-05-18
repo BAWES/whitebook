@@ -38,7 +38,8 @@ class Category extends \common\models\Category
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_allow_sale', 'default', 'value' => true],
-            ['category_icon', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'minWidth' => 200, 'maxWidth' => 300,'minHeight' => 40, 'maxHeight' =>70,'on' => 'register'],            
+            [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required','on' => 'register'],
+            [['category_icon', 'image', 'extensions' => 'png, jpg, jpeg'],'required','on' => 'register'],
             [['parent_category_id','category_name',], 'required','on' => 'sub_update',],
             [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
             [['category_name'], 'string', 'max' => 128]
@@ -49,6 +50,7 @@ class Category extends \common\models\Category
     {
         $scenarios = parent::scenarios();      
         $scenarios['sub_update'] = ['parent_category_id','category_name',];//Scenario Values Only Accepted
+        $scenarios['register'] = ['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description','category_icon'];
         return $scenarios;
     }
 
@@ -96,25 +98,25 @@ class Category extends \common\models\Category
 
   public static function loadcategoryname()
   {
-  			$category= Category::find()
-  			->where(['category_allow_sale'=>'yes'])
-  			->andwhere(['!=', 'trash', 'Deleted'])
-  			->andwhere(['=', 'category_level', '0'])
-  			->andwhere(['parent_category_id' => null])
-  			->all();
-  			$category=ArrayHelper::map($category,'category_id','category_name');
-  			return $category;
-  	}
-	
+     $category= Category::find()
+     ->where(['category_allow_sale'=>'yes'])
+     ->andwhere(['!=', 'trash', 'Deleted'])
+     ->andwhere(['=', 'category_level', '0'])
+     ->andwhere(['parent_category_id' => null])
+     ->all();
+     $category=ArrayHelper::map($category,'category_id','category_name');
+     return $category;
+   }
+ 
   public static function viewcategoryname($id)
- 	{
- 		$categories=Category::find()
- 		->where(['category_allow_sale' => 'yes'])
- 		->andwhere(['category_id' => $id])
- 		->andwhere(['!=', 'trash', 'Deleted'])
- 		->one();
- 		return $categories['category_name'];
- 	}
+  {
+   $categories=Category::find()
+   ->where(['category_allow_sale' => 'yes'])
+   ->andwhere(['category_id' => $id])
+   ->andwhere(['!=', 'trash', 'Deleted'])
+   ->one();
+   return $categories['category_name'];
+  }
 
 
     public function statusImageurl($img_status)

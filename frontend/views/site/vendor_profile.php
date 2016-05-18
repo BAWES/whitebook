@@ -1,9 +1,9 @@
 <?php
 
-use common\models\Category;
+use frontend\models\Category;
 use common\models\ChildCategory;
 use common\models\SubCategory;
-use common\models\Vendor;
+use frontend\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
@@ -192,6 +192,7 @@ if ($event_status > 0) {
                                         $subcategory = SubCategory::loadsubcat('invitations');
                                         $category_ids = Vendor::Vendorcategories($slug);
                                         $category_list = Category::Vendorcategorylist($category_ids['category_id']);
+                                       // print_r($category_list);die;
                                         if (count($category_list) > 3) {
                                             $class = "test_scroll";
                                         } else {
@@ -213,7 +214,7 @@ if ($event_status > 0) {
                                                 <div class="panel-body">
                                                     <div class="table">
                                                         <ul class="<?= $class; ?>">
-<?php foreach ($category_list as $key => $c_value) { ?>
+                                                <?php foreach ($category_list as $key => $c_value) { ?>
                                                                 <li>
                                                                 <?php if ($c_value['slug'] == 'say-thank-you') { ?>
                                                                         <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> >Say "Thank You"</label>
@@ -553,7 +554,7 @@ if ($event_status > 0) {
                                                         if (category_name == "" && theme_name == "")
                                                         {
                                                             window.history.pushState("test", "Title", newUrl);
-                                                            slug = <?php echo $slug; ?>
+                                                            slug = "<?php echo $slug; ?>";
                                                         }
 
                                                         if (category_name != "" || theme_name != "" || price_val != "")
@@ -561,8 +562,8 @@ if ($event_status > 0) {
                                                             url_path = '?category=' + category_name + '?themes=' + theme_name + '&price=' + price_val;
                                                         }
 
-                                                        var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loadvendoritems'); ?> ";
-<?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
+                                                        var path = "<?= Url::toRoute('/plan/loadvendoritems',true); ?>";
+                                                        <?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
 
                                                         jQuery.ajax({
                                                             type: 'POST',

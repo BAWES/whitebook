@@ -86,6 +86,11 @@ class Deliverytimeslot extends \yii\db\ActiveRecord
     {
         return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id])->asArray()->count();
     }
+
+    public static function vendor_deliverytimeslot($id,$day)
+    {
+        return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id, 'timeslot_day'=>$day])->asArray()->all();;
+    }
     
 }
 

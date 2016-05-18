@@ -5,7 +5,6 @@ use yii\helpers\Url;
 ?>
 
 <?php
-//echo '<pre';print_r($imageData);die;
 if (!empty($imageData)) {
 
     foreach ($imageData as $key => $value) {

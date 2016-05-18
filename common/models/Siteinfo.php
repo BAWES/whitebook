@@ -23,11 +23,11 @@ class Siteinfo extends \yii\db\ActiveRecord
             [['app_name', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision'],'required', 'on' => 'update'],
             [['app_desc', 'meta_desc'], 'string'],            
             [['commision'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
-            [['site_logo', 'site_favicon'],'file','extensions' => ['png', 'jpg', 'jpeg']],
+            [['site_logo', 'site_favicon'],'image','extensions' => ['png', 'jpg', 'jpeg']],
             [['app_name'], 'string', 'max' => 100],
             [['meta_keyword'], 'string', 'max' => 250],
             [['email_id'], 'string', 'max' => 50],
-            [['site_copyright', 'site_favicon'], 'string', 'max' => 200],            
+            [['site_copyright'], 'string', 'max' => 200],            
             /* Validation Rules */
             [['email_id'],'email'],
             ['phone_number','match', 'pattern' => '/^[0-9+ -]+$/','message' => 'Phone number accept only numbers and +,-']

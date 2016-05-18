@@ -63,7 +63,6 @@ class Category extends \yii\db\ActiveRecord
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_allow_sale', 'default', 'value' => true],
-            ['category_icon', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'minWidth' => 200, 'maxWidth' => 300,'minHeight' => 40, 'maxHeight' =>70,'on' => 'register'],            
             [['parent_category_id','category_name',], 'required','on' => 'sub_update',],
             [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
             [['category_name'], 'string', 'max' => 128]

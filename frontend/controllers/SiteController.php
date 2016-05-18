@@ -131,8 +131,7 @@ class SiteController extends BaseController
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Directory';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-        $vendor = new Vendor();
-        $directory = $vendor->get_directory_list();
+        $directory = Vendor::get_directory_list();
         $prevLetter = '';
         $result = array();
         foreach ($directory as $d) {
@@ -156,13 +155,12 @@ class SiteController extends BaseController
         $website_model = new Website();
         $main_category = $website_model->get_main_category();
         if (Yii::$app->request->isAjax) {
-            $category_model = new Category();
             $website_model = new Website();
             if ($_POST['slug'] != 'All') {
-                $categoryid = $category_model->category_value($_POST['slug']);
-                $cat_id = $categoryid['category_id'];
-                $directory = $website_model->get_search_directory_list($cat_id);
+                $categoryid = Category::category_value($_POST['slug']);
 
+                $directory = $website_model->get_search_directory_list($categoryid['category_id']);
+                print_r($directory);die;
                 $prevLetter = '';
                 $result = array();
                 foreach ($directory as $d) {
@@ -175,7 +173,6 @@ class SiteController extends BaseController
                 $result = array_unique($result);
             } else {
                 $directory = $website_model->get_search_directory_all_list();
-
                 $prevLetter = '';
                 $result = array();
                 foreach ($directory as $d) {
@@ -187,14 +184,14 @@ class SiteController extends BaseController
                 }
                 $result = array_unique($result);
             }
-            if ($_POST['ajaxdata'] == '0') {
+            if ($_POST['ajaxdata'] == 0) {
                 return $this->renderPartial('searchdirectory', [
-        'directory' => $directory,
-        'first_letter' => $result, ]);
+                    'directory' => $directory,
+                    'first_letter' => $result, ]);
             } else {
                 return $this->renderPartial('searchresponsedirectory', [
-        'directory' => $directory,
-        'first_letter' => $result, ]);
+                    'directory' => $directory,
+                    'first_letter' => $result, ]);
             }
         }
     }
@@ -357,7 +354,6 @@ class SiteController extends BaseController
     public function actionVendor_profile($slug = '')
     {
         if ($slug != '') {
-            $customer_id = Yii::$app->user->identity->customer_id;
             $website_model = new Website();
             $vendor_details = $website_model->vendor_details($slug);
             if (empty($vendor_details)) {
@@ -381,7 +377,7 @@ class SiteController extends BaseController
 			->all();
 
 			$vendorData = Vendoritem::find()
-			->select('{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name')
+			->select(['{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
 			->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
 			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
@@ -390,12 +386,12 @@ class SiteController extends BaseController
 			->asArray()
 			->all();
 			
+            
 
-
-            if ($customer_id == '') {
+            if (!isset(Yii::$app->user->identity->customer_id)) {
                 return $this->render('vendor_profile', [
               'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes,
-              'category' => $main_category, 'vendorData' => $vendorData,
+              'category' => $main_category, 'vendorData' => $vendorData,'slug'=>$slug,
             ]);
             } else {
                 $event_limit = 8;
@@ -408,7 +404,7 @@ class SiteController extends BaseController
 
                 return $this->render('vendor_profile', [
               'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes, 'vendorData' => $vendorData,
-              'category' => $main_category, 'customer_events' => $customer_events, 'customer_events_list' => $customer_events_list,'slug'=>$slug
+              'category' => $main_category, 'customer_events' => $customer_events, 'slug'=>$slug, 'customer_events_list' => $customer_events_list,'slug'=>$slug
             ]);
             }
         }

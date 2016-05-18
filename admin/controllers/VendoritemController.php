@@ -79,6 +79,7 @@ public function behaviors()
 */
 public function actionIndex()
 {
+
     $access = Authitem::AuthitemCheck('4', '23');
     if (yii::$app->user->can($access)) {
         $searchModel = new VendoritemSearch();
@@ -103,6 +104,7 @@ public function actionIndex()
 */
 public function actionView($id)
 {
+
     $access = Authitem::AuthitemviewCheck('view', '23');
     if (yii::$app->user->can($access)) {
         $dataProvider1=  Priorityitem::find()

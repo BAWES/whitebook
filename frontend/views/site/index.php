@@ -25,7 +25,7 @@ foreach ($banner as $b) {
 <?php if ($b['slide_type'] == 'video') { ?>
 <object width="100%" height="600" data="<?php echo $b['slide_video_url']; ?>" id="video_click"></object>
 <?php } else { ?>
-<?= Html::img(Yii::getAlias('@uploads/banner_images/banner_' . $b['slide_id'] . '.png'), ['alt' => 'My White Book']) ?>
+<?= Html::img(Yii::getAlias('@s3/slider_uploads/'. $b['slide_image']), ['alt' => 'My White Book']) ?>
 
 <?php } ?>
 </div>

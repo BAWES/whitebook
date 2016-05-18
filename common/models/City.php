@@ -41,15 +41,15 @@ class City extends \yii\db\ActiveRecord
         ];
     }
 
-        	public static function loadcity()
-	{       
-			$city= City::find()
-			->where(['!=', 'status', 'Deactive'])
-			->andwhere(['!=', 'trash', 'Deleted'])
-			->all();
-			$city=ArrayHelper::map($city,'city_id','city_name');
-			return $city;
-	}	
+    	public static function loadcity()
+    	{       
+    			$city= City::find()
+    			->where(['!=', 'status', 'Deactive'])
+    			->andwhere(['!=', 'trash', 'Deleted'])
+    			->all();
+    			$city=ArrayHelper::map($city,'city_id','city_name');
+    			return $city;
+    	}	
 	
     /**
      * @inheritdoc
@@ -88,7 +88,7 @@ class City extends \yii\db\ActiveRecord
      */
     public static function getCountryName($id)
     {		
-		$model = Country::find()->where(['country_id'=>$id])->one();
+		      $model = Country::find()->where(['country_id'=>$id])->one();
         return $model->country_name;
     }
     public static function getCityname($id)

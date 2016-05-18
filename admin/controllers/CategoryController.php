@@ -181,14 +181,16 @@ class CategoryController extends Controller
         if (yii::$app->user->can($access)) {
             $model = new Category();
             $model->scenario = 'register';
-
+            if($model->load(Yii::$app->request->post()))
+            {
+                $model->validate();
             if (isset($_FILES['Category']['name']['category_icon'])) {
                 $file = UploadedFile::getInstances($model, 'category_icon');
                 $model->category_icon = $file[0]->tempName;
             } else {
                 $model->scenario = '';
             }
-            if ($model->load(Yii::$app->request->post())) {
+            
                 $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
                 $model->category_name = strtolower($model->category_name);
                 
@@ -237,7 +239,7 @@ class CategoryController extends Controller
         $access = Authitem::AuthitemCheck('1', '3');
         if (yii::$app->user->can($access)) {
             $model = new SubCategory();
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
             
                 // get the max sort order
@@ -293,8 +295,7 @@ class CategoryController extends Controller
         $access = Authitem::AuthitemCheck('1', '3');
         if (yii::$app->user->can($access)) {
             $model = new ChildCategory();
-            if ($model->load(Yii::$app->request->post())) {
-                //print_r(Yii::$app->request->post());die;
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $string = str_replace(' ', '-', Yii::$app->request->post()['ChildCategory']['category_name']); // Replaces all spaces with hyphens.
             $model->slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
             $model->category_allow_sale = (Yii::$app->request->post()['ChildCategory']['category_allow_sale']) ? 'yes' : 'no';
@@ -524,14 +525,14 @@ class CategoryController extends Controller
             $subcategory = array();
             if (count($parentcategory) && (!empty($parentcategory))) {
                 $subcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $parentcategory[0]['category_id']])->all();
-                $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$parentcategory[0]['category_id']]);
+                $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$parentcategory[0]['category_id']]);
             }
 
             if (count($subcategory) && (!empty($subcategory))) {
                 $childcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $subcategory[0]['category_id']])->all();
-                $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$subcategory[0]['category_id']]);
+                $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$subcategory[0]['category_id']]);
             }
-            $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$id]);
+            $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$id]);
             if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Category deleted successfully!');
 

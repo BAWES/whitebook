@@ -43,23 +43,21 @@ class Category extends \common\models\Category
    /* Function used frontend  */
    public static function category_slug($id)
    {
-    $categories=Category::find()
+    return $categories=Category::find()
     ->where(['category_allow_sale' => 'yes'])
     ->andwhere(['category_id' => $id])
     ->andwhere(['!=', 'trash', 'Deleted'])
     ->one();
-    return $categories;
    }
 
   /* Function used frontend  */
   public static function category_value($slug)
   {
-   $categoryid=Category::find()
+   return $categoryid=Category::find()
    ->where(['slug' => $slug])
    ->andwhere(['!=', 'trash', 'Deleted'])
    ->asArray()
    ->one();
-   return $categoryid;
   }
 
   /* Function used frontend  */
@@ -75,17 +73,16 @@ class Category extends \common\models\Category
 
    /* Function used frontend  */
  public static function Vendorcategorylist($ids)
- { 
-  $c = explode(",", $ids);
-  $ids = implode("','", $c);
-  $val = "'".$ids."'";
-    $categories = Category::find()
-     ->select(['category_id','category_name','slug'])
-     ->where(['trash' =>'Default'])
-     ->andwhere(['category_allow_sale' => 'Yes'])
-     ->andwhere(['category_level' => '0'])
-     ->andwhere(['IN', 'category_id', $val])
-     ->all();
-   return $categories; 
- }    
+  { 
+    $c = explode(",", $ids);
+    return $categories = Category::find()
+       ->select(['category_id','category_name','slug'])
+       ->where(['trash' =>'Default'])
+       ->andWhere(['category_allow_sale' => 'Yes'])
+       ->andWhere(['category_level' => 0])
+       ->andWhere(['in', 'category_id', $c])
+       ->asArray()
+       ->all();
+       
+    }    
 }

@@ -270,7 +270,7 @@ class Vendoritem extends \yii\db\ActiveRecord
     
     
     public static function getItemType($id)
-    {		
+    {
 		$model = Itemtype::find()->where(['type_id'=>$id])->one();
         return $model->type_name;
     }
