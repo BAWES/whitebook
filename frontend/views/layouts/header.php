@@ -143,9 +143,9 @@ $action = Yii::$app->controller->action->id;
                                                 <span><?php echo Yii::t('frontend', 'Other'); ?></span>
                                             </a>
                                         </li>
-                                        <li><a title="<?php echo Yii::t('frontend', 'Say Thank you'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'say-thank-you']); ?>">
+                                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'say-thank-you']); ?>">
                                                 <span class="say_thank"></span>
-                                                <span><?php echo Yii::t('frontend', 'Say Thank you'); ?></span>
+                                                <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
                                             </a></li>
                                     </ul>
                                 </div>
@@ -376,9 +376,9 @@ foreach ($event_type as $e) {
                         </a>
                     </li>
                     <li class="ma5-li-1-9">
-                        <a title="<?php echo Yii::t('frontend', 'SAY_THANK_YOU'); ?>" href="<?= Url::toRoute('/products/say-thank-you', true); ?>">
+                        <a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::toRoute('/products/say-thank-you', true); ?>">
                             <span class="say_thank"></span>
-                            <span><?php echo Yii::t('frontend', 'SAY_THANK_YOU'); ?></span>
+                            <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
                         </a></li>
 
                 </ul>
