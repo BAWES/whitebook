@@ -3,7 +3,7 @@ namespace admin\models;
 
 use Yii;
 use yii\db\Expression;
-use yii\helpers\Setdateformat;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "Slide".
@@ -49,15 +49,20 @@ class Slide extends \common\models\Slide {
         return $scenarios;
     }
 
+    public function behaviors() {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
 
     public function beforeSave($insert) {
         if (parent::beforeSave($insert)) {
-             if ($insert) {
-                  $this->created_datetime = Setdateformat::convert(time(),'datetime');
-                } 
-               else {
-                   $this->modified_datetime = Setdateformat::convert(time(),'datetime');
-                }
 
             //All validations pass, upload the files to S3
             if ($this->slide_type == 'video') {
@@ -136,15 +141,15 @@ class Slide extends \common\models\Slide {
 
     public function statusImageurl($img_status)
     {
-        if($img_status == 'Active')     
+        if($img_status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Status Image title
     public function statusTitle($status)
-    {           
-    if($status == 'Active')     
+    {
+    if($status == 'Active')
         return 'Activate';
         return 'Deactivate';
     }
