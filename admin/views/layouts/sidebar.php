@@ -17,7 +17,7 @@
 		$menu = explode('\\',$controller);
 		$menu_act = $menu[2];
 		$first_menu = array('SiteinfoController','ContactsController','SocialinfoController',
-				   'ImageresizeController','SlideController','RoleController','AdminController','AccesscontrolController','FaqController','AdverthomeController');
+				   'SlideController','RoleController','AdminController','AccesscontrolController','FaqController','AdverthomeController');
 		$second_menu = array('CountryController','CityController','LocationController','AddresstypeController','AddressquestionController');
 		$third_menu = array('CategoryController');
 		$fourth_menu = array('FeaturegroupController','EventtypeController','ThemesController','ItemtypeController','PriorityitemController',);
@@ -46,10 +46,7 @@
 					</li>
 					<li class="<?php if ($menu_act == 'SocialinfoController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Social media', ['socialinfo/index'], ['class'=>'link-title']) ?>
-				   </li>
-					<li class="<?php if ($menu_act == 'ImageresizeController') {echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('Manage Image Resize', ['imageresize/index'], ['class'=>'link-title']) ?>
-					</li>
+				 </li>
 					<li class="<?php if ($menu_act == 'SlideController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Manage Banner Slides ', ['slide/index'], ['class'=>'link-title']) ?>
 				  </li>
