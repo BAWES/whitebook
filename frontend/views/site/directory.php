@@ -55,7 +55,7 @@ use yii\helpers\Html;?>
 $ltr = strtoupper(substr($d['vname'],0,1));
 if($ltr==$f)
 {?>
-<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/experience/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
 <?php } }?>
 <?php }?>
 </ul>
@@ -162,7 +162,7 @@ jQuery('#filter_category').change(function(){
 var x= jQuery('#filter_category').val();
 var ajaxdata= jQuery('#ajaxdata').val();
 
-var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('site/searchdirectory'); ?> ";
+var path = "<?= Url::to('site/searchdirectory'); ?> ";
 jQuery.ajax({
 type:'POST',
 url:path,

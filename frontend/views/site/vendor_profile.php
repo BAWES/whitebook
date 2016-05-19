@@ -468,167 +468,167 @@ if ($event_status > 0) {
 <script src="<?= Url::to("@web/js/jquery.mCustomScrollbar.concat.min.js") ?>"></script>
 <!-- continer end -->
 <script type="text/javascript">
-                                                    var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");
-                                                    function setupLabel() {
-                                                        if (jQuery('.label_check input').length) {
-                                                            jQuery('.label_check').each(function () {
-                                                                jQuery(this).removeClass('c_on');
+    var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");
+    function setupLabel() {
+    if (jQuery('.label_check input').length) {
+    jQuery('.label_check').each(function () {
+    jQuery(this).removeClass('c_on');
 
-                                                                if (jQuery(this).parents('.panel-body').find('label.c_on').length == 0) {
-                                                                    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'none');
-                                                                } else {
-                                                                    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'inline-block');
-                                                                }
+    if (jQuery(this).parents('.panel-body').find('label.c_on').length == 0) {
+    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'none');
+    } else {
+    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'inline-block');
+    }
 
-                                                            });
-                                                            jQuery('.label_check input:checked').each(function () {
-                                                                jQuery(this).parent('label').addClass('c_on');
-                                                                if (jQuery(this).parents('.panel-body').find('label.c_on').length == 0) {
-                                                                    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'none');
-                                                                } else {
-                                                                    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'inline-block');
-                                                                }
-                                                            });
-                                                        }
+    });
+    jQuery('.label_check input:checked').each(function () {
+    jQuery(this).parent('label').addClass('c_on');
+    if (jQuery(this).parents('.panel-body').find('label.c_on').length == 0) {
+    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'none');
+    } else {
+    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'inline-block');
+    }
+    });
+    }
 
-                                                        if (jQuery('.label_radio input').length) {
-                                                            jQuery('.label_radio').each(function () {
-                                                                jQuery(this).removeClass('r_on');
-                                                            });
-                                                            jQuery('.label_radio input:checked').each(function () {
-                                                                jQuery(this).parent('label').addClass('r_on');
-                                                            });
-                                                        }
+    if (jQuery('.label_radio input').length) {
+    jQuery('.label_radio').each(function () {
+    jQuery(this).removeClass('r_on');
+    });
+    jQuery('.label_radio input:checked').each(function () {
+    jQuery(this).parent('label').addClass('r_on');
+    });
+    }
 
-                                                    }
+    }
 
-                                                    jQuery(document).ready(function () {
-                                                        jQuery('.label_check, .label_radio').click(function () {
-                                                            setupLabel();
-                                                        });
-                                                        setupLabel();
-                                                        jQuery(".custom-select").change(function () {
-                                                            var selectedOption = jQuery(this).find(":selected").text();
-                                                            jQuery(this).next(".holder").text(selectedOption);
-                                                        }).trigger('change');
-                                                    });
+    jQuery(document).ready(function () {
+    jQuery('.label_check, .label_radio').click(function () {
+    setupLabel();
+    });
+    setupLabel();
+    jQuery(".custom-select").change(function () {
+    var selectedOption = jQuery(this).find(":selected").text();
+    jQuery(this).next(".holder").text(selectedOption);
+    }).trigger('change');
+    });
 
-                                                    jQuery('.label_check input').on('change', function ()
-                                                    {
-                                                        vendorfilter();
-                                                    });
-
-
-                                                    /* */
-                                                    function vendorfilter() {
-                                                        jQuery("#planloader").show();
-                                                        var category_name = jQuery("input[name=category]:checked").map(function () {
-                                                            return this.value;
-                                                        }).get().join('+');
+    jQuery('.label_check input').on('change', function ()
+    {
+    vendorfilter();
+    });
 
 
-                                                        var theme_name = jQuery("input[name=themes]:checked").map(function () {
-                                                            return this.value;
-                                                        }).get().join('+');
+    /* */
+    function vendorfilter() {
+    jQuery("#planloader").show();
+    var category_name = jQuery("input[name=category]:checked").map(function () {
+    return this.value;
+    }).get().join('+');
 
-                                                        var price_val = jQuery("input[name=price]:checked").map(function () {
-                                                            return this.value;
-                                                        }).get().join('+');
 
-                                                        var url_path;
-                                                        var url = window.location.href;
-                                                        var newUrl = url.substring(0, url.indexOf('?'));
+    var theme_name = jQuery("input[name=themes]:checked").map(function () {
+    return this.value;
+    }).get().join('+');
 
-                                                        var slug;
-                                                        if (newUrl != '')
-                                                        {
-                                                            slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
-                                                        }
-                                                        else
-                                                        {
-                                                            slug = url.substring(url.lastIndexOf('/') + 1);
+    var price_val = jQuery("input[name=price]:checked").map(function () {
+    return this.value;
+    }).get().join('+');
 
-                                                        }
+    var url_path;
+    var url = window.location.href;
+    var newUrl = url.substring(0, url.indexOf('?'));
 
-                                                        /* if all checkbox uncheck load items based on category */
-                                                        if (category_name == "" && theme_name == "")
-                                                        {
-                                                            window.history.pushState("test", "Title", newUrl);
-                                                            slug = "<?php echo $slug; ?>";
-                                                        }
+    var slug;
+    if (newUrl != '')
+    {
+    slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
+    }
+    else
+    {
+    slug = url.substring(url.lastIndexOf('/') + 1);
 
-                                                        if (category_name != "" || theme_name != "" || price_val != "")
-                                                        {
-                                                            url_path = '?category=' + category_name + '?themes=' + theme_name + '&price=' + price_val;
-                                                        }
+    }
 
-                                                        var path = "<?= Url::toRoute('/plan/loadvendoritems',true); ?>";
-                                                        <?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
+    /* if all checkbox uncheck load items based on category */
+    if (category_name == "" && theme_name == "")
+    {
+    window.history.pushState("test", "Title", newUrl);
+    slug = "<?php echo $slug; ?>";
+    }
 
-                                                        jQuery.ajax({
-                                                            type: 'POST',
-                                                            url: path,
-                                                            data: {category_name: category_name, themes: theme_name, price: price_val, slug: slug, _csrf: csrfToken},
-                                                            success: function (data) {
-                                                                window.history.pushState("test", "Title", url_path);
-                                                                jQuery('.events_listing ul').html(data);
-                                                                // Every fourth li change margin
-                                                                jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
-                                                                jQuery("#planloader").hide();
-                                                                jQuery(".events_listing").css({"opacity": "1.0", "position": "relative"});
-                                                            }
-                                                        }).done(function () {
-                                                            jQuery(".add_to_favourite").click(function () {
+    if (category_name != "" || theme_name != "" || price_val != "")
+    {
+    url_path = '?category=' + category_name + '?themes=' + theme_name + '&price=' + price_val;
+    }
 
-                                                                jQuery('#loading_img_list').show();
-                                                                jQuery('#loading_img_list').html('<img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />');
+    var path = "<?= Url::toRoute('/plan/loadvendoritems',true); ?>";
+    <?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
 
-                                                                item_id = (jQuery(this).attr('id'));
-                                                                jQueryelement = jQuery(this)
-                                                                jQuery(jQueryelement).parent().toggleClass("faverited_icons");
+    jQuery.ajax({
+    type: 'POST',
+    url: path,
+    data: {category_name: category_name, themes: theme_name, price: price_val, slug: slug, _csrf: csrfToken},
+    success: function (data) {
+    window.history.pushState("test", "Title", url_path);
+    jQuery('.events_listing ul').html(data);
+    // Every fourth li change margin
+    jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
+    jQuery("#planloader").hide();
+    jQuery(".events_listing").css({"opacity": "1.0", "position": "relative"});
+    }
+    }).done(function () {
+    jQuery(".add_to_favourite").click(function () {
 
-                                                                var _csrf = jQuery('#_csrf').val();
-                                                                jQuery.ajax({
-                                                                    url: "<?= Url::toRoute('/users/add_to_wishlist'); ?>",
-                                                                    type: "post",
-                                                                    data: "item_id=" + item_id + "&_csrf=" + _csrf,
-//async: false,
-                                                                    success: function (data)
-                                                                    {
-                                                                        jQuery('#heart_fave').html(data);
-                                                                        jQuery('#loading_img_list').hide();
-                                                                    }
-                                                                });
-                                                            });
-                                                        });
-                                                    }
+    jQuery('#loading_img_list').show();
+    jQuery('#loading_img_list').html('<img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />');
 
-                                                    /* BEGIN CLEAR FILTER */
-                                                    jQuery('a#filter-clear').on('click', function () {
-                                                        jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
-                                                        jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
-                                                        jQuery(this).hide();
-                                                        vendorfilter();
-                                                    })
-                                                    /* END CLEAR FILTER */
+    item_id = (jQuery(this).attr('id'));
+    jQueryelement = jQuery(this)
+    jQuery(jQueryelement).parent().toggleClass("faverited_icons");
 
-                                                    $(document).ready(function () {
-                                                        jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
-                                                        jQuery('.thing_items li:nth-child(8n)').addClass("margin-rightnone");
-                                                    });
+    var _csrf = jQuery('#_csrf').val();
+    jQuery.ajax({
+    url: "<?= Url::toRoute('/users/add_to_wishlist'); ?>",
+    type: "post",
+    data: "item_id=" + item_id + "&_csrf=" + _csrf,
+    //async: false,
+    success: function (data)
+    {
+    jQuery('#heart_fave').html(data);
+    jQuery('#loading_img_list').hide();
+    }
+    });
+    });
+    });
+    }
 
-                                                    jQuery('.collapse').on('shown.bs.collapse', function () {
-                                                        jQuery(this).parent().find(".plus_acc").removeClass("plus_acc").addClass("minus_acc");
-                                                    }).on('hidden.bs.collapse', function () {
-                                                        jQuery(this).parent().find(".minus_acc").removeClass("minus_acc").addClass("plus_acc");
-                                                    });
-                                                    (function (jQuery) {
-                                                        jQuery(window).load(function () {
-                                                            jQuery(".test_scroll").mCustomScrollbar(
-                                                                    {theme: "rounded-dark",
-                                                                        mouseWheelPixels: 50,
-                                                                        scrollInertia: 0
-                                                                    });
-                                                        });
-                                                    })(jQuery);
-</script>
+    /* BEGIN CLEAR FILTER */
+    jQuery('a#filter-clear').on('click', function () {
+    jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
+    jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
+    jQuery(this).hide();
+    vendorfilter();
+    })
+    /* END CLEAR FILTER */
+
+    $(document).ready(function () {
+    jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
+    jQuery('.thing_items li:nth-child(8n)').addClass("margin-rightnone");
+    });
+
+    jQuery('.collapse').on('shown.bs.collapse', function () {
+    jQuery(this).parent().find(".plus_acc").removeClass("plus_acc").addClass("minus_acc");
+    }).on('hidden.bs.collapse', function () {
+    jQuery(this).parent().find(".minus_acc").removeClass("minus_acc").addClass("plus_acc");
+    });
+    (function (jQuery) {
+    jQuery(window).load(function () {
+    jQuery(".test_scroll").mCustomScrollbar(
+    {theme: "rounded-dark",
+    mouseWheelPixels: 50,
+    scrollInertia: 0
+    });
+    });
+    })(jQuery);
+    </script>
