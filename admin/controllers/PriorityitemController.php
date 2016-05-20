@@ -396,15 +396,16 @@ class PriorityitemController extends Controller
             $data = Yii::$app->request->post();
         }
         $ids = implode('","', $data['keylist']);
+        //print_r($ids);die;
         if ($data['status'] == 'Normal') {
-			$command=Priorityitem::updateAll(['priority_level' => 'Normal'],['IN', 'priority_id', $ids]);
+			   $command=Priorityitem::updateAll(['priority_level' => 'Normal'],['IN', 'priority_id', $data['keylist']]);
             if ($command) {
                 echo Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
                 echo Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } elseif ($data['status'] == 'Super') {
-			$command=Priorityitem::updateAll(['priority_level' => 'Super'],['IN', 'priority_id', $ids]);
+			   $command=Priorityitem::updateAll(['priority_level' => 'Super'],['IN', 'priority_id', $data['keylist']]);
 			if ($command) {
                 echo Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
