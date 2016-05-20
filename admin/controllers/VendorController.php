@@ -100,15 +100,15 @@ class VendorController extends Controller
 
         $searchModel3 = new VendoritemcapacityexceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
-        //echo '<pre>';print_r($dataProvider3);die;
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'searchModel3' => $searchModel3,
             'dataProvider' => $dataProvider,
             'dataProvider1' => $dataProvider1,
-            'dataProvider2' => $dataProvider2,
             'dataProvider3' => $dataProvider3,
+            'dataProvider2' => $dataProvider2,
         ]);
     }
 
@@ -436,6 +436,7 @@ class VendorController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
+
         $user_start_date = ($data['start_date']);
         $user_end_date = ($data['end_date']);
         if (strtotime($data['start_date']) <= strtotime($data['end_date'])) {
@@ -444,14 +445,11 @@ class VendorController extends Controller
                 $user_start_date = date('Y-m-d', strtotime('+1 day', strtotime($user_start_date)));
             }
         } else {
-            return '2';
-            die;
+            return 2;
         }
         $package_pricing = Package::loadpackageprice($data['id']);
         $package_name = Package::PackageData($data['id']);
         $datetime = Vendorpackages::find()->where(['vendor_id' => $data['vid']])->asArray()->all();
-        /*$datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select()->where(['vendor_id' => $data['vid']])->all();*/
-        //print_r($datetime);die;
         
         foreach ($datetime as $d) {
             $date = $date1 = $d['package_start_date'];
@@ -466,14 +464,11 @@ class VendorController extends Controller
             foreach ($selected_dates as $key => $value) {
                 $available = in_array($value, $blocked_dates);
                 if ($available) {
-                    return '1';
-                    die;
+                    return 1;
                 }
             }
         }
-        if ($available == 0) {			    
-
-
+        if ($available == 0) {
         $vendor_pack = new Vendorpackages();	
         $vendor_pack->vendor_id = $data['vid'];
         $vendor_pack->package_id = $data['id'];
