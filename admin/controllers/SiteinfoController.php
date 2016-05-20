@@ -61,8 +61,6 @@ class SiteinfoController extends Controller
      */
     public function actionIndex()
     {
-        $this->hi();
-        exit;
         $access = Authitem::AuthitemCheck('4', '10');
         if (yii::$app->user->can($access)) {
             $model = Siteinfo::find()->all();
@@ -164,33 +162,6 @@ class SiteinfoController extends Controller
             $base = Yii::$app->basePath;
 
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $site_logo = UploadedFile::getInstance($model, 'site_logo');
-                $site_favicon = UploadedFile::getInstance($model, 'site_favicon');
-
-                if (!empty($site_logo)) {
-                    // check if uploaded file is set or not
-
-                    if (file_exists($_SERVER['DOCUMENT_ROOT'].'/web/uploads/app_img/'.$model->site_logo)) {
-                        unlink($base.'/web/uploads/app_img/'.$model->site_logo);
-                    }
-                    $len = rand(1, 1000);
-                    $site_logo->saveAs($base.'/web/uploads/app_img/'.$site_logo->baseName.'_'.$len.'.'.$site_logo->extension);
-                    $model->site_logo = $site_logo->baseName.'_'.$len.'.'.$site_logo->extension;
-                } else {
-                    $model->site_logo = Siteinfo::findone($model->id)->site_logo;
-                }
-
-                if (!empty($site_favicon)) {
-                    // check if uploaded file is set or not
-
-                 unlink($base.'/web/uploads/app_img/'.$model->site_favicon);
-                    $len = rand(1, 1000);
-                    $site_favicon->saveAs($base.'/web/uploads/app_img/'.$site_favicon->baseName.'_'.$len.'.'.$site_favicon->extension);
-                    $model->site_favicon = $site_favicon->baseName.'_'.$len.'.'.$site_favicon->extension;
-                } else {
-                    $model->site_favicon = Siteinfo::findone($model->id)->site_favicon;
-                }
-
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Application info updated successfully!');
                 Yii::info('[Site] Admin updated site information.', __METHOD__);
@@ -249,9 +220,4 @@ class SiteinfoController extends Controller
         }
     }
 
-    public function Hi()
-    {
-        return Yii::$app->getResponse()->redirect([Url::to('google.com',true), 302]);
-    }
-    
 }
