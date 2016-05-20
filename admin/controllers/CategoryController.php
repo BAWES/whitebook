@@ -423,9 +423,9 @@ class CategoryController extends Controller
                 return $this->redirect(['manage_subcategory']);
             } else {
                 $subcategory = SubCategory::find()
-            ->where(['parent_category_id' => null])
-            //->asArray()
-            ->all();
+                ->where(['parent_category_id' => null])
+                ->andWhere(['trash'=>'Default'])
+                ->all();
                 $subcategory = ArrayHelper::map($subcategory, 'category_id', 'category_name');
                 //print_r ($subcategory);die;
 
