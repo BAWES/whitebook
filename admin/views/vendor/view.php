@@ -4,6 +4,7 @@ use common\models\Vendoritem;
 use common\models\Itemtype;
 use admin\models\Category;
 use common\models\Package;
+use common\models\Vendorpackages;
 use common\models\Deliverytimeslot;
 use common\models\DeliverytimeslotSearch;
 use yii\helpers\Html;
@@ -124,7 +125,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<tbody>
 		<th>Package Name</th><th>Start Date</th><th>End Date</th><th>Package Price</th><th>Action</th>
 			</tr>
-			<?php $i=0;foreach ($dataProvider2->query as $log) { $sel = ($i==0)?'':''; ?>
+			<?php
+    //   print_r($dataProvider2->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);
+      $i=0;foreach ($dataProvider2->query as $log) { $sel = ($i==0)?'':''; ?>
 			<tr id="tr-<?php echo $log['id']; ?>">
 			<td><?= Package::PackageData($log['package_id']);  ?></td>
             <td><?php $sd=($log['package_start_date']); echo date("d/m/Y", strtotime($sd));?></td>

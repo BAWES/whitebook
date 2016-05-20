@@ -1,5 +1,4 @@
 <?php
-
 namespace admin\controllers;
 
 use Yii;
@@ -75,7 +74,6 @@ class SiteController extends Controller
         $customercnt = Customer::customercount();
         $customermonth = Customer::customermonthcount();
         $customerday = Customer::customerdatecount();
-//print_r ($vendorperiod);die;
         return $this->render('index', ['vendoritemcnt' => $vendoritemcnt, 'monthitemcnt' => $monthitemcnt, 'dateitemcnt' => $dateitemcnt,
         'vendorcnt' => $vendorcnt, 'vendormonth' => $vendormonth, 'vendorday' => $vendorday,
         'customercnt' => $customercnt, 'customermonth' => $customermonth, 'customerday' => $customerday, 'vendorperiod' => $vendorperiod, ]);

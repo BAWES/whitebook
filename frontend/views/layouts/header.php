@@ -416,9 +416,6 @@ foreach ($event_type as $e) {
                 function () {
                     jQuery('#basket_list').show();
                 },
-                function () {
-                    // jQuery('#basket_list').hide();
-                }
         );
 
         jQuery('#sear_button,#desk-search-label').click(function () {

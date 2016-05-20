@@ -32,8 +32,8 @@ class Vendorpackages extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vendor_id', 'package_id', 'package_price', 'created_datetime', 'modified_datetime', 'created_by', 'modified_by'], 'required'],
-            [['vendor_id', 'package_id', 'created_by', 'modified_by'], 'integer'],
+            [['vendor_id', 'package_id', 'package_price'], 'required'],
+            [['vendor_id', 'package_id', 'created_datetime', 'modified_datetime', 'created_by', 'modified_by'], 'integer'],
             [['package_price'], 'number'],
             [['created_datetime', 'modified_datetime'], 'safe']
         ];

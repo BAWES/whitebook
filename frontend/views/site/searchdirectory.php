@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Url;
+
 $total = count($directory);
 if ((!empty($directory)) && ($total > 1)) {
     $first = $total / 3;
@@ -16,7 +18,6 @@ if ((!empty($directory)) && ($total > 1)) {
                         <?php if ($i < $first) { ?>
                     <div class="direct_list">
                         <h2><?php echo $f; ?></h2>
-                        <ul>
                             <?php
                             foreach ($directory as $d) {
                                 $first_letter = strtoupper(substr($d['vname'], 0, 1));

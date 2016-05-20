@@ -20,23 +20,11 @@ class AddressQuestion extends \common\models\AddressQuestion
     
     public static function  loadAddressquestion($addresstypeid)
     {
-        $question = AddressQuestion::find()
+         return $question = AddressQuestion::find()
         ->select(['ques_id','address_type_id','question'])
-        ->where(['address_type_id'=>$addresstypeid])->all();
-       return $question;
-    }
-
-    public static function  loadquestion($addresstypeid)
-    {
-        $question = AddressQuestion::find()
-        ->select(['question'])
-        ->where(['address_type_id'=>$addresstypeid])->all();
-        foreach ($question as $q)
-        {
-            $ques[]=$q['question'];
-        }
-        $ques=implode ('<br>',$ques);
-        return($ques);
+        ->where(['address_type_id'=>$addresstypeid])
+        ->andWhere(['trash'=>'Default'])
+        ->all();
     }
 
     public function statusImageurl($img_status)

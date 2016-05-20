@@ -76,7 +76,7 @@ class Addresstype extends \common\models\Addresstype
   		->select(['type_id','type_name'])
   		->where(['status'=>'Active'])
       ->andWhere(['trash'=>'Default'])
-      ->asarray()->all();
+      ->all();
   		
   		return $addresstype=ArrayHelper::map($addresstype,'type_id','type_name');
   	}

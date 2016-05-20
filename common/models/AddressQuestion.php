@@ -89,7 +89,9 @@ class AddressQuestion extends \yii\db\ActiveRecord
     {
 		$question = AddressQuestion::find()
 		->select(['question'])
-		->where(['address_type_id'=>$addresstypeid])->all();
+		->where(['address_type_id'=>$addresstypeid])
+        ->andWhere(['trash'=>'Default'])
+        ->all();
 		foreach ($question as $q)
 		{
 			$ques[]=$q['question'];

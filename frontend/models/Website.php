@@ -37,8 +37,10 @@ class Website extends Model {
     }
 
     public static function get_search_directory_list($categoryid) {
+        $categoryid = (isset($categoryid)) ? $categoryid : '';
+        
         $today = date('Y-m-d H:i:s');
-            return $data=Vendor::find()
+             return $data=Vendor::find()
                     ->select(['{{%vendor}}.vendor_id AS vid',
                     '{{%vendor}}.vendor_name AS vname',
                     '{{%vendor}}.slug AS slug'])
@@ -53,7 +55,7 @@ class Website extends Model {
 			->groupby(['{{%vendor}}.vendor_id'])
 			->asArray()
 			->all();
-    }
+        }
 
     public static function get_search_directory_all_list() {
 		 $today = date('Y-m-d H:i:s');

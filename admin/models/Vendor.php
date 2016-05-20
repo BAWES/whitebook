@@ -5,7 +5,6 @@ use Yii;
 
 class Vendor extends \common\models\Vendor
 {
-
     /* 
     *
     *   To save created, modified user & date time 
@@ -82,10 +81,8 @@ class Vendor extends \common\models\Vendor
     // Status Image title
     public function statusTitle($status)
     {           
-    if($status == 'Active')     
+    if($status == 'Active')
         return 'Activate';
         return 'Deactivate';
     }
-
-
 }
