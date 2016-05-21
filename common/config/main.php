@@ -23,6 +23,9 @@ return [
         'httpclient' => [
             'class' => 'yii\httpclient\Client',
         ],
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
         'log' => [
             'targets' => [
                 [

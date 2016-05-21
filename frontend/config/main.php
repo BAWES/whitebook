@@ -18,9 +18,6 @@ return [
             'enableCookieValidation' => true,
             'enableCsrfValidation' => false,
         ],
-        'cache' => [
-                    'class' => 'yii\caching\FileCache',
-         ],
         'user' => [
             'identityClass' => 'common\models\Customer',
             'enableAutoLogin' => true,
@@ -40,9 +37,9 @@ return [
                 ],
             ],
         ],
-        /*'errorHandler' => [
-            'errorAction' => 'default/error',
-        ],*/
+        'errorHandler' => [
+            'errorAction' => 'site/error',
+        ],
 
     ],
     'params' => $params,
