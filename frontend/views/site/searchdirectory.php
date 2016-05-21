@@ -26,7 +26,7 @@ if ((!empty($directory)) && ($total > 1)) {
                                 if ($first_letter == $f) {
                                     if ($i < $first) {
                                         ?>
-                                        <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
+                                        <li><a href="<?= Url::toRoute('/site/vendor_profile/'.$d['slug']); ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
                     <?php }
                 }
             } ?>
@@ -73,7 +73,7 @@ if ((!empty($directory)) && ($total > 1)) {
                 $first_letter = strtoupper(substr($d['vname'], 0, 1));
                 if ($first_letter == $f) {
                     ?>
-                                    <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
+                                    <li><a href="<?php Url::toRoute('/site/vendor_profile/'.$d['slug']); ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
                 <?php }
             } ?>
 
