@@ -210,7 +210,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                             } ?>"></span></a>
                                         <?php } ?>
                                         <div id="loading_img" style='display:none'>
-                                        <?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
+                                        <?php $giflink = Url::to("@web/images/ajax-loader.gif"); ?>
                                             <img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />
                                         </div>
                                         <!-- Add to Event End here -->

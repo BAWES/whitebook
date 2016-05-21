@@ -5,17 +5,6 @@ Yii::setAlias('backend', dirname(dirname(__DIR__)) . '/backend');
 Yii::setAlias('admin', dirname(dirname(__DIR__)) . '/admin');
 Yii::setAlias('console', dirname(dirname(__DIR__)) . '/console');
 
-Yii::setAlias('themes', '/admin/web/themes/default/'); // backend
-Yii::setAlias('frontend_app_images', '/frontend/web/images'); // frontend
-
-//Remove The Following Aliases Later
-Yii::setAlias('uploads', '/uploads'); // backend
-Yii::setAlias('sub_category', '@uploads/subcategory_icon/');
-Yii::setAlias('gif_img', '@frontend_app_images/ajax-loader.gif');
-Yii::setAlias('top_category', '@uploads/category_ads/top/');
-Yii::setAlias('bottom_category', '@uploads/category_ads/bottom/');
-Yii::setAlias('home_ads', '@uploads/home_ads/');
-
 //Amazon S3 Alias
 Yii::setAlias('s3','https://thewhitebook.s3.amazonaws.com');
 Yii::setAlias('banner_images','@s3/banner_images');

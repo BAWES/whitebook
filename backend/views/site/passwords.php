@@ -10,6 +10,7 @@ use yii\bootstrap\Alert;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
+
 AppAsset::register($this);
 ?>
 <?= Html::csrfMetaTags() ?>
@@ -23,17 +24,6 @@ AppAsset::register($this);
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta content="" name="description" />
 <meta content="" name="author" />
-<!-- BEGIN CORE CSS FRAMEWORK -->
-<link href="<?= Yii::getAlias('@themes'.'/plugins/pace/pace-theme-flash.css') ?>" rel="stylesheet" type="text/css" media="screen"/>
-<link href="<?= Yii::getAlias('@themes'.'/plugins/boostrapv3/css/bootstrap.min.css') ?>" rel="stylesheet" type="text/css"/>
-<link href="<?= Yii::getAlias('@themes'.'/plugins/boostrapv3/css/bootstrap-theme.min.css') ?>" rel="stylesheet" type="text/css"/>
-<link href="<?= Yii::getAlias('@themes'.'/css/animate.min.css'); ?>" rel="stylesheet" type="text/css"/>
-<!-- END CORE CSS FRAMEWORK -->
-<!-- BEGIN CSS TEMPLATE -->
-<link href="<?= Yii::getAlias('@themes'.'/css/style.css'); ?>" rel="stylesheet" type="text/css"/>
-<link href="<?= Yii::getAlias('@themes'.'/css/responsive.css'); ?>" rel="stylesheet" type="text/css"/>
-<link href="<?= Yii::getAlias('@themes'.'/css/custom-icon-set.css'); ?>" rel="stylesheet" type="text/css"/>
-<!-- END CSS TEMPLATE -->
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -54,7 +44,7 @@ AppAsset::register($this);
 				echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash,'closeButton'=>['label'=>'']]);
 			} ?>
 
-			<?php $form = ActiveForm::begin(['id' => 'login-forms']); ?> 		
+			<?php $form = ActiveForm::begin(['id' => 'login-forms']); ?>
 
 		<div class="row">
 		<div class="form-group col-md-12">

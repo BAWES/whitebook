@@ -563,7 +563,7 @@ if ($event_status > 0) {
     }
 
     var path = "<?= Url::toRoute('/plan/loadvendoritems',true); ?>";
-    <?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
+    <?php $giflink = Url::to("@web/images/ajax-loader.gif"); ?>
 
     jQuery.ajax({
     type: 'POST',

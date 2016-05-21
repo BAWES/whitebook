@@ -593,7 +593,7 @@ url_path = '?themes='+theme_name+'&vendor='+vendor_name+'&price='+price_val;
 var slug = "<?php echo $search;?>";
 var search = "<?php echo $search;?>";
 var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loadsearchresultitems'); ?> ";
-<?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img');?>
+<?php $giflink = Url::to("@web/images/ajax-loader.gif");?>
 jQuery.ajax({
 type:'POST',
 url:path,

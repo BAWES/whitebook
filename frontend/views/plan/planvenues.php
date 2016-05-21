@@ -678,7 +678,7 @@ url_path = '?category='+category_name+'&themes='+theme_name+'&vendor='+vendor_na
 }
 
 var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loaditems'); ?> ";
-<?php $giflink= Yii::$app->homeUrl . Yii::getAlias('@gif_img');?>
+<?php $giflink= Url::to("@web/images/ajax-loader.gif");?>
 jQuery.ajax({
 type:'POST',
 url:path,

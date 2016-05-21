@@ -287,7 +287,7 @@ function logincheck()
                     {
                         jQuery('#login_loader').hide();
                         jQuery('#myModal').modal('hide');
-                        
+
                         if(favourite_status>0){
                             jQuery('#login_success').modal('show');
                             jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Success! Your are login and "'+item_name+'" add to favourite successfully!</span>');
@@ -1079,7 +1079,7 @@ function remove_from_favourite(x)
 
 
 //Add or remove favourites
-<?php $giflink = Yii::$app->homeUrl . Yii::getAlias('@gif_img'); ?>
+<?php $giflink = Url::to("@web/images/ajax-loader.gif"); ?>
 
 jQuery(".add_to_favourite").click(function(){
 
