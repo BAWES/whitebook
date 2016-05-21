@@ -7,7 +7,6 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use yii\bootstrap\Alert;
 use common\models\Vendor;
-use common\models\Siteinfo;
 
 $this->beginPage();
 ?>
@@ -22,7 +21,7 @@ $this->beginPage();
 	<meta content="" name="author" />
 	<?php $this->head();
 	AppAsset::register($this); ?>
-	<link rel="shortcut icon" href="<?php echo Siteinfo::FaviconUrl(); ?>" type="image/x-icon" />
+	<link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
 </head>
 <body class="">
 	<?php $this->beginBody() ?>

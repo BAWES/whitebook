@@ -6,7 +6,6 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use yii\bootstrap\Alert;
-use common\models\Siteinfo;
 
 $this->beginPage();
 ?>
