@@ -28,9 +28,6 @@ return [
         'session' => [
             'name' => 'app-frontend',
         ],
-        'newcomponent' => [
-            'class' => 'backend\components\MainComponent',
-        ],
         'common' => [
             'class' => 'common\components\Common',
         ],
