@@ -702,7 +702,7 @@ jQueryelement = jQuery(this)
 jQuery(jQueryelement).parent().toggleClass("faverited_icons");
 var _csrf=jQuery('#_csrf').val();
 jQuery.ajax({
-url:<?= Url::toRoute('/users/add_to_wishlist'); ?>,
+url:"<?= Url::toRoute('/users/add_to_wishlist'); ?>",
 type:"post",
 data:"item_id="+item_id+"&_csrf="+_csrf,
 //async: false,
