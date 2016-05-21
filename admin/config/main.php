@@ -41,16 +41,6 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'assetManager' => [
-            'bundles' => [
-                'yii\web\JqueryAsset' => [
-                    'sourcePath' => null,   // do not publish the bundle
-                    'js' => [
-                        YII_ENV_DEV ? '' : '',
-                    ],
-                ],
-            ],
-        ],
     ],
     'params' => $params,
 
