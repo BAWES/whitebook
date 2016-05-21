@@ -1,4 +1,4 @@
-<?php 
+<?php
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\Users;
@@ -65,7 +65,7 @@ use frontend\models\Users;
 </div>
 </div>
 </div>
-<!-- login succcess  start--> 
+<!-- login succcess  start-->
 <!-- Modal Login -->
 <!-- Selva success modal start  -->
 <div class="modal fade" id="login_activate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
@@ -228,7 +228,7 @@ use frontend\models\Users;
 <?php
 }
 ?>
-</select>  
+</select>
 </li>
 <li class="month-select">
 
@@ -246,7 +246,7 @@ use frontend\models\Users;
 <option value="10">Oct</option>
 <option value="11">Nov</option>
 <option value="12">Dec</option>
-</select>  
+</select>
 </li>
 <li class="year-select">
 <select class="selectpicker" id="byear" name="byear" data-style="btn-primary" style="display: none;">
@@ -260,7 +260,7 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 }
 ?>
 </select>
-</li>  
+</li>
 </ul>
 <div id="dob_er" class="error"></div>
 </div>
@@ -284,14 +284,14 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 </div>
 
 
-</div> 
+</div>
 <div class="col-md-6 col-sm-6 col-xs-12 padding-left0">
 <div class="form-group">
 <label>Mobile Number</label>
 <input type="text" placeholder="" name="phone" id="phone" class="form-control input-lg validation required">
 <span class="customer_mobile errors"></span>
 </div>
-</div> 
+</div>
 <div class="clearfix"></div>
 <div class="col-md-6 col-sm-6 col-xs-12 padding-right0">
 <div class="form-group">
@@ -299,16 +299,16 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 <input type="password" placeholder="" name="userpassword" id="userpassword" class="form-control input-lg validation required">
 <span class="customer_password password errors"></span>
 </div>
-</div> 
+</div>
 <div class="col-md-6 col-sm-6 col-xs-12 padding-left0">
 <div class="form-group">
 <label>Confirm Password</label>
 <input type="password" placeholder="" name="conpassword" id="conpassword" class="form-control input-lg validation required">
 <span class="customer_conpassword password errors"></span>
 
-<div id="con_pass"  class="error"></div>    
-</div>   
-</div>                             
+<div id="con_pass"  class="error"></div>
+</div>
+</div>
 <div class="clearfix"></div>
 <div class="form-group">
  <div class="i-agree text-center col-xs-12">
@@ -318,7 +318,7 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 </div>
 
 <div id="register_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
-<div class="button-signin">                                
+<div class="button-signin">
 <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 <button type="button" id="register" name="register" class="btn btn-primary btn-lg btn-block login_btn">Register</button>
 </div>
@@ -326,7 +326,7 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 Sign in here </a></span>
 
 </div>
-</div>  
+</div>
 </div>
 
 </form>
@@ -335,10 +335,10 @@ Sign in here </a></span>
 </div>
 </div>
 
-<!-- end -->  
+<!-- end -->
 
 <!-- begin Add to event modal-->
-<div class="modal fade" id="add_to_event" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">                         
+<div class="modal fade" id="add_to_event" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 <div class="modal-dialog">
 <div class="modal-content  modal_member_login signup_poupu row">
 <div class="modal-header">
@@ -362,7 +362,7 @@ Sign in here </a></span>
 </div>
 <!-- end Add to event modal-->
 
-<!-- footer start cntent -->  
+<!-- footer start cntent -->
 <footer id="footer_sections">
 <div class="container paddng0">
 <div class="top_footer">
@@ -402,13 +402,13 @@ via email, phone or live chat.</p>
 </div>
 <div class="bootom_footer_responsive">
 <span class="footer_logo text-center col-xs-12">
-<a href="#" title="Logo"><img src="<?= Url::toRoute('/mobile_logo.svg',true);?>" alt="Logo"/></a>
+<a href="#" title="Logo"><?= Html::img('@web/images/mobile_logo.svg', ['alt' => 'The White Book']); ?></a>
 </span>
 <div class="col-md-7 col-sm-12 padding_left0"  id="accordion">
 <a class="accor-link" data-toggle="collapse" data-parent="#accordion" href="#collapsefoot">Useful Information</a>
 <div id="collapsefoot" class="panel-collapse collapse">
 <ul class="treams_of_ser margin_top">
-	
+
 <li><a href="<?= Url::toRoute('/about-us',true);?>" title="About Us">About Us  </a></li>
 <li><a href="<?= Url::toRoute('/contact-us',true);?>" title="Contact &AMP; FAQ">Contact &AMP; FAQ</a></li>
 <li><a href="<?= Url::toRoute('/brands-product',true); ?>/" title="Brands">Brands</a></li>
