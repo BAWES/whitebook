@@ -237,11 +237,8 @@ class PlanController extends BaseController
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
                     ->limit(12)
-                    ->asArray();
-                    //->all();
-                  print_r($imageData->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
-                    //var_dump($imageData->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);
-                     //die;
+                    ->asArray()
+                    ->all();
                     }
                 }
             }
