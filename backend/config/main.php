@@ -16,9 +16,6 @@ return [
         'request' => [
             'enableCsrfValidation' => false,
         ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-        ],
         'user' => [
             'identityClass' => 'common\models\Vendor',
             'enableAutoLogin' => false,

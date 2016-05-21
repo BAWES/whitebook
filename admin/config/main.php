@@ -16,9 +16,6 @@ return [
         'request' => [
             'enableCsrfValidation' => false,
         ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-        ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
