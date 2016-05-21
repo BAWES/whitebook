@@ -131,7 +131,8 @@ class CustomerController extends Controller
 
                 return $this->redirect(['index']);
             } else {
-                $addresstype = Addresstype::loadAddresstype();
+                $addresstype = Addresstype::loadAddress();
+
                 $country = Country::loadcountry();
 
                 return $this->render('create', [
@@ -173,6 +174,7 @@ class CustomerController extends Controller
                 return $this->redirect(['index']);
             } else {
                 $addresstype = Addresstype::loadAddresstype();
+                
                 $country = Country::loadcountry();
                 $city = City::loadcity();
                 $location = Location::loadlocation();
