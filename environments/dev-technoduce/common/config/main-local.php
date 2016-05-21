@@ -9,6 +9,9 @@ return [
             'charset' => 'utf8',
             'tablePrefix'=>'whitebook_',
         ],
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',

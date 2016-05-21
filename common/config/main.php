@@ -41,9 +41,6 @@ return [
         'urlManager' => [
           'class' => 'yii\web\UrlManager',
         ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-        ],
         'formatter' => [
             'currencyCode' => 'KWD',
             'defaultTimeZone' => 'Asia/Kuwait',
