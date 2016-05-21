@@ -415,7 +415,7 @@ foreach ($event_type as $e) {
         jQuery("#basket_menu").hover(
                 function () {
                     jQuery('#basket_list').show();
-                },
+                }
         );
 
         jQuery('#sear_button,#desk-search-label').click(function () {
