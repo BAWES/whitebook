@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
              'label'=>'Status',
              'format'=>'raw',
 			  'value'=>function($data) {
-				return HTML::a('<img src='.$data->statusImageurl($data->theme_status).' id="image-'.$data->theme_id.'" alt="Status Image" title='.Yii::$app->newcomponent->statusTitle($data->theme_status).'>','javascript:void(0)',['id'=>'status', 
+				return HTML::a('<img src='.$data->statusImageurl($data->theme_status).' id="image-'.$data->theme_id.'" alt="Status Image" title='.$data->statusTitle($data->theme_status).'>','javascript:void(0)',['id'=>'status', 
 				'onclick'=>'change("'.$data->theme_status.'","'.$data->theme_id.'")']);
 				},
 			],

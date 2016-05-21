@@ -58,8 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			  'value'=>function($data) {
 				return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status']);
 				},
-			 'filter' => Yii::$app->newcomponent->Activestatus(),
-			],
+			 'filter' =>  \admin\models\Vendoritem::Activestatus(),
 			[
 				'attribute'=>'sort',
 				'label'=>'Sort Order',

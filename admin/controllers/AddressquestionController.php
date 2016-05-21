@@ -154,10 +154,8 @@ class AddressquestionController extends Controller
     {
         $model = $this->findModel($id);
         $addresstype = Addresstype::loadAddress();
-        
         $addressquestion = AddressQuestion::loadAddressquestion($model->address_type_id);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            //print_r($model->question);die;
             $i = 0;
             foreach ($model->question as $ques) {
                 if ($ques && $i < count($addressquestion)) {
@@ -173,7 +171,6 @@ class AddressquestionController extends Controller
                 ++$i;
             }
             echo Yii::$app->session->setFlash('success', 'Address Question updated successfully!');
-
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [

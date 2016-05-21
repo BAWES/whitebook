@@ -64,4 +64,13 @@ class Featuregroup extends \common\models\Featuregroup
    			$featuregroup=ArrayHelper::map($featuregroup,'group_id','group_name');
    			return $featuregroup;
    	}
+
+
+        // Status Image title
+    public function statusTitle($status)
+    {           
+    if($status == 'Active')
+        return 'Activate';
+        return 'Deactivate';
+    }
 }

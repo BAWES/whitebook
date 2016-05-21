@@ -80,4 +80,10 @@ class Package extends \common\models\Package
 				 return $package_data= Vendor::find()->where(['package_id' => $pack_id])->count();  
 				 
 			}
+
+       //All Gridview Status Filter
+    public function Activestatus()
+    {
+        return $status = ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
+    }
 }

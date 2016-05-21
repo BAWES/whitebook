@@ -96,4 +96,16 @@ class Vendoritem extends \common\models\Vendoritem
         return 'Deactivate';
     }
 
+               //All Gridview Status Filter
+    public function Activestatus()
+    {
+        return $status = ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
+    }
+
+   // Vendor Item Gridview Status Filter
+    public function Vendoritemstatus()
+    {
+        return $status = ['Yes' => 'Yes', 'Pending' => 'Pending','Rejected'=>'Rejected'];
+    }
+
 }

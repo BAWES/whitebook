@@ -85,4 +85,10 @@ class Vendor extends \common\models\Vendor
         return 'Activate';
         return 'Deactivate';
     }
+
+           //All Gridview Status Filter
+    public function Activestatus()
+    {
+        return $status = ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
+    }
 }

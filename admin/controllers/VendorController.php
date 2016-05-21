@@ -100,7 +100,8 @@ class VendorController extends Controller
 
         $searchModel3 = new VendoritemcapacityexceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
-
+        
+        //print_r($dataProvider3);die;
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,

@@ -41,9 +41,6 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'newcomponent' => [
-            'class' => 'common\components\MainComponent',
-        ],
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [

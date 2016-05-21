@@ -41,11 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute'=>'vendor_status',
              'label'=>'Status',
              'format'=>'raw',
-			  'value'=>function($data) {
-				return HTML::a('<img src='.$data->statusImageurl($data->vendor_status).' id="image-'.$data->vendor_id.'" alt="Status Image" title='.Yii::$app->newcomponent->statusTitle($data->vendor_status).'>','javascript:void(0)',['id'=>'status', 
+			  'value'=>function($data,$model) {
+				return HTML::a('<img src='.$data->statusImageurl($data->vendor_status).' id="image-'.$data->vendor_id.'" alt="Status Image" title='.$data->statusTitle($data->vendor_status).'>','javascript:void(0)',['id'=>'status', 
 				'onclick'=>'change("'.$data->vendor_status.'","'.$data->vendor_id.'")']);
 				},
-				'filter' => Yii::$app->newcomponent->Activestatus()
+				'filter' => \admin\models\Vendor::Activestatus()
 			],
 			[
 				'attribute'=>'created_datetime',
