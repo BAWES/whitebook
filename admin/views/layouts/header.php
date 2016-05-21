@@ -23,7 +23,7 @@ use yii\helpers\Url;
             <!-- END MOBILE HEADER -->
             <!-- BEGIN LOGO -->
             <a href="<?php echo Url::to(['site/index']); ?>">
-            <?= Html::img('/site_logo.svg',['class'=>"logo",'width'=>"200",'height'=>"50"]) ?>
+                <?= Html::img('@web/uploads/app_img/logo1_434.png',['class'=>"logo",'width'=>"200"]) ?>
             </a>
             <!-- END LOGO -->
             <ul class="nav pull-right notifcation-center">
@@ -73,7 +73,7 @@ use yii\helpers\Url;
                             <div class="iconset top-settings-dark"></div>
                         </a>
                         <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
-                            <li><a href="<?= Url::toRoute('site/profile'); ?>"> My Account</a>                            
+                            <li><a href="<?= Url::toRoute('site/profile'); ?>"> My Account</a>
                             </li>
                             <li><a href="<?= Url::toRoute('/site/changepassword'); ?>">Change password</a>
                             </li>

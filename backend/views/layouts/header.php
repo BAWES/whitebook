@@ -20,7 +20,7 @@ use yii\helpers\Url;
 			<!-- END MOBILE HEADER -->
 			<!-- BEGIN LOGO -->
 			<a href="<?php echo Url::to(['site/index']); ?>">
-				<?= Html::img(Yii::getAlias('/admin/web/uploads/app_img/').Siteinfo::logoUrl(),['class'=>"logo",'width'=>"200",'height'=>"50"]) ?>
+				<?= Html::img('@web/uploads/app_img/logo1_434.png',['class'=>"logo",'width'=>"200"]) ?>
 			</a>
 			<!-- END LOGO -->
 			<ul class="nav pull-right notifcation-center">
