@@ -12,7 +12,7 @@ return [
         'session' => [ //Use Redis Database for Session Storage
             'class' => 'yii\redis\Session',
             'redis' => [
-                'hostname' => '127.0.0.1',
+                'hostname' => 'localhost',
                 'port' => 6379,
                 'database' => 0,
             ]
@@ -20,7 +20,7 @@ return [
         'cache' => [ //Use Redis Database for Cache
             'class' => 'yii\redis\Cache',
             'redis' => [
-                'hostname' => '127.0.0.1',
+                'hostname' => 'localhost',
                 'port' => 6379,
                 'database' => 1,
             ]
