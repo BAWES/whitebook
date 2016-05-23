@@ -83,7 +83,7 @@ require(__DIR__ . '/../product/events_slider.php');
 <div class="inner_content_plan">
 <h1>SHOP</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
-<a href="<?= Url::toRoute('shop'); ?>" role="button" class="btn btn-default" title="Discover">Discover</a>
+<a href="<?= Url::toRoute('site/shop'); ?>" role="button" class="btn btn-default" title="Discover">Discover</a>
 </div>
 </div>
 </li>
@@ -93,7 +93,7 @@ require(__DIR__ . '/../product/events_slider.php');
 <div class="inner_content_plan">
 <h1>Experience</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</p>
-<a role="button" class="btn btn-default" title="Discover" href="<?= Url::toRoute('default/experience'); ?>">Discover</a>
+<a role="button" class="btn btn-default" title="Discover" href="<?= Url::toRoute('site/experience'); ?>">Discover</a>
 </div>
 </div>
 </li>
@@ -105,9 +105,9 @@ require(__DIR__ . '/../product/events_slider.php');
 $featured_produc = Featuregroup::find()->select(['group_id', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
 $i = 1;
 foreach ($featured_produc as $key => $value) {
-$sql1 = 'SELECT wvi.*,wfgi.vendor_id FROM whitebook_feature_group_item as wfgi 
+$sql1 = 'SELECT wvi.*,wfgi.vendor_id FROM whitebook_feature_group_item as wfgi
 INNER JOIN whitebook_vendor_item as wvi ON wfgi.item_id = wvi.item_id
-where wfgi.group_item_status="Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes" 
+where wfgi.group_item_status="Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes"
 AND type_id=2 AND item_status="Active"
 AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_id)';
 

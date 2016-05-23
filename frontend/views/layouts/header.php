@@ -383,10 +383,10 @@ foreach ($event_type as $e) {
 
                 </ul>
             </li>
-            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('/shop', true); ?>">Shop</a>
+            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('site/shop', true); ?>">Shop</a>
             </li>
-            <li class="ma5-li-3"><a href="<?= Url::toRoute('/experience', true); ?>" title="<?php echo Yii::t('frontend', 'EXPERIENCE'); ?>"><?php echo Yii::t('frontend', 'EXPERIENCE'); ?></a></li>
-            <li class="ma5-li-3"><a href="<?= Url::toRoute('/directory', true); ?>" title="<?php echo Yii::t('frontend', 'DIRECTORY'); ?>"><?php echo Yii::t('frontend', 'DIRECTORY'); ?></a></li>
+            <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'EXPERIENCE'); ?>"><?php echo Yii::t('frontend', 'EXPERIENCE'); ?></a></li>
+            <li class="ma5-li-3"><a href="<?= Url::toRoute('site/directory', true); ?>" title="<?php echo Yii::t('frontend', 'DIRECTORY'); ?>"><?php echo Yii::t('frontend', 'DIRECTORY'); ?></a></li>
 
 
             <div class="logout_part" style="border:none;">
