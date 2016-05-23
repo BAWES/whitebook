@@ -65,8 +65,8 @@ $action = Yii::$app->controller->action->id;
             </div>
 
             <div class="desktop-menu">
-                <div class="col-md-4 col-xs-12 col-sm-4 respo_hidde"></div>
-                <div class="col-md-4 col-xs-12 col-sm-6">
+                <div class="col-md-3 col-xs-12 col-sm-4 respo_hidde"></div>
+                <div class="col-md-6 col-xs-12 col-sm-6">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="sr-only">Toggle navigation</span>
@@ -155,16 +155,25 @@ $action = Yii::$app->controller->action->id;
                                 <?= Html::a(Yii::t('frontend', 'Shop'), ['site/shop'], ['title' => Yii::t('frontend', 'Shop')]); ?>
                             </li>
 
-                            <li  class="<?php if ($action == "experience") {
-    echo "active";
-} ?>"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
-                            <li class="<?php if ($action == "directory") {
-    echo "active";
-} ?>"><a href="<?= Url::toRoute('site/directory', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
+                            <li  class="<?php if ($action == "experience") { echo "active";} ?>">
+                                <a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>">
+                                    <?php echo Yii::t('frontend', 'Experience'); ?>
+                                </a>
+                            </li>
+                            <li  class="<?php if ($action == "themes") { echo "active";} ?>">
+                                <a href="<?= Url::toRoute('site/themes', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>">
+                                    <?php echo Yii::t('frontend', 'Themes'); ?>
+                                </a>
+                            </li>
+                            <li class="<?php if ($action == "directory") { echo "active";} ?>">
+                                <a href="<?= Url::toRoute('site/directory', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>">
+                                    <?php echo Yii::t('frontend', 'Directory'); ?>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-4 col-xs-12 col-sm-6 padding-left0 <?php if (!Yii::$app->user->isGuest) {
+                <div class="col-md-3 col-xs-12 col-sm-6 padding-left0 <?php if (!Yii::$app->user->isGuest) {
     echo 'new_user_name';
 } ?>">
                         <?php if (!Yii::$app->user->isGuest) { ?>
@@ -386,6 +395,7 @@ foreach ($event_type as $e) {
             <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('site/shop', true); ?>">Shop</a>
             </li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'EXPERIENCE'); ?>"><?php echo Yii::t('frontend', 'EXPERIENCE'); ?></a></li>
+            <li class="ma5-li-3"><a href="<?= Url::toRoute('site/themes', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/directory', true); ?>" title="<?php echo Yii::t('frontend', 'DIRECTORY'); ?>"><?php echo Yii::t('frontend', 'DIRECTORY'); ?></a></li>
 
 

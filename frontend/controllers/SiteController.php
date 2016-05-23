@@ -68,7 +68,7 @@ class SiteController extends BaseController
 
     public function actionIndex()
     {
-        
+
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();
@@ -150,6 +150,41 @@ class SiteController extends BaseController
         ]);
     }
 
+    public function actionThemes()
+    {
+        $website_model = new Website();
+        $category_url = Yii::$app->request->get('name');
+        $main_category = $website_model->get_main_category();
+
+        if ($category_url != '') {
+            $category_id = $website_model->get_category_id($category_url);
+        } else {
+            $category_id = '';
+        }
+
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Themes';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
+        $directory = Vendor::get_directory_list();
+        $prevLetter = '';
+        $result = array();
+        foreach ($directory as $d) {
+            $firstLetter = substr($d['vname'], 0, 1);
+            if ($firstLetter != $prevLetter) {
+                $result[] = strtoupper($firstLetter);
+            }
+            $prevLetter = $firstLetter;
+        }
+        $result = array_unique($result);
+
+        return $this->render('directory', [
+          'category' => $main_category,
+          'directory' => $directory,
+          'first_letter' => $result,
+        ]);
+    }
+
     public function actionSearchdirectory()
     {
         $website_model = new Website();
@@ -202,7 +237,7 @@ class SiteController extends BaseController
             $search = str_replace('and', '&', $search);
             $search = str_replace('-', ' ', $search);
             $searchlength = strlen($search);
-            
+
             $model = new Category();
             $active_vendors = Vendor::loadvalidvendors();
 
@@ -230,7 +265,7 @@ class SiteController extends BaseController
 			->groupBy('{{%image}}.item_id')
 			->asArray()
 			->all();
-			
+
             foreach ($imageData as $data) {
                 $k[] = $data['item_id'];
             }
@@ -383,8 +418,8 @@ class SiteController extends BaseController
 			->groupby(['{{%vendor_item}}.item_id'])
 			->asArray()
 			->all();
-			
-            
+
+
 
             if (!isset(Yii::$app->user->identity->customer_id)) {
                 return $this->render('vendor_profile', [
