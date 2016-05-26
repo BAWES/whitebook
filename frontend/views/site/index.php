@@ -131,12 +131,9 @@ if (!empty($feature_group_sql_result)) {
 
 <?php
 $i = 0;
-//echo '<pre>';print_r($feature_group_sql_result);die;
 foreach ($feature_group_sql_result as $f) { //echo $f[$i]['vendor_id'];die;
 $a = $f['item_id'];
 $b = $f['vendor_id'];
-//$loadthemes = Themes::find()->select('theme_id, theme_name')->where(['theme_id'=>$loadtheme_ids[0]['theme_id']])->asArray()->all();
-//$getitemdetails = Vendoritem::find()->where(['item_id'=> $a,'trash'=>'Default','item_for_sale'=>'Yes','type_id'=>2,'item_status'=>'Active'])->asArray()->one();
 $getitemdetails = Vendoritem::find()->where(['item_id' => $a])->asArray()->one();
 $getvendordetails = Vendor::find()->where(['vendor_id' => $b])->asArray()->one();
 if (empty($getitemdetails)) {
@@ -155,7 +152,7 @@ $out = $command->queryAll();
 if ($out) {
 $imglink = Yii::getAlias("@s3/vendor_item_images_210/") . $out[0]['image_path'];
 } else {
-$imglink = Yii::getAlias("@web/images/no_image.png");
+$imglink = Yii::getAlias("@web/images/no_image.jpg");
 }
 ?>
 <div class="item">
@@ -184,27 +181,6 @@ $imglink = Yii::getAlias("@web/images/no_image.png");
 
 </div>
 </section>
-<!-- content main end  -->
-<!-- Modal video start -->
-<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-<div class="modal-content  modal_member_login signup_poupu row">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-</div>
-<div class="modal-body">
-<div class="row">
-<div class="col-xs-8">
-<iframe id="banner_iframe_src" width="583" height="315" src="" frameborder="0" allowfullscreen></iframe>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<!-- video end -->
-
 
 <?php if (count($featured_product) > 0) {
 foreach ($featured_product as $f) {
@@ -225,9 +201,9 @@ foreach ($featured_product as $f) {
 
 <div class="product_popup_signup">
 <div class="product_popup_prod">
-<span class="prod_popu">xxxxxxxx
-<a href="" title=""><img src="<?php echo Url::toRoute('/backend/web/uploads/sig_ban.png'); ?>" alt=""/>xxxxxxsssss</a>
-</span>
+<!-- <span class="prod_popu">xxxxxxxx
+<a href="" title=""><img src="<?php /*echo Url::toRoute('@web/uploads/sig_ban.png');*/ ?>" alt=""/>xxxxxxsssss</a>
+</span> -->
 <div class="desc_popup_cont">
 <h4><?php echo $f['vendor_name']; ?></h4>
 <h3><?php echo $f['item_name']; ?></h3>
@@ -255,19 +231,17 @@ foreach ($featured_product as $f) {
 <?php }
 } ?>
 
-<!-- end -->
-<!-- BEGIN RESPONSIVE FOR HOME PAGE PLAN, SHOP, EXPERIENCE IMAGES WITH A TAG IMPORTANT-->
 <script type="text/javascript">
-if (jQuery(window).width() < 991) {
+if(jQuery(window).width() < 991) {
 var lop = 0;
 jQuery('.plan_sections ul li').each(function (index, value) {
 var hrefli = jQuery(this).find('a').attr('href');
-jQuery(this).find('a').remo ve();
+jQuery(this).find('a').remove();
 jQuery(this).html('<a href="' + hrefli + '" >' + jQuery(this).html() + '<a>');
 });
 }
 
-< !--VIDEO PLAY HOME START-- >
+/* VIDEO PLAY HOME START */
 jQuery(document).ready(function () {
 jQuery('a.play_buttons').click(function () {
 jQuery('#video_click')[0].play();
@@ -289,7 +263,8 @@ jQuery(this).css('background','transparent');
 jQuery('.container_common').css('margin','0');
 jQuery('.event_slider_top').css({'padding':'5px 0 0 0','display':'inline-block','width':'100%','margin':'4px 0 0 0'});
 });
-/* Hide BG FOR EVENT SLIDER*/
-<!--VIDEO PLAY HOME END-->
 </script>
+<!-- Hide BG FOR EVENT SLIDER 
+ VIDEO PLAY HOME END -->
+
 <!--END RESPONSIVE FOR HOME PAGE PLAN, SHOP, EXPERIENCE IMAGES WITH A TAG IMPORTANT-->

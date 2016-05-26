@@ -28,15 +28,6 @@ use yii\helpers\Html;?>
 <option data-icon="service-category" value="services">Services</option>
 <option data-icon="others-category" value="others">Others</option>
 <option data-icon="saythankyou-category" value="say-thank-you">Say "Thank You"</option>
-<?php /*<option data-icon="venue-category">Venues</option>
-<option data-icon="invitation-category">Invitations</option>
-<option data-icon="food-category">Food &Beverage</option>
-<option data-icon="decor-category">Decor</option>
-<option data-icon="supply-category">Supplies</option>
-<option data-icon="enter-category">Entertainment</option>
-<option data-icon="service-category">Services</option>
-<option data-icon="other-category">Others</option>
-<option data-icon="say-category">Say Thank you</option> */?>
 </select>
 </div>
 </div>

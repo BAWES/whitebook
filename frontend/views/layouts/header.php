@@ -293,7 +293,7 @@ foreach ($event_type as $e) {
                                     </div>
                                     <div id="eventresult" style="color:red"></div>
                                     <div class="eventErrorMsg error" style="color:red;margin-bottom: 10px;"></div>
-                                    <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::to('@web/images/ajax-loader.gif'); ?>" title="Loader"></div>
+                                    <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>" title="Loader"></div>
                                     <div class="buttons">
                                         <div class="creat_evn_sig">
                                             <button type="button" id="create_event_button" name="create_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'CREATE_EVENT'); ?>"><?php echo Yii::t('frontend', 'CREATE_EVENT'); ?></button>
@@ -425,8 +425,7 @@ foreach ($event_type as $e) {
         jQuery("#basket_menu").hover(
                 function () {
                     jQuery('#basket_list').show();
-                }
-        );
+                }),
 
         jQuery('#sear_button,#desk-search-label').click(function () {
             jQuery('#search_input_header').focus();
