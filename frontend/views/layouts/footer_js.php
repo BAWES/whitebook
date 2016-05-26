@@ -1,9 +1,8 @@
 <?php
 use Yii\helpers\Url;
+$this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
-
 <script type="text/javascript">
-var jQuery = $;
 jQuery(document).ready(function () {
     jQuery('#phone,#reg_email').bind("paste",function(e) {
         e.preventDefault();
@@ -14,25 +13,18 @@ jQuery(document).ready(function () {
     jQuery('.new_btn').click(function(e) {
         jQuery('#myModal').modal('hide');
     });
-    /*Popup modal script End*/
-    /*jQuery(".dropdown").click(function () {
-    alert("hi");
-});*/
-/* mobile hover menu start */
-jQuery(".mobile-menu .dropdown").click(function () {
-    //  jQuery('.dropdown-menu1', this).stop(true, true).slideDown("fast");
-    //jQuery(this).toggleClass('open');
-    jQuery(this).addClass('open');
-},
-function () {
-    //  jQuery('.dropdown-menu1', this).stop(true, true).slideUp("fast");
-    //jQuery(this).toggleClass('open');
-    jQuery(this).removeClass('open');
-});
+
+    /* mobile hover menu start */
+    jQuery(".mobile-menu .dropdown").click(function () {
+        jQuery(this).addClass('open');
+    },
+    function () {
+        jQuery(this).removeClass('open');
+    });
 
 /* mobile hover menu end */
 
-<!-- web hover menu start -->
+/* web hover menu start */
 jQuery(".desktop-menu .dropdown").hover(function () {
     jQuery('.dropdown-menu1', this).stop(true, true).slideDown("fast");
     jQuery(this).addClass('open');
@@ -68,7 +60,7 @@ function isTouchDevice() {
     return 'ontouchstart' in window
 };
 if( isTouchDevice() ) {
-    jQuery("body").swipe( {
+    jQuery("body").swipe({
         swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
             if ( direction == 'left' ) { jQuery('html').removeClass('ma5-menu-active');}
             if ( direction == 'right' ) { jQuery('html').addClass('ma5-menu-active');}
@@ -1355,8 +1347,7 @@ jQuery('.search-lbl-mobile').click(function()
 {
     if(jQuery('.mobile-menu').hasClass('open-search-menu'))
     {
-
-        jQuery("#mobile-sid").removeClass('open-search-menu')
+        jQuery("#mobile-sid").removeClass('open-search-menu');
 
     }
     else{
@@ -1380,8 +1371,6 @@ jQuery('.js-search-cancel,#search_list ul li a').click(function()
     jQuery( "#mobile_search_list" ).html('');
     jQuery( "#mobile_search_fail" ).html('');
     jQuery( "#search-terms2" ).val('');
-
-
 });
 /*open-search part add class 23-11-2015*/
 </script>

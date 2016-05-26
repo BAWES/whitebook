@@ -20,7 +20,8 @@ var hasClass, addClass, removeClass;
 
 if ( 'classList' in document.documentElement ) {
   hasClass = function( elem, c ) {
-    return elem.classList.contains( c );
+    if(elem)
+    return elem.classList.contains(c);
   };
   addClass = function( elem, c ) {
     elem.classList.add( c );

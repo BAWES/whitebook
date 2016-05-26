@@ -35,12 +35,9 @@ class AppAsset extends AssetBundle
         'js/jquery.flexslider.js',
         'js/classie.js',
         'js/main.js',
-        'js/search.js',
         'js/owl.carousel.js',
         'js/bootstrap-datepicker.js',
         'js/bootstrap-select.js'
-
-
     ];
     public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $depends = [
