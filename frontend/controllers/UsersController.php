@@ -459,10 +459,11 @@ class UsersController extends BaseController
     public function actionEvents()
     {
 
-        $customer_id = Yii::$app->user->identity->customer_id;
-        if ($customer_id == '') {
+        
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+        $customer_id = Yii::$app->user->identity->customer_id;
         $website_model = new Website();
         $event_type = $website_model->get_event_types();
         $model = new Users();
@@ -692,10 +693,15 @@ class UsersController extends BaseController
 			
 			$eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
 			->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
-			->Where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%event_item_link}}.event_id'=>$event_details[0]['event_id']])
+			->Where(['{{%vendor_item}}.item_status'=>'Active',
+                '{{%vendor_item}}.trash'=>'Default',
+                '{{%vendor_item}}.item_for_sale'=>'Yes',
+                '{{%vendor_item}}.type_id'=>'2',
+                '{{%event_item_link}}.event_id'=>$event_details[0]['event_id']])
 			->asArray()
 			->all();
             $searchModel = new EventinviteesSearch();
+            
             $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $slug);
 
             /* Load level 1 category */

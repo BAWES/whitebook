@@ -54,7 +54,7 @@ foreach ($customer_event_type as $key => $value) { ?>
 foreach ($customer_events as $key => $value) { ?>
 <li>
 <div class="delet_icons_new" onclick="deletefiltering1('<?php echo $value['event_id'];?>');"></div>
-<a href="<?php echo Url::toRoute("/event-details/".$value['slug']); ?>" id="<?php echo $value['event_id'];?>" title="<?= $value['event_name']; ?>">
+<a href="<?= Url::toRoute(['/users/eventdetails/','slug'=>$value['slug']]); ?>" id="<?php echo $value['event_id'];?>" title="<?= $value['event_name']; ?>">
 
 <div class="thing_inner_items">
 <h3><?php if(strlen($value['event_name'])>12){echo substr($value['event_name'], 0, 12).' ...';}else{ echo$value['event_name'];} ?></h3>
