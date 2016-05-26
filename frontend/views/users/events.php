@@ -160,13 +160,13 @@ foreach ($wishlist as $key => $value) {
 <?php
 $image = Image::find()->select('image_path')->where(['item_id'=>$value['item_id'],'module_type'=>'vendor_item', 'trash'=>'Default'])->asArray()->one();
 ?>
-<?= Html::img(Yii::getAlias("@vendor_item_images_210/").$image['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?>
+<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$image['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),
+Url::toRoute(['/product/product/','slug'=>$value['slug']])); ?>
 </div>
 <div class="events_descrip">
-<a title="<?= $value['item_name']; ?>" href="<?php echo Yii::$app->homeUrl; ?>/product/<?= $value['slug']; ?>"><?= $value['vendor_name']; ?>
+<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']]));?> 
 <h3><?= $value['item_name']; ?></h3>
 <p><?php if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-'; ?></p>
-</a>
 </div>
 </div>
 </li>
