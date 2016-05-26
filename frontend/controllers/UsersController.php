@@ -57,8 +57,7 @@ class UsersController extends BaseController
             if($model->login() == 1) {
                     Customer::setEventSession($model->customer_email);
                     $return_data['status'] = '1';
-                    echo json_encode($return_data);
-                    exit;
+                    return json_encode($return_data);
                 }
                 else
                 {
@@ -238,25 +237,20 @@ class UsersController extends BaseController
     }
     public function actionAccount_settings()
     {
-        $customer_id = Yii::$app->user->identity->customer_id;
-        if ($customer_id == '') {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         $country = Country::loadcountry();
 
         $model = new Users();
-        $user_detail = $model->get_user_details($customer_id);
-
-        $customer_details = array_merge($user_detail, $user_detail[0]['customerAddress']);
-        unset($customer_details[0]['customerAddress']);
-        $customer_detail = array_merge($customer_details[0], $customer_details[1]);
+        $user_detail = $model->get_user_details();
 
         if (!empty($customer_detail['country_id'])) {
             $city = City::listcityname($customer_detail['country_id']);
         } else {
             $city = City::fullcityname();
         }
-        return $this->render('account-settings', ['user_detail' => $customer_detail, 'loadcountry' => $country, 'loadcity' => $city]);
+        return $this->render('account-settings', ['user_detail' => $user_detail, 'loadcountry' => $country, 'loadcity' => $city]);
     }
 
     public function actionEdit_profile()

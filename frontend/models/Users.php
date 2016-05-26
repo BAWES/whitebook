@@ -65,11 +65,12 @@ class Users extends Model
             ->all();
     }
 
-    public static function get_user_details($customer_id)
+    public static function get_user_details()
     {
         return $ads = Customer::find()
-        ->joinWith('customerAddress')
-        ->where(['{{%customer_address}}.customer_id'=>Yii::$app->user->identity->customer_id])
+        ->select('{{%customer_address}}.*,{{%customer}}.*')
+        ->leftjoin('{{%customer_address}}','{{%customer_address}}.customer_id = {{%customer}}.customer_id')
+        ->where(['{{%customer}}.customer_id'=>Yii::$app->user->identity->customer_id])
         ->asArray()
         ->all();
     }
@@ -79,7 +80,7 @@ class Users extends Model
       $user = Customer::find()->select('customer_id,customer_activation_status,customer_status,
         trash,customer_name,customer_email')->where(['trash'=>"Default",'customer_email'=>$email])
       ->asArray()
-      ->one();
+      ->all();      
         if (count($user) > 0) {
             if ($user[0]['customer_activation_status'] == 0) {
                 return -1;
