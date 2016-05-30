@@ -38,7 +38,8 @@ class Accesscontroller extends \yii\db\ActiveRecord
         return [
            // [['create','update','delete','manage','view'], 'required'],
             [['admin_id','controller',], 'required'],
-            [['role_id', 'admin_id'], 'integer'],
+            [['role_id'], 'integer'],
+            [['admin_id'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe'],
         ];
     }

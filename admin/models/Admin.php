@@ -264,8 +264,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 		->asArray()
 		->all();
 		
-		$admin=ArrayHelper::map($admin,'id','admin_name');
-        return $admin;
+		return $admin=ArrayHelper::map($admin,'id','admin_name');
 	}
 
 		public static function Adminupdate()

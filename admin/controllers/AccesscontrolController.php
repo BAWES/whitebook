@@ -106,10 +106,6 @@ class AccesscontrolController extends Controller
             $admin = Admin::admin();
             $authitem = Authitem::Authitem();
             if ($_POST) {
-				//print_r ($_POST);die;
-				$model->load(Yii::$app->request->post());
-				//print_r ($_POST['Accesscontroller']['admin_id']);die;
-				//print_r ($model->admin_id);die;
                 $model->load(Yii::$app->request->post());
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
