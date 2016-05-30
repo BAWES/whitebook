@@ -45,8 +45,9 @@ if (!empty($imageData)) {
                                         <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a></div>
             <?php } ?>
                             </div>
-                            <a href="<?php echo Yii::$app->homeUrl; ?>/product/<?php echo $value['slug']; ?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $value['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?></a>
-                        </div>
+                           <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),
+Url::toRoute(['/product/product/','slug'=>$value['slug']])); ?>
+                                                    </div>
 
                         <div class="events_descrip">
                             <a href="product_pageshop_with_table.html" title=""><?= $value['vendor_name'] ?>

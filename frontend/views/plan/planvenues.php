@@ -86,7 +86,7 @@ if($category_det['category_name']!='Say thank you'){
 
 /* Get slug name to find category */
 $subcategory = SubCategory::loadsubcat($slug);
-//echo '<pre>';print_r($subcategory);die;
+
 $col=1;
 foreach ($subcategory as $key => $value) {
 $t = $in ='';
@@ -623,7 +623,7 @@ jQuery('#main-category').change(function(){
 //alert(jQuery('option[name=category]').val());
 var s = jQuery('#main-category :selected').val();
 var hostname = window.location.href;
-var newUrl1 = url.substring(0, url.indexOf('products'));
+var newUrl1 = url.substring(0, url.indexOf('plan'));
 window.location.href = jQuery(this).val();
 });
 /* END load category and reload the page */
@@ -651,33 +651,33 @@ return this.value;
 var url_path;
 /* BEGIN GET SLUG FROM URL */
 var url = window.location.href;
-var newUrl = url.substring(0, url.indexOf('?'));
+slug = <?= '"'.$_GET['slug'].'"';?>;
+/* var newUrl = url.substring(0, url.indexOf('?'));
 
-var slug;
 if(newUrl !='')
 {
-	 slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
+		slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
 }
 else
 {
 	slug = url.substring(url.lastIndexOf('/') + 1);
 
-}
+} */
 /* END GET SLUG FROM URL */
 
 /* if all checkbox uncheck load items based on category */
 if(category_name =="" && theme_name =="" && vendor_name =="")
 {
 window.history.pushState("test", "Title", newUrl);
-slug = <?= '"'.$slug.'"'; ?>;
+//slug = <?= '"'.$slug.'"'; ?>;
 }
 
 if(category_name !="" || theme_name !="" || vendor_name !="" || price_val !="")
 {
-url_path = '?category='+category_name+'&themes='+theme_name+'&vendor='+vendor_name+'&price='+price_val;
+url_path = '?slug='+slug+'&category='+category_name+'&themes='+theme_name+'&vendor='+vendor_name+'&price='+price_val;
 }
 
-var path = "<?php echo Yii::$app->urlManager->createAbsoluteUrl('plan/loaditems'); ?> ";
+var path = "<?= Url::to(['plan/loaditems']); ?> ";
 <?php $giflink= Url::to("@web/images/ajax-loader.gif");?>
 jQuery.ajax({
 type:'POST',
