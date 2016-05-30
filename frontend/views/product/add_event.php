@@ -5,7 +5,7 @@ foreach ($model as $key => $value) { ?>
 <div class="product_popup_signup">
 <div class="product_popup_prod">
 <span class="prod_popu">
-<?= Url::to(Html::img(Yii::getAlias("@vendor_item_images_210").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])); ?>
+<?= Url::to(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])); ?>
 </span>
 <div class="desc_popup_cont">
 <h4><?= $value['vendor_name']  ?></h4>
