@@ -1,4 +1,4 @@
-<?php
+<?php 
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\Users;
@@ -65,7 +65,7 @@ use frontend\models\Users;
 </div>
 </div>
 </div>
-<!-- login succcess  start-->
+<!-- login succcess  start--> 
 <!-- Modal Login -->
 <!-- Selva success modal start  -->
 <div class="modal fade" id="login_activate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
@@ -153,14 +153,9 @@ use frontend\models\Users;
 </div>
 <div id="reset_pwd_result" style="color:red"></div>
 <div class="button-signin">
-<button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_reset_password();">NEW USER</button>
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="reset_button" name="reset_button">Submit</button>
 </div>
 <div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
-
-<span class="text-center forgotpwd">
-<a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"> Sign in</a>
-</span>
 <div class="button-signin">
 
 </div>
