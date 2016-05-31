@@ -25,9 +25,6 @@ return [
         'session' => [
             'name' => 'app-frontend',
         ],
-        'common' => [
-            'class' => 'common\components\Common',
-        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
