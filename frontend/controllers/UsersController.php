@@ -32,19 +32,13 @@ use frontend\models\Users;
 
 class UsersController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        Yii::$app->language = 'en-EN';
-    }
-
     public function actionIndex()
     {
         return $this->render('index');
     }
 
     public function actionLogin()
-    {   
+    {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -54,9 +48,9 @@ class UsersController extends BaseController
         if (isset($_POST['email']) && isset($_POST['password'])) {
             $model->customer_email = $_POST['email'];
             $model->customer_password = $_POST['password'];
-            if($model->login() == 1) {
-                    Customer::setEventSession($model->customer_email);
-                    $return_data['status'] = '1';
+            //return ($model->login());
+            if($model->login() == Customer::SUCCESS_LOGIN) {
+                    $return_data['status'] = Customer::SUCCESS_LOGIN;
                     return json_encode($return_data);
                 }
                 else
@@ -65,7 +59,7 @@ class UsersController extends BaseController
                     echo json_encode($return_data);
                 }
         } else {
-            return $this->redirect(Yii::$app->request->urlReferrer);
+            return $this->redirect(Yii::$app->request->referrer);
         }
     }
 
@@ -124,7 +118,7 @@ class UsersController extends BaseController
                     die;
                     $this->redirect(Url::to('site/index'));
                 }
-            } 
+            }
             return $this->render('/users/signup', [
             'model' => $model,
             'error' => $error,
@@ -215,7 +209,7 @@ class UsersController extends BaseController
                 if (count($check_user) > 0) {
                    $val = 1;
                 }
-                return $val; 
+                return $val;
             }
         }
     }
@@ -323,7 +317,7 @@ class UsersController extends BaseController
             Yii::$app->session->set('event_name', $event_name);
             $customer_id = Yii::$app->user->identity->customer_id;
             // Creating event start
-            
+
             $customer_id = Yii::$app->user->identity->customer_id;
 			$event_date1 = date('Y-m-d', strtotime($event_date));
 			$string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
@@ -342,7 +336,7 @@ class UsersController extends BaseController
 			$result=$event_modal->event_id;
 			}
             // Creating event end
-            
+
             if ($result == -1) {
                 echo -1;
                 exit;
@@ -459,7 +453,7 @@ class UsersController extends BaseController
     public function actionEvents()
     {
 
-        
+
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -690,7 +684,7 @@ class UsersController extends BaseController
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
             $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
-			
+
 			$eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
 			->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
 			->Where(['{{%vendor_item}}.item_status'=>'Active',
@@ -701,7 +695,7 @@ class UsersController extends BaseController
 			->asArray()
 			->all();
             $searchModel = new EventinviteesSearch();
-            
+
             $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $slug);
 
             /* Load level 1 category */

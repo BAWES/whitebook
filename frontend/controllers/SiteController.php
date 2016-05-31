@@ -54,21 +54,8 @@ class SiteController extends BaseController
         ];
     }
 
-    public function init()
-    {
-        parent::init();
-        yii::$app->language = 'en-EN';
-    }
-
-    public function  beforeAction($action)
-    {
-        $session = Yii::$app->session;
-        return true;
-    }
-
     public function actionIndex()
     {
-
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();

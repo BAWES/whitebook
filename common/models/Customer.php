@@ -37,6 +37,11 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
 
+    const TRASH_DELETED = "Deleted";
+
+    const ACTIVATION_TRUE = 1;
+    const ACTIVATION_FALSE = 0;
+
     //Email verification values for `customer_email_verification`
     const EMAIL_VERIFIED = 1;
     const EMAIL_NOT_VERIFIED = 0;
@@ -217,7 +222,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      * @param string $password password to validate
      * @return boolean if password provided is valid for current user
      */
-    /* 
+    /*
     public function validatePassword($password) {
         return Yii::$app->security->validatePassword($password, $this->customer_password_hash);
     }*/
@@ -227,7 +232,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
      *
      * @param string $password
      */
-    /* 
+    /*
     public function setPassword($password) {
         $this->customer_password_hash = Yii::$app->security->generatePasswordHash($password);
     } */
