@@ -60,6 +60,7 @@ class SiteController extends BaseController
     public function actionActivate()
     {
         Yii::$app->session->set('reset_password_mail', '');
+
         $website_model = new Website();
         $product_list = $website_model->get_featured_product_id();
         $featured_product = $website_model->get_featured_product();
@@ -67,9 +68,9 @@ class SiteController extends BaseController
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
 
-        $customer_id = Yii::$app->user->identity->customer_id;
         $customer_events = array();
 
+        $customer_id = Yii::$app->user->identity->customer_id;
         if ($customer_id != '') {
             $customer_events = $website_model->getCustomerEvents($customer_id);
         }
@@ -274,6 +275,7 @@ class SiteController extends BaseController
                 return $this->render('search', ['imageData' => $imageData,
         'themes' => $themes1, 'vendor' => $vendor, 'slug' => $slug, 'search' => $search, ]);
             } else {
+                $customer_id = Yii::$app->user->identity->customer_id;
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
 
                 return $this->render('search', ['imageData' => $imageData,

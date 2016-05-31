@@ -11,8 +11,6 @@ use frontend\models\Website;
  */
 class BaseController extends Controller
 {
-
-    public $customer_id;
     public function init()
     {
         parent::init();
