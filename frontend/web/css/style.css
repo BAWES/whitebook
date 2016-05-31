@@ -528,11 +528,11 @@ textarea .form-group{ min-height: 126px;}
 .panel-heading .panel-title > a:hover{ text-decoration: none;}
 .cont_ifo_left h3 a{font:300 11pt/20px 'proxima_nova_rgregular'; color: #808080 ; padding:0 0 0 22px; margin: 0px; background: url(../images/mssg.png) left center no-repeat; display: inline-block; vertical-align: top;}
 .cont_ifo_left h3{ margin: 0px;}
-.cont_ifo_left h4{font:300 13px 'proxima_nova_rgregular'; color: #808080 ; margin: 0px;padding:0 0 0 19px; background: url(../images/mobil1.png) left center no-repeat; }
+.cont_ifo_left h4{font:300 13px 'proxima_nova_rgregular'; color: #808080 ;  margin: 7px 0 0 0;padding:0 0 0 19px; background: url(../images/mobil1.png) left center no-repeat; }
 .cont_ifo_left .flaticon-email5::before{ font-size: 10pt; color: #808080; }
 .cont_ifo_right .links_left a {font:300 13px 'proxima_nova_rgregular'; color: #808080 ; padding:0 0 0 30px; background: url(../images/linkes.png) left center no-repeat; display: inline-block;}
 .cont_ifo_right .timer_common{font:300 13px 'proxima_nova_rgregular'; color: #808080 ; padding:0 0 0 30px; background: url(../images/time.png) left center no-repeat;}
-.border-bottom{ display: inline-block; width: 100%;  border-bottom: 1px solid #e6e6e6; vertical-align: top; margin: 7px 0 0 0;}
+.border-bottom{ display: inline-block; width: 100%;  border-bottom: 1px solid #e6e6e6; vertical-align: top; margin: 10px 0 0 0;}
 .border-bottom.border-bottom-none{display:none;}
 .cont_ifo_right .border-bottom{ margin: 13px 0 11px;}
 .contact_information address{ margin: 0px;}
