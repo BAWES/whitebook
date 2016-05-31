@@ -400,6 +400,8 @@ class SiteController extends BaseController
                 $wish_limit = 6;
                 $offset = 0;
                 $type = '';
+                $customer_id = Yii::$app->user->identity->customer_id;
+
                 $model = new Users();
                 $customer_events_list = $model->get_customer_wishlist_details($customer_id);
                 $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);

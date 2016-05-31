@@ -28,8 +28,8 @@ class AppAsset extends AssetBundle
         'css/datepicker_popup.css'
     ];
     public $js = [
-        'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js',
-        'https://code.jquery.com/ui/1.11.3/jquery-ui.min.js',
+        'jsjquery.min.js',
+        'js/jquery-ui.min.js',
         'js/modernizr.js',
         'js/bootstrap.min.js',
         'js/jquery.flexslider.js',
