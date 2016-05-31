@@ -67,12 +67,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '{update} {delete}{link}',
 			'buttons' => [
 				'update' => function ($url,$model) {
-				$url = '../category/subcategory_update/?id='.$model->category_id;
+				$url = Url::toRoute(['/category/subcategory_update', 'id'=>$model->category_id]);
 				return Html::a(
 					'<span class="glyphicon glyphicon-pencil"></span>',$url);
 					},
 				'delete' => function ($url,$model) {
-				$url = '../category/subcategory_delete/?id='.$model->category_id;
+				$url = Url::toRoute(['/category/subcategory_delete', 'id'=>$model->category_id]);
 				return 
 				 Html::a(
 					'<span class="glyphicon glyphicon-trash"></span>',$url,['title'=>'Delete','data-confirm'=>'Are you sure you want to delete this item?']);

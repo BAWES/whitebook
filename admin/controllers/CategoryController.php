@@ -575,7 +575,7 @@ class CategoryController extends Controller
             if (!empty($vendor_item)) {
                 echo Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
 
-                return $this->redirect(['index']);
+                return $this->redirect(['manage_subcategory']);
             }
             $model = $this->findModel($id);
             $parentcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $id])->all();
@@ -596,7 +596,7 @@ class CategoryController extends Controller
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            return $this->redirect(['site/manage_subcategory']);
         }
     }
 
@@ -608,11 +608,11 @@ class CategoryController extends Controller
             if (!empty($vendor_item)) {
                 echo Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
 
-                return $this->redirect(['index']);
+                return $this->redirect(['child_category_index']);
             }
 
             $model = $this->findModel($id);
-            $category=Category::updateAll(['trash' => 'Deleted'],['category_id= '.$id]);
+            $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$id]);
             
             if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Child category deleted successfully!');
@@ -626,7 +626,7 @@ class CategoryController extends Controller
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            return $this->redirect(['site/child_category_index']);
         }
     }
 
