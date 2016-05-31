@@ -91,7 +91,7 @@ class UsersController extends BaseController
                     $siteinfo = Siteinfo::find()->asArray()->all();
                     $username = $model['customer_name'];
                     Yii::$app->session->set('register', '1');
-                    $message = 'Thank you for registration with us.</br><a href='.Yii::$app->request->hostInfo.'/frontend/web/index.php'.Url::to('/users/confirm_email?key='.$model->customer_activation_key).' title="Click Here">Click here </a> to activate your account.';
+                    $message = 'Thank you for registration with us.</br><a href='.Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true).' title="Click Here">Click here </a> to activate your account.';
                     //Send Email to user
                     $send_user = Yii::$app->mailer->compose
                     (["html"=>"customer/welcome"],
@@ -125,46 +125,40 @@ class UsersController extends BaseController
         ]);
     }
 
-    public function actionReset_confirm()
+    public function actionReset_confirm($cust_id)
     {
-        if (isset($_GET['cust_id'])) {
-            $model = new Users();
-            $check = $model->check_customer_validtime($_GET['cust_id']);
-            if (!empty($check)) {
-                Yii::$app->session->set('reset_password_mail', $_GET['cust_id']);
-            } else {
-                Yii::$app->session->set('reset_password_mail', '1');
-            }
-            return $this->goHome();
-        }
-    }
-    public function actionConfirm_email()
-    {
-        if (isset($_GET['key'])) {
-            $model = new Users();
-            $key = $_GET['key'];
-            $check_key = $model->check_valid_key($key);
-            if ($check_key == 1) {
-                //Yii::$app->session->setFlash('error', "Invalid key!");
-                return $this->goHome();
-            } else {
-                $login_det = $model->customer_logindetail($key);
-                $email = $login_det[0]['customer_email'];
-                //$password = $login_det[0]['customer_org_password'];
-
-                $authorization = $model->check_authorization($email);
-                print_r($authorization);die;
-                Yii::$app->session->set('key', '1');
-                Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
-                Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
-                Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
-                //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
-                //print_r ($login_det);die;
-                return $this->redirect(Url::toRoute('/site/activate'));
-                //return $this->goHome();
-            }
+        $model = new Users();
+        $check = $model->check_customer_validtime($cust_id);
+        if (!empty($check)) {
+            Yii::$app->session->set('reset_password_mail', $cust_id);
         } else {
+            Yii::$app->session->set('reset_password_mail', '1');
+        }
+        return $this->goHome();
+    }
+
+    public function actionConfirm_email($key)
+    {
+        $model = new Users();
+        $check_key = $model->check_valid_key($key);
+        if ($check_key == 1) {
+            //Yii::$app->session->setFlash('error', "Invalid key!");
             return $this->goHome();
+        } else {
+            $login_det = $model->customer_logindetail($key);
+            $email = $login_det[0]['customer_email'];
+            //$password = $login_det[0]['customer_org_password'];
+
+            $authorization = $model->check_authorization($email);
+            print_r($authorization);die;
+            Yii::$app->session->set('key', '1');
+            Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
+            Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
+            Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
+            //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
+            //print_r ($login_det);die;
+            return $this->redirect(Url::toRoute('/site/activate'));
+            //return $this->goHome();
         }
     }
 
@@ -177,7 +171,7 @@ class UsersController extends BaseController
             $id = $model->check_user_exist($email);
             if (count($id) > 0) {
                 $time = $model->update_datetime_user($id[0]['customer_activation_key']);
-                $message = 'Your requested password reset.</br><a href='.Yii::$app->request->hostInfo.'/frontend/web/index.php'.Url::to("/users/reset_confirm?cust_id=".$id[0]["customer_activation_key"]).' title="Click Here">Click here </a> to reset your password';
+                $message = 'Your requested password reset.</br><a href='.Url::to(["/users/reset_confirm", "cust_id" => $id[0]["customer_activation_key"]], true).' title="Click Here">Click here </a> to reset your password';
                 $send = Yii::$app->mailer->compose("customer/password-reset",
                     ["message"=>$message,"user"=>"Customer"])
                 ->setFrom(Yii::$app->params['supportEmail'])
