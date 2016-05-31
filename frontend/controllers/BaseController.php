@@ -20,8 +20,6 @@ class BaseController extends Controller
         $model = new Website();
 
         $general_settings = $model->get_general_settings();
-        if(!Yii::$app->user->isGuest)
-        Yii::$app->params['CUSTOMER_NAME'] = Yii::$app->user->identity->customer_name;
     }
 
     public function printdata($table)

@@ -178,7 +178,7 @@ $action = Yii::$app->controller->action->id;
 } ?>">
                         <?php if (!Yii::$app->user->isGuest) { ?>
                         <div class="user_name_cont">
-                            <p><?= 'Hi ' . Yii::$app->params['CUSTOMER_NAME'] . ','; ?></p>
+                            <p><?= 'Hi ' . Yii::$app->user->identity->customer_name . ','; ?></p>
                         </div>
                         <?php } ?>
                     <ul class="logout_part">
