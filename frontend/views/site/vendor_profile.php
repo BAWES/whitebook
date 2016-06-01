@@ -435,7 +435,7 @@ if ($event_status > 0) {
                                                     <div class="events_descrip">
                                                         <a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title=""><?= $value['vendor_name'] ?>
                                                             <h3><?= $value['item_name']; ?></h3>
-                                                            <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
+                                                            <p><?php if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
                                                     </div>
                                                 </div>
                                         </li>

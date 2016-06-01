@@ -383,7 +383,7 @@ if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php 
 <div class="events_descrip">
 <?= Html::a($value['vendor_name'],Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
 <h3><?= $value['item_name']  ?></h3>
-<p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
+<p><?php if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
 </div>
 </div>
 </li>
