@@ -5,9 +5,9 @@ use Yii;
 
 class Vendor extends \common\models\Vendor
 {
-    /* 
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function beforeSave($insert)
     {
@@ -15,14 +15,14 @@ class Vendor extends \common\models\Vendor
         {
            $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
            $this->created_by = \Yii::$app->user->identity->id;
-        } 
+        }
         else {
            $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
            $this->modified_by = \Yii::$app->user->identity->id;
         }
            return parent::beforeSave($insert);
     }
-    
+
    public static function vendorcount()
     {
         return Vendor::find()->where(['trash' => 'Default'])->count();
@@ -73,21 +73,21 @@ class Vendor extends \common\models\Vendor
 
         public function statusImageurl($img_status)
     {
-        if($img_status == 'Active')     
+        if($img_status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Status Image title
     public function statusTitle($status)
-    {           
+    {
     if($status == 'Active')
         return 'Activate';
         return 'Deactivate';
     }
 
            //All Gridview Status Filter
-    public function Activestatus()
+    public static function Activestatus()
     {
         return $status = ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
     }
