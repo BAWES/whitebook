@@ -26,63 +26,63 @@ class Package extends \common\models\Package
 
     public function statusImageurl($img_status)
     {
-        if($img_status == 'Active')     
+        if($img_status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Status Image title
     public function statusTitle($status)
-    {           
-    if($status == 'Active')     
+    {
+    if($status == 'Active')
         return 'Activate';
         return 'Deactivate';
     }
-		
-		
+
+
 			public static function loadpackage()
 			{
 				$packages=Package::find()->where(['package_status' => 'Active','trash'=>'Default'])
-				->all();			
+				->all();
 				return $package=ArrayHelper::map($packages,'package_id','package_name');
 			}
-	
+
 		 public static function PackageData($pack_id)
-			{	
+			{
 					if($pack_id){
-					$package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();	
+					$package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();
 					//return $package_data;
 					return $package_data[0]['package_name'];
 				}else {
 					return '----';
 			}
 		}
-	
-	
+
+
 		public static function loadpackageall()
 		{
-			return $packages=Package::find()->where(['package_status' => 'Active','trash'=>'default'])->all();			
+			return $packages=Package::find()->where(['package_status' => 'Active','trash'=>'default'])->all();
 		}
 
   public static function loadpackageprice($pack_id)
   {
-      $package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();  
-      
+      $package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();
+
       foreach($package_data as $pack => $data)
-      {                       
-           return  $package_price = $data['package_pricing'];                             
-      }        
-     
+      {
+           return  $package_price = $data['package_pricing'];
+      }
+
   }
-    
+
    public static function packagecount($pack_id)
-			{	
-				 return $package_data= Vendor::find()->where(['package_id' => $pack_id])->count();  
-				 
+			{
+				 return $package_data= Vendor::find()->where(['package_id' => $pack_id])->count();
+
 			}
 
        //All Gridview Status Filter
-    public function Activestatus()
+    public static function Activestatus()
     {
         return $status = ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
     }
