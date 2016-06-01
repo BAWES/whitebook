@@ -8,9 +8,9 @@ use admin\models\Vendor;
 class Vendoritem extends \common\models\Vendoritem
 {
 
-   /* 
+   /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function beforeSave($insert)
     {
@@ -18,7 +18,7 @@ class Vendoritem extends \common\models\Vendoritem
         {
            $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
            $this->created_by = \Yii::$app->user->identity->id;
-        } 
+        }
         else {
            $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
            $this->modified_by = \Yii::$app->user->identity->id;
@@ -28,13 +28,13 @@ class Vendoritem extends \common\models\Vendoritem
 
 
     public static function getVendorName($id)
-    {       
+    {
         $model = Vendor::find()->where(['vendor_id'=>$id])->one();
         return $model->vendor_name;
     }
 
     public static function vendorpriorityitemitem($id)
-    {       
+    {
             $item= Vendoritem::find()
             ->select(['item_id','item_name'])
             ->where(['=', 'item_id',$id])
@@ -46,7 +46,7 @@ class Vendoritem extends \common\models\Vendoritem
 
 
     public static function loadsubcategoryvendoritem($subcategory)
-    {       
+    {
             $item= Vendoritem::find()
             ->where(['trash' =>'Default','item_for_sale' =>'Yes','subcategory_id'=>$subcategory])
             ->all();
@@ -55,7 +55,7 @@ class Vendoritem extends \common\models\Vendoritem
     }
 
     public static function itemcount()
-    {   
+    {
         return Vendoritem::find()->where(['trash' => 'Default'])->count();
     }
 
@@ -67,7 +67,7 @@ class Vendoritem extends \common\models\Vendoritem
         ->where(['MONTH(created_datetime)' => $month])
         ->andwhere(['YEAR(created_datetime)' => $year])
         ->count();
-    } 
+    }
 
     public static function itemdatecount()
     {
@@ -83,27 +83,27 @@ class Vendoritem extends \common\models\Vendoritem
 
     public function statusImageurl($img_status)
     {
-        if($img_status == 'Active')     
+        if($img_status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Status Image title
     public function statusTitle($status)
-    {           
-    if($status == 'Active')     
+    {
+    if($status == 'Active')
         return 'Activate';
         return 'Deactivate';
     }
 
                //All Gridview Status Filter
-    public function Activestatus()
+    public static function Activestatus()
     {
         return $status = ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
     }
 
    // Vendor Item Gridview Status Filter
-    public function Vendoritemstatus()
+    public static function Vendoritemstatus()
     {
         return $status = ['Yes' => 'Yes', 'Pending' => 'Pending','Rejected'=>'Rejected'];
     }
