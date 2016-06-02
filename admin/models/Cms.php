@@ -4,6 +4,7 @@ namespace admin\models;
 
 use Yii;
 use yii\helpers\Url;
+
 /**
  * This is the model class for table "{{%cms}}".
  *
@@ -20,22 +21,9 @@ use yii\helpers\Url;
 class Cms extends \common\models\Cms
 {
 
-   /* 
-    *
-    *   To save created, modified user & date time 
-    */
-    public function beforeSave($insert)
+      public function behaviors()
     {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        } 
-        else {
-           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
+        return parent::behaviors();
     }
 
     

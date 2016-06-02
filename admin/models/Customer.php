@@ -42,6 +42,11 @@ class Customer extends \common\models\Customer
     ]);
    }
 
+    public function behaviors()
+    {
+        return parent::behaviors();
+    }
+    
    /**
      * Scenarios for validation and massive assignment
      */
@@ -51,25 +56,6 @@ class Customer extends \common\models\Customer
         $scenarios['createAdmin'] = ['customer_name','customer_email', 'customer_password', 'customer_mobile','customer_dateofbirth','customer_gender'];
 
         return $scenarios;
-    }
-
-
-   /* 
-    *
-    *   To save created, modified user & date time 
-    */
-    public function beforeSave($insert)
-    {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        } 
-        else {
-           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
     }
     
 

@@ -4,7 +4,10 @@ namespace common\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "whitebook_category".
  *
@@ -43,6 +46,21 @@ class SubCategory extends \yii\db\ActiveRecord
                     'class' => SluggableBehavior::className(),
                     'attribute' => 'category_name',
                 ],
+                [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
             ];
       }
 
@@ -117,29 +135,8 @@ class SubCategory extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
     }
-
-
-           /* 
-    *
-    *   To save created, modified user & date time 
-    */
-    public function beforeSave($insert)
-    {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        } 
-        else {
-           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
-    }
-
-
-
-        public static function statusImageurl($sale)
+  
+   public static function statusImageurl($sale)
 	{
 		if($sale == 'yes')
 		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');

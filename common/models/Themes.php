@@ -4,7 +4,10 @@ namespace common\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\behaviors\SluggableBehavior;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "whitebook_theme".
  *
@@ -32,15 +35,32 @@ class Themes extends \yii\db\ActiveRecord
         return 'whitebook_theme';
     }
 
+
     public function behaviors()
-      {
+    {
           return [
               [
                   'class' => SluggableBehavior::className(),
-                  'attribute' => 'theme_name',                 
+                  'attribute' => 'category_name',              
               ],
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
           ];
-      }
+    }
+
 
     /**
      * @inheritdoc

@@ -3,7 +3,6 @@ namespace admin\models;
 
 use Yii;
 use yii\db\Expression;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "Slide".
@@ -49,30 +48,9 @@ class Slide extends \common\models\Slide {
         return $scenarios;
     }
 
-    public function behaviors() {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_datetime',
-                'updatedAtAttribute' => 'modified_datetime',
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
-
-
-    public function beforeSave($insert) {
-        if (parent::beforeSave($insert)) {
-
-            //All validations pass, upload the files to S3
-            if ($this->slide_type == 'video') {
-                $this->uploadVideo();
-            }else{
-                $this->uploadImage();
-            }
-
-            return true;
-        }
+      public function behaviors()
+    {
+        return parent::behaviors();
     }
 
     public function beforeDelete() {

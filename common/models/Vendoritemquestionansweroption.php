@@ -3,7 +3,10 @@
 namespace common\models;
 
 use Yii;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "{{%vendor_item_question_answer_option}}".
  *
@@ -44,6 +47,27 @@ class Vendoritemquestionansweroption extends \yii\db\ActiveRecord
             [['answer_text'], 'string', 'max' => 128],
             [['answer_background_color'], 'string', 'max' => 64]
         ];
+    }
+
+    public function behaviors()
+    {
+          return [
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /**

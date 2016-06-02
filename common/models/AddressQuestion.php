@@ -2,7 +2,9 @@
 namespace common\models;
 use common\models\Addresstype;
 use Yii;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "whitebook_address_question".
  *
@@ -28,6 +30,8 @@ class AddressQuestion extends \yii\db\ActiveRecord
         return 'whitebook_address_question';
     }
 
+
+
     /**
      * @inheritdoc
      */
@@ -46,18 +50,25 @@ class AddressQuestion extends \yii\db\ActiveRecord
     *
     *   To save created, modified user & date time 
     */
-    public function beforeSave($insert)
+    public function behaviors()
     {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        } 
-        else {
-           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
+          return [
+                  [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /**
@@ -84,19 +95,18 @@ class AddressQuestion extends \yii\db\ActiveRecord
         return $model->type_name;
     }
 
-
-       public static function  loadquestion($addresstypeid)
+   public static function  loadquestion($addresstypeid)
     {
-		$question = AddressQuestion::find()
-		->select(['question'])
-		->where(['address_type_id'=>$addresstypeid])
-        ->andWhere(['trash'=>'Default'])
-        ->all();
-		foreach ($question as $q)
-		{
-			$ques[]=$q['question'];
-		}
-		$ques=implode ('<br>',$ques);
-		return($ques);
+    		$question = AddressQuestion::find()
+    		->select(['question'])
+    		->where(['address_type_id'=>$addresstypeid])
+            ->andWhere(['trash'=>'Default'])
+            ->all();
+    		foreach ($question as $q)
+    		{
+    			$ques[]=$q['question'];
+    		}
+    		$ques=implode ('<br>',$ques);
+    		return($ques);
     }
 }

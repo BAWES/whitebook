@@ -3,7 +3,10 @@
 namespace common\models;
 
 use Yii;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "{{%vendor_delivery_timeslot}}".
  *
@@ -48,6 +51,32 @@ class Deliverytimeslot extends \yii\db\ActiveRecord
             [['trash'], 'string'],
             [['timeslot_day'], 'string', 'max' => 64]
         ];
+    }
+
+
+        public function behaviors()
+    {
+          return [
+              [
+                  'class' => SluggableBehavior::className(),
+                  'attribute' => 'category_name',              
+              ],
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /**

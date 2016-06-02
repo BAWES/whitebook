@@ -3,7 +3,10 @@
 namespace common\models;
 use common\models\Vendoritem;
 use yii\helpers\ArrayHelper;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 use Yii;
 
 /**
@@ -41,6 +44,27 @@ class Vendoritemcapacityexception extends \yii\db\ActiveRecord
             [['created_by', 'modified_by', 'exception_date', 'created_datetime', 'modified_datetime'], 'safe'],
             [['trash'], 'string'],
         ];
+    }
+
+    public function behaviors()
+    {
+          return [
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /**

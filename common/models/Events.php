@@ -3,7 +3,10 @@
 namespace common\models;
 
 use Yii;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "{{%events}}".
  *
@@ -35,6 +38,27 @@ class Events extends \yii\db\ActiveRecord
             [['event_date', 'created_date'], 'safe'],
             [['event_name', 'event_type'], 'string', 'max' => 100],
         ];
+    }
+
+        public function behaviors()
+    {
+          return [
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /**

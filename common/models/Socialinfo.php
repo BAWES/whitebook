@@ -2,7 +2,10 @@
 namespace common\models;
 
 use Yii;
-use yii\helpers\Setdateformat;
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "store_social_info".
@@ -58,19 +61,26 @@ class Socialinfo extends \yii\db\ActiveRecord
    /* 
     *
     *   To save created, modified user & date time 
-    */ 
-    public function beforeSave($insert)
+    */
+    public function behaviors()
     {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        } 
-        else {
-           $this->modified_datetime = Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
+          return [
+                  [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
 

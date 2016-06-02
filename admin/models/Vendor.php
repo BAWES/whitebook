@@ -2,25 +2,15 @@
 namespace admin\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+
 
 class Vendor extends \common\models\Vendor
 {
-    /*
-    *
-    *   To save created, modified user & date time
-    */
-    public function beforeSave($insert)
+
+    public function behaviors()
     {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        }
-        else {
-           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
+        return parent::behaviors();
     }
 
    public static function vendorcount()

@@ -4,6 +4,9 @@ namespace admin\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
+use yii\db\ActiveRecord;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "whitebook_category".
@@ -27,6 +30,10 @@ use yii\helpers\Url;
 class Category extends \common\models\Category
 {
 
+    public function behaviors()
+    {
+        return parent::behaviors();
+    }
      /**
      * @inheritdoc
      */
@@ -54,24 +61,6 @@ class Category extends \common\models\Category
         return $scenarios;
     }
 
-
-       /* 
-    *
-    *   To save created, modified user & date time 
-    */
-    public function beforeSave($insert)
-    {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        } 
-        else {
-           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
-    }
 
   public  function categoryvalidation($attribute_name,$params)
   {
@@ -108,15 +97,15 @@ class Category extends \common\models\Category
      return $category;
    }
  
-  public static function viewcategoryname($id)
-  {
-   $categories=Category::find()
-   ->where(['category_allow_sale' => 'yes'])
-   ->andwhere(['category_id' => $id])
-   ->andwhere(['!=', 'trash', 'Deleted'])
-   ->one();
-   return $categories['category_name'];
-  }
+    public static function viewcategoryname($id)
+    {
+     $categories=Category::find()
+     ->where(['category_allow_sale' => 'yes'])
+     ->andwhere(['category_id' => $id])
+     ->andwhere(['!=', 'trash', 'Deleted'])
+     ->one();
+     return $categories['category_name'];
+    }
 
 
     public function statusImageurl($img_status)
@@ -133,4 +122,6 @@ class Category extends \common\models\Category
         return 'Activate';
         return 'Deactivate';
     }
+
+
 }

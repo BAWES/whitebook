@@ -3,7 +3,10 @@
 namespace admin\models;
 
 use Yii;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "{{%advert_home}}".
  *
@@ -23,6 +26,32 @@ class Adverthome extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return '{{%advert_home}}';
+    }
+
+
+   /* 
+    *
+    *   To save created, modified user & date time 
+    */
+    public function behaviors()
+    {
+          return [
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /**
@@ -57,21 +86,6 @@ class Adverthome extends \yii\db\ActiveRecord
         ];
     }
 
-   /* 
-    *
-    *   To save created, modified user & date time 
-    */
-    public function beforeSave($insert)
-    {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        } 
-        else {
-           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
-    }
+
+
 }

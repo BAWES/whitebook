@@ -5,8 +5,10 @@ use Yii;
 use yii\web\IdentityInterface;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
+use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
-
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "{{%vendor}}".
  *
@@ -70,13 +72,29 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         return '{{%vendor}}';
     }
 
+    
     public function behaviors()
     {
           return [
               [
                   'class' => SluggableBehavior::className(),
-                  'attribute' => 'vendor_name',
+                  'attribute' => 'vendor_name',              
               ],
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
           ];
     }
     /**

@@ -19,7 +19,12 @@ use Yii;
 class Blockeddate extends \common\models\Blockeddate
 {
 
-        public  function blockvalidation($attribute_name,$params)
+    public function behaviors()
+    {
+        return parent::behaviors();
+    }
+
+    public  function blockvalidation($attribute_name,$params)
     {
         if(!empty($this->block_date) ){
             //echo '111';die;
@@ -51,24 +56,5 @@ class Blockeddate extends \common\models\Blockeddate
         }
 
         }
-    }
-
-
-        /* 
-    *
-    *   To save created, modified user & date time 
-    */
-    public function beforeSave($insert)
-    {
-        if($this->isNewRecord)
-        {
-           $this->created_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->created_by = \Yii::$app->user->identity->id;
-        } 
-        else {
-           $this->modified_datetime = \yii\helpers\Setdateformat::convert(time(),'datetime');
-           $this->modified_by = \Yii::$app->user->identity->id;
-        }
-           return parent::beforeSave($insert);
     }
 }

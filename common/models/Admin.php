@@ -12,6 +12,10 @@ use common\models\Role;
 use yii\helpers\ArrayHelper;
 use common\models\Accesscontroller;
 
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
+
+
 /**
  * This is the model class for table "{{%admin}}".
  *
@@ -79,6 +83,27 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 		$scenarios['change'] = ['admin_password'];//Scenario Values Only Accepted
         $scenarios['profile'] = ['admin_name', 'admin_email','address','phone'];//Scenario Values Only Accepted
         return $scenarios;
+    }
+
+       public function behaviors()
+    {
+          return [
+                  [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
@@ -204,10 +229,6 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     }
     /** EXTENSION MOVIE * */
 
-    public function getRole()
-    {
-        return $this->hasOne(Role::className(), ['role_id' => 'role_id']);
-    }
 
 	public static function Roles()
     {

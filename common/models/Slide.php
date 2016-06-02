@@ -3,7 +3,9 @@
 namespace common\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
 use yii\db\Expression;
 use yii\helpers\Url;
 
@@ -49,15 +51,29 @@ class Slide extends \yii\db\ActiveRecord
         ];
     }
 
-	public function behaviors() {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_datetime',
-                'updatedAtAttribute' => 'modified_datetime',
-                'value' => new Expression('NOW()'),
-            ],
-        ];
+public function behaviors()
+    {
+          return [
+              [
+                  'class' => SluggableBehavior::className(),
+                  'attribute' => 'category_name',              
+              ],
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /**

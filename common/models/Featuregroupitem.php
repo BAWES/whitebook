@@ -4,7 +4,10 @@ namespace common\models;
 use common\models\Featuregroup;
 use yii\db\Query;
 use Yii;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "whitebook_feature_group_item".
  *
@@ -33,6 +36,28 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'whitebook_feature_group_item';
+    }
+
+
+        public function behaviors()
+    {
+          return [
+              [
+                      'class' => BlameableBehavior::className(),
+                      'createdByAttribute' => 'created_by',
+                      'updatedByAttribute' => 'modified_by',
+                  ],
+                  'timestamp' => 
+                  [
+                      'class' => 'yii\behaviors\TimestampBehavior',
+                      'attributes' => [
+                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
+                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
+                         
+                      ],
+                     'value' => new Expression('NOW()'),
+                  ],
+          ];
     }
 
     /**
