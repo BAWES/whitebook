@@ -6,9 +6,10 @@ use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
+use admin\models\Role;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
-use admin\models\Role;
+
 use yii\helpers\ArrayHelper;
 use admin\models\Accesscontroller;
 
@@ -219,13 +220,13 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
     /** EXTENSION MOVIE * */
 
-    public function getRole()
-    {
-        return $this->hasOne(Role::className(), ['role_id' => 'role_id']);
+    public function getRoledata(){
+        return $this->hasOne(\admin\models\Role::className(), ['role_id' => 'role_id']);
     }
-
+   
 	public static function Roles()
     {
 		$roles = Role::find()->all();
