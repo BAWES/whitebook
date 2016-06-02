@@ -17,9 +17,8 @@ use yii\widgets\ActiveForm;
 	])->textArea(['rows' => 6]) ?>
     </div>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
-     <?= Html::a('Back', ['adverthome/index'], ['class' => 'btn btn-default']) ?>
-    </div>
+     <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
+     </div>
 <?php ActiveForm::end(); ?>
 </div>
 

@@ -63,14 +63,16 @@ class AdverthomeController extends Controller
     {
         $access = Authitem::AuthitemCheck('2', '24');
         if (yii::$app->user->can($access)) {
+
             $model = Adverthome::find()->all();
+
             foreach ($model as $key => $val) {
                 $first_id = $val['advert_id'];
             }
             if (count($model) == 1) {
-                $this->redirect('update?id='.$first_id);
+                $this->redirect(['adverthome/update','id'=>$first_id]);
             } else {
-                $this->redirect('create');
+                $this->redirect(['adverthome/create']);
             }
 
         } else {
