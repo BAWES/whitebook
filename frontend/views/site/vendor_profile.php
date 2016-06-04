@@ -115,7 +115,7 @@ if ($event_status > 0) {
                                                                 <span class="border-bottom"></span>
                                                             <?php } ?>
     <?php if ($vendor_detail[0]['vendor_public_phone'] != '') { ?>
-                                                                <h4><?php echo $vendor_detail[0]['vendor_public_phone']; ?></h4>
+                                                                <h4 style="margin-top: 13px;"><?php echo $vendor_detail[0]['vendor_public_phone']; ?></h4>
                                                             <?php } ?>
                                                             <span class="border-bottom border-bottom-none"></span>
                                                         </div>
