@@ -10,6 +10,8 @@ if(isset($_GET['type']))
 {
 	$type=$_GET['type'];
 }
+$events = ($_GET['slug'] == 'events' ? 'active' : '');
+$thingsilike =  ($_GET['slug'] ==  'thingsilike' ?  'active' : '');
 ?>
 
 <section id="inner_pages_white_back">
@@ -24,10 +26,12 @@ if(isset($_GET['type']))
 <div class="tab_sections">
 <div id="exTab2">
 <ul class="nav nav-tabs">
-<li class="col-md-6 col-xs-6 padding0 first-event-tab <?php if($slug=='events'){echo 'active';}?>">
+
+<li class="col-md-6 col-xs-6 padding0 first-event-tab <?= $events ?> ">
 <a data-toggle="tab" href="#1" aria-expanded="false">EVENTS</a>
 </li>
-<li class="col-md-6 col-xs-6 padding0 second-event-tab <?php if($slug=='thingsilike'){echo 'active';}?>"><a data-toggle="tab" href="#2" aria-expanded="true"><span class="heart-icon">THINGS I LIKE</span></a>
+<li class="col-md-6 col-xs-6 padding0 second-event-tab <?= $thingsilike ?> ">
+<a data-toggle="tab" href="#2" aria-expanded="true"><span class="heart-icon">THINGS I LIKE</span></a>
 </li>
 </ul>
 

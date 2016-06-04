@@ -97,6 +97,7 @@ use yii\helpers\Url;
 <?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class' => '', 'width' => '64px', 'height' => '64px', 'id' => 'loading', 'alt' => 'loading']); ?>
     </p>
 </div>
+
 <script type="text/javascript">
     $(function () {
         $('button.close').html('');
