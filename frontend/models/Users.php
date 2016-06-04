@@ -96,10 +96,12 @@ class Users extends Model
         }
     }
 
-    public function customer_password_reset($password, $customer_activation_key)
+    public function customer_password_reset($password, $customer_activation_key,$user_email)
     {
         $gen_password = Yii::$app->getSecurity()->generatePasswordHash($password);
-		return $command = Customer::updateAll(['customer_password' => $gen_password],['customer_activation_key'=>$customer_activation_key]);
+        $new_activation_key = self::generateRandomString();
+		$command = Customer::updateAll(['customer_password' => $gen_password],['customer_activation_key'=>$customer_activation_key]);
+        return $update_key = Customer::updateAll(['customer_activation_key' => $new_activation_key],['customer_email'=>$user_email['customer_email']]);
     }
 
     public function update_customer_profile($post, $customer_id)
@@ -494,6 +496,18 @@ class Users extends Model
       ->where(['customer_activation_key'=>$key])
       ->asArray()
       ->all();
+    }
+
+    public function generateRandomString($length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; ++$i) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 
 }

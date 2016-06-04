@@ -80,7 +80,7 @@ class UsersController extends BaseController
             $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['customer_password']);
             $model->confirm_password=$data['confirm_password'];
             $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];
-            $model->customer_activation_key = $this->generateRandomString();
+            $model->customer_activation_key = Customer::generateRandomString();
             $model->created_datetime = date('Y-m-d H:i:s');
             $model->customer_name=$data['customer_name'];
             $model->customer_last_name=$data['customer_last_name'];
@@ -198,7 +198,11 @@ class UsersController extends BaseController
                 $model = new Users();
                 $customer_activation_key = $_POST['id'];
                 $password = $_POST['password'];
-                $check_user = $model->customer_password_reset($password, $customer_activation_key);
+                $user_email = Customer::find()->select('customer_email')->
+                where(['customer_activation_key'=>$customer_activation_key])
+                ->asArray()
+                ->one();
+                $check_user = $model->customer_password_reset($password, $customer_activation_key,$user_email);
                 $val = -1;
                 if (count($check_user) > 0) {
                    $val = 1;
@@ -644,17 +648,7 @@ class UsersController extends BaseController
         }
     }
 
-    public function generateRandomString($length = 10)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; ++$i) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
 
-        return $randomString;
-    }
 
     public function actionUsereventlist()
     {
