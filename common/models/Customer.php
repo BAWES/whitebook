@@ -4,10 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\web\IdentityInterface;
-use yii\db\ActiveRecord;
-use yii\behaviors\SluggableBehavior;
-use yii\behaviors\BlameableBehavior;
-use yii\db\Expression;
+
 /**
 * This is the model class for table "whitebook_customer".
 *
@@ -59,31 +56,6 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     public static function tableName()
     {
         return 'whitebook_customer';
-    }
-
-       /* 
-    *
-    *   To save created, modified user & date time 
-    */
-    public function behaviors()
-    {
-          return [
-                  [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
     }
 
     /**
