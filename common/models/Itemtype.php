@@ -37,13 +37,25 @@ class Itemtype extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-			['type_name','typenamevalidation','on' => 'insert',],
+			      [['type_name'],'required','on' => 'insert'],
             [['type_name'], 'required'],
             [['created_by', 'modified_by'], 'integer'],
             [['created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'safe'],
             [['trash'], 'string'],
-            [['type_name'], 'string', 'max' => 100]
+            [['type_name'], 'string', 'max' => 100],
+            ['type_name','typenamevalidation'],
         ];
+    }
+
+
+    /**
+     * Scenarios for validation and massive assignment
+     */
+    public function scenarios() {
+        $scenarios['insert'] = ['type_name'];
+        //$scenarios['uploadImage'] = ['slide_image'];
+
+        return $scenarios;
     }
 
         public function behaviors()
