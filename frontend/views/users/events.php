@@ -17,185 +17,186 @@ $thingsilike =  ($_GET['slug'] ==  'thingsilike' ?  'active' : '');
 ?>
 
 <section id="inner_pages_white_back">
-<div class="container paddng0">
-<?php if(!Yii::$app->user->isGuest) { ?>
-<!-- Events slider start -->
-<?php require(__DIR__ . '/../product/events_slider.php'); ?>
-<!-- Events slider end -->
-<?php } ?>
-<div class="events_content_part">
-<div class="event_detials_common tab_section_event">
-<div class="tab_sections">
-<div id="exTab2">
-<ul class="nav nav-tabs">
+	<div class="container paddng0">
 
-<li class="col-md-6 col-xs-6 padding0 first-event-tab <?= $events ?> ">
-<a data-toggle="tab" href="#1" aria-expanded="false">EVENTS</a>
-</li>
-<li class="col-md-6 col-xs-6 padding0 second-event-tab <?= $thingsilike ?> ">
-<a data-toggle="tab" href="#2" aria-expanded="true"><span class="heart-icon">THINGS I LIKE</span></a>
-</li>
-</ul>
+		<?php if(!Yii::$app->user->isGuest) { ?>
+		<!-- Events slider start -->
+		<?php require(__DIR__ . '/../product/events_slider.php'); ?>
+		<!-- Events slider end -->
+		<?php } ?>
 
-<div class="tab-content">
-<!-- <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div> -->
-<div id="1" class="tab-pane <?php if($slug=='events'){echo 'active';}?>">
-<div class="cat_events_items">
-<div class="select_category_sec">
-<div class="select_boxes">
-<select class="selectpicker" data-style="btn-primary" id="customer_event_type" name="customer_event_type" style="display:none" >
-<option value='all'>Select event type </option>
-<?php
-foreach ($customer_event_type as $key => $value) { ?>
-<option value="<?= $value['event_type']; ?>"><?= $value['event_type']; ?></option>
-<?php }  ?>
-</select>
-</div>
-</div>
-</div>
-<div class="thinl_like_sectons" >
+		<div class="events_content_part">
+			<div class="event_detials_common tab_section_event">
+				<div class="tab_sections">
+					<div id="exTab2">
+						<ul class="nav nav-tabs">
+							<li class="col-md-6 col-xs-6 padding0 first-event-tab <?= $events ?> ">
+								<a data-toggle="tab" href="#1" aria-expanded="false">EVENTS</a>
+							</li>
+							<li class="col-md-6 col-xs-6 padding0 second-event-tab <?= $thingsilike ?> ">
+								<a data-toggle="tab" href="#2" aria-expanded="true"><span class="heart-icon">THINGS I LIKE</span></a>
+							</li>
+						</ul>
 
-<ul class="thing_items" id="user_event_list">
-	<?php
-foreach ($customer_events as $key => $value) { ?>
-<li>
-<div class="delet_icons_new" onclick="deletefiltering1('<?php echo $value['event_id'];?>');"></div>
-<a href="<?= Url::toRoute(['/users/eventdetails/','slug'=>$value['slug']]); ?>" id="<?php echo $value['event_id'];?>" title="<?= $value['event_name']; ?>">
+						<div class="tab-content">
+							<!-- <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div> -->
+							<div id="1" class="tab-pane <?php if($slug=='events'){echo 'active';}?>">
+							<div class="cat_events_items">
+								<div class="select_category_sec">
+									<div class="select_boxes">
+										<select class="selectpicker" data-style="btn-primary" id="customer_event_type" name="customer_event_type" style="display:none" >
+											<option value='all'>Select event type </option>
+											<?php
+											foreach ($customer_event_type as $key => $value) { ?>
+											<option value="<?= $value['event_type']; ?>"><?= $value['event_type']; ?></option>
+											<?php }  ?>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="thinl_like_sectons" >
 
-<div class="thing_inner_items">
-<h3><?php if(strlen($value['event_name'])>12){echo substr($value['event_name'], 0, 12).' ...';}else{ echo$value['event_name'];} ?></h3>
-<p><?= $value['event_date']; ?></p>
-<p><?= $value['event_type']; ?><br/></p>
-</div>
-</a>
-</li>
-</a>
-<?php }  ?>
-<li>
-<div class="thing_inner_items border_none <?php if($slug=='thingsilike'){echo 'active';}?>">
-<a href="#" data-toggle="modal" data-target="#EventModal" title="">&nbsp;</a>
-</div>
-</li>
-</ul>
+							<ul class="thing_items" id="user_event_list">
+								<?php
+							foreach ($customer_events as $key => $value) { ?>
+							<li>
+							<div class="delet_icons_new" onclick="deletefiltering1('<?php echo $value['event_id'];?>');"></div>
+							<a href="<?= Url::toRoute(['/users/eventdetails/','slug'=>$value['slug']]); ?>" id="<?php echo $value['event_id'];?>" title="<?= $value['event_name']; ?>">
 
-</div>
+							<div class="thing_inner_items">
+							<h3><?php if(strlen($value['event_name'])>12){echo substr($value['event_name'], 0, 12).' ...';}else{ echo$value['event_name'];} ?></h3>
+							<p><?= $value['event_date']; ?></p>
+							<p><?= $value['event_type']; ?><br/></p>
+							</div>
+							</a>
+							</li>
+							</a>
+							<?php }  ?>
+							<li>
+							<div class="thing_inner_items border_none <?php if($slug=='thingsilike'){echo 'active';}?>">
+							<a href="#" data-toggle="modal" data-target="#EventModal" title="">&nbsp;</a>
+							</div>
+							</li>
+							</ul>
 
-</div>
+							</div>
 
-<div id="2" class="tab-pane second_event <?php if($slug=='thingsilike'){echo 'active';}?>">
-<a class="filter-link" id="filter-toggle" style="display:none;">Filter</a>
-<div class="category_select_box panel-collapse collapse" id="collapseFilter"><form>
+							</div>
 
-<div class="col-md-2 paddingleft0">
-<div class="select_boxes">
-<select class="selectpicker" id="loadcategory" data-style="btn-primary" style="display: none;">
-<option value="">Select Category</option>
-<?php
-if(!empty($categorylist)){
-foreach($categorylist as $c){?>
-	 <option value="<?=$c['category_id'];?>"><?=$c['category_name'];?></option>
-	 <?php } } ?>
+							<div id="2" class="tab-pane second_event <?php if($slug=='thingsilike'){echo 'active';}?>">
+							<a class="filter-link" id="filter-toggle" style="display:none;">Filter</a>
+							<div class="category_select_box panel-collapse collapse" id="collapseFilter"><form>
 
-</select>
-</div>
-</div>
+							<div class="col-md-2 paddingleft0">
+							<div class="select_boxes">
+							<select class="selectpicker" id="loadcategory" data-style="btn-primary" style="display: none;">
+							<option value="">Select Category</option>
+							<?php
+							if(!empty($categorylist)){
+							foreach($categorylist as $c){?>
+								 <option value="<?=$c['category_id'];?>"><?=$c['category_name'];?></option>
+								 <?php } } ?>
 
-<div class="col-md-2 paddingcommon">
-<div class="select_boxes">
-<select class="selectpicker" id="vendorlist" data-style="btn-primary" style="display: none;">
-<option value=''>Select Vendor</option>
-<?php
-if(!empty($vendorlist)){
-foreach($vendorlist as $v){?>
-	 <option value="<?=$v['vendor_id'];?>"><?=$v['vendor_name'];?></option>
-	 <?php } }?>
-</select>
-</div>
-</div>
-<div class="col-md-2 paddingcommon">
-<div class="select_boxes">
-<select class="selectpicker" id="avl_sale" data-style="btn-primary" style="display: none;">
-<option value=''>Available for sale</option>
-<option value="Yes">YES</option>
-<option value="No">NO</option>
-</select>
-</div>
-</div>
-<div class="col-md-2 paddingcommon">
-<div class="select_boxes">
-<select class="selectpicker" id="loadthemes" data-style="btn-primary" style="display: none;">
-<option value="">Select Themes</option>
-<?php
-if(!empty($themelist)){
-foreach($themelist as $t){?>
-	 <option value="<?=$t['theme_id'];?>"><?=$t['theme_name'];?></option>
-	 <?php } }?>
-</select>
-</div>
-</div>
-<div class="col-md-2 paddingright0">
-<div class="select_butons">
-<button class="btn btn-warning" id="filter" name="filter" type="button" title="Filter" onClick="wishlistfilter()">Filter</button>
-</div>
-</div>
-<div class="col-md-2 paddingright0">
-<div class="select_butons">
-<div class="clear_buttons_new">
-<button class="btn btn-warning" id="clearfilter1" name="clearfilter1" type="button" title="clear filter" onClick="clearfiltering();">Clear</button>
-</div>
-</div>
-</div>
-</form>
-</div>
-<div id="search_data">
-<div class="events_listing_inner">
-<div class="events_listing new-event">
-<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
-<ul id="wishlist">
-<?php
-$wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
-foreach ($wishlist as $key => $value) {
-?>
-<li id="<?php echo $value['item_id'];?>">
-<div class="events_items">
-<div class="events_images">
-<div class="hover_events">
-<div class="pluse_cont"><a href="javascript:;" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','ADD_EVENT');?>"></a></div>
-<div class="delet_icons"><a href="javascript:;" title=""   onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"></a></div>
-</div>
-<?php
-$image = Image::find()->select('image_path')->where(['item_id'=>$value['item_id'],'module_type'=>'vendor_item', 'trash'=>'Default'])->asArray()->one();
-?>
-<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$image['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),
-Url::toRoute(['/product/product/','slug'=>$value['slug']])); ?>
-</div>
-<div class="events_descrip">
-<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']]));?>
-<h3><?= $value['item_name']; ?></h3>
-<p><?php if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-'; ?></p>
-</div>
-</div>
-</li>
-<?php } ?>
-</ul>
-</div>
-</div>
-<?php /* if(count($wishlist) > 20)
-{ ?>
-<div class="lode_more_buttons">
-<button type="button" class="btn btn-danger" title="Load More">Load More</button>
-</div>
-<?php } */ ?>
-</div>
+							</select>
+							</div>
+							</div>
 
-</div>
-</div>
-</div>
-</div>
+							<div class="col-md-2 paddingcommon">
+							<div class="select_boxes">
+							<select class="selectpicker" id="vendorlist" data-style="btn-primary" style="display: none;">
+							<option value=''>Select Vendor</option>
+							<?php
+							if(!empty($vendorlist)){
+							foreach($vendorlist as $v){?>
+								 <option value="<?=$v['vendor_id'];?>"><?=$v['vendor_name'];?></option>
+								 <?php } }?>
+							</select>
+							</div>
+							</div>
+							<div class="col-md-2 paddingcommon">
+							<div class="select_boxes">
+							<select class="selectpicker" id="avl_sale" data-style="btn-primary" style="display: none;">
+							<option value=''>Available for sale</option>
+							<option value="Yes">YES</option>
+							<option value="No">NO</option>
+							</select>
+							</div>
+							</div>
+							<div class="col-md-2 paddingcommon">
+							<div class="select_boxes">
+							<select class="selectpicker" id="loadthemes" data-style="btn-primary" style="display: none;">
+							<option value="">Select Themes</option>
+							<?php
+							if(!empty($themelist)){
+							foreach($themelist as $t){?>
+								 <option value="<?=$t['theme_id'];?>"><?=$t['theme_name'];?></option>
+								 <?php } }?>
+							</select>
+							</div>
+							</div>
+							<div class="col-md-2 paddingright0">
+							<div class="select_butons">
+							<button class="btn btn-warning" id="filter" name="filter" type="button" title="Filter" onClick="wishlistfilter()">Filter</button>
+							</div>
+							</div>
+							<div class="col-md-2 paddingright0">
+							<div class="select_butons">
+							<div class="clear_buttons_new">
+							<button class="btn btn-warning" id="clearfilter1" name="clearfilter1" type="button" title="clear filter" onClick="clearfiltering();">Clear</button>
+							</div>
+							</div>
+							</div>
+							</form>
+							</div>
+							<div id="search_data">
+							<div class="events_listing_inner">
+							<div class="events_listing new-event">
+							<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
+							<ul id="wishlist">
+							<?php
+							$wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
+							foreach ($wishlist as $key => $value) {
+							?>
+							<li id="<?php echo $value['item_id'];?>">
+							<div class="events_items">
+							<div class="events_images">
+							<div class="hover_events">
+							<div class="pluse_cont"><a href="javascript:;" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','ADD_EVENT');?>"></a></div>
+							<div class="delet_icons"><a href="javascript:;" title=""   onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"></a></div>
+							</div>
+							<?php
+							$image = Image::find()->select('image_path')->where(['item_id'=>$value['item_id'],'module_type'=>'vendor_item', 'trash'=>'Default'])->asArray()->one();
+							?>
+							<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$image['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),
+							Url::toRoute(['/product/product/','slug'=>$value['slug']])); ?>
+							</div>
+							<div class="events_descrip">
+							<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']]));?>
+							<h3><?= $value['item_name']; ?></h3>
+							<p><?php if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-'; ?></p>
+							</div>
+							</div>
+							</li>
+							<?php } ?>
+							</ul>
+							</div>
+							</div>
+							<?php /* if(count($wishlist) > 20)
+							{ ?>
+							<div class="lode_more_buttons">
+							<button type="button" class="btn btn-danger" title="Load More">Load More</button>
+							</div>
+							<?php } */ ?>
+							</div>
 
-</div>
-</div>
-</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
 </section>
 
 <div class="modal fade" id="create_new_event" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
