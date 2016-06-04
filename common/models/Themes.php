@@ -5,7 +5,6 @@ use yii\helpers\ArrayHelper;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\db\ActiveRecord;
-use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression;
 /**
@@ -26,7 +25,7 @@ class Themes extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
-    
+
     /**
      * @inheritdoc
      */
@@ -41,20 +40,20 @@ class Themes extends \yii\db\ActiveRecord
           return [
               [
                   'class' => SluggableBehavior::className(),
-                  'attribute' => 'category_name',              
+                  'attribute' => 'category_name',
               ],
               [
                       'class' => BlameableBehavior::className(),
                       'createdByAttribute' => 'created_by',
                       'updatedByAttribute' => 'modified_by',
                   ],
-                  'timestamp' => 
+                  'timestamp' =>
                   [
                       'class' => 'yii\behaviors\TimestampBehavior',
                       'attributes' => [
                        ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
                        ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
+
                       ],
                      'value' => new Expression('NOW()'),
                   ],
@@ -111,7 +110,7 @@ class Themes extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItem::className(), ['item_id' => 'item_id'])->viaTable('whitebook_vendor_item_theme', ['theme_id' => 'theme_id']);
     }
-    
+
   public  function themevalidation($attribute_name,$params)
   {
     if(!empty($this->theme_name) ){
