@@ -150,6 +150,7 @@ class UsersController extends BaseController
             if($authorization)
             {
                 Yii::$app->session->set('key', '1'); // To activate user
+                //Consider replacing this with setFlash for a temporary session var 
             }
             return $this->redirect(Url::toRoute('/site/activate'));
         }
