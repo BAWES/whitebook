@@ -80,7 +80,7 @@ class UsersController extends BaseController
             $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['customer_password']);
             $model->confirm_password=$data['confirm_password'];
             $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];
-            $model->customer_activation_key = Customer::generateRandomString();
+            $model->customer_activation_key = Users::generateRandomString();
             $model->created_datetime = date('Y-m-d H:i:s');
             $model->customer_name=$data['customer_name'];
             $model->customer_last_name=$data['customer_last_name'];
@@ -141,24 +141,17 @@ class UsersController extends BaseController
     {
         $model = new Users();
         $check_key = $model->check_valid_key($key);
-        if ($check_key == 1) {
-            //Yii::$app->session->setFlash('error', "Invalid key!");
+        if ($check_key == Users::KEY_NOT_MATCH) {
             return $this->goHome();
         } else {
             $login_det = $model->customer_logindetail($key);
             $email = $login_det[0]['customer_email'];
-            //$password = $login_det[0]['customer_org_password'];
-
             $authorization = $model->check_authorization($email);
-            print_r($authorization);die;
-            Yii::$app->session->set('key', '1');
-            Yii::$app->session->set('customer_id', $authorization[0]['customer_id']);
-            Yii::$app->session->set('customer_email', $authorization[0]['customer_email']);
-            Yii::$app->session->set('customer_name', $authorization[0]['customer_name']);
-            //Yii::$app->session->setFlash('success', Yii::t('frontend','SUCC_LOGIN'));
-            //print_r ($login_det);die;
+            if($authorization)
+            {
+                Yii::$app->session->set('key', '1'); // To activate user
+            }
             return $this->redirect(Url::toRoute('/site/activate'));
-            //return $this->goHome();
         }
     }
 
@@ -179,13 +172,10 @@ class UsersController extends BaseController
                 ->setSubject('Requested forgot Password')
                 ->send();
                 Yii::$app->session->setFlash('success', Yii::t('frontend', 'PASS_SENT'));
-                return 1;
+                return Users::SUCCESS;
             } else {
-                return -1;
+                return Users::EMAIL_NOT_EXIST;
             }
-        } else {
-            return -1;
-
         }
     }
 

@@ -62,20 +62,20 @@ class SiteController extends BaseController
         Yii::$app->session->set('reset_password_mail', '');
 
         $website_model = new Website();
-        $product_list = $website_model->get_featured_product_id();
-        $featured_product = $website_model->get_featured_product();
+        $featuremodel = new Featuregroupitem();
+        $product_list = $featuremodel->get_featured_product_id();
+        $featured_product = $featuremodel->get_featured_product();
         $banner = $website_model->get_banner_details();
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
 
         $customer_events = array();
 
-        $customer_id = Yii::$app->user->identity->customer_id;
-        if ($customer_id != '') {
-            $customer_events = $website_model->getCustomerEvents($customer_id);
+        if (!Yii::$app->user->isGuest) {
+            $customer_events = $website_model->getCustomerEvents(Yii::$app->user->identity->customer_id);
         }
 
-        return $this->render('home', [
+        return $this->render('index', [
           'featured_product' => $featured_product,
           'banner' => $banner,
           'event_type' => $event_type,
