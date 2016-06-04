@@ -80,7 +80,7 @@ class Users extends Model
       $user = Customer::find()->select('customer_id,customer_activation_status,customer_status,
         trash,customer_name,customer_email')->where(['trash'=>"Default",'customer_email'=>$email])
       ->asArray()
-      ->all();      
+      ->all();
         if (count($user) > 0) {
             if ($user[0]['customer_activation_status'] == 0) {
                 return -1;
@@ -123,7 +123,7 @@ class Users extends Model
         {
             return $command = CustomerAddress::updateAll(['country_id' => $post['country'],'city_id' => $post['city']],['customer_id'=>$customer_id]);
         }
-       
+
     }
 
 
@@ -142,11 +142,11 @@ class Users extends Model
             return $slug;
         }
     }
-    
+
 
     public function update_wishlist($item_id, $customer_id)
     {
-     
+
         $user_fav = Wishlist::find()->select(['wish_status'])
 				->where(['customer_id'=>$customer_id])
 				->andWhere(['item_id'=>$item_id])
@@ -174,7 +174,7 @@ class Users extends Model
 			$command=Events::updateAll(['wish_status' => 1],['customer_id= '.$customer_id,'item_id= '.$item_id]);
             return 1;
         } else {
-			
+
 			$wish_modal= new Wishlist;
 			$wish_modal->item_id=$item_id;
 			$wish_modal->customer_id=$customer_id;
@@ -220,25 +220,31 @@ class Users extends Model
         {
             $condn.= "{{events}}.type_id=";
         }
+
         $events = Events::find()
         ->select(['{{%event_item_link}}.event_id as item_count','{{%events}}.event_id','{{%events}}.event_name','{{%events}}.slug','{{%events}}.event_type','{{%events}}.event_date'])
         ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.event_id = {{%events}}.event_id')
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
         ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
         ->with('{{%events}}');
-            if(!empty($type)) $events->Where([$condn]);
-            $events->groupby(['{{%events}}.event_id'])
+
+        if(!empty($type)){
+            $events->where([$condn]);
+        }
+
+        $events->groupby(['{{%events}}.event_id'])
         ->orderby(['{{%events}}.event_date' => SORT_ASC])
         ->limit($offset,$limit)
         ->asArray()
         ->all();
+
         return $events;
     }
 
     public static function get_customer_wishlist_details($customer_id)
     {
 		return $result = Wishlist::find()->select(['item_id'])
-						->where(['customer_id' => $customer_id])					
+						->where(['customer_id' => $customer_id])
 						->asArray()
 						->all();
     }
@@ -264,7 +270,7 @@ class Users extends Model
 				$availsafe .= '["{{vendor_item}}.item_for_sale"=> "yes"]';
             }
         }
-		
+
         if ($price != '') {
             if ($price == 0) {
 				//'usertype'=>SORT_ASC,
@@ -321,7 +327,7 @@ class Users extends Model
 				$availsafe .= '["{{vendor_item}}.item_for_sale"=> "yes"]';
             }
         }
-		
+
         if ($price != '') {
             if ($price == 0) {
 				//'usertype'=>SORT_ASC,

@@ -5,7 +5,9 @@ use frontend\models\Users;
 use common\models\Image;
 
 $this->title = 'Events/Wishlist | Whitebook';
+
 $type="sss";
+
 if(isset($_GET['type']))
 {
 	$type=$_GET['type'];
@@ -168,7 +170,7 @@ $image = Image::find()->select('image_path')->where(['item_id'=>$value['item_id'
 Url::toRoute(['/product/product/','slug'=>$value['slug']])); ?>
 </div>
 <div class="events_descrip">
-<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']]));?> 
+<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']]));?>
 <h3><?= $value['item_name']; ?></h3>
 <p><?php if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-'; ?></p>
 </div>
