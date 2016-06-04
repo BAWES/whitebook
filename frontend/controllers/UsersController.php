@@ -411,19 +411,14 @@ class UsersController extends BaseController
             $event_id = $_POST['event_id'];
             $item_id = $_POST['item_id'];
             $customer_id = Yii::$app->user->identity->customer_id;
-            echo $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);die;
-            if ($insert_item_to_event == -2) {
-                echo -2;
-                exit;
-            } elseif ($insert_item_to_event == 1) {
+            $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);
+            if ($insert_item_to_event == Users::EVENT_ALREADY_EXIST) {
+                return Users::EVENT_ALREADY_EXIST;
+            } elseif ($insert_item_to_event == Users::EVENT_ADDED_SUCCESS) {
                 Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_AD_SUCC'));
-                echo 1;
-                exit;
+                return Users::EVENT_ADDED_SUCCESS;
             }
-        } else {
-            return 1;
-            exit;
-        }
+        } 
     }
 
     public function actionAdd_to_wishlist()
@@ -436,12 +431,11 @@ class UsersController extends BaseController
             $update_wishlist = $model->update_wishlist($item_id, $customer_id);
             if ($update_wishlist == 1) {
                 $wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
-                echo count($wishlist);
-                exit;
+                return  count($wishlist);
             } else {
                 $wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
-                echo count($wishlist);
-                exit;
+                return count($wishlist);
+
             }
         } else {
             return $this->goHome();
@@ -450,8 +444,6 @@ class UsersController extends BaseController
 
     public function actionEvents()
     {
-
-
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
