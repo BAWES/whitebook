@@ -6,14 +6,7 @@ use common\models\Image;
 
 $this->title = 'Events/Wishlist | Whitebook';
 
-$type="sss";
 
-if(isset($_GET['type']))
-{
-	$type=$_GET['type'];
-}
-$events = ($_GET['slug'] == 'events' ? 'active' : '');
-$thingsilike =  ($_GET['slug'] ==  'thingsilike' ?  'active' : '');
 ?>
 
 <section id="inner_pages_white_back">
