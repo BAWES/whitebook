@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
     
     <div class="form-group">
     <?= $form->field($model, 'category_icon',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 	
-    	])->label('Category icon'.Html::tag('span', '*',['class'=>'required1']))->fileInput()->hint('Icon Size 240 * 50') ?>
+    	])->label('Category icon')->fileInput()->hint('Icon Size 240 * 50') ?>
     	
     </div> 
     <?php if(@$model->category_id) { 

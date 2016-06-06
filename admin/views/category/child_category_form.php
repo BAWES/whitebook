@@ -58,18 +58,8 @@ use yii\helpers\ArrayHelper;
 	<div class="form-group">   
 	<?= $form->field($model, 'category_allow_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
 	])->checkbox(['yes' => 'yes']) ?>
-    </div>    
+    </div>
     
-    <div class="form-group">
-    <?= $form->field($model, 'childcategory_icon',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 	
-    	])->fileInput()->hint('Icon Size 240 * 50') ?>
-    </div> 
-
-    <?php if(@$model->category_id) { 
-		if(file_exists($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/subcategory_icon/child_category_'.$model->category_id.'.png')) { 
-		?>
-	<?= Html::img(Yii::getAlias('@web/uploads/subcategory_icon/').'child_category_'.$model->category_id.'.png', ['alt'=>'some', 'class'=>'thing','width'=>'100px','height'=>'100px']); } } ?> 
-
     <div class="form-group"><br/>
 		<?= $form->field($model, 'top_ad',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
 	</div>
