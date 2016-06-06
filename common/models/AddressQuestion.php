@@ -1,30 +1,33 @@
 <?php
 namespace common\models;
+
 use common\models\Addresstype;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+
 /**
- * This is the model class for table "whitebook_address_question".
- *
- * @property integer $ques_id
- * @property integer $address_type_id
- * @property string $question
- * @property string $status
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_date
- * @property string $modified_date
- * @property string $trash
- */
+* This is the model class for table "whitebook_address_question".
+*
+* @property integer $ques_id
+* @property integer $address_type_id
+* @property string $question
+* @property string $status
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_date
+* @property string $modified_date
+* @property string $trash
+*/
 class AddressQuestion extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return 'whitebook_address_question';
@@ -33,8 +36,8 @@ class AddressQuestion extends \yii\db\ActiveRecord
 
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -42,38 +45,34 @@ class AddressQuestion extends \yii\db\ActiveRecord
             [['ques_id', 'address_type_id', 'created_by', 'modified_by'], 'integer'],
             [['status', 'trash'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe'],
-          //  [['question'], 'string', 'max' => 128]
+            //  [['question'], 'string', 'max' => 128]
         ];
     }
 
-       /* 
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function behaviors()
     {
-          return [
-                  [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -89,24 +88,24 @@ class AddressQuestion extends \yii\db\ActiveRecord
         ];
     }
 
-    	public static function  getAddresstype($id)
+    public static function  getAddresstype($id)
     {
-		$model = Addresstype::find()->where(['type_id'=>$id])->one();
+        $model = Addresstype::find()->where(['type_id'=>$id])->one();
         return $model->type_name;
     }
 
-   public static function  loadquestion($addresstypeid)
+    public static function  loadquestion($addresstypeid)
     {
-    		$question = AddressQuestion::find()
-    		->select(['question'])
-    		->where(['address_type_id'=>$addresstypeid])
-            ->andWhere(['trash'=>'Default'])
-            ->all();
-    		foreach ($question as $q)
-    		{
-    			$ques[]=$q['question'];
-    		}
-    		$ques=implode ('<br>',$ques);
-    		return($ques);
+        $question = AddressQuestion::find()
+        ->select(['question'])
+        ->where(['address_type_id'=>$addresstypeid])
+        ->andWhere(['trash'=>'Default'])
+        ->all();
+        foreach ($question as $q)
+        {
+            $ques[]=$q['question'];
+        }
+        $ques=implode ('<br>',$ques);
+        return($ques);
     }
 }

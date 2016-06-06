@@ -8,6 +8,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
 /**
@@ -35,29 +36,25 @@ class Accesscontroller extends \yii\db\ActiveRecord
     }
 
 
-   /* 
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function behaviors()
     {
-          return [
-                  [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
 
@@ -67,7 +64,7 @@ class Accesscontroller extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-           // [['create','update','delete','manage','view'], 'required'],
+            // [['create','update','delete','manage','view'], 'required'],
             [['admin_id','controller',], 'required'],
             [['role_id'], 'integer'],
             [['admin_id'], 'string'],
@@ -129,9 +126,9 @@ class Accesscontroller extends \yii\db\ActiveRecord
         foreach ($k as $f)
         {
             $controller= Usercontroller::find()
-                ->select ('controller')
-                ->where(['=', 'id', $f])
-                ->one();
+            ->select ('controller')
+            ->where(['=', 'id', $f])
+            ->one();
             $g[]=$controller;
         }
         $m=array();

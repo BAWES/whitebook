@@ -6,38 +6,40 @@ use Yii;
 use yii\helpers\Url;
 use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+
 /**
- * This is the model class for table "whitebook_item_type".
- *
- * @property string $type_id
- * @property string $type_name
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- *
- * @property VendorItem[] $vendorItems
- */
+* This is the model class for table "whitebook_item_type".
+*
+* @property string $type_id
+* @property string $type_name
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*
+* @property VendorItem[] $vendorItems
+*/
 class Eventtype extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return 'whitebook_event_type';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
-        
-			['type_name','typenamevalidation','on' => 'insert',],
+
+            ['type_name','typenamevalidation','on' => 'insert',],
             [['type_name'], 'required'],
             [['created_by', 'modified_by'], 'integer'],
             [['created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'safe'],
@@ -47,8 +49,8 @@ class Eventtype extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -61,44 +63,39 @@ class Eventtype extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
-    
-    	public  function typenamevalidation($attribute_name)
-	{
-		if(!empty($this->type_name) )
+
+    public  function typenamevalidation($attribute_name)
+    {
+        if(!empty($this->type_name) )
         {
-		$modelq = Eventtype::find()
-		->where(['type_name'=>$this->type_name])
-		->one();
-        if($modelq){
-            $this->addError('type_name','Please enter a unique event name');
-	   }
-	}
-	}
+            $modelq = Eventtype::find()
+            ->where(['type_name'=>$this->type_name])
+            ->one();
+            if($modelq){
+                $this->addError('type_name','Please enter a unique event name');
+            }
+        }
+    }
 
 
-    /* 
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 }
-

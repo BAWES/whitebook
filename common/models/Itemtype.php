@@ -7,37 +7,38 @@ use yii\helpers\Url;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 /**
- * This is the model class for table "whitebook_item_type".
- *
- * @property string $type_id
- * @property string $type_name
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- *
- * @property VendorItem[] $vendorItems
- */
+* This is the model class for table "whitebook_item_type".
+*
+* @property string $type_id
+* @property string $type_name
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*
+* @property VendorItem[] $vendorItems
+*/
 class Itemtype extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return 'whitebook_item_type';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
-			      [['type_name'],'required','on' => 'insert'],
+            [['type_name'],'required','on' => 'insert'],
             [['type_name'], 'required'],
             [['created_by', 'modified_by'], 'integer'],
             [['created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'safe'],
@@ -49,8 +50,8 @@ class Itemtype extends \yii\db\ActiveRecord
 
 
     /**
-     * Scenarios for validation and massive assignment
-     */
+    * Scenarios for validation and massive assignment
+    */
     public function scenarios() {
         $scenarios['insert'] = ['type_name'];
         //$scenarios['uploadImage'] = ['slide_image'];
@@ -58,30 +59,26 @@ class Itemtype extends \yii\db\ActiveRecord
         return $scenarios;
     }
 
-        public function behaviors()
+    public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -95,52 +92,51 @@ class Itemtype extends \yii\db\ActiveRecord
         ];
     }
 
-	public  function typenamevalidation($attribute_name)
-	{
-		if(!empty($this->type_name) ){
-		$modelq = Itemtype::find()
-		->where(['type_name'=>$this->type_name])
-		->one();
-        if($modelq){
-        $this->addError('type_name','Please enter a unique Type name');
-	}
-		}
-	}
-	
+    public  function typenamevalidation($attribute_name)
+    {
+        if(!empty($this->type_name) ){
+            $modelq = Itemtype::find()
+            ->where(['type_name'=>$this->type_name])
+            ->one();
+            if($modelq){
+                $this->addError('type_name','Please enter a unique Type name');
+            }
+        }
+    }
+
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getVendorItems()
     {
         return $this->hasMany(VendorItem::className(), ['type_id' => 'type_id']);
     }
-    
-    public static function loaditemtype()
-	{       
-			$itemtype= Itemtype::find()
-			->where(['!=', 'trash', 'Deleted'])
-			->all();
-			$itemtype=ArrayHelper::map($itemtype,'type_id','type_name');
-			return $itemtype;
-	}	
-	
-	        public static function loadvendorname()
-	{       
-			$vendorname= Vendor::find()
-			->where(['!=', 'trash', 'Deleted'])
-			->all();
-			$vendorname=ArrayHelper::map($vendorname,'vendor_id','vendor_name');
-			return $vendorname;
-	}	
-	
-	//Item type name should in vendor view tab
-	    	public static function itemtypename($id)
-	{       
-			$itemtype= Itemtype::find()
-			->where(['!=', 'trash', 'Deleted'])
-			->andwhere(['=', 'type_id', $id])
-			->one();
-			return $itemtype['type_name'];
-	}	
-}
 
+    public static function loaditemtype()
+    {
+        $itemtype= Itemtype::find()
+        ->where(['!=', 'trash', 'Deleted'])
+        ->all();
+        $itemtype=ArrayHelper::map($itemtype,'type_id','type_name');
+        return $itemtype;
+    }
+
+    public static function loadvendorname()
+    {
+        $vendorname= Vendor::find()
+        ->where(['!=', 'trash', 'Deleted'])
+        ->all();
+        $vendorname=ArrayHelper::map($vendorname,'vendor_id','vendor_name');
+        return $vendorname;
+    }
+
+    //Item type name should in vendor view tab
+    public static function itemtypename($id)
+    {
+        $itemtype= Itemtype::find()
+        ->where(['!=', 'trash', 'Deleted'])
+        ->andwhere(['=', 'type_id', $id])
+        ->one();
+        return $itemtype['type_name'];
+    }
+}

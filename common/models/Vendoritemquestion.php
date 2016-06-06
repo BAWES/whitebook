@@ -6,37 +6,38 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 /**
- * This is the model class for table "{{%vendor_item_question}}".
- *
- * @property string $question_id
- * @property string $item_id
- * @property string $answer_id
- * @property string $question_text
- * @property string $question_answer_type
- * @property integer $question_max_characters
- * @property integer $question_sort_order
- * @property string $question_archived
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- */
+* This is the model class for table "{{%vendor_item_question}}".
+*
+* @property string $question_id
+* @property string $item_id
+* @property string $answer_id
+* @property string $question_text
+* @property string $question_answer_type
+* @property integer $question_max_characters
+* @property integer $question_sort_order
+* @property string $question_archived
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*/
 class Vendoritemquestion extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%vendor_item_question}}';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -51,42 +52,38 @@ class Vendoritemquestion extends \yii\db\ActiveRecord
 
     public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
             'question_id' => 'Question',
-            'item_id' => 'Item ',           
+            'item_id' => 'Item ',
             'question_text' => 'Question Text',
             'question_answer_type' => 'Question Type',
             'question_max_characters' => 'Answer Max Characters',
-            'question_sort_order' => 'Question Sort Order',                     
+            'question_sort_order' => 'Question Sort Order',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
             'modified_datetime' => 'Modified Datetime',
             'trash' => 'Trash',
-            
+
         ];
     }
 }

@@ -6,27 +6,28 @@ use yii\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 use Yii;
 
 /**
- * This is the model class for table "{{%vendor_item_capacity_exception}}".
- *
- * @property string $exception_id
- * @property string $item_id
- * @property string $exception_date
- * @property integer $exception_capacity
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- */
+* This is the model class for table "{{%vendor_item_capacity_exception}}".
+*
+* @property string $exception_id
+* @property string $item_id
+* @property string $exception_date
+* @property integer $exception_capacity
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*/
 class Vendoritemcapacityexception extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public $default;
     public static function tableName()
     {
@@ -34,8 +35,8 @@ class Vendoritemcapacityexception extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -48,28 +49,24 @@ class Vendoritemcapacityexception extends \yii\db\ActiveRecord
 
     public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -91,8 +88,8 @@ class Vendoritemcapacityexception extends \yii\db\ActiveRecord
         //print_r ($id);die;
         foreach($id as $i)
         {
-        $model = Vendoritem::find()->where(['item_id'=>$i])->one();
-        $item[]=$model['item_name'];
+            $model = Vendoritem::find()->where(['item_id'=>$i])->one();
+            $item[]=$model['item_name'];
         }
         return $item=implode(',',$item);
     }
@@ -102,5 +99,5 @@ class Vendoritemcapacityexception extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
     }
-      
+
 }

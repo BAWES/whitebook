@@ -5,33 +5,34 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
 /**
- * This is the model class for table "store_social_info".
- *
- * @property integer $store_social_id
- * @property integer $store_id
- * @property string $store_facebook_share
- * @property string $store_twitter_share
- * @property string $store_google_share
- * @property string $store_linkedin_share
- * @property string $google_analytics
- * @property string $live_script
- */
+* This is the model class for table "store_social_info".
+*
+* @property integer $store_social_id
+* @property integer $store_id
+* @property string $store_facebook_share
+* @property string $store_twitter_share
+* @property string $store_google_share
+* @property string $store_linkedin_share
+* @property string $google_analytics
+* @property string $live_script
+*/
 class Socialinfo extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%social_info}}';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -42,8 +43,8 @@ class Socialinfo extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -58,29 +59,25 @@ class Socialinfo extends \yii\db\ActiveRecord
         ];
     }
 
-   /* 
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function behaviors()
     {
-          return [
-                  [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
 
@@ -90,7 +87,7 @@ class Socialinfo extends \yii\db\ActiveRecord
         $model = Socialinfo::find()->all();
         foreach($model as $key=>$val)
         {
-             return $val;
-        }        
-    }    
+            return $val;
+        }
+    }
 }

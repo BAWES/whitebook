@@ -6,35 +6,37 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+
 /**
- * This is the model class for table "{{%vendor_item_pricing}}".
- *
- * @property string $pricing_id
- * @property string $item_id
- * @property integer $range_from
- * @property integer $range_to
- * @property integer $pricing_quantity_ordered
- * @property integer $pricing_price_per_unit
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- */
+* This is the model class for table "{{%vendor_item_pricing}}".
+*
+* @property string $pricing_id
+* @property string $item_id
+* @property integer $range_from
+* @property integer $range_to
+* @property integer $pricing_quantity_ordered
+* @property integer $pricing_price_per_unit
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*/
 class Vendoritempricing extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%vendor_item_pricing}}';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -47,28 +49,24 @@ class Vendoritempricing extends \yii\db\ActiveRecord
 
     public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -87,9 +85,9 @@ class Vendoritempricing extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     * @return Vendoritempricingquery the active query used by this AR class.
-     */
+    * @inheritdoc
+    * @return Vendoritempricingquery the active query used by this AR class.
+    */
     public static function find()
     {
         return new Vendoritempricingquery(get_called_class());
@@ -100,33 +98,33 @@ class Vendoritempricing extends \yii\db\ActiveRecord
         $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
         return $model;
     }
-    
+
     // this function is used in frontend and backend ...
     public static function loadviewprice($item_id,$type_id,$item_price_per_unit)
-    {       
-          $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
-          if(empty($model))
-          {echo 'No price chart data!';}
-          else
-          {
+    {
+        $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
+        if(empty($model))
+        {echo 'No price chart data!';}
+        else
+        {
             echo '<table class="table table-striped table-bordered detail-view price_range"><tbody>';
-             echo '<tr style="font-size: 16px;"><th colspan=3>Item price per unit range</th></tr>';
+            echo '<tr style="font-size: 16px;"><th colspan=3>Item price per unit range</th></tr>';
             echo '<tr><th>Range from<th>Range To<th>Price (KD) </th></tr>';
-            foreach ($model as $key => $value) { 
-                 echo '<tr><td>'.$value['range_from'].'<td>'.$value['range_to'].'<td>'.$value['pricing_price_per_unit'].'</td></tr>';
-            }        
+            foreach ($model as $key => $value) {
+                echo '<tr><td>'.$value['range_from'].'<td>'.$value['range_to'].'<td>'.$value['pricing_price_per_unit'].'</td></tr>';
+            }
             echo "</tbody></table>";
-		}
-		
-	}
-	
-	// This function is used in frontend
+        }
+
+    }
+
+    // This function is used in frontend
     public static function checkprice($item_id,$type_id,$item_price_per_unit)
-    {       
-          $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
-          if(empty($model))
-          {return 0; }
-           else
-          {return 1; }
-	}
+    {
+        $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
+        if(empty($model))
+        {return 0; }
+        else
+        {return 1; }
+    }
 }

@@ -6,23 +6,25 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+
 /**
- * This is the model class for table "{{%area}}".
- *
- * @property string $area_id
- * @property integer $area_name
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- */
+* This is the model class for table "{{%area}}".
+*
+* @property string $area_id
+* @property integer $area_name
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*/
 class Vendoraddress extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return 'whitebook_vendor_address';
@@ -30,28 +32,24 @@ class Vendoraddress extends \yii\db\ActiveRecord
 
     public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -63,8 +61,8 @@ class Vendoraddress extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -78,21 +76,21 @@ class Vendoraddress extends \yii\db\ActiveRecord
         ];
     }
 
-    	public static function loadaddress()
-	{
-		 $address=Vendoraddress::find()->all();
-		return $address=ArrayHelper::map($area,'address_id','address_text');
-	}
-	
-	
-	public static function areashow($id)
-	{
-		echo $id;
-		 $area=Area::find()->select('area_name')
-		 ->where(['area_id'=> $id])
-		 ->asArray()
-		 ->all();
-		 return ($area[0]['area_name']);
-	}
+    public static function loadaddress()
+    {
+        $address=Vendoraddress::find()->all();
+        return $address=ArrayHelper::map($area,'address_id','address_text');
+    }
+
+
+    public static function areashow($id)
+    {
+        echo $id;
+        $area=Area::find()->select('area_name')
+        ->where(['area_id'=> $id])
+        ->asArray()
+        ->all();
+        return ($area[0]['area_name']);
+    }
 
 }

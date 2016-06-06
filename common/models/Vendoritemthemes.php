@@ -8,54 +8,55 @@ use yii\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 /**
- * This is the model class for table "whitebook_vendor_item".
- *
- * @property string $item_id
- * @property string $type_id
- * @property string $vendor_id
- * @property string $category_id
- * @property string $item_name
- * @property string $item_description
- * @property string $item_additional_info
- * @property integer $item_amount_in_stock
- * @property integer $item_default_capacity
- * @property string $item_price_per_unit
- * @property string $item_customization_description
- * @property string $item_price_description
- * @property string $item_for_sale
- * @property integer $item_how_long_to_make
- * @property integer $item_minimum_quantity_to_order
- * @property string $item_archived
- * @property string $item_approved
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- *
- * @property CustomerCart[] $customerCarts
- * @property EventItemLink[] $eventItemLinks
- * @property FeatureGroupItem[] $featureGroupItems
- * @property PriorityItem[] $priorityItems
- * @property SuborderItemPurchase[] $suborderItemPurchases
- * @property ItemType $type
- * @property Vendor $vendor
- * @property Category $category
- * @property VendorItemCapacityException[] $vendorItemCapacityExceptions
- * @property VendorItemImage[] $vendorItemImages
- * @property VendorItemPricing[] $vendorItemPricings
- * @property VendorItemQuestion[] $vendorItemQuestions
- * @property VendorItemRequest[] $vendorItemRequests
- * @property VendorItemTheme[] $vendorItemThemes
- * @property Theme[] $themes
- */
+* This is the model class for table "whitebook_vendor_item".
+*
+* @property string $item_id
+* @property string $type_id
+* @property string $vendor_id
+* @property string $category_id
+* @property string $item_name
+* @property string $item_description
+* @property string $item_additional_info
+* @property integer $item_amount_in_stock
+* @property integer $item_default_capacity
+* @property string $item_price_per_unit
+* @property string $item_customization_description
+* @property string $item_price_description
+* @property string $item_for_sale
+* @property integer $item_how_long_to_make
+* @property integer $item_minimum_quantity_to_order
+* @property string $item_archived
+* @property string $item_approved
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*
+* @property CustomerCart[] $customerCarts
+* @property EventItemLink[] $eventItemLinks
+* @property FeatureGroupItem[] $featureGroupItems
+* @property PriorityItem[] $priorityItems
+* @property SuborderItemPurchase[] $suborderItemPurchases
+* @property ItemType $type
+* @property Vendor $vendor
+* @property Category $category
+* @property VendorItemCapacityException[] $vendorItemCapacityExceptions
+* @property VendorItemImage[] $vendorItemImages
+* @property VendorItemPricing[] $vendorItemPricings
+* @property VendorItemQuestion[] $vendorItemQuestions
+* @property VendorItemRequest[] $vendorItemRequests
+* @property VendorItemTheme[] $vendorItemThemes
+* @property Theme[] $themes
+*/
 class Vendoritemthemes extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return 'whitebook_vendor_item_theme';
@@ -63,28 +64,24 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
 
     public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -93,8 +90,8 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -104,70 +101,70 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
             'subcategory_id' => 'subcategory Name',
         ];
     }
-    
-    
-	public static function getthemelist($t)
-	{
-			$themeid= Vendoritemthemes::find()
-			->select(['theme_id','id'])
-			->where(['=', 'item_id', $t])
-			->one();
-			return $themeid=$themeid['theme_id'];
-	}
+
+
+    public static function getthemelist($t)
+    {
+        $themeid= Vendoritemthemes::find()
+        ->select(['theme_id','id'])
+        ->where(['=', 'item_id', $t])
+        ->one();
+        return $themeid=$themeid['theme_id'];
+    }
 
 
 
-	public static function getthemeid($t)
-	{
-			$id= Vendoritemthemes::find()
-			->select(['id'])
-			->where(['=', 'item_id', $t])
-			->one();
-			return $id=$id['id'];
-	}
-	
-		public static function themedetails($t)
-	{
-			$id= Vendoritemthemes::find()
-			->select(['theme_id'])
-			->where(['=', 'item_id', $t])
-			->one();
-			 $id=$id['theme_id']; 
-			//print_r ($id);die;
-			 $k=explode(',',$id);
-			 
-			 foreach ($k as $key=>$value)
-			 {
-			 $theme_name[]= Themes::find()
-			->select('theme_name')
-			->where(['!=', 'theme_status', 'Deactive'])
-			->andwhere(['!=', 'trash', 'Deleted'])
-			->andwhere(['theme_id' => $value])
-			->one();
-			}
-			
-			$i=0;
-			 foreach ($theme_name as $key=>$value)
-			 {
-				 $themelist[]=$theme_name[$i]['theme_name'];
-				 $i++;
-			 }
-			 return implode(", ",$themelist);
-	}
-	
-	
-		public function getThemeName($id)
-	{        
-			$theme_name= Themes::find()
-			->select('theme_name')
-			->where(['!=', 'theme_status', 'Deactive'])
-			->andwhere(['!=', 'trash', 'Deleted'])
-			->andwhere(['theme_id' => $id])
-			->one();
-			return $theme_name['theme_name'];  
-	}	
-   /**
-     * @return \yii\db\ActiveQuery
-     */
-	
+    public static function getthemeid($t)
+    {
+        $id= Vendoritemthemes::find()
+        ->select(['id'])
+        ->where(['=', 'item_id', $t])
+        ->one();
+        return $id=$id['id'];
+    }
+
+    public static function themedetails($t)
+    {
+        $id= Vendoritemthemes::find()
+        ->select(['theme_id'])
+        ->where(['=', 'item_id', $t])
+        ->one();
+        $id=$id['theme_id'];
+        //print_r ($id);die;
+        $k=explode(',',$id);
+
+        foreach ($k as $key=>$value)
+        {
+            $theme_name[]= Themes::find()
+            ->select('theme_name')
+            ->where(['!=', 'theme_status', 'Deactive'])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+            ->andwhere(['theme_id' => $value])
+            ->one();
+        }
+
+        $i=0;
+        foreach ($theme_name as $key=>$value)
+        {
+            $themelist[]=$theme_name[$i]['theme_name'];
+            $i++;
+        }
+        return implode(", ",$themelist);
+    }
+
+
+    public function getThemeName($id)
+    {
+        $theme_name= Themes::find()
+        ->select('theme_name')
+        ->where(['!=', 'theme_status', 'Deactive'])
+        ->andwhere(['!=', 'trash', 'Deleted'])
+        ->andwhere(['theme_id' => $id])
+        ->one();
+        return $theme_name['theme_name'];
+    }
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+
 }
