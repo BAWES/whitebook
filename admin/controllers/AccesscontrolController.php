@@ -61,7 +61,7 @@ class AccesscontrolController extends Controller
     * @return mixed
     */
     public function actionIndex()
-    {        
+    {
 	 $access = Authitem::AuthitemCheck('4', '29');
         if (yii::$app->user->can($access)) {
             $searchModel = new AccesscontrolSearch();
@@ -120,75 +120,79 @@ class AccesscontrolController extends Controller
                         $auth_assign = new Authassignment;
                         foreach ($val as $k => $v) {
 							$timenow = date('Y-m-d h:i:sa');
-                            switch ($k) {
+                            switch ($k)
+                            {
                                 case 'controller_id':
-                                $controller_id = $v;
-                                break;
+                                    $controller_id = $v;
+                                    break;
                                 case 'create':
-                                $create = $v;
-                                if ($controller_id != '') {
-									$auth_assign->item_name = $create;
-									$auth_assign->user_id = $adminid;
-									$auth_assign->controller_id = $controller_id;
-									//$auth_assign->modified_datetime = $timenow;
-									$auth_assign->save();
-                                }
-                                break;
+                                    $create = $v;
+                                    if ($controller_id != '') {
+    									$auth_assign->item_name = $create;
+    									$auth_assign->user_id = $adminid;
+    									$auth_assign->controller_id = $controller_id;
+                                        //$auth_assign->auth_item = ;
+    									$auth_assign->save();
+                                    }
+                                    break;
                                 case 'update':
-                                $update = $v;
-                                if ($controller_id != '') {
-                                $auth_assign->item_name = $v;
-								$auth_assign->user_id = $adminid;
-								$auth_assign->controller_id = $controller_id;
-								$auth_assign->save();
-                                }
-                                break;
+                                    $update = $v;
+                                    if ($controller_id != '') {
+                                        $auth_assign->item_name = $v;
+        								$auth_assign->user_id = $adminid;
+        								$auth_assign->controller_id = $controller_id;
+                                        //$auth_assign->auth_item = ;
+        								$auth_assign->save();
+                                    }
+                                    break;
                                 case 'delete':
-                                $delete = $v;
-                                if ($controller_id != '') {
-                                $auth_assign->item_name = $v;
-								$auth_assign->user_id = $adminid;
-								$auth_assign->controller_id = $controller_id;
-								$auth_assign->save();
-                                }
-                                break;
+                                    $delete = $v;
+                                    if ($controller_id != '') {
+                                        $auth_assign->item_name = $v;
+        								$auth_assign->user_id = $adminid;
+        								$auth_assign->controller_id = $controller_id;
+                                        //$auth_assign->auth_item = ;
+        								$auth_assign->save();
+                                    }
+                                    break;
                                 case 'manage':
-                                $manage = $v;
-                                if ($controller_id != '') {
-                                $auth_assign->item_name = $v;
-								$auth_assign->user_id = $adminid;
-								$auth_assign->controller_id = $controller_id;
-								$auth_assign->save();
-                                }
-                                break;
-
+                                    $manage = $v;
+                                    if ($controller_id != '') {
+                                        $auth_assign->item_name = $v;
+        								$auth_assign->user_id = $adminid;
+        								$auth_assign->controller_id = $controller_id;
+                                        //$auth_assign->auth_item = ;
+        								$auth_assign->save();
+                                    }
+                                    break;
                                 case 'view':
-                                $view = $v;
-                                if ($controller_id != '') {
-                                $auth_assign->item_name = $v;
-								$auth_assign->user_id = $adminid;
-								$auth_assign->controller_id = $controller_id;
-								$auth_assign->save();
-                                }
-                                break;
+                                    $view = $v;
+                                    if ($controller_id != '') {
+                                    $auth_assign->item_name = $v;
+    								$auth_assign->user_id = $adminid;
+    								$auth_assign->controller_id = $controller_id;
+                                    //$auth_assign->auth_item = ;
+    								$auth_assign->save();
+                                    }
+                                    break;
                             }
                         }
                         $timenow = date('Y-m-d h:i:sa');
                         $userid = Admin::getAdmin('id');
                         if ($controller_id != '') {
-						$access_ctrl=new Accesscontroller;
-                         $access_ctrl->role_id = $roleid;
-						 $access_ctrl->admin_id = $adminid;
-						 $access_ctrl->controller = $controller_id;
-                         $access_ctrl->create = $create;
-                         $access_ctrl->update = $update;
-						 $access_ctrl->delete = $delete;
-						 $access_ctrl->manage = $manage;
-                         $access_ctrl->view = $view;
-						 $access_ctrl->created_by = $userid;
-						 $access_ctrl->created_datetime = $timenow;
-						$access_ctrl->validate();
-						$access_ctrl->save();
+    						$access_ctrl=new Accesscontroller;
+                            $access_ctrl->role_id = $roleid;
+    						$access_ctrl->admin_id = $adminid;
+    						$access_ctrl->controller = $controller_id;
+                            $access_ctrl->create = $create;
+                             $access_ctrl->update = $update;
+    						 $access_ctrl->delete = $delete;
+    						 $access_ctrl->manage = $manage;
+                             $access_ctrl->view = $view;
+    						 $access_ctrl->created_by = $userid;
+    						 $access_ctrl->created_datetime = $timenow;
+    						$access_ctrl->validate();
+    						$access_ctrl->save();
                         }
                     }
                 }
@@ -266,7 +270,7 @@ class AccesscontrolController extends Controller
 								$auth_assign->user_id = $adminid;
 								$auth_assign->controller_id = $controller_id;
 								$auth_assign->save();
-                                
+
                                 break;
                                 case 'manage':
                                 $manage = $v;
@@ -328,10 +332,10 @@ class AccesscontrolController extends Controller
         if (yii::$app->user->can($access)) {
             $admin_id = Accesscontroller::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
             $admin_id = $admin_id['admin_id'];
-            
+
             $command =Accesscontroller::deleteAll(['admin_id' => $admin_id]);
             $command =Authassignment::deleteAll(['user_id' => $admin_id]);
-                
+
             echo Yii::$app->session->setFlash('success', 'Access controller deleted successfully!');
 
             return $this->redirect(['index']);
@@ -376,11 +380,11 @@ class AccesscontrolController extends Controller
                 ->where(['exists', $subQuery]);
             $command = $query->createCommand();
 			$city=($command->queryall());
-			
-			    
-                  
-			
-			
+
+
+
+
+
         if (!empty($city)) {
             echo  '<option value="">Select</option>';
             foreach ($city as $key => $val) {
@@ -400,7 +404,7 @@ class AccesscontrolController extends Controller
         $control_id = Authassignment::find()->select('controller_id')->where(['user_id' => $admin_id])
         ->groupBy(['controller_id'])
 		->all();
-        
+
             if (!empty($control_id)) {
                 foreach ($control_id as $controll_id) {
                     $controller_id[] = "'".$controll_id['controller_id']."'";
@@ -426,7 +430,7 @@ class AccesscontrolController extends Controller
             }
             $admin_id = $data['admin_id'];
             $controller_id = $data['controller_id'];
-            
+
 			$subQuery = (new Query())
                 ->select('item_name')
                 ->from('{{%auth_assignment}} t')
@@ -438,7 +442,7 @@ class AccesscontrolController extends Controller
                 ->select('name')
                 ->from('{{%auth_item}} p2')
                 ->where(['exists', $subQuery]);
-            
+
             $command = $role->createCommand();
 			$role=($command->queryall());
 			//echo die;
