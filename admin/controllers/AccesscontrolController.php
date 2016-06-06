@@ -131,7 +131,6 @@ class AccesscontrolController extends Controller
     									$auth_assign->item_name = $create;
     									$auth_assign->user_id = $adminid;
     									$auth_assign->controller_id = $controller_id;
-                                        //$auth_assign->auth_item = ;
     									$auth_assign->save();
                                     }
                                     break;
@@ -141,7 +140,6 @@ class AccesscontrolController extends Controller
                                         $auth_assign->item_name = $v;
         								$auth_assign->user_id = $adminid;
         								$auth_assign->controller_id = $controller_id;
-                                        //$auth_assign->auth_item = ;
         								$auth_assign->save();
                                     }
                                     break;
@@ -151,7 +149,6 @@ class AccesscontrolController extends Controller
                                         $auth_assign->item_name = $v;
         								$auth_assign->user_id = $adminid;
         								$auth_assign->controller_id = $controller_id;
-                                        //$auth_assign->auth_item = ;
         								$auth_assign->save();
                                     }
                                     break;
@@ -161,7 +158,6 @@ class AccesscontrolController extends Controller
                                         $auth_assign->item_name = $v;
         								$auth_assign->user_id = $adminid;
         								$auth_assign->controller_id = $controller_id;
-                                        //$auth_assign->auth_item = ;
         								$auth_assign->save();
                                     }
                                     break;
@@ -171,7 +167,6 @@ class AccesscontrolController extends Controller
                                     $auth_assign->item_name = $v;
     								$auth_assign->user_id = $adminid;
     								$auth_assign->controller_id = $controller_id;
-                                    //$auth_assign->auth_item = ;
     								$auth_assign->save();
                                     }
                                     break;

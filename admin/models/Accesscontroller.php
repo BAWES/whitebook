@@ -81,7 +81,6 @@ class Accesscontroller extends \yii\db\ActiveRecord
             'access_id' => 'Access User',
             'role_id' => 'Roles',
             'controller' => 'Controller',
-            'auth_item' => 'Functions',
             'admin_id' => 'User',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
