@@ -212,7 +212,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     public function getRoledata(){
         return $this->hasOne(\admin\models\Role::className(), ['role_id' => 'role_id']);
     }
-   
+
 	public static function Roles()
     {
 		$roles = Role::find()->all();
@@ -236,22 +236,25 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 		$accessdata = Accesscontroller::find()
 		->select(['admin_id'])
 		->groupBy('admin_id')
-		 ->asArray()
+		->asArray()
 		->all();
+
 		for($i=0; $i<count($accessdata); $i++)
 		{
 			$data[]=$accessdata[$i]['admin_id'];
 		}
 
-		$data=implode(',',$data);
+		//$data=implode(',',$data);
+		//die(print_r($data, true));
+
 		$admin=Admin::find()
 		->select(["CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id",'admin_name'])
 		->where(['admin_status'=>'Active'])
-		->andwhere(['not in','id',$data])
+		->andWhere(['not in','id',$data])
 		->asArray()
 		->all();
-		
-		return $admin=ArrayHelper::map($admin,'id','admin_name');
+
+		return ArrayHelper::map($admin,'id','admin_name');
 	}
 
 		public static function Adminupdate()

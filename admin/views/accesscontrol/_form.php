@@ -10,7 +10,7 @@ use yii\bootstrap\ActiveField;
 <?= Html::csrfMetaTags() ?>
 <div class="accesscontrol-form">
 	<div class="col-md-8 col-sm-8 col-xs-8">
-	<? $form = ActiveForm::begin(array('options' => array('id' => 'myform','onsubmit'=>'return check_validation();'))); ?>
+	<?php $form = ActiveForm::begin(array('options' => array('id' => 'myform','onsubmit'=>'return check_validation();'))); ?>
 	<div class="form-group">
 	<?php if ($model->isNewRecord) { ?>
 	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
