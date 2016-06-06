@@ -144,7 +144,7 @@ class CategoryController extends Controller
         $cat_id = $_POST['cat_id'];
         $p_cat_id = $_POST['p_cat_id'];
         $category=Category::updateAll(['sort' => $sort],['category_id= '.$cat_id,'parent_category_id= '.$p_cat_id]);
-        
+
         if ($category) {
             Yii::$app->session->setFlash('success', 'Category sort order updated successfully!');
             echo 1;
@@ -186,22 +186,24 @@ class CategoryController extends Controller
                 $model->validate();
             if (isset($_FILES['Category']['name']['category_icon'])) {
                 $file = UploadedFile::getInstances($model, 'category_icon');
-                $model->category_icon = $file[0]->tempName;
+                if(!empty($file)){
+                    $model->category_icon = $file[0]->tempName;
+                }
             } else {
                 $model->scenario = '';
             }
-            
+
                 $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
                 $model->category_name = strtolower($model->category_name);
-                
-                
+
+
                  $max_sort = Category::find()
                  ->select('MAX(category_id) as sort')
 				->where(['trash' => 'Default'])
 				->andWhere(['category_level' =>0])
                 ->asArray()
 				->one();
-            
+
                 /*$max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_category` where trash = 'Default' AND parent_category_id IS NULL AND category_level = 0 ")->asArray()->all();*/
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
@@ -241,7 +243,7 @@ class CategoryController extends Controller
             $model = new SubCategory();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
-            
+
                 // get the max sort order
 		         $max_sort = Category::find()
                  ->select('max(sort) as sort')
@@ -395,7 +397,7 @@ class CategoryController extends Controller
 
     public function actionSubcategory_update($id)
     {
-		
+
         $access = Authitem::AuthitemCheck('2', '3');
         if (yii::$app->user->can($access)) {
             $model = $this->findsubModel($id);
@@ -613,7 +615,7 @@ class CategoryController extends Controller
 
             $model = $this->findModel($id);
             $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$id]);
-            
+
             if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Child category deleted successfully!');
 
@@ -677,9 +679,9 @@ class CategoryController extends Controller
 
         $sub_category = Category::find()->select('category_id')->where(['parent_category_id' => $data['cid']])->all();
         foreach ($sub_category as $cat) {
-		
-			$category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id'=>$cat['category_id']]);	
-			
+
+			$category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id'=>$cat['category_id']]);
+
         }
         if ($status == 'yes') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
@@ -694,7 +696,7 @@ class CategoryController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'yes' ? 'no' : 'yes');
-        
+
         $category=Category::updateAll(['category_allow_sale' => $status],['category_id'=>$data['cid']]);
         $category=Category::updateAll(['category_allow_sale' => $status],['parent_category_id'=>$data['cid']]);
         if ($status == 'yes') {
@@ -731,7 +733,7 @@ class CategoryController extends Controller
         $categories  = Category::find()
         ->select(['category_id', 'category_name'])
         ->where(['category_id' => $vendor_imp])
-        ->all();        
+        ->all();
         echo  '<option value="">Select</option>';
         foreach ($categories as $key => $val) {
             echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
