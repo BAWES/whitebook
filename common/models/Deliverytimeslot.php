@@ -4,7 +4,6 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression;
 /**
@@ -57,10 +56,6 @@ class Deliverytimeslot extends \yii\db\ActiveRecord
         public function behaviors()
     {
           return [
-              [
-                  'class' => SluggableBehavior::className(),
-                  'attribute' => 'category_name',              
-              ],
               [
                       'class' => BlameableBehavior::className(),
                       'createdByAttribute' => 'created_by',

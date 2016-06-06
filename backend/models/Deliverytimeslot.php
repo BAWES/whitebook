@@ -4,7 +4,6 @@ namespace backend\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -35,31 +34,6 @@ class Deliverytimeslot extends \common\models\Deliverytimeslot
     public static function vendor_deliverytimeslot($id,$day)
     {
         return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id, 'timeslot_day'=>$day])->asArray()->all();;
-    }
-
-    /*
-    *
-    *   To save created, modified user & date time
-    */
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'category_name',
-            ],
-            [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by',
-            ],
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_datetime',
-                'updatedAtAttribute' => 'modified_datetime',
-                'value' => new Expression('NOW()'),
-            ],
-        ];
     }
 
 }

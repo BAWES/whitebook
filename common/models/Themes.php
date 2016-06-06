@@ -43,7 +43,7 @@ class Themes extends \yii\db\ActiveRecord
         return [
             [
                 'class' => SluggableBehavior::className(),
-                'attribute' => 'category_name',
+                'attribute' => 'theme_name',
             ],
             [
                 'class' => BlameableBehavior::className(),
