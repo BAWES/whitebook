@@ -15,6 +15,15 @@ use common\models\CustomerAddress;
  */
 class Users extends Model
 {
+    //Success
+    const EVENT_ADDED_SUCCESS = 1;
+    const KEY_MATCH = 2;
+    const SUCCESS = 1;
+    // Failure
+    const EVENT_ALREADY_EXIST = -2;
+    const KEY_NOT_MATCH = 1;
+    const EMAIL_NOT_EXIST = -1;
+
     public $content;
     public static function tableName()
     {
@@ -454,13 +463,12 @@ class Users extends Model
     public function insert_item_to_event($item_id, $event_id)
     {
         $customer_id = Yii::$app->user->identity->customer_id;
-
         $check = Eventitemlink::find()->select('link_id')
                         ->where(['event_id'=>$event_id])
                         ->andWhere(['item_id'=>$item_id])
                         ->count();
         if ($check > 0) {
-            return -2;
+            return self::EVENT_ALREADY_EXIST;
         } else {
             $event_date = date('Y-m-d H:i:s');
             $command = new Eventitemlink();
@@ -471,11 +479,10 @@ class Users extends Model
             $command->modified_datetime = $event_date;
             if($command->save())
             {
-            return 1;
+                return self::EVENT_ADDED_SUCCESS;
             }
         }
     }
-
 
     public function check_valid_key($key)
     {
@@ -488,10 +495,10 @@ class Users extends Model
         if (count($check_key) > 0) {
           $command=Customer::updateAll(['customer_activation_status' => 1],['customer_activation_key'=>$key]);
             if ($command) {
-                return 2;
+                return self::KEY_MATCH;
             }
         } else {
-            return 1;
+            return self::KEY_NOT_MATCH;
         }
     }
 
