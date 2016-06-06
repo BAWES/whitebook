@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			   ],
             ['class' => 'yii\grid\ActionColumn',
             'header'=>'Action',
-           'template' => ' {update}',],
+           'template' => ' {update}{delete}',],
         ],
     ]); ?>
 		</div>
