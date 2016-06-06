@@ -15,13 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <p> <?= Html::a('Manage', ['index', ], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>        
     </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            [ 'label' => 'Role ',
-			  'value' => $model->role->role_name,
+           [ 'label' => 'role_id',
+			  'value' => $model->roledata->role_name,
             ],
             'admin_name',
             'admin_email:email',
