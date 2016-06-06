@@ -433,11 +433,16 @@ class UsersController extends BaseController
         }
     }
 
-    public function actionEvents($type = '')
+    public function actionEvents($type = '', $events ='', $thingsilike ='')
     {
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+
+        /* Begin events & things i like active tabs */
+        $events = ($_GET['slug'] == 'events' ? 'active' : '');
+        $thingsilike =  ($_GET['slug'] ==  'thingsilike' ?  'active' : '');
+        /* End active tabs */
 
         $customer_id = Yii::$app->user->identity->customer_id;
 
@@ -525,7 +530,9 @@ class UsersController extends BaseController
             'categorylist' => $categorylist,
             'vendorlist' => $vendorlist,
             'themelist' => $themelist,
-            'slug'=>'events'
+            'slug'=>'events',
+            'events'=>$events,
+            'thingsilike'=>$thingsilike,
         ]);
     }
 
