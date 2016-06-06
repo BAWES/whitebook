@@ -6,7 +6,6 @@ use common\models\Image;
 
 $this->title = 'Events/Wishlist | Whitebook';
 
-
 ?>
 
 <section id="inner_pages_white_back">
@@ -477,30 +476,6 @@ foreach($customer_wishlist as $f) {  ?>
 	}
 
 	/* END load themes based on category */
-
-	/* BEGIN ADD EVENT */
-	 function addevent(item_id)
-	{
-	    jQuery.ajax({
-	        type:'POST',
-	        url:"<?= Url::toRoute('/product/addevent'); ?>",
-	        data:{'item_id':item_id},
-	        success:function(data)
-	        {
-	            jQuery('#addevent').html(data);
-	            jQuery('#eventlist'+item_id).selectpicker('refresh');
-	            jQuery('#add_to_event').modal('show');
-
-	        }
-	    });
-	}
-
-	/* END ADD EVENT */
-	function remove_from_events1234(x)
-	{
-		alert(4);
-	}
-
 
 	/* BEGIN FILTER TOGGLE */
 	 if (jQuery(window).width() < 991) {
