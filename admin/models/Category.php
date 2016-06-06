@@ -46,7 +46,7 @@ class Category extends \common\models\Category
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_allow_sale', 'default', 'value' => true],
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required','on' => 'register'],
-            //[['category_icon', 'image', 'extensions' => 'png, jpg, jpeg'],'required','on' => 'register'],
+            [['category_icon', 'file', 'extensions' => 'png, jpg, jpeg'],'required','on' => 'register'],
             [['parent_category_id','category_name',], 'required','on' => 'sub_update',],
             [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
             [['category_name'], 'string', 'max' => 128]
@@ -57,7 +57,7 @@ class Category extends \common\models\Category
     {
         $scenarios = parent::scenarios();      
         $scenarios['sub_update'] = ['parent_category_id','category_name',];//Scenario Values Only Accepted
-        $scenarios['register'] = ['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'];
+        $scenarios['register'] = ['category_icon','category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'];
         return $scenarios;
     }
 

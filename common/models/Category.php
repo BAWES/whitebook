@@ -34,6 +34,8 @@ class Category extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
+
+    const CATEGORY_ICON = "category_icon/";
     /**
      * @inheritdoc
      */
@@ -75,12 +77,10 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-			         ['category_name','categoryvalidation','on' => 'insert',],			
             [['parent_category_id', 'created_by', 'modified_by',], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_allow_sale', 'default', 'value' => true],
-            [['parent_category_id','category_name',], 'required','on' => 'sub_update',],
             [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
             [['category_name'], 'string', 'max' => 128]
         ];

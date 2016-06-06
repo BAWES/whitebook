@@ -1,5 +1,5 @@
 <?php
-
+    
 namespace admin\controllers;
 
 use Yii;
@@ -204,7 +204,6 @@ class CategoryController extends Controller
                 ->asArray()
 				->one();
 
-                /*$max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_category` where trash = 'Default' AND parent_category_id IS NULL AND category_level = 0 ")->asArray()->all();*/
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
                 $model->save(false);
@@ -213,12 +212,25 @@ class CategoryController extends Controller
 
                 if ($file) {
                     foreach ($file as $files) {
-                        $files->saveAs($base.'/web/uploads/subcategory_icon/category_'.$categoryid.'.png');
+                         $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+                        //Resize file using imagine
+                        $resize = true;
+                        if($resize){
+                            /* Begin Product image resolution 25 */
+                            $newTmpName2 = $files->tempName . "." . $files->extension;
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image_30 = $imagine->open($files->tempName);
+                            $image_30->resize($image_30->getSize()->widen(30));
+                            $image_30->save($newTmpName2);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName2;
+                            $awsResult1 = Yii::$app->resourceManager->save($files, Category::CATEGORY_ICON . $filename);
+                        }
                     }
                 }
                 if ($file) {
-                    $file_name = 'category_'.$categoryid.'.png';
-                    $category=Category::updateAll(['category_icon' => $file_name],['category_id'=>$categoryid]);
+                    $category=Category::updateAll(['category_icon' => $filename],['category_id'=>$categoryid]);
                 }
                 echo Yii::$app->session->setFlash('success', 'Category created successfully!');
                 Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
@@ -242,9 +254,8 @@ class CategoryController extends Controller
         if (yii::$app->user->can($access)) {
             $model = new SubCategory();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
-
-                // get the max sort order
+                 $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
+                 // get the max sort order
 		         $max_sort = Category::find()
                  ->select('max(sort) as sort')
 				->where(['parent_category_id' => Yii::$app->request->post()['SubCategory']['parent_category_id']])
@@ -254,22 +265,9 @@ class CategoryController extends Controller
 				->one();
                 $sort = ($max_sort['sort'] + 1);
 
-            $model->sort = $sort;
+                $model->sort = $sort;
                 $model->category_level = '1';
                 $model->save(false);
-
-                $categoryid = $model->category_id;
-                $base = Yii::$app->basePath;
-                $file = UploadedFile::getInstances($model, 'subcategory_icon');
-                if ($file) {
-                    foreach ($file as $files) {
-                        $files->saveAs($base.'/web/uploads/subcategory_icon/sub_category_'.$categoryid.'.png');
-                    }
-                }
-                if ($file) {
-                    $file_name = 'sub_category_'.$categoryid.'.png';
-                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
-                }
                 echo Yii::$app->session->setFlash('success', 'Subcategory added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
 
@@ -312,21 +310,8 @@ class CategoryController extends Controller
 				->asArray()
 				->one();
                 $sort = ($max_sort['sort'] + 1);
-            // }
-            $model->sort = $sort;
+                $model->sort = $sort;
                 $model->save(false);
-                $categoryid = $model->category_id;
-                $base = Yii::$app->basePath;
-                $file = UploadedFile::getInstances($model, 'childcategory_icon');
-                if ($file) {
-                    foreach ($file as $files) {
-                        $files->saveAs($base.'/web/uploads/subcategory_icon/child_category_'.$categoryid.'.png');
-                    }
-                }
-                if ($file) {
-                    $file_name = 'child_category_'.$categoryid.'.png';
-                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
-                }
                 echo Yii::$app->session->setFlash('success', 'Child category added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
 
@@ -369,14 +354,29 @@ class CategoryController extends Controller
             $categoryid = $model->category_id;
             $base = Yii::$app->basePath;
             $file = UploadedFile::getInstances($model, 'category_icon');
-            if ($file) {
-                foreach ($file as $files) {
-                    $files->saveAs($base.'/web/uploads/subcategory_icon/category_'.$categoryid.'.png');
+                if ($file) {
+                    foreach ($file as $files) {
+                       // $files->saveAs($base.'/web/uploads/subcategory_icon/category_'.$categoryid.'.png');
+                         $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+                        //Resize file using imagine
+                        $resize = true;
+                        if($resize){
+                            /* Begin Product image resolution 25 */
+                            $newTmpName2 = $files->tempName . "." . $files->extension;
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image_30 = $imagine->open($files->tempName);
+                            $image_30->resize($image_30->getSize()->widen(30));
+                            $image_30->save($newTmpName2);
+
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName2;
+                            $awsResult1 = Yii::$app->resourceManager->save($files, Category::CATEGORY_ICON . $filename);
+                        }
+                    }
                 }
-            }
             if ($file) {
-                $file_name = 'category_'.$categoryid.'.png';
-                $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
+                //$file_name = 'category_'.$categoryid.'.png';
+                $category=Category::updateAll(['category_icon' => $filename],['category_id'=>$categoryid]);
             }
             echo Yii::$app->session->setFlash('success', 'Category updated successfully!');
             Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
@@ -406,22 +406,8 @@ class CategoryController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
                 $model->save();
-                $base = Yii::$app->basePath;
-                $categoryid = $model->category_id;
-                $file = UploadedFile::getInstances($model, 'subcategory_icon');
-                if ($file) {
-                    foreach ($file as $files) {
-                        $files->saveAs($base.'/web/uploads/subcategory_icon/sub_category_'.$categoryid.'.png');
-                    }
-                }
-                if ($file) {
-                    $file_name = 'sub_category_'.$categoryid.'.png';
-                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
-                }
-
                 echo Yii::$app->session->setFlash('success', 'Subcategory updated successfully!');
                 Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
-
                 return $this->redirect(['manage_subcategory']);
             } else {
                 $subcategory = SubCategory::find()
@@ -429,8 +415,6 @@ class CategoryController extends Controller
                 ->andWhere(['trash'=>'Default'])
                 ->all();
                 $subcategory = ArrayHelper::map($subcategory, 'category_id', 'category_name');
-                //print_r ($subcategory);die;
-
                 return $this->render('subcategory_update', ['model' => $model, 'subcategory' => $subcategory, 'userid' => $userid, 'id' => $id]);
             }
         } else {
@@ -456,19 +440,6 @@ class CategoryController extends Controller
                 $model->category_level = '2';
                 $model->category_name;
                 $model->save(false);
-                $base = Yii::$app->basePath;
-                $categoryid = $model->category_id;
-                $file = UploadedFile::getInstances($model, 'childcategory_icon');
-                if ($file) {
-                    foreach ($file as $files) {
-                        $files->saveAs($base.'/web/uploads/subcategory_icon/child_category_'.$categoryid.'.png');
-                    }
-                }
-                if ($file) {
-                    $file_name = 'child_category_'.$categoryid.'.png';
-                    $category=Category::updateAll(['category_icon' => $file_name],['category_id= '.$categoryid]);
-                }
-
                 echo Yii::$app->session->setFlash('success', 'Child category updated successfully!');
                 Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
 
