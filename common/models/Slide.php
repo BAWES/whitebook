@@ -4,27 +4,26 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 use yii\helpers\Url;
 
 /**
-* This is the model class for table "{{%slide}}".
-*
-* @property integer $slide_id
-* @property string $slide_title
-* @property string $slide_type
-* @property string $slide_image
-* @property string $slide_video_url
-* @property string $slide_url
-* @property string $slide_status
-* @property integer $sort
-* @property string $created_datetime
-* @property string $modified_datetime
-* @property string $trash
-*/
+ * This is the model class for table "{{%slide}}".
+ *
+ * @property integer $slide_id
+ * @property string $slide_title
+ * @property string $slide_type
+ * @property string $slide_image
+ * @property string $slide_video_url
+ * @property string $slide_url
+ * @property string $slide_status
+ * @property integer $sort
+ * @property string $created_datetime
+ * @property string $modified_datetime
+ * @property string $trash
+ */
 class Slide extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
@@ -32,16 +31,16 @@ class Slide extends \yii\db\ActiveRecord
     const UPLOADFOLDER = "slider_uploads/";
 
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public static function tableName()
     {
         return '{{%slide}}';
     }
 
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -52,13 +51,9 @@ class Slide extends \yii\db\ActiveRecord
         ];
     }
 
-    public function behaviors()
+public function behaviors()
     {
         return [
-            [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'category_name',
-            ],
             [
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
@@ -74,8 +69,8 @@ class Slide extends \yii\db\ActiveRecord
     }
 
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [
@@ -94,8 +89,8 @@ class Slide extends \yii\db\ActiveRecord
     }
 
     /**
-    * @return string path to the image
-    */
+     * @return string path to the image
+     */
     public function getImage(){
         if($this->slide_image){
             //Return link to photo uploaded in S3 bucket
@@ -104,8 +99,8 @@ class Slide extends \yii\db\ActiveRecord
     }
 
     /**
-    * @return string path to the video
-    */
+     * @return string path to the video
+     */
     public function getVideo(){
         if($this->slide_video_url){
             //Return link to photo uploaded in S3 bucket
