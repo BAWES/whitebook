@@ -34,7 +34,6 @@ class SubCategory extends \yii\db\ActiveRecord
     * @inheritdoc
     */
 
-    public $subcategory_icon;
     public static function tableName()
     {
         return '{{%category}}';
@@ -71,7 +70,6 @@ class SubCategory extends \yii\db\ActiveRecord
             [['category_allow_sale', 'trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad'], 'string'],
             [['parent_category_id','category_name','category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_icon', 'image', 'extensions' => 'png, jpg, jpeg'],
-            ['subcategory_icon', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => true,'minWidth' => 200, 'maxWidth' => 300,'minHeight' => 40, 'maxHeight' =>70],
             [['category_name'], 'string', 'max' => 128]
         ];
     }

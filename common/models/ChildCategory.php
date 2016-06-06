@@ -33,7 +33,6 @@ class ChildCategory extends \yii\db\ActiveRecord
      * @inheritdoc
      */
      
-    public $childcategory_icon;
     public $subcategory_id;
     public $grand_category_id;    
     public static function tableName()
@@ -49,8 +48,7 @@ class ChildCategory extends \yii\db\ActiveRecord
             [['parent_category_id','category_level', 'created_by', 'modified_by'], 'integer'],
             [['category_allow_sale', 'trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad','slug'], 'string'],
             [['parent_category_id','category_name','category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],			
-			['childcategory_icon', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => true,'minWidth' => 200, 'maxWidth' => 300,'minHeight' => 40, 'maxHeight' =>70],
-            [['category_name'], 'string', 'max' => 128]
+			[['category_name'], 'string', 'max' => 128]
         ];
     }
 
