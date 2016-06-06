@@ -4,33 +4,34 @@ namespace admin\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression;
 
 /**
- * This is the model class for table "{{%role}}".
- *
- * @property string $role_id
- * @property string $role_name
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- */
+* This is the model class for table "{{%role}}".
+*
+* @property string $role_id
+* @property string $role_name
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*/
 class Role extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%role}}';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -43,8 +44,8 @@ class Role extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -58,36 +59,32 @@ class Role extends \yii\db\ActiveRecord
         ];
     }
     public static function getRoleName($id)
-	{
-			$rolename= Role::find()
-			->select ('role_name')
-			->where(['=', 'role_id', $id])
-			->one();
-			return ($rolename['role_name']); 
-	}       
-    
-    /* 
+    {
+        $rolename= Role::find()
+        ->select ('role_name')
+        ->where(['=', 'role_id', $id])
+        ->one();
+        return ($rolename['role_name']);
+    }
+
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function behaviors()
     {
-          return [
-                 [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 }
