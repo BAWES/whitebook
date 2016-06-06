@@ -58,7 +58,7 @@ $action = Yii::$app->controller->action->id;
 
                 <?php } else { ?>
 
-                    <a href="<?= Url::toRoute('/users/events', true); ?>" title="THEWHITEBOOK">
+                    <a href="<?= Url::toRoute(['/users/events','slug'=>'events' ]); ?>" title="THEWHITEBOOK">
                         <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
                     </a>
 <?php } ?>
@@ -194,7 +194,7 @@ $action = Yii::$app->controller->action->id;
 <?php } else { ?>
 <li class="<?php if ($action == "account-settings") {echo "active";
 } ?>"><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'My Account'); ?>"><?php echo Yii::t('frontend', 'My Account'); ?></a></li>
-                            <li><a href="<?php echo Url::toRoute('/users/events', true); ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
+                            <li><a href="<?php echo Url::toRoute(['/users/events','slug'=>'events' ]) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
                             <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
 
@@ -409,7 +409,7 @@ foreach ($event_type as $e) {
                     <li class="<?php if ($action == "account-settings") {
         echo "active";
     } ?>"><a href="<?= Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?>"><?php echo Yii::t('frontend', 'MY_ACCOUNT'); ?></a></li>
-                    <li><a href="<?= Url::toRoute('/users/events', true); ?>" title="<?php echo Yii::t('frontend', 'MY_EVENTS'); ?>"><?php echo Yii::t('frontend', 'MY_EVENTS'); ?></a></li>
+                    <li><a href="<?= Url::toRoute(['/users/events','slug'=>'events']) ?>" title="<?php echo Yii::t('frontend', 'MY_EVENTS'); ?>"><?php echo Yii::t('frontend', 'MY_EVENTS'); ?></a></li>
                     <li><a href="<?= Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'LOGOUT'); ?>"><?php echo Yii::t('frontend', 'LOGOUT'); ?></a></li>
 <?php } ?>
 
