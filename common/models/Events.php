@@ -19,6 +19,10 @@ use yii\db\Expression;
  */
 class Events extends \yii\db\ActiveRecord
 {
+
+    const EVENT_ALREADY_EXIST = -1;
+    const EVENT_CREATED = 1;
+
     /**
      * @inheritdoc
      */

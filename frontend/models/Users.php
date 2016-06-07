@@ -16,13 +16,13 @@ use common\models\CustomerAddress;
 class Users extends Model
 {
     //Success
-    const EVENT_ADDED_SUCCESS = 1;
     const KEY_MATCH = 2;
     const SUCCESS = 1;
     // Failure
-    const EVENT_ALREADY_EXIST = -2;
+    const FAILURE = 0;
     const KEY_NOT_MATCH = 1;
     const EMAIL_NOT_EXIST = -1;
+    
 
     public $content;
     public static function tableName()
@@ -148,7 +148,6 @@ class Users extends Model
             return -1;
         } else {
 			return $command=Events::updateAll(['customer_id' => $customer_id,'event_name' => $event_name,'event_date' => $event_date,'event_type' => $event_type,'slug' => $slug],'event_id= '.$event_id);
-            return $slug;
         }
     }
 

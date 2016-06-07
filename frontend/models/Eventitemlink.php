@@ -22,6 +22,8 @@ use yii\db\Expression;
 */
 class Eventitemlink extends \yii\db\ActiveRecord
 {
+    const EVENT_ITEM_LINK_EXIST = -2;
+    const EVENT_ITEM_CREATED = 2;
     /**
     * @inheritdoc
     */
