@@ -67,23 +67,13 @@ use yii\helpers\Url;
 							<div class="iconset top-settings-dark"></div>
 						</a>
 						<ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
-							<li>
-								<a href="<?= Url::to(["site/profile"]) ?>">
-									My Account
-								</a>
-							</li>
-							<li>
-								<a href="<?= Url::to(["site/changepassword"]) ?>">
-									Change password
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="<?= Url::to(["site/logout"]) ?>">
-									<i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out
-								</a>
-							</li>
-						</ul>
+							<li><a href="<?= Url::toRoute('site/profile'); ?>"> My Account</a>
+       </li>
+       <li><a href="<?= Url::toRoute('/site/changepassword'); ?>">Change password</a>
+       </li>
+       <li class="divider"></li>
+       <li><a href="<?= Url::toRoute('/site/logout'); ?>"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+							</ul>
 					</li>
 					<!-- END SETTINGS -->
 					<!-- END CHAT SIDEBAR TOGGLE -->
