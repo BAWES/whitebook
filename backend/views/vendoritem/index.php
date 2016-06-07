@@ -30,20 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'id'=>'items',
         'columns' => [
-			[ 'class' => 'yii\grid\CheckboxColumn'],
-            ['class' => 'yii\grid\SerialColumn'],
-            'item_name',
-            [
-				'attribute'=>'category_id',
-				'label'=>'Category Name',
-				'value'=>function($data){
-					return $data->getCategoryName($data->category_id);
-					},
+     			[ 'class' => 'yii\grid\CheckboxColumn'],
+                 ['class' => 'yii\grid\SerialColumn'],
+                 'item_name',
+                 [
+     				'attribute'=>'category_id',
+     				'label'=>'Category Name',
+     				'value'=>function($data){
+     					return $data->getCategoryName($data->category_id);
+     					},
 
-				'filter' => $vendor_category,
-			],
-
-
+     				'filter' => $vendor_category,
+     			],
 			[
 				'attribute'=>'type_id',
 				'label'=>'Item Type',
@@ -53,12 +51,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),
 			],
      [
-             'label'=>'Status',
-             'format'=>'raw',
+      'attribute'=>'item_status',
+      'label'=>'Status',
+      'format'=>'raw',
 			  'value'=>function($data) {
 				return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status']);
 				},
 			 'filter' =>  \admin\models\Vendoritem::Activestatus(),
+    ],
 			[
 				'attribute'=>'sort',
 				'label'=>'Sort Order',
@@ -79,13 +79,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => ['date', Yii::$app->params['dateFormat']],
 				'label'=>'created date',
 			],
-			['class' => 'yii\grid\ActionColumn',
-            'header'=>'Action',
-            'template' => ' {view} {update} {delete}',
- 	],
-        ],
+       			['class' => 'yii\grid\ActionColumn',
+                   'header'=>'Action',
+                   'template' => ' {view} {update} {delete}',
+        	],
+    ],
     ]); ?>
-     <?php Pjax::end(); ?>
+    <?php Pjax::end(); ?>
 
 </div>
 </div>
