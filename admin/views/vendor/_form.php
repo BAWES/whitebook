@@ -237,9 +237,9 @@ $('.controls1').find('#remove').remove();
 $('.datepicker').datepicker();
 $('select#package').hide();
 
-$("#change_pack").live('click',function(){
+/*$("#change_pack").live('click',function(){
    $('select#package').show();
-});
+});*/
 
 $(function()
 {	/* Begin when loading page first tab opened */
