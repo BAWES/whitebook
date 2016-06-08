@@ -5,10 +5,11 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+
 /**
 * This is the model class for table "whitebook_category".
 *
@@ -69,7 +70,6 @@ class SubCategory extends \yii\db\ActiveRecord
             [['parent_category_id','category_level', 'created_by', 'modified_by'], 'integer'],
             [['category_allow_sale', 'trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad'], 'string'],
             [['parent_category_id','category_name','category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
-            ['category_icon', 'image', 'extensions' => 'png, jpg, jpeg'],
             [['category_name'], 'string', 'max' => 128]
         ];
     }

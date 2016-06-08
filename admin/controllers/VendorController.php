@@ -637,6 +637,6 @@ class VendorController extends Controller
           ->where(['vendor_name' => $data['vendor_name']])
           ->andwhere(['trash' => 'Default'])
           ->all();
-        echo $result = count($vendorname);
+        return $result = count($vendorname);
     }
 }

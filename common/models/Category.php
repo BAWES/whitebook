@@ -5,11 +5,12 @@ namespace common\models;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
-use common\models\User;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use common\models\User;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
-use yii\db\Expression;
+
 
 /**
  * This is the model class for table "whitebook_category".
@@ -88,7 +89,7 @@ class Category extends \yii\db\ActiveRecord
     
     public function scenarios()
     {
-		      $scenarios = parent::scenarios();      
+		$scenarios = parent::scenarios();      
         $scenarios['sub_update'] = ['parent_category_id','category_name',];//Scenario Values Only Accepted
         return $scenarios;
     }

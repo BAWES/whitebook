@@ -3,22 +3,22 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Image;
-use admin\models\Admin;
-use admin\models\Authitem;
-use admin\models\Category;
-use admin\models\Vendor;
-use common\models\ChildCategory;
-use common\models\SubCategory;
-use admin\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use admin\models\Vendoritem;
 use common\models\Customer;
+use common\models\ChildCategory;
+use common\models\SubCategory;
+use admin\models\Image;
+use admin\models\Admin;
+use admin\models\Authitem;
+use admin\models\Category;
+use admin\models\Vendor;
+use admin\models\CategorySearch;
+use admin\models\Vendoritem;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -192,18 +192,15 @@ class CategoryController extends Controller
             } else {
                 $model->scenario = '';
             }
-
-                $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
-                $model->category_name = strtolower($model->category_name);
-
-
-                 $max_sort = Category::find()
-                 ->select('MAX(category_id) as sort')
-				->where(['trash' => 'Default'])
-				->andWhere(['category_level' =>0])
+            $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
+            $model->category_name = strtolower($model->category_name);
+            $max_sort = Category::find()
+                ->select('MAX(category_id) as sort')
+    			->where(['trash' => 'Default'])
+    			->andWhere(['category_level' =>0])
                 ->asArray()
-				->one();
-
+    			->one();
+            print_r($max_sort);die;
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
                 $model->save(false);
@@ -266,7 +263,7 @@ class CategoryController extends Controller
                 $sort = ($max_sort['sort'] + 1);
 
                 $model->sort = $sort;
-                $model->category_level = '1';
+                $model->category_level = 1;
                 $model->save(false);
                 echo Yii::$app->session->setFlash('success', 'Subcategory added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
@@ -356,7 +353,6 @@ class CategoryController extends Controller
             $file = UploadedFile::getInstances($model, 'category_icon');
                 if ($file) {
                     foreach ($file as $files) {
-                       // $files->saveAs($base.'/web/uploads/subcategory_icon/category_'.$categoryid.'.png');
                          $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
                         //Resize file using imagine
                         $resize = true;

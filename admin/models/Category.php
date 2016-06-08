@@ -1,12 +1,14 @@
 <?php
 
 namespace admin\models;
-use yii\helpers\ArrayHelper;
+
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
-use yii\behaviors\BlameableBehavior;
 use yii\db\Expression;
+use yii\behaviors\BlameableBehavior;
+
 
 /**
  * This is the model class for table "whitebook_category".
