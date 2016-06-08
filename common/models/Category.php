@@ -36,12 +36,9 @@ class Category extends \yii\db\ActiveRecord
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
 
-    const CATEGORY_ICON = "category_icon/";
     /**
      * @inheritdoc
      */
-    public $subcategory_icon;
-    public $category_icon;
     public static function tableName()
     {
      return '{{%category}}';        

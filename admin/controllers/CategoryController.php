@@ -184,14 +184,6 @@ class CategoryController extends Controller
             if($model->load(Yii::$app->request->post()))
             {
                 $model->validate();
-            if (isset($_FILES['Category']['name']['category_icon'])) {
-                $file = UploadedFile::getInstances($model, 'category_icon');
-                if(!empty($file)){
-                    $model->category_icon = $file[0]->tempName;
-                }
-            } else {
-                $model->scenario = '';
-            }
             $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
             $model->category_name = strtolower($model->category_name);
             $max_sort = Category::find()
@@ -203,34 +195,8 @@ class CategoryController extends Controller
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
                 $model->save(false);
-                $categoryid = $model->category_id;
-                $base = Yii::$app->basePath;
-
-                if ($file) {
-                    foreach ($file as $files) {
-                         $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
-                        //Resize file using imagine
-                        $resize = true;
-                        if($resize){
-                            /* Begin Product image resolution 25 */
-                            $newTmpName2 = $files->tempName . "." . $files->extension;
-                            $imagine = new \Imagine\Gd\Imagine();
-                            $image_30 = $imagine->open($files->tempName);
-                            $image_30->resize($image_30->getSize()->widen(30));
-                            $image_30->save($newTmpName2);
-
-                            //Overwrite old filename for S3 uploading
-                            $files->tempName = $newTmpName2;
-                            $awsResult1 = Yii::$app->resourceManager->save($files, Category::CATEGORY_ICON . $filename);
-                        }
-                    }
-                }
-                if ($file) {
-                    $category=Category::updateAll(['category_icon' => $filename],['category_id'=>$categoryid]);
-                }
                 echo Yii::$app->session->setFlash('success', 'Category created successfully!');
                 Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
-
                 return $this->redirect(['index']);
             } else {
                 return $this->render('create', [
@@ -344,41 +310,12 @@ class CategoryController extends Controller
         $access = Authitem::AuthitemCheck('2', '3');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
-        //$model->scenario = 'update';
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $model->category_name = strtolower($model->category_name);
-            $categoryid = $model->category_id;
-            $base = Yii::$app->basePath;
-            $file = UploadedFile::getInstances($model, 'category_icon');
-                if ($file) {
-                    foreach ($file as $files) {
-                         $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
-                        //Resize file using imagine
-                        $resize = true;
-                        if($resize){
-                            /* Begin Product image resolution 25 */
-                            $newTmpName2 = $files->tempName . "." . $files->extension;
-                            $imagine = new \Imagine\Gd\Imagine();
-                            $image_30 = $imagine->open($files->tempName);
-                            $image_30->resize($image_30->getSize()->widen(30));
-                            $image_30->save($newTmpName2);
-
-                            //Overwrite old filename for S3 uploading
-                            $files->tempName = $newTmpName2;
-                            $awsResult1 = Yii::$app->resourceManager->save($files, Category::CATEGORY_ICON . $filename);
-                        }
-                    }
-                }
-            if ($file) {
-                //$file_name = 'category_'.$categoryid.'.png';
-                $category=Category::updateAll(['category_icon' => $filename],['category_id'=>$categoryid]);
-            }
             echo Yii::$app->session->setFlash('success', 'Category updated successfully!');
             Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
-
             return $this->redirect(['index']);
-            //return $this->redirect(['view', 'id' => $model->category_id]);
-        } else {
+            } else {
             return $this->render('update', [
                 'model' => $model,
             ]);

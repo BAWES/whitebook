@@ -23,16 +23,6 @@ use yii\widgets\ActiveForm;
     <div class="form-group">
 	<?= $form->field($model, 'category_meta_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
 </div>
-    
-    <div class="form-group">
-    <?= $form->field($model, 'category_icon',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 	
-    	])->label('Category icon')->fileInput()->hint('Icon Size 240 * 50') ?>
-    	
-    </div> 
-    <?php if(@$model->category_id) { 
-		if(file_exists($_SERVER['DOCUMENT_ROOT'].'/backend/web/uploads/subcategory_icon/category_'.$model->category_id.'.png')) { 
-		?>
-<?= Html::img(Yii::getAlias('@web/uploads/subcategory_icon/').'category_'.$model->category_id.'.png', ['alt'=>'some', 'class'=>'thing','width'=>'100px','height'=>'100px']); } } ?> 
 
 <div class="form-group">   
 	<?= $form->field($model, 'category_allow_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
