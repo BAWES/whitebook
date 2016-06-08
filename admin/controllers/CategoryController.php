@@ -200,7 +200,6 @@ class CategoryController extends Controller
     			->andWhere(['category_level' =>0])
                 ->asArray()
     			->one();
-            print_r($max_sort);die;
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
                 $model->save(false);
