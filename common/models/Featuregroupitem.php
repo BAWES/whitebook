@@ -109,10 +109,18 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
+
+   /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
+    }
     
     public static function getGroupName($id)
     {		
-		$model = Featuregroup::find()->where(['group_id'=>$id])->one();
+		  $model = Featuregroup::find()->where(['group_id'=>$id])->one();
         return $model->group_name;
     }
  
@@ -173,12 +181,12 @@ class Featuregroupitem extends \yii\db\ActiveRecord
             
             return $vendor = Featuregroupitem::find()
                     ->select('{{%feature_group_item}}.item_id')
-                    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%feature_group_item}}.vendor_id')
+                    ->joinWith('vendor')
                     ->where(['{{%feature_group_item}}.group_item_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor}}.approve_status' => 'Yes'])
-                    ->andwhere(['<=','{{%vendor}}.package_start_date',$today])
-                    ->andwhere(['>=','{{%vendor}}.package_end_date',$today])
-                    ->andwhere(['<=','{{%feature_group_item}}.featured_start_date',$today_date])
-                    ->andwhere(['>=','{{%feature_group_item}}.featured_end_date',$today_date])
+                    ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
+                    ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
+                    ->andWhere(['<=','{{%feature_group_item}}.featured_start_date',$today_date])
+                    ->andWhere(['>=','{{%feature_group_item}}.featured_end_date',$today_date])
                     ->all();
     }
 

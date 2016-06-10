@@ -1,9 +1,11 @@
 <?php
 
 use common\models\Featuregroup;
+use common\models\Featuregroupitem;
 use common\models\Vendoritem;
 use common\models\Vendor;
 use common\models\Themes;
+use common\models\Image;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
@@ -105,14 +107,18 @@ require(__DIR__ . '/../product/events_slider.php');
 $featured_produc = Featuregroup::find()->select(['group_id', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
 $i = 1;
 foreach ($featured_produc as $key => $value) {
-$sql1 = 'SELECT wvi.*,wfgi.vendor_id FROM whitebook_feature_group_item as wfgi
-INNER JOIN whitebook_vendor_item as wvi ON wfgi.item_id = wvi.item_id
-where wfgi.group_item_status="Active" AND wvi.trash="Default" AND wvi.item_for_sale="Yes"
-AND type_id=2 AND item_status="Active"
-AND wfgi.trash="Default" AND find_in_set(' . $value['group_id'] . ',wfgi.group_id)';
-
-$feature_group_sql = Yii::$app->db->createCommand($sql1);
-$feature_group_sql_result = $feature_group_sql->queryAll();
+ $feature_group_sql_result = Featuregroupitem::find()->select(['{{%vendor_item}}.*','{{%feature_group_item}}.vendor_id'])
+        ->joinWith('item')
+        ->where(['{{%feature_group_item}}.group_id'=>$value["group_id"]])
+        ->andWhere(['{{%feature_group_item}}.group_item_status'=>"Active"])
+        ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
+        ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
+        ->andWhere(['{{%vendor_item}}.item_for_sale'=>"Yes"])
+        ->andWhere(['{{%vendor_item}}.type_id'=>2])
+        ->andWhere(['{{%vendor_item}}.item_status'=>"Active"])
+        ->andWhere(['{{%feature_group_item}}.trash'=>"Default"])
+        ->asArray()
+        ->all();
 
 $count_items = count($feature_group_sql_result);
 if (!empty($feature_group_sql_result)) {
@@ -136,19 +142,21 @@ $a = $f['item_id'];
 $b = $f['vendor_id'];
 $getitemdetails = Vendoritem::find()->where(['item_id' => $a])->asArray()->one();
 $getvendordetails = Vendor::find()->where(['vendor_id' => $b])->asArray()->one();
-if (empty($getitemdetails)) {
+/*if (empty($getitemdetails)) {
 echo $getitemdetails['slug'] = 'dummy';
 echo $getitemdetails['item_name'] = 'dummy item';
 echo $getitemdetails['item_price_per_unit'] = '10';
 }
 if (empty($getvendordetails)) {
 echo $getvendordetails['vendor_name'] = 'Vendor';
-}
+}*/
 
+$out = Image::find()->select(['image_path'])
+       ->where(['item_id'=>$f['item_id']])
+       ->andWhere(['module_type'=>'vendor_item'])
+       ->orderby('vendorimage_sort_order')
+       ->all();
 
-$sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $f['item_id'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
-$command = Yii::$app->DB->createCommand($sql);
-$out = $command->queryAll();
 if ($out) {
 $imglink = Yii::getAlias("@s3/vendor_item_images_210/") . $out[0]['image_path'];
 } else {
