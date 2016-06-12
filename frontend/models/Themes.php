@@ -29,6 +29,7 @@ class Themes extends \common\models\Themes
         ->where(['!=', 'theme_status', 'Deactive'])
         ->andWhere(['!=', 'trash', 'Deleted'])
         ->andWhere(['theme_id' => $id])
+        ->orderby('theme_name')
         ->asArray()
         ->all();
         
