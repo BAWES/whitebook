@@ -38,10 +38,6 @@ class Country extends \yii\db\ActiveRecord
       {
           return [
               [
-                  'class' => SluggableBehavior::className(),
-                  'attribute' => 'country_name',                 
-              ],
-              [
                       'class' => BlameableBehavior::className(),
                       'createdByAttribute' => 'created_by',
                       'updatedByAttribute' => 'modified_by',
