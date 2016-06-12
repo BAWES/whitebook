@@ -1149,11 +1149,6 @@ jQuery(".faver_evnt_product").click(function(){
                     else if(data==-1)
                     {
                         jQuery('#add_to_event_loader').hide();
-                        jQuery('#add_to_event_failure'+x).html('Item Add to your event list is failed');
-                    }
-                    else if(data==-2)
-                    {
-                        jQuery('#add_to_event_loader').hide();
                         jQuery('#add_to_event_success'+x).html('Item already exists to this event!');
                     }
                 }
