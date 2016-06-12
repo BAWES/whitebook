@@ -8,7 +8,7 @@ class Vendoritem extends \common\models\Vendoritem
 
    public static function vendoritem_search_details($name)
     {   
-            $item= Vendoritem::find()
+          return  $item= Vendoritem::find()
             ->joinWith(['category'])
             ->joinWith(['vendor'])
             ->select(['item_name','whitebook_vendor_item.category_id','whitebook_vendor_item.vendor_id','whitebook_vendor_item.item_id','whitebook_vendor_item.slug as wvislug','whitebook_category.category_name','whitebook_category.slug as wcslug','whitebook_vendor.vendor_name','whitebook_vendor.slug as wvslug'])
@@ -17,11 +17,8 @@ class Vendoritem extends \common\models\Vendoritem
             ->orWhere(['like', 'vendor_name', $name])
             ->andwhere(['whitebook_vendor_item.trash' =>'Default','whitebook_category.trash' =>'Default','item_for_sale' =>'Yes','item_status'=>'Active'])
             ->distinct()
-            ->asArray()         
+            ->asArray()
             ->all();
-            
-            return($item);
-            
     }
 
     public static function findvendoritem($slug)
