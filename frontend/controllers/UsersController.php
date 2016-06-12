@@ -257,12 +257,10 @@ class UsersController extends BaseController
         if (isset($_POST['event_name']) && isset($_POST['event_type']) && isset($_POST['event_date'])) {
             $model = new Users();
             $event_name = $_POST['event_name'];
-            $event_type = $_POST['event_type'];
-            $event_date = \yii\helpers\Setdateformat::convert($_POST['event_date'],'date');
+            $event_date = $_POST['event_date'];
             Yii::$app->session->set('event_name', $event_name);
             $customer_id = Yii::$app->user->identity->customer_id;
             // Creating event start
-
             $customer_id = Yii::$app->user->identity->customer_id;
          			$event_date1 = date('Y-m-d', strtotime($event_date));
          			$string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
@@ -274,8 +272,8 @@ class UsersController extends BaseController
          			$event_modal=new Events;
          			$event_modal->customer_id=$customer_id;
          			$event_modal->event_name=$event_name;
-         			$event_modal->event_date=$event_date;
-         			$event_modal->event_type=$event_type;
+         			$event_modal->event_date=$event_date1;
+         			$event_modal->event_type=$_POST['event_type'];
          			$event_modal->slug=$slug;
          			$event_modal->save();
          			$result=$event_modal->event_id;
