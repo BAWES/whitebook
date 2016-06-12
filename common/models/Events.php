@@ -39,7 +39,7 @@ class Events extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'event_name', 'event_date', 'event_type'], 'required'],
             [['customer_id'], 'integer'],
-            [['event_date', 'created_date'], 'safe'],
+            [['event_date'], 'safe'],
             [['event_name', 'event_type'], 'string', 'max' => 100],
         ];
     }
@@ -76,7 +76,6 @@ class Events extends \yii\db\ActiveRecord
             'event_name' => 'Event Name',
             'event_date' => 'Event Date',
             'event_type' => 'Event Type',
-            'created_date' => 'Created Date',
         ];
     }
 }
