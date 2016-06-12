@@ -367,5 +367,12 @@ class Vendoritem extends \yii\db\ActiveRecord
             Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $image_key);
         }
 
-
+        public static function get_featured_product() {
+          return $feature = \frontend\models\Vendoritem::find()
+                      ->select(['{{%vendor_item}}.*'])
+                      ->where(['item_status' => 'Active'])
+                      ->with('vendor')
+                      ->asArray()
+                      ->all();
+            }
     }

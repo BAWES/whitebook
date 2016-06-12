@@ -189,17 +189,4 @@ class Featuregroupitem extends \yii\db\ActiveRecord
                     ->andWhere(['>=','{{%feature_group_item}}.featured_end_date',$today_date])
                     ->all();
     }
-
-    public static function get_featured_product() {
-        $today = date('Y-m-d H:i:s');
-        
-        return $feature = Vendoritem::find()
-                    ->select(['{{%vendor}}.vendor_name','{{%vendor_item}}.item_id','{{%vendor_item}}.slug as slug','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit'])
-                    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-                    ->where(['{{%vendor_item}}.item_status' => 'Active'])
-                    ->asArray()
-                    ->all();
-    }
-	
 }
