@@ -50,6 +50,7 @@ foreach ($banner as $b) {
 
 <!-- Events slider start -->
 <?php
+
 if (!Yii::$app->user->isGuest) {
 require(__DIR__ . '/../product/events_slider.php');
 } else {
@@ -110,12 +111,12 @@ foreach ($featured_produc as $key => $value) {
  $feature_group_sql_result = Featuregroupitem::find()->select(['{{%vendor_item}}.*','{{%feature_group_item}}.vendor_id'])
         ->joinWith('item')
         ->where(['{{%feature_group_item}}.group_id'=>$value["group_id"]])
-        ->andWhere(['{{%feature_group_item}}.group_item_status'=>"Active"])
+        ->andWhere(['{{%vendor_item}}.type_id'=>2])
         ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
         ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
         ->andWhere(['{{%vendor_item}}.item_for_sale'=>"Yes"])
-        ->andWhere(['{{%vendor_item}}.type_id'=>2])
         ->andWhere(['{{%vendor_item}}.item_status'=>"Active"])
+        ->andWhere(['{{%feature_group_item}}.group_item_status'=>"Active"])
         ->andWhere(['{{%feature_group_item}}.trash'=>"Default"])
         ->asArray()
         ->all();
@@ -142,14 +143,6 @@ $a = $f['item_id'];
 $b = $f['vendor_id'];
 $getitemdetails = Vendoritem::find()->where(['item_id' => $a])->asArray()->one();
 $getvendordetails = Vendor::find()->where(['vendor_id' => $b])->asArray()->one();
-/*if (empty($getitemdetails)) {
-echo $getitemdetails['slug'] = 'dummy';
-echo $getitemdetails['item_name'] = 'dummy item';
-echo $getitemdetails['item_price_per_unit'] = '10';
-}
-if (empty($getvendordetails)) {
-echo $getvendordetails['vendor_name'] = 'Vendor';
-}*/
 
 $out = Image::find()->select(['image_path'])
        ->where(['item_id'=>$f['item_id']])
@@ -213,7 +206,7 @@ foreach ($featured_product as $f) {
 <a href="" title=""><img src="<?php /*echo Url::toRoute('@web/uploads/sig_ban.png');*/ ?>" alt=""/>xxxxxxsssss</a>
 </span> -->
 <div class="desc_popup_cont">
-<h4><?php echo $f['vendor_name']; ?></h4>
+<h4><?php echo $f['vendor']['vendor_name']; ?></h4>
 <h3><?php echo $f['item_name']; ?></h3>
 <div class="text-center"><span class="borderslid"></span></div>
 <h5><?php echo number_format($f['item_price_per_unit'], 2) . "KWD"; ?></h5>
