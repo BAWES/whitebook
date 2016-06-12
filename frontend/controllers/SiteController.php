@@ -39,20 +39,15 @@ class SiteController extends BaseController
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();
-        $featured_product = $featuremodel->get_featured_product();
+        $featured_product = Vendoritem::get_featured_product();
         $banner = $website_model->get_banner_details();
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
-        $customer_events = array();
-        if (!Yii::$app->user->isGuest) {
-            $customer_events = $website_model->getCustomerEvents(Yii::$app->user->identity->customer_id);
-        }
         return $this->render('index', [
           'featured_product' => $featured_product,
           'banner' => $banner,
           'event_type' => $event_type,
           'ads' => $ads,
-          'customer_events' => $customer_events,
           'key' => '0',
         ]);
     }
