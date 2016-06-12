@@ -441,7 +441,7 @@ function deleteeventitem(item_link_id, category_name,category_id,event_id,tis)
 var r = confirm("Are you sure delete this item from "+category_name+"?");
 if (r == true) {
 jQuery.ajax({
-url:'<?php echo Url::to(['/users/deleteeventitem']); ?>',
+url:"<?php echo Url::to(['/users/deleteeventitem']); ?>",
 type:'POST',
 data:{'item_link_id':item_link_id,'category_id':category_id,'event_id':event_id},
 success:function(data)
