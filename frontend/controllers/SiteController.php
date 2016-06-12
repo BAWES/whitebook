@@ -141,7 +141,7 @@ class SiteController extends BaseController
         }
         $result = array_unique($result);
 
-        return $this->render('directory', [
+        return $this->render('themes', [
           'category' => $main_category,
           'directory' => $directory,
           'first_letter' => $result,
