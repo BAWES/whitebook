@@ -38,7 +38,7 @@ class UsersController extends BaseController
     }
 
     public function actionLogin()
-    {
+    { 
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -194,7 +194,9 @@ class UsersController extends BaseController
                 $check_user = $model->customer_password_reset($password, $customer_activation_key,$user_email);
                 $val = Users::FAILURE; // Password reset failure
                 if (count($check_user) > 0) {
-                   $val = Users::SUCCESS; // Password reset successfully
+                    $_POST['email'] = $user_email['customer_email'];
+                    $loginResult = $this->actionLogin();
+                    $val = Users::SUCCESS; // Password reset successfully
                 }
                 return $val;
             }

@@ -193,14 +193,15 @@ function resetpwdcheck()
             async: false,
             success:function(data)
             {
+              //  console.log(data); return false;
                 if(data==1)
                 {
                     jQuery('#reset_loader').hide();
                     jQuery('#resetPwdModal').modal('hide');
                     jQuery('#login_success').modal('show');
-                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Password reset successfully. Please go ahead login.</span>');
+                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Password reset and login successfully.</span>');
                     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
-                    //window.setTimeout(function(){location.reload()});
+                    location.reload();
                     //window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
                     all_form_reset();
                 }
