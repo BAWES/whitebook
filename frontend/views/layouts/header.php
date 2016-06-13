@@ -267,23 +267,13 @@ echo $search_div;
                                         </div>
                                         <label for="event_date" class="error"></label>
                                     </div>
-                                    <?/*<div class="form-group">
-                                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="datetimepicker2" class="input-append date">
-                                    <!--<div id="datetimepicker2" class="input-group date">-->
-                                    <input type="text" name="event_date" id="event_date" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'choose_event_date'); ?>" title="<?php echo Yii::t('frontend', 'choose_event_date'); ?>">
-                                    <span class="input-group-addon">
-                                    <i class="flaticon-calendar189 date1" id="oops"></i>
-                                    </span>
-                                    </div>
-                                    <label for="event_date" class="error"></label>
-                                    </div>*/?>
                                     <div class="form-group new_popup_common">
                                         <div class="bs-docs-example"><select class="selectpicker required trigger" name="event_type" data""-style="btn-primary" id="event_type" >
                                                                              <option value="">Select event type</option>
-<?php
-$event_type = Website::get_event_types();
-foreach ($event_type as $e) {
-    ?>
+                                            <?php
+                                            $event_type = Website::get_event_types();
+                                            foreach ($event_type as $e) {
+                                                ?>
                                                     <option value="<?php echo $e['type_name']; ?>"><?php echo $e['type_name']; ?></option>
 <?php } ?>
                                             </select>
