@@ -150,24 +150,7 @@ class Vendor extends \common\models\Vendor
             return $vendor_category;
         }
 
-    public static function get_directory_list() {
-        $today = date('Y-m-d H:i:s');
-        $data=Vendor::find()
-        ->select(['{{%vendor}}.vendor_id AS vid',
-                    '{{%vendor}}.vendor_name AS vname',
-                    '{{%vendor}}.slug AS slug'])
-            ->leftJoin('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
-            ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
-            ->andwhere(['>=','{{%vendor_packages}}.package_end_date',$today])
-			->andwhere(['{{%vendor}}.trash'=>'Default'])
-			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
-			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
-			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
-			->groupby(['{{%vendor}}.vendor_id'])
-			->asArray()
-			->all();
-        return $data;
-    }
+
 
    // Pass vendor slug to frontend
    public static function vendorslug($id){

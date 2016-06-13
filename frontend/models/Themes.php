@@ -22,8 +22,7 @@ class Themes extends \common\models\Themes
 {
 
   public static function load_all_themename($id)
-  {     
-
+  {
         return $theme_name =  Themes::find()
         ->select(['theme_id','theme_name','slug'])
         ->where(['!=', 'theme_status', 'Deactive'])
@@ -54,11 +53,11 @@ class Themes extends \common\models\Themes
 
   public static function loadthemenames()
   {       
-          $theme_name= Themes::find()
+      return $theme_name= Themes::find()
           ->where(['!=', 'theme_status', 'Deactive'])
           ->andwhere(['!=', 'trash', 'Deleted'])
+          ->orderby(['theme_name'=>SORT_ASC])
           ->asArray()
-          ->all();            
-          return $theme_name;
+          ->all();
   }
 }

@@ -12,26 +12,6 @@ use yii\helpers\Html;?>
 <h1>Themes</h1>
 </div>
 <div class="col-md-3 paddingleft0">
-<div class="filter_content">
-<div class="filter_section">
-<span class="title_filter">Categories</span>
-<div class="listing_sub_cat">
-<input type="hidden" id="ajaxdata" name="ajaxdata">
-<select class="selectpicker" style="display: none;" id="filter_category" name="filter_category">
-<option value="All">All</option>
-<option data-icon="venues-category" value="venues">Venues</option>
-<option data-icon="invitation-category" value="invitations">Invitations</option>
-<option data-icon="food-category" value="food-beverage">Food & Beverage</option>
-<option data-icon="decor-category" value="decor" >Decor</option>
-<option data-icon="supply-category" value="supplies">Supplies</option>
-<option data-icon="enter-category" value="entertainment">Entertainment</option>
-<option data-icon="service-category" value="services">Services</option>
-<option data-icon="others-category" value="others">Others</option>
-<option data-icon="saythankyou-category" value="say-thank-you">Say "Thank You"</option>
-</select>
-</div>
-</div>
-</div>
 </div>
 
 <div id="mobile_respon">
@@ -43,10 +23,10 @@ use yii\helpers\Html;?>
 { ?>
 <li><h2><?php echo $f;?></h2></li>
 <?php foreach($directory as $d) {
-$ltr = strtoupper(substr($d['vname'],0,1));
+$ltr = strtoupper(substr($d['theme_name'],0,1));
 if($ltr==$f)
 {?>
-<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
 <?php } }?>
 <?php }?>
 </ul>
@@ -73,10 +53,10 @@ $l=$first_letter;?>
 <h2><?php echo $f;?></h2>
 <ul>
 <?php foreach($directory as $d) {
-$first_letter = strtoupper(substr($d['vname'],0,1));
+$first_letter = strtoupper(substr($d['theme_name'],0,1));
 if($first_letter==$f)
 {if($i<$first){ ?>
-<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
 <?php }  } }?>
 </ul>
 </div>
@@ -92,10 +72,10 @@ if($first_letter==$f)
 <h2><?php echo $f;?></h2>
 <ul><?php
 foreach($directory as $d) {
-$first_letter = strtoupper(substr($d['vname'],0,1));
+$first_letter = strtoupper(substr($d['theme_name'],0,1));
 if($first_letter==$f)
 { ?>
-<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
 <?php  } }?>
 
 </ul>
@@ -114,10 +94,10 @@ if($first_letter==$f)
 <ul>
 <?php
 foreach($directory as $d) {
-$first_letter = strtoupper(substr($d['vname'],0,1));
+$first_letter = strtoupper(substr($d['theme_name'],0,1));
 if($first_letter==$f)
 {?>
-<li><?= Html::a(strtoupper($d['vname']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
 <?php  } }?>
 
 </ul>

@@ -129,11 +129,11 @@ class SiteController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        $directory = Vendor::get_directory_list();
+        $directory = Themes::loadthemenames();
         $prevLetter = '';
         $result = array();
         foreach ($directory as $d) {
-            $firstLetter = substr($d['vname'], 0, 1);
+            $firstLetter = substr($d['theme_name'], 0, 1);
             if ($firstLetter != $prevLetter) {
                 $result[] = strtoupper($firstLetter);
             }
