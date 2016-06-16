@@ -69,7 +69,7 @@ class SiteController extends Controller
 
         $model = new VendorLogin();
         if(!Yii::$app->user->isGuest){
-            $this->redirect('index');
+            $this->redirect(['site/index']);
         }else{
             if ($model->load(Yii::$app->request->post()) && $model->login()) {
                 $vendor_id=Yii::$app->user->getId();
@@ -82,11 +82,11 @@ class SiteController extends Controller
                     $session->destroy();
                     Yii::$app->session->setFlash('danger', "Kindly contact admin account deactivated!");
                     Yii::warning('[Account Deactivated] Vendor needs contact admin account deactivated', __METHOD__);
-                    return $this->redirect('login');
+                    return $this->redirect(['site/login']);
                 }
                 if($package){
                     Yii::info('[Vendor Login] Vendor Login successfully', __METHOD__);
-                    return $this->redirect('index');
+                    return $this->redirect(['site/index']);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ class SiteController extends Controller
                     $session->destroy();
                     Yii::$app->session->setFlash('danger', "Kindly contact admin package expired!");
                     Yii::warning('[Package Expired] Vendor needs contact admin package expired', __METHOD__);
-                    return $this->redirect('login');
+                    return $this->redirect(['site/login']);
                 }
             } else {
 
@@ -203,8 +203,8 @@ class SiteController extends Controller
 
     public function actionProfile($id=false)
     {
-		
-		
+
+
         $siteinfo = Siteinfo::find()->all();
         $to = $siteinfo[0]['email_id']; // admin email
 
@@ -216,7 +216,7 @@ class SiteController extends Controller
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
         $v_category = Category::find()->select('category_name')->where(['IN','category_id',$model['category_id']])->asArray()->all();
-		
+
         foreach ($v_category as $key => $value) {
             $vendor_categories[] = $value['category_name'];
         }
