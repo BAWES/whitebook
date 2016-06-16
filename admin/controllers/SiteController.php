@@ -86,10 +86,10 @@ class SiteController extends Controller
         Yii::$app->session->setFlash('danger', '');
         $model = new LoginForm();
         if (!Yii::$app->user->isGuest) {
-            $this->redirect('index');
+            $this->redirect(['site/index']);
         } else {
             if ($model->load(Yii::$app->request->post()) && $model->login()) {
-                $this->redirect('index');
+                $this->redirect(['site/index']);
             } else {
                 return $this->render('login', [
                 'model' => $model,
