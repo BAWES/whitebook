@@ -9,9 +9,7 @@ use yii\helpers\Html;?>
 
 <div class="directory_listing">
 <div class="title_main">
-<h1>Themes</h1>
-</div>
-<div class="col-md-3 paddingleft0">
+	<h1>Themes</h1>
 </div>
 
 <div id="mobile_respon">
@@ -45,7 +43,7 @@ $l=$first_letter;?>
 
 <!-- first section start here-->
 <div class="resposive-clearfix">
-<div class="col-md-3 resposive-clearfix">
+<div class="col-md-4 resposive-clearfix">
 <?php $i=0;foreach($first_letter as $f)
 { ?>
 <?php if($i<$first){?>
@@ -64,7 +62,7 @@ if($first_letter==$f)
 </div>
 <!-- first section end here-->
 <!-- second section start here-->
-<div class="col-md-3">
+<div class="col-md-4">
 <?php $i=0;foreach($k as $f)
 {  ?>
 <?php if(($i>=$first)&&($i<$second)){?>
@@ -84,7 +82,7 @@ if($first_letter==$f)
 </div>
 <!-- second section end here-->
 <!-- Third section start here-->
-<div class="col-md-3 paddingright0">
+<div class="col-md-4 paddingright0">
 
 <?php $i=0;foreach($l as $f)
 {  ?>
