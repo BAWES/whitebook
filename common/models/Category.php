@@ -35,6 +35,9 @@ class Category extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
+    const FIRST_LEVEL = 0;
+    const SECOND_LEVEL = 1;
+    const THIRD_LEVEL = 2;
 
     /**
      * @inheritdoc

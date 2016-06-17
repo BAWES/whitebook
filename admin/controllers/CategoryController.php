@@ -183,7 +183,7 @@ class CategoryController extends Controller
             $model->scenario = 'register';
             if($model->load(Yii::$app->request->post()))
             {
-                $model->validate();
+            $model->validate();
             $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
             $model->category_name = strtolower($model->category_name);
             $max_sort = Category::find()
@@ -194,6 +194,7 @@ class CategoryController extends Controller
     			->one();
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
+                $model->category_level = Category::FIRST_LEVEL;
                 $model->save(false);
                 echo Yii::$app->session->setFlash('success', 'Category created successfully!');
                 Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
@@ -222,13 +223,13 @@ class CategoryController extends Controller
                  ->select('max(sort) as sort')
 				->where(['parent_category_id' => Yii::$app->request->post()['SubCategory']['parent_category_id']])
 				->andWhere(['trash' => 'default'])
-				->andWhere(['category_level' => '1'])
+				->andWhere(['category_level' => Category::SECOND_LEVEL])
 				->asArray()
 				->one();
                 $sort = ($max_sort['sort'] + 1);
 
                 $model->sort = $sort;
-                $model->category_level = 1;
+                $model->category_level = Category::SECOND_LEVEL;
                 $model->save(false);
                 echo Yii::$app->session->setFlash('success', 'Subcategory added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
@@ -268,7 +269,7 @@ class CategoryController extends Controller
                  ->select('max(sort) as sort')
 				->where(['parent_category_id' => $parent_category_id])
 				->andwhere(['trash' => 'default'])
-				->andwhere(['category_level' => '2'])
+				->andwhere(['category_level' => Category::THIRD_LEVEL])
 				->asArray()
 				->one();
                 $sort = ($max_sort['sort'] + 1);
@@ -283,7 +284,7 @@ class CategoryController extends Controller
             ->where(['parent_category_id' => null])
             ->andwhere(['trash' => 'default'])
             ->andwhere(['category_allow_sale' => 'yes'])
-            ->andwhere(['category_level' => '0'])
+            ->andwhere(['category_level' => Category::FIRST_LEVEL])
             ->all();
                 $category = ArrayHelper::map($category, 'category_id', 'category_name');
 
@@ -369,7 +370,7 @@ class CategoryController extends Controller
             $model->slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
             $model->category_allow_sale = (Yii::$app->request->post()['ChildCategory']['category_allow_sale']) ? 'yes' : 'no';
                 $model->parent_category_id = Yii::$app->request->post()['ChildCategory']['subcategory_id'];
-                $model->category_level = '2';
+                $model->category_level = Category::THIRD_LEVEL;
                 $model->category_name;
                 $model->save(false);
                 echo Yii::$app->session->setFlash('success', 'Child category updated successfully!');
@@ -381,14 +382,15 @@ class CategoryController extends Controller
             ->where(['parent_category_id' => null])
             ->andwhere(['trash' => 'default'])
             ->andwhere(['category_allow_sale' => 'yes'])
-            ->andwhere(['category_level' => '0'])
+            ->andwhere(['category_level' => Category::FIRST_LEVEL])
             ->all();
                 $subcategory = Category::find()
             ->where(['category_id' => $model->parent_category_id])
             ->andwhere(['trash' => 'default'])
             ->andwhere(['category_allow_sale' => 'yes'])
-            ->andwhere(['category_level' => '1'])
+            ->andwhere(['category_level' => Category::SECOND_LEVEL])
             ->all();
+         //   print_r($parentcategory);die;
                 $parentid = $subcategory[0]['parent_category_id'];
                 $subcategory = ArrayHelper::map($subcategory, 'category_id', 'category_name');
             //echo $model->parent_category_id;die;
