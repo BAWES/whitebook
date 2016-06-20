@@ -7,57 +7,54 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
 /**
- * This is the model class for table "whitebook_feature_group".
- *
- * @property string $group_id
- * @property string $group_name
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- *
- * @property FeatureGroupItem[] $featureGroupItems
- */
+* This is the model class for table "whitebook_feature_group".
+*
+* @property string $group_id
+* @property string $group_name
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*
+* @property FeatureGroupItem[] $featureGroupItems
+*/
 class Featuregroup extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return 'whitebook_feature_group';
     }
 
-        public function behaviors()
+    public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -71,8 +68,8 @@ class Featuregroup extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -87,12 +84,12 @@ class Featuregroup extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getFeatureGroupItems()
     {
         return $this->hasMany(FeatureGroupItem::className(), ['group_id' => 'group_id']);
     }
-    
-    
+
+
 }

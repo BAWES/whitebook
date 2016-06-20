@@ -6,58 +6,55 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 /**
- * This is the model class for table "country".
- *
- * @property integer $country_id
- * @property string $country_name
- * @property string $iso_country_code
- * @property string $currency_code
- * @property string $currency_symbol
- * @property string $country_status
- * @property integer $default
- */
+* This is the model class for table "country".
+*
+* @property integer $country_id
+* @property string $country_name
+* @property string $iso_country_code
+* @property string $currency_code
+* @property string $currency_symbol
+* @property string $country_status
+* @property integer $default
+*/
 class Country extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%country}}';
     }
 
-   /* 
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function behaviors()
-      {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
-      }
+    {
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -69,8 +66,8 @@ class Country extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -82,32 +79,32 @@ class Country extends \yii\db\ActiveRecord
             'country_status' => 'Country Status',
             'default' => 'Default',
         ];
-    }    
+    }
 
 
 
 
-  	public static function loadcountry()
-  	{       
-  			$country= Country::find()
-  			->where(['!=', 'status', 'Deactive'])
-  			->where(['!=', 'trash', 'Deleted'])
-  			->all();
-  			$country=ArrayHelper::map($country,'country_id','country_name');
-  			return $country;
-  	}
+    public static function loadcountry()
+    {
+        $country= Country::find()
+        ->where(['!=', 'status', 'Deactive'])
+        ->where(['!=', 'trash', 'Deleted'])
+        ->all();
+        $country=ArrayHelper::map($country,'country_id','country_name');
+        return $country;
+    }
 
     public function statusImageurl($img_status)
     {
-        if($img_status == 'Active')     
+        if($img_status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Status Image title
     public function statusTitle($status)
-    {           
-    if($status == 'Active')     
+    {
+        if($status == 'Active')
         return 'Activate';
         return 'Deactivate';
     }

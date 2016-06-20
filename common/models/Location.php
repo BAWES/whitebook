@@ -6,33 +6,34 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 /**
- * This is the model class for table "{{%location}}".
- *
- * @property integer $id
- * @property integer $country_id
- * @property integer $city_id
- * @property string $location
- *
- * @property City $city
- * @property Category $country
- */
+* This is the model class for table "{{%location}}".
+*
+* @property integer $id
+* @property integer $country_id
+* @property integer $city_id
+* @property string $location
+*
+* @property City $city
+* @property Category $country
+*/
 class Location extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%location}}';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -43,8 +44,8 @@ class Location extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -57,82 +58,78 @@ class Location extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getCity()
     {
         return $this->hasOne(City::className(), ['city_id' => 'city_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getCountry()
     {
         return $this->hasOne(Country::className(), ['country_id' => 'country_id']);
     }
 
-   /* 
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function behaviors()
     {
-          return [
-                  [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
-    
- 	public static function loadlocation()
-	{       
-			$location= Location::find()
-			->where(['!=', 'status', 'Deactive'])
-			->andwhere(['!=', 'trash', 'Deleted'])
-			->all();
-			$location=ArrayHelper::map($location,'id','location');
-			return $location;
-	}		
-	
-	    	public static function locationdetails($id)
-	{       
-			$location= Location::find()
-			->where(['!=', 'trash', 'Deleted'])
-			->where(['=', 'id', $id])
-			->all();
-			$location=ArrayHelper::map($location,'id','location');
-			return $location;
-	}	
+
+    public static function loadlocation()
+    {
+        $location= Location::find()
+        ->where(['!=', 'status', 'Deactive'])
+        ->andwhere(['!=', 'trash', 'Deleted'])
+        ->all();
+        $location=ArrayHelper::map($location,'id','location');
+        return $location;
+    }
+
+    public static function locationdetails($id)
+    {
+        $location= Location::find()
+        ->where(['!=', 'trash', 'Deleted'])
+        ->where(['=', 'id', $id])
+        ->all();
+        $location=ArrayHelper::map($location,'id','location');
+        return $location;
+    }
     public static function getlocation($id)
-    {		
-		$model = Location::find()->where(['id'=>$id])->one();
+    {
+        $model = Location::find()->where(['id'=>$id])->one();
         return $model->location;
     }
 
     public function statusImageurl($img_status)
     {
-        if($img_status == 'Active')     
+        if($img_status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Status Image title
     public function statusTitle($status)
-    {           
-    if($status == 'Active')     
+    {
+        if($status == 'Active')
         return 'Activate';
         return 'Deactivate';
     }

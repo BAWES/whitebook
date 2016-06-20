@@ -10,27 +10,28 @@ use yii\db\Expression;
 use common\models\User;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 
 /**
- * This is the model class for table "whitebook_category".
- *
- * @property string $category_id
- * @property string $parent_category_id
- * @property string $category_name
- * @property string $category_allow_sale
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- *
- * @property AdvertCategory[] $advertCategories
- * @property Category $parentCategory
- * @property Category[] $categories
- * @property VendorItem[] $vendorItems
- * @property VendorItemRequest[] $vendorItemRequests
- */
+* This is the model class for table "whitebook_category".
+*
+* @property string $category_id
+* @property string $parent_category_id
+* @property string $category_name
+* @property string $category_allow_sale
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*
+* @property AdvertCategory[] $advertCategories
+* @property Category $parentCategory
+* @property Category[] $categories
+* @property VendorItem[] $vendorItems
+* @property VendorItemRequest[] $vendorItemRequests
+*/
 class Category extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
@@ -40,41 +41,37 @@ class Category extends \yii\db\ActiveRecord
     const THIRD_LEVEL = 2;
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
-     return '{{%category}}';        
+        return '{{%category}}';
     }
 
     public function behaviors()
     {
-          return [
-              [
-                  'class' => SluggableBehavior::className(),
-                  'attribute' => 'category_name',              
-              ],
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'category_name',
+            ],
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -86,17 +83,17 @@ class Category extends \yii\db\ActiveRecord
             [['category_name'], 'string', 'max' => 128]
         ];
     }
-    
+
     public function scenarios()
     {
-		$scenarios = parent::scenarios();      
+        $scenarios = parent::scenarios();
         $scenarios['sub_update'] = ['parent_category_id','category_name',];//Scenario Values Only Accepted
         return $scenarios;
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -116,51 +113,51 @@ class Category extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getParentCategory()
     {
         return $this->hasOne(Category::className(), ['category_id' => 'parent_category_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getCategories()
     {
         return $this->hasMany(Category::className(), ['parent_category_id' => 'category_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getVendorItems()
     {
         return $this->hasMany(VendorItem::className(), ['category_id' => 'category_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public function getVendorItemRequests()
     {
         return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
     }
-    
+
 
     public static function vendorcategory($id)
-    {      
-         $vendor = Vendor::find()->select(['category_id'])->where(['vendor_id' => $id])->all();
-         $vendor_id = $vendor[0]['category_id'];         
-         $vendor_exp = explode(',',$vendor_id);
-         //$vendor_imp = implode('","',$vendor_exp);
-         $categories = Category::find()
+    {
+        $vendor = Vendor::find()->select(['category_id'])->where(['vendor_id' => $id])->all();
+        $vendor_id = $vendor[0]['category_id'];
+        $vendor_exp = explode(',',$vendor_id);
+        //$vendor_imp = implode('","',$vendor_exp);
+        $categories = Category::find()
         ->select(['category_id','category_name'])
         ->where(['IN', 'category_id', $vendor_exp])
         ->all();
-         $category =ArrayHelper::map($categories,'category_id','category_name');
-         return $category;
- 
+        $category =ArrayHelper::map($categories,'category_id','category_name');
+        return $category;
+
     }
 
 }

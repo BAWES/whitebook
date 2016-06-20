@@ -6,17 +6,18 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 /**
- * This is the model class for table "{{%events}}".
- *
- * @property integer $event_id
- * @property integer $customer_id
- * @property string $event_name
- * @property string $event_date
- * @property string $event_type
- * @property string $created_date
- */
+* This is the model class for table "{{%events}}".
+*
+* @property integer $event_id
+* @property integer $customer_id
+* @property string $event_name
+* @property string $event_date
+* @property string $event_type
+* @property string $created_date
+*/
 class Events extends \yii\db\ActiveRecord
 {
 
@@ -24,16 +25,16 @@ class Events extends \yii\db\ActiveRecord
     const EVENT_CREATED = 1;
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%events}}';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -44,30 +45,26 @@ class Events extends \yii\db\ActiveRecord
         ];
     }
 
-        public function behaviors()
+    public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [

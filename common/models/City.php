@@ -8,133 +8,130 @@ use yii\db\Query;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
 /**
- * This is the model class for table "city".
- *
- * @property integer $city_id
- * @property integer $country_id
- * @property string $city_name
- * @property string $city_status
- *
- * @property Country $country
- */
+* This is the model class for table "city".
+*
+* @property integer $city_id
+* @property integer $country_id
+* @property string $city_name
+* @property string $city_status
+*
+* @property Country $country
+*/
 class City extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public static function tableName()
     {
         return '{{%city}}';
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
             [['country_id', 'city_name'], 'required'],
-            [['country_id'], 'integer'],            
+            [['country_id'], 'integer'],
             [['city_name'], 'string', 'max' => 100],
         ];
     }
 
-    	public static function loadcity()
-    	{       
-    			$city= City::find()
-    			->where(['!=', 'status', 'Deactive'])
-    			->andwhere(['!=', 'trash', 'Deleted'])
-    			->all();
-    			$city=ArrayHelper::map($city,'city_id','city_name');
-    			return $city;
-    	}	
-	
+    public static function loadcity()
+    {
+        $city= City::find()
+        ->where(['!=', 'status', 'Deactive'])
+        ->andwhere(['!=', 'trash', 'Deleted'])
+        ->all();
+        $city=ArrayHelper::map($city,'city_id','city_name');
+        return $city;
+    }
+
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
             'city_id' => 'Governorate ID',
             'country_id' => 'Country Name',
             'city_name' => 'Governorate',
-            'status' => 'Governorate Status',           
+            'status' => 'Governorate Status',
         ];
     }
 
 
-   /* 
+    /*
     *
-    *   To save created, modified user & date time 
+    *   To save created, modified user & date time
     */
     public function behaviors()
     {
-          return [
-              [
-                      'class' => BlameableBehavior::className(),
-                      'createdByAttribute' => 'created_by',
-                      'updatedByAttribute' => 'modified_by',
-                  ],
-                  'timestamp' => 
-                  [
-                      'class' => 'yii\behaviors\TimestampBehavior',
-                      'attributes' => [
-                       ActiveRecord::EVENT_BEFORE_INSERT => ['created_datetime'],
-                       ActiveRecord::EVENT_BEFORE_UPDATE => ['modified_datetime'],
-                         
-                      ],
-                     'value' => new Expression('NOW()'),
-                  ],
-          ];
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
     public static function getCountryName($id)
-    {		
-		      $model = Country::find()->where(['country_id'=>$id])->one();
+    {
+        $model = Country::find()->where(['country_id'=>$id])->one();
         return $model->country_name;
     }
     public static function getCityname($id)
-    {		
-		$model = City::find()->where(['city_id'=>$id])->one();
+    {
+        $model = City::find()->where(['city_id'=>$id])->one();
         return $model->city_name;
     }
-    
-        public static function listcityname($id)
-    {		
-		$model = City::find()
-		->select(['city_id','city_name'])
-		->where(['country_id'=>$id])->all();
-		$city=ArrayHelper::map($model,'city_id','city_name');
-		return $city;
+
+    public static function listcityname($id)
+    {
+        $model = City::find()
+        ->select(['city_id','city_name'])
+        ->where(['country_id'=>$id])->all();
+        $city=ArrayHelper::map($model,'city_id','city_name');
+        return $city;
     }
-        public static function fullcityname()
-    {		
-		$model = City::find()
-		->select(['city_id','city_name'])
-		->all();
-		$city=ArrayHelper::map($model,'city_id','city_name');
-		return $city;
+    public static function fullcityname()
+    {
+        $model = City::find()
+        ->select(['city_id','city_name'])
+        ->all();
+        $city=ArrayHelper::map($model,'city_id','city_name');
+        return $city;
     }
-    
+
     public function statusImageurl($img_status)
     {
-        if($img_status == 'Active')     
+        if($img_status == 'Active')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Status Image title
     public function statusTitle($status)
-    {           
-    if($status == 'Active')
+    {
+        if($status == 'Active')
         return 'Activate';
         return 'Deactivate';
     }
