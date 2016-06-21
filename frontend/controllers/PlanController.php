@@ -47,7 +47,6 @@ class PlanController extends BaseController
             if (empty($model1)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
-
             $seo_content = Website::SEOdata('category', 'category_id', $model1['category_id'], array('category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'));
 
             \Yii::$app->view->title = ($seo_content[0]['category_meta_title']) ? $seo_content[0]['category_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['category_name'];
@@ -77,7 +76,6 @@ class PlanController extends BaseController
                     ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
                     ->andWhere(['{{%vendor_item}}.type_id' => "2"])
                     ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-                    //->andWhere(['{{%image}}.module_type' => "vendor_item"])
                     ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
                     ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
                     ->groupBy('{{%vendor_item}}.item_id')
@@ -89,38 +87,37 @@ class PlanController extends BaseController
 
         /* END CATEGORY */
 
-          foreach ($imageData as $data) {
-            $k[] = $data['item_id'];
+        foreach ($imageData as $data) {
+            $items[] = $data['item_id'];
         }
-        $p = array();
-        if (!empty($k)) {
-            $result = Themes::loadthemename_item($k);
-            $out1[] = array();
-            $out2[] = array();
-            foreach ($result as $r) {
-                if (is_numeric($r['theme_id'])) {
-                    $out1[] = $r['theme_id'];
-                //$out2[]=0;
+        $get_unique_themes = array();
+        if (!empty($items)) {
+            $theme_names = Themes::loadthemename_item($items);
+            $single_themes[] = array();
+            $multi_themes[] = array();
+            foreach ($theme_names as $themes) {
+                if (is_numeric($themes['theme_id'])) {
+                    $single_themes[] = $themes['theme_id'];
                 }
-                if (!is_numeric($r['theme_id'])) {
-                    $out2[] = explode(',', $r['theme_id']);
-                }
-            }
-            foreach ($out2 as $id) {
-                foreach ($id as $key) {
-                    $p[] = $key;
+                if (!is_numeric($themes['theme_id'])) {
+                    $multi_themes[] = explode(',', $themes['theme_id']);
                 }
             }
-            if (count($out1)) {
-                foreach ($out1 as $o) {
-                    if (!empty($o)) {
-                        $p[] = $o;
+            foreach ($multi_themes as $multiple) {
+                foreach ($multiple as $key) {
+                    $get_unique_themes[] = $key;
+                }
+            }
+            if (count($single_themes)) {
+                foreach ($single_themes as $single) {
+                    if (!empty($single)) {
+                        $get_unique_themes[] = $single;
                     }
                 }
             }
-            $p = array_unique($p);
+            $get_unique_themes = array_unique($get_unique_themes);
         }
-        $themes = Themes::load_all_themename($p);
+        $themes = Themes::load_all_themename($get_unique_themes);
 
         /* VENDOR HAVIG ATLEAST ONE PRODUCT */
         $vendor = Vendoritem::find()
@@ -216,6 +213,7 @@ class PlanController extends BaseController
                 /* END PRICE FILTER */
 
                 $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
+
                 $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
                 // echo $condition;die;
                 if (!is_null($model1)) {

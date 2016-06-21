@@ -67,40 +67,39 @@ class VendoritemController extends Controller
 			->where(['!=','vendor_id', $vendr_id])
 			->asArray()
 			->All();
-        $out1[]= array();
-        $out2[]= array();
+        $single_cat[]= array();
+        $multiple_cat[]= array();
         foreach ($result as $r)
         {
             if(is_numeric($r['category_id']))
             {
-               $out1[]= $r['category_id'];
+               $single_cat[]= $r['category_id'];
             }
             if(!is_numeric($r['category_id']))
             {
-             $out2[]= explode(',',$r['category_id']);
+             $multiple_cat[]= explode(',',$r['category_id']);
             }
         }
-        $p=array();
-        foreach($out2 as $id)
+        $get_unique_ids=array();
+        foreach($multiple_cat as $id)
         {
             foreach($id as $key)
-            $p[] = $key;
+            $get_unique_ids[] = $key;
         }
         $k=array();
-        if(count ($out1)){
-        foreach ($out1 as $o)
+        if(count ($single_cat)){
+        foreach ($single_cat as $single)
         {
-            if(!empty($o)){
-            $p[]=$o;
+            if(!empty($single)){
+            $get_unique_ids[]=$single;
             }
         }
         }
-        $res= "('" . implode("','", $p) . "')";
         $cat_id1= Category::find()
 			->select(['category_id','category_name'])
 			->where(['category_level' => '0'])
-			->andwhere(['trash' => 'Default'])
-			->andwhere(['IN', 'category_id', $res])
+			->andWhere(['trash' => 'Default'])
+			->andWhere(['IN', 'category_id', $get_unique_ids])
 			->asArray()->all();
         $cat_val1[]=0;
         foreach($cat_id1 as $key=>$val)
