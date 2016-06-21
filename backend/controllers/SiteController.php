@@ -215,7 +215,9 @@ class SiteController extends Controller
         $model->scenario = 'vendorprofile';
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
-        $v_category = Category::find()->select('category_name')->where(['IN','category_id',$model['category_id']])->asArray()->all();
+        $vendor_category = explode(",", $model['category_id']);
+        $v_category = Category::find()->select('category_name')
+        ->where(['IN','category_id',$vendor_category])->asArray()->all();
 
         foreach ($v_category as $key => $value) {
             $vendor_categories[] = $value['category_name'];
