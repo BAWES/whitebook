@@ -5,6 +5,7 @@ use Yii;
 use yii\web\Controller;
 use common\models\Cms;
 use common\models\Vendoritem;
+use common\models\Vendoritemthemes;
 use frontend\models\Vendor;
 use frontend\models\Category;
 use common\models\Siteinfo;
@@ -129,6 +130,7 @@ class SiteController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
         $directory = Themes::loadthemenames();
+
         $prevLetter = '';
         $result = array();
         foreach ($directory as $d) {
@@ -661,11 +663,127 @@ class SiteController extends BaseController
                 $options .=  '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
             }
         }
-        echo $options;
-        die;
+        return $options;
     }
                     // END wish list manage page load vendorss based on category
+
+    public function actionThemesearch($slug = '')
+    {
+        $model = new Website();
+        if ($slug != '') {
+            $theme_name= Themes::find()->select('theme_id')
+          ->where(['slug'=>$slug])
+          ->andWhere(['!=', 'trash', 'Deleted'])
+          ->asArray()
+          ->one();
+
+          $item_themes= Vendoritemthemes::find()
+            ->joinwith('vendoritem')
+            ->join('inner join','{{%theme}}','{{%theme}}.theme_id = {{%vendor_item_theme}}
+                    .theme_id')
+          ->where(new \yii\db\Expression('FIND_IN_SET('.$theme_name['theme_id'].',{{%vendor_item_theme}}.theme_id)'))
+          ->andWhere(['!=', '{{%theme}}.trash', 'Deleted'])
+          ->asArray()
+          ->all();
+
+          $category_name= Category::find()->select('slug')
+                ->where(['category_id'=>$item_themes[0]['vendoritem']['category_id']])
+              ->asArray()
+              ->one();
+
+        // category name
+        $slug = $category_name['slug']; /* Very important */
+            
+        /* BEGIN GET VENDORS */
+        $active_vendors = Vendor::loadvalidvendorids($item_themes[0]['vendoritem']['category_id']);
+   //echo '<pre>';print_r($item_themes[0]['vendoritem']['category_id']);die;
+        if (!is_null($item_themes)) {
+
+            $imageData = Vendoritem::find()
+                    ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
+                        {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, 
+                        {{%vendor}}.vendor_name'])
+                    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+                    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
+                    ->where(['{{%vendor_item}}.trash' => "Default"])
+                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
+                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
+                    ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
+                    ->andWhere(['{{%vendor_item}}.category_id' => $item_themes[0]['vendoritem']['category_id']])
+                    ->groupBy('{{%vendor_item}}.item_id')
+                    ->asArray()
+                    ->all();
+            }
+       
+        
+
+        /* END CATEGORY */
+
+       foreach ($imageData as $data) {
+            $items[] = $data['item_id'];
+        }
+        $get_unique_themes = array();
+        if (!empty($items)) {
+            $theme_names = Themes::loadthemename_item($items);
+            $single_themes[] = array();
+            $multi_themes[] = array();
+            foreach ($theme_names as $themes) {
+                if (is_numeric($themes['theme_id'])) {
+                    $single_themes[] = $themes['theme_id'];
+                }
+                if (!is_numeric($themes['theme_id'])) {
+                    $multi_themes[] = explode(',', $themes['theme_id']);
+                }
+            }
+            foreach ($multi_themes as $multiple) {
+                foreach ($multiple as $key) {
+                    $get_unique_themes[] = $key;
+                }
+            }
+            if (count($single_themes)) {
+                foreach ($single_themes as $single) {
+                    if (!empty($single)) {
+                        $get_unique_themes[] = $single;
+                    }
+                }
+            }
+            $get_unique_themes = array_unique($get_unique_themes);
+        }
+
+        $themes = Themes::load_all_themename($get_unique_themes);
+        /* VENDOR HAVIG ATLEAST ONE PRODUCT */
+        $vendor = Vendoritem::find()
+            ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
+            ->join('INNER JOIN', '{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
+            ->where(['{{%vendor_item}}.vendor_id' => $active_vendors])
+            ->andWhere(['{{%vendor}}.vendor_status' => "Active"])
+            ->andWhere(['{{%vendor}}.approve_status' => "Yes"])
+            ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+            ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+            ->andWhere(['{{%vendor_item}}.trash' => "Default"])
+            ->andWhere(['{{%vendor_item}}.item_for_sale' =>'Yes'])
+            ->groupBy('{{%vendor_item}}.vendor_id')
+            ->asArray()
+            ->all();
+        /* END get current category to load sub category */
+
+        /* END GET VENDORS */
+        if (Yii::$app->user->isGuest) {
+            return $this->render('themesearch', ['model' => $model, 'imageData' => $imageData,
+            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug]);
+        } else {
+                $usermodel = new Users();
+                $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
+                return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
+                'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list]);
+            } 
+       }
+    }
 }
 
 
-//SELECT `wvi`.`item_id`, `wvi`.`item_name`, `wvi`.`item_price_per_unit`, `wv`.`vendor_name` FROM `whitebook_wishlist` LEFT JOIN `whitebook_vendor_item` `wvi` ON wvi.item_id = `whitebook_wishlist`.item_id LEFT JOIN `whitebook_vendor` `wv` ON wv.vendor_id = wvi.vendor_id LEFT JOIN `whitebook_vendor_item_theme` `wvt` ON wvt.item_id = wvi.item_id WHERE '1' AND 'wvi.trash'='Default' AND 'wvi.vendor_id'='1' AND 'wvi.item_for_sale'='Yes'
+

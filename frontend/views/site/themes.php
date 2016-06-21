@@ -54,7 +54,7 @@ $l=$first_letter;?>
 $first_letter = strtoupper(substr($d['theme_name'],0,1));
 if($first_letter==$f)
 {if($i<$first){ ?>
-<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/themesearch/','slug'=>$d['slug']])) ?></li>
 <?php }  } }?>
 </ul>
 </div>
@@ -73,7 +73,7 @@ foreach($directory as $d) {
 $first_letter = strtoupper(substr($d['theme_name'],0,1));
 if($first_letter==$f)
 { ?>
-<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/themesearch/','slug'=>$d['slug']])) ?></li>
 <?php  } }?>
 
 </ul>
@@ -95,7 +95,7 @@ foreach($directory as $d) {
 $first_letter = strtoupper(substr($d['theme_name'],0,1));
 if($first_letter==$f)
 {?>
-<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
+<li><?= Html::a(strtoupper($d['theme_name']),Url::toRoute(['/site/themesearch/','slug'=>$d['slug']])) ?></li>
 <?php  } }?>
 
 </ul>

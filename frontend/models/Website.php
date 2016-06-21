@@ -25,7 +25,7 @@ class Website extends Model {
     }
 
     public static function get_main_category() {
-        return $general = Category::find()->select('category_id,category_icon,category_name,category_url')->where(['parent_category_id'=>'IS NULL', 'trash'=>"Default",'category_allow_sale'=>"yes"])->asArray()->all();
+        return $general = Category::find()->select('category_id,category_name')->where(['parent_category_id'=>'IS NULL', 'trash'=>"Default",'category_allow_sale'=>"yes"])->asArray()->all();
     }
 
     public static function get_home_ads() {

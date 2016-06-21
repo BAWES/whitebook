@@ -411,7 +411,7 @@ class Users extends Model
 
     public static function get_main_category()
     {
-        return $general = Category::find()->select('category_id,category_name,category_url')
+        return $general = Category::find()->select('category_id,category_name')
                         ->where(['parent_category_id'=>'IS NULL'])
                         ->andwhere(['trash'=>'Default'])
                         ->andwhere(['category_allow_sale'=>'yes'])
