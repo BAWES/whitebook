@@ -2,6 +2,7 @@
 
 namespace common\models;
 use common\models\Featuregroup;
+use common\models\Vendoritem;
 use yii\db\Query;
 use Yii;
 use yii\db\ActiveRecord;

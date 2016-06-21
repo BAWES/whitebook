@@ -1,7 +1,5 @@
 <?php
 
-//use yii;
-use common\models\Vendor;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;

@@ -108,8 +108,10 @@ require(__DIR__ . '/../product/events_slider.php');
 $featured_produc = Featuregroup::find()->select(['group_id', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
 $i = 1;
 foreach ($featured_produc as $key => $value) {
- $feature_group_sql_result = Featuregroupitem::find()->select(['{{%vendor_item}}.*','{{%feature_group_item}}.vendor_id'])
+ $feature_group_sql_result = Featuregroupitem::find()->select(['{{%vendor_item}}.*','{{%feature_group_item}}.vendor_id','{{%vendor}}.vendor_name'])
         ->joinWith('item')
+        ->joinWith('vendor')
+        ->join('inner join','{{%image}}','{{%image}}.item_id = {{%vendor_item}}.item_id')
         ->where(['{{%feature_group_item}}.group_id'=>$value["group_id"]])
         ->andWhere(['{{%vendor_item}}.type_id'=>2])
         ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
@@ -122,6 +124,7 @@ foreach ($featured_produc as $key => $value) {
         ->all();
 
 $count_items = count($feature_group_sql_result);
+
 if (!empty($feature_group_sql_result)) {
 ?>
 <div class="feature_product_title">
@@ -138,32 +141,22 @@ if (!empty($feature_group_sql_result)) {
 
 <?php
 $i = 0;
-foreach ($feature_group_sql_result as $f) { //echo $f[$i]['vendor_id'];die;
-$a = $f['item_id'];
-$b = $f['vendor_id'];
-$getitemdetails = Vendoritem::find()->where(['item_id' => $a])->asArray()->one();
-$getvendordetails = Vendor::find()->where(['vendor_id' => $b])->asArray()->one();
+foreach ($feature_group_sql_result as $product_val) { //echo $f[$i]['vendor_id'];die;
 
-$out = Image::find()->select(['image_path'])
-       ->where(['item_id'=>$f['item_id']])
-       ->andWhere(['module_type'=>'vendor_item'])
-       ->orderby('vendorimage_sort_order')
-       ->all();
-
-if ($out) {
-$imglink = Yii::getAlias("@s3/vendor_item_images_210/") . $out[0]['image_path'];
+if ($product_val['image_path'] = '23432434') {
+$imglink = Yii::getAlias("@s3/vendor_item_images_210/") . $product_val['image_path'];
 } else {
 $imglink = Yii::getAlias("@web/images/no_image.jpg");
 }
 ?>
 <div class="item">
-<div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $f["slug"], true]); ?>'>
-<a href="<?= Url::toRoute(['/product/product','slug'=>$f["slug"], true]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['/product/product', $getitemdetails['slug'], true]); ?>'>
+<div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $product_val["slug"], true]); ?>'>
+<a href="<?= Url::toRoute(['/product/product','slug'=>$product_val["slug"], true]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['/product/product', $product_val['slug'], true]); ?>'>
 <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
 <div class="deals_listing_cont">
-<?php echo $getvendordetails['vendor_name']; ?>
-<h3><?php echo $f['item_name']; ?></h3>
-<p><?php echo number_format($f['item_price_per_unit'], 2) . "KD"; ?></p>
+<?php echo $product_val['vendor_name']; ?>
+<h3><?php echo $product_val['item_name']; ?></h3>
+<p><?php echo number_format($product_val['item_price_per_unit'], 2) . "KD"; ?></p>
 </div>
 </a>
 </div>
@@ -183,7 +176,8 @@ $imglink = Yii::getAlias("@web/images/no_image.jpg");
 </div>
 </section>
 
-<?php if (count($featured_product) > 0) {
+<?php 
+if(!Yii::$app->user->isGuest && count($featured_product) > 0){
 foreach ($featured_product as $f) {
 ?>
 <div class="modal fade" id="addevent<?php echo $f['item_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -202,9 +196,6 @@ foreach ($featured_product as $f) {
 
 <div class="product_popup_signup">
 <div class="product_popup_prod">
-<!-- <span class="prod_popu">xxxxxxxx
-<a href="" title=""><img src="<?php /*echo Url::toRoute('@web/uploads/sig_ban.png');*/ ?>" alt=""/>xxxxxxsssss</a>
-</span> -->
 <div class="desc_popup_cont">
 <h4><?php echo $f['vendor']['vendor_name']; ?></h4>
 <h3><?php echo $f['item_name']; ?></h3>

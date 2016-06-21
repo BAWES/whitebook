@@ -39,15 +39,15 @@ class SiteController extends BaseController
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();
-        $featured_product = Vendoritem::get_featured_product();
+        
         $banner = $website_model->get_banner_details();
-        $ads = $website_model->get_home_ads();
-        $event_type = $website_model->get_event_types();
+        $featured_product = array();
+        if (!Yii::$app->user->isGuest) {
+            $featured_product = Vendoritem::get_featured_product();
+        }
         return $this->render('index', [
           'featured_product' => $featured_product,
           'banner' => $banner,
-          'event_type' => $event_type,
-          'ads' => $ads,
           'key' => '0',
         ]);
     }
@@ -63,7 +63,6 @@ class SiteController extends BaseController
         $banner = $website_model->get_banner_details();
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
-
         $customer_events = array();
 
         if (!Yii::$app->user->isGuest) {

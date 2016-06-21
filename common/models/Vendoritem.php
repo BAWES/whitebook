@@ -204,6 +204,17 @@ class Vendoritem extends \yii\db\ActiveRecord
         return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }
 
+
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getImage()
+    {
+        return $this->hasOne(Image::className(), ['item_id' => 'item_id']);
+    }
+
+
     /**
     * @return \yii\db\ActiveQuery
     */

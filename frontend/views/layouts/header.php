@@ -233,7 +233,7 @@ echo $search_div;
 </header>
 <!-- header main end  -->
 
-
+<?php if(!Yii::$app->user->isGuest) { ?>
 <!-- BEGIN Create event Modal Box -->
 <div class="modal fade" id="EventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" id="eventModal">
@@ -301,6 +301,7 @@ echo $search_div;
         </div>
     </div>
 </div>
+<?php } ?>
 <!-- END Create event Modal Box -->
 
 <!-- BEGIN EDIT EVENT MODAL BOX -->
