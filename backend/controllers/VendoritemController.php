@@ -146,13 +146,14 @@ class VendoritemController extends Controller
         $model = new Vendoritem();
         $model->vendor_id = Vendor::getVendor('vendor_id');
         $vendor = Vendor::find()->select('category_id')->where(['vendor_id'=>Vendor::getVendor('vendor_id')])->one();
-		$load_category = Category::find()->select(['category_id','category_name'])
+        $v_category = explode(",", $vendor['category_id']);
+        $load_category = Category::find()->select(['category_id','category_name'])
         ->where(['category_allow_sale'=>'Yes'])
         ->andWhere(['category_level'=>0])
         ->andWhere(['trash'=>'Default'])
-		->andWhere(['IN','category_id',$vendor['category_id']])->asArray()->all();
+		->andWhere(['IN','category_id',$v_category])->asArray()->all();
         $categoryname=ArrayHelper::map($load_category,'category_id','category_name');
-
+        
         $model1 = new Image();
         $base = Yii::$app->basePath;
     		 $len = rand(1,1000);
