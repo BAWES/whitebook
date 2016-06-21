@@ -86,7 +86,6 @@ class VendoritemController extends Controller
             foreach($id as $key)
             $get_unique_ids[] = $key;
         }
-        $k=array();
         if(count ($single_cat)){
         foreach ($single_cat as $single)
         {
@@ -147,12 +146,12 @@ class VendoritemController extends Controller
         $model = new Vendoritem();
         $model->vendor_id = Vendor::getVendor('vendor_id');
         $vendor = Vendor::find()->select('category_id')->where(['vendor_id'=>Vendor::getVendor('vendor_id')])->one();
-        $cat_id = explode(',',$vendor['category_id']);
-
-		$load_category = Category::find()->select(['category_id','category_name'])->where(['category_allow_sale'=>'Yes','category_level'=>'0','trash'=>'Default'])
-		->andwhere(['IN','category_id',$vendor['category_id']])->asArray()->all();
-        $categoryname=ArrayHelper::map($load_category,'category_id','category_name');
-        //print_r($load_category);die;
+		$load_category = Category::find()->select(['category_id','category_name'])
+        ->where(['category_allow_sale'=>'Yes',''=>'0','trash'=>'Default'])
+        ->andWhere(['category_level'=>0])
+        ->andWhere(['trash'=>'Default'])
+		->andWhere(['IN','category_id',$vendor['category_id']])->asArray()->all();
+        $categoryname=ArrayHelper::map($load_category,'category_id','category_name');        
 
         $model1 = new Image();
         $base = Yii::$app->basePath;
