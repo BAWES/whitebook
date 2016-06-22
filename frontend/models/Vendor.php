@@ -67,7 +67,6 @@ class Vendor extends \common\models\Vendor
         ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
         ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
-       // ->distinct()
         ->all();
     
 
@@ -88,7 +87,6 @@ class Vendor extends \common\models\Vendor
 
 		$blocked_vendors = \common\models\Blockeddate::find()
                     ->select('GROUP_CONCAT(vendor_id) as vendor_id')
-                    //->where([ DATE(NOW()) => 'DATE(block_date)'])
                     ->where(['DATE(block_date)' =>$now ])
                     ->asArray()
                     ->all();
@@ -96,13 +94,10 @@ class Vendor extends \common\models\Vendor
             
         if($blocked_vendors[0]['vendor_id'] !='')
         {
-            //$condn = "'not in', '{{%vendor}}.vendor_id' ,$blocked_vendors['vendor_id'])";
             $condn = ",'"."not in"."',";
             $condn .= "'"."{{%vendor}}.vendor_id"."',";
             $condn .= $blocked_vendors['vendor_id'];
-            //$condn = 'wv.vendor_id NOT IN('.$blocked_vendors['vendor_id'].') AND';
         }
-        
             
 		 $vendor = Vendor::find()
         ->select('{{%vendor}}.*')
@@ -111,11 +106,9 @@ class Vendor extends \common\models\Vendor
             '{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default',
             '{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes',
             '{{%vendor_item}}.category_id' => $cat_id,'{{%vendor_item}}.type_id' => '2'.$condn])
-        //->andwhere([$condn])
         ->distinct()
         ->asArray()
         ->all();
-        //print_r($vendor->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
         $package = array();
 
         /* STEP 2 CHECK PACKAGE */
@@ -128,7 +121,6 @@ class Vendor extends \common\models\Vendor
         }
         
         return $active_vendors = array_filter($package);
-        //print_r($active_vendors);die;
     }
 
     /* Load who vendor having category  */
@@ -167,8 +159,6 @@ class Vendor extends \common\models\Vendor
 			->asArray()
 			->all();
     }
-
-
 
    // Pass vendor slug to frontend
    public static function vendorslug($id){

@@ -23,9 +23,9 @@ use yii\widgets\Breadcrumbs;
 $category_det=Category::category_value($slug);
 
 if($category_det['category_name']!='Say thank you'){
-	$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $slug])];
+	$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["site/themesearch", 'slug' => $slug])];
 }else{
-	$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Url::to(["plan/plan", 'slug' => $slug]) ];
+	$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Url::to(["site/themesearch", 'slug' => $slug]) ];
 }
 ?>
 
@@ -57,15 +57,15 @@ if($category_det['category_name']!='Say thank you'){
 			<span class="title_filter">Categories</span>
 
 			<select class="selectpicker" style="display: none;" id="main-category">
-				<option data-icon="venues-category" <?php  if($slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
-				<option data-icon="invitation-category" <?php  if($slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
-				<option data-icon="food-category" name="category" value="food-beverage" <?php  if($slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
-				<option data-icon="decor-category" name="category" value="decor" <?php  if($slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
-				<option data-icon="supply-category" value="supplies" <?php  if($slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
-				<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
-				<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
-				<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
-				<option data-icon="saythankyou-category" <?php  if($slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'say-thank-you']) ?>">Say "Thank You"</option>
+				<option data-icon="venues-category" <?php  if($slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="venues">Venues</option>
+				<option data-icon="invitation-category" <?php  if($slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="invitations">Invitations</option>
+				<option data-icon="food-category" name="category" value="food-beverage" <?php  if($slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'food-beverage']) ?>">Food & Beverage</option>
+				<option data-icon="decor-category" name="category" value="decor" <?php  if($slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'decor']) ?>">Decor</option>
+				<option data-icon="supply-category" value="supplies" <?php  if($slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'supplies']) ?>">Supplies</option>
+				<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'entertainment']) ?>">Entertainment</option>
+				<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'services']) ?>">Services</a></option>
+				<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'others']) ?>">Others</option>
+				<option data-icon="saythankyou-category" <?php  if($slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'say-thank-you']) ?>">Say "Thank You"</option>
 			</select>
 		</div>
 	</div>
@@ -84,7 +84,7 @@ if($category_det['category_name']!='Say thank you'){
 <?php
 
 /* Get slug name to find category */
-$subcategory = SubCategory::loadsubcat('food-beverage');
+$subcategory = SubCategory::loadsubcat($slug);
 
 $col=1;
 foreach ($subcategory as $key => $value) {
@@ -149,52 +149,6 @@ type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; 
 </div>
 <?php $col++; } ?>
 <!--  END CATEGORY FILTER-->
-<!--  BEGIN THEME FILTER-->
-<div class="panel panel-default" >
-<div class="panel-heading">
-<div class="clear_left"><p>Themes <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right">
-<a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-<h4 class="panel-title">
-<span class="plus_acc"></span>
-</h4>
-</a>
-</div>
-</div>
-<div id="themes" class="panel-collapse collapse" aria-expanded="false">
-<div class="panel-body">
-<div class="table">
-<?php
-/* BEGIN Display scroll for more than three li */
-if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-/* END Display scroll for more than three li */
-?>
-<ul class="<?= $class; ?>">
-<?php foreach ($themes as $key => $value) {
-if(isset($_GET['themes']) && $_GET['themes'] !="")
-{
-$val = explode(' ',$_GET['themes']);
-
-if(in_array($value['slug'],$val))
-{
-	$checked1 = 'checked=checked';
-}
-else
-{
-$checked1 = '';
-}
-}
-?>
-<li>
-<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>"><input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> ><?= ucfirst(strtolower($value['theme_name'])); ?></label>
-</li>
-<?php } ?>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<!--  END THEME FILTER -->
 
 <!--  BEGIN VENDOR FILTER -->
 <div class="panel panel-default" >
@@ -651,39 +605,34 @@ var url_path;
 /* BEGIN GET SLUG FROM URL */
 var url = window.location.href;
 slug = <?= '"'.$_GET['slug'].'"';?>;
-/* var newUrl = url.substring(0, url.indexOf('?'));
-
-if(newUrl !='')
-{
-		slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
-}
-else
-{
-	slug = url.substring(url.lastIndexOf('/') + 1);
-
-} */
+var newUrl = url.substring(0, url.indexOf('?'));
 /* END GET SLUG FROM URL */
 
 /* if all checkbox uncheck load items based on category */
 if(category_name =="" && theme_name =="" && vendor_name =="")
 {
 window.history.pushState("test", "Title", newUrl);
-//slug = <?= '"'.$slug.'"'; ?>;
 }
 
 if(category_name !="" || theme_name !="" || vendor_name !="" || price_val !="")
 {
-url_path = '?slug='+slug+'&category='+category_name+'&themes='+theme_name+'&vendor='+vendor_name+'&price='+price_val;
+url_path = 'subcategory='+category_name+'&vendor='+vendor_name+'&price='+price_val;
+window.history.pushState("test", "Title", '?slug='+slug+'&'+url_path);
+}
+else
+{
+	url_path = '?slug='+slug+'&subcategory='+category_name+'&vendor='+vendor_name+'&price='+price_val;
+window.history.pushState("test", "Title", url_path);
 }
 
-var path = "<?= Url::to(['plan/loaditems']); ?> ";
+var path = window.location.href;//"<?= Url::to(['site/themesearch']); ?> ";
 <?php $giflink= Url::to("@web/images/ajax-loader.gif");?>
 jQuery.ajax({
 type:'POST',
 url:path,
 data:{item_ids: category_name, themes : theme_name,vendor : vendor_name,price : price_val,slug: slug, _csrf : csrfToken},
 success:function(data){
-window.history.pushState("test", "Title", url_path);
+console.log(data);
 jQuery('.events_listing ul').html(data);
 // Every fourth li change margin
 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
@@ -763,4 +712,12 @@ jQuery("#left_side_cate nav").attr ('id','sidebar-wrapper')
 
 /* END RESPONSIVE FILTER NAVIGATION */
 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
+
+/* BEGIN load category and reload the page */
+jQuery('#main-category').change(function(){
+var category = jQuery('#main-category :selected').val();
+var hostname = window.location.href;
+window.location.href = hostname+'&category='+category;
+});
+/* END load category and reload the page */
 </script>

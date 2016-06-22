@@ -90,6 +90,7 @@ class PlanController extends BaseController
         foreach ($imageData as $data) {
             $items[] = $data['item_id'];
         }
+
         $get_unique_themes = array();
         if (!empty($items)) {
             $theme_names = Themes::loadthemename_item($items);
@@ -134,7 +135,6 @@ class PlanController extends BaseController
             ->groupBy('{{%vendor_item}}.vendor_id')
             ->asArray()
             ->all();
-            //print_r(parent::printdata($vendor));die;
         /* END get current category to load sub category */
 
         /* END GET VENDORS */
