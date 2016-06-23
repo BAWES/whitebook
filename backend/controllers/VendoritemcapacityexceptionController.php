@@ -51,8 +51,8 @@ class VendoritemcapacityexceptionController extends Controller
 		->orderby(['exception_date'=>SORT_ASC])
 		->asArray()
 		->all();
-	
-		$startdate = date ("d-m-Y", strtotime($startdate[0]['exception_date']));
+	   $startdate = date('Y-m-d', strtotime($startdate[0]['exception_date']));
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -98,16 +98,14 @@ class VendoritemcapacityexceptionController extends Controller
 				$dat[] = date('n/j/Y', strtotime($date['exception_date']));
 
 			}
-
 			$exist_dates = implode('","',$dat);
 		}
-
-			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+    	if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 			 $item = Yii::$app->request->post('Vendoritemcapacityexception');
 			 $model->item_id = implode(',',$model->item_id);
-			 $model->exception_date = \yii\helpers\Setdateformat::convert($model->exception_date);
+			 $model->exception_date = date('Y-m-d', strtotime($model->exception_date));
 			 $model->save();
-            echo Yii::$app->session->setFlash('success', "Exception date created successfully!");
+                echo Yii::$app->session->setFlash('success', "Exception date created successfully!");
 
              return $this->redirect(['index']);
 

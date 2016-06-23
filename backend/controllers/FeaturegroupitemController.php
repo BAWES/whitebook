@@ -16,7 +16,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\helpers\Setdateformat;
 use yii\helpers\ArrayHelper;
 /**
  * FeaturegroupitemController implements the CRUD actions for Featuregroupitem model.
@@ -111,8 +110,8 @@ class FeaturegroupitemController extends Controller
 			$model1->vendor_id=$vendorid;
 			$model1->theme_id=$theme_id;
 			$model1->save();
-			$model->featured_start_date = Setdateformat::convert($model->featured_start_date);
-			$model->featured_end_date = Setdateformat::convert($model->featured_end_date);
+			$model->featured_start_date = date('Y-m-d', strtotime($model->featured_start_date));
+			$model->featured_end_date = date('Y-m-d', strtotime($model->featured_end_date));
 			$model->vendor_id=$vendorid;
 			$exists = Featuregroupitem::findOne(["item_id" => $item_id,"trash" => 'Default',"vendor_id"=>$vendorid]);
 			 if($exists){
@@ -159,15 +158,14 @@ class FeaturegroupitemController extends Controller
 		$themelist= Themes::loadthemename();
         $model1=new Vendoritemthemes();
         $model = $this->findModel($id);
-		$themeid=Vendoritemthemes ::getthemelist($model->vendor_id,$model->item_id);
-		$id=Vendoritemthemes ::getthemeid($model->vendor_id,$model->item_id);
+		$themeid=Vendoritemthemes::getthemelist($model->vendor_id,$model->item_id);
+		$id=Vendoritemthemes::getthemeid($model->vendor_id,$model->item_id);
 		$id = array('0'=>$id);
 		$id=$id['0'];
-        $featuregroupitem=Vendoritem ::groupvendoritem($model->vendor_id,$model->category_id,$model->subcategory_id);
+        $featuregroupitem=Vendoritem::groupvendoritem($model->vendor_id,$model->category_id,$model->subcategory_id);
         if ($model->load(Yii::$app->request->post())&&($model->validate())) {
-			//print_r ($_POST);die;
-			 $model->featured_start_date = Setdateformat::convert($model->featured_start_date);
-			 $model->featured_end_date = Setdateformat::convert($model->featured_end_date);
+   $model->featured_start_date = date('Y-m-d', strtotime($model->featured_start_date));
+   $model->featured_end_date = date('Y-m-d', strtotime($model->featured_end_date));
 			 if($model->item_id){
 			$item_id=implode(",",$model->item_id);}
 			else{$item_id=0;}

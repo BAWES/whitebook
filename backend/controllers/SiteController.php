@@ -125,9 +125,7 @@ class SiteController extends Controller
         $monthitemcnt=Vendoritem::vendoritemmonthcount();
         $dateitemcnt=Vendoritem::vendoritemdatecount();
         $packageenddate=Vendor::getVendor_packagedate(Yii::$app->user->identity->id);
-        /*$model->load(Yii::$app->request->post());
-        $model->validate();
-        print_r($model->getErrors());die;*/
+
         if ($model->load(Yii::$app->request->post()) && $model->validate())
         {
 
