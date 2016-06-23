@@ -60,4 +60,12 @@ class Themes extends \common\models\Themes
           ->asArray()
           ->all();
   }
+
+  public static function getThemename($slug)
+  {
+    return $theme_name= Themes::find()->select('theme_name')
+          ->where(['slug'=> $slug])
+          ->asArray()
+          ->one();
+  }
 }

@@ -4,6 +4,7 @@ use common\models\ChildCategory;
 use common\models\SubCategory;
 use frontend\models\Category;
 use common\models\Vendor;
+use frontend\models\Themes;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
@@ -20,10 +21,10 @@ use yii\widgets\Breadcrumbs;
 <div class="bs-example">
 <!-- <ul class="breadcrumb"> -->
 <?php
-$category_det=Category::category_value($slug);
 
-if($category_det['category_name']!='Say thank you'){
-	$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["site/themesearch", 'slug' => $slug])];
+$theme_name=Themes::getthemename($slug);
+if($theme_name['theme_name']!='Say thank you'){
+	$this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($theme_name['theme_name']), 'url' => Url::to(["site/themesearch", 'slug' => $slug])];
 }else{
 	$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Url::to(["site/themesearch", 'slug' => $slug]) ];
 }
@@ -55,17 +56,17 @@ if($category_det['category_name']!='Say thank you'){
 	<div class="responsive-category-top">
 		<div class="listing_sub_cat1">
 			<span class="title_filter">Categories</span>
-
 			<select class="selectpicker" style="display: none;" id="main-category">
-				<option data-icon="venues-category" <?php  if($slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="venues">Venues</option>
-				<option data-icon="invitation-category" <?php  if($slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="invitations">Invitations</option>
-				<option data-icon="food-category" name="category" value="food-beverage" <?php  if($slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'food-beverage']) ?>">Food & Beverage</option>
-				<option data-icon="decor-category" name="category" value="decor" <?php  if($slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'decor']) ?>">Decor</option>
-				<option data-icon="supply-category" value="supplies" <?php  if($slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'supplies']) ?>">Supplies</option>
-				<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'entertainment']) ?>">Entertainment</option>
-				<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'services']) ?>">Services</a></option>
-				<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'others']) ?>">Others</option>
-				<option data-icon="saythankyou-category" <?php  if($slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'say-thank-you']) ?>">Say "Thank You"</option>
+				<option data-icon="venues-category" selected="selected" name="category">All</option>
+				<option data-icon="venues-category" <?php  if($category_slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="venues">Venues</option>
+				<option data-icon="invitation-category" <?php  if($category_slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="invitations">Invitations</option>
+				<option data-icon="food-category" name="category" value="food-beverage" <?php  if($category_slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'food-beverage']) ?>">Food & Beverage</option>
+				<option data-icon="decor-category" name="category" value="decor" <?php  if($category_slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'decor']) ?>">Decor</option>
+				<option data-icon="supply-category" value="supplies" <?php  if($category_slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'supplies']) ?>">Supplies</option>
+				<option data-icon="enter-category" value="entertainment" <?php  if($category_slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'entertainment']) ?>">Entertainment</option>
+				<option data-icon="service-category" value="services" <?php  if($category_slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'services']) ?>">Services</a></option>
+				<option data-icon="others-category" <?php  if($category_slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'others']) ?>">Others</option>
+				<option data-icon="saythankyou-category" <?php  if($category_slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'say-thank-you']) ?>">Say "Thank You"</option>
 			</select>
 		</div>
 	</div>
@@ -84,7 +85,8 @@ if($category_det['category_name']!='Say thank you'){
 <?php
 
 /* Get slug name to find category */
-$subcategory = SubCategory::loadsubcat($slug);
+if($category_slug !=""){	
+$subcategory = SubCategory::loadsubcat($category_slug);
 
 $col=1;
 foreach ($subcategory as $key => $value) {
@@ -148,6 +150,7 @@ type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; 
 </div>
 </div>
 <?php $col++; } ?>
+<?php } ?>
 <!--  END CATEGORY FILTER-->
 
 <!--  BEGIN VENDOR FILTER -->

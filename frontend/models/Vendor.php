@@ -98,6 +98,11 @@ class Vendor extends \common\models\Vendor
             $condn .= "'"."{{%vendor}}.vendor_id"."',";
             $condn .= $blocked_vendors['vendor_id'];
         }
+
+        if($cat_id!='')
+        {
+            $condn .= '{{%vendor_item}}.category_id ='. $cat_id;
+        }
             
 		 $vendor = Vendor::find()
         ->select('{{%vendor}}.*')
@@ -105,7 +110,7 @@ class Vendor extends \common\models\Vendor
         ->where(['{{%vendor}}.vendor_status' => 'Active',
             '{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default',
             '{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes',
-            '{{%vendor_item}}.category_id' => $cat_id,'{{%vendor_item}}.type_id' => '2'.$condn])
+            '{{%vendor_item}}.type_id' => '2'.$condn])
         ->distinct()
         ->asArray()
         ->all();

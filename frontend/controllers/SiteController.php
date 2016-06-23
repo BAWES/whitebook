@@ -686,7 +686,6 @@ class SiteController extends BaseController
               ->asArray()
               ->all();
 
-         $first_cat = $item_themes[0]['vendoritem']['category_id']; // by default first category
          $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
                     ->where(['trash'=>"Default"])
                     ->andWhere(['theme_id'=>$theme_name['theme_id']])
@@ -698,28 +697,20 @@ class SiteController extends BaseController
                $all_item_ids[] = $value['item_id'];
            }
 
-
+           $category_id = '';
+           $category_slug = '';
+           $condition = '{{%vendor_item}}.trash = "Default"';
         /* BEGIN GET VENDORS */
-        if(empty($category))
-        {   
-              $category_name= Category::find()->select('slug')
-              ->where(['category_id'=>$first_cat])
-              ->asArray()
-              ->one();
-             $slug = $category_name['slug']; /* category name Very important */ 
-             $category_id = $item_themes[0]['vendoritem']['category_id'];
-        }
-        else
+        if(!empty($category))
         {
             $category_val= Category::find()->select('category_id')
               ->where(['slug'=>$category])
               ->asArray()
               ->one();
             $category_id = $category_val['category_id'];
-            $slug = $category; /* category name Very important */ 
+            $category_slug = $category; /* category name Very important */ 
+            $condition .= ' AND {{%vendor_item}}.category_id IN("'.$category_id.'")';
         }
-
-        $condition = '{{%vendor_item}}.trash = "Default"';
         if (Yii::$app->request->isAjax) {
 
             if ($subcategory != '') {
@@ -746,6 +737,7 @@ class SiteController extends BaseController
             /* END PRICE FILTER */
         }
 
+
         $active_vendors = Vendor::loadvalidvendorids($category_id);
    
         if (!is_null($item_themes)) {
@@ -763,12 +755,12 @@ class SiteController extends BaseController
                     ->andWhere(['{{%vendor_item}}.type_id' => "2"])
                     ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
                     ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
-                    ->andWhere(['{{%vendor_item}}.category_id' => $category_id])
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->asArray()
                     ->all();
             }
 
+           // print_r($active_vendors);die;
             /* VENDOR HAVIG ATLEAST ONE PRODUCT */
             $vendor = Vendoritem::find()
             ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
@@ -784,6 +776,7 @@ class SiteController extends BaseController
             ->groupBy('{{%vendor_item}}.vendor_id')
             ->asArray()
             ->all();
+
         /* END get current category to load sub category */
 
        if (Yii::$app->request->isAjax) {
@@ -791,12 +784,12 @@ class SiteController extends BaseController
             }
         if (Yii::$app->user->isGuest) {
             return $this->render('themesearch', ['model' => $model, 'imageData' => $imageData,
-            'vendor' => $vendor, 'slug' => $slug]);
+            'vendor' => $vendor, 'slug' => $slug,'category_slug'=>$category_slug]);
         } else {
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
                 return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-                'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list]);
+                'vendor' => $vendor, 'slug' => $slug, 'category_slug'=>$category_slug, 'customer_events_list' => $customer_events_list]);
             } 
        }
     }
