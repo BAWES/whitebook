@@ -1,7 +1,6 @@
 <?php
 
 namespace common\models;
-use yii\helpers\Setdateformat;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -65,7 +64,7 @@ class VendoritemcapacityexceptionSearch extends Vendoritemcapacityexception
             return $dataProvider;
         }
           if($this->exception_date!=''){
-          $this->exception_date = Setdateformat::convert($this->exception_date);
+          $this->exception_date = date('Y-m-d', strtotime($model->exception_date));
           }   
         $query->andFilterWhere([
             'exception_id' => $this->exception_id,

@@ -240,7 +240,7 @@ $exist_groups = array();
 
 	 $(function (){
 	$('#option').hide();
-    $(".vendoritemquestion-question_answer_type").live('change',function (){
+    $(".vendoritemquestion-question_answer_type").on('change',function (){
 		var type = $(this).val();
 
 		if(type =='selection')
@@ -264,7 +264,7 @@ $exist_groups = array();
 		});
 		var p = 1;
 
-		$('.add_question').live('click',function(){
+		$('.add_question').on('click',function(){
 			var j = $(this).attr('id').replace(/add_question/, '');
 			var p = $(this).attr('data-option-count');
 			$(this).before('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:45%;float:left;"></div>');p++;

@@ -95,7 +95,7 @@ class PriorityitemController extends Controller
 			 $item_id=implode(",",$model->item_id);
 			 $model->item_id=$item_id;
 			 $model->priority_start_date = date('Y-m-d', strtotime($model->priority_start_date));
-			 $model->priority_end_date = date('Y-m-d', strtotime($model->priority_end_date);
+			 $model->priority_end_date = date('Y-m-d', strtotime($model->priority_end_date));
 			 $exists = Priorityitem::findOne(["item_id" => $item_id,"trash" => 'Default',"vendor_id"=>$vendorid]);
 			 $model->save();
 		echo Yii::$app->session->setFlash('success', "Priority item added successfully!");
@@ -140,7 +140,7 @@ class PriorityitemController extends Controller
 			 $item_id=implode(",",$model->item_id);
 			 $model->item_id=$item_id; }
 			 $model->priority_start_date = date('Y-m-d', strtotime($model->priority_start_date));
-             $model->priority_end_date = date('Y-m-d', strtotime($model->priority_end_date);
+             $model->priority_end_date = date('Y-m-d', strtotime($model->priority_end_date));
 			$exists = Priorityitem::findOne(["item_id" => $item_id,"trash" => 'Default',"vendor_id"=>$vendorid]);
             $model->save();
 		echo Yii::$app->session->setFlash('success', "Priority item updated successfully!");
