@@ -66,31 +66,24 @@ $vendor_count = Location::find()->where(['status'=>'Active', 'trash' => 'Default
 
 </div>
 <script>
-$(document).ready(function(){
+function check_uncheck_all_text(){
+if($('form :checkbox').length == $('form :checkbox:checked').length){
+      $('.check:button').val('Uncheck all');
+  }else $('.check:button').val('Check all');
+}
+check_uncheck_all_text();
 
-  if($(":checkbox:checked").length == <?php echo $vendor_count; ?>)
-  {
-    $('.check:button').val('Uncheck all');
-  }
-  else
-  {
-    $('.check:button').val('Check all');
-  }
-});
-
-    $('.check:button').toggle(function(){       
-      if($(this).val() == 'Uncheck all')
+var checkbox_div = $('.form-group :checkbox');
+$(document).on('click',':button.check',function(){
+ if($(this).val() === 'Uncheck all')
       {        
-        $('input:checkbox').removeAttr('checked');        
-        $(this).val('Check all');
+        checkbox_div.prop('checked',false);
+         check_uncheck_all_text();
       }  
-      else if($(this).val() == 'Check all')
-      {        
-        $('input:checkbox').attr('checked','checked');
-        $(this).val('Uncheck all');
+      else
+      {  
+          checkbox_div.prop('checked',true);
+          check_uncheck_all_text();
       }       
-    },function(){
-      $('input:checkbox').attr('checked','checked');
-        $(this).val('Uncheck all');        
-    });
+});
 </script>
