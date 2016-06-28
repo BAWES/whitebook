@@ -9,12 +9,12 @@ use yii\helpers\Html;
     <div class="container paddng0">
         <div class="exp_sect">
             <div class="plan_inner_sec">
-                <h2>Experience</h2>
-                <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</h5>
+                <h2><?= Yii::t("frontend", "Experience") ?></h2>
+                <h5 style='text-align:center;'><?= Yii::t("frontend", "Experience is a list of value added services provided by The White Book's team") ?></h5>
             </div>
         </div>
         <div class="plan_catg">
-            <h3 align="center">Coming soon... </h3>
+            <h3 align="center"><?= Yii::t("frontend", "Coming soon...") ?></h3>
 
         </div>
 
