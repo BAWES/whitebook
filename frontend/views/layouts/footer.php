@@ -1,4 +1,4 @@
-<?php 
+<?php
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\Users;
@@ -65,7 +65,7 @@ use frontend\models\Users;
 </div>
 </div>
 </div>
-<!-- login succcess  start--> 
+<!-- login succcess  start-->
 <!-- Modal Login -->
 <!-- Selva success modal start  -->
 <div class="modal fade" id="login_activate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
@@ -359,68 +359,69 @@ Sign in here </a></span>
 
 <!-- footer start cntent -->
 <footer id="footer_sections">
-<div class="container paddng0">
-<div class="top_footer">
-<div class="col-md-7 padding_left0">
-<span class="footer_logo">
-<a href="<?= Url::toRoute('site/index');?>" title="Logo"><?= Html::img("@web/images/footer_logo.png") ?></a>
-</span>
-<p class="bot_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus, sed viverra diam cursus nec. Pellentesque ligula ante, faucibus eget semper ac, auctor ac augue</p>
-</div>
-<div class="col-md-1"><div class="divider_bot"></div></div>
-<div class="col-md-4 padding_left0">
-<address class="address_bot">
-<h3>We're here to help</h3>
-<p>Our team is ready to help <br/>
-via email, phone or live chat.</p>
-<h5><?= $siteinfo['phone_number']; ?></h5>
-</address>
-</div>
-</div>
-<div class="bootom_footer">
-<div class="col-md-7 padding_left0">
-<ul class="treams_of_ser margin_top">
-<li><a href="<?= Url::toRoute('/about-us',true);?>" title="About Us">About Us  </a></li>
-<li><a href="<?= Url::toRoute('/contact-us',true);?>" title="Contact &AMP; FAQ">Contact &AMP; FAQ</a></li>
-<li><a href="<?= Url::toRoute('/brands-product',true); ?>/" title="Brands">Brands</a></li>
-<li><a href="<?= Url::toRoute('/taste-maker',true);?>" title="Tastemakers">Tastemakers</a></li>
-<li><a href="<?= Url::toRoute('/press-release',true);?>" title="Press">Press</a></li>
-<li><a href="<?= Url::toRoute('/trade-marker',true);?>" title="Trade">Trade </a></li>
-</ul>
-<ul class="treams_of_ser">
-<li>   &COPY;2015 - The White Book </li>
-<li><a href="<?= Url::toRoute('/terms-conditions',true);?>" title="Terms and Conditions ">Terms and Conditions </a></li>
-<li><a href="<?= Url::toRoute('/privacy-policy',true);?>" title="Privacy Policy">Privacy Policy</a></li>
-</ul>
-</div>
-<div class="col-md-5"></div>
-</div>
-<div class="bootom_footer_responsive">
-<span class="footer_logo text-center col-xs-12">
-<a href="#" title="Logo"><?= Html::img('@web/images/mobile_logo.svg', ['alt' => 'The White Book']); ?></a>
-</span>
-<div class="col-md-7 col-sm-12 padding_left0"  id="accordion">
-<a class="accor-link" data-toggle="collapse" data-parent="#accordion" href="#collapsefoot">Useful Information</a>
-<div id="collapsefoot" class="panel-collapse collapse">
-<ul class="treams_of_ser margin_top">
+    <div class="container paddng0">
+        <div class="top_footer">
+            <div class="col-md-7 padding_left0">
+                <span class="footer_logo">
+                <a href="<?= Url::toRoute('site/index');?>" title="Logo"><?= Html::img("@web/images/footer_logo.png") ?></a>
+                </span>
+                <p class="bot_desc"><!-- Description here --></p>
+            </div>
+            <div class="col-md-1"><div class="divider_bot"></div></div>
+            <div class="col-md-4 padding_left0">
+                <address class="address_bot">
+                    <h3>We're here to help</h3>
+                    <p>Our team is ready to help <br/>
+                    via email or phone.</p>
+                    <h5><?= $siteinfo['phone_number']; ?></h5>
+                </address>
+            </div>
+        </div>
+        <div class="bootom_footer">
+            <div class="col-md-7 padding_left0">
+                <ul class="treams_of_ser margin_top">
+                    <li><a href="<?= Url::toRoute('/about-us',true);?>" title="About Us">About Us  </a></li>
+                    <li><a href="<?= Url::toRoute('/contact-us',true);?>" title="Contact &AMP; FAQ">Contact &AMP; FAQ</a></li>
+                    <li><a href="<?= Url::toRoute('/brands-product',true); ?>/" title="Brands">Brands</a></li>
+                    <li><a href="<?= Url::toRoute('/taste-maker',true);?>" title="Tastemakers">Tastemakers</a></li>
+                    <li><a href="<?= Url::toRoute('/press-release',true);?>" title="Press">Press</a></li>
+                    <li><a href="<?= Url::toRoute('/trade-marker',true);?>" title="Trade">Trade </a></li>
+                </ul>
+                <ul class="treams_of_ser">
+                    <li>   &COPY;2015 - The White Book </li>
+                    <li><a href="<?= Url::toRoute('/terms-conditions',true);?>" title="Terms and Conditions ">Terms and Conditions </a></li>
+                    <li><a href="<?= Url::toRoute('/privacy-policy',true);?>" title="Privacy Policy">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
 
-<li><a href="<?= Url::toRoute('/about-us',true);?>" title="About Us">About Us  </a></li>
-<li><a href="<?= Url::toRoute('/contact-us',true);?>" title="Contact &AMP; FAQ">Contact &AMP; FAQ</a></li>
-<li><a href="<?= Url::toRoute('/brands-product',true); ?>/" title="Brands">Brands</a></li>
-<li><a href="<?= Url::toRoute('/taste-maker',true);?>" title="Tastemakers">Tastemakers</a></li>
-<li><a href="<?= Url::toRoute('/press-release',true);?>" title="Press">Press</a></li>
-<li><a href="<?= Url::toRoute('/trade-marker',true);?>" title="Trade">Trade </a></li>
-</ul>
-</div>
+        <div class="bootom_footer_responsive">
+            <span class="footer_logo text-center col-xs-12">
+            <a href="#" title="Logo"><?= Html::img('@web/images/mobile_logo.svg', ['alt' => 'The White Book']); ?></a>
+            </span>
+            <div class="col-md-7 col-sm-12 padding_left0"  id="accordion">
+            <a class="accor-link" data-toggle="collapse" data-parent="#accordion" href="#collapsefoot">Useful Information</a>
+            <div id="collapsefoot" class="panel-collapse collapse">
+            <ul class="treams_of_ser margin_top">
 
-</div>
-<ul class="treams_of_ser copyright col-md-7 col-sm-12 padding_left0">
-<li>   &COPY;2015 - The White Book </li>
+                <li><a href="<?= Url::toRoute('/about-us',true);?>" title="About Us">About Us  </a></li>
+                <li><a href="<?= Url::toRoute('/contact-us',true);?>" title="Contact &AMP; FAQ">Contact &AMP; FAQ</a></li>
+                <li><a href="<?= Url::toRoute('/brands-product',true); ?>/" title="Brands">Brands</a></li>
+                <li><a href="<?= Url::toRoute('/taste-maker',true);?>" title="Tastemakers">Tastemakers</a></li>
+                <li><a href="<?= Url::toRoute('/press-release',true);?>" title="Press">Press</a></li>
+                <li><a href="<?= Url::toRoute('/trade-marker',true);?>" title="Trade">Trade </a></li>
+            </ul>
+            </div>
 
-</ul>
-<div class="col-md-5"></div>
-</div>
-</div>
+            </div>
+            <ul class="treams_of_ser copyright col-md-7 col-sm-12 padding_left0">
+            <li>   &COPY;2015 - The White Book </li>
+
+            </ul>
+            <div class="col-md-5"></div>
+        </div>
+    </div>
 </footer>
 
 <!-- megamenu script -->
