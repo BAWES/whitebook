@@ -2,6 +2,7 @@
 
 return [
     'name' => 'The White Book',
+    'language' => 'en',
     'vendorPath' => dirname(dirname(__DIR__)).'/vendor',
     'components' => [
         'resourceManager' => [
