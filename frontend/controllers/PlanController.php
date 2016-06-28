@@ -21,7 +21,6 @@ class PlanController extends BaseController
     public function init()
     {
         parent::init();
-        Yii::$app->language = 'en-EN';
     }
 
     public function actionPlans()
@@ -66,7 +65,7 @@ class PlanController extends BaseController
 
             $imageData = Vendoritem::find()
                     ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
-                        {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, 
+                        {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id,
                         {{%vendor}}.vendor_name'])
                     ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                     ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
@@ -81,7 +80,7 @@ class PlanController extends BaseController
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->asArray()
                     ->all();
-                    
+
             }
         }
 
@@ -146,7 +145,7 @@ class PlanController extends BaseController
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
                 return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
                 'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list]);
-            } 
+            }
         }
 
 
@@ -189,7 +188,7 @@ class PlanController extends BaseController
                 } else {
                     $all_valid_themes = implode('","', $all_valid_themes);
                 }
-                
+
              /* END Multiple themes match comma seperate values in table*/
                 $condition .= ' AND {{%vendor_item}}.item_id IN("'.$all_valid_themes.'")';
                 }
@@ -461,7 +460,7 @@ class PlanController extends BaseController
                 //->limit(12)
                 ->asArray()
                 ->all();
-              
+
            if (!Yii::$app->user->isGuest) {
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
