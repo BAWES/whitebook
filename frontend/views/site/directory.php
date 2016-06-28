@@ -9,12 +9,12 @@ use yii\helpers\Html;?>
 
 <div class="directory_listing">
 <div class="title_main">
-<h1>Directory</h1>
+	<h1><?= Yii::t("frontend", "Directory") ?></h1>
 </div>
 <div class="col-md-3 paddingleft0">
 <div class="filter_content">
 <div class="filter_section">
-<span class="title_filter">Categories</span>
+<span class="title_filter"><?= Yii::t("frontend", "Categories") ?></span>
 <div class="listing_sub_cat">
 <input type="hidden" id="ajaxdata" name="ajaxdata">
 <select class="selectpicker" style="display: none;" id="filter_category" name="filter_category">

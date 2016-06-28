@@ -9,7 +9,7 @@ use yii\helpers\Html;?>
 
 <div class="directory_listing">
 <div class="title_main">
-	<h1>Themes</h1>
+	<h1><?= Yii::t("frontend", "Themes") ?></h1>
 </div>
 
 <div id="mobile_respon">

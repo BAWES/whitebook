@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRou
 <div class="responsive-category-bottom search-list col-xs-12 teat-right pull-right">
 <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0 pull-right" data-toggle="offcanvas">Filter</span>
 <div class="filter_title">
-<span class="title_filter color_yellow">Filter by</span>
+<span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
 </div>
 <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
 <img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
