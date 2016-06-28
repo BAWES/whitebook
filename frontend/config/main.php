@@ -25,6 +25,14 @@ return [
         'session' => [
             'name' => 'app-frontend',
         ],
+        // Override the urlManager component for i18n plugin
+        'urlManager' => [
+            'class' => 'codemix\localeurls\UrlManager',
+
+            // List all supported languages here
+            // Make sure, you include your app's default language.
+            'languages' => ['en', 'ar'],
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
