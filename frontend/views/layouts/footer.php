@@ -379,17 +379,14 @@ Sign in here </a></span>
         <div class="bootom_footer">
             <div class="col-md-7 padding_left0">
                 <ul class="treams_of_ser margin_top">
-                    <li><a href="<?= Url::toRoute('/about-us',true);?>" title="About Us">About Us  </a></li>
-                    <li><a href="<?= Url::toRoute('/contact-us',true);?>" title="Contact &AMP; FAQ">Contact &AMP; FAQ</a></li>
-                    <li><a href="<?= Url::toRoute('/brands-product',true); ?>/" title="Brands">Brands</a></li>
-                    <li><a href="<?= Url::toRoute('/taste-maker',true);?>" title="Tastemakers">Tastemakers</a></li>
-                    <li><a href="<?= Url::toRoute('/press-release',true);?>" title="Press">Press</a></li>
-                    <li><a href="<?= Url::toRoute('/trade-marker',true);?>" title="Trade">Trade </a></li>
+                    <li><a href="<?= Url::toRoute('/about-us',true);?>"> <?= Yii::t("frontend", "About Us") ?></a></li>
+                    <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "Contact & FAQ") ?></a></li>
+                    <li><a href="<?= Url::toRoute('/brands-product',true); ?>/"> <?= Yii::t("frontend", "Directory") ?></a></li>
                 </ul>
                 <ul class="treams_of_ser">
-                    <li>   &COPY;2015 - The White Book </li>
-                    <li><a href="<?= Url::toRoute('/terms-conditions',true);?>" title="Terms and Conditions ">Terms and Conditions </a></li>
-                    <li><a href="<?= Url::toRoute('/privacy-policy',true);?>" title="Privacy Policy">Privacy Policy</a></li>
+                    <li> &COPY;2015 - The White Book </li>
+                    <li><a href="<?= Url::toRoute('/terms-conditions',true);?>"><?= Yii::t("frontend", "Terms and Conditions") ?></a></li>
+                    <li><a href="<?= Url::toRoute('/privacy-policy',true);?>"><?= Yii::t("frontend", "Privacy Policy") ?></a></li>
                 </ul>
             </div>
             <div class="col-md-5"></div>
@@ -404,12 +401,11 @@ Sign in here </a></span>
             <div id="collapsefoot" class="panel-collapse collapse">
             <ul class="treams_of_ser margin_top">
 
-                <li><a href="<?= Url::toRoute('/about-us',true);?>" title="About Us">About Us  </a></li>
-                <li><a href="<?= Url::toRoute('/contact-us',true);?>" title="Contact &AMP; FAQ">Contact &AMP; FAQ</a></li>
-                <li><a href="<?= Url::toRoute('/brands-product',true); ?>/" title="Brands">Brands</a></li>
-                <li><a href="<?= Url::toRoute('/taste-maker',true);?>" title="Tastemakers">Tastemakers</a></li>
-                <li><a href="<?= Url::toRoute('/press-release',true);?>" title="Press">Press</a></li>
-                <li><a href="<?= Url::toRoute('/trade-marker',true);?>" title="Trade">Trade </a></li>
+                <li><a href="<?= Url::toRoute('/about-us',true);?>"> <?= Yii::t("frontend", "About Us") ?></a></li>
+                <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "Contact & FAQ") ?></a></li>
+                <li><a href="<?= Url::toRoute('/brands-product',true); ?>/"> <?= Yii::t("frontend", "Directory") ?></a></li>
+                <li><a href="<?= Url::toRoute('/terms-conditions',true);?>"><?= Yii::t("frontend", "Terms and Conditions") ?></a></li>
+                <li><a href="<?= Url::toRoute('/privacy-policy',true);?>"><?= Yii::t("frontend", "Privacy Policy") ?></a></li>
             </ul>
             </div>
 
