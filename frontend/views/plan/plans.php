@@ -9,64 +9,64 @@ use yii\helpers\Html;
     <div class="container paddng0">
         <div class="plan_sect">
             <div class="plan_inner_sec">
-                <h2>Plan</h2>
-                <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida convallis metus,</h5>
+                <h2><?= Yii::t("frontend", "Plan") ?></h2>
+                <h5 style='text-align: center;'><?= Yii::t("frontend", "Plan is where you browse, get ideas, and plan your event") ?></h5>
             </div>
         </div>
         <div class="plan_catg">
             <ul>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'venues']); ?>" title="Venues">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'venues']); ?>" >
                         <span class="venue"></span>
-                        <span class="responsi_common">Venues</span>
+                        <span class="responsi_common"><?= Yii::t("frontend", "Venues") ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'invitations']); ?>" title="Invitations">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'invitations']); ?>" >
                         <span class="invitations "></span>
-                        Invitations
+                        <?= Yii::t("frontend", "Invitations") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'food-beverage']); ?>" title="Food &amp; Beverage">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'food-beverage']); ?>">
                         <span class="food1"></span>
-                        Food &amp; Beverage
+                        <?= Yii::t("frontend", "Food & Beverage") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'decor']); ?>" title="Decor">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'decor']); ?>" >
                         <span class="decor1"></span>
-                        Decor
+                        <?= Yii::t("frontend", "Decor") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'supplies']); ?>" title="Supplies">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'supplies']); ?>">
                         <span class="supplies1"></span>
-                        Supplies
+                        <?= Yii::t("frontend", "Supplies") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'entertainment']); ?>" title="Entertainment">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'entertainment']); ?>" >
                         <span class="entertainment  "></span>
-                        Entertainment
+                        <?= Yii::t("frontend", "Entertainment") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'services']); ?>" title="Services">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'services']); ?>">
                         <span class="services  "></span>
-                        Services
+                        <?= Yii::t("frontend", "Services") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'others']); ?>" title="Other">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'others']); ?>">
                         <span class="other1"></span>
-                        Other
+                        <?= Yii::t("frontend", "Other") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'say-thank-you']); ?>" title="Gift Favors">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'say-thank-you']); ?>">
                         <span class="say1"></span>
-                        Gift Favors
+                        <?= Yii::t("frontend", "Gift Favors") ?>
                     </a>
                 </li>
             </ul>
@@ -79,15 +79,3 @@ use yii\helpers\Html;
     </div>
 </section>
 <!-- continer end -->
-
-<?php
-// category display dynamic
-/* foreach ($category as $key => $value) { ?>
-  <li>
-  <a href="<?= Url::to('products/'.$value['slug']); ?>" title="<?= $value['category_name'] ?>">
-  <span class="<?= $value['slug'] ?>" style="background: url(../../images/sprit2.png) -3px -17px no-repeat;display: inline-block;
-  width: 100%;  height: 50px;"></span>
-  <span class="responsi_common"><?= $value['category_name'] ?></span>
-  </a>
-  </li>
-  <?php } */?>
