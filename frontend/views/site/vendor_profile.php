@@ -68,7 +68,7 @@ if ($event_status > 0) {
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h4 class="panel-title">
                                                 <a class="collapsed" id="description_click" data-toggle="collapse" data-parent="#sub_accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-    <?php echo Yii::t('frontend', 'description'); ?>    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a>
+    <?php echo Yii::t('frontend', 'Description'); ?>    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a>
                                             </h4>
 
                                         </div>
@@ -84,7 +84,7 @@ if ($event_status > 0) {
                                         <div class="panel-heading" role="tab" id="headingTwo">
                                             <h4 class="panel-title">
                                                 <a class="collapsed" data-toggle="collapse" data-parent="#sub_accordion" id="policy_click" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-    <?php echo Yii::t('frontend', 'return_policy'); ?>
+    <?php echo Yii::t('frontend', 'Return policy'); ?>
                                                     <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a>
                                             </h4>
                                         </div>
@@ -101,7 +101,7 @@ if ($event_status > 0) {
                                         <div class="panel-heading" role="tab" id="headingFive">
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#sub_accordion"  id="contact_click" href="#collapseFive" aria-expanded="true" aria-controls="collapseOne">
-    <?php echo Yii::t('frontend', 'contact_info'); ?>
+    <?= Yii::t('frontend', 'Contact info'); ?>
                                                     <span class="glyphicon glyphicon-menu-down text-align pull-right"></span></a> </a>
                                             </h4>
                                         </div>
@@ -139,7 +139,7 @@ if ($event_status > 0) {
                                         </div>
                                                 <?php if (count($vendor_detail) > 0) { ?>
                                             <div class="social_share">
-                                                <h3>Share this</h3>
+                                                <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
                                                 <ul>
                                                     <?php if ($vendor_detail[0]['vendor_facebook'] != '') { ?>
                                                         <li><a target="_blank" href="<?php echo $vendor_detail[0]['vendor_facebook']; ?>" title="Facebook"><span class="flaticon-facebook55"></span></a></li>
@@ -179,7 +179,7 @@ if ($event_status > 0) {
                         <div class="responsive-category-bottom">
                             <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
                             <div class="filter_title">
-                                <span class="title_filter color_yellow">Filter by</span>
+                                <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by'); ?></span>
                             </div>
                             <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
                                 <img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg"); ?>" alt="click here">
@@ -201,7 +201,7 @@ if ($event_status > 0) {
                                         ?>
                                         <div class="panel panel-default" >
                                             <div class="panel-heading">
-                                                <div class="clear_left"><p>Categories <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
+                                                <div class="clear_left"><p><?= Yii::t('frontend', 'Categories'); ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
                                                 <div class="clear_right">
                                                     <a href="#bakery" id="sub_category_cakes" data-parent="#accordion" data-toggle="collapse" class="collapsed">
                                                         <h4 class="panel-title">
@@ -291,7 +291,7 @@ if ($event_status > 0) {
                                         <!--  BEGIN THEME FILTER-->
                                         <div class="panel panel-default" >
                                             <div class="panel-heading">
-                                                <div class="clear_left"><p>Themes <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
+                                                <div class="clear_left"><p><?= Yii::t('frontend', 'Themes'); ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
                                                 <div class="clear_right">
                                                     <a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
                                                         <h4 class="panel-title">
@@ -327,7 +327,7 @@ if ($event_status > 0) {
                                         <!--  BEGIN PRICE FILTER -->
                                         <div class="panel panel-default" >
                                             <div class="panel-heading">
-                                                <div class="clear_left"><p>Price <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
+                                                <div class="clear_left"><p><?= Yii::t('frontend', 'Price'); ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
                                                 <div class="clear_right">
                                                     <a href="#price" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_price">
                                                         <h4 class="panel-title">
