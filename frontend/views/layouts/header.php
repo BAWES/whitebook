@@ -184,11 +184,11 @@ $action = Yii::$app->controller->action->id;
                     <ul class="logout_part">
 <?php if (Yii::$app->user->isGuest) { ?>
         <li class="<?php if ($action == "about-us") {echo "active";} ?>">
-            <a href="<?= Url::toRoute('plan/cmspages', true); ?>" title="<?php echo Yii::t('frontend', 'About us'); ?>">
+            <a href="<?= Url::toRoute('plan/cmspages', true); ?>" title="<?php echo Yii::t('frontend', 'About Us'); ?>">
             <?php echo Yii::t('frontend', 'About us'); ?></a></li>
         <li class="">
-        <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
-        title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?>
+            <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
+            title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?>
         </a>
         </li>
 <?php } else { ?>
@@ -196,6 +196,12 @@ $action = Yii::$app->controller->action->id;
 } ?>"><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'My Account'); ?>"><?php echo Yii::t('frontend', 'My Account'); ?></a></li>
                             <li><a href="<?php echo Url::toRoute(['/users/events','slug'=>'events' ]) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
                             <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
+<?php } ?>
+
+<?php if(Yii::$app->language == "en"){ ?>
+<li class=""><a href="<?= Url::to(['site/index', 'language'=>'ar']) ?>">العربية</a></li>
+<?php }else{ ?>
+<li class=""><a href="<?= Url::to(['site/index', 'language'=>'en']) ?>">English</a></li>
 <?php } ?>
 
                     </ul>
@@ -317,7 +323,7 @@ echo $search_div;
 <nav class="ma5-menu-mobile mobile-menu">
     <div class="navbar-collapse">
         <ul class="nav navbar-nav ma5-ul" style=" border:none;">
-            <li class="ma5-li-1"> <a class="ma5-path-to-active ma5-btn-enter" href="#node1">Plan</a>
+            <li class="ma5-li-1"> <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Plan'); ?></a>
 
                 <ul class="ma5-ul-1 navbar-nav">
                     <li class="ma5-li-1-0">
@@ -325,7 +331,7 @@ echo $search_div;
                             <span class="ma5-btn-leave">
 
                             </span>
-                            <a style="color:#000;" class="ma5-path-to-active ma5-btn-enter" href="#node1">Back</a>
+                            <a style="color:#000;" class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Back'); ?></a>
                         </div></li>
                     <li class="ma5-li-1-1">
                         <a title="<?php echo Yii::t('frontend', 'Venues'); ?>" href="<?= Url::toRoute('/products/venues', true); ?>">
@@ -405,6 +411,12 @@ echo $search_div;
                     <li><a href="<?= Url::toRoute(['/users/events','slug'=>'events']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
                     <li><a href="<?= Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
+
+        <?php if(Yii::$app->language == "en"){ ?>
+        <li class=""><a href="<?= Url::to(['site/index', 'language'=>'ar']) ?>">العربية</a></li>
+        <?php }else{ ?>
+        <li class=""><a href="<?= Url::to(['site/index', 'language'=>'en']) ?>">English</a></li>
+        <?php } ?>
 
             </div>
         </ul>

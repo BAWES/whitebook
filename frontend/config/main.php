@@ -29,6 +29,13 @@ return [
         'urlManager' => [
             'class' => 'codemix\localeurls\UrlManager',
 
+            //Ignore adding /ar/ to the following url patterns
+            'ignoreLanguageUrlPatterns' => [
+                //'#^site/(login|register)#' => '#^(login|register)#',
+                //'#^api/#' => '#^api/#',
+                //'#^assets/#' => '#^assets/#',
+            ],
+
             // List all supported languages here
             // Make sure, you include your app's default language.
             'languages' => ['en', 'ar'],

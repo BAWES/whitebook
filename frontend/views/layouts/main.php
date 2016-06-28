@@ -5,6 +5,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
+use frontend\assets\ArabicAsset;
 use frontend\widgets\Alert;
 use yii\helpers\Url;
 use common\models\Socialinfo;
@@ -12,7 +13,6 @@ use common\models\Siteinfo;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-AppAsset::register($this);
 
 //Google Analytics JS
 $analytics = "
@@ -25,6 +25,16 @@ $analytics = "
   ga('send', 'pageview');
 ";
 $this->registerJs($analytics);
+
+
+//Arabic Styling Fix
+if(Yii::$app->language == 'ar'){
+    ArabicAsset::register($this);
+}else{
+    AppAsset::register($this);
+}
+
+
 $this->beginPage()
 ?>
 <html lang="<?= Yii::$app->language ?>">
