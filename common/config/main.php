@@ -56,33 +56,23 @@ return [
             //'appendTimestamp' => true,
         ],
         'i18n' => [
-          'translations' => [
-              'frontend*' => [
-                  'class' => 'yii\i18n\PhpMessageSource',
-                  'basePath' => '@common/messages',
-                  'sourceLanguage' => 'en',
-              ],
-              'backend*' => [
-                  'class' => 'yii\i18n\PhpMessageSource',
-                  'basePath' => '@common/messages',
-                  'sourceLanguage' => 'en',
-              ],
-              '*' => [
-                  'class' => 'yii\i18n\PhpMessageSource',
-                  'basePath' => '@common/messages',
-                  'sourceLanguage' => 'en',
-              ],
-              'app' => [
-                  'class' => 'yii\i18n\PhpMessageSource',
-                  'basePath' => '@common/messages',
-                  'sourceLanguage' => 'en',
-              ],
-              'yii' => [
-                  'class' => 'yii\i18n\PhpMessageSource',
-                  'basePath' => '@common/messages',
-                  'sourceLanguage' => 'en',
-              ],
-          ],
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/messages',
+                    'sourceLanguage' => 'en',
+                ],
+                'app' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/messages',
+                    'sourceLanguage' => 'en',
+                ],
+                'yii' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/messages',
+                    'sourceLanguage' => 'en',
+                ],
+            ],
         ],
     ],
      //'timeZone' => 'Asia/Calcutta',
