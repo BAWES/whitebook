@@ -372,8 +372,8 @@ Sign in here </a></span>
                 <address class="address_bot">
                     <h3>We're here to help</h3>
                     <p>Our team is ready to help <br/>
-                    via email or phone.</p>
-                    <h5><?= $siteinfo['phone_number']; ?></h5>
+                    via email</p>
+                    <a style='color:white' href='mailto:hello@thewhitebook.com.kw'>hello@thewhitebook.com.kw</a>
                 </address>
             </div>
         </div>
