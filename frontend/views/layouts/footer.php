@@ -370,9 +370,8 @@ Sign in here </a></span>
             <div class="col-md-1"><div class="divider_bot"></div></div>
             <div class="col-md-4 padding_left0">
                 <address class="address_bot">
-                    <h3>We're here to help</h3>
-                    <p>Our team is ready to help <br/>
-                    via email</p>
+                    <h3><?= Yii::t("frontend", "We're here to help") ?></h3>
+                    <p><?= Yii::t("frontend", "Our team is ready to help via email") ?></p>
                     <a style='color:white' href='mailto:hello@thewhitebook.com.kw'>hello@thewhitebook.com.kw</a>
                 </address>
             </div>

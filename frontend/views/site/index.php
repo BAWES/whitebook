@@ -60,7 +60,7 @@ require(__DIR__ . '/../product/events_slider.php');
 <div class="creatfirst_events">
     <p data-example-id="active-anchor-btns" class="bs-example">
     <a href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal" onclick="show_login_modal(-1);">
-        <?php echo Yii::t('frontend', 'Create Your First Event'); ?>
+        <?= Yii::t('frontend', 'Create Your First Event'); ?>
     </a>
 </p>
 </div>

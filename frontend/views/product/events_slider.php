@@ -69,13 +69,14 @@ foreach ($customer_events as $key => $value) { ?>
 <p data-example-id="active-anchor-btns" class="bs-example">
 
 <?php if(Yii::$app->user->isGuest) { ?>
-<a href="javascript:"  role="button" class="btn btn-default"  data-toggle="modal"  onclick="show_login_modal(-1);" data-target="#myModal" title="<?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?>"><?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?></a>
+    <a href="javascript:"  role="button" class="btn btn-default"  data-toggle="modal"  onclick="show_login_modal(-1);" data-target="#myModal" title="<?= Yii::t('frontend', 'Create Your First Event');?>"><?php echo Yii::t('frontend','Create Your First Event');?></a>
 <?php } else {
-if(count($customer_events) > 0) {?>
-<a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?>"><?php echo Yii::t('frontend','CREATE_YOUR_EVENT');?></a>
-<?php }else {?>
-<a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?php echo Yii::t('frontend','CREATE_YOUR_FIRST_EVENT');?>"><?php echo Yii::t('frontend','CREATE_YOUR_FIRST_EVENT');?></a>
-<?php } }?>
+    if(count($customer_events) > 0) {?>
+        <a href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?= Yii::t('frontend','Add an Event');?>"><?php echo Yii::t('frontend','Add an Event');?></a>
+    <?php }else {?>
+        <a href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?= Yii::t('frontend', 'Create Your First Event');?>"><?php echo Yii::t('frontend','Create Your First Event');?></a>
+<?php }
+}?>
 </p>
 </div>
 </div>

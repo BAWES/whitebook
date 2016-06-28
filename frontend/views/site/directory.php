@@ -18,16 +18,16 @@ use yii\helpers\Html;?>
 <div class="listing_sub_cat">
 <input type="hidden" id="ajaxdata" name="ajaxdata">
 <select class="selectpicker" style="display: none;" id="filter_category" name="filter_category">
-<option value="All">All</option>
-<option data-icon="venues-category" value="venues">Venues</option>
-<option data-icon="invitation-category" value="invitations">Invitations</option>
-<option data-icon="food-category" value="food-beverage">Food & Beverage</option>
-<option data-icon="decor-category" value="decor" >Decor</option>
-<option data-icon="supply-category" value="supplies">Supplies</option>
-<option data-icon="enter-category" value="entertainment">Entertainment</option>
-<option data-icon="service-category" value="services">Services</option>
-<option data-icon="others-category" value="others">Others</option>
-<option data-icon="saythankyou-category" value="say-thank-you">Say "Thank You"</option>
+	<option value="All">All</option>
+	<option data-icon="venues-category" value="venues"><?= Yii::t("frontend", "Venues") ?></option>
+	<option data-icon="invitation-category" value="invitations"><?= Yii::t("frontend", "Invitations") ?></option>
+	<option data-icon="food-category" value="food-beverage"><?= Yii::t("frontend", "Food & Beverage") ?></option>
+	<option data-icon="decor-category" value="decor" ><?= Yii::t("frontend", "Decor") ?></option>
+	<option data-icon="supply-category" value="supplies"><?= Yii::t("frontend", "Supplies") ?></option>
+	<option data-icon="enter-category" value="entertainment"><?= Yii::t("frontend", "Entertainment") ?></option>
+	<option data-icon="service-category" value="services"><?= Yii::t("frontend", "Services") ?></option>
+	<option data-icon="others-category" value="others"><?= Yii::t("frontend", "Others") ?></option>
+	<option data-icon="saythankyou-category" value="say-thank-you"><?= Yii::t("frontend", "Gift Favors") ?></option>
 </select>
 </div>
 </div>
