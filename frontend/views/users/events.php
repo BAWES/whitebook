@@ -153,7 +153,7 @@ $this->title = 'Events/Wishlist | Whitebook';
 							<div class="events_items">
 							<div class="events_images">
 							<div class="hover_events">
-							<div class="pluse_cont"><a href="javascript:;" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','ADD_EVENT');?>"></a></div>
+							<div class="pluse_cont"><a href="javascript:;" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a></div>
 							<div class="delet_icons"><a href="javascript:;" title=""   onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"></a></div>
 							</div>
 							<?php
@@ -297,7 +297,7 @@ foreach($customer_wishlist as $f) {  ?>
 <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
-<button type="button" class="btn btn-default" title="<?php echo Yii::t('frontend','Add Now');?>" onclick="submit_add_event(<?php echo $f['item_id'];?>)"><?php echo Yii::t('frontend','ADD NOW');?></button>
+<button type="button" class="btn btn-default" title="<?php echo Yii::t('frontend','Add Now');?>" onclick="submit_add_event(<?php echo $f['item_id'];?>)"><?php echo Yii::t('frontend','Add Now');?></button>
 </div>
 <div class="cancel_sig">
 <button type="button" onclick="show_create_event_form();" class="btn btn-default" title="<?php echo Yii::t('frontend','Create New Event');?>"><?php echo Yii::t('frontend','Create New Event');?></button>

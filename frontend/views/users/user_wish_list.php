@@ -7,12 +7,12 @@ use common\models\Image;
 //print_r($wishlist);die;
 if (!empty($wishlist)) {
     foreach ($wishlist as $key => $value) {
-        ?> 
+        ?>
         <li id="<?php echo $value['item_id']; ?>">
             <div class="events_items">
                 <div class="events_images">
                     <div class="hover_events">
-                        <div class="pluse_cont"><a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>" name="<?php echo $value['item_id']; ?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id']; ?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend', 'ADD_EVENT'); ?>"></a></div>
+                        <div class="pluse_cont"><a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>" name="<?php echo $value['item_id']; ?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id']; ?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend', 'Add to Event'); ?>"></a></div>
                         <div class="delet_icons"><a href="javascript:;" title=""   onclick="remove_from_favourite(<?php echo $value['item_id']; ?>)"onclick="remove_from_favourite(<?php echo $value['item_id']; ?>)"></a></div>
                     </div>
                     <?php
@@ -29,7 +29,7 @@ if (!empty($wishlist)) {
                     </a>
                 </div>
             </div>
-        </li>  
+        </li>
     <?php
     }
 }
@@ -38,5 +38,5 @@ else {
 
     <li>
         No Record found
-    </li>  
+    </li>
 <?php } ?>

@@ -188,7 +188,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                         <?php if (Yii::$app->user->isGuest) { ?>
                                             <a href="" data-toggle="modal" class="add_events" data-target="#myModal" title="Add to event"  onclick="add_event_login(<?php echo $model['item_id']; ?>)"><span class="plus-icon-prod">Add to event</span></a>
 <?php } else { ?>
-                                            <a  href="#" role="button" id="<?php echo $model['item_id']; ?>" name="<?php echo $model['item_id']; ?>" class="add_events"  data-target="#add_to_event<?php echo $model['item_id']; ?>"   onclick="addevent('<?php echo $model['item_id']; ?>')" data-toggle="modal"  class="add_events" title="<?php echo Yii::t('frontend', 'ADD_EVENT'); ?>"><span class="plus-icon-prod"><?php echo Yii::t('frontend', 'ADD_EVENT'); ?></span></a>
+                                            <a  href="#" role="button" id="<?php echo $model['item_id']; ?>" name="<?php echo $model['item_id']; ?>" class="add_events"  data-target="#add_to_event<?php echo $model['item_id']; ?>"   onclick="addevent('<?php echo $model['item_id']; ?>')" data-toggle="modal"  class="add_events" title="<?php echo Yii::t('frontend', 'Add to Event'); ?>"><span class="plus-icon-prod"><?php echo Yii::t('frontend', 'Add to Event'); ?></span></a>
 <?php } ?>
                                         <!-- add to event end here -->
 

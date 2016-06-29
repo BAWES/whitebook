@@ -406,9 +406,9 @@ if ($event_status > 0) {
                                                     <div class="hover_events">
                                                         <div class="pluse_cont">
                                                         <?php if (Yii::$app->user->isGuest) { ?>
-                                                                <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id']; ?>);" data-target="#myModal" title="<?php echo Yii::t('frontend', 'ADD_EVENT'); ?>"></a>
+                                                                <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id']; ?>);" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Add to Event'); ?>"></a>
                                                         <?php } else { ?>
-                                                                <a  href="#" role="button" id="<?php echo $value['item_id']; ?>" name="<?php echo $value['item_id']; ?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id']; ?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend', 'ADD_EVENT'); ?>"></a>
+                                                                <a  href="#" role="button" id="<?php echo $value['item_id']; ?>" name="<?php echo $value['item_id']; ?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id']; ?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend', 'Add to Event'); ?>"></a>
                                                         <?php } ?></div>
 
                                                                 <?php if (Yii::$app->user->isGuest) { ?>

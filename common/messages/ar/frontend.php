@@ -17,8 +17,6 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'ADD NOW' => '',
-    'ADD_EVENT' => '',
     'About Us' => '',
     'Account Info' => '',
     'Account Settings' => '',
@@ -127,7 +125,6 @@ return [
     'Year' => '',
     'You are Adding' => '',
     'password' => '',
-    'address_info' => '@@@@',
     'My Account' => 'حسابي',
     'Plan' => 'خطط',
     'Services' => 'خدمات',
