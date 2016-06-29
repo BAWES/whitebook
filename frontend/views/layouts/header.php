@@ -30,7 +30,7 @@ $action = Yii::$app->controller->action->id;
                             <div id="navigation-bar">
                                 <form id="search" method="post" action="#" onsubmit="return false;">
                                     <div id="input1" class="left_slider">
-                                        <input type="text" name="search-terms" id="search-terms2" onkeyup="show_close()" placeholder="SEARCH FOR... " class="search-box" autocomplete="off" >
+                                        <input type="text" name="search-terms" id="search-terms2" onkeyup="show_close()" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>" class="search-box" autocomplete="off" >
                                         <button class="js-search-cancel"> <?= Yii::t("frontend", "Cancel") ?> </button>
                                         <button id="search-close" class="search-clear icon-search_clear" type="reset" ><?= Yii::t("frontend", "Clear") ?></button>
                                     </div>
@@ -185,7 +185,7 @@ $action = Yii::$app->controller->action->id;
 <?php if (Yii::$app->user->isGuest) { ?>
         <li class="<?php if ($action == "about-us") {echo "active";} ?>">
             <a href="<?= Url::toRoute('plan/cmspages', true); ?>" title="<?php echo Yii::t('frontend', 'About Us'); ?>">
-            <?php echo Yii::t('frontend', 'About us'); ?></a></li>
+            <?php echo Yii::t('frontend', 'About Us'); ?></a></li>
         <li class="">
             <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
             title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?>
@@ -261,7 +261,7 @@ echo $search_div;
                                 <form name="create_event" id="create_event">
                                     <input type="hidden" id="_csrf" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
                                     <div class="form-group">
-                                        <input type="text" name="event_name" class="form-control required" id="event_name" placeholder="<?php echo Yii::t('frontend', 'enter_event_name'); ?>" title="<?php echo Yii::t('frontend', 'enter_event_name'); ?>">
+                                        <input type="text" name="event_name" class="form-control required" id="event_name" placeholder="<?php echo Yii::t('frontend', 'Enter Event Name'); ?>" title="<?php echo Yii::t('frontend', 'Enter Event Name'); ?>">
                                     </div>
                                     <div class="form-group">
                                         <input type="hidden" name="item_id" class="form-control required" id="item_id" value="0">
@@ -270,7 +270,7 @@ echo $search_div;
 
 
                                         <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
-                                            <input type="text"  name="event_date" id="event_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'choose_event_date'); ?>" title="<?php echo Yii::t('frontend', 'choose_event_date'); ?>">
+                                            <input type="text"  name="event_date" id="event_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>">
                                             <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                                         </div>
                                         <label for="event_date" class="error"></label>
@@ -294,10 +294,10 @@ echo $search_div;
                                     <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>" title="Loader"></div>
                                     <div class="buttons">
                                         <div class="creat_evn_sig">
-                                            <button type="button" id="create_event_button" name="create_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'CREATE_EVENT'); ?>"><?php echo Yii::t('frontend', 'CREATE_EVENT'); ?></button>
+                                            <button type="button" id="create_event_button" name="create_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'Create Event'); ?>"><?php echo Yii::t('frontend', 'Create Event'); ?></button>
                                         </div>
                                         <div class="cancel_sig">
-                                            <input class="btn btn-default" data-dismiss="modal"  id="cancel_button" name="cancel_button" type="button" value="<?php echo Yii::t('frontend', 'CANCEL'); ?>" title="<?php echo Yii::t('frontend', 'CANCEL'); ?>">
+                                            <input class="btn btn-default" data-dismiss="modal"  id="cancel_button" name="cancel_button" type="button" value="<?php echo Yii::t('frontend', 'Cancel'); ?>" title="<?php echo Yii::t('frontend', 'Cancel'); ?>">
                                         </div>
                                     </div>
                                 </form>

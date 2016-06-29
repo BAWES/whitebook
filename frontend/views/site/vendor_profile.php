@@ -413,7 +413,7 @@ if ($event_status > 0) {
 
                                                                 <?php if (Yii::$app->user->isGuest) { ?>
                                                             <div class="faver_icons">
-                                                                <a href=""  role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id']; ?>);" data-target="#myModal" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a>
+                                                                <a href=""  role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id']; ?>);" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Add to Things I Like'); ?>"></a>
                                                             </div>
             <?php
             } else {
@@ -426,7 +426,7 @@ if ($event_status > 0) {
                     ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
                                                                     <div class="faver_icons">
                                             <?php } ?>
-                                                                    <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a></div>
+                                                                    <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'Add to Things I Like'); ?>"></a></div>
                                         <?php } ?>
                                                         </div>
 

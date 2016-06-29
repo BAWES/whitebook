@@ -195,11 +195,11 @@ $this->title = 'Events/Wishlist | Whitebook';
 <div class="modal-dialog">
 <div class="modal-content  modal_member_login signup_poupu row">
 <div class="modal-header">
-<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<div class="text-center">
-<span class="yellow_top"></span>
-</div>
-<h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend','CREATE_NEW_EVENT');?></h4>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<div class="text-center">
+		<span class="yellow_top"></span>
+	</div>
+	<h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend','Create New Event');?></h4>
 </div>
 <div class="modal-body">
 <div class="row">
@@ -209,11 +209,11 @@ $this->title = 'Events/Wishlist | Whitebook';
 <form name="create_event" id="create_event">
 <input type="hidden" id="_csrf" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
 <div class="form-group">
-<input type="text" name="event_name" class="form-control required" id="event_name" placeholder="<?php echo Yii::t('frontend','enter_event_name');?>" title="<?php echo Yii::t('frontend','enter_event_name');?>">
+<input type="text" name="event_name" class="form-control required" id="event_name" placeholder="<?php echo Yii::t('frontend','Enter Event Name');?>" title="<?php echo Yii::t('frontend','Enter Event Name');?>">
 </div>
 <div class="form-group">
 <div id="datetimepicker2" class="input-group date">
-<input type="text" name="event_date" class="form-control required datetimepicker" placeholder="<?php echo Yii::t('frontend','choose_event_date');?>" title="<?php echo Yii::t('frontend','choose_event_date');?>">
+<input type="text" name="event_date" class="form-control required datetimepicker" placeholder="<?php echo Yii::t('frontend','Choose Event Date');?>" title="<?php echo Yii::t('frontend','Choose Event Date');?>">
 <span class="input-group-addon">
 <i class="flaticon-calendar189"></i>
 </span>
@@ -232,10 +232,10 @@ $this->title = 'Events/Wishlist | Whitebook';
 <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
-<button type="button" onclick="submit_create_event_form('create_event')" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE_EVENT');?>"><?php echo Yii::t('frontend','CREATE_EVENT');?></button>
+<button type="button" onclick="submit_create_event_form('create_event')" class="btn btn-default" title="<?php echo Yii::t('frontend','Create Event');?>"><?php echo Yii::t('frontend','Create Event');?></button>
 </div>
 <div class="cancel_sig">
-<input class="btn btn-default" data-dismiss="modal" type="button" value="<?php echo Yii::t('frontend','CANCEL');?>" title="<?php echo Yii::t('frontend','CANCEL');?>">
+<input class="btn btn-default" data-dismiss="modal" type="button" value="<?php echo Yii::t('frontend','Cancel');?>" title="<?php echo Yii::t('frontend','Cancel');?>">
 </div>
 </div>
 </form>
@@ -259,7 +259,7 @@ foreach($customer_wishlist as $f) {  ?>
 <div class="text-center">
 <span class="yellow_top"></span>
 </div>
-<h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend','u_r_adding');?></h4>
+<h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend','You are Adding');?></h4>
 </div>
 <div class="modal-body">
 <div class="row">
@@ -297,10 +297,10 @@ foreach($customer_wishlist as $f) {  ?>
 <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
-<button type="button" class="btn btn-default" title="<?php echo Yii::t('frontend','ADD_NOW');?>" onclick="submit_add_event(<?php echo $f['item_id'];?>)"><?php echo Yii::t('frontend','ADD_NOW');?></button>
+<button type="button" class="btn btn-default" title="<?php echo Yii::t('frontend','Add Now');?>" onclick="submit_add_event(<?php echo $f['item_id'];?>)"><?php echo Yii::t('frontend','ADD NOW');?></button>
 </div>
 <div class="cancel_sig">
-<button type="button" onclick="show_create_event_form();" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE_NEW_EVENT');?>"><?php echo Yii::t('frontend','CREATE_NEW_EVENT');?></button>
+<button type="button" onclick="show_create_event_form();" class="btn btn-default" title="<?php echo Yii::t('frontend','Create New Event');?>"><?php echo Yii::t('frontend','Create New Event');?></button>
 </div>
 </div>
 </form>
@@ -310,11 +310,11 @@ foreach($customer_wishlist as $f) {  ?>
 <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
 <input type="hidden" name="item_id" value="<?php echo  $f['item_id'];?>" />
 <div class="form-group">
-<input type="text" name="event_name" class="form-control required" placeholder="<?php echo Yii::t('frontend','enter_event_name');?>" title="<?php echo Yii::t('frontend','enter_event_name');?>">
+<input type="text" name="event_name" class="form-control required" placeholder="<?php echo Yii::t('frontend','Enter Event Name');?>" title="<?php echo Yii::t('frontend','Enter Event Name');?>">
 </div>
 <div class="form-group">
 <div id="datetimepicker2" class="input-group date">
-<input type="text" name="event_date" class="form-control required datetimepicker" placeholder="<?php echo Yii::t('frontend','choose_event_date');?>" title="<?php echo Yii::t('frontend','choose_event_date');?>">
+<input type="text" name="event_date" class="form-control required datetimepicker" placeholder="<?php echo Yii::t('frontend','Choose Event Date');?>" title="<?php echo Yii::t('frontend','Choose Event Date');?>">
 <span class="input-group-addon">
 <i class="flaticon-calendar189"></i>
 </span>
@@ -333,7 +333,7 @@ foreach($customer_wishlist as $f) {  ?>
 <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
-<button type="button" onclick="submit_create_new_event_form(<?php echo $f['item_id'];?>)" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE_EVENT');?>"><?php echo Yii::t('frontend','CREATE_EVENT');?></button>
+<button type="button" onclick="submit_create_new_event_form(<?php echo $f['item_id'];?>)" class="btn btn-default" title="<?php echo Yii::t('frontend','Create Event');?>"><?php echo Yii::t('frontend','Create Event');?></button>
 </div>
 <div class="cancel_sig">
 <button type="button" onclick="show_add_event_form();" class="btn btn-default" title="Add to Existing Event"><?php echo Yii::t('frontend','Add to Existing');?></button>

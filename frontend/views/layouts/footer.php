@@ -40,9 +40,9 @@ use frontend\models\Users;
 <span class="customer_status errors"></span>
 <div class="form-group">
 <div class="button-signin">
-<button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();">NEW USER</button>
+<button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();"><?= Yii::t('frontend','New User');?></button>
 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="login_button">
-<?php echo Yii::t('frontend','LOGIN');?></button>
+<?= Yii::t('frontend','Login');?></button>
 </div>
 <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 <span class="text-center forgotpwd"><a data-target="#forgotPwdModal" onclick="forgot_modal();"  data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#forgotPwdModal"> Forgot your password</a></span>
@@ -341,7 +341,7 @@ Sign in here </a></span>
 <div class="text-center">
 <span class="yellow_top"></span>
 </div>
-<h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend','ADD_TO_EVENT');?></h4>
+<h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend','Add to Event');?></h4>
 </div>
 <div class="modal-body">
 <div class="row">

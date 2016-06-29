@@ -8,7 +8,7 @@ $this->title = 'Delivery Address | Whitebook';
 <section id="inner_pages_sections">
     <div class="container">
         <div class="title_main">
-            <h1><?php echo Yii::t('frontend', 'delivery_address'); ?></h1>
+            <h1><?php echo Yii::t('frontend', 'Delivery Address'); ?></h1>
         </div>
 
         <div class="account_setings_sections">
@@ -18,7 +18,7 @@ $this->title = 'Delivery Address | Whitebook';
                     <div class="accont_info">
                         <div class="account_title">
                             <div id="acc_status" style="color:green;margin-bottom: 10px;"></div>
-                            <h4><?php echo Yii::t('frontend', 'address_info'); ?></h4>
+                            <h4><?php echo Yii::t('frontend', 'Address Info'); ?></h4>
                         </div>
                         <div class="account_form">
                             <div class="bs-example" data-example-id="basic-forms">

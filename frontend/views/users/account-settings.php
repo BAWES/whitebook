@@ -7,7 +7,7 @@ $this->title ='Account Setting | Whitebook';
 <section id="inner_pages_sections">
 <div class="container">
 <div class="title_main">
-<h1><?php echo Yii::t('frontend','account_settings'); ?></h1>
+<h1><?php echo Yii::t('frontend','Account Settings'); ?></h1>
 </div>
 
 <div class="account_setings_sections">
@@ -17,27 +17,27 @@ $this->title ='Account Setting | Whitebook';
 <div class="accont_info">
 <div class="account_title">
 <div id="acc_status" style="color:green;margin-bottom: 10px;"></div>
-<h4><?php echo Yii::t('frontend','account_info'); ?></h4>
+<h4><?= Yii::t('frontend','Account Info'); ?></h4>
 </div>
 <div class="account_form">
 <div class="bs-example" data-example-id="basic-forms">
 <form method="POST" action="<?php echo Url::toRoute('users/edit_profile'); ?>" name="account_setting" id="account_setting" name="account_setting">
 <div class="col-md-6 paddingleft0">
 <div class="form-group">
-<label for="exampleInputEmail1">First Name</label>
+<label for="exampleInputEmail1"><?= Yii::t('frontend','First Name');?></label>
 <input type="hidden" id="_csrf" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
-<input type="text" name="first_name" id="first_name"  maxlength="50" class="form-control required" placeholder="<?php echo Yii::t('frontend','enter_first_name');?>" title="<?php echo Yii::t('frontend','enter_first_name');?>" value="<?php echo $user_detail[0]['customer_name'];?>">
+<input type="text" name="first_name" id="first_name"  maxlength="50" class="form-control required" placeholder="<?php echo Yii::t('frontend','Enter First Name');?>" title="<?php echo Yii::t('frontend','Enter First Name');?>" value="<?php echo $user_detail[0]['customer_name'];?>">
 </div></div>
 <div class="col-md-6 paddingright0">
 <div class="form-group">
-<label for="exampleInputPassword1">Last Name</label>
-<input type="text" class="form-control required" maxlength="50" name="last_name" id="last_name" placeholder="<?php echo Yii::t('frontend','enter_last_name');?>" title="<?php echo Yii::t('frontend','enter_last_name');?>" value="<?php echo $user_detail[0]['customer_last_name'];?>">
+<label for="exampleInputPassword1"><?= Yii::t('frontend','Last Name');?></label>
+<input type="text" class="form-control required" maxlength="50" name="last_name" id="last_name" placeholder="<?php echo Yii::t('frontend','Enter Last Name');?>" title="<?= Yii::t('frontend','Enter Last Name');?>" value="<?php echo $user_detail[0]['customer_last_name'];?>">
 </div>
 </div>
 <div class="col-md-6 paddingleft0">
 <div class="form-group">
-<label for="exampleInputEmail1">Email Address</label>
-<input type="text" class="form-control required email" maxlength="100" name="customer_email" id="customer_email" placeholder="<?php echo Yii::t('frontend','enter_your_email_address');?>" title="<?php echo Yii::t('frontend','enter_your_email_address');?>" value="<?php echo $user_detail[0]['customer_email'];?>" readonly>
+<label for="exampleInputEmail1"><?= Yii::t('frontend','Email Address');?></label>
+<input type="text" class="form-control required email" maxlength="100" name="customer_email" id="customer_email" placeholder="<?php echo Yii::t('frontend','Enter your email address');?>" title="<?php echo Yii::t('frontend','Enter your email address');?>" value="<?php echo $user_detail[0]['customer_email'];?>" readonly>
 </div></div>
 <?php $dob=$user_detail[0]['customer_dateofbirth'];
 $year= date('Y', strtotime($dob));
@@ -46,7 +46,7 @@ $day= date('d', strtotime($dob));
 ?>
 <div class="col-md-6 paddingright0">
 <div class="form-group">
-<label for="exampleInputPassword1">Date of Birth </label>
+<label for="exampleInputPassword1"><?= Yii::t('frontend','Date of Birth'); ?></label>
 <div class="col-md-3 col-xs-3 paddingleft0"><div class="select_boxes">
 <select name="bday_detail" id="bday_detail" class="selectpicker" data-style="btn-primary" style="display: none;">
 <option value="">Day</option>
@@ -60,7 +60,7 @@ $day= date('d', strtotime($dob));
 </div></div>
 <div class="col-md-4 col-xs-4 paddingcommon"><div class="select_boxes">
 <select class="selectpicker" data-style="btn-primary" style="display: none;" id="bmonth_detail" name="bmonth_detail">
-<option value="">Month</option>
+<option value=""><?= Yii::t('frontend','Month'); ?></option>
 <option value="1" <?php if(isset($month) && $month==1) { echo "selected=selected"; } ?>>Jan</option>
 <option value="2" <?php if(isset($month) && $month==2) { echo "selected=selected"; } ?>>Feb</option>
 <option value="3" <?php if(isset($month) && $month==3) { echo "selected=selected"; } ?>>Mar</option>
@@ -78,7 +78,7 @@ $day= date('d', strtotime($dob));
 </div></div>
 <div class="col-md-5 col-xs-5 paddingright0"><div class="select_boxes">
 <select class="selectpicker" id="byear_detail" name="byear_detail" data-style="btn-primary" style="display: none;">
-<option value="">Year</option>
+<option value=""><?= Yii::t('frontend','Year'); ?></option>
 <?php
 $current= date('Y');
 $current= $current-5;
@@ -102,12 +102,12 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 </div>
 <div class="col-md-6 paddingleft0">
 <div class="form-group">
-<label for="exampleInputEmail1">Gender</label>
+<label for="exampleInputEmail1"><?= Yii::t('frontend','Gender'); ?></label>
 <div class="select_boxes">
 <select class="selectpicker" data-style="btn-primary" style="display: none;" id="gender_detail" name="gender_detail">
-<option value=""><?php echo Yii::t('frontend','choose_gender');?></option>
-<option value="Male" <?php if(isset($user_detail[0]['customer_gender']) && $user_detail[0]['customer_gender']=='Male') { echo "selected=selected"; } ?>>Male</option>
-<option value="Female" <?php if(isset($user_detail[0]['customer_gender']) && $user_detail[0]['customer_gender']=='Female') { echo "selected=selected"; } ?>>Female</option>
+<option value=""><?php echo Yii::t('frontend','Select Gender');?></option>
+<option value="Male" <?php if(isset($user_detail[0]['customer_gender']) && $user_detail[0]['customer_gender']=='Male') { echo "selected=selected"; } ?>><?= Yii::t('frontend','Male'); ?></option>
+<option value="Female" <?php if(isset($user_detail[0]['customer_gender']) && $user_detail[0]['customer_gender']=='Female') { echo "selected=selected"; } ?>><?= Yii::t('frontend','Female'); ?></option>
 </select>
 </div>
 
@@ -117,24 +117,24 @@ print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
 
 <div class="col-md-6 paddingright0">
 <div class="form-group">
-<label for="exampleInputPassword1">Mobile Number</label>
-<input type="text" class="form-control required" name="mobile_number_detail" id="mobile_number_detail" placeholder="<?php echo Yii::t('frontend','enter_mobile_number');?>" title="<?php echo Yii::t('frontend','enter_mobile_number');?>" value="<?php echo $user_detail[0]['customer_mobile'];?>">
+<label for="exampleInputPassword1"><?= Yii::t('frontend','Mobile Number');?></label>
+<input type="text" class="form-control required" name="mobile_number_detail" id="mobile_number_detail" placeholder="<?php echo Yii::t('frontend','Enter Mobile Number');?>" title="<?php echo Yii::t('frontend','Enter Mobile Number');?>" value="<?php echo $user_detail[0]['customer_mobile'];?>">
 </div>
 </div>
 
 
 <div class="address_informations">
 <div class="address_title">
-<h3>Address information</h3>
+<h3><?= Yii::t('frontend','Address Information');?></h3>
 </div>
 
 
 <div class="col-md-6 paddingleft0">
 <div class="form-group">
-<label for="exampleInputEmail1">Country</label>
+<label for="exampleInputEmail1"><?= Yii::t('frontend','Country');?></label>
 <select class="selectpicker" data-style="btn-primary" style="display: none;" id="country" name="country">
-<option value="">Select country</option>
-<?php 
+<option value=""><?= Yii::t('frontend','Select country');?></option>
+<?php
 foreach($loadcountry as $key=>$val)
 {$count= isset($user_detail[0]['country_id']) ? $user_detail[0]['country_id'] : '';
 if(isset($count) && $count==$key) { $selected='selected'; }else {$selected='';}
@@ -147,10 +147,10 @@ echo  '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
 
 <div class="col-md-6 paddingright0">
 <div class="form-group">
-<label for="exampleInputPassword1">Area</label>
+<label for="exampleInputPassword1"><?= Yii::t('frontend','Area');?></label>
 <div class="select_boxes">
 <select class="selectpicker " data-style="btn-primary" id="city" name="city" >
-<option value="">Select city</option>
+<option value=""><?= Yii::t('frontend','Select city');?></option>
 <?php foreach($loadcity as $key=>$val)
 {
 $city_count=isset($user_detail[0]['city_id']) ? $user_detail[0]['city_id'] : '';
@@ -173,7 +173,9 @@ echo  '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
 
 <div class="submitt_buttons">
 
-<button class="btn btn-default" type="button" title="Save Changes" id="saved" name="saved"> Save Changes</button>
+<button class="btn btn-default" type="button" title="Save Changes" id="saved" name="saved">
+    <?= Yii::t('frontend','Save Changes');?>
+</button>
 </div>
 </form>
 </div>

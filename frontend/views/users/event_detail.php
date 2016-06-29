@@ -94,7 +94,7 @@ $cust_id = Yii::$app->user->identity->customer_id;
 <div class="events_inner_listing_new">
 <div class="events_listing">
 <ul>
-<?php 
+<?php
  $cat_list=Vendoritem::find()->select(['{{%vendor_item}}.item_id'])
  ->join('INNER JOIN','{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
  ->where(['{{%vendor_item}}.item_status'=>'Active'])
@@ -149,13 +149,13 @@ if (is_numeric ($result)) { ?>
 <div class="faver_icons faverited_icons"> <?php } else { ?>
 <div class="faver_icons">
 <?php }?>
-<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','ADD_FAV');?>"></a></div>
+<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
 </div>
 <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
 </div>
 <div class="events_descrip">
 
-<?= /* Url::toRoute(['/product/product/','slug'=>$value['slug']]) */ 
+<?= /* Url::toRoute(['/product/product/','slug'=>$value['slug']]) */
 Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])) ?>
 <h3><?= $value['item_name']  ?></h3>
 <p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p>
@@ -169,7 +169,7 @@ Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/
 <?php   } ?>
 <div class="events_brows_buttons_common">
 <div class="margin_0_auto">
-<a href="<?= Url::toRoute(['/plan/plan/','slug'=>$value1['slug']]);?>" class="btn btn-danger">BROWSE THE CATEGORY</a>
+<a href="<?= Url::toRoute(['/plan/plan/','slug'=>$value1['slug']]);?>" class="btn btn-danger"><?= Yii::t('frontend','Browse the Category');?></a>
 </div>
 </div>
 </div>
@@ -182,9 +182,9 @@ Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/
 <!-- heading seven end -->
 
 <div class="invates_common" id="invitee">
-<h4>Invitees</h4>
-<p>Invite your friends, relatives for this event</p>
-<div class="invite_error" style="color:red;display:none;">Email already exist with this event.</div>
+<h4><?= Yii::t('frontend','Invitees');?></h4>
+<p><?= Yii::t('frontend','Invite your friends, relatives for this event');?></p>
+<div class="invite_error" style="color:red;display:none;"><?= Yii::t('frontend','Email already exist with this event.');?></div>
 <div class="add_detials_form">
 <div data-example-id="basic-forms" class="bs-example">
 <form>
@@ -199,18 +199,18 @@ Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/
 <div class="col-md-4">
 <div class="form-group">
 
-<input type="email" placeholder="Email" name="invitees_email" id="invitees_email" class="form-control">
+<input type="email" placeholder="<?= Yii::t('frontend','Email');?>" name="invitees_email" id="invitees_email" class="form-control">
 </div>
 </div>
 <div class="col-md-3">
 <div class="form-group">
 
-<input type="phone" placeholder="Phone" name="invitees_phone" id="invitees_phone" class="form-control">
+<input type="phone" placeholder="<?= Yii::t('frontend','Phone');?>" name="invitees_phone" id="invitees_phone" class="form-control">
 </div>
 </div>
 <div class="col-md-1 padding0">
 <div class="add_events_new">
-<input type="button" class="btn btn-default" id="submit" value="Add" onClick="addinvitees()">
+<input type="button" class="btn btn-default" id="submit" value="<?= Yii::t('frontend','Add');?>" onClick="addinvitees()">
 </div>
 </div>
 </form>
@@ -225,23 +225,25 @@ Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/
 <div class="input-group">
 <div id="navigation-bar">
 <form id="search" action="#" method="post">
-<div id="input3" class="right_slider">
-<input type="text" placeholder="Name/Phone/Email" id="inviteesearch1" class="form-control">
-<span class="input-group-btn mobile-search-icon">
-<button class="btn btn-default" type="button" onClick="Searchinvitee('<?php echo $event_details[0]['event_id'];?>')">Go!</button>
-</span>
-</div>
-<div id="label3">
-<div id="search1" class="search_for"></div>
-<label for="search-terms" id="search-labl3"></label></div>
+    <div id="input3" class="right_slider">
+
+        <input type="text" placeholder="<?= Yii::t('frontend','Name/Phone/Email');?>" id="inviteesearch1" class="form-control">
+
+        <span class="input-group-btn mobile-search-icon">
+            <button class="btn btn-default" type="button" onClick="Searchinvitee('<?php echo $event_details[0]['event_id'];?>')"><?= Yii::t('frontend','Go!');?></button>
+        </span>
+    </div>
+    <div id="label3">
+    <div id="search1" class="search_for"></div>
+    <label for="search-terms" id="search-labl3"></label></div>
 </form>
 </div>
 
 </div><!-- /input-group -->
 </div>
 <div class="prient_common">
-<a href="<?php echo Url::toRoute('/users/excel/'.$slug);?>" title="Export to Excel">Export to Excel</a>
-<a href="#" title="Print" onclick="window.print()">Print</a>
+<a href="<?php echo Url::toRoute('/users/excel/'.$slug);?>" title="<?= Yii::t('frontend','Export to Excel');?>"><?= Yii::t('frontend','Export to Excel');?></a>
+<a href="#" title="Print" onclick="window.print()"><?= Yii::t('frontend','Print');?></a>
 </div>
 </div>
 
@@ -249,38 +251,38 @@ Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/
 </div>
 </div>
 <div class="add_contact_table">
-<div class="table-responsive">
-<?php \yii\widgets\Pjax::begin(['id'=>'itemtype']); ?>
-<?= GridView::widget([
-'dataProvider' => $dataProvider,
-'columns' => [
-['class' => 'yii\grid\SerialColumn'],
-'name',
-'email:email',
-'phone_number',
-['class' => 'yii\grid\ActionColumn',
-'header'=>'Action',
-'template' => '{delete}{update}',
-'buttons' => [
-'delete' => function ($url, $model) {
-$url = '';
-return  Html::a('<a href="javascript:void(0)" onclick="deleteinvitee('.$model->invitees_id.')"><span class="glyphicon glyphicon-trash"></span></a>', $url, [
-'title' => Yii::t('app', 'Gallery'),
-//'class'=>'btn btn-primary btn-xs',
-]);
-},
-'update' => function ($url, $model) {
-$url = '';
-return  Html::a('<a href="javascript:void(0)"  onclick="updateinvitee('.$model->invitees_id.')"><span class="glyphicon glyphicon-pencil" style="margin-left:10px;"></span></a>', $url, [
-'title' => Yii::t('app', 'Gallery'),
-//'class'=>'btn btn-primary btn-xs',
-]);
-},
-], ],
-],
-]); ?>
-<?php \yii\widgets\Pjax::end(); ?>
-</div>
+    <div class="table-responsive">
+        <?php \yii\widgets\Pjax::begin(['id'=>'itemtype']); ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'name',
+                'email:email',
+                'phone_number',
+                ['class' => 'yii\grid\ActionColumn',
+                'header'=>'Action',
+                'template' => '{delete}{update}',
+                'buttons' => [
+                'delete' => function ($url, $model) {
+                $url = '';
+                return  Html::a('<a href="javascript:void(0)" onclick="deleteinvitee('.$model->invitees_id.')"><span class="glyphicon glyphicon-trash"></span></a>', $url, [
+                'title' => Yii::t('app', 'Gallery'),
+                //'class'=>'btn btn-primary btn-xs',
+                ]);
+                },
+                'update' => function ($url, $model) {
+                $url = '';
+                return  Html::a('<a href="javascript:void(0)"  onclick="updateinvitee('.$model->invitees_id.')"><span class="glyphicon glyphicon-pencil" style="margin-left:10px;"></span></a>', $url, [
+                'title' => Yii::t('app', 'Gallery'),
+                //'class'=>'btn btn-primary btn-xs',
+                ]);
+                },
+                ], ],
+            ],
+        ]); ?>
+        <?php \yii\widgets\Pjax::end(); ?>
+    </div>
 </div>
 </div>
 </div>

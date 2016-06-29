@@ -15,7 +15,7 @@ if(!Yii::$app->user->isGuest) {
     <img src="<?php echo Url::to('@web/images/my_book_desk.svg') ?>" alt="My White Book"/></span>
 <div class="creatfirst_events">
 <p data-example-id="active-anchor-btns" class="bs-example">
-<a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?php echo Yii::t('frontend','Create your first event');?>"><?php echo Yii::t('frontend','Create your first event');?></a>
+<a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?php echo Yii::t('frontend','Create Your First Event');?>"><?php echo Yii::t('frontend','Create Your First Event');?></a>
 </p>
 </div>
 </div>

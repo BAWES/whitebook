@@ -192,7 +192,7 @@ foreach ($featured_product as $f) {
         <div class="text-center">
             <span class="yellow_top"></span>
         </div>
-        <h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend', 'u_r_adding'); ?></h4>
+        <h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend', 'You are Adding'); ?></h4>
     </div>
     <div class="modal-body">
         <div class="row">

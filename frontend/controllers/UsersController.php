@@ -38,7 +38,7 @@ class UsersController extends BaseController
     }
 
     public function actionLogin()
-    { 
+    {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -71,10 +71,10 @@ class UsersController extends BaseController
 
     public function actionSignup()
     {
-
         $model = new Customer();
         $model->scenario = 'signup';
         $error = array();
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['customer_password']);
@@ -87,37 +87,39 @@ class UsersController extends BaseController
             $model->customer_email=$data['customer_email'];
             $model->customer_gender=$data['customer_gender'];
             $model->customer_mobile=$data['customer_mobile'];
+
             if ($model->validate() && $model->save()) {
-                    $siteinfo = Siteinfo::find()->asArray()->all();
-                    $username = $model['customer_name'];
-                    Yii::$app->session->set('register', '1');
-                    $message = 'Thank you for registration with us.</br><a href='.Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true).' title="Click Here">Click here </a> to activate your account.';
-                    //Send Email to user
-                    $send_user = Yii::$app->mailer->compose
-                    (["html"=>"customer/welcome"],
-                     ["message"=>$message,"user"=>$model->customer_name])
-                    ->setFrom(Yii::$app->params['supportEmail'])
-                    ->setTo($model['customer_email'])
-                    ->setSubject('TheWhiteBook registration successfull')
-                    ->send();
-                 //Send Email to admin
-                    $message_admin = $model->customer_name.' registered in TheWhiteBook';
-                    $send_admin = Yii::$app->mailer->compose
-                    (["html"=>"customer/user-register"],
-                     ["message"=>$message_admin])
-                    ->setFrom(Yii::$app->params['supportEmail'])
-                    ->setTo(Yii::$app->params['adminEmail'])
-                    ->setSubject('User registered')
-                    ->send();
-                    $this->redirect(Url::to('site/index'));
-                    return Users::SUCCESS;
-                    } else {
-                    Yii::$app->session->setFlash('error', 'Signup Failed!');
-                    return Users::FAILURE;
-                    $this->redirect(Url::to('site/index'));
-                }
+                $siteinfo = Siteinfo::find()->asArray()->all();
+                $username = $model['customer_name'];
+                Yii::$app->session->set('register', '1');
+                $message = 'Thank you for registration with us.</br><a href='.Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true).' title="Click Here">Click here </a> to activate your account.';
+                //Send Email to user
+                $send_user = Yii::$app->mailer->compose
+                (["html"=>"customer/welcome"],
+                 ["message"=>$message,"user"=>$model->customer_name])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($model['customer_email'])
+                ->setSubject('TheWhiteBook registration successfull')
+                ->send();
+             //Send Email to admin
+                $message_admin = $model->customer_name.' registered in TheWhiteBook';
+                $send_admin = Yii::$app->mailer->compose
+                (["html"=>"customer/user-register"],
+                 ["message"=>$message_admin])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo(Yii::$app->params['adminEmail'])
+                ->setSubject('User registered')
+                ->send();
+                $this->redirect(Url::to('site/index'));
+                return Users::SUCCESS;
+            } else {
+                Yii::$app->session->setFlash('error', 'Signup Failed!');
+                return Users::FAILURE;
+                $this->redirect(Url::to('site/index'));
             }
-            return $this->render('/users/signup', [
+        }
+
+        return $this->render('/users/signup', [
             'model' => $model,
             'error' => $error,
         ]);
@@ -132,6 +134,7 @@ class UsersController extends BaseController
         } else {
             Yii::$app->session->set('reset_password_mail', '1');
         }
+
         return $this->goHome();
     }
 
@@ -145,11 +148,13 @@ class UsersController extends BaseController
             $login_det = $model->customer_logindetail($key);
             $email = $login_det[0]['customer_email'];
             $authorization = $model->check_authorization($email);
+
             if($authorization)
             {
                 Yii::$app->session->set('key', '1'); // To activate user
-                //Consider replacing this with setFlash for a temporary session var 
+                //Consider replacing this with setFlash for a temporary session var
             }
+
             return $this->redirect(Url::toRoute('/site/activate'));
         }
     }
@@ -170,7 +175,7 @@ class UsersController extends BaseController
                 ->setTo($email)
                 ->setSubject('Requested forgot Password')
                 ->send();
-                Yii::$app->session->setFlash('success', Yii::t('frontend', 'PASS_SENT'));
+                Yii::$app->session->setFlash('success', Yii::t('frontend', 'Password has been sent'));
                 return Users::SUCCESS;
             } else {
                 return Users::EMAIL_NOT_EXIST;
@@ -191,8 +196,10 @@ class UsersController extends BaseController
                 where(['customer_activation_key'=>$customer_activation_key])
                 ->asArray()
                 ->one();
+
                 $check_user = $model->customer_password_reset($password, $customer_activation_key,$user_email);
                 $val = Users::FAILURE; // Password reset failure
+
                 if (count($check_user) > 0) {
                     $_POST['email'] = $user_email['customer_email'];
                     $loginResult = $this->actionLogin();
@@ -305,11 +312,11 @@ class UsersController extends BaseController
                     			$event_item_modal->modified_datetime=$event_date;
                     			$event_item_modal->save();
                        Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_AD_SUCC'));
-                       return Eventitemlink::EVENT_ITEM_CREATED; 
+                       return Eventitemlink::EVENT_ITEM_CREATED;
                    }
                 }
                 Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_SUCC'));
-                return Events::EVENT_CREATED; 
+                return Events::EVENT_CREATED;
             }
         }
     }
@@ -330,7 +337,7 @@ class UsersController extends BaseController
             if ($add_event ==  Events::EVENT_ALREADY_EXIST) {
                 return  Events::EVENT_ALREADY_EXIST;
             } else {
-                Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVENT_UPDATED_SUCCESSFULLY'));
+                Yii::$app->session->setFlash('success', Yii::t('frontend', 'Event has been updated'));
                 return $add_event;
             }
         }

@@ -23,7 +23,7 @@ if (!empty($imageData)) {
 
                             <?php if (Yii::$app->user->isGuest) { ?>
                                 <div class="faver_icons">
-                                    <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal();" data-target="#myModal" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a>
+                                    <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal();" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Add to Things I Like'); ?>"></a>
                                 </div>
                             <?php
                             } else {
@@ -42,7 +42,7 @@ if (!empty($imageData)) {
                                     ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
                                         <div class="faver_icons">
                 <?php } ?>
-                                        <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'ADD_FAV'); ?>"></a></div>
+                                        <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend', 'Add to Things I Like'); ?>"></a></div>
             <?php } ?>
                             </div>
                            <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),
