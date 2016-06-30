@@ -24,9 +24,9 @@ return [
             'name' => 'app-backend',
         ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'traceLevel' => 3,//YII_DEBUG ? 3 : 0,
             'targets' => [
-                'file' => [
+                [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
