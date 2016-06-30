@@ -25,7 +25,6 @@ class ProductController extends BaseController
     public function init()
     {
         parent::init();
-        Yii::$app->language = 'en-EN';
     }
 
     /**
@@ -61,7 +60,7 @@ class ProductController extends BaseController
 			->orderby(['vendorimage_sort_order'=>SORT_ASC])
 			->asArray()
 			->all();
-			
+
             $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
             foreach ($output as $out) {
                 if ($out) {
@@ -74,7 +73,7 @@ class ProductController extends BaseController
             }
 
             /* BEGIN DELIVERY AREAS --VENDOR */
-            
+
 			$vendr_area = Vendorlocation::find()
 			->select(['{{%vendor_location}}.area_id','{{%location}}.*'])
 			->leftJoin('{{%location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
@@ -151,7 +150,7 @@ class ProductController extends BaseController
 		->where(['vendor_id' => $model['vendor_id']])
 		->andwhere(['timeslot_day' => date("l", $timestamp)])
 		->asArray()->all();
-		
+
             foreach ($vendor_timeslot as $key => $value) {
                 echo '<option value="'.$key['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
             }
