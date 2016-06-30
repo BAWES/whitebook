@@ -483,6 +483,7 @@ $("#validone1").click(function() {
 
 	if($('#test').val()==1)
 	{
+  //alert($('#test').val());
 		return false;
 	}
 
@@ -511,9 +512,10 @@ $("#validone1").click(function() {
 			$(".field-vendoritem-child_category").find('.help-block').html('Child category cannot be blank.');
 			return false;
   }
-   //validate email already exist or not
+/*   //validate email already exist or not
  	var item_len = $("#vendoritem-item_name").val().length;
-     if($("#vendoritem-item_name").val()=='')
+
+  if($("#vendoritem-item_name").val()=='')
 	 {
 	 	$(".field-vendoritem-item_name").addClass('has-error');
 			$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
@@ -526,9 +528,9 @@ $("#validone1").click(function() {
 				return false;
 	 } else if(item_len > 3)
 	{
-
+  alert(item_len);
 		var mail=$("#vendoritem-item_name").val();
-        var path = "<?php echo Url::to(['/vendoritem/itemnamecheck']); ?> ";
+        var path = "<?php echo Url::to(['/vendoritem/itemnamecheck1']); ?> ";
         $('.loadingmessage').show();
         var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] :  '0'; ?>;
         $.ajax({
@@ -539,12 +541,14 @@ $("#validone1").click(function() {
 			$("#test").val(mail);
             if(data>0)
             {
+             //alert(data);
 			$('.loadingmessage').hide();
 			$(".field-vendoritem-item_name").removeClass('has-success');
 			$(".field-vendoritem-item_name").addClass('has-error');
 			$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
 			$(".field-vendoritem-item_name" ).focus();
 			$('#test').val(1);
+   return false;
 			}
 			else
 			{
@@ -558,7 +562,7 @@ $("#validone1").click(function() {
 	else
 	  {
 	  	return true;
-	  }
+	  }*/
 	});
 
 /* BEGIN TAB 2 */
@@ -732,32 +736,37 @@ $(function(){
 /* BEGIN Vendor item check exist or not */
  $(function () {
 
- $("#vendoritem-item_name").on('keyup keypress focusout',function () {
+ //$("#vendoritem-item_name").on('keyup keypress focusout',function () {
+  $("#w0").on("afterValidateAttribute", function (event, messages) {
+
 	if($("#vendoritem-item_name").val().length > 3)
 	{
-		var mail=$("#vendoritem-item_name").val();
+		      var mail=$("#vendoritem-item_name").val();
         var path = "<?php echo Url::to(['/vendoritem/itemnamecheck']); ?> ";
-        $('.loadingmessage').show();
+       //$('.loadingmessage').show();
         var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
         $.ajax({
         type: 'POST',
         url: path,
         data: { item: mail ,item_id : item_id, _csrf : csrfToken},
+        async:false,
         success: function( data ) {
-			$("#test").val(mail);
+			        $("#test").val(mail);
             if(data>0)
             {
-			$('.loadingmessage').hide();
+/*		//	$('.loadingmessage').hide();
 			$(".field-vendoritem-item_name").removeClass('has-success');
-			$(".field-vendoritem-item_name").addClass('has-error');
+			$(".field-vendoritem-item_name").addClass('has-error');*/
 			$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
-			$(".field-vendoritem-item_name" ).focus();
+		//	$(".field-vendoritem-item_name" ).focus();
 			$('#test').val(1);
+   //return false;
 			}
 			else
 			{
+    //alert(234);
 			$(".field-vendoritem-item_name").find('.help-block').html('');
-			$('.loadingmessage').hide();
+			//$('.loadingmessage').hide();
 			$('#test').val(0);
 			}
          }
