@@ -602,12 +602,17 @@ $("#validtwo2").click(function() {
 
   	var messageLength = CKEDITOR.instances['vendoritem-item_description'].getData().replace(/<[^>]*>/gi, '').length;
         if(!messageLength ) {
+         alert(messageLength);
         $(".field-vendoritem-item_description").addClass('has-error');
-		$(".field-vendoritem-item_description").find('.help-block').html('Item description cannot be blank.');
-		return false;
+	      	$(".field-vendoritem-item_description").find('.help-block').html('Item description cannot be blank.');
+		     return false;
      }
   else
-  {return true;}
+  {
+   $(".field-vendoritem-item_description").removeClass('has-error');
+  $(".field-vendoritem-item_description").find('.help-block').html('');
+   return true;
+  }
 });
 
 
