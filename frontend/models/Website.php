@@ -5,7 +5,6 @@ namespace frontend\models;
 use common\models\User;
 use common\models\Siteinfo;
 use common\models\Socialinfo;
-use common\models\Category;
 use admin\models\Adverthome;
 use common\models\Slide;
 use common\models\Events;

@@ -293,9 +293,10 @@ class UsersController extends BaseController
                 return Events::EVENT_ALREADY_EXIST;
             } else {
                 if (isset($_POST['item_id']) && ($_POST['item_id'] > 0)) {
+                    //echo die;
                     Yii::$app->session->set('item_name', $_POST['item_name']);
                     $item_id = $_POST['item_id'];
-                    $event_id = $add_event;
+                     $event_id = $event_modal->event_id;
                     $check = Eventitemlink::find()->select(['link_id'])
                    ->where(['event_id'=> $event_id])
                    ->andwhere(['item_id'=> $item_id])
