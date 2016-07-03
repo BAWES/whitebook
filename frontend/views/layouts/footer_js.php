@@ -799,7 +799,7 @@ jQuery('#create_event_button').click(function(){
                         jQuery('#MyModal').modal('hide');
                         jQuery('#EventModal').modal('hide');
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">You should receive an email to reset your password by email</span>');
+                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;"><?= Yii::t("frontend","You will now receive an email to reset your password by email") ?></span>');
                         //window.setTimeout(function(){location.reload()},2000)
                         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
                         all_form_reset();

@@ -20,6 +20,7 @@ return [
     'EVE_CRE_AD_SUCC' => '',
     'EVE_CRE_SUCC' => '',
     'Filter by' => '',
+    'You will now receive an email to reset your password by email' => '',
     'Birth Date' => '@@تاريخ الميلاد@@',
     'Confirm Password' => '@@تأكيد كلمة السر@@',
     'Create Account' => '@@إنشاء حساب@@',
