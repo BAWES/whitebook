@@ -9,6 +9,7 @@ use frontend\models\Users;
 use common\models\Events;
 use frontend\models\Themes;
 use common\models\CustomerAddress;
+use common\models\Events;
 
 /**
  * Signup form.
@@ -467,7 +468,7 @@ class Users extends Model
                         ->andWhere(['item_id'=>$item_id])
                         ->count();
         if ($check > 0) {
-            return self::EVENT_ALREADY_EXIST;
+            return Events::EVENT_ALREADY_EXIST;
         } else {
             $event_date = date('Y-m-d H:i:s');
             $command = new Eventitemlink();
@@ -478,7 +479,7 @@ class Users extends Model
             $command->modified_datetime = $event_date;
             if($command->save())
             {
-                return self::EVENT_ADDED_SUCCESS;
+                return Events::EVENT_ADDED_SUCCESS;
             }
         }
     }
