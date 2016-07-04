@@ -9,7 +9,6 @@ use frontend\models\Users;
 use common\models\Events;
 use frontend\models\Themes;
 use common\models\CustomerAddress;
-use common\models\Events;
 
 /**
  * Signup form.
