@@ -333,7 +333,7 @@ foreach($customer_wishlist as $f) {  ?>
 <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
-<button type="button" onclick="submit_create_new_event_form(<?php echo $f['item_id'];?>)" class="btn btn-default" title="<?php echo Yii::t('frontend','Create Event');?>"><?php echo Yii::t('frontend','Create Event');?></button>
+<button type="button" onclick="submit_create_new_event_form(<?php echo $f['item_id'];?>)" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE_NEW_EVENT');?>"><?php echo Yii::t('frontend','Create Event');?></button>
 </div>
 <div class="cancel_sig">
 <button type="button" onclick="show_add_event_form();" class="btn btn-default" title="Add to Existing Event"><?php echo Yii::t('frontend','Add to Existing');?></button>

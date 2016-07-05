@@ -196,10 +196,11 @@ function resetpwdcheck()
               //  console.log(data); return false;
                 if(data==1)
                 {
+                     var pwd_reset_msg = "<?php echo Yii::t('frontend','Password reset and login successfully') ?>";
                     jQuery('#reset_loader').hide();
                     jQuery('#resetPwdModal').modal('hide');
                     jQuery('#login_success').modal('show');
-                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Password reset and login successfully.</span>');
+                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_reset_msg+'</span>');
                     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
                     location.reload();
                     //window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
@@ -253,28 +254,32 @@ function logincheck()
 
                     if(status==-1)
                     {
+                        var not_activate_msg = "<?php echo Yii::t('frontend','Looks like you are not activated your account') ?>";
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html('Looks like you are not activated your account!!<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(+not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                         jQuery('#login_forget').show();
                         jQuery('#loader').hide();
                     }
                     else if(status==-2)
                     {
+                        var user_blocked_msg = "<?php echo Yii::t('frontend','User blocked') ?>";
                         jQuery('#login_loader').hide();
-                        jQuery('#result').html('User blocked!<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(+user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-3)
                     {
+                        var email_not_exist = "<?php echo Yii::t('frontend','Your email does not exist') ?>";
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html('Your email does not exist<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(+email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-4)
                     {
+                        var email_not_match = "<?php echo Yii::t('frontend','Email and password does not match') ?>";
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html('Email and password does not match<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(+email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==1)
                     {
@@ -282,8 +287,10 @@ function logincheck()
                         jQuery('#myModal').modal('hide');
 
                         if(favourite_status>0){
+                             var success_fav_added = "<?php echo Yii::t('frontend','Success! Your are login and') ?>"+ '"'+item_name+'"' +"<?php echo Yii::t('frontend','add to favourite successfully') ?>";
+
                             jQuery('#login_success').modal('show');
-                            jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Success! Your are login and "'+item_name+'" add to favourite successfully!</span>');
+                            jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;"> '+success_fav_added+' </span>');
                             window.setTimeout(function(){location.reload()},1000)
                         } else if(event_status==-1){
                             window.setTimeout(function(){location.reload()})
@@ -305,10 +312,11 @@ function logincheck()
         }
         else
         {
+             var reg_email = "<?php echo Yii::t('frontend','Enter registered email-id') ?>";
             jQuery('#login_loader').hide();
             //jQuery('#loginErrorMsg').addClass('alert-failure alert fade in');
             jQuery('#result').addClass('alert-success alert fade in');
-            jQuery('#result').html('Enter registered email-id!<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+            jQuery('#result').html(+reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
 
         }
     }
@@ -550,16 +558,16 @@ jQuery('#create_event_button').click(function(){
                 data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf,
                 success:function(data,slider)
                 {
-
                     jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){
                         jQuery(this).css('background','transparent','important');
                     });
                     /* Hide BG FOR EVENT SLIDER*/
                     if(data==-1)
                     {
+                          var event_exist = "<?php echo Yii::t('frontend','Same event name already exists') ?>";
                         jQuery('#event_loader').hide();
                         jQuery('#eventresult').addClass('alert-success alert fade in');
-                        jQuery('#eventresult').html('Same event name already exists!<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#eventresult').html(+event_exist+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(data==1)
                     {
@@ -621,9 +629,10 @@ jQuery('#create_event_button').click(function(){
                 {
                     if(data==-1)
                     {
+                      var event_exists = "<?php echo Yii::t('frontend','Same event name already exists') ?>";
                         jQuery('#event_loader').hide();
                         jQuery('#eventresult').addClass('alert-success alert fade in');
-                        jQuery('#eventresult').html('Same event name already exists!<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#eventresult').html(+event_exists+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
                         //jQuery(".eventErrorMsg").html('Same event name already exists!');
                         // window.setTimeout(function(){location.reload()},2000);
                     }
@@ -634,7 +643,8 @@ jQuery('#create_event_button').click(function(){
 
                         jQuery('#EditeventModal').modal('hide');
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Event updated successfully!</span>');
+                        var update_msg = "<?php echo Yii::t('frontend','Event updated successfully') ?>";
+                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+update_msg+'</span>');
                         setTimeout(function() {$('#login_success').modal('hide');}, 2000);
                         //jQuery('#EventModal').modal('hide');
                         setTimeout(function(){locat(data)},2000);
@@ -799,16 +809,18 @@ jQuery('#create_event_button').click(function(){
                         jQuery('#MyModal').modal('hide');
                         jQuery('#EventModal').modal('hide');
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;"><?= Yii::t("frontend","You will now receive an email to reset your password by email") ?></span>');
+                        var receive_email = <?php echo Yii::t("frontend","You will now receive an email to reset your password by email") ?>
+                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+receive_email+'</span>');
                         //window.setTimeout(function(){location.reload()},2000)
                         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
                         all_form_reset();
                     }
                     else if(data==-1)
                     {
+                        var contact_admin = <?php echo Yii::t("frontend","Entered email id not found in registred user email. Kindly contact admin!") ?>
                         jQuery('#forgot_loader').hide();
                         jQuery('#forgot_result').addClass('alert-success alert fade in');
-                        jQuery('#forgot_result').html('Entered email id not found in registred user email. Kindly contact admin!<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#forgot_result').html(+contact_admin+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
                         //all_form_reset();
                     }
                 }
@@ -816,9 +828,10 @@ jQuery('#create_event_button').click(function(){
 
         }else {
             //if(reg_email!='')
+            var reg_email_id = "<?php echo Yii::t('frontend','Enter registered Email-id'); ?> ";
             jQuery('#forgot_loader').hide();
             jQuery('#forgot_result').addClass('alert-success alert fade in');
-            jQuery('#forgot_result').html('Enter registered Email-id!<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
+            jQuery('#forgot_result').html(+reg_email_id+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
 
             //jQuery("#forgerErrorMsg").show();
             //jQuery("#forgerErrorMsg").html('Enter registered mail id');
@@ -1004,23 +1017,24 @@ function add_to_favourite(x)
             {
                 jQuery('#add_to_event_loader').hide();
                 jQuery('#add_to_event_success'+x).modal('hide');
-
-
                 jQuery('#login_success').modal('show');
-                jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Item add to your event list!</span>');
+                var added_success = "<?php echo Yii::t('frontend','Item add to your event list!'); ?> ";
+                jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+added_success+'</span>');
                 //jQuery('#add_to_event_success'+x).html('Item add to your event list');
                 window.setTimeout(function(){location.reload()},1000)
             }
             else if(data==-1)
             {
+                var add_failed = "<?php echo Yii::t('frontend','Item add to your event list is failed'); ?> ";
                 jQuery('#add_to_event_loader').hide();
-                jQuery('#add_to_event_failure'+x).html('Item add to your event list is failed');
+                jQuery('#add_to_event_failure'+x).html(+add_failed+);
                 //window.setTimeout(function(){location.reload()},1000)
             }
             else if(data==-2)
             {
+                var already_exist = "<?php echo Yii::t('frontend','Item already exists to this event!'); ?> ";
                 jQuery('#add_to_event_loader').hide();
-                jQuery('#add_to_event_success'+x).html('Item already exists to this event!');
+                jQuery('#add_to_event_success'+x).html(+already_exist+);
             }
         }
     });
@@ -1045,9 +1059,11 @@ function remove_from_favourite(x)
                 //alert(data);
                 if(data==1)
                 {
+                    var item_removed = "<?php echo Yii::t('frontend','Item remove from your favourite list'); ?> ";
+
                     jQuery("#oner").load("<?= Url::toRoute('/product/event-slider'); ?>");
                     jQuery('#login_success').modal('show');
-                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Item remove from your favourite list</span>');
+                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+item_removed+'</span>');
                     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
                     wishlistfilter();
                     //jQuery('#add_to_event_success'+x).html('Item add to your event list');
@@ -1127,6 +1143,7 @@ jQuery(".faver_evnt_product").click(function(){
         var item_name=jQuery('.desc_popup_cont h3').text();
         var event_id=jQuery('#eventlist'+x).val();
         var event_name=jQuery('#eventlist'+x+' option:selected').text();
+        var msg = '"'+event_name+'" '+"<?php echo Yii::t('frontend','SUCCESSFULLY_ADDED_TO'); ?> "+' '+"<?php echo Yii::t('frontend','CATEGORY'); ?> ";
         if(event_id!=''){
             jQuery('#add_to_event_loader').show();
             var _csrf=jQuery('#_csrf').val();
@@ -1143,7 +1160,7 @@ jQuery(".faver_evnt_product").click(function(){
                         jQuery('#add_to_event_loader').hide();
                         jQuery('#add_to_event').modal('hide');
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">"'+item_name+'" successfully added to "'+event_name+'" category!</span>');
+                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+msg+'</span>');
                         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
                         //jQuery('#add_to_event_success'+x).html('Item Add to Your event list');
                     }
@@ -1465,11 +1482,14 @@ function default_session_data(x)
 {
     jQuery('#login_success').modal('show');
     if(x==1)
-    {jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Your Login successfully</span>');
+    {
+    var login_success_msg = "<?php echo Yii::t('frontend','Your Login successfully'); ?> ";
+    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+login_success_msg+'</span>');
     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);}
     else
     {
-        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Success! Your are login and "'+x+'" add to favourite successfully!</span>');}
+        var login_update_msg = "<?php echo Yii::t('frontend','Success! Your are login and'); ?> " '"'+x+'"' "<?php echo Yii::t('frontend','add to favourite successfully!'); ?>";
+        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+login_update_msg+' </span>');}
         /*  jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" >Your Login successfully</span>');*/
         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
     }
@@ -1510,9 +1530,10 @@ function default_session_data(x)
                             jQuery('#userid1').val('<?= $reset_password;?>');
                             <?php $reset_password=Yii::$app->session->set('reset_password_mail',''); ?>
                         }else{
+                            var pwd_fail_msg = "<?php echo Yii::t('frontend','Password reset failed!'); ?>";
 
                             jQuery('#login_success').modal('show');
-                            jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Password reset failed!</span>');
+                            jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_fail_msg+'</span>');
                             window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
                             <?php $reset_password=Yii::$app->session->set('reset_password_mail',''); ?>
 
@@ -1594,8 +1615,10 @@ function default_session_data(x)
                                 <script type="text/javascript">
                                 function show_password_reset_modal_true()
                                 {
+                                    var pwd_success_msg = "<?php echo Yii::t('frontend','Password reset successfully. Your login successfully!'); ?>";
+
                                     jQuery('#login_success').modal('show');
-                                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Password reset successfully.<br>Your login successfully!</span>');
+                                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_success_msg+'</span>');
                                     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
                                 }
                                 window.onload=show_password_reset_modal_true();
@@ -1608,8 +1631,9 @@ function default_session_data(x)
 /* Registration Completed start*/
 function show_register_modal_true()
 {
+    var reg_success_msg = "<?php echo Yii::t('frontend','Registration completed successfully.Confirmation link send to your registered email-id'); ?>";
     jQuery('#login_success').modal('show');
-    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Registration completed successfully.<br>Confirmation link send to your registered email-id!</span>');
+    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+reg_success_msg+'</span>');
     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
 }
 </script>
@@ -1632,12 +1656,15 @@ function show_event_modal_true()
 {
     var event_name='<?=Yii::$app->session->get('event_name');?>';
     var item_name='<?=Yii::$app->session->get('item_name');?>';
+    var created_msg = "<?php echo Yii::t('frontend','EVENT'); ?> "+'"'+event_name+'" '+"<?php echo Yii::t('frontend','CREATED SUCCESSFULLY'); ?> ";
+    var added_msg = "<?php echo Yii::t('frontend','EVENT'); ?> "+' "'+event_name+'" '+"<?php echo Yii::t('frontend','CREATED'); ?> "+ '"'+item_name+'" '+"<?php echo Yii::t('frontend','ADDED SUCCESSFULLY');?>";
+    
     jQuery('#login_success').modal('show');
     if(!item_name.length){
-        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Event "'+event_name+'" Created successfully</span>');
+        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+created_msg+'</span>');
     }
     else {
-        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Event "'+event_name+'" Created and "'+item_name+'" added successfully</span>');
+        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+added_msg+' </span>');
     }
     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
 }

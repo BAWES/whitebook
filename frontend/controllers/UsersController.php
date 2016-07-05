@@ -359,7 +359,7 @@ class UsersController extends BaseController
                 return Events::EVENT_ALREADY_EXIST;
             } elseif ($insert_item_to_event == Events::EVENT_ADDED_SUCCESS) {
                 Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_AD_SUCC'));
-                return Events::EVENT_CREATED;
+                return Events::EVENT_ADDED_SUCCESS;
             }
         }
     }
