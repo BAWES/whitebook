@@ -76,6 +76,13 @@ class Vendoritem extends \yii\db\ActiveRecord
     {
         return [
             [
+                'class' => SluggableBehavior::className(),
+                'slugAttribute' => 'slug',
+                'attribute' => 'item_name',
+                'immutable' => true,
+                'ensureUnique'=>true,
+            ],
+            [
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'modified_by',
