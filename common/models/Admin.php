@@ -4,7 +4,6 @@ namespace common\models;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
@@ -12,8 +11,6 @@ use common\models\Role;
 use yii\helpers\ArrayHelper;
 use common\models\Accesscontroller;
 
-use yii\behaviors\BlameableBehavior;
-use yii\db\Expression;
 
 
 /**
@@ -85,22 +82,6 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 		return $scenarios;
 	}
 
-	public function behaviors()
-	{
-		return [
-			[
-				'class' => BlameableBehavior::className(),
-				'createdByAttribute' => 'created_by',
-				'updatedByAttribute' => 'modified_by',
-			],
-			[
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_datetime',
-                'updatedAtAttribute' => 'modified_datetime',
-                'value' => new Expression('NOW()'),
-            ],
-		];
-	}
 
 	/** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
 	/**
