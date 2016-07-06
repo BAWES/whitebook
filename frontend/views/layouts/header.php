@@ -143,7 +143,7 @@ $action = Yii::$app->controller->action->id;
                                                 <span><?php echo Yii::t('frontend', 'Other'); ?></span>
                                             </a>
                                         </li>
-                                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'say-thank-you']); ?>">
+                                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'gift-favors']); ?>">
                                                 <span class="say_thank"></span>
                                                 <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
                                             </a></li>
@@ -384,7 +384,7 @@ echo $search_div;
                         </a>
                     </li>
                     <li class="ma5-li-1-9">
-                        <a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::toRoute('/products/say-thank-you', true); ?>">
+                        <a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::toRoute('/products/gift-favors', true); ?>">
                             <span class="say_thank"></span>
                             <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
                         </a></li>

@@ -11,7 +11,7 @@ use yii\grid\GridView;
 <div class="container paddng0">
 <?php if(!Yii::$app->user->isGuest) { ?>
 <!-- Events slider start -->
-<?php require(__DIR__ . '/../product/events_slider.php'); ?>
+<?php require_once(__DIR__ . '/../product/events_slider.php'); ?>
 <!-- Events slider end -->
 <?php } ?>
 <div class="breadcrumb_common">
@@ -78,9 +78,9 @@ $cust_id = Yii::$app->user->identity->customer_id;
 <div class="panel panel-default">
 <div class="panel-heading" role="tab" id="heading<?= $key ?>">
 <h4 class="panel-title">
-<?php if($value1['slug']=='say-thank-you'){ ?>
+<?php if($value1['slug']=='gift-favors'){ ?>
 <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapse<?= $key ?>" aria-expanded="false" aria-controls="collapse<?= $key ?>" class="collapsed">
-<?php echo 'Say'.' "Thank You" '.' - '.'<span id="item_count">' .count($cat_list1). '</span>'; ?>
+<?php echo 'Gift'.' "Favors" '.' - '.'<span id="item_count">' .count($cat_list1). '</span>'; ?>
 <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
 <?php } else {  ?>
 <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapse<?= $key ?>" aria-expanded="false" aria-controls="collapse<?= $key ?>" class="collapsed">

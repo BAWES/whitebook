@@ -27,7 +27,7 @@ use yii\helpers\Html;?>
 	<option data-icon="enter-category" value="entertainment"><?= Yii::t("frontend", "Entertainment") ?></option>
 	<option data-icon="service-category" value="services"><?= Yii::t("frontend", "Services") ?></option>
 	<option data-icon="others-category" value="others"><?= Yii::t("frontend", "Others") ?></option>
-	<option data-icon="saythankyou-category" value="say-thank-you"><?= Yii::t("frontend", "Gift Favors") ?></option>
+	<option data-icon="saythankyou-category" value="gift-favors"><?= Yii::t("frontend", "Gift Favors") ?></option>
 </select>
 </div>
 </div>

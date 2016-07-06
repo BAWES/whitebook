@@ -3,6 +3,13 @@ use Yii\helpers\Url;
 $this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 <script type="text/javascript">
+
+    function validateEmail(email) {
+        // http://stackoverflow.com/a/46181/11236
+        var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
+        return re.test(email);
+    }
+
 jQuery(document).ready(function () {
     jQuery('#phone,#reg_email').bind("paste",function(e) {
         e.preventDefault();
@@ -809,7 +816,7 @@ jQuery('#create_event_button').click(function(){
                         jQuery('#MyModal').modal('hide');
                         jQuery('#EventModal').modal('hide');
                         jQuery('#login_success').modal('show');
-                        var receive_email = <?php echo Yii::t("frontend","You will now receive an email to reset your password by email") ?>
+                        var receive_email = '<?php echo Yii::t("frontend","You will now receive an email to reset your password by email") ?>';
                         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+receive_email+'</span>');
                         //window.setTimeout(function(){location.reload()},2000)
                         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
@@ -817,7 +824,7 @@ jQuery('#create_event_button').click(function(){
                     }
                     else if(data==-1)
                     {
-                        var contact_admin = <?php echo Yii::t("frontend","Entered email id not found in registred user email. Kindly contact admin!") ?>
+                        var contact_admin = '<?php echo Yii::t("frontend","Entered email id not found in registred user email. Kindly contact admin!") ?>';
                         jQuery('#forgot_loader').hide();
                         jQuery('#forgot_result').addClass('alert-success alert fade in');
                         jQuery('#forgot_result').html(+contact_admin+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
@@ -836,12 +843,6 @@ jQuery('#create_event_button').click(function(){
             //jQuery("#forgerErrorMsg").show();
             //jQuery("#forgerErrorMsg").html('Enter registered mail id');
         }
-    }
-
-    function validateEmail(email) {
-        // http://stackoverflow.com/a/46181/11236
-        var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
-        return re.test(email);
     }
 
 
@@ -1027,14 +1028,14 @@ function add_to_favourite(x)
             {
                 var add_failed = "<?php echo Yii::t('frontend','Item add to your event list is failed'); ?> ";
                 jQuery('#add_to_event_loader').hide();
-                jQuery('#add_to_event_failure'+x).html(+add_failed+);
+                jQuery('#add_to_event_failure'+x).html(add_failed);
                 //window.setTimeout(function(){location.reload()},1000)
             }
             else if(data==-2)
             {
                 var already_exist = "<?php echo Yii::t('frontend','Item already exists to this event!'); ?> ";
                 jQuery('#add_to_event_loader').hide();
-                jQuery('#add_to_event_success'+x).html(+already_exist+);
+                jQuery('#add_to_event_success'+x).html(already_exist);
             }
         }
     });
@@ -1488,7 +1489,7 @@ function default_session_data(x)
     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);}
     else
     {
-        var login_update_msg = "<?php echo Yii::t('frontend','Success! Your are login and'); ?> " '"'+x+'"' "<?php echo Yii::t('frontend','add to favourite successfully!'); ?>";
+        var login_update_msg = "<?php echo Yii::t('frontend','Success! Your are login and'); ?>"+ '"'+x+'"' +"<?php echo Yii::t('frontend','add to favourite successfully!'); ?>";
         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+login_update_msg+' </span>');}
         /*  jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" >Your Login successfully</span>');*/
         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);

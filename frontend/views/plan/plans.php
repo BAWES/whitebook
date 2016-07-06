@@ -64,7 +64,7 @@ use yii\helpers\Html;
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'say-thank-you']); ?>">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'gift-favors']); ?>">
                         <span class="say1"></span>
                         <?= Yii::t("frontend", "Gift Favors") ?>
                     </a>
