@@ -54,7 +54,8 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
-
+	
+	/* Upload */
     const UPLOADFOLDER = "vendor_logo/";
 
     public $auth_key;
@@ -65,7 +66,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     public $pack; // vendor package
     public $vendor_working_min;
     public $vendor_working_min_to;
-
+    
     /**
     * @inheritdoc
     */
