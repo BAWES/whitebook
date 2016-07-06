@@ -130,70 +130,62 @@ class DeliverytimeslotController extends Controller
        }
     }
 
-
-        public static function actionChecktime()
+    /*  Check if given timeslot collide with other timeslots in same day 
+        @param string day:Thursday
+        @param string start:04:15PM
+        @param string end:04:45PM
+        @param string update:25 
+    */
+    public static function actionChecktime()
     {
-          if(Yii::$app->request->isAjax)
-           $data = Yii::$app->request->post();
-           $day='"'.$data['day'].'"';
-           $start=$data['start'];
-           $end=$data['end'];
-            $start_hour=substr($start, 0, 2);
-            $end_hour=substr($end, 0, 2);
+        $status = 1;
+        $message = '';
 
-            $start_minute=substr($start, 3, 2);
-            $end_minute=substr($end, 3, 2);
+        $data = Yii::$app->request->post();
 
-            $start_day=substr($start, 6, 2);
-            $end_day=substr($end, 6, 2);
+        $start_time = strtotime($data['start']);
+        $end_time = strtotime($data['end']);
 
-            // convert values into UNIX timestamp integers
-            $Ymd = date('Y-m-d'); // just in case we try to process across midnight
-            $start_ts = strtotime("$Ymd $start_hour:$start_minute $start_day");
-            $end_ts = strtotime("$Ymd $end_hour:$end_minute $end_day");
-            // test if end time is later than start time
-            if($end_ts < $start_ts) {
-                return 1;
+        //get all timeslot for given day and current vendor and not current record
+        if($data['update']){
+            $timeslots = Deliverytimeslot::find()
+            ->where(['timeslot_day' => $data['day'], 'vendor_id'=>Yii::$app->user->getId()])
+            ->andwhere(['!=','timeslot_id', $data['update']])
+            ->asArray()
+            ->all();
+        }else{
+            $timeslots = Deliverytimeslot::find()
+            ->where(['timeslot_day' => $data['day'], 'vendor_id'=>Yii::$app->user->getId()])
+            ->asArray()
+            ->all();
+        }
+
+        foreach ($timeslots as $row) {
+            
+            $timeslot_start_time = strtotime($row['timeslot_start_time']);
+            $timeslot_end_time = strtotime($row['timeslot_end_time']);
+
+            if($start_time > $timeslot_start_time && $start_time < $timeslot_end_time) {
+                $status = 0;
+                $message = 'Timeslot colide with '.date('h:i A', $timeslot_start_time).' - '.date('h:i A', $timeslot_end_time);
+                break;
             }
 
-		  $update=$data['update'];
-          if($update==0){
-				$result = Deliverytimeslot::find()->select(["DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start","DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1"])
-				->where(['timeslot_day' => $day])
-				->asArray()
-				->all();
-            }else{
-            	$result = Deliverytimeslot::find()->select(["DATE_FORMAT(`timeslot_start_time`,'%h:%i %p') as start","DATE_FORMAT(`timeslot_end_time`,'%h:%i %p') as end1"])
-            		->where(['timeslot_day' => $day])
-            		->andwhere(['!=','timeslot_day', $day])
-            		->asArray()->all();
+            if($end_time > $timeslot_start_time && $end_time < $timeslot_end_time) {
+                $status = 0;
+                $message = 'Timeslot collision with '.date('h:i A', $timeslot_start_time).' - '.date('h:i A', $timeslot_end_time);
+                break;
             }
-                   
-             $dt1 = $data['start'];
-             $dt2 = $data['end'];
-            $k=array();
-            foreach ($result as $r)
-            {
-                $range=range(strtotime($r['start']),strtotime($r['end1']),01*60);
-            foreach($range as $time){
-                    $k[]=date("h:i a",$time)."\n";
-            }
-            }
+        }
 
-            foreach ($k as $dt) {
-            $dt = str_replace(' ', '', $dt);
-             $a=(strtotime($dt1));
-             $b=(strtotime($dt2));
-             $c=(strtotime($dt));
-                if($a == $c){
-                    return  2;
-                }else if($b == $c){
-                    return  2;
-                }
-            }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-
-  }
+        return [
+            'message' => $message,
+            'status' => $status,
+        ];    
+        
+    }//end of function 
 
 
     /**

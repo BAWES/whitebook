@@ -73,7 +73,7 @@ date("a", strtotime($model->timeslot_end_time))=='pm'?$model->end_med='PM':$mode
     <?= $form->field($model, 'timeslot_end_time',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['value'=>'']) ?>
 </div>
 	<div class="col-sm-offset-2 col-sm-10">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['id'=> 'submit1','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::button($model->isNewRecord ? 'Create' : 'Update', ['id'=> 'submit1','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
     </div>
 	</div>
@@ -92,18 +92,19 @@ date("a", strtotime($model->timeslot_end_time))=='pm'?$model->end_med='PM':$mode
 <script>
 $('#submit1').click(function()
 {
-        var day = $('#deliverytimeslot-timeslot_day').val();
-        var start_hr = $('#deliverytimeslot-start_hr').val();
-        var start_min = $('#deliverytimeslot-start_min').val();
-        var start_med = $('#deliverytimeslot-start_med').val();
-        var colon=':';
-        var end_hr = $('#deliverytimeslot-end_hr').val();
-        var end_min = $('#deliverytimeslot-end_min').val();
-        var end_med = $('#deliverytimeslot-end_med').val();
+    var day = $('#deliverytimeslot-timeslot_day').val();
+    var start_hr = $('#deliverytimeslot-start_hr').val();
+    var start_min = $('#deliverytimeslot-start_min').val();
+    var start_med = $('#deliverytimeslot-start_med').val();
+    var colon=':';
+    var end_hr = $('#deliverytimeslot-end_hr').val();
+    var end_min = $('#deliverytimeslot-end_min').val();
+    var end_med = $('#deliverytimeslot-end_med').val();
 
-        var slot = $('#deliverytimeslot-timeslot_maximum_orders').val();
-        var path = "<?php echo Url::to(['deliverytimeslot/checktime']); ?> ";
-        var update = "<?php if($model->isNewRecord){echo '0';}else{echo $model->timeslot_id;} ?> ";
+    var slot = $('#deliverytimeslot-timeslot_maximum_orders').val();
+    var path = "<?php echo Url::to(['deliverytimeslot/checktime']); ?> ";
+    var update = "<?php if($model->isNewRecord){echo '0';}else{echo $model->timeslot_id;} ?> ";
+
     if(start_hr!='' && start_min!=''  && start_med!='' && end_hr!='' && end_min!=''&& end_med!='' && day!='' && slot!=''){
     var sta=start_hr.concat(colon);
     var res1 = sta.concat(start_min);
@@ -112,30 +113,31 @@ $('#submit1').click(function()
     var en=end_hr.concat(colon);
     var res2 = en.concat(end_min);
     var end_time=res2.concat(end_med);
+
     $.ajax({
         type: 'POST',
         async:false,
         url: path, //url to be called
         data: { day: day ,start: start_time ,end: end_time,update: update}, //data to be send
-        success: function( data ) {
+        success: function(json) {
 
-            if(data==1)
-            {
-            $('#deliverytimeslot-default').val('');
-            $("#result").html('<div class="alert alert-failure"><button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>Time period is not a valid one!</div>');
-            return false;
-            }else if(data==2){
-            $("#result").html('<div class="alert alert-failure"><button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>Day already exists in same time period!</div>');
-            $('#deliverytimeslot-default').val('');
-            return false;
-        }else{
-          $('#deliverytimeslot-default').val('1');
-          $('#deliverytimeslot-timeslot_start_time').val(start_time);
-          $('#deliverytimeslot-timeslot_end_time').val(end_time);
-          return false;
+            if(json['status']) {
+                $('#deliverytimeslot-default').val('1');
+                $('#deliverytimeslot-timeslot_start_time').val(start_time);
+                $('#deliverytimeslot-timeslot_end_time').val(end_time);
+                $('.deliverytimeslot-form form').submit();
+            }else{
+                $('#deliverytimeslot-default').val('');
+                $("#result").html('<div class="alert alert-failure"><button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>' + json['message'] + '</div>');
+            }
+
+            /*else if(data==2){
+                $("#result").html('<div class="alert alert-failure"><button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>Day already exists in same time period!</div>');
+                $('#deliverytimeslot-default').val('');
+                return false;
+            }*/
         }
-        }
-        })
+    })
     }
  });
 </script>
