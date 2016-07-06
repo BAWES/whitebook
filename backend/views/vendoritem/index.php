@@ -55,7 +55,13 @@ $this->params['breadcrumbs'][] = $this->title;
       'label'=>'Status',
       'format'=>'raw',
 			  'value'=>function($data) {
-				return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status']);
+
+			  	if($data->item_status == 'Active') {
+			  		return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status', 'class'=>'status active']);
+			  	}else{
+			  		return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status', 'class'=>'status deactive']);
+			  	}
+				
 				},
 			 'filter' =>  \admin\models\Vendoritem::Activestatus(),
     ],

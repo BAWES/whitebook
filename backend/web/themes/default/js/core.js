@@ -13,6 +13,21 @@ var color_warning="#f7cf5e";
 var color_info="#3b4751";
 
 $(document).ready(function () {
+
+    $('.vendoritem-index table a.status').click(function(){
+
+        //uncheck other 
+        $('input[name="selection[]"]').attr('checked', false);
+
+        $(this).parents('tr').find('input[name="selection[]"]').attr('checked', true);
+
+        if($(this).hasClass('active')) {
+            Status("Deactivate");
+        }else{
+            Status("Activate")
+        }
+    });
+
     calculateHeight();
     $(".remove-widget").click(function () {
         $(this).parent().parent().parent().addClass('animated fadeOut');
