@@ -216,8 +216,8 @@ if ($event_status > 0) {
                                                         <ul class="<?= $class; ?>">
                                                 <?php foreach ($category_list as $key => $c_value) { ?>
                                                                 <li>
-                                                                <?php if ($c_value['slug'] == 'say-thank-you') { ?>
-                                                                        <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> >Say "Thank You"</label>
+                                                                <?php if ($c_value['slug'] == 'gift-favors') { ?>
+                                                                        <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> >"Gift Favors"</label>
     <?php } else { ?>
                                                                         <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> ><?= ucfirst(strtolower($c_value['category_name'])); ?></label>
                                                                     </li>

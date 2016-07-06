@@ -66,7 +66,7 @@ if($category_det['category_name']!='Say thank you'){
 				<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
 				<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
 				<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
-				<option data-icon="saythankyou-category" <?php  if($slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'say-thank-you']) ?>">Say "Thank You"</option>
+				<option data-icon="saythankyou-category" <?php  if($slug == 'gift-favors') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>">Gift Favors</option>
 			</select>
 		</div>
 	</div>

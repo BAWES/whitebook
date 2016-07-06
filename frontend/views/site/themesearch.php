@@ -66,7 +66,7 @@ if($theme_name['theme_name']!='Say thank you'){
 				<option data-icon="enter-category" value="entertainment" <?php  if($category_slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'entertainment']) ?>"><?= Yii::t("frontend", "Entertainment") ?></option>
 				<option data-icon="service-category" value="services" <?php  if($category_slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['site/themesearch', 'category'=>'services']) ?>"><?= Yii::t("frontend", "Services") ?></a></option>
 				<option data-icon="others-category" <?php  if($category_slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'others']) ?>"><?= Yii::t("frontend", "Others") ?></option>
-				<option data-icon="saythankyou-category" <?php  if($category_slug == 'say-thank-you') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'say-thank-you']) ?>"><?= Yii::t("frontend", "Gift Favors") ?></option>
+				<option data-icon="saythankyou-category" <?php  if($category_slug == 'gift-favors') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['site/themesearch', 'category'=>'gift-favors']) ?>"><?= Yii::t("frontend", "Gift Favors") ?></option>
 			</select>
 		</div>
 	</div>
