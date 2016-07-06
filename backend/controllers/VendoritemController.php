@@ -1,6 +1,6 @@
 <?php
-namespace backend\controllers;
 
+namespace backend\controllers;
 
 use Yii;
 use yii\base\Model;
@@ -15,12 +15,14 @@ use common\models\Category;
 use common\models\SubCategory;
 use common\models\VendoritemSearch;
 use common\models\Itemtype;
+use common\models\Priorityitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\db\Expression;
 use common\models\Themes;
 use common\models\Featuregroup;
 use common\models\Featuregroupitem;
@@ -120,9 +122,10 @@ class VendoritemController extends Controller
      */
     public function actionView($id)
     {
-			$dataProvider1=Priorityitem::find()
+		$dataProvider1=Priorityitem::find()
 			->select(['priority_level','priority_start_date','priority_end_date'])
 			->where(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
+
 		$model_question = Vendoritemquestion::find()
 		->where(['item_id'=>$id,'answer_id'=>null,'question_answer_type'=>'selection'])
 		->orwhere(['item_id'=>$id,'question_answer_type'=>'text','answer_id'=>null])
