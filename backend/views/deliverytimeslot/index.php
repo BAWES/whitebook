@@ -41,8 +41,8 @@ $timesot_id = 2;
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
         echo '</div>';
       } ?>
     </ul>
@@ -58,8 +58,8 @@ $timesot_id = 2;
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
         echo '</div>';
       } ?>
     </ul>
@@ -74,8 +74,8 @@ $timesot_id = 2;
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
         echo '</div>';
       } ?>
     </ul>
@@ -89,8 +89,8 @@ $timesot_id = 2;
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
         echo '</div>';
       } ?>
     </ul>
@@ -104,8 +104,8 @@ $timesot_id = 2;
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<a href="'.Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
         echo '</div>';
       } ?>
     </ul>
@@ -120,8 +120,8 @@ $timesot_id = 2;
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
           $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
         echo '</div>';
       } ?>
     </ul>
@@ -135,8 +135,8 @@ $timesot_id = 2;
         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
         $orders =  $value['timeslot_maximum_orders'];
         echo '<div class="one_slot">';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<a href="update?id='.$value['timeslot_id'].'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href">'.'<li>'. $start .' - '. $end .'</li>'.'</a>';
+        echo '<a href="'. Url::to(['deliverytimeslot/update', 'id' => $value['timeslot_id']]).'" class="delivery_href ">'.'<li><span class="timeslot_orders">'.$orders.'</span></li>'.'</a><span class="glyphicon glyphicon-trash delivery_delete" onClick="deletetimeslot('.$value['timeslot_id'].')"></span>';
         echo '</div>';
       } ?>
     </ul>
