@@ -5,6 +5,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 use yii\web\IdentityInterface;
 use admin\models\Role;
 use yii\db\BaseActiveRecord;
@@ -12,6 +13,7 @@ use yii\helpers\Security;
 use yii\helpers\ArrayHelper;
 use admin\models\Accesscontroller;
 use yii\behaviors\SluggableBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "{{%admin}}".
@@ -42,9 +44,21 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
         return '{{%admin}}';
     }
 
-    public function behaviors()
+     public function behaviors()
     {
-        return parent::behaviors();
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                   'class' => TimestampBehavior::className(),
+                   'createdAtAttribute' => 'created_datetime',
+                   'updatedAtAttribute' => 'modified_datetime',
+                   'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
