@@ -53,6 +53,7 @@ class Itemtype extends \yii\db\ActiveRecord
     * Scenarios for validation and massive assignment
     */
     public function scenarios() {
+        $scenarios['default'] = ['type_name'];
         $scenarios['insert'] = ['type_name'];
         //$scenarios['uploadImage'] = ['slide_image'];
 
@@ -96,8 +97,9 @@ class Itemtype extends \yii\db\ActiveRecord
     {
         if(!empty($this->type_name) ){
             $modelq = Itemtype::find()
-            ->where(['type_name'=>$this->type_name])
-            ->one();
+            ->where(['type_name' => $this->type_name])
+            ->andWhere(['!=', 'type_id', $this->type_id])
+            ->one();            
             if($modelq){
                 $this->addError('type_name','Please enter a unique Type name');
             }
