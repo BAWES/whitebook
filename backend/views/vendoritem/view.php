@@ -16,35 +16,103 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="tabbable">
   <ul class="nav nav-tabs">
     <li class="active">
-      <a href="#1" data-toggle="tab">Priority Log</a>
+      <a href="#1" data-toggle="tab">Item info</a>
+    </li>
+    <li>
+      <a href="#2" data-toggle="tab">Item description</a>
+    </li>
+    <li>
+      <a href="#3" data-toggle="tab">Item price</a>
+    </li>
+    <li>
+      <a href="#4" data-toggle="tab">Priority Log</a>
     </li>
     <?php if($model->item_for_sale=='Yes'){ ?>
     <li>
-      <a href="#2" data-toggle="tab">Question Answer Details</a>
-    </li>  <?php } ?>
+      <a href="#5" data-toggle="tab">Question Answer Details</a>
+    </li>  
+    <?php } ?>
     <li>
-      <a href="#3" data-toggle="tab">Gallery</a>
+      <a href="#6" data-toggle="tab">Gallery</a>
     </li>
   </ul>
   <div class="tab-content">
+
   <div class="tab-pane" id="1" >
-  <table class="table table-striped table-bordered detail-view">
-    <tbody>
-        <tr>
-            <th>Priority Level</th><th>Start Date</th><th>End Date</th>
-            </tr>
-            <?php $model->item_id; foreach ($dataProvider1 as $log) {?>
-            <tr>
-            <td><?php print_r($log['priority_level']);?></td><td><?php $sd=($log['priority_start_date'][0]);$sd=($log['priority_start_date']); echo date("d/m/Y", strtotime($sd)); ?></td><td><?php $sd=($log['priority_end_date']);if($sd=='0000-00-00 00:00:00'){echo 'not set';}else { echo date("d/m/Y", strtotime($sd));} ?></td>
-            </tr>
-            <?php }?>
-    </tbody>
-</table>
+    <table class="table table-striped table-bordered detail-view">
+      <tbody>
+          <tr><th>Item name</th><td><?= $model->item_name ?></td></tr>
+          <tr>
+            <th>Categories</th>
+            <td>
+              <ul>
+              <?php foreach($categories as $category) { ?>
+                <li><?= $category['category_name'] ?></li>
+              <?php } ?>
+              </ul>
+            </td>
+          </tr>  
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane" id="2" >
+    <table class="table table-striped table-bordered detail-view">
+      <tbody>
+          <tr><th>Item type</th><td><?= $item_type; ?></td></tr>
+          <tr><th>Item description</th><td><?= $model->item_description; ?></td></tr>
+          <tr><th>Item additional info</th><td><?= $model->item_additional_info; ?></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane" id="3" >
+    <table class="table table-striped table-bordered detail-view">
+      <tbody>
+          <tr><th>Item for sale</th><td><?= $model->item_for_sale?'Yes':'No'; ?></td></tr>
+          <tr><th>Item Number of Stock</th><td><?= $model->item_amount_in_stock; ?></td></tr>
+          <tr><th>Item Default Capacity</th><td><?= $model->item_default_capacity; ?></td></tr>
+          <tr><th>No of days delivery</th><td><?= $model->item_how_long_to_make ?></td></tr>
+          <tr><th>Item Minimum Quantity to Order</th><td><?= $model->item_minimum_quantity_to_order ?></td></tr>
+          <tr><th>Item Price per Unit</th><td><?= $model->item_price_per_unit ?></td></tr>
+          <tr>
+            <th>Item price</th>
+            <td>
+              <table>
+                <tr><th>From range</th><th>To range</th><th>Price</th></tr>            
+                <?php foreach ($price_values as $row) { ?>
+                <tr>
+                  <td><?= $row->range_from ?></td>
+                  <td><?= $row->range_to ?></td>
+                  <td><?= $row->pricing_price_per_unit ?> KWD</td>
+                </tr>
+                <?php } ?>
+              </table>
+            </td>
+          </tr>
+          <tr><th>Item price description</th><td><?= $model->item_price_description ?></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane" id="4" >
+    <table class="table table-striped table-bordered detail-view">
+      <tbody>
+          <tr>
+              <th>Priority Level</th><th>Start Date</th><th>End Date</th>
+              </tr>
+              <?php $model->item_id; foreach ($dataProvider1 as $log) {?>
+              <tr>
+              <td><?php print_r($log['priority_level']);?></td><td><?php $sd=($log['priority_start_date'][0]);$sd=($log['priority_start_date']); echo date("d/m/Y", strtotime($sd)); ?></td><td><?php $sd=($log['priority_end_date']);if($sd=='0000-00-00 00:00:00'){echo 'not set';}else { echo date("d/m/Y", strtotime($sd));} ?></td>
+              </tr>
+              <?php }?>
+      </tbody>
+    </table>
   </div>
 
 <!--End Second Tab -->
 <?php if($model->item_for_sale=='Yes'){ ?>
-<div class="tab-pane" id="2">
+<div class="tab-pane" id="5">
 <?php
 $t=0;
 foreach($model_question as $question_records)
@@ -62,14 +130,14 @@ foreach($model_question as $question_records)
 <?php } ?>
 <!--End third Tab -->
 
-<div class="tab-pane" id="3" >
-<ul class="row">
-            <?php foreach ($imagedata as $image) { ?>
-            <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-                <?= Html::img(Yii::getAlias('@vendor_images/').$image->image_path, ['class'=>'img-responsive','width'=>'125px','height'=>'125px','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@vendor_images/').$image->image_path]);?>
-            </li>
-             <?php } ?>
-</ul>
+<div class="tab-pane" id="6" >
+  <ul class="row">
+    <?php foreach ($imagedata as $image) { ?>
+    <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
+        <?= Html::img(Yii::getAlias('@vendor_images/').$image->image_path, ['class'=>'img-responsive','width'=>'125px','height'=>'125px','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@vendor_images/').$image->image_path]);?>
+    </li>
+    <?php } ?>
+  </ul>
 </div>
 </div>
 </div>

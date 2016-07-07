@@ -134,8 +134,26 @@ class VendoritemController extends Controller
 
 		$imagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'vendor_item'])->orderby(['vendorimage_sort_order'=>SORT_ASC])->all();
 
+        $model = $this->findModel($id);
+
+        $categories = Category::find()->select(['category_name'])
+        ->Where(['IN','category_id',  [$model->category_id, $model->subcategory_id, $model->child_category]])
+        ->orderBy(['category_level' => SORT_ASC])
+        ->asArray()
+        ->all();
+
+        $item_type = Itemtype::itemtypename($model->type_id);
+
+        $price_values= Vendoritempricing::loadpricevalues($model->item_id);
+
         return $this->render('view', [
-            'model'=> $this->findModel($id),'dataProvider1'=>$dataProvider1,'model_question'=>$model_question,'imagedata'=>$imagedata,
+            'model' => $model,
+            'categories' => $categories,
+            'item_type' => $item_type,
+            'price_values' => $price_values,
+            'dataProvider1' => $dataProvider1,
+            'model_question' => $model_question,
+            'imagedata'=>$imagedata,
         ]);
     }
 
@@ -225,10 +243,11 @@ class VendoritemController extends Controller
 
                             //Overwrite old filename for S3 uploading
                             $files->tempName = $newTmpName;
-                            }
+                        }
 
                         //Save to S3
                         $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADSALESGUIDE . $filename);
+                        
                         if($awsResult){
                             $model->guide_image = $filename;
                         }
@@ -240,11 +259,11 @@ class VendoritemController extends Controller
 						$image_tbl->vendorimage_sort_order = $i;
 						$image_tbl->image_user_id = Yii::$app->user->getId();
 						$image_tbl->save();
+
                             ++$i;
                             }
                        }
                  }
-
 
                 /* Begin Upload product image table  */
                     $product_file = UploadedFile::getInstances($model, 'image_path');
