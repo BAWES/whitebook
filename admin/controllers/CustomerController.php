@@ -262,7 +262,6 @@ class CustomerController extends Controller
                 'customer_gender',
                 'customer_mobile',
                 'customer_dateofbirth',
-                'customer_gender',
               ],
         ]);
     }
