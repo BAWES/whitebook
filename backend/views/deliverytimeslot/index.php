@@ -22,16 +22,10 @@ $timesot_id = 2;
         <?= Html::a('Create delivery time slot', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <div class="day_head">SUNDAY</div>
-    <div class="day_head">MONDAY</div>
-    <div class="day_head">TUESDAY</div>
-    <div class="day_head">WEDNESDAY</div>
-    <div class="day_head">THURSDAY</div>
-    <div class="day_head">FRIDAY</div>
-    <div class="day_head">SATURDAY</div>
-
     <div class="delivery_days">
       <div class="sun">
+      <div class="day_head">SUNDAY</div>
+      <div class="clearfix"></div>
       <ul>
       <?php  $sun = Deliverytimeslot::deliverytimeslot('Sunday');
 
@@ -49,6 +43,8 @@ $timesot_id = 2;
 
       </div>
       <div class="mon">
+      <div class="day_head">MONDAY</div>
+      <div class="clearfix"></div>
         <ul>
       <?php  $mon = Deliverytimeslot::deliverytimeslot('Monday');
 
@@ -65,6 +61,8 @@ $timesot_id = 2;
     </ul>
       </div>
       <div class="tue">
+      <div class="day_head">TUESDAY</div>
+      <div class="clearfix"></div>
           <ul>
       <?php  $tue = Deliverytimeslot::deliverytimeslot('Tuesday');
 
@@ -81,6 +79,8 @@ $timesot_id = 2;
     </ul>
       </div>
       <div class="wed">
+      <div class="day_head">WEDNESDAY</div>
+      <div class="clearfix"></div>
           <ul>
       <?php  $wed = Deliverytimeslot::deliverytimeslot('Wednesday');
       foreach ($wed as $key => $value) {
@@ -96,6 +96,8 @@ $timesot_id = 2;
     </ul>
       </div>
       <div class="thu">
+      <div class="day_head">THURSDAY</div>
+      <div class="clearfix"></div>
           <ul>
       <?php  $thu = Deliverytimeslot::deliverytimeslot('Thursday');
       foreach ($thu as $key => $value) {
@@ -111,6 +113,8 @@ $timesot_id = 2;
     </ul>
       </div>
       <div class="fri">
+      <div class="day_head">FRIDAY</div>
+      <div class="clearfix"></div>
           <ul>
       <?php  $fri = Deliverytimeslot::deliverytimeslot('Friday');
 
@@ -127,6 +131,8 @@ $timesot_id = 2;
     </ul>
       </div>
       <div class="sat">
+      <div class="day_head">SATURDAY</div>
+      <div class="clearfix"></div>
           <ul>
       <?php  $sat = Deliverytimeslot::deliverytimeslot('Saturday');
       foreach ($sat as $key => $value) {
