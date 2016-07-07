@@ -312,11 +312,11 @@ class UsersController extends BaseController
                     			$event_item_modal->created_datetime=$event_date;
                     			$event_item_modal->modified_datetime=$event_date;
                     			$event_item_modal->save();
-                       Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_AD_SUCC'));
+                       
                        return Eventitemlink::EVENT_ITEM_CREATED;
                    }
                 }
-                Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_SUCC'));
+                
                 return Events::EVENT_CREATED;
             }
         }
