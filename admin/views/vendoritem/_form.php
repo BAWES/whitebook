@@ -398,7 +398,7 @@ $(function()
 	 });
 
 		// if it is new record //
-    $(".vendoritemquestion-question_answer_type").live('change',function (){
+    $(document).delegate(".vendoritemquestion-question_answer_type", 'change',function (){
 		var type = $(this).val();
 		var parent_id = $(this).attr("parent_id");
 		var parent = $(this).attr("data-parent");
@@ -449,7 +449,8 @@ $(function()
 		}
 		// Add selection for questions //
 		});
-		$('.add_question').live('click',function(){
+
+		$(document).delegate('.add_question', 'click',function(){
 
 			var j = $(this).attr('id').replace(/add_question/, '');
 			var par = $(this).attr('data-parent');
@@ -610,6 +611,7 @@ function vendor_load(){
          }
         });
 }
+
 //* Load Sub Category *//
 $(function (){
     $("#vendoritem-category_id").change(function (){
@@ -1320,7 +1322,6 @@ $("#validsix6").click(function() {
 			return false;
   	}
    }
-
 
   	if($(".file-preview-thumbnails > img").length <= 0)
 	{
