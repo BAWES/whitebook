@@ -38,6 +38,7 @@ use yii\web\View;
 	<?= $form->field($model, 'customer_dateofbirth',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlenght' => 255, 'value' => date( 'd-m-Y', strtotime( $model->customer_dateofbirth ) )])?>
 </div>
 <?php } ?>
+
 <div class="form-group">
 	<?= $form->field($model, 'customer_gender',[
                       'template' => "{label}<div class='controls'>{input}</div>
@@ -110,12 +111,9 @@ $(function (){
      });
  });
 </script>
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+
+<script src="<?= Url::to('@web/themes/default/plugins/jquery-mask/jquery.mask.js') ?>"></script>
+
 <script>
-$('#customer-customer_dateofbirth').datepicker({  format: 'dd-mm-yyyy',});
+    $('#customer-customer_dateofbirth').mask("00-00-0000", {placeholder: "dd-mm-yyyy"});
 </script>
