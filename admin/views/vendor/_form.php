@@ -656,7 +656,7 @@ $(document).ready(function(){
 
 <?php if($model->isNewRecord) {?>
 $(function () {
- $("#vendor-vendor_contact_email").on('keyup keypress focusout',function () {
+ $("#vendor-vendor_contact_email").on('focusout',function () {//keyup keypress 
 	 if(validateEmail($(this).val()) == true){
 	if($("#vendor-vendor_contact_email").val()!='')
 	{
@@ -673,7 +673,7 @@ $(function () {
         async:true,
         data: { id: mail ,_csrf : csrfToken}, //data to be send
         success: function( data ) {
-			$(".loadingmessage").ajaxComplete(function(event, request, settings){
+			$(document).ajaxComplete(function(event, request, settings){//".loadingmessage"
 				$("input[name=email_valid]").val(data);
 				 if(data>0)
 				 {
@@ -709,7 +709,7 @@ $(document).ready(function(){
  });
 });
  $(function () {
- $("#vendor-vendor_name").on('keyup keypress focusout',function () {
+ $("#vendor-vendor_name").on('focusout',function () {//keyup keypress 
 	if($("#vendor-vendor_name").val().length > 3)
 	{
 		var mail=$("#vendor-vendor_name").val();
