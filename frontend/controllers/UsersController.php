@@ -670,7 +670,20 @@ class UsersController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $command = Eventitemlink::deleteAll('link_id='.$data['item_link_id']);
+            
+            //check if login customer's link             
+            $sub_query = (new Query())
+                ->select('event_id')
+                ->from('whitebook_events')
+                ->where(['customer_id' => Yii::$app->user->identity->customer_id]);
+
+            $command = Eventitemlink::deleteAll(
+                [
+                    'link_id' => $data['item_link_id'],
+                    ['in', 'event_id', $sub_query]
+                ]
+            );
+            
             if ($command) {
             				$cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
             				->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
