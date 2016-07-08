@@ -636,7 +636,6 @@ class VendoritemController extends Controller
 
 	}
 
-
 	public function actionSort_vendor_item()
 	{
 		$sort=$_POST['sort_val'];
@@ -656,16 +655,18 @@ class VendoritemController extends Controller
 	/* Vendor item gridview status changes */
 	public function actionStatus()
 	{
-		if(Yii::$app->request->isAjax)
 		$data = Yii::$app->request->post();
-		$ids = implode('","',$data['keylist']);
+        
+		$ids = $data['keylist']; 
+
 		if($data['status'] == 'Delete')
 		{
-			$command=Vendoritem::deleteAll(['IN','item_id',$ids]);
+			$command = Vendoritem::deleteAll(['IN','item_id',$ids]);
+
 			if($command)
 			{
 				echo Yii::$app->session->setFlash('success', "Item deleted successfully!");
-			}	else
+			}else
 			{
 				echo Yii::$app->session->setFlash('danger', "Something went wrong");
 			}
@@ -681,8 +682,10 @@ class VendoritemController extends Controller
 				echo Yii::$app->session->setFlash('danger', "Something went wrong");
 			}
 		} else {
-		$command=Vendoritem::updateAll(['item_status' => $data['status']],['IN','item_id',$ids]);	
-		if($command)
+
+    		$command=Vendoritem::updateAll(['item_status' => $data['status']],['IN','item_id',$ids]);	
+
+    		if($command)
 			{
 				echo Yii::$app->session->setFlash('success', "Item status updated!");
 		 	}
