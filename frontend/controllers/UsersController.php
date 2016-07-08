@@ -113,7 +113,6 @@ class UsersController extends BaseController
                 $this->redirect(Url::to('site/index'));
                 return Users::SUCCESS;
             } else {
-                Yii::$app->session->setFlash('error', 'Signup Failed!');
                 return Users::FAILURE;
                 $this->redirect(Url::to('site/index'));
             }
@@ -175,7 +174,6 @@ class UsersController extends BaseController
                 ->setTo($email)
                 ->setSubject('Requested forgot Password')
                 ->send();
-                Yii::$app->session->setFlash('success', Yii::t('frontend', 'Password has been sent'));
                 return Users::SUCCESS;
             } else {
                 return Users::EMAIL_NOT_EXIST;
@@ -338,7 +336,6 @@ class UsersController extends BaseController
             if ($add_event ==  Events::EVENT_ALREADY_EXIST) {
                 return  Events::EVENT_ALREADY_EXIST;
             } else {
-                Yii::$app->session->setFlash('success', Yii::t('frontend', 'Event has been updated'));
                 return $add_event;
             }
         }
@@ -358,7 +355,6 @@ class UsersController extends BaseController
             if ($insert_item_to_event == Events::EVENT_ALREADY_EXIST) {
                 return Events::EVENT_ALREADY_EXIST;
             } elseif ($insert_item_to_event == Events::EVENT_ADDED_SUCCESS) {
-                Yii::$app->session->setFlash('success', Yii::t('frontend', 'EVE_CRE_AD_SUCC'));
                 return Events::EVENT_ADDED_SUCCESS;
             }
         }
