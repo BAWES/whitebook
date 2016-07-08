@@ -537,6 +537,7 @@ jQuery("#phone,#invitees_phone").keypress(function (e) {
 /* BEGIN ADD TO EVENT */
 jQuery('#create_event_button').click(function(){
     jQuery.noConflict();
+    alert(234);
     var i=0;
     //var element = jQuery(this).parents('form');
     var event_type=jQuery('#event_type').val();
@@ -565,6 +566,7 @@ jQuery('#create_event_button').click(function(){
                 data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf,
                 success:function(data,slider)
                 {
+                    alert(data);
                     jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){
                         jQuery(this).css('background','transparent','important');
                     });
@@ -827,8 +829,7 @@ jQuery('#create_event_button').click(function(){
                         var contact_admin = '<?php echo Yii::t("frontend","Entered email id not found in registred user email. Kindly contact admin!") ?>';
                         jQuery('#forgot_loader').hide();
                         jQuery('#forgot_result').addClass('alert-success alert fade in');
-                        jQuery('#forgot_result').html(+contact_admin+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
-                        //all_form_reset();
+                        jQuery('#forgot_result').html(contact_admin+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
                     }
                 }
             });
@@ -1144,7 +1145,8 @@ jQuery(".faver_evnt_product").click(function(){
         var item_name=jQuery('.desc_popup_cont h3').text();
         var event_id=jQuery('#eventlist'+x).val();
         var event_name=jQuery('#eventlist'+x+' option:selected').text();
-        var msg = '"'+event_name+'" '+"<?php echo Yii::t('frontend','SUCCESSFULLY_ADDED_TO'); ?> "+' '+"<?php echo Yii::t('frontend','CATEGORY'); ?> ";
+        var msg = '"'+event_name+ "<?php echo Yii::t('frontend',' successfully added to '); ?>" +item_name+'"';
+
         if(event_id!=''){
             jQuery('#add_to_event_loader').show();
             var _csrf=jQuery('#_csrf').val();
@@ -1657,8 +1659,8 @@ function show_event_modal_true()
 {
     var event_name='<?=Yii::$app->session->get('event_name');?>';
     var item_name='<?=Yii::$app->session->get('item_name');?>';
-    var created_msg = "<?php echo Yii::t('frontend','EVENT'); ?> "+'"'+event_name+'" '+"<?php echo Yii::t('frontend','CREATED SUCCESSFULLY'); ?> ";
-    var added_msg = "<?php echo Yii::t('frontend','EVENT'); ?> "+' "'+event_name+'" '+"<?php echo Yii::t('frontend','CREATED'); ?> "+ '"'+item_name+'" '+"<?php echo Yii::t('frontend','ADDED SUCCESSFULLY');?>";
+    var created_msg = '"<?php echo Yii::t("frontend","EVENT"); ?> '+' '+event_name+' '+'<?php echo Yii::t("frontend","CREATED SUCCESSFULL"); ?> "';
+    var added_msg = '"<?php echo Yii::t("frontend","EVENT"); ?> '+' '+event_name+' '+'<?php echo Yii::t("frontend","CREATED SUCCESSFULLY AND"); ?> '+' '+'item_name'+' '+'<?php echo Yii::t("frontend","ADDED TO");?>'+' '+'event_name'+'"';
     
     jQuery('#login_success').modal('show');
     if(!item_name.length){
