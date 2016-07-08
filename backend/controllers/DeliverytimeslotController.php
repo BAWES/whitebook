@@ -165,13 +165,13 @@ class DeliverytimeslotController extends Controller
             $timeslot_start_time = strtotime($row['timeslot_start_time']);
             $timeslot_end_time = strtotime($row['timeslot_end_time']);
 
-            if($start_time > $timeslot_start_time && $start_time < $timeslot_end_time) {
+            if($start_time >= $timeslot_start_time && $start_time <= $timeslot_end_time) {
                 $status = 0;
                 $message = 'Timeslot colide with '.date('h:i A', $timeslot_start_time).' - '.date('h:i A', $timeslot_end_time);
                 break;
             }
 
-            if($end_time > $timeslot_start_time && $end_time < $timeslot_end_time) {
+            if($end_time >= $timeslot_start_time && $end_time <= $timeslot_end_time) {
                 $status = 0;
                 $message = 'Timeslot collision with '.date('h:i A', $timeslot_start_time).' - '.date('h:i A', $timeslot_end_time);
                 break;
