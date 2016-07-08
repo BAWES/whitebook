@@ -330,7 +330,14 @@ body.modal-open .chat-window-wrapper {
   font-size: 13px !important;
 }
 .header a {
-  text-decoration: none;
+    text-decoration: none;
+}
+.header .header-seperation a{  
+    margin: auto;
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-top: 5px;
 }
 .header .chat-toggler {
   position: relative;

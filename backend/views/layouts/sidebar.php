@@ -10,7 +10,7 @@
 		<!-- BEGIN MINI-PROFILE -->
 		<div class="user-info-wrapper">
 			<div class="user-info">
-				<div class="greeting">Hi, <?php echo Vendor::getVendor('vendor_name'); ?> </div>
+				<div class="greeting">Hi, <?php echo Vendor::getVendor('vendor_name'); ?>!</div>
 				<div class="username"> <span class="semi-bold">  </span></div>
 			</div>
 		</div>
@@ -29,7 +29,7 @@
 		?>
 		<!-- END MINI-PROFILE -->
 		<!-- BEGIN SIDEBAR MENU -->
-		 <p class="menu-title"><span class="pull-right"><a href="javascript:;"></a></span></p>
+		<p class="menu-title">NAVIGATION</p>
 		<ul>
 			<li class="<?php if ($menu_act == 'DefaultController'  && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>

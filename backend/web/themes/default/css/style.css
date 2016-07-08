@@ -332,6 +332,13 @@ body.modal-open .chat-window-wrapper {
 .header a {
   text-decoration: none;
 }
+.header .header-seperation a{  
+    margin: auto;
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-top: 5px;
+}
 .header .chat-toggler {
   position: relative;
   top: 10px;
@@ -454,6 +461,7 @@ body.modal-open .chat-window-wrapper {
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.2px;
+  opacity: 0.5;
 }
 .menu-title a {
   color: #808285;

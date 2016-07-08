@@ -23,10 +23,12 @@ use yii\helpers\Url;
 				<?= Html::img('@web/uploads/app_img/logo1_434.png',['class'=>"logo",'width'=>"200"]) ?>
 			</a>
 			<!-- END LOGO -->
+
+			<!-- 
 			<ul class="nav pull-right notifcation-center">
 				<li class="dropdown" id="header_task_bar"> <a href="<?= Url::to(['site/index']); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
 			</ul>
-			<!-- END LOGO NAV BUTTONS -->
+			END LOGO NAV BUTTONS -->
 		</div>
 		<!-- END NAVIGATION HEADER -->
 		<!-- BEGIN CONTENT HEADER -->
@@ -60,7 +62,7 @@ use yii\helpers\Url;
 
 				</div>
 				<!-- BEGIN HEADER NAV BUTTONS -->
-				<ul class="nav quick-section">
+				<ul class="nav quick-section pull-right">
 					<!-- BEGIN SETTINGS -->
 					<li class="quicklinks">
 						<a data-toggle="dropdown" class="dropdown-toggle pull-right" href="#" id="user-options">
@@ -68,12 +70,12 @@ use yii\helpers\Url;
 						</a>
 						<ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
 							<li><a href="<?= Url::toRoute('site/profile'); ?>"> My Account</a>
-       </li>
-       <li><a href="<?= Url::toRoute('/site/changepassword'); ?>">Change password</a>
-       </li>
-       <li class="divider"></li>
-       <li><a href="<?= Url::toRoute('/site/logout'); ?>"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
-							</ul>
+					        </li>
+					        <li><a href="<?= Url::toRoute('/site/changepassword'); ?>">Change password</a>
+					        </li>
+					        <li class="divider"></li>
+					        <li><a href="<?= Url::toRoute('/site/logout'); ?>"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+						</ul>
 					</li>
 					<!-- END SETTINGS -->
 					<!-- END CHAT SIDEBAR TOGGLE -->

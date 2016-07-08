@@ -277,7 +277,7 @@ $this->title = 'Dashboard';
 										->count();
 									}
 									$data=array_map('intVal', $h);
-									echo Highcharts::widget([
+									/*echo Highcharts::widget([
 										'options' => [
 											'credits' => ['enabled' => false],
 											'chart' => [
@@ -294,7 +294,8 @@ $this->title = 'Dashboard';
 												['name' => 'Year', 'data' => $data],
 											]
 										]
-									]);?>
+									]);*/
+									?>
 								</div>
 							</div>
 						</div>
@@ -326,7 +327,7 @@ $this->title = 'Dashboard';
 										->count();
 									}
 									$deactive=array_map('intVal', $deactive);
-									echo  Highcharts::widget([
+									/*echo  Highcharts::widget([
 										'options' => [
 											'credits' => ['enabled' => false],
 											'chart' => [
@@ -348,7 +349,7 @@ $this->title = 'Dashboard';
 												['name' => 'Blocked', 'data' => $deactive]
 											]
 										]
-									]);
+									]);*/
 									?>
 								</div>
 							</div>

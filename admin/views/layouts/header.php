@@ -26,9 +26,9 @@ use yii\helpers\Url;
                 <?= Html::img('@web/uploads/app_img/logo1_434.png',['class'=>"logo",'width'=>"200"]) ?>
             </a>
             <!-- END LOGO -->
-            <ul class="nav pull-right notifcation-center">
+            <!--<ul class="nav pull-right notifcation-center">
                 <li class="dropdown" id="header_task_bar"> <a href="<?= Url::to(['site/index']); ?>" class="dropdown-toggle active" data-toggle=""> <div class="iconset top-home"></div> </a> </li>
-                <!-- END LOGO NAV BUTTONS -->
+                 END LOGO NAV BUTTONS -->
         </div>
         <!-- END NAVIGATION HEADER -->
         <!-- BEGIN CONTENT HEADER -->

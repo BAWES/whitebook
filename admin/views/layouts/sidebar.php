@@ -6,7 +6,7 @@
 		<!-- BEGIN MINI-PROFILE -->
 		<div class="user-info-wrapper">
 			<div class="user-info">
-				<div class="greeting">Welcome <?php echo Yii::$app->user->identity->admin_name; ?> </div>
+				<div class="greeting">Welcome, <?php echo Yii::$app->user->identity->admin_name; ?>! </div>
 				<div class="username"> <span class="semi-bold"> </span></div>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 		$eighth_menu = array('CustomerController');
 
 		?>
-		 <p class="menu-title"><span class="pull-right"><a href="javascript:;"></a></span></p>
+		 <p class="menu-title">NAVIGATION</p>
 		<ul>
 			<li class="<?php if ($menu_act == 'SiteController') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
