@@ -343,19 +343,20 @@ class UsersController extends BaseController
 
     public function actionAdd_event()
     {
+
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         if (isset($_POST['event_id']) && isset($_POST['item_id'])) {
-            $model = new Users();
+           $model = new Users();
             $event_id = $_POST['event_id'];
             $item_id = $_POST['item_id'];
             $customer_id = Yii::$app->user->identity->customer_id;
             $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);
-            if ($insert_item_to_event == Events::EVENT_ALREADY_EXIST) {
-                return Events::EVENT_ALREADY_EXIST;
-            } elseif ($insert_item_to_event == Events::EVENT_ADDED_SUCCESS) {
-                return Events::EVENT_ADDED_SUCCESS;
+            if ($insert_item_to_event == Events::EVENT_ADDED_SUCCESS) {
+                return json_encode(['status'=>Events::EVENT_ADDED_SUCCESS,'message'=>Yii::t('frontend','"'.$_POST['item_name'].' item successfully added to '.$_POST['event_name'].' event"')]);
+            } elseif ($insert_item_to_event == Events::EVENT_ALREADY_EXIST) {
+                return json_encode(['status'=>Events::EVENT_ALREADY_EXIST,'message'=>Yii::t('frontend',$_POST['item_name']." item already exist with ".$_POST['event_name']." event")]);
             }
         }
     }
@@ -669,7 +670,20 @@ class UsersController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $command = Eventitemlink::deleteAll('link_id='.$data['item_link_id']);
+            
+            //check if login customer's link             
+            $sub_query = (new Query())
+                ->select('event_id')
+                ->from('whitebook_events')
+                ->where(['customer_id' => Yii::$app->user->identity->customer_id]);
+
+            $command = Eventitemlink::deleteAll(
+                [
+                    'link_id' => $data['item_link_id'],
+                    ['in', 'event_id', $sub_query]
+                ]
+            );
+            
             if ($command) {
             				$cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
             				->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')

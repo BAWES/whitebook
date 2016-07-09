@@ -1290,3 +1290,13 @@ input#search_input_header {
 	 -webkit-box-shadow: inset 0 1px 1px #fff !important; 
      box-shadow: inset 0 1px 1px #fff !important; 
 	} */
+
+a.boxclose{
+    float:right;
+    width:26px;
+    height:26px;
+    background:transparent url(http://tympanus.net/Tutorials/CSSOverlay/images/cancel.png) repeat top left;
+    margin-top:-5px;
+    margin-right:-10px;
+    cursor:pointer;
+}
