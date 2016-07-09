@@ -238,26 +238,26 @@ function logincheck()
                     {                        
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(+not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                         jQuery('#login_forget').show();
                         jQuery('#loader').hide();
                     }
                     else if(status==-2)
                     {                        
                         jQuery('#login_loader').hide();
-                        jQuery('#result').html(user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(+user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-3)
                     {                        
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(+email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-4)
                     {                        
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(+email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==1)
                     {
@@ -292,7 +292,7 @@ function logincheck()
             jQuery('#login_loader').hide();
             //jQuery('#loginErrorMsg').addClass('alert-failure alert fade in');
             jQuery('#result').addClass('alert-success alert fade in');
-            jQuery('#result').html(reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+            jQuery('#result').html(+reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
 
         }
     }
@@ -532,7 +532,7 @@ jQuery('#create_event_button').click(function(){
                     {
                         jQuery('#event_loader').hide();
                         jQuery('#eventresult').addClass('alert-success alert fade in');
-                        jQuery('#eventresult').html(event_exist+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#eventresult').html(+event_exist+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(data==1)
                     {
@@ -594,7 +594,7 @@ jQuery(document).on('click',"#update_event_button",function()
                 {
                     jQuery('#event_loader').hide();
                     jQuery('#eventresult').addClass('alert-success alert fade in');
-                    jQuery('#eventresult').html(event_exists+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
+                    jQuery('#eventresult').html(+event_exists+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
                     //jQuery(".eventErrorMsg").html('Same event name already exists!');
                     // window.setTimeout(function(){location.reload()},2000);
                 }
@@ -786,7 +786,7 @@ function forgot_password()
         //if(reg_email!='')
         jQuery('#forgot_loader').hide();
         jQuery('#forgot_result').addClass('alert-success alert fade in');
-        jQuery('#forgot_result').html(reg_email_id+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
+        jQuery('#forgot_result').html(+reg_email_id+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
 
         //jQuery("#forgerErrorMsg").show();
         //jQuery("#forgerErrorMsg").html('Enter registered mail id');
@@ -1410,7 +1410,7 @@ function display_event_modal()
     jQuery('#EventModal').modal('show');
 }
 
-if(session_create_event > 0) {
+if(session_create_event) {
     window.onload = display_event_modal();
 }
 
@@ -1498,10 +1498,10 @@ function show_event_modal_true()
 {
     jQuery('#login_success').modal('show');
     if(!item_name.length){
-        var event_created_msg = '"'+ text_event + ' ' + event_name + ' ' + created_successfully + '"';
+        var event_created_msg = '"'+ event + ' ' + event_name + ' ' + created_successfully + '"';
         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+event_created_msg+'</span>');
     } else {
-        var event_added_msg = '"'+ text_event + ' ' + event_name + ' ' + created_successfully_and + ' ' + item_name +' '+ added_to +' '+ event_name +'"';
+        var event_added_msg = '"'+ event + ' ' + event_name + ' ' + created_successfully_and + ' ' + item_name +' '+ added_to +' '+ event_name +'"';
         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+event_added_msg+' </span>');
     }
     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
