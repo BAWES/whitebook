@@ -40,7 +40,7 @@ $this->registerJs("
     var event_name = '".Yii::$app->session->get('event_name')."';
     var item_name = '".Yii::$app->session->get('item_name')."';
     
-    var event = '".Yii::t("frontend","EVENT")."';
+    var text_event = '".Yii::t("frontend","EVENT")."';
     var created_successfully = '".Yii::t("frontend","CREATED SUCCESSFULL")."';
     var created_successfully_and = '".Yii::t("frontend","CREATED SUCCESSFULLY AND")."';
     var_added_to = '".Yii::t("frontend","ADDED TO")."';
