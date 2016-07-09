@@ -1,3 +1,4 @@
+
 function validateEmail(email) {
     // http://stackoverflow.com/a/46181/11236
     var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
@@ -1523,5 +1524,5 @@ if(session_key == 2){
         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_success_msg+'</span>');
         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
     }
-    window.onload=show_password_reset_modal_true();                                
+    window.onload=show_password_reset_modal_true();  
 }
