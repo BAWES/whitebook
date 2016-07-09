@@ -1411,7 +1411,7 @@ function display_event_modal()
     jQuery('#EventModal').modal('show');
 }
 
-if(session_create_event) {
+if(session_create_event > 0) {
     window.onload = display_event_modal();
 }
 
