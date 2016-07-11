@@ -537,7 +537,6 @@ jQuery("#phone,#invitees_phone").keypress(function (e) {
 /* BEGIN ADD TO EVENT */
 jQuery('#create_event_button').click(function(){
     jQuery.noConflict();
-    alert(234);
     var i=0;
     //var element = jQuery(this).parents('form');
     var event_type=jQuery('#event_type').val();
@@ -566,7 +565,6 @@ jQuery('#create_event_button').click(function(){
                 data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf,
                 success:function(data,slider)
                 {
-                    alert(data);
                     jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){
                         jQuery(this).css('background','transparent','important');
                     });
@@ -1145,7 +1143,6 @@ jQuery(".faver_evnt_product").click(function(){
         var item_name=jQuery('.desc_popup_cont h3').text();
         var event_id=jQuery('#eventlist'+x).val();
         var event_name=jQuery('#eventlist'+x+' option:selected').text();
-        var msg = '"'+event_name+ "<?php echo Yii::t('frontend',' successfully added to '); ?>" +item_name+'"';
 
         if(event_id!=''){
             jQuery('#add_to_event_loader').show();
@@ -1153,24 +1150,27 @@ jQuery(".faver_evnt_product").click(function(){
             jQuery.ajax({
                 url:"<?= Url::toRoute('/users/add_event'); ?>",
                 type:"post",
-                data:"event_id="+event_id+"&item_id="+x+"&_csrf="+_csrf,
+                data:{"event_name":event_name,"item_name":item_name,
+                "event_id":event_id,"item_id":x,"_csrf":_csrf},
                 async: false,
+                dataType:'JSON',
                 success:function(data)
                 {
-                    if(data==1)
+
+                    if(data.status==1)
                     {
                         jQuery("#event-slider").load("<?= Url::toRoute('/product/event-slider'); ?>");
                         jQuery('#add_to_event_loader').hide();
                         jQuery('#add_to_event').modal('hide');
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+msg+'</span>');
+                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+data.message+'</span>');
                         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
                         //jQuery('#add_to_event_success'+x).html('Item Add to Your event list');
                     }
-                    else if(data==-1)
+                    else if(data.status==-1)
                     {
                         jQuery('#add_to_event_loader').hide();
-                        jQuery('#add_to_event_success'+x).html('Item already exists to this event!');
+                        jQuery('#add_to_event_success'+x).html(data.message);
                     }
                 }
             });
@@ -1660,7 +1660,7 @@ function show_event_modal_true()
     var event_name='<?=Yii::$app->session->get('event_name');?>';
     var item_name='<?=Yii::$app->session->get('item_name');?>';
     var created_msg = '"<?php echo Yii::t("frontend","EVENT"); ?> '+' '+event_name+' '+'<?php echo Yii::t("frontend","CREATED SUCCESSFULL"); ?> "';
-    var added_msg = '"<?php echo Yii::t("frontend","EVENT"); ?> '+' '+event_name+' '+'<?php echo Yii::t("frontend","CREATED SUCCESSFULLY AND"); ?> '+' '+'item_name'+' '+'<?php echo Yii::t("frontend","ADDED TO");?>'+' '+'event_name'+'"';
+    var added_msg = '"<?php echo Yii::t("frontend","EVENT"); ?> '+' '+event_name+' '+'<?php echo Yii::t("frontend","CREATED SUCCESSFULLY AND"); ?> '+' '+item_name+' '+'<?php echo Yii::t("frontend","ADDED TO");?>'+' '+event_name+'"';
     
     jQuery('#login_success').modal('show');
     if(!item_name.length){
