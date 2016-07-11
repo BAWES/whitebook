@@ -343,12 +343,11 @@ class UsersController extends BaseController
 
     public function actionAdd_event()
     {
-
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         if (isset($_POST['event_id']) && isset($_POST['item_id'])) {
-           $model = new Users();
+            $model = new Users();
             $event_id = $_POST['event_id'];
             $item_id = $_POST['item_id'];
             $customer_id = Yii::$app->user->identity->customer_id;
