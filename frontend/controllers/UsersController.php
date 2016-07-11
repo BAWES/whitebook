@@ -21,6 +21,7 @@ use frontend\models\EventinviteesSearch;
 use frontend\models\Eventitemlink;
 use yii\helpers\Arrayhelper;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use common\models\Events;
 use frontend\models\Users;
 
@@ -48,7 +49,7 @@ class UsersController extends BaseController
         if (isset($_POST['email']) && isset($_POST['password'])) {
             $model->customer_email = $_POST['email'];
             $model->customer_password = $_POST['password'];
-            //return ($model->login());
+
             if($model->login() == Customer::SUCCESS_LOGIN) {
                     $return_data['status'] = Customer::SUCCESS_LOGIN;
                     return json_encode($return_data);
@@ -343,20 +344,34 @@ class UsersController extends BaseController
 
     public function actionAdd_event()
     {
-
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         if (isset($_POST['event_id']) && isset($_POST['item_id'])) {
-           $model = new Users();
+            $model = new Users();
             $event_id = $_POST['event_id'];
             $item_id = $_POST['item_id'];
+
+            $item_name = Html::encode($_POST['item_name']);
+            $event_name = Html::encode($_POST['event_name']);
+
             $customer_id = Yii::$app->user->identity->customer_id;
             $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);
+
             if ($insert_item_to_event == Events::EVENT_ADDED_SUCCESS) {
-                return json_encode(['status'=>Events::EVENT_ADDED_SUCCESS,'message'=>Yii::t('frontend','"'.$_POST['item_name'].' item successfully added to '.$_POST['event_name'].' event"')]);
+                return json_encode(['status'=>Events::EVENT_ADDED_SUCCESS,'message'=>Yii::t('frontend','{item_name} has been added to {event_name}',
+                 [
+                       'item_name' => $item_name,
+                       'event_name' => $event_name,
+                 ])
+               ]);
             } elseif ($insert_item_to_event == Events::EVENT_ALREADY_EXIST) {
-                return json_encode(['status'=>Events::EVENT_ALREADY_EXIST,'message'=>Yii::t('frontend',$_POST['item_name']." item already exist with ".$_POST['event_name']." event")]);
+                return json_encode(['status'=>Events::EVENT_ALREADY_EXIST,'message'=>Yii::t('frontend','{item_name} already exist with {event_name}',
+                 [
+                       'item_name' => $item_name,
+                       'event_name' => $event_name,
+                 ])
+               ]);
             }
         }
     }
