@@ -283,7 +283,7 @@ class FeaturegroupitemController extends Controller
 
     public function actionLoadsubcategory()
     {
-		if(Yii::$app->request->isAjax)
+		if(!Yii::$app->request->isAjax)
 			die();
 
 		$data = Yii::$app->request->post();
