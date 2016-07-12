@@ -81,4 +81,3 @@ Yii::$app->session->set('key','0');
 $this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/footer.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
