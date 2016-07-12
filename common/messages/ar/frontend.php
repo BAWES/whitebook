@@ -18,7 +18,6 @@
  */
 return [
     ' successfully added to ' => '',
-    '"' => '',
     'ADDED TO' => '',
     'CATEGORY' => '',
     'CREATED SUCCESSFULL' => '',
@@ -47,9 +46,9 @@ return [
     'Your email does not exist' => '',
     'add to favourite successfully' => '',
     'add to favourite successfully!' => '',
-    'ADDED SUCCESSFULLY' => '@@@@',
+    '{item_name} already exist with {event_name}' => '',
+    '{item_name} has been added to {event_name}' => '',
     'Birth Date' => '@@تاريخ الميلاد@@',
-    'CREATED' => '@@@@',
     'CREATED SUCCESSFULLY' => '@@@@',
     'Confirm Password' => '@@تأكيد كلمة السر@@',
     'Create Account' => '@@إنشاء حساب@@',
