@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Security;
-//use yii\filters\AccessControl;
+use yii\helpers\Url;
 
 /**
  * VendorController implements the CRUD actions for Vendor model.
@@ -71,17 +71,22 @@ class vendoraddressController extends Controller
     public function actionCreate()
     {
         $model = new Vendoraddress();
-       // $model->scenario = 'register';
-		$area = Location::loadlocation();
-		//print_r ($area);die;
+        // $model->scenario = 'register';
+		
+        $area = Location::loadlocation();
+		
         if ($model->load(Yii::$app->request->post())&&($model->validate())) {
 			$model->vendor_id=Yii::$app->user->identity->id;
 			$model->save();
-			echo Yii::$app->session->setFlash('success', "Vendor address details created successfully!");
+			
+            Yii::$app->session->setFlash('success', "Vendor address details created successfully!");
+            
             return $this->redirect(['index']);
+        
         } else {
             return $this->render('create', [
-                'model' => $model,'area' => $area,
+                'model' => $model,
+                'area' => $area
             ]);
         }
     }
@@ -89,15 +94,19 @@ class vendoraddressController extends Controller
     public function actionUpdate($id)
     {
 		$model = $this->findModel($id);
-		$area = Location::loadlocation();
-		//print_r ($area);die;
+		
+        $area = Location::loadlocation();
+		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//print_r ($_POST);die;
-			echo Yii::$app->session->setFlash('success', "Vendor address details updated successfully!");
+			
+            Yii::$app->session->setFlash('success', "Vendor address details updated successfully!");
+            
             return $this->redirect(['index']);
-        } else {
+        
+        } else {            
             return $this->render('update', [
-                'model' => $model,'area' => $area,
+                'model' => $model,
+                'area' => $area
             ]);
         }
     }
@@ -111,7 +120,7 @@ class vendoraddressController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-		echo Yii::$app->session->setFlash('success', "Vendor address details deleted successfully!");
+		Yii::$app->session->setFlash('success', "Vendor address details deleted successfully!");
         return $this->redirect(['index']);
     }
 
@@ -131,48 +140,59 @@ class vendoraddressController extends Controller
         }
     }
 
-        public function actionLoadcategory()
+    public function actionLoadcategory()
     {
-		  if(Yii::$app->request->isAjax)
-		  $data = Yii::$app->request->post();
-		  $categoryid = Vendor::find()->select('category_id')->where(['vendor_id' => $data['id']])->one();
-		  $k=$categoryid->category_id;
-		  $category = Category::find()->select('category_id,category_name')->where(['category_id' => $k])->all();
-		  echo  '<option value="">Select...</option>';
-		 foreach($category as $key=>$val)
-		 {
+		if(!Yii::$app->request->isAjax)
+            die();
+
+		$data = Yii::$app->request->post();
+		
+        $categoryid = Vendor::find()->select('category_id')->where(['vendor_id' => $data['id']])->one();
+		
+        $k = $categoryid->category_id;
+		  
+        $category = Category::find()->select('category_id,category_name')->where(['category_id' => $k])->all();
+		
+        echo  '<option value="">Select...</option>';
+		
+        foreach($category as $key=>$val) {
 			echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-		 }
+		}
 	}
+
     public function actionLoadsubcategory()
     {
-		  if(Yii::$app->request->isAjax)
-		  $data = Yii::$app->request->post();
-		  $subcategory = Category::find()->select('category_id,category_name')->where(['parent_category_id' => $data['id']])->all();
-		  echo  '<option value="">Select...</option>';
-		 foreach($subcategory as $key=>$val)
-		 {
-			echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-		 }
-	}
-		public function actionBlock()
-    {
-		if(Yii::$app->request->isAjax)
+		if(!Yii::$app->request->isAjax)
+            die();
+
 		$data = Yii::$app->request->post();
-		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-		$command=Vendor::updateAll(['vendor_status' => $status],['vendor_id= '.$data['id']]);
-		if($status == 'Active')
-			{
-			echo Yii::$app->session->setFlash('success', "Vendor Address Status Updated!");
-			return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		 	}
-			else
-			{
-			echo Yii::$app->session->setFlash('success', "Vendor Address Status Updated!");
-			return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-			}
+		
+        $subcategory = Category::find()->select('category_id,category_name')->where(['parent_category_id' => $data['id']])->all();
+		
+        echo  '<option value="">Select...</option>';
+		
+        foreach($subcategory as $key=>$val) {
+		  echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
+		}
 	}
+		
+    public function actionBlock()
+    {
+		if(!Yii::$app->request->isAjax)
+            die();
 
-
-
+		$data = Yii::$app->request->post();
+		
+        $status = $data['status'] == 'Active' ? 'Deactive' : 'Active';
+		
+        $command = Vendor::updateAll(['vendor_status' => $status], ['vendor_id= '.$data['id']]);
+		
+        if($status == 'Active') {
+    		Yii::$app->session->setFlash('success', "Vendor Address Status Updated!");
+    		return Url::to('@web/uploads/app_img/active.png');
+	 	} else {
+    		Yii::$app->session->setFlash('success', "Vendor Address Status Updated!");
+    		return Url::to('@web/uploads/app_img/inactive.png');
+		}
+	}
 }

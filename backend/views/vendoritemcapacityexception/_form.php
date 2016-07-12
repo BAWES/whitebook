@@ -45,84 +45,28 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 </div>
 
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
+<?php 
 
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.min.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+$this->registerCssFile("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css");
+$this->registerCssFile("@web/themes/default/plugins/bootstrap-select2/select2.css");
+$this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
 
-<!-- multi select begin -->
-<script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js") ?>"></script>
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css") ?>" rel="stylesheet" type="text/css" />
-<!-- multi select end -->
+$this->registerJs("
+    var check_item_url = '".Url::to(['/vendor/vendoritemcapacityexception/checkitems'])."';
+    var update_value = '".$model->isNewRecord?'0':$model->exception_id."';
+");
 
-<script>
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-    var forbidden = ["<?php //echo $exist_dates; ?>"];
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-select2/select2.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-    $('#vendoritemcapacityexception-exception_date').datepicker({
-    	startDate: 'today',
-        autoclose:true,
-    	format: 'dd-mm-yyyy',
-    	   beforeShowDay:function(Date){
-            //
-            var curr_day = Date.getDate();
-            var curr_month = Date.getMonth()+1;
-            var curr_year = Date.getFullYear();
-            var curr_date=curr_month+'/'+curr_day+'/'+curr_year;
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-            if (forbidden.indexOf(curr_date)>-1) return false;
-        }
-    });
+$this->registerJsFile('@web/themes/default/js/vendor_item_capacity.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-    $(function(){
-        $('#vendoritemcapacityexception-item_id').multiselect({
-            'enableFiltering': true,
-            'buttonWidth': '660px',
-            'filterPlaceholder': 'Select Item...',
-            'includeSelectAllOption': true
-        });
-    });
-</script>
+$this->registerCss("
+    .multiselect-container>li{
+        height: auto !important;
+    }
+");
 
-<script>
-$('#submit1').click(function()
-{
-    //var csrfToken = $('meta[name="csrf-token"]').attr("content");
-    var item_id = $('#vendoritemcapacityexception-item_id').val();
-    var exception_date = $('#vendoritemcapacityexception-exception_date').val();
-    var exception_date = exception_date.split("-").reverse().join("-");
-    var path = "<?php echo Url::to(['/vendor/vendoritemcapacityexception/checkitems']); ?> ";
-    var update = "<?php if($model->isNewRecord){echo '0';}else{echo $model->exception_id;} ?> ";
-
-    $.ajax({
-        type: 'POST',
-        async:false,
-        url: path,
-        data: { item_id: item_id ,exception_date: exception_date ,update: update}, //data to be send
-        success: function( data ) {
-            if(data==2){
-                $(".field-vendoritemcapacityexception-exception_date").addClass('has-error');
-                $(".field-vendoritemcapacityexception-item_id").find('.help-block').html('Item already exists in same date!');
-                $(".field-vendoritemcapacityexception-exception_capacity").find('.help-block').html('Item already exists in same date!');
-                $('#date_error').html('Item already exists in same date!').animate({ color: "#a94442" }).show();
-                $('#vendoritemcapacityexception-default').val('');
-                return false;
-            }else{
-              $('#vendoritemcapacityexception-default').val('1');
-            }
-            return false;
-        }
-    });
- });
-</script>
-
-<style>
-.multiselect-container>li{
-    height: auto !important;
-}
-</style>

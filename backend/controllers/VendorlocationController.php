@@ -43,50 +43,50 @@ class VendorlocationController extends Controller
     {
         $model= new Vendorlocation;
 
-         if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
 
-            if(empty($_POST['location']))
-            {
-                Vendorlocation::deleteAll('vendor_id = :vendor_id', [':vendor_id' => 0]); // this is dummy record
+            $location = Yii::$app->request->post('location');
+
+            if($location) {
+            
+                Vendorlocation::deleteAll('vendor_id = :vendor_id', [':vendor_id' => Yii::$app->user->getId()]);
+            
+                foreach ($location as $key => $value) {
+                    $get_city_id = Location::find()->select('city_id')->where(['id'=>$value])->asArray()->one();
+                    $vendor_location_tbl = new Vendorlocation;
+                    $vendor_location_tbl->vendor_id = Yii::$app->user->getId();
+                    $vendor_location_tbl->city_id = $get_city_id['city_id'];
+                    $vendor_location_tbl->area_id = $value;
+                    $vendor_location_tbl->validate();
+                    $vendor_location_tbl->save();
+                }
+
+                $model->save();
+
+            } else {
                 Vendorlocation::deleteAll('vendor_id = :vendor_id', [':vendor_id' => Yii::$app->user->getId()]);
             }
-            else
-            {
-
-            $selected_areas = implode(',',$_POST['location']);
-            Vendorlocation::deleteAll('vendor_id = :vendor_id', [':vendor_id' => Yii::$app->user->getId()]);
-            foreach ($_POST['location'] as $key => $value) {
-				
-                 $get_city_id = Location::find()->select('city_id')->where(['id'=>$value])->asArray()->one();
-                 $vendor_location_tbl = new Vendorlocation;
-                 $vendor_location_tbl->vendor_id = Yii::$app->user->getId();
-                 $vendor_location_tbl->city_id = $get_city_id['city_id'];
-                 $vendor_location_tbl->area_id = $value;
-                 $vendor_location_tbl->validate();
-                 $vendor_location_tbl->save();
-
-                 //print_r ($vendor_location_tbl->getErrors());die;
-
-			}
-            $model->save();
-            }
-            Vendorlocation::deleteAll('vendor_id = :vendor_id', [':vendor_id' => 0]); // this is dummy record
-            echo Yii::$app->session->setFlash('success', "Area info updated successfully!");
+            
+            Yii::$app->session->setFlash('success', "Area info updated successfully!");
+            
             return $this->redirect(['edit']);
-
         }
-        	$cities=City::find()->select(['{{%city}}.*'])
-            		->leftJoin('{{%location}}', '{{%location}}.city_id = {{%city}}.city_id')
-            		->where(['{{%city}}.status'=>'Active'])
-            		->andwhere(['{{%location}}.trash'=>'Default'])
-            		->andwhere(['{{%location}}.status'=>'Active'])
-            		->groupby(['{{%location}}.city_id'])
-            		->asArray()
-            		->all();
-	
-            return $this->render('edit', [
-                'model' => $model, 'cities' => $cities,
-            ]);
+
+        Vendorlocation::deleteAll('vendor_id = :vendor_id', [':vendor_id' => 0]); // this is dummy record
+        
+    	$cities = City::find()->select(['{{%city}}.*'])
+    		->leftJoin('{{%location}}', '{{%location}}.city_id = {{%city}}.city_id')
+    		->where(['{{%city}}.status'=>'Active'])
+    		->andwhere(['{{%location}}.trash'=>'Default'])
+    		->andwhere(['{{%location}}.status'=>'Active'])
+    		->groupby(['{{%location}}.city_id'])
+    		->asArray()
+    		->all();
+
+        return $this->render('edit', [
+            'model' => $model, 
+            'cities' => $cities,
+        ]);
     }
 
     /**
