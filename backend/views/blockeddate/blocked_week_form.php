@@ -20,8 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="form-group">
 	<div class="form-group">
 <?php
+
 if(!empty($block)){
+
 $b=explode(',',$block);
+
 foreach ($b as $b1){
   //echo $i.$b1;$i++;
   if($b1==7){$model->sunday='7';}
@@ -32,7 +35,8 @@ foreach ($b as $b1){
   if($b1==5){$model->friday='5';}
   if($b1==6){$model->saturday='6';}
 }}?>
-      <?= $form->field($model, 'sunday',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+
+<?= $form->field($model, 'sunday',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
   ])->checkbox(['value' => '7'])->label('Weekdays Block',['class'=> 'form-label-cap'])?>
     <?= $form->field($model, 'monday')->checkbox(['value' => '1'])?>
     <?= $form->field($model, 'tuesday')->checkbox(['value' => '2'])?>
@@ -40,25 +44,30 @@ foreach ($b as $b1){
     <?= $form->field($model, 'thursday')->checkbox(['value' => '4'])?>
     <?= $form->field($model, 'friday')->checkbox(['value' => '5'])?>
     <?= $form->field($model, 'saturday')->checkbox(['value' => '6'])?>
-  </div>
-
 </div>
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Update' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-
-    </div>
-	</div>
-    <?php ActiveForm::end(); ?>
 
 </div>
 
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+<div class="form-group">
+    <?= Html::submitButton($model->isNewRecord ? 'Update' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+</div>
 
-<script>
-$('#blockeddate-block_date').datepicker({ format: 'dd-mm-yyyy',autoclose:true, startDate: 'today',});
-</script>
+</div>
+
+<?php ActiveForm::end(); ?>
+
+</div>
+
+<?php
+
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css');
+
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJs("
+  $('#blockeddate-block_date').datepicker({ 
+    format: 'dd-mm-yyyy',
+    autoclose:true, 
+    startDate: 'today'
+  });
+");

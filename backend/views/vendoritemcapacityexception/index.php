@@ -46,18 +46,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
+<?php 
 
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css');
 
-<script>
-$("[name='VendoritemcapacityexceptionSearch[exception_date]']").datepicker({
-	startDate: "<?php echo $startdate;?>",
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJs("
+  $(\"[name='VendoritemcapacityexceptionSearch[exception_date]']\").datepicker({
+  	startDate: '".$startdate."',
     autoclose:true,
-	format: 'dd-mm-yyyy',
-});
-</script>
+  	format: 'dd-mm-yyyy',
+  });
+");

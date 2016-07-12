@@ -4,8 +4,8 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
+use yii\web\View;
 
-/* @var $this yii\web\View */
 /* @var $searchModel common\models\VendoritemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Manage items';
@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 	<?php Pjax::begin(['enablePushState' => false]); ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -103,18 +104,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		<?= Html::a('Activate', [''], ['class' => 'btn btn-info','id'=>'Reject','onclick'=>'return Status("Activate")', 'style'=>'float:right;']) ?>
 </p>
-<script type="text/javascript">
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");
+
+<?php $this->registerJs("
+
+	var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
 	var txt;
 
 	/* Change status for respective vendor items */
 
-		function Status(status){
+	function Status(status){
 
 		var keys = $('#items').yiiGridView('getSelectedRows');
-		var pathUrl = "<?php echo Url::to(['vendoritem/status']); ?>";
+		var pathUrl = '".Url::to(['vendoritem/status'])."';
 		if(keys.length == 0) { alert ('Select atleast one item'); return false;}
-		var r = confirm("Are you sure want to " +status+ "?");
+		var r = confirm(\"Are you sure want to \" +status+ \"?\");
 			status = (status=='Activate')?'Active':((status=='Deactivate'))?'Deactive':status;
 		if (r == true) {
 			$.ajax({
@@ -134,55 +137,57 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	function change(status, id)
 	{
-        var path = "<?php echo Url::to(['vendoritem/block']); ?> ";
+        var path = '".Url::to(['vendoritem/block'])."';
         $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { status: status, id: id,_csrf : csrfToken}, //data to be send
-        success: function(data) {
-         }
+	        type: 'POST',
+	        url: path, //url to be called
+	        data: { status: status, id: id,_csrf : csrfToken}, //data to be send
+	        success: function(data) {
+	        }
         });
      }
 
      function change_sort_order(sort_val,item_id)
      {
-		 var exist_sort=$('#hidden_'+item_id).val();
-		 if(sort_val!=exist_sort || exist_sort==0)
+		 var exist_sort = $('#hidden_'+item_id).val();
+
+		 if(sort_val != exist_sort || exist_sort == 0)
 		 {
-			if(sort_val<=0 && sort_val!='')
+			if(sort_val <= 0 && sort_val != '')
 			{
-				alert("Please enter greater than 0!");
+				alert('Please enter greater than 0!');
 				return false;
 			}
 
 			if(isNumeric(sort_val))
 			{
-				var csrfToken = $('meta[name="csrf-token"]').attr("content");
-				var path = "<?php echo Url::to(['vendoritem/sort_vendor_item']); ?> ";
+				var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+				var path = '".Url::to(['vendoritem/sort_vendor_item'])."';
 				$.ajax({
-				type: 'POST',
-				url: path, //url to be called
-				data: { sort_val: sort_val,item_id: item_id,_csrf : csrfToken}, //data to be send
-				success: function(data) {
-					if(data)
-					{
-						location.reload();
+					type: 'POST',
+					url: path, //url to be called
+					data: { sort_val: sort_val,item_id: item_id,_csrf : csrfToken}, //data to be send
+					success: function(data) {
+						if(data)
+						{
+							location.reload();
+						}
 					}
-				 }
 				});
 			}
 			else
 			{
 				if(sort_val!='')
 				{
-					alert("Enter only integer values!");
+					alert('Enter only integer values!');
 					return false;
 				}
 			}
 		}
-	 }
+	}
+
 	function isNumeric(n)
 	{
 		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
-</script>
+", View::POS_HEAD);

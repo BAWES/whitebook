@@ -142,7 +142,8 @@ foreach($model_question as $question_records)
 </div>
 </div>
 </div>
- <style>
+
+<?php $this->registerCss("
       ul {
           padding:0 0 0 0;
           margin:0 0 0 0;
@@ -191,49 +192,52 @@ foreach($model_question as $question_records)
               display:none;
           }
       }
-  </style>
+  ");
 
- <script>
-    var csrfToken = $('meta[name="csrf-token"]').attr("content");
-// single question view
-function questionView(q_id,tis){
+$this->registerJs("
+    var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
 
-    var check = $('.show_ques'+q_id).html();
-    if(check==''){
-    var path = "<?php echo Url::to(['vendoritem/viewrenderquestion']); ?> ";
-    $.ajax({
-        type : 'POST',
-        url :  path,
-        data: { q_id: q_id ,_csrf : csrfToken},
-        success: function( data ) {
-        $('.show_ques'+q_id).html(data);
-        $(tis).toggleClass("expanded");
-        return false;
-        }
-    })
-    }else{
-            $('.show_ques'+q_id).toggle();
-            $(tis).toggleClass("expanded");
+    // single question view
+    function questionView(q_id,tis){
+
+      var check = $('.show_ques'+q_id).html();
+      
+      if(check==''){
+        var path = '".Url::to(['vendoritem/viewrenderquestion'])."';
+        
+        $.ajax({
+            type : 'POST',
+            url :  path,
+            data: { q_id: q_id ,_csrf : csrfToken},
+            success: function( data ) {
+            $('.show_ques'+q_id).html(data);
+            $(this).toggleClass('expanded');
+            return false;
+            }
+        });
+
+      }else{
+        $('.show_ques'+q_id).toggle();
+        $(this).toggleClass('expanded');
+      }
     }
 
-}
+    /* Begin when loading page first tab opened */
+    $('.nav-tabs li:first').addClass('active');
+    $('.tab-content div:first').addClass('active');
+");
 
+$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
- /* Begin when loading page first tab opened */
- $(function (){
-        $('.nav-tabs li:first').addClass("active");
-        $(".tab-content div:first").addClass("active");
-    });
-        /* End when loading page first tab opened */
- </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js") ?>"></script>
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="z-index: 99999;">
-        <div class="modal-content">
-          <div class="modal-body">
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+?>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="z-index: 99999;">
+    <div class="modal-content">
+      <div class="modal-body">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

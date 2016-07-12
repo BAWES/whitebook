@@ -78,11 +78,11 @@ class LocationController extends Controller
         $model = new Location();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            echo Yii::$app->session->setFlash('success', "Area info created successfully!");
+            Yii::$app->session->setFlash('success', "Area info created successfully!");
             return $this->redirect(['index']);
         } else {
-			$countries=Country::find()->all();
-			$country=ArrayHelper::map($countries,'country_id','country_name');
+			$countries = Country::find()->all();
+			$country = ArrayHelper::map($countries,'country_id','country_name');
             return $this->render('create', [
                 'model' => $model,'country' => $country,
             ]);
@@ -98,16 +98,20 @@ class LocationController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			echo Yii::$app->session->setFlash('success', "Area info updated successfully!");
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {			
+            Yii::$app->session->setFlash('success', "Area info updated successfully!");
             return $this->redirect(['index']);
-             } else {
-			$countries=Country::find()->all();
-			$country=ArrayHelper::map($countries,'country_id','country_name');
-			$cities=City::find()->all();
-			$city=ArrayHelper::map($cities,'city_id','city_name');
+        } else {
+			$countries = Country::find()->all();
+			$country = ArrayHelper::map($countries,'country_id','country_name');
+			$cities = City::find()->all();
+			$city = ArrayHelper::map($cities,'city_id','city_name');
+
             return $this->render('update', [
-                'model' => $model,'city' => $city, 'country' => $country,
+                'model' => $model,
+                'city' => $city, 
+                'country' => $country,
             ]);
         }
     }
@@ -141,44 +145,60 @@ class LocationController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
     public function actionCity()
     {
-		if(Yii::$app->request->isAjax)
-		 $data = Yii::$app->request->post();
-		 $city = City::find()->select('city_id,city_name')->where(['country_id' => $data['country_id']])->all();
-		 echo  '<option value="">Select</option>';
-		 foreach($city as $key=>$val)
-		 {
-			echo  '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
-		 }
+		if(!Yii::$app->request->isAjax)
+            die();
+
+        $data = Yii::$app->request->post();
+        $city = City::find()->select('city_id,city_name')->where(['country_id' => $data['country_id']])->all();
+        
+        echo  '<option value="">Select</option>';
+        
+        foreach($city as $key=>$val)
+        {
+            echo '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
+        }
 	}
 
 	public function actionBlock()
     {
-		if(Yii::$app->request->isAjax)
+		if(!Yii::$app->request->isAjax)
+            die();
+
 		$data = Yii::$app->request->post();
-		$status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-		$command=Location::updateAll(['status' => $status],['id= '.$data['id']]);
+		
+        $status = $data['status'] == 'Active' ? 'Deactive' : 'Active';
+		
+        $command=Location::updateAll(
+            ['status' => $status],
+            ['id= '.$data['id']]
+        );
+
 		if($status == 'Active')
-			{
-			echo Yii::$app->session->setFlash('success', "Area status updated!");
+		{
+			Yii::$app->session->setFlash('success', "Area status updated!");
 			return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-		 	}
-			else
-			{
-			echo Yii::$app->session->setFlash('success', "Area status updated!");
+		} else {
+			Yii::$app->session->setFlash('success', "Area status updated!");
 			return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-			}
+		}
 	}
+
 	public function actionArea()
     {
-		if(Yii::$app->request->isAjax)
-		 $data = Yii::$app->request->post();
-		 $location = Location::find()->select('id,location')->where(['city_id' => $data['city_id']])->all();
-		 echo  '<option value="">Select</option>';
-		 foreach($location as $key=>$val)
-		 {
-			echo  '<option value="'.$val['id'].'">'.$val['location'].'</option>';
-		 }
+		if(!Yii::$app->request->isAjax)
+            die();
+
+        $data = Yii::$app->request->post();
+        $location = Location::find()->select('id,location')->where(['city_id' => $data['city_id']])->all();
+        
+        echo  '<option value="">Select</option>';
+        
+        foreach($location as $key=>$val)
+        {
+            echo '<option value="'.$val['id'].'">'.$val['location'].'</option>';
+        }
 	}
 }

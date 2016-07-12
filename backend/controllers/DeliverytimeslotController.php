@@ -69,13 +69,16 @@ class DeliverytimeslotController extends Controller
         $vendor = Vendor::loadvendorname();
         $model->vendor_id = Vendor::getVendor('vendor_id');
         $day = array('Sunday'=>'Sunday','Monday'=>'Monday','Tuesday'=>'Tuesday','Wednesday'=>'Wednesday','Thursday'=>'Thursday','Friday'=>'Friday','Saturday'=>'Saturday');
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-             $start  = date("H:i", strtotime($model->timeslot_start_time));
-             $end  = date("H:i", strtotime($model->timeslot_end_time));
-             $model->timeslot_start_time=$start;
-             $model->timeslot_end_time=$end;
-             $model->save();
-            echo Yii::$app->session->setFlash('success', "Delivery time slot created successfully!");
+            $start = date("H:i", strtotime($model->timeslot_start_time));
+            $end = date("H:i", strtotime($model->timeslot_end_time));
+            $model->timeslot_start_time=$start;
+            $model->timeslot_end_time=$end;
+            $model->save();
+            
+            Yii::$app->session->setFlash('success', "Delivery time slot created successfully!");
+
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
@@ -101,10 +104,12 @@ class DeliverytimeslotController extends Controller
             $start  = date("H:i", strtotime($model->timeslot_start_time));
             $end  = date("H:i", strtotime($model->timeslot_end_time));
 
-            echo $model->timeslot_start_time=$start;
-            echo $model->timeslot_end_time=$end;
+            $model->timeslot_start_time = $start;
+            $model->timeslot_end_time = $end;
             $model->save();
-            echo Yii::$app->session->setFlash('success', "Delivery time slot updated successfully!");
+            
+            Yii::$app->session->setFlash('success', "Delivery time slot updated successfully!");
+            
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
@@ -122,12 +127,14 @@ class DeliverytimeslotController extends Controller
     public function actionDelete($id = false)
     {
         if(Yii::$app->request->isAjax)
-       {
-        $data = Yii::$app->request->post();
-        $this->findModel($data['id'])->delete();
-        echo Yii::$app->session->setFlash('success', "Delivery time slot deleted successfully!");
-        return $this->redirect(['index']);
-       }
+        {
+            $data = Yii::$app->request->post();
+            $this->findModel($data['id'])->delete();
+            
+            Yii::$app->session->setFlash('success', "Delivery time slot deleted successfully!");
+            
+            return $this->redirect(['index']);
+        }
     }
 
     /*  Check if given timeslot collide with other timeslots in same day 
