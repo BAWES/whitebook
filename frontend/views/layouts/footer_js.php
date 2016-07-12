@@ -78,7 +78,7 @@ Yii::$app->session->set('reset_password_mail','');
 Yii::$app->session->set('register',0);
 Yii::$app->session->set('key','0');
 
-use Yii\helpers\Url;
+
 $this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 <script type="text/javascript">
