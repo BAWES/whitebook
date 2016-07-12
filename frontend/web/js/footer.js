@@ -771,14 +771,13 @@ function forgot_password()
                     jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+receive_email+'</span>');
                     //window.setTimeout(function(){location.reload()},2000)
                     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
-                    all_form_reset();
                 }
                 else if(data==-1)
                 {
                     jQuery('#forgot_loader').hide();
                     jQuery('#forgot_result').addClass('alert-success alert fade in');
                     jQuery('#forgot_result').html(contact_admin+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
-                    //all_form_reset();
+
                 }
             }
         });
