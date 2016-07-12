@@ -27,7 +27,7 @@ input[type="text"],input[type="submit"],input[type="button"],select{ outline:non
 
 
 @media screen and (max-width: 1360px) {
-.mega-dropdown-menu{ width: 1350px;}
+/*.mega-dropdown-menu{ width: 1350px;} */
 .dropdown-menu{ left:-762%}
 .bootstrap-select .dropdown-menu{left:0;}
 .shop-menu .dropdown-menu{ left:-825%}   
