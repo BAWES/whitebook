@@ -57,16 +57,16 @@ if($category_det['category_name']!='Say thank you'){
 		<div class="listing_sub_cat1">
 			<span class="title_filter">Categories</span>
 
-			<select class="selectpicker" style="display: none;" id="main-category">
-				<option data-icon="venues-category" <?php  if($slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
-				<option data-icon="invitation-category" <?php  if($slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
-				<option data-icon="food-category" name="category" value="food-beverage" <?php  if($slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
-				<option data-icon="decor-category" name="category" value="decor" <?php  if($slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
-				<option data-icon="supply-category" value="supplies" <?php  if($slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
-				<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
-				<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
-				<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
-				<option data-icon="saythankyou-category" <?php  if($slug == 'gift-favors') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>">Gift Favors</option>
+				<select class="selectpicker" style="display: none;" id="main-category">
+			<option data-icon="venues-category" value="venues" <?php  if($category_id == Category::VENUES) { ?> selected="selected" <?php } ?> name="category" >Venues</option>
+			<option data-icon="invitation-category" value="invitations" <?php  if($category_id == Category::INVITATIONS) { ?> selected="selected"<?php } ?> name="category">Invitations</option>
+			<option data-icon="food-category" name="category" value="food-beverage" <?php  if($category_id == Category::FOOD_BEVERAGES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
+			<option data-icon="decor-category" name="category" value="decor" <?php  if($category_id ==  Category::DECOR) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
+			<option data-icon="supply-category" value="supplies" <?php  if($category_id ==  Category::SUPPLIES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
+			<option data-icon="enter-category" value="entertainment" <?php  if($category_id ==  Category::ENTERTAINMENT) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
+			<option data-icon="service-category" value="services" <?php  if($category_id ==  Category::SERVICES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
+			<option data-icon="others-category" <?php  if($category_id ==  Category::OTHERS) { ?> selected="selected" <?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
+			<option data-icon="saythankyou-category" <?php  if($category_id == Category::GIFT_FAVORS) { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>">Gift Favor</option>
 			</select>
 		</div>
 	</div>

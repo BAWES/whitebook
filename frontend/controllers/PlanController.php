@@ -59,7 +59,7 @@ class PlanController extends BaseController
         /* END CATEGORY EXIST OR NOT*/
 
         /* BEGIN GET VENDORS */
-        $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
+        $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);        
 
         if (!is_null($model1)) {
 
@@ -139,12 +139,12 @@ class PlanController extends BaseController
         /* END GET VENDORS */
         if (Yii::$app->user->isGuest) {
             return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug]);
+            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug,'category_id'=>$model1['category_id']]);
         } else {
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
                 return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-                'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list]);
+                'themes' => $themes, 'vendor' => $vendor, 'category_id'=>$model1['category_id'],'slug' => $slug, 'customer_events_list' => $customer_events_list]);
             }
         }
 

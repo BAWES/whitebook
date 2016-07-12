@@ -784,12 +784,12 @@ class SiteController extends BaseController
             }
         if (Yii::$app->user->isGuest) {
             return $this->render('themesearch', ['model' => $model, 'imageData' => $imageData,
-            'vendor' => $vendor, 'slug' => $slug,'category_slug'=>$category_slug]);
+            'vendor' => $vendor, 'slug' => $slug,'category_slug'=>$category_slug,'category_id'=>$category_id]);
         } else {
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
                 return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-                'vendor' => $vendor, 'slug' => $slug, 'category_slug'=>$category_slug, 'customer_events_list' => $customer_events_list]);
+                'vendor' => $vendor, 'slug' => $slug, 'category_slug'=>$category_slug, 'customer_events_list' => $customer_events_list,'category_id'=>$category_id]);
             } 
        }
     }
