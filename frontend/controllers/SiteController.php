@@ -20,6 +20,7 @@ use frontend\models\Users;
 use yii\web\Session;
 use yii\db\Query;
 use common\models\Smtp;
+use frontend\models\Contacts;
 
 class SiteController extends BaseController
 {
@@ -418,20 +419,15 @@ class SiteController extends BaseController
         if (Yii::$app->request->isAjax) {
             $date = date('Y/m/d');
             $data = Yii::$app->request->post();
-            $model = \admin\models\Contacts();
+
+            $subject = 'Enquiry from user';
+
+            $model = new Contacts();
             $model->contact_name=$data['username'];
             $model->contact_email=$data['useremail'];
             $model->created_datetime=$date;
-            $model->message=$data['msg'];
-            $model->save();
-            $db = Yii::$app->db;// or Category::getDb()
-            $result = $db->cache(function ($db) use ($id) {
-              return Siteinfo::find()->all();
-            }, CACHE_TIMEOUT);
-
-            foreach ($model as $key => $val) {
-                $mail_id = $val['email_id'];
-            }
+            $model->message = $data['msg'];
+            $model->subject = $subject;
 
             $body = '<table>
             <tbody>
@@ -450,7 +446,7 @@ class SiteController extends BaseController
             </tbody>
             </table>';
 
-            if (count($model) == 1) {
+            if ($model->save()) {
                 Yii::$app->mailer->compose([
                         "html" => "customer/contact-inquiry"
                             ],[
@@ -458,18 +454,20 @@ class SiteController extends BaseController
                         "user" => $data['username']
                     ])
                     ->setFrom(Yii::$app->params['supportEmail'])
-                    ->setTo($form['admin_email'])
-                    ->setSubject('Enquiry from user')
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setSubject($subject)
                     ->send();
-            }
-            if ($k) {
+
                 echo '1';
                 die;
+
             } else {
+
                 echo '0';
                 die;
             }
         }
+
         return $this->render('contact', ['faq' => $faq_details]);
     }
 
