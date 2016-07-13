@@ -476,7 +476,7 @@ jQuery("#register").click(function()
             type:"post",
             data:"customer_name="+fname+"&customer_last_name="+lname+"&customer_email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&customer_gender="+gender+"&customer_mobile="+phone+"&customer_password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
             success:function(data)
-            {
+            {    
                 if(data==0)
                 {
                     jQuery('#myModal1').modal('hide');
@@ -490,7 +490,10 @@ jQuery("#register").click(function()
                 else if(data==1)
                 {
                     jQuery('#myModal1').modal('hide');
-                    window.setTimeout(function(){location.reload()})
+                    
+                    window.setTimeout(function(){
+                        location.reload()
+                    });
                 }
             }
         });

@@ -366,7 +366,7 @@ section#inner_page_detials { margin: 110px 0 0; display: inline-block;min-height
 .logo_header.col-xs-10.text-center { width: 92%;}
 
 
-#label1 label{margin:18px 0px; background: rgba(0, 0, 0, 0) url("../images/search_icon.svg") no-repeat center center;}
+#label1 label{margin:6px 0px; background: rgba(0, 0, 0, 0) url("../images/search_icon.svg") no-repeat center center;}
 .logout_part li{width:100%;border-bottom: 1px solid #eeeeee; padding: 6px 20px;text-align:left;}
 .logout_part li a{ font-size: 13px; padding: 12px 0;color:#000;text-transform:uppercase;text-align:left;}
 .navbar-nav{margin:0;}

@@ -97,25 +97,29 @@ class UsersController extends BaseController
                 //Send Email to user
                 $send_user = Yii::$app->mailer->compose
                 (["html"=>"customer/welcome"],
-                 ["message"=>$message,"user"=>$model->customer_name])
+                 ["message"=>$message, "user"=>$model->customer_name])
                 ->setFrom(Yii::$app->params['supportEmail'])
                 ->setTo($model['customer_email'])
                 ->setSubject('TheWhiteBook registration successfull')
                 ->send();
-             //Send Email to admin
+
+                //Send Email to admin
                 $message_admin = $model->customer_name.' registered in TheWhiteBook';
-                $send_admin = Yii::$app->mailer->compose
-                (["html"=>"customer/user-register"],
-                 ["message"=>$message_admin])
+                
+                $send_admin = Yii::$app->mailer->compose(
+                    ["html" => "customer/user-register"],
+                    ["message" => $message_admin]
+                );
+
+                $send_admin
                 ->setFrom(Yii::$app->params['supportEmail'])
                 ->setTo(Yii::$app->params['adminEmail'])
                 ->setSubject('User registered')
                 ->send();
-                $this->redirect(Url::to('site/index'));
+
                 return Users::SUCCESS;
             } else {
                 return Users::FAILURE;
-                $this->redirect(Url::to('site/index'));
             }
         }
 

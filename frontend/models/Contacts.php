@@ -56,5 +56,4 @@ class Contacts extends \yii\db\ActiveRecord
             'message' => 'Message',
         ];
     }
-
 }
