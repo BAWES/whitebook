@@ -61,7 +61,7 @@ $action = Yii::$app->controller->action->id;
                     <a href="<?= Url::toRoute(['/users/events','slug'=>'events' ]); ?>" title="THEWHITEBOOK">
                         <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
                     </a>
-<?php } ?>
+                <?php } ?>
             </div>
 
             <div class="desktop-menu">
@@ -178,7 +178,7 @@ $action = Yii::$app->controller->action->id;
 } ?>">
                         <?php if (!Yii::$app->user->isGuest) { ?>
                         <div class="user_name_cont">
-                            <p><?= 'Hi ' . Yii::$app->user->identity->customer_name . ','; ?></p>
+                            <p>Hi, <?= Yii::$app->user->identity->customer_name; ?>!</p>
                         </div>
                         <?php } ?>
                     <ul class="logout_part">
