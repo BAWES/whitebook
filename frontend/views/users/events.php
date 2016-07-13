@@ -357,9 +357,10 @@ foreach($customer_wishlist as $f) {  ?>
 	{
 		if(val!='')
 		{
-		window.location="<?php echo Yii::$app->homeUrl;?>/events.html?type="+val;
+			window.location="<?php echo Yii::$app->homeUrl;?>/events.html?type="+val;
 		}
 	}
+
 	/* BEGIN load vendor based on category */
 	jQuery('#loadvendor').change(function()
 	{
@@ -379,8 +380,8 @@ foreach($customer_wishlist as $f) {  ?>
 		});
 	});
 	/* END load vendor based on category */
-	/* BEGIN load themes based on category */
 
+	/* BEGIN load themes based on category */
 	jQuery('#customer_event_type').change(function()
 	{
 		if(jQuery(this).val()!=''){
@@ -403,6 +404,7 @@ foreach($customer_wishlist as $f) {  ?>
 		}
 	});
 	/* END load themes based on category */
+	
 	/* BEGIN load themes based on category */
 	function clearfiltering()
 	{
@@ -428,7 +430,7 @@ foreach($customer_wishlist as $f) {  ?>
 				data:{event_id:x},
 				success:function(data)
 				{
-					jQuery("#oner").load("<?= Url::toRoute('/product/event-slider'); ?>");
+					jQuery("#oner").load("<?= Url::toRoute('product/event_slider'); ?>");
 					jQuery('a#'+x).parent('li').remove();
 					jQuery("#loader1").hide();
 					jQuery("#loader1").hide();

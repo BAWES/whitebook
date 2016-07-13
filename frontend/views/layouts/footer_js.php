@@ -29,7 +29,7 @@ $this->registerJs("
     var search_result_url = '".Url::toRoute('/search-result/')."/';
     var home_url = '".Yii::$app->homeUrl."';
     var site_search = '".Url::toRoute('/site/search')."';             
-    var event_slider_url = '".Url::toRoute('/product/event-slider')."';
+    var event_slider_url = '".Url::toRoute('/product/event_slider')."';
     var item_removed_fav = '".Yii::t('frontend','Item remove from your favourite list')."';
     var remove_from_wishlist = '".Url::toRoute('/users/remove_from_wishlist')."';
     var item_add_to_wishlist_failed = '".Yii::t('frontend','Item add to your event list is failed')."';

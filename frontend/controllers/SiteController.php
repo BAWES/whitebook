@@ -412,8 +412,9 @@ class SiteController extends BaseController
 
     public function actionContact()
     {
-        $faq = new Faq();
-        $faq_details = $faq->faq_details();
+        $faq_details = Faq::find()
+            ->where(['faq_status' => 'Active', 'trash' => 'Default'])->all();
+
         if (Yii::$app->request->isAjax) {
             $date = date('Y/m/d');
             $data = Yii::$app->request->post();
