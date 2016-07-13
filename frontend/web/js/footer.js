@@ -5,7 +5,20 @@ function validateEmail(email) {
     return re.test(email);
 }
 
+jQuery(window).resize(function(){
+
+    //make dropdown box fullwidth 
+    jQuery('.mega-dropdown-menu').css('width', jQuery(window).width());
+
+    //set left position for dropdown ment 
+    $left = jQuery('.nav.navbar-nav').offset().left;
+    jQuery('.mega-dropdown-menu').css('left', '-' + $left + 'px');
+});
+
 jQuery(document).ready(function () {
+
+    jQuery(window).trigger('resize');
+
     jQuery('#phone,#reg_email').bind("paste",function(e) {
         e.preventDefault();
     });

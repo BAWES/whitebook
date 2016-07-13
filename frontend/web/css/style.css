@@ -1300,3 +1300,8 @@ a.boxclose{
     margin-right:-10px;
     cursor:pointer;
 }
+
+.search_header form#search{
+	position: relative;
+	z-index: 9999;
+}
