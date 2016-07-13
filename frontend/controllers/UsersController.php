@@ -311,11 +311,11 @@ class UsersController extends BaseController
                     			$event_item_modal->created_datetime=$event_date;
                     			$event_item_modal->modified_datetime=$event_date;
                     			$event_item_modal->save();
-                       
+
                        return Eventitemlink::EVENT_ITEM_CREATED;
                    }
                 }
-                
+
                 return Events::EVENT_CREATED;
             }
         }
@@ -647,7 +647,7 @@ class UsersController extends BaseController
         /* Load level 1 category */
         $cat_exist = \frontend\models\Category::find()
         ->where(['category_level' =>0,'category_allow_sale' =>'Yes','trash' =>'Default','category_level' =>'0'])
-        ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Say thank you")'))
+        ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
         ->asArray()->all();
         return $this->render('event_detail', [
                 'slug' => $slug,
@@ -685,8 +685,8 @@ class UsersController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            
-            //check if login customer's link             
+
+            //check if login customer's link
             $sub_query = (new Query())
                 ->select('event_id')
                 ->from('whitebook_events')
@@ -698,7 +698,7 @@ class UsersController extends BaseController
                     ['in', 'event_id', $sub_query]
                 ]
             );
-            
+
             if ($command) {
             				$cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
             				->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
@@ -711,5 +711,4 @@ class UsersController extends BaseController
             }
         }
     }
-
 }
