@@ -64,7 +64,7 @@ return [
             'admin/config/main-local.php',
         ],
     ],
-    'Development Server' => [
+    'Dev-Server' => [
         'path' => 'dev-server',
         'setWritable' => [
             'backend/runtime',
