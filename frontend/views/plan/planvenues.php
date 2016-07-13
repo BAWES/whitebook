@@ -22,12 +22,7 @@ use yii\widgets\Breadcrumbs;
 <?php
 $category_det=Category::category_value($slug);
 
-if($category_det['category_name']!='Say thank you'){
-	$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $slug])];
-}else{
-	$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Url::to(["plan/plan", 'slug' => $slug]) ];
-}
-
+$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $slug])];
 ?>
 
 <?= Breadcrumbs::widget([

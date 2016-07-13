@@ -23,11 +23,7 @@ use yii\widgets\Breadcrumbs;
 <?php
 
 $theme_name=Themes::getthemename($slug);
-if($theme_name['theme_name']!='Say thank you'){
-	$this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($theme_name['theme_name']), 'url' => Url::to(["site/themesearch", 'slug' => $slug])];
-}else{
-	$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Url::to(["site/themesearch", 'slug' => $slug]) ];
-}
+$this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($theme_name['theme_name']), 'url' => Url::to(["site/themesearch", 'slug' => $slug])];
 ?>
 
 <?= Breadcrumbs::widget([
