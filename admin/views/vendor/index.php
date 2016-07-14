@@ -55,15 +55,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn',
              'header'=>'Action',
              'template' => '{update} {delete}{view}{link}',
-            'buttons' => [            
-            'link' => function ($url, $model) {
-                $url = Url::to(['/vendor/vendoritemview?id='.$model->id]); 
+             'buttons' => [            
+             'link' => function ($url, $model) {
+
+                $url = Url::to(['vendoritem/index', 'VendoritemSearch[vendor_name]' => $model->vendor_name]); 
+
                  return  Html::a('<span class="fa fa-bars"></span>', $url, [
                             'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
                 ]);
             },            
             ],
-             ],
+            ],
         ],
     ]); ?>
      <?php Pjax::end(); ?>
