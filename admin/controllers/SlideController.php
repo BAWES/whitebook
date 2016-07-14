@@ -115,7 +115,7 @@ class SlideController extends Controller
     {
         $access = Authitem::AuthitemCheck('1', '1');
         if (yii::$app->user->can($access)) {
-            $model = new \admin\models\Slide();
+            $model = new Slide();
             $model->scenario = "create";
 
             if ($model->load(Yii::$app->request->post())) {
@@ -130,6 +130,7 @@ class SlideController extends Controller
 				->asarray()
 				->all();
                 $model->sort = ($max_sort[0]['sort'] + 1);
+                
                 //Get Uploaded Instances
                 $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
                 $model->slide_image = UploadedFile::getInstance($model, 'slide_image');

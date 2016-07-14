@@ -48,7 +48,7 @@ class Slide extends \common\models\Slide {
         return $scenarios;
     }
 
-      public function behaviors()
+    public function behaviors()
     {
         return parent::behaviors();
     }
