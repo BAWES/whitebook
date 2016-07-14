@@ -76,10 +76,10 @@ class CustomerController extends Controller
             $count = $dataProvider->getTotalCount();
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'count' => $count,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'count' => $count,
+            ]);
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
@@ -96,7 +96,8 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
-		$command=Customer::updateAll(['message_status' => 0],'customer_id= '.$id);
+		    $command=Customer::updateAll(['message_status' => 0],'customer_id= '.$id);
+
         $model1 = CustomerAddress::find()
         ->where('customer_id = :customer_id', [':customer_id' => $id])->one();
 
@@ -120,13 +121,17 @@ class CustomerController extends Controller
             $model1 = new CustomerAddress();
             
             if ($model->load(Yii::$app->request->post()) && $model1->load(Yii::$app->request->post()) && Model::validateMultiple([$model, $model1])) {
+                
                 $model->customer_dateofbirth=Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
+
                 $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
+
                 if ($model->save(false)) {
                     $model1->customer_id = $model->customer_id; // no need for validation rule on user_id as you set it yourself
                     $model1->save();
                     Yii::info('[Customer Created] Admin created customer '.$model->customer_name, __METHOD__);
                 }
+
                 echo Yii::$app->session->setFlash('success', 'Customer detail added successfully!');
 
                 return $this->redirect(['index']);
@@ -136,8 +141,11 @@ class CustomerController extends Controller
                 $country = Country::loadcountry();
 
                 return $this->render('create', [
-                'model' => $model, 'model1' => $model1, 'addresstype' => $addresstype, 'country' => $country,
-            ]);
+                    'model' => $model, 
+                    'model1' => $model1, 
+                    'addresstype' => $addresstype, 
+                    'country' => $country,
+                ]);
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -157,30 +165,53 @@ class CustomerController extends Controller
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '26');
+
         if (yii::$app->user->can($access)) {
+
             $model = $this->findModel($id);
             $model->scenario = 'createAdmin';
            
-            $model1 = CustomerAddress::find()
-            ->where('customer_id = :customer_id', [':customer_id' => $id])->one();
+            $model1 = CustomerAddress::findOne(['customer_id' => $id]);
+
+            //if customer address not found 
+            if(!$model1) {
+              $model1 = new CustomerAddress();
+            }
+
             if ($model->load(Yii::$app->request->post()) && $model1->load(Yii::$app->request->post()) && Model::validateMultiple([$model, $model1])) {
+
                 $model->customer_dateofbirth = Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
+               
                 $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
+               
                 $model->save();
+
+                $model1->customer_id = $model->customer_id;
+
                 $model1->save();
+               
                 echo Yii::$app->session->setFlash('success', 'Customer detail updated successfully!');
+
                 Yii::info('[Customer Updated] Admin updated customer '.$model->customer_name.' information', __METHOD__);
 
                 return $this->redirect(['index']);
+
             } else {
                 $addresstype = Addresstype::loadAddresstype();
                 
                 $country = Country::loadcountry();
                 $city = City::loadcity();
                 $location = Location::loadlocation();
+                
                 return $this->render('update', [
-                'model' => $model, 'model1' => $model1, 'addresstype' => $addresstype, 'country' => $country, 'location' => $location, 'city' => $city,
-            ]);
+                  'model' => $model, 
+                  'model1' => $model1, 
+                  'addresstype' => $addresstype, 
+                  'country' => $country, 
+                  'location' => $location, 
+                  'city' => $city,
+                ]);
+
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
