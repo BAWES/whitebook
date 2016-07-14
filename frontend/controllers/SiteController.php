@@ -43,10 +43,13 @@ class SiteController extends BaseController
         $product_list = $featuremodel->get_featured_product_id();
         
         $banner = $website_model->get_banner_details();
+        
         $featured_product = array();
+        
         if (!Yii::$app->user->isGuest) {
             $featured_product = Vendoritem::get_featured_product();
         }
+        
         return $this->render('index', [
           'featured_product' => $featured_product,
           'banner' => $banner,
@@ -61,8 +64,15 @@ class SiteController extends BaseController
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();
-        $featured_product = $featuremodel->get_featured_product();
+        
         $banner = $website_model->get_banner_details();
+        
+        $featured_product = array();
+        
+        if (!Yii::$app->user->isGuest) {
+            $featured_product = Vendoritem::get_featured_product();
+        }
+
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
         $customer_events = array();
@@ -72,13 +82,13 @@ class SiteController extends BaseController
         }
 
         return $this->render('index', [
-          'featured_product' => $featured_product,
-          'banner' => $banner,
-          'event_type' => $event_type,
-          'ads' => $ads,
-          'customer_events' => $customer_events,
-          'key' => '1',
-    ]);
+              'featured_product' => $featured_product,
+              'banner' => $banner,
+              'event_type' => $event_type,
+              'ads' => $ads,
+              'customer_events' => $customer_events,
+              'key' => '1',
+        ]);
     }
 
     public function actionDirectory()
