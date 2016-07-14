@@ -95,18 +95,21 @@ class UsersController extends BaseController
                 $username = $model['customer_name'];
                 Yii::$app->session->set('register', '1');
                 $message = 'Thank you for registration with us.</br><a href='.Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true).' title="Click Here">Click here </a> to activate your account.';
+
                 //Send Email to user
-                $send_user = Yii::$app->mailer->compose
-                (["html"=>"customer/welcome"],
-                 ["message"=>$message, "user"=>$model->customer_name])
+                Yii::$app->mailer->compose("customer/welcome",
+                 [
+                     "message" => $message,
+                     "user" => $model->customer_name
+                 ])
                 ->setFrom(Yii::$app->params['supportEmail'])
                 ->setTo($model['customer_email'])
-                ->setSubject('TheWhiteBook registration successfull')
+                ->setSubject('Welcome to The White Book')
                 ->send();
 
                 //Send Email to admin
                 $message_admin = $model->customer_name.' registered in TheWhiteBook';
-                
+
                 $send_admin = Yii::$app->mailer->compose(
                     ["html" => "customer/user-register"],
                     ["message" => $message_admin]
@@ -696,10 +699,10 @@ class UsersController extends BaseController
                 ->select('event_id')
                 ->from('whitebook_events')
                 ->where(['customer_id' => Yii::$app->user->identity->customer_id])->one();
-    
+
                 $command = Eventitemlink::deleteAll(['link_id' => $data['item_link_id'],
                     'event_id'=> $sub_query['event_id']]);
-            
+
             if ($command) {
             				$cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
             				->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
