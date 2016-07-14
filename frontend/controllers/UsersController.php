@@ -24,6 +24,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use common\models\Events;
 use frontend\models\Users;
+use yii\db\Query;
 
 
 
@@ -694,15 +695,11 @@ class UsersController extends BaseController
             $sub_query = (new Query())
                 ->select('event_id')
                 ->from('whitebook_events')
-                ->where(['customer_id' => Yii::$app->user->identity->customer_id]);
-
-            $command = Eventitemlink::deleteAll(
-                [
-                    'link_id' => $data['item_link_id'],
-                    ['in', 'event_id', $sub_query]
-                ]
-            );
-
+                ->where(['customer_id' => Yii::$app->user->identity->customer_id])->one();
+    
+                $command = Eventitemlink::deleteAll(['link_id' => $data['item_link_id'],
+                    'event_id'=> $sub_query['event_id']]);
+            
             if ($command) {
             				$cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
             				->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
