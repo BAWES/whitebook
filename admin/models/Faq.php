@@ -21,6 +21,7 @@ class Faq extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
+    
     /**
      * @inheritdoc
      */

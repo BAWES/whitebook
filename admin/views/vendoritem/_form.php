@@ -109,7 +109,7 @@ $vendor_name = Vendor::getvendorname($_GET['vid']); ?>
 
 <div class="form-group">
 	<?= $form->field($model, 'item_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
-	->label('Item_description'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?>
+	->label('Item description'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?>
 </div>
 
 <div class="form-group">
