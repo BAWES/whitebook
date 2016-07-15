@@ -269,6 +269,12 @@ if(empty($guideimagedata)) {
 	$guideimagedata = '';
 }
 
+if($imagedata) {
+	$have_image_data = 1;
+} else {
+	$have_image_data = 0;
+}
+
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
@@ -297,7 +303,7 @@ $this->registerJs("
 	var item_name_check_url = '".Url::to(['/vendoritem/itemnamecheck'])."';
 	var image_order_url = '".Url::to(['/site/imageorder'])."';
 	
-	var imagedata = '".$imagedata."';
+	var imagedata = '".$have_image_data."';
 	var img = '".$img."';
 	var action = '".$action."';
 

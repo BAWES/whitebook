@@ -51,12 +51,13 @@ $this->registerJs(
 
     <?php ActiveForm::end(); ?>
 </div>
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/ckeditor/ckeditor.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<script type="text/javascript">
-$(function()
-{
-	CKEDITOR.replace('text-editor');
-});
-</script>
+
+<?php 
+
+$this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJs("
+	$(function() {
+		CKEDITOR.replace('text-editor');
+	});
+");
