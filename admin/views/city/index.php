@@ -49,22 +49,26 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 </div>
 
-<script type="text/javascript">
+<?php 
+
+$this->registerJs("
 	function change(status, cid)
 	{				
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/city/block']); ?> ";
+		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');		
+        var path = '".Url::to(['/city/block'])."';
+        
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, cid: cid, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-			$('#image-'+cid).attr('src',data);
-			$('#image-'+cid).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+cid+"')");
-         }
+	        type: 'POST',      
+	        url: path, //url to be called
+	        data: { status: status, cid: cid, _csrf : csrfToken}, //data to be send
+	        success: function(data) {
+				var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+				$('#image-'+cid).attr('src',data);
+				$('#image-'+cid).parent('a').attr('onclick', 
+				\"change('\" + status1 + \"', '\" + cid + \"')\");
+	        }
         });
-     }
-	 
-</script>
+    }
+");
+
+	
