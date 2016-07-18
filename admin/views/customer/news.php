@@ -16,84 +16,84 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="customer-create">
 
 <div class="customer-form">
-<div class="col-md-8 col-sm-8 col-xs-8">
-    <?php $form = ActiveForm::begin();?>
-    <?php //print_r ($customer_email);die; ?>
-    <div class="form-group">
-	<?= $form->field($model, 'newsmail',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->dropDownList($customer_email, ['id'=>'customer_email','multiple'=>true,'placeholder'=>'Select user']) ?>
+    <div class="col-md-8 col-sm-8 col-xs-8">
+        
+        <?php $form = ActiveForm::begin();?>
+        
+        <div class="form-group">
+        	<?= $form->field($model, 'newsmail',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+        	])->dropDownList($customer_email, ['id'=>'customer_email','multiple'=>true,'placeholder'=>'Select user']) ?>
+        </div>
+
+        <div class="form-group">
+        	<?= $form->field($model, 'content',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
+        </div>
+
+        <div class="form-group">
+            <?= Html::submitButton($model->isNewRecord ? 'Send' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <?= Html::a('Back', ['index', ], ['class' => 'btn btn-defauult']) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
     </div>
-
-
-<div class="form-group">
-	<?= $form->field($model, 'content',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-</div>
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Send' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?= Html::a('Back', ['index', ], ['class' => 'btn btn-defauult']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>
 
-</div>
+<?php 
 
-<script type="text/javascript">
-$(function (){
-    $("#customeraddress-country_id").change(function (){
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var country_id = $('#customeraddress-country_id').val();
-        var path = "<?php echo Url::to(['/location/city']); ?> ";
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { country_id: country_id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {
-             $('#customeraddress-city_id').html(data);
-         }
-        })
+$this->registerJs("
+    $(function (){
+        $('#customeraddress-country_id').change(function (){
+            var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+            var country_id = $('#customeraddress-country_id').val();
+            var path = '".Url::to(['/location/city'])."';
+            
+            $.ajax({
+                type: 'POST',
+                url: path, //url to be called
+                data: { country_id: country_id ,_csrf : csrfToken}, //data to be send
+                success: function( data ) {
+                     $('#customeraddress-city_id').html(data);
+                }
+            });
+        });
+        
+        $('#customeraddress-city_id').change(function (){
+            var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+            var city_id = $('#customeraddress-city_id').val();
+            var path = '".Url::to(['/location/area'])."';
+            
+            $.ajax({
+                type: 'POST',
+                url: path, //url to be called
+                data: { city_id: city_id ,_csrf : csrfToken}, //data to be send
+                success: function( data ) {
+                     $('#customeraddress-area_id').html(data);
+                }
+            });
+         });
      });
- });
-</script>
+");
 
-<script type="text/javascript">
-$(function (){
-    $("#customeraddress-city_id").change(function (){
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var city_id = $('#customeraddress-city_id').val();
-        var path = "<?php echo Url::to(['/location/area']); ?> ";
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { city_id: city_id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {
-             $('#customeraddress-area_id').html(data);
-         }
-        })
+$this->registerCssFile("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css");
 
-     });
- });
-</script>
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.min.js") ?>" type="text/javascript"></script>
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
-<script src="<?= Url::to("@web/themes/default/plugins/ckeditor/ckeditor.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<script>
+$this->registerCssFile("@web/themes/default/plugins/bootstrap-select2/select2.css");
 
-$("#customer_email").select2({
-    placeholder: "Select category.."
-});
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-select2/select2.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$('#customer-customer_dateofbirth').datepicker({  format: 'dd-mm-yyyy',});
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$(function()
-{
-	CKEDITOR.replace('Customer[content]');
-});
-</script>
+$this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJs("
+    $('#customer_email').select2({
+        placeholder: 'Select category..'
+    });
+
+    $('#customer-customer_dateofbirth').datepicker({  format: 'dd-mm-yyyy',});
+
+    $(function()
+    {
+        CKEDITOR.replace('Customer[content]');
+    });
+");

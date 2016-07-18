@@ -98,8 +98,12 @@ use yii\helpers\Url;
     </p>
 </div>
 
-<script type="text/javascript">
+<?php 
+
+$this->registerJs("
     $(function () {
         $('button.close').html('');
     });
-</script>
+");
+    
+

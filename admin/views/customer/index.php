@@ -59,24 +59,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
+<?php 
 
-
-
-<script type="text/javascript">
-	function change(status, id)
-	{		
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/customer/block']); ?> ";
+$this->registerJs("
+    function change(status, id)
+    {       
+        var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');       
+        var path = '".Url::to(['/customer/block'])."';
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-			$('#image-'+id).attr('src',data);
-			$('#image-'+id).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+id+"')");
-         }
+            type: 'POST',      
+            url: path, //url to be called
+            data: { status: status, id: id, _csrf : csrfToken}, //data to be send
+            success: function(data) {
+                var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+                $('#image-'+id).attr('src',data);
+                $('#image-'+id).parent('a').attr('onclick', 
+                \"change('\"+status1+\"', '\"+id+\"')\");
+            }
         });
-     }
-</script>
+    }
+");
