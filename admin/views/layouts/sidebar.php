@@ -185,10 +185,15 @@
 	</div>
 	<!-- BEGIN SCROLL UP HOVER -->
 	<a href="#" class="scrollup">Scroll</a>
-	<script>
-	$(document).ready(function () {
-        $(".nav li").removeClass("active");//this will remove the active class from
-   //previously active menu item
-        $('.open').addClass('active');
-    });
-	</script>
+
+	<?php 
+
+	$this->registerJs("
+		$(document).ready(function () {
+	        $('.nav li').removeClass('active');//this will remove the active class from
+	   		//previously active menu item
+	        $('.open').addClass('active');
+	    });
+	");
+	
+	

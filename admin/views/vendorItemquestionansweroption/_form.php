@@ -49,11 +49,16 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
-<script>
-$(function(){
-$('#vendoritemquestionansweroption-answer_background_color').colorpicker();
-});
-</script>
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js") ?>" type="text/javascript"></script>
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css") ?>" rel="stylesheet" type="text/css" />
-<link href="<?= Url::to("@web/themes/default/plugins/boostrap-clockpicker/bootstrap-clockpicker.min.css") ?>" rel="stylesheet" type="text/css" />
+
+<?php 
+
+$this->registerJs("
+	$(function(){
+		$('#vendoritemquestionansweroption-answer_background_color').colorpicker();
+	});
+");
+
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerCssFile("@web/themes/default/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css");
+$this->registerCssFile("@web/themes/default/plugins/boostrap-clockpicker/bootstrap-clockpicker.min.css");

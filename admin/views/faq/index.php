@@ -58,22 +58,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
+<?php 
 
-
-<script type="text/javascript">
+$this->registerJS("
 	function change(status, id)
 	{		
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/faq/block']); ?> ";
+		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');		
+        var path = '".Url::to(['/faq/block'])."';
+        
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
-        success: function(data) {
+	        type: 'POST',      
+	        url: path, //url to be called
+	        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
+	        success: function(data) {
       			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
       			$('#image-'+id).attr('src',data);
       			$('#image-'+id).parent('a').attr('onclick', 
-      			"change('"+status1+"', '"+id+"')");
+      			\"change('\"+status1+\"', '\"+id+\"')\");
            }
         });
      }
@@ -81,19 +82,20 @@ $this->params['breadcrumbs'][] = $this->title;
 	 function change_sort_order(sort_val,faq_id)
      {
 		 var exist_sort=$('#hidden_'+faq_id).val();
+
 		 if(sort_val!=exist_sort || exist_sort==0)
 		 {
 			if(sort_val<=0 && sort_val!='')
 			{
 				$('#hidden_'+faq_id).next(':input').val(exist_sort);
-				alert("Please enter greater than 0!");
+				alert('Please enter greater than 0!');
 				return false;
 			}
 			
 			if(isNumeric(sort_val))
 			{
-				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/faq/sort_faq']); ?> ";
+				var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');		
+				var path = '".Url::to(['/faq/sort_faq'])."';
 				$.ajax({  
 				type: 'POST',      
 				url: path, //url to be called
@@ -110,14 +112,17 @@ $this->params['breadcrumbs'][] = $this->title;
 			{
 				if(sort_val!='')
 				{
-					alert("Enter only integer values!");
+					alert('Enter only integer values!');
 					return false;
 				}
 			}
 		}
-	 }
-	 function isNumeric(n)
+	}
+	
+	function isNumeric(n)
 	{
 		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
-</script>
+");
+
+	
