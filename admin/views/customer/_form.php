@@ -15,11 +15,6 @@ use yii\web\View;
 
     $form = ActiveForm::begin();
 
-    if($model->isNewRecord){
-        $city = array(); 
-        $location = array();
-    } 
-
     ?>
 
     <div class="form-group">
@@ -54,19 +49,6 @@ use yii\web\View;
 
     <div class="form-group">
     	<?= $form->field($model, 'customer_mobile',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-    </div>
-
-    <?= $form->field($model1, 'address_type_id')->dropDownList($addresstype, ['prompt'=>'Select...']); ?>
-
-    <?= $form->field($model1, 'country_id')->dropDownList($country, ['prompt'=>'Select...']); ?>
-
-	<?= $form->field($model1, 'city_id')->dropDownList($city, ['prompt'=>'Select...']); ?>
-
-    <?= $form->field($model1, 'area_id')->dropDownList($location, ['prompt'=>'Select...']); ?>
-
-    <div class="form-group">
-    	<?= $form->field($model1, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
-    	])->textArea(['rows' => 6]) ?>
     </div>
 
     <div class="form-group">
