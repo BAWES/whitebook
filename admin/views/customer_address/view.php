@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\CustomerAddress */
+/* @var $model app\models\CustomerAddress */
 
 $this->title = $model->address_id;
 $this->params['breadcrumbs'][] = ['label' => 'Customer Addresses', 'url' => ['index']];
@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'country_id',
             'city_id',
             'area_id',
+            'address_data:ntext',
             'address_archived',
             'created_by',
             'modified_by',

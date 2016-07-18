@@ -50,7 +50,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
             [['country_id', 'city_id'], 'required'],
             [['customer_id', 'address_type_id', 'country_id', 'city_id', 'area_id', 'created_by', 'modified_by'], 'integer'],
             [['address_archived', 'trash'], 'string'],
-            [['created_datetime', 'modified_datetime'], 'safe']
+            [['customer', 'created_datetime', 'modified_datetime'], 'safe']
         ];
     }
 
@@ -94,46 +94,53 @@ class CustomerAddress extends \yii\db\ActiveRecord
     /**
     * @return \yii\db\ActiveQuery
     */
-    /*    public function getAddressType()
+    public function getAddressType()
     {
-    return $this->hasOne(AddressType::className(), ['type_id' => 'address_type_id']);
-}*/
+        return $this->hasOne(AddressType::className(), ['type_id' => 'address_type_id']);
+    }
 
-/**
-* @return \yii\db\ActiveQuery
-*/
-public function getCustomerAddressResponses()
-{
-    return $this->hasMany(CustomerAddressResponse::className(), ['address_id' => 'address_id']);
-}
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(City::className(), ['city_id' => 'city_id']);
+    }
 
-/**
-* @return \yii\db\ActiveQuery
-*/
-public function getSuborderItemPurchases()
-{
-    return $this->hasMany(SuborderItemPurchase::className(), ['address_id' => 'address_id']);
-}
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getCustomerAddressResponses()
+    {
+        return $this->hasMany(CustomerAddressResponse::className(), ['address_id' => 'address_id']);
+    }
 
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getSuborderItemPurchases()
+    {
+        return $this->hasMany(SuborderItemPurchase::className(), ['address_id' => 'address_id']);
+    }
 
-/*
-*
-*   To save created, modified user & date time
-*/
-public function behaviors()
-{
-    return [
-        [
-            'class' => BlameableBehavior::className(),
-            'createdByAttribute' => 'created_by',
-            'updatedByAttribute' => 'modified_by',
-        ],
-        [
-            'class' => TimestampBehavior::className(),
-            'createdAtAttribute' => 'created_datetime',
-            'updatedAtAttribute' => 'modified_datetime',
-            'value' => new Expression('NOW()'),
-        ],
-    ];
-}
+    /*
+    *
+    *   To save created, modified user & date time
+    */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
 }

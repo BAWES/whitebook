@@ -3,18 +3,18 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Authitem;
-use common\models\CustomerAddress;
-use common\models\SearchCustomerAddress;
+use admin\models\Authitem;
+use admin\models\CustomerAddress;
+use admin\models\CustomerAddressSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * CustomerAddressController implements the CRUD actions for CustomerAddress model.
+ * Customer_addressController implements the CRUD actions for CustomerAddress model.
  */
-class CustomerAddressController extends Controller
+class Customer_addressController extends Controller
 {
     public function init()
     {
@@ -61,14 +61,16 @@ class CustomerAddressController extends Controller
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('4', '30');
+
         if (yii::$app->user->can($access)) {
-            $searchModel = new SearchCustomerAddress();
+            $searchModel = new CustomerAddressSearch();
+            
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
