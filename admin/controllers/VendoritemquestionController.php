@@ -83,7 +83,7 @@ class VendoritemquestionController extends Controller
         $subcategory = Subcategory::loadsubcategoryname();
         $vendorname = Vendor::loadvendorname();
         $vendoritem = Vendoritem::loadvendoritem();
-        //var_dump($_POST);die;
+
         if ($model->load(Yii::$app->request->post())) {
             $model->item_id = implode(',', $model->item_id);
             $model->validate();

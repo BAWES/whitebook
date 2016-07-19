@@ -230,9 +230,13 @@ class SlideController extends Controller
 
     public function actionSort_slide()
     {
-        $sort = $_POST['sort_val'];
-        $slide_id = $_POST['slide_id'];
-        $command=Slide::updateAll(['sort' => $sort],['IN','slide_id',$slide_id]);
+        $request = Yii::$app->request;
+
+        $sort = $request->post('sort_val');
+        $slide_id = $request->post('slide_id');
+
+        $command = Slide::updateAll(['sort' => $sort], ['IN','slide_id',$slide_id]);
+        
         if ($command) {
             Yii::$app->session->setFlash('success', 'Slide sort order updated successfully!');
             echo 1;

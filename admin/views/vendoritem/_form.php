@@ -7,16 +7,16 @@ use admin\models\Vendor;
 use common\models\Vendoritemquestion;
 use dosamigos\fileupload\FileUploadUI;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Vendoritem */
-/* @var $form yii\widgets\ActiveForm */
+$request = Yii::$app->request;
+
 if($model->isNewRecord){
-$categoryname = array();
-$subcategory = array();
-$childcategory = array();
-$exist_themes =array();
-$exist_groups = array();
+	$categoryname = array();
+	$subcategory = array();
+	$childcategory = array();
+	$exist_themes =array();
+	$exist_groups = array();
 }
+
 ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -60,8 +60,8 @@ $exist_groups = array();
 <!-- Begin First Tab -->
 <div class="tab-pane" id="1" >
 <!-- vid - click create item button from item view page for the particular item view page-->
-<?php if(isset($_GET['vid'])) {
-$vendor_name = Vendor::getvendorname($_GET['vid']); ?>
+<?php if($request->get('vid')) {	
+$vendor_name = Vendor::getvendorname($request->get('vid')); ?>
 <div class="form-group"><?= $form->field($model, 'vendor_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
 {error}"])->dropDownList($vendor_name) ?></div>
 
@@ -712,7 +712,7 @@ input#price, input#image,{	margin: 10px 5px 10px 0px;    width: 45%;}
 .question_title{font-weight: bold;  margin-top: 15px;  line-height: 31px;  font-size: 15px;}
 .upimage {margin: 5px 0px 10px 0px;}
 </style>
-	<?php if(!$model->isNewRecord && isset($_GET['create']) !='') {?>
+	<?php if(!$model->isNewRecord && $request->get('create')) { ?>
     <script type="text/javascript">
     $(function (){
  	/* Begin when loading page last tab opened */
@@ -950,7 +950,7 @@ $("#validone1").click(function() {
 		var mail=$("#vendoritem-item_name").val();
         var path = "<?php echo Url::to(['/vendoritem/itemnamecheck']); ?> ";
         $('.loadingmessage').show();
-        var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] :  '0'; ?>;
+        var item_id = <?php echo $request->get('id') ? $request->get('id') :  '0'; ?>;
         $.ajax({
         type: 'POST',
         url: path, //url to be called
@@ -1446,7 +1446,7 @@ function deletequestionselection(selection_val)
 		var mail=$("#vendoritem-item_name").val();
         var path = "<?php echo Url::to(['/vendoritem/itemnamecheck']); ?> ";
         $('.loadingmessage').show();
-        var item_id = <?php echo isset($_GET['id']) ? $_GET['id'] : '0'; ?>;
+        var item_id = <?php echo $request->get('id') ? $request->get('id') : '0'; ?>;
         $.ajax({
         type: 'POST',
         url: path, //url to be called

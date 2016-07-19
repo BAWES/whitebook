@@ -140,10 +140,16 @@ class CategoryController extends Controller
 
     public function actionSort_sub_category()
     {
-        $sort = $_POST['sort_val'];
-        $cat_id = $_POST['cat_id'];
-        $p_cat_id = $_POST['p_cat_id'];
-        $category=Category::updateAll(['sort' => $sort],['category_id= '.$cat_id,'parent_category_id= '.$p_cat_id]);
+        $request = Yii::$app->request;
+
+        $sort = $request->post('sort_val');
+        $cat_id = $request->post('cat_id');
+        $p_cat_id = $request->post('p_cat_id');
+
+        $category = Category::updateAll(
+            ['sort' => $sort],
+            ['category_id= '.$cat_id,'parent_category_id= '.$p_cat_id]
+        );
 
         if ($category) {
             Yii::$app->session->setFlash('success', 'Category sort order updated successfully!');
@@ -157,9 +163,16 @@ class CategoryController extends Controller
 
     public function actionSort_category()
     {
-        $sort = $_POST['sort_val'];
-        $cat_id = $_POST['cat_id'];
-        $category=Category::updateAll(['sort' => $sort],['category_id= '.$cat_id]);
+        $request = Yii::$app->request;
+
+        $sort = $request->post('sort_val');
+        $cat_id = $request->post('cat_id');
+
+        $category = Category::updateAll(
+            ['sort' => $sort],
+            ['category_id= '.$cat_id]
+        );
+
         if ($category) {
             Yii::$app->session->setFlash('success', 'Category sort order updated successfully!');
             echo 1;
@@ -169,6 +182,7 @@ class CategoryController extends Controller
             exit;
         }
     }
+
     /**
      * Creates a new Category model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -178,34 +192,43 @@ class CategoryController extends Controller
     public function actionCreate()
     {
         $access = Authitem::AuthitemCheck('1', '3');
+        
         if (yii::$app->user->can($access)) {
+            
             $model = new Category();
             $model->scenario = 'register';
+            
             if($model->load(Yii::$app->request->post()))
             {
-            $model->validate();
-            $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
-            $model->category_name = strtolower($model->category_name);
-            $max_sort = Category::find()
-                ->select('MAX(category_id) as sort')
-    			->where(['trash' => 'Default'])
-    			->andWhere(['category_level' =>0])
-                ->asArray()
-    			->one();
+                $model->validate();
+                
+                $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
+
+                $model->category_name = strtolower($model->category_name);
+                
+                $max_sort = Category::find()
+                    ->select('MAX(category_id) as sort')
+        			->where(['trash' => 'Default'])
+        			->andWhere(['category_level' =>0])
+                    ->asArray()
+        			->one();
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
+                
                 $model->category_level = Category::FIRST_LEVEL;
                 $model->save(false);
-                echo Yii::$app->session->setFlash('success', 'Category created successfully!');
+                
+                Yii::$app->session->setFlash('success', 'Category created successfully!');
+                
                 Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
                 return $this->redirect(['index']);
             } else {
                 return $this->render('create', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

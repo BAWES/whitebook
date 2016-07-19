@@ -7,8 +7,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Vendor */
+$request = Yii::$app->request;
 
 $this->title = $model->vendor_name.' info ';
 $this->params['breadcrumbs'][] = ['label' => 'Vendors', 'url' => ['index']];
@@ -20,7 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="vendoritem-index">
     <?php if($model->vendor_status == 'Active'){ ?>
     <p>
-        <?= Html::a('Create vendor item', ['vendoritem/create?id='.$_GET['id']], ['class' => 'btn btn-success']) ?>       
+        <?= Html::a('Create vendor item', 
+                ['vendoritem/create?id='.$request->get('id')], 
+                ['class' => 'btn btn-success']
+            );
+        ?>       
     </p>
     <?php } ?>
     <?php Pjax::begin(['enablePushState' => false]); ?>
@@ -81,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => ' {update} {delete}{link}',
             'buttons' => [
             'update' => function ($url, $model) {
-                $url = Url::to('/vendoritem/update?id='.$model['item_id'].'&vid='.$_GET['id']); 
+                $url = Url::to('/vendoritem/update?id='.$model['item_id'].'&vid='.$request->get('id')); 
                  return  Html::a('<span class="fa fa-pencil "></span>', $url, [
                             'title' => Yii::t('app', 'Gallery'),
                 ]);

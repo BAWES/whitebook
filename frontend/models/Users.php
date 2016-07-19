@@ -116,23 +116,16 @@ class Users extends Model
     public function update_customer_profile($post, $customer_id)
     {
         $customer_dateofbirth = $post['byear'].'-'.$post['bmonth'].'-'.$post['bday'];
-        $customer = Customer::updateAll(['customer_name' => $post['first_name'],'customer_last_name' => $post['last_name'],'customer_gender' => $post['gender'],'customer_dateofbirth' => $customer_dateofbirth,'customer_mobile' => $post['mobile_number']],['customer_id'=>$customer_id]);
-        $address_count = CustomerAddress::find()->where(['customer_id'=>$customer_id])->count();
-        if($address_count == 0)
-        {
-           $command = new CustomerAddress();
-           $command->country_id = $post['country'];
-           $command->city_id = $post['city'];
-           //$command->address_data = $post['address_name'];
-           $command->city_id = $post['city'];
-           $command->customer_id = $customer_id;
-           return $command->save();
-        }
-        else
-        {
-            return $command = CustomerAddress::updateAll(['country_id' => $post['country'],'city_id' => $post['city']],['customer_id'=>$customer_id]);
-        }
 
+        return Customer::updateAll([
+                'customer_name' => $post['first_name'],
+                'customer_last_name' => $post['last_name'],
+                'customer_gender' => $post['gender'],
+                'customer_dateofbirth' => $customer_dateofbirth,
+                'customer_mobile' => $post['mobile_number']
+            ],[
+                'customer_id'=>$customer_id]
+            );
     }
 
 
