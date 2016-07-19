@@ -7,6 +7,9 @@ use common\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
+
+$get = $this->request->get();
+
 ?>
 
 <!-- coniner start -->
@@ -115,9 +118,9 @@ if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 
 foreach ($childcategory as $key => $value) {
 
-if(isset($_GET['category']) && $_GET['category'] !="")
+if(isset($get['category']) && $get['category'] !="")
 {
-$val = explode(' ',$_GET['category']);
+$val = explode(' ',$get['category']);
 
 if(in_array($value['slug'],$val))
 {
@@ -167,9 +170,9 @@ if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 ?>
 <ul class="<?= $class; ?>">
 <?php foreach ($themes as $key => $value) {
-if(isset($_GET['themes']) && $_GET['themes'] !="")
+if(isset($get['themes']) && $get['themes'] !="")
 {
-$val = explode(' ',$_GET['themes']);
+$val = explode(' ',$get['themes']);
 
 if(in_array($value['slug'],$val))
 {
@@ -216,10 +219,10 @@ if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 <ul class="<?= $class; ?>">
 <?php foreach ($vendor as $key => $value) {
 
-if(isset($_GET['vendor']) && $_GET['vendor'] !="")
+if(isset($get['vendor']) && $get['vendor'] !="")
 {
 
-$val = explode(' ',$_GET['vendor']);
+$val = explode(' ',$get['vendor']);
 
 if(in_array($value['slug'],$val))
 {
@@ -278,9 +281,9 @@ if($min_kd > 0 )
 {
 	foreach ($imageData as $key => $value) {
 	/* Check checkbox based on URL */
-	if(isset($_GET['price']) && $_GET['price'] !="")
+	if(isset($get['price']) && $get['price'] !="")
 	{
-	$val = explode(' ',$_GET['price']);
+	$val = explode(' ',$get['price']);
 
 	if(in_array($value['slug'],$val))
 	{
@@ -646,7 +649,7 @@ return this.value;
 var url_path;
 /* BEGIN GET SLUG FROM URL */
 var url = window.location.href;
-slug = <?= '"'.$_GET['slug'].'"';?>;
+slug = <?= '"'.$get['slug'].'"';?>;
 /* var newUrl = url.substring(0, url.indexOf('?'));
 
 if(newUrl !='')

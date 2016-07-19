@@ -163,11 +163,16 @@ class SiteController extends BaseController
     public function actionSearchdirectory()
     {
         $website_model = new Website();
+
         $main_category = $website_model->get_main_category();
+        
+        $request = Yii::$app->request;
+
         if (Yii::$app->request->isAjax) {
             $website_model = new Website();
-            if ($_POST['slug'] != 'All') {
-                $categoryid = Category::category_value($_POST['slug']);
+            
+            if ($request->post('slug') != 'All') {
+                $categoryid = Category::category_value($request->post('slug'));
                 $directory = $website_model->get_search_directory_list($categoryid['category_id']);
                 $prevLetter = '';
                 $result = array();
@@ -192,7 +197,7 @@ class SiteController extends BaseController
                 }
                 $result = array_unique($result);
             }
-            if ($_POST['ajaxdata'] == 0) {
+            if ($request->post('ajaxdata') == 0) {
                 return $this->renderPartial('searchdirectory', [
                     'directory' => $directory,
                     'first_letter' => $result, ]);
@@ -293,30 +298,37 @@ class SiteController extends BaseController
 
     public function actionSearch()
     {
-        if (isset($_POST['search']) && isset($_POST['_csrf'])) {
-            $search_data = $_POST['search'];
+        $request = Yii::$app->request;
+
+        if ($request->post('search') && $request->post('_csrf')) {
+
+            $search_data = $request->post('search');
             $item = new Vendoritem();
-            $item_details = $item->vendoritem_search_details($_POST['search']);
+            $item_details = $item->vendoritem_search_details($request->post('search'));
 
             $k = '';
             $slug1 = array();
             $itm = array();
+            
             if (!empty($item_details)) {
                 foreach ($item_details as $i) {
                     $slug1[] = $i['wcslug'];
                     $category[] = $i['category_name'];
                 }
             }
+
             if (!empty($slug1)) {
                 $slg = array_unique($slug1);
             } else {
                 $slg = '';
             }
+            
             if (!empty($category)) {
                 $cat = array_unique($category);
             } else {
                 $cat = '';
             }
+            
             if (!empty($cat)) {
                 for ($i = 0;$i < count($cat); ++$i) {
                     if (!empty($cat[$i])) {
@@ -365,9 +377,11 @@ class SiteController extends BaseController
         if ($slug != '') {
             $website_model = new Website();
             $vendor_details = $website_model->vendor_details($slug);
+            
             if (empty($vendor_details)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
+
             $vendor_item_details = $website_model->vendor_item_details($vendor_details[0]['vendor_id']);
             $main_category = $website_model->get_main_category();
 
@@ -395,13 +409,15 @@ class SiteController extends BaseController
 			->asArray()
 			->all();
 
-
-
             if (!isset(Yii::$app->user->identity->customer_id)) {
                 return $this->render('vendor_profile', [
-              'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes,
-              'category' => $main_category, 'vendorData' => $vendorData,'slug'=>$slug,
-            ]);
+                  'vendor_detail' => $vendor_details, 
+                  'vendor_item_details' => $vendor_item_details, 
+                  'themes' => $themes,
+                  'category' => $main_category, 
+                  'vendorData' => $vendorData,
+                  'slug'=>$slug,
+                ]);
             } else {
                 $event_limit = 8;
                 $wish_limit = 6;
@@ -414,9 +430,16 @@ class SiteController extends BaseController
                 $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
 
                 return $this->render('vendor_profile', [
-              'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes, 'vendorData' => $vendorData,
-              'category' => $main_category, 'customer_events' => $customer_events, 'slug'=>$slug, 'customer_events_list' => $customer_events_list,'slug'=>$slug
-            ]);
+                  'vendor_detail' => $vendor_details, 
+                  'vendor_item_details' => $vendor_item_details, 
+                  'themes' => $themes, 
+                  'vendorData' => $vendorData,
+                  'category' => $main_category, 
+                  'customer_events' => $customer_events, 
+                  'slug' => $slug, 
+                  'customer_events_list' => $customer_events_list,
+                  'slug'=>$slug
+                ]);
             }
         }
     }
@@ -424,7 +447,8 @@ class SiteController extends BaseController
     public function actionContact()
     {
         $faq_details = Faq::find()
-            ->where(['faq_status' => 'Active', 'trash' => 'Default'])->all();
+            ->where(['faq_status' => 'Active', 'trash' => 'Default'])
+            ->all();
 
         if (Yii::$app->request->isAjax) {
             $date = date('Y/m/d');
