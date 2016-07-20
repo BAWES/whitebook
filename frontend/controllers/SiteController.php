@@ -11,6 +11,7 @@ use frontend\models\Category;
 use common\models\Siteinfo;
 use common\models\Events;
 use common\models\City;
+use common\models\Location;
 use common\models\Faq;
 use frontend\models\Themes;
 use common\models\Featuregroupitem;
@@ -683,8 +684,28 @@ class SiteController extends BaseController
         }
     }
 
+    public function actionArea()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
 
-   public function actionCity()
+        $area = Location::find()
+            ->select('id, location')
+            ->where(['city_id' => $data['city_id']])
+            ->all();
+
+        $options = '<option value="">Select</option>';
+        
+        if (!empty($area)) {
+            foreach ($area as $key => $val) {
+                $options .=  '<option value="'.$val['id'].'">'.$val['location'].'</option>';
+            }
+        }
+        return $options;
+    }
+
+    public function actionCity()
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();

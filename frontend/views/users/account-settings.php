@@ -5,6 +5,7 @@ use yii\helpers\Url;
 $this->title ='Account Setting | Whitebook';
 
 ?>
+
 <!-- coniner start -->
 <section id="inner_pages_sections">
 	<div class="container">
@@ -251,7 +252,9 @@ jQuery('#login_loader141').hide();
 
 
 
-<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js">
+	
+</script>
 <script type="text/javascript">
 	$('#saved').on('click', function() {
 
@@ -279,6 +282,7 @@ jQuery('#login_loader141').hide();
 			jQuery('#gen_error').hide();
 			i=1;
 		}
+		
 		if((country==0)&&(country==''))
 		{
 			jQuery('#country_er').html('Select country');
