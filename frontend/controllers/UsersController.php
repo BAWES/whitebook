@@ -6,8 +6,11 @@ use Yii;
 use arturoliveira\ExcelView;
 use frontend\models\Basket;
 use common\models\Country;
+use frontend\models\Addresstype;
+use frontend\models\AddressQuestion;
 use frontend\models\Customer;
 use common\models\CustomerAddress;
+use common\models\CustomerAddressResponse;
 use common\models\Siteinfo;
 use frontend\models\Themes;
 use frontend\models\Vendoritem;
@@ -50,8 +53,8 @@ class UsersController extends BaseController
 
         if ($request->post('email') && $request->post('password')) {
 
-            $model->customer_email = $request->post('email')
-            $model->customer_password = $request->post('password')
+            $model->customer_email = $request->post('email');
+            $model->customer_password = $request->post('password');
 
             if($model->login() == Customer::SUCCESS_LOGIN) {
                 $return_data['status'] = Customer::SUCCESS_LOGIN;
@@ -838,5 +841,118 @@ class UsersController extends BaseController
                 return Users::SUCCESS; // Event item removed successfully
             }
         }
+    }
+
+    /**
+     * Displays all address
+     *
+     * @return mixed
+     */
+    public function actionAddress()
+    {
+        $customer_id = Yii::$app->user->getId();
+        
+        if ($customer_id == '') {
+            return $this->goHome();
+        }
+
+        if(Yii::$app->request->isPost) {
+
+            $customer_address = new CustomerAddress();
+          
+            if ($customer_address->load(Yii::$app->request->post())) {
+              
+                $customer_address->customer_id = $customer_id;
+
+                if ($customer_address->save(false)) {
+                  
+                    $address_id = $customer_address->address_id;
+
+                    //save customer address response 
+                    $questions = Yii::$app->request->post('question');
+
+                    foreach ($questions as $key => $value) {
+                        $customer_address_response = new CustomerAddressResponse();
+                        $customer_address_response->address_id = $address_id;
+                        $customer_address_response->address_type_question_id = $key;
+                        $customer_address_response->response_text = $value;
+                        $customer_address_response->save();
+                    }
+                }
+            }
+        }
+
+        $addresses = array();
+
+        $result = CustomerAddress::find()
+        ->select('whitebook_city.city_name, whitebook_location.location, whitebook_customer_address.*')
+        ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
+        ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
+        ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
+        ->asArray()
+        ->all();
+
+        foreach($result as $row) {
+
+          $row['questions'] = CustomerAddressResponse::find()
+          ->select('aq.question, whitebook_customer_address_response.*')
+          ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
+          ->where('address_id = :address_id', [':address_id' => $row['address_id']])
+          ->asArray()
+          ->all();
+
+          $addresses[] = $row;
+        }
+
+        $customer_address_modal = new CustomerAddress();
+        $addresstype = Addresstype::loadAddress();
+        $country = Country::loadcountry();
+
+        return $this->render('address', [
+            'addresses' => $addresses,
+            'customer_address_modal' => $customer_address_modal,
+            'addresstype' => $addresstype,
+            'country' => $country
+        ]);
+    }
+
+    public function actionAddress_delete()
+    {
+        $customer_id = Yii::$app->user->identity->customer_id;
+        
+        if ($customer_id == '') {
+            return $this->goHome();
+        }
+  
+        $address_id = yii::$app->request->post('address_id');
+
+        //check if address belong to login customer 
+        $exist = CustomerAddress::find()
+                    ->where(['address_id' => $address_id, 'customer_id' => $customer_id])
+                    ->one();
+
+        if($exist) {
+            CustomerAddressResponse::deleteAll('address_id = ' . $address_id);
+            CustomerAddress::deleteAll('address_id = ' . $address_id);    
+        }        
+    }
+
+    /**
+     * Updates address questions 
+     * If update is successful, the browser will be redirected to the 'index' page.
+     *
+     * @param string $id
+     *
+     * @return mixed
+     */
+    public function actionQuestions()
+    {
+        $address_type_id = Yii::$app->request->post('address_type_id');
+
+        $questions = AddressQuestion::find()->where('address_type_id = '. $address_type_id)->all();
+
+        return $this->renderPartial('questions', [
+            'questions' => $questions
+        ]);
     }
 }

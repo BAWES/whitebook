@@ -75,15 +75,15 @@ $this->registerJs("
         var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');       
         var path = '".Url::to(['/addresstype/block'])."';
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, id: id,_csrf : csrfToken}, //data to be send
-        success: function(data) {   
-            $.pjax.reload({container:'#medicine'});  //Reload GridView
-            //$('#grid').yiiGridView('update');
-            //$.fn.yiiGridView.update('#medicine');
-            //$('a#status').attr('src', data);                 
-         }
+            type: 'POST',      
+            url: path, //url to be called
+            data: { status: status, id: id,_csrf : csrfToken}, //data to be send
+            success: function(data) {   
+                $.pjax.reload({container:'#medicine'});  //Reload GridView
+                //$('#grid').yiiGridView('update');
+                //$.fn.yiiGridView.update('#medicine');
+                //$('a#status').attr('src', data);                 
+            }
         });
     }
 
@@ -98,7 +98,7 @@ $this->registerJs("
             success: function(data) {
                 var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
                 $('#image-'+cid).attr('src',data);
-                $('#image-'+cid).parent('a').attr('onclick', \"change('\" + status1 + \"', '\" + cid + \"')");
+                $('#image-'+cid).parent('a').attr('onclick', \"change('\" + status1 + \"', '\" + cid + \"')\");
             }
         });
      }

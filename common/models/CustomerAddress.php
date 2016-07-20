@@ -50,7 +50,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
             [['country_id', 'city_id'], 'required'],
             [['customer_id', 'address_type_id', 'country_id', 'city_id', 'area_id', 'created_by', 'modified_by'], 'integer'],
             [['address_archived', 'trash'], 'string'],
-            [['customer', 'created_datetime', 'modified_datetime'], 'safe']
+            [['customer', 'address_data', 'created_datetime', 'modified_datetime'], 'safe']
         ];
     }
 
