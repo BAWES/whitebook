@@ -190,7 +190,7 @@
 
 	$this->registerJs("
 		$(document).ready(function () {
-	        $('.nav li').removeClass('active');//this will remove the active class from
+	        $('.header .nav li').removeClass('active');//this will remove the active class from
 	   		//previously active menu item
 	        $('.open').addClass('active');
 	    });

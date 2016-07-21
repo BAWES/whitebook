@@ -347,14 +347,8 @@ public function actionCreate($vid = '')
         Yii::$app->session->setFlash('success', 'Vendor item added successfully!');
         Yii::info('[New Item] Admin created new item '.addslashes($model->item_name), __METHOD__);
 
-        if ($model->type_id == 2) {
-           return $this->redirect(['vendoritem/update?id='.$itemid.'&create='.$itemid]);
-       } elseif (Yii::$app->request->get('vid')) {
-           return $this->redirect(['vendoritem/view?id='.Yii::$app->request->get('vid')]);
-       } else {
-           return $this->redirect(['vendoritem/view?id='.$model->item_id]);
-       }
-   }
+        return $this->redirect(['index']);
+    }
 
 } else {
     return $this->render('create', [
@@ -368,7 +362,7 @@ public function actionCreate($vid = '')
         ]);
 }
 } else {
-    echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+    Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
     return $this->redirect(['site/index']);
 }
@@ -398,23 +392,23 @@ public function actionUpdate($id, $vid = false)
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
         $item_id = $model->item_id;
-    // Item image path values
-        $imagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'admin'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
-    // Item image path SALES and  RENTAL values
-        $guideimagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'guides'])->orderBy(['vendorimage_sort_order' => SORT_ASC])->all();
-        /* END gallery */
+
+        $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order' => SORT_ASC])->all(); // AND module_type = :status ':status' => 'admin'
+
+        // Item image path SALES and  RENTAL values
+        $guideimagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderBy(['vendorimage_sort_order' => SORT_ASC])->all(); // AND module_type = :status , ':status' => 'guides'
 
         $cat_id = $model->category_id;
         $subcat_id = $model->subcategory_id;
         $itemtype = Itemtype::loaditemtype();
         $vendorname = Vendor::loadvendorname();
         $categoryname = Category::vendorcategory($model->vendor_id);
-    //print_r($categoryname);die;
+    
         $subcategory = Subcategory::loadsubcategory($cat_id);
         $childcategory = Childcategory::loadchildcategory($subcat_id);
         $loadpricevalues = Vendoritempricing::loadpricevalues($item_id);
 
-    // BEGIN themes and groups
+        // BEGIN themes and groups
         $themelist = Themes::loadthemename();
         $selected_themes = Vendoritemthemes::find()->where('item_id = "'.$id.'"')->one();
 
@@ -424,7 +418,7 @@ public function actionUpdate($id, $vid = false)
         $selected_groups = Featuregroupitem::find()->where('item_id = "'.$id.'"')->one();
         $exist_groups = explode(',', $selected_groups['group_id']);
         $model->groups = $exist_groups;
-    // END themes and groups
+        // END themes and groups
 
         $grouplist = Featuregroup::loadfeaturegroup();
     // Values for priority log table dont delete...
