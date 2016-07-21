@@ -3,10 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\PackageSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use yii\web\View;
 
 $this->title = 'Packages';
 $this->params['breadcrumbs'][] = $this->title;
@@ -80,5 +77,5 @@ $this->registerJs("
             }
         });
      }   
-");
+", View::POS_HEAD);
 	
