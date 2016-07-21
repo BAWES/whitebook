@@ -9,7 +9,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 
-$get = $this->request->get();
+$get = Yii::$app->request->get();
 
 ?>
 
