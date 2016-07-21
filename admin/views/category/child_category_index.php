@@ -3,8 +3,8 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
+use yii\web\View;
 
-/* @var $this yii\web\View */
 /* @var $searchModel common\models\SearchCategory */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -161,4 +161,4 @@ $this->registerJs("
 	{
 		return !isNaN(parseFloat(n)) && isFinite(n);	
 	}
-");
+", View::POS_HEAD);
