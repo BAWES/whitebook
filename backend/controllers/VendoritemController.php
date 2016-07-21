@@ -387,10 +387,10 @@ class VendoritemController extends Controller
          $item_id=$model->item_id;
 
         // Item image path values
-        $imagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'vendor_item'])->orderby(['vendorimage_sort_order'=>SORT_ASC])->all();
+        $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order'=>SORT_ASC])->all();// AND module_type = :status , ':status' => 'vendor_item'
 
         // Item image path SALES and  RENTAL values
-        $guideimagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'guides'])->orderBy(['vendorimage_sort_order' => SORT_ASC])->all();
+        $guideimagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderBy(['vendorimage_sort_order' => SORT_ASC])->all();// AND module_type = :status , ':status' => 'guides'
 
         /* question and answer */
         $model_question = Vendoritemquestion::find()

@@ -245,34 +245,38 @@ if(!$model->isNewRecord) {
 
 <?php 
 
-if(empty($imagedata)) {
-	$imagedata = '';
-}
+if(!empty($imagedata)) { 
 
-if(empty($img)) {
-	$img = '';
-}
+	$this->registerJs("
+		var imagedata = 1;	
+		var img = ".$img.";
+		var action = ".$action.";
+	", View::POS_HEAD);
 
-if(empty($action)) {
-	$action = '';
-}
+}else {
 
-if(empty($img1)) {
-	$img1 = '';
-}
+	$this->registerJs("
+		var imagedata = '';	
+		var img = '';
+		var action = '';
+	", View::POS_HEAD);
+} 
 
-if(empty($action1)) {
-	$action1 = '';
-}
+if(!empty($guideimagedata)) { 
 
-if(empty($guideimagedata)) {
-	$guideimagedata = '';
-}
+	$this->registerJs("
+		var guideimagedata = 1;
+		var img1 = ".$img1.";
+		var action1 = ".$action1.";
+	", View::POS_HEAD);
 
-if($imagedata) {
-	$have_image_data = 1;
-} else {
-	$have_image_data = 0;
+}else{
+
+	$this->registerJs("
+		var guideimagedata = '';
+		var img1 = '';
+		var action1 = '';
+	", View::POS_HEAD);
 }
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
@@ -303,13 +307,6 @@ $this->registerJs("
 	var item_name_check_url = '".Url::to(['/vendoritem/itemnamecheck'])."';
 	var image_order_url = '".Url::to(['/site/imageorder'])."';
 	
-	var imagedata = '".$have_image_data."';
-	var img = '".$img."';
-	var action = '".$action."';
-
-	var img1 = '".$img1."';
-	var action1 = '".$action1."';
-	var guideimagedata = '".$guideimagedata."';
 ", View::POS_HEAD);
 
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
