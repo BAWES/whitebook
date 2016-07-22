@@ -23,8 +23,8 @@ class Siteinfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['app_name', 'app_desc', 'meta_keyword', 'meta_desc', 'email_id', 'site_location', 'site_copyright','currency_symbol'], 'required'],
-            [['app_name', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision'],'required', 'on' => 'update'],
+            [['app_name', 'home_slider_alias', 'app_desc', 'meta_keyword', 'meta_desc', 'email_id', 'site_location', 'site_copyright','currency_symbol'], 'required'],
+            [['app_name', 'home_slider_alias', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision'],'required', 'on' => 'update'],
             [['app_desc', 'meta_desc'], 'string'],
             [['commision'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
             [['app_name'], 'string', 'max' => 100],
@@ -40,7 +40,7 @@ class Siteinfo extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['update'] = ['app_name', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision','currency_symbol'];//Scenario Values Only Accepted
+        $scenarios['update'] = ['app_name', 'home_slider_alias', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision','currency_symbol'];//Scenario Values Only Accepted
         return $scenarios;
     }
 

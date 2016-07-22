@@ -52,6 +52,7 @@ class SiteController extends BaseController
         }
         
         return $this->render('index', [
+          'home_slider_alias' => Siteinfo::find()->one()->home_slider_alias,
           'featured_product' => $featured_product,
           'banner' => $banner,
           'key' => '0',
