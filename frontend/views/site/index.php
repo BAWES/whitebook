@@ -1,32 +1,23 @@
 <?php
 
+use yii\helpers\Url;
+use yii\helpers\Html;
 use common\models\Featuregroup;
 use common\models\Featuregroupitem;
 use common\models\Vendoritem;
 use common\models\Vendor;
 use common\models\Themes;
 use common\models\Image;
-use yii\helpers\Url;
-use yii\helpers\Html;
+
 use frontend\models\Website;
 
 $this->title = 'Home | Whitebook';
 
 $model = new Website();
-
-$this->registerCssFile('css/slider_fonts.css');
-
 ?>
 <!-- content main start -->
 
-
-<section id="banner_sections">
-    <div class="banner_slider_content">
-        <?php echo file_get_contents('http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias); ?>
-    </div>
-</section>
-
-<!-- banner section end -->
+<?php echo file_get_contents('http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias); ?>
 
 <!-- Content start -->
 <section id="content_section">
