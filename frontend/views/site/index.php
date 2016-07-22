@@ -1,46 +1,23 @@
 <?php
 
+use yii\helpers\Url;
+use yii\helpers\Html;
 use common\models\Featuregroup;
 use common\models\Featuregroupitem;
 use common\models\Vendoritem;
 use common\models\Vendor;
 use common\models\Themes;
 use common\models\Image;
-use yii\helpers\Url;
-use yii\helpers\Html;
+
+use frontend\models\Website;
 
 $this->title = 'Home | Whitebook';
-use frontend\models\Website;
+
 $model = new Website();
 ?>
 <!-- content main start -->
-<!-- banner section start -->
-<?php if (count($banner) > 0) { ?>
-<section id="banner_sections">
-    <div class="banner_slider_content">
-        <div class="carousel slide">
-            <div class="carousel-inner owl-carousel" id="home-banner-slider">
-            <?php $i = 1;
-            foreach ($banner as $b) {
-            ?>
-            <div class="item">
-                <?php if ($b['slide_type'] == 'video') { ?>
-                <object width="100%" height="600" data="<?php echo $b['slide_video_url']; ?>" id="video_click"></object>
-                <?php } else { ?>
-                <?= Html::img(Yii::getAlias('@s3/slider_uploads/'. $b['slide_image']), ['alt' => 'My White Book']) ?>
 
-                <?php } ?>
-            </div>
-            <?php $i++;
-            } ?>
-
-            </div>
-        </div>
-    </div>
-</section>
-<?php } ?>
-
-<!-- banner section end -->
+<?php echo file_get_contents('http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias); ?>
 
 <!-- Content start -->
 <section id="content_section">
