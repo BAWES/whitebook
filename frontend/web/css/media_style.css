@@ -614,7 +614,9 @@ a.deliver-detail.accor-link-min{background:url("../images/delivery-minus.png") n
 @media (min-width: 768px)  and (max-width: 965px){
 nav#sidebar-wrapper{top:130px;height:65%;}
 .toggled .hamburger{top:129px;}
-#banner_sections,#banner_sections video{height:356px !important;}
+#banner_sections,#banner_sections video{
+	margin-bottom:180px;
+	height:356px !important;}
 }
 
 @media (min-width: 600px)  and (max-width: 736px){
@@ -913,7 +915,10 @@ header{ z-index:18;}
 #exTab2 .events_listing.new-event ul li {min-height: 304px;}
 .left_slider.focus {    background: none repeat scroll 0 0 hsl(0, 0%, 100%);    border: 2px solid hsl(0, 0%, 0%);    height:100%;    margin-right: 24px;    position: fixed;   right:0;    transition: right 0.3s ease 0s;    width: 100%;}
 
-#banner_sections{min-height:135px;}
+#banner_sections{
+	min-height:135px;
+	margin-bottom: 170px;
+}
 
 /*td032*/
 .inner_content_plan { padding: 25px 100px;cursor:pointer;}
