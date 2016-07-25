@@ -183,9 +183,6 @@ $action = Yii::$app->controller->action->id;
                         <?php } ?>
                     <ul class="logout_part">
 <?php if (Yii::$app->user->isGuest) { ?>
-        <li class="<?php if ($action == "about-us") {echo "active";} ?>">
-            <a href="<?= Url::toRoute('plan/cmspages', true); ?>" title="<?php echo Yii::t('frontend', 'About Us'); ?>">
-            <?php echo Yii::t('frontend', 'About Us'); ?></a></li>
         <li class="">
             <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
             title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?>
