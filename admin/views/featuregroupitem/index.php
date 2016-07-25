@@ -69,64 +69,72 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
-<script type="text/javascript">
-	
+
+<?php 
+
+$this->registerJs("
 	function change(status, id)
 	{		
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/featuregroupitem/block']); ?> ";
+		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');		
+        var path = '".Url::to(['/featuregroupitem/block'])."';
+
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-			$('#image-'+id).attr('src',data);
-			$('#image-'+id).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+id+"')");
-         }
+	        type: 'POST',      
+	        url: path, //url to be called
+	        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
+	        success: function(data) {
+				var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+				$('#image-'+id).attr('src',data);
+				$('#image-'+id).parent('a').attr('onclick', 
+				\"change('\"+status1+\"', '\"+id+\"')\");
+	        }
         });
     }
-     
-function change_sort_order(sort_val,featured_id)
-     {
+
+    function change_sort_order(sort_val,featured_id)
+    {
 		 var exist_sort=$('#hidden_'+featured_id).val();
 		 if(sort_val!=exist_sort || exist_sort==0)
 		 {
 			if(sort_val<=0 && sort_val!='')
 			{
-				alert("Please enter greater than 0!");
+				alert('Please enter greater than 0!');
 				return false;
 			}
 			
 			if(isNumeric(sort_val))
 			{
-				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/featuregroupitem/sort_feature_group']); ?> ";
+				var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');		
+				var path = '".Url::to(['/featuregroupitem/sort_feature_group'])."';
+				
 				$.ajax({  
-				type: 'POST',      
-				url: path, //url to be called
-				data: { sort_val: sort_val,featured_id: featured_id,_csrf : csrfToken}, //data to be send
-				success: function(data) {
-					if(data)
-					{
-						location.reload();
+					type: 'POST',      
+					url: path, //url to be called
+					data: { sort_val: sort_val,featured_id: featured_id,_csrf : csrfToken}, //data to be send
+					success: function(data) {
+						if(data)
+						{
+							location.reload();
+						}
 					}
-				 }
 				});
 			}
 			else
 			{
 				if(sort_val!='')
 				{
-					alert("Enter only integer values!");
+					alert('Enter only integer values!');
 					return false;
 				}
 			}
 		}
-	 }
-	 function isNumeric(n)
+	}
+	
+	function isNumeric(n)
 	{
 		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
-</script>
+");
+	
+	
+     

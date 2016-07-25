@@ -72,7 +72,7 @@ class PrioritylogSearch extends Prioritylog
         
     }
     
-        public function vendorsearch($params,$vendor_id=false)
+    public function vendorsearch($params,$vendor_id=false)
     {
 		        if(empty($vendor_id))
         {          
@@ -113,7 +113,7 @@ class PrioritylogSearch extends Prioritylog
         return $dataProvider;
     }
     
-            public function vendorviewsearch($params,$vendor_id)
+    public function vendorviewsearch($params,$vendor_id)
     {
         $query = Prioritylog::find()
         ->andwhere(['vendor_id'=> $vendor_id])
@@ -133,9 +133,7 @@ class PrioritylogSearch extends Prioritylog
         return $dataProvider;
     }
     
-    
-    
-            public function vendoritemsearch($item_id)
+    public function vendoritemsearch($item_id)
     {
         $query = Prioritylog::find()
         ->where(['item_id'=> $item_id])

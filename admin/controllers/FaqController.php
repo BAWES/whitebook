@@ -183,9 +183,13 @@ class FaqController extends Controller
 
     public function actionSort_faq()
     {
-        $sort = $_POST['sort_val'];
-        $faq_id = $_POST['faq_id'];
+        $request = Yii::$app->request;
+
+        $sort = $request->post('sort_val');
+        $faq_id = $request->post('faq_id');
+
         $command=Faq::updateAll(['sort' => $sort],'faq_id= '.$faq_id);
+
         if ($command) {
             Yii::$app->session->setFlash('success', 'FAQ sort order updated successfully!');
             echo 1;
@@ -220,8 +224,11 @@ class FaqController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
+
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
+        
         $command=Faq::updateAll(['faq_status' => $status],'faq_id= '.$data['id']);
+        
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         }

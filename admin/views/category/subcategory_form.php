@@ -60,16 +60,17 @@ use yii\helpers\ArrayHelper;
 
 </div>
 
-<script>
-	<?php if($model->isNewRecord){ ?>
-	$('#subcategory-category_allow_sale').prop('checked', true);
-	<?php }
-	else
-	{ if($model->category_allow_sale=='yes'){?>
-	$('#subcategory-category_allow_sale').prop('checked', true);	
-		<?php }	else { ?>
-	$('#subcategory-category_allow_sale').prop('checked', false);		
-			<?php } ?>
-	<?php } ?>
+<?php 
+
+if($model->isNewRecord || $model->category_allow_sale=='yes') { 
 	
-</script>
+	$this->registerJs("
+		$('#subcategory-category_allow_sale').prop('checked', true);
+	");	
+
+} else { 
+	
+	$this->registerJs("
+		$('#subcategory-category_allow_sale').prop('checked', false);		
+	");	
+}

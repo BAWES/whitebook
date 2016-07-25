@@ -80,35 +80,39 @@ use yii\helpers\ArrayHelper;
 </div>
 
 
-<script type="text/javascript">
-$(function (){ 
-    $("#childcategory-parent_category_id").change(function (){
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var id = $('#childcategory-parent_category_id').val();
-        var path = "<?php echo Url::to(['/category/loadsubcategory']); ?> ";
-        $.ajax({
-        type: 'POST',      
-        url: path, //url to be called
-        data: { id: id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {			
-             $('#childcategory-subcategory_id').html(data);
-         }
-        })
+<?php 
 
-     });
- });
-</script>
-
-<script>
-	<?php if($model->isNewRecord){ ?>
-	$('#childcategory-category_allow_sale').prop('checked', true);
-	<?php }
-	else
-	{ if($model->category_allow_sale=='yes'){?>
-	$('#childcategory-category_allow_sale').prop('checked', true);	
-		<?php }	else { ?>
-	$('#childcategory-category_allow_sale').prop('checked', false);		
-			<?php } ?>
-	<?php } ?>
+$this->registerJs("
 	
-</script>
+	$(function (){ 
+
+	    $('#childcategory-parent_category_id').change(function (){
+			var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+	        var id = $('#childcategory-parent_category_id').val();
+	        var path = '".Url::to(['/category/loadsubcategory'])."';
+	        
+	        $.ajax({
+		        type: 'POST',      
+		        url: path, //url to be called
+		        data: { id: id ,_csrf : csrfToken}, //data to be send
+		        success: function( data ) {			
+		             $('#childcategory-subcategory_id').html(data);
+		        }
+	        });
+
+	     });
+	});
+");
+
+if($model->isNewRecord || $model->category_allow_sale=='yes'){ 
+	
+	$this->registerJs("
+		$('#childcategory-category_allow_sale').prop('checked', true);
+	");
+
+} else { 
+	
+	$this->registerJs("
+		$('#childcategory-category_allow_sale').prop('checked', false);		
+	");
+} 

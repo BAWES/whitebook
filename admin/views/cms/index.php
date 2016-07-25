@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use yii\web\View;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\CmsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -50,11 +52,14 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 </div>
 
-<script type="text/javascript">
+<?php 
+
+$this->registerJs("
+	
 	function change(status, id)
 	{	
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/cms/block']); ?> ";
+		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');		
+        var path = '".Url::to(['/cms/block'])."';
         $.ajax({  
         type: 'POST',      
         url: path, //url to be called
@@ -63,9 +68,9 @@ $this->params['breadcrumbs'][] = $this->title;
 			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
 			$('#image-'+id).attr('src',data);
 			$('#image-'+id).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+id+"')");
+			\"change('\"+status1+\"', '\"+id+\"')\");
          }
         });
-     }
-	 
-</script>
+    }
+
+", View::POS_HEAD);

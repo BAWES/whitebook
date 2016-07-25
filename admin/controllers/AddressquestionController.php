@@ -70,9 +70,15 @@ class AddressquestionController extends Controller
 
     public function actionSort_addressquestion()
     {
-        $sort = $_POST['sort_val'];
-        $ques_id = $_POST['ques_id'];
-         $command=Addressquestion::updateAll(['sort' => $sort],'ques_id= '.$ques_id);
+        $request = Yii::$app->request;
+
+        $sort = $request->post('sort_val');
+        $ques_id = $request->post('ques_id');
+
+        $command = Addressquestion::updateAll(
+            ['sort' => $sort],
+            'ques_id= '.$ques_id
+        );
 
         if ($command) {
             Yii::$app->session->setFlash('success', 'Questions sort order updated successfully!');
@@ -89,8 +95,11 @@ class AddressquestionController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
+
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
+        
         $command=Addressquestion::updateAll(['status' => $status],'ques_id= '.$data['cid']);
+        
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {

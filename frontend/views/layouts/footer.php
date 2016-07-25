@@ -377,7 +377,7 @@ use frontend\models\Users;
                 <ul class="treams_of_ser margin_top">
                     <li><a href="<?= Url::toRoute('/about-us',true);?>"> <?= Yii::t("frontend", "About Us") ?></a></li>
                     <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "Contact & FAQ") ?></a></li>
-                    <li><a href="<?= Url::toRoute('/brands-product',true); ?>/"> <?= Yii::t("frontend", "Directory") ?></a></li>
+                    <li><a href="<?= Url::toRoute('site/directory',true); ?>"> <?= Yii::t("frontend", "Directory") ?></a></li>
                 </ul>
                 <ul class="treams_of_ser">
                     <li> &COPY;2015 - The White Book </li>

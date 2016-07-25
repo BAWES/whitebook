@@ -160,6 +160,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
         $category=ArrayHelper::map($category,'category_id','category_name');
         return $category;
     }
+    
     public static function similiar_details()
     {
         $data=Featuregroupitem::find()->select(['{{%feature_group_item}}.item_id as gid','{{%vendor}}.vendor_name as vname','{{%vendor_item}}.item_name as iname','{{%vendor_item}}.item_price_per_unit as price','{{%vendor_item}}.slug as slug'])

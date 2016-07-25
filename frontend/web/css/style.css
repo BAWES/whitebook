@@ -21,12 +21,12 @@ a:focus, a:hover{text-decoration:none;}
 .search_header .form-control::-moz-placeholder{ color:#000;}
 .navbar{margin-bottom: 0!important;}
 .menu_header li {float: left;list-style: outside none none;}
-.menu_header li a{color:#fff;font:16pt/43px 'proxima_nova_rgregular';}
+.menu_header li a{color:#fff;font:16pt/43px 'proxima_nova_rgregular'; }
 .menu_header li.active a,.menu_header li a:hover,.menu_header li:hover a{border-bottom:2px solid #37c878;color:#37c878;line-height: 42px;}
 .logout_part{ padding: 0px; display: inline-block; width:auto; float:right; border:none;box-shadow:none; margin:34px 0 0px;}
-.logout_part li{ margin: 0px; padding: 0 0px 0px 8px; display: inline-block; list-style: none; }
+.logout_part li{ margin: 0px; padding: 0 0px 0px 8px; display: inline-block; list-style: none; position: relative;}
 .logout_part li:last-child{ border: none;}
-.logout_part li a{ margin: 0px; padding:0px;letter-spacing: 0.3px; display: inline-block; text-decoration:none;  font-size:10px; color:#585858; font-family:'proxima_nova_rgregular';}
+.logout_part li a{ cursor: pointer; margin: 0px; padding:0px;letter-spacing: 0.3px; display: inline-block; text-decoration:none;  font-size:10px; color:#585858; font-family:'proxima_nova_rgregular';}
 .logout_part li a:hover,.logout_part li.active a{ color: #ebc000; text-decoration: none;}
 .category_listing_nav ul{ display: inline-block;width: 100%; padding: 0px; margin: 0px; text-align: center;}
 .category_listing_nav ul{ display: inline-block;width: 100%; padding: 0px; margin: 0px; text-align: center;}
@@ -240,7 +240,7 @@ textarea .form-group{ min-height: 126px;}
 /*end*/
 
 /*directory page start*/
-.directory_slider{ display: inline-block; width: 100%; background: rgba(0, 0, 0, 0) url("../images/slide_bg.png") no-repeat scroll 0 0; min-height: 192px;}
+.directory_slider{ display: inline-block; width: 100%; margin-top: 5px; background: rgba(0, 0, 0, 0) url("../images/slide_bg.png") no-repeat scroll 0 0; min-height: 192px;}
 .top_whit {    margin: 48px 14px;}
 .plus_icons a{display: inline-block; width: 100%; background: url(../images/plus.png) center center no-repeat; vertical-align: middle; line-height: 195px; text-align: center; }
 .plus_icons a:hover{ text-decoration: none;}
@@ -761,7 +761,7 @@ input#search-terms::-ms-input-placeholder {
 /*heder end*/
 
 @font-face {font-family:ProximaNova-Regular;src: url(../fonts/ProximaNova-Regular.otf);}
-@font-face {font-family:BodoniMT;src: url(../fonts/BodoniMT.ttf);}
+@font-face {font-family:BodoniMT;src: url(../fonts/BodoniMT.TTF);}
 /*fonts start*/
 @font-face {
     font-family: 'OpenSansRegular';
@@ -1124,7 +1124,7 @@ font-family: 'FontAwesome';
 /*13/11/2015 END*/
 
 /*5/11/2015*/
-.new_user_name .logout_part{ margin:0px 0 9px;}
+.new_user_name .logout_part{ margin:0px 0 0px;}
 
 /* 6-11-2015 */
 @-webkit-keyframes opacity {
@@ -1299,4 +1299,77 @@ a.boxclose{
     margin-top:-5px;
     margin-right:-10px;
     cursor:pointer;
+}
+
+.search_header form#search{
+	position: relative;
+	z-index: 1001
+}
+
+/*account menu */
+.account-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1002;
+  display: none;
+  float: left;
+  min-width: 100px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+.account-dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+}
+.account-dropdown-menu > li > a:hover,
+.account-dropdown-menu > li > a:focus {
+  color: #262626;
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+.account-dropdown-menu > .active > a,
+.account-dropdown-menu > .active > a:hover,
+.account-dropdown-menu > .active > a:focus {
+  color: #fff;
+  text-decoration: none;
+  background-color: #337ab7;
+  outline: 0;
+}
+.open > .account-dropdown-menu {
+  display: block;
+}
+.account-dropdown-menu li {
+	display: block;
+	padding: 0;
+}
+
+/* address box */
+.address_box ul {
+    margin: 0;
+    padding: 0;
+}
+.address_box li {
+    list-style: none;
+}
+.address_box {
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, .15);
+    background: white;
 }

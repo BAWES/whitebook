@@ -13,6 +13,7 @@ use yii\base;
 $this->title = 'Customers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="customer-index">
    <?= Html::a('Create customer', ['create'], ['class' => 'btn btn-success']) ?>
     <?php $a=1; if($count>0){?>
@@ -49,34 +50,43 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => ['date', 'php:d/m/Y'],
 				'label'=>'created date',			
 			],
-			
-            
-            ['class' => 'yii\grid\ActionColumn',
-            'header'=>'Action',
-            'template' => '{view}{update} {delete}{link}',],
-        ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header'=>'Action',
+                'buttons' => [
+                    'address' => function ($url, $model) {
+                        
+                        $url = Url::toRoute(['customer/address', 'id'=> $model->customer_id]);
+
+                        return Html::a('<span class="glyphicon glyphicon-book"></span>', $url, [
+                                    'title' => \Yii::t('yii', 'Address'),
+                                    'data-pjax' => '0',
+                        ]);
+                    }
+                ],
+                'template' => '{view} {update} {delete} {address}'],
+            ],
     ]); ?>
 
 </div>
 
+<?php 
 
-
-
-<script type="text/javascript">
-	function change(status, id)
-	{		
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/customer/block']); ?> ";
+$this->registerJs("
+    function change(status, id)
+    {       
+        var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');       
+        var path = '".Url::to(['/customer/block'])."';
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-			$('#image-'+id).attr('src',data);
-			$('#image-'+id).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+id+"')");
-         }
+            type: 'POST',      
+            url: path, //url to be called
+            data: { status: status, id: id, _csrf : csrfToken}, //data to be send
+            success: function(data) {
+                var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+                $('#image-'+id).attr('src',data);
+                $('#image-'+id).parent('a').attr('onclick', 
+                \"change('\"+status1+\"', '\"+id+\"')\");
+            }
         });
-     }
-</script>
+    }
+");

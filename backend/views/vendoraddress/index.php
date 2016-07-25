@@ -34,17 +34,18 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 </div>
 
-<script type="text/javascript">
+<?php $this->registerJs("
 	function change(status, id)
 	{
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['vendor/block']); ?> ";
+		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+        var path = '".Url::to(['vendor/block'])."';
+        
         $.ajax({
-        type: 'POST',
-        url: path,
-        data: { status: status, id: id,_csrf : csrfToken},
-        success: function(data) {
-         }
+            type: 'POST',
+            url: path,
+            data: { status: status, id: id,_csrf : csrfToken},
+            success: function(data) {
+            }
         });
-     }
-</script>
+    }
+");

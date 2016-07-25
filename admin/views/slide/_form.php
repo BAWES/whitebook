@@ -43,6 +43,7 @@ use yii\widgets\ActiveForm;
 
 </div>
 
+
 <script>
 	<?php if(@$model->slide_video_url=='') { ?>
 	$('#image').show();

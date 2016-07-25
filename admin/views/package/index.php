@@ -3,10 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\PackageSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use yii\web\View;
 
 $this->title = 'Packages';
 $this->params['breadcrumbs'][] = $this->title;
@@ -59,21 +56,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-<script type="text/javascript">
-	function change(status, id)
-	{	
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/package/block']); ?> ";
+<?php 
+
+$this->registerJs("
+
+    function change(status, id)
+    {   
+        var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');       
+        var path = '".Url::to(['/package/block'])."';
+
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-			$('#image-'+id).attr('src',data);
-			$('#image-'+id).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+id+"')");
-         }
+            type: 'POST',      
+            url: path, //url to be called
+            data: { status: status, id: id, _csrf : csrfToken}, //data to be send
+            success: function(data) {
+                var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+                $('#image-'+id).attr('src',data);
+                $('#image-'+id).parent('a').attr('onclick', 
+                \"change('\" + status1 + \"', '\" + id + \"')\");
+            }
         });
-     }	 
-</script>
+     }   
+", View::POS_HEAD);
+	

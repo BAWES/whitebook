@@ -71,9 +71,9 @@ class ThemesController extends Controller
     public function actionCreate()
     {
         $model = new Themes();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            echo Yii::$app->session->setFlash('success', "Theme Added successfully!");
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', "Theme Added successfully!");
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
@@ -93,7 +93,7 @@ class ThemesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            echo Yii::$app->session->setFlash('success', "Theme Updated successfully!");
+            Yii::$app->session->setFlash('success', "Theme Updated successfully!");
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
@@ -116,7 +116,9 @@ class ThemesController extends Controller
         $model->trash = 'Deleted';
         $model->load(Yii::$app->request->post());
         $model->save();
-        echo Yii::$app->session->setFlash('success', "Theme Deleted successfully!");
+        
+        Yii::$app->session->setFlash('success', "Theme Deleted successfully!");
+        
         return $this->redirect(['index']);
     }
 
@@ -138,18 +140,19 @@ class ThemesController extends Controller
 
     public function actionBlock()
     {
-        if(Yii::$app->request->isAjax)
+        if(!Yii::$app->request->isAjax)
+            die();
+
         $data = Yii::$app->request->post();
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $command=Themes::updateAll(['theme_status' => $status],['vendor_id= '.$data['id']]);
-        if($status == 'Active')
-        {
-            echo Yii::$app->session->setFlash('success', "Theme status updated!");
+        
+        $command = Themes::updateAll(['theme_status' => $status],['vendor_id= '.$data['id']]);
+
+        if($status == 'Active') {
+            Yii::$app->session->setFlash('success', "Theme status updated!");
             return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/active.png');
-        }
-        else
-        {
-            echo Yii::$app->session->setFlash('success', "Theme status updated!");
+        } else {
+            Yii::$app->session->setFlash('success', "Theme status updated!");
             return \Yii::$app->urlManagerBackEnd->createAbsoluteUrl('themes/default/img/inactive.png');
         }
     }

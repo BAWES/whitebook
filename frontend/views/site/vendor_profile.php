@@ -189,7 +189,6 @@ if ($event_status > 0) {
                                     <div id="accordion" class="panel-group">
                                         <!-- BEGIN CATEGORY FILTER  -->
                                         <?php
-                                        $subcategory = SubCategory::loadsubcat('invitations');
                                         $category_ids = Vendor::Vendorcategories($slug);
                                         $category_list = Category::Vendorcategorylist($category_ids['category_id']);
                                        // print_r($category_list);die;
@@ -213,81 +212,19 @@ if ($event_status > 0) {
                                             <div id="bakery" class="panel-collapse collapse" area-expanded="true" aria-expanded="true">
                                                 <div class="panel-body">
                                                     <div class="table">
-                                                        <ul class="<?= $class; ?>">
-                                                <?php foreach ($category_list as $key => $c_value) { ?>
-                                                                <li>
-                                                                <?php if ($c_value['slug'] == 'gift-favors') { ?>
-                                                                        <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> >"Gift Favors"</label>
-    <?php } else { ?>
-                                                                        <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> ><?= ucfirst(strtolower($c_value['category_name'])); ?></label>
-                                                                    </li>
-                                            <?php }
-                                        } ?>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <?php /* Hide Subcategory filters here
-                                          $col=1;
-                                          foreach ($subcategory as $key => $value) {
-                                          $t = $in ='';
-                                          if($col==1){
-                                          $s_class='minus_acc';$t='area-expanded="true"';$in='in';
-                                          }else{
-                                          $s_class='plus_acc';
-                                          }
-                                          ?>
-                                          <div class="panel panel-default" >
-                                          <div class="panel-heading">
-                                          <div class="clear_left"><p><?= $value['category_name']; ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-                                          <div class="clear_right">
-                                          <a href="#<?= $value['category_id']; ?>" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-                                          <h4 class="panel-title">
-                                          <span class="<?= $s_class;?>"></span>
-                                          </h4>
-                                          </a>
-                                          </div>
-                                          </div>
-                                          <div id="<?= $value['category_id']; ?>" <?= $t; ?> class="panel-collapse collapse <?= $in; ?>"  >
-                                          <div class="panel-body">
-                                          <div class="table">
-                                          <?php $childcategory = ChildCategory::loadchildcategoryslug($value['category_id']);
-                                          /* Display scroll for more than three li *//*
-                                          if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-                                          /* Display scroll for more than three li *//*
-                                          ?>
-                                          <ul class="<?= $class; ?>">
-                                          <?php
-                                          foreach ($childcategory as $key => $value) {
-
-                                          /* BEGIN check category checbox values */ /*
-                                          if(isset($_GET['category']) && $_GET['category'] !="")
-                                          {
-                                          $val = explode(',',$_GET['category']);
-                                          if(in_array($key,$val))
-                                          {
-                                          $checked = 'checked=checked';
-                                          }
-                                          else
-                                          {
-                                          $checked = '';
-                                          }
-                                          }
-                                          /* END check category checbox values */ /*
-                                          ?>
-                                          <li>
-                                          <label class="label_check" for="checkbox-<?= $value['category_name'] ?>"><input name="items" data-element="input" class="items" id="checkbox-<?= $value['category_name'] ?>" value="<?= $value['slug'] ?>" step="<?= $value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> ><?= $value['category_name']; ?></label>
-                                          </li>
-
-                                          <?php }  ?>
-                                          </ul>
-                                          </div>
-                                          </div>
-                                          </div>
-                                          </div>
-                                          <?php $col++; } */ ?>
-                                        <!--  END CATEGORY FILTER-->
+                <ul class="<?= $class; ?>">
+            <?php foreach ($category_list as $key => $c_value) { ?>
+                <li>                
+                <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> ><?= ucfirst(strtolower($c_value['category_name'])); ?></label>
+                </li>
+            <?php } ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         
+            <!--  END CATEGORY FILTER-->
                                         <!--  BEGIN THEME FILTER-->
                                         <div class="panel panel-default" >
                                             <div class="panel-heading">

@@ -20,6 +20,11 @@ use yii\widgets\ActiveForm;
 	])->textarea(['rows' => 6,'placeholder' => 'Enter app_desc','class'=> 'form-control']) ?>
 	</div>
 
+	<div class="form-group">    
+	<?= $form->field($model, 'home_slider_alias',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+	])->textInput(['placeholder' => 'Enter slider alias','class'=> 'form-control']) ?>
+	</div>
+
 	<div class="form-group">   
 	<?= $form->field($model, 'meta_keyword',[ 'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
 	])->textInput(['maxlength' => 250]) ?>

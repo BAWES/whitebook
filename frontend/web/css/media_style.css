@@ -27,7 +27,7 @@ input[type="text"],input[type="submit"],input[type="button"],select{ outline:non
 
 
 @media screen and (max-width: 1360px) {
-.mega-dropdown-menu{ width: 1350px;}
+/*.mega-dropdown-menu{ width: 1350px;} */
 .dropdown-menu{ left:-762%}
 .bootstrap-select .dropdown-menu{left:0;}
 .shop-menu .dropdown-menu{ left:-825%}   
@@ -366,7 +366,7 @@ section#inner_page_detials { margin: 110px 0 0; display: inline-block;min-height
 .logo_header.col-xs-10.text-center { width: 92%;}
 
 
-#label1 label{margin:18px 0px; background: rgba(0, 0, 0, 0) url("../images/search_icon.svg") no-repeat center center;}
+#label1 label{margin:6px 0px; background: rgba(0, 0, 0, 0) url("../images/search_icon.svg") no-repeat center center;}
 .logout_part li{width:100%;border-bottom: 1px solid #eeeeee; padding: 6px 20px;text-align:left;}
 .logout_part li a{ font-size: 13px; padding: 12px 0;color:#000;text-transform:uppercase;text-align:left;}
 .navbar-nav{margin:0;}
@@ -1312,12 +1312,9 @@ header{ z-index:18;}
 .product_detail_section .faver_evnt_product{float:none;}
 }
 
-
-
-/* TD035 siva */
-	div#mobile_search_fail {
+div#mobile_search_fail {
   z-index: 22;
   position: relative;
 }
 
-/* TD035 siva */
+/* Home slider */

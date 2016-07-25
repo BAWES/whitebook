@@ -21,22 +21,26 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="priorityitem-index">
+
 <div class="loadingmessage" style="display: none;">
-<p>
-<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
-</p>
+    <p>
+    <?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
+    </p>
 </div>
-<p>        <?= Html::a('Create Priority item', ['create'], ['class' => 'btn btn-success']) ?>
 
-        <?= Html::a('Normal', [''], ['class' => 'btn btn-info','id'=>'Normal','onclick'=>'return Status("Normal")', 'style'=>'float:right;']) ?>
+<p>        
+    <?= Html::a('Create Priority item', ['create'], ['class' => 'btn btn-success']) ?>
 
-		<?= Html::a('Super', [''], ['class' => 'btn btn-info','id'=>'Super','onclick'=>'return Status("Super")', 'style'=>'float:right;']) ?>
+    <?= Html::a('Normal', [''], ['class' => 'btn btn-info','id'=>'Normal','onclick'=>'return Status("Normal")', 'style'=>'float:right;']) ?>
+
+	<?= Html::a('Super', [''], ['class' => 'btn btn-info','id'=>'Super','onclick'=>'return Status("Super")', 'style'=>'float:right;']) ?>
 </p>
-	<div class="filter-date">
 
-	<input type="text" name="filter_start" id="filter_start"  placeholder='Priority start date'class="filter" style="margin-left:10px;"/>
+<div class="filter-date">
 
- 	<input type="text" name="filter_end" id="filter_end"  placeholder='Priority end date' class="filter" style="margin-left:10px;"/>
+	<input type="text" name="filter_start" id="filter_start"  placeholder='Priority start date'class="filter" style="margin-left:10px;" />
+
+ 	<input type="text" name="filter_end" id="filter_end"  placeholder='Priority end date' class="filter" style="margin-left:10px;" />
 
 	<select id="status" style="width:100px;">
 		<option value="All">All</option>
@@ -51,8 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <option value="Super">Super</option>
     </select>
 
-    <input type="button" name="filter" id="filter" value="Filter" onClick="prioritydatefilter()" class="btn btn-info" style="margin-left:10px;"/>
-    <input type="button" name="clear" id="clear" value="clear" class="btn btn-info" style="margin-left:10px;"/>
+    <input type="button" name="filter" id="filter" value="Filter" onClick="prioritydatefilter()" class="btn btn-info" style="margin-left:10px; margin-top: -6px;"/>
+    
+    <input type="button" name="clear" id="clear" value="clear" class="btn btn-info" style="margin-left:10px; margin-top: -6px;"/>
 
     </div>
 

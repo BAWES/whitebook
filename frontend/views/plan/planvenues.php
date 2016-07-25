@@ -7,6 +7,9 @@ use common\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
+
+$get = Yii::$app->request->get();
+
 ?>
 
 <!-- coniner start -->
@@ -22,12 +25,7 @@ use yii\widgets\Breadcrumbs;
 <?php
 $category_det=Category::category_value($slug);
 
-if($category_det['category_name']!='Say thank you'){
-	$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $slug])];
-}else{
-	$this->params['breadcrumbs'][] = ['label' => 'Say "Thank You"', 'url' => Url::to(["plan/plan", 'slug' => $slug]) ];
-}
-
+$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $slug])];
 ?>
 
 <?= Breadcrumbs::widget([
@@ -57,16 +55,16 @@ if($category_det['category_name']!='Say thank you'){
 		<div class="listing_sub_cat1">
 			<span class="title_filter">Categories</span>
 
-			<select class="selectpicker" style="display: none;" id="main-category">
-				<option data-icon="venues-category" <?php  if($slug == 'venues') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'venues']) ?>">Venues</option>
-				<option data-icon="invitation-category" <?php  if($slug == 'invitations') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'invitations']) ?>">Invitations</option>
-				<option data-icon="food-category" name="category" value="food-beverage" <?php  if($slug == 'food-beverage') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
-				<option data-icon="decor-category" name="category" value="decor" <?php  if($slug == 'decor') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
-				<option data-icon="supply-category" value="supplies" <?php  if($slug == 'supplies') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
-				<option data-icon="enter-category" value="entertainment" <?php  if($slug == 'entertainment') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
-				<option data-icon="service-category" value="services" <?php  if($slug == 'services') { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
-				<option data-icon="others-category" <?php  if($slug == 'others') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
-				<option data-icon="saythankyou-category" <?php  if($slug == 'gift-favors') { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>">Gift Favors</option>
+				<select class="selectpicker" style="display: none;" id="main-category">
+			<option data-icon="venues-category" value="venues" <?php  if($category_id == Category::VENUES) { ?> selected="selected" <?php } ?> name="category" >Venues</option>
+			<option data-icon="invitation-category" value="invitations" <?php  if($category_id == Category::INVITATIONS) { ?> selected="selected"<?php } ?> name="category">Invitations</option>
+			<option data-icon="food-category" name="category" value="food-beverage" <?php  if($category_id == Category::FOOD_BEVERAGES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
+			<option data-icon="decor-category" name="category" value="decor" <?php  if($category_id ==  Category::DECOR) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
+			<option data-icon="supply-category" value="supplies" <?php  if($category_id ==  Category::SUPPLIES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
+			<option data-icon="enter-category" value="entertainment" <?php  if($category_id ==  Category::ENTERTAINMENT) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
+			<option data-icon="service-category" value="services" <?php  if($category_id ==  Category::SERVICES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
+			<option data-icon="others-category" <?php  if($category_id ==  Category::OTHERS) { ?> selected="selected" <?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
+			<option data-icon="saythankyou-category" <?php  if($category_id == Category::GIFT_FAVORS) { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>">Gift Favor</option>
 			</select>
 		</div>
 	</div>
@@ -120,9 +118,9 @@ if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 
 foreach ($childcategory as $key => $value) {
 
-if(isset($_GET['category']) && $_GET['category'] !="")
+if(isset($get['category']) && $get['category'] !="")
 {
-$val = explode(' ',$_GET['category']);
+$val = explode(' ',$get['category']);
 
 if(in_array($value['slug'],$val))
 {
@@ -172,9 +170,9 @@ if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 ?>
 <ul class="<?= $class; ?>">
 <?php foreach ($themes as $key => $value) {
-if(isset($_GET['themes']) && $_GET['themes'] !="")
+if(isset($get['themes']) && $get['themes'] !="")
 {
-$val = explode(' ',$_GET['themes']);
+$val = explode(' ',$get['themes']);
 
 if(in_array($value['slug'],$val))
 {
@@ -221,10 +219,10 @@ if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 <ul class="<?= $class; ?>">
 <?php foreach ($vendor as $key => $value) {
 
-if(isset($_GET['vendor']) && $_GET['vendor'] !="")
+if(isset($get['vendor']) && $get['vendor'] !="")
 {
 
-$val = explode(' ',$_GET['vendor']);
+$val = explode(' ',$get['vendor']);
 
 if(in_array($value['slug'],$val))
 {
@@ -283,9 +281,9 @@ if($min_kd > 0 )
 {
 	foreach ($imageData as $key => $value) {
 	/* Check checkbox based on URL */
-	if(isset($_GET['price']) && $_GET['price'] !="")
+	if(isset($get['price']) && $get['price'] !="")
 	{
-	$val = explode(' ',$_GET['price']);
+	$val = explode(' ',$get['price']);
 
 	if(in_array($value['slug'],$val))
 	{
@@ -651,7 +649,7 @@ return this.value;
 var url_path;
 /* BEGIN GET SLUG FROM URL */
 var url = window.location.href;
-slug = <?= '"'.$_GET['slug'].'"';?>;
+slug = <?= '"'.$get['slug'].'"';?>;
 /* var newUrl = url.substring(0, url.indexOf('?'));
 
 if(newUrl !='')

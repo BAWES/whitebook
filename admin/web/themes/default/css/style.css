@@ -8405,3 +8405,16 @@ a.delivery_href:hover{
   .vendor-admin-new .delivery_days .sun, .vendor-admin-new .mon,.vendor-admin-new .tue,.vendor-admin-new .wed,.vendor-admin-new .thu,.vendor-admin-new .fri,.vendor-admin-new .sat{width:135px;}
   .vendor-admin-new {width: 100%; display: inline-block;}
   .vendor-admin-new .delivery_days{padding: 12px 0 0 3px;}
+
+.address_box {
+    margin-bottom: 10px;
+    border: 1px dashed;
+    padding: 5px;
+}
+.address_box ul {
+    margin: 0;
+    padding: 0;
+}
+.address_box ul li {
+    list-style: none;
+}

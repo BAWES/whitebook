@@ -89,8 +89,10 @@ class VendorController extends Controller
 
     public function actionView($id)
     {
+        $request = Yii::$app->request;
+
         $searchModel = new VendoritemSearch();
-        $dataProvider = $searchModel->searchviewVendor(Yii::$app->request->queryParams, $_GET['id']);
+        $dataProvider = $searchModel->searchviewVendor(Yii::$app->request->queryParams, $request->get('id'));
 
         $searchModel1 = new PrioritylogSearch();
         $dataProvider1 = $searchModel1->vendorviewsearch(Yii::$app->request->queryParams, $id);
@@ -116,7 +118,11 @@ class VendorController extends Controller
     public function actionVendoritemview($id)
     {
         $searchModel = new VendoritemSearch();
-        $dataProvider = $searchModel->searchVendor(Yii::$app->request->queryParams, $_GET['id']);
+        
+        $dataProvider = $searchModel->searchVendor(
+            Yii::$app->request->queryParams, 
+            Yii::$app->request->get('id')
+        );
 
         return $this->render('vendoritemview', [
             'model' => $this->findModel($id),

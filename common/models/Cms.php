@@ -5,6 +5,9 @@ namespace common\models;
 use Yii;
 use yii\helpers\Url;
 use yii\behaviors\SluggableBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 /**
  * This is the model class for table "{{%cms}}".
  *
@@ -34,6 +37,7 @@ class Cms extends \yii\db\ActiveRecord
 	{
 	      return [
 	          [
+
 	              'class' => SluggableBehavior::className(),
 	              'attribute' => 'page_name',	
 	              
@@ -44,6 +48,17 @@ class Cms extends \yii\db\ActiveRecord
 				 return str_replace(' ', '-', $this->slug);
         },             
 	          ],
+              [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                   'class' => TimestampBehavior::className(),
+                   'createdAtAttribute' => 'created_datetime',
+                   'updatedAtAttribute' => 'modified_datetime',
+                   'value' => new Expression('NOW()'),
+            ],
 	      ];
 	}
 

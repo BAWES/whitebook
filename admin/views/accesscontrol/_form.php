@@ -10,17 +10,21 @@ use yii\bootstrap\ActiveField;
 <?= Html::csrfMetaTags() ?>
 <div class="accesscontrol-form">
 	<div class="col-md-8 col-sm-8 col-xs-8">
-	<?php $form = ActiveForm::begin(array('options' => array('id' => 'myform','onsubmit'=>'return check_validation();'))); ?>
-	<div class="form-group">
-	<?php if ($model->isNewRecord) { ?>
-	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->label('Select a user')->dropDownList($admin,['prompt'=>'Select...']) ?>
+	
+    <?php $form = ActiveForm::begin(array('options' => array('id' => 'myform','onsubmit'=>'return check_validation();'))); ?>
+	
+    <div class="form-group">
+    <?php if ($model->isNewRecord) { ?>
+    	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+    	])->label('Select a user')->dropDownList($admin,['prompt'=>'Select...']) ?>
 	<?php } else { ?>
-	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->label('Select a user')->dropDownList($admin,['prompt'=>'Select...','disabled' => true,]) ?><?php } ?>
+    	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+    	])->label('Select a user')->dropDownList($admin,['prompt'=>'Select...','disabled' => true,]) ?>
+    <?php } ?>
 	</div>
-	<div class="form-group">
-	 <div id="no-more-tables">
+	
+    <div class="form-group">
+	   <div id="no-more-tables">
             <table class="col-md-12 table-bordered table-striped table-condensed cf">
         		<thead class="cf">
         			<tr>
@@ -49,7 +53,7 @@ use yii\bootstrap\ActiveField;
         			</tr>
         			<?php } } else {
         			foreach($accesslist as $al){	?>
-				<tr>
+				    <tr>
         				<td><input type="checkbox" id="ctrl" name="Accesscontroller[controller][<?php echo $al['controller'];?>][controller_id]" class="checkbox_all" value="<?php echo $al['id'];?>" <?php if(($al['id'])){echo 'checked';}?>>&nbsp;<?php echo $al['controller'];?></td>
 						<td><input type="checkbox" id="create" name="Accesscontroller[controller][<?php echo $al['controller'];?>][create]" class="create"value="Create" <?php if($al['create']){echo 'checked';}?>></td>
 						<td><input type="checkbox" id="update" name="Accesscontroller[controller][<?php echo $al['controller'];?>][update]"  class="update"value="Update" <?php if($al['update']){echo 'checked';}?>></td>
@@ -64,7 +68,7 @@ use yii\bootstrap\ActiveField;
         				<td><input type="checkbox" id="view" name="Accesscontroller[controller][<?php echo $al['controller'];?>][view]" class="view" value="View"></td>
         				<?php }?>
 					</tr>
-				<?php } ?>
+				    <?php } ?>
         			<?php  foreach($controller as $key => $value){	?>
         			<tr>
         				<td><input type="checkbox"  id="ctrl" name="Accesscontroller[controller][<?php echo $value;?>][controller_id]" class="checkbox_all" value="<?php echo $key; ?>">&nbsp;<?php echo $value;?></td>
@@ -83,111 +87,51 @@ use yii\bootstrap\ActiveField;
 
         			<?php } ?>
 				</tbody>
-	</table>
-	</div>
-        			 <div class="ctrlnew" style="color:#a94442; margin-top:8px;">Select atleast one module</div>
-        			 <div class="functionnew" style="color:#a94442; margin-top:8px;">Select atleast one function</div>
-</div>
+        	</table>
+        </div>
+		<div class="ctrlnew" style="color:#a94442; margin-top:8px;">Select atleast one module</div>
+		<div class="functionnew" style="color:#a94442; margin-top:8px;">Select atleast one function</div>
+    </div>
 
-	 <div class="form-group mrg_top">
+	<div class="form-group mrg_top">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
     </div>
+    
     <?php ActiveForm::end(); ?>
-	</div>
+	
+    </div>
 </div>
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-select2/select2.css") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<script>
-$("#auth_item").select2({
-    placeholder: "Select User Function.."
-});
 
-</script>
+<?php 
 
-<script type="text/javascript">
-$(function (){
-	$(".admin").hide();
-	$(".ctrlnew").hide();
-	$(".functionnew").hide();
- });
-</script>
-<?php if(!$model->isNewRecord){ ?>
-<script>
-	$(function (){
-		check_checkbox_all(); // when page load check the checkbox count and make check all to be checked
-		$('.checkbox_all,.create,.update,.delete,.manage').on('click',function(){ // when click any one of the checkbox and make check all to be checked or not
-				check_checkbox_all();
-		});
-	});
-	function check_checkbox_all(){
-		if($('.checkbox_all:checked').length==$('.checkbox_all').length) $('#module').prop('checked', true);else $('#module').prop('checked', false);
-		if($('.create:checked').length==$('.checkbox_all').length) $('#create').prop('checked', true); else $('#create').prop('checked', false);
-		if($('.update:checked').length==$('.checkbox_all').length) $('#update').prop('checked', true); else $('#update').prop('checked', false);
-		if($('.delete:checked').length==$('.checkbox_all').length) $('#delete').prop('checked', true); else $('#delete').prop('checked', false);
-		if($('.manage:checked').length==$('.checkbox_all').length) $('#manage').prop('checked', true); else $('#manage').prop('checked', false);
-	}
-</script>
-<?php }?>
+$this->registerJs("
+    var auth_item_url = '".Url::to(['/accesscontrol/authitem'])."';
+");
 
+if(!$model->isNewRecord){ 
 
-<script type="text/javascript">
-$(function (){
-    $("#accesscontroller-admin_id").change(function (){
-		$('#myTable').addClass('has-error');
-   });
- });
-</script>
+    $this->registerJs("
 
-<script type="text/javascript">
-$(function (){
-    $("#accesscontroller-controller").change(function (){
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var admin_id = $('#accesscontroller-admin_id').val();
-        var controller_id = $('#accesscontroller-controller').val();
-        var path = "<?php echo Url::to(['/accesscontrol/authitem']); ?> ";
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { admin_id: admin_id ,controller_id : controller_id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {
-             $('#auth_item').html(data);
-         }
-        })
-     });
- });
+        $(function (){
+            check_checkbox_all(); // when page load check the checkbox count and make check all to be checked
+            $('.checkbox_all,.create,.update,.delete,.manage').on('click',function(){ // when click any one of the checkbox and make check all to be checked or not
+                    check_checkbox_all();
+            });
+        });
 
+        function check_checkbox_all(){
+            if($('.checkbox_all:checked').length==$('.checkbox_all').length) $('#module').prop('checked', true);else $('#module').prop('checked', false);
+            if($('.create:checked').length==$('.checkbox_all').length) $('#create').prop('checked', true); else $('#create').prop('checked', false);
+            if($('.update:checked').length==$('.checkbox_all').length) $('#update').prop('checked', true); else $('#update').prop('checked', false);
+            if($('.delete:checked').length==$('.checkbox_all').length) $('#delete').prop('checked', true); else $('#delete').prop('checked', false);
+            if($('.manage:checked').length==$('.checkbox_all').length) $('#manage').prop('checked', true); else $('#manage').prop('checked', false);
+        }
+    ");
+}
 
- function check_validation()
- {
-	var ids = $("input[id=ctrl]:checked").get();
-	var create = $("input[id=create]:checked").get();
-	var update = $("input[id=update]:checked").get();
-	var delete1 = $("input[id=delete]:checked").get();
-	var manage = $("input[id=manage]:checked").get();
-	var view = $("input[id=view]:checked").get();
-    if(ids.length == 0)
-    {
-		$(".ctrlnew").show();
-		$('#myTable').addClass('has-error');
-		return false;
-    }
-        if((create.length == 0)&&(update.length == 0)&&(delete1.length == 0)&&(view.length == 0)&&(manage.length == 0))
-    {
-		$(".ctrlnew").hide();
-		$(".functionnew").show();
-		$('#myTable').addClass('has-error');
-		return false;
-    }
-    else {
-	$('#myTable').removeClass();
-    return true;
-    }
-    return false;
- }
- //33
-</script>
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-select2/select2.css');
+
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-select2/select2.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile("@web/themes/default/js/accesscontrol.js", ['depends' => [\yii\web\JqueryAsset::className()]]);

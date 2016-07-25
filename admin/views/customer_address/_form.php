@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\CustomerAddress */
+/* @var $model app\models\CustomerAddress */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -12,15 +12,17 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'customer_id')->textInput(['maxlength' => 11]) ?>
+    <?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'address_type_id')->textInput(['maxlength' => 11]) ?>
+    <?= $form->field($model, 'address_type_id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'country_id')->textInput() ?>
 
     <?= $form->field($model, 'city_id')->textInput() ?>
 
-    <?= $form->field($model, 'area_id')->textInput(['maxlength' => 11]) ?>
+    <?= $form->field($model, 'area_id')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'address_data')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'address_archived')->dropDownList([ 'yes' => 'Yes', 'no' => 'No', ], ['prompt' => '']) ?>
 
@@ -36,7 +38,6 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?= Html::a('Back', ['index', ], ['class' => 'btn btn-defauult']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

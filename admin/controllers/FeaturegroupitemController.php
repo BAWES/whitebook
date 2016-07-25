@@ -85,9 +85,13 @@ class FeaturegroupitemController extends Controller
 
     public function actionSort_feature_group()
     {
-        $sort = $_POST['sort_val'];
-        $featured_id = $_POST['featured_id'];
-         $command=Featuregroupitem::updateAll(['featured_sort' => $sort],'featured_id= '.$featured_id);
+        $request = Yii::$app->request;
+
+        $sort = $request->post('sort_val');
+        $featured_id = $request->post('featured_id');
+        
+        $command=Featuregroupitem::updateAll(['featured_sort' => $sort], 'featured_id= '.$featured_id);
+        
         if ($command) {
             Yii::$app->session->setFlash('success', 'Sort order updated successfully!');
             echo 1;

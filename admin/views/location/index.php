@@ -49,22 +49,28 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
-	function change(status, lid)
-	{				
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/location/block']); ?> ";
+
+<?php 
+
+$this->registerJs("
+
+    function change(status, lid)
+    {               
+        var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');       
+        var path = '".Url::to(['/location/block'])."';
+        
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, lid: lid, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-			$('#image-'+lid).attr('src',data);
-			$('#image-'+lid).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+lid+"')");
-         }
+            type: 'POST',      
+            url: path, //url to be called
+            data: { status: status, lid: lid, _csrf : csrfToken}, //data to be send
+            success: function(data) {
+                var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+                $('#image-'+lid).attr('src',data);
+                $('#image-'+lid).parent('a').attr('onclick', 
+                \"change('\" + status1 + \"', '\" + lid + \"')\");
+            }
         });
-     }
-	 
-</script>
+    }
+");
+
+	
