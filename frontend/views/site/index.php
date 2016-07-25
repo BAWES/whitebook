@@ -2,18 +2,19 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\web\view;
 use common\models\Featuregroup;
 use common\models\Featuregroupitem;
 use common\models\Vendoritem;
 use common\models\Vendor;
 use common\models\Themes;
 use common\models\Image;
-
 use frontend\models\Website;
 
 $this->title = 'Home | Whitebook';
 
 $model = new Website();
+
 ?>
 <!-- content main start -->
 
@@ -207,40 +208,45 @@ foreach ($featured_product as $f) {
 </div>
 </div>
 <?php }
-} ?>
+} 
 
-<script type="text/javascript">
-if(jQuery(window).width() < 991) {
-    var lop = 0;
-    jQuery('.plan_sections ul li').each(function (index, value) {
-        var hrefli = jQuery(this).find('a').attr('href');
-        jQuery(this).find('a').remove();
-        jQuery(this).html('<a href="' + hrefli + '" >' + jQuery(this).html() + '<a>');
-    });
-}
+$this->registerJs("
 
-/* VIDEO PLAY HOME START */
-jQuery(document).ready(function () {
-    jQuery('a.play_buttons').click(function () {
-        jQuery('#video_click')[0].play();
-        jQuery('#video_click').attr('controls', true);
-        jQuery('a.play_buttons').hide();
-    });
-    jQuery('#video_click').bind('ended', function () {
-        //$('#thisdiv').load(document.URL +  ' #thisdiv');
-        jQuery('#video_click').load();
-        jQuery('#video_click').attr('controls', false);
-        jQuery('a.play_buttons').show();
-    });
-});
+    if(jQuery(window).width() < 991) {
+        var lop = 0;
+        jQuery('.plan_sections ul li').each(function (index, value) {
+            var hrefli = jQuery(this).find('a').attr('href');
+            jQuery(this).find('a').remove();
+            jQuery(this).html('<a href=\"' + hrefli + '\" >' + jQuery(this).html() + '<a>');
+        });
+    }
 
-/* Hide BG FOR EVENT SLIDER IMPORTANT*/
-jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){
-    jQuery(this).css('background','transparent');
-    jQuery('.container_common').css('margin','0');
-    jQuery('.event_slider_top').css({'padding':'5px 0 0 0','display':'inline-block','width':'100%','margin':'4px 0 0 0'});
-});
-</script>
+    /* VIDEO PLAY HOME START */
+    jQuery(document).ready(function () {
+        jQuery('a.play_buttons').click(function () {
+            jQuery('#video_click')[0].play();
+            jQuery('#video_click').attr('controls', true);
+            jQuery('a.play_buttons').hide();
+        });
+        jQuery('#video_click').bind('ended', function () {
+            //$('#thisdiv').load(document.URL +  ' #thisdiv');
+            jQuery('#video_click').load();
+            jQuery('#video_click').attr('controls', false);
+            jQuery('a.play_buttons').show();
+        });
+    });
+
+    /* Hide BG FOR EVENT SLIDER IMPORTANT*/
+    jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){
+        jQuery(this).css('background','transparent');
+        jQuery('.container_common').css('margin','0');
+        jQuery('.event_slider_top').css({'padding':'5px 0 0 0','display':'inline-block','width':'100%','margin':'4px 0 0 0'});
+    });
+
+", View::POS_READY);
+
+?>
+
 <!-- Hide BG FOR EVENT SLIDER
  VIDEO PLAY HOME END -->
 
