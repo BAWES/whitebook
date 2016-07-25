@@ -761,7 +761,7 @@ input#search-terms::-ms-input-placeholder {
 /*heder end*/
 
 @font-face {font-family:ProximaNova-Regular;src: url(../fonts/ProximaNova-Regular.otf);}
-@font-face {font-family:BodoniMT;src: url(../fonts/BodoniMT.ttf);}
+@font-face {font-family:BodoniMT;src: url(../fonts/BodoniMT.TTF);}
 /*fonts start*/
 @font-face {
     font-family: 'OpenSansRegular';
