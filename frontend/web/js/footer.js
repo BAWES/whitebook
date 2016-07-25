@@ -13,6 +13,10 @@ jQuery(window).resize(function(){
     //set left position for dropdown ment 
     $left = jQuery('.nav.navbar-nav').offset().left;
     jQuery('.mega-dropdown-menu').css('left', '-' + $left + 'px');
+
+    if(jQuery(window).width() <= 990) {
+        jQuery('#home_slider').css('padding-top', $('#top_header').height() + 'px');    
+    }    
 });
 
 jQuery(document).ready(function () {

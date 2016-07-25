@@ -1312,12 +1312,9 @@ header{ z-index:18;}
 .product_detail_section .faver_evnt_product{float:none;}
 }
 
-
-
-/* TD035 siva */
-	div#mobile_search_fail {
+div#mobile_search_fail {
   z-index: 22;
   position: relative;
 }
 
-/* TD035 siva */
+/* Home slider */

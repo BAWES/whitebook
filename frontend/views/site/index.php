@@ -17,7 +17,13 @@ $model = new Website();
 ?>
 <!-- content main start -->
 
-<?php echo file_get_contents('http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias); ?>
+<div id="home_slider">
+    <?php 
+        echo file_get_contents(
+            'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias
+        );
+    ?>
+</div>
 
 <!-- Content start -->
 <section id="content_section">
