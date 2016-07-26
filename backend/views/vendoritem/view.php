@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <table class="table table-striped table-bordered detail-view">
       <tbody>
           <tr><th>Item name</th><td><?= $model->item_name ?></td></tr>
+          <tr><th>Item name - Arabic</th><td><?= $model->item_name_ar ?></td></tr>
           <tr>
             <th>Categories</th>
             <td>
@@ -61,7 +62,9 @@ $this->params['breadcrumbs'][] = $this->title;
       <tbody>
           <tr><th>Item type</th><td><?= $item_type; ?></td></tr>
           <tr><th>Item description</th><td><?= $model->item_description; ?></td></tr>
+          <tr><th>Item description - Arabic</th><td><?= $model->item_description_ar; ?></td></tr>
           <tr><th>Item additional info</th><td><?= $model->item_additional_info; ?></td></tr>
+          <tr><th>Item additional info - Arabic</th><td><?= $model->item_additional_info_ar; ?></td></tr>
       </tbody>
     </table>
   </div>
@@ -91,6 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </td>
           </tr>
           <tr><th>Item price description</th><td><?= $model->item_price_description ?></td></tr>
+          <tr><th>Item price description - Arabic</th><td><?= $model->item_price_description_ar ?></td></tr>
       </tbody>
     </table>
   </div>

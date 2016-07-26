@@ -63,6 +63,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 
 	<div class="form-group">
+	<?= $form->field($model, 'vendor_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textInput(['maxlength' => 100]) ?>
+	</div>
+
+	<div class="form-group">
 	<?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->textInput(['maxlength' => 100,]) ?>
 	</div>
@@ -111,6 +116,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?= $form->field($model, 'vendor_contact_address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->textArea() ?>
 	</div>
+
+	<div class="form-group" style="clear:both;">
+	<?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textArea() ?>
+	</div>
+	
 	<div class="form-group" style="height: 10px;">
 	<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next">
 	</div>
@@ -132,12 +143,22 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 
 	<div class="form-group">
+	<?= $form->field($model, 'vendor_return_policy_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textArea(['id'=>'text-editor-2']) ?>
+	</div>
+
+	<div class="form-group">
 	<?= $form->field($model, 'vendor_fax',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->textInput() ?>
 	</div>
 
 	<div class="form-group">
 	<?= $form->field($model, 'short_description',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textArea() ?>
+	</div>
+
+	<div class="form-group">
+	<?= $form->field($model, 'short_description_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->textArea() ?>
 	</div>
 

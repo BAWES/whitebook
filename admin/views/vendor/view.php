@@ -57,7 +57,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?= DetailView::widget([ 'model' => $model,
         'attributes' => [
             'vendor_name',
-              ['label'=>'package_id',
+            'vendor_name_ar',
+              ['label'=>'package id',
              'value'=> isset($model->package->package_name) ? $model->package->package_name : 'Not set' ,
             ],
             'vendor_brief',

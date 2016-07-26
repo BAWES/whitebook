@@ -52,6 +52,11 @@ use yii\helpers\Url;
 	])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
 	</div>
 
+	<div class="form-group">
+	<?= $form->field($model, 'vendor_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
+	</div>
+
 	<?php if(!$model->isNewRecord) { ?>
 
 	<div class="form-group">
@@ -111,6 +116,11 @@ use yii\helpers\Url;
 	])->textArea() ?>
 	</div>
 
+	<div class="form-group">
+	<?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textArea() ?>
+	</div>
+
 	<div class="form-group" style="height: 10px;">
 	<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next">
 	</div>
@@ -147,12 +157,22 @@ use yii\helpers\Url;
 	</div>
 
 	<div class="form-group">
+	<?= $form->field($model, 'vendor_return_policy_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textArea(['id'=>'text-editor-2']) ?>
+	</div>
+
+	<div class="form-group">
 	<?= $form->field($model, 'vendor_fax',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->textInput() ?>
 	</div>
 
 	<div class="form-group">
 	<?= $form->field($model, 'short_description',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textArea() ?>
+	</div>
+
+	<div class="form-group">
+	<?= $form->field($model, 'short_description_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->textArea() ?>
 	</div>
 
@@ -248,6 +268,7 @@ $(function()
  	/* End when loading page first tab opened */
 
 	CKEDITOR.replace('text-editor');
+	CKEDITOR.replace('text-editor-2');
 });
 
 var j= <?= $count_vendor+1; ?>;
