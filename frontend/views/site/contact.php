@@ -1,4 +1,11 @@
-<?php $this->title = 'Contact us | Whitebook'; ?>
+<?php 
+
+use yii\web\view;
+
+$this->title = 'Contact us | Whitebook'; 
+
+?>
+
 <!-- coniner start -->
 <section id="inner_pages_sections">
     <div class="container">
@@ -60,79 +67,22 @@
 </div>
 </section>
 
+<?php 
 
+$this->registerJs("
 
-<!-- continer end -->
-
-
-<script>
-    jQuery(document).ready(function () {
-
-        jQuery(".dropdown").hover(
-                function () {
-                    jQuery('.dropdown-menu', this).stop(true, true).slideDown("fast");
-                    jQuery(this).toggleClass('open');
-                },
-                function () {
-                    jQuery('.dropdown-menu', this).stop(true, true).slideUp("fast");
-                    jQuery(this).toggleClass('open');
-                }
-        );
-
-
-        jQuery(".show_content").click(function () {
-            jQuery(this).parent().next('.toogle_botom').toggle();
-        });
-
-// Window load event used just in case window height is dependant upon images
-        if (jQuery(window).width() > 991) {
-
-            jQuery(window).bind("load", function () {
-
-                var footerHeight = 0,
-                        footerTop = 0,
-                        jQueryfooter = jQuery("#footer_sections");
-
-                positionFooter();
-
-                function positionFooter() {
-
-                    footerHeight = jQueryfooter.height();
-                    jQueryTop = (jQuery(window).scrollTop() + jQuery(window).height() - footerHeight) + "px";
-
-                    if ((jQuery(document.body).height() + footerHeight) < jQuery(window).height()) {
-                        jQueryfooter.css({
-                            position: "absolute"
-                        })
-                    } else {
-                        jQueryfooter.css({
-                            position: "static"
-                        }).animate({
-                            bottom: footerTop
-                        })
-                    }
-
-                }
-
-                jQuery(window)
-                        .scroll(positionFooter)
-                        .resize(positionFooter)
-
-            });
-        }
-<!--end footer sticky-->
-
+    jQuery('.show_content').click(function () {
+        jQuery(this).parent().next('.toogle_botom').toggle();
     });
-</script>
 
 
-
-
-<script type="text/javascript">
     jQuery('#send').on('click', function () {
+
         jQuery('#chkname,#chkemail,#chkmessage').html('');
+        
         var i = 0;
         var j = 0;
+        
         if (jQuery('#username').val() == '')
         {
             jQuery('#chkname').html('Enter name!');
@@ -154,6 +104,7 @@
             i = 1;
             j = 1;
         }
+
         if (jQuery('#usermessgae').val() == '')
         {
             jQuery('#chkmessage').html('Enter message!');
@@ -166,27 +117,38 @@
             var msg = jQuery('#usermessgae').val();
             i = 0;
         }
+
         if (i == 1)
         {
             return false;
         }
+
         if ((i == 0) && (j == 0))
         {
-            var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");
+            var csrfToken = jQuery('meta[name=\"csrf-token\"]').attr('content');
+
+            $('#send').html('Sending...');
+
             jQuery.ajax({
                 type: 'POST',
-                url: "<?php echo Yii::$app->urlManager->createAbsoluteUrl('site/contact'); ?>",
-                //type: 'post',
-                data: {username: jQuery("#username").val(), useremail: jQuery("#useremail").val(), msg: jQuery("#usermessgae").val(), csrf: csrfToken},
+                url: '".Yii::$app->urlManager->createAbsoluteUrl('site/contact')."',
+                data: {
+                    username: jQuery('#username').val(), 
+                    useremail: jQuery('#useremail').val(), 
+                    msg: jQuery('#usermessgae').val(), 
+                    csrf: csrfToken
+                },
                 success: function (data) {
                     if (data == 1)
                     {
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span style="margin-top: 5px; width: 320px; float: left; text-align: left;">Contact enquiry information send successfully!</span>');
+                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">Contact enquiry information send successfully!</span>');
                         window.setTimeout(function () {
                             location.reload()
                         }, 2000)
                     }
+
+                    $('#send').html('Send Email');
                 }
             });
 
@@ -195,22 +157,4 @@
 
     });
 
-
-    /*		function validateEmail(mail)   
-     {  
-     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form1.useremail.value))  
-     {  
-     return (1);  
-     }  
-     
-     return (0);  
-     }  
-     */
-    /*function validateEmail(email) {
-     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-     return re.test(email);
-     }*/
-</script> 
-
-
-
+", View::POS_READY);

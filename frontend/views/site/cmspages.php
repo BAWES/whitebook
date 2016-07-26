@@ -20,51 +20,14 @@ $this->title = $title . ' | Whitebook';
 </section>
 
 <script>
-// Window load event used just in case window height is dependant upon images
-    if (jQuery(window).width() > 991) {
-        $(window).bind("load", function () {
 
-            var footerHeight = 0,
-                    footerTop = 0,
-                    $footer = $("#footer_sections");
-
-            positionFooter();
-
-            function positionFooter() {
-
-                footerHeight = $footer.height();
-                footerTop = ($(window).scrollTop() + $(window).height() - footerHeight) + "px";
-
-                if (($(document.body).height() + footerHeight) < $(window).height()) {
-                    $footer.css({
-                        position: "absolute"
-                    })
-                } else {
-                    $footer.css({
-                        position: "static"
-                    }).animate({
-                        bottom: footerTop
-                    })
-                }
-
-            }
-
-            $(window)
-                    .scroll(positionFooter)
-                    .resize(positionFooter)
-
-        });
-
-    }
 // mobile hover menu start
     $(".mobile-menu .dropdown").click(function () {
-//  $('.dropdown-menu1', this).stop(true, true).slideDown("fast");
-        $(this).toggleClass('open');
-    },
-            function () {
-//  $('.dropdown-menu1', this).stop(true, true).slideUp("fast");
-                $(this).toggleClass('open');
-            }
+            $(this).toggleClass('open');
+        },
+        function () {
+            $(this).toggleClass('open');
+        }
     );
 
 // mobile hover menu end
