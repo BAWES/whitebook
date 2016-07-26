@@ -40,6 +40,18 @@ class Category extends \yii\db\ActiveRecord
     const SECOND_LEVEL = 1;
     const THIRD_LEVEL = 2;
 
+    /* CATEGORY LISTS */
+    const VENUES = 125;
+    const INVITATIONS = 103;
+    const FOOD_BEVERAGES = 85;
+    const DECOR = 86;
+    const SUPPLIES = 101;
+    const ENTERTAINMENT = 87;
+    const SERVICES = 102;
+    const OTHERS = 126;
+    const GIFT_FAVORS = 127;
+
+
     /**
     * @inheritdoc
     */

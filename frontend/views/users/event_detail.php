@@ -78,15 +78,10 @@ $cust_id = Yii::$app->user->identity->customer_id;
 <div class="panel panel-default">
 <div class="panel-heading" role="tab" id="heading<?= $key ?>">
 <h4 class="panel-title">
-<?php if($value1['slug']=='gift-favors'){ ?>
-<a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapse<?= $key ?>" aria-expanded="false" aria-controls="collapse<?= $key ?>" class="collapsed">
-<?php echo 'Gift'.' "Favors" '.' - '.'<span id="item_count">' .count($cat_list1). '</span>'; ?>
-<span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
-<?php } else {  ?>
+
 <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapse<?= $key ?>" aria-expanded="false" aria-controls="collapse<?= $key ?>" class="collapsed">
 <?php echo $value1['category_name'].' - '.'<span id="item_count">' .count($cat_list1). '</span>'; ?>
 <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
-<?php } ?>
 </h4>
 </div>
 <div id="collapse<?= $key ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?= $key ?>" aria-expanded="false">

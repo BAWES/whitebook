@@ -11,6 +11,7 @@ use frontend\models\Category;
 use common\models\Siteinfo;
 use common\models\Events;
 use common\models\City;
+use common\models\Location;
 use common\models\Faq;
 use frontend\models\Themes;
 use common\models\Featuregroupitem;
@@ -20,6 +21,7 @@ use frontend\models\Users;
 use yii\web\Session;
 use yii\db\Query;
 use common\models\Smtp;
+use frontend\models\Contacts;
 
 class SiteController extends BaseController
 {
@@ -42,11 +44,15 @@ class SiteController extends BaseController
         $product_list = $featuremodel->get_featured_product_id();
         
         $banner = $website_model->get_banner_details();
+        
         $featured_product = array();
+        
         if (!Yii::$app->user->isGuest) {
             $featured_product = Vendoritem::get_featured_product();
         }
+        
         return $this->render('index', [
+          'home_slider_alias' => Siteinfo::find()->one()->home_slider_alias,
           'featured_product' => $featured_product,
           'banner' => $banner,
           'key' => '0',
@@ -60,8 +66,15 @@ class SiteController extends BaseController
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();
-        $featured_product = $featuremodel->get_featured_product();
+        
         $banner = $website_model->get_banner_details();
+        
+        $featured_product = array();
+        
+        if (!Yii::$app->user->isGuest) {
+            $featured_product = Vendoritem::get_featured_product();
+        }
+
         $ads = $website_model->get_home_ads();
         $event_type = $website_model->get_event_types();
         $customer_events = array();
@@ -71,13 +84,13 @@ class SiteController extends BaseController
         }
 
         return $this->render('index', [
-          'featured_product' => $featured_product,
-          'banner' => $banner,
-          'event_type' => $event_type,
-          'ads' => $ads,
-          'customer_events' => $customer_events,
-          'key' => '1',
-    ]);
+              'featured_product' => $featured_product,
+              'banner' => $banner,
+              'event_type' => $event_type,
+              'ads' => $ads,
+              'customer_events' => $customer_events,
+              'key' => '1',
+        ]);
     }
 
     public function actionDirectory()
@@ -152,11 +165,16 @@ class SiteController extends BaseController
     public function actionSearchdirectory()
     {
         $website_model = new Website();
+
         $main_category = $website_model->get_main_category();
+        
+        $request = Yii::$app->request;
+
         if (Yii::$app->request->isAjax) {
             $website_model = new Website();
-            if ($_POST['slug'] != 'All') {
-                $categoryid = Category::category_value($_POST['slug']);
+            
+            if ($request->post('slug') != 'All') {
+                $categoryid = Category::category_value($request->post('slug'));
                 $directory = $website_model->get_search_directory_list($categoryid['category_id']);
                 $prevLetter = '';
                 $result = array();
@@ -181,7 +199,7 @@ class SiteController extends BaseController
                 }
                 $result = array_unique($result);
             }
-            if ($_POST['ajaxdata'] == 0) {
+            if ($request->post('ajaxdata') == 0) {
                 return $this->renderPartial('searchdirectory', [
                     'directory' => $directory,
                     'first_letter' => $result, ]);
@@ -282,30 +300,37 @@ class SiteController extends BaseController
 
     public function actionSearch()
     {
-        if (isset($_POST['search']) && isset($_POST['_csrf'])) {
-            $search_data = $_POST['search'];
+        $request = Yii::$app->request;
+
+        if ($request->post('search') && $request->post('_csrf')) {
+
+            $search_data = $request->post('search');
             $item = new Vendoritem();
-            $item_details = $item->vendoritem_search_details($_POST['search']);
+            $item_details = $item->vendoritem_search_details($request->post('search'));
 
             $k = '';
             $slug1 = array();
             $itm = array();
+            
             if (!empty($item_details)) {
                 foreach ($item_details as $i) {
                     $slug1[] = $i['wcslug'];
                     $category[] = $i['category_name'];
                 }
             }
+
             if (!empty($slug1)) {
                 $slg = array_unique($slug1);
             } else {
                 $slg = '';
             }
+            
             if (!empty($category)) {
                 $cat = array_unique($category);
             } else {
                 $cat = '';
             }
+            
             if (!empty($cat)) {
                 for ($i = 0;$i < count($cat); ++$i) {
                     if (!empty($cat[$i])) {
@@ -354,9 +379,11 @@ class SiteController extends BaseController
         if ($slug != '') {
             $website_model = new Website();
             $vendor_details = $website_model->vendor_details($slug);
+            
             if (empty($vendor_details)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
+
             $vendor_item_details = $website_model->vendor_item_details($vendor_details[0]['vendor_id']);
             $main_category = $website_model->get_main_category();
 
@@ -384,13 +411,15 @@ class SiteController extends BaseController
 			->asArray()
 			->all();
 
-
-
             if (!isset(Yii::$app->user->identity->customer_id)) {
                 return $this->render('vendor_profile', [
-              'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes,
-              'category' => $main_category, 'vendorData' => $vendorData,'slug'=>$slug,
-            ]);
+                  'vendor_detail' => $vendor_details, 
+                  'vendor_item_details' => $vendor_item_details, 
+                  'themes' => $themes,
+                  'category' => $main_category, 
+                  'vendorData' => $vendorData,
+                  'slug'=>$slug,
+                ]);
             } else {
                 $event_limit = 8;
                 $wish_limit = 6;
@@ -403,34 +432,38 @@ class SiteController extends BaseController
                 $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
 
                 return $this->render('vendor_profile', [
-              'vendor_detail' => $vendor_details, 'vendor_item_details' => $vendor_item_details, 'themes' => $themes, 'vendorData' => $vendorData,
-              'category' => $main_category, 'customer_events' => $customer_events, 'slug'=>$slug, 'customer_events_list' => $customer_events_list,'slug'=>$slug
-            ]);
+                  'vendor_detail' => $vendor_details, 
+                  'vendor_item_details' => $vendor_item_details, 
+                  'themes' => $themes, 
+                  'vendorData' => $vendorData,
+                  'category' => $main_category, 
+                  'customer_events' => $customer_events, 
+                  'slug' => $slug, 
+                  'customer_events_list' => $customer_events_list,
+                  'slug'=>$slug
+                ]);
             }
         }
     }
 
     public function actionContact()
     {
-        $faq = new Faq();
-        $faq_details = $faq->faq_details();
+        $faq_details = Faq::find()
+            ->where(['faq_status' => 'Active', 'trash' => 'Default'])
+            ->all();
+
         if (Yii::$app->request->isAjax) {
             $date = date('Y/m/d');
             $data = Yii::$app->request->post();
-            $model = \admin\models\Contacts();
+
+            $subject = 'Enquiry from user';
+
+            $model = new Contacts();
             $model->contact_name=$data['username'];
             $model->contact_email=$data['useremail'];
             $model->created_datetime=$date;
-            $model->message=$data['msg'];
-            $model->save();
-            $db = Yii::$app->db;// or Category::getDb()
-            $result = $db->cache(function ($db) use ($id) {
-              return Siteinfo::find()->all();
-            }, CACHE_TIMEOUT);
-
-            foreach ($model as $key => $val) {
-                $mail_id = $val['email_id'];
-            }
+            $model->message = $data['msg'];
+            $model->subject = $subject;
 
             $body = '<table>
             <tbody>
@@ -449,7 +482,7 @@ class SiteController extends BaseController
             </tbody>
             </table>';
 
-            if (count($model) == 1) {
+            if ($model->save()) {
                 Yii::$app->mailer->compose([
                         "html" => "customer/contact-inquiry"
                             ],[
@@ -457,18 +490,20 @@ class SiteController extends BaseController
                         "user" => $data['username']
                     ])
                     ->setFrom(Yii::$app->params['supportEmail'])
-                    ->setTo($form['admin_email'])
-                    ->setSubject('Enquiry from user')
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setSubject($subject)
                     ->send();
-            }
-            if ($k) {
+
                 echo '1';
                 die;
+
             } else {
+
                 echo '0';
                 die;
             }
         }
+
         return $this->render('contact', ['faq' => $faq_details]);
     }
 
@@ -650,8 +685,28 @@ class SiteController extends BaseController
         }
     }
 
+    public function actionArea()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
 
-   public function actionCity()
+        $area = Location::find()
+            ->select('id, location')
+            ->where(['city_id' => $data['city_id']])
+            ->all();
+
+        $options = '<option value="">Select</option>';
+        
+        if (!empty($area)) {
+            foreach ($area as $key => $val) {
+                $options .=  '<option value="'.$val['id'].'">'.$val['location'].'</option>';
+            }
+        }
+        return $options;
+    }
+
+    public function actionCity()
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -784,12 +839,12 @@ class SiteController extends BaseController
             }
         if (Yii::$app->user->isGuest) {
             return $this->render('themesearch', ['model' => $model, 'imageData' => $imageData,
-            'vendor' => $vendor, 'slug' => $slug,'category_slug'=>$category_slug]);
+            'vendor' => $vendor, 'slug' => $slug,'category_slug'=>$category_slug,'category_id'=>$category_id]);
         } else {
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
-                return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-                'vendor' => $vendor, 'slug' => $slug, 'category_slug'=>$category_slug, 'customer_events_list' => $customer_events_list]);
+                return $this->render('themesearch', ['model' => $model, 'imageData' => $imageData,
+                'vendor' => $vendor, 'slug' => $slug, 'category_slug'=>$category_slug, 'customer_events_list' => $customer_events_list,'category_id'=>$category_id]);
             } 
        }
     }

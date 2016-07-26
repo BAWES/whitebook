@@ -126,24 +126,39 @@ $this->params['breadcrumbs'][] = $this->title;
 		<th>Package Name</th><th>Start Date</th><th>End Date</th><th>Package Price</th><th>Action</th>
 			</tr>
 			<?php
-    //   print_r($dataProvider2->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);
-      $i=0;foreach ($dataProvider2->query as $log) { $sel = ($i==0)?'':''; ?>
+   
+      $i=0;
+      
+      foreach ($dataProvider2 as $log) { 
+
+      $sel = ($i==0)?'':'';
+
+      ?>
+
 			<tr id="tr-<?php echo $log['id']; ?>">
-			<td><?= Package::PackageData($log['package_id']);  ?></td>
-            <td><?php $sd=($log['package_start_date']); echo date("d/m/Y", strtotime($sd));?></td>
-            <td><?php $sd=($log['package_end_date']);echo date("d/m/Y", strtotime($sd)); ?></td>
-            <td><?php print_r($log['package_price']); ?><input type="hidden" id="packedit" value="<?=$log['id'];?>"></td>
-            <td>
-                <?php
-                $url = Url::to(['package/packagedelete', 'id' => $log['package_id']]);
-                echo Html::a('<span class="glyphicon glyphicon-trash"></span>','#', ['onclick' => 'packagedelete('.$log['id'].');','title'=>'Delete','class' =>$sel]);
-                echo Html::a('<span class="glyphicon glyphicon-pencil"></span>','#', ['onclick' => 'packageedit('.$log['id'].');','title'=>'Edit','class' =>$sel]);
-                ?>
-            </td>
+          <td><?= Package::PackageData($log['package_id']);  ?></td>
+          <td><?php $sd=($log['package_start_date']); echo date("d/m/Y", strtotime($sd));?></td>
+          <td><?php $sd=($log['package_end_date']);echo date("d/m/Y", strtotime($sd)); ?></td>
+          <td>
+            <?php print_r($log['package_price']); ?>
+            <input type="hidden" id="packedit" value="<?=$log['id'];?>">
+          </td>
+          <td>
+              <?php
+              
+              $url = Url::to(['package/packagedelete', 'id' => $log['package_id']]);
+              
+              echo Html::a('<span class="glyphicon glyphicon-trash"></span>','#', ['onclick' => 'packagedelete('.$log['id'].');','title'=>'Delete','class' =>$sel]);
+              
+              echo Html::a('<span class="glyphicon glyphicon-pencil"></span>','#', ['onclick' => 'packageedit('.$log['id'].');','title'=>'Edit','class' =>$sel]);
+              
+              ?>
+          </td>
 			</tr>
-			<?php $i++;}?>
+			<?php $i++; } ?>
 	</tbody>
 </table>
+
 <div id="output"></div>
 <!--End Third Tab -->
 
@@ -177,7 +192,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </table>
 <!--End Third Tab -->
 </div>
-
 
 <div class="tab-pane" id="5">
 
@@ -339,14 +353,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--End sixth Tab -->
 
 
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+<?php 
 
+$this->registerCssFile("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css");
 
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+?>
 
 <script>
 
@@ -363,7 +376,7 @@ $this->params['breadcrumbs'][] = $this->title;
  $(function (){
 
  	/* Begin when loading page first tab opened */
-  	$('.nav-tabs li:first').addClass("active");
+  $('.nav-tabs li:first').addClass("active");
  	$(".tab-content div:first").addClass("active");
  	/* End when loading page first tab opened */
 
@@ -372,33 +385,50 @@ $this->params['breadcrumbs'][] = $this->title;
  	/* For themes and groups list checkbox alignment*/
 
 	$('#option').hide();
-    $(".vendoritemquestion-question_answer_type").live('change',function (){
-		var type = $(this).val();
+
+  $(document).delegate(".vendoritemquestion-question_answer_type", 'change', function (){
+		
+    var type = $(this).val();
 
 		if(type =='selection')
 		{
 			$(this).next('.price_val').remove();
-			var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
-			$('#option').show();
-			$(this).after('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" name="Addss" value="Add Selection"></div>');
-		}
-		else if(type =='image' ||  type =='text')
-		{
+			
+      var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
+			
+      $('#option').show();
+			
+      $(this).after('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" name="Addss" value="Add Selection"></div>');
+
+		} else if(type =='image' ||  type =='text') {
+
 			$(this).next('.selection').remove();
-			$(this).next('.price_val').remove();
-			var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
-			$('#option').show();
+			
+      $(this).next('.price_val').remove();
+			
+      var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
+			
+      $('#option').show();
+
 			$(this).after('<div class="price_val"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
 		}
 
   	// Add selection for questions //
-		});
+  });
+
 		var p = 1;
-		$('.add_question').live('click',function(){
-			var j = $(this).attr('id').replace(/add_question/, '');
-			$(this).before('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');	p++;
-		})
-	});
+
+		$(document).delegate('.add_question', 'click', function(){
+			
+      var j = $(this).attr('id').replace(/add_question/, '');
+			
+      $(this).before('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');	
+      
+      p++;
+
+		});
+
+});
 
 </script>
 <script type="text/javascript">
@@ -582,36 +612,41 @@ function packageedit(id)
 
 
 $(function (){
-    $("#vendor-package_id").live("change",function (){
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var id = $('#vendor-vendor_id').val();
-        var path = "<?php echo Url::to(['/vendor/loadpackagedate']); ?> ";
-        $('.loadingmessage').show();
-        $.ajax({
+    $(document).delegate("#vendor-package_id", "change", function (){
+
+		  var csrfToken = $('meta[name="csrf-token"]').attr("content");
+      var id = $('#vendor-vendor_id').val();
+      var path = "<?php echo Url::to(['/vendor/loadpackagedate']); ?> ";
+      $('.loadingmessage').show();
+
+      $.ajax({
         type: 'POST',
-		dataType:"json",
+		    dataType:"json",
         url: path, //url to be called
         data: { id: id ,_csrf : csrfToken}, //data to be send
         success: function( data ) {
         	$('.loadingmessage').hide();
-			$('.mystart').html(data.input1);
-			$('.myend').html(data.input2);
-			var forbidden=data.date;
-if($("#vendor-package_id").val()!=''){
-$('#vendor-package_start_date,#vendor-package_end_date').datepicker({
-	format: 'dd-mm-yyyy',
-	autoclose: true,
-	startDate:'d',
-    beforeShowDay:function(Date){
-        var curr_date = Date.toJSON().substring(0,10);
-        if (forbidden.indexOf(curr_date)>-1) return false;
-    }
-})
-}
-}
-});
-});
-});
+    			$('.mystart').html(data.input1);
+    			$('.myend').html(data.input2);
+    			var forbidden=data.date;
+
+          if($("#vendor-package_id").val()!=''){
+
+            $('#vendor-package_start_date,#vendor-package_end_date').datepicker({
+            	format: 'dd-mm-yyyy',
+            	autoclose: true,
+            	startDate:'d',
+                beforeShowDay:function(Date){
+                    var curr_date = Date.toJSON().substring(0,10);
+                    if (forbidden.indexOf(curr_date)>-1) return false;
+                }
+            });
+
+          }
+        }//success 
+      });
+    });//on change
+});//on ready 
 
 
  function check_edit_validation()

@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?= Html::csrfMetaTags() ?>
 <div class="themes-index">
-<p>
+    <p>
         <?= Html::a('Create theme', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
@@ -39,20 +39,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-
-<script type="text/javascript">
+<?php $this->registerJs("
 	function change(status, id)
 	{
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['themes/block']); ?> ";
+		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+        var path = '".Url::to(['themes/block'])."';
         $.ajax({
-        type: 'POST',
-        url: path,
-        data: { status: status, id: id,_csrf : csrfToken},
-        success: function(data) {
-			$.pjax.reload({container:'#medicine'});
-         }
+            type: 'POST',
+            url: path,
+            data: { status: status, id: id,_csrf : csrfToken},
+            success: function(data) {
+    			$.pjax.reload({container:'#medicine'});
+            }
         });
      }
-
-</script>
+");

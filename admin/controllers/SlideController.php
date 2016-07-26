@@ -115,7 +115,7 @@ class SlideController extends Controller
     {
         $access = Authitem::AuthitemCheck('1', '1');
         if (yii::$app->user->can($access)) {
-            $model = new \admin\models\Slide();
+            $model = new Slide();
             $model->scenario = "create";
 
             if ($model->load(Yii::$app->request->post())) {
@@ -130,6 +130,7 @@ class SlideController extends Controller
 				->asarray()
 				->all();
                 $model->sort = ($max_sort[0]['sort'] + 1);
+                
                 //Get Uploaded Instances
                 $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
                 $model->slide_image = UploadedFile::getInstance($model, 'slide_image');
@@ -229,9 +230,13 @@ class SlideController extends Controller
 
     public function actionSort_slide()
     {
-        $sort = $_POST['sort_val'];
-        $slide_id = $_POST['slide_id'];
-        $command=Slide::updateAll(['sort' => $sort],['IN','slide_id',$slide_id]);
+        $request = Yii::$app->request;
+
+        $sort = $request->post('sort_val');
+        $slide_id = $request->post('slide_id');
+
+        $command = Slide::updateAll(['sort' => $sort], ['IN','slide_id',$slide_id]);
+        
         if ($command) {
             Yii::$app->session->setFlash('success', 'Slide sort order updated successfully!');
             echo 1;

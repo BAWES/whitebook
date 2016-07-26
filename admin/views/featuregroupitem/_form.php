@@ -77,67 +77,71 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 </div>
 
+<?php 
 
-<script type="text/javascript">
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");
-$(function (){
-	if($("input[class=check]:checked").length > 2)
-		{
-              alert('You can not able to select more than 20 categories');return false;
-		}
-    $("#featuregroupitem-category_id").change(function (){
+$this->registerJs("
+
+  var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+
+  $(function (){
+   
+    if($('input[class=check]:checked').length > 2)
+    {
+      alert('You can not able to select more than 20 categories');
+      return false;
+    }
+
+    $('#featuregroupitem-category_id').change(function (){
         var id = $('#featuregroupitem-category_id').val();
-        var path = "<?php echo Url::to(['/featuregroupitem/loadsubcategory']); ?> ";
+        var path = '".Url::to(['/featuregroupitem/loadsubcategory'])."';
+        
         $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { id: id ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {
-             $('#featuregroupitem-subcategory_id').html(data);
-         }
-        })
-     });
- });
-</script>
-
-<script type="text/javascript">
-$(function (){
-    $("#featuregroupitem-subcategory_id").change(function (){
+          type: 'POST',
+          url: path, //url to be called
+          data: { id: id ,_csrf : csrfToken}, //data to be send
+          success: function( data ) {
+               $('#featuregroupitem-subcategory_id').html(data);
+          }
+        });
+    });
+ 
+    $('#featuregroupitem-subcategory_id').change(function (){
         var id2 = $('#featuregroupitem-category_id').val();
         var id3 = $('#featuregroupitem-subcategory_id').val();
-        var path = "<?php echo Url::to(['/featuregroupitem/loaditems']); ?> ";
+        var path = '".Url::to(['/featuregroupitem/loaditems'])."';
+
         $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { id2: id2 ,id3: id3 ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {
-             $('#featuregroupitem-item_id').html(data);
-         }
-        })
-     });
- });
-</script>
+          type: 'POST',
+          url: path, //url to be called
+          data: { id2: id2 ,id3: id3 ,_csrf : csrfToken}, //data to be send
+          success: function( data ) {
+               $('#featuregroupitem-item_id').html(data);
+          }
+        });
+    });
+  });
+");
+	
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css');
 
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<script>
-$('#featuregroupitem-featured_start_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
-$('#featuregroupitem-featured_end_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js");
 
-</script>
+$this->registerJs("
+  
+  $('#featuregroupitem-featured_start_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
+  $('#featuregroupitem-featured_end_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
 
-<script>
-var countChecked = function() {
-  var n = $( "input:checked" ).length;
-  if(n>20){
-  alert('The limit is 20 for feature group item');
-  return false;}
-};
-countChecked();
-$( "input[type=checkbox]" ).live( "click", countChecked );
+  var countChecked = function() {
+    var n = $('input:checked').length;
+    
+    if(n>20){
+      alert('The limit is 20 for feature group item');
+      return false;
+    }
+  };
 
-</script>
+  countChecked();
+
+  $('input[type=checkbox]').live('click', countChecked);
+
+");

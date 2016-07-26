@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\CustomerAddress */
+/* @var $model app\models\CustomerAddress */
 
-$this->title = 'Update Customer Address: ' . ' ' . $model->address_id;
+$this->title = 'Update Customer Address: ' . $model->address_id;
 $this->params['breadcrumbs'][] = ['label' => 'Customer Addresses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->address_id, 'url' => ['view', 'id' => $model->address_id]];
 $this->params['breadcrumbs'][] = 'Update';

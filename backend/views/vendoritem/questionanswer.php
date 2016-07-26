@@ -93,18 +93,22 @@ use common\models\Vendoritemquestionguide;
 			<input type="hidden" style="float:right; margin:0px 5px 5px 0px;" class="hide_<?= $t;?>" onclick=hideQuestion("hide_<?= $t;?>",this) value="Hide">
  	</div>
 <?php $t++; } ?>
-<script type="text/javascript">
-function viewQuestion(q_id,tis)
-{		
-	var question_id_append = q_id - 1;
-	var path = "<?php echo Url::to(['/vendoritem/renderanswer']); ?> ";
-	$.ajax({
-		type : 'POST',
-		url :  path,
-		data: {q_id :q_id }, 
-        success: function( data ) {
-        $(tis).closest('.question-section').after(data);   	
-        }
-	})	
-}
-</script>
+
+<?php 
+
+$this->registerJs("
+	function viewQuestion(q_id,tis)
+	{		
+		var question_id_append = q_id - 1;
+		var path = '".Url::to(['/vendoritem/renderanswer'])."';
+		
+		$.ajax({
+			type : 'POST',
+			url :  path,
+			data: { q_id : q_id }, 
+	        success: function( data ) {
+	        	$(tis).closest('.question-section').after(data);   	
+	        }
+		})	
+	}
+");

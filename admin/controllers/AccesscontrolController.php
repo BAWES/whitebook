@@ -100,12 +100,16 @@ class AccesscontrolController extends Controller
     public function actionCreate()
     {
         $access = Authitem::AuthitemCheck('1', '29');
+        $request = Yii::$app->request;
+
         if (yii::$app->user->can($access)) {
             $model = new Accesscontroller();
             $controller = Usercontroller::loadcontroller();
             $admin = Admin::admin();
             $authitem = Authitem::Authitem();
-            if ($_POST) {
+
+            if ($request->isPost) {
+
                 $model->load(Yii::$app->request->post());
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
@@ -217,6 +221,7 @@ class AccesscontrolController extends Controller
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '29');
+        
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             $controller = Usercontroller::loadcontroller($model->admin_id, $model->role_id);
@@ -225,7 +230,9 @@ class AccesscontrolController extends Controller
             $admin_id = $model->admin_id;
             $accesslist = \Yii::$app->DB->createCommand("SELECT whitebook_controller.controller,whitebook_controller.id,`create`,`update`,`delete`,`manage`,`view` FROM whitebook_access_control LEFT JOIN whitebook_controller ON whitebook_controller.id = whitebook_access_control.controller WHERE admin_id = $admin_id AND role_id =$model->role_id ORDER BY whitebook_access_control.controller ASC")->queryall();
             $model->admin_id = $model->admin_id.'_'.$model->role_id;
-            if ($_POST) {
+            
+            if (Yii::$app->request->isPost) {
+                
 				$model->load(Yii::$app->request->post());
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];

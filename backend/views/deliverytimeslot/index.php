@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\web\view;
 use backend\models\Deliverytimeslot;
 
 /* @var $this yii\web\View */
@@ -154,20 +155,25 @@ $timesot_id = 2;
 
 </div>
 
-<script>
-function deletetimeslot(id)
+<?php $this->registerJs("
+
+  function deletetimeslot(id)
   {
-    var r = confirm("Are you sure want to delete?");
-        if (r == true) {
-        var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['deliverytimeslot/delete']); ?>";      
-        $.ajax({
-        type: 'POST',
-        url: path,
-        data: { id: id,_csrf : csrfToken},
-        success: function(data) {
-         }
-        });
-     }
- }
-</script
+      var r = confirm('Are you sure want to delete?');
+      
+      if (r == true) {
+          var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+          var path = '".Url::to(['deliverytimeslot/delete'])."';      
+          
+          $.ajax({
+            type: 'POST',
+            url: path,
+            data: { id: id,_csrf : csrfToken},
+            success: function(data) {
+
+            }
+          });
+       }
+  }
+
+", View::POS_END);

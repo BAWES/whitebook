@@ -3,8 +3,8 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
+use yii\web\View;
 
-/* @var $this yii\web\View */
 /* @var $searchModel common\models\SearchCategory */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -84,65 +84,76 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-<script type="text/javascript">
+<?php 
+
+$this->registerJs("
+
 	function change(status, cid)
 	{		
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-        var path = "<?php echo Url::to(['/category/subcategory_block']); ?> ";
+		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+		var path = '".Url::to(['/category/subcategory_block'])."';
+        
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, cid: cid, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'yes') ? 'no' : 'yes'; 
-			$('#image-'+cid).attr('src',data);
-			$('#image-'+cid).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+cid+"')");
-         }
+	        type: 'POST',      
+	        url: path, //url to be called
+	        data: { status: status, cid: cid, _csrf : csrfToken}, //data to be send
+	        success: function(data) {
+				
+				var status1 = (status == 'yes') ? 'no' : 'yes'; 
+				
+				$('#image-'+cid).attr('src',data);
+				
+				$('#image-'+cid).parent('a').attr(
+					'onclick', \"change('\" + status1 + \"', '\" + cid + \"')\");
+	        }
         });
      }
      
      function change_sort_order(sort_val,cat_id,p_cat_id)
      {
-		 var exist_sort=$('#hidden_'+cat_id).val();
+		 var exist_sort=$('#hidden_' + cat_id).val();
+
 		 if(sort_val!=exist_sort || exist_sort==0)
 		 {
 			if(sort_val<=0 && sort_val!='')
 			{
-				alert("Please enter greater than 0!");
+				alert('Please enter greater than 0!');
 				return false;
 			}
 			
 			if(isNumeric(sort_val))
 			{
-				var csrfToken = $('meta[name="csrf-token"]').attr("content");		
-				var path = "<?php echo Url::to(['/category/sort_sub_category']); ?> ";
+				var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');		
+				var path = '".Url::to(['/category/sort_sub_category'])."';
+				
 				$.ajax({  
-				type: 'POST',      
-				url: path, //url to be called
-				data: { sort_val: sort_val,cat_id: cat_id,p_cat_id: p_cat_id, _csrf : csrfToken}, //data to be send
-				success: function(data) {
-					if(data)
-					{
-						location.reload();
+					type: 'POST',      
+					url: path, //url to be called
+					data: { sort_val: sort_val,cat_id: cat_id,p_cat_id: p_cat_id, _csrf : csrfToken}, //data to be send
+					success: function(data) {
+						if(data)
+						{
+							location.reload();
+						}
 					}
-				 }
 				});
 			}
 			else
 			{
 				if(sort_val!='')
 				{
-					alert("Enter only integer values!");
+					alert('Enter only integer values!');
 					return false;
 				}
 			}
 		}
-	 }
+	}
 	 
-	 function isNumeric(n)
-	 {
-			return !isNaN(parseFloat(n)) && isFinite(n);
+	function isNumeric(n)
+	{
+		return !isNaN(parseFloat(n)) && isFinite(n);
 	
 	}
-</script>
+", View::POS_HEAD);
+
+	

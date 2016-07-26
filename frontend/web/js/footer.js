@@ -1,10 +1,28 @@
+
 function validateEmail(email) {
     // http://stackoverflow.com/a/46181/11236
     var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
     return re.test(email);
 }
 
+jQuery(window).resize(function(){
+
+    //make dropdown box fullwidth 
+    jQuery('.mega-dropdown-menu').css('width', jQuery(window).width());
+
+    //set left position for dropdown ment 
+    $left = jQuery('.nav.navbar-nav').offset().left;
+    jQuery('.mega-dropdown-menu').css('left', '-' + $left + 'px');
+
+    if(jQuery(window).width() <= 990) {
+        jQuery('#home_slider').css('padding-top', $('#top_header').height() + 'px');    
+    }    
+});
+
 jQuery(document).ready(function () {
+
+    jQuery(window).trigger('resize');
+
     jQuery('#phone,#reg_email').bind("paste",function(e) {
         e.preventDefault();
     });
@@ -238,26 +256,26 @@ function logincheck()
                     {                        
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html(+not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                         jQuery('#login_forget').show();
                         jQuery('#loader').hide();
                     }
                     else if(status==-2)
                     {                        
                         jQuery('#login_loader').hide();
-                        jQuery('#result').html(+user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-3)
                     {                        
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html(+email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-4)
                     {                        
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
-                        jQuery('#result').html(+email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#result').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==1)
                     {
@@ -292,7 +310,7 @@ function logincheck()
             jQuery('#login_loader').hide();
             //jQuery('#loginErrorMsg').addClass('alert-failure alert fade in');
             jQuery('#result').addClass('alert-success alert fade in');
-            jQuery('#result').html(+reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+            jQuery('#result').html(reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
 
         }
     }
@@ -462,7 +480,7 @@ jQuery("#register").click(function()
             type:"post",
             data:"customer_name="+fname+"&customer_last_name="+lname+"&customer_email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&customer_gender="+gender+"&customer_mobile="+phone+"&customer_password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
             success:function(data)
-            {
+            {    
                 if(data==0)
                 {
                     jQuery('#myModal1').modal('hide');
@@ -476,7 +494,10 @@ jQuery("#register").click(function()
                 else if(data==1)
                 {
                     jQuery('#myModal1').modal('hide');
-                    window.setTimeout(function(){location.reload()})
+                    
+                    window.setTimeout(function(){
+                        location.reload()
+                    });
                 }
             }
         });
@@ -532,7 +553,7 @@ jQuery('#create_event_button').click(function(){
                     {
                         jQuery('#event_loader').hide();
                         jQuery('#eventresult').addClass('alert-success alert fade in');
-                        jQuery('#eventresult').html(+event_exist+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#eventresult').html(event_exist+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(data==1)
                     {
@@ -594,7 +615,7 @@ jQuery(document).on('click',"#update_event_button",function()
                 {
                     jQuery('#event_loader').hide();
                     jQuery('#eventresult').addClass('alert-success alert fade in');
-                    jQuery('#eventresult').html(+event_exists+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
+                    jQuery('#eventresult').html(event_exists+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
                     //jQuery(".eventErrorMsg").html('Same event name already exists!');
                     // window.setTimeout(function(){location.reload()},2000);
                 }
@@ -770,14 +791,13 @@ function forgot_password()
                     jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+receive_email+'</span>');
                     //window.setTimeout(function(){location.reload()},2000)
                     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
-                    all_form_reset();
                 }
                 else if(data==-1)
                 {
                     jQuery('#forgot_loader').hide();
                     jQuery('#forgot_result').addClass('alert-success alert fade in');
                     jQuery('#forgot_result').html(contact_admin+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
-                    //all_form_reset();
+
                 }
             }
         });
@@ -786,7 +806,7 @@ function forgot_password()
         //if(reg_email!='')
         jQuery('#forgot_loader').hide();
         jQuery('#forgot_result').addClass('alert-success alert fade in');
-        jQuery('#forgot_result').html(+reg_email_id+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
+        jQuery('#forgot_result').html(reg_email_id+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
 
         //jQuery("#forgerErrorMsg").show();
         //jQuery("#forgerErrorMsg").html('Enter registered mail id');
@@ -1074,46 +1094,47 @@ jQuery(".faver_evnt_product").click(function(){
 });
 
 function add_to_event(x)
-{
-    //alert(jQuery(data).find('desc_popup_cont').text());
-    var item_name=jQuery('.desc_popup_cont h3').text();
-    var event_id=jQuery('#eventlist'+x).val();
-    var event_name=jQuery('#eventlist'+x+' option:selected').text();
-    var msg = '"'+event_name+'" ' + successfully_added_to +'"' + item_name + '"';
-    if(event_id!=''){
-        jQuery('#add_to_event_loader').show();
-        var _csrf=jQuery('#_csrf').val();
-        jQuery.ajax({
-            url: add_event_url,
-            type:"post",
-            data:"event_id="+event_id+"&item_id="+x+"&_csrf="+_csrf,
-            async: false,
-            success:function(data)
-            {
-                if(data==1)
-                {
-                    jQuery("#event-slider").load(event_slider_url);
-                    jQuery('#add_to_event_loader').hide();
-                    jQuery('#add_to_event').modal('hide');
-                    jQuery('#login_success').modal('show');
-                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+msg+'</span>');
-                    window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
-                    //jQuery('#add_to_event_success'+x).html('Item Add to Your event list');
-                }
-                else if(data==-1)
-                {
-                    jQuery('#add_to_event_loader').hide();
-                    jQuery('#add_to_event_success'+x).html('Item already exists to this event!');
-                }
-            }
-        });
-    }
-    else
     {
-        jQuery('#add_to_event_error'+x).html('Kindly select the event type');
-    }
+        var item_name=jQuery('.desc_popup_cont h3').text();
+        var event_id=jQuery('#eventlist'+x).val();
+        var event_name=jQuery('#eventlist'+x+' option:selected').text();
 
-}
+        if(event_id!=''){
+            jQuery('#add_to_event_loader').show();
+            var _csrf=jQuery('#_csrf').val();
+            jQuery.ajax({
+                url:add_event_url,
+                type:"post",
+                data:{"event_name":event_name,"item_name":item_name,
+                "event_id":event_id,"item_id":x,"_csrf":_csrf},
+                async: false,
+                dataType:'JSON',
+                success:function(data)
+                {
+                    if(data.status==1)
+                    {
+                        jQuery("#event-slider").load("<?= Url::toRoute('/product/event-slider'); ?>");
+                        jQuery('#add_to_event_loader').hide();
+                        jQuery('#add_to_event').modal('hide');
+                        jQuery('#login_success').modal('show');
+                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+data.message+'</span>');
+                        window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
+                        //jQuery('#add_to_event_success'+x).html('Item Add to Your event list');
+                    }
+                    else if(data.status==-1)
+                    {
+                        jQuery('#add_to_event_loader').hide();
+                        jQuery('#add_to_event_success'+x).html(data.message);
+                    }
+                }
+            });
+        }
+        else
+        {
+            jQuery('#add_to_event_error'+x).html('Kindly select the event type');
+        }
+
+    }
 
 function MyFunction()
 {
@@ -1410,7 +1431,7 @@ function display_event_modal()
     jQuery('#EventModal').modal('show');
 }
 
-if(session_create_event) {
+if(session_create_event > 0) {
     window.onload = display_event_modal();
 }
 
@@ -1498,10 +1519,10 @@ function show_event_modal_true()
 {
     jQuery('#login_success').modal('show');
     if(!item_name.length){
-        var event_created_msg = '"'+ event + ' ' + event_name + ' ' + created_successfully + '"';
+        var event_created_msg = '"'+ text_event + ' ' + event_name + ' ' + created_successfully + '"';
         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+event_created_msg+'</span>');
     } else {
-        var event_added_msg = '"'+ event + ' ' + event_name + ' ' + created_successfully_and + ' ' + item_name +' '+ added_to +' '+ event_name +'"';
+        var event_added_msg = '"'+ text_event + ' ' + event_name + ' ' + created_successfully_and + ' ' + item_name +' '+ added_to +' '+ event_name +'"';
         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+event_added_msg+' </span>');
     }
     window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
@@ -1523,5 +1544,5 @@ if(session_key == 2){
         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_success_msg+'</span>');
         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
     }
-    window.onload=show_password_reset_modal_true();                                
+    window.onload=show_password_reset_modal_true();  
 }

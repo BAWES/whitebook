@@ -4,4 +4,4 @@
 
 Launching in Kuwait
 
-Additional info will be posted here
+Additional info will be posted
