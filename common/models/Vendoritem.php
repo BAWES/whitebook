@@ -102,19 +102,19 @@ class Vendoritem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'vendor_id', 'category_id', 'item_name','subcategory_id',
+            [['type_id', 'vendor_id', 'category_id', 'item_name', 'item_name_ar', 'subcategory_id',
             'child_category'], 'required'],
             [['type_id', 'vendor_id', 'category_id','subcategory_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','child_category', 'created_by', 'modified_by'], 'integer'],
-            [['item_description', 'item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale', 'item_approved', 'trash'], 'string'],
+            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash'], 'string'],
             [['item_price_per_unit'], 'number'],
             [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
-            [['item_name'], 'string', 'max' => 128],
+            [['item_name', 'item_name_ar'], 'string', 'max' => 128],
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'category_id',  'item_description', 'item_additional_info', 'item_amount_in_stock',
-            'item_default_capacity', 'item_customization_description', 'item_price_description', 'item_how_long_to_make',
-            'item_minimum_quantity_to_order','item_name','subcategory_id',
+            [['type_id', 'category_id',  'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
+            'item_default_capacity', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_how_long_to_make',
+            'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'subcategory_id',
             'item_for_sale','item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
@@ -122,9 +122,10 @@ class Vendoritem extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['VendorItemAdd'] = ['type_id', 'category_id',  'item_description', 'item_additional_info', 'item_amount_in_stock',
-        'item_default_capacity', 'item_customization_description', 'item_price_description', 'item_how_long_to_make',
-        'item_minimum_quantity_to_order','item_name','subcategory_id','child_category',
+        $scenarios['VendorItemAdd'] = ['type_id', 'category_id',  'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
+        'item_default_capacity', 'item_customization_description', 'item_price_description',
+            'item_price_description_ar', 'item_how_long_to_make',
+        'item_minimum_quantity_to_order','item_name','item_name_ar', 'subcategory_id','child_category',
         'item_for_sale','item_price_per_unit'];
         return $scenarios;
     }
@@ -141,13 +142,18 @@ class Vendoritem extends \yii\db\ActiveRecord
             'vendor_id' => 'Vendor Name',
             'category_id' => 'Category Name',
             'item_name' => 'Item Name',
+            'item_name_ar' => 'Item Name - Arabic',
             'item_description' => 'Item Description',
+            'item_description_ar' => 'Item Description - Arabic',
             'item_additional_info' => 'Item Additional Info',
+            'item_additional_info_ar' => 'Item Additional Info - Arabic',
             'item_amount_in_stock' => 'Item Number of Stock',
             'item_default_capacity' => 'Item Default Capacity',
             'item_price_per_unit' => 'Item Price per Unit',
             'item_customization_description' => 'Item Customization Description',
+            'item_customization_description_ar' => 'Item Customization Description - Arabic',
             'item_price_description' => 'Item Price Description',
+            'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_for_sale' => 'Shop - Available for sale',
             'item_how_long_to_make' => 'No of days delivery',
             'item_minimum_quantity_to_order' => 'Item Minimum Quantity to Order',

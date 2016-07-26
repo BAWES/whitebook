@@ -1,4 +1,5 @@
 CKEDITOR.replace('text-editor');
+CKEDITOR.replace('text-editor-2');
 
 /* Begin when loading page first tab opened */
 $(function(){
