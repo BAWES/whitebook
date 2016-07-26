@@ -79,16 +79,27 @@ $this->params['breadcrumbs'][] = $model->item_name;
             'label'=>'Child Category Name',
 			'value'  => Vendoritem::getCategoryName($model->child_category),
 			],
-            'item_name',
-            [
-            'label'=>'Item customization description',
+      'item_name',
+      'item_name_ar',
+      [
+            'label'=>'Item description',
             'format'=>'raw',
-			'value'  =>strip_tags($model->item_description),
+			      'value'  =>strip_tags($model->item_description),
 			],
-            [
-            'label'=>'Item customization description',
+      [
+            'label'=>'Item description - Arabic',
             'format'=>'raw',
-			'value'  =>strip_tags($model->item_additional_info),
+            'value'  =>strip_tags($model->item_description_ar),
+      ],
+      [
+            'label'=>'Item additional info',
+            'format'=>'raw',
+            'value'  =>strip_tags($model->item_additional_info),
+      ],
+      [
+            'label'=>'Item additional info - Arabic',
+            'format'=>'raw',
+			      'value'  =>strip_tags($model->item_additional_info_ar),
 			],
             'item_amount_in_stock',
             'item_default_capacity',
@@ -96,12 +107,21 @@ $this->params['breadcrumbs'][] = $model->item_name;
 			[
             'label'=>'Item customization description',
             'format'=>'raw',
-			'value'  =>strip_tags($model->item_customization_description),
+			     'value'  =>strip_tags($model->item_customization_description),
 			],
+      [
+            'label'=>'Item customization description - Arabic',
+            'format'=>'raw',
+           'value'  =>strip_tags($model->item_customization_description_ar),
+      ],
 			[
             'label'=>'Item price description',
-			'value'  =>strip_tags($model->item_price_description),
+			      'value'  =>strip_tags($model->item_price_description),
 			],
+      [
+            'label'=>'Item price description - Arabic',
+            'value'  =>strip_tags($model->item_price_description_ar),
+      ],
             'item_for_sale',
             'item_how_long_to_make',
             'item_minimum_quantity_to_order',

@@ -1,4 +1,5 @@
 <?php
+
 namespace admin\models;
 
 use Yii;
@@ -18,7 +19,6 @@ class Vendoritem extends \common\models\Vendoritem
         return parent::behaviors();
     }
 
-
     public static function getVendorName($id)
     {
         $model = Vendor::find()->where(['vendor_id'=>$id])->one();
@@ -35,7 +35,6 @@ class Vendoritem extends \common\models\Vendoritem
             $item=ArrayHelper::map($item,'item_id','item_name');
             return $item;
     }
-
 
     public static function loadsubcategoryvendoritem($subcategory)
     {

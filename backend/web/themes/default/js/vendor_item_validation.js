@@ -134,11 +134,12 @@ $(function(){
 	CKEDITOR.replace('vendoritem-item_description');
 	CKEDITOR.replace('vendoritem-item_additional_info');
 	CKEDITOR.replace('vendoritem-item_price_description');
-});
-
-$(function()
-{
 	CKEDITOR.replace('vendoritem-item_customization_description');
+
+	CKEDITOR.replace('vendoritem-item_description_ar');
+	CKEDITOR.replace('vendoritem-item_additional_info_ar');
+	CKEDITOR.replace('vendoritem-item_price_description_ar');
+	CKEDITOR.replace('vendoritem-item_customization_description_ar');
 });
 
 // Question and answer begin
@@ -497,6 +498,7 @@ $('.complete').click(function()
 
 $(function(){
 	$('.custom_description').hide();
+	$('.custom_description_ar').hide();
 	$('.guide_image').hide();
 	$('.mandatory').show();
 
@@ -505,11 +507,13 @@ $(function(){
 		if($(this).is(':checked'))
 		{
 			$('.custom_description').hide();
+			$('.custom_description_ar').hide();
 			$('.guide_image').hide();
 			$('.mandatory').show();
 		} else {
 			$('.mandatory').hide();
 			$('.custom_description').show();
+			$('.custom_description_ar').show();
 			$('.guide_image').show();
 		}
 	});
@@ -517,12 +521,14 @@ $(function(){
 	if(isNewRecord) {
 		if($('#vendoritem-item_for_sale').prop('checked') == true){
 			$('.custom_description').hide();
+			$('.custom_description_ar').hide();
 			$('.guide_image').hide();
 			$('.mandatory').show();
 		}
 		else
 		{
 			$('.custom_description').show();
+			$('.custom_description_ar').show();
 			$('.guide_image').show();
 			$('.mandatory').hide();
 		}

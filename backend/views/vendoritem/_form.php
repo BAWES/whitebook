@@ -53,6 +53,12 @@ if($model->isNewRecord){
 </div>
 
 <div class="form-group">
+	<?= $form->field($model, 'item_name_ar',[
+		'template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])
+	?>
+</div>
+
+<div class="form-group">
 	<?= $form->field($model, 'category_id', [
 	'template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])
 	->dropDownList($categoryname, ['prompt'=>'Select...']) ?>
@@ -89,7 +95,16 @@ if($model->isNewRecord){
 </div>
 
 <div class="form-group">
+	<?= $form->field($model, 'item_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
+	->label('Item description - Arabic'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?>
+</div>
+
+<div class="form-group">
 	<?= $form->field($model, 'item_additional_info',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
+</div>
+
+<div class="form-group">
+	<?= $form->field($model, 'item_additional_info_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
 </div>
 
 <input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
@@ -155,8 +170,16 @@ if($model->isNewRecord){
 	<?= $form->field($model, 'item_price_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea([])?>
 </div>
 
+<div class="form-group">
+	<?= $form->field($model, 'item_price_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea([])?>
+</div>
+
 <div class="form-group custom_description">
 	<?= $form->field($model, 'item_customization_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
+</div>
+
+<div class="form-group custom_description_ar">
+	<?= $form->field($model, 'item_customization_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
 </div>
 
 <!-- guide image -->
@@ -315,5 +338,5 @@ $this->registerJsFile('@web/themes/default/plugins/bootstrap-fileinput/fileinput
 
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
