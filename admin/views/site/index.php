@@ -14,7 +14,6 @@ use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 use common\models\Log;
 use yii\log\Logger;
-use yii\helpers\Url;
 
 $this->title = 'Dashboard';
 ?>
