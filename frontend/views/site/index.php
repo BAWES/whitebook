@@ -28,31 +28,38 @@ $model = new Website();
 
 <!-- Content start -->
 <section id="content_section">
+
+<?php if (!Yii::$app->user->isGuest) { ?>  
+    <br />  
+    <div id="event_slider_wrapper">
+        <div class="container paddng0">
+        <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+        </div>
+    </div>
+    <br />
+<?php } ?>
+
 <div class="container_plan">
+
 <div class="container_common">
 
-<!-- Events slider start -->
-<?php
-
-if (!Yii::$app->user->isGuest) {
-require(__DIR__ . '/../product/events_slider.php');
-} else {
-?>
+<?php if (Yii::$app->user->isGuest) { ?>    
 <span class="first_events">
-    <?= Html::img('@web/images/my_book_desk.svg', ['alt' => 'My White Book']) ?>
+    MY EVENTS
 </span>
 <div class="creatfirst_events">
     <p data-example-id="active-anchor-btns" class="bs-example">
-    <a href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal" onclick="show_login_modal(-1);">
-        <?= Yii::t('frontend', 'Create Your First Event'); ?>
-    </a>
-</p>
+        <a href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal" onclick="show_login_modal(-1);">
+            <?= Yii::t('frontend', 'Create Your First Event'); ?>
+        </a>
+    </p>
 </div>
+<br />
+<br />
 <?php } ?>
 
 <!-- Events slider end -->
 
-</div>
 <div class="plan_sections">
 <ul>
     <li>
