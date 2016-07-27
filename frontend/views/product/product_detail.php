@@ -319,13 +319,19 @@ if (($vendordetail['vendor_contact_number']) || ($vendordetail['vendor_contact_a
                                 </div>
                             </div>
                             <div class="social_share">
-<?php
-$title = 'Whitebook Application' . ucfirst($vendor_det['vendor_name']);
-$url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
-$summary = 'Whitebook Application' . ucfirst($vendor_det['vendor_name']) . ucfirst($model['item_name']);
-//$image='http://demositeapp.com/backend/web/uploads/vendor_images/445_blueberry_coffee_cake_61.jpg';
-$image = $baselink;
-?>
+                                <?php
+
+                                $title = 'Whitebook Application' . ucfirst($vendor_det['vendor_name']);
+                                $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
+                                $summary = 'Whitebook Application' . ucfirst($vendor_det['vendor_name']) . ucfirst($model['item_name']);
+
+                                if(isset($baselink)) {
+                                    $image = $baselink;
+                                } else {
+                                    $image = '';
+                                }
+
+                                ?>
                                 <h3>Share this</h3>
                                 <ul>
                                     <li><a title="Facebook" onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=<?php echo $title; ?>&amp;p[summary]=<?php echo $summary; ?>&amp;p[url]=<?php echo $url; ?>&amp;&p[images][0]=<?php echo $image; ?>', 'sharer', 'toolbar=0,status=0,width=620,height=280');" href="javascript: void(0)"><span class="flaticon-facebook55"></span></a></li>
