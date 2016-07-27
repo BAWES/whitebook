@@ -140,7 +140,6 @@ if (!empty($feature_group_sql_result)) {
 
                             $image_row = Image::find()->select(['image_path'])
                                 ->where(['item_id' => $product_val['item_id']])
-                                ->andwhere(['module_type' => 'vendor_item'])
                                 ->orderby(['vendorimage_sort_order'=>SORT_ASC])
                                 ->asArray()
                                 ->one();
