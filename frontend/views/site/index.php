@@ -148,7 +148,7 @@ if (!empty($feature_group_sql_result)) {
                             ?>
                             <div class="item">
                                 <div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $product_val["slug"], true]); ?>'>
-                                    <a href="<?= Url::toRoute(['/product/product','slug'=>$product_val["slug"], true]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['/product/product', $product_val['slug'], true]); ?>'>
+                                    <a href="<?= Url::toRoute(['product/product','slug' => $product_val["slug"]]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['product/product', $product_val['slug']]); ?>'>
                                         <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
                                         <div class="deals_listing_cont">
                                             <?php echo $product_val['vendor_name']; ?>
