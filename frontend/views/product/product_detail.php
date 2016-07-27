@@ -106,7 +106,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                             <!--23-10-2015 slider start-->
                             <div class="carousel-inner owl-carousel" id="mobile-slider">
                                 <?php
-                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
+                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' order by vendorimage_sort_order';
                                 $command = Yii::$app->DB->createCommand($sql);
                                 $output = $command->queryAll();
                                 $img_count = count($output);
@@ -135,7 +135,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                 <ul class="slides">
 
                                     <?php
-                                    $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
+                                    $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' order by vendorimage_sort_order';
                                     $command = Yii::$app->DB->createCommand($sql);
                                     $output = $command->queryAll();
                                     $img_count = count($output);
@@ -158,7 +158,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                     <ul class="slides">
 
                                         <?php
-                                        $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
+                                        $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . '  order by vendorimage_sort_order';
                                         $command = Yii::$app->DB->createCommand($sql);
                                         $output = $command->queryAll();
                                         foreach ($output as $out) {
