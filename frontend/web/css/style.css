@@ -1378,3 +1378,8 @@ a.boxclose{
 a.thing_cont:hover {
 	color: black !important;
 }
+.mobile-logo-text a {
+    color: black;
+    font-size: 24px;
+    margin-bottom: 0;
+}
