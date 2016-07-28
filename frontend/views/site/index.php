@@ -254,7 +254,7 @@ $this->registerJs("
     });
 
     /* Hide BG FOR EVENT SLIDER IMPORTANT*/
-    jQuery('.directory_slider,.container_eventslider').load('events_slider', function(){
+    jQuery('.directory_slider,.container_eventslider').load(event_slider_url, function(){
         jQuery(this).css('background','transparent');
         jQuery('.container_common').css('margin','0');
         jQuery('.event_slider_top').css({'padding':'5px 0 0 0','display':'inline-block','width':'100%','margin':'4px 0 0 0'});
