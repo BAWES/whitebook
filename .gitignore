@@ -36,4 +36,3 @@ phpunit.phar
 frontend/web/robots.txt
 backend/web/robots.txt
 admin/web/robots.txt
-common/config/main.php
