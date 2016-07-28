@@ -104,10 +104,16 @@ input[type="submit"] {
 .carousel-control {height: 40px;left: 0px;line-height: 30px;margin-top: -20px; font-size:0px; opacity:4; position: absolute;text-align: center;top: 50%;width: 40px;}
 .carousel-inner > .item > a > img, .carousel-inner > .item > img, .img-responsive, .thumbnail a > img, .thumbnail > img{ display: inline-block;}
 .carousel-caption {    left: 15%;    padding-bottom: 30px;    right: 15%;}
-.container_common{ display: inline-block; width: 100%; background:url(../images/new.jpg) center center no-repeat; text-align: center; margin: 3px 0;  min-height: 204px;}
-.container_eventslider{ display: inline-block; width: 100%; background:url(../images/slide_bg.png) center center no-repeat; min-height: 204px; text-align: center; margin-bottom: 3px;  }
+.container_common{ display: inline-block; width: 100%; /*background:url(../images/new.jpg) center center no-repeat; */text-align: center; margin: 3px 0;  min-height: 204px;}
+.container_eventslider{ display: inline-block; width: 100%; /*background:url(../images/slide_bg.png) center center no-repeat; */min-height: 204px; text-align: center; margin-bottom: 3px;  }
 .creatfirst_events .btn{ font-size:9.3pt; line-height: 22px; color:#8f8f8f; font-family:'proxima_nova_rgregular'; text-transform: uppercase; }
-.first_events {    border-bottom: 1px solid #fff;    display: inline-block;    margin: 30px 0 19px;    padding-bottom: 19px;}
+.first_events {
+    border-bottom: 1px solid #000;
+    display: inline-block;
+    margin: 30px 0 19px;
+    padding-bottom: 19px;
+    font-size: 30px;
+}
 .inner_content_plan{ display: inline-block; width: 100%; position: absolute; text-align: center;  top: 0px; left: 0px;   padding:62px 54px;}
 .plan_list{ display: inline-block; width: 386px; position: relative; }
 .plan_list img{width:auto;max-width:100%;height:260px;}
@@ -240,7 +246,16 @@ textarea .form-group{ min-height: 126px;}
 /*end*/
 
 /*directory page start*/
-.directory_slider{ display: inline-block; width: 100%; margin-top: 5px; background: rgba(0, 0, 0, 0) url("../images/slide_bg.png") no-repeat scroll 0 0; min-height: 192px;}
+#event_slider_wrapper {
+	background: #e6e6e6;
+}
+.directory_slider {
+    display: inline-block;
+    width: 100%;
+    background: #e6e6e6;
+    min-height: 192px;
+}
+
 .top_whit {    margin: 48px 14px;}
 .plus_icons a{display: inline-block; width: 100%; background: url(../images/plus.png) center center no-repeat; vertical-align: middle; line-height: 195px; text-align: center; }
 .plus_icons a:hover{ text-decoration: none;}
@@ -257,7 +272,7 @@ textarea .form-group{ min-height: 126px;}
 .listing_sub_cat1 ul{ padding: 0px; width: 100%; display: inline-block; margin: 0px;}
 .listing_sub_cat1 ul li{ padding:18px 0 11px; width: 100%; display: inline-block; list-style: none; background: #f8f8f8;}
 .listing_sub_cat1 ul li a{font-size:12px;font-family: "proxima_nova_rgregular"; color:#272727; display: inline-block; width: 100%; padding: 0 13px 0 4px;}
-.heart_fave{ display: inline-block ; width: 100%; text-align: center;background:url("../images/heart.png") no-repeat  center center; height: 60px; margin: 25px 0 0; font-size:12px;font-family: "proxima_nova_rgregular"; color:#272727; line-height: 64px;}
+.heart_fave{ display: inline-block ; width: 100%; text-align: center;background:url("../images/heart.png") no-repeat  center center; height: 60px; margin: 25px 0 0; font-size:12px;font-family: "proxima_nova_rgregular"; color:#fff; line-height: 64px;}
 .thing_cont{font-size:12px;font-family: "proxima_nova_rgregular"; color:#fff; margin-top: 4px;}
 .thing_cont:hover{ color: #fff!important; text-decoration: none;}
 .directory_listing {    display: inline-block;    margin-bottom: 29px;    width: 100%;}
@@ -1372,4 +1387,21 @@ a.boxclose{
     padding: 5px;
     border: 1px solid rgba(0, 0, 0, .15);
     background: white;
+}
+
+.creatfirst_events .btn {
+	border: 1px solid #000;
+    background: #000;
+    color: #fff;
+}
+
+.inner_slider_event .item{
+	background: #e6e6e6 !important;
+    border: 3px solid black;
+}
+.inner_slider_event .item a {
+    color: black;
+}
+a.thing_cont:hover {
+	color: black !important;
 }

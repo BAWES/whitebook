@@ -768,7 +768,6 @@ header{ z-index:18;}
 #exTab2 .events_listing.new-event ul li{min-height:auto;}
 #exTab2 .events_listing.new-event ul li:nth-child(4n),#exTab2 .events_listing.new-event ul li:nth-child(5n){margin:0 33px 0 0 !important;}
 /*td032*/
-#content_section .container_plan .container_common{display:none;}
 #content_section .container_plan{padding:10px 15px 0;}
 .banner_slider_content:hover .left.carousel-control, .banner_slider_content:hover .right.carousel-control{display:none;}
 /*15-9-15-modal*/

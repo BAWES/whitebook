@@ -13,10 +13,15 @@ $this->title = 'Whitebook - ' . $model['item_name'];
 
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com">
+
+    <div id="event_slider_wrapper">
+        <div class="container paddng0">
+        <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+        </div>
+    </div>
+
     <div class="container paddng0">
-        <!-- Events slider start -->
-<?php require(__DIR__ . '/../product/events_slider.php'); ?>
-        <!-- Events slider end -->
+       
         <div class="breadcrumb_common">
             <div class="bs-example">
 
@@ -101,7 +106,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                             <!--23-10-2015 slider start-->
                             <div class="carousel-inner owl-carousel" id="mobile-slider">
                                 <?php
-                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
+                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' order by vendorimage_sort_order';
                                 $command = Yii::$app->DB->createCommand($sql);
                                 $output = $command->queryAll();
                                 $img_count = count($output);
@@ -130,7 +135,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                 <ul class="slides">
 
                                     <?php
-                                    $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
+                                    $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' order by vendorimage_sort_order';
                                     $command = Yii::$app->DB->createCommand($sql);
                                     $output = $command->queryAll();
                                     $img_count = count($output);
@@ -153,7 +158,7 @@ $this->title = 'Whitebook - ' . $model['item_name'];
                                     <ul class="slides">
 
                                         <?php
-                                        $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
+                                        $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . '  order by vendorimage_sort_order';
                                         $command = Yii::$app->DB->createCommand($sql);
                                         $output = $command->queryAll();
                                         foreach ($output as $out) {

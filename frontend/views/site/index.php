@@ -28,31 +28,38 @@ $model = new Website();
 
 <!-- Content start -->
 <section id="content_section">
+
+<?php if (!Yii::$app->user->isGuest) { ?>  
+    <br />  
+    <div id="event_slider_wrapper">
+        <div class="container paddng0">
+        <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+        </div>
+    </div>
+    <br />
+<?php } ?>
+
 <div class="container_plan">
+
 <div class="container_common">
 
-<!-- Events slider start -->
-<?php
-
-if (!Yii::$app->user->isGuest) {
-require(__DIR__ . '/../product/events_slider.php');
-} else {
-?>
+<?php if (Yii::$app->user->isGuest) { ?>    
 <span class="first_events">
-    <?= Html::img('@web/images/my_book_desk.svg', ['alt' => 'My White Book']) ?>
+    MY EVENTS
 </span>
 <div class="creatfirst_events">
     <p data-example-id="active-anchor-btns" class="bs-example">
-    <a href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal" onclick="show_login_modal(-1);">
-        <?= Yii::t('frontend', 'Create Your First Event'); ?>
-    </a>
-</p>
+        <a href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal" onclick="show_login_modal(-1);">
+            <?= Yii::t('frontend', 'Create Your First Event'); ?>
+        </a>
+    </p>
 </div>
+<br />
+<br />
 <?php } ?>
 
 <!-- Events slider end -->
 
-</div>
 <div class="plan_sections">
 <ul>
     <li>
@@ -93,10 +100,11 @@ require(__DIR__ . '/../product/events_slider.php');
 $featured_produc = Featuregroup::find()->select(['group_id', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
 $i = 1;
 foreach ($featured_produc as $key => $value) {
+
  $feature_group_sql_result = Featuregroupitem::find()->select(['{{%vendor_item}}.*','{{%feature_group_item}}.vendor_id','{{%vendor}}.vendor_name'])
         ->joinWith('item')
         ->joinWith('vendor')
-        ->join('inner join','{{%image}}','{{%image}}.item_id = {{%vendor_item}}.item_id')
+        //->join('inner join','{{%image}}','{{%image}}.item_id = {{%vendor_item}}.item_id')
         ->where(['{{%feature_group_item}}.group_id'=>$value["group_id"]])
         ->andWhere(['{{%vendor_item}}.type_id'=>2])
         ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
@@ -127,17 +135,26 @@ if (!empty($feature_group_sql_result)) {
                     <div class="owl-carousel twb-slider" id="feature-group-slider" >
                         <?php
                         $i = 0;
+
                         foreach ($feature_group_sql_result as $product_val) {
 
-                            if ($product_val['image_path'] = '23432434') {
-                                $imglink = Yii::getAlias("@s3/vendor_item_images_210/") . $product_val['image_path'];
+                            $image_row = Image::find()->select(['image_path'])
+                                ->where(['item_id' => $product_val['item_id']])
+                                ->orderby(['vendorimage_sort_order'=>SORT_ASC])
+                                ->asArray()
+                                ->one();
+
+                            if ($image_row) {
+                                $imglink = Yii::getAlias("@s3/vendor_item_images_210/") 
+                                    . $image_row['image_path'];
                             } else {
                                 $imglink = Yii::getAlias("@web/images/no_image.jpg");
                             }
+                            
                             ?>
                             <div class="item">
                                 <div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $product_val["slug"], true]); ?>'>
-                                    <a href="<?= Url::toRoute(['/product/product','slug'=>$product_val["slug"], true]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['/product/product', $product_val['slug'], true]); ?>'>
+                                    <a href="<?= Url::toRoute(['product/product','slug' => $product_val["slug"]]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['product/product', $product_val['slug']]); ?>'>
                                         <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
                                         <div class="deals_listing_cont">
                                             <?php echo $product_val['vendor_name']; ?>
