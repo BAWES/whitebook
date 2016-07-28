@@ -14,10 +14,14 @@ $get = Yii::$app->request->get();
 
 <!-- coniner start -->
 <section id="inner_pages_white_back">
+
+<div id="event_slider_wrapper">
+	<div class="container paddng0">
+		<?php require(__DIR__ . '/../product/events_slider.php'); ?>
+	</div>
+</div>
+
 <div class="container paddng0">
-<!-- Events slider start -->
-<?php require(__DIR__ . '/../product/events_slider.php'); ?>
-<!-- Events slider end -->
 
 <div class="breadcrumb_common">
 <div class="bs-example">

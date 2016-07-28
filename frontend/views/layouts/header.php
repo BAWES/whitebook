@@ -53,13 +53,13 @@ $action = Yii::$app->controller->action->id;
                 <?php if (Yii::$app->user->isGuest) { ?>
 
                     <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK">
-                        <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
+                        My Events
                     </a>
 
                 <?php } else { ?>
 
                     <a href="<?= Url::toRoute(['/users/events','slug'=>'events' ]); ?>" title="THEWHITEBOOK">
-                        <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
+                        My Events
                     </a>
                 <?php } ?>
             </div>
@@ -257,7 +257,7 @@ echo $search_div;
                 <div class="text-center">
                     <span class="yellow_top"></span>
                 </div>
-                <h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend', 'CREATE_NEW_EVENT'); ?></h4>
+                <h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend', 'CREATE NEW EVENT'); ?></h4>
             </div>
             <div class="modal-body">
                 <div class="row">

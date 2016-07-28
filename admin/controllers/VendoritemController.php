@@ -117,7 +117,7 @@ public function actionView($id)
         ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
         ->asArray()->all();
 
-        $imagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'vendor_item'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
+        $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
 
         return $this->render('view', [
             'model' => $this->findModel($id), 'dataProvider1' => $dataProvider1, 'model_question' => $model_question, 'imagedata' => $imagedata,

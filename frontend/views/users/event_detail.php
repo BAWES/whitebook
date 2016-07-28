@@ -8,12 +8,17 @@ use yii\grid\GridView;
 ?>
 <!-- coniner start -->
 <section id="inner_pages_white_back">
-<div class="container paddng0">
+
 <?php if(!Yii::$app->user->isGuest) { ?>
-<!-- Events slider start -->
-<?php require_once(__DIR__ . '/../product/events_slider.php'); ?>
-<!-- Events slider end -->
+<div id="event_slider_wrapper">
+    <div class="container paddng0">
+        <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+    </div>
+</div>
 <?php } ?>
+
+<div class="container paddng0">
+
 <div class="breadcrumb_common">
 <div class="bs-example">
 <!-- <ul class="breadcrumb"> -->

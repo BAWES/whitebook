@@ -22,8 +22,8 @@
 #owl-demo .item h4{ font-weight: bold; font-size:13px;font-family: "proxima_nova_rgregular"; display: inline-block;   color: #000; margin: 34px 0 0 0; padding: 0px;}
 #owl-demo .item label{cursor:pointer;font-weight:normal; font-size:12px;font-family: "proxima_nova_rgregular";color: #000;margin: 0px; padding: 0px; }
 #owl-demo .item p{ font-size:12px;font-family: "proxima_nova_rgregular";color: #000;margin: 0px; padding: 0px;}
-#owl-demo .owl-prev{ position: absolute; top: 39%; left: -20px; background: url(../images/left_slid.png) no-repeat; width: 18px; height: 30px;}
-#owl-demo .owl-next{ position: absolute; top: 39%; right: -20px;background: url(../images/right_slid.png) no-repeat;width: 18px; height: 30px;}
+#owl-demo .owl-prev{ position: absolute; top: 39%; left: -30px; background: url(../images/left_slid.png) no-repeat; width: 18px; height: 30px;}
+#owl-demo .owl-next{ position: absolute; top: 39%; right: -30px;background: url(../images/right_slid.png) no-repeat;width: 18px; height: 30px;}
 #owl-demo .item :hover{ color: #000;}
 #owl-demo .item a{min-height:126px;display:inline-block;}
 .col-md-6.paddig0.resp_hide{ display:none;}

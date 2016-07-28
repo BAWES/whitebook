@@ -9,13 +9,15 @@ $this->title = 'Events/Wishlist | Whitebook';
 ?>
 
 <section id="inner_pages_white_back">
-	<div class="container paddng0">
 
-		<?php if(!Yii::$app->user->isGuest) { ?>
-		<!-- Events slider start -->
+<?php if(!Yii::$app->user->isGuest) { ?>
+<div id="event_slider_wrapper">
+	<div class="container paddng0">
 		<?php require(__DIR__ . '/../product/events_slider.php'); ?>
-		<!-- Events slider end -->
-		<?php } ?>
+	</div>
+</div>
+<?php } ?>
+	<div class="container paddng0">
 
 		<div class="events_content_part">
 			<div class="event_detials_common tab_section_event">
@@ -333,7 +335,7 @@ foreach($customer_wishlist as $f) {  ?>
 <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
-<button type="button" onclick="submit_create_new_event_form(<?php echo $f['item_id'];?>)" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE_NEW_EVENT');?>"><?php echo Yii::t('frontend','Create Event');?></button>
+<button type="button" onclick="submit_create_new_event_form(<?php echo $f['item_id'];?>)" class="btn btn-default" title="<?php echo Yii::t('frontend','CREATE NEW EVENT');?>"><?php echo Yii::t('frontend','Create Event');?></button>
 </div>
 <div class="cancel_sig">
 <button type="button" onclick="show_add_event_form();" class="btn btn-default" title="Add to Existing Event"><?php echo Yii::t('frontend','Add to Existing');?></button>

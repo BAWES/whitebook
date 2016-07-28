@@ -56,7 +56,7 @@ class ProductController extends BaseController
 
 			$output = Image::find()->select(['image_path'])
 			->where(['item_id' => $model['item_id']])
-			->andwhere(['module_type' => 'vendor_item'])
+			//->andwhere(['module_type' => 'vendor_item'])
 			->orderby(['vendorimage_sort_order'=>SORT_ASC])
 			->asArray()
 			->all();
