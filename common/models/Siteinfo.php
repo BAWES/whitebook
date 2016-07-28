@@ -23,24 +23,15 @@ class Siteinfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['app_name', 'home_slider_alias', 'app_desc', 'meta_keyword', 'meta_desc', 'email_id', 'site_location', 'site_copyright','currency_symbol'], 'required'],
-            [['app_name', 'home_slider_alias', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision'],'required', 'on' => 'update'],
-            [['app_desc', 'meta_desc'], 'string'],
-            [['commision'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
-            [['app_name'], 'string', 'max' => 100],
-            [['meta_keyword'], 'string', 'max' => 250],
-            [['email_id'], 'string', 'max' => 50],
-            [['site_copyright'], 'string', 'max' => 200],
-            /* Validation Rules */
-            [['email_id'],'email'],
-            ['phone_number','match', 'pattern' => '/^[0-9+ -]+$/','message' => 'Phone number accept only numbers and +,-']
+            [['home_slider_alias'], 'required'],
+            [['home_slider_alias'],'required', 'on' => 'update']
         ];
     }
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['update'] = ['app_name', 'home_slider_alias', 'app_desc', 'site_location','phone_number','meta_keyword', 'meta_desc', 'email_id', 'site_copyright','commision','currency_symbol'];//Scenario Values Only Accepted
+        $scenarios['update'] = ['home_slider_alias'];//Scenario Values Only Accepted
         return $scenarios;
     }
 
