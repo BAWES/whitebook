@@ -103,7 +103,7 @@ class ThemesController extends Controller
             $model = new Themes();
             $model->scenario = 'insert';
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->theme_name = strtolower($model->theme_name);
+                $model->theme_name = strtolower($model->theme_name);               
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Theme added successfully!');
 
@@ -131,7 +131,9 @@ class ThemesController extends Controller
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '20');
+
         if (yii::$app->user->can($access)) {
+
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -142,9 +144,10 @@ class ThemesController extends Controller
 
                 return $this->redirect(['index']);
             } else {
+
                 return $this->render('update', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');

@@ -147,11 +147,14 @@ class Vendor extends \common\models\Vendor
             return $vendor_category;
         }
 
-    public static function get_directory_list() {
+    public static function get_directory_list($sort = 'vendor_name') {
+        
         $today = date('Y-m-d H:i:s');
+
         return $data=Vendor::find()
-        ->select(['{{%vendor}}.vendor_id AS vid',
+            ->select(['{{%vendor}}.vendor_id AS vid',
                     '{{%vendor}}.vendor_name AS vname',
+                    '{{%vendor}}.vendor_name_ar AS vname_ar',
                     '{{%vendor}}.slug AS slug'])
             ->leftJoin('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
             ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
@@ -159,7 +162,7 @@ class Vendor extends \common\models\Vendor
 			->andWhere(['{{%vendor}}.trash'=>'Default'])
 			->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
 			->andWhere(['{{%vendor}}.vendor_status'=>'Active'])
-			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
+			->orderby(['{{%vendor}}.'.$sort => SORT_ASC])
 			->groupby(['{{%vendor}}.vendor_id'])
 			->asArray()
 			->all();
