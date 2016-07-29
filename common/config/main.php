@@ -52,8 +52,7 @@ return [
         ],
         'assetManager' => [
             //Link assets -> create symbolic links to assets
-            'linkAssets' => false,
-            'forceCopy' => true
+            'linkAssets' => true
             //append time stamps to assets for cache busting
             //'appendTimestamp' => true,
         ],
