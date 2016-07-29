@@ -30,6 +30,7 @@ $this->registerJs($analytics);
 //Arabic Styling Fix
 if(Yii::$app->language == 'ar'){
     ArabicAsset::register($this);
+    $this->registerCssFile('@web/css/style_arabic.css');
 }else{
     AppAsset::register($this);
 }
