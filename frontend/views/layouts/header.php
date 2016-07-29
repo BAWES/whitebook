@@ -53,13 +53,13 @@ $action = Yii::$app->controller->action->id;
                 <?php if (Yii::$app->user->isGuest) { ?>
 
                     <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK">
-                        <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
+                        My Events
                     </a>
 
                 <?php } else { ?>
 
                     <a href="<?= Url::toRoute(['/users/events','slug'=>'events' ]); ?>" title="THEWHITEBOOK">
-                        <?= Html::img('@web/images/mywhitebook_vector.svg', ['alt' => 'My Whitebook', 'title' => 'My Whitebook']); ?>
+                        My Events
                     </a>
                 <?php } ?>
             </div>

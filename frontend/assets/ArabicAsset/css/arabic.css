@@ -1,3 +1,42 @@
 
 @import url(https://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
 body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{font-family: 'Droid Arabic Kufi', serif !important;}
+
+.venus_icon {
+    background-position: -12px -8px !important;
+}
+
+.invit_icon {
+    background-position: -83px -12px !important;
+}
+
+.decor {
+    background-position: -230px -12px !important;
+}
+
+.supplies {
+    background-position: -290px -11px !important;
+}
+.entert {
+    background-position: -358px -10px !important;
+    padding: 0 5px;
+    float: none;
+}
+.serv {
+    background-position: -443px -3px !important;
+}
+
+.other {
+    background-position: -526px -13px !important;
+}
+
+.category_listing_nav ul li a:hover .venus_icon{background-position: -12px -71px  !important; }
+.category_listing_nav ul li a:hover .invit_icon{background-position: -83px -76px  !important; }
+.category_listing_nav ul li a:hover .supplies{background-position: -291px -68px !important; }
+.category_listing_nav ul li a:hover  .food_map{background-position: -135px -70px !important; }
+.category_listing_nav ul li a:hover .decor{background-position: -230px -71px !important; }
+.category_listing_nav ul li a:hover .entert{background-position: -358px -66px !important}
+.category_listing_nav ul li a:hover .serv{background-position: -443px -68px !important; }
+.category_listing_nav ul li a:hover .other{background-position:-526px -71px !important;}
+.category_listing_nav ul li a:hover .say_thank{background-position: -578px -69px !important; }
+
