@@ -97,7 +97,9 @@ class SiteController extends BaseController
     {
         $website_model = new Website();
         $category_url = Yii::$app->request->get('name');
+
         $main_category = $website_model->get_main_category();
+        
         if ($category_url != '') {
             $category_id = $website_model->get_category_id($category_url);
         } else {
@@ -105,18 +107,36 @@ class SiteController extends BaseController
         }
 
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Directory';
+        
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-        $directory = Vendor::get_directory_list();
+        
+        if(Yii::$app->language == "en") {
+            $directory = Vendor::get_directory_list();
+        }else{
+            $directory = Vendor::get_directory_list('vendor_name_ar');
+        }
+        
         $prevLetter = '';
+        
         $result = array();
+        
         foreach ($directory as $d) {
-            $firstLetter = substr($d['vname'], 0, 1);
+            
+            if(Yii::$app->language == "en") {
+                $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
+            }else{
+                $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
+            }
+
             if ($firstLetter != $prevLetter) {
                 $result[] = strtoupper($firstLetter);
             }
+            
             $prevLetter = $firstLetter;
         }
+
         $result = array_unique($result);
 
         return $this->render('directory', [
@@ -142,17 +162,30 @@ class SiteController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        $directory = Themes::loadthemenames();
+        if(Yii::$app->language == "en") {
+            $directory = Themes::loadthemenames();
+        }else{
+            $directory = Themes::loadthemenames('theme_name_ar');    
+        }
 
         $prevLetter = '';
         $result = array();
         foreach ($directory as $d) {
-            $firstLetter = substr($d['theme_name'], 0, 1);
+            
+            if(Yii::$app->language == "en") {
+                $firstLetter = mb_substr($d['theme_name'], 0, 1, 'utf8');
+            }else{
+                $firstLetter = mb_substr($d['theme_name_ar'], 0, 1, 'utf8');
+                //for arabic last letter will be first letter 
+            }
+
             if ($firstLetter != $prevLetter) {
                 $result[] = strtoupper($firstLetter);
             }
+
             $prevLetter = $firstLetter;
         }
+
         $result = array_unique($result);
 
         return $this->render('themes', [

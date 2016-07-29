@@ -51,12 +51,12 @@ class Themes extends \common\models\Themes
 
   }
 
-  public static function loadthemenames()
-  {       
+  public static function loadthemenames($sort = 'theme_name')
+  {             
       return $theme_name= Themes::find()
           ->where(['!=', 'theme_status', 'Deactive'])
           ->andwhere(['!=', 'trash', 'Deleted'])
-          ->orderby(['theme_name'=>SORT_ASC])
+          ->orderby([$sort => SORT_ASC])
           ->asArray()
           ->all();
   }

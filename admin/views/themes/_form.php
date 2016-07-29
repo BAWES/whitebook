@@ -15,7 +15,12 @@ use yii\widgets\ActiveForm;
     
     <div class="form-group">
 	<?= $form->field($model, 'theme_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+	</div> 
+
+	<div class="form-group">
+	<?= $form->field($model, 'theme_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
+	</div> 
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?= Html::a('Back', ['index', ], ['class' => 'btn btn-defauult']) ?>
