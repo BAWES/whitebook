@@ -195,7 +195,7 @@ function resetpwdcheck()
             async: false,
             success:function(data)
             {
-              //  console.log(data); return false;
+                console.log(data); 
                 if(data==1)
                 {
                     jQuery('#reset_loader').hide();

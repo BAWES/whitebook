@@ -140,6 +140,7 @@ class UsersController extends BaseController
     {
         $model = new Users();
         $check = $model->check_customer_validtime($cust_id);
+
         if (!empty($check)) {
             Yii::$app->session->set('reset_password_mail', $cust_id);
         } else {
@@ -193,7 +194,7 @@ class UsersController extends BaseController
                 ->setTo($email)
                 ->setSubject('Requested forgot Password')
                 ->send();
-                
+
                 return Users::SUCCESS;
             } else {
                 return Users::EMAIL_NOT_EXIST;
@@ -223,15 +224,27 @@ class UsersController extends BaseController
                     ->asArray()
                     ->one();
 
-                $check_user = $model->customer_password_reset($password, $customer_activation_key,$user_email);
+                $check_user = $model->customer_password_reset($password, $customer_activation_key, $user_email);
                 
                 $val = Users::FAILURE; // Password reset failure
 
-                if (count($check_user) > 0) {                    
-                    $_POST['email'] = $user_email['customer_email'];
-                    $loginResult = $this->actionLogin();
-                    $val = Users::SUCCESS; // Password reset successfully
+                if (count($check_user) > 0) { 
+
+                    $model = new Customer();
+                    $model->scenario = 'login';
+
+                    $request = Yii::$app->request;
+
+                    $model->customer_email = $user_email['customer_email'];
+                    $model->customer_password = $request->post('password');
+
+                    if($model->login() == Customer::SUCCESS_LOGIN) {
+                        $val = Customer::SUCCESS_LOGIN;
+                    } else {
+                        $val = $model->login();
+                    }
                 }
+
                 return $val;
             }
         }
