@@ -140,6 +140,7 @@ class UsersController extends BaseController
     {
         $model = new Users();
         $check = $model->check_customer_validtime($cust_id);
+
         if (!empty($check)) {
             Yii::$app->session->set('reset_password_mail', $cust_id);
         } else {
@@ -193,7 +194,7 @@ class UsersController extends BaseController
                 ->setTo($email)
                 ->setSubject('Requested forgot Password')
                 ->send();
-                
+
                 return Users::SUCCESS;
             } else {
                 return Users::EMAIL_NOT_EXIST;
@@ -223,15 +224,27 @@ class UsersController extends BaseController
                     ->asArray()
                     ->one();
 
-                $check_user = $model->customer_password_reset($password, $customer_activation_key,$user_email);
+                $check_user = $model->customer_password_reset($password, $customer_activation_key, $user_email);
                 
                 $val = Users::FAILURE; // Password reset failure
 
-                if (count($check_user) > 0) {                    
-                    $_POST['email'] = $user_email['customer_email'];
-                    $loginResult = $this->actionLogin();
-                    $val = Users::SUCCESS; // Password reset successfully
+                if (count($check_user) > 0) { 
+
+                    $model = new Customer();
+                    $model->scenario = 'login';
+
+                    $request = Yii::$app->request;
+
+                    $model->customer_email = $user_email['customer_email'];
+                    $model->customer_password = $request->post('password');
+
+                    if($model->login() == Customer::SUCCESS_LOGIN) {
+                        $val = Customer::SUCCESS_LOGIN;
+                    } else {
+                        $val = $model->login();
+                    }
                 }
+
                 return $val;
             }
         }
@@ -321,28 +334,28 @@ class UsersController extends BaseController
             
             // Creating event start
             $customer_id = Yii::$app->user->identity->customer_id;
- 			$event_date1 = date('Y-m-d', strtotime($event_date));
- 			$string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
- 			$slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
- 			
+            $event_date1 = date('Y-m-d', strtotime($event_date));
+            $string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
+            $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+            
             $check = Events::find()
                 ->select('event_id')
                 ->where(['customer_id' => $customer_id, 'event_name' => $event_name])
                 ->asArray()
                 ->all();
 
- 			if (count($check) > 0) {
- 				$result = Events::EVENT_ALREADY_EXIST;
- 			} else {
-     			$event_modal=new Events;
-     			$event_modal->customer_id=$customer_id;
-     			$event_modal->event_name=$event_name;
-     			$event_modal->event_date=$event_date1;
-     			$event_modal->event_type= $request->post('event_type');
-     			$event_modal->slug=$slug;
-     			$event_modal->save();
-     			$result=$event_modal->event_id;
- 			}
+            if (count($check) > 0) {
+                $result = Events::EVENT_ALREADY_EXIST;
+            } else {
+                $event_modal=new Events;
+                $event_modal->customer_id=$customer_id;
+                $event_modal->event_name=$event_name;
+                $event_modal->event_date=$event_date1;
+                $event_modal->event_type= $request->post('event_type');
+                $event_modal->slug=$slug;
+                $event_modal->save();
+                $result=$event_modal->event_id;
+            }
 
             // Creating event end
 
@@ -365,16 +378,16 @@ class UsersController extends BaseController
                         ->count();
 
                     if($check > 0) {
-           			    return Eventitemlink::EVENT_ITEM_LINK_EXIST;
+                        return Eventitemlink::EVENT_ITEM_LINK_EXIST;
                     } else {
                         $event_date = date('Y-m-d H:i:s');
-            			$event_item_modal = new Eventitemlink;
-            			$event_item_modal->event_id=$event_id;
-            			$event_item_modal->item_id=$item_id;
-            			$event_item_modal->link_datetime=$event_date;
-            			$event_item_modal->created_datetime=$event_date;
-            			$event_item_modal->modified_datetime=$event_date;
-            			$event_item_modal->save();
+                        $event_item_modal = new Eventitemlink;
+                        $event_item_modal->event_id=$event_id;
+                        $event_item_modal->item_id=$item_id;
+                        $event_item_modal->link_datetime=$event_date;
+                        $event_item_modal->created_datetime=$event_date;
+                        $event_item_modal->modified_datetime=$event_date;
+                        $event_item_modal->save();
 
                        return Eventitemlink::EVENT_ITEM_CREATED;
                    }
@@ -756,15 +769,15 @@ class UsersController extends BaseController
 
         $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
- 		$eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
- 		->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
- 		->Where(['{{%vendor_item}}.item_status'=>'Active',
+        $eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
+        ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
+        ->Where(['{{%vendor_item}}.item_status'=>'Active',
              '{{%vendor_item}}.trash'=>'Default',
              '{{%vendor_item}}.item_for_sale'=>'Yes',
              '{{%vendor_item}}.type_id'=>'2',
              '{{%event_item_link}}.event_id' => $event_details[0]['event_id']])
- 		->asArray()
- 		->all();
+        ->asArray()
+        ->all();
 
         $searchModel = new EventinviteesSearch();
 
@@ -830,11 +843,11 @@ class UsersController extends BaseController
 
             if ($command) {
 
-				$cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
-				->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
-				->Where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%vendor_item}}.category_id'=>$data['category_id'],'{{%event_item_link}}.event_id'=>$data['event_id']])
-				->asArray()
-				->all();
+                $cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
+                ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
+                ->Where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%vendor_item}}.category_id'=>$data['category_id'],'{{%event_item_link}}.event_id'=>$data['event_id']])
+                ->asArray()
+                ->all();
                 
                 return count($cat_list1);
             } else {
