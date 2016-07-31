@@ -201,7 +201,7 @@ $action = Yii::$app->controller->action->id;
         </li>
 
         <li class="">
-            <a href="<?= Url::to(['site/index', 'language'=>'en']) ?>">
+            <a href="<?= Url::toRoute('/contact-us',true);?>">
                 <?= Yii::t('frontend', 'Become a Vendor'); ?>
             </a>
         </li>
