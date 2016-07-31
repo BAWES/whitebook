@@ -181,13 +181,31 @@ $action = Yii::$app->controller->action->id;
                             <p>Hi, <?= Yii::$app->user->identity->customer_name; ?>!</p>
                         </div>
                         <?php } ?>
+
+        <?php if(Yii::$app->language == "en"){ ?>
+            <a  href="<?= Url::to(['site/index', 'language'=>'ar']) ?>"
+                style="position: absolute; top: 9px; right: 0;" class="respo_hidde">العربية</a>
+        <?php }else{ ?>
+            <a  href="<?= Url::to(['site/index', 'language'=>'en']) ?>"
+                style="position: absolute; top: 9px; right: 0;" class="respo_hidde">English</a>
+        <?php } ?>
+
+
                     <ul class="logout_part">
 <?php if (Yii::$app->user->isGuest) { ?>
         <li class="">
             <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
-            title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?>
-        </a>
+            title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>">
+                <?php echo Yii::t('frontend', 'Sign in / Register'); ?>
+            </a>
         </li>
+
+        <li class="">
+            <a href="<?= Url::to(['site/index', 'language'=>'en']) ?>">
+                <?= Yii::t('frontend', 'Become a Vendor'); ?>
+            </a>
+        </li>
+
 <?php } else { ?>
 
 <li>
@@ -204,13 +222,7 @@ $action = Yii::$app->controller->action->id;
 <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
 
-<?php if(Yii::$app->language == "en"){ ?>
-<li class=""><a href="<?= Url::to(['site/index', 'language'=>'ar']) ?>">العربية</a></li>
-<?php }else{ ?>
-<li class=""><a href="<?= Url::to(['site/index', 'language'=>'en']) ?>">English</a></li>
-<?php } ?>
-
-                    </ul>
+</ul>
 
                     <div class="search_header">
                         <div class="input-group">
