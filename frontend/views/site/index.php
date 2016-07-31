@@ -19,18 +19,25 @@ $model = new Website();
 <!-- content main start -->
 
 <div id="home_slider">
-    <?php 
-        echo file_get_contents(
-            'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias
-        );
+    <?php
+        if(Yii::$app->language == 'en'){
+            echo file_get_contents(
+                'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias
+            );
+        }else{
+            echo file_get_contents(
+                'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias=arabic-slider'
+            );
+        }
+
     ?>
 </div>
 
 <!-- Content start -->
 <section id="content_section">
 
-<?php if (!Yii::$app->user->isGuest) { ?>  
-    <br />  
+<?php if (!Yii::$app->user->isGuest) { ?>
+    <br />
     <div id="event_slider_wrapper">
         <div class="container paddng0">
         <?php require(__DIR__ . '/../product/events_slider.php'); ?>
@@ -43,7 +50,7 @@ $model = new Website();
 
 <div class="container_common">
 
-<?php if (Yii::$app->user->isGuest) { ?>    
+<?php if (Yii::$app->user->isGuest) { ?>
 <span class="first_events">
     MY EVENTS
 </span>
@@ -145,12 +152,12 @@ if (!empty($feature_group_sql_result)) {
                                 ->one();
 
                             if ($image_row) {
-                                $imglink = Yii::getAlias("@s3/vendor_item_images_210/") 
+                                $imglink = Yii::getAlias("@s3/vendor_item_images_210/")
                                     . $image_row['image_path'];
                             } else {
                                 $imglink = Yii::getAlias("@web/images/no_image.jpg");
                             }
-                            
+
                             ?>
                             <div class="item">
                                 <div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $product_val["slug"], true]); ?>'>
@@ -225,7 +232,7 @@ foreach ($featured_product as $f) {
 </div>
 </div>
 <?php }
-} 
+}
 
 $this->registerJs("
 
