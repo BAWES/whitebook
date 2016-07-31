@@ -18,6 +18,7 @@
  */
 return [
     '(not set)' => '',
+    'Address' => '',
     'An internal server error occurred.' => '',
     'Are you sure you want to delete this item?' => '',
     'Delete' => '',
@@ -37,6 +38,7 @@ return [
     'Please upload a file.' => '',
     'Powered by {yii}' => '',
     'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.' => '',
+    'The combination {values} of {attributes} has already been taken.' => '',
     'The file "{file}" is not an image.' => '',
     'The file "{file}" is too big. Its size cannot exceed {formattedLimit}.' => '',
     'The file "{file}" is too small. Its size cannot be smaller than {formattedLimit}.' => '',
