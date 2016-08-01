@@ -15,73 +15,116 @@ if ((!empty($directory)) && ($total > 1)) {
             <?php $i = 0;
             foreach ($first_letter as $f) {
                 ?>
-                        <?php if ($i < $first) { ?>
+                <?php if ($i < $first) { ?>
                     <div class="direct_list">
 
                         <h2><?php echo $f; ?></h2>
                         <ul>
                             <?php
                             foreach ($directory as $d) {
-                                $first_letter = strtoupper(substr($d['vname'], 0, 1));
+                               
+                                if(Yii::$app->language == "en") {
+                                    $first_letter = strtoupper(mb_substr($d['vname'], 0, 1, 'utf8'));
+                                    $vname = strtoupper($d['vname']);
+                                }else{
+                                    $first_letter = strtoupper(mb_substr($d['vname_ar'], 0, 1, 'utf8'));
+                                    $vname = strtoupper($d['vname_ar']);    
+                                }
+
                                 if ($first_letter == $f) {
                                     if ($i < $first) {
                                         ?>
-                                        <li><a href="<?= Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
-                    <?php }
-                }
-            } ?>
+                                        <li>
+                                            <a href="<?= Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a>
+                                        </li>
+                                <?php }
+                                }
+                            } ?>
                         </ul>
                     </div>
-                <?php }$i++;
+                <?php } $i++;
             } ?>
         </div>
         <!-- first section end here-->
         <!-- second section start here-->
         <div class="col-md-3">
-                    <?php $i = 0;
-                    foreach ($k as $f) {
-                        ?>
-                        <?php if (($i >= $first) && ($i < $second)) { ?>
-                    <div class="direct_list">
-                        <h2><?php echo $f; ?></h2>
-                        <ul><?php
-                    foreach ($directory as $d) {
-                        $first_letter = strtoupper(substr($d['vname'], 0, 1));
-                        if ($first_letter == $f) {
-                            ?>
-                                    <li><a href="<?= Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
-                        <?php }
-                    } ?>
+            <?php 
 
-                        </ul>
-                    </div>
-                        <?php }$i++;
-                    } ?></div>
+            $i = 0;
+
+            foreach ($k as $f) { 
+                
+                if (($i >= $first) && ($i < $second)) { ?>
+
+            <div class="direct_list">
+                <h2><?php echo $f; ?></h2>
+                <ul><?php
+            
+                foreach ($directory as $d) {
+
+                if(Yii::$app->language == "en") {
+                    $first_letter = strtoupper(mb_substr($d['vname'], 0, 1, 'utf8'));
+                    $vname = strtoupper($d['vname']);
+                }else{
+                    $first_letter = strtoupper(mb_substr($d['vname_ar'], 0, 1, 'utf8'));
+                    $vname = strtoupper($d['vname_ar']);    
+                }
+
+                if ($first_letter == $f) { ?>
+                    <li><a href="<?= Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a></li>
+                <?php 
+                }
+                } ?>
+                </ul>
+            </div>
+            <?php 
+                }
+                $i++;
+            } ?>
+        </div>
         <!-- second section end here-->
+
         <!-- Third section start here-->
         <div class="col-md-3 paddingright0">
 
-                    <?php $i = 0;
-                    foreach ($l as $f) {
-                        ?>
-        <?php if (($i >= $second) && ($i < $third)) { ?>
+            <?php 
+
+            $i = 0;
+            
+            foreach ($l as $f) {
+                       
+                if (($i >= $second) && ($i < $third)) { ?>
                     <div class="direct_list">
                         <h2><?php echo $f; ?></h2>
                         <ul>
-            <?php
-            foreach ($directory as $d) {
-                $first_letter = strtoupper(substr($d['vname'], 0, 1));
-                if ($first_letter == $f) {
-                    ?>
-                                    <li><a href="<?php Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
-                <?php }
-            } ?>
+                        <?php
+
+                        foreach ($directory as $d) {
+                            
+                            if(Yii::$app->language == "en") {
+                                $first_letter = strtoupper(mb_substr($d['vname'], 0, 1, 'utf8'));
+                                $vname = strtoupper($d['vname']);
+                            }else{
+                                $first_letter = strtoupper(mb_substr($d['vname_ar'], 0, 1, 'utf8'));
+                                $vname = strtoupper($d['vname_ar']);    
+                            }
+
+                            if ($first_letter == $f) { ?>
+
+                                <li><a href="<?php Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a></li>
+                            <?php 
+                            }
+                        } ?>
 
                         </ul>
                     </div>
-        <?php }$i++;
-    } ?></div>
+            <?php 
+                }
+                $i++;
+            } ?>
+        </div>
         <!-- Third section end here-->
+
     </div>
 <?php } else { ?>
     <div class="resposive-clearfix">

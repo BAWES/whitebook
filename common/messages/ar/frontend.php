@@ -17,6 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'No matching entries' => 'لا توجد إدخالات مطابقة',
+    'All' => 'جميع',
+    'MY EVENTS' => 'بلدي الأحداث',
     ' successfully added to ' => 'تم اضافة اختيارك بنجاح',
     'ADDED TO' => 'مضاف إلى',
     'CATEGORY' => 'فئة',
