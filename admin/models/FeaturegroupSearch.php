@@ -19,7 +19,7 @@ class FeaturegroupSearch extends Featuregroup
     {
         return [
             [['group_id', 'created_by', 'modified_by'], 'integer'],
-            [['group_name',], 'safe'],
+            [['group_name','group_name_ar'], 'safe'],
         ];
     }
 
