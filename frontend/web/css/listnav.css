@@ -16,7 +16,7 @@
 
 .ln-letter-count { position: absolute;top: 0;left: 0;width: 20px;text-align: center; font-size: 0.8em;line-height: 1.35; color: #336699}/*# sourceMappingURL=listnav.css.map */
 
-#demoOne-nav{border-bottom:1px solid #000; padding-bottom: 10px;}
+#demoOne-nav{border-bottom:1px solid #000; padding-bottom: 10px; display: none;}
 #demoOne{padding:0;margin:20px 0 0;}
 #demoOne li{list-style-type:none;}
 #demoOne li a{color: #000;font-family: "proxima_nova_rgregular";font-size: 13px; text-transform: uppercase;}

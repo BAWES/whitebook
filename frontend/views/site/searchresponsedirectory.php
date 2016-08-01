@@ -7,14 +7,24 @@
                     ?>
                     <li><h2><?php echo $f; ?></h2></li>
                     <?php
+
                     foreach ($directory as $d) {
-                        $ltr = strtoupper(substr($d['vname'], 0, 1));
-                        if ($ltr == $f) {
-                            ?>
-                            <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo strtoupper($d['vname']); ?>"><?php echo strtoupper($d['vname']); ?></a></li>
+
+                        if(Yii::$app->language == "en") {
+                            $ltr = strtoupper(mb_substr($d['vname'], 0, 1, 'utf8'));
+                            $vname = strtoupper($d['vname']);
+                        }else{
+                            $ltr = strtoupper(mb_substr($d['vname_ar'], 0, 1, 'utf8'));
+                            $vname = strtoupper($d['vname_ar']);    
+                        }
+
+                        if ($ltr == $f) { ?>
+
+                            <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a></li>
+                            
                         <?php }
                     } ?>
-    <?php } ?>
+                <?php } ?>
             </ul>
         </div>
     </div>

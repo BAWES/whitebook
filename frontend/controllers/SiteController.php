@@ -204,42 +204,78 @@ class SiteController extends BaseController
         $request = Yii::$app->request;
 
         if (Yii::$app->request->isAjax) {
-            $website_model = new Website();
-            
+                       
             if ($request->post('slug') != 'All') {
+                
                 $categoryid = Category::category_value($request->post('slug'));
-                $directory = $website_model->get_search_directory_list($categoryid['category_id']);
+                
+                if(Yii::$app->language == "en") {
+                    $directory = $website_model->get_search_directory_list($categoryid['category_id']);
+                }else{
+                    $directory = $website_model->get_search_directory_list($categoryid['category_id'], 'vendor_name_ar');
+                }
+
                 $prevLetter = '';
                 $result = array();
                 foreach ($directory as $d) {
-                    $firstLetter = substr($d['vname'], 0, 1);
+
+                    if(Yii::$app->language == "en") {
+                        $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
+                    }else{
+                        $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
+                    }
+
                     if ($firstLetter != $prevLetter) {
                         $result[] = strtoupper($firstLetter);
                     }
+
                     $prevLetter = $firstLetter;
                 }
+
                 $result = array_unique($result);
+
             } else {
-                $directory = $website_model->get_search_directory_all_list();
+                
+                if(Yii::$app->language == "en") {
+                    $directory = $website_model->get_search_directory_all_list();
+                }else{
+                    $directory = $website_model->get_search_directory_all_list('vendor_name_ar');
+                }
+
                 $prevLetter = '';
+
                 $result = array();
+                
                 foreach ($directory as $d) {
-                    $firstLetter = substr($d['vname'], 0, 1);
+
+                    if(Yii::$app->language == "en") {
+                        $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
+                    }else{
+                        $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
+                    }
+
                     if ($firstLetter != $prevLetter) {
                         $result[] = strtoupper($firstLetter);
                     }
                     $prevLetter = $firstLetter;
                 }
+
                 $result = array_unique($result);
             }
+
             if ($request->post('ajaxdata') == 0) {
+                
                 return $this->renderPartial('searchdirectory', [
                     'directory' => $directory,
-                    'first_letter' => $result, ]);
+                    'first_letter' => $result, 
+                ]);
+
             } else {
+                
                 return $this->renderPartial('searchresponsedirectory', [
                     'directory' => $directory,
-                    'first_letter' => $result, ]);
+                    'first_letter' => $result
+                ]);
             }
         }
     }
@@ -312,21 +348,38 @@ class SiteController extends BaseController
                         }
                     }
                 }
+
                 $p = array_unique($p);
+
                 $themes1 = Themes::load_all_themename($p);
 
                 $vendor = Vendor::loadvendor_item($k);
             }
+
             $usermodel = new Users();
+
             if (Yii::$app->user->isGuest) {
-                return $this->render('search', ['imageData' => $imageData,
-        'themes' => $themes1, 'vendor' => $vendor, 'slug' => $slug, 'search' => $search, ]);
+                
+                return $this->render('search', [
+                    'imageData' => $imageData,
+                    'themes' => $themes1, 
+                    'vendor' => $vendor, 
+                    'slug' => $slug, 
+                    'search' => $search
+                ]);
+
             } else {
                 $customer_id = Yii::$app->user->identity->customer_id;
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
 
-                return $this->render('search', ['imageData' => $imageData,
-        'themes' => $themes1, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list, 'search' => $search, ]);
+                return $this->render('search', [
+                    'imageData' => $imageData,
+                    'themes' => $themes1, 
+                    'vendor' => $vendor, 
+                    'slug' => $slug, 
+                    'customer_events_list' => $customer_events_list, 
+                    'search' => $search
+                ]);
             }
         }
     }

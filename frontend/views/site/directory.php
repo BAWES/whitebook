@@ -1,5 +1,11 @@
-<?php use yii\helpers\Url;
-use yii\helpers\Html;?>
+<?php 
+
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\web\view;
+
+?>
+
 <!-- coniner start -->
 <section id="inner_pages_white_back">
 
@@ -22,7 +28,7 @@ use yii\helpers\Html;?>
 <div class="listing_sub_cat">
 <input type="hidden" id="ajaxdata" name="ajaxdata">
 <select class="selectpicker" style="display: none;" id="filter_category" name="filter_category">
-	<option value="All">All</option>
+	<option value="All"><?= Yii::t("frontend", "All"); ?></option>
 	<option data-icon="venues-category" value="venues"><?= Yii::t("frontend", "Venues") ?></option>
 	<option data-icon="invitation-category" value="invitations"><?= Yii::t("frontend", "Invitations") ?></option>
 	<option data-icon="food-category" value="food-beverage"><?= Yii::t("frontend", "Food & Beverage") ?></option>
@@ -175,7 +181,7 @@ $l = $first_letter;?>
 	$i=0;
 
 	foreach($l as $f) { 
-		if(($i>=$second)&&($i<$third)) { ?>
+		if(($i >= $second)&&($i < $third)) { ?>
 		<div class="direct_list">
 		<h2><?php echo $f;?></h2>
 		<ul>
@@ -216,61 +222,65 @@ $l = $first_letter;?>
 </div>
 </section>
 
-<!-- continer end -->
-<script src="<?= Url::to("@web/js/jquery-listnav.js") ?>"></script>
-<link href="<?= Url::to("@web/css/listnav.css") ?>" rel="stylesheet">
-<script>
+<?php 
 
+$this->registerJsFile('@web/js/jquery-listnav.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerCssFile('@web/css/listnav.css?v=1.1');
 
-/*directorypage nav tabs*/
-$(function(){
-jQuery('#demoOne').listnav();
+$this->registerJs("
+	jQuery('#demoOne').listnav({
+		allText: '" . Yii::t('frontend', 'All') . "',
+		noMatchText: '". Yii::t('frontend', 'No matching entries') ."'
+	});
 
-jQuery('.demo a').click(function(e) {
-e.preventDefault();
-});
-});
+	jQuery('.demo a').click(function(e) {
+		e.preventDefault();
+	});
 
-jQuery('#filter_category').change(function(){
+	jQuery('#filter_category').change(function(){
 
+		var x= jQuery('#filter_category').val();
+		var ajaxdata= jQuery('#ajaxdata').val();
 
-var x= jQuery('#filter_category').val();
-var ajaxdata= jQuery('#ajaxdata').val();
+		var path = '".Url::to('site/searchdirectory')."';
+		
+		jQuery.ajax({
+			type:'POST',
+			url:path,
+			data:{ slug:x, ajaxdata:ajaxdata },
+			success:function(data){
+				if(ajaxdata=='1'){
+					jQuery('#mobile_respon').html(data);
+				} else {
+					jQuery('#filter').html(data);
+				}
+			}
+		}).done(function() {
+			if(ajaxdata=='1'){
+				jQuery('#demoOne').listnav({
+					allText: '" . Yii::t('frontend', 'All') . "',
+					noMatchText: '". Yii::t('frontend', 'No matching entries') ."'
+				});
 
-var path = "<?= Url::to('site/searchdirectory'); ?> ";
-jQuery.ajax({
-type:'POST',
-url:path,
-data:{slug:x,ajaxdata:ajaxdata},
-success:function(data){
-if(ajaxdata=='1'){
-	jQuery('#mobile_respon').html(data);}
-	else
-{jQuery('#filter').html(data);}
-}
-}).done(function() {
-if(ajaxdata=='1'){
-jQuery('#demoOne').listnav();
+				jQuery('.demo a').click(function(e) {
+					e.preventDefault();
+				});
+			}
+		});
+	});
 
-jQuery('.demo a').click(function(e) {
-e.preventDefault();
-});
-}
+	jQuery('#demoOne a').click(function(){
+		var directive_link = jQuery(this).attr('href');
+		window.location.href = directive_link;
+	});
 
-
-});
-});
-
-
-jQuery('#demoOne a').click(function(){
-var directive_link=(jQuery(this).attr("href"));
-window.location.href=directive_link;
-});
-</script>
-<script type="text/javascript">
-if (jQuery(window).width() < 991) {
-	jQuery('#ajaxdata').val('1');
-}else{
+	if (jQuery(window).width() < 991) {
+		jQuery('#ajaxdata').val('1');
+	}else{
 		jQuery('#ajaxdata').val('0');
-		}
-</script>
+	}
+
+", View::POS_READY);
+
+
+
