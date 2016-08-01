@@ -58,12 +58,12 @@ class Featuregroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['group_name',], 'required'],
-            [['group_name',],'unique'],
+            [['group_name', 'group_name_ar'], 'required'],
+            [['group_name', 'group_name_ar'],'unique'],
             [['created_by', 'modified_by'], 'integer'],
             [['created_datetime', 'modified_datetime'], 'safe'],
             [['trash'], 'string'],
-            [['group_name'], 'string', 'max' => 128]
+            [['group_name', 'group_name_ar'], 'string', 'max' => 128]
         ];
     }
 
@@ -75,6 +75,7 @@ class Featuregroup extends \yii\db\ActiveRecord
         return [
             'group_id' => 'Group Name',
             'group_name' => 'Group Name',
+            'group_name_ar' => 'Group Name - Arabic',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
@@ -90,6 +91,4 @@ class Featuregroup extends \yii\db\ActiveRecord
     {
         return $this->hasMany(FeatureGroupItem::className(), ['group_id' => 'group_id']);
     }
-
-
 }

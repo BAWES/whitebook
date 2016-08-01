@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'group_id',
             'group_name',
+            'group_name_ar',
             'created_by',
             'modified_by',
             'created_datetime',
