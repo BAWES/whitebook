@@ -12,7 +12,7 @@ if(!Yii::$app->user->isGuest) {
 	<?php if(count($customer_events) == 0) {  ?>
 		<div class="container_eventslider">
 			<span class="first_events" style='text-transform:uppercase'>
-				<?= Yii::t('frontend','My Events'); ?>
+				<?= Yii::t('frontend', 'MY EVENTS'); ?>
 			</span>
 			<div class="creatfirst_events">
 				<p data-example-id="active-anchor-btns" class="bs-example">
@@ -26,7 +26,7 @@ if(!Yii::$app->user->isGuest) {
 				<div class="event_slider_top">
 					<div class="col-md-3">
 						<span class="first_events" style='text-transform:uppercase'>
-							<?= Yii::t('frontend','My Events'); ?>
+							<?= Yii::t('frontend','MY EVENTS'); ?>
 						</span>
 						<div class="creatfirst_events">
 						    <p data-example-id="active-anchor-btns" class="bs-example">
@@ -74,7 +74,7 @@ if(!Yii::$app->user->isGuest) {
 									?>
 									<div class="container_eventslider" style='text-transform:uppercase'>
 										<span class="first_events">
-											<?php echo Yii::t('frontend','My Events'); ?>
+											<?php echo Yii::t('frontend','MY EVENTS'); ?>
 										</span>
 										<div class="creatfirst_events">
 											<p data-example-id="active-anchor-btns" class="bs-example">
