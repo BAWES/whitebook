@@ -59,7 +59,7 @@ jQuery(document).ready(function () {
         if (jQuery('#agree_terms').attr('checked')) {
             jQuery("#agree_terms").attr("checked",false);
             jQuery("#agree_terms").val('0');
-            jQuery('#agree').html('Tick the terms of services and privacy policy');
+            jQuery('#agree').html(tick_the_terms_of_services_and_privacy_policy);
             jQuery('label#label_check1').removeClass('c_onn');
             jQuery('label#label_check1').addClass('c_off');
         } else {
@@ -173,7 +173,8 @@ function resetpwdcheck()
     if(x<6)
     {
         jQuery('#reset_pwd_result').show();
-        jQuery('#reset_pwd_result').html('Password should contain minimum six letters');return false;
+        jQuery('#reset_pwd_result').html(password_should_contain_minimum_six_letters);
+        return false;
     }
     if(password==conPassword)
     {
@@ -183,7 +184,8 @@ function resetpwdcheck()
     else
     {
         jQuery('#reset_pwd_result').show();
-        jQuery('#reset_pwd_result').html('Confirm password should be equal to password');return false;
+        jQuery('#reset_pwd_result').html(confirm_password_should_be_equal_to_password);
+        return false;
     }
 
     if((jQuery('#resetForm').valid()) && (k==1))
@@ -338,7 +340,7 @@ jQuery("#register").click(function()
         if(jQuery('#agree_terms').val()==0)
         {
             jQuery('#agree').show();
-            jQuery('#agree').html('Tick the terms of services and privacy policy');
+            jQuery('#agree').html(tick_the_terms_of_services_and_privacy_policy);
         }
 
     }else
@@ -366,13 +368,13 @@ jQuery("#register").click(function()
     }
     else{
         jQuery('#con_pass').show();
-        jQuery('#con_pass').html('Password and Confirm password should be minimum six letters and same');
+        jQuery('#con_pass').html(password_and_confirm_password_should_be_minimum_six_letters_and_same);
     }
 
     if(gender==0)
     {
         jQuery('#gen_er').show();
-        jQuery('#gen_er').html('The field is required');
+        jQuery('#gen_er').html(the_field_is_required);
     }
     else
     {
@@ -382,37 +384,37 @@ jQuery("#register").click(function()
     if(bday=='' && bmonth=='' && byear=='')
     {
         jQuery('#dob_er').show();
-        jQuery('#dob_er').text("The field is required ");
+        jQuery('#dob_er').text(the_field_is_required);
     }
     else if(bday=='' && bmonth=='')
     {
         jQuery('#dob_er').show();
-        jQuery('#dob_er').text("Choose date and month of birth");
+        jQuery('#dob_er').text(choose_date_and_month_of_birth);
     }
     else if(bday=='' && byear=='')
     {
         jQuery('#dob_er').show();
-        jQuery('#dob_er').text("Choose date and year of birth");
+        jQuery('#dob_er').text(choose_date_and_year_of_birth);
     }
     else if(bmonth=='' && byear=='')
     {
         jQuery('#dob_er').show();
-        jQuery('#dob_er').text("Choose month and year of birth");
+        jQuery('#dob_er').text(choose_month_and_year_of_birth);
     }
     else if(bmonth=='')
     {
         jQuery('#dob_er').show();
-        jQuery('#dob_er').text("Choose month of birth");
+        jQuery('#dob_er').text(choose_month_of_birth);
     }
     else if(byear=='')
     {
         jQuery('#dob_er').show();
-        jQuery('#dob_er').text("Choose year of birth");
+        jQuery('#dob_er').text(choose_year_of_birth);
     }
     else if(bday=='')
     {
         jQuery('#dob_er').show();
-        jQuery('#dob_er').text("Choose day of birth");
+        jQuery('#dob_er').text(choose_day_of_birth);
     }
     else
     {
@@ -434,7 +436,7 @@ jQuery("#register").click(function()
                 if(data==1)
                 {
                     jQuery("#customer_email").show();
-                    jQuery("#customer_email").html('Entered email id is already exists');
+                    jQuery("#customer_email").html(entered_email_id_is_already_exists);
                     l=0;
                     jQuery("#loader1").hide();
                 }
@@ -453,7 +455,7 @@ jQuery("#register").click(function()
         if(x != ''){
             l=0;
             jQuery("#customer_email").show();
-            jQuery("#customer_email").html('Enter a valid email id');
+            jQuery("#customer_email").html(enter_a_valid_email_id);
         }
     }
 
@@ -521,7 +523,7 @@ jQuery('#create_event_button').click(function(){
     //var element = jQuery(this).parents('form');
     var event_type=jQuery('#event_type').val();
     if(event_type==''){
-        jQuery('#type_error').html('Kindly select Event type');
+        jQuery('#type_error').html(kindly_select_event_type);
         i=1;
     }else{
         i=0;
@@ -592,7 +594,7 @@ jQuery(document).on('click',"#update_event_button",function()
 {
     var event_type = jQuery('#edit_event_type').val();
     if(event_type==''){
-        jQuery('#type_error').html('Kindly select Event type');
+        jQuery('#type_error').html(kindly_select_event_type);
         i=1;
     }else{
         i=0;
@@ -728,7 +730,7 @@ jQuery(function () {
                     if(data==1)
                     {
                         jQuery("#customer_email").show();
-                        jQuery("#customer_email").html('Entered email id is already exists');
+                        jQuery("#customer_email").html(entered_email_id_is_already_exists);
                     }
                     else if(data==0)
                     {
@@ -897,7 +899,7 @@ function search_data(search){
                     if(data==0)
                     {
                         jQuery("#search_list").html('');
-                        jQuery("#search_list_fail1").html('<p>No Record found</p>');
+                        jQuery("#search_list_fail1").html('<p>' + no_record_found + '</p>');
                     }
                     else
                     {
@@ -927,7 +929,7 @@ function mobile_search_data(search){
                 {
                     if(data==0)
                     {
-                        jQuery("#mobile_search_list").html('No data found');
+                        jQuery("#mobile_search_list").html(no_record_found);
                     }
                     else
                     {
@@ -1131,7 +1133,7 @@ function add_to_event(x)
         }
         else
         {
-            jQuery('#add_to_event_error'+x).html('Kindly select the event type');
+            jQuery('#add_to_event_error'+x).html(kindly_select_event_type);
         }
 
     }
@@ -1171,7 +1173,7 @@ jQuery("#event_type").change(function () {
     var event_type=jQuery('#event_type').val();
     if(event_type==''){
         //jQuery('#gen_er').html('');
-        jQuery('#type_error').html('Kindly select Event type');
+        jQuery('#type_error').html(kindly_select_the_event_type);
 
     }else
     {

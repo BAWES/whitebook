@@ -21,17 +21,16 @@ use common\models\Vendoritemthemes;
 class Themes extends \common\models\Themes
 {
 
-  public static function load_all_themename($id)
+  public static function load_all_themename($id, $sort = 'theme_name')
   {
         return $theme_name =  Themes::find()
-        ->select(['theme_id','theme_name','slug'])
+        ->select(['theme_id','theme_name','theme_name_ar','slug'])
         ->where(['!=', 'theme_status', 'Deactive'])
         ->andWhere(['!=', 'trash', 'Deleted'])
         ->andWhere(['theme_id' => $id])
-        ->orderby('theme_name')
+        ->orderby($sort)
         ->asArray()
-        ->all();
-        
+        ->all();        
   }
 
 

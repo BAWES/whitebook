@@ -19,7 +19,7 @@ use yii\helpers\Html;
                 <h3 style='margin-top:1.2em;'><?= Yii::t("frontend", "Boost your Event!") ?></h3>
 
                 <p style='font-size:1.1em; margin:1.5em auto; width:85%;'>
-                    We provide event boosting services where we assist with brainstorming and researching ideas, suggesting vendors and ideas to implement at your event, getting quotations from different vendors and booking them for the event
+                    <?= Yii::t("frontend", "We provide event boosting services where we assist with brainstorming and researching ideas, suggesting vendors and ideas to implement at your event, getting quotations from different vendors and booking them for the event"); ?>
                 </p>
             </div>
             <div class='row'>
