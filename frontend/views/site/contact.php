@@ -10,28 +10,29 @@ $this->title = 'Contact us | Whitebook';
 <section id="inner_pages_sections">
     <div class="container">
         <div class="title_main">
-            <h1>Contact & Faq's</h1>
+            <h1><?= Yii::t('frontend', 'Contact & Faq\'s') ?></h1>
         </div>
         <div class="contact_us">
             <div class="col-md-4 paddingleft0">
                 <div class="contact_us_sec">
-                    <h3 class="inner_title">Ask a Question</h3>
+                    <h3 class="inner_title"><?= Yii::t('frontend', 'Ask a Question') ?></h3>
                     <div data-example-id="basic-forms" class="bs-example">
                         <form id="form1" name="form1" method="post">
+                            
                             <div class="form-group">
-
-                                <input type="text" placeholder="Sender Name *" id="username" name="username" class="form-control">
+                                <input type="text" placeholder="<?= Yii::t('frontend', 'Sender Name *') ?>" id="username" name="username" class="form-control">
                                 <div id="chkname" class="error"></div>
                             </div>
+
                             <div class="form-group">
-                                <input type="email" placeholder="Sender Email *" id="useremail" name="useremail" class="form-control">
+                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control">
                                 <div id="chkemail" class="error"></div>
                             </div><div class="form-group">
-                                <textarea placeholder="Message *" rows="3" id="usermessgae" name="usermessgae" class="form-control"></textarea>
+                                <textarea placeholder="<?= Yii::t('frontend', 'Message *'); ?>" rows="3" id="usermessgae" name="usermessgae" class="form-control"></textarea>
                                 <div id="chkmessage" class="error"></div>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-default" type="button" id="send" name="send" title="Send Email">Send Email</button>
+                                <button class="btn btn-default" type="button" id="send" name="send" title="Send Email"><?= Yii::t('frontend', 'Send Email') ?></button>
                         </form>
                     </div>
                 </div>
@@ -40,12 +41,11 @@ $this->title = 'Contact us | Whitebook';
         </div>
         <div class="col-md-7">
             <div class="contact_center_sec">
-                <h3 class="inner_title">Find an Answer</h3>
+                <h3 class="inner_title"><?= Yii::t('frontend', 'Find an Answer') ?></h3>
                 <ul class="inner_contents">
                     <li>
                         <div class="left_books">
-                            WHAT IS <br/>
-                            My Whitebook ?
+                            <?= Yii::t('frontend', 'WHAT IS My Whitebook?') ?>
                         </div>
                         <div class="left_books_lis">
                             <ul>

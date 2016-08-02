@@ -40,6 +40,7 @@ class PlanController extends BaseController
     public function actionPlan($slug = '')
     {
         $model = new Website();
+
         if ($slug != '') {
             /* BEGIN CATEGORY*/
         $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $slug])->asArray()->one();
@@ -117,11 +118,16 @@ class PlanController extends BaseController
             }
             $get_unique_themes = array_unique($get_unique_themes);
         }
-        $themes = Themes::load_all_themename($get_unique_themes);
+
+        if(Yii::$app->language == "en"){
+            $themes = Themes::load_all_themename($get_unique_themes, 'theme_name');
+        }else{
+            $themes = Themes::load_all_themename($get_unique_themes, 'theme_name_ar');
+        }
 
         /* VENDOR HAVIG ATLEAST ONE PRODUCT */
         $vendor = Vendoritem::find()
-            ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
+            ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
             ->join('INNER JOIN', '{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
             ->where(['{{%vendor_item}}.vendor_id' => $active_vendors])
@@ -138,15 +144,32 @@ class PlanController extends BaseController
 
         /* END GET VENDORS */
         if (Yii::$app->user->isGuest) {
-            return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug,'category_id'=>$model1['category_id']]);
+
+            return $this->render('planvenues', [
+                'model' => $model, 
+                'imageData' => $imageData,
+                'themes' => $themes, 
+                'vendor' => $vendor, 
+                'slug' => $slug,
+                'category_id' => $model1['category_id']
+            ]);
+
         } else {
-                $usermodel = new Users();
-                $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
-                return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-                'themes' => $themes, 'vendor' => $vendor, 'category_id'=>$model1['category_id'],'slug' => $slug, 'customer_events_list' => $customer_events_list]);
-            }
+            $usermodel = new Users();
+            
+            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
+            
+            return $this->render('planvenues', [
+                'model' => $model, 
+                'imageData' => $imageData,
+                'themes' => $themes, 
+                'vendor' => $vendor, 
+                'category_id' => $model1['category_id'],
+                'slug' => $slug, 
+                'customer_events_list' => $customer_events_list
+            ]);
         }
+    }
 
 
     public function actionLoaditems()
