@@ -57,25 +57,29 @@ $get = Yii::$app->request->get();
 
 					<select class="selectpicker" style="display: none;" id="main-category">
 
-						<option data-icon="venues-category" value="venues" <?= $category_id == Category::VENUES?'selected="selected"':''; ?> name="category" >
-							Venues
-						</option>
+						<?php 
 
-						<option data-icon="invitation-category" value="invitations" <?php  if($category_id == Category::INVITATIONS) { ?> selected="selected"<?php } ?> name="category">Invitations</option>
+						foreach($top_categories as $category) { 
 
-						<option data-icon="food-category" name="category" value="food-beverage" <?php  if($category_id == Category::FOOD_BEVERAGES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
+							if ($category_id == $category['category_id']) {
+								$selected = 'selected="selected"';
+							} else {
+								$selected = '';
+							}
 
-						<option data-icon="decor-category" name="category" value="decor" <?php  if($category_id ==  Category::DECOR) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
-
-						<option data-icon="supply-category" value="supplies" <?php  if($category_id ==  Category::SUPPLIES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
-
-						<option data-icon="enter-category" value="entertainment" <?php  if($category_id ==  Category::ENTERTAINMENT) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
-
-						<option data-icon="service-category" value="services" <?php  if($category_id ==  Category::SERVICES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
-
-						<option data-icon="others-category" <?php  if($category_id ==  Category::OTHERS) { ?> selected="selected" <?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
-
-						<option data-icon="saythankyou-category" <?php  if($category_id == Category::GIFT_FAVORS) { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>">Gift Favor</option>
+							if(Yii::$app->language == "en"){
+								$category_name = $category['category_name'];
+							}else{
+								$category_name = $category['category_name_ar'];
+							}
+						?>
+							<option 
+								data-icon="<?= $category['icon'] ?>" 
+								value="<?= Url::toRoute(['plan/plan', 'slug'=> $category['slug']]) ?>" 
+								name="category" <?= $selected ?>>
+								<?= $category_name ?>
+							</option>
+						<?php } ?>
 
 					</select>
 				</div><!-- END .listing_sub_cat1 -->
@@ -98,18 +102,39 @@ $get = Yii::$app->request->get();
 			/* Get slug name to find category */
 			$subcategory = SubCategory::loadsubcat($slug);
 
-			$col=1;
+			$col = 1;
+
 			foreach ($subcategory as $key => $value) {
+				
 				$t = $in ='';
+
 				if($col==1){
-					$s_class='minus_acc';$t='area-expanded="true"';$in='in';
+					$s_class='minus_acc';
+					$t='area-expanded="true"';
+					$in='in';
 				}else{
 					$s_class='plus_acc';
 				}
+
 				?>
 				<div class="panel panel-default" >
 					<div class="panel-heading">
-						<div class="clear_left"><p><?= $value['category_name']; ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
+						<div class="clear_left">
+							<p>
+
+							<?php
+
+							if(Yii::$app->language == 'en') {
+								echo $value['category_name']; 
+							} else{
+								echo $value['category_name_ar']; 
+							} ?>
+
+							<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">
+								- <?= Yii::t('frontend', 'Clear') ?></a>
+							
+							</p>
+						</div>
 						<div class="clear_right">
 							<a href="#<?= $value['category_id']; ?>" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
 								<h4 class="panel-title">
@@ -148,12 +173,29 @@ $get = Yii::$app->request->get();
 										?>
 										<li>
 											<label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
-												<input name="items" data-element="input" class="items" id="checkbox-<?= $value['category_name'] ?>"
-												value="<?= $value['slug'] ?>" step="<?= $value['category_id'] ?>"
-												type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
-												<?= ucfirst(strtolower($value['category_name'])); ?></label>
-											</li>
-											<?php }  ?>
+
+												<input 
+													name="items" 
+													data-element="input" 
+													class="items" 
+													id="checkbox-<?= $value['category_name'] ?>"
+													value="<?= $value['slug'] ?>" 
+													step="<?= $value['category_id'] ?>"
+													type="checkbox" 
+													<?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
+												
+												<?php
+
+												if(Yii::$app->language == 'en') {
+													echo ucfirst(strtolower($value['category_name'])); 
+												}else{
+													echo ucfirst(strtolower($value['category_name_ar'])); 
+												}
+
+												?>
+											</label>
+										</li>
+										<?php }  ?>
 										</ul>
 									</div>
 								</div>

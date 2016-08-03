@@ -33,34 +33,31 @@ class Cms extends \yii\db\ActiveRecord
         return '{{%cms}}';
     }
     
-	public function behaviors()
-	{
-	      return [
-	          [
-
-	              'class' => SluggableBehavior::className(),
-	              'attribute' => 'page_name',	
-	              
-            'immutable' => false,
-            
-            'ensureUnique'=>true,
-	              'value' => function ($event) {
-				 return str_replace(' ', '-', $this->slug);
+    public function behaviors()
+    {
+        return [
+        [
+        'class' => SluggableBehavior::className(),
+        'attribute' => 'page_name',	     
+        'immutable' => false,
+        'ensureUnique'=>true,
+        'value' => function ($event) {
+            return str_replace(' ', '-', $this->slug);
         },             
-	          ],
-              [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by',
-            ],
-            [
-                   'class' => TimestampBehavior::className(),
-                   'createdAtAttribute' => 'created_datetime',
-                   'updatedAtAttribute' => 'modified_datetime',
-                   'value' => new Expression('NOW()'),
-            ],
-	      ];
-	}
+        ],
+        [
+        'class' => BlameableBehavior::className(),
+        'createdByAttribute' => 'created_by',
+        'updatedByAttribute' => 'modified_by',
+        ],
+        [
+        'class' => TimestampBehavior::className(),
+        'createdAtAttribute' => 'created_datetime',
+        'updatedAtAttribute' => 'modified_datetime',
+        'value' => new Expression('NOW()'),
+        ],
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -68,11 +65,11 @@ class Cms extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['page_name', 'page_content', 'cms_meta_title', 'cms_meta_keywords', 'cms_meta_description'], 'required'],
-            [['page_content','page_status', 'trash'], 'string'],
-            [['page_order', 'created_by', 'modified_by'], 'integer'],
-            [['page_order', 'created_by', 'modified_by',], 'safe'],
-            [['page_name'], 'string', 'max' => 100]
+        [['page_name_ar', 'page_content_ar', 'page_name', 'page_content', 'cms_meta_title', 'cms_meta_keywords', 'cms_meta_description'], 'required'],
+        [['page_content_ar', 'page_content','page_status', 'trash'], 'string'],
+        [['page_order', 'created_by', 'modified_by'], 'integer'],
+        [['page_order', 'created_by', 'modified_by',], 'safe'],
+        [['page_name', 'page_name_ar'], 'string', 'max' => 100]
         ];
     }
 
@@ -82,48 +79,52 @@ class Cms extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'page_id' => 'Page ID',
-            'page_name' => 'Page Name',
-            'page_content' => 'Page Content',
-            'page_order' => 'Page Order',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
-            'created_datetime' => 'Created Datetime',
-            'modified_datetime' => 'Modified Datetime',
-            'trash' => 'Trash',
-            'cms_meta_title' => 'Page meta title',
-            'cms_meta_keywords' => 'Page meta keywords',
-            'cms_meta_description' => 'Page meta description',
+        'page_id' => 'Page ID',
+        'page_name' => 'Page Name',
+        'page_name_ar' => 'Page Name - Arabic',
+        'page_content' => 'Page Content',
+        'page_content_ar' => 'Page Content - Arabic',
+        'page_order' => 'Page Order',
+        'created_by' => 'Created By',
+        'modified_by' => 'Modified By',
+        'created_datetime' => 'Created Datetime',
+        'modified_datetime' => 'Modified Datetime',
+        'trash' => 'Trash',
+        'cms_meta_title' => 'Page meta title',
+        'cms_meta_keywords' => 'Page meta keywords',
+        'cms_meta_description' => 'Page meta description',
         ];
     }
     
-    	public static function getContent($id)
-	{
-		$content=Cms::find()
-		->select(['page_content'])
-		->where(['page_id' => $id])
-		->all();
-		 $k=($content[0]['page_content']);
-		 return   substr($k, 0, 150);
-		
-	}
-    	public static function cms_details($slug)
-	{
+    public static function getContent($id)
+    {
+        $content=Cms::find()
+        ->select(['page_content'])
+        ->where(['page_id' => $id])
+        ->all();
+
+        $k= $content[0]['page_content'];
+
+        return   substr($k, 0, 150);
+    }
+
+    public static function cms_details($slug)
+    {
 		//echo $slug;die;
-		if($slug){
-		$content=Cms::find()
-		->select(['page_id','page_content','page_name','cms_meta_title','cms_meta_keywords','cms_meta_description'])
-		->where(['slug' => $slug])
-		->andwhere(['page_status' => 'active'])
-		->andwhere(['trash' => 'Default'])
-		->one();
-		return ($content);
-		}
-				
-	}    
-    
+      if($slug){
+          $content=Cms::find()
+          ->select(['page_id','page_content_ar','page_name_ar','page_content','page_name','cms_meta_title','cms_meta_keywords','cms_meta_description'])
+          ->where(['slug' => $slug])
+          ->andwhere(['page_status' => 'active'])
+          ->andwhere(['trash' => 'Default'])
+          ->one();
+          return ($content);
+      }
+
+    }    
+
     public static function content($content)
-	{       
-			return strip_tags($content); 
-	}	
+    {       
+        return strip_tags($content); 
+    }	
 }

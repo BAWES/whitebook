@@ -332,20 +332,26 @@ class CategoryController extends Controller
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '3');
+        
         if (yii::$app->user->can($access)) {
+            
             $model = $this->findModel($id);
+            
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->category_name = strtolower($model->category_name);
-            echo Yii::$app->session->setFlash('success', 'Category updated successfully!');
-            Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
-            return $this->redirect(['index']);
+                $model->category_name = strtolower($model->category_name);
+                
+                Yii::$app->session->setFlash('success', 'Category updated successfully!');
+                Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
+                
+                return $this->redirect(['index']);
             } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -578,6 +584,7 @@ class CategoryController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
     protected function findsubModel($id)
     {
         if (($model = Subcategory::findOne($id)) !== null) {

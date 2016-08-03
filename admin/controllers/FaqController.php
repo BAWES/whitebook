@@ -61,16 +61,17 @@ class FaqController extends Controller
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('4', '15');
+        
         if (yii::$app->user->can($access)) {
             $searchModel = new FaqSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -110,7 +111,7 @@ class FaqController extends Controller
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'FAQ Created successfully!');
+                Yii::$app->session->setFlash('success', 'FAQ Created successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -119,7 +120,7 @@ class FaqController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -139,7 +140,7 @@ class FaqController extends Controller
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'FAQ Updated successfully!');
+                Yii::$app->session->setFlash('success', 'FAQ Updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -148,7 +149,7 @@ class FaqController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -171,11 +172,11 @@ class FaqController extends Controller
             $model->load(Yii::$app->request->post());
             $model->save();
 
-            echo Yii::$app->session->setFlash('success', 'FAQ Deleted successfully!');
+            Yii::$app->session->setFlash('success', 'FAQ Deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

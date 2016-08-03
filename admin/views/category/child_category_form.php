@@ -39,10 +39,12 @@ use yii\helpers\ArrayHelper;
 {error}"])->dropDownList($subcategory,['prompt'=>'Select...']) ?></div>
 <?php } ?>
 
-
-
 <div class="form-group">
 	<?= $form->field($model, 'category_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
+</div> 
+
+<div class="form-group">
+	<?= $form->field($model, 'category_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
 </div> 
 
 <div class="form-group">

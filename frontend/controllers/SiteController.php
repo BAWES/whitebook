@@ -604,7 +604,21 @@ class SiteController extends BaseController
             \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['cms_meta_description']) ? $seo_content[0]['cms_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
             \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['cms_meta_keywords']) ? $seo_content[0]['cms_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
 
-            return $this->render('cmspages', ['title' => $cms_details['page_name'], 'content' => $cms_details['page_content']]);
+
+            if(Yii::$app->language == "en"){
+                
+                return $this->render('cmspages', [
+                    'title' => $cms_details['page_name'], 
+                    'content' => $cms_details['page_content']
+                ]);
+
+            }else{
+
+                return $this->render('cmspages', [
+                    'title' => $cms_details['page_name_ar'], 
+                    'content' => $cms_details['page_content_ar']
+                ]);
+            }
         }
     }
 

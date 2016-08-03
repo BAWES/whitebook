@@ -20,17 +20,20 @@ $this->title = 'Contact us | Whitebook';
                         <form id="form1" name="form1" method="post">
                             
                             <div class="form-group">
-                                <input type="text" placeholder="<?= Yii::t('frontend', 'Sender Name *') ?>" id="username" name="username" class="form-control">
+                                <input type="text" placeholder="<?= Yii::t('frontend', 'Sender Name *') ?>" id="username" name="username" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter name!'); ?>" />
                                 <div id="chkname" class="error"></div>
                             </div>
 
                             <div class="form-group">
-                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control">
+                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter valid email address!'); ?>" />
                                 <div id="chkemail" class="error"></div>
-                            </div><div class="form-group">
-                                <textarea placeholder="<?= Yii::t('frontend', 'Message *'); ?>" rows="3" id="usermessgae" name="usermessgae" class="form-control"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea placeholder="<?= Yii::t('frontend', 'Message *'); ?>" rows="3" id="usermessgae" name="usermessgae" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter message!'); ?>"></textarea>
                                 <div id="chkmessage" class="error"></div>
                             </div>
+                            
                             <div class="form-group">
                                 <button class="btn btn-default" type="button" id="send" name="send" title="Send Email"><?= Yii::t('frontend', 'Send Email') ?></button>
                         </form>
@@ -51,9 +54,21 @@ $this->title = 'Contact us | Whitebook';
                             <ul>
                                 <?php foreach ($faq as $f) { ?>
                                     <li>
-                                        <p><a class="show_content" href="javascript:void(0);"><?= ucfirst($f['question']) ?></a></p>
-                                        <div class="toogle_botom"><?= ucfirst($f['answer']) ?>
-                                        </div>
+                                        <?php if(Yii::$app->language == "en"){ ?>
+                                            <p><a class="show_content" href="javascript:void(0);">
+                                                <?= ucfirst($f['question_ar']) ?></a>
+                                            </p>
+                                            <div class="toogle_botom">
+                                                <?= ucfirst($f['answer_ar']) ?>
+                                            </div>
+                                        <?php }else{ ?>
+                                            <p><a class="show_content" href="javascript:void(0);">
+                                                <?= ucfirst($f['question_ar']) ?></a>
+                                            </p>
+                                            <div class="toogle_botom">
+                                                <?= ucfirst($f['answer_ar']) ?>
+                                            </div>
+                                        <?php } ?>
                                     </li>
                                 <?php } ?>
                             </ul>
@@ -85,7 +100,7 @@ $this->registerJs("
         
         if (jQuery('#username').val() == '')
         {
-            jQuery('#chkname').html('Enter name!');
+            jQuery('#chkname').html('".Yii::t('frontend', 'Enter name!')."');
             i = 1;
         } else
         {
@@ -100,14 +115,14 @@ $this->registerJs("
         }
         else
         {
-            jQuery('#chkemail').html('Enter valid email address!');
+            jQuery('#chkemail').html('".Yii::t('frontend', 'Enter valid email address!')."');
             i = 1;
             j = 1;
         }
 
         if (jQuery('#usermessgae').val() == '')
         {
-            jQuery('#chkmessage').html('Enter message!');
+            jQuery('#chkmessage').html('".Yii::t('frontend', 'Enter message!')."');
             return false;
             i = 1;
             j = 1;
@@ -142,13 +157,13 @@ $this->registerJs("
                     if (data == 1)
                     {
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">Contact enquiry information send successfully!</span>');
+                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">".Yii::t('frontend', 'Contact enquiry information send successfully!')."</span>');
                         window.setTimeout(function () {
                             location.reload()
                         }, 2000)
                     }
 
-                    $('#send').html('Send Email');
+                    $('#send').html('".Yii::t('frontend', 'Send Email')."');
                 }
             });
 

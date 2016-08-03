@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'category_id',
             'parent_category_id',
             'category_name',
+            'category_name_ar',
             'category_allow_sale',
             'created_by',
             'modified_by',

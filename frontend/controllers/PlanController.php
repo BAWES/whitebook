@@ -42,22 +42,26 @@ class PlanController extends BaseController
         $model = new Website();
 
         if ($slug != '') {
-            /* BEGIN CATEGORY*/
-        $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $slug])->asArray()->one();
-            if (empty($model1)) {
-                throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-            }
-            $seo_content = Website::SEOdata('category', 'category_id', $model1['category_id'], array('category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'));
+         
+        $model1 = Category::find()->select(['category_id', 'category_name_ar', 'category_name'])->where(['slug' => $slug])->asArray()->one();
 
-            \Yii::$app->view->title = ($seo_content[0]['category_meta_title']) ? $seo_content[0]['category_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['category_name'];
-            \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['category_meta_description']) ? $seo_content[0]['category_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
-            \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['category_meta_keywords']) ? $seo_content[0]['category_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
+        if (empty($model1)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+         
+        $seo_content = Website::SEOdata('category', 'category_id', $model1['category_id'], array('category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'));
+
+        \Yii::$app->view->title = ($seo_content[0]['category_meta_title']) ? $seo_content[0]['category_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['category_name'];
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['category_meta_description']) ? $seo_content[0]['category_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['category_meta_keywords']) ? $seo_content[0]['category_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
 
         /* BEGIN CATEGORY EXIST OR NOT*/
         if (empty($model1)) {
             $imageData = '';
         }
         /* END CATEGORY EXIST OR NOT*/
+
+        $top_categories = Category::find()->where(['category_level' => 0])->asArray()->all();
 
         /* BEGIN GET VENDORS */
         $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);        
@@ -147,6 +151,7 @@ class PlanController extends BaseController
 
             return $this->render('planvenues', [
                 'model' => $model, 
+                'top_categories' => $top_categories,
                 'imageData' => $imageData,
                 'themes' => $themes, 
                 'vendor' => $vendor, 
@@ -161,6 +166,7 @@ class PlanController extends BaseController
             
             return $this->render('planvenues', [
                 'model' => $model, 
+                'top_categories' => $top_categories,
                 'imageData' => $imageData,
                 'themes' => $themes, 
                 'vendor' => $vendor, 

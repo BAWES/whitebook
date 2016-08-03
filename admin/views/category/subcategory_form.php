@@ -29,6 +29,10 @@ use yii\helpers\ArrayHelper;
 </div> 
 
 <div class="form-group">
+	<?= $form->field($model, 'category_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
+</div> 
+
+<div class="form-group">
 	<?= $form->field($model, 'category_meta_title',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
 </div> 
     <div class="form-group">

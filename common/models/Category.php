@@ -112,6 +112,7 @@ class Category extends \yii\db\ActiveRecord
             'category_id' => 'Category name',
             'parent_category_id' => 'Parent category',
             'category_name' => 'Category name',
+            'category_name_ar' => 'Category name - Arabic',
             'category_allow_sale' => 'Category allow status',
             'created_by' => 'Created by',
             'modified_by' => 'Modified by',
