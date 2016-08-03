@@ -156,7 +156,9 @@ class SubCategory extends \yii\db\ActiveRecord
         ->andwhere(['!=', 'trash', 'Deleted'])
         ->andwhere(['!=', 'parent_category_id', 'null'])
         ->all();
-        $subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name');
+
+        $subcategoryname = ArrayHelper::map($subcategoryname, 'category_id', 'category_name', 'category_name_ar');
+        
         return $subcategoryname;
     }
 
@@ -169,7 +171,7 @@ class SubCategory extends \yii\db\ActiveRecord
         ->andwhere(['=', 'category_level', '1'])
         ->andwhere(['!=', 'parent_category_id', 'null'])
         ->all();
-        $subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name');
+        $subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name','category_name_ar');
         return $subcategoryname;
     }
 
@@ -180,8 +182,11 @@ class SubCategory extends \yii\db\ActiveRecord
 
         if(!empty($subcategory_slug['category_id'])){
             return $subcategory = Vendoritem::find()
-            ->select(['{{%vendor_item}}.subcategory_id as category_id','{{%category}}.category_name'
-            ,'{{%category}}.slug'])
+            ->select([
+                '{{%vendor_item}}.subcategory_id as category_id',
+                '{{%category}}.category_name',
+                '{{%category}}.category_name_ar',
+                '{{%category}}.slug'])
             ->join('INNER JOIN','{{%category}}', '{{%category}}.category_allow_sale = "yes" AND
             {{%vendor_item}}.trash = "Default" AND
             {{%category}}.category_level = 1 AND

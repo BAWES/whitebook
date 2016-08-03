@@ -21,11 +21,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'page_name',
+            'page_name_ar',
             'page_content' => 
-        [
-            'label'  => 'page content',
-            'value'  => cms::content($model->page_content),
-        ],
+            [
+                'label'  => 'page content',
+                'value'  => cms::content($model->page_content),
+            ],
+            'page_content_ar' => 
+            [
+                'label'  => 'page content - Arabic',
+                'value'  => cms::content($model->page_content_ar),
+            ],
          
         ],
     ]) ?>

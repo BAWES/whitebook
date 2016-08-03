@@ -17,6 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Contact enquiry information send successfully!' => 'الاتصال الاستفسار المعلومات ترسل بنجاح !',
+    'Enter name!' => 'أدخل الاسم!',
+    'Enter valid email address!' => 'أدخل عنوان بريد إلكتروني صالح!',
+    'Enter message!' => 'كتابة رسالة !',
     'Find an Answer' => 'ابحث عن اجابة',
     'WHAT IS My Whitebook?' => 'ما هو بلدي Whitebook؟',
     'Send Email' => 'ارسل بريد الكتروني',

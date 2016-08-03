@@ -36,9 +36,8 @@ class Faq extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question', 'answer'], 'required'],
-            [['question', 'answer', 'faq_status', 'trash'], 'string'],
-            //[['created_by', 'modified_by','sort'], 'integer'],
+            [['question', 'answer', 'question_ar', 'answer_ar'], 'required'],
+            [['question', 'answer', 'question_ar', 'answer_ar', 'faq_status', 'trash'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe']
         ];
     }
@@ -52,6 +51,8 @@ class Faq extends \yii\db\ActiveRecord
             'faq_id' => 'Faq ID',
             'question' => 'Question',
             'answer' => 'Answer',
+            'question_ar' => 'Question - Arabic',
+            'answer_ar' => 'Answer - Arabic',
             'faq_status' => 'Faq Status',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
@@ -72,9 +73,10 @@ class Faq extends \yii\db\ActiveRecord
     // Status Image title
     public function statusTitle($status)
     {           
-    if($status == 'Active')     
-    return 'Activate';
-    return 'Deactivate';
+        if($status == 'Active')     
+            return 'Activate';
+        
+        return 'Deactivate';
     }
 
 	public static function faq_details()
