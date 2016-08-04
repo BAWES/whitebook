@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Message translations.
  *
@@ -17,6 +17,19 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Service' => 'خدمة',
+    'Rental' => 'تأجير',
+    'Sales' => 'مبيعات',
+    'Contact Info' => 'معلومات الاتصال',
+    'Additional Information' => 'معلومة اضافية',
+    'Product type' => 'نوع المنتج',
+    'Buy' => 'يشترى',
+    'Product Description' => 'وصف المنتج',
+    'Select' => 'اختار',
+    'Price Cart' => 'سعر سلة',
+    'Similar products' => 'منتجات مماثلة',
+    'Select Delivery Area' => 'حدد منطقة التسليم',
+    'Select Delivery Time' => 'اختر التسليم في الوقت المحدد',
     'Contact enquiry information send successfully!' => 'الاتصال الاستفسار المعلومات ترسل بنجاح !',
     'Enter name!' => 'أدخل الاسم!',
     'Enter valid email address!' => 'أدخل عنوان بريد إلكتروني صالح!',

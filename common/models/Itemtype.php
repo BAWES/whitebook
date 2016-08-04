@@ -139,6 +139,17 @@ class Itemtype extends \yii\db\ActiveRecord
         ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['=', 'type_id', $id])
         ->one();
+
         return $itemtype['type_name'];
+    }
+
+    public static function itemtypename_ar($id)
+    {
+        $itemtype= Itemtype::find()
+        ->where(['!=', 'trash', 'Deleted'])
+        ->andwhere(['=', 'type_id', $id])
+        ->one();
+        
+        return $itemtype['type_name_ar'];
     }
 }

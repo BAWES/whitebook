@@ -85,8 +85,9 @@ class ProductController extends BaseController
             $title = 'Whitebook Application '.ucfirst($vendor_det['vendor_name']);
             $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
             $summary = 'Whitebook Application '.ucfirst($vendor_det['vendor_name']).' '.ucfirst($model['item_name']);
-            //$image='http://demositeapp.com/backend/web/uploads/vendor_images/445_blueberry_coffee_cake_61.jpg';
+            
             $image = $baselink;
+            
             \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => $title]);
             \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
             \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
@@ -96,17 +97,30 @@ class ProductController extends BaseController
             \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => $baselink]);
 
             if (Yii::$app->user->isGuest) {
-                return $this->render('/product/product_detail', ['avlbl_stock' => $avlbl_stock, 'model' => $model, 'similiar_item' => $similiar_item, 'social_vendor' => $social_vendor,
-                'vendor_area' => $vendr_area, ]);
+                
+                return $this->render('/product/product_detail', [
+                    'avlbl_stock' => $avlbl_stock, 
+                    'model' => $model, 
+                    'similiar_item' => $similiar_item, 
+                    'social_vendor' => $social_vendor,
+                    'vendor_area' => $vendr_area
+                ]);
                 /*return $this->render('/product/product_detail',['avlbl_stock'=>$avlbl_stock,'model'=>$model,'similiar_item'=>$similiar_item,'social_vendor'=>$social_vendor,
                 'vendor_area'=>$vendr_area,'vendor_timeslot'=>$vendor_timeslot]);*/
             } else {
+                
                 $user = new Users();
+                
                 $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
-                return $this->render('/product/product_detail', ['model' => $model, 'similiar_item' => $similiar_item,
-                'avlbl_stock' => $avlbl_stock, 'social_vendor' => $social_vendor, 'customer_events_list' => $customer_events_list,
-                'vendor_area' => $vendr_area, ]);
+                return $this->render('/product/product_detail', [
+                    'model' => $model, 
+                    'similiar_item' => $similiar_item,
+                    'avlbl_stock' => $avlbl_stock, 
+                    'social_vendor' => $social_vendor, 
+                    'customer_events_list' => $customer_events_list,
+                    'vendor_area' => $vendr_area
+                ]);
             }
         }
     }
