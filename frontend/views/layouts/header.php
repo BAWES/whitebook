@@ -184,10 +184,10 @@ $action = Yii::$app->controller->action->id;
 
         <?php if(Yii::$app->language == "en"){ ?>
             <a  href="<?= Url::to(['site/index', 'language'=>'ar']) ?>"
-                style="position: absolute; top: 9px; right: 0;" class="respo_hidde">العربية</a>
+                style="position: absolute; top: 9px; right: <?= Yii::$app->user->isGuest?0:120 ?>px;" class="respo_hidde">العربية</a>
         <?php }else{ ?>
             <a  href="<?= Url::to(['site/index', 'language'=>'en']) ?>"
-                style="position: absolute; top: 9px; right: 0;" class="respo_hidde">English</a>
+                style="position: absolute; top: 9px; right: <?= Yii::$app->user->isGuest?0:120 ?>px;" class="respo_hidde">English</a>
         <?php } ?>
 
 
