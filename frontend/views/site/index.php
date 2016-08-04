@@ -104,31 +104,47 @@ $model = new Website();
 
 <!-- BEGIN FEATURE GROUP ITEM-->
 <?php
-$featured_produc = Featuregroup::find()->select(['group_id', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
+
+$featured_produc = Featuregroup::find()->select(['group_id', 'group_name_ar', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
+
 $i = 1;
 foreach ($featured_produc as $key => $value) {
 
- $feature_group_sql_result = Featuregroupitem::find()->select(['{{%vendor_item}}.*','{{%feature_group_item}}.vendor_id','{{%vendor}}.vendor_name'])
-        ->joinWith('item')
-        ->joinWith('vendor')
-        //->join('inner join','{{%image}}','{{%image}}.item_id = {{%vendor_item}}.item_id')
-        ->where(['{{%feature_group_item}}.group_id'=>$value["group_id"]])
-        ->andWhere(['{{%vendor_item}}.type_id'=>2])
-        ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
-        ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
-        ->andWhere(['{{%vendor_item}}.item_for_sale'=>"Yes"])
-        ->andWhere(['{{%vendor_item}}.item_status'=>"Active"])
-        ->andWhere(['{{%feature_group_item}}.group_item_status'=>"Active"])
-        ->andWhere(['{{%feature_group_item}}.trash'=>"Default"])
-        ->asArray()
-        ->all();
+ $feature_group_sql_result = Featuregroupitem::find()->select([
+        '{{%vendor_item}}.*',
+        '{{%feature_group_item}}.vendor_id',
+        '{{%vendor}}.vendor_name',
+        '{{%vendor}}.vendor_name_ar'
+    ])
+    ->joinWith('item')
+    ->joinWith('vendor')
+    //->join('inner join','{{%image}}','{{%image}}.item_id = {{%vendor_item}}.item_id')
+    ->where(['{{%feature_group_item}}.group_id'=>$value["group_id"]])
+    ->andWhere(['{{%vendor_item}}.type_id'=>2])
+    ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
+    ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
+    ->andWhere(['{{%vendor_item}}.item_for_sale'=>"Yes"])
+    ->andWhere(['{{%vendor_item}}.item_status'=>"Active"])
+    ->andWhere(['{{%feature_group_item}}.group_item_status'=>"Active"])
+    ->andWhere(['{{%feature_group_item}}.trash'=>"Default"])
+    ->asArray()
+    ->all();
 
 $count_items = count($feature_group_sql_result);
 
 if (!empty($feature_group_sql_result)) {
 ?>
     <div class="feature_product_title">
-        <h2><?= $value['group_name']; ?></h2>
+        <h2>
+        <?php 
+
+            if(Yii::$app->language == "en"){ 
+                echo $value['group_name']; 
+            }else{
+                echo $value['group_name_ar']; 
+            }
+        ?>            
+        </h2>
     </div>
 <?php } ?>
 
@@ -141,6 +157,7 @@ if (!empty($feature_group_sql_result)) {
                 <div id="demo">
                     <div class="owl-carousel twb-slider" id="feature-group-slider" >
                         <?php
+
                         $i = 0;
 
                         foreach ($feature_group_sql_result as $product_val) {
@@ -161,11 +178,21 @@ if (!empty($feature_group_sql_result)) {
                             ?>
                             <div class="item">
                                 <div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $product_val["slug"], true]); ?>'>
+                                    
                                     <a href="<?= Url::toRoute(['product/product','slug' => $product_val["slug"]]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['product/product', $product_val['slug']]); ?>'>
+                                        
                                         <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
+                                        
                                         <div class="deals_listing_cont">
-                                            <?php echo $product_val['vendor_name']; ?>
-                                            <h3><?php echo $product_val['item_name']; ?></h3>
+                                            
+                                            <?php if(Yii::$app->language == "en"){ ?>
+                                                <?php echo $product_val['vendor_name']; ?>
+                                                <h3><?php echo $product_val['item_name']; ?></h3>
+                                            <?php }else{ ?>
+                                                <?php echo $product_val['vendor_name_ar']; ?>
+                                                <h3><?php echo $product_val['item_name_ar']; ?></h3>
+                                            <?php } ?>
+
                                             <p><?php echo number_format($product_val['item_price_per_unit'], 2) . "KD"; ?></p>
                                         </div>
                                     </a>
