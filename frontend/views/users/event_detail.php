@@ -100,7 +100,7 @@ $cat_list1=Vendoritem::find()->select(['{{%vendor_item}}.item_id'])
 <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapse<?= $key ?>" aria-expanded="false" aria-controls="collapse<?= $key ?>" class="collapsed">
 
 <?php if(Yii::$app->language == "en"){
-        echo $value1['category_name'].' - '.'<span id="item_count">' .count($cat_list1). '</span>'; 
+        echo $value1['category_name'].' - '.'<span data-cateogry-id="'.$value1['category_id'].'" id="item_count">' .count($cat_list1). '</span>'; 
       }else{
         echo $value1['category_name_ar'].' - '.'<span id="item_count">' .count($cat_list1). '</span>'; 
       }
