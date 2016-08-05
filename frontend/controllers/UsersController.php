@@ -785,7 +785,7 @@ class UsersController extends BaseController
 
         /* Load level 1 category */
         $cat_exist = \frontend\models\Category::find()
-        ->where(['category_level' =>0,'category_allow_sale' =>'Yes','trash' =>'Default','category_level' =>'0'])
+        ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
         ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
         ->asArray()
         ->all();

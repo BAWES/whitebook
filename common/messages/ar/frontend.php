@@ -17,6 +17,12 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Ops, nothing to show!' => 'مكتب خدمات المشاريع ، لا شيء لاظهار !',
+    'Action' => 'عمل',
+    'PHONE NUMBER' => 'رقم الهاتف',
+    'Name/Email/Phone' =>  'اسم / البريد الإلكتروني / الهاتف',
+    'Enter invitees name.' => 'أدخل اسم المدعوين .',
+    'RESET' => 'إعادة تعيين',
     'Service' => 'خدمة',
     'Rental' => 'تأجير',
     'Sales' => 'مبيعات',

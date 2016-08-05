@@ -448,8 +448,11 @@ class CategoryController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '3');
+        
         if (yii::$app->user->can($access)) {
+
             $vendor_item = Vendoritem::find()->where(['category_id' => $id, 'trash' => 'Default'])->count();
+        
             if (!empty($vendor_item)) {
                 echo Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
 
@@ -468,7 +471,9 @@ class CategoryController extends Controller
                 $childcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $subcategory[0]['category_id']])->all();
                 $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$subcategory[0]['category_id']]);
             }
+
             $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$id]);
+
             if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Category deleted successfully!');
 
@@ -477,6 +482,7 @@ class CategoryController extends Controller
                 echo Yii::$app->session->setFlash('success', 'Category delete failed!');
                 return $this->redirect(['index']);
             }
+
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
