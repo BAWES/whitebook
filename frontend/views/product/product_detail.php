@@ -456,71 +456,63 @@ $this->title = 'Whitebook - ' . $item_name;
 
                 <!-- Mobile end Here-->
 
+                <div class="clearfix"></div>
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
                         <h2><?= Yii::t('frontend', 'Similar products') ?></h2>
                     </div>
                     <div class="feature_product_slider">
-                        <div class="most_popular_slider">
-                            <div class="slider_new_up">
-                                <div class="flexslider4">
-                                    <div id="demo">
-                                        <div class="owl-carousel" id="similar-products-slider">
-                                            <?php
-                                            
-                                            foreach ($similiar_item as $s) {
-                                                
-                                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
-                                                
-                                                $command = Yii::$app->DB->createCommand($sql);
-                                                
-                                                $out = $command->queryAll();
-                                                
-                                                if ($out) {
-                                                    $imglink = Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
-                                                    $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $out[0]['image_path'];
-                                                } else {
-                                                    $imglink = Yii::getAlias('@vendor_images/no_image.png');
-                                                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
-                                                }
+                        <div id="similar-products-slider">
+                            <?php
+                            
+                            foreach ($similiar_item as $s) {
+                                
+                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
+                                
+                                $command = Yii::$app->DB->createCommand($sql);
+                                
+                                $out = $command->queryAll();
+                                
+                                if ($out) {
+                                    $imglink = Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
+                                    $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $out[0]['image_path'];
+                                } else {
+                                    $imglink = Yii::getAlias('@vendor_images/no_image.png');
+                                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
+                                }
 
-                                                ?>
-                                                <div class="item">
-                                                    <div class="fetu_product_list">
-                                                        <?php if ($s['slug'] != '') { ?>
-                                                            <a href="<?= Url::to(["product/product", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
-                                                                
-                                                                <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
-                                                        
-                                                                <?php if (file_exists($imglink)) { ?>
-                                                                    <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
-                                                                <?php } ?>
+                                ?>
+                                <div class="item">
+                                    <div class="fetu_product_list">
+                                        <?php if ($s['slug'] != '') { ?>
+                                            <a href="<?= Url::to(["product/product", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
+                                                
+                                                <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
+                                        
+                                                <?php if (file_exists($imglink)) { ?>
+                                                    <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
+                                                <?php } ?>
 
-                                                                <div class="deals_listing_cont">
-                                                                    
-                                                                    <?php if(Yii::$app->language == "en"){ ?>
-                                                                        <?= $s['vname']; ?>
-                                                                        <h3><?= $s['iname']; ?></h3>
-                                                                    <?php }else{ ?>
-                                                                        <?= $s['vname_ar']; ?>
-                                                                        <h3><?= $s['iname_ar']; ?></h3>
-                                                                    <?php } ?>
+                                                <div class="deals_listing_cont">
+                                                    
+                                                    <?php if(Yii::$app->language == "en"){ ?>
+                                                        <?= $s['vname']; ?>
+                                                        <h3><?= $s['iname']; ?></h3>
+                                                    <?php }else{ ?>
+                                                        <?= $s['vname_ar']; ?>
+                                                        <h3><?= $s['iname_ar']; ?></h3>
+                                                    <?php } ?>
 
-                                                                    <p><?= $s['price']; ?>KD</p>
-                                                                </div>
-                                                            </a>
-                                                        <?php } ?>
-                                                    </div>
+                                                    <p><?= $s['price']; ?>KD</p>
                                                 </div>
-                                            <?php 
-                                            }//END foreach ?>
-                                        </div>
+                                            </a>
+                                        <?php } ?>
                                     </div>
                                 </div>
-                            </div>
+                            <?php 
+                            }//END foreach ?>
                         </div>
                     </div>
-
                 </div>
             </div><!--product detail end-->
         </div>

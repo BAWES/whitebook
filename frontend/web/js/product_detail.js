@@ -1,5 +1,5 @@
 
-    jQuery(window).load(function () {
+    jQuery(document).ready(function () {
         /* client say slider start*/
         jQuery('.flexslider2').flexslider({
             animation: "slide",
@@ -22,7 +22,7 @@
 
     /* FeatureD Products end*/
     /*carousel slider*/
-    jQuery(window).load(function () {
+    jQuery(document).ready(function () {
         window.curSlide;
         jQuery('#carousel').flexslider({
             animation: "slide",
@@ -63,7 +63,7 @@
             start: function (slider) {
                 jQuery('#carousel .slides li img').click(function (event) {
                     event.preventDefault();
-                    sslider.flexAnimate(slider.currentSlide);
+                    slider.flexAnimate(slider.currentSlide);
                 });
             },
         });
