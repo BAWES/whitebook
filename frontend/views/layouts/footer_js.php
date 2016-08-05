@@ -80,18 +80,6 @@ $this->registerJs("
 
     var the_field_is_required = '".Yii::t('frontend','The field is required')."';
 
-    var choose_date_and_month_of_birth = '".Yii::t('frontend','Choose date and month of birth')."';
-
-    var choose_date_and_year_of_birth = '".Yii::t('frontend','Choose date and year of birth')."';
-
-    var choose_month_and_year_of_birth = '".Yii::t('frontend','Choose month and year of birth')."';
-
-    var choose_month_of_birth = '".Yii::t('frontend', 'Choose month of birth')."';
-
-    var choose_year_of_birth = '".Yii::t('frontend', 'Choose year of birth')."';
-
-    var choose_day_of_birth = '".Yii::t('frontend', 'Choose day of birth')."';
-
     var entered_email_id_is_already_exists = '".Yii::t('frontend', 'Entered email id is already exists')."';
 
     var enter_a_valid_email_id = '".Yii::t('frontend', 'Enter a valid email id')."';

@@ -423,40 +423,10 @@ jQuery("#register").click(function()
         jQuery('#gen_er').hide();
         i=1;
     }
-    if(bday=='' && bmonth=='' && byear=='')
+    if(bday == '' || bmonth == '' || byear == '')
     {
         jQuery('#dob_er').show();
         jQuery('#dob_er').text(the_field_is_required);
-    }
-    else if(bday=='' && bmonth=='')
-    {
-        jQuery('#dob_er').show();
-        jQuery('#dob_er').text(choose_date_and_month_of_birth);
-    }
-    else if(bday=='' && byear=='')
-    {
-        jQuery('#dob_er').show();
-        jQuery('#dob_er').text(choose_date_and_year_of_birth);
-    }
-    else if(bmonth=='' && byear=='')
-    {
-        jQuery('#dob_er').show();
-        jQuery('#dob_er').text(choose_month_and_year_of_birth);
-    }
-    else if(bmonth=='')
-    {
-        jQuery('#dob_er').show();
-        jQuery('#dob_er').text(choose_month_of_birth);
-    }
-    else if(byear=='')
-    {
-        jQuery('#dob_er').show();
-        jQuery('#dob_er').text(choose_year_of_birth);
-    }
-    else if(bday=='')
-    {
-        jQuery('#dob_er').show();
-        jQuery('#dob_er').text(choose_day_of_birth);
     }
     else
     {
