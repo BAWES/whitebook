@@ -56,10 +56,10 @@ $this->title = 'Contact us | Whitebook';
                                     <li>
                                         <?php if(Yii::$app->language == "en"){ ?>
                                             <p><a class="show_content" href="javascript:void(0);">
-                                                <?= ucfirst($f['question_ar']) ?></a>
+                                                <?= ucfirst($f['question']) ?></a>
                                             </p>
                                             <div class="toogle_botom">
-                                                <?= ucfirst($f['answer_ar']) ?>
+                                                <?= ucfirst($f['answer']) ?>
                                             </div>
                                         <?php }else{ ?>
                                             <p><a class="show_content" href="javascript:void(0);">
