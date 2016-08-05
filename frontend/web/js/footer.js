@@ -21,6 +21,48 @@ jQuery(window).resize(function(){
 
 jQuery(document).ready(function () {
 
+    /*home slider new start*/
+    var owl = jQuery("#home-banner-slider");
+
+    owl.owlCarousel({
+
+        itemsCustom: [
+            [0, 1],
+            [450, 1],
+            [600, 1],
+            [800, 1],
+            [1000, 1],
+            [1200, 1],
+            [1400, 1],
+            [1600, 1]
+        ],
+        navigation: true,
+        autoWidth: true,
+        loop: true,
+        autoPlay:false
+    });
+
+    var owl = jQuery("#feature-group-slider,#similar-products-slider");
+
+    owl.owlCarousel({
+
+        itemsCustom: [
+            [0, 1],
+            [450, 1],
+            [600, 2],
+            [700, 3],
+            [800, 3],
+            [1000, 4],
+            [1200, 5],
+            [1400, 5],
+            [1600, 5]
+        ],
+        navigation: true,
+        autoWidth: true,
+        loop: true,
+        autoPlay:false
+    });
+
     jQuery(window).trigger('resize');
 
     jQuery('#phone,#reg_email').bind("paste",function(e) {
@@ -1314,48 +1356,6 @@ jQuery('.js-search-cancel,#search_list ul li a').click(function()
     jQuery( "#search-terms2" ).val('');
 });
 /*open-search part add class 23-11-2015*/
-
-/*home slider new start*/
-var owl = jQuery("#home-banner-slider");
-
-owl.owlCarousel({
-
-    itemsCustom: [
-        [0, 1],
-        [450, 1],
-        [600, 1],
-        [800, 1],
-        [1000, 1],
-        [1200, 1],
-        [1400, 1],
-        [1600, 1]
-    ],
-    navigation: true,
-    autoWidth: true,
-    loop: true,
-    autoPlay:false
-});
-
-var owl = jQuery("#feature-group-slider,#similar-products-slider");
-
-owl.owlCarousel({
-
-    itemsCustom: [
-        [0, 1],
-        [450, 1],
-        [600, 2],
-        [700, 3],
-        [800, 3],
-        [1000, 4],
-        [1200, 5],
-        [1400, 5],
-        [1600, 5]
-    ],
-    navigation: true,
-    autoWidth: true,
-    loop: true,
-    autoPlay:false
-});
 
 /*home slider new end*/
 function Searchinvitee(event_id)
