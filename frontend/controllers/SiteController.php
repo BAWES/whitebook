@@ -22,6 +22,9 @@ use yii\web\Session;
 use yii\db\Query;
 use common\models\Smtp;
 use frontend\models\Contacts;
+use frontend\models\FaqGroup;
+use yii\helpers\ArrayHelper;
+
 
 class SiteController extends BaseController
 {
@@ -534,10 +537,6 @@ class SiteController extends BaseController
 
     public function actionContact()
     {
-        $faq_details = Faq::find()
-            ->where(['faq_status' => 'Active', 'trash' => 'Default'])
-            ->all();
-
         if (Yii::$app->request->isAjax) {
             $date = date('Y/m/d');
             $data = Yii::$app->request->post();
@@ -590,7 +589,20 @@ class SiteController extends BaseController
             }
         }
 
-        return $this->render('contact', ['faq' => $faq_details]);
+        $faq_details = array();
+
+        $faq_groups = ArrayHelper::toArray(FaqGroup::find()->all());
+
+        foreach ($faq_groups as $group) {
+            
+            $group['faq_list'] = Faq::find()
+                ->where(['faq_group_id' => $group['faq_group_id'], 'faq_status' => 'Active', 'trash' => 'Default'])
+                ->all();
+
+            $faq_details[] = $group;
+        }
+
+        return $this->render('contact', ['faq_details' => $faq_details]);
     }
 
     public function actionCmspages($slug = '')

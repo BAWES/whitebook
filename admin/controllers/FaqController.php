@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use admin\models\FaqGroup;
 
 /**
  * FaqController implements the CRUD actions for Faq model.
@@ -115,9 +116,19 @@ class FaqController extends Controller
 
                 return $this->redirect(['index']);
             } else {
+                
+                $faq_group_drdwn = array();
+
+                $query = FaqGroup::find()->all();
+
+                foreach ($query as $row) {
+                    $faq_group_drdwn[$row->faq_group_id] = $row['group_name'];
+                }
+
                 return $this->render('create', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                    'faq_group_drdwn' => $faq_group_drdwn
+                ]);
             }
         } else {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -144,9 +155,19 @@ class FaqController extends Controller
 
                 return $this->redirect(['index']);
             } else {
+
+                $faq_group_drdwn = array();
+
+                $query = FaqGroup::find()->all();
+
+                foreach ($query as $row) {
+                    $faq_group_drdwn[$row->faq_group_id] = $row['group_name'];
+                }
+
                 return $this->render('update', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                    'faq_group_drdwn' => $faq_group_drdwn
+                ]);
             }
         } else {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');

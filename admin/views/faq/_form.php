@@ -13,7 +13,12 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="form-group">
-    	<?= $form->field($model, 'question',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['rows' => 6,'maxlength' => 128])?>
+        <?= $form->field($model, 'faq_group_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
+            {error}"])->dropDownList($faq_group_drdwn) ?>
+    </div>
+
+    <div class="form-group">
+        <?= $form->field($model, 'question',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['rows' => 6,'maxlength' => 128])?>
     </div> 
     
     <div class="form-group">

@@ -55,10 +55,13 @@
 					</li>
 					<li class="<?php if ($menu_act == 'RoleController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Manage Role ', ['role/index'], ['class'=>'link-title']) ?>
-				  </li>
+				  	</li>
 					<li class="<?php if ($menu_act == 'AccesscontrolController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Manage Access control ', ['accesscontrol/index'], ['class'=>'link-title']) ?>
-				  </li>
+				  	</li>
+					<li class="<?php if ($menu_act == 'FaqgroupController') {echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Manage FAQ Group', ['faqgroup/index'], ['class'=>'link-title']) ?>
+					</li>
 					<li class="<?php if ($menu_act == 'FaqController') {echo "active"; } else  {echo "noactive";}?>">
 						<?= Html::a('Manage FAQ', ['faq/index'], ['class'=>'link-title']) ?>
 					</li>
