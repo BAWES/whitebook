@@ -36,9 +36,9 @@ class Faq extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question', 'answer', 'question_ar', 'answer_ar'], 'required'],
+            [['question', 'faq_group_id', 'answer', 'question_ar', 'answer_ar'], 'required'],
             [['question', 'answer', 'question_ar', 'answer_ar', 'faq_status', 'trash'], 'string'],
-            [['created_datetime', 'modified_datetime'], 'safe']
+            [['created_datetime', 'modified_datetime', 'group_name'], 'safe']
         ];
     }
 
@@ -70,6 +70,14 @@ class Faq extends \yii\db\ActiveRecord
 		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
 	}
 
+    public function getFaqgroup() {
+        return $this->hasOne(FaqGroup::classname(), ['faq_group_id' => 'faq_group_id']);
+    }
+
+    public function getGroup_name() {
+        return $this->faqgroup->group_name;
+    }
+    
     // Status Image title
     public function statusTitle($status)
     {           

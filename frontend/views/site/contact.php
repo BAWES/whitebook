@@ -46,13 +46,18 @@ $this->title = 'Contact us | Whitebook';
             <div class="contact_center_sec">
                 <h3 class="inner_title"><?= Yii::t('frontend', 'Find an Answer') ?></h3>
                 <ul class="inner_contents">
+                    <?php foreach($faq_details as $group) { ?>
                     <li>
                         <div class="left_books">
-                            <?= Yii::t('frontend', 'WHAT IS My Whitebook?') ?>
+                            <?php  if(Yii::$app->language == "en"){
+                                        echo $group['group_name'];
+                                   }else {
+                                        echo $group['group_name_ar'];
+                                   }  ?>
                         </div>
                         <div class="left_books_lis">
                             <ul>
-                                <?php foreach ($faq as $f) { ?>
+                                <?php foreach ($group['faq_list'] as $f) { ?>
                                     <li>
                                         <?php if(Yii::$app->language == "en"){ ?>
                                             <p><a class="show_content" href="javascript:void(0);">
@@ -74,6 +79,7 @@ $this->title = 'Contact us | Whitebook';
                             </ul>
                         </div>
                     </li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>
