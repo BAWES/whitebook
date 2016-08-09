@@ -7,7 +7,7 @@ class m160808_101935_faq_grouping extends Migration
     public function up()
     {
         $tableOptions = null;
-      
+
         if ($this->db->driverName === 'mysql') {
           $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
@@ -62,8 +62,8 @@ class m160808_101935_faq_grouping extends Migration
         ]);
 
         $this->addColumn(
-            'whitebook_faq', 
-            'faq_group_id', 
+            'whitebook_faq',
+            'faq_group_id',
             $this->integer()->after('faq_id')
         );
 
@@ -79,6 +79,7 @@ class m160808_101935_faq_grouping extends Migration
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -93,6 +94,7 @@ class m160808_101935_faq_grouping extends Migration
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -111,6 +113,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -125,6 +128,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -139,6 +143,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -153,6 +158,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -167,6 +173,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -181,6 +188,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -195,6 +203,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -209,6 +218,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -223,6 +233,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -237,6 +248,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -251,6 +263,7 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -267,6 +280,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -281,6 +295,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -295,6 +310,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -309,6 +325,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -323,6 +340,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -337,6 +355,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -351,6 +370,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -365,6 +385,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -379,6 +400,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -393,6 +415,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -407,6 +430,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -421,6 +445,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -435,6 +460,7 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
+            'created_datetime' => date('Y-d-m h:i:s'),
             'modified_datetime' => date('Y-d-m h:i:s'),
             'trash' => 'Default'
         ]);
@@ -443,7 +469,7 @@ details.',
 
     public function down()
     {
-       
+
     }
 
     /*
