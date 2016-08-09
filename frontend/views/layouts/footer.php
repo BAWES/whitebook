@@ -147,7 +147,7 @@ use frontend\models\Users;
                             <span class="help-block"></span>
                         </div>
                         <div class="form-group">
-                            <label><?= Yii::t('frontend', 'تأكيد كلمة المرور') ?></label>
+                            <label><?= Yii::t('frontend', 'Confirm Password') ?></label>
                             <input type="password" placeholder="" name="confirm_password" id="confirm_password" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
                             <span class="help-block"></span>
                         </div>
@@ -216,7 +216,7 @@ use frontend\models\Users;
                                 <div class="col-md-12 padding0 birth_date_drop">
                                     <ul class="padding0">
                                         <li class="day-select">
-                                            <select name="bday" id="bday" class="selectpicker" data-style="btn-primary" style="display: none;">
+                                            <select name="bday" id="bday" class="selectpicker" data-style="btn-primary" style=" display: none;">
                                                 <option value=""><?= Yii::t('frontend', 'Day') ?></option>
                                                 <?php for($i=1;$i<=31;$i++)
                                                 { ?>
