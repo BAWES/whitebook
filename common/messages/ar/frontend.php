@@ -279,4 +279,5 @@ return [
     'add to favourite successfully!' => 'تم الاضافة للقائمة المفضلة بنجاح!',
     '{item_name} already exist with {event_name}' => ' {event_name}موجود بالفعل مع {item_name}',
     '{item_name} has been added to {event_name}' => ' {event_name}قد أضيف إلى {item_name} ',
+    'CONFIRM PASSWORD' => ' تأكيد كلمة المرور',
 ];

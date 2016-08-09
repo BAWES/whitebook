@@ -147,7 +147,7 @@ use frontend\models\Users;
                             <span class="help-block"></span>
                         </div>
                         <div class="form-group">
-                            <label><?= Yii::t('frontend', 'تأكيد كلمة المرور') ?></label>
+                            <label><?= Yii::t('frontend', 'CONFIRM PASSWORD') ?></label>
                             <input type="password" placeholder="" name="confirm_password" id="confirm_password" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
                             <span class="help-block"></span>
                         </div>
@@ -157,9 +157,7 @@ use frontend\models\Users;
                         </div>
                         <div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="<?= Yii::t('frontend', 'Loader') ?>"></div>
                         <div class="button-signin">
-
                         </div>
-
                     </div>
                 </div>
             </form>
@@ -216,7 +214,7 @@ use frontend\models\Users;
                                 <div class="col-md-12 padding0 birth_date_drop">
                                     <ul class="padding0">
                                         <li class="day-select">
-                                            <select name="bday" id="bday" class="selectpicker" data-style="btn-primary" style="display: none;">
+                                            <select name="bday" id="bday" class="selectpicker" data-style="btn-primary" style=" display: none;">
                                                 <option value=""><?= Yii::t('frontend', 'Day') ?></option>
                                                 <?php for($i=1;$i<=31;$i++)
                                                 { ?>
