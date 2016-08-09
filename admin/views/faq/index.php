@@ -26,13 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
 						return substr($model->question, 0, 35);
 					},
 				],
-   [
+   			[
 				'attribute' => 'answer',
 				'format' => 'raw',
 				'value' => function ($model) {                      
 						return substr($model->answer, 0, 35);
 				},
 			],
+			'group_name',
 			[
 				'attribute'=>'sort',
 				'label'=>'Sort Order',	

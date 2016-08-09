@@ -11,7 +11,9 @@ if(!Yii::$app->user->isGuest) {
 
 	<?php if(count($customer_events) == 0) {  ?>
 		<div class="container_eventslider">
-			<span class="first_events">MY EVENTS</span>
+			<span class="first_events" style='text-transform:uppercase'>
+				<?= Yii::t('frontend', 'MY EVENTS'); ?>
+			</span>
 			<div class="creatfirst_events">
 				<p data-example-id="active-anchor-btns" class="bs-example">
 					<a  href="javascript:" role="button" class="btn btn-default"  data-toggle="modal" data-target="#EventModal" title="<?php echo Yii::t('frontend','Create Your First Event');?>">
@@ -23,11 +25,13 @@ if(!Yii::$app->user->isGuest) {
 			<div class="directory_slider" id="oner">
 				<div class="event_slider_top">
 					<div class="col-md-3">
-						<span class="first_events">MY EVENTS</span>
+						<span class="first_events" style='text-transform:uppercase'>
+							<?= Yii::t('frontend','MY EVENTS'); ?>
+						</span>
 						<div class="creatfirst_events">
 						    <p data-example-id="active-anchor-btns" class="bs-example">
 							    <a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" data-target="#EventModal">
-							        <?php echo Yii::t('frontend','Add an event');?>
+							        <?php echo Yii::t('frontend','Add an Event');?>
 							    </a>
 							</p>
 						</div>
@@ -40,9 +44,12 @@ if(!Yii::$app->user->isGuest) {
 									<div class="item" style=" background: transparent important!; border: none;">
 										<?php if(!empty($customer_events)) {?>
 											<a href="<?= Url::toRoute(['/users/events','slug'=>'thingsilike']); ?>" class="thing_cont" title="Things I like"><span class="heart_fave" id="heart_fave"><?= count($wishlist); ?></span>
-												Things I like</a>
+												<?php echo Yii::t('frontend','Things I like'); ?>
+												</a>
 												<?php } else {?>
-													<a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" data-target="#EventModal" title="CREATE YOUR FIRST EVENT" style="   float: left;    margin-left: 225px;    margin-top: 45px;    min-height: 30px;">CREATE YOUR FIRST EVENT</a>
+													<a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" data-target="#EventModal" title="CREATE YOUR FIRST EVENT" style="   float: left;    margin-left: 225px;    margin-top: 45px;    min-height: 30px;">
+														<?= Yii::t('frontend','CREATE YOUR FIRST EVENT'); ?>
+													</a>
 													<?php } ?>
 												</div>
 												<?php
@@ -65,9 +72,9 @@ if(!Yii::$app->user->isGuest) {
 								<!-- END load user events -->
 								<?php } }else {
 									?>
-									<div class="container_eventslider">
+									<div class="container_eventslider" style='text-transform:uppercase'>
 										<span class="first_events">
-											MY EVENTS
+											<?php echo Yii::t('frontend','MY EVENTS'); ?>
 										</span>
 										<div class="creatfirst_events">
 											<p data-example-id="active-anchor-btns" class="bs-example">

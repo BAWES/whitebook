@@ -163,13 +163,21 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     
     public static function similiar_details()
     {
-        $data=Featuregroupitem::find()->select(['{{%feature_group_item}}.item_id as gid','{{%vendor}}.vendor_name as vname','{{%vendor_item}}.item_name as iname','{{%vendor_item}}.item_price_per_unit as price','{{%vendor_item}}.slug as slug'])
+        $data=Featuregroupitem::find()->select([
+            '{{%feature_group_item}}.item_id as gid',
+            '{{%vendor}}.vendor_name as vname',
+            '{{%vendor_item}}.item_name as iname',
+            '{{%vendor}}.vendor_name_ar as vname_ar',
+            '{{%vendor_item}}.item_name_ar as iname_ar',
+            '{{%vendor_item}}.item_price_per_unit as price',
+            '{{%vendor_item}}.slug as slug'])
         ->leftJoin('{{%vendor}}', '{{%feature_group_item}}.vendor_id = {{%vendor}}.vendor_id')
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%feature_group_item}}.item_id')
         ->where(['{{%feature_group_item}}.group_item_status'=>'Active'])
         ->andwhere(['{{%feature_group_item}}.trash'=>'Default'])
         ->asArray()
         ->all();
+        
         return ($data);
     }
 

@@ -59,6 +59,7 @@ $this->registerJs("
     var session_final_reset = '".Yii::$app->session->get('final_reset')."';
     var session_register = '".Yii::$app->session->get('register')."';
     var you_are_login_and = '".Yii::t('frontend','Success! Your are login and')."';
+
     var session_key = '".Yii::$app->session->get('key')."';
     var add_to_favourite_successfully = '".Yii::t('frontend','add to favourite successfully!')."';
         
@@ -67,6 +68,27 @@ $this->registerJs("
     var session_event_status = '".Yii::$app->session->get('event_status')."';
     var reg_success_msg = '".Yii::t('frontend','Registration completed successfully.Confirmation link send to your registered email-id')."';
     var pwd_success_msg = '".Yii::t('frontend','Password reset successfully. Your login successfully!')."';
+
+    //language variables 
+    var tick_the_terms_of_services_and_privacy_policy = '".Yii::t('frontend','Tick the terms of services and privacy policy')."';
+
+    var password_should_contain_minimum_six_letters = '".Yii::t('frontend','Password should contain minimum six letters')."';
+
+    var confirm_password_should_be_equal_to_password  = '".Yii::t('frontend','Confirm password should be equal to password')."';
+
+    var password_and_confirm_password_should_be_minimum_six_letters_and_same = '".Yii::t('frontend','Password and Confirm password should be minimum six letters and same')."';
+
+    var the_field_is_required = '".Yii::t('frontend','The field is required')."';
+
+    var entered_email_id_is_already_exists = '".Yii::t('frontend', 'Entered email id is already exists')."';
+
+    var enter_a_valid_email_id = '".Yii::t('frontend', 'Enter a valid email id')."';
+
+    var kindly_select_event_type = '".Yii::t('frontend', 'Kindly select Event type')."';
+
+    var no_record_found = '".Yii::t('frontend', 'No Record found')."';
+    
+
 ", View::POS_HEAD);
 
 Yii::$app->session->set('default',0);
@@ -78,6 +100,7 @@ Yii::$app->session->set('reset_password_mail','');
 Yii::$app->session->set('register',0);
 Yii::$app->session->set('key','0');
 
+$this->registerJsFile('@web/js/jquery.touchSwipe.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/footer.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

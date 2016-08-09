@@ -125,7 +125,7 @@ input[type="submit"] {
 .plan_sections ul li{margin: 0 10px 0 0;padding: 0px; list-style: none; float: left; }
 .margin-rightnone{ margin-right:0 !important;}
 .feature_product_title h2{font-size:18px; color:#000;font-family:'OpenSansRegular'; margin-bottom: 27px; margin-top:16px; text-transform: uppercase; display: inline-block; border-bottom: 1px solid #000; padding-bottom: 21px;letter-spacing: 3px; }
-.feature_product_title{ display: inline-block; width: 100%;text-align: center; margin: 12px 0 0 0; }
+.feature_product_title{  display: inline-block; width: 100%;text-align: center; margin: 12px 0 0 0; }
 .deals_listing_cont a{font-size:13px; color:#000;font-family:'OpenSansRegular' ; text-align: center;width: 100%; display: inline-block; margin: 16px 0 3px;}
 .index_redirect{ float:left; width:100%;}
 .deals_listing_cont {font-size:13px; color:#000;font-family:'OpenSansRegular' ; text-align: center;width: 100%; display: inline-block; margin: 16px 0 3px;}
@@ -135,7 +135,7 @@ input[type="submit"] {
 .deals_listing_cont h3{font-size:10pt; color:#000;font-family:'OpenSansRegular' ; text-transform: uppercase; margin: 4px 0 3px; text-align: center; }
 .deals_listing_cont p{font-size:13px; color:#000;font-family:'OpenSansRegular' ; text-transform: uppercase; margin: 0px; text-align: center; margin-bottom: 6px; }
 .inner_content_plan .btn:hover,.creatfirst_events .btn:hover{border:1px solid #000; background:#000 ;color: #fff; }
-.most_popular_slider {    display: inline-block;    margin: 5px 0 0;    width: 100%;}
+.most_popular_slider { display: inline-block;    margin: 5px 0 0;    width: 100%;}
 .fetu_product_list {    display: inline-block;    width: 209px; margin: 0 0 0 0px; cursor:pointer;}
 /*#search {    position: relative;    float: left;    width: 28px;    height: 28px; }*/
 #label,#label1{cursor:pointer;  width: 28px;    height: 28px;    position: relative;    z-index: 20;    float: right;}
@@ -1053,11 +1053,28 @@ div#search_list_fail1 p{padding:5px 0 10px;margin:0}
 .banner_slider_content .owl-buttons{position: absolute;top:47%;width:100%;}
 
 /* Mari BEGIN HOME PAGE FEATURE PRODUCTS */
-.twb-slider .owl-controls, #similar-products-slider .owl-controls{display:block !important;}
+.twb-slider .owl-controls, #similar-products-slider .owl-controls{
+    display: block !important;
+    position: relative;
+}
 
-.twb-slider .owl-prev, #similar-products-slider .owl-prev {position: absolute; background: url("../images/left_aero.png") no-repeat scroll center center;left: -28px; height: 30px;width:18px;height:30px;top: 39%;}
-.twb-slider .owl-next, #similar-products-slider .owl-next{position: absolute; background: url("../images/aero_right.png") no-repeat scroll center center ; right: -42px;width:18px;height:30px;top: 39%;}
-.twb-slider .owl-buttons, #similar-products-slider .owl-buttons{position: absolute;top:33%;width:100%;}
+.twb-slider .owl-prev, #similar-products-slider .owl-prev {
+    position: absolute; 
+    background: url("../images/left_aero.png") no-repeat scroll center center;
+    left: -28px;
+    width:18px;
+    height:30px;
+    top: -200px;
+}
+.twb-slider .owl-next, #similar-products-slider .owl-next{
+    position: absolute; 
+    background: url("../images/aero_right.png") no-repeat scroll center center ;
+    right: -42px;
+    width:18px;
+    height:30px;
+    top: -200px;
+}
+.twb-slider .owl-buttons, #similar-products-slider .owl-buttons{width:100%;}
 .twb-slider .item,#similar-products-slider .item{margin: 0 11px 0 4px;}
 /* END Mari HOME PAGE FEATURE PRODUCTS */
 
@@ -1382,4 +1399,12 @@ a.thing_cont:hover {
     color: black;
     font-size: 24px;
     margin-bottom: 0;
+}
+.clearfix{
+    display: block;
+    clear: both;
+}
+.similar_product_listing{
+    display: block;
+    clear: both;
 }

@@ -13,8 +13,30 @@ use yii\helpers\Html;
                 <h5 style='text-align:center;'><?= Yii::t("frontend", "Experience is a list of value added services provided by The White Book's team") ?></h5>
             </div>
         </div>
-        <div class="plan_catg">
-            <h3 align="center"><?= Yii::t("frontend", "Coming soon...") ?></h3>
+
+        <div style='text-align:center'>
+            <div class='row'>
+                <h3 style='margin-top:1.2em;'><?= Yii::t("frontend", "Boost your Event!") ?></h3>
+
+                <p style='font-size:1.1em; margin:1.5em auto; width:85%;'>
+                    <?= Yii::t("frontend", "We provide event boosting services where we assist with brainstorming and researching ideas, suggesting vendors and ideas to implement at your event, getting quotations from different vendors and booking them for the event"); ?>
+                </p>
+            </div>
+            <div class='row'>
+                <div class='col-md-6'>
+
+                    <h4><?= Yii::t("frontend", "BBS Ramadan Bazaar") ?></h4>
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/QYA6S395lMw" frameborder="0" allowfullscreen></iframe>
+
+                </div>
+
+                <div class='col-md-6'>
+
+                    <h4><?= Yii::t("frontend", "Founders & Investors Event") ?></h4>
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/4b4S0oTyBK4" frameborder="0" allowfullscreen></iframe>
+                </div>
+
+            </div>
 
         </div>
 

@@ -22,6 +22,9 @@ use yii\web\Session;
 use yii\db\Query;
 use common\models\Smtp;
 use frontend\models\Contacts;
+use frontend\models\FaqGroup;
+use yii\helpers\ArrayHelper;
+
 
 class SiteController extends BaseController
 {
@@ -84,6 +87,7 @@ class SiteController extends BaseController
         }
 
         return $this->render('index', [
+              'home_slider_alias' => Siteinfo::find()->one()->home_slider_alias, 
               'featured_product' => $featured_product,
               'banner' => $banner,
               'event_type' => $event_type,
@@ -97,7 +101,9 @@ class SiteController extends BaseController
     {
         $website_model = new Website();
         $category_url = Yii::$app->request->get('name');
+
         $main_category = $website_model->get_main_category();
+        
         if ($category_url != '') {
             $category_id = $website_model->get_category_id($category_url);
         } else {
@@ -105,18 +111,36 @@ class SiteController extends BaseController
         }
 
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Directory';
+        
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-        $directory = Vendor::get_directory_list();
+        
+        if(Yii::$app->language == "en") {
+            $directory = Vendor::get_directory_list();
+        }else{
+            $directory = Vendor::get_directory_list('vendor_name_ar');
+        }
+        
         $prevLetter = '';
+        
         $result = array();
+        
         foreach ($directory as $d) {
-            $firstLetter = substr($d['vname'], 0, 1);
+            
+            if(Yii::$app->language == "en") {
+                $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
+            }else{
+                $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
+            }
+
             if ($firstLetter != $prevLetter) {
                 $result[] = strtoupper($firstLetter);
             }
+            
             $prevLetter = $firstLetter;
         }
+
         $result = array_unique($result);
 
         return $this->render('directory', [
@@ -142,17 +166,30 @@ class SiteController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        $directory = Themes::loadthemenames();
+        if(Yii::$app->language == "en") {
+            $directory = Themes::loadthemenames();
+        }else{
+            $directory = Themes::loadthemenames('theme_name_ar');    
+        }
 
         $prevLetter = '';
         $result = array();
         foreach ($directory as $d) {
-            $firstLetter = substr($d['theme_name'], 0, 1);
+            
+            if(Yii::$app->language == "en") {
+                $firstLetter = mb_substr($d['theme_name'], 0, 1, 'utf8');
+            }else{
+                $firstLetter = mb_substr($d['theme_name_ar'], 0, 1, 'utf8');
+                //for arabic last letter will be first letter 
+            }
+
             if ($firstLetter != $prevLetter) {
                 $result[] = strtoupper($firstLetter);
             }
+
             $prevLetter = $firstLetter;
         }
+
         $result = array_unique($result);
 
         return $this->render('themes', [
@@ -171,42 +208,78 @@ class SiteController extends BaseController
         $request = Yii::$app->request;
 
         if (Yii::$app->request->isAjax) {
-            $website_model = new Website();
-            
+                       
             if ($request->post('slug') != 'All') {
+                
                 $categoryid = Category::category_value($request->post('slug'));
-                $directory = $website_model->get_search_directory_list($categoryid['category_id']);
+                
+                if(Yii::$app->language == "en") {
+                    $directory = $website_model->get_search_directory_list($categoryid['category_id']);
+                }else{
+                    $directory = $website_model->get_search_directory_list($categoryid['category_id'], 'vendor_name_ar');
+                }
+
                 $prevLetter = '';
                 $result = array();
                 foreach ($directory as $d) {
-                    $firstLetter = substr($d['vname'], 0, 1);
+
+                    if(Yii::$app->language == "en") {
+                        $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
+                    }else{
+                        $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
+                    }
+
                     if ($firstLetter != $prevLetter) {
                         $result[] = strtoupper($firstLetter);
                     }
+
                     $prevLetter = $firstLetter;
                 }
+
                 $result = array_unique($result);
+
             } else {
-                $directory = $website_model->get_search_directory_all_list();
+                
+                if(Yii::$app->language == "en") {
+                    $directory = $website_model->get_search_directory_all_list();
+                }else{
+                    $directory = $website_model->get_search_directory_all_list('vendor_name_ar');
+                }
+
                 $prevLetter = '';
+
                 $result = array();
+                
                 foreach ($directory as $d) {
-                    $firstLetter = substr($d['vname'], 0, 1);
+
+                    if(Yii::$app->language == "en") {
+                        $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
+                    }else{
+                        $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
+                    }
+
                     if ($firstLetter != $prevLetter) {
                         $result[] = strtoupper($firstLetter);
                     }
                     $prevLetter = $firstLetter;
                 }
+
                 $result = array_unique($result);
             }
+
             if ($request->post('ajaxdata') == 0) {
+                
                 return $this->renderPartial('searchdirectory', [
                     'directory' => $directory,
-                    'first_letter' => $result, ]);
+                    'first_letter' => $result, 
+                ]);
+
             } else {
+                
                 return $this->renderPartial('searchresponsedirectory', [
                     'directory' => $directory,
-                    'first_letter' => $result, ]);
+                    'first_letter' => $result
+                ]);
             }
         }
     }
@@ -279,21 +352,38 @@ class SiteController extends BaseController
                         }
                     }
                 }
+
                 $p = array_unique($p);
+
                 $themes1 = Themes::load_all_themename($p);
 
                 $vendor = Vendor::loadvendor_item($k);
             }
+
             $usermodel = new Users();
+
             if (Yii::$app->user->isGuest) {
-                return $this->render('search', ['imageData' => $imageData,
-        'themes' => $themes1, 'vendor' => $vendor, 'slug' => $slug, 'search' => $search, ]);
+                
+                return $this->render('search', [
+                    'imageData' => $imageData,
+                    'themes' => $themes1, 
+                    'vendor' => $vendor, 
+                    'slug' => $slug, 
+                    'search' => $search
+                ]);
+
             } else {
                 $customer_id = Yii::$app->user->identity->customer_id;
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
 
-                return $this->render('search', ['imageData' => $imageData,
-        'themes' => $themes1, 'vendor' => $vendor, 'slug' => $slug, 'customer_events_list' => $customer_events_list, 'search' => $search, ]);
+                return $this->render('search', [
+                    'imageData' => $imageData,
+                    'themes' => $themes1, 
+                    'vendor' => $vendor, 
+                    'slug' => $slug, 
+                    'customer_events_list' => $customer_events_list, 
+                    'search' => $search
+                ]);
             }
         }
     }
@@ -448,10 +538,6 @@ class SiteController extends BaseController
 
     public function actionContact()
     {
-        $faq_details = Faq::find()
-            ->where(['faq_status' => 'Active', 'trash' => 'Default'])
-            ->all();
-
         if (Yii::$app->request->isAjax) {
             $date = date('Y/m/d');
             $data = Yii::$app->request->post();
@@ -504,7 +590,20 @@ class SiteController extends BaseController
             }
         }
 
-        return $this->render('contact', ['faq' => $faq_details]);
+        $faq_details = array();
+
+        $faq_groups = ArrayHelper::toArray(FaqGroup::find()->all());
+
+        foreach ($faq_groups as $group) {
+            
+            $group['faq_list'] = Faq::find()
+                ->where(['faq_group_id' => $group['faq_group_id'], 'faq_status' => 'Active', 'trash' => 'Default'])
+                ->all();
+
+            $faq_details[] = $group;
+        }
+
+        return $this->render('contact', ['faq_details' => $faq_details]);
     }
 
     public function actionCmspages($slug = '')
@@ -518,7 +617,21 @@ class SiteController extends BaseController
             \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['cms_meta_description']) ? $seo_content[0]['cms_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
             \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['cms_meta_keywords']) ? $seo_content[0]['cms_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
 
-            return $this->render('cmspages', ['title' => $cms_details['page_name'], 'content' => $cms_details['page_content']]);
+
+            if(Yii::$app->language == "en"){
+                
+                return $this->render('cmspages', [
+                    'title' => $cms_details['page_name'], 
+                    'content' => $cms_details['page_content']
+                ]);
+
+            }else{
+
+                return $this->render('cmspages', [
+                    'title' => $cms_details['page_name_ar'], 
+                    'content' => $cms_details['page_content_ar']
+                ]);
+            }
         }
     }
 

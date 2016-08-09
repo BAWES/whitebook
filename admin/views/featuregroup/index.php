@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'group_name',
+            'group_name_ar',
             [
              'label'=>'Status',
              'format'=>'raw',
@@ -57,7 +58,7 @@ $this->registerJs("
                 var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
                 $('#image-'+id).attr('src',data);
                 $('#image-'+id).parent('a').attr('onclick', 
-                \"change('\"+status1+\"', '\"+id+\"')");
+                \"change('\"+status1+\"', '\"+id+\"')\");
             }
         });
      }

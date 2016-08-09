@@ -332,20 +332,26 @@ class CategoryController extends Controller
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '3');
+        
         if (yii::$app->user->can($access)) {
+            
             $model = $this->findModel($id);
+            
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->category_name = strtolower($model->category_name);
-            echo Yii::$app->session->setFlash('success', 'Category updated successfully!');
-            Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
-            return $this->redirect(['index']);
+                $model->category_name = strtolower($model->category_name);
+                
+                Yii::$app->session->setFlash('success', 'Category updated successfully!');
+                Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
+                
+                return $this->redirect(['index']);
             } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -442,8 +448,11 @@ class CategoryController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '3');
+        
         if (yii::$app->user->can($access)) {
+
             $vendor_item = Vendoritem::find()->where(['category_id' => $id, 'trash' => 'Default'])->count();
+        
             if (!empty($vendor_item)) {
                 echo Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
 
@@ -462,7 +471,9 @@ class CategoryController extends Controller
                 $childcategory = Category::find()->select('category_id,parent_category_id')->where(['parent_category_id' => $subcategory[0]['category_id']])->all();
                 $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$subcategory[0]['category_id']]);
             }
+
             $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$id]);
+
             if ($category) {
                 echo Yii::$app->session->setFlash('success', 'Category deleted successfully!');
 
@@ -471,6 +482,7 @@ class CategoryController extends Controller
                 echo Yii::$app->session->setFlash('success', 'Category delete failed!');
                 return $this->redirect(['index']);
             }
+
         } else {
             echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
@@ -578,6 +590,7 @@ class CategoryController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
     protected function findsubModel($id)
     {
         if (($model = Subcategory::findOne($id)) !== null) {

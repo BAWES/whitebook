@@ -35,32 +35,35 @@ class Website extends Model {
         return $ads = Slide::find()->select('*')->where(['trash'=>'Default','slide_status'=>"Active"])->asArray()->all();
     }
 
-    public static function get_search_directory_list($categoryid) {
+    public static function get_search_directory_list($categoryid, $sort = 'vendor_name') {
         $categoryid = (isset($categoryid)) ? $categoryid : '';
         
         $today = date('Y-m-d H:i:s');
              return $data=Vendor::find()
-                    ->select(['{{%vendor}}.vendor_id AS vid',
-                    '{{%vendor}}.vendor_name AS vname',
-                    '{{%vendor}}.slug AS slug'])
-            ->LEFTJOIN('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
-            ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
-            ->andWhere(['>=','{{%vendor_packages}}.package_end_date',$today])
-			->andWhere(['{{%vendor}}.trash'=>'Default'])
-			->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
-			->andWhere(['{{%vendor}}.vendor_status'=>'Active'])
-			->andWhere(new \yii\db\Expression('FIND_IN_SET('.$categoryid.',{{%vendor}}.category_id)'))
-			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
-			->groupby(['{{%vendor}}.vendor_id'])
-			->asArray()
-			->all();
+                ->select(['{{%vendor}}.vendor_id AS vid',
+                        '{{%vendor}}.vendor_name AS vname',
+                        '{{%vendor}}.vendor_name_ar AS vname_ar',
+                        '{{%vendor}}.slug AS slug'])
+                ->LEFTJOIN('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
+                ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
+                ->andWhere(['>=','{{%vendor_packages}}.package_end_date',$today])
+    			->andWhere(['{{%vendor}}.trash'=>'Default'])
+    			->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
+    			->andWhere(['{{%vendor}}.vendor_status'=>'Active'])
+    			->andWhere(new \yii\db\Expression('FIND_IN_SET('.$categoryid.',{{%vendor}}.category_id)'))
+    			->orderby(['{{%vendor}}.'.$sort => SORT_ASC])
+    			->groupby(['{{%vendor}}.vendor_id'])
+    			->asArray()
+    			->all();
         }
 
-    public static function get_search_directory_all_list() {
-		 $today = date('Y-m-d H:i:s');
-        		return $data=Vendor::find()
-        ->select(['{{%vendor}}.vendor_id AS vid',
+    public static function get_search_directory_all_list($sort = 'vendor_name') {
+		$today = date('Y-m-d H:i:s');
+        
+        return $data=Vendor::find()
+            ->select(['{{%vendor}}.vendor_id AS vid',
                     '{{%vendor}}.vendor_name AS vname',
+                    '{{%vendor}}.vendor_name_ar AS vname_ar',
                     '{{%vendor}}.slug AS slug'])
             ->LEFTJOIN('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
             ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
@@ -68,7 +71,7 @@ class Website extends Model {
 			->andwhere(['{{%vendor}}.trash'=>'Default'])
 			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
 			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
-			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
+			->orderby(['{{%vendor}}.'.$sort => SORT_ASC])
 			->groupby(['{{%vendor}}.vendor_id'])
 			->asArray()
 			->all();

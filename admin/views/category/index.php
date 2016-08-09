@@ -11,10 +11,7 @@ $this->title = 'Category';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="category-index">
-    <p>
-        <?= Html::a('Create category', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -45,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			 ],
            ['class' => 'yii\grid\ActionColumn',
             'header'=>'Action',
-            'template' => ' {update} {link}',
+            'template' => ' {update} {delete} {link}',
 			],
         ],
     ]); ?>

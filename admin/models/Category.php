@@ -42,30 +42,30 @@ class Category extends \common\models\Category
     public function rules()
     {
            return array_merge(parent::rules(), [
-            ['category_name','categoryvalidation','on' => 'insert',],   
+            ['category_name', 'categoryvalidation','on' => 'insert',],   
             [['parent_category_id', 'created_by', 'modified_by',], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
-            [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
+            [['category_name', 'category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_allow_sale', 'default', 'value' => true],
-            [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required','on' => 'register'],
-            [['parent_category_id','category_name',], 'required','on' => 'sub_update',],
+            [['category_name', 'category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required','on' => 'register'],
+            [['parent_category_id', 'category_name','category_name_ar'], 'required','on' => 'sub_update',],
             [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
-            [['category_name'], 'string', 'max' => 128]
+            [['category_name','category_name_ar'], 'string', 'max' => 128]
         ]);
     }
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();      
-        $scenarios['sub_update'] = ['parent_category_id','category_name',];//Scenario Values Only Accepted
-        $scenarios['register'] = ['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'];
+        $scenarios['sub_update'] = ['parent_category_id','category_name','category_name_ar'];//Scenario Values Only Accepted
+        $scenarios['register'] = ['category_name','category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'];
         return $scenarios;
     }
 
 
   public  function categoryvalidation($attribute_name,$params)
   {
-   if(!empty($this->category_name) ){
+    if(!empty($this->category_name) ){
       $model = Category::find()
       ->where(['category_name'=>$this->category_name])
       ->andwhere(['parent_category_id'=>null])->one();
@@ -119,10 +119,8 @@ class Category extends \common\models\Category
     // Status Image title
     public function statusTitle($status)
     {           
-    if($status == 'Active')     
-        return 'Activate';
+        if($status == 'Active')     
+            return 'Activate';
         return 'Deactivate';
     }
-
-
 }

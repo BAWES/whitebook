@@ -40,23 +40,28 @@ class PlanController extends BaseController
     public function actionPlan($slug = '')
     {
         $model = new Website();
-        if ($slug != '') {
-            /* BEGIN CATEGORY*/
-        $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $slug])->asArray()->one();
-            if (empty($model1)) {
-                throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-            }
-            $seo_content = Website::SEOdata('category', 'category_id', $model1['category_id'], array('category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'));
 
-            \Yii::$app->view->title = ($seo_content[0]['category_meta_title']) ? $seo_content[0]['category_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['category_name'];
-            \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['category_meta_description']) ? $seo_content[0]['category_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
-            \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['category_meta_keywords']) ? $seo_content[0]['category_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
+        if ($slug != '') {
+         
+        $model1 = Category::find()->select(['category_id', 'category_name_ar', 'category_name'])->where(['slug' => $slug])->asArray()->one();
+
+        if (empty($model1)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+         
+        $seo_content = Website::SEOdata('category', 'category_id', $model1['category_id'], array('category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'));
+
+        \Yii::$app->view->title = ($seo_content[0]['category_meta_title']) ? $seo_content[0]['category_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['category_name'];
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['category_meta_description']) ? $seo_content[0]['category_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['category_meta_keywords']) ? $seo_content[0]['category_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
 
         /* BEGIN CATEGORY EXIST OR NOT*/
         if (empty($model1)) {
             $imageData = '';
         }
         /* END CATEGORY EXIST OR NOT*/
+
+        $top_categories = Category::find()->where(['category_level' => 0])->asArray()->all();
 
         /* BEGIN GET VENDORS */
         $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);        
@@ -117,11 +122,16 @@ class PlanController extends BaseController
             }
             $get_unique_themes = array_unique($get_unique_themes);
         }
-        $themes = Themes::load_all_themename($get_unique_themes);
+
+        if(Yii::$app->language == "en"){
+            $themes = Themes::load_all_themename($get_unique_themes, 'theme_name');
+        }else{
+            $themes = Themes::load_all_themename($get_unique_themes, 'theme_name_ar');
+        }
 
         /* VENDOR HAVIG ATLEAST ONE PRODUCT */
         $vendor = Vendoritem::find()
-            ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
+            ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
             ->join('INNER JOIN', '{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
             ->where(['{{%vendor_item}}.vendor_id' => $active_vendors])
@@ -138,15 +148,34 @@ class PlanController extends BaseController
 
         /* END GET VENDORS */
         if (Yii::$app->user->isGuest) {
-            return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-            'themes' => $themes, 'vendor' => $vendor, 'slug' => $slug,'category_id'=>$model1['category_id']]);
+
+            return $this->render('planvenues', [
+                'model' => $model, 
+                'top_categories' => $top_categories,
+                'imageData' => $imageData,
+                'themes' => $themes, 
+                'vendor' => $vendor, 
+                'slug' => $slug,
+                'category_id' => $model1['category_id']
+            ]);
+
         } else {
-                $usermodel = new Users();
-                $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
-                return $this->render('planvenues', ['model' => $model, 'imageData' => $imageData,
-                'themes' => $themes, 'vendor' => $vendor, 'category_id'=>$model1['category_id'],'slug' => $slug, 'customer_events_list' => $customer_events_list]);
-            }
+            $usermodel = new Users();
+            
+            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
+            
+            return $this->render('planvenues', [
+                'model' => $model, 
+                'top_categories' => $top_categories,
+                'imageData' => $imageData,
+                'themes' => $themes, 
+                'vendor' => $vendor, 
+                'category_id' => $model1['category_id'],
+                'slug' => $slug, 
+                'customer_events_list' => $customer_events_list
+            ]);
         }
+    }
 
 
     public function actionLoaditems()

@@ -10,11 +10,12 @@ use yii\web\AssetBundle;
  */
 class ArabicAsset extends AssetBundle
 {
-    public $sourcePath = '@frontend/assets/ArabicAsset';
+    public $basePath = '@webroot';
+    public $baseUrl = '@web';
 
     //CSS will be added before closing </head> tag
     public $css = [
-        'css/arabic.css',
+        'css/style_arabic.css?v=1.1',
     ];
 
     //This arabic asset is an adjustment for TemplateAsset in the case of Arabic language

@@ -20,9 +20,16 @@ $this->registerJs(
 );
 ?>
  <div class="col-md-8 col-sm-8 col-xs-8">
+    
     <?php $form = ActiveForm::begin(['options' => ['data-pjax' => true ]]); ?>
+    
     <div class="form-group">
 	<?= $form->field($model, 'page_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textInput(['maxlength' => 100]) ?>
+	</div>
+
+	<div class="form-group">
+	<?= $form->field($model, 'page_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->textInput(['maxlength' => 100]) ?>
 	</div>
 
@@ -43,8 +50,12 @@ $this->registerJs(
 	])->textArea(['id'=>'text-editor']) ?>
 	</div>
 
+	<div class="form-group">
+	<?= $form->field($model, 'page_content_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textArea(['id'=>'text-editor-ar']) ?>
+	</div>
 
-     <div class="form-group">
+    <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?= Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
     </div>
@@ -59,5 +70,6 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 $this->registerJs("
 	$(function() {
 		CKEDITOR.replace('text-editor');
+		CKEDITOR.replace('text-editor-ar');
 	});
 ");

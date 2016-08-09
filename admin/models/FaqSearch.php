@@ -12,6 +12,8 @@ use admin\models\Faq;
  */
 class FaqSearch extends Faq
 {
+    public $group_name;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class FaqSearch extends Faq
     {
         return [
             [['faq_id', 'created_by', 'modified_by'], 'integer'],
-            [['question', 'answer', 'faq_status', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
+            [['question', 'answer', 'faq_status', 'created_datetime', 'modified_datetime', 'trash', 'group_name'], 'safe'],
         ];
     }
 
@@ -44,9 +46,20 @@ class FaqSearch extends Faq
 		$query = Faq::find()
         ->where(['!=', 'trash', 'Deleted'])
 		->orderBy('faq_id');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'sort'=> ['defaultOrder' => ['faq_id'=>SORT_DESC]]
+        ]);
+
+        $dataProvider->setSort([
+            'attributes' => [
+                'group_name' => [
+                    'asc' => ['whitebook_faq_group.group_name' => SORT_ASC],
+                    'desc' => ['whitebook_faq_group.group_name' => SORT_DESC],
+                    'label' => 'Group'
+                ]
+            ]
         ]);
 
         $this->load($params);
@@ -57,11 +70,13 @@ class FaqSearch extends Faq
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-        ]);
+        $query->joinWith(['faqgroup' => function ($q) {
+            $q->where('whitebook_faq_group.group_name LIKE "%' . $this->group_name . '%"');
+        }]);
 
         $query->andFilterWhere(['like', 'question', $this->question])
             ->andFilterWhere(['like', 'answer', $this->answer]);
+
         return $dataProvider;
     }
 }

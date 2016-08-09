@@ -16,13 +16,13 @@ use yii\helpers\Html;
         <div class="plan_catg">
             <ul>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'venues']); ?>" >
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'venues']); ?>" style="width: 50px;">
                         <span class="venue"></span>
                         <span class="responsi_common"><?= Yii::t("frontend", "Venues") ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'invitations']); ?>" >
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'invitations']); ?>" style="width: 70px;">
                         <span class="invitations "></span>
                         <?= Yii::t("frontend", "Invitations") ?>
                     </a>
@@ -46,19 +46,19 @@ use yii\helpers\Html;
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'entertainment']); ?>" >
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'entertainment']); ?>" style="width: 90px;">
                         <span class="entertainment  "></span>
                         <?= Yii::t("frontend", "Entertainment") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'services']); ?>">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'services']); ?>" style="width: 50px;">
                         <span class="services  "></span>
                         <?= Yii::t("frontend", "Services") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["plan/plan", 'slug' => 'others']); ?>">
+                    <a href="<?= Url::to(["plan/plan", 'slug' => 'others']); ?>" style="width: 40px;">
                         <span class="other1"></span>
                         <?= Yii::t("frontend", "Other") ?>
                     </a>
