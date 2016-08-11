@@ -1,5 +1,6 @@
 <?php $this->title = 'Plan | Whitebook'; ?>
 <link href="<?= Url::to("@web/fonts/flaticon/plan/flaticon.css") ?>" rel="stylesheet">
+
 <!-- coniner start -->
 <section id="inner_pages_white_back">
     <div class="container paddng0">

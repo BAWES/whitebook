@@ -4,21 +4,20 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\helpers\Json;
-use yii\helpers\Url;
 use frontend\models\Vendoritem;
 use frontend\models\Vendor;
-use frontend\models\Users;
 use common\models\Featuregroupitem;
-use common\models\Deliverytimeslot;
+use frontend\models\Users;
 use common\models\Events;
 use common\models\Vendorlocation;
 use common\models\Image;
+use yii\helpers\Json;
+use yii\helpers\Url;
 
 /**
 * Site controller.
 */
-class ProductController extends BaseController
+class Buy_productController extends BaseController
 {
     /**
     * {@inheritdoc}
@@ -34,10 +33,12 @@ class ProductController extends BaseController
     public function actionProduct($slug = '')
     {
         if ($slug != '') {
+            
             $similiar = new Featuregroupitem();
             $similiar_item = $similiar->similiar_details();
             $item = new Vendoritem();
             $model = Vendoritem::findvendoritem($slug);
+            
             $avlbl_stock = Vendoritem::find()->select(['item_amount_in_stock AS stock'])
 			->where(['item_approved' => 'Yes'])
 			->andwhere(['trash' => 'Default'])
@@ -51,6 +52,7 @@ class ProductController extends BaseController
             if (empty($model)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
+
             $vendor = new Vendor();
             $vendor_det = Vendor::vendorslug($model['vendor_id']);
             $social_vendor = $vendor->sociallist($model->vendor_id);
@@ -99,22 +101,21 @@ class ProductController extends BaseController
 
             if (Yii::$app->user->isGuest) {
                 
-                return $this->render('/product/product_detail', [
+                return $this->render('/buy_product/product_detail', [
                     'avlbl_stock' => $avlbl_stock, 
                     'model' => $model, 
                     'similiar_item' => $similiar_item, 
                     'social_vendor' => $social_vendor,
                     'vendor_area' => $vendr_area
                 ]);
-                /*return $this->render('/product/product_detail',['avlbl_stock'=>$avlbl_stock,'model'=>$model,'similiar_item'=>$similiar_item,'social_vendor'=>$social_vendor,
-                'vendor_area'=>$vendr_area,'vendor_timeslot'=>$vendor_timeslot]);*/
+               
             } else {
                 
                 $user = new Users();
                 
                 $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
-                return $this->render('/product/product_detail', [
+                return $this->render('/buy_product/product_detail', [
                     'model' => $model, 
                     'similiar_item' => $similiar_item,
                     'avlbl_stock' => $avlbl_stock, 
@@ -157,19 +158,18 @@ class ProductController extends BaseController
     public function actionGetdeliverytimeslot()
     {
         if (Yii::$app->request->isAjax) {
-        
             $data = Yii::$app->request->post();
             $string = $data['sel_date'];
             $timestamp = strtotime($string);
 
-    		$vendor_timeslot = Deliverytimeslot::find()
-    		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
-    		->where(['vendor_id' => $data['vendor_id']])
-    		->andwhere(['timeslot_day' => date("l", $timestamp)])
-    		->asArray()->all();
+		$vendor_timeslot = Deliverytimeslot::find()
+		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+		->where(['vendor_id' => $model['vendor_id']])
+		->andwhere(['timeslot_day' => date("l", $timestamp)])
+		->asArray()->all();
 
             foreach ($vendor_timeslot as $key => $value) {
-                echo '<option value="'.$value['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
+                echo '<option value="'.$key['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
             }
         }
     }
