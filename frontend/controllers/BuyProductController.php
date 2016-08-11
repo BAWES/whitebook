@@ -17,7 +17,7 @@ use yii\helpers\Url;
 /**
 * Site controller.
 */
-class Buy_productController extends BaseController
+class BuyProductController extends BaseController
 {
     /**
     * {@inheritdoc}
