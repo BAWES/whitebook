@@ -8,6 +8,8 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use common\models\City;
+use common\models\Location;
 
 /**
 * This is the model class for table "{{%vendor_location}}".
@@ -77,5 +79,10 @@ class Vendorlocation extends \yii\db\ActiveRecord
                 'value' => new Expression('NOW()'),
             ],
         ];
+    }
+
+    public function getLocation()
+    {
+        return $this->hasOne(Location::className(), ['id' => 'area_id']);
     }
 }

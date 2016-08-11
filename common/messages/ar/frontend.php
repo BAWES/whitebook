@@ -8,7 +8,7 @@
  *
  * Each array element represents the translation (value) of a message (key).
  * If the value is empty, the message is considered as not translated.
- * Messages that no longer need translation will have their translations
+ * Mfessages that no longer need translation will have their translations
  * enclosed between a pair of '@@' marks.
  *
  * Message string can be used with plural forms format. Check i18n section
@@ -17,6 +17,28 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Hi, {customer_name}!'=> 'مرحبا {customer_name}!',
+    'Delivery not available on selected area!' => 'تسليم غير متوفر على المنطقة المختارة !',
+    'Delivery date' => 'تاريخ التسليم او الوصول',
+    'Choose Delivery Date' => 'اختيار تاريخ التسليم',
+    'City' => 'مدينة',
+    'Delivery timeslot' => 'موعدها تسليم',
+    'OPTIONS' => 'خيارات',
+    'We cannot delivery this item!' => 'لا يمكننا تسليم هذا البند !',
+    'Sub-Total' => 'المجموع الفرعي',
+    'Delivery Charge' => 'رسوم التوصيل',
+    'Total' => 'مجموع',
+    'Item Name' => 'اسم العنصر',
+    'Image' => 'صورة',
+    'Delivery' => 'خدمه توصيل',
+    'Quantity' => 'كمية',
+    'Unit Price' => 'سعر الوحدة',
+    'Continue Shopping' => 'مواصلة التسوق',
+    'Proceed to Checkout' => 'باشرالخروج من الفندق',
+    'Your cart is empty!' => 'عربة التسوق فارغة!',
+    'Cart ({count})' => '({count}) العربة',
+    'Shopping Cart' => 'عربة التسوق',
+    'Shopping Cart | Whitebook' => 'عربة التسوق | Whitebook',
     'Ops, nothing to show!' => 'مكتب خدمات المشاريع ، لا شيء لاظهار !',
     'Action' => 'عمل',
     'PHONE NUMBER' => 'رقم الهاتف',
