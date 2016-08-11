@@ -8,6 +8,7 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\Vendorlocation;
+use common\models\Vendoritem;
 
 /**
  * This is the model class for table "whitebook_customer_cart".
@@ -96,7 +97,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public function getItem()
     {
-        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
     }
 
     public function getTimeslot()
