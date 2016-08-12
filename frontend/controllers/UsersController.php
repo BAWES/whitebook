@@ -898,7 +898,8 @@ class UsersController extends BaseController
         $addresses = array();
 
         $result = CustomerAddress::find()
-        ->select('whitebook_city.city_name, whitebook_location.location, whitebook_customer_address.*')
+        ->select('whitebook_city.city_name, whitebook_city.city_name_ar, whitebook_location.location, 
+            whitebook_location.location_ar, whitebook_customer_address.*')
         ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
         ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
         ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
@@ -908,7 +909,7 @@ class UsersController extends BaseController
         foreach($result as $row) {
 
           $row['questions'] = CustomerAddressResponse::find()
-          ->select('aq.question, whitebook_customer_address_response.*')
+          ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
           ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
           ->where('address_id = :address_id', [':address_id' => $row['address_id']])
           ->asArray()
@@ -962,7 +963,11 @@ class UsersController extends BaseController
     {
         $address_type_id = Yii::$app->request->post('address_type_id');
 
-        $questions = AddressQuestion::find()->where('address_type_id = '. $address_type_id)->all();
+        $questions = AddressQuestion::find()->where([
+            'address_type_id' => $address_type_id,
+            'trash' => 'Default',
+            'status' => 'Active'
+        ])->all();
 
         return $this->renderPartial('questions', [
             'questions' => $questions
