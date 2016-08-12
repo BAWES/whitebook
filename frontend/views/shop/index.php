@@ -6,10 +6,10 @@
 
 <section id="inner_pages_white_back">
     <div class="container paddng0">
-        <div class="plan_sect">
+        <div class="shop_sect">
             <div class="plan_inner_sec">
                 <h2><?= Yii::t("frontend", "Shop") ?></h2>
-                <h5 class="text-center"><?= Yii::t("frontend", "Shop is where you browse, get ideas, and plan your event") ?></h5>
+                <h5 class="text-center"><?= Yii::t("frontend", "Shop is where you purchase, customise, and schedule delivery of your products and services") ?></h5>
             </div>
         </div>
         <div class="plan_catg">
