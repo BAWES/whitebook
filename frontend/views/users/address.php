@@ -74,7 +74,6 @@ $this->title ='Address Book | Whitebook';
     </div>
 </section>
 
-
 <?php $form = ActiveForm::begin(); ?>
 
 <div class="modal fade" id="modal_create_address">

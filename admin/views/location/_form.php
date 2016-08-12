@@ -24,13 +24,16 @@ use yii\web\View;
 	<?= $form->field($model, 'city_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
 	])->dropDownList($city, ['prompt'=>'Select...']);  ?>
 	</div>	
-	
-	
+		
 	<div class="form-group">   
 	<?= $form->field($model, 'location',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
 	])->textInput(['maxlength' => 50])  ?>
 	</div>
 	  
+    <div class="form-group">   
+    <?= $form->field($model, 'location_ar', [  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
+    ])->textInput(['maxlength' => 50])  ?>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
