@@ -41,7 +41,7 @@ class City extends \yii\db\ActiveRecord
         return [
             [['country_id', 'city_name'], 'required'],
             [['country_id'], 'integer'],
-            [['city_name'], 'string', 'max' => 100],
+            [['city_name', 'city_name_ar'], 'string', 'max' => 100]
         ];
     }
 
@@ -64,6 +64,7 @@ class City extends \yii\db\ActiveRecord
             'city_id' => 'Governorate ID',
             'country_id' => 'Country Name',
             'city_name' => 'Governorate',
+            'city_name_ar' => 'Governorate - Arabic',
             'status' => 'Governorate Status',
         ];
     }
