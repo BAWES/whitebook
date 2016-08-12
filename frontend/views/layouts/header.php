@@ -155,7 +155,7 @@ $action = Yii::$app->controller->action->id;
                             </li>
 
                             <li class="">
-                                <?= Html::a(Yii::t('frontend', 'Shop'), ['site/shop'], ['title' => Yii::t('frontend', 'Shop')]); ?>
+                                <?= Html::a(Yii::t('frontend', 'Shop'), ['shop/index'], ['title' => Yii::t('frontend', 'Shop')]); ?>
                             </li>
 
                             <li  class="<?php if ($action == "experience") { echo "active";} ?>">
