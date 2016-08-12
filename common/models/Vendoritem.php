@@ -206,7 +206,7 @@ class Vendoritem extends \yii\db\ActiveRecord
     */
     public function getType()
     {
-        return $this->hasOne(ItemType::className(), ['type_id' => 'type_id']);
+        return $this->hasOne(Itemtype::className(), ['type_id' => 'type_id']);
     }
 
     /**

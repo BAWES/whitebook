@@ -17,6 +17,15 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Address Data' => 'بيانات عنوان',
+    'Country name' => 'اسم الدولة',
+    'Governorate' => 'محافظة',
+    'Area name' => 'اسم المنطقة',
+    'Address Data' => 'بيانات عنوان',
+    'Address type' => 'نوع العنوان',
+    'Select...' => 'اختار...',
+    'Questions' => 'أسئلة',
+    'Add new address' => 'اضف عنوان جديد',
     'Hi, {customer_name}!'=> 'مرحبا {customer_name}!',
     'Delivery not available on selected area!' => 'تسليم غير متوفر على المنطقة المختارة !',
     'Delivery date' => 'تاريخ التسليم او الوصول',
