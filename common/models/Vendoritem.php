@@ -399,4 +399,8 @@ class Vendoritem extends \yii\db\ActiveRecord
                       ->asArray()
                       ->all();
             }
+    public function getImages()
+    {
+        return $this->hasMany(Image::className(), ['item_id' => 'item_id']);
     }
+}
