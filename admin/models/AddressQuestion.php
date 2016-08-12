@@ -26,7 +26,7 @@ class AddressQuestion extends \common\models\AddressQuestion
     public static function  loadAddressquestion($addresstypeid)
     {
          return $question = AddressQuestion::find()
-        ->select(['ques_id','address_type_id','question'])
+        ->select(['ques_id','address_type_id', 'question_ar', 'question'])
         ->where(['address_type_id'=>$addresstypeid])
         ->andWhere(['trash'=>'Default'])
         ->all();
