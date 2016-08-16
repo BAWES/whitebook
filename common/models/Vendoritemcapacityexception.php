@@ -23,7 +23,7 @@ use Yii;
 * @property string $modified_datetime
 * @property string $trash
 */
-class Vendoritemcapacityexception extends \yii\db\ActiveRecord
+class VendorItemCapacityException extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -85,7 +85,6 @@ class Vendoritemcapacityexception extends \yii\db\ActiveRecord
     public function getItemName($id)
     {
         $id=explode(',',$id);
-        //print_r ($id);die;
         foreach($id as $i)
         {
             $model = Vendoritem::find()->where(['item_id'=>$i])->one();
