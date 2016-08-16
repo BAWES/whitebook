@@ -17,6 +17,19 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Payment method selected : <strong>{payment_method}</strong>' => '<strong> {payment_method} </strong> : طريقة الدفع اختيار',
+    'Confirm Order' => 'أكد الطلب',
+    'Cash On Delivery' => 'الدفع عند التسليم',
+    'Please select the preferred payment method to use on this order.' => 'يرجى اختيار طريقة الدفع المفضلة لاستخدامها في هذا النظام.',
+    'Select payment method' => 'اختار طريقة الدفع',
+    'Error: Please select address for each items!' => 'خطأ : الرجاء تحديد عنوان لكل مادة!',
+    'Checkout' => 'الدفع',
+    'Back to shopping' => 'العودة إلى التسوق',
+    'Next' => 'التالى',
+    'Select delivery address for each items' => 'اختر عنوان تسليم كل البنود',
+    'Confirm' => 'أكد',
+    'Payment' => 'دفع',
+    'Address' => 'عنوان',
     'Address Data' => 'بيانات عنوان',
     'Country name' => 'اسم الدولة',
     'Governorate' => 'محافظة',

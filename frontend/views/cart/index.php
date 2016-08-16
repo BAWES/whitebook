@@ -143,14 +143,14 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	          </table>
 	        </div>
         </div>
-
-        <button class="btn btn-primary pull-right btn-checkout">
+        
+        <a href="<?= Url::to(['checkout/index']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
-        </button>
+        </a>
 
-        <button class="btn btn-primary pull-right btn-checkout">
+        <a href="<?= Url::to(['shop/index']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
-        </button>
+        </a>
 
         <br />
         <br />

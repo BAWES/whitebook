@@ -141,13 +141,9 @@ ActiveForm::end();
 $this->registerJs("
 
     function add_address() {
-
-
-
         $('#modal_create_address form').submit();    
     }
     
-
     $(function (){
 
     	$('.address_delete').click(function(){
