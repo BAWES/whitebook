@@ -22,7 +22,7 @@ class VendorItemCapacityExceptionController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                  //  'delete' => ['post'],
+                    //  'delete' => ['post'],
                 ],
             ],
             'access' => [
@@ -47,11 +47,11 @@ class VendorItemCapacityExceptionController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $startdate = VendorItemCapacityException::find()->select('exception_date')
-    		->where(['trash'=>'Default'])
-    		->orderby(['exception_date' => SORT_ASC])
-    		->asArray()
-    		->all();
-	    $startdate = date('Y-m-d', strtotime($startdate[0]['exception_date']));
+            ->where(['trash'=>'Default'])
+            ->orderby(['exception_date' => SORT_ASC])
+            ->asArray()
+            ->all();
+        $startdate = date('Y-m-d', strtotime($startdate[0]['exception_date']));
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -83,10 +83,10 @@ class VendorItemCapacityExceptionController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->exception_date = date('Y-m-d', strtotime($model->exception_date));
-			$model->save();
+            $model->save();
             Yii::$app->session->setFlash('success', "Exception date created successfully!");
             return $this->redirect(['index']);
-		} else {
+        } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -106,9 +106,9 @@ class VendorItemCapacityExceptionController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $model->exception_date =Yii::$app->formatter->asDate($model->exception_date, 'php:Y-m-d');
-			$model->save();
+            $model->save();
             Yii::$app->session->setFlash('success', "Exception date updated successfully!");
-            
+
             return $this->redirect(['index']);
         } else {
             $model->exception_date = date( 'd-m-Y', strtotime( $model->exception_date ));
