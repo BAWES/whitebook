@@ -188,4 +188,33 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         return $result;
     }
+
+    public static function customerAddress($area_id){
+        
+        $result = CustomerAddress::find()
+            ->joinWith('location')
+            ->joinWith('city')
+            ->where([
+                '{{%customer_address}}.trash' => 'Default',
+                '{{%location}}.id' => $area_id,
+                '{{%location}}.status' => 'Active',
+                '{{%location}}.trash' => 'Default',
+                '{{%city}}.status' => 'Active',
+                '{{%city}}.trash' => 'Default'])
+            ->asArray()
+            ->all();
+
+        return $result;    
+    }
+
+    public static function getAddressData($address_id) {
+
+        $address = CustomerAddress::findOne($address_id);
+
+        if($address) {
+            return $address->address_data;
+        } else {
+            return null;
+        }        
+    }
 }

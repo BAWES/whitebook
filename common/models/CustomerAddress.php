@@ -100,6 +100,11 @@ class CustomerAddress extends \yii\db\ActiveRecord
         return $this->hasOne(AddressType::className(), ['type_id' => 'address_type_id']);
     }
 
+    public function getLocation()
+    {
+        return $this->hasOne(Location::className(), ['id' => 'area_id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
