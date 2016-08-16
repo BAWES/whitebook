@@ -11,10 +11,10 @@ $this->params['breadcrumbs'][] = ['label' => 'Exception dates', 'url' => ['index
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<div class="vendoritemcapacityexception-create">
+<div class="vendor-item-capacity-exception-form-create">
 
     <?= $this->render('_form', [
-        'model' => $model,'exist_dates' => $exist_dates,
+        'model' => $model,
     ]) ?>
 
 </div>

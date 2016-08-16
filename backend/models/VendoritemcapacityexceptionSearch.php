@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 /**
  * VendoritemcapacityexceptionSearch represents the model behind the search form about `common\models\Vendoritemcapacityexception`.
  */
-class VendoritemcapacityexceptionSearch extends \common\models\Vendoritemcapacityexception
+class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacityException
 {
     public $item_name;
     /**

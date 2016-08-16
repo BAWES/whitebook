@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="vendoritemcapacityexception-search">
+<div class="vendor-item-capacity-exception-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
