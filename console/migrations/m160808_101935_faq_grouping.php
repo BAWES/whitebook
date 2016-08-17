@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Migration;
+use yii\db\Expression;
 
 class m160808_101935_faq_grouping extends Migration
 {
@@ -79,8 +80,8 @@ class m160808_101935_faq_grouping extends Migration
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -94,8 +95,8 @@ class m160808_101935_faq_grouping extends Migration
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -113,8 +114,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -128,8 +129,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -143,8 +144,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -158,8 +159,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -173,8 +174,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -188,8 +189,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -203,8 +204,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -218,8 +219,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -233,8 +234,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -248,8 +249,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -263,8 +264,8 @@ added services provided by The White Book’s Team.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -280,8 +281,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -295,8 +296,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -310,8 +311,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -325,8 +326,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -340,8 +341,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -355,8 +356,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -370,8 +371,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -385,8 +386,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -400,8 +401,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -415,8 +416,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -430,8 +431,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -445,8 +446,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
@@ -460,8 +461,8 @@ details.',
             'sort' => '0',
             'created_by' => '0',
             'modified_by' => '0',
-            'created_datetime' => date('Y-d-m h:i:s'),
-            'modified_datetime' => date('Y-d-m h:i:s'),
+            'created_datetime' => new Expression('NOW()'),
+            'modified_datetime' => new Expression('NOW()'),
             'trash' => 'Default'
         ]);
 
