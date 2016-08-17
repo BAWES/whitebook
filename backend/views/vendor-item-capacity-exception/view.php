@@ -26,7 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'item_id',
+            [
+                'attribute'=>'item_id',
+                'value' => $model->vendoritem->item_name
+            ],
             'exception_date',
             'exception_capacity',
             'created_datetime',
