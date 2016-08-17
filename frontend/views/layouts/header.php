@@ -420,7 +420,7 @@ $action = Yii::$app->controller->action->id;
 
                 </ul>
             </li>
-            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('site/shop', true); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
+            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('shop/index', true); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
             </li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/themes', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>

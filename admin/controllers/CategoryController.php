@@ -170,7 +170,7 @@ class CategoryController extends Controller
 
         $category = Category::updateAll(
             ['sort' => $sort],
-            ['category_id= '.$cat_id]
+            ['category_id' => $cat_id]
         );
 
         if ($category) {

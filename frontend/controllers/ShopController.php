@@ -47,8 +47,12 @@ class ShopController extends BaseController
             \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($Category->category_meta_description) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
             \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($Category->category_meta_keywords) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
 
+            $TopCategories = Category::find()
+                ->where(['category_level' => 0, 'trash' => 'Default'])
+                ->orderBy('sort')
+                ->asArray()
+                ->all();
 
-            $TopCategories = Category::findAll(['category_level' => 0]);
             $ActiveVendors = Vendor::loadvalidvendorids($Category->category_id);
             $imageData = Vendoritem::find()
                     ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
