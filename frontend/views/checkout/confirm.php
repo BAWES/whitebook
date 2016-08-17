@@ -72,7 +72,7 @@ use common\models\CustomerCart;
                     ?>
         		</td>
         		<td>
-        			<a target="_blank" href="<?= Url::to(["buy-product/product", 'slug' => $item['slug']]) ?>">
+        			<a target="_blank" href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
         				<?php if(Yii::$app->language == 'en') {
         					echo $item['item_name'];
         				} else {
@@ -91,9 +91,13 @@ use common\models\CustomerCart;
         				
         				<?= nl2br($address_data); ?> <br />
 
-        				<?= $delivery_area->location->location; ?> <br />
-
-        				<?= $delivery_area->location->city->city_name; ?> <br />
+                        <?php if(Yii::$app->language == 'en') { ?>
+            				<?= $delivery_area->location->location; ?> <br />
+            				<?= $delivery_area->location->city->city_name; ?> <br />
+                        <?php } else { ?>
+                            <?= $delivery_area->location->location_ar; ?> <br />
+                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
+                        <?php } ?>
 
         				<?= $item['cart_delivery_date'] ?> <br />
         			

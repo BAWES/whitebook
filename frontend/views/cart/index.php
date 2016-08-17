@@ -72,7 +72,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	                        ?>
 		        		</td>
 		        		<td>
-		        			<a href="<?= Url::to(["buy-product/product", 'slug' => $item['slug']]) ?>">
+		        			<a href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
 		        				<?php if(Yii::$app->language == 'en') {
 		        					echo $item['item_name'];
 		        				} else {
@@ -89,9 +89,13 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 		        				?>
 		        				
-		        				<?= $delivery_area->location->location; ?> <br />
-
-		        				<?= $delivery_area->location->city->city_name; ?> <br />
+		        				<?php if(Yii::$app->language == 'en') { ?>
+		            				<?= $delivery_area->location->location; ?> <br />
+		            				<?= $delivery_area->location->city->city_name; ?> <br />
+		                        <?php } else { ?>
+		                            <?= $delivery_area->location->location_ar; ?> <br />
+		                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
+		                        <?php } ?>
 
 		        				<?= $item['cart_delivery_date'] ?> <br />
 		        			
