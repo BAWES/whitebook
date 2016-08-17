@@ -133,7 +133,7 @@ class SiteController extends Controller
                 }
                 return $this->redirect('recoverypassword');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Email id is not registered!');
+                echo Yii::$app->session->setFlash('danger', 'email is not registered!');
 
                 return $this->redirect('recoverypassword');
             }

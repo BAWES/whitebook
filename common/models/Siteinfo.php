@@ -67,7 +67,7 @@ class Siteinfo extends \yii\db\ActiveRecord
             'app_desc' => 'App Description',
             'meta_keyword' => 'Meta Keyword',
             'meta_desc' => 'Meta Description',
-            'email_id' => 'Email ID',
+            'email_id' => 'email',
             'phone_number' => 'Phone Number',
             'site_location' => 'Site Location',
             'site_copyright' => 'Site Copyright',

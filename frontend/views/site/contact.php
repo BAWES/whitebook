@@ -25,7 +25,7 @@ $this->title = 'Contact us | Whitebook';
                             </div>
 
                             <div class="form-group">
-                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter valid email address!'); ?>" />
+                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter valid Email!'); ?>" />
                                 <div id="chkemail" class="error"></div>
                             </div>
 
@@ -121,7 +121,7 @@ $this->registerJs("
         }
         else
         {
-            jQuery('#chkemail').html('".Yii::t('frontend', 'Enter valid email address!')."');
+            jQuery('#chkemail').html('".Yii::t('frontend', 'Enter valid Email!')."');
             i = 1;
             j = 1;
         }

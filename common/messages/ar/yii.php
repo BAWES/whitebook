@@ -72,7 +72,7 @@ return [
     '{attribute} contains wrong subnet mask.' => '',
     '{attribute} is invalid.' => '',
     '{attribute} is not a valid URL.' => '',
-    '{attribute} is not a valid email address.' => '',
+    '{attribute} is not a valid Email.' => '',
     '{attribute} is not in the allowed range.' => '',
     '{attribute} must be "{requiredValue}".' => '',
     '{attribute} must be a number.' => '',

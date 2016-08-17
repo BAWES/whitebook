@@ -24,7 +24,7 @@ $this->registerJs("
     var event_details = '".Yii::$app->homeUrl."/event-details/';
     var forgot_password_url = '".Url::toRoute('users/forget_password')."';
     var receive_email = '".Yii::t("frontend","You will now receive an email to reset your password by email")."';
-    var contact_admin = '".Yii::t("frontend","Entered email id not found in registred user email. Kindly contact admin!")."';
+    var contact_admin = '".Yii::t("frontend","Entered email not found in registred user email. Kindly contact admin!")."';
     var reg_email_id = '".Yii::t('frontend','Enter registered email')."';
     var search_result_url = '".Url::toRoute('/search-result/')."/';
     var home_url = '".Yii::$app->homeUrl."';
@@ -80,9 +80,9 @@ $this->registerJs("
 
     var the_field_is_required = '".Yii::t('frontend','The field is required')."';
 
-    var entered_email_id_is_already_exists = '".Yii::t('frontend', 'Entered email id is already exists')."';
+    var entered_email_id_is_already_exists = '".Yii::t('frontend', 'Entered email is already exists')."';
 
-    var enter_a_valid_email_id = '".Yii::t('frontend', 'Enter a valid email id')."';
+    var enter_a_valid_email_id = '".Yii::t('frontend', 'Enter a valid email')."';
 
     var kindly_select_event_type = '".Yii::t('frontend', 'Kindly select Event type')."';
 

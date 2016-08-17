@@ -23,7 +23,7 @@ use frontend\models\Users;
 
                     <div class="login-padding">
                         <div class="form-group">
-                            <label><?= Yii::t('frontend', 'Email Address') ?></label>
+                            <label><?= Yii::t('frontend', 'Email') ?></label>
                             <input type="text" placeholder="" name="email" id="email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.'); ?>">
                             <input type="hidden" placeholder="" name="event_status" id="event_status" value="0" class="form-control input-lg">
                             <input type="hidden" placeholder="" name="favourite_status" id="favourite_status" value="0" class="form-control input-lg">
@@ -100,7 +100,7 @@ use frontend\models\Users;
                     <form id="forgotForm" name="forgotForm" method="POST" class="form col-md-12 center-block">
                         <div class="login-padding">
                             <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Email Address') ?></label>
+                                <label><?= Yii::t('frontend', 'Email') ?></label>
                                 <input type="text" placeholder="" name="forget_email" id="forget_email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
                                 <span class="help-block"></span>
                             </div>
@@ -202,7 +202,7 @@ use frontend\models\Users;
 
                         <div class="col-md-6 col-sm-6 col-xs-12 padding-right0">
                             <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Email Address') ?></label>
+                                <label><?= Yii::t('frontend', 'Email') ?></label>
                                 <input type="text" placeholder="" name="reg_email" id="reg_email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
                                 <span class="customer_email errors"></span>
                                 <div id="customer_email" class="error"></div>
