@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Vendoritemcapacityexception */
+/* @var $model common\models\VendorItemCapacityException */
 
 $this->title = 'Create exception dates';
 $this->params['breadcrumbs'][] = ['label' => 'Exception dates', 'url' => ['index']];
