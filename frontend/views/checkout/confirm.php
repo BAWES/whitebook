@@ -72,7 +72,7 @@ use common\models\CustomerCart;
                     ?>
         		</td>
         		<td>
-        			<a target="_blank" href="<?= Url::to(["buy-product/product", 'slug' => $item['slug']]) ?>">
+        			<a target="_blank" href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
         				<?php if(Yii::$app->language == 'en') {
         					echo $item['item_name'];
         				} else {
