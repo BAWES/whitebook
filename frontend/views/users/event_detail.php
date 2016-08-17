@@ -411,7 +411,7 @@ $this->registerJs("
 
         var pathUrl = '".Yii::$app->urlManager->createAbsoluteUrl('/eventinvitees/delete')."?id=' + invitee_id;
 
-        var r = confirm('".Yii::t('frontend', 'Are you sure want to delete this invitee?')."');
+        var r = confirm('".Yii::t('frontend', 'Are you sure you want to delete this invitee?')."');
 
         if (r == true) {
             jQuery.ajax({
@@ -494,7 +494,7 @@ $this->registerJs("
     /* BEGIN USER CAN DELETE THE ITEM FOR THE PARTICULAR EVENT */
     function deleteeventitem(item_link_id, category_name,category_id,event_id,tis)
     {
-        var r = confirm('".Yii::t('frontend', 'Are you sure delete this item?.')."');
+        var r = confirm('".Yii::t('frontend', 'Are you sure you want to delete this item?')."');
 
         if (r == true) {
 

@@ -11,9 +11,9 @@ $this->registerJs("
     var user_blocked_msg = '".Yii::t('frontend','User blocked')."';
     var email_not_match = '".Yii::t('frontend','Email and password does not match')."';
     var email_not_exist = '".Yii::t('frontend','Your email does not exist')."';
-    var success_fav_added1 = '".Yii::t('frontend','Success! Your are login and')."';
-    var success_fav_added2 = '".Yii::t('frontend','add to favourite successfully')."';
-    var reg_email = '".Yii::t('frontend','Enter registered email-id')."';
+    var success_fav_added1 = '".Yii::t('frontend','You are now logged in and')."';
+    var success_fav_added2 = '".Yii::t('frontend','Added to Things I like')."';
+    var reg_email = '".Yii::t('frontend','Enter registered email')."';
     var email_check = '".Url::toRoute('/users/email_check')."';
     var signup = '".Url::toRoute('/users/signup')."';
     var create_event = '".Url::toRoute('/users/create_event')."';
@@ -25,7 +25,7 @@ $this->registerJs("
     var forgot_password_url = '".Url::toRoute('users/forget_password')."';
     var receive_email = '".Yii::t("frontend","You will now receive an email to reset your password by email")."';
     var contact_admin = '".Yii::t("frontend","Entered email id not found in registred user email. Kindly contact admin!")."';
-    var reg_email_id = '".Yii::t('frontend','Enter registered Email-id')."';
+    var reg_email_id = '".Yii::t('frontend','Enter registered email')."';
     var search_result_url = '".Url::toRoute('/search-result/')."/';
     var home_url = '".Yii::$app->homeUrl."';
     var site_search = '".Url::toRoute('/site/search')."';
@@ -40,7 +40,7 @@ $this->registerJs("
     var event_name = '".Yii::$app->session->get('event_name')."';
     var item_name = '".Yii::$app->session->get('item_name')."';
 
-    var text_event = '".Yii::t("frontend","EVENT")."';
+    var text_event = '".Yii::t("frontend","Event")."';
     var created_successfully = '".Yii::t("frontend","CREATED SUCCESSFULL")."';
     var created_successfully_and = '".Yii::t("frontend","CREATED SUCCESSFULLY AND")."';
     var_added_to = '".Yii::t("frontend","ADDED TO")."';
@@ -51,17 +51,17 @@ $this->registerJs("
     var category = '".Yii::t('frontend','Category')."';
     var eventinvitees_url = '".Url::toRoute(['eventinvitees/index'])."';
     var eventinvitees_add_event_url = '".Url::toRoute(['/eventinvitees/addevent'])."';
-    var login_success_msg = '".Yii::t('frontend','Your Login successfully')."';
+    var login_success_msg = '".Yii::t('frontend','You are now logged in')."';
     var session_default = '".Yii::$app->session->get('default')."';
     var session_favourite_status = '".Yii::$app->session->get('favourite_status')."';
     var session_create_event = '".Yii::$app->session->get('create_event')."';
     var session_reset_password = '".Yii::$app->session->get('reset_password_mail')."';
     var session_final_reset = '".Yii::$app->session->get('final_reset')."';
     var session_register = '".Yii::$app->session->get('register')."';
-    var you_are_login_and = '".Yii::t('frontend','Success! Your are login and')."';
+    var you_are_login_and = '".Yii::t('frontend','You are now logged in and')."';
 
     var session_key = '".Yii::$app->session->get('key')."';
-    var add_to_favourite_successfully = '".Yii::t('frontend','add to favourite successfully!')."';
+    var add_to_favourite_successfully = '".Yii::t('frontend','Added to Things I like')."';
 
     var pwd_fail_msg = '".Yii::t('frontend','Password reset failed!')."';
     var product_add_event_url = '".Url::toRoute('product/addevent')."';

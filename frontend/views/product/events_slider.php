@@ -47,8 +47,8 @@ if(!Yii::$app->user->isGuest) {
 												<?php echo Yii::t('frontend','Things I like'); ?>
 												</a>
 												<?php } else {?>
-													<a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" data-target="#EventModal" title="CREATE YOUR FIRST EVENT" style="   float: left;    margin-left: 225px;    margin-top: 45px;    min-height: 30px;">
-														<?= Yii::t('frontend','CREATE YOUR FIRST EVENT'); ?>
+													<a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" data-target="#EventModal" title="Create Your First Event" style="   float: left;    margin-left: 225px;    margin-top: 45px;    min-height: 30px;">
+														<?= Yii::t('frontend','Create Your First Event'); ?>
 													</a>
 													<?php } ?>
 												</div>

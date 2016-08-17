@@ -23,13 +23,13 @@ use yii\widgets\ActiveForm;
     <div class="add_events_new">
         <a class="btn btn-default search-hide" onClick="Searchinvitee('<?php echo $event_details[0]['event_id']; ?>')" type="button" title="Search">
             <?= Yii::t('frontend', 'Search') ?>
-        </a> 
+        </a>
     </div>
 </div>
 <div class="col-md-1 padding0">
     <div class="add_events_new">
         <a class="btn btn-default search-hide" onClick="window.location.reload()" type="button" title="Reset">
-            <?= Yii::t('frontend', 'RESET') ?>
+            <?= Yii::t('frontend', 'Reset') ?>
         </a>
     </div>
 </div>

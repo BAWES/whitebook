@@ -14,7 +14,7 @@ use frontend\models\Users;
                     <span class="yellow_top"></span>
                 </div>
                 <h4 class="modal-title text-center" id="myModalLabel">
-                    <span><?= Yii::t('frontend', 'SIGN IN') ?></span>
+                    <span><?= Yii::t('frontend', 'Sign In') ?></span>
                 </h4>
             </div>
             <div class="modal-body">
@@ -76,7 +76,7 @@ use frontend\models\Users;
                 <div class="modal-header">
                     <button type="button" class="close"  id="reload_page1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div id="success" style="width: 360px;"><span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;"><?= Yii::t('frontend', 'YOUR ACCOUNT ACTIVATED SUCCESSFULLY') ?></span></div>
+                <div id="success" style="width: 360px;"><span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;"><?= Yii::t('frontend', 'Your account has been activated successfully') ?></span></div>
             </div>
         </div>
     </div>
@@ -106,13 +106,13 @@ use frontend\models\Users;
                             </div>
                             <div id="forgot_result" style="color:red"></div>
                             <div class="button-signin">
-                                <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();"><?= Yii::t('frontend', 'NEW USER') ?></button>
+                                <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();"><?= Yii::t('frontend', 'New User') ?></button>
                                 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="forgot_button" name="forgot_button"><?= Yii::t('frontend', 'Send') ?></button>
                             </div>
                             <div id="forgot_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="<?= Yii::t('frontend', 'Loader') ?>"></div>
 
                             <span class="text-center forgotpwd">
-                                <a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"><?= Yii::t('frontend', 'SIGN IN') ?></a>
+                                <a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"><?= Yii::t('frontend', 'Sign In') ?></a>
                             </span>
                             <div class="button-signin">
                             </div>
@@ -135,7 +135,7 @@ use frontend\models\Users;
                 <div class="text-center">
                     <span class="yellow_top"></span>
                 </div>
-                <h4 class="modal-title text-center" id="myModalLabel"><span><?= Yii::t('frontend', 'RESET PASSWORD') ?></span></h4>
+                <h4 class="modal-title text-center" id="myModalLabel"><span><?= Yii::t('frontend', 'Reset Password') ?></span></h4>
             </div>
             <div class="modal-body">
                 <form id="resetForm" name="resetForm" method="POST" class="form col-md-12 center-block">
@@ -147,7 +147,7 @@ use frontend\models\Users;
                             <span class="help-block"></span>
                         </div>
                         <div class="form-group">
-                            <label><?= Yii::t('frontend', 'CONFIRM PASSWORD') ?></label>
+                            <label><?= Yii::t('frontend', 'Confirm Password') ?></label>
                             <input type="password" placeholder="" name="confirm_password" id="confirm_password" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
                             <span class="help-block"></span>
                         </div>
@@ -210,7 +210,7 @@ use frontend\models\Users;
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12 padding-left0">
                             <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Date of Birth') ?></label>
+                                <label><?= Yii::t('frontend', 'Date of birth') ?></label>
                                 <div class="col-md-12 padding0 birth_date_drop">
                                     <ul class="padding0">
                                         <li class="day-select">
@@ -317,7 +317,7 @@ use frontend\models\Users;
                                 <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="<?= Yii::t('frontend', 'Loader') ?>"></div>
                                 <button type="button" id="register" name="register" class="btn btn-primary btn-lg btn-block login_btn"><?= Yii::t('frontend', 'Register') ?></button>
                             </div>
-                            <span class="text-center forgotpwd"><?= Yii::t('frontend', 'Already a member?') ?><a data-target="#myModal" onclick="show_mydata();" data-toggle="modal" title="<?= Yii::t('frontend', 'SIGN IN') ?>" class="actionButtons" href="">
+                            <span class="text-center forgotpwd"><?= Yii::t('frontend', 'Already a member?') ?><a data-target="#myModal" onclick="show_mydata();" data-toggle="modal" title="<?= Yii::t('frontend', 'Sign In') ?>" class="actionButtons" href="">
                                 <?= Yii::t('frontend', 'Sign in here') ?> </a></span>
 
                             </div>
@@ -379,8 +379,7 @@ use frontend\models\Users;
         <div class="bootom_footer">
             <div class="col-md-7 padding_left0">
                 <ul class="treams_of_ser margin_top">
-                    <li><a href="<?= Url::toRoute('/about-us',true);?>"> <?= Yii::t("frontend", "About Us") ?></a></li>
-                    <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "Contact & FAQ") ?></a></li>
+                    <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "About and Contact") ?></a></li>
                     <li><a href="<?= Url::toRoute('site/directory',true); ?>"> <?= Yii::t("frontend", "Directory") ?></a></li>
                 </ul>
                 <ul class="treams_of_ser">
@@ -401,8 +400,7 @@ use frontend\models\Users;
                 <div id="collapsefoot" class="panel-collapse collapse">
                     <ul class="treams_of_ser margin_top">
 
-                        <li><a href="<?= Url::toRoute('/about-us',true);?>"> <?= Yii::t("frontend", "About Us") ?></a></li>
-                        <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "Contact & FAQ") ?></a></li>
+                        <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "About and Contact") ?></a></li>
                         <li><a href="<?= Url::toRoute('/brands-product',true); ?>/"> <?= Yii::t("frontend", "Directory") ?></a></li>
                         <li><a href="<?= Url::toRoute('/terms-conditions',true);?>"><?= Yii::t("frontend", "Terms and Conditions") ?></a></li>
                         <li><a href="<?= Url::toRoute('/privacy-policy',true);?>"><?= Yii::t("frontend", "Privacy Policy") ?></a></li>
@@ -424,9 +422,9 @@ use frontend\models\Users;
     .datepicker{z-index:1151 !important;}
 </style>
 
-<?php 
+<?php
 
-require(__DIR__ . '/footer_js.php'); 
+require(__DIR__ . '/footer_js.php');
 
 $event=Yii::$app->session->get('event_name');
 
@@ -438,6 +436,6 @@ if(!empty($event)){
 
     Yii::$app->session->set('event_name','');
     Yii::$app->session->set('item_name','');
-} 
+}
 
 ?>
