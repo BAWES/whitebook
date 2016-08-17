@@ -157,7 +157,6 @@ class ShopController extends BaseController
         }
     }
 
-
     public function actionLoadItems()
     {
         if (Yii::$app->request->isAjax) {

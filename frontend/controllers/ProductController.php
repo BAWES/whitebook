@@ -143,34 +143,4 @@ class ProductController extends BaseController
             return $this->renderPartial('edit_event', array('edit_eventinfo' => $edit_eventinfo));
         }
     }
-
-    /* BEGIN DELIVERY TIME SLOT -- VENDOR */
-    public function actionGetdeliverytime()
-    {
-		$vendor_timeslot = Deliverytimeslot::find()
-		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
-		->where(['vendor_id' => $model['vendor_id']])
-		->asArray()->all();
-    }
-    /* END DELIVERY TIME SLOT -- VENDOR */
-    
-    public function actionGetdeliverytimeslot()
-    {
-        if (Yii::$app->request->isAjax) {
-        
-            $data = Yii::$app->request->post();
-            $string = $data['sel_date'];
-            $timestamp = strtotime($string);
-
-    		$vendor_timeslot = Deliverytimeslot::find()
-    		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
-    		->where(['vendor_id' => $data['vendor_id']])
-    		->andwhere(['timeslot_day' => date("l", $timestamp)])
-    		->asArray()->all();
-
-            foreach ($vendor_timeslot as $key => $value) {
-                echo '<option value="'.$value['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
-            }
-        }
-    }
 }

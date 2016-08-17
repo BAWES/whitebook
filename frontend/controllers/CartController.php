@@ -4,14 +4,15 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use common\models\Vendoritem;
-use frontend\models\Vendor;
-use common\models\City;
-use common\models\Location;
-use common\models\CustomerCart;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\response;
+use frontend\models\Vendor;
+use common\models\Vendoritem;
+use common\models\City;
+use common\models\Location;
+use common\models\CustomerCart;
+use common\models\Deliverytimeslot;
 
 class CartController extends BaseController
 {
@@ -179,6 +180,29 @@ class CartController extends BaseController
         }
 
         return $this->redirect(['index']);
+    }
+
+    /* 
+        Get delivery timeslot
+    */
+    public function actionGetdeliverytimeslot()
+    {
+        if (Yii::$app->request->isAjax) {
+        
+            $data = Yii::$app->request->post();
+            $string = $data['sel_date'];
+            $timestamp = strtotime($string);
+
+            $vendor_timeslot = Deliverytimeslot::find()
+            ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+            ->where(['vendor_id' => $data['vendor_id']])
+            ->andwhere(['timeslot_day' => date("l", $timestamp)])
+            ->asArray()->all();
+
+            foreach ($vendor_timeslot as $key => $value) {
+                echo '<option value="'.$value['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
+            }
+        }
     }
 }
 
