@@ -49,7 +49,7 @@ $this->title ='Account Setting | Whitebook';
 											?>
 											<div class="col-md-6 paddingright0">
 												<div class="form-group">
-													<label for="exampleInputPassword1"><?= Yii::t('frontend','Date of Birth'); ?></label>
+													<label for="exampleInputPassword1"><?= Yii::t('frontend','Date of birth'); ?></label>
 													<div class="col-md-3 col-xs-3 paddingleft0">
 														<div class="select_boxes">
 															<select name="bday_detail" id="bday_detail" class="selectpicker" data-size="10" data-style="btn-primary">
