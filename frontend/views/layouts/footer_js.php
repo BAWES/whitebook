@@ -5,7 +5,7 @@ use yii\web\View;
 
 $this->registerJs("
     var password_reset_link = '".Url::toRoute(['/users/password_reset'])."';
-    var pwd_reset_msg = '".Yii::t('frontend','Password reset and login successfully')."';
+    var pwd_reset_msg = '".Yii::t('frontend','Your password has been reset and you are now logged in')."';
     var user_login = '".Url::toRoute('/users/login')."';
     var not_activate_msg = '".Yii::t('frontend','Looks like you are not activated your account')."';
     var user_blocked_msg = '".Yii::t('frontend','User blocked')."';
@@ -41,9 +41,9 @@ $this->registerJs("
     var item_name = '".Yii::$app->session->get('item_name')."';
 
     var text_event = '".Yii::t("frontend","Event")."';
-    var created_successfully = '".Yii::t("frontend","CREATED SUCCESSFULL")."';
-    var created_successfully_and = '".Yii::t("frontend","CREATED SUCCESSFULLY AND")."';
-    var_added_to = '".Yii::t("frontend","ADDED TO")."';
+    var created_successfully = '".Yii::t("frontend","successfully created")."';
+    var created_successfully_and = '".Yii::t("frontend","successfully created and")."';
+    var_added_to = '".Yii::t("frontend","added to")."';
 
     var isGuest = '".Yii::$app->user->isGuest."';
     var add_event_url = '".Url::toRoute('/users/add_event')."';
@@ -67,7 +67,7 @@ $this->registerJs("
     var product_add_event_url = '".Url::toRoute('product/addevent')."';
     var session_event_status = '".Yii::$app->session->get('event_status')."';
     var reg_success_msg = '".Yii::t('frontend','Registration completed successfully.Confirmation link send to your registered email-id')."';
-    var pwd_success_msg = '".Yii::t('frontend','Password reset successfully. Your login successfully!')."';
+    var pwd_success_msg = '".Yii::t('frontend','Your password has been reset and you are now logged in')."';
 
     //language variables
     var tick_the_terms_of_services_and_privacy_policy = '".Yii::t('frontend','You must agree to the terms and conditions and the privacy policy')."';

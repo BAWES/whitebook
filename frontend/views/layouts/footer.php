@@ -46,7 +46,7 @@ use frontend\models\Users;
                                 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="login_button">
                                     <?= Yii::t('frontend','Login');?></button>
                                 </div>
-                                <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="<?= Yii::t('frontend', 'Loader') ?>"></div>
+                                <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
                                 <span class="text-center forgotpwd"><a data-target="#forgotPwdModal" onclick="forgot_modal();"  data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#forgotPwdModal"> <?= Yii::t('frontend', 'Forgot your password') ?></a></span>
                             </div>
                         </div>
@@ -94,7 +94,7 @@ use frontend\models\Users;
                         <span class="yellow_top"></span>
                     </div>
                     <h4 class="modal-title text-center" id="myModalLabel">
-                        <span><?= Yii::t('frontend', 'FORGOT PASSWORD') ?></span></h4>
+                        <span><?= Yii::t('frontend', 'Forgot Password') ?></span></h4>
                 </div>
                 <div class="modal-body">
                     <form id="forgotForm" name="forgotForm" method="POST" class="form col-md-12 center-block">
@@ -109,7 +109,7 @@ use frontend\models\Users;
                                 <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();"><?= Yii::t('frontend', 'New User') ?></button>
                                 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="forgot_button" name="forgot_button"><?= Yii::t('frontend', 'Send') ?></button>
                             </div>
-                            <div id="forgot_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="<?= Yii::t('frontend', 'Loader') ?>"></div>
+                            <div id="forgot_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 
                             <span class="text-center forgotpwd">
                                 <a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"><?= Yii::t('frontend', 'Sign In') ?></a>
@@ -155,7 +155,7 @@ use frontend\models\Users;
                         <div class="button-signin">
                             <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="reset_button" name="reset_button"><?= Yii::t('frontend', 'Submit') ?></button>
                         </div>
-                        <div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="<?= Yii::t('frontend', 'Loader') ?>"></div>
+                        <div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
                         <div class="button-signin">
                         </div>
                     </div>
@@ -266,7 +266,7 @@ use frontend\models\Users;
                                 <label><?= Yii::t('frontend', 'Gender') ?></label>
                                 <div class="col-md-12 padding0 gender-select">
                                     <select class="selectpicker" data-style="btn-primary" id="gender" name="gender" style="display: none;">
-                                        <option value=""><?= Yii::t('frontend', 'Choose Gender') ?></option>
+                                        <option value=""><?= Yii::t('frontend', 'Select Gender') ?></option>
                                         <option value="Male"><?= Yii::t('frontend', 'Male') ?></option>
                                         <option value="Female"><?= Yii::t('frontend', 'Female') ?></option>
                                     </select>
@@ -311,14 +311,14 @@ use frontend\models\Users;
                                 <div id="agree" class="error"></div>
                             </div>
 
-                            <div id="register_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::to('@web/images/ajax-loader.gif',true);?>"  title="<?= Yii::t('frontend', 'Loader') ?>"></div>
+                            <div id="register_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 
                             <div class="button-signin">
-                                <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="<?= Yii::t('frontend', 'Loader') ?>"></div>
+                                <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
                                 <button type="button" id="register" name="register" class="btn btn-primary btn-lg btn-block login_btn"><?= Yii::t('frontend', 'Register') ?></button>
                             </div>
                             <span class="text-center forgotpwd"><?= Yii::t('frontend', 'Already a member?') ?><a data-target="#myModal" onclick="show_mydata();" data-toggle="modal" title="<?= Yii::t('frontend', 'Sign In') ?>" class="actionButtons" href="">
-                                <?= Yii::t('frontend', 'Sign in here') ?> </a></span>
+                                <?= Yii::t('frontend', 'Sign In') ?> </a></span>
 
                             </div>
                         </div>
