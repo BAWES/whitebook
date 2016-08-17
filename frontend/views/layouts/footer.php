@@ -307,7 +307,7 @@ use frontend\models\Users;
                         <div class="form-group">
                            <div class="i-agree text-center col-xs-12">
                             <label for="checkbox-50" class="label_check c_off" id="label_check1">
-                                <input type="checkbox" id="agree_terms" name="agree_terms" value="0"><?= Yii::t('frontend', 'I agree to the') ?> </label> <a href="<?=  Url::toRoute('/privacy-policy',true);?>" title="<?= Yii::t('frontend', 'Privacy Policy') ?>">&nbsp;<?= Yii::t('frontend', 'Privacy Policy') ?>&nbsp;</a>&amp;<a href="<?=  Url::toRoute('/terms-conditions',true);?>" title="<?= Yii::t('frontend', 'Terms of Service') ?>">&nbsp;<?= Yii::t('frontend', 'Terms of Service') ?></a>
+                                <input type="checkbox" id="agree_terms" name="agree_terms" value="0"><?= Yii::t('frontend', 'I agree to the') ?> </label> <a href="<?=  Url::toRoute('/privacy-policy',true);?>" title="<?= Yii::t('frontend', 'Privacy Policy') ?>">&nbsp;<?= Yii::t('frontend', 'Privacy Policy') ?>&nbsp;</a>&amp;<a href="<?=  Url::toRoute('/terms-conditions',true);?>" title="<?= Yii::t('frontend', 'Terms and Conditions') ?>">&nbsp;<?= Yii::t('frontend', 'Terms and Conditions') ?></a>
                                 <div id="agree" class="error"></div>
                             </div>
 

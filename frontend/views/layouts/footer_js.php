@@ -70,13 +70,13 @@ $this->registerJs("
     var pwd_success_msg = '".Yii::t('frontend','Password reset successfully. Your login successfully!')."';
 
     //language variables
-    var tick_the_terms_of_services_and_privacy_policy = '".Yii::t('frontend','Tick the terms of services and privacy policy')."';
+    var tick_the_terms_of_services_and_privacy_policy = '".Yii::t('frontend','You must agree to the terms and conditions and the privacy policy')."';
 
     var password_should_contain_minimum_six_letters = '".Yii::t('frontend','Password should contain minimum six letters')."';
 
-    var confirm_password_should_be_equal_to_password  = '".Yii::t('frontend','Confirm password should be equal to password')."';
+    var confirm_password_should_be_equal_to_password  = '".Yii::t('frontend','Password and confirm password should match')."';
 
-    var password_and_confirm_password_should_be_minimum_six_letters_and_same = '".Yii::t('frontend','Password and Confirm password should be minimum six letters and same')."';
+    var password_and_confirm_password_should_be_minimum_six_letters_and_same = '".Yii::t('frontend','Password and confirm password should match and contain a minimum of 6 letters')."';
 
     var the_field_is_required = '".Yii::t('frontend','The field is required')."';
 
