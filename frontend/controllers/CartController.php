@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use yii\web\response;
+use yii\web\Response;
 use frontend\models\Vendor;
 use common\models\Vendoritem;
 use common\models\City;
