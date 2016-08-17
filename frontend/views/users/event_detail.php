@@ -358,11 +358,11 @@ $this->registerJs("
 
         if(jQuery('#invitees_email').val() =='')
         {
-            alert('".Yii::t('frontend', 'Enter invitees email id')."');
+            alert('".Yii::t('frontend', 'Enter invitees email')."');
             return false;
 
         } else if(isEmail(jQuery('#invitees_email').val()) == false ){
-            alert('".Yii::t('frontend', 'Enter valid email id')."');
+            alert('".Yii::t('frontend', 'Enter valid email')."');
             return false;
         }
 

@@ -25,7 +25,7 @@ $this->title = 'Contact us | Whitebook';
                             </div>
 
                             <div class="form-group">
-                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter valid email address!'); ?>" />
+                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter valid Email!'); ?>" />
                                 <div id="chkemail" class="error"></div>
                             </div>
 
@@ -121,7 +121,7 @@ $this->registerJs("
         }
         else
         {
-            jQuery('#chkemail').html('".Yii::t('frontend', 'Enter valid email address!')."');
+            jQuery('#chkemail').html('".Yii::t('frontend', 'Enter valid Email!')."');
             i = 1;
             j = 1;
         }
@@ -163,7 +163,7 @@ $this->registerJs("
                     if (data == 1)
                     {
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">".Yii::t('frontend', 'Contact enquiry information send successfully!')."</span>');
+                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">".Yii::t('frontend', 'Thank! We will be in touch soon!')."</span>');
                         window.setTimeout(function () {
                             location.reload()
                         }, 2000)
