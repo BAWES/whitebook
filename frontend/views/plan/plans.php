@@ -60,7 +60,7 @@ use yii\helpers\Html;
                 <li>
                     <a href="<?= Url::to(["plan/plan", 'slug' => 'others']); ?>" style="width: 40px;">
                         <span class="other1"></span>
-                        <?= Yii::t("frontend", "Other") ?>
+                        <?= Yii::t("frontend", "Others") ?>
                     </a>
                 </li>
                 <li>

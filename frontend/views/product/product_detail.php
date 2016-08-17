@@ -239,7 +239,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                         <!-- Add to favourite start -->
 
                                         <?php if (Yii::$app->user->isGuest) { ?>
-                                            <a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id']; ?>);"  title="<?php echo Yii::t('frontend', 'Add to Favorite'); ?>">
+                                            <a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id']; ?>);"  title="<?php echo Yii::t('frontend', 'Add to Things I like'); ?>">
                                                 <span class="heart-product"></span>
                                             </a>
                                         <?php
@@ -250,7 +250,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                             }
                                             $result = array_search($model['item_id'], $k);
                                             ?>
-                                            <a class="faver_evnt_product" href="javascript:;"  title="<?php echo Yii::t('frontend', 'Add to Favorite'); ?>" id="<?php echo $model['item_id']; ?>">
+                                            <a class="faver_evnt_product" href="javascript:;"  title="<?php echo Yii::t('frontend', 'Add to Things I like'); ?>" id="<?php echo $model['item_id']; ?>">
                                                 <span class="<?php if (is_numeric($result)) {
                                                     echo "heart-product heart-product-hover";
                                                 } else {

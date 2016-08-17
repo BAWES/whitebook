@@ -50,7 +50,7 @@ AppAsset::register($this);
 		<div class="form-group col-md-12">
 		<?= $form->field($model, 'vendor_contact_email', [
 		'template' => "{label}<div class='controls'><div class='input-with-icon  right'><i class=''></i></div></div>{input}\n{hint}\n{error}"
-		])->textInput(array('placeholder' => 'Enter your email id','class'=> 'form-control','id' => 'txtemail'));  ?>
+		])->textInput(array('placeholder' => 'Enter your email','class'=> 'form-control','id' => 'txtemail'));  ?>
         </div>
         <div class="col-md-5">
 			<?= Html::submitButton('Recovery password',['class' => 'btn btn-lg btn-success btn-block', 'name' => 'login-button']) ?>
