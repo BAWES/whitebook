@@ -27,7 +27,7 @@ use yii\web\view;
 <?php
 
 $this->params['breadcrumbs'][] = [
-    'label' => ucfirst($slug), 
+    'label' => ucfirst($slug),
     'url' => Yii::$app->homeUrl.'/Event details/'.$slug
 ];
 
@@ -50,7 +50,7 @@ echo Breadcrumbs::widget([
 <div class="col-md-10 padding0">
 <div class="events_inner_descript">
     <h3>
-        <?php echo $event_details[0]['event_name']; ?> 
+        <?php echo $event_details[0]['event_name']; ?>
         <a class="edit_content" href="#" title="( Edit )" onclick="editevent(<?php echo $event_details[0]['event_id'];?>)">( Edit )</a>
     </h3>
     <p><?php echo date('d-m-Y',strtotime($event_details[0]['event_date'])); ?></p>
@@ -100,9 +100,9 @@ $cat_list1=Vendoritem::find()->select(['{{%vendor_item}}.item_id'])
 <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapse<?= $key ?>" aria-expanded="false" aria-controls="collapse<?= $key ?>" class="collapsed">
 
 <?php if(Yii::$app->language == "en"){
-        echo $value1['category_name'].' - '.'<span data-cateogry-id="'.$value1['category_id'].'" id="item_count">' .count($cat_list1). '</span>'; 
+        echo $value1['category_name'].' - '.'<span data-cateogry-id="'.$value1['category_id'].'" id="item_count">' .count($cat_list1). '</span>';
       }else{
-        echo $value1['category_name_ar'].' - '.'<span id="item_count">' .count($cat_list1). '</span>'; 
+        echo $value1['category_name_ar'].' - '.'<span id="item_count">' .count($cat_list1). '</span>';
       }
 ?>
 
@@ -184,7 +184,7 @@ Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/
 </div>
 </div>
 </li>
-<?php } }  
+<?php } }
 $imageData=array();
 }
 ?>
@@ -294,7 +294,7 @@ $imageData=array();
                     'attribute' => 'email:email',
                 ],
                 [
-                    'header' => Yii::t('frontend', 'PHONE NUMBER'),
+                    'header' => Yii::t('frontend', 'Phone'),
                     'attribute' => 'phone_number',
                 ],
                 [
@@ -316,7 +316,7 @@ $imageData=array();
                             //'class'=>'btn btn-primary btn-xs',
                             ]);
                         },
-                    ], 
+                    ],
                 ],
             ],
         ]); ?>
@@ -349,7 +349,7 @@ $this->registerJs("
     function addinvitees()
     {
         var action = '';
-        
+
         if(jQuery('#invitees_name').val() =='')
         {
             alert('".Yii::t('frontend', 'Enter invitees name.')."');
@@ -360,7 +360,7 @@ $this->registerJs("
         {
             alert('".Yii::t('frontend', 'Enter invitees email id')."');
             return false;
-        
+
         } else if(isEmail(jQuery('#invitees_email').val()) == false ){
             alert('".Yii::t('frontend', 'Enter valid email id')."');
             return false;
@@ -383,7 +383,7 @@ $this->registerJs("
         type :'POST',
         url:path,
         data: {
-            invitees_id: jQuery('#invitees_id').val(), 
+            invitees_id: jQuery('#invitees_id').val(),
             event_id: event_id,
             name: jQuery('#invitees_name').val(),
             email:jQuery('#invitees_email').val(),
@@ -408,11 +408,11 @@ $this->registerJs("
     }
 
     function deleteinvitee(invitee_id){
-        
+
         var pathUrl = '".Yii::$app->urlManager->createAbsoluteUrl('/eventinvitees/delete')."?id=' + invitee_id;
-        
+
         var r = confirm('".Yii::t('frontend', 'Are you sure want to delete this invitee?')."');
-        
+
         if (r == true) {
             jQuery.ajax({
                 url: pathUrl,
@@ -431,7 +431,7 @@ $this->registerJs("
     function updateinvitee(invitee_id)
     {
         var pathUrl = '".Yii::$app->urlManager->createAbsoluteUrl('/eventinvitees/inviteedetails')."';
-        
+
         jQuery.ajax({
             url: pathUrl,
             type : 'POST',
@@ -486,7 +486,7 @@ $this->registerJs("
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         return regex.test(email);
     }
-    
+
     jQuery('label#search-labl3').click(function(){
         jQuery.pjax.reload({container:'#invitee-grid'});
     });
@@ -495,7 +495,7 @@ $this->registerJs("
     function deleteeventitem(item_link_id, category_name,category_id,event_id,tis)
     {
         var r = confirm('".Yii::t('frontend', 'Are you sure delete this item?.')."');
-        
+
         if (r == true) {
 
             jQuery.ajax({

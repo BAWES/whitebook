@@ -28,7 +28,7 @@ $this->registerJs("
     var reg_email_id = '".Yii::t('frontend','Enter registered Email-id')."';
     var search_result_url = '".Url::toRoute('/search-result/')."/';
     var home_url = '".Yii::$app->homeUrl."';
-    var site_search = '".Url::toRoute('/site/search')."';             
+    var site_search = '".Url::toRoute('/site/search')."';
     var event_slider_url = '".Url::toRoute('/product/event_slider')."';
     var item_removed_fav = '".Yii::t('frontend','Item remove from your favourite list')."';
     var remove_from_wishlist = '".Url::toRoute('/users/remove_from_wishlist')."';
@@ -36,10 +36,10 @@ $this->registerJs("
     var item_add_to_wishlist_already_exist = '".Yii::t('frontend','Item already exists to this event!')."';
     var item_add_to_wishlist_success = '".Yii::t('frontend','Item add to your event list!')."';
     var add_to_wishlist_url = '".Url::toRoute('/users/add_to_wishlist')."';
-    var giflink = '".Url::to("@web/images/ajax-loader.gif")."';  
+    var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
     var event_name = '".Yii::$app->session->get('event_name')."';
     var item_name = '".Yii::$app->session->get('item_name')."';
-    
+
     var text_event = '".Yii::t("frontend","EVENT")."';
     var created_successfully = '".Yii::t("frontend","CREATED SUCCESSFULL")."';
     var created_successfully_and = '".Yii::t("frontend","CREATED SUCCESSFULLY AND")."';
@@ -48,7 +48,7 @@ $this->registerJs("
     var isGuest = '".Yii::$app->user->isGuest."';
     var add_event_url = '".Url::toRoute('/users/add_event')."';
     var successfully_added_to = '".Yii::t('frontend',' successfully added to ')."';
-    var category = '".Yii::t('frontend','CATEGORY')."';
+    var category = '".Yii::t('frontend','Category')."';
     var eventinvitees_url = '".Url::toRoute(['eventinvitees/index'])."';
     var eventinvitees_add_event_url = '".Url::toRoute(['/eventinvitees/addevent'])."';
     var login_success_msg = '".Yii::t('frontend','Your Login successfully')."';
@@ -62,14 +62,14 @@ $this->registerJs("
 
     var session_key = '".Yii::$app->session->get('key')."';
     var add_to_favourite_successfully = '".Yii::t('frontend','add to favourite successfully!')."';
-        
+
     var pwd_fail_msg = '".Yii::t('frontend','Password reset failed!')."';
     var product_add_event_url = '".Url::toRoute('product/addevent')."';
     var session_event_status = '".Yii::$app->session->get('event_status')."';
     var reg_success_msg = '".Yii::t('frontend','Registration completed successfully.Confirmation link send to your registered email-id')."';
     var pwd_success_msg = '".Yii::t('frontend','Password reset successfully. Your login successfully!')."';
 
-    //language variables 
+    //language variables
     var tick_the_terms_of_services_and_privacy_policy = '".Yii::t('frontend','Tick the terms of services and privacy policy')."';
 
     var password_should_contain_minimum_six_letters = '".Yii::t('frontend','Password should contain minimum six letters')."';
@@ -87,13 +87,13 @@ $this->registerJs("
     var kindly_select_event_type = '".Yii::t('frontend', 'Kindly select Event type')."';
 
     var no_record_found = '".Yii::t('frontend', 'No Record found')."';
-    
+
 
 ", View::POS_HEAD);
 
 Yii::$app->session->set('default',0);
 Yii::$app->session->set('favourite_status','');
-Yii::$app->session->set('create_event','0'); 
+Yii::$app->session->set('create_event','0');
 Yii::$app->session->set('reset_password_mail','');
 Yii::$app->session->set('event_status','0');
 Yii::$app->session->set('reset_password_mail','');

@@ -60,7 +60,7 @@ use frontend\models\Website;
                                         <button type="button" id="update_event_button" name="update_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'UPDATE_EVENT'); ?>"><?php echo Yii::t('frontend', 'UPDATE_EVENT'); ?></button>
                                     </div>
                                     <div class="cancel_sig">
-                                        <input class="btn btn-default" data-dismiss="modal" type="button" value="<?php echo Yii::t('frontend', 'CANCEL'); ?>" title="<?php echo Yii::t('frontend', 'CANCEL'); ?>">
+                                        <input class="btn btn-default" data-dismiss="modal" type="button" value="<?php echo Yii::t('frontend', 'Cancel'); ?>" title="<?php echo Yii::t('frontend', 'Cancel'); ?>">
                                     </div>
                                 </div>
                             </form>
