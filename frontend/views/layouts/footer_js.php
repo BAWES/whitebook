@@ -7,7 +7,7 @@ $this->registerJs("
     var password_reset_link = '".Url::toRoute(['/users/password_reset'])."';
     var pwd_reset_msg = '".Yii::t('frontend','Your password has been reset and you are now logged in')."';
     var user_login = '".Url::toRoute('/users/login')."';
-    var not_activate_msg = '".Yii::t('frontend','Looks like you are not activated your account')."';
+    var not_activate_msg = '".Yii::t('frontend','Your account is inactive, please activate your account by verifying your email')."';
     var user_blocked_msg = '".Yii::t('frontend','User blocked')."';
     var email_not_match = '".Yii::t('frontend','Email and password does not match')."';
     var email_not_exist = '".Yii::t('frontend','Your email does not exist')."';
@@ -24,17 +24,17 @@ $this->registerJs("
     var event_details = '".Yii::$app->homeUrl."/event-details/';
     var forgot_password_url = '".Url::toRoute('users/forget_password')."';
     var receive_email = '".Yii::t("frontend","You will now receive an email to reset your password by email")."';
-    var contact_admin = '".Yii::t("frontend","Entered email not found in registred user email. Kindly contact admin!")."';
+    var contact_admin = '".Yii::t("frontend","Email not found")."';
     var reg_email_id = '".Yii::t('frontend','Enter registered email')."';
     var search_result_url = '".Url::toRoute('/search-result/')."/';
     var home_url = '".Yii::$app->homeUrl."';
     var site_search = '".Url::toRoute('/site/search')."';
     var event_slider_url = '".Url::toRoute('/product/event_slider')."';
-    var item_removed_fav = '".Yii::t('frontend','Item remove from your favourite list')."';
+    var item_removed_fav = '".Yii::t('frontend','Item removed from Things I like')."';
     var remove_from_wishlist = '".Url::toRoute('/users/remove_from_wishlist')."';
-    var item_add_to_wishlist_failed = '".Yii::t('frontend','Item add to your event list is failed')."';
-    var item_add_to_wishlist_already_exist = '".Yii::t('frontend','Item already exists to this event!')."';
-    var item_add_to_wishlist_success = '".Yii::t('frontend','Item add to your event list!')."';
+    var item_add_to_wishlist_failed = '".Yii::t('frontend','Failed adding the item to your event list')."';
+    var item_add_to_wishlist_already_exist = '".Yii::t('frontend','Item already exists in this event')."';
+    var item_add_to_wishlist_success = '".Yii::t('frontend','Item has been added to your event')."';
     var add_to_wishlist_url = '".Url::toRoute('/users/add_to_wishlist')."';
     var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
     var event_name = '".Yii::$app->session->get('event_name')."';
@@ -66,7 +66,7 @@ $this->registerJs("
     var pwd_fail_msg = '".Yii::t('frontend','Password reset failed!')."';
     var product_add_event_url = '".Url::toRoute('product/addevent')."';
     var session_event_status = '".Yii::$app->session->get('event_status')."';
-    var reg_success_msg = '".Yii::t('frontend','Registration completed successfully.Confirmation link send to your registered email-id')."';
+    var reg_success_msg = '".Yii::t('frontend','A confirmation link will be sent to your email to activate your account')."';
     var pwd_success_msg = '".Yii::t('frontend','Your password has been reset and you are now logged in')."';
 
     //language variables
@@ -80,7 +80,7 @@ $this->registerJs("
 
     var the_field_is_required = '".Yii::t('frontend','The field is required')."';
 
-    var entered_email_id_is_already_exists = '".Yii::t('frontend', 'Entered email is already exists')."';
+    var entered_email_id_is_already_exists = '".Yii::t('frontend', 'Email already exists')."';
 
     var enter_a_valid_email_id = '".Yii::t('frontend', 'Enter a valid email')."';
 

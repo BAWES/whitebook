@@ -163,7 +163,7 @@ $this->registerJs("
                     if (data == 1)
                     {
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">".Yii::t('frontend', 'Contact enquiry information send successfully!')."</span>');
+                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">".Yii::t('frontend', 'Thank! We will be in touch soon!')."</span>');
                         window.setTimeout(function () {
                             location.reload()
                         }, 2000)

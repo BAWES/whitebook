@@ -106,9 +106,9 @@ $action = Yii::$app->controller->action->id;
                                             </a>
                                         </li>
                                         <li>
-                                            <a title="<?php echo Yii::t('frontend', 'Food and Beverage'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'food-beverage']); ?>">
+                                            <a title="<?php echo Yii::t('frontend', 'Food & Beverage'); ?>" href="<?= Url::to(["plan/plan", 'slug' => 'food-beverage']); ?>">
                                                 <span class="food_map"></span>
-                                                <span><?php echo Yii::t('frontend', 'Food and Beverage') ?></span>
+                                                <span><?php echo Yii::t('frontend', 'Food & Beverage') ?></span>
                                             </a>
                                         </li>
                                         <li>
