@@ -1,5 +1,6 @@
 <?php
 namespace backend\models;
+use common\models\VendorItemCapacityException;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -44,7 +45,7 @@ class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacit
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
-        $query = Vendoritemcapacityexception::find()
+        $query = VendorItemCapacityException::find()
             ->orderBy(['exception_id' => SORT_DESC]);
 
         $dataProvider = new ActiveDataProvider([

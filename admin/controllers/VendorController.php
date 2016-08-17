@@ -13,7 +13,7 @@ use admin\models\Category;
 use admin\models\VendorSearch;
 use common\models\Vendorpackages;
 use admin\models\Package;
-use common\models\VendoritemcapacityexceptionSearch;
+use common\models\VendorItemCapacityExceptionSearch;
 use common\models\VendoritemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -100,7 +100,7 @@ class VendorController extends Controller
         $searchModel2 = new VendorpackagesSearch();
         $dataProvider2 = $searchModel2->vendorviewsearch(Yii::$app->request->queryParams, $id);
 
-        $searchModel3 = new VendoritemcapacityexceptionSearch();
+        $searchModel3 = new VendorItemCapacityExceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
         
         //print_r($dataProvider3);die;
