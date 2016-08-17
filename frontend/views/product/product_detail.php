@@ -26,7 +26,7 @@ if(Yii::$app->language == "en"){
     $item_description = strip_tags($model['item_description_ar']);
     $item_additional_info = strip_tags($model['item_additional_info_ar']);
     $vendor_contact_address = $vendor_det['vendor_contact_address_ar'];
-}             
+}
 
 $this->title = 'Whitebook - ' . $item_name;
 
@@ -42,17 +42,17 @@ $this->title = 'Whitebook - ' . $item_name;
     </div>
 
     <div class="container paddng0">
-       
+
         <div class="breadcrumb_common">
             <div class="bs-example">
 
                 <?php
-                
+
                 $this->params['breadcrumbs'][] = [
-                    'label' => ucfirst($category_name), 
+                    'label' => ucfirst($category_name),
                     'url' => Url::to(["plan/plan", 'slug' => $category_det['slug']])
                 ];
-                
+
                 $this->params['breadcrumbs'][] = ucfirst($item_name);
                 ?>
 
@@ -179,7 +179,7 @@ $this->title = 'Whitebook - ' . $item_name;
                             <?php } ?>
                                 </ul>
                             </div>
-    
+
                             <?php if ($img_count > 1) { ?>
                                 <div id="carousel" class="flexslider display_none_thumb">
                                     <ul class="slides">
@@ -197,7 +197,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                 $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
                                             }
                                             ?>
-                                            <li>    
+                                            <li>
                                                 <img src="<?php echo $baselink; ?>" alt="item detail image">
                                             </li>
                                         <?php } ?>
@@ -239,7 +239,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                         <!-- Add to favourite start -->
 
                                         <?php if (Yii::$app->user->isGuest) { ?>
-                                            <a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id']; ?>);"  title="<?php echo Yii::t('frontend', 'Add to Favourite'); ?>">
+                                            <a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id']; ?>);"  title="<?php echo Yii::t('frontend', 'Add to Favorite'); ?>">
                                                 <span class="heart-product"></span>
                                             </a>
                                         <?php
@@ -250,7 +250,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                             }
                                             $result = array_search($model['item_id'], $k);
                                             ?>
-                                            <a class="faver_evnt_product" href="javascript:;"  title="<?php echo Yii::t('frontend', 'Add to Favourite'); ?>" id="<?php echo $model['item_id']; ?>">
+                                            <a class="faver_evnt_product" href="javascript:;"  title="<?php echo Yii::t('frontend', 'Add to Favorite'); ?>" id="<?php echo $model['item_id']; ?>">
                                                 <span class="<?php if (is_numeric($result)) {
                                                     echo "heart-product heart-product-hover";
                                                 } else {
@@ -279,9 +279,9 @@ $this->title = 'Whitebook - ' . $item_name;
                                             </div>
                                         <?php } else if ($avlbl_stock > 0) { ?>
                                             <div class="buy_events">
-                                                <a href="#" 
-                                                    id="<?php echo $model['item_id']; ?>" 
-                                                    class="buy_item" 
+                                                <a href="#"
+                                                    id="<?php echo $model['item_id']; ?>"
+                                                    class="buy_item"
                                                     data-slug="<?php echo $model['slug']; ?>">
                                                         <?= Yii::t('frontend', 'Buy') ?>
                                                 </a>
@@ -300,10 +300,10 @@ $this->title = 'Whitebook - ' . $item_name;
                                                     <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                          <?= Yii::t('frontend', 'Product Description') ?>
                                                         <span class="produ_type">
-                                                        ( 
-                                                            <?= Yii::t('frontend', 'Product type') ?>: 
+                                                        (
+                                                            <?= Yii::t('frontend', 'Product type') ?>:
                                                             <?= Yii::t(
-                                                                    'frontend', 
+                                                                    'frontend',
                                                                     Itemtype::itemtypename($model['type_id'])
                                                                 );
                                                             ?>
@@ -339,8 +339,8 @@ $this->title = 'Whitebook - ' . $item_name;
                                         </div>
 
                                         <?php } ?>
-                                        
-                                        <?php 
+
+                                        <?php
 
                                         if ($vendor_det['vendor_contact_number'] || $vendor_contact_address) {
                                         ?>
@@ -360,11 +360,11 @@ $this->title = 'Whitebook - ' . $item_name;
                                                     </p>
                                                     <p>
                                                         <?php
-                                                    
+
                                                         $num = explode(
                                                             ',', $vendor_det['vendor_contact_number']);
-                                                        
-                                                        echo $num[0]; 
+
+                                                        echo $num[0];
 
                                                         ?>
                                                     </p>
@@ -375,8 +375,8 @@ $this->title = 'Whitebook - ' . $item_name;
                                         <?php } ?>
 
                                         <?php if (Vendoritempricing::checkprice(
-                                                    $model->item_id, 
-                                                    $model->type_id, 
+                                                    $model->item_id,
+                                                    $model->type_id,
                                                     $model->item_price_per_unit
                                                   )
                                               ) { ?>
@@ -397,7 +397,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                             </div>
                                         </div>
                                         <?php } ?>
-                                        
+
                                         <?php if (!empty($model['item_customization_description'])) { ?>
                                         <div class="panel panel-default">
                                             <div class="panel-heading" role="tab" id="headingFive">
@@ -440,12 +440,12 @@ $this->title = 'Whitebook - ' . $item_name;
                                     <li><a  title="Twitter" href="https://twitter.com/share" class="twitter" target="_blank" data-url="<?php echo $url; ?>" data-text="<?php echo $title; ?>" data-lang="en" data-size="medium" data-count="none"><span class="flaticon-twitter13"></span></a></li>
 
                                     <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
-                                    
+
                                     <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
-                                    
+
                                     <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>
                                            " title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
-                                    
+
                                     <li><a href="mailto:<?= $social_vendor->vendor_contact_email; ?>" title="<?= $social_vendor->vendor_contact_email; ?>"><i class="flaticon-email5"></i> </a></li>
                                 </ul>
                             </div>
@@ -464,15 +464,15 @@ $this->title = 'Whitebook - ' . $item_name;
                     <div class="feature_product_slider">
                         <div id="similar-products-slider">
                             <?php
-                            
+
                             foreach ($similiar_item as $s) {
-                                
+
                                 $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
-                                
+
                                 $command = Yii::$app->DB->createCommand($sql);
-                                
+
                                 $out = $command->queryAll();
-                                
+
                                 if ($out) {
                                     $imglink = Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
                                     $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $out[0]['image_path'];
@@ -486,15 +486,15 @@ $this->title = 'Whitebook - ' . $item_name;
                                     <div class="fetu_product_list">
                                         <?php if ($s['slug'] != '') { ?>
                                             <a href="<?= Url::to(["product/product", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
-                                                
+
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
-                                        
+
                                                 <?php if (file_exists($imglink)) { ?>
                                                     <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
                                                 <?php } ?>
 
                                                 <div class="deals_listing_cont">
-                                                    
+
                                                     <?php if(Yii::$app->language == "en"){ ?>
                                                         <?= $s['vname']; ?>
                                                         <h3><?= $s['iname']; ?></h3>
@@ -509,7 +509,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                         <?php } ?>
                                     </div>
                                 </div>
-                            <?php 
+                            <?php
                             }//END foreach ?>
                         </div>
                     </div>
@@ -525,7 +525,7 @@ $this->title = 'Whitebook - ' . $item_name;
 <?php
 
 $this->registerJs("
-    
+
     var isGuest = ".(int)Yii::$app->user->isGuest.";
 
     var vendor_id = '".$model['vendor_id']."';

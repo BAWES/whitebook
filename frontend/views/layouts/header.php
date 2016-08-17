@@ -269,7 +269,7 @@ echo $search_div;
                 <div class="text-center">
                     <span class="yellow_top"></span>
                 </div>
-                <h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend', 'CREATE NEW EVENT'); ?></h4>
+                <h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend', 'Create New Event'); ?></h4>
             </div>
             <div class="modal-body">
                 <div class="row">
