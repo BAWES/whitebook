@@ -12,8 +12,8 @@ $this->title = $title . ' | Whitebook';
             <div class="title_main">
                 <h1><?= $title ?></h1>
             </div>
-            <div class="about_content_sec">
-                <h5><?= $content ?></h5>
+            <div class="about_content_sec" style="font-family: 'OpenSansRegular' !important">
+                <?= $content ?>
             </div>
         </div>
     </div>
