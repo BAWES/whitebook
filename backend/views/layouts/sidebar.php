@@ -1,8 +1,10 @@
-  <?php
- use yii\helpers\Html;
- use common\models\Vendor;
- use common\models\Vendoritem;
- ?>
+<?php
+use yii\helpers\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use common\models\Vendor;
+use common\models\Vendoritem;
+?>
  	<!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->
 	<div class="page-sidebar" id="main-menu">
@@ -15,13 +17,6 @@
 			</div>
 		</div>
 		<?php
-		$action = $this->context->action->id;
-		$controller = get_class($this->context);
-		$action = $this->context->action->id;
-		$menu = explode('\\',$controller);
-		$menu_act = $menu[2];
-		$second_menu = array('vendoraddressController','LocationController');
-		$first_menu = array('VendoritemController');
 
 		/* BEGIN Check vendor have any one item. !imporatnt for menus */
 		$checkone = Vendoritem::find()->where(['vendor_id'=>Yii::$app->user->getId(),'item_approved'=>'Yes','item_for_sale'=>'Yes'])->count();
@@ -30,41 +25,31 @@
 		<!-- END MINI-PROFILE -->
 		<!-- BEGIN SIDEBAR MENU -->
 		<p class="menu-title">NAVIGATION</p>
-		<ul>
-			<li class="<?php if ($menu_act == 'DefaultController'  && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
-			</li>
-			<li class="<?php if($menu_act == 'VendoritemController') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="fa fa-certificate"></i><span class="title">Manage Item</span>', ['vendoritem/index'], ['class'=>'link-title']) ?>
-			</li>
 
-			<li class="<?php if ($menu_act == 'VendorlocationController'  && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', ['vendorlocation/edit'], ['class'=>'link-title']) ?>
-			</li>
-			<!-- Manage Address End-->
-			<?php if($checkone > 0) { ?>
-			<li class="<?php if ($menu_act == 'DeliverytimeslotController') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="fa fa-clock-o"></i><span class="title">Delivery Time slot</span>', ['deliverytimeslot/index'], ['class'=>'link-title']) ?>
-			</li>
-			<li class="<?php if ($menu_act == 'VendoritemcapacityexceptionController'  && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('<i class="fa fa-calendar-o"></i><span class="title">Exception Dates</span>', ['vendoritemcapacityexception/index'], ['class'=>'link-title']) ?>
-			</li>
-			<!-- Block date management-->
-			<li class="<?php if ($menu_act == 'BlockeddateController' && $action == 'createweek') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="fa fa-anchor"></i><span class="title">Weekly Off</span>', ['blockeddate/createweek'], ['class'=>'link-title']) ?>
-			</li>
-			<li class="<?php if ($menu_act == 'BlockeddateController' && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="fa fa-film"></i><span class="title">Block Date</span>', ['blockeddate/index'], ['class'=>'link-title']) ?>
-			</li>
-			<!-- block date management-->
-			<?php } ?>
-			<li class="<?php if ($menu_act == 'VendorpackagesController') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="fa fa-book"></i><span class="title">My Package</span>', ['vendorpackages/index'], ['class'=>'link-title']) ?>
-			</li>
-			<li class="<?php if ($menu_act == 'DefaultController'  && $action == 'profile') {echo "active"; } else  {echo "noactive";}?>">
-				<?= Html::a('<i class="fa fa-university"></i><span class="title">My Profile</span>', ['site/profile'], ['class'=>'link-title']) ?>
-			</li>
-		</ul>
+			  <?php
+			  $menuItems = [
+				  ['label' => '<i class="icon-custom-home"></i><span class="title">Dashboard</span>', 'url' => ['/site/index']],
+				  ['label' => '<i class="fa fa-certificate"></i><span class="title">Manage Item</span>', 'url' => ['/vendoritem/index']],
+				  ['label' => '<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', 'url' => ['/vendorlocation/edit']],
+
+			  ];
+			  if($checkone > 0) {
+				  $menuItems[] = ['label' => '<i class="fa fa-clock-o"></i><span class="title">Delivery Time slot</span>', 'url' => ['/deliverytimeslot/index']];
+				  $menuItems[] = ['label' => '<i class="fa fa-calendar-o"></i><span class="title">Exception Dates</span>', 'url' => ['/vendor-item-capacity-exception/index']];
+				  $menuItems[] = ['label' => '<i class="fa fa-anchor"></i><span class="title">Weekly Off</span>', 'url' => ['/blockeddate/createweek']];
+				  $menuItems[] = ['label' => '<i class="fa fa-film"></i><span class="title">Block Date</span>', 'url' => ['/blockeddate/index']];
+			  }
+
+			  $menuItems[] = ['label' => '<i class="fa fa-book"></i><span class="title">My Package</span>', 'url' => ['/vendorpackages/index']];
+			  $menuItems[] = ['label' => '<i class="fa fa-university"></i><span class="title">My Profile</span>', 'url' => ['/site/profile']];
+			  echo Nav::widget([
+				  'options' => ['class' => 'left-side-bar'],
+				  'activateParents'=>true,
+				  'encodeLabels' => false,
+				  'items' => $menuItems,
+			  ]);
+
+			  ?>
 			<div class="clearfix"></div>
 		<!-- END SIDEBAR WIDGETS -->
 	</div>
