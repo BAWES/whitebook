@@ -39,8 +39,8 @@ $this->title ='Account Setting | Whitebook';
 										</div>
 										<div class="col-md-6 paddingleft0">
 											<div class="form-group">
-												<label for="exampleInputEmail1"><?= Yii::t('frontend','Email Address');?></label>
-												<input type="text" class="form-control required email" maxlength="100" name="customer_email" id="customer_email" placeholder="<?php echo Yii::t('frontend','Enter your email address');?>" title="<?php echo Yii::t('frontend','Enter your email address');?>" value="<?php echo $user_detail[0]['customer_email'];?>" readonly>
+												<label for="exampleInputEmail1"><?= Yii::t('frontend','Email');?></label>
+												<input type="text" class="form-control required email" maxlength="100" name="customer_email" id="customer_email" placeholder="<?php echo Yii::t('frontend','Enter your Email');?>" title="<?php echo Yii::t('frontend','Enter your Email');?>" value="<?php echo $user_detail[0]['customer_email'];?>" readonly>
 											</div></div>
 											<?php $dob=$user_detail[0]['customer_dateofbirth'];
 											$year= date('Y', strtotime($dob));
@@ -49,7 +49,7 @@ $this->title ='Account Setting | Whitebook';
 											?>
 											<div class="col-md-6 paddingright0">
 												<div class="form-group">
-													<label for="exampleInputPassword1"><?= Yii::t('frontend','Date of Birth'); ?></label>
+													<label for="exampleInputPassword1"><?= Yii::t('frontend','Date of birth'); ?></label>
 													<div class="col-md-3 col-xs-3 paddingleft0">
 														<div class="select_boxes">
 															<select name="bday_detail" id="bday_detail" class="selectpicker" data-size="10" data-style="btn-primary">

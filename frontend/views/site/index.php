@@ -52,7 +52,7 @@ $model = new Website();
 
 <?php if (Yii::$app->user->isGuest) { ?>
 <span class="first_events">
-    <?= Yii::t('frontend', 'MY EVENTS'); ?>
+    <?= Yii::t('frontend', 'My Events'); ?>
 </span>
 <div class="creatfirst_events">
     <p data-example-id="active-anchor-btns" class="bs-example">

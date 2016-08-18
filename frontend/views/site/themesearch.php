@@ -56,21 +56,21 @@ $this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($theme_name['t
 		<div class="listing_sub_cat1">
 			<span class="title_filter">Categories</span>
 				<select class="selectpicker" style="display: none;" id="main-category">
-			<option data-icon="venues-category" selected="selected" name="category">All</option>
-			<option data-icon="venues-category" value="venues" <?php  if($category_id == Category::VENUES) { ?> selected="selected" <?php } ?> >Venues</option>
-			<option data-icon="invitation-category" value="invitations" <?php  if($category_id == Category::INVITATIONS) { ?> selected="selected"<?php } ?> name="category">Invitations</option>
-			<option data-icon="food-category"  value="food-beverage" <?php  if($category_id == Category::FOOD_BEVERAGES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>">Food & Beverage</option>
-			<option data-icon="decor-category" value="decor" <?php  if($category_id ==  Category::DECOR) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>">Decor</option>
-			<option data-icon="supply-category" value="supplies" <?php  if($category_id ==  Category::SUPPLIES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>">Supplies</option>
-			<option data-icon="enter-category" value="entertainment" <?php  if($category_id ==  Category::ENTERTAINMENT) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>">Entertainment</option>
-			<option data-icon="service-category" value="services" <?php  if($category_id ==  Category::SERVICES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>">Services</a></option>
-			<option data-icon="others-category" value="others" <?php  if($category_id ==  Category::OTHERS) { ?> selected="selected" <?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>">Others</option>
-			<option data-icon="saythankyou-category" value="gift-favors" <?php  if($category_id == Category::GIFT_FAVORS) { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>">Gift Favor</option>
+			<option data-icon="venues-category" selected="selected" name="category"><?= Yii::t("frontend", "All"); ?></option>
+			<option data-icon="venues-category" value="venues" <?php  if($category_id == Category::VENUES) { ?> selected="selected" <?php } ?> ><?= Yii::t("frontend", "Venues") ?></option>
+			<option data-icon="invitation-category" value="invitations" <?php  if($category_id == Category::INVITATIONS) { ?> selected="selected"<?php } ?> name="category"><?= Yii::t("frontend", "Invitations") ?></option>
+			<option data-icon="food-category"  value="food-beverage" <?php  if($category_id == Category::FOOD_BEVERAGES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>"><?= Yii::t("frontend", "Food & Beverage") ?></option>
+			<option data-icon="decor-category" value="decor" <?php  if($category_id ==  Category::DECOR) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>"><?= Yii::t("frontend", "Decor") ?></option>
+			<option data-icon="supply-category" value="supplies" <?php  if($category_id ==  Category::SUPPLIES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>"><?= Yii::t("frontend", "Supplies") ?></option>
+			<option data-icon="enter-category" value="entertainment" <?php  if($category_id ==  Category::ENTERTAINMENT) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>"><?= Yii::t("frontend", "Entertainment") ?></option>
+			<option data-icon="service-category" value="services" <?php  if($category_id ==  Category::SERVICES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>"><?= Yii::t("frontend", "Services") ?></a></option>
+			<option data-icon="others-category" value="others" <?php  if($category_id ==  Category::OTHERS) { ?> selected="selected" <?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>"><?= Yii::t("frontend", "Others") ?></option>
+			<option data-icon="saythankyou-category" value="gift-favors" <?php  if($category_id == Category::GIFT_FAVORS) { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>"><?= Yii::t("frontend", "Gift Favors") ?></option>
 			</select>
 		</div>
 	</div>
 <div class="responsive-category-bottom">
-<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
+<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas"><?= Yii::t("frontend", "Filter") ?></span>
 <div class="filter_title">
 <span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
 </div>

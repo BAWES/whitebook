@@ -57,10 +57,10 @@ use frontend\models\Website;
                                 <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
                                 <div class="buttons">
                                     <div class="creat_evn_sig">
-                                        <button type="button" id="update_event_button" name="update_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'UPDATE_EVENT'); ?>"><?php echo Yii::t('frontend', 'UPDATE_EVENT'); ?></button>
+                                        <button type="button" id="update_event_button" name="update_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'Update Event'); ?>"><?php echo Yii::t('frontend', 'Update Event'); ?></button>
                                     </div>
                                     <div class="cancel_sig">
-                                        <input class="btn btn-default" data-dismiss="modal" type="button" value="<?php echo Yii::t('frontend', 'CANCEL'); ?>" title="<?php echo Yii::t('frontend', 'CANCEL'); ?>">
+                                        <input class="btn btn-default" data-dismiss="modal" type="button" value="<?php echo Yii::t('frontend', 'Cancel'); ?>" title="<?php echo Yii::t('frontend', 'Cancel'); ?>">
                                     </div>
                                 </div>
                             </form>

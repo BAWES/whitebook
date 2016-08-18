@@ -44,7 +44,7 @@ foreach ($model as $key => $value) { ?>
 <div class="creat_evn_sig">
 <button type="button" id="add_event_button" name="add_event_button" onclick="add_to_event(<?php echo $value['item_id'];?>);" class="btn btn-default" title="<?php echo Yii::t('frontend','Add to Event');?>"><?php echo Yii::t('frontend','Add to Event');?></button>
 </div>
-<span class="text-center forgotpwd"><a data-target="#EventModal" data-dismiss="modal" data-toggle="modal" title="<?php echo Yii::t('frontend','CREATE NEW EVENT');?>"  onclick="add_create_event(<?php echo  $value['item_id'];?>)" class="actionButtons" href="#"> <?php echo Yii::t('frontend','CREATE NEW EVENT');?></a></span>
+<span class="text-center forgotpwd"><a data-target="#EventModal" data-dismiss="modal" data-toggle="modal" title="<?php echo Yii::t('frontend','Create New Event');?>"  onclick="add_create_event(<?php echo  $value['item_id'];?>)" class="actionButtons" href="#"> <?php echo Yii::t('frontend','Create New Event');?></a></span>
 
 </div>
 

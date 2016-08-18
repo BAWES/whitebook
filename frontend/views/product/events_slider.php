@@ -12,7 +12,7 @@ if(!Yii::$app->user->isGuest) {
 	<?php if(count($customer_events) == 0) {  ?>
 		<div class="container_eventslider">
 			<span class="first_events" style='text-transform:uppercase'>
-				<?= Yii::t('frontend', 'MY EVENTS'); ?>
+				<?= Yii::t('frontend', 'My Events'); ?>
 			</span>
 			<div class="creatfirst_events">
 				<p data-example-id="active-anchor-btns" class="bs-example">
@@ -26,7 +26,7 @@ if(!Yii::$app->user->isGuest) {
 				<div class="event_slider_top">
 					<div class="col-md-3">
 						<span class="first_events" style='text-transform:uppercase'>
-							<?= Yii::t('frontend','MY EVENTS'); ?>
+							<?= Yii::t('frontend','My Events'); ?>
 						</span>
 						<div class="creatfirst_events">
 						    <p data-example-id="active-anchor-btns" class="bs-example">
@@ -47,8 +47,8 @@ if(!Yii::$app->user->isGuest) {
 												<?php echo Yii::t('frontend','Things I like'); ?>
 												</a>
 												<?php } else {?>
-													<a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" data-target="#EventModal" title="CREATE YOUR FIRST EVENT" style="   float: left;    margin-left: 225px;    margin-top: 45px;    min-height: 30px;">
-														<?= Yii::t('frontend','CREATE YOUR FIRST EVENT'); ?>
+													<a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" data-target="#EventModal" title="Create Your First Event" style="   float: left;    margin-left: 225px;    margin-top: 45px;    min-height: 30px;">
+														<?= Yii::t('frontend','Create Your First Event'); ?>
 													</a>
 													<?php } ?>
 												</div>
@@ -74,7 +74,7 @@ if(!Yii::$app->user->isGuest) {
 									?>
 									<div class="container_eventslider" style='text-transform:uppercase'>
 										<span class="first_events">
-											<?php echo Yii::t('frontend','MY EVENTS'); ?>
+											<?php echo Yii::t('frontend','My Events'); ?>
 										</span>
 										<div class="creatfirst_events">
 											<p data-example-id="active-anchor-btns" class="bs-example">

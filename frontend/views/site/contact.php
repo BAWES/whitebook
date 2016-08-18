@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 use yii\web\view;
 
-$this->title = 'Contact us | Whitebook'; 
+$this->title = 'Contact us | Whitebook';
 
 ?>
 
@@ -10,7 +10,7 @@ $this->title = 'Contact us | Whitebook';
 <section id="inner_pages_sections">
     <div class="container">
         <div class="title_main">
-            <h1><?= Yii::t('frontend', 'Contact & Faq\'s') ?></h1>
+            <h1><?= Yii::t('frontend', 'About and Contact') ?></h1>
         </div>
         <div class="contact_us">
             <div class="col-md-4 paddingleft0">
@@ -18,14 +18,14 @@ $this->title = 'Contact us | Whitebook';
                     <h3 class="inner_title"><?= Yii::t('frontend', 'Ask a Question') ?></h3>
                     <div data-example-id="basic-forms" class="bs-example">
                         <form id="form1" name="form1" method="post">
-                            
+
                             <div class="form-group">
                                 <input type="text" placeholder="<?= Yii::t('frontend', 'Sender Name *') ?>" id="username" name="username" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter name!'); ?>" />
                                 <div id="chkname" class="error"></div>
                             </div>
 
                             <div class="form-group">
-                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter valid email address!'); ?>" />
+                                <input type="email" placeholder="<?= Yii::t('frontend', 'Sender Email *') ?>" id="useremail" name="useremail" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter valid Email!'); ?>" />
                                 <div id="chkemail" class="error"></div>
                             </div>
 
@@ -33,7 +33,7 @@ $this->title = 'Contact us | Whitebook';
                                 <textarea placeholder="<?= Yii::t('frontend', 'Message *'); ?>" rows="3" id="usermessgae" name="usermessgae" class="form-control" data-msg-required="<?= Yii::t('frontend', 'Enter message!'); ?>"></textarea>
                                 <div id="chkmessage" class="error"></div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <button class="btn btn-default" type="button" id="send" name="send" title="Send Email"><?= Yii::t('frontend', 'Send Email') ?></button>
                         </form>
@@ -88,7 +88,7 @@ $this->title = 'Contact us | Whitebook';
 </div>
 </section>
 
-<?php 
+<?php
 
 $this->registerJs("
 
@@ -100,10 +100,10 @@ $this->registerJs("
     jQuery('#send').on('click', function () {
 
         jQuery('#chkname,#chkemail,#chkmessage').html('');
-        
+
         var i = 0;
         var j = 0;
-        
+
         if (jQuery('#username').val() == '')
         {
             jQuery('#chkname').html('".Yii::t('frontend', 'Enter name!')."');
@@ -121,7 +121,7 @@ $this->registerJs("
         }
         else
         {
-            jQuery('#chkemail').html('".Yii::t('frontend', 'Enter valid email address!')."');
+            jQuery('#chkemail').html('".Yii::t('frontend', 'Enter valid Email!')."');
             i = 1;
             j = 1;
         }
@@ -154,16 +154,16 @@ $this->registerJs("
                 type: 'POST',
                 url: '".Yii::$app->urlManager->createAbsoluteUrl('site/contact')."',
                 data: {
-                    username: jQuery('#username').val(), 
-                    useremail: jQuery('#useremail').val(), 
-                    msg: jQuery('#usermessgae').val(), 
+                    username: jQuery('#username').val(),
+                    useremail: jQuery('#useremail').val(),
+                    msg: jQuery('#usermessgae').val(),
                     csrf: csrfToken
                 },
                 success: function (data) {
                     if (data == 1)
                     {
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">".Yii::t('frontend', 'Contact enquiry information send successfully!')."</span>');
+                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">".Yii::t('frontend', 'Thank! We will be in touch soon!')."</span>');
                         window.setTimeout(function () {
                             location.reload()
                         }, 2000)
