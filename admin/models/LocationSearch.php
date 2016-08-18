@@ -12,8 +12,6 @@ use common\models\Location;
  */
 class LocationSearch extends Location
 {
-    public $cityName;
-
     /**
      * @inheritdoc
      */
@@ -21,7 +19,7 @@ class LocationSearch extends Location
     {
         return [
             [['id', 'country_id', 'city_id'], 'integer'],
-            [['location', 'location_ar', 'cityName'], 'safe'],
+            [['location'], 'safe'],
         ];
     }
 
@@ -45,36 +43,19 @@ class LocationSearch extends Location
     {
         $query = Location::find();
 
-        $query->joinWith(['city' => function ($q) {
-            $q->where('whitebook_city.city_name LIKE "%' . $this->cityName . '%"');
-        }]);
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
+			'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
-        $dataProvider->setSort([
-            'attributes' => [
-                'id',
-                'cityName' => [
-                    'asc' => ['whitebook_city.city_name' => SORT_ASC],
-                    'desc' => ['whitebook_city.city_name' => SORT_DESC],
-                    'label' => 'Governorate',
-                    'default' => SORT_ASC
-                ]
-            ]
-        ]);
-     
         $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails
             // $query->where('0=1');
-            $query->joinWith(['city']);
             return $dataProvider;
         }
-        
+
         $query->andFilterWhere([
             'id' => $this->id,
             'country_id' => $this->country_id,
@@ -82,7 +63,6 @@ class LocationSearch extends Location
         ]);
 
         $query->andFilterWhere(['like', 'location', $this->location]);
-        $query->andFilterWhere(['like', 'location_ar', $this->location_ar]);
 
         return $dataProvider;
     }

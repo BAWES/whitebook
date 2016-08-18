@@ -11,23 +11,23 @@ use yii\db\Expression;
 use Yii;
 
 /**
- * This is the model class for table "{{%vendor_item_capacity_exception}}".
- *
- * @property string $exception_id
- * @property string $item_id
- * @property string $exception_date
- * @property integer $exception_capacity
- * @property integer $created_by
- * @property integer $modified_by
- * @property string $created_datetime
- * @property string $modified_datetime
- * @property string $trash
- */
-class VendorItemCapacityException extends \yii\db\ActiveRecord
+* This is the model class for table "{{%vendor_item_capacity_exception}}".
+*
+* @property string $exception_id
+* @property string $item_id
+* @property string $exception_date
+* @property integer $exception_capacity
+* @property integer $created_by
+* @property integer $modified_by
+* @property string $created_datetime
+* @property string $modified_datetime
+* @property string $trash
+*/
+class Vendoritemcapacityexception extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public $default;
     public static function tableName()
     {
@@ -35,8 +35,8 @@ class VendorItemCapacityException extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
@@ -65,8 +65,8 @@ class VendorItemCapacityException extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function attributeLabels()
     {
         return [
@@ -85,6 +85,7 @@ class VendorItemCapacityException extends \yii\db\ActiveRecord
     public function getItemName($id)
     {
         $id=explode(',',$id);
+        //print_r ($id);die;
         foreach($id as $i)
         {
             $model = Vendoritem::find()->where(['item_id'=>$i])->one();

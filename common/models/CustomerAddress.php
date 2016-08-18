@@ -60,19 +60,18 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'address_id' => Yii::t('frontend', 'Address name'),
-            'customer_id' => Yii::t('frontend', 'Customer name'),
-            'address_type_id' => Yii::t('frontend', 'Address type'),
-            'country_id' => Yii::t('frontend', 'Country name'),
-            'city_id' => Yii::t('frontend', 'Governorate'),
-            'area_id' => Yii::t('frontend', 'Area name'),
-            'address_archived' => Yii::t('frontend', 'Delete'),
-            'address_data' =>  Yii::t('frontend', 'Address Data'),
-            'created_by' => Yii::t('frontend', 'Created By'),
-            'modified_by' => Yii::t('frontend', 'Modified By'),
-            'created_datetime' => Yii::t('frontend', 'Created Datetime'),
-            'modified_datetime' => Yii::t('frontend', 'Modified Datetime'),
-            'trash' => Yii::t('frontend', 'Trash')
+            'address_id' => 'Address name',
+            'customer_id' => 'Customer name',
+            'address_type_id' => 'Address type',
+            'country_id' => 'Country name',
+            'city_id' => 'City name',
+            'area_id' => 'Area name',
+            'address_archived' => 'Delete',
+            'created_by' => 'Created By',
+            'modified_by' => 'Modified By',
+            'created_datetime' => 'Created Datetime',
+            'modified_datetime' => 'Modified Datetime',
+            'trash' => 'Trash',
         ];
     }
 
@@ -98,11 +97,6 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function getAddressType()
     {
         return $this->hasOne(AddressType::className(), ['type_id' => 'address_type_id']);
-    }
-
-    public function getLocation()
-    {
-        return $this->hasOne(Location::className(), ['id' => 'area_id']);
     }
 
     /**

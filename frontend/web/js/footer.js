@@ -120,7 +120,6 @@ jQuery(document).ready(function () {
     };
 
     if( isTouchDevice() ) {
-        /*
         jQuery("body").swipe({
             swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
                 if ( direction == 'left' ) { jQuery('html').removeClass('ma5-menu-active');}
@@ -128,7 +127,6 @@ jQuery(document).ready(function () {
             },
             allowPageScroll: "vertical"
         });
-        */
     };
     /*Responsive menu script end*/
 });//end document ready 
@@ -1462,7 +1460,7 @@ function show_activate_modal_true()
     });
 }
 
-/* BEGIN RESPONSIVE MENU SINGLE CLICK TO OPEN SUB MENUS 
+/* BEGIN RESPONSIVE MENU SINGLE CLICK TO OPEN SUB MENUS */
 jQuery(document).on('touchstart', function() {
     documentClick = true;
 });

@@ -33,16 +33,19 @@ class AddressQuestion extends \yii\db\ActiveRecord
         return 'whitebook_address_question';
     }
 
+
+
     /**
     * @inheritdoc
     */
     public function rules()
     {
         return [
-            [['question', 'question_ar', 'address_type_id'], 'required'],
+            [['question', 'address_type_id'], 'required'],
             [['ques_id', 'address_type_id', 'created_by', 'modified_by'], 'integer'],
             [['status', 'trash'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe'],
+            //  [['question'], 'string', 'max' => 128]
         ];
     }
 
@@ -76,23 +79,13 @@ class AddressQuestion extends \yii\db\ActiveRecord
             'ques_id' => 'Ques ID',
             'address_type_id' => 'Address Type	',
             'question' => 'Question',
-            'question_ar' => 'Question - Arabic',
             'status' => 'Status',
-            'typeName' => 'Address Type',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Date',
             'modified_datetime' => 'Modified Date',
             'trash' => 'Trash',
         ];
-    }
-
-    public function getType(){
-        return $this->hasOne(Addresstype::ClassName(), ['type_id' => 'address_type_id']);
-    }
-
-    public function getTypeName(){
-        return $this->type->type_name;
     }
 
     public static function  getAddresstype($id)
@@ -104,18 +97,15 @@ class AddressQuestion extends \yii\db\ActiveRecord
     public static function  loadquestion($addresstypeid)
     {
         $question = AddressQuestion::find()
-            ->select(['question'])
-            ->where(['address_type_id'=>$addresstypeid])
-            ->andWhere(['trash'=>'Default'])
-            ->all();
-        
+        ->select(['question'])
+        ->where(['address_type_id'=>$addresstypeid])
+        ->andWhere(['trash'=>'Default'])
+        ->all();
         foreach ($question as $q)
         {
             $ques[]=$q['question'];
         }
-
-        $ques = implode('<br>', $ques);
-        
+        $ques=implode ('<br>',$ques);
         return($ques);
     }
 }

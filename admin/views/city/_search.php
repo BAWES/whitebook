@@ -21,8 +21,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'city_name') ?>
 
-    <?= $form->field($model, 'city_name_ar') ?>
-
     <?= $form->field($model, 'city_status') ?>
 
     <?= $form->field($model, 'default_city') ?>

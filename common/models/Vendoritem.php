@@ -206,7 +206,7 @@ class Vendoritem extends \yii\db\ActiveRecord
     */
     public function getType()
     {
-        return $this->hasOne(Itemtype::className(), ['type_id' => 'type_id']);
+        return $this->hasOne(ItemType::className(), ['type_id' => 'type_id']);
     }
 
     /**
@@ -399,8 +399,4 @@ class Vendoritem extends \yii\db\ActiveRecord
                       ->asArray()
                       ->all();
             }
-    public function getImages()
-    {
-        return $this->hasMany(Image::className(), ['item_id' => 'item_id']);
     }
-}

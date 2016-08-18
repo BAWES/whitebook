@@ -457,25 +457,8 @@ a.deliver-detail.accor-link-min{background:url("../images/delivery-minus.png") n
 /*-------------------------------*/
 /*       Hamburger-Cross         */
 /*-------------------------------*/
-.filter_butt img {
-    left: 210px;
-    background: #ccc;
-    padding: 5px 10px;
-}
-
-.toggled .hamburger {
-    position: fixed;
-    top: 26%;
-    z-index: 999;
-    display: block;
-    width: 32px;
-    height: 32px;
-    margin-left: 10px;
-    background: black;
-    border: none;
-    left: 300px;
-    cursor: pointer;
-}
+.filter_butt img{left:210px;background: #fff;padding:5px 10px;}
+.toggled .hamburger{ position: fixed; top: 26%;   z-index: 999;  display: block;  width: 32px;  height: 32px;  margin-left: 15px;  background: transparent;  border: none;  left:300px;  cursor:pointer;}
 
 .hamburger:hover,.hamburger:focus,.hamburger:active {  outline: none;}
 

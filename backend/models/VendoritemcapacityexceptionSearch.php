@@ -1,14 +1,14 @@
 <?php
+
 namespace backend\models;
-use common\models\VendorItemCapacityException;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * VendorItemCapacityExceptionSearch represents the model behind the search form about `common\models\VendorItemCapacityException`.
+ * VendoritemcapacityexceptionSearch represents the model behind the search form about `common\models\Vendoritemcapacityexception`.
  */
-class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacityException
+class VendoritemcapacityexceptionSearch extends \common\models\Vendoritemcapacityexception
 {
     public $item_name;
     /**
@@ -18,6 +18,7 @@ class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacit
     {
         return [
             [['exception_id', 'exception_capacity', 'created_by', 'modified_by'], 'integer'],
+          //  [['item_id'], 'string'],
             [['exception_date', 'item_name','created_datetime', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
@@ -31,7 +32,7 @@ class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacit
         return Model::scenarios();
     }
 
-    /**
+            /**
      * Creates data provider instance with search query applied
      *
      * @param array $params
@@ -41,18 +42,18 @@ class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacit
     public function search($params,$vendor_id=false)
     {
         if(empty($vendor_id))
-        {
+        {          
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
-        $query = VendorItemCapacityException::find()
-            ->orderBy(['exception_id' => SORT_DESC]);
-
+        $query = Vendoritemcapacityexception::find()
+        ->orderBy(['exception_id' => SORT_DESC]);
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $query->leftJoin('{{%vendor_item}}','FIND_IN_SET({{%vendor_item}}.item_id,{{%vendor_item_capacity_exception}}.item_id)');
+        $query->leftJoin('{{%vendor_item}}','FIND_IN_SET({{%vendor_item}}.item_id,{{%vendor_item_capacity_exception}}.item_id)'); 
         $this->load($params);
 
         if (!$this->validate()) {
@@ -60,9 +61,9 @@ class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacit
             // $query->where('0=1');
             return $dataProvider;
         }
-        if($this->exception_date!=''){
-            $this->exception_date = strtotime($this->exception_date);
-        }
+          if($this->exception_date!=''){
+          $this->exception_date = strtotime($this->exception_date);
+          }   
         $query->andFilterWhere([
             'exception_id' => $this->exception_id,
             'exception_date' => $this->exception_date,

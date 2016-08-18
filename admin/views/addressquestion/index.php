@@ -4,16 +4,14 @@ use common\models\Addresstype;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-use yii\web\view;
 
+/* @var $this yii\web\View */
 /* @var $searchModel common\models\AddressQuestionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Address Questions';
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
-
 <div class="address-question-index">
 <p>        
     <div class="row-fluid">
@@ -28,23 +26,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'typeName',
             [
+				'attribute' => 'address_type_id',
+				'label' => 'Address Type',	
+				'format' => 'raw',
+				'value' => function($data){
+					return '<b>'.ucfirst($data->getAddressType($data->address_type_id)).'</b>';
+				}	
+			],
+			
+			[
 				'attribute' => 'question',
 				'label' => 'Question',	
 				'value' => function($data){
 				return ucfirst($data->question);
 				}	
 			],
-
-			[
-				'attribute' => 'question_ar',
-				'label' => 'Question - Arabic',	
-				'value' => function($data){
-					return ucfirst($data->question_ar);
-				}	
-			],
-
 			[
 				'attribute' => 'sort',
 				'label' => 'Sort Order',	
@@ -54,13 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					},
 				'contentOptions' => ['class'=>'sort','style'=>'max-width: 100px;']					
 			],
-			
 			[
 				'attribute' => 'created_datetime',
 				'format' => ['date', Yii::$app->params['dateFormat']],
 				'label' => 'created date',			
 			],
-
 			[
 			  'header' => 'Status',
 			  'format' => 'raw',
@@ -70,11 +65,9 @@ $this->params['breadcrumbs'][] = $this->title;
 				'onclick'=>'change("'.$data->status.'","'.$data->ques_id.'")']);
 				},
 			],
-          	
-          	[
-          		'class' => 'yii\grid\ActionColumn',
-            	'header' => 'Action',
-            	'template' => '{view} {update} {delete} {link}',
+          	['class' => 'yii\grid\ActionColumn',
+            'header'=>'Action',
+            'template' => '{view}{update} {delete}{link}',
             ],
         ],
     ]); ?>
@@ -96,7 +89,7 @@ $this->registerJs("
 		{
 			if(sort_val <= 0 && sort_val != '')
 			{
-				alert('Please enter greater than 0!');
+				alert('Please enter greater than 0!'');
 				return false;
 			}
 			
@@ -150,4 +143,4 @@ $this->registerJs("
 	        }
         });
      }     
-", View::POS_HEAD);
+");

@@ -4,12 +4,12 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\VendorItemCapacityException;
+use common\models\Vendoritemcapacityexception;
 
 /**
- * VendorItemCapacityExceptionSearch represents the model behind the search form about `common\models\VendorItemCapacityException`.
+ * VendoritemcapacityexceptionSearch represents the model behind the search form about `common\models\Vendoritemcapacityexception`.
  */
-class VendorItemCapacityExceptionSearch extends VendorItemCapacityException
+class VendoritemcapacityexceptionSearch extends Vendoritemcapacityexception
 {
     public $item_name;
     /**
@@ -19,7 +19,7 @@ class VendorItemCapacityExceptionSearch extends VendorItemCapacityException
     {
         return [
             [['exception_id', 'exception_capacity', 'created_by', 'modified_by'], 'integer'],
-            //  [['item_id'], 'string'],
+          //  [['item_id'], 'string'],
             [['exception_date', 'item_name','created_datetime', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
@@ -33,7 +33,7 @@ class VendorItemCapacityExceptionSearch extends VendorItemCapacityException
         return Model::scenarios();
     }
 
-    /**
+                /**
      * Creates data provider instance with search query applied
      *
      * @param array $params
@@ -48,24 +48,24 @@ class VendorItemCapacityExceptionSearch extends VendorItemCapacityException
             $pagination = 40;
         }
 
-        $query = VendorItemCapacityException::find()
-            ->orderBy(['exception_id' => SORT_ASC]);
-
+        $query = Vendoritemcapacityexception::find()
+        ->orderBy(['exception_id' => SORT_ASC]);
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
         $query->leftJoin('{{%vendor_item}}','FIND_IN_SET({{%vendor_item}}.item_id,{{%vendor_item_capacity_exception}}.item_id)')
-            ->where(['{{%vendor_item}}.vendor_id'=>$vendor_id]);
-        $this->load($params);
+              ->where(['{{%vendor_item}}.vendor_id'=>$vendor_id]);
+          $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
-        if($this->exception_date!=''){
-            $this->exception_date = date('Y-m-d', strtotime($model->exception_date));
-        }
+          if($this->exception_date!=''){
+          $this->exception_date = date('Y-m-d', strtotime($model->exception_date));
+          }   
         $query->andFilterWhere([
             'exception_id' => $this->exception_id,
             'exception_date' => $this->exception_date,

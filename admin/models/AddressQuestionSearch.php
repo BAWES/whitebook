@@ -12,8 +12,6 @@ use admin\models\AddressQuestion;
  */
 class AddressQuestionSearch extends AddressQuestion
 {
-    public $typeName;
-
     /**
      * @inheritdoc
      */
@@ -21,7 +19,7 @@ class AddressQuestionSearch extends AddressQuestion
     {
         return [
             [['ques_id', 'address_type_id', 'created_by', 'modified_by'], 'integer'],
-            [['question', 'typeName', 'question_ar', 'status', 'modified_datetime', 'trash'], 'safe'],
+            [['question', 'status', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
 
@@ -43,29 +41,15 @@ class AddressQuestionSearch extends AddressQuestion
      */
     public function search($params)
     {
-		$query = Addressquestion::find()
-        ->where(['!=', 'whitebook_address_question.trash', 'Deleted'])
-		->orderBy('address_type_id');
+        $query = AddressQuestion::find();
 
-        $query->joinWith(['type' => function ($q) {
-            $q->where('whitebook_address_type.type_name LIKE "%' . $this->typeName . '%"');
-        }]);
+		$query = Addressquestion::find()
+        ->where(['!=', 'trash', 'Deleted'])
+		->orderBy('address_type_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'sort'=> ['defaultOrder' => ['address_type_id'=>SORT_DESC]]
-        ]);
-
-        $dataProvider->setSort([
-            'attributes' => [
-                'id',
-                'addresstypeName' => [
-                    'asc' => ['whitebook_address_type.type_name' => SORT_ASC],
-                    'desc' => ['whitebook_address_type.type_name' => SORT_DESC],
-                    'label' => 'Address type',
-                    'default' => SORT_ASC
-                ]
-            ]
         ]);
 
         $this->load($params);
@@ -73,7 +57,6 @@ class AddressQuestionSearch extends AddressQuestion
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails
             // $query->where('0=1');
-            $query->joinWith(['type']);
             return $dataProvider;
         }
 
@@ -87,7 +70,6 @@ class AddressQuestionSearch extends AddressQuestion
         ]);
 
         $query->andFilterWhere(['like', 'question', $this->question])
-            ->andFilterWhere(['like', 'question_ar', $this->question])
             ->andFilterWhere(['like', 'status', $this->status])
             ->andFilterWhere(['like', 'trash', $this->trash]);
 

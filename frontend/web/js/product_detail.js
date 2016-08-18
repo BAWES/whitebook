@@ -320,87 +320,33 @@
 
     /* BEGIN Buy Item */
     if (!isGuest) { 
-
-        jQuery(document).delegate('#form_product_option', 'submit', function(e) {
-
-            jQuery.post(
-                addtobasket_url,
-                jQuery('#form_product_option').serialize(),
-                function (data)
-                {  
-                    jQuery('#form_product_option .error').html('');
-
-                    if(data['success']) {
-                        location = location;
-                    } else {
-
-                        $.each(data['errors'], function(index, errors) {
-                            $.each(errors, function() {
-                                jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');
-                            });
-                        });
-
-                    }
-                }
-            );
-
-            e.preventDefault();
-        });
-
-        jQuery('.buy_item').click(function (e) {
+        jQuery('.buy_item').click(function () {
             
             var item_id = jQuery(this).attr('id');
             
-            jQuery.get(
-                addtobasket_url,
-                {
-                    'item_id': item_id, 
-                    'cust_id': customer_id 
-                },
-                function (data)
-                {  
-                    jQuery('#option_modal_wrapper').html(data);
-                    jQuery('#productOptionModal').modal('show');
-                    jQuery('.selectpicker').selectpicker();
-
-                    jQuery('.date').datepicker({
-                        container:'#delivery_date_wrapper'
-                    });
-                }
-            );
-
-            e.preventDefault();
-        });
-
-        jQuery(document).delegate('#option_modal_wrapper #city_id', 'change', function() {
-
-            $city_id = $(this).val();
-
-            jQuery.post(
-                area_option_url,
-                {
-                    city_id : $city_id
-                },
-                function(data) {
-                    jQuery('#area_id').html(data);
-                    jQuery('#area_id').selectpicker('refresh');
-                }
-            );
-        });
-
-        jQuery(document).delegate('#delivery_date', 'change', function () {
             jQuery.ajax({
                 type: 'POST',
-                url: getdeliverytimeslot_url,
-                data: { 'vendor_id': vendor_id, 'sel_date': jQuery(this).val()},
+                url: addtobasket_url,
+                data: {'item_id': item_id, 'cust_id': customer_id },
                 success: function (data)
                 {
-                    jQuery('#timeslot_id').html(data);
-                    jQuery('#timeslot_id').selectpicker('refresh');                    
+                    // alert(data);
                 }
             });
         });
     }
 
+
     /* END BUY Item */
-    
+    jQuery('#delivery_date').on('change', function () {
+        jQuery.ajax({
+            type: 'POST',
+            url: getdeliverytimeslot_url,
+            data: {'vendor_id': vendor_id, 'sel_date': jQuery(this).val()},
+            success: function (data)
+            {
+                jQuery('.bs-docs-example #delivery-time').selectpicker('refresh');
+                jQuery('.bs-docs-example #delivery-time').html(data);
+            }
+        });
+    });

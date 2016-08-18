@@ -130,31 +130,23 @@ class AddressquestionController extends Controller
     public function actionCreate()
     {
         $model = new AddressQuestion();
-        
-        $data = Yii::$app->request->post('AddressQuestion');
-
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            
-            for ($i = 0; $i < count($data['question']); $i++) { 
-               
-                $models = new AddressQuestion();
-                $models->address_type_id = $model->address_type_id;
-                $models->question = $data['question'][$i];
-                $models->question_ar = $data['question_ar'][$i];
-                $models->save();
+            foreach ($model->question as $ques) {
+                if ($ques) {
+                    $models = new AddressQuestion();
+                    $models->address_type_id = $model->address_type_id;
+                    $models->question = $ques;
+                    $models->save();
+                }
             }
-
-            Yii::$app->session->setFlash('success', 'Address Question created successfully!');
+            echo Yii::$app->session->setFlash('success', 'Address Question created successfully!');
 
             return $this->redirect(['index']);
-        
         } else {
-            
             $addresstype = Addresstype::loadAddresstype();
 
             return $this->render('create', [
-                'model' => $model, 
-                'addresstype' => $addresstype,
+                'model' => $model, 'addresstype' => $addresstype,
             ]);
         }
     }
@@ -172,42 +164,26 @@ class AddressquestionController extends Controller
         $model = $this->findModel($id);
         $addresstype = Addresstype::loadAddress();
         $addressquestion = AddressQuestion::loadAddressquestion($model->address_type_id);
-        $data = Yii::$app->request->post('AddressQuestion');
-
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            
-            //update all old questions
-            for($i = 0; $i < count($addressquestion); $i++) {
-                
-                Addressquestion::updateAll([
-                        'question' => $data['question'][$i],
-                        'question_ar' => $data['question_ar'][$i],
-                        'address_type_id' => $model->address_type_id
-                    ],
-                    'ques_id= '.$addressquestion[$i]['ques_id']
-                );
+            $i = 0;
+            foreach ($model->question as $ques) {
+                if ($ques && $i < count($addressquestion)) {
+                    $model->address_type_id;
+                    $model->question[$i];
+                    $command=Addressquestion::updateAll(['question' => $model->question[$i],'address_type_id'=>$model->address_type_id],'ques_id= '.$addressquestion[$i]['ques_id']);
+                } elseif ($ques) {
+                    $models = new AddressQuestion();
+                    $models->address_type_id = $model->address_type_id;
+                    $models->question = $ques;
+                    $models->save();
+                }
+                ++$i;
             }
-
-            //add all newquestions
-            for ($i = count($addressquestion) - 1; $i < count($data['question']); $i++) { 
-               
-                $models = new AddressQuestion();
-                $models->address_type_id = $model->address_type_id;
-                $models->question = $data['question'][$i];
-                $models->question_ar = $data['question_ar'][$i];
-                $models->save();
-            }
-
-            Yii::$app->session->setFlash('success', 'Address Question updated successfully!');
-            
+            echo Yii::$app->session->setFlash('success', 'Address Question updated successfully!');
             return $this->redirect(['index']);
-
         } else {
-
             return $this->render('update', [
-                'model' => $model, 
-                'addresstype' => $addresstype, 
-                'addressquestion' => $addressquestion,
+                'model' => $model, 'addresstype' => $addresstype, 'addressquestion' => $addressquestion,
             ]);
         }
     }

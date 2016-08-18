@@ -61,12 +61,8 @@ class PlanController extends BaseController
         }
         /* END CATEGORY EXIST OR NOT*/
 
-        $top_categories = Category::find()
-                ->where(['category_level' => 0, 'trash' => 'Default'])
-                ->orderBy('sort')
-                ->asArray()
-                ->all();
-                
+        $top_categories = Category::find()->where(['category_level' => 0])->orderBy(['sort' => SORT_ASC])->asArray()->all();
+
         /* BEGIN GET VENDORS */
         $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);        
 

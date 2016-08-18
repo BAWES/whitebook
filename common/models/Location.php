@@ -39,8 +39,7 @@ class Location extends \yii\db\ActiveRecord
         return [
             [['country_id', 'city_id', 'location',], 'required'],
             [['country_id', 'city_id'], 'integer'],
-            [['location', 'location_ar'], 'string', 'max' => 50],
-            [['cityName'], 'safe']
+            [['location'], 'string', 'max' => 50]
         ];
     }
 
@@ -52,10 +51,8 @@ class Location extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'country_id' => 'Country Name',
-            'city_id' => 'Governorate',
-            'cityName' => 'Governorate',
+            'city_id' => 'City Name',
             'location' => 'Area',
-            'location_ar' => 'Area - Arabic',
             'status'=>'Status',
         ];
     }
@@ -68,10 +65,6 @@ class Location extends \yii\db\ActiveRecord
         return $this->hasOne(City::className(), ['city_id' => 'city_id']);
     }
 
-    public function getCityName() {
-        return $this->city->city_name;
-    }
- 
     /**
     * @return \yii\db\ActiveQuery
     */
@@ -120,7 +113,6 @@ class Location extends \yii\db\ActiveRecord
         $location=ArrayHelper::map($location,'id','location');
         return $location;
     }
-
     public static function getlocation($id)
     {
         $model = Location::find()->where(['id'=>$id])->one();
@@ -138,8 +130,7 @@ class Location extends \yii\db\ActiveRecord
     public function statusTitle($status)
     {
         if($status == 'Active')
-            return 'Activate';
-
+        return 'Activate';
         return 'Deactivate';
     }
 }
