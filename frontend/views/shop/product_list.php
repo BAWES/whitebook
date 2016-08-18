@@ -557,7 +557,6 @@ $this->registerJs("
 
 $this->registerJs("
 
-	/* Mega menu ends */
 	(function(jQuery){
 		jQuery(window).load(function(){
 			jQuery('.test_scroll').mCustomScrollbar({
@@ -574,7 +573,7 @@ $this->registerJs("
 	setupLabel();
 
 	jQuery('.label_check input').on('change',function() {
-		filter();
+        filter();
 	});
 
 	/* BEGIN GET SLUG FROM URL */
@@ -613,16 +612,6 @@ $this->registerJs("
 			}
 		});
 	});
-
-
-	/* BEGIN load category and reload the page */
-	jQuery('#main-category').change(function(){
-		var s = jQuery('#main-category :selected').val();
-		var hostname = window.location.href;
-		var newUrl1 = url.substring(0, url.indexOf('plan'));
-		window.location.href = jQuery(this).val();
-	});
-	/* END load category and reload the page */
 
 	var loadmore = 0;
 
@@ -706,53 +695,4 @@ $this->registerJs("
 		});
 	}//end of function
 
-	/* BEGIN CLEAR FILTER */
-	jQuery('a#filter-clear').on('click',function(){
-		jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
-		jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
-		jQuery(this).hide();
-		filter();
-	})
-	/* END CLEAR FILTER */
-
-	/* BEGIN RESPONSIVE FILTER NAVIGATION */
-	var trigger = jQuery('.filter_butt,.search_header'),
-	overlay = jQuery('.overlay'),
-	isClosed = false;
-
-	trigger.click(function () {
-		filter_butt();   /* FUNCTION REFERENCE main.js */
-	});
-
-	jQuery('.search_header').click(function(){
-		if (isClosed == true) {
-			overlay.hide();
-			trigger.removeClass('ses_act');
-			trigger.addClass('ses_dct');
-			isClosed = false;
-		} else {
-			overlay.show();
-			trigger.removeClass('ses_act');
-			trigger.addClass('ses_dct');
-			isClosed = true;
-		}
-	});
-
-	jQuery('[data-toggle=\"offcanvas\"]').click(function () {
-		jQuery('#wrapper').toggleClass('toggled');
-	});
-
-	jQuery('#left_side_cate nav').removeClass('navbar navbar-fixed-top');
-	jQuery('#left_side_cate ul').removeClass('nav sidebar-nav');
-	jQuery('#left_side_cate nav').removeAttr('id')
-
-	if (jQuery(window).width() < 991) {
-		jQuery('#left_side_cate nav').addClass ('navbar navbar-fixed-top');
-		jQuery('#left_side_cate ul').addClass ('nav sidebar-nav');
-		jQuery('#left_side_cate nav').attr ('id','sidebar-wrapper')
-	}
-
-	/* END RESPONSIVE FILTER NAVIGATION */
-	jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
-
-");
+", View::POS_END);
