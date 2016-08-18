@@ -16,13 +16,13 @@ use yii\helpers\Url;
         <div class="plan_catg">
         <ul>
                 <li>
-                    <a href="<?= Url::to(["shop/products", 'slug' => 'venues']); ?>" style="width: 50px;">
+                    <a href="<?= Url::to(["shop/products", 'slug' => 'venues']); ?>" class="venue_lnk">
                         <span class="venue"></span>
                         <span class="responsi_common"><?= Yii::t("frontend", "Venues") ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["shop/products", 'slug' => 'invitations']); ?>" style="width: 70px;">
+                    <a href="<?= Url::to(["shop/products", 'slug' => 'invitations']); ?>" class="invitations_lnk">
                         <span class="invitations "></span>
                         <?= Yii::t("frontend", "Invitations") ?>
                     </a>
@@ -46,19 +46,19 @@ use yii\helpers\Url;
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["shop/products", 'slug' => 'entertainment']); ?>" style="width: 90px;">
+                    <a href="<?= Url::to(["shop/products", 'slug' => 'entertainment']); ?>" class="entertainment_lnk">
                         <span class="entertainment  "></span>
                         <?= Yii::t("frontend", "Entertainment") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["shop/products", 'slug' => 'services']); ?>" style="width: 50px;">
+                    <a href="<?= Url::to(["shop/products", 'slug' => 'services']); ?>" class="services_lnk">
                         <span class="services  "></span>
                         <?= Yii::t("frontend", "Services") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["shop/products", 'slug' => 'others']); ?>" style="width: 40px;">
+                    <a href="<?= Url::to(["shop/products", 'slug' => 'others']); ?>" class="others_lnk">
                         <span class="other1"></span>
                         <?= Yii::t("frontend", "Others") ?>
                     </a>

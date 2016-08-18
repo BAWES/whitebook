@@ -420,7 +420,7 @@ $action = Yii::$app->controller->action->id;
 
                 </ul>
             </li>
-            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('shop/index', true); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
+            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::to('shop/index'); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
             </li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/themes', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>
@@ -434,11 +434,28 @@ $action = Yii::$app->controller->action->id;
     } ?>"><a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'About Us'); ?>"><?php echo Yii::t('frontend', 'About Us'); ?></a></li>
                     <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a></li>
 <?php } else { ?>
-                    <li class="<?php if ($action == "account-settings") {
-        echo "active";
-    } ?>"><a href="<?= Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'My Account'); ?>"><?php echo Yii::t('frontend', 'My Account'); ?></a></li>
-                    <li><a href="<?= Url::toRoute(['/users/events','slug'=>'events']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
-                    <li><a href="<?= Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
+        
+        <li>
+            <a href="<?php echo Url::to(['cart/index']); ?>">
+                <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
+            </a>
+        </li>  
+
+         <li class="<?php if ($action == "account-settings") { echo "active"; } ?>">
+            <a href="<?= Url::toRoute('/users/account_settings', true); ?>">
+                <?php echo Yii::t('frontend', 'My Account'); ?>
+            </a>
+        </li>
+
+        <li><a href="<?= Url::toRoute(['/users/events','slug'=>'events']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
+
+        <li>
+            <a href="<?php echo Url::toRoute('/users/address', true); ?>">
+                <?php echo Yii::t('frontend', 'Address Book'); ?>
+            </a>
+        </li>
+
+        <li><a href="<?= Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
 
         <?php if(Yii::$app->language == "en"){ ?>
