@@ -120,15 +120,13 @@ jQuery(document).ready(function () {
     };
 
     if( isTouchDevice() ) {
-        /*
-        jQuery("body").swipe({
+        /*jQuery("body").swipe({
             swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
                 if ( direction == 'left' ) { jQuery('html').removeClass('ma5-menu-active');}
                 if ( direction == 'right' ) { jQuery('html').addClass('ma5-menu-active');}
             },
             allowPageScroll: "vertical"
-        });
-        */
+        });*/
     };
     /*Responsive menu script end*/
 });//end document ready 

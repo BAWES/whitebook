@@ -787,5 +787,4 @@ $this->registerJs("
 		});
 	}//end of function 
 
-
 ");
