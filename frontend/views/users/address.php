@@ -36,16 +36,29 @@ $this->title ='Address Book | Whitebook';
 
                             			<?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
                             			
-                            			<?= $address['location']?$address['location'].'<br />':'' ?>
+                                        <?php 
+
+                                        if(Yii::$app->language == 'en') { 
+
+                            			    echo $address['location']?$address['location'].'<br />':'';
+                                            echo $address['city_name']?$address['city_name'].'<br />':'';
+                                        } else {
+
+                                            echo $address['location_ar']?$address['location_ar'].'<br />':'';
+                                            echo $address['city_name_ar']?$address['city_name_ar'].'<br />':'';
+                                        }
                             			
-                            			<?= $address['city_name']?$address['city_name'].'<br />':'' ?>
-                            			
-                            			<?php if($address['questions']) { ?>
-                            			<h4>Questions</h4>
+                            			if($address['questions']) { ?>
+                            			<h4><?php echo Yii::t('frontend', 'Questions') ?></h4>
                             			<ul>
                             			<?php foreach ($address['questions'] as $row) { ?>
                             				<li>
-                            					<b><?= $row['question'] ?></b>
+                            					<?php if(Yii::$app->language == 'en') { ?>
+                                                    <b><?= $row['question'] ?></b>
+                                                <?php } else{ ?>
+                                                    <b><?= $row['question_ar'] ?></b>
+                                                <?php } ?>
+
                             					<p><?= $row['response_text'] ?></p>
                             				</li>
                             			<?php } ?>
@@ -62,7 +75,7 @@ $this->title ='Address Book | Whitebook';
 
                             <center class="submitt_buttons">
                             <a class="btn btn-default" data-toggle="modal" data-target="#modal_create_address">
-                            	Add new address
+                            	<?php echo Yii::t('frontend','Add new address') ?>
                             </a>
                             </center>
                         </div>
@@ -74,7 +87,6 @@ $this->title ='Address Book | Whitebook';
     </div>
 </section>
 
-
 <?php $form = ActiveForm::begin(); ?>
 
 <div class="modal fade" id="modal_create_address">
@@ -84,21 +96,29 @@ $this->title ='Address Book | Whitebook';
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Add new address</h4>
+        <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
       </div>
       <div class="modal-body" style="background: white; margin-top: 0;">
 
-			<?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, ['prompt'=>'Select...']); ?>
+			<?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, 
+                    ['prompt' => Yii::t('frontend', 'Select...')]
+                ); ?>
 
 			<div class="question_wrapper">
 				<!-- question will go here -->
 			</div>
 
-			<?= $form->field($customer_address_modal, 'country_id')->dropDownList($country, ['prompt'=>'Select...']); ?>
+			<?= $form->field($customer_address_modal, 'country_id')->dropDownList($country, 
+                    ['prompt' => Yii::t('frontend', 'Select...')]
+                ); ?>
 
-			<?= $form->field($customer_address_modal, 'city_id')->dropDownList([], ['prompt'=>'Select...']); ?>
+			<?= $form->field($customer_address_modal, 'city_id')->dropDownList([], 
+                    ['prompt' => Yii::t('frontend', 'Select...')]
+                ); ?>
 
-			<?= $form->field($customer_address_modal, 'area_id')->dropDownList([], ['prompt'=>'Select...']); ?>
+			<?= $form->field($customer_address_modal, 'area_id')->dropDownList([], 
+                    ['prompt' => Yii::t('frontend', 'Select...')]
+                ); ?>
 
 			<div class="form-group">
 				<?= $form->field($customer_address_modal, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
@@ -106,7 +126,9 @@ $this->title ='Address Book | Whitebook';
 			</div>
 
 	  <div class="modal-footer submitt_buttons">
-        <button type="submit" class="btn btn-submit-address btn-default">Submit</button>
+        <button type="submit" class="btn btn-submit-address btn-default">
+            <?= Yii::t('frontend', 'Submit') ?>
+        </button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -119,13 +141,9 @@ ActiveForm::end();
 $this->registerJs("
 
     function add_address() {
-
-
-
         $('#modal_create_address form').submit();    
     }
     
-
     $(function (){
 
     	$('.address_delete').click(function(){

@@ -23,15 +23,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-           [
+           /*[
             'label'=>'country name',
             'value'=>'country.country_name',
-            ],
-            [
-            'label'=>'city name',
-            'value'=>'city.city_name',
-            ],            
+            ],*/
+            'cityName',
             'location',
+            'location_ar',
             [
 			  'header'=>'country status',
 			  'format' => 'raw',

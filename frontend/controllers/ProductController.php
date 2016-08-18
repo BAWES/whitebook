@@ -4,15 +4,16 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\helpers\Json;
+use yii\helpers\Url;
 use frontend\models\Vendoritem;
 use frontend\models\Vendor;
-use common\models\Featuregroupitem;
 use frontend\models\Users;
+use common\models\Featuregroupitem;
+use common\models\Deliverytimeslot;
 use common\models\Events;
 use common\models\Vendorlocation;
 use common\models\Image;
-use yii\helpers\Json;
-use yii\helpers\Url;
 
 /**
 * Site controller.
@@ -140,34 +141,6 @@ class ProductController extends BaseController
             $data = Yii::$app->request->post();
             $edit_eventinfo = Events::find()->where(['event_id' => $data['event_id']])->asArray()->all();
             return $this->renderPartial('edit_event', array('edit_eventinfo' => $edit_eventinfo));
-        }
-    }
-
-    /* BEGIN DELIVERY TIME SLOT -- VENDOR */
-    public function actionGetdeliverytime()
-    {
-		$vendor_timeslot = Deliverytimeslot::find()
-		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
-		->where(['vendor_id' => $model['vendor_id']])
-		->asArray()->all();
-    }
-    /* END DELIVERY TIME SLOT -- VENDOR */
-    public function actionGetdeliverytimeslot()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $string = $data['sel_date'];
-            $timestamp = strtotime($string);
-
-		$vendor_timeslot = Deliverytimeslot::find()
-		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
-		->where(['vendor_id' => $model['vendor_id']])
-		->andwhere(['timeslot_day' => date("l", $timestamp)])
-		->asArray()->all();
-
-            foreach ($vendor_timeslot as $key => $value) {
-                echo '<option value="'.$key['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
-            }
         }
     }
 }

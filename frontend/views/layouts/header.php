@@ -1,10 +1,13 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\Website;
+use common\models\CustomerCart;
 
 //define('ACTION',Yii::$app->controller->action->id);
 $action = Yii::$app->controller->action->id;
+
 ?>
 <!-- header main start  -->
 <header id="top_header" class="ma5-page">
@@ -53,13 +56,13 @@ $action = Yii::$app->controller->action->id;
                 <?php if (Yii::$app->user->isGuest) { ?>
 
                     <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK">
-                        My Events
+                        <?= Yii::t('frontend', 'My Events') ?>
                     </a>
 
                 <?php } else { ?>
 
                     <a href="<?= Url::toRoute(['/users/events','slug'=>'events' ]); ?>" title="THEWHITEBOOK">
-                        My Events
+                        <?= Yii::t('frontend', 'My Events') ?>
                     </a>
                 <?php } ?>
             </div>
@@ -69,7 +72,7 @@ $action = Yii::$app->controller->action->id;
                 <div class="col-md-6 col-xs-12 col-sm-6">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
+                            <span class="sr-only"><?= Yii::t('frontend', 'Toggle navigation') ?></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -152,7 +155,7 @@ $action = Yii::$app->controller->action->id;
                             </li>
 
                             <li class="">
-                                <?= Html::a(Yii::t('frontend', 'Shop'), ['site/shop'], ['title' => Yii::t('frontend', 'Shop')]); ?>
+                                <?= Html::a(Yii::t('frontend', 'Shop'), ['shop/index'], ['title' => Yii::t('frontend', 'Shop')]); ?>
                             </li>
 
                             <li  class="<?php if ($action == "experience") { echo "active";} ?>">
@@ -178,7 +181,11 @@ $action = Yii::$app->controller->action->id;
 } ?>">
                         <?php if (!Yii::$app->user->isGuest) { ?>
                         <div class="user_name_cont">
-                            <p>Hi, <?= Yii::$app->user->identity->customer_name; ?>!</p>
+                            <p>
+                            <?= Yii::t('frontend', 'Hi, {customer_name}!', [
+                                    'customer_name' => Yii::$app->user->identity->customer_name
+                                ]) ?>
+                            </p>
                         </div>
                         <?php } ?>
 
@@ -217,7 +224,11 @@ $action = Yii::$app->controller->action->id;
         <li><a href="<?php echo Url::toRoute('/users/address', true); ?>" title="<?php echo Yii::t('frontend', 'Address Book'); ?>"><?php echo Yii::t('frontend', 'Address Book'); ?></a></li>
     </ul>
 </li>
-
+<li>
+    <a href="<?php echo Url::to(['cart/index']); ?>">
+        <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
+    </a>
+</li>    
 <li><a href="<?php echo Url::toRoute(['/users/events','slug'=>'events' ]) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
 <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
@@ -228,14 +239,14 @@ $action = Yii::$app->controller->action->id;
                         <div class="input-group">
                             <div id="navigation-bar">
                                 <form id="search"  method="post" onsubmit="return false;">
-<?php
-if (!Yii::$app->user->isGuest) {
-    $search_div = '<div class="form-group has-feedback" style="margin-bottom:0px">';
-} else {
-    $search_div = '<div class="form-group has-feedback">';
-}
-echo $search_div;
-?>
+                                    <?php
+                                    if (!Yii::$app->user->isGuest) {
+                                        $search_div = '<div class="form-group has-feedback" style="margin-bottom:0px">';
+                                    } else {
+                                        $search_div = '<div class="form-group has-feedback">';
+                                    }
+                                    echo $search_div;
+                                    ?>
                                     <label for="search" class="sr-only"><?= Yii::t("frontend", "Search") ?></label>
                                     <input type="search" class="form-control sear_ip_head" onkeyup="show_close3()" autofocus name="search_input_desk" id="search_input_header" autocomplete="off" title="search" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>">
                                     <button id="search-close1" class="search-clear icon-search_clear" type="reset"><?= Yii::t("frontend", "Clear") ?></button>
@@ -409,7 +420,7 @@ echo $search_div;
 
                 </ul>
             </li>
-            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('site/shop', true); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
+            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('shop/index', true); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
             </li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/themes', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>
