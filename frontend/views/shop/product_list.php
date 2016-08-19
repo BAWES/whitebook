@@ -76,257 +76,30 @@
                                 <nav class="row-offcanvas row-offcanvas-left">
                                     <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                                         <div id="accordion" class="panel-group">
+
                                             <!-- BEGIN CATEGORY FILTER  -->
-                                            <?php
-                                            /* Get slug name to find category */
-                                            $subcategory = SubCategory::loadsubcat($slug);
-                                            $col = 1;
-                                            foreach ($subcategory as $key => $value) {
-                                                $t = $in ='';
-                                                if ($col==1) {
-                                                    $s_class='minus_acc';
-                                                    $t='area-expanded="true"';
-                                                    $in='in';
-                                                } else {
-                                                    $s_class='plus_acc';
-                                                }
-                                                ?>
-                                                <div class="panel panel-default" >
-                                                    <div class="panel-heading">
-                                                        <div class="clear_left">
-                                                            <p>
-                                                                <?php
-
-                                                                if (Yii::$app->language == 'en') {
-                                                                    echo $value['category_name'];
-                                                                } else {
-                                                                    echo $value['category_name_ar'];
-                                                                } ?>
-
-                                                                <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a>
-                                                            </p>
-                                                        </div>
-                                                        <div class="clear_right">
-                                                            <a href="#<?= $value['category_id']; ?>" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-                                                                <h4 class="panel-title">
-                                                                    <span class="<?= $s_class;?>"></span>
-                                                                </h4>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div id="<?= $value['category_id']; ?>" <?= $t; ?> class="panel-collapse collapse <?= $in; ?>"  >
-                                                        <div class="panel-body">
-                                                            <div class="table">
-                                                                <?php
-                                                                $childcategory = ChildCategory::loadchildcategoryslug($value['category_id']);
-                                                                /* Display scroll for more than three li */
-                                                                $class = (count($childcategory) > 3 ) ? "test_scroll" : $class = "";
-                                                                /* Display scroll for more than three li */
-                                                                ?>
-                                                                <ul class="<?= $class; ?>">
-                                                                    <?php
-                                                                    foreach ($childcategory as $key => $value) {
-
-                                                                        if (isset($get['category']) && $get['category'] !="") {
-                                                                            $val = explode(' ',$get['category']);
-                                                                            $checked = (in_array($value['slug'],$val)) ? 'checked=checked' : '';
-                                                                        }
-                                                                        ?>
-                                                                        <li>
-                                                                            <label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
-                                                                                <input name="items" data-element="input" class="items" id="checkbox-<?= $value['category_name'] ?>"
-                                                                                    value="<?= $value['slug'] ?>" step="<?= $value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
-
-                                                                                <?php
-
-                                                                                if (Yii::$app->language == 'en') {
-                                                                                    echo ucfirst(strtolower($value['category_name']));
-                                                                                } else {
-                                                                                    echo ucfirst(strtolower($value['category_name_ar']));
-                                                                                }
-
-                                                                                ?>
-                                                                            </label>
-                                                                        </li>
-                                                                    <?php }  ?>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <?php $col++; } ?>
+                                            <?php 
+                                                require 'filter/category.php';
+                                            ?>
                                             <!--  END CATEGORY FILTER-->
+                                            
                                             <!--  BEGIN THEME FILTER-->
-                                            <div class="panel panel-default" >
-                                                <div class="panel-heading">
-                                                    <div class="clear_left"><p><?= Yii::t('frontend', 'Themes') ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
-                                                    <div class="clear_right">
-                                                        <a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-                                                            <h4 class="panel-title">
-                                                                <span class="plus_acc"></span>
-                                                            </h4>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div id="themes" class="panel-collapse collapse" aria-expanded="false">
-                                                    <div class="panel-body">
-                                                        <div class="table">
-                                                            <?php
-                                                            /* BEGIN Display scroll for more than three li */
-                                                            $class = (count($themes) > 3 ) ? "test_scroll" : $class = "";
-                                                            /* END Display scroll for more than three li */
-                                                            ?>
-                                                            <ul class="<?= $class; ?>">
-                                                                <?php foreach ($themes as $key => $value) {
-                                                                    if (isset($get['themes']) && $get['themes'] !="") {
-                                                                        $val = explode(' ',$get['themes']);
-
-                                                                        $checked1 = (in_array($value['slug'],$val)) ? 'checked=checked' : '';
-                                                                    }
-
-                                                                    if (Yii::$app->language == "en") {
-                                                                        $theme_name = ucfirst(strtolower($value['theme_name']));
-                                                                    } else {
-                                                                        $theme_name = ucfirst(strtolower($value['theme_name_ar']));
-                                                                    }
-                                                                    ?>
-                                                                    <li>
-                                                                        <label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">
-                                                                        <input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> ><?= $theme_name ?></label>
-                                                                    </li>
-                                                                <?php } ?>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <?php 
+                                                require 'filter/theme.php';
+                                            ?>
                                             <!--  END THEME FILTER -->
 
                                             <!--  BEGIN VENDOR FILTER -->
-                                            <div class="panel panel-default" >
-                                                <div class="panel-heading">
-                                                    <div class="clear_left"><p><?= Yii::t('frontend', 'Vendor') ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
-                                                    <div class="clear_right">
-                                                        <a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-                                                            <h4 class="panel-title">
-                                                                <span class="plus_acc"></span>
-                                                            </h4>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div id="vendor" class="panel-collapse collapse" area-expanded="false" >
-                                                    <div class="panel-body">
-                                                        <div class="table">
-                                                            <?php
-
-                                                            /* BEGIN Display scroll for more than three li */
-                                                            $class = (count($vendor) > 3 ) ? "test_scroll" : $class = "";
-                                                            /* END Display scroll for more than three li */
-                                                            ?>
-                                                            <ul class="<?= $class; ?>">
-                                                                <?php foreach ($vendor as $key => $value) {
-
-                                                                    if (isset($get['vendor']) && $get['vendor'] !="") {
-                                                                        $val = explode(' ',$get['vendor']);
-                                                                        $checked2  = (in_array($value['slug'],$val)) ? 'checked=checked' : '';
-                                                                    }
-
-                                                                    if (Yii::$app->language == "en") {
-                                                                        $vendor_name = ucfirst(strtolower($value['vendor_name']));
-                                                                    } else {
-                                                                        $vendor_name = ucfirst(strtolower($value['vendor_name_ar']));
-                                                                    }
-
-                                                                    ?>
-                                                                    <li>
-                                                                        <label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>">
-                                                                            <input name="vendor" data-element="input" class="items" id="checkbox-<?= $value['vendor_name'] ?>" step="<?= $value['vendor_name'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked2) && $checked2 !="") ?  $checked2 : ''; ?> ><?= $vendor_name; ?></label>
-                                                                    </li>
-                                                                <?php }?>
-
-                                                            </ul>
-                                                        </div><!-- END table -->
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <?php 
+                                                require 'filter/vendor.php';
+                                            ?>
                                             <!--  END VENDOR FILTER-->
+
                                             <!--  BEGIN PRICE FILTER -->
-                                            <div class="panel panel-default" >
-                                                <div class="panel-heading">
-                                                    <div class="clear_left">
-                                                        <p>
-                                                            <?= Yii::t('frontend', 'Price'); ?>
-                                                            <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?>
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                    <div class="clear_right">
-                                                        <a href="#price" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_price">
-                                                            <h4 class="panel-title">
-		                                                        <span class="plus_acc"></span>
-                                                            </h4>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
-                                                    <div class="panel-body">
-                                                        <div class="table">
-                                                            <ul class="test_scroll">
-                                                                <?php
-
-                                                                /* Get max price_per_unit in item table */
-                                                                $min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
-
-                                                                $max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
-
-                                                                $max = $max_price[0]['price'];
-
-                                                                $divide = round($max / 5);
-
-                                                                $i = 0;
-
-                                                                for ($x = $min_price[0]['price'] ; $x <= 1000 ; $x+=$divide) {
-
-                                                                    $min_kd = round($x-$divide);
-
-                                                                    if ($min_kd > 0 ) {
-
-                                                                        foreach ($imageData as $key => $value) {
-                                                                            /* Check checkbox based on URL */
-                                                                            if (isset($get['price']) && $get['price'] !="") {
-
-                                                                                $val = explode(' ',$get['price']);
-
-                                                                                $checked3 = (in_array($value['slug'],$val)) ? 'checked=checked' : '';
-                                                                            }
-                                                                            /* Check checkbox based on URL */
-                                                                            # code...
-                                                                            $item_price = $value['item_price_per_unit'];
-
-                                                                            $check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
-
-                                                                            if($check_range ==1)	{
-                                                                                ?>
-                                                                                <li>
-                                                                                    <label class="label_check" for="checkbox-<?php echo $x;?>">
-                                                                                        <input name="price" id="checkbox-<?php echo $x;?>" value="<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?>-<?php echo $x = ceil($x / 100) * 100;?>" type="checkbox">
-                                                                                        <?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
-                                                                                </li>
-                                                                                <?php
-                                                                                break;
-                                                                            }
-                                                                            $i++; }
-                                                                    }
-                                                                }
-
-                                                                ?>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <?php 
+                                                require 'filter/price.php';
+                                            ?>
                                             <!--  END PRICE FILTER-->
-                                            <!-- END FILTER  -->
                                         </div>
                                 </nav>
                             </div>
