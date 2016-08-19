@@ -196,8 +196,6 @@ class VendorController extends Controller
                     }
                 }
 
-                $model->package_id = 0;
-
                 if ($model->save(false)) {
                     //Add to log
                     Yii::info('[New Vendor] Admin created new vendor '.$model['vendor_name'], __METHOD__);
