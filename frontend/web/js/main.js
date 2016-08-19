@@ -9,15 +9,15 @@
 jQuery(document).ready(function(){
     jQuery('body').append('<div class="ma5-mobile-menu-container"/>');
     jQuery('.ma5-menu-mobile').find('ul').clone().addClass('ma5-menu-panel').appendTo('.ma5-mobile-menu-container').find('ul').remove();
-    
-    jQuery('.ma5-toggle-menu').on('click touch', function () {        
-        if(jQuery(".plan_venues").hasClass("toggled")){            
-            jQuery(".plan_venues").removeClass("toggled");           
+
+    jQuery('.ma5-toggle-menu').on('click touch', function () {
+        if(jQuery(".plan_venues").hasClass("toggled")){
+            jQuery(".plan_venues").removeClass("toggled");
             jQuery(".overlay").css("display","none");
             isClosed = false;
             // jQuery(".overlay").css("display","block");
         }
-        
+
         jQuery('html').toggleClass('ma5-menu-active');
     });
 
@@ -43,7 +43,7 @@ jQuery(document).ready(function(){
         var itemPath = itemPath.join("-");
         jQuery('.ma5-menu-panel').removeClass('ma5-active-leave ma5-parent-leave ma5-active-enter ma5-parent-enter');
         jQuery('.ma5-menu-panel.' + itemParent).addClass('ma5-parent-leave');
-        jQuery('.ma5-menu-panel.' + itemPath).addClass('ma5-active-leave'); 
+        jQuery('.ma5-menu-panel.' + itemPath).addClass('ma5-active-leave');
     });
 });
 
@@ -52,17 +52,17 @@ var overlay = jQuery('.overlay');
 var isClosed = false;
 
 jQuery(document).delegate('.filter_butt', 'click', function () {
-    
-    if(jQuery("html").hasClass("ma5-menu-active")) {      
-        jQuery("html").removeClass("ma5-menu-active");      
+
+    if(jQuery("html").hasClass("ma5-menu-active")) {
+        jQuery("html").removeClass("ma5-menu-active");
     }
-       
-    if (isClosed == true) {     
+
+    if (isClosed == true) {
         overlay.hide();
         jQuery(this).removeClass('ses_dct');
         jQuery(this).addClass('ses_act');
         isClosed = false;
-    } else {   
+    } else {
         overlay.show();
         jQuery(this).removeClass('ses_act');
         jQuery(this).addClass('ses_dct');
@@ -71,17 +71,17 @@ jQuery(document).delegate('.filter_butt', 'click', function () {
 });
 
 jQuery(document).delegate('.search_header', 'click', function () {
-    
-    if(jQuery("html").hasClass("ma5-menu-active")) {      
-        jQuery("html").removeClass("ma5-menu-active");      
+
+    if(jQuery("html").hasClass("ma5-menu-active")) {
+        jQuery("html").removeClass("ma5-menu-active");
     }
-       
-    if (isClosed == true) {     
+
+    if (isClosed == true) {
         overlay.hide();
         jQuery(this).removeClass('ses_dct');
         jQuery(this).addClass('ses_act');
         isClosed = false;
-    } else {   
+    } else {
         overlay.show();
         jQuery(this).removeClass('ses_act');
         jQuery(this).addClass('ses_dct');

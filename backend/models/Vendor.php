@@ -30,7 +30,6 @@ class Vendor extends \common\models\Vendor
 
   public static function getVendor_packagedate($id)
   {
-        $id = 1;  // id for testing // check while dynamic
         $datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
         ->where(['vendor_id' => $id])
         ->asArray()
@@ -54,7 +53,7 @@ class Vendor extends \common\models\Vendor
       if ($blocked_dates) {
         $max = max(array_map('strtotime', $blocked_dates));
         return date('d-m-Y', $max);
-      } 
+      }
   }
 
   public function behaviors()

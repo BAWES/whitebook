@@ -33,6 +33,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
      			[ 'class' => 'yii\grid\CheckboxColumn'],
                  ['class' => 'yii\grid\SerialColumn'],
+                 [
+                     'attribute'=>'item_name',
+                     'value'=>function($data){
+                         return (strlen($data->item_name)>30) ? substr($data->item_name,0,30).'...' : $data->item_name;
+                     },
+                 ],
                  'item_name',
                  [
      				'attribute'=>'category_id',
@@ -45,6 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
      			],
 			[
 				'attribute'=>'type_id',
+                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center'],
 				'label'=>'Item Type',
 				'value'=>function($data){
 					return $data->getItemType($data->type_id);
@@ -53,6 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
      [
       'attribute'=>'item_status',
+      'contentOptions' => ['class' => 'text-center'],
+      'headerOptions' => ['class' => 'text-center'],
       'label'=>'Status',
       'format'=>'raw',
 			  'value'=>function($data) {
@@ -62,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			  	}else{
 			  		return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status', 'class'=>'status deactive']);
 			  	}
-				
+
 				},
 			 'filter' =>  \admin\models\Vendoritem::Activestatus(),
     ],
@@ -85,6 +95,8 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute'=>'created_datetime',
 				'format' => ['date', Yii::$app->params['dateFormat']],
 				'label'=>'created date',
+                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center'],
 			],
        			['class' => 'yii\grid\ActionColumn',
                    'header'=>'Action',
