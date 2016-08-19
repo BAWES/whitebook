@@ -7,16 +7,16 @@ function validateEmail(email) {
 
 jQuery(window).resize(function(){
 
-    //make dropdown box fullwidth 
+    //make dropdown box fullwidth
     jQuery('.mega-dropdown-menu').css('width', jQuery(window).width());
 
-    //set left position for dropdown ment 
+    //set left position for dropdown ment
     $left = jQuery('.nav.navbar-nav').offset().left;
     jQuery('.mega-dropdown-menu').css('left', '-' + $left + 'px');
 
     if(jQuery(window).width() <= 990) {
-        jQuery('#home_slider').css('padding-top', $('#top_header').height() + 'px');    
-    }    
+        jQuery('#home_slider').css('padding-top', $('#top_header').height() + 'px');
+    }
 });
 
 jQuery(document).ready(function () {
@@ -120,25 +120,25 @@ jQuery(document).ready(function () {
     };
 
     if( isTouchDevice() ) {
-        jQuery("body").swipe({
+        /*jQuery("body").swipe({
             swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
                 if ( direction == 'left' ) { jQuery('html').removeClass('ma5-menu-active');}
                 if ( direction == 'right' ) { jQuery('html').addClass('ma5-menu-active');}
             },
             allowPageScroll: "vertical"
-        });
+        });*/
     };
     /*Responsive menu script end*/
-});//end document ready 
+});//end document ready
 
 jQuery('#dp3,#delivery_date').datepicker({
     format: 'dd-mm-yyyy',
     startDate:'today',
     autoclose:true,
 });
-// megamenu script end 
+// megamenu script end
 
-// plan last:child script 
+// plan last:child script
 jQuery(document).ready(function() {
     jQuery('.plan_sections ul li:nth-child(3n)').addClass("margin-rightnone");
 });
@@ -195,7 +195,7 @@ jQuery("#reset_button").click( function()
 
 jQuery('#resetForm input ').keydown(function(e) {
     if (e.keyCode == 13)
-    {  
+    {
         resetpwdcheck();
         //jQuery('#login_msg').hide();
     }
@@ -239,7 +239,7 @@ function resetpwdcheck()
             async: false,
             success:function(data)
             {
-                console.log(data); 
+                console.log(data);
                 if(data==1)
                 {
                     jQuery('#reset_loader').hide();
@@ -297,7 +297,7 @@ function logincheck()
                     item_name=arr[1];
 
                     if(status==-1)
-                    {                        
+                    {
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
                         jQuery('#result').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
@@ -305,18 +305,18 @@ function logincheck()
                         jQuery('#loader').hide();
                     }
                     else if(status==-2)
-                    {                        
+                    {
                         jQuery('#login_loader').hide();
                         jQuery('#result').html(user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-3)
-                    {                        
+                    {
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
                         jQuery('#result').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-4)
-                    {                        
+                    {
                         jQuery('#login_loader').hide();
                         jQuery('#result').addClass('alert-success alert fade in');
                         jQuery('#result').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
@@ -494,7 +494,7 @@ jQuery("#register").click(function()
             type:"post",
             data:"customer_name="+fname+"&customer_last_name="+lname+"&customer_email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&customer_gender="+gender+"&customer_mobile="+phone+"&customer_password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
             success:function(data)
-            {    
+            {
                 if(data==0)
                 {
                     jQuery('#myModal1').modal('hide');
@@ -508,7 +508,7 @@ jQuery("#register").click(function()
                 else if(data==1)
                 {
                     jQuery('#myModal1').modal('hide');
-                    
+
                     window.setTimeout(function(){
                         location.reload()
                     });
@@ -836,7 +836,7 @@ jQuery('#search_input_header').keydown(function(e) {
 
         var url = search_result_url;
         var path = url.concat(search2);
-        
+
         window.location.href=path;
     }
 });
@@ -850,7 +850,7 @@ jQuery('#sear_button_submit').click(function(e) {
 
         var url = search_result_url;
         var path = url.concat(search2);
-        
+
         window.location.href=path;
     }
 });
@@ -959,7 +959,7 @@ function mobile_search_data(search){
     {
         jQuery("#mobile_search_list").html('');
     }
-}//END function mobile_search_data 
+}//END function mobile_search_data
 
 jQuery("#search-terms2").keyup(function(e){if(e.keyCode == 8)
     {
@@ -1001,7 +1001,7 @@ function add_to_favourite(x)
                 jQuery('#add_to_event_success'+x).modal('hide');
                 jQuery('#login_success').modal('show');
                 jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">' + item_add_to_wishlist_success + '</span>');
-                
+
                 window.setTimeout(function(){
                     location.reload()},1000
                 )
@@ -1085,7 +1085,7 @@ jQuery(".add_to_favourite").click(function(){
 
 jQuery(".faver_evnt_product").click(function(){
     if(isGuest) {
-        
+
         jQuery('#loading_img').show();
 
         item_id=(jQuery(this).attr('id'));
@@ -1393,7 +1393,7 @@ function default_session_data(x)
 if(session_default == 1) {
     window.onload=default_session_data(1);
 }
-    
+
 if(session_favourite_status) {
     window.onload = default_session_data(session_favourite_status);
 }
@@ -1414,8 +1414,8 @@ if(session_reset_password){
         var x = session_reset_password;
         if(x!=1){
             jQuery('#resetPwdModal').modal('show');
-            jQuery('#userid1').val(session_reset_password);                            
-        }else{                            
+            jQuery('#userid1').val(session_reset_password);
+        }else{
             jQuery('#login_success').modal('show');
             jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_fail_msg+'</span>');
             window.setTimeout(function() {
@@ -1424,7 +1424,7 @@ if(session_reset_password){
         }
     }
     window.onload=display_reset_password_modal;
-}//END if(session_reset_password){ 
+}//END if(session_reset_password){
 
 function addevent1(item_id)
 {
@@ -1442,8 +1442,8 @@ function addevent1(item_id)
 }
 /* END ADD EVENT */
 
-if(session_event_status>0){                        
-    var x = session_event_status;                    
+if(session_event_status>0){
+    var x = session_event_status;
     window.onload=addevent1(x);
 }
 
@@ -1460,7 +1460,7 @@ function show_activate_modal_true()
     });
 }
 
-/* BEGIN RESPONSIVE MENU SINGLE CLICK TO OPEN SUB MENUS */
+/* BEGIN RESPONSIVE MENU SINGLE CLICK TO OPEN SUB MENUS 
 jQuery(document).on('touchstart', function() {
     documentClick = true;
 });
@@ -1476,7 +1476,7 @@ jQuery(document).on('click touchend', function(event) {
     }
 });
 /* END RESPONSIVE MENU SINGLE CLICK TO OPEN SUB MENUS */
-                   
+
 
 // Registration Completed start
 function show_register_modal_true()
@@ -1511,10 +1511,10 @@ if(session_key == 1){
 if(session_key == 2){
     function show_password_reset_modal_true()
     {
-        
+
         jQuery('#login_success').modal('show');
         jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_success_msg+'</span>');
         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
     }
-    window.onload=show_password_reset_modal_true();  
+    window.onload=show_password_reset_modal_true();
 }
