@@ -8,9 +8,9 @@
 jQuery(document).ready(function(){
     jQuery('body').append('<div class="ma5-mobile-menu-container"/>');
     jQuery('.ma5-menu-mobile').find('ul').clone().addClass('ma5-menu-panel').appendTo('.ma5-mobile-menu-container').find('ul').remove();
-    jQuery('.ma5-toggle-menu').on('click touch', function () {        
-        if(jQuery(".plan_venues").hasClass("toggled")){            
-            jQuery(".plan_venues").removeClass("toggled");           
+    jQuery('.ma5-toggle-menu').on('click touch', function () {
+        if(jQuery(".plan_venues").hasClass("toggled")){
+            jQuery(".plan_venues").removeClass("toggled");
             jQuery(".overlay").css("display","none");
             isClosed = false;
             // jQuery(".overlay").css("display","block");
@@ -37,27 +37,92 @@ jQuery(document).ready(function(){
         var itemPath = itemPath.join("-");
         jQuery('.ma5-menu-panel').removeClass('ma5-active-leave ma5-parent-leave ma5-active-enter ma5-parent-enter');
         jQuery('.ma5-menu-panel.' + itemParent).addClass('ma5-parent-leave');
-        jQuery('.ma5-menu-panel.' + itemPath).addClass('ma5-active-leave'); 
+        jQuery('.ma5-menu-panel.' + itemPath).addClass('ma5-active-leave');
     });
 });
 
-function filter_butt() {
-	if(jQuery("html").hasClass("ma5-menu-active"))
-	{      
-		jQuery("html").removeClass("ma5-menu-active");		
-	}
-   
+/* BEGIN RESPONSIVE FILTER NAVIGATION */
+ var overlay = jQuery('.overlay');
+ var isClosed = false;
 
+ jQuery(document).delegate('.filter_butt', 'click', function () {
 
-if (isClosed == true) {     
-overlay.hide();
-trigger.removeClass('ses_dct');
-trigger.addClass('ses_act');
-isClosed = false;
-} else {   
-overlay.show();
-trigger.removeClass('ses_act');
-trigger.addClass('ses_dct');
-isClosed = true;
-}
-}
+     if(jQuery("html").hasClass("ma5-menu-active")) {
+         jQuery("html").removeClass("ma5-menu-active");
+     }
+
+     if (isClosed == true) {
+         overlay.hide();
+         jQuery(this).removeClass('ses_dct');
+         jQuery(this).addClass('ses_act');
+         isClosed = false;
+     } else {
+         overlay.show();
+         jQuery(this).removeClass('ses_act');
+         jQuery(this).addClass('ses_dct');
+         isClosed = true;
+     }
+ });
+
+ jQuery(document).delegate('.search_header', 'click', function () {
+     if(jQuery("html").hasClass("ma5-menu-active")) {
+         jQuery("html").removeClass("ma5-menu-active");
+     }
+
+     if (isClosed == true) {
+         overlay.hide();
+         jQuery(this).removeClass('ses_dct');
+         jQuery(this).addClass('ses_act');
+         isClosed = false;
+    } else {
+        overlay.show();
+        jQuery(this).removeClass('ses_act');
+        jQuery(this).addClass('ses_dct');
+        isClosed = true;
+    }
+});
+
+/* BEGIN CLEAR FILTER */
+jQuery(document).delegate('a#filter-clear', 'click', function(){
+    jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
+    jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
+    jQuery(this).hide();
+    filter();
+})
+/* BEGIN CLEAR FILTER */
+jQuery(document).delegate('a#filter-clear', 'click', function(){
+    jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
+    jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
+    jQuery(this).hide();
+    filter();
+})
+/* END CLEAR FILTER */
+
+jQuery(document).delegate('[data-toggle="offcanvas"]', 'click', function () {
+    jQuery('#wrapper').toggleClass('toggled');
+});
+
+/* BEGIN load category and reload the page */
+jQuery(document).delegate('#main-category', 'change', function(){
+    var s = jQuery('#main-category :selected').val();
+    var hostname = window.location.href;
+    var newUrl1 = url.substring(0, url.indexOf('plan'));
+    window.location.href = jQuery(this).val();
+});
+/* END load category and reload the page */
+
+jQuery(function(){
+
+    jQuery('#left_side_cate nav').removeClass('navbar navbar-fixed-top');
+    jQuery('#left_side_cate ul').removeClass('nav sidebar-nav');
+    jQuery('#left_side_cate nav').removeAttr('id')
+
+    if (jQuery(window).width() < 991) {
+        jQuery('#left_side_cate nav').addClass ('navbar navbar-fixed-top');
+        jQuery('#left_side_cate ul').addClass ('nav sidebar-nav');
+        jQuery('#left_side_cate nav').attr ('id','sidebar-wrapper')
+    }
+
+    /* END RESPONSIVE FILTER NAVIGATION */
+    jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
+})

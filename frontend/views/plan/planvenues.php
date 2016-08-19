@@ -57,9 +57,9 @@ $get = Yii::$app->request->get();
 
 					<select class="selectpicker" style="display: none;" id="main-category">
 
-						<?php 
+						<?php
 
-						foreach($top_categories as $category) { 
+						foreach($top_categories as $category) {
 
 							if ($category_id == $category['category_id']) {
 								$selected = 'selected="selected"';
@@ -73,9 +73,9 @@ $get = Yii::$app->request->get();
 								$category_name = $category['category_name_ar'];
 							}
 						?>
-							<option 
-								data-icon="<?= $category['icon'] ?>" 
-								value="<?= Url::toRoute(['plan/plan', 'slug'=> $category['slug']]) ?>" 
+							<option
+								data-icon="<?= $category['icon'] ?>"
+								value="<?= Url::toRoute(['plan/plan', 'slug'=> $category['slug']]) ?>"
 								name="category" <?= $selected ?>>
 								<?= $category_name ?>
 							</option>
@@ -105,7 +105,7 @@ $get = Yii::$app->request->get();
 			$col = 1;
 
 			foreach ($subcategory as $key => $value) {
-				
+
 				$t = $in ='';
 
 				if($col==1){
@@ -125,14 +125,14 @@ $get = Yii::$app->request->get();
 							<?php
 
 							if(Yii::$app->language == 'en') {
-								echo $value['category_name']; 
+								echo $value['category_name'];
 							} else{
-								echo $value['category_name_ar']; 
+								echo $value['category_name_ar'];
 							} ?>
 
 							<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">
 								- <?= Yii::t('frontend', 'Clear') ?></a>
-							
+
 							</p>
 						</div>
 						<div class="clear_right">
@@ -174,22 +174,22 @@ $get = Yii::$app->request->get();
 										<li>
 											<label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
 
-												<input 
-													name="items" 
-													data-element="input" 
-													class="items" 
+												<input
+													name="items"
+													data-element="input"
+													class="items"
 													id="checkbox-<?= $value['category_name'] ?>"
-													value="<?= $value['slug'] ?>" 
+													value="<?= $value['slug'] ?>"
 													step="<?= $value['category_id'] ?>"
-													type="checkbox" 
+													type="checkbox"
 													<?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
-												
+
 												<?php
 
 												if(Yii::$app->language == 'en') {
-													echo ucfirst(strtolower($value['category_name'])); 
+													echo ucfirst(strtolower($value['category_name']));
 												}else{
-													echo ucfirst(strtolower($value['category_name_ar'])); 
+													echo ucfirst(strtolower($value['category_name_ar']));
 												}
 
 												?>
@@ -240,11 +240,11 @@ $get = Yii::$app->request->get();
 												}
 
 												if(Yii::$app->language == "en"){
-												  	$theme_name = ucfirst(strtolower($value['theme_name'])); 
-												}else{ 
-													$theme_name = ucfirst(strtolower($value['theme_name_ar'])); 
+												  	$theme_name = ucfirst(strtolower($value['theme_name']));
+												}else{
+													$theme_name = ucfirst(strtolower($value['theme_name_ar']));
 												}
-												
+
 												?>
 												<li>
 													<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">
@@ -299,11 +299,11 @@ $get = Yii::$app->request->get();
 							}
 
 							if(Yii::$app->language == "en"){
-							  	$vendor_name = ucfirst(strtolower($value['vendor_name'])); 
-							}else{ 
-								$vendor_name = ucfirst(strtolower($value['vendor_name_ar'])); 
+							  	$vendor_name = ucfirst(strtolower($value['vendor_name']));
+							}else{
+								$vendor_name = ucfirst(strtolower($value['vendor_name_ar']));
 							}
-							
+
 							?>
 							<li>
 							<label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>">
@@ -323,7 +323,7 @@ $get = Yii::$app->request->get();
 <div class="clear_left">
 	<p>
 		<?= Yii::t('frontend', 'Price'); ?>
-		<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?>	
+		<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?>
 		</a>
 	</p>
 </div>
@@ -499,7 +499,7 @@ if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php 
 </div>
 </section>
 
-<?php 
+<?php
 
 $giflink = Url::to("@web/images/ajax-loader.gif");
 
@@ -514,7 +514,7 @@ $this->registerJs("
 		if(jQuery('.label_check input').length ) {
 
 			jQuery('.label_check').each(function () {
-				
+
 				jQuery(this).removeClass('c_on');
 
 				if(jQuery(this).parents('.panel-body').find('label.c_on').length == 0){
@@ -535,11 +535,11 @@ $this->registerJs("
 		}
 
 		if (jQuery('.label_radio input').length) {
-			
+
 			jQuery('.label_radio').each(function () {
 				jQuery(this).removeClass('r_on');
 			});
-			
+
 			jQuery('.label_radio input:checked').each(function () {
 				jQuery(this).parent('label').addClass('r_on');
 			});
@@ -653,7 +653,7 @@ $this->registerJs("
 	var csrfToken = jQuery('meta[name=\"csrf-token\"]').attr('content');
 	var url = window.location.href;     // Returns full URL
 	setupLabel();
-	
+
 	jQuery('.label_check input').on('change',function() {
 		filter();
 	});
@@ -662,7 +662,7 @@ $this->registerJs("
 	var url = window.location.href;
 	var newUrl = url.substring(0, url.indexOf('?'));
 	var slug;
-	
+
 	if(newUrl !='')
 	{
 		 slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
@@ -677,11 +677,11 @@ $this->registerJs("
 
 	jQuery('button#loadmore').click(function(event) {
 		jQuery('#planloader').show();
-	
+
 		setupLabel();
 		limit = limit+4;
 		var path = '".Yii::$app->urlManager->createAbsoluteUrl('plan/loadmoreitems')."';
-	
+
 		jQuery.ajax({
 			type:'POST',
 			url:path,
@@ -710,7 +710,7 @@ $this->registerJs("
 	function filter(){
 		jQuery('#planloader').show();
 		jQuery('.events_listing').css({'opacity' : '0.5', 'position' : 'relative'});
-		
+
 		var category_name = jQuery('input[name=items]:checked').map(function() {
 			return this.value;
 		}).get().join('+');
@@ -749,11 +749,11 @@ $this->registerJs("
 			type:'POST',
 			url:path,
 			data:{
-				item_ids: category_name, 
+				item_ids: category_name,
 				themes : theme_name,
 				vendor : vendor_name,
 				price : price_val,
-				slug: slug, 
+				slug: slug,
 				_csrf : csrfToken
 			},
 			success:function(data){
@@ -785,55 +785,8 @@ $this->registerJs("
 				});
 			});
 		});
-	}//end of function 
+	}//end of function
 
-	/* BEGIN CLEAR FILTER */
-	jQuery('a#filter-clear').on('click',function(){
-		jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
-		jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
-		jQuery(this).hide();
-		filter();
-	})
-	/* END CLEAR FILTER */
-
-	/* BEGIN RESPONSIVE FILTER NAVIGATION */
-	var trigger = jQuery('.filter_butt,.search_header'),
-	overlay = jQuery('.overlay'),
-	isClosed = false;
-
-	trigger.click(function () {
-		filter_butt();   /* FUNCTION REFERENCE main.js */
-	});
-
-	jQuery('.search_header').click(function(){
-		if (isClosed == true) {
-			overlay.hide();
-			trigger.removeClass('ses_act');
-			trigger.addClass('ses_dct');
-			isClosed = false;
-		} else {
-			overlay.show();
-			trigger.removeClass('ses_act');
-			trigger.addClass('ses_dct');
-			isClosed = true;
-		}
-	});
-
-	jQuery('[data-toggle=\"offcanvas\"]').click(function () {
-		jQuery('#wrapper').toggleClass('toggled');
-	});
-
-	jQuery('#left_side_cate nav').removeClass('navbar navbar-fixed-top');
-	jQuery('#left_side_cate ul').removeClass('nav sidebar-nav');
-	jQuery('#left_side_cate nav').removeAttr('id')
-
-	if (jQuery(window).width() < 991) {
-		jQuery('#left_side_cate nav').addClass ('navbar navbar-fixed-top');
-		jQuery('#left_side_cate ul').addClass ('nav sidebar-nav');
-		jQuery('#left_side_cate nav').attr ('id','sidebar-wrapper')
-	}
-
-	/* END RESPONSIVE FILTER NAVIGATION */
-	jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
+	
 
 ");
