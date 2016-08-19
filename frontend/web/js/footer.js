@@ -21,6 +21,10 @@ jQuery(window).resize(function(){
 
 jQuery(document).ready(function () {
 
+    if(session_show_login_modal == 1) {
+        jQuery('#myModal').modal('show');
+    }
+
     /*home slider new start*/
     var owl = jQuery("#home-banner-slider");
 

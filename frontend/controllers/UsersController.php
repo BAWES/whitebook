@@ -270,6 +270,7 @@ class UsersController extends BaseController
     public function actionAccount_settings()
     {
         if (Yii::$app->user->isGuest) {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
             return $this->goHome();
         }
 
@@ -496,6 +497,7 @@ class UsersController extends BaseController
     public function actionEvents($type = '', $events ='', $thingsilike ='')
     {
         if (Yii::$app->user->isGuest) {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
             return $this->goHome();
         }
 
@@ -758,6 +760,11 @@ class UsersController extends BaseController
 
     public function actionEventdetails($slug = '')
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
+            return $this->goHome();
+        }        
+
         $event_details = Events::find()
             ->where(['customer_id' => Yii::$app->user->identity->customer_id, 'slug' => $slug])
             ->asArray()
@@ -802,6 +809,11 @@ class UsersController extends BaseController
 
     public function actionExcel($slug = '')
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
+            return $this->goHome();
+        }
+
         $event_details = Events::find()
             ->where(['customer_id' => Yii::$app->user->identity->customer_id, 'slug' => $slug])
             ->asArray()
@@ -866,9 +878,10 @@ class UsersController extends BaseController
         $customer_id = Yii::$app->user->getId();
         
         if ($customer_id == '') {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
             return $this->goHome();
         }
-
+        
         if(Yii::$app->request->isPost) {
 
             $customer_address = new CustomerAddress();
