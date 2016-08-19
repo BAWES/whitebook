@@ -58,6 +58,7 @@ $this->registerJs("
     var session_reset_password = '".Yii::$app->session->get('reset_password_mail')."';
     var session_final_reset = '".Yii::$app->session->get('final_reset')."';
     var session_register = '".Yii::$app->session->get('register')."';
+    var session_show_login_modal = '".Yii::$app->session->get('show_login_modal')."';
     var you_are_login_and = '".Yii::t('frontend','You are now logged in and')."';
 
     var session_key = '".Yii::$app->session->get('key')."';
@@ -99,6 +100,7 @@ Yii::$app->session->set('event_status','0');
 Yii::$app->session->set('reset_password_mail','');
 Yii::$app->session->set('register',0);
 Yii::$app->session->set('key','0');
+Yii::$app->session->set('show_login_modal', 0);
 
 //$this->registerJsFile('@web/js/jquery.touchSwipe.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
