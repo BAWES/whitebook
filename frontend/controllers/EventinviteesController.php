@@ -113,7 +113,6 @@ class EventinviteesController extends BaseController
     public function actionDelete($id)
     {
         if (Yii::$app->request->isAjax) {
-            //echo $id; die;
             return $this->findModel($id)->delete();
         }
 
