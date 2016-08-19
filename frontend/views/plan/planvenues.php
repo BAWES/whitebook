@@ -96,404 +96,79 @@ $get = Yii::$app->request->get();
 				<nav class="row-offcanvas row-offcanvas-left">
 					<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 					<div id="accordion" class="panel-group">
-			<!-- BEGIN CATEGORY FILTER  -->
-			<?php
-
-			/* Get slug name to find category */
-			$subcategory = SubCategory::loadsubcat($slug);
-
-			$col = 1;
-
-			foreach ($subcategory as $key => $value) {
-
-				$t = $in ='';
-
-				if($col==1){
-					$s_class='minus_acc';
-					$t='area-expanded="true"';
-					$in='in';
-				}else{
-					$s_class='plus_acc';
-				}
-
-				?>
-				<div class="panel panel-default" >
-					<div class="panel-heading">
-						<div class="clear_left">
-							<p>
-
-							<?php
-
-							if(Yii::$app->language == 'en') {
-								echo $value['category_name'];
-							} else{
-								echo $value['category_name_ar'];
-							} ?>
-
-							<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">
-								- <?= Yii::t('frontend', 'Clear') ?></a>
-
-							</p>
-						</div>
-						<div class="clear_right">
-							<a href="#<?= $value['category_id']; ?>" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-								<h4 class="panel-title">
-									<span class="<?= $s_class;?>"></span>
-								</h4>
-							</a>
-						</div>
-					</div>
-					<div id="<?= $value['category_id']; ?>" <?= $t; ?> class="panel-collapse collapse <?= $in; ?>"  >
-						<div class="panel-body">
-							<div class="table">
-								<?php $childcategory = ChildCategory::loadchildcategoryslug($value['category_id']);
-								/* Display scroll for more than three li */
-								if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-								/* Display scroll for more than three li */
-								?>
-								<ul class="<?= $class; ?>">
-									<?php
-
-									foreach ($childcategory as $key => $value) {
-
-										if(isset($get['category']) && $get['category'] !="")
-										{
-											$val = explode(' ',$get['category']);
-
-											if(in_array($value['slug'],$val))
-											{
-												$checked = 'checked=checked';
-											}
-											else
-											{
-												$checked = '';
-											}
-										}
-										/* END check category checbox values */
-										?>
-										<li>
-											<label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
-
-												<input
-													name="items"
-													data-element="input"
-													class="items"
-													id="checkbox-<?= $value['category_name'] ?>"
-													value="<?= $value['slug'] ?>"
-													step="<?= $value['category_id'] ?>"
-													type="checkbox"
-													<?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
-
-												<?php
-
-												if(Yii::$app->language == 'en') {
-													echo ucfirst(strtolower($value['category_name']));
-												}else{
-													echo ucfirst(strtolower($value['category_name_ar']));
-												}
-
-												?>
-											</label>
-										</li>
-										<?php }  ?>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-						<?php $col++; } ?>
+						<!-- BEGIN CATEGORY FILTER  -->
+						<?php 
+							require 'filter/category.php';
+						?>		
 						<!--  END CATEGORY FILTER-->
+
 						<!--  BEGIN THEME FILTER-->
-						<div class="panel panel-default" >
-							<div class="panel-heading">
-								<div class="clear_left"><p><?= Yii::t('frontend', 'Themes') ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
-								<div class="clear_right">
-									<a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-										<h4 class="panel-title">
-											<span class="plus_acc"></span>
-										</h4>
-									</a>
-								</div>
-							</div>
-							<div id="themes" class="panel-collapse collapse" aria-expanded="false">
-								<div class="panel-body">
-									<div class="table">
-										<?php
-										/* BEGIN Display scroll for more than three li */
-										if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-										/* END Display scroll for more than three li */
-										?>
-										<ul class="<?= $class; ?>">
-											<?php foreach ($themes as $key => $value) {
-												if(isset($get['themes']) && $get['themes'] !="")
-												{
-													$val = explode(' ',$get['themes']);
+						<?php 
+							require 'filter/theme.php';
+						?>
+						<!--  END THEME FILTER -->					
 
-													if(in_array($value['slug'],$val))
-													{
-														$checked1 = 'checked=checked';
-													}
-													else
-													{
-														$checked1 = '';
-													}
-												}
+						<!--  BEGIN VENDOR FILTER -->
+						<?php 
+							require 'filter/vendor.php';
+						?>
+						<!--  END VENDOR FILTER-->
 
-												if(Yii::$app->language == "en"){
-												  	$theme_name = ucfirst(strtolower($value['theme_name']));
-												}else{
-													$theme_name = ucfirst(strtolower($value['theme_name_ar']));
-												}
-
-												?>
-												<li>
-													<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">
-
-													<input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> ><?= $theme_name ?></label>
-												</li>
-												<?php } ?>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!--  END THEME FILTER -->
-
-							<!--  BEGIN VENDOR FILTER -->
-							<div class="panel panel-default" >
-							<div class="panel-heading">
-							<div class="clear_left"><p><?= Yii::t('frontend', 'Vendor') ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
-							<div class="clear_right">
-							<a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-							<h4 class="panel-title">
-							<span class="plus_acc"></span>
-							</h4>
-							</a>
-							</div>
-							</div>
-							<div id="vendor" class="panel-collapse collapse" area-expanded="false" >
-							<div class="panel-body">
-							<div class="table">
-							<?php
-
-							/* BEGIN Display scroll for more than three li */
-							if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-							/* END Display scroll for more than three li */
-							?>
-							<ul class="<?= $class; ?>">
-							<?php foreach ($vendor as $key => $value) {
-
-							if(isset($get['vendor']) && $get['vendor'] !="")
-							{
-
-							$val = explode(' ',$get['vendor']);
-
-							if(in_array($value['slug'],$val))
-							{
-							$checked2 = 'checked=checked';
-							}
-							else
-							{
-							$checked2 = '';
-							}
-							}
-
-							if(Yii::$app->language == "en"){
-							  	$vendor_name = ucfirst(strtolower($value['vendor_name']));
-							}else{
-								$vendor_name = ucfirst(strtolower($value['vendor_name_ar']));
-							}
-
-							?>
-							<li>
-							<label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>">
-							<input name="vendor" data-element="input" class="items" id="checkbox-<?= $value['vendor_name'] ?>" step="<?= $value['vendor_name'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked2) && $checked2 !="") ?  $checked2 : ''; ?> ><?= $vendor_name; ?></label>
-							</li>
-							<?php }?>
-
-							</ul>
-							</div><!-- END table -->
-							</div>
-							</div>
-							</div>
-							<!--  END VENDOR FILTER-->
-							<!--  BEGIN PRICE FILTER -->
-<div class="panel panel-default" >
-<div class="panel-heading">
-<div class="clear_left">
-	<p>
-		<?= Yii::t('frontend', 'Price'); ?>
-		<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?>
-		</a>
-	</p>
-</div>
-<div class="clear_right">
-	<a href="#price" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_price">
-		<h4 class="panel-title">
-		<span class="plus_acc">
-		</span>
-		</h4>
-	</a>
-</div>
-</div>
-<div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
-<div class="panel-body">
-<div class="table">
-<ul class="test_scroll">
-<?php
-
-/* Get max price_per_unit in item table */
-$min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
-
-$max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
-
-$max = $max_price[0]['price'];
-
-$divide = round($max / 5);
-
-$i = 0;
-
-for ($x = $min_price[0]['price'] ; $x <= 1000 ; $x+=$divide) {
-
-//$item_price = $imageData[$i]['item_price_per_unit'];
-$min_kd = round($x-$divide);
-
-//if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
-if($min_kd > 0 )
-{
-
-foreach ($imageData as $key => $value) {
-/* Check checkbox based on URL */
-if(isset($get['price']) && $get['price'] !="")
-{
-
-$val = explode(' ',$get['price']);
-
-if(in_array($value['slug'],$val))
-{
-	$checked3 = 'checked=checked';
-}
-else
-{
-	$checked3 = '';
-}
-}
-/* Check checkbox based on URL */
-
-# code...
-$item_price = $value['item_price_per_unit'];
-
-$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
-
-if($check_range ==1)	{
-?>
-<li>
-<label class="label_check" for="checkbox-<?php echo $x;?>">
-<input name="price" id="checkbox-<?php echo $x;?>" value="<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?>-<?php echo $x = ceil($x / 100) * 100;?>" type="checkbox">
-<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
-</li>
-<?php
-break;
-}
-$i++; }
-}
-}
-
-?>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<!--  END PRICE FILTER-->
-<!-- END FILTER  -->
-</div>
-</nav>
-</div>
-</div>
-</div>
+						<!--  BEGIN PRICE FILTER -->
+						<?php 
+							require 'filter/price.php';
+						?>				
+						<!--  END PRICE FILTER-->
+					<!-- END FILTER  -->
+					</div>
+				</nav>
+			</div><!-- END .responsive-category-bottom -->
+		</div><!-- END .plan_venues -->
+	</div>
 </div>
 <div class="col-md-9 paddingright0">
-<div class="banner_section_plan">
-<?= Html::img("@web/images/banner_plan.png") ?>
-</div>
-<!-- BEGIN Item lists -->
-<div class="listing_right">
-<div class="events_listing">
-<ul>
-<?php
-if(!empty($imageData))
-{
-foreach ($imageData as $key => $value) {
 
-// echo $value['image_path'];die;
-if($value['image_path'] !="")  {
-?>
-<li>
-<div class="events_items">
-<div class="events_images">
-<div class="hover_events">
-<div class="pluse_cont">
-
-<?php if(Yii::$app->user->isGuest) { ?>
-<a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
-<?php } else { ?>
-<a  href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
-<?php } ?></div>
-
-<?php if(Yii::$app->user->isGuest) { ?>
-<div class="faver_icons">
-<a href=""  role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
-</div>
-<?php } else {
-$k=array();
-foreach((array)$customer_events_list as $l){
-$k[]=$l['item_id'];
-}
-//print_r($k);die;
-$result=array_search($value['item_id'],$k);
-
-if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
-<div class="faver_icons">
-<?php }?>
-<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
-	<?php } ?>
-</div>
-
-<a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title="" ><?= Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
-</div>
-<div class="events_descrip">
-<?= Html::a($value['vendor_name'],Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
-<h3><?= $value['item_name']  ?></h3>
-<p><?php if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
-</div>
-</div>
-</li>
-<?php } }  } else {
-	echo Yii::t('frontend', "No records found");
-}
-?>
-</ul>
-<div id="planloader">
-<img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
-</div>
-</div>
-<div class="add_more_commons">
-	<?php if(count($imageData) > 12) { ?>
-	<div class="lode_more_buttons">
-		<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">
-			 Yii::t('frontend', 'Load More') ?>
-		</button>
-	</div>
-	<?php } ?>
 	<div class="banner_section_plan">
-	<?= Html::img("@web/images/banner_plan.png") ?>
+		<?= Html::img("@web/images/banner_plan.png") ?>
 	</div>
-</div><!-- END .add_more_commons -->
-</div>
-<!-- END Item lists -->
 
-</div>
+	<!-- BEGIN Item lists -->
+	<div class="listing_right">
+		<div class="events_listing">
+			<ul>
+			<?php
+
+			if(!empty($imageData))  {
+				foreach ($imageData as $key => $value) {
+					if($value['image_path'] !="")  { 
+						require 'item.php';
+					} 
+				}  
+			} else {
+				echo Yii::t('frontend', "No records found");
+			}
+
+			?>
+			</ul>
+			<div id="planloader">
+				<img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
+			</div>
+		</div>
+		<div class="add_more_commons">
+			<?php if(count($imageData) > 12) { ?>
+			<div class="lode_more_buttons">
+				<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">
+					 Yii::t('frontend', 'Load More') ?>
+				</button>
+			</div>
+			<?php } ?>
+			<div class="banner_section_plan">
+				<?= Html::img("@web/images/banner_plan.png") ?>
+			</div>
+		</div><!-- END .add_more_commons -->
+	</div><!-- END Item lists -->
+
+</div><!-- END .col-md-9 -->
 </div>
 
 </div>
