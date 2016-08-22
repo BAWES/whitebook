@@ -125,11 +125,23 @@ if ($event_status > 0) {
                                                                 <span class="border-bottom"></span>
                                                             <?php } ?>
                                                             <?php if ($vendor_detail[0]['vendor_working_hours'] != '') { ?>
-                                                                <span class="timer_common"><?php echo $vendor_detail[0]['vendor_working_hours']; ?></span>
+                                                                <span class="timer_common"><?php
+                                                                    $from = explode(':',$vendor_detail[0]['vendor_working_hours']);
+                                                                    echo (isset($from[0])) ? $from[0] : '';
+                                                                    echo (isset($from[1])) ? ':'.$from[1] : '';
+                                                                    echo (isset($from[2])) ? ' '.$from[2] : ''
+                                                                    ?></span>
                                                             <?php } ?>
-    <?php if ($vendor_detail[0]['vendor_working_hours_to'] != '') { ?>
-                                                                - <span class="timer_common"><?php echo $vendor_detail[0]['vendor_working_hours_to']; ?></span>
-    <?php } ?>
+                                                            <?php if ($vendor_detail[0]['vendor_working_hours_to'] != '') { ?>
+                                                                - <span class="timer_common">
+                                                                    <?php
+                                                                    $to = explode(':',$vendor_detail[0]['vendor_working_hours_to']);
+                                                                    echo (isset($to[0])) ? $to[0] : '';
+                                                                    echo (isset($to[1])) ? ':'.$to[1] : '';
+                                                                    echo (isset($to[2])) ? ' '.$to[2] : ''
+                                                                    ?>
+                                                                </span>
+                                                            <?php } ?>
                                                         </div>
                                                     </address>
 
