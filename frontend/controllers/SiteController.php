@@ -906,7 +906,6 @@ class SiteController extends BaseController
             /* END PRICE FILTER */
         }
 
-
         $active_vendors = Vendor::loadvalidvendorids($category_id);
    
         if (!is_null($item_themes)) {
@@ -949,17 +948,35 @@ class SiteController extends BaseController
         /* END get current category to load sub category */
 
        if (Yii::$app->request->isAjax) {
-              return $this->renderPartial('/plan/loaditems', ['imageData' => $imageData]);
-            }
+          return $this->renderPartial('/plan/loaditems', ['imageData' => $imageData]);
+        }
+
         if (Yii::$app->user->isGuest) {
-            return $this->render('themesearch', ['model' => $model, 'imageData' => $imageData,
-            'vendor' => $vendor, 'slug' => $slug,'category_slug'=>$category_slug,'category_id'=>$category_id]);
+            
+            return $this->render('themesearch', [
+                'model' => $model, 
+                'imageData' => $imageData,
+                'vendor' => $vendor, 
+                'slug' => $slug,
+                'category_slug' => $category_slug,
+                'category_id' => $category_id
+            ]);
+
         } else {
-                $usermodel = new Users();
-                $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
-                return $this->render('themesearch', ['model' => $model, 'imageData' => $imageData,
-                'vendor' => $vendor, 'slug' => $slug, 'category_slug'=>$category_slug, 'customer_events_list' => $customer_events_list,'category_id'=>$category_id]);
-            } 
+          
+            $usermodel = new Users();
+            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
+            
+            return $this->render('themesearch', [
+                'model' => $model, 
+                'imageData' => $imageData,
+                'vendor' => $vendor, 
+                'slug' => $slug, 
+                'category_slug' => $category_slug, 
+                'customer_events_list' => $customer_events_list,
+                'category_id'=>$category_id
+            ]);
+        } 
        }
     }
 }

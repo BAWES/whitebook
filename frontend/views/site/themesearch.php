@@ -26,6 +26,7 @@ $get = Yii::$app->request->get();
 <?php
 
 $theme_name=Themes::getthemename($slug);
+
 $this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($theme_name['theme_name']), 'url' => Url::to(["site/themesearch", 'slug' => $slug])];
 ?>
 
@@ -50,242 +51,51 @@ $this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($theme_name['t
 <div class="overlay"></div>
 <div class="overlay_filter"></div>
 <div class="col-md-3 paddingleft0" id="left_side_cate">
-<div class="filter_content">
-<div class="filter_section">
-	<div class="responsive-category-top">
-		<div class="listing_sub_cat1">
-			<span class="title_filter">Categories</span>
-				<select class="selectpicker" style="display: none;" id="main-category">
-			<option data-icon="venues-category" selected="selected" name="category"><?= Yii::t("frontend", "All"); ?></option>
-			<option data-icon="venues-category" value="venues" <?php  if($category_id == Category::VENUES) { ?> selected="selected" <?php } ?> ><?= Yii::t("frontend", "Venues") ?></option>
-			<option data-icon="invitation-category" value="invitations" <?php  if($category_id == Category::INVITATIONS) { ?> selected="selected"<?php } ?> name="category"><?= Yii::t("frontend", "Invitations") ?></option>
-			<option data-icon="food-category"  value="food-beverage" <?php  if($category_id == Category::FOOD_BEVERAGES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>"><?= Yii::t("frontend", "Food & Beverage") ?></option>
-			<option data-icon="decor-category" value="decor" <?php  if($category_id ==  Category::DECOR) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>"><?= Yii::t("frontend", "Decor") ?></option>
-			<option data-icon="supply-category" value="supplies" <?php  if($category_id ==  Category::SUPPLIES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>"><?= Yii::t("frontend", "Supplies") ?></option>
-			<option data-icon="enter-category" value="entertainment" <?php  if($category_id ==  Category::ENTERTAINMENT) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>"><?= Yii::t("frontend", "Entertainment") ?></option>
-			<option data-icon="service-category" value="services" <?php  if($category_id ==  Category::SERVICES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>"><?= Yii::t("frontend", "Services") ?></a></option>
-			<option data-icon="others-category" value="others" <?php  if($category_id ==  Category::OTHERS) { ?> selected="selected" <?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>"><?= Yii::t("frontend", "Others") ?></option>
-			<option data-icon="saythankyou-category" value="gift-favors" <?php  if($category_id == Category::GIFT_FAVORS) { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>"><?= Yii::t("frontend", "Gift Favors") ?></option>
-			</select>
-		</div>
-	</div>
-<div class="responsive-category-bottom">
-<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas"><?= Yii::t("frontend", "Filter") ?></span>
-<div class="filter_title">
-<span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
-</div>
-<div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
-<img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
-</div>
-<nav class="row-offcanvas row-offcanvas-left">
-<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
-<div id="accordion" class="panel-group">
-<!-- BEGIN CATEGORY FILTER  -->
-<?php
-
-/* Get slug name to find category */
-if($category_slug !=""){
-$subcategory = SubCategory::loadsubcat($category_slug);
-
-$col=1;
-foreach ($subcategory as $key => $value) {
-$t = $in ='';
-if($col==1){
-$s_class='minus_acc';$t='area-expanded="true"';$in='in';
-}else{
-$s_class='plus_acc';
-}
-?>
-<div class="panel panel-default" >
-<div class="panel-heading">
-<div class="clear_left"><p><?= $value['category_name']; ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right">
-<a href="#<?= $value['category_id']; ?>" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-<h4 class="panel-title">
-<span class="<?= $s_class;?>"></span>
-</h4>
-</a>
-</div>
-</div>
-<div id="<?= $value['category_id']; ?>" <?= $t; ?> class="panel-collapse collapse <?= $in; ?>"  >
-<div class="panel-body">
-<div class="table">
-<?php $childcategory = ChildCategory::loadchildcategoryslug($value['category_id']);
-/* Display scroll for more than three li */
-if(count($childcategory) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-/* Display scroll for more than three li */
-?>
-<ul class="<?= $class; ?>">
-<?php
-
-foreach ($childcategory as $key => $value) {
-
-if(isset($get['category']) && $get['category'] !="")
-{
-$val = explode(' ',$get['category']);
-
-if(in_array($value['slug'], $val))
-{
-	$checked = 'checked=checked';
-}
-else
-{
-$checked = '';
-}
-}
-/* END check category checbox values */
-?>
-<li>
-<label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
-<input name="items" data-element="input" class="items" id="checkbox-<?= $value['category_name'] ?>"
-value="<?= $value['slug'] ?>" step="<?= $value['category_id'] ?>"
-type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
-<?= ucfirst(strtolower($value['category_name'])); ?></label>
-</li>
-<?php }  ?>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<?php $col++; } ?>
-<?php } ?>
-<!--  END CATEGORY FILTER-->
-
-<!--  BEGIN VENDOR FILTER -->
-<div class="panel panel-default" >
-<div class="panel-heading">
-<div class="clear_left"><p>Vendor <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right">
-<a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-<h4 class="panel-title">
-<span class="plus_acc"></span>
-</h4>
-</a>
-</div>
-</div>
-<div id="vendor" class="panel-collapse collapse" area-expanded="false" >
-<div class="panel-body">
-<div class="table">
-<?php
-
-/* BEGIN Display scroll for more than three li */
-if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-/* END Display scroll for more than three li */
-?>
-<ul class="<?= $class; ?>">
-<?php foreach ($vendor as $key => $value) {
-
-if(isset($get['vendor']) && $get['vendor'] !="")
-{
-
-$val = explode(' ',$get['vendor']);
-
-if(in_array($value['slug'],$val))
-{
-	$checked2 = 'checked=checked';
-}
-else
-{
-$checked2 = '';
-}
-}
-
-?>
-<li>
-<label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>"><input name="vendor" data-element="input" class="items" id="checkbox-<?= $value['vendor_name'] ?>" step="<?= $value['vendor_name'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked2) && $checked2 !="") ?  $checked2 : ''; ?> ><?= ucfirst(strtolower($value['vendor_name'])); ?></label>
-</li>
-<?php }?>
-
-</ul>
-</div>
-</div>
-</div>
-</div>
-<!--  END VENDOR FILTER-->
-<!--  BEGIN PRICE FILTER -->
-<div class="panel panel-default" >
-<div class="panel-heading">
-<div class="clear_left"><p>Price <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right">
-<a href="#price" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_price">
-<h4 class="panel-title">
-<span class="plus_acc">
-</span>
-</h4></a>
-</div>
-</div>
-<div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
-<div class="panel-body">
-<div class="table">
-<ul class="test_scroll">
-<?php
-
-/* Get max price_per_unit in item table */
-$min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
-$max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
-$max = $max_price[0]['price'];
-
-$divide = round($max / 5);
-//$maxx = $max+
-$i = 0;
-for ($x = $min_price[0]['price'] ; $x <= 1000 ; $x+=$divide) {
-//$item_price = $imageData[$i]['item_price_per_unit'];
-$min_kd = round($x-$divide);
-
-//if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
-if($min_kd > 0 )
-{
-	foreach ($imageData as $key => $value) {
-	/* Check checkbox based on URL */
-	if(isset($get['price']) && $get['price'] !="")
-	{
-	$val = explode(' ',$get['price']);
-
-	if(in_array($value['slug'],$val))
-	{
-		$checked3 = 'checked=checked';
-	}
-	else
-	{
-	$checked3 = '';
-	}
-	}
-	/* Check checkbox based on URL */
-
-	# code...
-	$item_price = $value['item_price_per_unit'];
-
-	$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
-
-	if($check_range ==1)	{
-	?>
-	<li>
-	<label class="label_check" for="checkbox-<?php echo $x;?>">
-	<input name="price" id="checkbox-<?php echo $x;?>" value="<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?>-<?php echo $x = ceil($x / 100) * 100;?>" type="checkbox">
-	<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
-	</li>
-	<?php
-	break;
-	}
-	$i++; }
-	}
-}
-
-	?>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<!--  END PRICE FILTER-->
-<!-- END FILTER  -->
-</div>
-</nav>
-</div>
-</div>
-</div>
-</div>
+	<div class="filter_content">
+		<div class="filter_section">
+			<div class="responsive-category-top">
+				<div class="listing_sub_cat1">
+					<span class="title_filter">Categories</span>
+						<select class="selectpicker" style="display: none;" id="main-category">
+					<option data-icon="venues-category" selected="selected" name="category"><?= Yii::t("frontend", "All"); ?></option>
+					<option data-icon="venues-category" value="venues" <?php  if($category_id == Category::VENUES) { ?> selected="selected" <?php } ?> ><?= Yii::t("frontend", "Venues") ?></option>
+					<option data-icon="invitation-category" value="invitations" <?php  if($category_id == Category::INVITATIONS) { ?> selected="selected"<?php } ?> name="category"><?= Yii::t("frontend", "Invitations") ?></option>
+					<option data-icon="food-category"  value="food-beverage" <?php  if($category_id == Category::FOOD_BEVERAGES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'food-beverage']) ?>"><?= Yii::t("frontend", "Food & Beverage") ?></option>
+					<option data-icon="decor-category" value="decor" <?php  if($category_id ==  Category::DECOR) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'decor']) ?>"><?= Yii::t("frontend", "Decor") ?></option>
+					<option data-icon="supply-category" value="supplies" <?php  if($category_id ==  Category::SUPPLIES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'supplies']) ?>"><?= Yii::t("frontend", "Supplies") ?></option>
+					<option data-icon="enter-category" value="entertainment" <?php  if($category_id ==  Category::ENTERTAINMENT) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'entertainment']) ?>"><?= Yii::t("frontend", "Entertainment") ?></option>
+					<option data-icon="service-category" value="services" <?php  if($category_id ==  Category::SERVICES) { ?> selected="selected"<?php } ?> value="<?= Url::toRoute(['plan/plan', 'slug'=>'services']) ?>"><?= Yii::t("frontend", "Services") ?></a></option>
+					<option data-icon="others-category" value="others" <?php  if($category_id ==  Category::OTHERS) { ?> selected="selected" <?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'others']) ?>"><?= Yii::t("frontend", "Others") ?></option>
+					<option data-icon="saythankyou-category" value="gift-favors" <?php  if($category_id == Category::GIFT_FAVORS) { ?> selected="selected"<?php } ?> name="category" value="<?= Url::toRoute(['plan/plan', 'slug'=>'gift-favors']) ?>"><?= Yii::t("frontend", "Gift Favors") ?></option>
+					</select>
+				</div>
+			</div>
+			<div class="responsive-category-bottom">
+				<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">
+					<?= Yii::t("frontend", "Filter") ?>
+				</span>
+				<div class="filter_title">
+					<span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
+				</div>
+				<div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
+					<img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
+				</div>
+				<nav class="row-offcanvas row-offcanvas-left">
+					<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
+						<div id="accordion" class="panel-group">
+							<?php 
+								require 'filter/category.php';
+								require 'filter/vendor.php';
+								require 'filter/price.php';
+							?>
+							<!-- END FILTER  -->
+						</div><!-- END -->
+					</div>	
+				</nav>
+			</div>
+		</div><!-- END .filter_section -->
+	</div><!-- END .filter_content -->
+</div><!-- END .left_side_cate -->
 <div class="col-md-9 paddingright0">
 <div class="banner_section_plan">
 	<?= Html::img("@web/images/banner_plan.png") ?>
@@ -295,12 +105,11 @@ if($min_kd > 0 )
 <div class="events_listing">
 <ul>
 <?php
-if(!empty($imageData))
-{
-foreach ($imageData as $key => $value) {
 
-	// echo $value['image_path'];die;
-if($value['image_path'] !="")  {
+if(!empty($imageData)) {
+	foreach ($imageData as $key => $value) {
+
+	if($value['image_path'] !="")  {
 ?>
 <li>
 <div class="events_items">
@@ -309,21 +118,22 @@ if($value['image_path'] !="")  {
 <div class="pluse_cont">
 
 <?php if(Yii::$app->user->isGuest) { ?>
-<a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+	<a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
 <?php } else { ?>
-<a  href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+	<a href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
 <?php } ?></div>
 
 <?php if(Yii::$app->user->isGuest) { ?>
 <div class="faver_icons">
-<a href=""  role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+	<a href="" role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
 </div>
 <?php } else {
-$k=array();
-foreach((array)$customer_events_list as $l){
-$k[]=$l['item_id'];
+
+$k = array();
+foreach((array)$customer_events_list as $l) {
+	$k[] = $l['item_id'];
 }
-//print_r($k);die;
+
 $result=array_search($value['item_id'],$k);
 
 if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
@@ -357,8 +167,9 @@ echo "No records found";
 <button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
 </div>
 <?php } ?>
+
 <div class="banner_section_plan">
-<?= Html::img("@web/images/banner_plan.png") ?>
+	<?= Html::img("@web/images/banner_plan.png") ?>
 </div>
 </div>
 </div>
@@ -386,12 +197,12 @@ jQuery('.thing_items li:nth-child(8n)').addClass("margin-rightnone");
 
 jQuery(".dropdown").hover(
 function () {
-jQuery('.dropdown-menu', this).stop(true, true).slideDown("fast");
-jQuery(this).toggleClass('open');
+	jQuery('.dropdown-menu', this).stop(true, true).slideDown("fast");
+	jQuery(this).toggleClass('open');
 },
 function () {
-jQuery('.dropdown-menu', this).stop(true, true).slideUp("fast");
-jQuery(this).toggleClass('open');
+	jQuery('.dropdown-menu', this).stop(true, true).slideUp("fast");
+	jQuery(this).toggleClass('open');
 });
 
 var owl = jQuery("#owl-demo");
