@@ -61,7 +61,7 @@ use yii\web\view;
 					$vname = strtoupper($d['vname_ar']);
 				}
 
-				if($ltr==$f) { ?>
+				if($ltr == $f) { ?>
 				<li><?= Html::a($vname,Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
 				<?php 
 				} 
@@ -78,7 +78,6 @@ use yii\web\view;
 
 $total = count($directory);
 
-if($total > 1) {
 
 $first = $total/3;
 $second = $first+$first;
@@ -215,7 +214,7 @@ $l = $first_letter;?>
 	</div><!-- END .col-md-3 -->
 	<!-- Third section end here-->
 </div><!-- END .resposive-clearfix -->	
-<?php }//if total > 1 ?>
+
 </div><!-- END #filter -->
 
 </div>
