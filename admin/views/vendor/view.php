@@ -580,7 +580,7 @@ function packageedit(id)
 			$('#packedit').val(id);
 			$('.mystart').html(data.input1);
 			$('.myend').html(data.input2);
-			$('.edit_package').attr('value',packageid);
+            $('#vendor-package_id option[value="'+packageid+'"]').attr("selected", "selected");
 			$('.edit_start').remove();
 			$('.mystart1').html('<input type="text" id="vendor-package_start_date" class="edit_start" name="Vendor[package_start_date]" value="" maxlength="128" placeholder="Start">');
 			$('.edit_start').val(start);
