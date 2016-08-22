@@ -176,9 +176,9 @@ class PackageController extends Controller
     public function actionPackagedelete()
     {
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            return $command =Vendorpackages::deleteAll(['id' => $data['packid']]);
-	        }
+            $data = \common\models\Vendorpackages::findOne($_POST['packid']);
+            return $data->delete();
+        }
     }
 
     public function actionPackageupdate()
