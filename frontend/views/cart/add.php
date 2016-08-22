@@ -1,4 +1,8 @@
+<?php 
 
+use common\models\Location;
+
+?>
 <div class="modal fade" id="productOptionModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content row">
@@ -18,6 +22,54 @@
                         
                         <input name="item_id" value="<?= $item_id ?>" type="hidden" />
 
+
+                        <div class="form-group">
+                            <label><?= Yii::t('frontend', 'Area') ?></label>
+                            <div class="select_boxes">
+                                <select name="area_id" data-height="100px" data-live-search="true" id="area_id" class="selectpicker" data-size="10" data-style="btn-primary">
+                                   
+                                    <?php 
+
+                                    foreach ($cities as $city) { 
+
+                                        if(Yii::$app->language == 'en') {
+                                            $city_name = $city['city_name'];
+                                        } else{ 
+                                            $city_name = $city['city_name_ar'];
+                                        }
+
+                                        //get areas
+                                        $areas = Location::find()
+                                            ->select('id, location, location_ar')
+                                            ->where(['city_id' => $city['city_id']])
+                                            ->asArray()
+                                            ->all();
+
+                                    ?>    
+                                        <optgroup label="<?= $city_name ?>">
+
+                                        <?php 
+
+                                        foreach ($areas as $area) {
+                                            if(Yii::$app->language == 'en') { ?>
+                                                <option value="<?= $area['id'] ?>">
+                                                    <?= $area['location']; ?>
+                                                </option>
+                                            <?php } else { ?>
+                                                <option value="<?= $area['id'] ?>">
+                                                    <?= $area['location_ar']; ?>
+                                                </option>
+                                            <?php } 
+                                        } ?>  
+                                        
+                                        </optgroup>
+
+                                    <?php 
+                                    } ?>
+                                </select>
+                            </div>    
+                        </div>
+                        
                         <div class="form-group">
                             <label><?= Yii::t('frontend', 'Delivery date');?></label>
                             <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" style="position: relative;"  id="delivery_date_wrapper">
@@ -31,25 +83,6 @@
                             <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary">
                             </select>
                             <span class="error timeslot_id"></span>
-                        </div>
-                        <div class="form-group">
-                            <label><?= Yii::t('frontend', 'City') ?></label>
-                            <div class="select_boxes">
-                                <select name="city_id" id="city_id" class="selectpicker" data-size="10" data-style="btn-primary">
-                                    <option value=""></option>
-                                    <?php foreach ($cities as $city) { ?>
-                                        <option value="<?= $city['city_id'] ?>""><?= $city['city_name']; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>    
-                        </div>
-                        <div class="form-group">
-                            <label><?= Yii::t('frontend', 'Area') ?></label>
-                            <div class="select_boxes">
-                                <select name="area_id" id="area_id" class="selectpicker" data-size="10" data-style="btn-primary">
-                                </select>
-                                <span class="error area_id"></span>
-                            </div>
                         </div>
                         <div class="form-group">
                             <label><?= Yii::t('frontend', 'Quantity');?></label>
