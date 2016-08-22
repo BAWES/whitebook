@@ -50,9 +50,11 @@ class Vendor extends \common\models\Vendor
                 }
             }
         }
-        $max = max(array_map('strtotime', $blocked_dates));
-        return date('d-m-Y', $max);
 
+        if($blocked_dates) {
+            $max = max(array_map('strtotime', $blocked_dates));
+            return date('d-m-Y', $max);    
+        }
     }
 
     public function behaviors()
