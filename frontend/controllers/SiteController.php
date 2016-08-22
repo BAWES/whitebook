@@ -141,6 +141,7 @@ class SiteController extends BaseController
             $prevLetter = $firstLetter;
         }
 
+
         $result = array_unique($result);
 
         return $this->render('directory', [

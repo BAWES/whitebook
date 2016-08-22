@@ -151,14 +151,14 @@ class Vendor extends \common\models\Vendor
         
         $today = date('Y-m-d H:i:s');
 
-        return $data=Vendor::find()
+        $data = Vendor::find()
             ->select(['{{%vendor}}.vendor_id AS vid',
                     '{{%vendor}}.vendor_name AS vname',
                     '{{%vendor}}.vendor_name_ar AS vname_ar',
                     '{{%vendor}}.slug AS slug'])
             ->leftJoin('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
-            ->where(['<=','{{%vendor_packages}}.package_start_date',$today])
-            ->andWhere(['>=','{{%vendor_packages}}.package_end_date',$today])
+            ->where(['<=','{{%vendor_packages}}.package_start_date', $today])
+            ->andWhere(['>=','{{%vendor_packages}}.package_end_date', $today])
 			->andWhere(['{{%vendor}}.trash'=>'Default'])
 			->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
 			->andWhere(['{{%vendor}}.vendor_status'=>'Active'])
@@ -166,6 +166,8 @@ class Vendor extends \common\models\Vendor
 			->groupby(['{{%vendor}}.vendor_id'])
 			->asArray()
 			->all();
+
+        return $data;
     }
 
    // Pass vendor slug to frontend

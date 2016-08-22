@@ -20,6 +20,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
+use yii\web\Response;
 use admin\models\VendorpackagesSearch;
 
 /**
@@ -441,58 +442,57 @@ class VendorController extends Controller
 
     public function actionChangepackage()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) 
+            die();
+
+        $json = ['errors' => []];
+
+        $data = Yii::$app->request->post();
+                
+        //check if date is valid 
+        if (strtotime($data['start_date']) >= strtotime($data['end_date'])) {
+            $json['errors'][] = Yii::t('admin', 'Given Date is not a valid one. Kindly entered valid date!');
         }
 
-        $user_start_date = ($data['start_date']);
-        $user_end_date = ($data['end_date']);
-        if (strtotime($data['start_date']) <= strtotime($data['end_date'])) {
-            while (strtotime($user_start_date) <= strtotime($user_end_date)) {
-                $selected_dates[] = $user_start_date;
-                $user_start_date = date('Y-m-d', strtotime('+1 day', strtotime($user_start_date)));
-            }
-        } else {
-            return 2;
-        }
-        $package_pricing = Package::loadpackageprice($data['id']);
-        $package_name = Package::PackageData($data['id']);
-        $datetime = Vendorpackages::find()->where(['vendor_id' => $data['vid']])->asArray()->all();
+        //check if other package available in selected date
+        $package_exists = Vendorpackages::find()
+            ->where(['vendor_id' => $data['vid']])
+            ->where(['between', 'package_start_date', $data['start_date'], $data['end_date']])
+            ->where(['between', 'package_end_date', $data['start_date'], $data['end_date']])
+            ->asArray()->one();
         
-        foreach ($datetime as $d) {
-            $date = $date1 = $d['package_start_date'];
-            $end_date = $end_date1 = $d['package_end_date'];
-            while (strtotime($date) <= strtotime($end_date)) {
-                $blocked_dates[] = $date;
-                $date = date('Y-m-d', strtotime('+1 day', strtotime($date)));
-            }
+        if ($package_exists) {
+
+            $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
+                    'start_date' => date('d/m/Y', strtotime($package_exists['package_start_date'])),
+                    'end_date' => date('d/m/Y', strtotime($package_exists['package_end_date']))
+                ]);                
         }
-        $available = 0;
-        if (!empty($blocked_dates)) {
-            foreach ($selected_dates as $key => $value) {
-                $available = in_array($value, $blocked_dates);
-                if ($available) {
-                    return 1;
-                }
-            }
-        }
-        if ($available == 0) {
-        $vendor_pack = new Vendorpackages();	
-        $vendor_pack->vendor_id = $data['vid'];
-        $vendor_pack->package_id = $data['id'];
-        $vendor_pack->package_price = $package_pricing;
-        $vendor_pack->package_start_date = $data['start_date'];
-        $vendor_pack->package_end_date = $data['end_date'];
-		$vendor_pack->save();
-		$packageid = $vendor_pack->id;
+      
+        if (!$json['errors']) {
+            
+            $package_pricing = Package::loadpackageprice($data['id']);
+            $package_name = Package::PackageData($data['id']);
+
+            $vendor_pack = new Vendorpackages();	
+            $vendor_pack->vendor_id = $data['vid'];
+            $vendor_pack->package_id = $data['id'];
+            $vendor_pack->package_price = $package_pricing;
+            $vendor_pack->package_start_date = $data['start_date'];
+            $vendor_pack->package_end_date = $data['end_date'];
+    		$vendor_pack->save();
+    		$packageid = $vendor_pack->id;
 
             $url = Url::to('/package/packagedelete?id='.$packageid);
             $startshow = date('d/m/Y', strtotime($data['start_date']));
             $endshow = date('d/m/Y', strtotime($data['end_date']));
-            $output = '<tr id="tr-'.$packageid.'"><td>'.$package_name.'</td><td>'.$startshow.'</td><td>'.$endshow.'</td><td>'.$package_pricing.'<input type="hidden" id="packedit" value='.$packageid.'></td><td>'.Html::a('<span class="glyphicon glyphicon-trash"></span>', '#', ['onclick' => 'packagedelete('.$packageid.');', 'title' => 'Delete']).''.Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', ['onclick' => 'packageedit('.$packageid.');', 'title' => 'Edit']).'</td></tr>';
 
-            return $output;
+            $json['html'] = '<tr id="tr-'.$packageid.'"><td>'.$package_name.'</td><td>'.$startshow.'</td><td>'.$endshow.'</td><td>'.$package_pricing.'<input type="hidden" id="packedit" value='.$packageid.'></td><td>'.Html::a('<span class="glyphicon glyphicon-trash"></span>', '#', ['onclick' => 'packagedelete('.$packageid.');', 'title' => 'Delete']).''.Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', ['onclick' => 'packageedit('.$packageid.');', 'title' => 'Edit']).'</td></tr>';
         }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return $json;
     }
 
     public function actionChangeeditpackage()

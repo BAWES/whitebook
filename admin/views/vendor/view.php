@@ -449,74 +449,66 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/boots
 
  function check_validation()
  {
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");
-	var id = $('#vendor-package_id').val();
-	var vid = $('#vendor-vendor_id').val();
-	var start_dat = $('#vendor-package_start_date').val(); //
-	var start_date = start_dat.split("-").reverse().join("-");	// change date format
-	var end_dat = $('#vendor-package_end_date').val(); //
-	var end_date = end_dat.split("-").reverse().join("-");	// change date format
-	var package_pricing = $('#vendor-package_pricing').val();
-	if((id==null)||(id=='')||(start_date==null)||(start_date=='')||(end_date==null)||(end_date=='')){
-	$("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>Kindly Enter Valid value!</div>');
-          $('.alert .close').on("click", function(e){
-                $(this).parent().fadeTo(500, 0).slideUp(500);
-             });
+  	var csrfToken = $('meta[name="csrf-token"]').attr("content");
+  	var id = $('#vendor-package_id').val();
+  	var vid = $('#vendor-vendor_id').val();
+  	var start_dat = $('#vendor-package_start_date').val(); //
+  	var start_date = start_dat.split("-").reverse().join("-");	// change date format
+  	var end_dat = $('#vendor-package_end_date').val(); //
+  	var end_date = end_dat.split("-").reverse().join("-");	// change date format
+  	var package_pricing = $('#vendor-package_pricing').val();
+  	
+    if(!(id && start_date && end_date)) {      	
+      $("#result").html('<div class="alert alert-failure"><button type="button" data-dismiss="alert" class="close"></button>Kindly Enter Valid value!</div>');
+      return false;
+  	}
 
-    return false;
-	}
-        var path = "<?php echo Url::to(['/vendor/changepackage']); ?> ";
-        $('.loadingmessage').show();
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { id: id ,vid: vid ,start_date: start_date ,end_date: end_date,package_pricing: package_pricing ,_csrf : csrfToken}, //data to be send
-        success: function( data ){
-			$('.loadingmessage').hide();
-			if(data==1){
-					$("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>Blocked dates available in between start date and end date!</div>');
-          $('.alert .close').on("click", function(e){
-                $(this).parent().fadeTo(500, 0).slideUp(500);
-             });
+    var path = "<?php echo Url::to(['/vendor/changepackage']); ?> ";
 
-			$('#vendor-package_id').val('');
-			$('#vendor-package_start_date').val('');
-			$('#vendor-package_end_date').val('');
-			exit;
-			}
-			if(data==2){
-				$("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>Given Date is not a valid one.Kindly entered valid date!</div>');
-          $('.alert .close').on("click", function(e){
-                $(this).parent().fadeTo(500, 0).slideUp(500);
-             });
-				exit;
-			}
-			if(data==0){
-			$("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>Package details already exists.Kindly enter new values!</div>');
-          $('.alert .close').on("click", function(e){
-                $(this).parent().fadeTo(500, 0).slideUp(500);
-             });
+    $('.loadingmessage').show();
+    
+    $.ajax({
+      type: 'POST',
+      url: path, //url to be called
+      data: { 
+        id: id,
+        vid: vid,
+        start_date: start_date,
+        end_date: end_date,
+        package_pricing: package_pricing,
+        _csrf : csrfToken
+      }, //data to be send
+      success: function(json){
+	        
+          $('.loadingmessage').hide();
+			    
+          if(json.errors.length > 0) {
+             
+              $msg = '';
 
-			$('#vendor-package_id').val('');
-			$('#vendor-package_start_date').val('');
-			$('#vendor-package_end_date').val('');
-			}else{
-			$('.loadingmessage').hide();
-			$('#vendor-package_id').val('');
-			$('#vendor-package_start_date').val('');
-			$('#vendor-package_end_date').val('');
-			$("#result").html('<div class="alert alert-success"><button type="button" class="close"></button>Package added successfully!</div>');
-			$("#vendor-package_start_date").attr("disabled","disabled");
-			$("#vendor-package_end_date").attr("disabled","disabled");
-          $('.alert .close').on("click", function(e){
-                $(this).parent().fadeTo(500, 0).slideUp(500);
-             });
-			$('#myTable tr').removeClass("update_row");
-			$("#myTable tbody tr:first").after(data);
+              $.each(json.errors, function(index, value) {
+                  $msg += value + '<br />';
+              }); 
 
-		}
-}
-})
+              $("#result").html('<div class="alert alert-failure"><button type="button" class="close"></button>' + $msg + '</div>');
+
+              exit;
+          }else{
+              $('#vendor-package_id').val('');
+              $('#vendor-package_start_date').val('');
+              $('#vendor-package_end_date').val('');
+              $("#result").html('<div class="alert alert-success"><button type="button" class="close"></button>Package added successfully!</div>');
+              $("#vendor-package_start_date").attr("disabled","disabled");
+              
+              $("#vendor-package_end_date").attr("disabled","disabled");
+                  $('.alert .close').on("click", function(e){
+                        $(this).parent().fadeTo(500, 0).slideUp(500);
+                 });
+              $('#myTable tr').removeClass("update_row");
+              $("#myTable tbody tr:first").after(json['html']);
+          }
+      }
+    });
 }
 
 function packagedelete(id)
@@ -602,10 +594,10 @@ function packageedit(id)
 				format: 'dd-mm-yyyy',
 				autoclose: true,
 				startDate:'d',
-				beforeShowDay:function(Date){
+				/*beforeShowDay:function(Date){
 					var curr_date = Date.toJSON().substring(0,10);
 					if (forbidden.indexOf(curr_date)>-1) return false;
-				}
+				}*/
       });
     }
   });
@@ -637,10 +629,10 @@ $(function (){
             	format: 'dd-mm-yyyy',
             	autoclose: true,
             	startDate:'d',
-                beforeShowDay:function(Date){
+              /* beforeShowDay:function(Date){
                     var curr_date = Date.toJSON().substring(0,10);
                     if (forbidden.indexOf(curr_date)>-1) return false;
-                }
+                }*/
             });
 
           }
