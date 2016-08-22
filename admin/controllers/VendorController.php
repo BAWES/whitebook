@@ -21,34 +21,19 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use yii\web\Response;
-use admin\models\VendorpackagesSearch;
+use admin\models\VendorPackagesSearch;
 
 /**
  * VendorController implements the CRUD actions for Vendor model.
  */
 class VendorController extends Controller
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
-            $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
-            Yii::$app->getResponse()->redirect($url);
-        }
-    }
-
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
                    [
                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'loadcategory', 'loadsubcategory', 'vendoritemview', 'vendorname', 'changepackage', 'changeeditpackage', 'emailcheck', 'loadpackagedate', 'packageupdate', 'vendornamecheck'],
                        'allow' => true,
@@ -98,8 +83,7 @@ class VendorController extends Controller
         $searchModel1 = new PrioritylogSearch();
         $dataProvider1 = $searchModel1->vendorviewsearch(Yii::$app->request->queryParams, $id);
 
-        $searchModel2 = new VendorpackagesSearch();
-        $dataProvider2 = $searchModel2->vendorviewsearch(Yii::$app->request->queryParams, $id);
+        $vendorPackage = VendorPackagesSearch::find()->where(['!=', 'trash', 'Deleted'])->andwhere(['vendor_id' => $id])->orderBy('id')->all();
 
         $searchModel3 = new VendorItemCapacityExceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
@@ -112,7 +96,7 @@ class VendorController extends Controller
             'dataProvider' => $dataProvider,
             'dataProvider1' => $dataProvider1,
             'dataProvider3' => $dataProvider3,
-            'dataProvider2' => $dataProvider2,
+            'vendorPackage' => $vendorPackage,
         ]);
     }
 

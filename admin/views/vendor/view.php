@@ -29,63 +29,58 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="col-md-12 col-sm-12 col-xs-12">
 <!-- Begin Twitter Tabs-->
 <div class="tabbable">
-  <ul class="nav nav-tabs">
-    <li class="active">
-      <a href="#1" data-toggle="tab">Vendor Info </a>
-    </li>
-    <li>
-      <a href="#3" data-toggle="tab">Package Log</a>
-    </li>
-    <li>
-      <a href="#4" data-toggle="tab">Vendor Item Details</a>
-    </li>
-    <li>
-      <a href="#5" data-toggle="tab">Delivery timeslot</a>
-    </li>
-    <li>
-      <a href="#6" data-toggle="tab">Exception dates</a>
-    </li>
-  </ul>
-  <div class="tab-content">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#1" data-toggle="tab">Vendor Info </a></li>
+        <li><a href="#3" data-toggle="tab">Package Log</a></li>
+        <li><a href="#4" data-toggle="tab">Vendor Item Details</a></li>
+        <li><a href="#5" data-toggle="tab">Delivery timeslot</a></li>
+        <li><a href="#6" data-toggle="tab">Exception dates</a></li>
+    </ul>
+<div class="tab-content">
 <!-- Begin First Tab -->
 <div class="tab-pane" id="1" ><div class="admin" style="text-align: center;padding:0px 0px 25px 0px;">
-<?php if(isset($model->vendor_logo_path)) {
+    <?php
+    if(isset($model->vendor_logo_path)) {
 		echo Html::img(Yii::getAlias('@s3/vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
-		}  ?>
+    }
+    ?>
 		</div>
-<div class="form-group">
-	<?= DetailView::widget([ 'model' => $model,
-        'attributes' => [
-            'vendor_name',
-            'vendor_name_ar',
-              ['label'=>'package id',
-             'value'=> isset($model->package->package_name) ? $model->package->package_name : 'Not set' ,
-            ],
-            'vendor_brief',
-            ['label'=>'vendor_return_policy',
-            'value'=>strip_tags($model->vendor_return_policy)
-            ],
-            'vendor_public_email',
-            'vendor_public_phone',
-            'vendor_working_hours',
-            'vendor_contact_name',
-            'vendor_contact_email',
-            'vendor_contact_number',
-            [
-				'attribute'=>'package_start_date',
-				'format' => ['date', 'php:d/m/Y'],
-			],
-			[
-				'attribute'=>'package_end_date',
-				'format' => ['date', 'php:d/m/Y'],
-			],
-            'vendor_emergency_contact_name',
-            'vendor_emergency_contact_email',
-            'vendor_emergency_contact_number',
-            'vendor_website',
-            'vendor_delivery_charge',
-            'vendor_status',]]);?>
-</div>
+    <div class="form-group">
+        <?= DetailView::widget([ 'model' => $model,
+            'attributes' => [
+                'vendor_name',
+                'vendor_name_ar',
+//                  ['label'=>'package id',
+//                 'value'=> isset($model->package->package_name) ? $model->package->package_name : 'Not set' ,
+//                ],
+                'vendor_brief',
+                [
+                    'label'=>'vendor_return_policy',
+                    'value'=>strip_tags($model->vendor_return_policy)
+                ],
+                'vendor_public_email',
+                'vendor_public_phone',
+                'vendor_working_hours',
+                'vendor_contact_name',
+                'vendor_contact_email',
+                'vendor_contact_number',
+                [
+                    'attribute'=>'package_start_date',
+                    'format' => ['date', 'php:d/m/Y'],
+                ],
+                [
+                    'attribute'=>'package_end_date',
+                    'format' => ['date', 'php:d/m/Y'],
+                ],
+                'vendor_emergency_contact_name',
+                'vendor_emergency_contact_email',
+                'vendor_emergency_contact_number',
+                'vendor_website',
+                'vendor_delivery_charge',
+                'vendor_status'
+            ]
+        ]);?>
+    </div>
 </div>
 <!--End First Tab -->
 
@@ -93,8 +88,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="tab-pane" id="3">
 <table class="table table-striped  detail-view">
 	<tbody>
-		<tr class="add"><td><?php $package = Package::loadpackage();
-	$form = ActiveForm::begin([]); $model->package_id='';$model->package_start_date='';$model->package_end_date='';
+		<tr class="add">
+            <td>
+                <?php   $package = Package::loadpackage();
+	                    $form = ActiveForm::begin([]); $model->package_id='';$model->package_start_date='';$model->package_end_date='';
 	echo $form->field($model, 'package_id')->dropdownList($package,['prompt'=>'Select Package',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"],'style' => 'margin-top:10px;'])->label(false); ?></td>
 	<td><?= $form->field($model, 'package_start_date',['template' => "{label}<div class='controls mystart'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'Start date',])->label(false);?></td>
 	<td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date',])->label(false);?></td>
@@ -130,31 +127,25 @@ $this->params['breadcrumbs'][] = $this->title;
    
       $i=0;
       
-      foreach ($dataProvider2 as $log) { 
+    foreach ($vendorPackage as $log) {
+        $sel = ($i==0)?'':'';
+        ?>
 
-      $sel = ($i==0)?'':'';
-
-      ?>
-
-			<tr id="tr-<?php echo $log['id']; ?>">
-          <td><?= Package::PackageData($log['package_id']);  ?></td>
-          <td><?php $sd=($log['package_start_date']); echo date("d/m/Y", strtotime($sd));?></td>
-          <td><?php $sd=($log['package_end_date']);echo date("d/m/Y", strtotime($sd)); ?></td>
-          <td>
-            <?php print_r($log['package_price']); ?>
-            <input type="hidden" id="packedit" value="<?=$log['id'];?>">
-          </td>
-          <td>
-              <?php
-              
-              $url = Url::to(['package/packagedelete', 'id' => $log['package_id']]);
-              
-              echo Html::a('<span class="glyphicon glyphicon-trash"></span>','#', ['onclick' => 'packagedelete('.$log['id'].');','title'=>'Delete','class' =>$sel]);
-              
-              echo Html::a('<span class="glyphicon glyphicon-pencil"></span>','#', ['onclick' => 'packageedit('.$log['id'].');','title'=>'Edit','class' =>$sel]);
-              
-              ?>
-          </td>
+        <tr id="tr-<?php echo $log['id']; ?>">
+            <td><?= Package::PackageData($log['package_id']);  ?></td>
+            <td><?php $sd=($log['package_start_date']); echo date("d/m/Y", strtotime($sd));?></td>
+            <td><?php $sd=($log['package_end_date']);echo date("d/m/Y", strtotime($sd)); ?></td>
+            <td>
+                <?php print_r($log['package_price']); ?>
+                <input type="hidden" id="packedit" value="<?=$log['id'];?>">
+            </td>
+            <td>
+                <?php
+                $url = Url::to(['package/packagedelete', 'id' => $log['package_id']]);
+                echo Html::a('<span class="glyphicon glyphicon-trash"></span>','#', ['onclick' => 'packagedelete('.$log['id'].');','title'=>'Delete','class' =>$sel]);
+                echo Html::a('<span class="glyphicon glyphicon-pencil"></span>','#', ['onclick' => 'packageedit('.$log['id'].');','title'=>'Edit','class' =>$sel]);
+                ?>
+            </td>
 			</tr>
 			<?php $i++; } ?>
 	</tbody>
@@ -171,11 +162,17 @@ $this->params['breadcrumbs'][] = $this->title;
 <table class="table table-striped table-bordered detail-view">
 	<tbody>
 		<tr>
-			<th>Item Type</th><th>Item Name</th><th>Category</th><th>Status</th><th>Priority</th><th>Item Approved</th><th>Action</th>
-			</tr>
-			<?php foreach ($dataProvider->query as $log) {?>
-			<tr>
-			<td><?= Itemtype::itemtypename($log['type_id']); ?></td>
+			<th>Item Type</th>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Item Approved</th>
+            <th>Action</th>
+        </tr>
+        <?php foreach ($dataProvider->query as $log) { ?>
+        <tr>
+            <td><?= Itemtype::itemtypename($log['type_id']); ?></td>
             <td><?= Vendoritem::vendoritemname($log['item_id']); ?></td>
             <td><?= Category::viewcategoryname($log['category_id']); ?></td>
             <td><?= ($log['item_status']); ?></td>
@@ -187,8 +184,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View')]);
                 ?>
             </td>
-			</tr>
-			<?php } ?>
+        </tr>
+        <?php } ?>
 	</tbody>
 </table>
 <!--End Third Tab -->
@@ -196,9 +193,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="tab-pane" id="5">
 
-	<?php $timeslot_val = array();
-  $delivery_data = Deliverytimeslot::vendor_delivery_details($model->vendor_id);
-    if($delivery_data>0){?>
+	<?php
+    $timeslot_val = array();
+    $delivery_data = Deliverytimeslot::vendor_delivery_details($model->vendor_id);
+    if ($delivery_data>0) { ?>
 
 	<div class="vendor-admin-new">
 	<div class="day_head">SUNDAY</div>
@@ -210,114 +208,113 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="day_head">SATURDAY</div>
 
     <div class="delivery_days">
-      <div class="sun">
-      <ul>
-      <?php  $sun = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Sunday');
-      foreach ($sun as $key => $value) {
-         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-         $start = date('g:ia', strtotime($value['timeslot_start_time']));
-         $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-         $orders =  $value['timeslot_maximum_orders'];
-        echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-        echo '</div>';
-      } ?>
-    </ul>
-
-      </div>
-      <div class="mon">
+        <div class="sun">
         <ul>
-      <?php  $mon = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Monday');
-      foreach ($mon as $key => $value) {
-        $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-        $start = date('g:ia', strtotime($value['timeslot_start_time']));
-        $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-        $orders =  $value['timeslot_maximum_orders'];
-        echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>';
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-        echo '</div>';
-      } ?>
-    </ul>
-      </div>
-      <div class="tue">
-          <ul>
-      <?php  $tue = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Tuesday');
+            <?php
+            $sun = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Sunday');
+            foreach ($sun as $key => $value) {
+            $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
+            $start = date('g:ia', strtotime($value['timeslot_start_time']));
+            $end =  date('g:ia', strtotime($value['timeslot_end_time']));
+            $orders =  $value['timeslot_maximum_orders'];
+            echo '<div class="one_slot">';
+            echo '<li>'. $start .' - '. $end .'</li>'.'</a>';
+            echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
+            echo '</div>';
+            } ?>
+        </ul>
+        </div>
+        <div class="mon">
+            <ul>
+                <?php  $mon = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Monday');
+                foreach ($mon as $key => $value) {
+                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
+                $start = date('g:ia', strtotime($value['timeslot_start_time']));
+                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
+                $orders =  $value['timeslot_maximum_orders'];
+                echo '<div class="one_slot">';
+                echo '<li>'. $start .' - '. $end .'</li>';
+                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
+                echo '</div>';
+                } ?>
+            </ul>
+        </div>
+        <div class="tue">
+            <ul>
+                <?php  $tue = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Tuesday');
 
-      foreach ($tue as $key => $value) {
-        $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-        $start = date('g:ia', strtotime($value['timeslot_start_time']));
-        $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-        $orders =  $value['timeslot_maximum_orders'];
-        echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>';
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-        echo '</div>';
-      } ?>
-    </ul>
-      </div>
-      <div class="wed">
-          <ul>
-      <?php  $wed = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Wednesday');
-      foreach ($wed as $key => $value) {
-        $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-        $start = date('g:ia', strtotime($value['timeslot_start_time']));
-        $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-        $orders =  $value['timeslot_maximum_orders'];
-        echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>';
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-        echo '</div>';
-      } ?>
-    </ul>
-      </div>
-      <div class="thu">
-          <ul>
-      <?php  $thu = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Thursday');
-
-      foreach ($thu as $key => $value) {
-        $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-        $start = date('g:ia', strtotime($value['timeslot_start_time']));
-        $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-        $orders =  $value['timeslot_maximum_orders'];
-        echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>'.'</a>';
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-        echo '</div>';
-      } ?>
-    </ul>
-      </div>
-      <div class="fri">
-          <ul>
-      <?php  $fri = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Friday');
-      foreach ($fri as $key => $value) {
-        $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-        $start = date('g:ia', strtotime($value['timeslot_start_time']));
-        $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-          $orders =  $value['timeslot_maximum_orders'];
-        echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>';
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-        echo '</div>';
-      } ?>
-    </ul>
-      </div>
-      <div class="sat">
-      <ul>
-      <?php  $sat = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Saturday');
-      foreach ($sat as $key => $value) {
-        $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-        $start = date('g:ia', strtotime($value['timeslot_start_time']));
-        $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-        $orders =  $value['timeslot_maximum_orders'];
-        echo '<div class="one_slot">';
-        echo '<li>'. $start .' - '. $end .'</li>';
-        echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-        echo '</div>';
-      } ?>
-    </ul>
-      </div>
+                foreach ($tue as $key => $value) {
+                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
+                $start = date('g:ia', strtotime($value['timeslot_start_time']));
+                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
+                $orders =  $value['timeslot_maximum_orders'];
+                echo '<div class="one_slot">';
+                echo '<li>'. $start .' - '. $end .'</li>';
+                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
+                echo '</div>';
+                } ?>
+            </ul>
+        </div>
+        <div class="wed">
+            <ul>
+                <?php  $wed = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Wednesday');
+                foreach ($wed as $key => $value) {
+                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
+                $start = date('g:ia', strtotime($value['timeslot_start_time']));
+                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
+                $orders =  $value['timeslot_maximum_orders'];
+                echo '<div class="one_slot">';
+                echo '<li>'. $start .' - '. $end .'</li>';
+                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
+                echo '</div>';
+                } ?>
+            </ul>
+        </div>
+        <div class="thu">
+            <ul>
+                <?php  $thu = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Thursday');
+                foreach ($thu as $key => $value) {
+                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
+                $start = date('g:ia', strtotime($value['timeslot_start_time']));
+                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
+                $orders =  $value['timeslot_maximum_orders'];
+                echo '<div class="one_slot">';
+                echo '<li>'. $start .' - '. $end .'</li>'.'</a>';
+                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
+                echo '</div>';
+                } ?>
+            </ul>
+        </div>
+        <div class="fri">
+            <ul>
+                <?php  $fri = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Friday');
+                foreach ($fri as $key => $value) {
+                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
+                $start = date('g:ia', strtotime($value['timeslot_start_time']));
+                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
+                $orders =  $value['timeslot_maximum_orders'];
+                echo '<div class="one_slot">';
+                echo '<li>'. $start .' - '. $end .'</li>';
+                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
+                echo '</div>';
+                } ?>
+            </ul>
+        </div>
+        <div class="sat">
+            <ul>
+                <?php  $sat = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Saturday');
+                foreach ($sat as $key => $value) {
+                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
+                $start = date('g:ia', strtotime($value['timeslot_start_time']));
+                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
+                $orders =  $value['timeslot_maximum_orders'];
+                echo '<div class="one_slot">';
+                echo '<li>'. $start .' - '. $end .'</li>';
+                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
+                echo '</div>';
+                } ?>
+            </ul>
+        </div>
     </div>
 </div>
 <?php } else {
