@@ -1,3 +1,8 @@
+<?php
+
+//we already getting theme for listed items, so no need to have sql like price filter here
+
+if($themes) { ?>
 
 <div class="panel panel-default" >
 	<div class="panel-heading">
@@ -52,4 +57,5 @@
 			</div>
 		</div>
 	</div>
-	
+<?php 
+}	
