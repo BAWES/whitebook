@@ -57,15 +57,41 @@ foreach ($subcategory as $key => $value) {
 					/* Display scroll for more than three li */
 					?>
 					<ul class="<?= $class; ?>">
+
+						<li>
+							<label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
+
+								<input
+									name="items"
+									data-element="input"
+									class="items"
+									id="checkbox-<?= $value['category_name'] ?>"
+									value="<?= $value['slug'] ?>"
+									step="<?= $value['category_id'] ?>"
+									type="checkbox"
+									<?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
+
+								<?php
+
+								if(Yii::$app->language == 'en') {
+									echo ucfirst(strtolower($value['category_name']));
+								}else{
+									echo ucfirst(strtolower($value['category_name_ar']));
+								}
+
+								?>
+							</label>
+						</li>
+
 						<?php
 
-						foreach ($childcategory as $key => $value) {
+						foreach ($childcategory as $key => $childcategory_value) {
 
 							if(isset($get['category']) && $get['category'] !="")
 							{
 								$val = explode(' ',$get['category']);
 
-								if(in_array($value['slug'],$val))
+								if(in_array($childcategory_value['slug'], $val))
 								{
 									$checked = 'checked=checked';
 								}
@@ -77,24 +103,24 @@ foreach ($subcategory as $key => $value) {
 							/* END check category checbox values */
 							?>
 							<li>
-								<label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
+								<label class="label_check" for="checkbox-<?= $childcategory_value['category_name'] ?>">
 
 									<input
 										name="items"
 										data-element="input"
 										class="items"
-										id="checkbox-<?= $value['category_name'] ?>"
-										value="<?= $value['slug'] ?>"
-										step="<?= $value['category_id'] ?>"
+										id="checkbox-<?= $childcategory_value['category_name'] ?>"
+										value="<?= $childcategory_value['slug'] ?>"
+										step="<?= $childcategory_value['category_id'] ?>"
 										type="checkbox"
 										<?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> >
 
 									<?php
 
 									if(Yii::$app->language == 'en') {
-										echo ucfirst(strtolower($value['category_name']));
+										echo ucfirst(strtolower($childcategory_value['category_name']));
 									}else{
-										echo ucfirst(strtolower($value['category_name_ar']));
+										echo ucfirst(strtolower($childcategory_value['category_name_ar']));
 									}
 
 									?>

@@ -1,3 +1,9 @@
+<?php
+
+//we already getting theme for listed items, so no need to have sql like price filter here
+
+if($themes) { ?>
+
 <div class="panel panel-default" >
     <div class="panel-heading">
         <div class="clear_left"><p><?= Yii::t('frontend', 'Themes') ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
@@ -41,3 +47,6 @@
         </div>
     </div>
 </div>
+
+<?php 
+}
