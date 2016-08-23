@@ -54,6 +54,7 @@ class ShopController extends BaseController
                 ->all();
 
             $ActiveVendors = Vendor::loadvalidvendorids($Category->category_id);
+            
             $imageData = Vendoritem::find()
                     ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
                         {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id,
