@@ -21,15 +21,18 @@ $model = new Website();
 <div id="home_slider">
     <?php
         if(Yii::$app->language == 'en'){
-            echo file_get_contents(
-                'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias
-            );
+            $url = 'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias;
         }else{
-            echo file_get_contents(
-                'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias=arabic-slider'
-            );
+            $url = 'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias=arabic-slider';
         }
 
+        $ch = curl_init();
+        $timeout = 5;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        echo curl_exec($ch);
+        curl_close($ch);
     ?>
 </div>
 
