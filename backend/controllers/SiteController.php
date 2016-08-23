@@ -237,10 +237,7 @@ class SiteController extends Controller
         $siteinfo = Siteinfo::find()->all();
         $to = $siteinfo[0]['email_id']; // admin email
 
-        $session = Yii::$app->session;
-        
-        $model = Vendor::find()->where('vendor_contact_email = "'.$session['email'].'"')->one();
-
+        $model = Vendor::findOne(\Yii::$app->user->getId());
         $model->scenario = 'vendorprofile';
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
@@ -259,27 +256,26 @@ class SiteController extends Controller
         // Current Phone numbers
         $vendor_contact_number = explode(',',$model['vendor_contact_number']);
 
-        if($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
+            $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
+            $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
 
             $vendor = Yii::$app->request->post('Vendor');
-
             $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
-
-            $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'];
-
-            $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'];
+            $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
+            $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
 
             $file = UploadedFile::getInstances($model, 'vendor_logo_path');
 
             if ($file) {
                 foreach ($file as $files) {
-                    if($files instanceof yii\web\UploadedFile){
+                    if ($files instanceof yii\web\UploadedFile) {
                         $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
                         //Resize file using imagine
                         $resize = true;
 
-                        if($resize){
+                        if ($resize) {
                             $newTmpName = $files->tempName . "." . $files->extension;
 
                             $imagine = new \Imagine\Gd\Imagine();
@@ -293,7 +289,7 @@ class SiteController extends Controller
 
                         //Save to S3
                         $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
-                        if($awsResult){
+                        if ($awsResult) {
                             $model->vendor_logo_path = $filename;
                         }
                     }
@@ -303,13 +299,12 @@ class SiteController extends Controller
             }
 
             if($model->save()) {
+
                 $v_name = $model['vendor_name'];
-                
                 Yii::info('[Vendor Profile Updated] Vendor updated profile information', __METHOD__);
-                
                 Yii::$app->session->setFlash('success', "Successfully updated your profile!");
-                
                 return $this->redirect(['index']);
+
             } else {
                 Yii::$app->session->setFlash('danger', "Something went wrong!");
                 return $this->render('profile', ['model' => $model]);
