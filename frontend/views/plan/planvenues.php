@@ -96,6 +96,12 @@ $get = Yii::$app->request->get();
 				<nav class="row-offcanvas row-offcanvas-left">
 					<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 					<div id="accordion" class="panel-group">
+						<!--  BEGIN PRICE FILTER -->
+						<?php 
+							require 'filter/price.php';
+						?>				
+						<!--  END PRICE FILTER-->
+
 						<!-- BEGIN CATEGORY FILTER  -->
 						<?php 
 							require 'filter/category.php';
@@ -114,11 +120,7 @@ $get = Yii::$app->request->get();
 						?>
 						<!--  END VENDOR FILTER-->
 
-						<!--  BEGIN PRICE FILTER -->
-						<?php 
-							require 'filter/price.php';
-						?>				
-						<!--  END PRICE FILTER-->
+						
 					<!-- END FILTER  -->
 					</div>
 				</nav>
@@ -398,10 +400,7 @@ $this->registerJs("
 			return this.value;
 		}).get().join('+');
 
-		var price_val = jQuery('input[name=price]:checked').map(function() {
-			return this.value;
-		}).get().join('+');
-		/* URL format */
+		var price_val = jQuery('.price_slider').val().replace(',', '-');
 
 		var url_path;
 		/* BEGIN GET SLUG FROM URL */
