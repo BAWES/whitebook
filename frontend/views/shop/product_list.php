@@ -12,7 +12,7 @@
     <section id="inner_pages_white_back">
         <div id="event_slider_wrapper">
             <div class="container paddng0">
-                <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+                <?php echo $this->render('/product/events_slider.php');  ?>
             </div>
         </div>
         <div class="container paddng0">
@@ -34,6 +34,7 @@
                 <div class="col-md-3 paddingleft0" id="left_side_cate">
                     <div class="filter_content">
                         <div class="filter_section">
+
                             <div class="responsive-category-top">
                                 <div class="listing_sub_cat1">
                                     <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
@@ -76,31 +77,12 @@
                                 <nav class="row-offcanvas row-offcanvas-left">
                                     <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                                         <div id="accordion" class="panel-group">
-                                            <!--  BEGIN PRICE FILTER -->
-                                            <?php 
-                                                require 'filter/price.php';
-                                            ?>
-                                            <!--  END PRICE FILTER-->
-
-                                            <!-- BEGIN CATEGORY FILTER  -->
-                                            <?php 
-                                                require 'filter/category.php';
-                                            ?>
-                                            <!--  END CATEGORY FILTER-->
-                                            
-                                            <!--  BEGIN THEME FILTER-->
-                                            <?php 
-                                                require 'filter/theme.php';
-                                            ?>
-                                            <!--  END THEME FILTER -->
-
-                                            <!--  BEGIN VENDOR FILTER -->
-                                            <?php 
-                                                require 'filter/vendor.php';
-                                            ?>
-                                            <!--  END VENDOR FILTER-->
-
-                                            
+                                            <?php echo $this->render('filter/date.php');  ?>
+                                            <?php echo $this->render('filter/locations.php');  ?>
+                                            <?php echo $this->render('filter/price.php');  ?>
+                                            <?php echo $this->render('filter/category.php',['slug'=>$slug]); ?>
+                                            <?php echo $this->render('filter/theme.php',['themes'=>$themes]); ?>
+                                            <?php echo $this->render('filter/vendor.php',['vendor'=>$vendor]); ?>
                                         </div>
                                 </nav>
                             </div>
@@ -137,13 +119,10 @@
                         </div><!-- END .add_more_commons -->
                     </div>
                     <!-- END Item lists -->
-
                 </div>
             </div>
-
         </div>
     </section>
-
 <?php
 
 $giflink = Url::to("@web/images/ajax-loader.gif");
