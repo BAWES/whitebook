@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
+
 ?>
 <style>
     .datepicker{
@@ -102,8 +104,14 @@ use yii\helpers\Url;
                     <div class="col-xs-8 col-xs-offset-2">
                         <div class="product_popup_signup_box">
                             <div class="">
-                                <form name="create_event" id="create_event">
-                                    <input type="hidden" id="_csrf" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
+                                <!--<form name="create_event" id="create_event">-->
+
+                                <?php
+
+                                $form = ActiveForm::begin([
+                                    'id' => 'area-selection',
+                                ]) ?>
+                                    <input type="hidden" id="_csrf" name="_csrf" value="<?=Yii::$app->request->csrfToken; ?>" />
                                     <div class="form-group new_popup_common">
                                         <div class="bs-docs-example">
                                             <?php
@@ -139,7 +147,8 @@ use yii\helpers\Url;
                                             <input class="btn btn-default" data-dismiss="modal"  id="cancel_button" name="cancel_button" type="button" value="<?php echo Yii::t('frontend', 'Cancel'); ?>" title="<?php echo Yii::t('frontend', 'Cancel'); ?>">
                                         </div>
                                     </div>
-                                </form>
+                                <?php ActiveForm::end() ?>
+
                             </div>
                         </div>
                     </div>
@@ -176,7 +185,43 @@ jQuery('#AreaModal').modal('show');
             }
         });
         return false;
-
     });
+
+    jQuery('#submit').on('click',function(){
+        if($('#area').val() == '') {
+            alert('Please select area');
+            return false;
+        } else if($('#Location').val() == '') {
+            alert('Please select location');
+            return false;
+        } else if($('#delivery_date').val() == '') {
+            alert('Please select delivery date');
+            return false;
+        } else {
+
+            var csrfToken = $('meta[name=\"csrf-token\"]').attr(\"content\");
+            var path = '".\Yii\helpers\Url::to(['shop/set-user-location'])."';
+            $.ajax({
+            type: 'POST',
+            url: path, //url to be called
+            data: { city_id: jQuery(this).val(), _csrf : csrfToken},
+
+            beforeSend: function (xhr) {
+                $('#location_div').html('Please Wait....');
+            },
+            success: function(data) {
+                    $('#location_div').html(data);
+                    jQuery('.selectpicker').selectpicker({
+                        style: 'btn-primary',
+                        size: 2
+                    });
+                    return false;
+                }
+            });
+            return false;
+
+        }
+    });
+
 ");
 ?>
