@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Url;
 use yii\helpers\Html;
 use common\models\Vendoritempricing;
@@ -50,15 +49,11 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 ]);
                 ?>
-
             </div>
         </div>
-
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
-                
-
                 <div class="product_detials_common normal_tables">
 
                     <div class="col-md-6 paddig0 resp_hide">
@@ -140,7 +135,6 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                 <div class="right_descrip">
                                     <div class="responsive_width">
                                         <!-- add to event start -->
-
                                         <?php if (Yii::$app->user->isGuest) { ?>
                                             <a href="" data-toggle="modal" class="add_events" data-target="#myModal" title="Add to event"  onclick="add_event_login(<?php echo $model['item_id']; ?>)">
                                                 <span class="plus-icon-prod">
@@ -155,10 +149,7 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                             </a>
                                         <?php } ?>
                                         <!-- add to event end here -->
-
-
                                         <!-- Add to favourite start -->
-
                                         <?php if (Yii::$app->user->isGuest) { ?>
                                             <a href="" class="faver_evnt_product" data-toggle="modal" data-target="#myModal" onclick="show_login_modal_wishlist(<?php echo $model['item_id']; ?>);"  title="<?php echo Yii::t('frontend', 'Add to Favourite'); ?>">
                                                 <span class="heart-product"></span>
