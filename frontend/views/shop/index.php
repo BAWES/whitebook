@@ -1,10 +1,21 @@
 <?php
-
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 ?>
-
+<style>
+    .datepicker{
+        border: 2px solid rgb(242, 242, 242);
+    }
+    .datepicker table {
+        font-size: 12px;
+    }
+    .m-0{margin:0px! important;}
+    .padding-left-0{padding-left: 0px!important;}
+    .padding-right-0{padding-right: 0px!important;}
+    .new_popup_common .bootstrap-select button,#dp3 input[type="text"]{color: #0a0a0a!important;}
+</style>
 <section id="inner_pages_white_back">
     <div class="container paddng0">
         <div class="shop_sect">
@@ -77,3 +88,140 @@ use yii\helpers\Url;
     </div>
 </section>
 <!-- continer end -->
+
+<div class="modal fade" id="AreaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" id="eventModal">
+        <div class="modal-content  modal_member_login signup_poupu row">
+            <div class="modal-header">
+                <button type="button" class="close" id="boxclose" name="boxclose" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="text-center">
+                    <span class="yellow_top"></span>
+                </div>
+                <h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend', 'Select Area & Delivery Date'); ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-8 col-xs-offset-2">
+                        <div class="product_popup_signup_box">
+                            <div class="">
+                                <!--<form name="create_event" id="create_event">-->
+
+                                <?php
+
+                                $form = ActiveForm::begin([
+                                    'id' => 'area-selection',
+                                ]) ?>
+                                    <input type="hidden" id="_csrf" name="_csrf" value="<?=Yii::$app->request->csrfToken; ?>" />
+                                    <div class="form-group new_popup_common">
+                                        <div class="bs-docs-example">
+                                            <?php
+                                            if (Yii::$app->language == "en") {
+                                                $name = 'city_name';
+                                            } else {
+                                                $name = 'city_name_ar';
+                                            }
+                                            echo Html::dropDownList('city','',\yii\helpers\ArrayHelper::map($city,'city_id',$name),['prompt'=>'Please Select City','class'=>'selectpicker required trigger','id'=>'area']);
+                                            ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group new_popup_common">
+                                        <div class="bs-docs-example" id="location_div">
+                                            <?php
+                                            echo Html::dropDownList('location','',[],['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'location'])
+                                            ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group top_calie_new">
+                                        <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
+                                            <input type="text" name="delivery_date" id="delivery_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
+                                            <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="buttons">
+                                        <div class="m-0 creat_evn_sig col-lg-6 padding-left-0">
+                                            <button type="button" id="submit" name="submit" class="btn btn-default" title="<?php echo Yii::t('frontend', 'Create Event'); ?>"><?php echo Yii::t('frontend', 'Save'); ?></button>
+                                        </div>
+                                        <div class="m-0 cancel_sig col-lg-6 padding-right-0">
+                                            <input class="btn btn-default" data-dismiss="modal"  id="cancel_button" name="cancel_button" type="button" value="<?php echo Yii::t('frontend', 'Cancel'); ?>" title="<?php echo Yii::t('frontend', 'Cancel'); ?>">
+                                        </div>
+                                    </div>
+                                <?php ActiveForm::end() ?>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+
+$this->registerJS("
+jQuery.noConflict();
+jQuery('#AreaModal').modal('show');
+
+    jQuery('#area').on('change',function(){
+        var csrfToken = $('meta[name=\"csrf-token\"]').attr(\"content\");
+        var path = '".\Yii\helpers\Url::to(['shop/get-location-list'])."';
+        $.ajax({
+        type: 'POST',
+        url: path, //url to be called
+        data: { city_id: jQuery(this).val(), _csrf : csrfToken}, //data to be send
+
+        beforeSend: function (xhr) {
+            $('#location_div').html('Please Wait....');
+        },
+        success: function(data) {
+		        $('#location_div').html(data);
+		        jQuery('.selectpicker').selectpicker({
+                    style: 'btn-primary',
+                    size: 2
+                });
+		        return false;
+            }
+        });
+        return false;
+    });
+
+    jQuery('#submit').on('click',function(){
+        if($('#area').val() == '') {
+            alert('Please select area');
+            return false;
+        } else if($('#Location').val() == '') {
+            alert('Please select location');
+            return false;
+        } else if($('#delivery_date').val() == '') {
+            alert('Please select delivery date');
+            return false;
+        } else {
+
+            var csrfToken = $('meta[name=\"csrf-token\"]').attr(\"content\");
+            var path = '".\Yii\helpers\Url::to(['shop/set-user-location'])."';
+            $.ajax({
+            type: 'POST',
+            url: path, //url to be called
+            data: { city_id: jQuery(this).val(), _csrf : csrfToken},
+
+            beforeSend: function (xhr) {
+                $('#location_div').html('Please Wait....');
+            },
+            success: function(data) {
+                    $('#location_div').html(data);
+                    jQuery('.selectpicker').selectpicker({
+                        style: 'btn-primary',
+                        size: 2
+                    });
+                    return false;
+                }
+            });
+            return false;
+
+        }
+    });
+
+");
+?>

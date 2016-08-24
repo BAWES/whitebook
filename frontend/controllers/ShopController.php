@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Location;
 use common\models\Vendorlocation;
 use Yii;
 use frontend\models\Users;
@@ -25,10 +26,12 @@ class ShopController extends BaseController
 
     public function actionIndex()
     {
+
         \Yii::$app->view->title = 'The White Book | Plan';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-        return $this->render('index');
+        $city = \common\models\City::findAll(['trash'=>'Default']);
+        return $this->render('index',['city'=>$city]);
     }
 
     public function actionProducts($slug)
@@ -361,6 +364,25 @@ class ShopController extends BaseController
                 'customer_events_list' => $customer_events_list,
                 'vendor_area' => $VendorArea
             ]);
+        }
+
+    }
+
+    public function actionGetLocationList(){
+        if (Yii::$app->request->isAjax) {
+
+            if (Yii::$app->language == "en") {
+                $name = 'location';
+            } else {
+                $name = 'location_ar';
+            }
+            $area = \common\models\Location::find()->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $_POST['city_id']])->orderBy('city_id')->all();
+            if ($area) {
+                echo \yii\helpers\Html::dropDownList('Location','',\yii\helpers\ArrayHelper::map($area ,'id',$name),['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'Location']);
+            } else {
+                echo \yii\helpers\Html::dropDownList('Location','',[],['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'Location']);
+            }
+            exit;
         }
     }
 }
