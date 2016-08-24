@@ -153,7 +153,7 @@ class PlanController extends BaseController
         /* END GET VENDORS */
         if (Yii::$app->user->isGuest) {
 
-            return $this->render('planvenues', [
+            return $this->render('product_list', [
                 'model' => $model, 
                 'top_categories' => $top_categories,
                 'imageData' => $imageData,
@@ -168,7 +168,7 @@ class PlanController extends BaseController
             
             $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
             
-            return $this->render('planvenues', [
+            return $this->render('product_list', [
                 'model' => $model, 
                 'top_categories' => $top_categories,
                 'imageData' => $imageData,
@@ -279,7 +279,7 @@ class PlanController extends BaseController
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
             }
 
-        return $this->renderPartial('loaditems', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
+        return $this->renderPartial('product_list_ajax', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
     }
 
     public function actionLoadsearchitems()
@@ -383,7 +383,7 @@ class PlanController extends BaseController
             $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
         }
 
-        return $this->renderPartial('loaditems', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
+        return $this->renderPartial('product_list_ajax', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
     }
 
     public function actionLoadmoreitems()
@@ -415,7 +415,7 @@ class PlanController extends BaseController
                     //limit 4 offset '.$limit.'
                     ->asArray()
                     ->all();
-            return $this->renderPartial('loaditems', ['imageData' => $imageData]);
+            return $this->renderPartial('product_list_ajax', ['imageData' => $imageData]);
         }
     }
 
@@ -498,9 +498,9 @@ class PlanController extends BaseController
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
-                return $this->renderPartial('loaditems', ['imageData' => $vendorData,'customer_events_list' => $customer_events_list]);
+                return $this->renderPartial('product_list_ajax', ['imageData' => $vendorData,'customer_events_list' => $customer_events_list]);
             } else {
-                return $this->renderPartial('loaditems', ['imageData' => $vendorData]);
+                return $this->renderPartial('product_list_ajax', ['imageData' => $vendorData]);
             }
         }
     }
@@ -597,9 +597,9 @@ class PlanController extends BaseController
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
                 if (!empty($customer_id)) {
-                    return $this->renderPartial('loaditems', ['imageData' => $imageData]);
+                    return $this->renderPartial('product_list_ajax', ['imageData' => $imageData]);
                 } else {
-                    return $this->renderPartial('loaditems', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
+                    return $this->renderPartial('product_list_ajax', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
                 }
             }
         }
