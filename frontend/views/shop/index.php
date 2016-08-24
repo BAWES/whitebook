@@ -159,7 +159,7 @@ use yii\widgets\ActiveForm;
 </div>
 
 <?php
-
+/*
 $this->registerJS("
 jQuery.noConflict();
 jQuery('#AreaModal').modal('show');
@@ -223,5 +223,5 @@ jQuery('#AreaModal').modal('show');
         }
     });
 
-");
+");*/
 ?>
