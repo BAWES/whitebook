@@ -84,9 +84,9 @@ $this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($theme_name['t
 					<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 						<div id="accordion" class="panel-group">
 							<?php 
-								require 'filter/category.php';
-								require 'filter/vendor.php';
-								require 'filter/price.php';
+								require 'themesearh_filter/category.php';
+								require 'themesearh_filter/vendor.php';
+								require 'themesearh_filter/price.php';
 							?>
 							<!-- END FILTER  -->
 						</div><!-- END -->
