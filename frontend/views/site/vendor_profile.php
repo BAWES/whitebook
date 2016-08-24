@@ -63,14 +63,15 @@ if ($event_status > 0) {
                                 <h3><h3><?php echo $vendor_detail[0]['vendor_name']; ?></h3></h3>
                             </div>
                             <div class="panel-group" id="sub_accordion">
-<?php if ($vendor_detail[0]['vendor_brief'] != '') { ?>
+                                <?php if ($vendor_detail[0]['vendor_brief'] != '') { ?>
                                     <div class="panel panel-default" >
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h4 class="panel-title">
                                                 <a class="collapsed" id="description_click" data-toggle="collapse" data-parent="#sub_accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-    <?php echo Yii::t('frontend', 'Description'); ?>    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a>
+                                                    <?php echo Yii::t('frontend', 'Description'); ?>    
+                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+                                                </a> 
                                             </h4>
-
                                         </div>
                                         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">
@@ -78,14 +79,16 @@ if ($event_status > 0) {
                                             </div>
                                         </div>
                                     </div>
-<?php } ?>
-<?php if ($vendor_detail[0]['vendor_return_policy'] != '') { ?>
+                                <?php } ?>
+
+                                <?php if ($vendor_detail[0]['vendor_return_policy'] != '') { ?>
                                     <div class="panel panel-default" >
                                         <div class="panel-heading" role="tab" id="headingTwo">
                                             <h4 class="panel-title">
                                                 <a class="collapsed" data-toggle="collapse" data-parent="#sub_accordion" id="policy_click" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-    <?php echo Yii::t('frontend', 'Return policy'); ?>
-                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a> </a>
+                                                    <?php echo Yii::t('frontend', 'Return policy'); ?>
+                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+                                                </a> 
                                             </h4>
                                         </div>
                                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
@@ -94,15 +97,16 @@ if ($event_status > 0) {
                                             </div>
                                         </div>
                                     </div>
-<?php } ?>
+                                <?php } ?>
 
-<?php if ($vendor_detail[0]['vendor_public_email'] != '' || $vendor_detail[0]['vendor_public_phone'] != '' || $vendor_detail[0]['vendor_website'] != '' || $vendor_detail[0]['vendor_working_hours']) { ?>
+                                <?php if ($vendor_detail[0]['vendor_public_email'] != '' || $vendor_detail[0]['vendor_public_phone'] != '' || $vendor_detail[0]['vendor_website'] != '' || $vendor_detail[0]['vendor_working_hours']) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingFive">
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#sub_accordion"  id="contact_click" href="#collapseFive" aria-expanded="true" aria-controls="collapseOne">
-    <?= Yii::t('frontend', 'Contact info'); ?>
-                                                    <span class="glyphicon glyphicon-menu-down text-align pull-right"></span></a> </a>
+                                                    <?= Yii::t('frontend', 'Contact info'); ?>
+                                                    <span class="glyphicon glyphicon-menu-down text-align pull-right"></span>
+                                                </a> 
                                             </h4>
                                         </div>
                                         <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
@@ -111,11 +115,17 @@ if ($event_status > 0) {
                                                     <address>
                                                         <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
                                                             <?php if ($vendor_detail[0]['vendor_public_email'] != '') { ?>
-                                                                <h3><a href="#" title="<?php echo $vendor_detail[0]['vendor_public_email']; ?>"><?php echo $vendor_detail[0]['vendor_public_email']; ?></a></h3>
-                                                                <span class="border-bottom"></span>
+                                                            <h3>
+                                                                <a href="#" title="<?php echo $vendor_detail[0]['vendor_public_email']; ?>"><?php echo $vendor_detail[0]['vendor_public_email']; ?></a>
+                                                            </h3>
+                                                            <span class="border-bottom"></span>
                                                             <?php } ?>
-    <?php if ($vendor_detail[0]['vendor_public_phone'] != '') { ?>
-                                                                <h4 style="margin-top: 13px;"><?php echo $vendor_detail[0]['vendor_public_phone']; ?></h4>
+                                                            
+                                                            <?php if ($vendor_detail[0]['vendor_public_phone'] != '') { ?>
+                                                                <h4 style="margin-top: 13px;">
+                                                                    <?php echo $vendor_detail[0]['vendor_public_phone']; ?>
+                                                                    
+                                                                </h4>
                                                             <?php } ?>
                                                             <span class="border-bottom border-bottom-none"></span>
                                                         </div>
@@ -164,17 +174,16 @@ if ($event_status > 0) {
                                                     <?php } ?>
                                                     <?php if ($vendor_detail[0]['vendor_instagram'] != '') { ?>
                                                         <li><a target="_blank" href="<?php echo $vendor_detail[0]['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-tumblr14"></span></a></li>
-        <?php } ?>
+                                            <?php } ?>
                                             <?php $vendor_url = Yii::$app->homeUrl . '/vendor/' . $vendor_detail[0]['vendor_contact_name'] . '.html'; ?>
                                                     <li><a href="mailto:<?php echo $vendor_detail[0]['vendor_contact_email']; ?>?subject=Vendor Profile&body=<?php echo $vendor_url; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                                 </ul>
                                             </div>
-    <?php } ?>
-                                    </div>
-<?php } ?>
+                            <?php } ?>
+                            </div>
+                            <?php } ?>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -200,138 +209,17 @@ if ($event_status > 0) {
                                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                                     <div id="accordion" class="panel-group">
                                         <!-- BEGIN CATEGORY FILTER  -->
-                                        <?php
-                                        $category_ids = Vendor::Vendorcategories($slug);
-                                        $category_list = Category::Vendorcategorylist($category_ids['category_id']);
-                                       // print_r($category_list);die;
-                                        if (count($category_list) > 3) {
-                                            $class = "test_scroll";
-                                        } else {
-                                            $class = "";
-                                        }
-                                        ?>
-                                        <div class="panel panel-default" >
-                                            <div class="panel-heading">
-                                                <div class="clear_left"><p><?= Yii::t('frontend', 'Categories'); ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-                                                <div class="clear_right">
-                                                    <a href="#bakery" id="sub_category_cakes" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-                                                        <h4 class="panel-title">
-                                                            <span class="plus_acc"></span>
-                                                        </h4>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div id="bakery" class="panel-collapse collapse" area-expanded="true" aria-expanded="true">
-                                                <div class="panel-body">
-                                                    <div class="table">
-                <ul class="<?= $class; ?>">
-            <?php foreach ($category_list as $key => $c_value) { ?>
-                <li>                
-                <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> ><?= ucfirst(strtolower($c_value['category_name'])); ?></label>
-                </li>
-            <?php } ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-         
-            <!--  END CATEGORY FILTER-->
+                                        <?php 
+                                            require 'vendor_profile_filter/category.php';
+                                        ?>                                        
                                         <!--  BEGIN THEME FILTER-->
-                                        <div class="panel panel-default" >
-                                            <div class="panel-heading">
-                                                <div class="clear_left"><p><?= Yii::t('frontend', 'Themes'); ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-                                                <div class="clear_right">
-                                                    <a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-                                                        <h4 class="panel-title">
-                                                            <span class="plus_acc"></span>
-                                                        </h4>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div id="themes" class="panel-collapse collapse" aria-expanded="false">
-                                                <div class="panel-body">
-                                                    <div class="table">
-                                                            <?php
-                                                            /* BEGIN Display scroll for more than three li */
-                                                            if (count($themes) > 3) {
-                                                                $class = "test_scroll";
-                                                            } else {
-                                                                $class = "";
-                                                            }
-                                                            /* END Display scroll for more than three li */
-                                                            ?>
-                                                        <ul class="<?= $class; ?>">
-<?php foreach ($themes as $key => $value) { ?>
-                                                                <li>
-                                                                    <label class="label_check" for="checkbox-<?= $value['theme_name'] ?>"><input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> ><?= $value['theme_name']; ?></label>
-                                                                </li>
-<?php } ?>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--  END THEME FILTER -->
+                                        <?php 
+                                            require 'vendor_profile_filter/theme.php';
+                                        ?>
                                         <!--  BEGIN PRICE FILTER -->
-                                        <div class="panel panel-default" >
-                                            <div class="panel-heading">
-                                                <div class="clear_left"><p><?= Yii::t('frontend', 'Price'); ?> <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-                                                <div class="clear_right">
-                                                    <a href="#price" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_price">
-                                                        <h4 class="panel-title">
-                                                            <span class="plus_acc">
-                                                            </span>
-                                                        </h4></a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
-                                                <div class="panel-body">
-                                                    <div class="table">
-                                                        <ul class="test_scroll">
-                                                            <?php
-                                                            /* Get max price_per_unit in item table */
-                                                            $min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
-                                                            $max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
-                                                            $max = $max_price[0]['price'];
-                                                            $divide = round($max / 5);
-//$maxx = $max+
-                                                            $i = 0;
-                                                            for ($x = $min_price[0]['price']; $x <= 1000; $x+=$divide) {
-//$item_price = $imageData[$i]['item_price_per_unit'];
-                                                                $min_kd = round($x - $divide);
-
-//if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
-                                                                if ($min_kd > 0) {
-                                                                    foreach ($vendorData as $key => $value) {
-                                                                        # code...
-                                                                        $item_price = $value['item_price_per_unit'];
-
-                                                                        $check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
-
-                                                                        if ($check_range == 1) {
-                                                                            ?>
-                                                                            <li>
-                                                                                <label class="label_check" for="checkbox-<?php echo $x; ?>">
-                                                                                    <input name="price" id="checkbox-<?php echo $x; ?>" value=<?php echo $min_kd . '-' . $x; ?> type="checkbox">
-                <?php echo $min_kd = floor($min_kd / 100) * 100;
-                $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100; ?> KD</label>
-                                                                            </li>
-                <?php
-                break;
-            }
-            $i++;
-        }
-    }
-}
-?>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--  END PRICE FILTER-->
-                                        <!-- END FILTER  -->
+                                        <?php 
+                                            require 'vendor_profile_filter/price.php';
+                                        ?>
                                     </div>
                             </nav>
                         </div>
@@ -343,12 +231,11 @@ if ($event_status > 0) {
                 <div class="listing_right">
                     <div class="events_listing">
                         <ul>
-                                                <?php
-                                                if (!empty($vendorData)) {
-                                                    foreach ($vendorData as $key => $value) {
-                                                        // echo $value['image_path'];die;
-                                                        if ($value['image_path'] != "") {
-                                                            ?>
+                            <?php
+                            
+                            if (!empty($vendorData)) {
+                                foreach ($vendorData as $key => $value) {                                    
+                                    if ($value['image_path'] != "") { ?>
                                         <li>
                                             <div class="events_items">
                                                 <div class="events_images">
