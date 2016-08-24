@@ -257,7 +257,10 @@ class ShopController extends BaseController
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
             }
 
-        return $this->renderPartial('_load', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
+        return $this->renderPartial('product_list_ajax', [
+            'imageData' => $imageData, 
+            'customer_events_list' => $customer_events_list
+        ]);
     }
 
     public function actionLoadMoreItems()
@@ -289,7 +292,7 @@ class ShopController extends BaseController
                     //limit 4 offset '.$limit.'
                     ->asArray()
                     ->all();
-            return $this->renderPartial('_load', ['imageData' => $imageData]);
+            return $this->renderPartial('product_list_ajax', ['imageData' => $imageData]);
         }
     }
 
