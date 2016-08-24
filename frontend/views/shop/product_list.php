@@ -338,6 +338,14 @@ $this->registerJs("
 		var price_val = jQuery('.price_slider').val().replace(',', '-');
 		/* URL format */
 
+        var areas = jQuery('input[name=location]:checked').map(function() {
+			return this.value;
+		}).get().join('+');
+
+		var date = jQuery('#delivery_date_2').val()
+		var price_val = jQuery('.price_slider').val().replace(',', '-');
+
+
 		var url_path;
 		slug = '".$get['slug']."';
 		var url = window.location.href+'?slug='+slug;
@@ -350,7 +358,7 @@ $this->registerJs("
 		}
 
 		if(category_name != '' || theme_name != '' || vendor_name != '' || price_val != '') {
-			url_path = '?slug=' + slug + '&category=' + category_name + '&themes=' + theme_name + '&vendor=' + vendor_name + '&price=' + price_val;
+			url_path = '?slug=' + slug + '&category=' + category_name + '&themes=' + theme_name + '&vendor=' + vendor_name + '&price=' + price_val+ '&date=' + date+ '&location=' + areas;
 		}
 
 		var path = '".Url::to(['shop/load-items'])."';
@@ -364,6 +372,8 @@ $this->registerJs("
 				vendor : vendor_name,
 				price : price_val,
 				slug: slug,
+                date : date,
+				location: areas,
 				_csrf : csrfToken
 			},
 			success:function(data){

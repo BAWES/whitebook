@@ -27,7 +27,7 @@
             <div class="table">
                 <div class="form-group">
                     <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" style="position: relative;"  id="delivery_date_wrapper">
-                        <input readonly="true" name="delivery_date" id="delivery_date" class="form-control required"  placeholder="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>" style="height: 40px;">
+                        <input readonly="true" name="delivery_date" id="delivery_date_2" class="form-control required"  placeholder="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>" style="height: 40px;">
                         <span class="add-on position_product_option"> <i class="flaticon-calendar189"></i></span>
                     </div>
                     <span class="error cart_delivery_date"></span>
