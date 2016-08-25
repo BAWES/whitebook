@@ -1,5 +1,26 @@
+var imagedata = $('#imagedata').val();
+var img  = $('#img').val();
+var action  = $('#action').val();
+var guideimagedata = $('#guideimagedata').val();
+var img1  = $('#img1').val();
+var action1 = $('#action1').val();
+var isNewRecord = $('#isNewRecord').val();
+var item_for_sale = $('#item_for_sale').val();
+var item_status = $('#item_status').val();
+var item_id = $('#item_id').val();
 
-	/* Begin Tabs NEXT & PREV buttons */
+var load_sub_category_url = $('#load_sub_category_url').val();
+var load_child_category_url = $('#load_child_category_url').val();
+
+var image_delete_url = $('#image_delete_url').val();
+var remove_question_url = $('#remove_question_url').val();
+
+var render_question_url = $('#render_question_url').val();
+var item_name_check_url = $('#item_name_check_url').val();
+var image_order_url = $('#image_order_url').val();
+
+
+/* Begin Tabs NEXT & PREV buttons */
 	$('.btnNext').click(function(){
 	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
 	});
@@ -182,7 +203,7 @@ function removePrice(tis)
 $(document).on('ready', function() {
 	
 	$('.file-block').hide();
-	
+
 	/* Sort item image */
 	if(!imagedata) { 
 
