@@ -410,15 +410,14 @@ class VendoritemController extends Controller
 
         $loadpricevalues = Vendoritempricing::loadpricevalues($item_id);
 
-        if($model->load(Yii::$app->request->post()) && $model->validate()) {
-            
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
             $vendor_item = Yii::$app->request->post('Vendoritem');
 
-            $model->item_for_sale = $vendor_item['item_for_sale']?'Yes':'No';
+            $model->item_for_sale = ($vendor_item['item_for_sale']) ? 'Yes':'No';
         
             /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
-            if($model->item_for_sale == 'No')
-            {
+            if ($model->item_for_sale == 'No') {
                 $model->item_amount_in_stock = '';
                 $model->item_default_capacity = '';
                 $model->item_minimum_quantity_to_order='';
@@ -428,19 +427,17 @@ class VendoritemController extends Controller
 
             $model->item_status='Deactive'; /* Vendor make it any changes item status should be deactivaed */
             
-            if($model->save()) {
+            if ($model->save()) {
 
                 $itemid = $model->item_id;
-                
                 $file = UploadedFile::getInstances($model, 'image_path');
-                
                 /* Begin Upload guide image table  */
                 $guide_image = UploadedFile::getInstances($model, 'guide_image');
 
                 if ($guide_image) {
                     $i = 0;
                     foreach ($guide_image as $files) {
-                        if($files instanceof yii\web\UploadedFile){
+                        if($files instanceof yii\web\UploadedFile) {
                             $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
                             //Resize file using imagine
