@@ -66,8 +66,9 @@ use common\models\Location;
 
                                     <?php 
                                     } ?>
-                                </select>
+                                </select>                                
                             </div>    
+                            <span class="error area_id"></span>
                         </div>
                         
                         <div class="form-group">

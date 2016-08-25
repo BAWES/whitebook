@@ -299,7 +299,8 @@ class ShopController extends BaseController
     public function actionProduct($slug)
     {
         $Similar = new \common\models\Featuregroupitem();
-        $model = Vendoritem::findOne(['slug'=>$slug]);
+
+        $model = Vendoritem::findOne(['slug' => $slug]);
 
         if (
             $model->item_approved == 'Yes' &&

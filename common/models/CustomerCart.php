@@ -9,6 +9,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\Vendorlocation;
 use common\models\Vendoritem;
+use common\models\Blockeddate;
 
 /**
  * This is the model class for table "whitebook_customer_cart".
@@ -103,6 +104,138 @@ class CustomerCart extends \yii\db\ActiveRecord
     public function getTimeslot()
     {
         return $this->hasOne(Deliverytimeslot::className(), ['timeslot_id' => 'timeslot_id']);
+    }
+
+    public function validate_item($data) {
+
+        $errors = [];
+
+        $item = Vendoritem::findOne($data['item_id']);
+
+        $vendor_id = $item->vendor_id;
+
+        if(!$item) {
+            $errors['warning'] = [
+                Yii::t('frontend', 'Item not available for sell!')
+            ];
+        }
+
+        //check if same item with same date available in cart 
+        $in_cart = CustomerCart::find()
+            ->where([
+                'customer_id' => Yii::$app->user->getId(),
+                'item_id' => $data['item_id'],
+                'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
+                'cart_valid' => 'yes',
+                'trash' => 'Default'
+            ])->sum('cart_quantity');
+
+        /*
+            Check if deliery availabel in selected area 
+        */
+        if(!empty($data['area_id'])) {
+
+            $delivery_area = CustomerCart::checkLocation($data['area_id'], $vendor_id);    
+
+            if(!$delivery_area) {
+                
+                $errors['area_id'] = [
+                    Yii::t('frontend', 'Delivery not available on selected area!')
+                ];
+            }
+        } 
+
+        //check if desire quantity available 
+        if($data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
+
+            $errors['cart_quantity'][] = [
+                
+                Yii::t('frontend', 'Maximum amount available in stock is "{item_amount_in_stock}".', [
+                    'item_amount_in_stock' => $item->item_amount_in_stock - $in_cart
+                ])
+            ];
+        }
+
+        //item_minimum_quantity_to_order
+        if($data['quantity'] < $item->item_minimum_quantity_to_order) {
+
+            $errors['cart_quantity'] = [
+                
+                Yii::t('yii', '{attribute} must be greater than or equal to "{compareValueOrAttribute}".', [
+                    'attribute' => Yii::t('frontend', 'Quantity'),
+                    'compareValueOrAttribute' => $item->item_minimum_quantity_to_order
+                ])
+            ];
+        }
+
+        //-------------- Start Item Capacity -----------------//
+        //default capacity is how many of it they can process per day
+
+        //1) get capacity exception for selected date 
+        $capacity_exception = VendorItemCapacityException::findOne([
+            'item_id' => $data['item_id'],
+            'exception_date' => date('Y-m-d', strtotime($data['delivery_date']))
+        ]);
+
+        if($capacity_exception && $capacity_exception->exception_capacity) {
+            $capacity = $capacity_exception->exception_capacity;
+        } else {
+            $capacity = $item->item_default_capacity;
+        }
+
+        //2) get no of item purchased for selected date 
+        $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "'.$data['item_id'].'" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(so.created_datetime) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
+
+        if($purchased_result) {
+            $purchased = $purchased_result['purchased'];
+        } else {
+            $purchased = 0;
+        }
+
+        //3) campare capacity 
+        if(($data['quantity'] + $purchased + $in_cart) > $capacity) {
+
+            $no_of_available = $capacity - $purchased - $in_cart;
+
+            //if stock is lower than capacity 
+            if($item->item_amount_in_stock < $no_of_available) {
+                $no_of_available = $item->item_amount_in_stock;
+            }
+
+            $errors['cart_quantity'] = [
+                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
+                   'no_of_available' => $no_of_available 
+                ])
+            ];
+        }
+        //-------------- END Item Capacity -----------------//
+
+        if(!$data['delivery_date']) 
+            return $errors;
+
+        //current date should not in blocked date 
+        $block_date = Blockeddate::findOne([
+            'vendor_id' => $vendor_id,
+            'block_date' => date('Y-m-d', strtotime($data['delivery_date']))
+        ]);
+        
+        if($block_date) {
+            $errors['cart_delivery_date'] = [
+                Yii::t('frontend', 'Item not available for selected date .')
+            ];    
+        }
+
+        //day should not in week off 
+        $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days); 
+        $day = date('N', strtotime($data['delivery_date']));//7-sunday, 1-monday
+
+        if(in_array($day, $blocked_days)) {
+            $errors['cart_delivery_date'] = [
+                Yii::t('frontend', 'Item not available for selected date .')
+            ];             
+        }
+        
+        return $errors;       
     }
 
     //return customer items 
