@@ -1,5 +1,26 @@
+var imagedata = $('#imagedata').val();
+var img  = $('#img').val();
+var action  = $('#action').val();
+var guideimagedata = $('#guideimagedata').val();
+var img1  = $('#img1').val();
+var action1 = $('#action1').val();
+var isNewRecord = $('#isNewRecord').val();
+var item_for_sale = $('#item_for_sale').val();
+var item_status = $('#item_status').val();
+var item_id = $('#item_id').val();
 
-	/* Begin Tabs NEXT & PREV buttons */
+var load_sub_category_url = $('#load_sub_category_url').val();
+var load_child_category_url = $('#load_child_category_url').val();
+
+var image_delete_url = $('#image_delete_url').val();
+var remove_question_url = $('#remove_question_url').val();
+
+var render_question_url = $('#render_question_url').val();
+var item_name_check_url = $('#item_name_check_url').val();
+var image_order_url = $('#image_order_url').val();
+
+
+/* Begin Tabs NEXT & PREV buttons */
 	$('.btnNext').click(function(){
 	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
 	});
@@ -182,7 +203,7 @@ function removePrice(tis)
 $(document).on('ready', function() {
 	
 	$('.file-block').hide();
-	
+
 	/* Sort item image */
 	if(!imagedata) { 
 
@@ -193,15 +214,56 @@ $(document).on('ready', function() {
 		    uploadUrl : '/dummy/dummy',
 		});
 	} else {
+
+        /*var text = '{ "employees" : [' +
+            '{ "firstName":"John" , "lastName":"Doe" },' +
+            '{ "firstName":"Anna" , "lastName":"Smith" },' +
+            '{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+
+        var obj12 = JSON.parse(text);
+
+        console.log(obj12);
+*/
+        //var reviewtext = '{"reviewer1": "Pam", "stars1": 2, "text1": "Pretty good, but could have used more Jason"}'; +
+        //var moviereviewtext = '{"title": "Friday the 13th", "year": 1980, "reviews": [{"reviewer": "Pam", "stars": 3, "text": "Pretty good, but could have used more Jason"}, {"reviewer": "Alice", "stars": 4, "text": "The end was good, but a little unsettling"}]}';
+        //var jsonobj = eval("(" + moviereviewtext + ")");
+        //var jsonobj = eval("(" + action + ")");
+
+        console.log(action);
+
+        var temp = img.split(',');
+        var pluginArrayArg = new Array();
+
+		for (a in temp ) {
+			var html = $.parseHTML( temp[a] );
+
+            var jsonArg = new Object();
+            jsonArg.url = '/vendoritem/deleteitemimage';
+            jsonArg.key = $(html).data('key');
+            pluginArrayArg.push(jsonArg);
+		}
+
+        ////var pluginArrayArg = new Array();
+        ////pluginArrayArg.push(jsonArg1);
+        ////pluginArrayArg.push(jsonArg2);
+        //
+        //
+        //var obj1 = JSON.stringify(pluginArrayArg);
+		//var ob2 = jQuery.parseJSON(obj1)
+		////console.log(ob2[1]);
+        //var $var1 = '{url: "/vendoritem/deleteitemimage",key: 745},';
+        //var $var2 = '{url: "/vendoritem/deleteitemimage",key: 741}';
+		//var res = $var1.concat($var2);
+        //console.log({url: "/vendoritem/deleteitemimage",key: 745);
+		//console.log({url: "/vendoritem/deleteitemimage",key: 745},{url: "/vendoritem/deleteitemimage",key: 734});
+		//var p = JSON.parse(action);
+		//console.log(p);
+
 		$('#vendoritem-image_path').fileinput({
 	    	showUpload:false,
 			showRemove:false,
-			initialPreview: [
-				img,
-			],
-			initialPreviewConfig: [
-			   action,
-			],
+			initialPreview: img.split(','),
+			initialPreviewConfig: action,
 			overwriteInitial: false,
 	    	uploadUrl : '/dummy/dummy',
 		});
