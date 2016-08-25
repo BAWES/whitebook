@@ -30,15 +30,15 @@ $col = 1;
                 <ul class="test_scroll">
                     <?php
                     foreach ($cities as $key => $value) {  ?>
-                    <input type="hidden" name="city[]" value=<?= $value['city_id']; ?>>
-                    <label style="margin-left: 12px;"><b> <?= $value['city_name']; ?></b></label>
-                    <?php
-                    $area = \common\models\Location::find()->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $value['city_id']])->orderBy('city_id')->asArray()->all();
+                        <input type="hidden" name="city[]" value=<?= $value['city_id']; ?>>
+                        <label style="margin-left: 12px;"><b> <?= $value['city_name']; ?></b></label>
+                        <?php
+                        $area = \common\models\Location::find()->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $value['city_id']])->orderBy('city_id')->asArray()->all();
                         foreach ($area as $key => $value) {
                             $vendor_area = \common\models\Vendorlocation::find()->select('area_id')->where(['area_id'=>$value['id']])->one(); ?>
                             <li>
                                 <label class="label_check" for="checkbox-<?= $value['location']; ?>">
-                                    <input type="checkbox" name="location[]" class="items" id="loc" value="<?= $value['id']; ?>">
+                                    <input type="checkbox" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
                                     <?= $value['location']; ?>
                                 </label>
                             </li>

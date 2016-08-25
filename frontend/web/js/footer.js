@@ -142,6 +142,14 @@ jQuery('#dp3,#delivery_date').datepicker({
     startDate:'today',
     autoclose:true,
 });
+
+jQuery('#delivery_date_2').datepicker({
+    format: 'dd-mm-yyyy',
+    startDate:'today',
+    autoclose:true,
+}).on("change", function (e) {
+    filter();
+});
 // megamenu script end
 
 // plan last:child script

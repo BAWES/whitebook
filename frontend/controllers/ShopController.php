@@ -174,7 +174,12 @@ class ShopController extends BaseController
             $join = '';
             if ($data['slug'] != '') {
 
-                  /* CATEGORY FILTER */
+                if ($data['location'] != '') {
+                    $location = explode('+', $data['location']);
+                    $condition .= ' AND {{%vendor_location}}.area_id IN('.implode(',',$location).')';
+                }
+
+                /* CATEGORY FILTER */
             if ($data['item_ids'] != '') {
                 $condition .= ' AND {{%category}}.slug IN("'.$data['item_ids'].'")';
             }
@@ -235,6 +240,7 @@ class ShopController extends BaseController
                     ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                     ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                     ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
+                    ->leftJoin('{{%vendor_location}}', '{{%vendor}}.vendor_id = {{%vendor_location}}.vendor_id')
                     ->where($condition)
                     ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                     ->andWhere(['{{%vendor_item}}.item_status' => "Active"])

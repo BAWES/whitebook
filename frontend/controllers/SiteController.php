@@ -469,16 +469,16 @@ class SiteController extends BaseController
     {
         if ($slug != '') {
             $website_model = new Website();
-            $vendor_details = $website_model->vendor_details($slug);
-            
+            $vendor_details = Vendor::findOne(['slug'=>$slug]);
+
             if (empty($vendor_details)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
 
-            $vendor_item_details = $website_model->vendor_item_details($vendor_details[0]['vendor_id']);
+            $vendor_item_details = $website_model->vendor_item_details($vendor_details['vendor_id']);
             $main_category = $website_model->get_main_category();
 
-            \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$vendor_details[0]['vendor_name'];
+            \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$vendor_details['vendor_name'];
             \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
             \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
@@ -487,7 +487,7 @@ class SiteController extends BaseController
 			->select(['wt.theme_id','wt.slug','wt.theme_name'])
 			->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
 			->Where(['wt.theme_status'=>'Active'])
-			->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details[0]['vendor_id']])
+			->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details['vendor_id']])
 			->groupby(['wt.theme_id'])
 			->asArray()
 			->all();
