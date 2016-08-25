@@ -27,7 +27,6 @@ if ($event_status > 0) {
         /* BEGIN ADD EVENT */
         function addevent1(item_id)
         {
-
             jQuery.ajax({
                 type: 'POST',
                 url: "<?php Url::toRoute('product/addevent'); ?>",
@@ -51,19 +50,21 @@ if ($event_status > 0) {
 <section id="inner_pages_white_back">
     <div class="container paddng0">
         <div class="vender_profile_new">
-
             <div class="product_detials_vender aother_dates">
                 <div class="col-md-6 padding0">
-                    <a href="#" title=""><img src="<?php echo Url::to("@web/images/no_banner.png"); ?>" alt=""/></a>
+                    <a href="#" title="">
+                    <?php if(isset($vendor_detail['vendor_logo_path'])) {
+                        echo Html::img(Yii::getAlias('@vendor_logo/').$vendor_detail['vendor_logo_path'], ['class'=>'','width'=>'565','height'=>'470','alt'=>'Logo']);
+                    } ?>
+                    </a>
                 </div>
                 <div class="col-md-6 paddingcommon">
                     <div class="right_descr_product">
                         <div class="accad_menus">
                             <div class="bakery_title">
-                                <h3><h3><?php echo $vendor_detail[0]['vendor_name']; ?></h3></h3>
+                                <h3><?php echo $vendor_detail['vendor_name']; ?></h3>
                             </div>
                             <div class="panel-group" id="sub_accordion">
-                                <?php if ($vendor_detail[0]['vendor_brief'] != '') { ?>
                                     <div class="panel panel-default" >
                                         <div class="panel-heading" role="tab" id="headingThree">
                                             <h4 class="panel-title">
@@ -75,13 +76,10 @@ if ($event_status > 0) {
                                         </div>
                                         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">
-                                                <p><?= strip_tags($vendor_detail[0]['vendor_brief']); ?></p>
+                                                <p><?= strip_tags($vendor_detail['vendor_brief']); ?></p>
                                             </div>
                                         </div>
                                     </div>
-                                <?php } ?>
-
-                                <?php if ($vendor_detail[0]['vendor_return_policy'] != '') { ?>
                                     <div class="panel panel-default" >
                                         <div class="panel-heading" role="tab" id="headingTwo">
                                             <h4 class="panel-title">
@@ -93,13 +91,10 @@ if ($event_status > 0) {
                                         </div>
                                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                                             <div class="panel-body">
-                                                <p><?= strip_tags($vendor_detail[0]['vendor_return_policy']); ?></p>
+                                                <p><?= strip_tags($vendor_detail['vendor_return_policy']); ?></p>
                                             </div>
                                         </div>
                                     </div>
-                                <?php } ?>
-
-                                <?php if ($vendor_detail[0]['vendor_public_email'] != '' || $vendor_detail[0]['vendor_public_phone'] != '' || $vendor_detail[0]['vendor_website'] != '' || $vendor_detail[0]['vendor_working_hours']) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingFive">
                                             <h4 class="panel-title">
@@ -114,44 +109,36 @@ if ($event_status > 0) {
                                                 <div class="contact_information">
                                                     <address>
                                                         <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
-                                                            <?php if ($vendor_detail[0]['vendor_public_email'] != '') { ?>
                                                             <h3>
-                                                                <a href="#" title="<?php echo $vendor_detail[0]['vendor_public_email']; ?>"><?php echo $vendor_detail[0]['vendor_public_email']; ?></a>
+                                                                <a href="#" title="<?php echo $vendor_detail['vendor_public_email']; ?>"><?php echo $vendor_detail['vendor_public_email']; ?>&nbsp;</a>
                                                             </h3>
                                                             <span class="border-bottom"></span>
-                                                            <?php } ?>
-                                                            
-                                                            <?php if ($vendor_detail[0]['vendor_public_phone'] != '') { ?>
                                                                 <h4 style="margin-top: 13px;">
-                                                                    <?php echo $vendor_detail[0]['vendor_public_phone']; ?>
-                                                                    
+                                                                    <?php echo $vendor_detail['vendor_public_phone']; ?>&nbsp;
                                                                 </h4>
-                                                            <?php } ?>
+
                                                             <span class="border-bottom border-bottom-none"></span>
                                                         </div>
                                                         <div class="col-md-6 col-xs-6 paddingright0 cont_ifo_right">
-                                                            <?php if ($vendor_detail[0]['vendor_website'] != '') { ?>
-                                                                <span class="links_left"><a href="<?php echo $vendor_detail[0]['vendor_website']; ?>" title="<?php echo $vendor_detail[0]['vendor_website']; ?>"><?php echo $vendor_detail[0]['vendor_website']; ?></a></span>
+                                                                <span class="links_left"><a href="<?php echo $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>"><?php echo $vendor_detail['vendor_website']; ?>&nbsp;</a></span>
                                                                 <span class="border-bottom"></span>
-                                                            <?php } ?>
-                                                            <?php if ($vendor_detail[0]['vendor_working_hours'] != '') { ?>
+
                                                                 <span class="timer_common"><?php
-                                                                    $from = explode(':',$vendor_detail[0]['vendor_working_hours']);
+                                                                    $from = explode(':',$vendor_detail['vendor_working_hours']);
                                                                     echo (isset($from[0])) ? $from[0] : '';
                                                                     echo (isset($from[1])) ? ':'.$from[1] : '';
                                                                     echo (isset($from[2])) ? ' '.$from[2] : ''
                                                                     ?></span>
-                                                            <?php } ?>
-                                                            <?php if ($vendor_detail[0]['vendor_working_hours_to'] != '') { ?>
+
                                                                 - <span class="timer_common">
                                                                     <?php
-                                                                    $to = explode(':',$vendor_detail[0]['vendor_working_hours_to']);
+                                                                    $to = explode(':',$vendor_detail['vendor_working_hours_to']);
                                                                     echo (isset($to[0])) ? $to[0] : '';
                                                                     echo (isset($to[1])) ? ':'.$to[1] : '';
                                                                     echo (isset($to[2])) ? ' '.$to[2] : ''
                                                                     ?>
                                                                 </span>
-                                                            <?php } ?>
+
                                                         </div>
                                                     </address>
 
@@ -159,42 +146,29 @@ if ($event_status > 0) {
 
                                             </div>
                                         </div>
-                                                <?php if (count($vendor_detail) > 0) { ?>
+                                            <?php if (count($vendor_detail) > 0) { ?>
                                             <div class="social_share">
                                                 <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
                                                 <ul>
-                                                    <?php if ($vendor_detail[0]['vendor_facebook'] != '') { ?>
-                                                        <li><a target="_blank" href="<?php echo $vendor_detail[0]['vendor_facebook']; ?>" title="Facebook"><span class="flaticon-facebook55"></span></a></li>
-                                                    <?php } ?>
-                                                    <?php if ($vendor_detail[0]['vendor_twitter'] != '') { ?>
-                                                        <li><a target="_blank" href="<?php echo $vendor_detail[0]['vendor_twitter']; ?>" title="Twitter"><span class="flaticon-twitter13"></span></a></li>
-                                                    <?php } ?>
-                                                    <?php if ($vendor_detail[0]['vendor_googleplus'] != '') { ?>
-                                                        <li><a target="_blank" href="<?php echo $vendor_detail[0]['vendor_googleplus']; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
-                                                    <?php } ?>
-                                                    <?php if ($vendor_detail[0]['vendor_instagram'] != '') { ?>
-                                                        <li><a target="_blank" href="<?php echo $vendor_detail[0]['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-tumblr14"></span></a></li>
-                                            <?php } ?>
-                                            <?php $vendor_url = Yii::$app->homeUrl . '/vendor/' . $vendor_detail[0]['vendor_contact_name'] . '.html'; ?>
-                                                    <li><a href="mailto:<?php echo $vendor_detail[0]['vendor_contact_email']; ?>?subject=Vendor Profile&body=<?php echo $vendor_url; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
+                                                    <li><a target="_blank" href="<?php echo $vendor_detail['vendor_facebook']; ?>" title="Facebook"><span class="flaticon-facebook55"></span></a></li>
+                                                    <li><a target="_blank" href="<?php echo $vendor_detail['vendor_twitter']; ?>" title="Twitter"><span class="flaticon-twitter13"></span></a></li>
+                                                    <li><a target="_blank" href="<?php echo $vendor_detail['vendor_googleplus']; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
+                                                    <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-tumblr14"></span></a></li>
+                                                    <?php $vendor_url = Yii::$app->homeUrl . '/vendor/' . $vendor_detail['vendor_contact_name'] . '.html'; ?>
+                                                    <li><a href="mailto:<?php echo $vendor_detail['vendor_contact_email']; ?>?subject=Vendor Profile&body=<?php echo $vendor_url; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                                 </ul>
                                             </div>
-                            <?php } ?>
+                                        <?php } ?>
                             </div>
-                            <?php } ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
-
         <div class="plan_venues total_continer">
-
             <div class="col-md-3 paddingleft0">
-
                 <div class="filter_content">
                     <div class="filter_section">
                         <div class="responsive-category-bottom">
@@ -210,15 +184,9 @@ if ($event_status > 0) {
                                     <div id="accordion" class="panel-group">
                                         <!-- BEGIN CATEGORY FILTER  -->
                                         <?php 
-                                            require 'vendor_profile_filter/category.php';
-                                        ?>                                        
-                                        <!--  BEGIN THEME FILTER-->
-                                        <?php 
-                                            require 'vendor_profile_filter/theme.php';
-                                        ?>
-                                        <!--  BEGIN PRICE FILTER -->
-                                        <?php 
-                                            require 'vendor_profile_filter/price.php';
+                                            echo $this->render('vendor_profile_filter/category.php',['slug'=>$slug]);
+                                            echo $this->render('vendor_profile_filter/theme.php',['themes'=>$themes]);
+                                            echo $this->render('vendor_profile_filter/price.php',['vendorData'=>$vendorData]);
                                         ?>
                                     </div>
                             </nav>
@@ -275,22 +243,22 @@ if ($event_status > 0) {
                                                     </div>
                                                 </div>
                                         </li>
-        <?php
-        }
-    }
-} else {
-    echo "No records found";
-}
+<?php
+                                        }
+                                    }
+                                } else {
+                                    echo "No records found";
+                                }
 ?>
                         </ul>
                     </div>
                     <div id="planloader"><img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader" style="margin-top: 15%;"></div>
                     <div class="add_more_commons">
-<?php if (!empty($vendor_item_details)) { ?>
+                    <?php if (!empty($vendor_item_details)) { ?>
                             <div class="lode_more_buttons">
                                 <!-- <button title="Load More" class="btn btn-danger" type="button">Load More</button> -->
                             </div>
-<?php } ?>
+                    <?php } ?>
                     </div>
                 </div>
             </div>
@@ -306,165 +274,158 @@ if ($event_status > 0) {
 <script type="text/javascript">
     var csrfToken = jQuery('meta[name="csrf-token"]').attr("content");
     function setupLabel() {
-    if (jQuery('.label_check input').length) {
-    jQuery('.label_check').each(function () {
-    jQuery(this).removeClass('c_on');
+        if (jQuery('.label_check input').length) {
+            jQuery('.label_check').each(function () {
+                jQuery(this).removeClass('c_on');
 
-    if (jQuery(this).parents('.panel-body').find('label.c_on').length == 0) {
-    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'none');
-    } else {
-    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'inline-block');
-    }
+                if (jQuery(this).parents('.panel-body').find('label.c_on').length == 0) {
+                    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'none');
+                } else {
+                    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'inline-block');
+                }
+            });
 
-    });
-    jQuery('.label_check input:checked').each(function () {
-    jQuery(this).parent('label').addClass('c_on');
-    if (jQuery(this).parents('.panel-body').find('label.c_on').length == 0) {
-    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'none');
-    } else {
-    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'inline-block');
-    }
-    });
-    }
+            jQuery('.label_check input:checked').each(function () {
+                jQuery(this).parent('label').addClass('c_on');
+                if (jQuery(this).parents('.panel-body').find('label.c_on').length == 0) {
+                    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'none');
+                } else {
+                   jQuery(this).parents('.panel-default').find('a.filter-clear').css('display', 'inline-block');
+                }
+            });
+        }
 
-    if (jQuery('.label_radio input').length) {
-    jQuery('.label_radio').each(function () {
-    jQuery(this).removeClass('r_on');
-    });
-    jQuery('.label_radio input:checked').each(function () {
-    jQuery(this).parent('label').addClass('r_on');
-    });
-    }
+        if (jQuery('.label_radio input').length) {
+            jQuery('.label_radio').each(function () {
+                jQuery(this).removeClass('r_on');
+            });
+            jQuery('.label_radio input:checked').each(function () {
+                jQuery(this).parent('label').addClass('r_on');
+            });
+        }
 
     }
 
     jQuery(document).ready(function () {
-    jQuery('.label_check, .label_radio').click(function () {
-    setupLabel();
-    });
-    setupLabel();
-    jQuery(".custom-select").change(function () {
-    var selectedOption = jQuery(this).find(":selected").text();
-    jQuery(this).next(".holder").text(selectedOption);
-    }).trigger('change');
+        jQuery('.label_check, .label_radio').click(function () {
+            setupLabel();
+        });
+        setupLabel();
+        jQuery(".custom-select").change(function () {
+            var selectedOption = jQuery(this).find(":selected").text();
+            jQuery(this).next(".holder").text(selectedOption);
+        }).trigger('change');
     });
 
-    jQuery('.label_check input').on('change', function ()
-    {
-    vendorfilter();
+    jQuery('.label_check input').on('change', function () {
+        vendorfilter();
     });
 
 
     /* */
     function vendorfilter() {
-    jQuery("#planloader").show();
-    var category_name = jQuery("input[name=category]:checked").map(function () {
-    return this.value;
-    }).get().join('+');
+        jQuery("#planloader").show();
+        var category_name = jQuery("input[name=category]:checked").map(function () {
+            return this.value;
+        }).get().join('+');
 
 
-    var theme_name = jQuery("input[name=themes]:checked").map(function () {
-    return this.value;
-    }).get().join('+');
+        var theme_name = jQuery("input[name=themes]:checked").map(function () {
+            return this.value;
+        }).get().join('+');
 
-    var price_val = jQuery("input[name=price]:checked").map(function () {
-    return this.value;
-    }).get().join('+');
+        var price_val = jQuery("input[name=price]:checked").map(function () {
+            return this.value;
+        }).get().join('+');
 
-    var url_path;
-    var url = window.location.href;
-    var newUrl = url.substring(0, url.indexOf('?'));
+        var url_path;
+        var url = window.location.href;
+        var newUrl = url.substring(0, url.indexOf('?'));
 
-    var slug;
-    if (newUrl != '')
-    {
-    slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
-    }
-    else
-    {
-    slug = url.substring(url.lastIndexOf('/') + 1);
+        var slug;
+        if (newUrl != '') {
+            slug = newUrl.substring(newUrl.lastIndexOf('/') + 1);
+        } else {
+            slug = url.substring(url.lastIndexOf('/') + 1);
+        }
 
-    }
+        /* if all checkbox uncheck load items based on category */
+        if (category_name == "" && theme_name == "") {
+            window.history.pushState("test", "Title", newUrl);
+            slug = "<?php echo $slug; ?>";
+        }
 
-    /* if all checkbox uncheck load items based on category */
-    if (category_name == "" && theme_name == "")
-    {
-    window.history.pushState("test", "Title", newUrl);
-    slug = "<?php echo $slug; ?>";
-    }
+        if (category_name != "" || theme_name != "" || price_val != "") {
+            url_path = '?category=' + category_name + '?themes=' + theme_name + '&price=' + price_val;
+        }
 
-    if (category_name != "" || theme_name != "" || price_val != "")
-    {
-    url_path = '?category=' + category_name + '?themes=' + theme_name + '&price=' + price_val;
-    }
+        var path = "<?= Url::toRoute('/plan/loadvendoritems',true); ?>";
+        <?php $giflink = Url::to("@web/images/ajax-loader.gif"); ?>
 
-    var path = "<?= Url::toRoute('/plan/loadvendoritems',true); ?>";
-    <?php $giflink = Url::to("@web/images/ajax-loader.gif"); ?>
+        jQuery.ajax({
+            type: 'POST',
+            url: path,
+            data: {category_name: category_name, themes: theme_name, price: price_val, slug: slug, _csrf: csrfToken},
+            success: function (data) {
+                window.history.pushState("test", "Title", url_path);
+                jQuery('.events_listing ul').html(data);
+                // Every fourth li change margin
+                jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
+                jQuery("#planloader").hide();
+                jQuery(".events_listing").css({"opacity": "1.0", "position": "relative"});
+            }
+        }).done(function () {
+            jQuery(".add_to_favourite").click(function () {
 
-    jQuery.ajax({
-    type: 'POST',
-    url: path,
-    data: {category_name: category_name, themes: theme_name, price: price_val, slug: slug, _csrf: csrfToken},
-    success: function (data) {
-    window.history.pushState("test", "Title", url_path);
-    jQuery('.events_listing ul').html(data);
-    // Every fourth li change margin
-    jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
-    jQuery("#planloader").hide();
-    jQuery(".events_listing").css({"opacity": "1.0", "position": "relative"});
-    }
-    }).done(function () {
-    jQuery(".add_to_favourite").click(function () {
+                jQuery('#loading_img_list').show();
+                jQuery('#loading_img_list').html('<img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />');
 
-    jQuery('#loading_img_list').show();
-    jQuery('#loading_img_list').html('<img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />');
+                item_id = (jQuery(this).attr('id'));
+                jQueryelement = jQuery(this)
+                jQuery(jQueryelement).parent().toggleClass("faverited_icons");
 
-    item_id = (jQuery(this).attr('id'));
-    jQueryelement = jQuery(this)
-    jQuery(jQueryelement).parent().toggleClass("faverited_icons");
-
-    var _csrf = jQuery('#_csrf').val();
-    jQuery.ajax({
-    url: "<?= Url::toRoute('/users/add_to_wishlist'); ?>",
-    type: "post",
-    data: "item_id=" + item_id + "&_csrf=" + _csrf,
-    //async: false,
-    success: function (data)
-    {
-    jQuery('#heart_fave').html(data);
-    jQuery('#loading_img_list').hide();
-    }
-    });
-    });
-    });
+                var _csrf = jQuery('#_csrf').val();
+                jQuery.ajax({
+                    url: "<?= Url::toRoute('/users/add_to_wishlist'); ?>",
+                    type: "post",
+                    data: "item_id=" + item_id + "&_csrf=" + _csrf,
+                    //async: false,
+                    success: function (data)
+                    {
+                        jQuery('#heart_fave').html(data);
+                        jQuery('#loading_img_list').hide();
+                    }
+                });
+            });
+        });
     }
 
     /* BEGIN CLEAR FILTER */
     jQuery('a#filter-clear').on('click', function () {
-    jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
-    jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
-    jQuery(this).hide();
-    vendorfilter();
+        jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
+        jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
+        jQuery(this).hide();
+        vendorfilter();
     })
     /* END CLEAR FILTER */
 
     $(document).ready(function () {
-    jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
-    jQuery('.thing_items li:nth-child(8n)').addClass("margin-rightnone");
+        jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
+        jQuery('.thing_items li:nth-child(8n)').addClass("margin-rightnone");
     });
 
     jQuery('.collapse').on('shown.bs.collapse', function () {
-    jQuery(this).parent().find(".plus_acc").removeClass("plus_acc").addClass("minus_acc");
+        jQuery(this).parent().find(".plus_acc").removeClass("plus_acc").addClass("minus_acc");
     }).on('hidden.bs.collapse', function () {
-    jQuery(this).parent().find(".minus_acc").removeClass("minus_acc").addClass("plus_acc");
+        jQuery(this).parent().find(".minus_acc").removeClass("minus_acc").addClass("plus_acc");
     });
     (function (jQuery) {
-    jQuery(window).load(function () {
-    jQuery(".test_scroll").mCustomScrollbar(
-    {theme: "rounded-dark",
-    mouseWheelPixels: 50,
-    scrollInertia: 0
-    });
-    });
+        jQuery(window).load(function () {
+            jQuery(".test_scroll").mCustomScrollbar({
+                theme: "rounded-dark",
+                mouseWheelPixels: 50,
+                scrollInertia: 0
+            });
+        });
     })(jQuery);
-    </script>
+</script>
