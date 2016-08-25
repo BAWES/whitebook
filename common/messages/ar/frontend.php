@@ -17,6 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Max item available for selected date is "{no_of_available}".' => '',
+    'Maximum amount available in stock is "{item_amount_in_stock}".' => '',
+    'Item not available for sell!' => '',
     'About and Contact' => '',
     'Add to Favourite' => '',
     'Add to Things I like' => '',

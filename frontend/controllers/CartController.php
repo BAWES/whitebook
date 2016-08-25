@@ -16,6 +16,8 @@ use common\models\Deliverytimeslot;
 
 class CartController extends BaseController
 {
+    private $errors = array();
+
     public function init(){
         if(Yii::$app->user->isGuest) {
             $this->redirect(['site/index']);
@@ -63,33 +65,12 @@ class CartController extends BaseController
             ]);    
         }
 
-        if(Yii::$app->request->isPost) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $data = Yii::$app->request->post();
+
+        if($this->validate_item($data)) {
             
-            $data = Yii::$app->request->post();
-
-            /*
-                Check if deliery availabel in selected area 
-            */
-            if(!empty($data['area_id'])) {
-
-                $vendor_id = Vendoritem::findOne($data['item_id'])->vendor_id;
-
-                $delivery_area = CustomerCart::checkLocation($data['area_id'], $vendor_id);    
-
-                if(!$delivery_area) {
-                    
-                    Yii::$app->response->format = Response::FORMAT_JSON;
-
-                    return [
-                        'errors' => [
-                            'area_id' => [
-                                Yii::t('frontend', 'Delivery not available on selected area!')
-                            ]
-                        ]
-                    ];
-                }
-            } 
-
             $cart = CustomerCart::find()
                 ->where([
                     'item_id' => $data['item_id'],
@@ -133,8 +114,6 @@ class CartController extends BaseController
                 $cart->trash = 'Default';
             }
             
-            Yii::$app->response->format = Response::FORMAT_JSON;
-
             if($cart->save()) {
                 
                 return [
@@ -144,17 +123,25 @@ class CartController extends BaseController
             } else {
 
                 return [
-                    'errors' => $cart->getErrors()
+                    'errors' => array_merge($this->errors, $cart->getErrors())
                 ];
             }            
+        
+        } else {
+            return [
+                'errors' => $this->errors
+            ];
         }
     }
 
-    /*  
-        Delete cart item with validation for login user 
+    /*
+        Validate cart item availability
     */
-    public function actionDelete() {
+    public function validate_item($data) {
 
+        $this->errors = CustomerCart::validate_item($data);
+
+        return !$this->errors;
     }
 
     /*
