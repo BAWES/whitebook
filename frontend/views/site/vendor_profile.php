@@ -76,7 +76,13 @@ if ($event_status > 0) {
                                         </div>
                                         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">
-                                                <p><?= strip_tags($vendor_detail['vendor_brief']); ?></p>
+                                                <p><?php
+                                                    if(Yii::$app->language == "en") {
+                                                        echo strip_tags($vendor_detail['short_description']);
+                                                    } else {
+                                                        echo strip_tags($vendor_detail['short_description_ar']);
+                                                    }
+                                                    ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -91,7 +97,14 @@ if ($event_status > 0) {
                                         </div>
                                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                                             <div class="panel-body">
-                                                <p><?= strip_tags($vendor_detail['vendor_return_policy']); ?></p>
+                                                <p><?php
+
+                                                    if(Yii::$app->language == "en") {
+                                                        echo strip_tags($vendor_detail['vendor_return_policy']);
+                                                    } else {
+                                                        echo strip_tags($vendor_detail['vendor_return_policy_ar']);
+                                                    }
+                                                    ?></p>
                                             </div>
                                         </div>
                                     </div>
