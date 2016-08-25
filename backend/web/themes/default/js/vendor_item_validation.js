@@ -214,15 +214,56 @@ $(document).on('ready', function() {
 		    uploadUrl : '/dummy/dummy',
 		});
 	} else {
+
+        /*var text = '{ "employees" : [' +
+            '{ "firstName":"John" , "lastName":"Doe" },' +
+            '{ "firstName":"Anna" , "lastName":"Smith" },' +
+            '{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+
+        var obj12 = JSON.parse(text);
+
+        console.log(obj12);
+*/
+        //var reviewtext = '{"reviewer1": "Pam", "stars1": 2, "text1": "Pretty good, but could have used more Jason"}'; +
+        //var moviereviewtext = '{"title": "Friday the 13th", "year": 1980, "reviews": [{"reviewer": "Pam", "stars": 3, "text": "Pretty good, but could have used more Jason"}, {"reviewer": "Alice", "stars": 4, "text": "The end was good, but a little unsettling"}]}';
+        //var jsonobj = eval("(" + moviereviewtext + ")");
+        //var jsonobj = eval("(" + action + ")");
+
+        console.log(action);
+
+        var temp = img.split(',');
+        var pluginArrayArg = new Array();
+
+		for (a in temp ) {
+			var html = $.parseHTML( temp[a] );
+
+            var jsonArg = new Object();
+            jsonArg.url = '/vendoritem/deleteitemimage';
+            jsonArg.key = $(html).data('key');
+            pluginArrayArg.push(jsonArg);
+		}
+
+        ////var pluginArrayArg = new Array();
+        ////pluginArrayArg.push(jsonArg1);
+        ////pluginArrayArg.push(jsonArg2);
+        //
+        //
+        //var obj1 = JSON.stringify(pluginArrayArg);
+		//var ob2 = jQuery.parseJSON(obj1)
+		////console.log(ob2[1]);
+        //var $var1 = '{url: "/vendoritem/deleteitemimage",key: 745},';
+        //var $var2 = '{url: "/vendoritem/deleteitemimage",key: 741}';
+		//var res = $var1.concat($var2);
+        //console.log({url: "/vendoritem/deleteitemimage",key: 745);
+		//console.log({url: "/vendoritem/deleteitemimage",key: 745},{url: "/vendoritem/deleteitemimage",key: 734});
+		//var p = JSON.parse(action);
+		//console.log(p);
+
 		$('#vendoritem-image_path').fileinput({
 	    	showUpload:false,
 			showRemove:false,
-			initialPreview: [
-				img,
-			],
-			initialPreviewConfig: [
-			   action,
-			],
+			initialPreview: img.split(','),
+			initialPreviewConfig: action,
 			overwriteInitial: false,
 	    	uploadUrl : '/dummy/dummy',
 		});

@@ -141,19 +141,12 @@ if($model->isNewRecord){
 					if(!$model->isNewRecord) {
 
 						if(!empty($imagedata)) {
-
 							$img= $action = '';
-
 							foreach ($imagedata as $value) {
-								$img .= '<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>';
-
-								$action .='{
-									url: "'.Url::to(['/vendoritem/deleteitemimage']).'",
-									key: '.$value->image_id.',
-								}'.',';
+								$img .= '<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>,';
+								$action .='{"url": ".Url::to(["/vendoritem/deleteitemimage"]).",key: $value->image_id},';
 							}
-
-							//$img = rtrim($img,',');
+							$img = rtrim($img,',');
 							$action = rtrim($action,',');
 						}
 					 } ?>
@@ -217,7 +210,6 @@ echo Html::hiddenInput('remove_question_url',Url::to(['vendoritem/removequestion
 echo Html::hiddenInput('render_question_url',Url::to(['vendoritem/renderquestion']),['id'=>'render_question_url']);
 echo Html::hiddenInput('item_name_check_url',Url::to(['/vendoritem/itemnamecheck']),['id'=>'item_name_check_url']);
 echo Html::hiddenInput('image_order_url',Url::to(['/site/imageorder']),['id'=>'image_order_url']);
-
 
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
