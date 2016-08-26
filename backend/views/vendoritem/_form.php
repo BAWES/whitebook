@@ -135,6 +135,7 @@ if($model->isNewRecord){
 					<div class="file-block" style="color:red"> Please upload aleast one file</div>
 
 					<?php
+
 					// Usage with ActiveForm and model
                     echo $form->field($model, 'image_path[]')->widget(FileInput::classname(), [
                         'options' => [
@@ -154,6 +155,7 @@ if($model->isNewRecord){
                     ]);
 
                     ?>
+
 				</div>
 
 				<div class="form-group"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete','style'=>'float:right;']) ?></div>

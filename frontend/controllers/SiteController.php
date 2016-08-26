@@ -497,7 +497,12 @@ class SiteController extends BaseController
 			->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
 			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-			->Where(['{{%vendor_item}}.trash'=> 'Default','{{%vendor_item}}.item_approved'=> 'Yes','{{%vendor_item}}.item_status'=> 'Active','{{%vendor_item}}.type_id'=> '2','{{%vendor_item}}.item_for_sale'=> 'Yes','{{%image}}.module_type'=> 'vendor_item','{{%vendor}}.slug'=> $slug])
+			->Where([
+                '{{%vendor_item}}.trash'=> 'Default',
+                '{{%vendor_item}}.item_approved'=> 'Yes',
+                '{{%vendor_item}}.item_status'=> 'Active',
+                '{{%vendor}}.slug'=> $slug
+            ])
 			->groupby(['{{%vendor_item}}.item_id'])
 			->asArray()
 			->all();

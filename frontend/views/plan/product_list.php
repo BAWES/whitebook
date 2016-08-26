@@ -138,9 +138,17 @@ $get = Yii::$app->request->get();
 	<div class="listing_right">
 		<div class="events_listing">
 			<ul>
-				<?php 
-	                require 'product_list_ajax.php';
-	            ?>
+			<?php
+
+			if(!empty($imageData))  {
+				foreach ($imageData as $key => $value) {
+					require 'item.php';
+				}  
+			} else {
+				echo Yii::t('frontend', "No records found");
+			}
+
+			?>
 			</ul>
 			<div id="planloader">
 				<img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
