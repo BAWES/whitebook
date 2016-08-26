@@ -106,7 +106,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $this->hasOne(Deliverytimeslot::className(), ['timeslot_id' => 'timeslot_id']);
     }
 
-    public function validate_item($data) {
+    public function validate_item($data, $valid_for_cart_item = false) {
 
         $errors = [];
 
@@ -146,7 +146,19 @@ class CustomerCart extends \yii\db\ActiveRecord
         } 
 
         //check if desire quantity available 
-        if($data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
+        if($valid_for_cart_item && $in_cart > $item->item_amount_in_stock) {
+
+            $errors['cart_quantity'][] = [
+                
+                Yii::t('frontend', 'Maximum amount available in stock is "{item_amount_in_stock}".', [
+                    'item_amount_in_stock' => $item->item_amount_in_stock
+                ])
+            ];
+        
+        } 
+
+        //validate to add product to cart 
+        if (!$valid_for_cart_item && $data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
 
             $errors['cart_quantity'][] = [
                 
@@ -193,7 +205,24 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //3) campare capacity 
-        if(($data['quantity'] + $purchased + $in_cart) > $capacity) {
+        if($valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
+
+            $no_of_available = $capacity - $purchased;
+
+            //if stock is lower than capacity 
+            if($item->item_amount_in_stock < $no_of_available) {
+                $no_of_available = $item->item_amount_in_stock;
+            }
+
+            $errors['cart_quantity'] = [
+                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
+                   'no_of_available' => $no_of_available 
+                ])
+            ];        
+        }
+
+        //validate to add product to cart
+        if(!$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased - $in_cart;
 
@@ -208,6 +237,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 ])
             ];
         }
+
         //-------------- END Item Capacity -----------------//
 
         if(!$data['delivery_date']) 

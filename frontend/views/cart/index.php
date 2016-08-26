@@ -21,13 +21,41 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		<br />
 		<br />
 
-        <?php if($items) { ?>
+        <?php 
+
+        if($items) { 
+
+        	foreach ($items as $item) {
+        		$errors = CustomerCart::validate_item([
+        			'item_id' => $item['item_id'],
+        			'delivery_date' => $item['cart_delivery_date'],
+        			'area_id' => $item['area_id'],
+        			'quantity' => $item['cart_quantity']
+        		], true);
+
+        		if($errors) { ?>
+
+        			<div class="alert alert-danger">
+        				<button class="close" data-dismiss="alert">x</button>
+        				<strong><?= $item['item_name'].' #'.$item['cart_id'] ?></strong>
+        				<br />
+        				<?php foreach ($errors as $key => $attrib_errors) {
+        					foreach ($attrib_errors as $error) {
+        						echo '<p>' . $error . '</p>';
+        					}
+        				} ?>
+        			</div>
+        		<?php
+        		}
+        	}
+       	?>
 
         <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">	
 
 	        <table class="table table-bordered cart-table">
 		        <thead>
 		        	<tr>
+		        		<td align="center"><?= Yii::t('frontend', 'ID') ?></th>
 		        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 		        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
 		        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
@@ -51,6 +79,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 		        	?>
 		        	<tr>
+		        		<td align="center">
+		        			#<?= $item['cart_id'] ?>
+		        		</td>
 		        		<td align="center">
 		        			<?php
 

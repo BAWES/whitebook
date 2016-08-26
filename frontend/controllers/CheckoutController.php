@@ -24,6 +24,20 @@ class CheckoutController extends BaseController
 
 	public function actionIndex()
 	{
+		//validate cart 
+		foreach (CustomerCart::items() as $item) {
+    		$errors = CustomerCart::validate_item([
+    			'item_id' => $item['item_id'],
+    			'delivery_date' => $item['cart_delivery_date'],
+    			'area_id' => $item['area_id'],
+    			'quantity' => $item['cart_quantity']
+    		], true);
+
+    		if($errors) { 
+    			$this->redirect(['cart/index']);
+    		}
+    	}
+
         return $this->render('index');
 	}
 
