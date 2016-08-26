@@ -2,6 +2,7 @@
 namespace frontend\models;
 
 use Yii;
+use common\models\Blockeddate;
 
 class Vendor extends \common\models\Vendor
 {
@@ -82,46 +83,32 @@ class Vendor extends \common\models\Vendor
 
     public static function loadvalidvendorids($cat_id=false)
     {
-        $expression = new \yii\db\Expression('NOW()');
-		$now = (new \yii\db\Query)->select($expression)->scalar();  // SELECT NOW();
-
-		$blocked_vendors = \common\models\Blockeddate::find()
-                    ->select('GROUP_CONCAT(vendor_id) as vendor_id')
-                    ->where(['DATE(block_date)' =>$now ])
-                    ->asArray()
-                    ->all();
-            $condn = '';
+		$vendor_query = Vendor::find()
+            ->select('{{%vendor}}.vendor_id')
+            ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+            ->where([
+                '{{%vendor}}.vendor_status' => 'Active',
+                '{{%vendor}}.trash' => 'Default',
+                '{{%vendor_item}}.trash' => 'Default',
+                '{{%vendor_item}}.item_status' => 'Active']);
             
-        if($blocked_vendors[0]['vendor_id'] !='')
-        {
-            $condn = ",'"."not in"."',";
-            $condn .= "'"."{{%vendor}}.vendor_id"."',";
-            $condn .= $blocked_vendors['vendor_id'];
+        $vendor_query
+            ->andWhere('{{%vendor}}.vendor_id NOT IN (select vendor_id from {{%vendor_blocked_date}} WHERE DATE(block_date) = DATE(NOW()))');
+                
+        if($cat_id!='') {
+            $vendor_query->andWhere(['{{%vendor_item}}.category_id' => $cat_id]);
         }
 
-        if($cat_id!='')
-        {
-            $condn .= '{{%vendor_item}}.category_id ='. $cat_id;
-        }
-            
-		 $vendor = Vendor::find()
-        ->select('{{%vendor}}.*')
-        ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-        ->where(['{{%vendor}}.vendor_status' => 'Active',
-            '{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default',
-            '{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes',
-            '{{%vendor_item}}.type_id' => '2'.$condn])
-        ->distinct()
-        ->asArray()
-        ->all();
+        $vendor = $vendor_query
+            ->asArray()
+            ->all();
+
         $package = array();
-
-        /* STEP 2 CHECK PACKAGE */
         foreach ($vendor as $key => $value) {
-            $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
+            $package[] = Vendor::packageCheck($value['vendor_id'], $check_vendor="Notempty");
         }
-        if($package =='')
-        {
+
+        if($package ==''){
             return '';
         }
         

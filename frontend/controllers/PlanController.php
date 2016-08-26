@@ -42,33 +42,33 @@ class PlanController extends BaseController
         $model = new Website();
 
         if ($slug != '') {
-         
-        $model1 = Category::find()->select(['category_id', 'category_name_ar', 'category_name'])->where(['slug' => $slug])->asArray()->one();
+             
+            $model1 = Category::find()->select(['category_id', 'category_name_ar', 'category_name'])->where(['slug' => $slug])->asArray()->one();
 
-        if (empty($model1)) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-         
-        $seo_content = Website::SEOdata('category', 'category_id', $model1['category_id'], array('category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'));
+            if (empty($model1)) {
+                throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+            }
+             
+            $seo_content = Website::SEOdata('category', 'category_id', $model1['category_id'], array('category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'));
 
-        \Yii::$app->view->title = ($seo_content[0]['category_meta_title']) ? $seo_content[0]['category_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['category_name'];
-        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['category_meta_description']) ? $seo_content[0]['category_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
-        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['category_meta_keywords']) ? $seo_content[0]['category_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
+            \Yii::$app->view->title = ($seo_content[0]['category_meta_title']) ? $seo_content[0]['category_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['category_name'];
+            \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['category_meta_description']) ? $seo_content[0]['category_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
+            \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['category_meta_keywords']) ? $seo_content[0]['category_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
 
-        /* BEGIN CATEGORY EXIST OR NOT*/
-        if (empty($model1)) {
-            $imageData = '';
-        }
-        /* END CATEGORY EXIST OR NOT*/
+            /* BEGIN CATEGORY EXIST OR NOT*/
+            if (empty($model1)) {
+                $imageData = '';
+            }
+            /* END CATEGORY EXIST OR NOT*/
 
-        $top_categories = Category::find()->where(['category_level' => 0])->orderBy(['sort' => SORT_ASC])->asArray()->all();
+            $top_categories = Category::find()->where(['category_level' => 0])->orderBy(['sort' => SORT_ASC])->asArray()->all();
 
-        /* BEGIN GET VENDORS */
-        $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);        
+            /* BEGIN GET VENDORS */
+            $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);        
 
-        if (!is_null($model1)) {
+            if (!is_null($model1)) {
 
-            $imageData = Vendoritem::find()
+                $imageData = Vendoritem::find()
                     ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
                         {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id,
                         {{%vendor}}.vendor_name'])
@@ -78,7 +78,7 @@ class PlanController extends BaseController
                     ->where(['{{%vendor_item}}.trash' => "Default"])
                     ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                     ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-                    ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
+                    ->andWhere(['{{%vendor_item}}.vendor_id' => $active_vendors])
                     ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->asArray()
@@ -86,7 +86,6 @@ class PlanController extends BaseController
 
             }
         }
-
         /* END CATEGORY */
 
         foreach ($imageData as $data) {
@@ -138,7 +137,6 @@ class PlanController extends BaseController
             ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
             ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
             ->andWhere(['{{%vendor_item}}.trash' => "Default"])
-            ->andWhere(['{{%vendor_item}}.item_for_sale' =>'Yes'])
             ->groupBy('{{%vendor_item}}.vendor_id')
             ->asArray()
             ->all();
