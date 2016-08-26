@@ -42,7 +42,13 @@ use yii\helpers\Url;
 		<?php } ?>
 		</div>
 
-		<a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title="" ><?= Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
+		<a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title="" >
+			<?php if($value['image_path']) {
+				echo Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
+			} else { 				
+				echo Html::img('http://placehold.it/210x208',['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
+			 } ?> 				
+		</a>
 
 	</div>
 	<div class="events_descrip">
@@ -53,8 +59,7 @@ use yii\helpers\Url;
 					echo $value['item_price_per_unit'].'.00 KD'; 
 				  } else {
 				  	echo '-';
-				  } ?>
-				
+				  } ?>				
 		</p>
 	</a>
 	</div>

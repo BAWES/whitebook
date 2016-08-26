@@ -75,6 +75,7 @@ class VendoritemController extends Controller
             ->All();
         
         $single_cat[]= array();
+        
         $multiple_cat[]= array();
         
         foreach ($result as $r)
