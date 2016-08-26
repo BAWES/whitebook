@@ -381,17 +381,12 @@ class VendoritemController extends Controller
      */
     public function actionUpdate($id)
     {
+
          $model = $this->findModel($id);
          $model1 = new Image();
          $base = Yii::$app->basePath;
          $len = rand(1,1000);
          $item_id=$model->item_id;
-
-        // Item image path values
-        $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order'=>SORT_ASC])->all();// AND module_type = :status , ':status' => 'vendor_item'
-
-        // Item image path SALES and  RENTAL values
-        $guideimagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderBy(['vendorimage_sort_order' => SORT_ASC])->all();// AND module_type = :status , ':status' => 'guides'
 
         /* question and answer */
         $model_question = Vendoritemquestion::find()
@@ -444,7 +439,8 @@ class VendoritemController extends Controller
                             //Resize file using imagine
                             $resize = true;
 
-                            if($resize){
+                            if ($resize) {
+
                                 $newTmpName = $files->tempName . "." . $files->extension;
 
                                 $imagine = new \Imagine\Gd\Imagine();
@@ -583,8 +579,8 @@ class VendoritemController extends Controller
                 'vendorname' => $vendorname,
                 'categoryname' => $categoryname,
                 'subcategory' => $subcategory,
-                'guideimagedata' => $guideimagedata,
-                'imagedata' => $imagedata,
+                'guide_images' => Image::findAll(['item_id' => $id,'module_type'=>'guides']),
+                'images' => Image::findAll(['item_id' => $id,'module_type'=>'vendor_item']),
                 'model1' => $model1,
                 'childcategory' => $childcategory,
                 'loadpricevalues' => $loadpricevalues,
@@ -837,23 +833,37 @@ class VendoritemController extends Controller
     }
 
     // Delete item image
-    public function actionDeleteitemimage()
+    public function actionDeleteItemImage()
     {
-        $model1 = new Image();
-
         if (Yii::$app->request->isAjax) {
-
             $data = Yii::$app->request->post();
 
             if (isset($data['key']) &&  $data['key'] != '') {
-
-                $image_path = Image::loadguideimageids($data['key']);
+                $model = Image::findOne(['image_id'=>$data['key'],'module_type'=>'vendor_item']);
+                $image_path = $model['image_path'];
+                $model->delete();
                 Vendoritem::deleteFiles($image_path);
-
-                return $image=Image::deleteAll(['image_id'=>$image_id]);
+                return 1;
             }
         }
     }
+
+    // Delete item type service or rental image
+    public function actionDeleteServiceGuideImage()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+
+            if (isset($data['key']) &&  $data['key'] != '') {
+                $model = Image::findOne(['image_id'=>$data['key'],'module_type'=>'guides']);
+                $image_path = $model['image_path'];
+                $model->delete();
+                Vendoritem::deleteFiles($image_path);
+                return 1;
+            }
+        }
+    }
+
 
     /*
     *   To check Item name 
@@ -890,23 +900,6 @@ class VendoritemController extends Controller
         }
 
         return $result = count($itemname);    
-    }
-
-    // Delete item type service or rental image
-    public function actionDeleteserviceguideimage()
-    {
-        $model1 = new Image();
-
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-
-            if (isset($data['key']) &&  $data['key'] != '') {
-                $image_path = \common\models\Image::loadserviceguideimageids($data['key']);
-                unlink(Yii::getAlias('@sales_guide_images').$image_path[0]['image_path']);
-                
-                Image::deleteAll('image_id='.$data['key']);
-            }
-        }
     }
 
     public function actionRenderanswer()
