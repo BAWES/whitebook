@@ -140,9 +140,7 @@ $get = Yii::$app->request->get();
 
 			if(!empty($imageData))  {
 				foreach ($imageData as $key => $value) {
-					if($value['image_path'] !="")  { 
-						require 'item.php';
-					} 
+					require 'item.php';
 				}  
 			} else {
 				echo Yii::t('frontend', "No records found");

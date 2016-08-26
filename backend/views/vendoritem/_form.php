@@ -99,9 +99,9 @@ if($model->isNewRecord){
 				<!-- BEGIN display exist images -->
 				<?php
 
+				$img1 = $action1 = '';
+				
 				if(!empty($guideimagedata)) {
-
-					$img1 = $action1 = '';
 
 					foreach ($guideimagedata as $value) {
 
@@ -138,10 +138,13 @@ if($model->isNewRecord){
 					<?= $form->field($model, 'image_path[]')->fileInput(['multiple' => true]) ?>
 
 					<?php
+
+					$img= $action = '';
+
 					if(!$model->isNewRecord) {
 
 						if(!empty($imagedata)) {
-							$img= $action = '';
+							
 							foreach ($imagedata as $value) {
 								$img .= '<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>,';
 								$action .='{"url": ".Url::to(["/vendoritem/deleteitemimage"]).",key: $value->image_id},';

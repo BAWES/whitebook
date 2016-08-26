@@ -1,3 +1,14 @@
+<?php 
+
+/* Get max price_per_unit in item table */
+$min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
+
+$max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
+
+$max = $max_price[0]['price'];
+
+if($max != $min_price[0]['price']) { ?>
+
 <div class="panel panel-default" >
 	<div class="panel-heading">
 		<div class="clear_left">
@@ -22,65 +33,59 @@
 				<ul class="test_scroll">
 				<?php
 
-				/* Get max price_per_unit in item table */
-				$min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
+				$divide = round($max / 5);
 
-				$max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
+				$i = 0;
 
-				$max = $max_price[0]['price'];
+				for ($x = $min_price[0]['price'] ; $x <= 1000 ; $x+=$divide) {
 
+					//$item_price = $imageData[$i]['item_price_per_unit'];
+					$min_kd = round($x-$divide);
 
-				if($max) {
-					
-					$divide = round($max / 5);
+					//if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
+					if($min_kd > 0 ) {
+						foreach ($imageData as $key => $value) {
+							/* Check checkbox based on URL */
+							if(isset($get['price']) && $get['price'] !="")
+							{
 
-					$i = 0;
+								$val = explode(' ',$get['price']);
 
-					for ($x = $min_price[0]['price'] ; $x <= 1000 ; $x+=$divide) {
-
-						//$item_price = $imageData[$i]['item_price_per_unit'];
-						$min_kd = round($x-$divide);
-
-						//if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
-						if($min_kd > 0 ) {
-							foreach ($imageData as $key => $value) {
-								/* Check checkbox based on URL */
-								if(isset($get['price']) && $get['price'] !="")
+								if(in_array($value['slug'],$val))
 								{
-
-									$val = explode(' ',$get['price']);
-
-									if(in_array($value['slug'],$val))
-									{
-										$checked3 = 'checked=checked';
-									} else {
-										$checked3 = '';
-									}
+									$checked3 = 'checked=checked';
+								} else {
+									$checked3 = '';
 								}
-								/* Check checkbox based on URL */
+							}
+							/* Check checkbox based on URL */
 
-								# code...
-								$item_price = $value['item_price_per_unit'];
+							# code...
+							$item_price = $value['item_price_per_unit'];
 
-								$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
+							$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
 
-								if($check_range ==1)	{
-								?>
-								<li>
-								<label class="label_check" for="checkbox-<?php echo $x;?>">
-								<input name="price" id="checkbox-<?php echo $x;?>" value="<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?>-<?php echo $x = ceil($x / 100) * 100;?>" type="checkbox">
-								<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
-								</li>
-								<?php
-								break;
-								}
-								$i++; 
-							}//foreach 
-						}
+							if($check_range ==1)	{
+							?>
+							<li>
+							<label class="label_check" for="checkbox-<?php echo $x;?>">
+							<input name="price" id="checkbox-<?php echo $x;?>" value="<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?>-<?php echo $x = ceil($x / 100) * 100;?>" type="checkbox">
+							<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
+							</li>
+							<?php
+							break;
+							}
+							$i++; 
+						}//foreach 
 					}
-				} ?>
+				}
+				
+				?>
 				</ul>
 			</div>
 		</div>
 	</div>
 </div>
+
+<?php 
+}

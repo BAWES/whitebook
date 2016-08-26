@@ -457,6 +457,7 @@ $this->title = 'Whitebook - ' . $item_name;
                 <!-- Mobile end Here-->
 
                 <div class="clearfix"></div>
+                <?php if($similiar_item) { ?>
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
                         <h2><?= Yii::t('frontend', 'Similar products') ?></h2>
@@ -514,6 +515,7 @@ $this->title = 'Whitebook - ' . $item_name;
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </div><!--product detail end-->
         </div>
         <!-- one end -->
