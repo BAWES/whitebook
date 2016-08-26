@@ -11,19 +11,19 @@ $this->params['breadcrumbs'][] = ['label' => $model->item_id, 'url' => ['view', 
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="vendoritem-update">
-    <?= $this->render('_form', [
+    <?php
+    echo $this->render('_update', [
         'model' => $model,
         'itemtype'=>$itemtype,
         'vendorname'=>$vendorname,
         'categoryname'=>$categoryname,
         'subcategory'=>$subcategory,
-        'imagedata'=>$imagedata,
+        'images'=>$images,
         'model1' => $model1,
         'childcategory'=>$childcategory,
         'loadpricevalues'=>$loadpricevalues,
-        'guideimagedata'=>$guideimagedata,
+        'guide_images'=>$guide_images,
         'model_question' => $model_question,
         
     ]) ?>
-
 </div>
