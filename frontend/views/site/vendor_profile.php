@@ -166,13 +166,13 @@ if ($event_status > 0) {
                                                     <li><a target="_blank" href="<?php echo $vendor_detail['vendor_facebook']; ?>" title="Facebook"><span class="flaticon-facebook55"></span></a></li>
                                                     <li><a target="_blank" href="<?php echo $vendor_detail['vendor_twitter']; ?>" title="Twitter"><span class="flaticon-twitter13"></span></a></li>
                                                     <li><a target="_blank" href="<?php echo $vendor_detail['vendor_googleplus']; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
-                                                    <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-tumblr14"></span></a></li>
+                                                    <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-instagram7"></span></a></li>
                                                     <?php $vendor_url = Yii::$app->homeUrl . '/vendor/' . $vendor_detail['vendor_contact_name'] . '.html'; ?>
                                                     <li><a href="mailto:<?php echo $vendor_detail['vendor_contact_email']; ?>?subject=Vendor Profile&body=<?php echo $vendor_url; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                                 </ul>
                                             </div>
                                         <?php } ?>
-                            </div>
+                                </div>
                             </div>
                         </div>
                     </div>

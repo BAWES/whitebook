@@ -94,7 +94,6 @@ if($model->isNewRecord){
 				<div class="form-group custom_description_ar"><?= $form->field($model, 'item_customization_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
 
 				<!-- guide image -->
-
                 <div class="form-group guide_image" style="display: none;">
                         <?php
                         // Usage with ActiveForm and model
@@ -155,7 +154,6 @@ if($model->isNewRecord){
                     ]);
 
                     ?>
-
 				</div>
 
 				<div class="form-group"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete','style'=>'float:right;']) ?></div>
