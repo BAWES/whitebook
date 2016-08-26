@@ -202,10 +202,10 @@ function removePrice(tis)
 /* BEGIN bootstrap file input widget for image preview */
 $(document).on('ready', function() {
 	
-	$('.file-block').hide();
+	//$('.file-block').hide();
 
 	/* Sort item image */
-	if(!imagedata) { 
+	/*if(!imagedata) {
 
 		$('#vendoritem-image_path').fileinput({
 		    showUpload:false,
@@ -213,7 +213,7 @@ $(document).on('ready', function() {
 			overwriteInitial: false,
 		    uploadUrl : '/dummy/dummy',
 		});
-	} else {
+	} else {*/
 
         /*var text = '{ "employees" : [' +
             '{ "firstName":"John" , "lastName":"Doe" },' +
@@ -229,7 +229,7 @@ $(document).on('ready', function() {
         //var jsonobj = eval("(" + moviereviewtext + ")");
         //var jsonobj = eval("(" + action + ")");
 
-        console.log(action);
+       /* console.log(action);
 
         var temp = img.split(',');
         var pluginArrayArg = new Array();
@@ -241,7 +241,7 @@ $(document).on('ready', function() {
             jsonArg.url = '/vendoritem/deleteitemimage';
             jsonArg.key = $(html).data('key');
             pluginArrayArg.push(jsonArg);
-		}
+		}*/
 
         ////var pluginArrayArg = new Array();
         ////pluginArrayArg.push(jsonArg1);
@@ -259,39 +259,39 @@ $(document).on('ready', function() {
 		//var p = JSON.parse(action);
 		//console.log(p);
 
-		$('#vendoritem-image_path').fileinput({
+		/*$('#vendoritem-image_path').fileinput({
 	    	showUpload:false,
 			showRemove:false,
 			initialPreview: img.split(','),
 			initialPreviewConfig: action,
 			overwriteInitial: false,
 	    	uploadUrl : '/dummy/dummy',
-		});
-	}
+		});*/
+	//}
 
 	/* Sort guide image */
-	if(guideimagedata) { 
-		$('#vendoritem-guide_image').fileinput({
-	    	showUpload:false,
-			showRemove:false,
-
-			initialPreview: [
-				img1,
-			],
-			initialPreviewConfig: [
-			   	action1,
-			],
-			overwriteInitial: false,
-	    	uploadUrl : '/dummy/dummy',
-	   	});
-	}else{
-		$('#vendoritem-guide_image').fileinput({
-	    	showUpload:false,
-			showRemove:false,
-			overwriteInitial: false,
-	    	uploadUrl : '/dummy/dummy',
-	   	});
-	}
+	//if(guideimagedata) {
+	//	$('#vendoritem-guide_image').fileinput({
+	//    	showUpload:false,
+	//		showRemove:false,
+    //
+	//		initialPreview: [
+	//			img1,
+	//		],
+	//		initialPreviewConfig: [
+	//		   	action1,
+	//		],
+	//		overwriteInitial: false,
+	//    	uploadUrl : '/dummy/dummy',
+	//   	});
+	//}else{
+	//	$('#vendoritem-guide_image').fileinput({
+	//    	showUpload:false,
+	//		showRemove:false,
+	//		overwriteInitial: false,
+	//    	uploadUrl : '/dummy/dummy',
+	//   	});
+	//}
 		/* BEGIN SORT code for item and guide images */
 		var path = image_order_url;
 		$(".file-preview-thumbnails").sortable({
@@ -561,7 +561,6 @@ $('.complete').click(function()
 $(function(){
 	$('.custom_description').hide();
 	$('.custom_description_ar').hide();
-	$('.guide_image').hide();
 	$('.mandatory').show();
 
 	$('#vendoritem-item_for_sale').click(function()

@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+//use dosamigos\fileupload\FileUploadUI;
 use common\models\Vendoritemquestion;
 use yii\web\View;
 
@@ -13,7 +14,9 @@ if($model->isNewRecord){
 	$childcategory = array();
 	$exist_themes = array();
 	$exist_groups = array();
-} ?>
+}
+
+?>
 
 <?= Html::csrfMetaTags() ?>
 
@@ -94,28 +97,50 @@ if($model->isNewRecord){
 				<div class="form-group custom_description_ar"><?= $form->field($model, 'item_customization_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
 
 				<!-- guide image -->
+				<?php if ($model->item_for_sale == 'No') { ?>
+					<div class="form-group guide_image" >
+				<?php } else { ?>
+						<div class="form-group guide_image" style="display: none;">
+				<?php } ?>
 
-                <div class="form-group guide_image" style="display: none;">
-                        <?php
-                        // Usage with ActiveForm and model
-                        echo $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"])->widget(FileInput::classname(), [
-                            'options' => [
-                                'accept' => 'image/*',
-                                'multiple' => true,
+					<?php
+					$initialPreview = [];
+					$initialPreviewConfig = [];
+					if(!empty($guide_images)) {
 
-                            ],
-                            'pluginOptions'=>[
-                                'browseClass' => 'btn btn-primary btn-block',
-                                'browseIcon' => ' ',
-                                'browseLabel' => 'Select Photo',
-                                'showUpload'=>false,
-                                'showRemove'=>false,
-                                'overwriteInitial'=> false,
-                                'uploadUrl' => '/dummy/dummy',
-                            ]
-                        ]);
-                        ?>
-                    </div>
+						$i=0;
+						foreach ($guide_images as $value) {
+							$key = $value->image_id;
+							$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
+							$url = Url::to(["/vendoritem/delete-service-guide-image", "id" => $key]);
+							$initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
+							$i++;
+						}
+					}
+
+					// Usage with ActiveForm and model
+					echo $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"])->widget(FileInput::classname(), [
+						'options' => [
+							'accept' => 'image/*',
+							'multiple' => true,
+
+						],
+						'pluginOptions'=>[
+							'browseClass' => 'btn btn-primary btn-block',
+							'browseIcon' => ' ',
+							'browseLabel' => 'Select Photo',
+							'showUpload'=>false,
+							'showRemove'=>false,
+							'overwriteInitial'=> false,
+							'initialPreview' => $initialPreview,
+							'initialPreviewConfig' => $initialPreviewConfig,
+							'uploadUrl' => '/dummy/dummy',
+						]
+					]);
+					?>
+				</div>
+
+				<!-- END display exist images -->
 
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
@@ -133,27 +158,41 @@ if($model->isNewRecord){
 			<div class="tab-pane" id="5">
 				<div class="form-group">
 					<div class="file-block" style="color:red"> Please upload aleast one file</div>
-
 					<?php
-					// Usage with ActiveForm and model
-                    echo $form->field($model, 'image_path[]')->widget(FileInput::classname(), [
-                        'options' => [
-                            'accept' => 'image/*',
-                            'multiple' => true,
+					$initialPreview = [];
+					$initialPreviewConfig = [];
+						if(!empty($images)) {
 
-                        ],
+							$i=0;
+							foreach ($images as $value) {
+								$key = $value->image_id;
+								$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
+								$url = Url::to(["/vendoritem/delete-item-image", "id" => $key]);
+								$initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
+								$i++;
+							}
+						}
+
+					// Usage with ActiveForm and model
+					echo $form->field($model, 'image_path[]')->widget(FileInput::classname(), [
+						'options' => [
+							'accept' => 'image/*',
+							'multiple' => true,
+
+						],
                         'pluginOptions'=>[
-                            'browseClass' => 'btn btn-primary btn-block',
-                            'browseIcon' => ' ',
-                            'browseLabel' => 'Select Photo',
+							'browseClass' => 'btn btn-primary btn-block',
+							'browseIcon' => ' ',
+							'browseLabel' => 'Select Photo',
                             'showUpload'=>false,
                             'showRemove'=>false,
                             'overwriteInitial'=> false,
+							'initialPreview' => $initialPreview,
+							'initialPreviewConfig' => $initialPreviewConfig,
                             'uploadUrl' => '/dummy/dummy',
                         ]
-                    ]);
-
-                    ?>
+					]);
+					?>
 				</div>
 
 				<div class="form-group"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete','style'=>'float:right;']) ?></div>
@@ -165,7 +204,6 @@ if($model->isNewRecord){
 <?php ActiveForm::end(); ?>
 
 <?php
-
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
 $this->registerCss("
