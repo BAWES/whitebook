@@ -1408,3 +1408,6 @@ a.thing_cont:hover {
     display: block;
     clear: both;
 }
+.border-top{ display: inline-block; width: 100%;  border-top: 1px solid #e6e6e6; vertical-align: top; margin: 10px 0 0 0;}
+.address_ifo_left h5{font:300 11pt/24px 'OpenSansRegular'; color: #808080 ; padding:0 0 0 22px; margin: 0px; background: url(../images/enus11.png) left center no-repeat; display: inline-block; vertical-align: top;}
+.margin-top-13{margin-top:13px!important;}
