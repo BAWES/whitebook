@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <li><a href="#6" data-toggle="tab">Gallery</a></li>
         </ul>
         <div class="tab-content">
-
             <div class="tab-pane" id="1" >
                 <table class="table table-striped table-bordered detail-view">
                     <tbody>
@@ -44,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tbody>
                 </table>
             </div>
-
             <div class="tab-pane" id="2" >
                 <table class="table table-striped table-bordered detail-view">
                     <tbody>
@@ -56,7 +54,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tbody>
                 </table>
             </div>
-
             <div class="tab-pane" id="3" >
                 <table class="table table-striped table-bordered detail-view">
                     <tbody>
@@ -86,7 +83,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tbody>
                 </table>
             </div>
-
             <div class="tab-pane" id="4" >
                 <table class="table table-striped table-bordered detail-view">
                     <tbody>
@@ -97,7 +93,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tbody>
                 </table>
             </div>
-
             <?php if($model->item_for_sale=='Yes'){ ?>
                 <div class="tab-pane" id="5">
                     <?php
@@ -128,86 +123,44 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-
 <?php $this->registerCss("
-      ul {
-          padding:0 0 0 0;
-          margin:0 0 0 0;
-      }
-      ul li {
-          list-style:none;
-          margin-bottom:25px;
-      }
-      ul li img {
-          cursor: pointer;
-      }
-      .modal-body {
-          padding:5px !important;
-      }
-      .modal-content {
-          border-radius:0;
-      }
-      .modal-dialog img {
-          text-align:center;
-          margin:0 auto;
-      }
-    .controls{
-        width:50px;
-        display:block;
-        font-size:11px;
-        padding-top:8px;
-        font-weight:bold;
-    }
-    .next {
-        float:right;
-        text-align:right;
-    }
+      ul {padding:0 0 0 0;margin:0 0 0 0;}
+      ul li {list-style:none;margin-bottom:25px;}
+      ul li img {cursor: pointer;}
+      .modal-body {padding:5px !important;}
+      .modal-content {border-radius:0;}
+      .modal-dialog img {text-align:center;margin:0 auto;}
+      .controls{width:50px;display:block;font-size:11px;padding-top:8px;font-weight:bold;}
+      .next {float:right;text-align:right;}
       /*override modal for demo only*/
-      .modal-dialog {
-          max-width:500px;
-          padding-top: 90px;
-      }
-      @media screen and (min-width: 768px){
-          .modal-dialog {
-              width:500px;
-              padding-top: 90px;
-          }
-      }
-      @media screen and (max-width:1500px){
-          #ads {
-              display:none;
-          }
-      }
+      .modal-dialog {max-width:500px;padding-top: 90px;}
+      @media screen and (min-width: 768px){.modal-dialog {width:500px;padding-top: 90px;}}
+      @media screen and (max-width:1500px){#ads {display:none;}}
   ");
 
 $this->registerJs("
     var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
 
     // single question view
-    function questionView(q_id,tis){
-
-      var check = $('.show_ques'+q_id).html();
-      
-      if(check==''){
-        var path = '".Url::to(['vendoritem/viewrenderquestion'])."';
-        
-        $.ajax({
-            type : 'POST',
-            url :  path,
-            data: { q_id: q_id ,_csrf : csrfToken},
-            success: function( data ) {
-            $('.show_ques'+q_id).html(data);
+    function questionView(q_id,tis) {
+        var check = $('.show_ques'+q_id).html();
+        if (check=='') {
+            var path = '".Url::to(['vendoritem/viewrenderquestion'])."';
+            $.ajax({
+                type : 'POST',
+                url :  path,
+                data: { q_id: q_id ,_csrf : csrfToken},
+                success: function( data ) {
+                $('.show_ques'+q_id).html(data);
+                $(this).toggleClass('expanded');
+                return false;
+                }
+            });
+        } else {
+            $('.show_ques'+q_id).toggle();
             $(this).toggleClass('expanded');
-            return false;
-            }
-        });
-
-      }else{
-        $('.show_ques'+q_id).toggle();
-        $(this).toggleClass('expanded');
-      }
+        }
     }
-
     /* Begin when loading page first tab opened */
     $('.nav-tabs li:first').addClass('active');
     $('.tab-content div:first').addClass('active');
@@ -216,7 +169,6 @@ $this->registerJs("
 $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
-
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="z-index: 99999;">
         <div class="modal-content">

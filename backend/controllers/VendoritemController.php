@@ -421,8 +421,11 @@ class VendoritemController extends Controller
             }
             /* END Scenario if item for sale is no not required below four fields */
 
-            $model->item_status='Deactive'; /* Vendor make it any changes item status should be deactivaed */
-            
+
+            /* Vendor make it any changes item status should be deactivaed */
+            $model->item_status = 'Deactive';
+            $model->item_approved = 'Pending';
+
             if ($model->save()) {
 
                 $itemid = $model->item_id;
@@ -481,7 +484,7 @@ class VendoritemController extends Controller
                 /* Begin Upload guide image table  */
                 $product_file = UploadedFile::getInstances($model, 'image_path');
                 
-                if($product_file){
+                if ($product_file) {
 
                     $i = 0;
                     
@@ -492,7 +495,7 @@ class VendoritemController extends Controller
                             //Resize file using imagine
                             $resize = true;
 
-                            if($resize) {
+                            if ($resize) {
 
                                 /* Begin Product image resolution 1000 */
                                 $newTmpName2 = $files->tempName . "." . $files->extension;
@@ -528,7 +531,7 @@ class VendoritemController extends Controller
                                 $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename);
                             }//if resize
                             
-                            if($awsResult){
+                            if ($awsResult) {
                                 $model->image_path = $filename;
                             }
                         }//if instanceof yii\web\UploadedFile 
