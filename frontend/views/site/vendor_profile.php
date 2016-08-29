@@ -121,6 +121,7 @@ if ($event_status > 0) {
                                             <div class="panel-body">
                                                 <div class="contact_information">
                                                     <address>
+                                                        <div class="clearfix">
                                                         <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
                                                             <h3>
                                                                 <a href="#" title="<?php echo $vendor_detail['vendor_public_email']; ?>"><?php echo $vendor_detail['vendor_public_email']; ?>&nbsp;</a>
@@ -151,12 +152,18 @@ if ($event_status > 0) {
                                                                     echo (isset($to[2])) ? ' '.$to[2] : ''
                                                                     ?>
                                                                 </span>
-
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
+                                                            <h5 class="margin-top-13">
+                                                                <?php
+                                                                    $address = (Yii::$app->language == "en") ? 'vendor_contact_address' : 'vendor_contact_address_ar';
+                                                                    echo $vendor_detail[$address];
+                                                                ?>
+                                                            </h5>
                                                         </div>
                                                     </address>
-
                                                 </div>
-
                                             </div>
                                         </div>
                                             <?php if (count($vendor_detail) > 0) { ?>
