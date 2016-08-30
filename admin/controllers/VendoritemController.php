@@ -334,7 +334,7 @@ public function actionCreate($vid = '')
                         $image_tbl->image_path = $filename;
                         $image_tbl->item_id = $model->item_id;
                         $image_tbl->image_user_id = Yii::$app->user->getId();
-                        $image_tbl->module_type = 'admin';
+                        $image_tbl->module_type = 'vendor_item';
                         $image_tbl->image_user_type = 'admin';
                         $image_tbl->vendorimage_sort_order = $i;
                         $image_tbl->save();
@@ -393,10 +393,8 @@ public function actionUpdate($id, $vid = false)
         $len = rand(1, 1000);
         $item_id = $model->item_id;
 
-        $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order' => SORT_ASC])->all(); // AND module_type = :status ':status' => 'admin'
-
-        // Item image path SALES and  RENTAL values
-        $guideimagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderBy(['vendorimage_sort_order' => SORT_ASC])->all(); // AND module_type = :status , ':status' => 'guides'
+        $guideimagedata = Image::findAll(['item_id' => $id,'module_type'=>'guides']);
+        $imagedata = Image::findAll(['item_id' => $id,'module_type'=>'vendor_item']);
 
         $cat_id = $model->category_id;
         $subcat_id = $model->subcategory_id;
@@ -553,7 +551,7 @@ public function actionUpdate($id, $vid = false)
                         $image_tbl->image_path = $filename;
                         $image_tbl->item_id = $id;
                         $image_tbl->image_user_id = Yii::$app->user->getId();
-                        $image_tbl->module_type = 'admin';
+                        $image_tbl->module_type = 'vendor_item';
                         $image_tbl->image_user_type = 'admin';
                         $image_tbl->vendorimage_sort_order = $i;
                         $image_tbl->save();
@@ -1134,14 +1132,14 @@ public function actionDeletesalesimage()
     // Delete item image
 public function actionDeleteitemimage()
 {
-    $model1 = new Image();
     if (Yii::$app->request->isAjax) {
        $data = Yii::$app->request->post();
-       if (isset($data['key']) &&  $data['key'] != '') {
-        $image_path = Image::loadguideimageids($data['key']);
-        Vendoritem::deleteFiles($image_path);
-        Image::deleteAll('image_id='.$data['key']);
-            die; // dont remove die, action used by vendor module also.
+        if (isset($data['key']) &&  $data['key'] != '') {
+            $imageData = Image::findOne(['image_id'=>$data['key']]);
+            if ($imageData){
+                Vendoritem::deleteFiles($imageData->image_path);
+                echo $imageData->delete();
+            }
         }
     }
 }
