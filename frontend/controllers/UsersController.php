@@ -932,7 +932,7 @@ class UsersController extends BaseController
         }
 
         $customer_address_modal = new CustomerAddress();
-        $addresstype = Addresstype::loadAddress();
+        $addresstype = Addresstype::loadAddresstype();
         $country = Country::loadcountry();
 
         return $this->render('address', [

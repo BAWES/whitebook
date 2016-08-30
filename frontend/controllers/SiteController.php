@@ -811,15 +811,19 @@ class SiteController extends BaseController
         }
 
         $area = Location::find()
-            ->select('id, location')
+            ->select('id, location, location_ar')
             ->where(['city_id' => $data['city_id']])
             ->all();
 
-        $options = '<option value="">Select</option>';
+        $options = '<option value="">'.Yii::t('frontend', 'Select').'</option>';
         
         if (!empty($area)) {
             foreach ($area as $key => $val) {
-                $options .=  '<option value="'.$val['id'].'">'.$val['location'].'</option>';
+                if(Yii::$app->language == 'en') {
+                    $options .=  '<option value="'.$val['id'].'">'.$val['location'].'</option>';
+                } else {
+                    $options .=  '<option value="'.$val['id'].'">'.$val['location_ar'].'</option>';
+                }
             }
         }
         return $options;
@@ -830,13 +834,24 @@ class SiteController extends BaseController
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $city = City::find()->select('city_id,city_name')->where(['country_id' => $data['country_id']])->all();
-        $options = '<option value="">Select</option>';
+
+        $city = City::find()
+            ->select('city_id, city_name, city_name_ar')
+            ->where(['country_id' => $data['country_id']])
+            ->all();
+        
+        $options = '<option value="">'.Yii::t('frontend', 'Select').'</option>';
+        
         if (!empty($city)) {
             foreach ($city as $key => $val) {
-                $options .=  '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
+                if(Yii::$app->language == 'en') {
+                    $options .=  '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
+                }else{
+                    $options .=  '<option value="'.$val['city_id'].'">'.$val['city_name_ar'].'</option>';    
+                }
             }
         }
+        
         return $options;
     }
     // END wish list manage page load vendorss based on category
