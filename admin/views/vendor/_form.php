@@ -61,7 +61,7 @@ use yii\helpers\Url;
 
 	<div class="form-group">
 	<?= $form->field($model, 'vendor_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100,'readonly'=>true,]) ?>
+	])->textInput(['maxlength' => 100]) ?>
 	</div>
 
 	<?php } else {?>
