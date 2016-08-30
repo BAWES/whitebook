@@ -7,7 +7,7 @@ use admin\models\Vendor;
 use common\models\Vendoritemquestion;
 use dosamigos\fileupload\FileUploadUI;
 use yii\web\view;
-
+use kartik\file\FileInput;
 $request = Yii::$app->request;
 
 if($model->isNewRecord){
@@ -166,7 +166,6 @@ if($model->isNewRecord){
 				->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?>
 			</div>
 
-			<?php if($model->isNewRecord) { ?>
 			<!-- BEGIN if type is sale -->
 			<div class="form-group single_price">
 				<?= $form->field($model, 'item_price_per_unit',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
@@ -197,69 +196,28 @@ if($model->isNewRecord){
 			</div>
 
 			<div class="form-group guide_image">
+				<?php
 
-			<?= $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
-					])->fileInput(['multiple' => true]) ?>
+				// Usage with ActiveForm and model
+				echo $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"])->widget(FileInput::classname(), [
+					'options' => [
+						'accept' => 'image/*',
+						'multiple' => true,
 
+					],
+					'pluginOptions'=>[
+						'browseClass' => 'btn btn-primary btn-block',
+						'browseIcon' => ' ',
+						'browseLabel' => 'Select Photo',
+						'showUpload'=>false,
+						'showRemove'=>false,
+						'overwriteInitial'=> false,
+						'uploadUrl' => '/dummy/dummy',
+					]
+				]);
+				?>
 			</div>
 
-			<?php } else if(!$model->isNewRecord){ ?>
-
-			<div class="form-group single_price">
-				<?= $form->field($model, 'item_price_per_unit',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-			</div>
-
-			<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">
-				<div class="multi_pricing">Price  From - To </div>
-
-				<?php $t=0;
-				foreach ($loadpricevalues as $value) {  ?>
-
-				<div class="controls<?= $t; ?>"><input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From range" value="<?= $value['range_from'];?>"><input type="text" id="vendoritem-item_to" class="form-control to_range_<?= $t; ?>" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To range" value="<?= $value['range_to'];?>"><input type="text" id="item_price_per_unit" class="form-control price_kd_<?= $t; ?>" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price" value="<?= $value['pricing_price_per_unit'];?>">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>
-
-				<?php $t++; }?>
-				<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
-			</div>
-
-			<div class="form-group">
-				<?= $form->field($model, 'item_price_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
-
-			<div class="form-group">
-				<?= $form->field($model, 'item_price_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
-
-			<div class="form-group custom_description">
-				<?= $form->field($model, 'item_customization_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
-
-			<div class="form-group custom_description_ar">
-				<?= $form->field($model, 'item_customization_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
-
-			<!-- guide image -->
-			<div class="form-group guide_image">
-			<?= $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
-					])->fileInput(['multiple' => true]) ?>
-
-			</div>
-			<!-- BEGIN display exist images -->
-			<?php
-			 if(!empty($guideimagedata)) {
-
-			         	$img1 = $action1 = '';
-			         	foreach ($guideimagedata as $value) {
-						$img1 .= '"<img src='.Yii::getAlias('@slider_uploads/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
-						$action1 .='{
-						        url: "'.Url::to(['/vendoritem/deleteserviceguideimage']).'",
-						        key: '.$value->image_id.',
-						    }'.',';
-							}
-
-						$img1 = rtrim($img1,',');
-						$action1 = rtrim($action1,',');
-						}
-			 }?>
 			<!-- END display exist images -->
 
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
@@ -286,25 +244,26 @@ if($model->isNewRecord){
 		<div class="tab-pane" id="5">
 			<div class="file-block" style="color:red"> Please upload aleast a file</div>
 			<div class="form-group">
-				<?= $form->field($model, 'image_path[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
-					])->fileInput(['multiple' => true]) ?>
+			<?php
+			// Usage with ActiveForm and model
+			echo $form->field($model, 'image_path[]')->widget(FileInput::classname(), [
+				'options' => [
+					'accept' => 'image/*',
+					'multiple' => true,
+
+				],
+				'pluginOptions'=>[
+					'browseClass' => 'btn btn-primary btn-block',
+					'browseIcon' => ' ',
+					'browseLabel' => 'Select Photo',
+					'showUpload'=>false,
+					'showRemove'=>false,
+					'overwriteInitial'=> false,
+					'uploadUrl' => '/dummy/dummy',
+				]
+			]);
+			?>
 			</div>
-
-			<?php if(!$model->isNewRecord){
-			 if(!empty($imagedata)) {
-			         	$img= $action = '';
-			         	foreach ($imagedata as $value) {
-			       			$img .= '"<img src='.Yii::getAlias('@vendor_item_images_210/').$value->image_path.' width=\'175\' height=\'125\' data-key='.$value->image_id.'>"'.',';
-			       			$action .='{
-			       			        url: "'.Url::to(['/vendoritem/deleteitemimage']).'",
-			       			        key: '.$value->image_id.',
-			       			    }'.',';
-			       				}
-
-						$img = rtrim($img,',');
-						$action = rtrim($action,',');
-						}
-			 }?>
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 		</div>
@@ -468,8 +427,6 @@ $this->registerCssFile("@web/themes/default/plugins/jquery-superbox/css/style.cs
 $this->registerJsFile("@web/themes/default/plugins/jquery-superbox/js/superbox.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
-$this->registerJsFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 

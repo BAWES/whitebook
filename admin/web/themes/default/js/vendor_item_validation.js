@@ -1,3 +1,24 @@
+var count_q = $('#count_q').val();
+var appImageUrl = $('#appImageUrl').val();
+var image_order_url = $('#image_order_url').val();
+var deletequestionoptions_url = $('#deletequestionoptions_url').val();
+var salesguideimage_url = $('#salesguideimage_url').val();
+var request_create = $('#request_create').val();
+var isNewRecord = $('#isNewRecord').val();
+var item_for_sale = $('#item_for_sale').val();
+var item_status = $('#item_status').val();
+var item_id = $('#item_id').val();
+var item_name_check = $('#item_name_check').val();
+var add_question_url = $('#add_question_url').val();
+var guideimage_url = $('#guideimage_url').val();
+var exist_question = $('#exist_question').val();
+var removequestion_url = $('#removequestion_url').val();
+var vendorcategory_url = $('#vendorcategory_url').val();
+var loadsubcategory_url = $('#loadsubcategory_url').val();
+var loadchildcategory_url = $('#loadchildcategory_url').val();
+var renderquestion_url = $('#renderquestion_url').val();
+
+
 $(function()
 {
 	CKEDITOR.replace('vendoritem-item_description');
@@ -352,28 +373,6 @@ $(function(){
 });
 /* END Themes and groups multiselect widget */
 
-if(isNewRecord) {
-    $('#vendoritem-item_for_sale').prop('checked', true);
-} else {
-    
-    if(item_for_sale=='Yes') {
-       	
-       	$('#vendoritem-item_for_sale').prop('checked', true);
-    
-    } else { 
-       		$('#vendoritem-item_for_sale').prop('checked', false);
-    }
-
-    if(item_status=='Active') {	
-       
-       	$('#vendoritem-item_status').prop('checked', true);
-    
-    } else { 
-       	
-       	$('#vendoritem-item_status').prop('checked', false);
-    }
-}
-
 // Add more for pricing 
 $(function(){
 
@@ -454,55 +453,55 @@ $(document).ready(function(){
 $(document).on('ready', function() {
 	$('.file-block').hide();
 
-	if(imagedata) {
-		$("#vendoritem-image_path").fileinput({
-	    	resizeImage: true,
-	    	showUpload:false,
-			showRemove:false,
-			minImageWidth: 208,
-	    	minImageHeight: 221,
-			initialPreview: [
-				img,
-			],
-			initialPreviewConfig: [
-			   action,
-			],
-			overwriteInitial: false,
-	    	uploadUrl : '/dummy/dummy',
-		});
-	} else {
-		$("#vendoritem-image_path").fileinput({
-	    	resizeImage: true,
-	    	showUpload:false,
-			showRemove:false,
-			minImageWidth: 208,
-	    	minImageHeight: 221,
-			overwriteInitial: false,
-	    	uploadUrl : '/dummy/dummy',
-		});
-	}
+	//if(imagedata) {
+	//	$("#vendoritem-image_path").fileinput({
+	//    	resizeImage: true,
+	//    	showUpload:false,
+	//		showRemove:false,
+	//		minImageWidth: 208,
+	//    	minImageHeight: 221,
+	//		initialPreview: [
+	//			img,
+	//		],
+	//		initialPreviewConfig: [
+	//		   action,
+	//		],
+	//		overwriteInitial: false,
+	//    	uploadUrl : '/dummy/dummy',
+	//	});
+	//} else {
+	//	$("#vendoritem-image_path").fileinput({
+	//    	resizeImage: true,
+	//    	showUpload:false,
+	//		showRemove:false,
+	//		minImageWidth: 208,
+	//    	minImageHeight: 221,
+	//		overwriteInitial: false,
+	//    	uploadUrl : '/dummy/dummy',
+	//	});
+	//}
     
-    if(guideimagedata) {
-    	$("#vendoritem-guide_image").fileinput({
-	    	showUpload:false,
-			showRemove:false,
-			initialPreview: [
-				img1,
-			],
-			initialPreviewConfig: [
-			   action1,
-			],
-			overwriteInitial: false,
-	    	uploadUrl : '/dummy/dummy',
-	   	});
-    } else {
-    	$("#vendoritem-guide_image").fileinput({
-	    	showUpload:false,
-			showRemove:false,
-			overwriteInitial: false,
-	    	uploadUrl : '/dummy/dummy',
-	   	});
-    }
+    //if(guideimagedata) {
+    //	$("#vendoritem-guide_image").fileinput({
+	 //   	showUpload:false,
+		//	showRemove:false,
+		//	initialPreview: [
+		//		img1,
+		//	],
+		//	initialPreviewConfig: [
+		//	   action1,
+		//	],
+		//	overwriteInitial: false,
+	 //   	uploadUrl : '/dummy/dummy',
+	 //  	});
+    //} else {
+    //	$("#vendoritem-guide_image").fileinput({
+	 //   	showUpload:false,
+		//	showRemove:false,
+		//	overwriteInitial: false,
+	 //   	uploadUrl : '/dummy/dummy',
+	 //  	});
+    //}
 	
 	var path = image_order_url;
 
