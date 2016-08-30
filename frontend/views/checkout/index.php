@@ -60,7 +60,8 @@ $this->title = Yii::t('frontend', 'Checkout | Whitebook');
 
 $this->registerJs("
 
-	var address_url = '".Url::to(['checkout/address'])."'; 
+	var cart_url = '".Url::to(['cart/index'])."'; 
+    var address_url = '".Url::to(['checkout/address'])."'; 
 	var save_address_url = '".Url::to(['checkout/save-address'])."'; 
 	var payment_url = '".Url::to(['checkout/payment'])."'; 
 	var save_payment_url = '".Url::to(['checkout/save-payment'])."'; 

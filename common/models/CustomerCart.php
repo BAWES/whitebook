@@ -110,7 +110,10 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         $errors = [];
 
-        $item = Vendoritem::findOne($data['item_id']);
+        $item = Vendoritem::find()->where([
+            'item_id' => $data['item_id'], 
+            'item_for_sale' => 'Yes'
+        ])->one();
 
         $vendor_id = $item->vendor_id;
 
