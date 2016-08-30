@@ -396,27 +396,26 @@ if(!empty($guideimagedata)) {
 	", View::POS_HEAD);
 }
 
-$this->registerJs("
-	var count_q = '".$count_q."';
-	var appImageUrl = '".Yii::getAlias('appImageUrl')."';
-	var image_order_url = '".Url::to(['/image/imageorder'])."';
-	var deletequestionoptions_url = '".Url::to(['/vendoritemquestionansweroption/deletequestionoptions'])."';
-	var salesguideimage_url = '".Url::to(['/vendoritem/salesguideimage'])."';
-	var request_create = '".$request->get('create')."';
-	var isNewRecord = ".$isNewRecord.";
-	var item_for_sale = '".$model->item_for_sale."';
-	var item_status = '".$model->item_status."';
-	var item_id = ".$item_id.";
-	var item_name_check = '".Url::to(['/vendoritem/itemnamecheck'])."';
-	var add_question_url = '".Url::to(['/vendoritem/addquestion'])."';
-	var guideimage_url = '".Url::to(['/vendoritem/guideimage'])."';
-	var exist_question = '".$exist_question."'; 
-	var removequestion_url = '".Url::to(['/vendoritem/removequestion'])."';
-	var vendorcategory_url = '".Url::to(['/category/vendorcategory'])."';
-	var loadsubcategory_url = '".Url::to(['/priorityitem/loadsubcategory'])."';
-	var loadchildcategory_url = '".Url::to(['/priorityitem/loadchildcategory'])."';
-	var renderquestion_url = '".Url::to(['/vendoritem/renderquestion'])."';
-",View::POS_HEAD);
+echo Html::hiddenInput('count_q',$count_q,['id'=>$count_q]);
+echo Html::hiddenInput('appImageUrl',Yii::getAlias('appImageUrl'),['id'=>'appImageUrl']);
+echo Html::hiddenInput('image_order_url',Url::to(['/image/imageorder']),['id'=>'image_order_url']);
+echo Html::hiddenInput('deletequestionoptions_url',Url::to(['/vendoritemquestionansweroption/deletequestionoptions']),['id'=>'deletequestionoptions_url']);
+echo Html::hiddenInput('salesguideimage_url',Url::to(['/vendoritem/salesguideimage']),['id'=>'salesguideimage_url']);
+echo Html::hiddenInput('request_create',$request->get('create'), ['id'=>'request_create']);
+echo Html::hiddenInput('isNewRecord',$isNewRecord, ['id'=>'isNewRecord']);
+echo Html::hiddenInput('item_for_sale',$model->item_for_sale, ['id'=>'item_for_sale']);
+echo Html::hiddenInput('item_status',$model->item_status, ['id'=>'item_status']);
+echo Html::hiddenInput('item_id',$item_id, ['id'=>'item_id']);
+echo Html::hiddenInput('item_name_check',Url::to(['/vendoritem/itemnamecheck']), ['id'=>'item_name_check']);;
+echo Html::hiddenInput('add_question_url',Url::to(['/vendoritem/addquestion']), ['id'=>'add_question_url']);
+echo Html::hiddenInput('guideimage_url',Url::to(['/vendoritem/guideimage']), ['id'=>'guideimage_url']);
+echo Html::hiddenInput('exist_question',$exist_question, ['id'=>'exist_question']);
+echo Html::hiddenInput('removequestion_url',Url::to(['/vendoritem/removequestion']), ['id'=>'removequestion_url']);
+echo Html::hiddenInput('vendorcategory_url',Url::to(['/category/vendorcategory']), ['id'=>'vendorcategory_url']);
+echo Html::hiddenInput('loadsubcategory_url',Url::to(['/priorityitem/loadsubcategory']), ['id'=>'loadsubcategory_url']);
+echo Html::hiddenInput('loadchildcategory_url',Url::to(['/priorityitem/loadchildcategory']), ['id'=>'loadchildcategory_url']);
+echo Html::hiddenInput('renderquestion_url',Url::to(['/vendoritem/renderquestion']), ['id'=>'renderquestion_url']);
+
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
 

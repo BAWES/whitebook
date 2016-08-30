@@ -378,8 +378,11 @@ $(function(){
 
 	$('.custom_description').hide();
 	$('.custom_description_ar').hide();
-
-	$('.guide_image').hide();
+	if (item_for_sale == 0) {
+		$('.guide_image').show();
+	} else {
+		$('.guide_image').hide();
+	}
 	$('.mandatory').show();
 
 	$('#vendoritem-item_for_sale').click(function()
