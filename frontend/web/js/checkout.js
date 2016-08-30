@@ -10,7 +10,11 @@ function address() {
 	$('.checkout-wizard .text-success').removeClass('text-success');
 
 	$.get(address_url, function(html) {
-		$('.checkout_content_wrapper').html(html);
+		if(html) {
+			$('.checkout_content_wrapper').html(html);		
+		}else{
+			location = cart_url;
+		}
 	});
 
 	$('html, body').animate({ scrollTop: 0 }, 'slow');
@@ -48,9 +52,12 @@ function payment() {
 	$('#ar-step-address').addClass('text-success');
 
 	$.get(payment_url, function(html) {
-		$('.checkout_content_wrapper').html(html);
-
-		$('html, body').animate({ scrollTop: 0 }, 'slow');
+		if(html) {
+			$('.checkout_content_wrapper').html(html);
+			$('html, body').animate({ scrollTop: 0 }, 'slow');
+		} else {
+			location = cart_url;
+		}		
 	});
 }
 
@@ -77,8 +84,12 @@ function confirm() {
 	$('#ar-step-payment').addClass('text-success');
 
 	$.get(confirm_url, function(html) {
-		$('.checkout_content_wrapper').html(html);
-		$('html, body').animate({ scrollTop: 0 }, 'slow');
+		if(html) {
+			$('.checkout_content_wrapper').html(html);
+			$('html, body').animate({ scrollTop: 0 }, 'slow');	
+		} else {
+			location = cart_url;
+		}
 	});
 }
 

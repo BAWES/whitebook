@@ -46,6 +46,19 @@ class CheckoutController extends BaseController
 		
 		$items = CustomerCart::items();
 
+		foreach ($items as $item) {
+			$error = CustomerCart::validate_item([
+    			'item_id' => $item['item_id'],
+    			'delivery_date' => $item['cart_delivery_date'],
+    			'area_id' => $item['area_id'],
+    			'quantity' => $item['cart_quantity']
+    		], true);
+
+    		if($error) {
+    			return null;
+    		}
+		}
+
 		$customer_address_modal = new CustomerAddress();
         $addresstype = Addresstype::loadAddress();
         $country = Country::loadcountry();
@@ -114,6 +127,22 @@ class CheckoutController extends BaseController
 
 	//Display form to select payment method 
 	public function actionPayment(){
+
+		$items = CustomerCart::items();
+
+		foreach ($items as $item) {
+			$error = CustomerCart::validate_item([
+    			'item_id' => $item['item_id'],
+    			'delivery_date' => $item['cart_delivery_date'],
+    			'area_id' => $item['area_id'],
+    			'quantity' => $item['cart_quantity']
+    		], true);
+
+    		if($error) {
+    			return null;
+    		}
+		}
+
 		return $this->renderPartial('payment');
 	}
 
@@ -127,6 +156,21 @@ class CheckoutController extends BaseController
 
 	//Display all data for order to get confirm 
 	public function actionConfirm() {
+
+		$items = CustomerCart::items();
+		
+		foreach ($items as $item) {
+			$error = CustomerCart::validate_item([
+    			'item_id' => $item['item_id'],
+    			'delivery_date' => $item['cart_delivery_date'],
+    			'area_id' => $item['area_id'],
+    			'quantity' => $item['cart_quantity']
+    		], true);
+
+    		if($error) {
+    			return null;
+    		}
+		}
 
 		$payment_method_code = Yii::$app->session->get('payment_method');
 
