@@ -74,19 +74,19 @@ class SiteController extends Controller
         $this->layout = "login";
 
         $model = new VendorLogin();
-        
+
         if(!Yii::$app->user->isGuest){
-            
+
             $this->redirect(['site/index']);
 
         }else{
 
             if ($model->load(Yii::$app->request->post()) && $model->login()) {
-                
+
                 $vendor_id = Yii::$app->user->getId();
-                
+
                 $package = Vendor::packageCheck($vendor_id);
-                
+
                 $status = Vendor::statusCheck($vendor_id);
 
                 if(!$status){
@@ -94,30 +94,30 @@ class SiteController extends Controller
                     $session = Yii::$app->session;
                     Yii::$app->user->logout();
                     $session->destroy();
-                    
+
                     Yii::$app->session->setFlash('danger', "Kindly contact admin, account deactivated!");
-                    
-                    Yii::warning('[Account Deactivated] Vendor needs contact admin, account deactivated', __METHOD__);
-                    
+
+                    Yii::warning('[Account Deactivated - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' needs to contact admin, account deactivated', __METHOD__);
+
                     return $this->redirect(['site/login']);
                 }
 
                 if($package){
-                    
-                    Yii::info('[Vendor Login] Vendor Login successfully', __METHOD__);
-                    
+
+                    Yii::info('[Vendor Login - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' has logged in to manage their items', __METHOD__);
+
                     return $this->redirect(['site/index']);
 
                 } else {
-                    
+
                     $session = Yii::$app->session;
                     Yii::$app->user->logout();
                     $session->destroy();
-                    
+
                     Yii::$app->session->setFlash('danger', "Kindly contact admin, package expired!");
-                    
-                    Yii::warning('[Package Expired] Vendor needs contact admin, package expired', __METHOD__);
-                    
+
+                    Yii::warning('[Vendor Package Expired - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' needs contact admin, package expired', __METHOD__);
+
                     return $this->redirect(['site/login']);
                 }
 
@@ -138,9 +138,9 @@ class SiteController extends Controller
     public function actionChangepassword()
     {
         $session = Yii::$app->session;
-        
+
         $users_tbl = Vendor::find()->where(['vendor_contact_email' => Vendor::getVendor('vendor_contact_email')])->one();
-        
+
         $model = new VendorPassword;
         $model->scenario = 'change';
 
@@ -159,19 +159,19 @@ class SiteController extends Controller
                 return false;
 
             } else if($form['new_password'] !== $form['confirm_password']) {
-                
+
                 Yii::$app->session->setFlash('danger', "Old password and new password does not match!");
                 $this->redirect(['changepassword']);
                 return false;
 
             } else {
-                
+
                 $users_tbl->scenario = 'change';
                 $users_tbl->vendor_password = Yii::$app->getSecurity()->generatePasswordHash($form['new_password']);
                 $users_tbl->save();
-                
+
                 Yii::$app->session->setFlash('success', "SuccessFully changed your password!");
-                
+
                 return $this->render('index',[
                     'vendoritemcnt' => $vendoritemcnt,
                     'monthitemcnt' => $monthitemcnt,
@@ -191,7 +191,7 @@ class SiteController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $form = Yii::$app->request->post('VendorPassword');
-			
+
             $rows = Vendor::find()->select('vendor_contact_email')
     			->where(['vendor_contact_email'=>$form['vendor_contact_email']])
     			->asArray()
@@ -241,7 +241,7 @@ class SiteController extends Controller
         $model->scenario = 'vendorprofile';
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
-        
+
         $vendor_category = explode(",", $model['category_id']);
         $v_category = Category::find()->select('category_name')
         ->where(['IN','category_id',$vendor_category])->asArray()->all();
@@ -294,7 +294,7 @@ class SiteController extends Controller
                         }
                     }
                 }
-            } else {  
+            } else {
                 $model->vendor_logo_path = $exist_logo_image;
             }
 
@@ -320,11 +320,11 @@ class SiteController extends Controller
 
     public function actionImageorder() {
 
-        if (!Yii::$app->request->isAjax) 
+        if (!Yii::$app->request->isAjax)
             die();
 
         $data = Yii::$app->request->post();
-        
+
         $i = 1;
         foreach ($data['sort'] as $order => $value) {
             $command = \common\models\Image::updateAll(['vendorimage_sort_order' => $i],'image_id= '.$value);

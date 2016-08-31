@@ -54,9 +54,8 @@ class LoginForm extends Model
      */
     public function login()
     {
-
         if ($this->validate()) {
-            Yii::info('[Admin Login] Admin Login successfully', __METHOD__);
+            Yii::info('[Admin Login - '. $this->getUser()->admin_name .'] Admin has logged in to manage The White Book', __METHOD__);
 
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {

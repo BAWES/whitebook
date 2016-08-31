@@ -183,7 +183,7 @@ class VendorController extends Controller
 
                 if ($model->save(false)) {
                     //Add to log
-                    Yii::info('[New Vendor] Admin created new vendor '.$model['vendor_name'], __METHOD__);
+                    Yii::info('[New Vendor] '. Yii::$app->user->identity->admin_name .' created new vendor '.$model['vendor_name'], __METHOD__);
 
                     //Send Email
                     Yii::$app->mailer->compose([

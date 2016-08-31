@@ -173,7 +173,7 @@ public function actionCreate($vid = '')
             $chk_item_exist = Vendoritem::find()->where(['trash'=>'default'])->andWhere(['LIKE','slug',$c_slug4])->one();
 
             if (!empty($chk_item_exist)) {
-                
+
                 $vendor_item = Yii::$app->request->post('Vendoritem');
 
                 $tbl_vendor = Vendor::find()
@@ -192,11 +192,11 @@ public function actionCreate($vid = '')
             $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
             if ($vendoritem_item_price['from']) {
-                
+
                 $from = $vendoritem_item_price['from'];
                 $to = $vendoritem_item_price['to'];
                 $price = $vendoritem_item_price['price'];
-                
+
                 for ($opt = 0;$opt < count($from);++$opt) {
                     $vendor_item_pricing = new Vendoritempricing();
                     $vendor_item_pricing->item_id = $itemid;
@@ -339,25 +339,25 @@ public function actionCreate($vid = '')
                         $image_tbl->vendorimage_sort_order = $i;
                         $image_tbl->save();
                         ++$i;
-            }//foreach product files 
+            }//foreach product files
         }
 
         /*  Upload image table End */
 
         Yii::$app->session->setFlash('success', 'Vendor item added successfully!');
-        Yii::info('[New Item] Admin created new item '.addslashes($model->item_name), __METHOD__);
+        Yii::info('[New Item Created by '. Yii::$app->user->identity->admin_name .'] New Item added: '.addslashes($model->item_name), __METHOD__);
 
         return $this->redirect(['index']);
     }
 
 } else {
     return $this->render('create', [
-        'model' => $model, 
-        'model1' => $model1, 
-        'itemtype' => $itemtype, 
-        'vendorname' => $vendorname, 
+        'model' => $model,
+        'model1' => $model1,
+        'itemtype' => $itemtype,
+        'vendorname' => $vendorname,
         'model_question' => $model_question,
-        'themelist' => $themelist, 
+        'themelist' => $themelist,
         'grouplist' => $grouplist,
         ]);
 }
@@ -401,7 +401,7 @@ public function actionUpdate($id, $vid = false)
         $itemtype = Itemtype::loaditemtype();
         $vendorname = Vendor::loadvendorname();
         $categoryname = Category::vendorcategory($model->vendor_id);
-    
+
         $subcategory = Subcategory::loadsubcategory($cat_id);
         $childcategory = Childcategory::loadchildcategory($subcat_id);
         $loadpricevalues = Vendoritempricing::loadpricevalues($item_id);
@@ -438,7 +438,7 @@ public function actionUpdate($id, $vid = false)
             $chk_item_exist = Vendoritem::find()->where(['trash'=>'default'])->andWhere(['LIKE','slug',$c_slug4])->one();
 
             if (!empty($chk_item_exist)) {
-                
+
                 $vendoritem = Yii::$app->request->post('Vendoritem');
 
                 $tbl_vendor = Vendor::find()
@@ -452,7 +452,7 @@ public function actionUpdate($id, $vid = false)
 
             $model->item_for_sale = (Yii::$app->request->post()['Vendoritem']['item_for_sale']) ? 'Yes' : 'No';
             $model->item_status = (Yii::$app->request->post()['Vendoritem']['item_status'] == 1) ? 'Active' : 'Deactive';
-            
+
             if ($model->save()) {
 
                 /* Begin Upload guide image table  */
@@ -498,7 +498,7 @@ public function actionUpdate($id, $vid = false)
 
                 /* Begin Upload guide image table  */
                 $product_file = UploadedFile::getInstances($model, 'image_path');
-                
+
                 if($product_file){
                     $i = count($imagedata) + 1;
                     foreach ($product_file as $files) {
@@ -591,13 +591,13 @@ public function actionUpdate($id, $vid = false)
                 $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
                 if ($vendoritem_item_price['from'] != '') {
-                    
+
                     Vendoritempricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
-                    
+
                     $from = $vendoritem_item_price['from'];
                     $to = $vendoritem_item_price['to'];
                     $price = $vendoritem_item_price['price'];
-                    
+
                     for ($opt = 0;$opt < count($from);++$opt) {
                         $vendor_item_pricing = new Vendoritempricing();
                         $vendor_item_pricing->item_id = $itemid;
@@ -615,13 +615,13 @@ public function actionUpdate($id, $vid = false)
                 if ($vendor_item['themes']) {
 
                     $save = 'update';
-                    
+
                     if (!isset($selected_themes)) {
                         $selected_themes = new Vendoritemthemes();
                         $selected_themes->vendor_id = $model['vendor_id'];
                         $save = 'save';
                     }
-                    
+
                     $theme_id = implode(',', $vendor_item['themes']);
                     $selected_themes->item_id = $itemid;
                     $selected_themes->theme_id = $theme_id;
@@ -633,13 +633,13 @@ public function actionUpdate($id, $vid = false)
                 if ($vendor_item['groups']) {
 
                     $save = 'update';
-                    
+
                     if (!isset($selected_groups)) {
                         $selected_groups = new Featuregroupitem();
                         $selected_groups->vendor_id = $model['vendor_id'];
                         $save = 'save';
                     }
-                    
+
                     $group_id = implode(',', $vendor_item['groups']);
                     $selected_groups->item_id = $itemid;
                     $selected_groups->group_id = $group_id;
@@ -690,7 +690,7 @@ public function actionUpdate($id, $vid = false)
             }
 
             Yii::$app->session->setFlash('success', 'Vendor item updated successfully!');
-            
+
             Yii::info('[Item Updated] Admin updated '.addslashes($model->item_name).' item information', __METHOD__);
 
             if (Yii::$app->request->get('vid')) {
@@ -700,18 +700,18 @@ public function actionUpdate($id, $vid = false)
             }
         } else {
             return $this->render('update', [
-                'model' => $model, 
-                'itemtype' => $itemtype, 
-                'vendorname' => $vendorname, 
-                'subcategory' => $subcategory, 
+                'model' => $model,
+                'itemtype' => $itemtype,
+                'vendorname' => $vendorname,
+                'subcategory' => $subcategory,
                 'categoryname' => $categoryname,
-                'imagedata' => $imagedata, 
-                'model_question' => $model_question, 
-                'themelist' => $themelist, 
+                'imagedata' => $imagedata,
+                'model_question' => $model_question,
+                'themelist' => $themelist,
                 'grouplist' => $grouplist,
-                'exist_themes' => $exist_themes, 
-                'childcategory' => $childcategory, 
-                'loadpricevalues' => $loadpricevalues, 
+                'exist_themes' => $exist_themes,
+                'childcategory' => $childcategory,
+                'loadpricevalues' => $loadpricevalues,
                 'guideimagedata' => $guideimagedata,
                 ]);
         }
@@ -740,7 +740,7 @@ public function actionDelete($id)
         $vendor_item_update = Vendoritem::findOne('item_id ='.$id);
         $vendor_item_update->trash='Deleted';
         $vendor_item_update->update();
-        
+
         Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
         return $this->redirect(['index']);
     } else {
@@ -952,7 +952,7 @@ public function actionGuideimage()
     $question_id  = Yii::$app->request->post('question_id');
 
     foreach ($_FILES as $key) {
-        
+
         if ($key['error'] == UPLOAD_ERR_OK) {
             $name = $len.'_'.$key['name'];
             $temp = $key['tmp_name'];
@@ -971,9 +971,9 @@ public function actionGuideimage()
         $image_tbl->image_user_type ='admin';
         $image_tbl->vendorimage_sort_order = 0;
         $image_tbl->save();
-        
+
         $last_id = Yii::$app->db->getLastInsertID();
-        
+
         // guide image table
         $question_tbl = new Vendoritemquestionguide;
         $question_tbl->question_id = $question_id;
