@@ -130,7 +130,7 @@ class SiteinfoController extends Controller
 
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Application info created successfully!');
-                Yii::info('[Site] Admin created site information.', __METHOD__);
+                Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' created site information.', __METHOD__);
 
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -164,7 +164,7 @@ class SiteinfoController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->save();
                 echo Yii::$app->session->setFlash('success', 'Application info updated successfully!');
-                Yii::info('[Site] Admin updated site information.', __METHOD__);
+                Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' updated site information.', __METHOD__);
 
                 return $this->redirect(['view', 'id' => $model->id]);
             }
