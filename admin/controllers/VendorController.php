@@ -87,7 +87,7 @@ class VendorController extends Controller
 
         $searchModel3 = new VendoritemcapacityexceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
-        
+
         //print_r($dataProvider3);die;
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -103,9 +103,9 @@ class VendorController extends Controller
     public function actionVendoritemview($id)
     {
         $searchModel = new VendoritemSearch();
-        
+
         $dataProvider = $searchModel->searchVendor(
-            Yii::$app->request->queryParams, 
+            Yii::$app->request->queryParams,
             Yii::$app->request->get('id')
         );
 
@@ -297,7 +297,7 @@ class VendorController extends Controller
                     Yii::$app->resourceManager->delete("vendor_logo/" . $exist_logo_image);
                     echo Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
                 }
-                
+
 
                 return $this->redirect(['index']);
             } else {
@@ -426,14 +426,14 @@ class VendorController extends Controller
 
     public function actionChangepackage()
     {
-        if (!Yii::$app->request->isAjax) 
+        if (!Yii::$app->request->isAjax)
             die();
 
         $json = ['errors' => []];
 
         $data = Yii::$app->request->post();
-                
-        //check if date is valid 
+
+        //check if date is valid
         if (strtotime($data['start_date']) >= strtotime($data['end_date'])) {
             $json['errors'][] = Yii::t('admin', 'Given Date is not a valid one. Kindly entered valid date!');
         }
@@ -441,24 +441,24 @@ class VendorController extends Controller
         //check if other package available in selected date
         $package_exists = Vendorpackages::find()
             ->where(['vendor_id' => $data['vid']])
-            ->where(['between', 'package_start_date', $data['start_date'], $data['end_date']])
-            ->where(['between', 'package_end_date', $data['start_date'], $data['end_date']])
+            ->andWhere(['between', 'package_start_date', $data['start_date'], $data['end_date']])
+            ->andWhere(['between', 'package_end_date', $data['start_date'], $data['end_date']])
             ->asArray()->one();
-        
+
         if ($package_exists) {
 
             $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
                     'start_date' => date('d/m/Y', strtotime($package_exists['package_start_date'])),
                     'end_date' => date('d/m/Y', strtotime($package_exists['package_end_date']))
-                ]);                
+                ]);
         }
-      
+
         if (!$json['errors']) {
-            
+
             $package_pricing = Package::loadpackageprice($data['id']);
             $package_name = Package::PackageData($data['id']);
 
-            $vendor_pack = new Vendorpackages();	
+            $vendor_pack = new Vendorpackages();
             $vendor_pack->vendor_id = $data['vid'];
             $vendor_pack->package_id = $data['id'];
             $vendor_pack->package_price = $package_pricing;
@@ -504,9 +504,9 @@ class VendorController extends Controller
           ->andwhere(['!=','id',$packedit])
           ->asArray()
           ->all();
-          
+
       /*  $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") AS package_end_date'])->where(['vendor_id' => $data['vid'],['!=', 'id', $packedit]])->all();*/
-        
+
         $blocked_dates = array();
         if (!empty($datetime)) {
             foreach ($datetime as $d) {
@@ -552,7 +552,7 @@ class VendorController extends Controller
             $data = Yii::$app->request->post();
         }
         if ($data['id']):
-        
+
         $datetime = Vendorpackages::find()->select(['package_start_date','package_end_date'])
           ->where(['vendor_id' => $data['id']])
           ->asArray()
@@ -582,12 +582,12 @@ class VendorController extends Controller
             $data = Yii::$app->request->post();
         }
         if ($data['packid']):
-        
+
         $packdate = Vendorpackages::find()->select(['package_id','package_start_date','package_end_date'])
           ->where(['vendor_id' => $data['vid']])
           ->andwhere(['id' =>$data['packid']])
           ->asArray()->all();
-        
+
         $package_id = $packdate[0]['package_id'];
         $edit_start_date = date('Y-m-d', strtotime('+0 day', strtotime($packdate[0]['package_start_date'])));
         $edit_end_date = date('Y-m-d', strtotime('+0 day', strtotime($packdate[0]['package_end_date'])));
