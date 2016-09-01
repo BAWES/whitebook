@@ -113,11 +113,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php } ?>
             <div class="tab-pane" id="6" >
                 <ul class="row">
-                <?php foreach ($imagedata as $image) { ?>
-                    <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-                        <?=Html::img(Yii::getAlias('@vendor_item_images_530/').$image->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>$model->item_name, 'data-key'=>$image->image_id,'title'=>$model->item_name]); ?>
-                    </li>
-                <?php } ?>
+                    <?php foreach ($imagedata as $image) {
+                        $alias = ($image->module_type == 'vendor_item') ? Yii::getAlias('@vendor_item_images_210/') : Yii::getAlias('@sales_guide_images/')
+                        ?>
+                        <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
+                            <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-responsive','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
+                        </li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>
