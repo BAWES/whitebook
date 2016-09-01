@@ -282,7 +282,6 @@ public function actionCreate($vid = '')
                 if($product_file){
                     $i = 0;
                     foreach ($product_file as $files) {
-
                         if($files instanceof yii\web\UploadedFile){
                             $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
@@ -381,7 +380,6 @@ public function actionUpdate($id, $vid = false)
     $access = Authitem::AuthitemCheck('2', '23');
     if (yii::$app->user->can($access)) {
         $model = $this->findModel($id);
-        $model1 = new Image();
         $model_question = Vendoritemquestion::find()
         ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
         ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
@@ -389,22 +387,15 @@ public function actionUpdate($id, $vid = false)
         ->asArray()->all();
 
         /* BEGIN gallery */
-        $base = Yii::$app->basePath;
-        $len = rand(1, 1000);
         $item_id = $model->item_id;
-
-        $guideimagedata = Image::findAll(['item_id' => $id,'module_type'=>'guides']);
-        $imagedata = Image::findAll(['item_id' => $id,'module_type'=>'vendor_item']);
 
         $cat_id = $model->category_id;
         $subcat_id = $model->subcategory_id;
-        $itemtype = Itemtype::loaditemtype();
-        $vendorname = Vendor::loadvendorname();
         $categoryname = Category::vendorcategory($model->vendor_id);
 
         $subcategory = Subcategory::loadsubcategory($cat_id);
         $childcategory = Childcategory::loadchildcategory($subcat_id);
-        $loadpricevalues = Vendoritempricing::loadpricevalues($item_id);
+
 
         // BEGIN themes and groups
         $themelist = Themes::loadthemename();
@@ -419,19 +410,17 @@ public function actionUpdate($id, $vid = false)
         // END themes and groups
 
         $grouplist = Featuregroup::loadfeaturegroup();
-    // Values for priority log table dont delete...
+        // Values for priority log table dont delete...
         $vendorid = $model->vendor_id;
         $itemid = $model->item_id;
         $priorityvalue = $model->priority;
 
         if ($model->load(Yii::$app->request->post())) {
             $model->slug = Yii::$app->request->post()['Vendoritem']['item_name'];
+
             $c_slug1 = strtolower($model->slug);
             $c_slug2 = str_replace(' ', '-', $c_slug1);
-        //Make alphanumeric (removes all other characters)
-            $c_slug3 = preg_replace("/[^a-z0-9_\s-]/", '', $c_slug2);
-        //Convert whitespaces and underscore to dash
-            $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
+            $c_slug3 = preg_replace("/[^a-z0-9_\s-]/", '', $c_slug2); //Make alphanumeric (removes all other characters)
             $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
             $model->slug = $c_slug4;
 
@@ -454,11 +443,9 @@ public function actionUpdate($id, $vid = false)
             $model->item_status = (Yii::$app->request->post()['Vendoritem']['item_status'] == 1) ? 'Active' : 'Deactive';
 
             if ($model->save()) {
-
                 /* Begin Upload guide image table  */
                 $guide_image = UploadedFile::getInstances($model, 'guide_image');
-
-                if ($guide_image) {
+                if (count($guide_image) > 0) {
                     $i = 0;
                     foreach ($guide_image as $files) {
                         if($files instanceof yii\web\UploadedFile){
@@ -498,49 +485,45 @@ public function actionUpdate($id, $vid = false)
 
                 /* Begin Upload guide image table  */
                 $product_file = UploadedFile::getInstances($model, 'image_path');
-
-                if($product_file){
-                    $i = count($imagedata) + 1;
+                if (count($product_file)>0) {
                     foreach ($product_file as $files) {
                         if($files instanceof yii\web\UploadedFile){
                             $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
-            //Resize file using imagine
-                            $resize = true;
+
+                            $resize = true; //Resize file using imagine
 
                             if($resize){
-                                /* Begin Product image resolution 1000 */
+
                                 $newTmpName2 = $files->tempName . "." . $files->extension;
                                 $imagine = new \Imagine\Gd\Imagine();
                                 $image_1000 = $imagine->open($files->tempName);
                                 $image_1000->resize($image_1000->getSize()->widen(1000));
-                                $image_1000->save($newTmpName2);
+                                $image_1000->save($newTmpName2); /* Begin Product image resolution 1000 */
 
-        //Overwrite old filename for S3 uploading
+
                                 $files->tempName = $newTmpName2;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_1000 . $filename);
+                                Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_1000 . $filename); //Overwrite old filename for S3 uploading
 
-                                /* Begin Product image resolution 530 */
                                 $newTmpName1 = $files->tempName . "." . $files->extension;
                                 $image_530 = $imagine->open($files->tempName);
                                 $image_530->resize($image_530->getSize()->widen(530));
-                                $image_530->save($newTmpName1);
+                                $image_530->save($newTmpName1); /* Begin Product image resolution 530 */
 
-        //Overwrite old filename for S3 uploading
+
                                 $files->tempName = $newTmpName1;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_530 . $filename);
+                                Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_530 . $filename); //Overwrite old filename for S3 uploading
 
-                                /* Begin Product image resolution 210 */
+
                                 $newTmpName = $files->tempName . "." . $files->extension;
                                 $image = $imagine->open($files->tempName);
                                 $image->resize($image->getSize()->widen(210));
-                                $image->save($newTmpName);
+                                $image->save($newTmpName);  /* Begin Product image resolution 210 */
 
-        //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName;
 
-        //Save to S3
-                                $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename);
+                                $files->tempName = $newTmpName; //Overwrite old filename for S3 uploading
+
+                                $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename); //Save to S3
                             }
 
                             if($awsResult){
@@ -553,9 +536,8 @@ public function actionUpdate($id, $vid = false)
                         $image_tbl->image_user_id = Yii::$app->user->getId();
                         $image_tbl->module_type = 'vendor_item';
                         $image_tbl->image_user_type = 'admin';
-                        $image_tbl->vendorimage_sort_order = $i;
+                        $image_tbl->vendorimage_sort_order = 0;
                         $image_tbl->save();
-                        ++$i;
                     }
                 }
 
@@ -701,19 +683,18 @@ public function actionUpdate($id, $vid = false)
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'itemtype' => $itemtype,
-                'vendorname' => $vendorname,
+                'itemType' => Itemtype::findAll(['trash'=>'Default']),
                 'subcategory' => $subcategory,
                 'categoryname' => $categoryname,
-                'imagedata' => $imagedata,
+                'images' => Image::findAll(['item_id' => $id,'module_type'=>'vendor_item']),
                 'model_question' => $model_question,
-                'themelist' => $themelist,
+                'themes' => Themes::findAll(['theme_status'=>'Active','trash'=>'Default']),
                 'grouplist' => $grouplist,
                 'exist_themes' => $exist_themes,
                 'childcategory' => $childcategory,
-                'loadpricevalues' => $loadpricevalues,
-                'guideimagedata' => $guideimagedata,
-                ]);
+                'itemPricing' => Vendoritempricing::findAll(['item_id'=>$item_id]),
+                'guideImages' => Image::findAll(['item_id' => $id,'module_type'=>'guides']),
+            ]);
         }
     } else {
         Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');

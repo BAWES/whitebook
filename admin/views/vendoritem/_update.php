@@ -18,7 +18,8 @@ if($model->isNewRecord){
 	$exist_themes =array();
 	$exist_groups = array();
 }
-
+$itemType  = \yii\helpers\ArrayHelper::map($itemType,'type_id','type_name');
+$themelist = \yii\helpers\ArrayHelper::map($themes,'theme_id','theme_name');
 ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -64,7 +65,7 @@ if($model->isNewRecord){
 		<!--BEGIN second Tab -->
 		<div class="tab-pane" id="2">
 			<!-- BEGIN ITEM TYPE -->
-			<div class="form-group"><?= $form->field($model, 'type_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($itemtype, ['prompt'=>'Select...']) ?></div>
+			<div class="form-group"><?= $form->field($model, 'type_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($itemType, ['prompt'=>'Select...']) ?></div>
 			<!-- END ITEM TYPE -->
 			<div class="form-group"><?= $form->field($model, 'item_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item description'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?></div>
 			<div class="form-group"><?= $form->field($model, 'item_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item description - Arabic '.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?></div>
@@ -92,7 +93,7 @@ if($model->isNewRecord){
 				<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price  From - To </div>
 
 					<?php $t=0;
-					foreach ($loadpricevalues as $value) {  ?>
+					foreach ($itemPricing as $value) {  ?>
 
 					<div class="controls<?= $t; ?>"><input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From range" value="<?= $value['range_from'];?>"><input type="text" id="vendoritem-item_to" class="form-control to_range_<?= $t; ?>" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To range" value="<?= $value['range_to'];?>"><input type="text" id="item_price_per_unit" class="form-control price_kd_<?= $t; ?>" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price" value="<?= $value['pricing_price_per_unit'];?>">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>
 
@@ -113,10 +114,10 @@ if($model->isNewRecord){
                     <?php
                     $initialPreview = [];
                     $initialPreviewConfig = [];
-                    if(!empty($guideimagedata)) {
+                    if(!empty($guideImages)) {
 
                         $i=0;
-                        foreach ($guideimagedata as $value) {
+                        foreach ($guideImages as $value) {
                             $key = $value->image_id;
                             $initialPreview[] = Html::img(Yii::getAlias('@sales_guide_images/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
                             $url = Url::to(["/vendoritem/deleteitemimage", "id" => $key]);
@@ -137,11 +138,11 @@ if($model->isNewRecord){
                             'browseIcon' => ' ',
                             'browseLabel' => 'Select Photo',
                             'showUpload'=>false,
-                            'showRemove'=>false,
+							'showRemove'=>false,
                             'overwriteInitial'=> false,
                             'initialPreview' => $initialPreview,
                             'initialPreviewConfig' => $initialPreviewConfig,
-                            'uploadUrl' => '/dummy/dummy',
+                            //'uploadUrl' => '/dummy/dummy',
                         ]
                     ]);
                     ?>
@@ -168,16 +169,16 @@ if($model->isNewRecord){
 		<div class="tab-pane" id="5">
 			<div class="file-block" style="color:red"> Please upload aleast a file</div>
             <?php
-            $initialPreview = [];
-            $initialPreviewConfig = [];
-            if(!empty($imagedata)) {
+			$imageInitialPreview = [];
+            $imageInitialPreviewConfig = [];
+			if(!empty($images)) {
 
                 $i=0;
-                foreach ($imagedata as $value) {
+                foreach ($images as $value) {
                     $key = $value->image_id;
-                    $initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
+					$imageInitialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
                     $url = Url::to(["/vendoritem/deleteitemimage", "id" => $key]);
-                    $initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
+					$imageInitialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
                     $i++;
                 }
             }
@@ -196,9 +197,9 @@ if($model->isNewRecord){
                     'showUpload'=>false,
                     'showRemove'=>false,
                     'overwriteInitial'=> false,
-                    'initialPreview' => $initialPreview,
-                    'initialPreviewConfig' => $initialPreviewConfig,
-                    'uploadUrl' => '/dummy/dummy',
+                    'initialPreview' => $imageInitialPreview,
+                    'initialPreviewConfig' => $imageInitialPreviewConfig,
+                    ///'uploadUrl' => '/dummy/dummy',
                 ]
             ]);
             ?>
@@ -280,40 +281,6 @@ if($model->isNewRecord) {
 } else {
 	$isNewRecord = 0;
 }
-
-//if(!empty($imagedata)) {
-//
-//	$this->registerJs("
-//		var imagedata = 1;
-//		var img = ".$img.";
-//		var action = ".$action.";
-//	", View::POS_HEAD);
-//
-//}else {
-//
-//	$this->registerJs("
-//		var imagedata = '';
-//		var img = '';
-//		var action = '';
-//	", View::POS_HEAD);
-//}
-//
-//if(!empty($guideimagedata)) {
-//
-//	$this->registerJs("
-//		var guideimagedata = 1;
-//		var img1 = ".$img1.";
-//		var action1 = ".$action1.";
-//	", View::POS_HEAD);
-//
-//}else{
-//
-//	$this->registerJs("
-//		var guideimagedata = '';
-//		var img1 = '';
-//		var action1 = '';
-//	", View::POS_HEAD);
-//}
 
 echo Html::hiddenInput('count_q',$count_q,['id'=>$count_q]);
 echo Html::hiddenInput('appImageUrl',Yii::getAlias('appImageUrl'),['id'=>'appImageUrl']);
