@@ -149,7 +149,7 @@ class VendoritemController extends Controller
             ->orwhere(['item_id'=>$id,'question_answer_type'=>'image','answer_id'=>null])
             ->asArray()->all();
 
-        $imagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'vendor_item'])->orderby(['vendorimage_sort_order'=>SORT_ASC])->all();
+        $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order'=>SORT_ASC])->all();
 
         $model = $this->findModel($id);
 
