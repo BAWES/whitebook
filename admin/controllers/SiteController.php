@@ -13,7 +13,7 @@ use admin\models\Vendor;
 use admin\models\Vendoritem;
 use yii\web\UploadedFile;
 use common\models\PasswordForm;
-use common\models\LoginForm;
+use admin\models\LoginForm;
 use common\models\UploadForm;
 
 /**
