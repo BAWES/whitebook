@@ -1,5 +1,5 @@
 <?php
-namespace common\models;
+namespace admin\models;
 use Yii;
 use yii\base\Model;
 
@@ -71,18 +71,18 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-			$session = Yii::$app->session;
-			$session->open();
-			$session['language'] = 'en-US';
-			$session['email'] = $this->admin_email;
-			$session['type'] = 'Admin';
+            $session = Yii::$app->session;
+            $session->open();
+            $session['language'] = 'en-US';
+            $session['email'] = $this->admin_email;
+            $session['type'] = 'Admin';
             $this->_user = Admin::findByUsername($this->admin_email);
         }
 
         return $this->_user;
     }
 
-     public function attributeLabels()
+    public function attributeLabels()
     {
         return [
             'admin_email' => 'Email',

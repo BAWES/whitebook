@@ -12,18 +12,17 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="vendoritem-update">
     <?= $this->render('_update', [
         'model' => $model,
-        'itemtype'=>$itemtype,
-        'vendorname'=>$vendorname,
+        'itemType'=>$itemType,
         'categoryname'=>$categoryname,
         'subcategory'=>$subcategory,
-        'imagedata'=>$imagedata,
+        'images'=>$images,
         'model_question' => $model_question,
-        'themelist'=>$themelist,
+        'themes'=>$themes,
         'grouplist'=>$grouplist,
         'exist_themes'=>$exist_themes,
         'childcategory'=>$childcategory,
-        'loadpricevalues'=>$loadpricevalues,
-        'guideimagedata'=>$guideimagedata
+        'itemPricing'=>$itemPricing,
+        'guideImages'=>$guideImages
     ]); ?>
 
 </div>
