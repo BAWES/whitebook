@@ -110,7 +110,7 @@ if($model->isNewRecord){
                                 'showUpload'=>false,
                                 'showRemove'=>false,
                                 'overwriteInitial'=> false,
-                                'uploadUrl' => '/dummy/dummy',
+                                //'uploadUrl' => '/dummy/dummy',
                             ]
                         ]);
                         ?>
@@ -149,7 +149,7 @@ if($model->isNewRecord){
                             'showUpload'=>false,
                             'showRemove'=>false,
                             'overwriteInitial'=> false,
-                            'uploadUrl' => '/dummy/dummy',
+                            //'uploadUrl' => '/dummy/dummy',
                         ]
                     ]);
 

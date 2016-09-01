@@ -38,6 +38,7 @@ if($model->isNewRecord){
 		<div class="tab-content">
 
 			<div class="tab-pane" id="1" >
+
 				<div class="form-group"><?= $form->field($model, 'item_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128]) ?></div>
 				<div class="form-group"><?= $form->field($model, 'item_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128]) ?></div>
 				<div class="form-group"><?= $form->field($model, 'category_id', ['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList($categoryname, ['prompt'=>'Select...']) ?></div>
@@ -111,7 +112,7 @@ if($model->isNewRecord){
 						$i=0;
 						foreach ($guide_images as $value) {
 							$key = $value->image_id;
-							$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
+							$initialPreview[] = Html::img(Yii::getAlias('@sales_guide_images/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
 							$url = Url::to(["/vendoritem/delete-service-guide-image", "id" => $key]);
 							$initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
 							$i++;
@@ -134,7 +135,7 @@ if($model->isNewRecord){
 							'overwriteInitial'=> false,
 							'initialPreview' => $initialPreview,
 							'initialPreviewConfig' => $initialPreviewConfig,
-							'uploadUrl' => '/dummy/dummy',
+							//'uploadUrl' => '/dummy/dummy',
 						]
 					]);
 					?>
@@ -189,7 +190,7 @@ if($model->isNewRecord){
                             'overwriteInitial'=> false,
 							'initialPreview' => $initialPreview,
 							'initialPreviewConfig' => $initialPreviewConfig,
-                            'uploadUrl' => '/dummy/dummy',
+                            //'uploadUrl' => '/dummy/dummy',
                         ]
 					]);
 					?>
