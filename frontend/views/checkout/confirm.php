@@ -148,9 +148,9 @@ use common\models\CustomerCart;
                 <?= Yii::t('frontend', 'Back') ?>
         </button>
 
-        <button class="btn btn-primary btn-checkout pull-right">
+        <a href="<?= $pg_link ?>" class="btn btn-primary btn-checkout pull-right">
                 <?= Yii::t('frontend', 'Confirm Order') ?>
-        </button>
+        </a>
 </div>
 
 <br />
