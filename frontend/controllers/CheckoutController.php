@@ -10,6 +10,7 @@ use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use common\models\Country;
 use frontend\models\Addresstype;
+use yii\helpers\Url;
 
 /**
  * Checkout controller.
@@ -187,7 +188,25 @@ class CheckoutController extends BaseController
         return $this->renderPartial('confirm', [
             'items' => $items,
             'payment_method' => $payment_method,
-            'address' => $address
+            'address' => $address,
+            'pg_link' => Url::to(['payment/'.$payment_method_code.'/index'])
         ]);
 	}
+
+    public function actionSuccess() {
+
+        //clear cart 
+        CustomerCart::deleteAll('customer_id = '.Yii::$app->user->getId());
+
+        //clear temp session data
+        Yii::$app->session->remove('payment_method');
+        Yii::$app->session->remove('address');
+
+        $order_id = Yii::$app->session->get('order_id');
+
+        return $this->render('success', [
+            'order_id' => $order_id,
+            'order_page' => Url::to(['orders/index'])
+        ]);
+    }
 }

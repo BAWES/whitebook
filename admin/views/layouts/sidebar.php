@@ -17,7 +17,7 @@
 		$menu = explode('\\',$controller);
 		$menu_act = $menu[2];
 		$first_menu = array('SiteinfoController','ContactsController','SocialinfoController',
-				   'SlideController','RoleController','AdminController','AccesscontrolController','FaqController','AdverthomeController');
+				   'SlideController','RoleController','AdminController','AccesscontrolController','FaqController','AdverthomeController', 'OrderStatusController', 'PaymentGatewayController');
 		$second_menu = array('CountryController','CityController','LocationController','AddresstypeController','AddressquestionController');
 		$third_menu = array('CategoryController');
 		$fourth_menu = array('FeaturegroupController','EventtypeController','ThemesController','ItemtypeController','PriorityitemController',);
@@ -66,7 +66,13 @@
 						<?= Html::a('Manage FAQ', ['faq/index'], ['class'=>'link-title']) ?>
 					</li>
 					<li class="<?php if ($menu_act == 'AdverthomeController') {echo "active"; } else  {echo "noactive";}?>">
-					<?= Html::a('Home Ads', ['adverthome/index'], ['class'=>'link-title']) ?>
+						<?= Html::a('Home Ads', ['adverthome/index'], ['class'=>'link-title']) ?>
+					</li>
+					<li class="<?php if ($menu_act == 'OrderStatusController') {echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Order Status', ['order-status/index'], ['class'=>'link-title']) ?>
+					</li>
+					<li class="<?php if ($menu_act == 'PaymentGatewayController') {echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Payment Gateway', ['payment-gateway/index'], ['class'=>'link-title']) ?>
 					</li>
 				</ul>
 			</li>
