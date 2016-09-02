@@ -7,6 +7,7 @@ use common\models\Order;
 use common\models\Suborder;
 use common\models\SuborderItemPurchase;
 use common\models\CustomerAddress;
+use common\models\OrderStatus;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -207,7 +208,7 @@ class Order extends \yii\db\ActiveRecord
             $sub_order->suborder_commission_percentage = $suborder_commission_percentage;
             $sub_order->suborder_commission_total =  $suborder_commission_total;
             $sub_order->suborder_vendor_total =  $total - $suborder_commission_total;
-            $sub_order->save();
+            $sub_order->save(false);
 
         }//foreach chink 
 
@@ -232,5 +233,23 @@ class Order extends \yii\db\ActiveRecord
         }
 
         return $purchase_delivery_address;
-    }                
+    }    
+
+    //product count by order id 
+    public function itemCount($order_id) {
+        return SuborderItemPurchase::find()
+            ->where('suborder_id IN (select suborder_id from whitebook_suborder WHERE order_id = '.$order_id.')')
+            ->count();
+    }
+
+    public function subOrderItems($suborder_id) {
+        $items = SuborderItemPurchase::find()
+                ->with('vendoritem')
+                ->where(['suborder_id' => $suborder_id])
+                ->all();
+
+
+        return $items;        
+    }
+    
 }

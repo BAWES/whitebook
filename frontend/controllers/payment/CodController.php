@@ -20,7 +20,7 @@ class CodController extends Controller
         }
 
         //place order     
-        $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['order_status_id']);
+        $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['order_status_id'], '-');
 
         Yii::$app->session->set('order_id', $order_id);
 
