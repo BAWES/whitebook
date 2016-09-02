@@ -9,7 +9,7 @@ use frontend\models\Category;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
 
-$vendor_det = Vendor::vendorslug($model['vendor_id']);
+$vendor_det = $model->vendor;
 $category_det = Category::category_slug($model['category_id']);
 
 if(Yii::$app->language == "en"){
@@ -37,17 +37,15 @@ $this->title = 'Whitebook - ' . $item_name;
 
     <div id="event_slider_wrapper">
         <div class="container paddng0">
-            <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+            <?php echo $this->render('events_slider'); ?>
         </div>
     </div>
 
     <div class="container paddng0">
-
         <div class="breadcrumb_common">
             <div class="bs-example">
 
                 <?php
-
                 $this->params['breadcrumbs'][] = [
                     'label' => ucfirst($category_name),
                     'url' => Url::to(["plan/plan", 'slug' => $category_det['slug']])
@@ -132,22 +130,18 @@ $this->title = 'Whitebook - ' . $item_name;
                             <!--23-10-2015 slider start-->
                             <div class="carousel-inner owl-carousel" id="mobile-slider">
                                 <?php
-                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' order by vendorimage_sort_order';
-                                $command = Yii::$app->DB->createCommand($sql);
-                                $output = $command->queryAll();
-                                $img_count = count($output);
-                                foreach ($output as $out) {
-                                    if ($out) {
-                                        $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                        $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $out['image_path'];
-                                    } else {
-                                        $imglink = Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                        $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                    }
+                                $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
+                                if (isset($model->images) && count($model->images)>0) {
+                                    foreach ($model->images as $img) {
+                                        if ($img) {
+                                            $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
+                                            $baselink = $imgPath . $img['image_path'];
+                                        }
+                                        ?>
+                                        <div class="item"><img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px;"></div>
+                                    <?php }
+                                }
                                     ?>
-                                    <div class="item">   <img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px;">
-                                    </div>
-                                <?php } ?>
                             </div>
                             <!--23-10-2015 slider end-->
 
@@ -161,46 +155,38 @@ $this->title = 'Whitebook - ' . $item_name;
                                 <ul class="slides">
 
                                     <?php
-                                    $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . ' order by vendorimage_sort_order';
-                                    $command = Yii::$app->DB->createCommand($sql);
-                                    $output = $command->queryAll();
-                                    $img_count = count($output);
-                                    foreach ($output as $out) {
-                                        if ($out) {
-                                            $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                            $baselink = Yii::getAlias("@s3/vendor_item_images_530/"). $out['image_path'];
-                                        } else {
-                                            $imglink = Yii::getAlias('@vendor_images/') . 'no_image.jpg';
-                                            $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg';
-                                        }
-                                        ?>
-                                        <li>    <img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px !important;">
-                                        </li>
-                            <?php } ?>
+                                        $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
+                                        if (isset($model->images) && count($model->images)>0) {
+                                            foreach ($model->images as $img) {
+                                                if ($img) {
+                                                    $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
+                                                    $baselink = $imgPath . $img['image_path'];
+                                                }
+                                                ?>
+                                                <li><img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px !important;"></li>
+                                            <?php }
+                                    } ?>
                                 </ul>
                             </div>
 
-                            <?php if ($img_count > 1) { ?>
+                            <?php if (count($model->images) > 1) { ?>
                                 <div id="carousel" class="flexslider display_none_thumb">
                                     <ul class="slides">
 
                                         <?php
-                                        $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $model['item_id'] . '  order by vendorimage_sort_order';
-                                        $command = Yii::$app->DB->createCommand($sql);
-                                        $output = $command->queryAll();
-                                        foreach ($output as $out) {
-                                            if ($out) {
-                                                $imglink = Yii::getAlias('@vendor_images/') . $out['image_path'];
-                                                $baselink = Yii::getAlias("@s3/vendor_item_images_530/"). $out['image_path'];
-                                            } else {
-                                                $imglink = Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                                $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
+                                        $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
+                                        if (isset($model->images) && count($model->images)>0) {
+                                            foreach ($model->images as $img) {
+                                                if ($img) {
+                                                    $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
+                                                    $baselink = $imgPath . $img['image_path'];
+                                                }
+                                                ?>
+                                                <li><img src="<?php echo $baselink; ?>" alt="item detail image"></li>
+                                                <?php
                                             }
+                                        }
                                             ?>
-                                            <li>
-                                                <img src="<?php echo $baselink; ?>" alt="item detail image">
-                                            </li>
-                                        <?php } ?>
                                     </ul>
                                 </div>
                             <?php } ?>
@@ -266,26 +252,11 @@ $this->title = 'Whitebook - ' . $item_name;
                                         <!-- Add to Event End here -->
 
                                         <?php if (Yii::$app->user->isGuest) { ?>
-                                            <div class="buy_events">
-                                                <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal">
-                                                    <?= Yii::t('frontend', 'Buy') ?>
-                                                </a>
-                                            </div>
-                                        <?php } else if (empty($avlbl_stock)) { ?>
-                                            <div class="buy_events">
-                                                <a href="#" id="<?php echo $model['item_id']; ?>" class="stock">
-                                                    <?= Yii::t('frontend', 'Out of stock') ?>
-                                                </a>
-                                            </div>
-                                        <?php } else if ($avlbl_stock > 0) { ?>
-                                            <div class="buy_events">
-                                                <a href="#"
-                                                    id="<?php echo $model['item_id']; ?>"
-                                                    class="buy_item"
-                                                    data-slug="<?php echo $model['slug']; ?>">
-                                                        <?= Yii::t('frontend', 'Buy') ?>
-                                                </a>
-                                            </div>
+                                            <div class="buy_events"><a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"><?= Yii::t('frontend', 'Buy') ?></a></div>
+                                        <?php } else if ($model->type_id ==2 && $model->item_for_sale == 'Yes' && $model->item_amount_in_stock > 0) { ?>
+                                            <div class="buy_events"><a href="#" id="<?php echo $model['item_id']; ?>" class="buy_item" data-slug="<?php echo $model['slug']; ?>"><?= Yii::t('frontend', 'Buy') ?></a></div>
+                                        <?php } else { ?>
+                                            <div class="buy_events"><a href="#" id="<?php echo $model['item_id']; ?>" class="stock"><?= Yii::t('frontend', 'Out of stock') ?></a></div>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -446,7 +417,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                     <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>
                                            " title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
 
-                                    <li><a href="mailto:<?= $social_vendor->vendor_contact_email; ?>" title="<?= $social_vendor->vendor_contact_email; ?>"><i class="flaticon-email5"></i> </a></li>
+                                    <li><a href="mailto:<?= $model->vendor->vendor_contact_email; ?>" title="<?= $model->vendor->vendor_contact_email; ?>"><i class="flaticon-email5"></i> </a></li>
                                 </ul>
                             </div>
                         </div>
@@ -465,23 +436,20 @@ $this->title = 'Whitebook - ' . $item_name;
                     <div class="feature_product_slider">
                         <div id="similar-products-slider">
                             <?php
-
+                            $imglink = Yii::getAlias('@vendor_images/no_image.png');
+                            $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
                             foreach ($similiar_item as $s) {
+                                if (isset($s->images) && count($s->images) > 0) {
 
-                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
-
-                                $command = Yii::$app->DB->createCommand($sql);
-
-                                $out = $command->queryAll();
-
-                                if ($out) {
-                                    $imglink = Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
-                                    $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $out[0]['image_path'];
-                                } else {
-                                    $imglink = Yii::getAlias('@vendor_images/no_image.png');
-                                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
+                                    foreach ($s->images as $img) {
+                                        if ($img['module_type'] == 'vendor_item') {
+                                            $imgUrl = $img['image_path'];
+                                            break;
+                                        }
+                                    }
+                                    $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $imgUrl;
+                                    $imglink = Yii::getAlias('@vendor_images/') . $imgUrl;
                                 }
-
                                 ?>
                                 <div class="item">
                                     <div class="fetu_product_list">
@@ -495,16 +463,8 @@ $this->title = 'Whitebook - ' . $item_name;
                                                 <?php } ?>
 
                                                 <div class="deals_listing_cont">
-
-                                                    <?php if(Yii::$app->language == "en"){ ?>
-                                                        <?= $s['vname']; ?>
-                                                        <h3><?= $s['iname']; ?></h3>
-                                                    <?php }else{ ?>
-                                                        <?= $s['vname_ar']; ?>
-                                                        <h3><?= $s['iname_ar']; ?></h3>
-                                                    <?php } ?>
-
-                                                    <p><?= $s['price']; ?>KD</p>
+                                                    <h3><?= (Yii::$app->language == "en") ? $s->vendor->vendor_name : $s->vendor->vendor_name_ar; ?></h3>
+                                                    <p><?= $s['item_price_per_unit']; ?>KD</p>
                                                 </div>
                                             </a>
                                         <?php } ?>
