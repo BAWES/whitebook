@@ -295,7 +295,7 @@ class SiteController extends BaseController
             $searchlength = strlen($search);
 
             $model = new Category();
-            $active_vendors = Vendor::loadvalidvendors();
+            //$active_vendors = Vendor::loadvalidvendors();
 
             if ($searchlength > 1) {
                 $cat_item_details = $model->category_search_details($search);
