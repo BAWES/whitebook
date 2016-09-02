@@ -601,10 +601,12 @@ $(function(){
 /* END VALIDATION */
 
 /* BEGIN Vendor item check exist or not */
-$(function () {
+/*$(function () {
 
  	//$('#vendoritem-item_name').on('keyup keypress focusout',function () {
   	$('#w0').on('afterValidateAttribute', function (event, messages) {
+		alert('test');
+		return false;
 
 		if($('#vendoritem-item_name').val().length > 3) {
 
@@ -622,24 +624,24 @@ $(function () {
 					$('#test').val(mail);
 
 		            if(data > 0) {
-						/*$('.loadingmessage').hide();
-						$('.field-vendoritem-item_name').removeClass('has-success');
-						$('.field-vendoritem-item_name').addClass('has-error');*/
-						$('.field-vendoritem-item_name').find('.help-block').html('Item name already exists.');
+						//('.loadingmessage').hide();
+						//$('.field-vendoritem-item_name').removeClass('has-success');
+						//$('.field-vendoritem-item_name').addClass('has-error');
+						//$('.field-vendoritem-item_name').find('.help-block').html('Item name already exists.');
 						//	$('.field-vendoritem-item_name').focus();
-						$('#test').val(1);
+						//$('#test').val(1);
 			   			//return false;
-					} else {
+					//} else {
 			    		//alert(234);
-						$('.field-vendoritem-item_name').find('.help-block').html('');
+					//	$('.field-vendoritem-item_name').find('.help-block').html('');
 						//$('.loadingmessage').hide();
-						$('#test').val(0);
+					//	$('#test').val(0);
 					}
 		        }
 	        });
 	  	}
 	});
-});
+});*/
 /* END Vendor item check exist or not */
 
 // single question view
