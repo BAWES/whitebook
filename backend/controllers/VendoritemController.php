@@ -410,8 +410,6 @@ class VendoritemController extends Controller
 
             $vendor_item = Yii::$app->request->post('Vendoritem');
 
-            $model->item_for_sale = ($vendor_item['item_for_sale']) ? 'Yes':'No';
-
             /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
             if ($model->item_for_sale == 'No') {
                 $model->item_amount_in_stock = '';
@@ -423,7 +421,6 @@ class VendoritemController extends Controller
 
 
             /* Vendor make it any changes item status should be deactivaed */
-            $model->item_status = 'Deactive';
             $model->item_approved = 'Pending';
 
             if ($model->save()) {
