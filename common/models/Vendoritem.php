@@ -227,6 +227,14 @@ class Vendoritem extends \yii\db\ActiveRecord
         return $this->hasOne(Image::className(), ['item_id' => 'item_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImages()
+    {
+        return $this->hasMany(Image::className(), ['item_id' => 'item_id']);
+    }
+
 
     /**
     * @return \yii\db\ActiveQuery
@@ -399,8 +407,4 @@ class Vendoritem extends \yii\db\ActiveRecord
                       ->asArray()
                       ->all();
             }
-    public function getImages()
-    {
-        return $this->hasMany(Image::className(), ['item_id' => 'item_id']);
-    }
 }
