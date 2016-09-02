@@ -44,6 +44,7 @@ if($model->isNewRecord){
 				<div class="form-group"><?= $form->field($model, 'category_id', ['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList($categoryname, ['prompt'=>'Select...']) ?></div>
 				<div class="form-group"><?= $form->field($model, 'subcategory_id',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList($subcategory, ['prompt'=>'Select...']) ?></div>
 				<div class="form-group"><?= $form->field($model, 'child_category',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList($childcategory, ['prompt'=>'Select...']) ?></div>
+				<div class="form-group"><?= $form->field($model, 'item_status',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList(['Active'=>'Yes','Deactive'=>'No']) ?></div>
 				<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" /></div>
 			</div>
 			<!--End First Tab -->
@@ -65,8 +66,7 @@ if($model->isNewRecord){
 			<div class="tab-pane" id="3">
 				<input type="hidden" id="test" value="0" name="tests">
 				<div class="form-group">
-				<?= $form->field($model, 'item_for_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-				])->checkbox(['Yes' => 'Yes'])?>
+					<?= $form->field($model, 'item_for_sale',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList(['Yes'=>'Yes','No'=>'No']) ?>
 				</div>
 
 				<div class="form-group"><?= $form->field($model, 'item_amount_in_stock',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?></div>
@@ -150,7 +150,6 @@ if($model->isNewRecord){
 
 			<div class="tab-pane" id="4">
 				<div class="file-block" style="color:red"> Please upload aleast one file</div>
-				<?= $form->field($model, 'item_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Value' => true,'disabled'=>'disabled'])?>
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 			</div>

@@ -563,9 +563,9 @@ $(function(){
 	$('.custom_description_ar').hide();
 	$('.mandatory').show();
 
-	$('#vendoritem-item_for_sale').click(function()
+	$('#vendoritem-item_for_sale').on('change',function()
 	{
-		if($(this).is(':checked'))
+		if($(this).val() == 'Yes')
 		{
 			$('.custom_description').hide();
 			$('.custom_description_ar').hide();
