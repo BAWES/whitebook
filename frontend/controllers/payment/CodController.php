@@ -13,16 +13,18 @@ class CodController extends Controller
 
     public function actionIndex()
     {
-        $gateway = PaymentGateway::find()->where(['code' => 'cod', 'status' => 1])->queryOne();
+        $gateway = PaymentGateway::find()->where(['code' => 'cod', 'status' => 1])->one();
 
         if(!$gateway) {
             $this->redirect(['checkout/index']);
         }
 
         //place order     
-        Order::place_order($gateway['name'], $gateway['percentage'], $gateway['order_status_id']);
+        $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['order_status_id']);
+
+        Yii::$app->session->set('order_id', $order_id);
 
         //redirect to order success 
-        //$this->redirect(['checkout/success']);
+        $this->redirect(['checkout/success']);
     }
 }
