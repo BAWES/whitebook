@@ -4,8 +4,13 @@ namespace common\models;
 
 use Yii;
 use common\models\Order;
-use Suborder;
-use SuborderItemPurchase;
+use common\models\Suborder;
+use common\models\SuborderItemPurchase;
+use common\models\CustomerAddress;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+use yii\web\Request;
 
 /**
  * This is the model class for table "whitebook_order".
@@ -37,6 +42,21 @@ class Order extends \yii\db\ActiveRecord
         return 'whitebook_order';
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['customer_id', 'order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'required'],
+            [['customer_id', 'created_by'], 'integer'],
+            [['order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total'], 'number'],
+            [['modified_by', 'modified_datetime'], 'safe'],
+            [['trash'], 'string'],
+            [['order_payment_method', 'order_transaction_id', 'order_ip_address'], 'string', 'max' => 128],
+        ];
+    }
+
     public function behaviors()
     {
         return [
@@ -51,21 +71,6 @@ class Order extends \yii\db\ActiveRecord
                 'updatedAtAttribute' => 'modified_datetime',
                 'value' => new Expression('NOW()'),
             ],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['customer_id', 'order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total', 'order_datetime', 'created_by', 'modified_by', 'created_date', 'modified_date', 'trash'], 'required'],
-            [['customer_id', 'created_by', 'created_date'], 'integer'],
-            [['order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total'], 'number'],
-            [['order_datetime', 'modified_by', 'modified_date'], 'safe'],
-            [['trash'], 'string'],
-            [['order_payment_method', 'order_transaction_id', 'order_ip_address'], 'string', 'max' => 128],
         ];
     }
 
@@ -95,6 +100,12 @@ class Order extends \yii\db\ActiveRecord
     }
 
     public function place_order($gateway_name, $gateway_percentage, $order_status_id = 0, $transaction_id = ''){
+
+        //address ids saved in session from checkout 
+        $addresses = Yii::$app->session->get('address');
+
+        //default commision 
+        $default_commision = Siteinfo::findOne(1)->commision;
 
         //make chunks of item by vendor id 
         $chanks = [];
@@ -129,61 +140,97 @@ class Order extends \yii\db\ActiveRecord
         $order->order_transaction_id = $transaction_id;
         $order->order_gateway_percentage = $gateway_percentage;
         $order->order_gateway_total = $gateway_total;
-        $order->order_ip_address = $_SERVER['HTTP_CLIENT_IP'];
+        $order->order_ip_address = Request::getUserIP();
         $order->trash = 'Default';
-        $order->save();
+        $order->save(false);
 
         //insert suborder 
         foreach($chanks as $vendor_id => $chank) {
-
+            
             //calculate order total data 
-            $total = $sub_total = $delivery_charge = 0;
+            $total = 0;
+            $sub_total = 0;
+            $delivery_charge = 0;
+            $suborder_commission_total = 0;
 
-            foreach ($chank as $item) {
-                
-                $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
-
-                $delivery_charge += $delivery_area->delivery_price;
-
-                $sub_total += $item['item_price_per_unit'] * $item['cart_quantity'];
-            }
-
-            //insert suborder 
             $sub_order = new Suborder;
             $sub_order->order_id = $order->order_id;
             $sub_order->vendor_id = $vendor_id;
             $sub_order->status_id = $order_status_id;
-            $sub_order->suborder_delivery_charge = $delivery_charge;
-            $sub_order->suborder_total_without_delivery = $total - $delivery_charge;
-            $sub_order->suborder_total_with_delivery = $total;
-            $sub_order->suborder_commission_percentage = '';
-            $sub_order->suborder_commission_total =  '';
-            $sub_order->suborder_vendor_total =  '';
             $sub_order->trash = 'Default';
-            $sub_order->save();
+            $sub_order->save(false);
 
             //insert items 
             foreach ($chank as $item) {
 
+                //address 
+                $address_id = $addresses[$item['cart_id']];
+
                 $item_purchase = new SuborderItemPurchase;
                 $item_purchase->suborder_id = $sub_order->suborder_id;
-                $item_purchase->timeslot_id = '';
-                $item_purchase->item_id  = '';
-                $item_purchase->area_id = '';
-                $item_purchase->address_id = '';
-                $item_purchase->purchase_delivery_address = '';
-                $item_purchase->purchase_delivery_date = '';
-                $item_purchase->purchase_price_per_unit = '';
-                $item_purchase->purchase_customization_price_per_unit = '';
-                $item_purchase->purchase_quantity = '';
-                $item_purchase->purchase_total_price = '';
+                $item_purchase->timeslot_id = $item['timeslot_id'];
+                $item_purchase->item_id  = $item['item_id'];
+                $item_purchase->area_id = $item['area_id'];
+                $item_purchase->address_id = $address_id;
+                $item_purchase->purchase_delivery_address = Order::getPurchaseDeliveryAddress($address_id);
+                $item_purchase->purchase_delivery_date = $item['cart_delivery_date'];
+                $item_purchase->purchase_price_per_unit = $item['item_price_per_unit'];
+                $item_purchase->purchase_customization_price_per_unit = 0;
+                $item_purchase->purchase_quantity = $item['cart_quantity'];
+                $item_purchase->purchase_total_price = $item['item_price_per_unit'] * $item['cart_quantity'];
                 $item_purchase->trash = 'Default';
-                $item_purchase->save();
+                $item_purchase->save(false);
+
+                //sub order total data 
+                $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+                $delivery_charge += $delivery_area->delivery_price;
+                $sub_total += $item['item_price_per_unit'] * $item['cart_quantity'];
             }
+
+            $total = $sub_total + $delivery_charge;
+
+            //suborder commission
+            $vendor = Vendor::findOne($vendor_id);
+            
+            if(is_null($vendor->commision) || $vendor->commision == '') {
+                $suborder_commission_percentage = $vendor->commision;
+            } else {
+                $suborder_commission_percentage = $default_commision;
+            }
+
+            $suborder_commission_total = $total * ($suborder_commission_percentage / 100);
+
+            //update sub order total 
+            $sub_order->suborder_delivery_charge = $delivery_charge;
+            $sub_order->suborder_total_without_delivery = $total - $delivery_charge;
+            $sub_order->suborder_total_with_delivery = $total;
+            $sub_order->suborder_commission_percentage = $suborder_commission_percentage;
+            $sub_order->suborder_commission_total =  $suborder_commission_total;
+            $sub_order->suborder_vendor_total =  $total - $suborder_commission_total;
+            $sub_order->save();
 
         }//foreach chink 
 
         return $order->order_id;
 
     }//END place_order
+
+
+    private function getPurchaseDeliveryAddress($address_id) {
+
+        $address_model = CustomerAddress::findOne($address_id);
+
+        $purchase_delivery_address = $address_model->address_data.'<br />';
+        
+        //get address response 
+        $address_responses = CustomerAddressResponse::find()
+            ->where(['address_id' => $address_id])
+            ->all();
+
+        foreach ($address_responses as $response) {
+           $purchase_delivery_address .= $response->response_text.'<br />';
+        }
+
+        return $purchase_delivery_address;
+    }                
 }
