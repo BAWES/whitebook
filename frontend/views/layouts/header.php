@@ -220,6 +220,7 @@ $action = Yii::$app->controller->action->id;
         <?php echo Yii::t('frontend', 'My Account'); ?>
     </a>
     <ul class="account-dropdown-menu">
+        <li><a href="<?php echo Url::to(['orders/index']); ?>" title="<?php echo Yii::t('frontend', 'My Orders'); ?>"><?php echo Yii::t('frontend', 'My Orders'); ?></a></li>
         <li><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'Account Settings'); ?>"><?php echo Yii::t('frontend', 'Account Settings'); ?></a></li>
         <li><a href="<?php echo Url::toRoute('/users/address', true); ?>" title="<?php echo Yii::t('frontend', 'Address Book'); ?>"><?php echo Yii::t('frontend', 'Address Book'); ?></a></li>
     </ul>
@@ -444,6 +445,12 @@ $action = Yii::$app->controller->action->id;
          <li class="<?php if ($action == "account-settings") { echo "active"; } ?>">
             <a href="<?= Url::toRoute('/users/account_settings', true); ?>">
                 <?php echo Yii::t('frontend', 'My Account'); ?>
+            </a>
+        </li>
+
+        <li>
+            <a href="<?php echo Url::to(['orders/index']); ?>">
+                <?php echo Yii::t('frontend', 'My Orders'); ?>
             </a>
         </li>
 
