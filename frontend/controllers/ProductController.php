@@ -39,7 +39,7 @@ class ProductController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $similarProductModel = Vendoritem::find()->where(['category_id'=>$model->category_id,'subcategory_id'=>$model->subcategory_id,'child_category'=>$model->child_category,'item_status'=>'Active','item_approved'=>'Yes','trash' => 'Default'])
+        $similarProductModel = Vendoritem::find()->where(['vendor_id'=>$model->vendor_id,'item_status'=>'Active','item_approved'=>'Yes','trash' => 'Default'])
             ->andWhere(['<>','item_id', $model->item_id])
             ->all();
         $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
