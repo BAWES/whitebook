@@ -156,7 +156,7 @@ if($model->isNewRecord){
                     ?>
 				</div>
 
-				<div class="form-group"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete','style'=>'float:right;']) ?></div>
+				<div class="form-group"><?= Html::submitButton('Complete', ['class' => 'btn btn-primary complete','style'=>'float:right;']) ?></div>
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 			</div>
 		</div>
@@ -174,6 +174,7 @@ $this->registerCss("
 	.price_val{  width: 100%;  float: left;}
 	.question-section input[type=\"text\"] { margin:10px 0px;}
 ");
+
 echo Html::hiddenInput('isNewRecord',$model->isNewRecord,['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_for_sale',$model->item_for_sale,['id'=>'item_for_sale']);
 echo Html::hiddenInput('item_status',$model->item_status,['id'=>'item_status']);
@@ -193,4 +194,3 @@ $this->registerJsFile('@web/themes/default/plugins/bootstrap-multiselect/dist/js
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
-

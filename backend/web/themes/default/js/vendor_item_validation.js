@@ -554,6 +554,10 @@ $('.complete').click(function()
 		$('.field-vendoritem-image_path').find('.help-block').html('Upload atleast one image.');
 		return false;
 	}
+
+	$(this).attr('disabled', 'disabled');
+	$(this).html('Please wait...');
+	$(this).parents('form').submit();
 });
 
 /* Guide images and descrition show / hide */

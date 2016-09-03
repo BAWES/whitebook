@@ -1138,3 +1138,11 @@ $(function () {
 	}); 	
 });
 /* END Vendor item check exist or not */
+
+
+$('.complete').click(function()
+{
+	$(this).attr('disabled', 'disabled');
+	$(this).html('Please wait...');
+	$(this).parents('form').submit();
+});
