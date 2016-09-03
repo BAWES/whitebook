@@ -4,7 +4,7 @@ use yii\helpers\Url;
 
 ?>
 
-<div class="panel panel-default">
+<div class="panel panel-default panel-pg-list">
     <div class="panel-heading">
             <h4 class="panel-title">
                     <?= Yii::t('frontend', 'Select payment method') ?>                        
@@ -14,12 +14,18 @@ use yii\helpers\Url;
 
     	<?= Yii::t('frontend', 'Please select the preferred payment method to use on this order.') ?>
 
+        <?php foreach ($payment_gateway as $row) { ?>
     	<div class="radio">
-    	<input type="radio" name="payment_method" value="cod" checked="checked" />
-		    <label>		        
-		        <?= Yii::t('frontend', 'Cash On Delivery') ?>
+            <input type="radio" name="payment_method" id="<?= $row->code ?>" value="<?= $row->code ?>" />   
+    	    <label for="<?= $row->code ?>">                    
+		        <?php if(Yii::$app->language == 'en') {
+                    echo $row->name;
+                } else {
+                    echo $row->name_ar;
+                } ?>
 		    </label>
 		</div>
+        <?php } ?>
     </div>
 </div>
 

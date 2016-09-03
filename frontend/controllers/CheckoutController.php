@@ -9,6 +9,7 @@ use common\models\CustomerCart;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use common\models\Country;
+use common\models\PaymentGateway;
 use frontend\models\Addresstype;
 use yii\helpers\Url;
 
@@ -144,15 +145,34 @@ class CheckoutController extends BaseController
     		}
 		}
 
-		return $this->renderPartial('payment');
+        $payment_gateway = PaymentGateway::find()
+            ->where(['status' => 1])
+            ->all();
+
+		return $this->renderPartial('payment', [
+            'payment_gateway' => $payment_gateway
+        ]);
 	}
 
 	//validate payment method
 	public function actionSavePayment(){
 		
+        $json = [];
+
 		$payment_method = Yii::$app->request->post('payment_method');
 
-		Yii::$app->session->set('payment_method', $payment_method);
+		if($payment_method) {
+            
+            Yii::$app->session->set('payment_method', $payment_method);
+
+        } else {
+
+            $json['error'] = Yii::t('frontend', 'Please, select payment method!');
+            
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return $json;
+        }
 	}
 
 	//Display all data for order to get confirm 

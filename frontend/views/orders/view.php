@@ -23,18 +23,18 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<td colspan="2">Order Details</td>
+					<td colspan="2"><?= Yii::t('frontend', 'Order Details') ?></td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td>
-						<b>Order ID:</b> #<?= $order->order_id ?> <br />
-						<b>Date Added:</b> <?= date('d/m/Y', strtotime($order->created_datetime)) ?>
+						<b><?= Yii::t('frontend', 'Order ID') ?>:</b> #<?= $order->order_id ?> <br />
+						<b><?= Yii::t('frontend', 'Date Added') ?>:</b> <?= date('d/m/Y', strtotime($order->created_datetime)) ?>
 					</td>
 					<td>
-						<b>Payment Method:</b> <?= $order->order_payment_method ?><br />
-						<b>Transaction ID:</b> <?= $order->order_transaction_id ?>
+						<b><?= Yii::t('frontend', 'Payment Method') ?>:</b> <?= $order->order_payment_method ?><br />
+						<b><?= Yii::t('frontend', 'Transaction ID') ?>:</b> <?= $order->order_transaction_id ?>
 					</td>
 				</tr>
 			</tbody>
@@ -63,7 +63,7 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 			<tbody>
 				<tr>
 					<td>
-						Order status: 
+						<?= Yii::t('frontend', 'Order status') ?>: 
 						<?php if(Yii::$app->language == 'en') { 
 								echo OrderStatus::findOne($row->status_id)->name;
 							  } else {
@@ -72,8 +72,8 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 						<br />
 					</td>
 					<td>
-						Contact Email: <?= $vendor->vendor_public_email ?> <br />
-						Contact Number: <?= $vendor->vendor_public_phone ?>
+						<?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?> <br />
+						<?= Yii::t('frontend', 'Contact Number') ?>: <?= $vendor->vendor_public_phone ?>
 					</td>
 				</tr>
 			</tbody>
