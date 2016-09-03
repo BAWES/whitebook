@@ -65,12 +65,20 @@ function save_payment() {
 	$.post(
 		save_payment_url, 
 		{ 
-			payment_method : $('input[name="payment_method"]').val() 
+			payment_method : $('input[name="payment_method"]:checked').val() 
 		},
 		function(data) {
 					
-			if(data.errors) {
+			if(data.error) {
 
+				$html  = '<div class="alert alert-success">';
+				$html += data.error;
+				$html += '<button class="close" data-dismiss="alert">&times;</button>';
+				$html += '</div>';
+
+				$('.checkout_message_wrapper').html($html);
+
+				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			} else {
 				confirm();
 			}
@@ -119,6 +127,12 @@ $(document).delegate('#modal_create_address form', 'submit', function(e){
 
 	e.preventDefault();
 });
+
+/*$(document).delegate('.panel-pg-list .radio label', 'click', function(){
+	
+	$(this).find('input').attr('checked', 'checked');
+
+});*/
 
 $(function (){
 
