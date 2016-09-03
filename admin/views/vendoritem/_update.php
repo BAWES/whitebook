@@ -213,7 +213,10 @@ $themelist = \yii\helpers\ArrayHelper::map($themes,'theme_id','theme_name');
 			<div class="form-group"><?= $form->field($model, 'themes',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($themelist , ['multiple'=>'multiple',]) ?></div>
 			<div class="form-group"><?= $form->field($model, 'groups',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($grouplist , ['multiple'=>'multiple']) ?></div>
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success', 'style'=>'float:right;']) ?>
+			
+			<?= Html::submitButton('Complete', [
+				'class' => 'btn btn-success complete', 
+				'style'=>'float:right;']) ?>
 		</div>
 		<!--End sixth Tab -->
 

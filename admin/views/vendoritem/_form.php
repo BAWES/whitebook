@@ -281,7 +281,9 @@ if($model->isNewRecord){
 
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 
-			<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success', 'style'=>'float:right;']) ?>
+			<?= Html::submitButton('Complete', [
+					'class' => 'btn btn-success complete', 
+					'style'=>'float:right;']) ?>
 		</div>
 		<!--End sixth Tab -->
 
