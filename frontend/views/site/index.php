@@ -123,8 +123,7 @@ foreach ($featured_produc as $key => $value) {
     ->joinWith('vendor')
     //->join('inner join','{{%image}}','{{%image}}.item_id = {{%vendor_item}}.item_id')
     ->where(['{{%feature_group_item}}.group_id'=>$value["group_id"]])
-    ->andWhere(['{{%vendor_item}}.type_id'=>2])
-    ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
+    //->andWhere(['{{%vendor_item}}.type_id'=>2])
     ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
     ->andWhere(['{{%vendor_item}}.item_for_sale'=>"Yes"])
     ->andWhere(['{{%vendor_item}}.item_status'=>"Active"])
@@ -139,14 +138,14 @@ if (!empty($feature_group_sql_result)) {
 ?>
     <div class="feature_product_title">
         <h2>
-        <?php 
+        <?php
 
-            if(Yii::$app->language == "en"){ 
-                echo $value['group_name']; 
+            if(Yii::$app->language == "en"){
+                echo $value['group_name'];
             }else{
-                echo $value['group_name_ar']; 
+                echo $value['group_name_ar'];
             }
-        ?>            
+        ?>
         </h2>
     </div>
 <?php } ?>
@@ -181,13 +180,13 @@ if (!empty($feature_group_sql_result)) {
                             ?>
                             <div class="item">
                                 <div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $product_val["slug"], true]); ?>'>
-                                    
+
                                     <a href="<?= Url::toRoute(['product/product','slug' => $product_val["slug"]]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['product/product', $product_val['slug']]); ?>'>
-                                        
+
                                         <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
-                                        
+
                                         <div class="deals_listing_cont">
-                                            
+
                                             <?php if(Yii::$app->language == "en"){ ?>
                                                 <?php echo $product_val['vendor_name']; ?>
                                                 <h3><?php echo $product_val['item_name']; ?></h3>
