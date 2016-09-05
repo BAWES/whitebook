@@ -1,7 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: anilkumar
- * Date: 9/5/16
- * Time: 4:57 PM
- */
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+?>
+
+<?php
+if (!empty($imageData)) {
+
+    foreach ($imageData as $key => $value) {
+        require 'item.php';
+    }
+} else {
+    echo "No records found";
+}
+?>
