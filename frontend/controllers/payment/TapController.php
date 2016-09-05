@@ -11,10 +11,10 @@ use common\models\Customer;
 
 class TapController extends Controller
 {
-    private $tap_merchantid = '13014';
+    private $tap_merchantid = '1230';
     private $tap_username = 'test';
     private $tap_password = '123tap';
-    private $tap_api_key = 'tap1234';
+    private $tap_api_key = '1tap7';
 
     public function actionIndex()
     {
@@ -52,7 +52,7 @@ class TapController extends Controller
         $data['cstmobile'] = $customer->customer_mobile;
         $data['cntry'] = 'KW';
 
-        $data['returnurl'] = Url::to(['payment/tap/callback', 'hashcd' => md5($order_id . $order->order_total_with_delivery . 'KWD' . $this->tap_password)]);
+        $data['returnurl'] = Url::toRoute(['payment/tap/callback', 'hashcd' => md5($order_id . $order->order_total_with_delivery . 'KWD' . $this->tap_password)], true);
 
         return $this->renderPartial('index', $data);
     }
@@ -77,7 +77,7 @@ class TapController extends Controller
                 
             if ($hashstring != $responsehashstring) {
                 $error = Yii::t('frontend', 'Unable to locate or update your order status');
-            } else if ($this->request->get['result'] != 'SUCCESS') {
+            } else if ($request['result'] != 'SUCCESS') {
                 $error = Yii::t('frontend', 'Payment was declined by Tap');
             }
         } else {
