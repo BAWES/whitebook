@@ -26,12 +26,14 @@ use yii\helpers\Url;
 		<?php } else {
 
 		$k = array();
+		$result  = '';
+		if (count($customer_events_list) > 0) {
+			foreach ((array)$customer_events_list as $l) {
+				$k[] = $l['item_id'];
+			}
 
-		foreach((array)$customer_events_list as $l) {
-			$k[] = $l['item_id'];
+			$result = array_search($value['item_id'], $k);
 		}
-
-		$result = array_search($value['item_id'],$k);
 
 		if (is_numeric ($result)) { ?>  
 		<div class="faver_icons faverited_icons"> 
@@ -49,7 +51,6 @@ use yii\helpers\Url;
 				echo Html::img('http://placehold.it/210x208',['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
 			 } ?> 				
 		</a>
-
 	</div>
 	<div class="events_descrip">
 		<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
