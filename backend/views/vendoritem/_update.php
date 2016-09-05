@@ -16,6 +16,11 @@ if($model->isNewRecord){
 	$exist_groups = array();
 }
 
+function cmp($a, $b)
+{
+	return strcmp($a["vendorimage_sort_order"], $b["vendorimage_sort_order"]);
+}
+
 ?>
 
 <?= Html::csrfMetaTags() ?>
@@ -159,14 +164,20 @@ if($model->isNewRecord){
 				<div class="form-group">
 					<div class="file-block" style="color:red"> Please upload aleast one file</div>
 					<?php
+
+					$order = [];
 					$initialPreview = [];
 					$initialPreviewConfig = [];
 						if(!empty($images)) {
-
 							$i=0;
 							foreach ($images as $value) {
-								$key = $value->image_id;
-								$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
+								$order[] = ['image_id'=>$value->image_id,'vendorimage_sort_order'=>$value->vendorimage_sort_order,'image_path'=>$value->image_path];
+								usort($order, "cmp");
+
+							}
+							foreach ($order as $value) {
+								$key = $value['image_id'];
+								$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value['image_path'], [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value['image_id'],'title'=>'']);
 								$url = Url::to(["/vendoritem/delete-item-image", "id" => $key]);
 								$initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
 								$i++;

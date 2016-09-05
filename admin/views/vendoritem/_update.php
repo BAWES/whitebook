@@ -20,6 +20,11 @@ if($model->isNewRecord){
 }
 $itemType  = \yii\helpers\ArrayHelper::map($itemType,'type_id','type_name');
 $themelist = \yii\helpers\ArrayHelper::map($themes,'theme_id','theme_name');
+function cmp($a, $b)
+{
+	return strcmp($a["vendorimage_sort_order"], $b["vendorimage_sort_order"]);
+}
+
 ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -174,13 +179,18 @@ $themelist = \yii\helpers\ArrayHelper::map($themes,'theme_id','theme_name');
 			if(!empty($images)) {
 
                 $i=0;
-                foreach ($images as $value) {
-                    $key = $value->image_id;
-					$imageInitialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
-                    $url = Url::to(["/vendoritem/deleteitemimage", "id" => $key]);
+				foreach ($images as $value) {
+					$order[] = ['image_id'=>$value->image_id,'vendorimage_sort_order'=>$value->vendorimage_sort_order,'image_path'=>$value->image_path];
+					usort($order, "cmp");
+
+				}
+				foreach ($order as $value) {
+					$key = $value['image_id'];
+					$imageInitialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value['image_path'], [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value['image_id'],'title'=>'']);
+					$url = Url::to(["/vendoritem/delete-item-image", "id" => $key]);
 					$imageInitialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
-                    $i++;
-                }
+					$i++;
+				}
             }
 
             // Usage with ActiveForm and model
@@ -307,17 +317,12 @@ echo Html::hiddenInput('renderquestion_url',Url::to(['/vendoritem/renderquestion
 
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
-
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
-
 $this->registerCssFile("@web/themes/default/plugins/jquery-superbox/css/style.css");
-
 $this->registerJsFile("@web/themes/default/plugins/jquery-superbox/js/superbox.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
