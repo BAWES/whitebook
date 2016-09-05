@@ -507,25 +507,25 @@ class PlanController extends BaseController
             $condition = '';
             $join = '';
             if (!empty($data['slug'])) {
-                $cat_item_details = Category::category_search_details($data['slug']);
+                $cat_item_details = \frontend\models\Category::category_search_details($data['slug']);
                 if (!empty($cat_item_details)) {
                     $cat_id = $cat_item_details[0]['category_id'];
-                    $join .= ' ({{%vendor_item}}.category_id  = ("'.$cat_id.'")
-   or {{%vendor_item}}.subcategory_id  = ("'.$cat_id.'") or {{%vendor_item}}.child_category  = ("'.$cat_id.'") OR {{%vendor_item}}.item_name
+                    $join .= ' (wvi.category_id  = ("'.$cat_id.'")
+   or wvi.subcategory_id  = ("'.$cat_id.'") or wvi.child_category  = ("'.$cat_id.'") OR wvi.item_name
    LIKE "%'.$data['slug'].'%" )';
                 }
 
                 if (!empty($data['vendor'])) {
-                    $vendor = explode('+', $data['vendor']);
-                //print_r($vendor);die;
-                foreach ($vendor as $key => $val) {
-                    $vendor_ids[] = Vendor::Vendorid_item($val)['vendor_id'];
-                }
-                //print_r($vendor_ids);die;
-                $v = implode('","', $vendor_ids);
+                        $vendor = explode('+', $data['vendor']);
+                    //print_r($vendor);die;
+                    foreach ($vendor as $key => $val) {
+                        $vendor_ids[] = Vendor::Vendorid_item($val)['vendor_id'];
+                    }
+                    //print_r($vendor_ids);die;
+                    $v = implode('","', $vendor_ids);
 
-               // $active_vendors = Vendor::loadvalidvendors();
-                $condition .= ' AND {{%vendor_item}}.vendor_id IN("'.$v.'")';
+                   // $active_vendors = Vendor::loadvalidvendors();
+                    $condition .= ' AND wvi.vendor_id IN("'.$v.'")';
                 }
 
             /* THEMES FILTER */
@@ -550,12 +550,13 @@ class PlanController extends BaseController
                 if (count($all_valid_themes) <= 1) {
                     $all_valid_themes = $all_valid_themes[0];
                 } else {
-                    $all_valid_themes = implode('","', $all_valid_themes);
+                    //$all_valid_themes = implode('","', $all_valid_themes);
+                    $all_valid_themes = implode(',', $all_valid_themes);
                 }
              /* END Multiple themes match comma seperate values in table*/
 
           //  $join .= ' inner join whitebook_theme as wt ON wt.slug REGEXP "'.$theme_ids.'" ';
-              $condition .= ' AND {{%vendor_item}}.item_id IN("'.$all_valid_themes.'") ';
+              $condition .= ' AND wvi.item_id IN('.$all_valid_themes.') ';
             }
 
              /* BEGIN PRICE FILTER */
@@ -564,35 +565,29 @@ class PlanController extends BaseController
                 foreach ($price as $key => $value) {
                     $prices[] = $value;
                     $price_val = explode('-', $value);
-                    $price_val1[] = 'AND ({{%vendor_item}}.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
+                    $price_val1[] = 'AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
                 }
                 $condition1 = implode(' OR ', $price_val1);
                 $condition .= str_replace('OR AND', 'OR', $condition1);
             }
+
             /* END PRICE FILTER */
-            $imageData = Vendoritem::find()
-                    ->select('{{%vendor_item}}.category_id, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name,{{%vendor_item}}.category_id, count(*) as total')
-                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
-                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
-                    ->where(['{{%vendor_item}}.trash' => "Default"])
-                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
-                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
-                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-                    ->andWhere(['wi.module_type' => "vendor_item"])
-                    ->andWhere([$join.$condition])
-                    ->andWhere(['wv.slug' => $data['slug']])
-                    ->groupBy('wi.item_id')
-                    ->limit(12)
-                    ->asArray()
-                    ->all();
+
+                $q = 'select wvi.category_id, wi.image_path, wvi.item_price_per_unit, wvi.item_name, wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name, wvi.category_id, count(*) as total from whitebook_vendor_item as wvi ';
+                $q .= 'left join whitebook_image as wi on wvi.item_id = wi.item_id left join whitebook_vendor as wv on wvi.vendor_id = wv.vendor_id ';
+                $q .= 'where wvi.trash = "Default" AND wvi. item_approved = "Yes" AND wvi.item_status = "Active" AND wvi.type_id = "2" AND wvi.item_for_sale = "Yes" AND wi.module_type = "vendor_item" AND wv.slug = "'.$data["slug"].'" ';
+                $q .= $condition;
+                $q .= 'group by wi.item_id LIMIT 12';
+
+                $result = Vendoritem::findBySql($q)->asArray()->all();
+
                 $customer_id = Yii::$app->user->identity->customer_id;
                 $usermodel = new Users();
                 $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
                 if (!empty($customer_id)) {
-                    return $this->renderPartial('product_list_ajax', ['imageData' => $imageData]);
+                    return $this->renderPartial('loaditems', ['imageData' => $result]);
                 } else {
-                    return $this->renderPartial('product_list_ajax', ['imageData' => $imageData, 'customer_events_list' => $customer_events_list]);
+                    return $this->renderPartial('loaditems', ['imageData' => $result, 'customer_events_list' => $customer_events_list]);
                 }
             }
         }

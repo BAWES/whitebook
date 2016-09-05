@@ -57,28 +57,32 @@ class Vendor extends \common\models\Vendor
 
     public static function loadvendor_item($item)
     {
-        $k=array();
-		foreach ($item as $data){
-		$k[]=$data;
-		}
-		$id = implode("','", $k);
-		$val = "'".$id."'";
+//        $k=array();
+//		foreach ($item as $data){
+//		$k[]=$data;
+//		}
+//		$id = implode("','", $k);
+//		$val = "'".$id."'";
         /* STEP 1 GET ACTIVE VENDORS*/
+        $package = [];
         $vendor = Vendor::find()
         ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
         ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
         ->all();
-    
 
-    foreach ($vendor as $key => $value) {
-        $package[] = Vendor::packageCheck($value['vendor_id'],$check_vendor="Notempty");
-    }
-        $active_vendors = implode('","', array_filter($package));
-        $query = Vendor::find()
-        ->select(['vendor_id','slug','vendor_name'])
-        ->where('vendor_id IN ("'.$active_vendors.'")')->asArray()->all();
-	return ($query);
+        if ($vendor) {
+            foreach ($vendor as $key => $value) {
+                $package[] = Vendor::packageCheck($value['vendor_id'], $check_vendor = "Notempty");
+            }
+            if (count($package)>0) {
+                $active_vendors = implode('","', array_filter($package));
+                $query = Vendor::find()
+                    ->select(['vendor_id', 'slug', 'vendor_name'])
+                    ->where('vendor_id IN ("' . $active_vendors . '")')->asArray()->all();
+                return ($query);
+            }
+        }
     }
 
     public static function loadvalidvendorids($cat_id=false)

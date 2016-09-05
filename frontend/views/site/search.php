@@ -9,292 +9,299 @@ use yii\widgets\Breadcrumbs;
 
 $controller = get_class($this->context);
 $event_status=Yii::$app->session->get('event_status');
-if($event_status==-1){
+if($event_status==-1) {
 ?>
-<script type="text/javascript">
-function display_event_modal()
-{
-jQuery('#EventModal').modal('show');
-}
-window.onload=display_event_modal;
+	<script type="text/javascript">
+	function display_event_modal() {
+		jQuery('#EventModal').modal('show');
+	}
+	window.onload=display_event_modal;
 </script>
-<?php }
+<?php
+}
 if($event_status>0){
 ?>
-<script type="text/javascript">
-/* BEGIN ADD EVENT */
- function addevent1(item_id)
-{
-	jQuery.ajax({
-		type:'POST',
-		url:"<?= Url::toRoute('/product/addevent'); ?>",
-		data:{'item_id':item_id},
-		success:function(data)
-		{
-			jQuery('#addevent').html(data);
-			jQuery('#eventlist'+item_id).selectpicker('refresh');
-			jQuery('#add_to_event').modal('show');
+	<script type="text/javascript">
+	/* BEGIN ADD EVENT */
+	 function addevent1(item_id) {
+		jQuery.ajax({
+			type:'POST',
+			url:"<?= Url::toRoute('/product/addevent'); ?>",
+			data:{'item_id':item_id},
+			success:function(data)
+			{
+				jQuery('#addevent').html(data);
+				jQuery('#eventlist'+item_id).selectpicker('refresh');
+				jQuery('#add_to_event').modal('show');
 
-		}
-	});
-}
+			}
+		});
+	}
 
-/* END ADD EVENT */
-var x='<?= $event_status;?>';
-window.onload=addevent1(x);
-       </script>
-       <?php } ?>
+	/* END ADD EVENT */
+	var x='<?= $event_status;?>';
+	window.onload=addevent1(x);
+   </script>
+<?php } ?>
 <!-- coniner start -->
 <section id="inner_pages_white_back">
-<div class="container paddng0">
-<!-- Events slider start -->
-<?php require(__DIR__ . '/../product/events_slider.php'); ?>
-<!-- Events slider end -->
+	<div class="container paddng0">
+	<!-- Events slider start -->
+	<?=$this->render('/product/events_slider'); ?>
+	<!-- Events slider end -->
 
-<div class="breadcrumb_common">
-<div class="bs-example">
-<!-- <ul class="breadcrumb"> -->
-<?php
-$this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRoute('/plan/plan/'.$slug)];
-//$this->params['breadcrumbs'][] =$model['item_name'];
-?>
-<?= Breadcrumbs::widget([
-'options' => ['class' => 'new breadcrumb'],
-'homeLink' => [
-'label' => Yii::t('yii', 'Home'),
-'url' => Yii::$app->homeUrl,
-],
-'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-]);
-?>
+	<div class="breadcrumb_common">
+			<div class="bs-example">
+			<!-- <ul class="breadcrumb"> -->
+			<?php
+				$this->params['breadcrumbs'][] = ['label' => ucfirst($slug), 'url' => Url::toRoute('/plan/plan/'.$slug)];
+				//$this->params['breadcrumbs'][] =$model['item_name'];
+			?>
+			<?= Breadcrumbs::widget([
+				'options' => ['class' => 'new breadcrumb'],
+				'homeLink' => [
+					'label' => Yii::t('yii', 'Home'),
+					'url' => Yii::$app->homeUrl,
+				],
+				'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+				]);
+			?>
 
-<!-- </ul> -->
-</div>
-</div>
-<div class="plan_venues" id="wrapper">
-<div class="overlay"></div>
-<div class="col-md-3 paddingleft0" id="left_side_cate">
-<div class="filter_content">
-<div class="filter_section">
-<div class="responsive-category-bottom search-list col-xs-12 teat-right pull-right">
-<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0 pull-right" data-toggle="offcanvas">Filter</span>
-<div class="filter_title">
-<span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
-</div>
-<div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
-<img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
-</div>
-<nav class="row-offcanvas row-offcanvas-left">
-<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
-<div id="accordion" class="panel-group">
+		<!-- </ul> -->
+		</div>
+	</div>
+	<div class="plan_venues" id="wrapper">
+		<div class="overlay"></div>
+			<div class="col-md-3 paddingleft0" id="left_side_cate">
+				<div class="filter_content">
+					<div class="filter_section">
+						<div class="responsive-category-bottom search-list col-xs-12 teat-right pull-right">
+							<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0 pull-right" data-toggle="offcanvas">Filter</span>
+							<div class="filter_title">
+								<span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
+							</div>
+							<div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
+								<img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
+							</div>
+							<nav class="row-offcanvas row-offcanvas-left">
+								<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
+									<div id="accordion" class="panel-group">
 
-<!--  END CATEGORY FILTER-->
-<!--  BEGIN THEME FILTER-->
-<div class="panel panel-default" >
-<div class="panel-heading">
-<div class="clear_left"><p>Themes <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right"><a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-<h4 class="panel-title">
-<span class="plus_acc"></span>
-</h4>
-</a>
-</div>
-</div>
-<div id="themes" class="panel-collapse collapse" aria-expanded="false">
-<div class="panel-body">
-<div class="table">
-<?php
-/* BEGIN Display scroll for more than three li */
-if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-/* END Display scroll for more than three li */
-?>
-<ul class="<?= $class; ?>">
-<?php if(!empty($themes)){foreach ($themes as $key => $value) { ?>
-<li>
-<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>"><input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> ><?= $value['theme_name']; ?></label>
-</li>
-<?php }} ?>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<!--  END THEME FILTER -->
+									<!--  END CATEGORY FILTER-->
+									<!--  BEGIN THEME FILTER-->
+										<div class="panel panel-default" >
+											<div class="panel-heading">
+											<div class="clear_left"><p>Themes <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
+											<div class="clear_right">
+												<a href="#themes" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
+													<h4 class="panel-title">
+														<span class="plus_acc"></span>
+													</h4>
+												</a>
+											</div>
+											</div>
+										<div id="themes" class="panel-collapse collapse" aria-expanded="false">
+											<div class="panel-body">
+												<div class="table">
+													<?php
+													/* BEGIN Display scroll for more than three li */
+													if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
+													/* END Display scroll for more than three li */
+													?>
+													<ul class="<?= $class; ?>">
+														<?php if(!empty($themes)){foreach ($themes as $key => $value) { ?>
+														<li>
+															<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>"><input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> ><?= $value['theme_name']; ?></label>
+														</li>
+													<?php }} ?>
+													</ul>
+												</div>
+											</div>
+										</div>
+										</div>
+									<!--  END THEME FILTER -->
 
-<!--  BEGIN VENDOR FILTER -->
-<div class="panel panel-default" >
-<div class="panel-heading">
-<div class="clear_left"><p>Vendor <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right"><a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
-<h4 class="panel-title">
-<span class="plus_acc"></span>
-</h4>
-</a>
-</div>
-</div>
-<div id="vendor" class="panel-collapse collapse" area-expanded="false" >
-<div class="panel-body">
-<div class="table">
-<?php
-/* BEGIN Display scroll for more than three li */
-if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-/* END Display scroll for more than three li */
-?>
-<ul class="<?= $class; ?>">
-<?php if(!empty($vendor)){foreach ($vendor as $key => $value) {  ?>
-<li>
-<label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>"><input name="vendor" data-element="input" class="items" id="checkbox-<?= $value['vendor_name'] ?>" step="<?= $value['vendor_name'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> ><?= $value['vendor_name']; ?></label>
-</li>
-<?php }} ?>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<!--  END VENDOR FILTER-->
-<!--  BEGIN PRICE FILTER -->
-<div class="panel panel-default" >
-<div class="panel-heading">
-<div class="clear_left"><p>Price <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
-<div class="clear_right"><a href="#price" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_price">
-<h4 class="panel-title">
-<span class="plus_acc">
-</span>
-</h4></a>
-</div>
-</div>
-<div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
-<div class="panel-body">
-<div class="table">
-	<?php if(!empty($imageData)){?>
-<ul class="test_scroll">
-<?php
-foreach ($imageData as $key => $value) {
-	$price_val[] = $value['item_price_per_unit'];
-}
-/* Get max price_per_unit in item table */
-$min_price = min($price_val);
-$max_price = max($price_val);
-$max = $max_price;
-$divide = round($max / 5);
-//$maxx = $max+
-$i = 0;
-for ($x = $min_price ; $x <= 1000 ; $x+=$divide) {
-//$item_price = $imageData[$i]['item_price_per_unit'];
-$min_kd = round($x-$divide);
+									<!--  BEGIN VENDOR FILTER -->
+										<div class="panel panel-default" >
+											<div class="panel-heading">
+												<div class="clear_left"><p>Vendor <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
+												<div class="clear_right">
+													<a href="#vendor" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
+														<h4 class="panel-title">
+															<span class="plus_acc"></span>
+														</h4>
+													</a>
+												</div>
+											</div>
+											<div id="vendor" class="panel-collapse collapse" area-expanded="false" >
+												<div class="panel-body">
+													<div class="table">
+													<?php
+													/* BEGIN Display scroll for more than three li */
+													if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
+													/* END Display scroll for more than three li */
+													?>
+													<ul class="<?= $class; ?>">
+														<?php if(!empty($vendor)){foreach ($vendor as $key => $value) {  ?>
+														<li>
+															<label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>"><input name="vendor" data-element="input" class="items" id="checkbox-<?= $value['vendor_name'] ?>" step="<?= $value['vendor_name'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked) && $checked !="") ?  $checked : ''; ?> ><?= $value['vendor_name']; ?></label>
+														</li>
+														<?php }} ?>
+													</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									<!--  END VENDOR FILTER-->
+									<!--  BEGIN PRICE FILTER -->
+										<div class="panel panel-default" >
+											<div class="panel-heading">
+											<div class="clear_left"><p>Price <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>
+												<div class="clear_right">
+													<a href="#price" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_price">
+														<h4 class="panel-title">
+															<span class="plus_acc">
+															</span>
+														</h4>
+													</a>
+												</div>
+											</div>
+											<div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
+												<div class="panel-body">
+													<div class="table">
+														<?php if(!empty($imageData)){?>
+															<ul class="test_scroll">
+																<li><label class="label_check" for="checkbox-0"><input name="price" id="checkbox-0" value="0-500" type="checkbox">0 KD  -  500 KD</label></li>
+																<li><label class="label_check" for="checkbox-500"><input name="price" id="checkbox-500" value="500-1000" type="checkbox">500 KD  -  1000 KD</label></li>
+																<li><label class="label_check" for="checkbox-1000"><input name="price" id="checkbox-1000" value="1000-2000" type="checkbox">1000 KD  -  2000 KD</label></li>
+																<li><label class="label_check" for="checkbox-2000"><input name="price" id="checkbox-2000" value="2000-5000" type="checkbox">2000 KD  -  5000 KD</label></li>
+																<li><label class="label_check" for="checkbox-10000"><input name="price" id="checkbox-10000" value="5000-100000" type="checkbox">5000 + KD</label></li>
+															<?php
 
-//if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
-if($min_kd > 0 )
-{
-	foreach ($imageData as $key => $value) {
-	# code...
-	$item_price = $value['item_price_per_unit'];
+															/*foreach ($imageData as $key => $value) {
+																$price_val[] = $value['item_price_per_unit'];
+															}
+															// Get max price_per_unit in item table
+															$min_price = min($price_val);
+															$max_price = max($price_val);
+															$max = $max_price;
+															$divide = round($max / 5);
+															//$maxx = $max+
+															$i = 0;
+															for ($x = $min_price ; $x <= 1000 ; $x+=$divide) {
+															//$item_price = $imageData[$i]['item_price_per_unit'];
+															$min_kd = round($x-$divide);
 
-	$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
+															//if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
+															if($min_kd > 0 )
+															{
+																foreach ($imageData as $key => $value) {
+																# code...
+																$item_price = $value['item_price_per_unit'];
 
-	if($check_range ==1)	{
-	?>
-	<li>
-	<label class="label_check" for="checkbox-<?php echo $x;?>">
-	<input name="price" id="checkbox-<?php echo $x;?>" value=<?php echo $min_kd.'-'.$x;?> type="checkbox">
-	<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
-	</li>
-	<?php
-	break;
-	}
-	$i++; }
-	}
-}
-	?>
-</ul><?php }?>
-</div>
-</div>
-</div>
-</div>
-<!--  END PRICE FILTER-->
+																$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
 
-<!-- END FILTER  -->
-</div>
-</nav>
-</div>
-</div>
-</div>
-</div>
+																if($check_range ==1)	{
+																?>
+																<li>
+																<label class="label_check" for="checkbox-<?php echo $x;?>">
+																<input name="price" id="checkbox-<?php echo $x;?>" value=<?php echo $min_kd.'-'.$x;?> type="checkbox">
+																<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
+																</li>
+																<?php
+																break;
+																}
+																$i++; }
+																}
+															}*/
+																?>
+															</ul>
+														<?php } ?>
+													</div>
+												</div>
+											</div>
+										</div>
+								</div>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
 
-<div class="col-md-9 paddingright0">
-<div class="banner_section_plan">
-	<h3>Search Result for:<?= $search?> (<?= count($imageData);?>)</h3>
-</div>
-<!-- BEGIN Item lists -->
-<div class="listing_right">
-<div class="events_listing">
-<ul>
-<?php
-if(!empty($imageData))
-{
-foreach ($imageData as $key => $value) {
-if($value['image_path'] !="")  {
-?>
-<li>
-<div class="events_items">
-<div class="events_images">
-<div class="hover_events">
-<div class="pluse_cont">
+		<div class="col-md-9 paddingright0">
+		<div class="banner_section_plan">
+			<h3>Search Result for:<?= $search?> (<?= count($imageData);?>)</h3>
+		</div>
+		<!-- BEGIN Item lists -->
+		<div class="listing_right">
+		<div class="events_listing">
+		<ul>
+		<?php
+		if(!empty($imageData))
+		{
+		foreach ($imageData as $key => $value) {
+		if($value['image_path'] !="")  {
+		?>
+		<li>
+		<div class="events_items">
+		<div class="events_images">
+		<div class="hover_events">
+		<div class="pluse_cont">
 
-<?php if(Yii::$app->user->isGuest) { ?>
-<a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
-<?php } else { ?>
-<a  href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
-<?php } ?></div>
+		<?php if(Yii::$app->user->isGuest) { ?>
+		<a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+		<?php } else { ?>
+		<a  href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+		<?php } ?></div>
 
-<?php if(Yii::$app->user->isGuest) { ?>
-<div class="faver_icons">
-<a href=""  role="button" class=""  data-toggle="modal"   onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);"  data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
-</div>
-<?php } else {$k=array();
-if(!empty($customer_events_list)){
-foreach($customer_events_list as $l){
-$k[]=$l['item_id'];
-} }
-$result=array_search($value['item_id'],$k);
-if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
-<div class="faver_icons">
-<?php }?>
-<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
-<?php } ?>
-</div>
+		<?php if(Yii::$app->user->isGuest) { ?>
+		<div class="faver_icons">
+		<a href=""  role="button" class=""  data-toggle="modal"   onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);"  data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+		</div>
+		<?php } else {$k=array();
+		if(!empty($customer_events_list)){
+		foreach($customer_events_list as $l){
+		$k[]=$l['item_id'];
+		} }
+		$result=array_search($value['item_id'],$k);
+		if (is_numeric ($result)) { ?>  <div class="faver_icons faverited_icons"> <?php } else { ?>
+		<div class="faver_icons">
+		<?php }?>
+		<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
+		<?php } ?>
+		</div>
 
-<a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
-</div>
-<div class="events_descrip">
-<a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title=""><?= $value['vendor_name']  ?>
-<h3><?= $value['item_name']  ?></h3>
-<p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
-</div>
-</div>
-</li>
-<?php } }  } else {
-echo "No records found";
-}
-?>
-</ul>
-<div id="planloader"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;"></div>
-</div>
-<?/*
-<div class="add_more_commons">
-<?php
-if((!empty($imageData)) && (count($imageData) > 20)) { ?>
-<div class="lode_more_buttons">
-<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
-</div>
-<?php } ?>
-</div>
-</div> */ ?>
-<!-- END Item lists -->
-</div>
-</div>
+		<a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
+		</div>
+		<div class="events_descrip">
+		<a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title=""><?= $value['vendor_name']  ?>
+		<h3><?= $value['item_name']  ?></h3>
+		<p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
+		</div>
+		</div>
+		</li>
+		<?php } }  } else {
+		echo "No records found";
+		}
+		?>
+		</ul>
+		<div id="planloader"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;"></div>
+		</div>
+		<?/*
+		<div class="add_more_commons">
+		<?php
+		if((!empty($imageData)) && (count($imageData) > 20)) { ?>
+		<div class="lode_more_buttons">
+		<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
+		</div>
+		<?php } ?>
+		</div>
+		</div> */ ?>
+		<!-- END Item lists -->
+		</div>
+		</div>
 
-</div>
+	</div>
 </section>
 
 <!-- continer end -->
