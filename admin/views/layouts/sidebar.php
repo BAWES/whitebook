@@ -31,6 +31,9 @@
 			<li class="<?php if ($menu_act == 'SiteController') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
 			</li>
+			<li class="<?php if ($menu_act == 'OrderController') {echo "active"; } else  {echo "noactive";}?>">
+				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Order</span>', ['order/index'], ['class'=>'link-title']) ?>
+			</li>
 			<li class="<?php if (in_array($menu_act,$first_menu)) {echo "open"; } else  {echo "noactive";}?>">
 				<a href="javascript:;">
 					<i class="fa fa-university"></i>
