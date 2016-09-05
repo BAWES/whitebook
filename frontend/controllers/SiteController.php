@@ -369,7 +369,8 @@ class SiteController extends BaseController
                     'imageData' => $imageData,
                     'themes' => $themes1, 
                     'vendor' => $vendor, 
-                    'slug' => $slug, 
+                    'customer_events_list' => [],
+                    'slug' => $slug,
                     'search' => $search
                 ]);
 
