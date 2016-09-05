@@ -55,7 +55,7 @@ class Order extends \yii\db\ActiveRecord
             [['order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total'], 'number'],
             [['modified_by', 'modified_datetime'], 'safe'],
             [['trash'], 'string'],
-            [['order_payment_method', 'order_transaction_id', 'order_ip_address'], 'string', 'max' => 128],
+            [['customerName', 'order_payment_method', 'order_transaction_id', 'order_ip_address'], 'string', 'max' => 128],
         ];
     }
 
@@ -84,9 +84,10 @@ class Order extends \yii\db\ActiveRecord
         return [
             'order_id' => 'Order ID',
             'customer_id' => 'Customer ID',
-            'order_total_delivery_charge' => 'Order Total Delivery Charge',
-            'order_total_without_delivery' => 'Order Total Without Delivery',
-            'order_total_with_delivery' => 'Order Total With Delivery',
+            'countryName' => 'Customer',
+            'order_total_delivery_charge' => 'Delivery Charge',
+            'order_total_without_delivery' => 'Without Delivery',
+            'order_total_with_delivery' => 'Order Total',
             'order_payment_method' => 'Order Payment Method',
             'order_transaction_id' => 'Order Transaction ID',
             'order_gateway_percentage' => 'Order Gateway Percentage',
@@ -253,6 +254,10 @@ class Order extends \yii\db\ActiveRecord
     }
         
     public function getCustomer() {
-        return $this->hasMany(Customer::className(), ['customer_id' => 'customer_id']);
+        return $this->hasOne(Customer::className(), ['customer_id' => 'customer_id']);
+    }
+
+    public function getCustomerName() {
+        return $this->customer->customer_name.' '.$this->customer->customer_last_name;
     }
 }
