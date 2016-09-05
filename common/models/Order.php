@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\Customer;
 use common\models\Order;
 use common\models\Suborder;
 use common\models\SuborderItemPurchase;
@@ -248,8 +249,10 @@ class Order extends \yii\db\ActiveRecord
                 ->where(['suborder_id' => $suborder_id])
                 ->all();
 
-
         return $items;        
     }
-    
+        
+    public function getCustomer() {
+        return $this->hasMany(Customer::className(), ['customer_id' => 'customer_id']);
+    }
 }
