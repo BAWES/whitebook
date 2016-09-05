@@ -195,10 +195,12 @@ class CheckoutController extends BaseController
 
 		$payment_method_code = Yii::$app->session->get('payment_method');
 
-		if($payment_method_code == 'cod') {
-			$payment_method = Yii::t('frontend', 'Cash On Delivery');
+        $gateway = PaymentGateway::find()->where(['code' => $payment_method_code, 'status' => 1])->one();
+
+		if(Yii::$app->language == 'en') {
+			$payment_method = $gateway->name;
 		} else {
-			$payment_method = 'undefined!';
+			$payment_method = $gateway->name_ar;
 		}
 
 		$address = Yii::$app->session->get('address');
