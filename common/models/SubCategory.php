@@ -146,7 +146,7 @@ class SubCategory extends \yii\db\ActiveRecord
     public static function getCategoryName($id)
     {
         $model = Category::find()->where(['category_id'=>$id])->one();
-        return $model->category_name;
+        return (isset($model->category_name)) ? $model->category_name : '-';
     }
 
     public static function loadsubcategoryname()
