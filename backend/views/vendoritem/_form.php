@@ -131,7 +131,7 @@ if($model->isNewRecord){
 
 			<div class="tab-pane" id="5">
 				<div class="form-group">
-					<div class="file-block" style="color:red"> Please upload aleast one file</div>
+					<div class="file-block" style="color:red;display: none;"> Please upload aleast one file</div>
 
 					<?php
 
