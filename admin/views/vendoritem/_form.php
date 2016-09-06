@@ -242,7 +242,7 @@ if($model->isNewRecord){
 		<!--End fourth Tab -->
 
 		<div class="tab-pane" id="5">
-			<div class="file-block" style="color:red"> Please upload aleast a file</div>
+			<div class="file-block" style="color:red;display: none;"> Please upload aleast a file</div>
 			<div class="form-group">
 			<?php
 			// Usage with ActiveForm and model
