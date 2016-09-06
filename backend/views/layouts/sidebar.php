@@ -31,9 +31,13 @@ use common\models\Vendoritem;
 		<!-- END MINI-PROFILE -->
 		<!-- BEGIN SIDEBAR MENU -->
 		<p class="menu-title">NAVIGATION</p>
-		<ul>
+		<ul>			
 			<li class="<?php if ($menu_act == 'SiteController'  && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
+			</li>
+
+			<li class="<?php if ($menu_act == 'SubOrderController') {echo "active"; } else  {echo "noactive";}?>">
+				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Sub Order</span>', ['sub-order/index'], ['class'=>'link-title']) ?>
 			</li>
 
             <li class="<?php if (in_array($menu_act,$first_menu)) {echo "open"; } else  {echo "noactive";}?>">
