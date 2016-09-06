@@ -11,8 +11,6 @@ class m160831_105756_image_data_update_for_id_271 extends Migration
 
     public function down()
     {
-        echo "m160831_105756_image_data_update_for_id_271 cannot be reverted.\n";
-
-        return false;
+    	
     }
 }
