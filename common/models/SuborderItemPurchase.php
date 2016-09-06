@@ -23,7 +23,6 @@ use yii\db\Expression;
  * @property string $purchase_customization_price_per_unit
  * @property integer $purchase_quantity
  * @property string $purchase_total_price
- * @property string $purchase_datetime
  * @property integer $created_by
  * @property integer $modified_by
  * @property string $created_datetime
@@ -63,10 +62,10 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['suborder_id', 'timeslot_id', 'item_id', 'area_id', 'address_id', 'purchase_delivery_address', 'purchase_delivery_date', 'purchase_price_per_unit', 'purchase_quantity', 'purchase_total_price', 'purchase_datetime', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
+            [['suborder_id', 'timeslot_id', 'item_id', 'area_id', 'address_id', 'purchase_delivery_address', 'purchase_delivery_date', 'purchase_price_per_unit', 'purchase_quantity', 'purchase_total_price', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
             [['suborder_id', 'timeslot_id', 'item_id', 'area_id', 'address_id', 'purchase_quantity', 'created_by', 'modified_by'], 'integer'],
             [['purchase_delivery_address', 'trash'], 'string'],
-            [['purchase_delivery_date', 'purchase_datetime', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['purchase_delivery_date', 'created_datetime', 'modified_datetime'], 'safe'],
             [['purchase_price_per_unit', 'purchase_customization_price_per_unit', 'purchase_total_price'], 'number'],
         ];
     }
@@ -89,7 +88,6 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
             'purchase_customization_price_per_unit' => 'Purchase Customization Price Per Unit',
             'purchase_quantity' => 'Purchase Quantity',
             'purchase_total_price' => 'Purchase Total Price',
-            'purchase_datetime' => 'Purchase Datetime',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',

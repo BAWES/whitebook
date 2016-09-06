@@ -92,7 +92,6 @@ class Order extends \yii\db\ActiveRecord
             'order_transaction_id' => 'Order Transaction ID',
             'order_gateway_percentage' => 'Order Gateway Percentage',
             'order_gateway_total' => 'Order Gateway Total',
-            'order_datetime' => 'Order Datetime',
             'order_ip_address' => 'Order Ip Address',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',

@@ -1,5 +1,7 @@
 <?php
 
+use yii\web\View;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\models\Order;
@@ -36,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_transaction_id',
             'order_gateway_percentage',
             'order_gateway_total',
-            'order_datetime',
             'order_ip_address',
             'created_datetime',
             'modified_datetime'
@@ -66,8 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <tbody>
                 <tr>
                     <td>
-                        <?= Yii::t('frontend', 'Order status') ?>: 
                         <div class="order_status_wrapper" data-id="<?= $row->suborder_id ?>">
+                            <?= Yii::t('frontend', 'Order status') ?>: 
                             <span>
                             <?php if(Yii::$app->language == 'en') { 
                                     echo OrderStatus::findOne($row->status_id)->name;
@@ -144,8 +145,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <h4 class="modal-title">Change Sub-order Status</h4>
       </div>
       <div class="modal-body">
-            <input type="hidden" name="suborder_id" value="" />
-            
+            <input type="hidden" name="suborder_id" value="" id="suborder_id" />
+            <select name="status_id" class="form-control" id="status_id">
+            <?php foreach($status as $row) { ?>
+                <option val="<?= $row->order_status_id ?>"><?= $row->name ?></option>
+            <?php } ?>
+            </select>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -155,23 +160,26 @@ $this->params['breadcrumbs'][] = $this->title;
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<script>
-    $('.edit_status').click(function(){
-        $('input[name="suborder_id"]').val($(this).parent().attr('data-id'));
+<?php 
+
+$this->registerJs("
+    jQuery('.edit_status').click(function(){
+        jQuery('input[name=\'suborder_id\']').val(jQuery(this).parent().attr('data-id'));
     });
 
-    $('.save_status').click(function(){
+    jQuery('.save_status').click(function(){
 
-        $status_id = $('select[name="status_id"] option:selected').val();
-        $status =  $('select[name="status_id"] option:selected').html();
+        var status_id = jQuery('#status_id option:selected').attr('val');
+        var status =  jQuery('#status_id option:selected').html();
+        var suborder_id = jQuery('#suborder_id').val();
 
-        $.post('<?= Url::to("order/change-status") ?>', { 
-            suborder_id : $('input[name="suborder_id"]').val(),
-            status_id : $status_id
+        jQuery.post('".Url::to(["order/order-status"])."', { 
+            suborder_id : suborder_id,
+            status_id : status_id
         }, function(){
-            $('#status_modal').modal('hide');
-            $('#order_status_wrapper[data-id="' + $status_id + '"] span').html($status); 
+            jQuery('#status_modal').modal('hide');
+            jQuery('[data-id=\'' + suborder_id + '\'] span').html(status); 
         });
     });
-</script>
-
+", View::POS_READY);
+    
