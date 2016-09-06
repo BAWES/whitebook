@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\models\Order;
@@ -36,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_transaction_id',
             'order_gateway_percentage',
             'order_gateway_total',
-            'order_datetime',
             'order_ip_address',
             'created_datetime',
             'modified_datetime'
@@ -66,13 +66,19 @@ $this->params['breadcrumbs'][] = $this->title;
             <tbody>
                 <tr>
                     <td>
-                        <?= Yii::t('frontend', 'Order status') ?>: 
-                        <?php if(Yii::$app->language == 'en') { 
-                                echo OrderStatus::findOne($row->status_id)->name;
-                              } else {
-                                echo OrderStatus::findOne($row->status_id)->name_ar;
-                              } ?>  
-                        <br />
+                        <div class="order_status_wrapper" data-id="<?= $row->suborder_id ?>">
+                            <?= Yii::t('frontend', 'Order status') ?>: 
+                            <span>
+                            <?php if(Yii::$app->language == 'en') { 
+                                    echo OrderStatus::findOne($row->status_id)->name;
+                                  } else {
+                                    echo OrderStatus::findOne($row->status_id)->name_ar;
+                                  } ?>  
+                            </span>      
+                            <a data-toggle="modal" href="#status_modal" class="edit_status">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </a>
+                        </div>
                     </td>
                     <td>
                         <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?> <br />
@@ -127,3 +133,50 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php } ?>
 
 </div>
+
+<div class="modal fade" id="status_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Change Sub-order Status</h4>
+      </div>
+      <div class="modal-body">
+            <input type="hidden" name="suborder_id" value="" />
+            <select name="status_id" class="form-control">
+            <?php foreach($status as $row) { ?>
+                <option val="<?= $row->order_status_id ?>"><?= $row->name ?></option>
+            <?php } ?>
+            </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save_status">Submit</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    $('.edit_status').click(function(){
+        $('input[name="suborder_id"]').val($(this).parent().attr('data-id'));
+    });
+
+    $('.save_status').click(function(){
+
+        $status_id = $('select[name="status_id"] option:selected').attr('val');
+        $status =  $('select[name="status_id"] option:selected').html();
+        $suborder_id = $('input[name="suborder_id"]').val();
+
+        $.post('<?= Url::to(["order/order-status"]) ?>', { 
+            suborder_id : $suborder_id,
+            status_id : $status_id
+        }, function(){
+            $('#status_modal').modal('hide');
+            $('[data-id="' + $suborder_id + '"] span').html($status); 
+        });
+    });
+</script>
+

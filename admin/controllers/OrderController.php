@@ -4,6 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Order;
+use common\models\OrderStatus;
 use common\models\Suborder;
 use common\models\OrderSearch;
 use common\models\SuborderItemPurchase;
@@ -57,11 +58,23 @@ class OrderController extends Controller
             ->where(['order_id' => $id])
             ->all();
 
+        $status = OrderStatus::find()->all();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'suborder' => $suborder
+            'suborder' => $suborder,
+            'status' => $status
         ]);
     }
+    
+    public function actionOrderStatus()
+    {
+        $suborder = Suborder::findOne(Yii::$app->request->post('suborder_id'));
+        $suborder->status_id = Yii::$app->request->post('status_id');
+        $suborder->save();
+
+    }
+
 
     /**
      * Deletes an existing Order model.
