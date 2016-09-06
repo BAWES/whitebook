@@ -91,4 +91,16 @@ class Suborder extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
+
+    public function getOrder() {
+        return $this->hasOne(Order::className(), ['order_id' => 'order_id']);
+    }
+
+    public function getStatus() {
+        return $this->hasOne(OrderStatus::className(), ['order_status_id' => 'status_id']);
+    }
+
+    public function getStatusName() {
+        return $this->status->name;
+    }
 }
