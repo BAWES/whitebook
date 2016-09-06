@@ -22,7 +22,7 @@ class OrderSearch extends Order
         return [
             [['order_id', 'customer_id', 'created_by'], 'integer'],
             [['order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total'], 'number'],
-            [['customerName', 'order_payment_method', 'order_transaction_id', 'order_datetime', 'order_ip_address', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
+            [['customerName', 'order_payment_method', 'order_transaction_id', 'order_ip_address', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
 
@@ -82,7 +82,6 @@ class OrderSearch extends Order
             'order_total_with_delivery' => $this->order_total_with_delivery,
             'order_gateway_percentage' => $this->order_gateway_percentage,
             'order_gateway_total' => $this->order_gateway_total,
-            'order_datetime' => $this->order_datetime,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,
             'created_datetime' => $this->created_datetime,
