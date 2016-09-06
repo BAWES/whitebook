@@ -176,45 +176,6 @@ if($event_status>0){
 																<li><label class="label_check" for="checkbox-1000"><input name="price" id="checkbox-1000" value="1000-2000" type="checkbox">1000 KD  -  2000 KD</label></li>
 																<li><label class="label_check" for="checkbox-2000"><input name="price" id="checkbox-2000" value="2000-5000" type="checkbox">2000 KD  -  5000 KD</label></li>
 																<li><label class="label_check" for="checkbox-10000"><input name="price" id="checkbox-10000" value="5000-100000" type="checkbox">5000 + KD</label></li>
-															<?php
-
-															/*foreach ($imageData as $key => $value) {
-																$price_val[] = $value['item_price_per_unit'];
-															}
-															// Get max price_per_unit in item table
-															$min_price = min($price_val);
-															$max_price = max($price_val);
-															$max = $max_price;
-															$divide = round($max / 5);
-															//$maxx = $max+
-															$i = 0;
-															for ($x = $min_price ; $x <= 1000 ; $x+=$divide) {
-															//$item_price = $imageData[$i]['item_price_per_unit'];
-															$min_kd = round($x-$divide);
-
-															//if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
-															if($min_kd > 0 )
-															{
-																foreach ($imageData as $key => $value) {
-																# code...
-																$item_price = $value['item_price_per_unit'];
-
-																$check_range = ($item_price >= $min_kd && $item_price <= $x) ? 1 : 0;
-
-																if($check_range ==1)	{
-																?>
-																<li>
-																<label class="label_check" for="checkbox-<?php echo $x;?>">
-																<input name="price" id="checkbox-<?php echo $x;?>" value=<?php echo $min_kd.'-'.$x;?> type="checkbox">
-																<?php echo $min_kd = floor($min_kd / 100) * 100;  $min_kd; ?> KD  -  <?php echo $x = ceil($x / 100) * 100;?> KD</label>
-																</li>
-																<?php
-																break;
-																}
-																$i++; }
-																}
-															}*/
-																?>
 															</ul>
 														<?php } ?>
 													</div>
@@ -287,16 +248,6 @@ if($event_status>0){
 		</ul>
 		<div id="planloader"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;"></div>
 		</div>
-		<?/*
-		<div class="add_more_commons">
-		<?php
-		if((!empty($imageData)) && (count($imageData) > 20)) { ?>
-		<div class="lode_more_buttons">
-		<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
-		</div>
-		<?php } ?>
-		</div>
-		</div> */ ?>
 		<!-- END Item lists -->
 		</div>
 		</div>
@@ -414,10 +365,6 @@ jQuery(this).next(".holder").text(selectedOption);
 
 });
 
-
-/*jQuery('#accordion a').click(function () {
-jQuery("span", this).toggleClass("minus_acc plus_acc");
-});*/
 jQuery('.collapse').on('shown.bs.collapse', function(){
 jQuery(this).parent().find(".plus_acc").removeClass("plus_acc").addClass("minus_acc");
 }).on('hidden.bs.collapse', function(){

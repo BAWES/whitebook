@@ -16,18 +16,20 @@ if($model->isNewRecord){
 	$exist_groups = array();
 }
 
+function cmp($a, $b)
+{
+	return strcmp($a["vendorimage_sort_order"], $b["vendorimage_sort_order"]);
+}
+
 ?>
 
 <?= Html::csrfMetaTags() ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
-
 	<?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
-
 	<div class="loadingmessage" style="display: none;">
 		<p><?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?></p>
 	</div>
-
 	<div class="tabbable">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#1" data-toggle="tab">Item Info </a></li>
@@ -36,9 +38,7 @@ if($model->isNewRecord){
 			<li><a href="#5" data-toggle="tab" id="validthree3">Images</a></li>
 		</ul>
 		<div class="tab-content">
-
-			<div class="tab-pane" id="1" >
-
+			<div class="tab-pane" id="1">
 				<div class="form-group"><?= $form->field($model, 'item_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128]) ?></div>
 				<div class="form-group"><?= $form->field($model, 'item_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128]) ?></div>
 				<div class="form-group"><?= $form->field($model, 'category_id', ['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList($categoryname, ['prompt'=>'Select...']) ?></div>
@@ -157,16 +157,22 @@ if($model->isNewRecord){
 
 			<div class="tab-pane" id="5">
 				<div class="form-group">
-					<div class="file-block" style="color:red"> Please upload aleast one file</div>
+					<div class="file-block" style="color:red;display: none;"> Please upload aleast one file</div>
 					<?php
+
+					$order = [];
 					$initialPreview = [];
 					$initialPreviewConfig = [];
 						if(!empty($images)) {
-
 							$i=0;
 							foreach ($images as $value) {
-								$key = $value->image_id;
-								$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
+								$order[] = ['image_id'=>$value->image_id,'vendorimage_sort_order'=>$value->vendorimage_sort_order,'image_path'=>$value->image_path];
+								usort($order, "cmp");
+
+							}
+							foreach ($order as $value) {
+								$key = $value['image_id'];
+								$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value['image_path'], [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value['image_id'],'title'=>'']);
 								$url = Url::to(["/vendoritem/delete-item-image", "id" => $key]);
 								$initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
 								$i++;
@@ -202,7 +208,6 @@ if($model->isNewRecord){
 	</div>
 </div>
 <?php ActiveForm::end(); ?>
-
 <?php
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
@@ -216,13 +221,10 @@ echo Html::hiddenInput('isNewRecord',$model->isNewRecord,['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_for_sale',$model->item_for_sale,['id'=>'item_for_sale']);
 echo Html::hiddenInput('item_status',$model->item_status,['id'=>'item_status']);
 echo Html::hiddenInput('item_id',Yii::$app->request->get('id'),['id'=>'item_id']);
-
 echo Html::hiddenInput('load_sub_category_url',Url::to(['/priorityitem/loadsubcategory']),['id'=>'load_sub_category_url']);
 echo Html::hiddenInput('load_child_category_url',Url::to(['/priorityitem/loadchildcategory']),['id'=>'load_child_category_url']);
-
 echo Html::hiddenInput('image_delete_url',Url::to(['vendoritem/imagedelete']),['id'=>'image_delete_url']);
 echo Html::hiddenInput('remove_question_url',Url::to(['vendoritem/removequestion']),['id'=>'remove_question_url']);
-
 echo Html::hiddenInput('render_question_url',Url::to(['vendoritem/renderquestion']),['id'=>'render_question_url']);
 echo Html::hiddenInput('item_name_check_url',Url::to(['/vendoritem/itemnamecheck']),['id'=>'item_name_check_url']);
 echo Html::hiddenInput('image_order_url',Url::to(['/site/imageorder']),['id'=>'image_order_url']);
@@ -231,4 +233,3 @@ $this->registerJsFile('@web/themes/default/plugins/bootstrap-multiselect/dist/js
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
