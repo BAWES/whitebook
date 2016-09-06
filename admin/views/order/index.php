@@ -37,7 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {delete}' 
+                'template' => '{view} {invoice} {delete}',
+                'buttons' => [
+                    'invoice' => function ($url, $model) {     
+                        return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
+                                'title' => Yii::t('yii', 'Invoice'),
+                        ]);  
+                    }
+                ]
             ],
         ],
     ]); ?>

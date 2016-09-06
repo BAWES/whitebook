@@ -11,6 +11,7 @@ use common\models\SuborderItemPurchase;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\mpdf\Pdf;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -66,15 +67,57 @@ class OrderController extends Controller
             'status' => $status
         ]);
     }
+
+    public function actionInvoice($id)
+    {
+        $suborder = Suborder::find()
+            ->where(['order_id' => $id])
+            ->all();
+
+        $status = OrderStatus::find()->all();
+
+        $this->layout = 'pdf';
+
+        $content = $this->render('invoice', [
+            'model' => $this->findModel($id),
+            'suborder' => $suborder,
+            'status' => $status
+        ]);
+
+        $pdf = new Pdf([
+            // set to use core fonts only
+            'mode' => Pdf::MODE_CORE, 
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $content,  
+            // format content from your own css file if needed or use the
+            // enhanced bootstrap css built by Krajee for mPDF formatting 
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            // any css to be embedded if required
+            'cssInline' => '.kv-heading-1{font-size:38px}', 
+             // set mPDF properties on the fly
+            'options' => [],//['title' => 'Order #'.$id],
+             // call mPDF methods on the fly
+            'methods' => [ 
+                'SetHeader'=>['Order #'.$id], 
+                'SetFooter'=>['{PAGENO}'],
+            ]
+        ]);    
+
+        return $pdf->render();     
+    }
     
     public function actionOrderStatus()
     {
         $suborder = Suborder::findOne(Yii::$app->request->post('suborder_id'));
         $suborder->status_id = Yii::$app->request->post('status_id');
         $suborder->save();
-
     }
-
 
     /**
      * Deletes an existing Order model.
