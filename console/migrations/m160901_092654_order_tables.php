@@ -7,6 +7,10 @@ class m160901_092654_order_tables extends Migration
     public function up()
     {
         //order status 
+        if (in_array('whitebook_order_status', $this->getDb()->schema->tableNames)) {
+            $this->dropTable('whitebook_order_status');
+        }
+
         $this->createTable('whitebook_order_status', [
             'order_status_id' => $this->primaryKey(),
             'name' => $this->string(100)->notNull(),
@@ -28,6 +32,10 @@ class m160901_092654_order_tables extends Migration
         ]);
 
         //payment gateway 
+        if (in_array('whitebook_payment_gateway', $this->getDb()->schema->tableNames)) {
+            $this->dropTable('whitebook_payment_gateway');
+        }
+        
         $this->createTable('whitebook_payment_gateway', [
             'gateway_id' => $this->primaryKey(),
             'name' => $this->string(100)->notNull(),
@@ -65,7 +73,7 @@ class m160901_092654_order_tables extends Migration
         //order tabel datetime 
         $this->dropColumn('whitebook_order', 'order_datetime');
         $this->dropColumn('whitebook_suborder', 'suborder_datetime');
-        $this->dropColumn('suborder_item_purchase', 'purchase_datetime');
+        $this->dropColumn('whitebook_suborder_item_purchase', 'purchase_datetime');
         $this->alterColumn ('whitebook_order', 'created_date', $this->dateTime());
         $this->renameColumn('whitebook_order', 'created_date', 'created_datetime');
         $this->renameColumn('whitebook_order', 'modified_date', 'modified_datetime');
