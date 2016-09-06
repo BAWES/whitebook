@@ -5,7 +5,8 @@
     "keywords": ["plan", "event"],
     "homepage": "http://www.thewhitebook.com.kw/",
     "type": "project",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
@@ -18,7 +19,7 @@
         "dektrium/yii2-user": "*",
         "arturoliveira/yii2-excelview": "*",
         "kartik-v/yii2-krajee-base": "*",
-        "kartik-v/mpdf": "*",
+        "kartik-v/yii2-mpdf": "dev-master",
         "miloschuman/yii2-highcharts-widget": "*",
         "2amigos/yii2-file-upload-widget": "~1.0",
         "yiisoft/yii2-imagine": "*",
@@ -27,7 +28,6 @@
         "2amigos/yii2-resource-manager-component": "*",
         "codemix/yii2-localeurls": "*",
         "kartik-v/yii2-widget-fileinput": "@dev"
-
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
