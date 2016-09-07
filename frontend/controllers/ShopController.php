@@ -237,38 +237,18 @@ class ShopController extends BaseController
 
                 $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
 
-                if (!is_null($model1)) {
-
-                    $vendor_ids = implode(',',$active_vendors);
-                    $category_id = $model1['category_id'];
-                    $q  = "select * from whitebook_vendor_item as wvi ";
-                    $q .= " left join whitebook_vendor as wv ON wvi.vendor_id = wv.vendor_id";
-                    $q .= " left join whitebook_category as wc ON wc.category_id = wvi.child_category";
-                    $q .= " left join whitebook_vendor_location as wvl ON wv.vendor_id = wvl.vendor_id";
-                    $q .= " where (wvi.item_approved = 'Yes') AND (wvi.item_status = 'Active') AND (wvi.type_id = 2) ";
-                    $q .=   $condition;
-                    $q .= " AND (wvi.item_for_sale = 'Yes') AND (wvi.vendor_id IN ($vendor_ids))";
-                    $q .= " AND (wvi.category_id = $category_id) group by wvi.item_id";
-                    $imageData = Vendoritem::findBySql($q)->limit(12)->all();
-
-//                    ->select(['{{%vendor_item}}.category_id','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
-//                        '{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
-//                    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
-//                    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-//                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
-//                    ->leftJoin('{{%vendor_location}}', '{{%vendor}}.vendor_id = {{%vendor_location}}.vendor_id')
-//                    ->where($condition)
-//                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
-//                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-//                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
-//                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-//                    ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
-//                    ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
-//                    ->groupBy('{{%vendor_item}}.item_id')
-//                    ->limit(12)
-//                    ->asArray()
-//                    ->all();
-
+                    if (!is_null($model1)) {
+                        $vendor_ids = implode(',',$active_vendors);
+                        $category_id = $model1['category_id'];
+                        $q  = "select * from whitebook_vendor_item as wvi ";
+                        $q .= " left join whitebook_vendor as wv ON wvi.vendor_id = wv.vendor_id";
+                        $q .= " left join whitebook_category as wc ON wc.category_id = wvi.child_category";
+                        $q .= " left join whitebook_vendor_location as wvl ON wv.vendor_id = wvl.vendor_id";
+                        $q .= " where (wvi.item_approved = 'Yes') AND (wvi.item_status = 'Active') AND (wvi.type_id = 2) ";
+                        $q .=   $condition;
+                        $q .= " AND (wvi.item_for_sale = 'Yes') AND (wvi.vendor_id IN ($vendor_ids))";
+                        $q .= " AND (wvi.category_id = $category_id) group by wvi.item_id";
+                        $imageData = Vendoritem::findBySql($q)->limit(12)->all();
                     }
                 }
             }
