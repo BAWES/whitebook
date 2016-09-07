@@ -152,7 +152,8 @@ class PlanController extends BaseController
                 'themes' => $themes, 
                 'vendor' => $vendor, 
                 'slug' => $slug,
-                'category_id' => $model1['category_id']
+                'category_id' => $model1['category_id'],
+                'customer_events_list' => []
             ]);
 
         } else {
