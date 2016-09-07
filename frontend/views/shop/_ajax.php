@@ -5,7 +5,8 @@ use yii\helpers\Url;
 
 if (!empty($imageData)) {
     foreach ($imageData as $key => $value) {
-        if(isset($value->image))  { ?>
+        if(isset($value->image))  {
+            ?>
             <li>
                 <div class="events_items">
                     <div class="events_images">
@@ -33,9 +34,10 @@ if (!empty($imageData)) {
                             $result = array_search($value['item_id'],$k);
 
                             if (is_numeric ($result)) { ?>  
-                                <div class="faver_icons faverited_icons"> <?php } else { ?>
+                                <div class="faver_icons faverited_icons">
+                                    <?php } else { ?>
                                 <div class="faver_icons">
-                                    <?php }?>
+                                    <?php } ?>
                                     <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
                                 <?php } ?>
                             </div>

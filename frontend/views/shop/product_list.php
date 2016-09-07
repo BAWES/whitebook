@@ -407,4 +407,11 @@ $this->registerJs("
 		});
 	}//end of function
 
+
+jQuery(document).delegate('a#filter-clear-date', 'click', function(){
+    jQuery('#delivery_date_2').val('');
+    jQuery(this).hide();
+    filter();
+})
+
 ", View::POS_END);

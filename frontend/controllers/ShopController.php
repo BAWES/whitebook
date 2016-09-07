@@ -59,9 +59,9 @@ class ShopController extends BaseController
             $ActiveVendors = Vendor::loadvalidvendorids($Category->category_id);
             
             $imageData = Vendoritem::find()
-                    ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
-                        {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id,
-                        {{%vendor}}.vendor_name'])
+                    //->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
+                      //  {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id,
+//                        {{%vendor}}.vendor_name'])
                     ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                     ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                     ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
@@ -73,7 +73,7 @@ class ShopController extends BaseController
                     ->andWhere(['{{%vendor_item}}.vendor_id' =>$ActiveVendors])
                     ->andWhere(['{{%vendor_item}}.category_id' => $Category->category_id])
                     ->groupBy('{{%vendor_item}}.item_id')
-                    ->asArray()
+                    //->asArray()
                     ->all();
         }
 
@@ -170,18 +170,18 @@ class ShopController extends BaseController
         if (Yii::$app->request->isAjax) {
 
             $data = Yii::$app->request->post();
-            $condition = '{{%vendor_item}}.trash = "Default"';
+            $condition = 'AND wvi.trash = "Default"';
             $join = '';
             if ($data['slug'] != '') {
 
                 if ($data['location'] != '') {
                     $location = explode('+', $data['location']);
-                    $condition .= ' AND {{%vendor_location}}.area_id IN('.implode(',',$location).')';
+                    $condition .= ' AND wvl.area_id IN('.implode(',',$location).')';
                 }
 
                 /* CATEGORY FILTER */
             if ($data['item_ids'] != '') {
-                $condition .= ' AND {{%category}}.slug IN("'.$data['item_ids'].'")';
+                $condition .= ' AND wc.slug IN("'.$data['item_ids'].'")';
             }
 
             /* THEMES FILTER */
@@ -208,13 +208,13 @@ class ShopController extends BaseController
 
 
                  /* END Multiple themes match comma seperate values in table*/
-                $condition .= ' AND {{%vendor_item}}.item_id IN("'.$all_valid_themes.'")';
+                $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'")';
             }
 
                 if ($data['vendor'] != '') {
                     $vendor = explode('+', $data['vendor']);
                     $v = implode('","', $vendor);
-                    $condition .= ' AND {{%vendor}}.slug IN("'.$v.'") AND {{%vendor}}.vendor_id IS NOT NULL';
+                    $condition .= ' AND wv.slug IN("'.$v.'") AND wv.vendor_id IS NOT NULL';
                 }
                 /* BEGIN PRICE FILTER */
                 if ($data['price'] != '') {
@@ -222,7 +222,7 @@ class ShopController extends BaseController
                     foreach ($price as $key => $value) {
                         $prices[] = $value;
                         $price_val = explode('-', $value);
-                        $price_val1[] = ' AND ({{%vendor_item}}.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
+                        $price_val1[] = ' AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
                     }
                     $condition1 = implode(' OR ', $price_val1);
                     $condition .= str_replace('OR AND', 'OR', $condition1);
@@ -232,27 +232,39 @@ class ShopController extends BaseController
                 $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
 
                 $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
-                // echo $condition;die;
+
                 if (!is_null($model1)) {
-                $imageData = Vendoritem::find()
-                    ->select(['{{%vendor_item}}.category_id','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
-                        '{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
-                    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
-                    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
-                    ->leftJoin('{{%vendor_location}}', '{{%vendor}}.vendor_id = {{%vendor_location}}.vendor_id')
-                    ->where($condition)
-                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
-                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
-                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-                    ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
-                    ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
-                    ->groupBy('{{%vendor_item}}.item_id')
-                    ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
-                    ->limit(12)
-                    ->asArray()
-                    ->all();
+
+                    $vendor_ids = implode(',',$active_vendors);
+                    $category_id = $model1['category_id'];
+                    $q  = "select * from whitebook_vendor_item as wvi ";
+                    $q .= " left join whitebook_vendor as wv ON wvi.vendor_id = wv.vendor_id";
+                    $q .= " left join whitebook_category as wc ON wc.category_id = wvi.child_category";
+                    $q .= " left join whitebook_vendor_location as wvl ON wv.vendor_id = wvl.vendor_id";
+                    $q .= " left join whitebook_vendor_blocked_date as wvbd ON wv.vendor_id = wvbd.vendor_id";
+                    $q .= " where wvi.item_approved = 'Yes' AND wvi.item_status = 'Active' AND wvi.type_id = 2 ";
+                    $q .= $condition;
+                    $q .= " AND wvi.item_for_sale = 'Yes' AND wvi.vendor_id IN ($vendor_ids) AND wvi.category_id = $category_id group by wvi.item_id";
+                    $imageData = Vendoritem::findBySql($q)->limit(12)->all();
+
+//                    ->select(['{{%vendor_item}}.category_id','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
+//                        '{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
+//                    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+//                    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+//                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
+//                    ->leftJoin('{{%vendor_location}}', '{{%vendor}}.vendor_id = {{%vendor_location}}.vendor_id')
+//                    ->where($condition)
+//                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
+//                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
+//                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
+//                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
+//                    ->andWhere(['{{%vendor_item}}.vendor_id' =>$active_vendors])
+//                    ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
+//                    ->groupBy('{{%vendor_item}}.item_id')
+//                    ->limit(12)
+//                    ->asArray()
+//                    ->all();
+
                     }
                 }
             }
@@ -263,7 +275,7 @@ class ShopController extends BaseController
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
             }
 
-        return $this->renderPartial('product_list_ajax', [
+        return $this->renderPartial('_ajax', [
             'imageData' => $imageData, 
             'customer_events_list' => $customer_events_list
         ]);
