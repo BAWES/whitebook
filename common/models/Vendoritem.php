@@ -217,14 +217,13 @@ class Vendoritem extends \yii\db\ActiveRecord
         return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }
 
-
-
     /**
     * @return \yii\db\ActiveQuery
     */
     public function getImage()
     {
-        return $this->hasOne(Image::className(), ['item_id' => 'item_id']);
+        //return $this->hasOne(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
+        return $this->hasOne(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
     }
 
     /**
@@ -232,7 +231,8 @@ class Vendoritem extends \yii\db\ActiveRecord
      */
     public function getImages()
     {
-        return $this->hasMany(Image::className(), ['item_id' => 'item_id']);
+        //return $this->hasMany(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
+        return $this->hasMany(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
     }
 
 

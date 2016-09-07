@@ -220,10 +220,10 @@ if ($event_status > 0) {
                     <div class="events_listing">
                         <ul>
                         <?php
-                            
+
                             if (!empty($vendorData)) {
-                                foreach ($vendorData as $key => $value) { 
-                                    require dirname(__DIR__).'/plan/item.php';
+                                foreach ($vendorData as $key => $value) {
+                                    echo $this->render('/plan/item',['value'=>$value,'customer_events_list'=>$customer_events_list]);
                                 }
                             } else {
                                 echo "No records found";

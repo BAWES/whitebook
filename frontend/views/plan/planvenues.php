@@ -10,23 +10,18 @@ use yii\widgets\Breadcrumbs;
 use yii\web\view;
 
 $get = Yii::$app->request->get();
-
 ?>
 
-<!-- coniner start -->
 <section id="inner_pages_white_back">
-
 	<div id="event_slider_wrapper">
 		<div class="container paddng0">
-			<?php require(__DIR__ . '/../product/events_slider.php'); ?>
+			<?=$this->render('/product/events_slider.php'); ?>
 		</div>
 	</div>
 
 	<div class="container paddng0">
-
 		<div class="breadcrumb_common">
 			<div class="bs-example">
-
 			<?php
 
 			$category_det=Category::category_value($slug);
@@ -97,33 +92,16 @@ $get = Yii::$app->request->get();
 					<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 					<div id="accordion" class="panel-group">
 						<!-- BEGIN CATEGORY FILTER  -->
-						<?php 
-							require 'filter/category.php';
-						?>		
-						<!--  END CATEGORY FILTER-->
-
-						<!--  BEGIN THEME FILTER-->
-						<?php 
-							require 'filter/theme.php';
-						?>
-						<!--  END THEME FILTER -->					
-
-						<!--  BEGIN VENDOR FILTER -->
-						<?php 
-							require 'filter/vendor.php';
-						?>
-						<!--  END VENDOR FILTER-->
-
-						<!--  BEGIN PRICE FILTER -->
-						<?php 
-							require 'filter/price.php';
-						?>				
+						<?=$this->render('filter/category',['slug'=>$slug]);?>
+						<?=$this->render('filter/theme',['themes'=>$themes]); ?>
+						<?=$this->render('filter/vendor',['vendor'=>$vendor]); ?>
+						<?=$this->render('filter/price',['imageData'=>$imageData]); ?>
 						<!--  END PRICE FILTER-->
 					<!-- END FILTER  -->
 					</div>
 				</nav>
-			</div><!-- END .responsive-category-bottom -->
-		</div><!-- END .plan_venues -->
+			</div>
+		</div>
 	</div>
 </div>
 <div class="col-md-9 paddingright0">
@@ -140,7 +118,7 @@ $get = Yii::$app->request->get();
 
 			if(!empty($imageData))  {
 				foreach ($imageData as $key => $value) {
-					require 'item.php';
+					echo $this->render('item',['value'=>$value,'customer_events_list'=>$customer_events_list]);
 				}  
 			} else {
 				echo Yii::t('frontend', "No records found");
@@ -156,7 +134,7 @@ $get = Yii::$app->request->get();
 			<?php if(count($imageData) > 12) { ?>
 			<div class="lode_more_buttons">
 				<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">
-					 Yii::t('frontend', 'Load More') ?>
+					 <?php echo Yii::t('frontend', 'Load More') ?>
 				</button>
 			</div>
 			<?php } ?>

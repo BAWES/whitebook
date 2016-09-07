@@ -30,20 +30,6 @@ if(Yii::$app->language == "en"){
 
 $this->title = 'Whitebook - ' . $item_name;
 
-
-// to sort order array
-function cmp($a, $b)
-{
-    return strcmp($a["vendorimage_sort_order"], $b["vendorimage_sort_order"]);
-}
-$orderImage = [];
-if (isset($model->images) && count($model->images)>0) {
-    foreach ($model->images as $value) {
-        $orderImage[] = ['image_id' => $value->image_id, 'vendorimage_sort_order' => $value->vendorimage_sort_order, 'image_path' => $value->image_path, 'module_type' => $value->module_type];
-        usort($orderImage, "cmp");
-
-    }
-}
 ?>
 
 <!-- coniner start -->
@@ -145,11 +131,11 @@ if (isset($model->images) && count($model->images)>0) {
                             <div class="carousel-inner owl-carousel" id="mobile-slider">
                                 <?php
                                 $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                if (isset($orderImage) && count($orderImage)>0) {
-                                    foreach ($orderImage as $img) {
+                                if (isset($model->images) && count($model->images)>0) {
+                                    foreach ($model->images as $img) {
                                         if ($img) {
-                                            $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
-                                            $baselink = $imgPath . $img['image_path'];
+                                            $imgPath = ($img->module_type == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
+                                            $baselink = $imgPath . $img->image_path;
                                         }
                                         ?>
                                         <div class="item"><img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px;"></div>
@@ -158,7 +144,6 @@ if (isset($model->images) && count($model->images)>0) {
                                     ?>
                             </div>
                             <!--23-10-2015 slider end-->
-
                         </div>
                         <!-- Indicators responsive slider end -->
                     </div>
@@ -170,9 +155,9 @@ if (isset($model->images) && count($model->images)>0) {
 
                                     <?php
                                         $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                        if (isset($orderImage) && count($orderImage)>0) {
-                                            foreach ($orderImage as $img) {
-                                                if ($img) {
+                                    if (isset($model->images) && count($model->images)>0) {
+                                        foreach ($model->images as $img) {
+                                            if ($img) {
                                                     $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
                                                     $baselink = $imgPath . $img['image_path'];
                                                 }
@@ -186,11 +171,10 @@ if (isset($model->images) && count($model->images)>0) {
                             <?php if (count($model->images) > 1) { ?>
                                 <div id="carousel" class="flexslider display_none_thumb">
                                     <ul class="slides">
-
                                         <?php
                                         $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                        if (isset($orderImage) && count($orderImage)>0) {
-                                            foreach ($orderImage as $img) {
+                                        if (isset($model->images) && count($model->images)>0) {
+                                            foreach ($model->images as $img) {
                                                 if ($img) {
                                                     $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
                                                     $baselink = $imgPath . $img['image_path'];
