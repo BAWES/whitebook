@@ -13,7 +13,7 @@
 </style>
 <div class="panel panel-default" >
     <div class="panel-heading">
-        <div class="clear_left"><p><?= Yii::t('frontend', 'Delivery date');?><a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
+        <div class="clear_left"><p><?= Yii::t('frontend', 'Delivery date');?><a href="javascript:void(0)" class="filter-clear" id="filter-clear-date" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
         <div class="clear_right">
             <a href="#date-filter" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
                 <h4 class="panel-title">
