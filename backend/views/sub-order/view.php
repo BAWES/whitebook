@@ -9,9 +9,6 @@ use common\models\Vendor;
 use common\models\OrderStatus;
 use common\models\SuborderItemPurchase;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\SubOrder */
-
 $this->title = 'Sub order #'.$model->suborder_id;
 $this->params['breadcrumbs'][] = ['label' => 'Sub Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
