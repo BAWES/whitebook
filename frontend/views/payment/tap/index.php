@@ -19,7 +19,7 @@
 
 <script>
 window.onload = function(){
- // document.getElementById('tap_form').submit();
+  document.getElementById('tap_form').submit();
 }
 </script>
 
