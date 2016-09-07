@@ -39,14 +39,13 @@ class Vendoritem extends \common\models\Vendoritem
                 ->where(['item_id' => $i])
                 ->one();
             }
-            foreach ($categories as  $cat) {
+            foreach($categories as  $cat) {
                 $k[]=$cat['category_id'];
             }
         }
-        if (!empty($k)) {
-            $k1=(array_unique($k));
-
-            foreach ($k1 as $c) {
+        if(!empty($k)){
+        $k1=(array_unique($k));
+            foreach($k1 as $c) {
                 $category_result[]= \common\models\Category::find()
                 ->select(['category_id','category_name'])
                 ->where(['category_id' => $c])
@@ -58,14 +57,14 @@ class Vendoritem extends \common\models\Vendoritem
 
     public static function get_vendor_itemlist($itemid)
     {
-        if (!empty($itemid)) {
-            foreach ($itemid as $i) {
+        if(!empty($itemid)){
+            foreach($itemid as $i) {
                 $vendorlist[]= Vendoritem::find()
                 ->select(['vendor_id'])
                 ->where(['item_id' => $i])
                 ->one();
             }
-            foreach ($vendorlist as  $ven) {
+            foreach($vendorlist as  $ven) {
                 $k[]=$ven['vendor_id'];
             }
             $k1=(array_unique($k));
