@@ -73,9 +73,9 @@ class PlanController extends BaseController
             if (!is_null($model1)) {
 
                 $imageData = Vendoritem::find()
-                    ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
-                        {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id,
-                        {{%vendor}}.vendor_name'])
+//                    ->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
+//                        {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id,
+//                        {{%vendor}}.vendor_name'])
                     ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                     ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                     ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
@@ -85,9 +85,9 @@ class PlanController extends BaseController
                     ->andWhere(['{{%vendor_item}}.vendor_id' => $active_vendors])
                     ->andWhere(['{{%vendor_item}}.category_id' => $model1['category_id']])
                     ->groupBy('{{%vendor_item}}.item_id')
-                    ->asArray()
+                    ->orderBy('{{%image}}.vendorimage_sort_order',SORT_ASC)
+                    //->asArray()
                     ->all();
-
             }
         }
         /* END CATEGORY */
@@ -156,7 +156,8 @@ class PlanController extends BaseController
                 'themes' => $themes, 
                 'vendor' => $vendor, 
                 'slug' => $slug,
-                'category_id' => $model1['category_id']
+                'category_id' => $model1['category_id'],
+                'customer_events_list' => []
             ]);
 
         } else {
@@ -246,8 +247,8 @@ class PlanController extends BaseController
                 // echo $condition;die;
                 if (!is_null($model1)) {
                 $imageData = Vendoritem::find()
-                    ->select(['{{%vendor_item}}.category_id','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
-                        '{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
+//                    ->select(['{{%vendor_item}}.category_id','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
+//                        '{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
                     ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                     ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                     ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
@@ -260,7 +261,7 @@ class PlanController extends BaseController
                     ->groupBy('{{%vendor_item}}.item_id')
                     ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
                     ->limit(12)
-                    ->asArray()
+                    //->asArray()
                     ->all();
                     }
                 }
@@ -472,7 +473,7 @@ class PlanController extends BaseController
             /* END PRICE FILTER */
 
             $vendorData = Vendoritem::find()
-                ->select(['{{%vendor_item}}.category_id, {{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, {{%vendor}}.vendor_name'])
+                //->select(['{{%vendor_item}}.category_id, {{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, {{%vendor}}.vendor_name'])
                 ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                 ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                 ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
@@ -484,7 +485,7 @@ class PlanController extends BaseController
                 ->andWhere(['{{%vendor}}.slug' => $data['slug']])
                 ->groupBy('{{%vendor_item}}.item_id')
                 //->limit(12)
-                ->asArray()
+                //->asArray()
                 ->all();
 
            if (!Yii::$app->user->isGuest) {
