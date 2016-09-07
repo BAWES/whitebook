@@ -24,7 +24,7 @@
 		$fifth_menu = array('PackageController','VendorController','VendoritemController','PrioritylogController');
 		$seventh_menu = array('CategoryadsController','AdverthomeController');
 		$eighth_menu = array('CustomerController');
-
+		$nineth_menu = array('ReportController');
 		?>
 		 <p class="menu-title">NAVIGATION</p>
 		<ul>
@@ -187,6 +187,23 @@
 					</li>
 				</ul>
 			</li>
+
+			<li class="<?php if (in_array($menu_act, $nineth_menu)) { echo "open"; } else { echo "noactive";} ?>">
+				<a href="javascript:;">
+					<i class="fa fa-bullseye"></i>
+					<span class="title">Reports</span>
+					<span class="<?php if (in_array($menu_act,$nineth_menu)) {echo "arrow open"; } else { echo "arrow";}?>"></span>
+				</a>
+				<ul class="sub-menu">
+					<li class="<?php if(($menu_act=='ReportController') && ($action == 'package')){echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Vendor packages', ['report/package'], ['class'=>'link-title']) ?>
+					</li>
+					<li class="<?php if(($menu_act=='ReportController') && ($action == 'commission')){echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Vendor commission', ['report/commission'], ['class'=>'link-title']) ?>
+					</li>
+				</ul>
+			</li>
+
 			<li class="<?php if ($menu_act == 'CmsController') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="fa fa-tasks"></i><span class="title">Static Pages</span>', ['cms/index'], ['class'=>'link-title']) ?>
 			</li>

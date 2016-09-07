@@ -80,11 +80,65 @@ class Vendorpackages extends \yii\db\ActiveRecord
             'modified_by' => 'Modified By',
         ];
     }
+
     /**
     * @return \yii\db\ActiveQuery
     */
     public function getPackage()
     {
         return $this->hasOne(Package::className(), ['package_id' => 'package_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public static function getReportQuery($data = array())
+    {    
+        $query = Vendorpackages::find()
+          ->select('
+              MIN(created_datetime) AS date_start, 
+              MAX(created_datetime) AS date_end, 
+              COUNT(*) AS `package_count`,
+              SUM(package_price) AS `package_price_sum`,
+          ')
+          ->where(['trash' => 'Default']);
+
+        if (!empty($data['package_id'])) {
+          $query->andWhere('package_id = ' . $data['package_id']);
+        } 
+
+        if (!empty($data['date_start'])) {
+          $query->andWhere("DATE(created_datetime) >= '" . $data['date_start'] . "'");
+        }
+
+        if (!empty($data['date_end'])) {
+          $query->andWhere("DATE(created_datetime) <= '" . $data['date_end'] . "'");
+        }
+
+        if (!empty($data['group_by'])) {
+          $group = $data['group_by'];
+        } else {
+          $group = 'day';
+        }
+
+        switch($group) {
+          case 'day';
+            $query->groupBy("YEAR(created_datetime), MONTH(created_datetime), DAY(created_datetime)");
+            break;
+          default:
+          case 'week':
+            $query->groupBy("YEAR(created_datetime), WEEK(created_datetime)");
+            break;
+          case 'month':
+            $query->groupBy("YEAR(created_datetime), MONTH(created_datetime)");
+            break;
+          case 'year':
+            $query->groupBy("YEAR(created_datetime)");
+            break;
+        }
+
+        $query->orderBy("created_datetime DESC");
+
+        return $query;
     }
 }
