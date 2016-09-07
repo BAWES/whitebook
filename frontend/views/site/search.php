@@ -237,10 +237,11 @@ if($event_status>0){
 		<div class="events_listing">
 		<ul>
 		<?php
+
 		if(!empty($imageData))
 		{
 		foreach ($imageData as $key => $value) {
-		if($value['image_path'] !="")  {
+		if(isset($value->image->image_path))  {
 		?>
 		<li>
 		<div class="events_items">
@@ -271,11 +272,11 @@ if($event_status>0){
 		<?php } ?>
 		</div>
 
-		<a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
+		<a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title="" ><?= Html::img(Yii::getAlias("@vendor_item_images_210/").$value->image->image_path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?></a>
 		</div>
 		<div class="events_descrip">
-		<a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title=""><?= $value['vendor_name']  ?>
-		<h3><?= $value['item_name']  ?></h3>
+		<a href="<?php echo Url::toRoute('product/'.$value['slug']);?>" title=""><?= $value->vendor->vendor_name  ?>
+		<h3><?= substr($value['item_name'] ,0,15) ?></h3>
 		<p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p></a>
 		</div>
 		</div>

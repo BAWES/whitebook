@@ -30,20 +30,6 @@ if(Yii::$app->language == "en"){
 
 $this->title = 'Whitebook - ' . $item_name;
 
-
-// to sort order array
-function cmp($a, $b)
-{
-    return strcmp($a["vendorimage_sort_order"], $b["vendorimage_sort_order"]);
-}
-$orderImage = [];
-if (isset($model->images) && count($model->images)>0) {
-    foreach ($model->images as $value) {
-        $orderImage[] = ['image_id' => $value->image_id, 'vendorimage_sort_order' => $value->vendorimage_sort_order, 'image_path' => $value->image_path, 'module_type' => $value->module_type];
-        usort($orderImage, "cmp");
-
-    }
-}
 ?>
 
 <!-- coniner start -->
@@ -145,11 +131,11 @@ if (isset($model->images) && count($model->images)>0) {
                             <div class="carousel-inner owl-carousel" id="mobile-slider">
                                 <?php
                                 $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                if (isset($orderImage) && count($orderImage)>0) {
-                                    foreach ($orderImage as $img) {
+                                if (isset($model->images) && count($model->images)>0) {
+                                    foreach ($model->images as $img) {
                                         if ($img) {
-                                            $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
-                                            $baselink = $imgPath . $img['image_path'];
+                                            $imgPath = ($img->module_type == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
+                                            $baselink = $imgPath . $img->image_path;
                                         }
                                         ?>
                                         <div class="item"><img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px;"></div>
@@ -158,7 +144,6 @@ if (isset($model->images) && count($model->images)>0) {
                                     ?>
                             </div>
                             <!--23-10-2015 slider end-->
-
                         </div>
                         <!-- Indicators responsive slider end -->
                     </div>
@@ -170,9 +155,9 @@ if (isset($model->images) && count($model->images)>0) {
 
                                     <?php
                                         $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                        if (isset($orderImage) && count($orderImage)>0) {
-                                            foreach ($orderImage as $img) {
-                                                if ($img) {
+                                    if (isset($model->images) && count($model->images)>0) {
+                                        foreach ($model->images as $img) {
+                                            if ($img) {
                                                     $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
                                                     $baselink = $imgPath . $img['image_path'];
                                                 }
@@ -186,11 +171,10 @@ if (isset($model->images) && count($model->images)>0) {
                             <?php if (count($model->images) > 1) { ?>
                                 <div id="carousel" class="flexslider display_none_thumb">
                                     <ul class="slides">
-
                                         <?php
                                         $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.png';
-                                        if (isset($orderImage) && count($orderImage)>0) {
-                                            foreach ($orderImage as $img) {
+                                        if (isset($model->images) && count($model->images)>0) {
+                                            foreach ($model->images as $img) {
                                                 if ($img) {
                                                     $imgPath = ($img['module_type'] == 'guides') ? Yii::getAlias("@s3/sales_guide_images/") : Yii::getAlias("@s3/vendor_item_images_530/");
                                                     $baselink = $imgPath . $img['image_path'];
@@ -421,23 +405,16 @@ if (isset($model->images) && count($model->images)>0) {
                                 <ul>
                                     <li>
                                     <a title="Facebook" onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=<?php echo $title; ?>&amp;p[summary]=<?php echo $summary; ?>&amp;p[url]=<?php echo $url; ?>&amp;&p[images][0]=<?php echo $image; ?>', 'sharer', 'toolbar=0,status=0,width=620,height=280');" href="javascript: void(0)"><span class="flaticon-facebook55"></span></a></li>
-
                                     <li><a  title="Twitter" href="https://twitter.com/share" class="twitter" target="_blank" data-url="<?php echo $url; ?>" data-text="<?php echo $title; ?>" data-lang="en" data-size="medium" data-count="none"><span class="flaticon-twitter13"></span></a></li>
-
                                     <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
-
                                     <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
-
-                                    <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>
-                                           " title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
-
+                                    <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>" title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
                                     <li><a href="mailto:<?= $model->vendor->vendor_contact_email; ?>" title="<?= $model->vendor->vendor_contact_email; ?>"><i class="flaticon-email5"></i> </a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Mobile end Here-->
 
@@ -477,7 +454,7 @@ if (isset($model->images) && count($model->images)>0) {
                                                 <?php } ?>
 
                                                 <div class="deals_listing_cont">
-                                                    <h3><?= (Yii::$app->language == "en") ? $s->vendor->vendor_name : $s->vendor->vendor_name_ar; ?></h3>
+                                                    <h3><?= (Yii::$app->language == "en") ? $s->item_name : $s->item_name_ar; ?></h3>
                                                     <p><?= $s['item_price_per_unit']; ?>KD</p>
                                                 </div>
                                             </a>
