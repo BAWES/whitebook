@@ -170,20 +170,24 @@ class ShopController extends BaseController
         if (Yii::$app->request->isAjax) {
 
             $data = Yii::$app->request->post();
-            $condition = 'AND wvi.trash = "Default"';
+            $condition = 'AND (wvi.trash = "Default") ';
             $join = '';
             if ($data['slug'] != '') {
 
                 if ($data['location'] != '') {
                     $location = explode('+', $data['location']);
-                    $condition .= ' AND wvl.area_id IN('.implode(',',$location).')';
+                    $condition .= ' AND (wvl.area_id IN('.implode(',',$location).')) ';
                 }
 
                 /* CATEGORY FILTER */
             if ($data['item_ids'] != '') {
-                $condition .= ' AND wc.slug IN("'.$data['item_ids'].'")';
+                $condition .= ' AND (wc.slug IN("'.$data['item_ids'].'")) ';
             }
 
+            if ($data['date'] != '') {
+                $date = date('Y-m-d',strtotime($data['date']));
+                $condition .= " AND (wv.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '$date')) ";
+            }
             /* THEMES FILTER */
             if ($data['themes'] != '') {
                 $theme = explode('+', $data['themes']);
@@ -214,7 +218,7 @@ class ShopController extends BaseController
                 if ($data['vendor'] != '') {
                     $vendor = explode('+', $data['vendor']);
                     $v = implode('","', $vendor);
-                    $condition .= ' AND wv.slug IN("'.$v.'") AND wv.vendor_id IS NOT NULL';
+                    $condition .= ' AND (wv.slug IN("'.$v.'") AND wv.vendor_id IS NOT NULL) ';
                 }
                 /* BEGIN PRICE FILTER */
                 if ($data['price'] != '') {
@@ -222,7 +226,7 @@ class ShopController extends BaseController
                     foreach ($price as $key => $value) {
                         $prices[] = $value;
                         $price_val = explode('-', $value);
-                        $price_val1[] = ' AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
+                        $price_val1[] = ' AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].') ';
                     }
                     $condition1 = implode(' OR ', $price_val1);
                     $condition .= str_replace('OR AND', 'OR', $condition1);
@@ -241,10 +245,10 @@ class ShopController extends BaseController
                     $q .= " left join whitebook_vendor as wv ON wvi.vendor_id = wv.vendor_id";
                     $q .= " left join whitebook_category as wc ON wc.category_id = wvi.child_category";
                     $q .= " left join whitebook_vendor_location as wvl ON wv.vendor_id = wvl.vendor_id";
-                    $q .= " left join whitebook_vendor_blocked_date as wvbd ON wv.vendor_id = wvbd.vendor_id";
-                    $q .= " where wvi.item_approved = 'Yes' AND wvi.item_status = 'Active' AND wvi.type_id = 2 ";
-                    $q .= $condition;
-                    $q .= " AND wvi.item_for_sale = 'Yes' AND wvi.vendor_id IN ($vendor_ids) AND wvi.category_id = $category_id group by wvi.item_id";
+                    $q .= " where (wvi.item_approved = 'Yes') AND (wvi.item_status = 'Active') AND (wvi.type_id = 2) ";
+                    $q .=   $condition;
+                    $q .= " AND (wvi.item_for_sale = 'Yes') AND (wvi.vendor_id IN ($vendor_ids))";
+                    $q .= " AND (wvi.category_id = $category_id) group by wvi.item_id";
                     $imageData = Vendoritem::findBySql($q)->limit(12)->all();
 
 //                    ->select(['{{%vendor_item}}.category_id','{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',

@@ -27,10 +27,9 @@ if (!empty($imageData)) {
                             
                             $k=array();
                             
-                            foreach((array)$customer_events_list as $l){
+                            foreach((array)$customer_events_list as $l) {
                                 $k[]=$l['item_id'];
                             }
-                            
                             $result = array_search($value['item_id'],$k);
 
                             if (is_numeric ($result)) { ?>  
