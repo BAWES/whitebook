@@ -1088,7 +1088,6 @@ jQuery(".add_to_favourite").click(function(){
 });
 
 jQuery(".faver_evnt_product").click(function(){
-    if(isGuest) {
 
         jQuery('#loading_img').show();
 
@@ -1108,7 +1107,6 @@ jQuery(".faver_evnt_product").click(function(){
                 jQuery('#loading_img').hide();
             }
         });
-    }
 });
 
 function add_to_event(x)
