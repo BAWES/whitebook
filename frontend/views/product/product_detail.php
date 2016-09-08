@@ -479,7 +479,6 @@ $this->title = 'Whitebook - ' . $item_name;
 $this->registerJs("
 
     var isGuest = ".(int)Yii::$app->user->isGuest.";
-
     var vendor_id = '".$model['vendor_id']."';
     var customer_id = '".Yii::$app->user->id."';
     var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('users/addtobasket')."';
