@@ -24,9 +24,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'order_status_id')->dropDownList($order_status, ['prompt'=>'Select...']); ?>
 
-    <?= $form->field($model, 'under_testing')->textInput() ?>
+    <?= $form->field($model, 'under_testing')->dropDownList([0 => 'No', 1 => 'Yes']) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList([0 => 'Inactive', 1 => 'Active']) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
