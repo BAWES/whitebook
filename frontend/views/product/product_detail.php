@@ -8,7 +8,6 @@ use common\models\Itemtype;
 use frontend\models\Category;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
-
 $vendor_det = $model->vendor;
 $category_det = Category::category_slug($model['category_id']);
 
@@ -249,13 +248,13 @@ $this->title = 'Whitebook - ' . $item_name;
                                         </div>
                                         <!-- Add to Event End here -->
 
-                                        <?php if (Yii::$app->user->isGuest) { ?>
+                                        <?php /*if (Yii::$app->user->isGuest) { ?>
                                             <div class="buy_events"><a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"><?= Yii::t('frontend', 'Buy') ?></a></div>
                                         <?php } else if ($model->type_id ==2 && $model->item_for_sale == 'Yes' && $model->item_amount_in_stock > 0) { ?>
                                             <div class="buy_events"><a href="#" id="<?php echo $model['item_id']; ?>" class="buy_item" data-slug="<?php echo $model['slug']; ?>"><?= Yii::t('frontend', 'Buy') ?></a></div>
                                         <?php } else { ?>
                                             <div class="buy_events"><a href="#" id="<?php echo $model['item_id']; ?>" class="stock"><?= Yii::t('frontend', 'Out of stock') ?></a></div>
-                                        <?php } ?>
+                                        <?php }*/ ?>
                                     </div>
                                 </div>
                             </div>
