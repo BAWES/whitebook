@@ -149,6 +149,7 @@ jQuery('#delivery_date_2').datepicker({
     autoclose:true,
 }).on("change", function (e) {
     filter();
+    jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block');
 });
 // megamenu script end
 

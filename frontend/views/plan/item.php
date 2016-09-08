@@ -44,7 +44,7 @@ use yii\helpers\Url;
 					echo Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value->image->image_path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
 				} else {
 					echo Html::img('http://placehold.it/210x208',['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
-				 } ?>
+			 	} ?>
 			</a>
 		</div>
 		<div class="events_descrip">
