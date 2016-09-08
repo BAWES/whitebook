@@ -510,12 +510,13 @@ class SiteController extends BaseController
 
             if (!isset(Yii::$app->user->identity->customer_id)) {
                 return $this->render('vendor_profile', [
-                  'vendor_detail' => $vendor_details, 
-                  'vendor_item_details' => $vendor_item_details, 
-                  'themes' => $themes,
-                  'category' => $main_category, 
-                  'vendorData' => $vendorData,
-                  'slug'=>$slug,
+                    'vendor_detail' => $vendor_details,
+                    'vendor_item_details' => $vendor_item_details,
+                    'themes' => $themes,
+                    'category' => $main_category,
+                    'vendorData' => $vendorData,
+                    'customer_events_list' => [],
+                    'slug'=>$slug,
                 ]);
             } else {
                 $event_limit = 8;
