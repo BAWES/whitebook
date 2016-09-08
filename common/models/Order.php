@@ -101,7 +101,7 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
-    public function place_order($gateway_name, $gateway_percentage, $order_status_id = 0, $transaction_id = ''){
+    public function place_order($gateway_name, $gateway_percentage, $gateway_fees, $order_status_id = 0, $transaction_id = ''){
 
         //address ids saved in session from checkout 
         $addresses = Yii::$app->session->get('address');
@@ -141,6 +141,7 @@ class Order extends \yii\db\ActiveRecord
         $order->order_payment_method = $gateway_name;
         $order->order_transaction_id = $transaction_id;
         $order->order_gateway_percentage = $gateway_percentage;
+        $order->order_gateway_fees = $gateway_fees;
         $order->order_gateway_total = $gateway_total;
         $order->order_ip_address = Request::getUserIP();
         $order->trash = 'Default';

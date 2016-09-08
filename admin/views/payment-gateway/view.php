@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name_ar',
             'code',
             'percentage',
+            'fees',
             [
              'attribute' => 'order_status',
              'value' => $model->orderStatus->name

@@ -49,6 +49,7 @@ class SubOrderSearch extends Suborder
         // add conditions that should always apply here
 
         $query->where('whitebook_suborder.trash="default"');
+        $query->orderBy('suborder_id DESC');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

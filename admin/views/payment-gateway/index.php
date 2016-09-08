@@ -16,13 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'gateway_id',
             'name',
             'name_ar',
             //'code',
             'percentage',
+            'fees',
             // 'order_status_id',
             // 'under_testing',
             // 'status',
@@ -33,4 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+    <p class="error">KNET will charge fixed fees only, Creditcard will charge as per commission(%) set above in Tap Gateway.</p>
 </div>

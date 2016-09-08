@@ -20,7 +20,7 @@ class PaymentGatewaySearch extends PaymentGateway
         return [
             [['gateway_id', 'order_status_id', 'under_testing', 'status'], 'integer'],
             [['name', 'name_ar', 'code'], 'safe'],
-            [['percentage'], 'number'],
+            [['percentage', 'fees'], 'number'],
         ];
     }
 
@@ -62,6 +62,7 @@ class PaymentGatewaySearch extends PaymentGateway
         $query->andFilterWhere([
             'gateway_id' => $this->gateway_id,
             'percentage' => $this->percentage,
+            'fees' => $this->fees,
             'order_status_id' => $this->order_status_id,
             'under_testing' => $this->under_testing,
             'status' => $this->status,
