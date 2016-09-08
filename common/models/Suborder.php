@@ -103,4 +103,54 @@ class Suborder extends \yii\db\ActiveRecord
     public function getStatusName() {
         return $this->status->name;
     }
+
+    public static function getReportQuery($data = array())
+    {    
+        $query = Suborder::find()
+          ->select('
+              MIN(created_datetime) AS date_start, 
+              MAX(created_datetime) AS date_end, 
+              COUNT(*) AS `suborder_count`,
+              SUM(suborder_commission_total) AS `commission`,
+          ')
+          ->where(['trash' => 'Default']);
+
+        if (!empty($data['vendor_id'])) {
+          $query->andWhere('vendor_id = ' . $data['vendor_id']);
+        } 
+
+        if (!empty($data['date_start'])) {
+          $query->andWhere("DATE(created_datetime) >= '" . $data['date_start'] . "'");
+        }
+
+        if (!empty($data['date_end'])) {
+          $query->andWhere("DATE(created_datetime) <= '" . $data['date_end'] . "'");
+        }
+
+        if (!empty($data['group_by'])) {
+          $group = $data['group_by'];
+        } else {
+          $group = 'day';
+        }
+
+        switch($group) {
+          case 'day';
+            $query->groupBy("YEAR(created_datetime), MONTH(created_datetime), DAY(created_datetime)");
+            break;
+          default:
+          case 'week':
+            $query->groupBy("YEAR(created_datetime), WEEK(created_datetime)");
+            break;
+          case 'month':
+            $query->groupBy("YEAR(created_datetime), MONTH(created_datetime)");
+            break;
+          case 'year':
+            $query->groupBy("YEAR(created_datetime)");
+            break;
+        }
+
+        $query->orderBy("created_datetime DESC");
+
+        return $query;
+    }
 }
