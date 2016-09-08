@@ -25,7 +25,7 @@ class TapController extends Controller
         }
 
         //place order with 0 - missing order 
-        $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['order_status_id']);
+        $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['fees'], $gateway['order_status_id']);
 
         Yii::$app->session->set('order_id', $order_id);
 
@@ -58,7 +58,7 @@ class TapController extends Controller
     }
 
     public function actionCallback() {
-        
+
         $request = Yii::$app->request->get();
 
         $order_id = $request['trackid'];
@@ -92,11 +92,23 @@ class TapController extends Controller
             
         } else {
             
-            //gateway info 
-            $gateway = PaymentGateway::find()->where(['code' => 'cod', 'status' => 1])->one();
-
             //load order 
             $order = Order::findOne($order_id);
+
+            //gateway info 
+            $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
+
+            if($request['crdtype'] == 'KNET') {
+                $order->order_payment_method = 'Tap - Paid with KNET';
+                $order->order_gateway_fees = $gateway->fees;
+                $order->order_gateway_percentage = 0;
+                $order->order_gateway_total = $gateway->fees;//fixed price fee 
+            } else {
+                $order->order_payment_method = 'Tap - Paid with Creditcard/Debitcard';
+                $order->order_gateway_fees = 0;
+                $order->order_gateway_percentage = $gateway->percentage;
+                $order->order_gateway_total = $gateway->percentage * ($order->order_total_with_delivery / 100);
+            }
 
             //update status 
             $order->order_transaction_id = $request['ref'];

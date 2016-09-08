@@ -14,7 +14,8 @@ class OrdersController extends BaseController
 
 		$query = Order::find()
 			->where('customer_id = ' . Yii::$app->user->getId())
-			->andWhere('order_transaction_id != ""');
+			->andWhere('order_transaction_id != ""')
+			->orderBy('created_datetime DESC');
 
 		// create a pagination object with the total count
 		$pagination = new Pagination(['totalCount' => $query->count()]);

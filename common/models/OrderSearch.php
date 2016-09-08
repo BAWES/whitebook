@@ -48,6 +48,7 @@ class OrderSearch extends Order
 
         // add conditions that should always apply here
         $query->where('order_transaction_id != "" AND whitebook_order.trash="default"');
+        $query->orderBy('order_id DESC');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

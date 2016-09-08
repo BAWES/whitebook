@@ -34,7 +34,7 @@ class PaymentGateway extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'name_ar', 'code'], 'required'],
-            [['percentage'], 'number'],
+            [['percentage', 'fees'], 'number'],
             [['order_status_id', 'under_testing', 'status'], 'integer'],
             [['name', 'name_ar', 'code'], 'string', 'max' => 100]
         ];
@@ -50,7 +50,8 @@ class PaymentGateway extends \yii\db\ActiveRecord
             'name' => 'Name',
             'name_ar' => 'Name - Arabic',
             'code' => 'Code',
-            'percentage' => 'Percentage',
+            'percentage' => 'Commission (%)',
+            'fees' => 'Fees',
             'order_status_id' => 'Order Status ID',
             'under_testing' => 'Under Testing',
             'status' => 'Status',

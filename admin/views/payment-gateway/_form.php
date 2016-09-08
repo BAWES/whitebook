@@ -20,6 +20,8 @@ use yii\widgets\ActiveForm;
     
     <?= $form->field($model, 'percentage')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'fees')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'order_status_id')->dropDownList($order_status, ['prompt'=>'Select...']); ?>
 
     <?= $form->field($model, 'under_testing')->textInput() ?>
