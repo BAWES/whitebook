@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Package Report';
+$this->title = 'Commission Report';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
