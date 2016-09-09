@@ -43,7 +43,7 @@ use yii\web\view;
 			
 								if($ltr === $f) { ?>
 								
-								<li><?= Html::a(strtoupper($theme_name),Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']])) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),Url::toRoute(['/site/theme-search/','slug'=>$d['slug']])) ?></li>
 								<?php 
 								
 								} 
