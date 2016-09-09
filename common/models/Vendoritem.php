@@ -223,7 +223,7 @@ class Vendoritem extends \yii\db\ActiveRecord
     public function getImage()
     {
         //return $this->hasOne(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
-        return $this->hasOne(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
+        return $this->hasOne(Image::className(), ['item_id' => 'item_id'])->where(['module_type'=>'vendor_item'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
     }
 
     /**
