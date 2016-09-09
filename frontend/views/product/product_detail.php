@@ -425,6 +425,7 @@ $this->title = 'Whitebook - ' . $item_name;
                     <div class="feature_product_slider">
                         <div id="similar-products-slider">
                             <?php
+                            $imgUrl = '';
                             $imglink = Yii::getAlias('@vendor_images/no_image.png');
                             $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
                             foreach ($similiar_item as $s) {
