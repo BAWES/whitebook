@@ -23,6 +23,7 @@ use common\models\Itemtype;
 use common\models\Vendoritempricing;
 use common\models\Prioritylog;
 use admin\models\Priorityitem;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -49,25 +50,25 @@ class VendoritemController extends Controller
     {
         return [
         'verbs' => [
-        'class' => VerbFilter::className(),
-        'actions' => [
-        //'delete' => ['post'],
-        ],
+            'class' => VerbFilter::className(),
+            'actions' => [
+                //'delete' => ['post'],
+            ],
         ],
         'access' => [
-        'class' => AccessControl::className(),
-        'rules' => [
-        [
-        'actions' => [],
-        'allow' => true,
-        'roles' => ['?'],
-        ],
-        [
-        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'check', 'itemactive', 'status', 'removequestion', 'sort_vendor_item', 'addquestion', 'renderquestion', 'renderanswer', 'guideimage', 'viewrenderquestion', 'itemgallery', 'uploadhandler', 'uploadhandler1', 'galleryupload', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck'],
-        'allow' => true,
-        'roles' => ['@'],
-        ],
-        ],
+            'class' => AccessControl::className(),
+            'rules' => [
+                [
+                    'actions' => [],
+                    'allow' => true,
+                    'roles' => ['?'],
+                ],
+                [
+                    'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'check', 'itemactive', 'status', 'removequestion', 'sort_vendor_item', 'addquestion', 'renderquestion', 'renderanswer', 'guideimage', 'viewrenderquestion', 'itemgallery', 'uploadhandler', 'uploadhandler1', 'galleryupload', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck'],
+                    'allow' => true,
+                    'roles' => ['@'],
+                ],
+            ],
         ],
         ];
     }
@@ -104,7 +105,6 @@ public function actionIndex()
 */
 public function actionView($id)
 {
-
     $access = Authitem::AuthitemviewCheck('view', '23');
     if (yii::$app->user->can($access)) {
         $dataProvider1=  Priorityitem::find()
@@ -209,16 +209,15 @@ public function actionCreate($vid = '')
             //END Manage item pricing table
 
                 /* Themes table Begin*/
+
                 $vendor_item = Yii::$app->request->post('Vendoritem');
-
-                if ($vendor_item['themes']) {
-
-                    $theme_id = implode(',', $vendor_item['themes']);
-                    $vendor_item_themes = new Vendoritemthemes();
-                    $vendor_item_themes->item_id = $itemid;
-                    $vendor_item_themes->theme_id = $theme_id;
-                    $vendor_item_themes->vendor_id = $model['vendor_id'];
-                    $vendor_item_themes->save();
+                if (isset($vendor_item['themes']) && $_POST['Vendoritem']['themes'] != '' && count($vendor_item['themes'])>0 ) {
+                    foreach($vendor_item['themes'] as $value) {
+                        $themeModel = new Vendoritemthemes();
+                        $themeModel->item_id = $itemid;
+                        $themeModel->theme_id = $value;
+                        $themeModel->save();
+                    }
                 }
                 /* Themes table End */
 
@@ -380,6 +379,9 @@ public function actionUpdate($id, $vid = false)
     $access = Authitem::AuthitemCheck('2', '23');
     if (yii::$app->user->can($access)) {
         $model = $this->findModel($id);
+
+        $model->themes = \yii\helpers\ArrayHelper::map($model->vendorItemThemes, 'theme_id', 'theme_id');
+
         $model_question = Vendoritemquestion::find()
         ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
         ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
@@ -403,7 +405,8 @@ public function actionUpdate($id, $vid = false)
 
         $theme_selected = Themes::loadthemenameupdate($selected_themes['theme_id']);
         $exist_themes = explode(',', $selected_themes['theme_id']);
-        $model->themes = $exist_themes;
+
+
         $selected_groups = Featuregroupitem::find()->where('item_id = "'.$id.'"')->one();
         $exist_groups = explode(',', $selected_groups['group_id']);
         $model->groups = $exist_groups;
@@ -593,21 +596,27 @@ public function actionUpdate($id, $vid = false)
 
                 /* Themes table Begin*/
                 $vendor_item = Yii::$app->request->post('Vendoritem');
-
-                if ($vendor_item['themes']) {
-
-                    $save = 'update';
-
-                    if (!isset($selected_themes)) {
-                        $selected_themes = new Vendoritemthemes();
-                        $selected_themes->vendor_id = $model['vendor_id'];
-                        $save = 'save';
+                Vendoritemthemes::deleteAll(['item_id'=>$id]); # to clear old values
+                if (isset($vendor_item['themes']) && count($vendor_item['themes'])>0 && $_POST['Vendoritem']['themes'] !='') {
+                    foreach ($vendor_item['themes'] as $values) {
+                        $themesModel = new Vendoritemthemes();
+                        $themesModel->item_id = $id;
+                        $themesModel->theme_id = $values;
+                        $themesModel->save();
                     }
-
-                    $theme_id = implode(',', $vendor_item['themes']);
-                    $selected_themes->item_id = $itemid;
-                    $selected_themes->theme_id = $theme_id;
-                    $selected_themes->$save();
+//
+//                    $save = 'update';
+//
+//                    if (!isset($selected_themes)) {
+//                        $selected_themes = new Vendoritemthemes();
+//                        $selected_themes->vendor_id = $model['vendor_id'];
+//                        $save = 'save';
+//                    }
+//
+//                    $theme_id = implode(',', $vendor_item['themes']);
+//                    $selected_themes->item_id = $itemid;
+//                    $selected_themes->theme_id = $theme_id;
+//                    $selected_themes->$save();
                 }
                 /* Themes table End */
 
@@ -671,7 +680,7 @@ public function actionUpdate($id, $vid = false)
                 }
             }
 
-            Yii::$app->session->setFlash('success', 'Vendor item updated successfully!');
+            Yii::$app->session->setFlash('success', 'Vendor item With ID '.$id.' updated successfully!');
 
             Yii::info('[Item Updated] Admin updated '.addslashes($model->item_name).' item information', __METHOD__);
 

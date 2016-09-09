@@ -289,17 +289,18 @@ class Vendoritem extends \yii\db\ActiveRecord
     */
     public function getVendorItemThemes()
     {
-        return $this->hasMany(VendorItemTheme::className(), ['item_id' => 'item_id']);
+        return $this->hasMany(Vendoritemthemes::className(), ['item_id' => 'item_id']);
     }
 
     /**
     * @return \yii\db\ActiveQuery
     */
 
-    public function getThemes()
-    {
-        return $this->hasMany(Theme::className(), ['theme_id' => 'theme_id'])->viaTable('whitebook_vendor_item_theme', ['item_id' => 'item_id']);
-    }
+//    public function getThemes()
+//    {
+//        //return $this->hasMany(Theme::className(), ['theme_id' => 'theme_id'])->viaTable('whitebook_vendor_item_theme', ['item_id' => 'item_id']);
+//        return $this->hasMany(Vendoritemthemes::className(), ['item_id' => 'item_id']);
+//    }
 
     public static function vendoritemcount($vid='')
     {
