@@ -90,7 +90,7 @@ use yii\web\view;
 
 							if($first_letter == $f)
 								{if($i<$first){ ?>
-								<li><?= Html::a(strtoupper($theme_name),Url::toRoute(['/site/themesearch/','slug'=>$d['slug']])) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),Url::toRoute(['/site/theme-search/','slug'=>$d['slug']])) ?></li>
 								<?php }  } }?>
 							</ul>
 						</div><!-- END .direct_list -->
@@ -121,7 +121,7 @@ use yii\web\view;
 							}
 
 							if($first_letter == $f) { ?>
-								<li><?= Html::a(strtoupper($theme_name),Url::toRoute(['/site/themesearch/','slug'=>$d['slug']])) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),Url::toRoute(['/site/theme-search/','slug'=>$d['slug']])) ?></li>
 								<?php  
 
 							} //if
@@ -161,7 +161,7 @@ use yii\web\view;
 							}
 
 							if($first_letter == $f) { ?>
-								<li><?= Html::a(strtoupper($theme_name), Url::toRoute(['/site/themesearch/','slug'=>$d['slug']])) ?></li>
+								<li><?= Html::a(strtoupper($theme_name), Url::toRoute(['/site/theme-search/','slug'=>$d['slug']])) ?></li>
 								<?php  
 							}//if
 
