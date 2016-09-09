@@ -413,7 +413,7 @@ function filter() {
 		window.history.pushState("test", "Title", url_path);
 	}
 
-	var path = window.location.href;//"<?= Url::to(['site/themesearch']); ?> ";
+	var path = window.location.href;//"<?= Url::to(['site/theme-search']); ?> ";
 	<?php $giflink= Url::to("@web/images/ajax-loader.gif");?>
 	jQuery.ajax({
 		type:'POST',
