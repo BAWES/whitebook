@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         'item_approved',
                         [
                             'label'=>'Themes',
-                            'value'  => Vendoritemthemes::themedetails($model->item_id),
+                            'value'  => Vendoritemthemes::themedetails($model),
                         ],
                         [
                             'label'=>'Group',
