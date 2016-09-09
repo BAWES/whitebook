@@ -1,9 +1,7 @@
 <?php
 
 namespace common\models;
-use admin\models\Themes;
-use common\models\Vendoritemthemes;
-use common\models\vendoritemthemesSearch;
+
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
@@ -11,6 +9,10 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use common\models\Vendoritemthemes;
+use common\models\vendoritemthemesSearch;
+use frontend\models\Themes as ItemTheme;
+
 /**
 * This is the model class for table "whitebook_vendor_item".
 *
@@ -104,7 +106,7 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
     */
     public function getThemeDetail()
     {
-        return $this->hasOne(Themes::className(), ['theme_id' => 'theme_id']);
+        return $this->hasOne(ItemTheme::className(), ['theme_id' => 'theme_id']);
     }
 
     /**
@@ -155,7 +157,7 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
 
     public function getThemeName($id)
     {
-        $theme_name= Themes::find()
+        $theme_name= ItemTheme::find()
         ->select('theme_name')
         ->where(['!=', 'theme_status', 'Deactive'])
         ->andwhere(['!=', 'trash', 'Deleted'])
