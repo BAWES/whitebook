@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+use admin\models\Themes;
 use common\models\Vendoritemthemes;
 use common\models\vendoritemthemesSearch;
 use Yii;
@@ -90,12 +91,20 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
     }
 
 
-     /**
+    /**
     * @return \yii\db\ActiveQuery
     */
     public function getVendoritem()
     {
         return $this->hasOne(Vendoritem::className(), ['vendor_id' => 'vendor_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getThemeDetail()
+    {
+        return $this->hasOne(Themes::className(), ['theme_id' => 'theme_id']);
     }
 
     /**
@@ -132,33 +141,15 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
         return $id=$id['id'];
     }
 
-    public static function themedetails($t)
+    public static function themedetails($model)
     {
-        $id= Vendoritemthemes::find()
-        ->select(['theme_id'])
-        ->where(['=', 'item_id', $t])
-        ->one();
-        $id=$id['theme_id'];
-        //print_r ($id);die;
-        $k=explode(',',$id);
-
-        foreach ($k as $key=>$value)
-        {
-            $theme_name[]= Themes::find()
-            ->select('theme_name')
-            ->where(['!=', 'theme_status', 'Deactive'])
-            ->andwhere(['!=', 'trash', 'Deleted'])
-            ->andwhere(['theme_id' => $value])
-            ->one();
+        $string = [];
+        if (isset($model->vendorItemThemes) && count($model->vendorItemThemes)>0) {
+            foreach ($model->vendorItemThemes as $theme) {
+                $string[] = ucfirst($theme->themeDetail->theme_name);
+            }
         }
-
-        $i=0;
-        foreach ($theme_name as $key=>$value)
-        {
-            $themelist[]=$theme_name[$i]['theme_name'];
-            $i++;
-        }
-        return implode(", ",$themelist);
+        return implode(', ',$string);
     }
 
 
