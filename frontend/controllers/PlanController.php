@@ -578,14 +578,14 @@ class PlanController extends BaseController
 
                 $result = Vendoritem::findBySql($q)->asArray()->all();
 
-                $customer_id = Yii::$app->user->identity->customer_id;
-                $usermodel = new Users();
-                $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
-                if (!empty($customer_id)) {
-                    return $this->renderPartial('loaditems', ['imageData' => $result]);
+                if (Yii::$app->user->isGuest) {
+                    $customer_events_list = [];
                 } else {
-                    return $this->renderPartial('loaditems', ['imageData' => $result, 'customer_events_list' => $customer_events_list]);
+                    $customer_id = Yii::$app->user->identity->customer_id;
+                    $usermodel = new Users();
+                    $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
                 }
+                return $this->renderPartial('loaditems', ['imageData' => $result, 'customer_events_list' => $customer_events_list]);
             }
         }
     }
