@@ -1,4 +1,5 @@
 <?php $this->title = 'Plan | Whitebook'; ?>
+
 <link href="<?= Url::to("@web/fonts/flaticon/plan/flaticon.css") ?>" rel="stylesheet">
 
 <!-- coniner start -->

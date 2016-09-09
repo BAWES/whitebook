@@ -31,20 +31,26 @@ use yii\helpers\Url;
 			}
 
 			if (is_numeric ($result)) { ?>
-				<div class="faver_icons faverited_icons">
-					<?php } else { ?>
-						<div class="faver_icons">
-					<?php }?>
-						<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
-					<?php } ?>
-				</div>
+			<div class="faver_icons faverited_icons">
+			<?php } else { ?>
+					<div class="faver_icons">
+			<?php }?>
+					<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
+			<?php } ?>
+			</div>
 
 			<a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title="" >
-				<?php if(isset($value->image) && $value->image->image_path) {
-					echo Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value->image->image_path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
+				<?php 
+
+				if(isset($value->image)) {
+					$path = Yii::getAlias("@s3/vendor_item_images_210/").$value->image->image_path;
 				} else {
-					echo Html::img('http://placehold.it/210x208',['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
-			 	} ?>
+					$path = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
+				}
+
+				echo Html::img($path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
+				
+				?>
 			</a>
 		</div>
 		<div class="events_descrip">
