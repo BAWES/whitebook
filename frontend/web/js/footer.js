@@ -841,7 +841,11 @@ jQuery('#search_input_header').keydown(function(e) {
         var url = search_result_url;
         var path = url.concat(search2);
 
-        window.location.href=path;
+        if(search2) {
+            window.location.href = path;
+        } else {
+            window.location.href = url + 'all';    
+        }        
     }
 });
 
