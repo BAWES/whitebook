@@ -360,15 +360,15 @@ function questionView(q_id,tis){
 
 /* 	BEGIN Themes and groups multiselect widget */
 $(function(){
- 	$('#vendoritem-themes').multiselect({
-		'enableFiltering': true,
-        'filterPlaceholder': 'Search for something...'
-    });
-    
-    $('#vendoritem-groups').multiselect({
-		'enableFiltering': true,
-        'filterPlaceholder': 'Search for something...'
-    });
+ 	//$('#vendoritem-themes').multiselect({
+		//'enableFiltering': true,
+    //    'filterPlaceholder': 'Search for something...'
+    //});
+    //
+    //$('#vendoritem-groups').multiselect({
+		//'enableFiltering': true,
+    //    'filterPlaceholder': 'Search for something...'
+    //});
 
 });
 /* END Themes and groups multiselect widget */

@@ -10,14 +10,6 @@ use yii\web\view;
 use kartik\file\FileInput;
 
 $request = Yii::$app->request;
-
-if($model->isNewRecord){
-	$categoryname = array();
-	$subcategory = array();
-	$childcategory = array();
-	$exist_themes =array();
-	$exist_groups = array();
-}
 $itemType  = \yii\helpers\ArrayHelper::map($itemType,'type_id','type_name');
 $themelist = \yii\helpers\ArrayHelper::map($themes,'theme_id','theme_name');
 function cmp($a, $b)
@@ -26,6 +18,17 @@ function cmp($a, $b)
 }
 
 ?>
+<style>
+	#vendoritem-groups label,#vendoritem-themes label {
+		float: left;
+		min-width: 15%;
+		margin-right: 43px;
+	}
+	.border-top{
+		border-top: 1px solid;
+	}
+	.padding-top-bottom{padding: 36px 0;}
+</style>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -220,8 +223,15 @@ function cmp($a, $b)
 		<!--End fifth Tab -->
 
 		<div class="tab-pane" id="6">
-			<div class="form-group"><?= $form->field($model, 'themes',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($themelist , ['multiple'=>'multiple',]) ?></div>
-			<div class="form-group"><?= $form->field($model, 'groups',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($grouplist , ['multiple'=>'multiple']) ?></div>
+			<div class="form-group clearfix padding-top-bottom">
+				<?php echo $form->field($model, 'themes')->checkboxlist($themelist);?>
+				<?php //$form->field($model, 'themes',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($themelist , ['multiple'=>'multiple',]) ?>
+			</div>
+			<div class="border-top"></div>
+			<div class="padding-top-bottom form-group clearfix">
+				<?php echo $form->field($model, 'groups')->checkboxlist($grouplist);?>
+				<?php //$form->field($model, 'groups',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($grouplist , ['multiple'=>'multiple']) ?>
+			</div>
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 			
 			<?= Html::submitButton('Complete', [
