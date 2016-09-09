@@ -105,7 +105,6 @@ public function actionIndex()
 */
 public function actionView($id)
 {
-
     $access = Authitem::AuthitemviewCheck('view', '23');
     if (yii::$app->user->can($access)) {
         $dataProvider1=  Priorityitem::find()
