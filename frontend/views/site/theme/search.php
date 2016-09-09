@@ -91,8 +91,7 @@ $get = Yii::$app->request->get();
 						<?php
 
 						if(!empty($imageData)) {
-							foreach ($imageData as $key => $value) {
-								if(isset($value->image->image_path)) { ?>
+							foreach ($imageData as $key => $value) { ?>
 									<li>
 										<div class="events_items">
 											<div class="events_images">
@@ -128,7 +127,11 @@ $get = Yii::$app->request->get();
 													</div>
 
 													<a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title="" >
-                                                        <?= Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value->image->image_path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?>
+                                                        <?php if(isset($value->image->image_path))  { ?>
+                                                            <?= Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value->image->image_path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?>
+                                                        <?php } else {
+                                                            echo Html::img('http://placehold.it/210x208',['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
+                                                            } ?>
                                                         <br/>
                                                     </a>
 												</div>
@@ -140,7 +143,6 @@ $get = Yii::$app->request->get();
 											</div>
 									</li>
 							<?php
-								}
 							}
 						} else {
 							echo "No records found";
