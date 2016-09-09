@@ -5,7 +5,6 @@ use yii\helpers\Url;
 use kartik\sortable\Sortable;
 use admin\models\Vendor;
 use common\models\Vendoritemquestion;
-use dosamigos\fileupload\FileUploadUI;
 use yii\web\view;
 use kartik\file\FileInput;
 $request = Yii::$app->request;
@@ -19,6 +18,18 @@ if($model->isNewRecord){
 }
 
 ?>
+
+<style>
+	#vendoritem-groups label,#vendoritem-themes label {
+		float: left;
+		min-width: 15%;
+		margin-right: 43px;
+	}
+	.border-top{
+		border-top: 1px solid;
+	}
+	.padding-top-bottom{padding: 36px 0;}
+</style>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -270,14 +281,13 @@ if($model->isNewRecord){
 		<!--End fifth Tab -->
 
 		<div class="tab-pane" id="6">
-			<!-- BEGIN Exist THEME list displayed on JSON format-->
-			<div class="form-group"><?= $form->field($model, 'themes',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($themelist , ['multiple'=>'multiple',]) ?></div>
-			 <!-- BEGIN Exist theme list displayed on JSON format-->
-			 <div class="form-group"><?= $form->field($model, 'groups',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($grouplist , ['multiple'=>'multiple']) ?></div>
-
-			 <!-- BEGIN Exist theme list displayed on JSON format-->
+			<div class="form-group clearfix padding-top-bottom">
+				<?php echo $form->field($model, 'themes')->checkboxlist($themelist);?>
+			</div>
+			<div class="border-top"></div>
+			<div class="padding-top-bottom form-group clearfix">
+				<?php echo $form->field($model, 'groups')->checkboxlist($grouplist);?>
+			</div>
 
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 
