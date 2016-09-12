@@ -469,9 +469,9 @@ class SiteController extends BaseController
         }
     }
 
-    public function actionVendor_profile($slug = '')
+    public function actionVendor_profile($slug)
     {
-        if ($slug != '') {
+
             $website_model = new Website();
             $vendor_details = Vendor::findOne(['slug'=>$slug]);
 
@@ -497,7 +497,6 @@ class SiteController extends BaseController
 			->all();
 
 			$vendorData = Vendoritem::find()
-			//->select(['{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor_item}}.slug','{{%vendor_item}}.child_category','{{%vendor_item}}.item_id','{{%vendor}}.vendor_name'])
 			->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
 			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
@@ -508,11 +507,10 @@ class SiteController extends BaseController
                 '{{%vendor}}.slug'=> $slug
             ])
 			->groupby(['{{%vendor_item}}.item_id'])
-			//->asArray()
 			->all();
 
             if (!isset(Yii::$app->user->identity->customer_id)) {
-                return $this->render('vendor_profile', [
+                return $this->render('vendor/profile', [
                     'vendor_detail' => $vendor_details,
                     'vendor_item_details' => $vendor_item_details,
                     'themes' => $themes,
@@ -532,7 +530,7 @@ class SiteController extends BaseController
                 $customer_events_list = $model->get_customer_wishlist_details($customer_id);
                 $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
 
-                return $this->render('vendor_profile', [
+                return $this->render('vendor/profile', [
                   'vendor_detail' => $vendor_details, 
                   'vendor_item_details' => $vendor_item_details, 
                   'themes' => $themes, 
@@ -543,7 +541,6 @@ class SiteController extends BaseController
                   'customer_events_list' => $customer_events_list,
                   'slug'=>$slug
                 ]);
-            }
         }
     }
 

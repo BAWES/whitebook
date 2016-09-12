@@ -471,7 +471,6 @@ class PlanController extends BaseController
                 $condition .= str_replace('OR AND', 'OR', $condition1);
             }
             /* END PRICE FILTER */
-
             $vendorData = Vendoritem::find()
                 //->select(['{{%vendor_item}}.category_id, {{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,{{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id, {{%vendor}}.vendor_name'])
                 ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
@@ -480,12 +479,9 @@ class PlanController extends BaseController
                 ->where($condition)
                 ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                 ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-                ->andWhere(['{{%vendor_item}}.type_id' => "2"])
-                ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
                 ->andWhere(['{{%vendor}}.slug' => $data['slug']])
                 ->groupBy('{{%vendor_item}}.item_id')
-                //->limit(12)
-                //->asArray()
+                ->limit(12)
                 ->all();
 
            if (!Yii::$app->user->isGuest) {
@@ -493,9 +489,9 @@ class PlanController extends BaseController
                 $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
                 return $this->renderPartial('product_list_ajax', ['imageData' => $vendorData,'customer_events_list' => $customer_events_list]);
-            } else {
-                return $this->renderPartial('product_list_ajax', ['imageData' => $vendorData]);
-            }
+           } else {
+                return $this->renderPartial('loaditems', ['imageData' => $vendorData,'customer_events_list' => []]);
+           }
         }
     }
     /* END VENDOR PROFILE PAGE LOAD ITEMS BASED ON VENDOR */

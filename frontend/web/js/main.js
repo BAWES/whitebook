@@ -90,6 +90,14 @@ jQuery(document).delegate('.search_header', 'click', function () {
 });
 
 /* BEGIN CLEAR FILTER */
+//jQuery(document).delegate('a#filter-clear', 'click', function(){
+//    jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
+//    jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
+//    jQuery(this).hide();
+//    filter();
+//})
+
+/* BEGIN CLEAR FILTER */
 jQuery(document).delegate('a#filter-clear', 'click', function(){
     jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');
     jQuery(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
