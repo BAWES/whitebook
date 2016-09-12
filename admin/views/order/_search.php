@@ -45,9 +45,15 @@ use yii\widgets\ActiveForm;
         <div class="col-md-3">
             <?= $form->field($model, 'order_gateway_total') ?>
 
-            <?= $form->field($model, 'created_datetime')->label('Created Date'); ?>
+            <?= $form
+                ->field($model, 'created_datetime')
+                ->textInput(['class' => 'form-control datepicker'])
+                ->label('Created Date'); ?>
 
-            <?= $form->field($model, 'modified_datetime')->label('Modified Date'); ?>
+            <?= $form
+                ->field($model, 'modified_datetime')
+                ->textInput(['class' => 'form-control datepicker'])
+                ->label('Modified Date'); ?>
 
         </div>
     </div>
