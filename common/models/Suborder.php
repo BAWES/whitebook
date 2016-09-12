@@ -78,6 +78,7 @@ class Suborder extends \yii\db\ActiveRecord
             'order_id' => 'Order ID',
             'vendor_id' => 'Vendor ID',
             'status_id' => 'Status ID',
+            'profit' => 'Profit (KWD)',
             'suborder_delivery_charge' => 'Suborder Delivery Charge',
             'suborder_total_without_delivery' => 'Suborder Total Without Delivery',
             'suborder_total_with_delivery' => 'Suborder Total With Delivery',
@@ -152,5 +153,10 @@ class Suborder extends \yii\db\ActiveRecord
         $query->orderBy("created_datetime DESC");
 
         return $query;
+    }
+
+    public function getProfit() {
+        $profit = $this->suborder_vendor_total - $this->suborder_commission_total;
+        return $profit;
     }
 }

@@ -13,9 +13,14 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-index">
 
+    <?= $this->render('_search', [
+        'model' => $searchModel,
+    ]) ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
+
         'columns' => [
            // ['class' => 'yii\grid\SerialColumn'],
 
@@ -23,14 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'customerName',
             'order_total_delivery_charge',
             'order_total_with_delivery',
+            'order_gateway_total',
+            'commission',
+
             // 'order_payment_method',
             // 'order_transaction_id',
             // 'order_gateway_percentage',
-            // 'order_gateway_total',
             // 'order_datetime',
             // 'order_ip_address',
-            // 'created_by',
-            // 'modified_by',
             'created_datetime',
             // 'modified_datetime',
             // 'trash',
@@ -49,9 +54,3 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
-
-<?php 
-
-$this->registerJs("
-    $('input[name=\"OrderSearch[order_id]\"]').css('width', '50px');
-", View::POS_READY);

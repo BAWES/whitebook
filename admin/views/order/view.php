@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_gateway_percentage',
             'order_gateway_fees',
             'order_gateway_total',
+            'commission',
             'order_ip_address',
             'created_datetime',
             'modified_datetime'

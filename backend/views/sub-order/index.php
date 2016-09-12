@@ -8,18 +8,24 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sub-order-index">
 
+    <?= $this->render('_search', [
+        'model' => $searchModel,
+        'status' => $status
+    ]) ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             
             'suborder_id',
             'statusName',
             'suborder_delivery_charge',
             'suborder_total_with_delivery',
-            'suborder_commission_percentage',
+            //'suborder_commission_percentage',
             'suborder_commission_total',
             'suborder_vendor_total',
+            'profit',
             'created_datetime',
             
             [

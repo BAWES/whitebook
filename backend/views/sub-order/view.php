@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'suborder_commission_percentage',
             'suborder_commission_total',
             'suborder_vendor_total',
+            'profit',
             'created_datetime',
         ],
     ]);

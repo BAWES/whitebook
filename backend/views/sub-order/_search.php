@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 ?>
 
@@ -12,36 +13,41 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'suborder_id') ?>
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'suborder_id') ?>
 
-    <?= $form->field($model, 'order_id') ?>
+            <?= $form->field($model, 'order_id') ?>
 
-    <?= $form->field($model, 'vendor_id') ?>
+            <?= $form->field($model, 'vendor_id') ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'status_id')
+                ->dropDownList(
+                    ArrayHelper::map($status, 'order_status_id', 'name'),           
+                    ['prompt'=>'']    
+                )->label('Status') ?>
 
-    <?= $form->field($model, 'status_id') ?>
+            <?= $form->field($model, 'suborder_delivery_charge') ?>
 
-    <?= $form->field($model, 'suborder_delivery_charge') ?>
+            <?= $form->field($model, 'suborder_total_without_delivery') ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'suborder_total_with_delivery') ?>
 
-    <?php // echo $form->field($model, 'suborder_total_without_delivery') ?>
+            <?= $form->field($model, 'suborder_commission_percentage') ?>
 
-    <?php // echo $form->field($model, 'suborder_total_with_delivery') ?>
+            <?= $form->field($model, 'suborder_commission_total') ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'suborder_vendor_total') ?>
 
-    <?php // echo $form->field($model, 'suborder_commission_percentage') ?>
+            <?= $form->field($model, 'created_datetime')->label('Created date') ?>
 
-    <?php // echo $form->field($model, 'suborder_commission_total') ?>
-
-    <?php // echo $form->field($model, 'suborder_vendor_total') ?>
-
-    <?php // echo $form->field($model, 'created_by') ?>
-
-    <?php // echo $form->field($model, 'modified_by') ?>
-
-    <?php // echo $form->field($model, 'created_datetime') ?>
-
-    <?php // echo $form->field($model, 'modified_datetime') ?>
-
-    <?php // echo $form->field($model, 'trash') ?>
-
+            <?= $form->field($model, 'modified_datetime')->label('Modified date') ?>
+        </div>
+    </div>
+    
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
