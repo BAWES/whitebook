@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
+use yii\web\View;
 
 $this->title = 'Package Report';
 $this->params['breadcrumbs'][] = $this->title;
@@ -21,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		    <div class="form-group">
 				<label class="control-label">Date start</label>
 				<div class="controls">
-					<input type="text" class="form-control" name="date_start" value="<?= $date_start ?>" />
+					<input type="text" class="form-control datepicker" name="date_start" value="<?= $date_start ?>" />
 				</div>
 			</div>
 		</div>
@@ -30,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="form-group">
 				<label class="control-label">Date end</label>
 				<div class="controls">
-					<input type="text" class="form-control" name="date_end" value="<?= $date_end ?>" />
+					<input type="text" class="form-control datepicker" name="date_end" value="<?= $date_end ?>" />
 				</div>
 			</div>
 		</div>
@@ -119,3 +120,15 @@ $this->params['breadcrumbs'][] = $this->title;
 		]); ?>
 	</div>
 </div>	
+
+<?php 
+
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.min.css', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJs("
+	jQuery('.datepicker').datepicker({
+		format: 'yyyy-mm-dd',
+	});
+", View::POS_READY);

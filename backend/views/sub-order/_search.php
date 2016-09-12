@@ -42,9 +42,16 @@ use yii\helpers\ArrayHelper;
         <div class="col-md-3">
             <?= $form->field($model, 'suborder_vendor_total') ?>
 
-            <?= $form->field($model, 'created_datetime')->label('Created date') ?>
+            <?= $form
+                ->field($model, 'created_datetime')
+                ->textInput(['class' => 'form-control datepicker'])
+                ->label('Created date') ?>
 
-            <?= $form->field($model, 'modified_datetime')->label('Modified date') ?>
+            <?= $form
+                ->field($model, 'modified_datetime')
+                ->textInput(['class' => 'form-control datepicker'])
+                ->label('Modified date') ?>
+
         </div>
     </div>
     
