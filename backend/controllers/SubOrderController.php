@@ -42,9 +42,12 @@ class SubOrderController extends Controller
         $searchModel = new SubOrderSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $status = OrderStatus::find()->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'status' => $status
         ]);
     }
 

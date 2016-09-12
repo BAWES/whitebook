@@ -85,13 +85,14 @@ class Order extends \yii\db\ActiveRecord
             'order_id' => 'Order ID',
             'customer_id' => 'Customer ID',
             'countryName' => 'Customer',
-            'order_total_delivery_charge' => 'Delivery Charge',
-            'order_total_without_delivery' => 'Without Delivery',
-            'order_total_with_delivery' => 'Order Total',
+            'commission' => 'TWB commission (KWD)',
+            'order_total_delivery_charge' => 'Delivery Charge (KWD)',
+            'order_total_without_delivery' => 'Without Delivery (KWD)',
+            'order_total_with_delivery' => 'Total (KWD)',
             'order_payment_method' => 'Order Payment Method',
             'order_transaction_id' => 'Order Transaction ID',
             'order_gateway_percentage' => 'Order Gateway Percentage',
-            'order_gateway_total' => 'Order Gateway Total',
+            'order_gateway_total' => 'Gateway Total (KWD)',
             'order_ip_address' => 'Order Ip Address',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
@@ -259,5 +260,14 @@ class Order extends \yii\db\ActiveRecord
 
     public function getCustomerName() {
         return $this->customer->customer_name.' '.$this->customer->customer_last_name;
+    }
+
+    public function getCommission() {
+        
+        $result = Suborder::find()
+            ->where(['order_id' => $this->order_id])
+            ->sum('suborder_commission_total');
+
+        return $result;
     }
 }

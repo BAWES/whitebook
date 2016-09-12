@@ -15,37 +15,42 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'order_id') ?>
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'order_id') ?>
 
-    <?= $form->field($model, 'customer_id') ?>
+            <?= $form->field($model, 'customerName') ?>
 
-    <?= $form->field($model, 'order_total_delivery_charge') ?>
+            <?= $form->field($model, 'order_total_delivery_charge') ?>
 
-    <?= $form->field($model, 'order_total_without_delivery') ?>
+        </div>
+        <div class="col-md-3">
 
-    <?= $form->field($model, 'order_total_with_delivery') ?>
+            <?= $form->field($model, 'order_total_without_delivery') ?>
+            
+            <?= $form->field($model, 'order_total_with_delivery') ?>
 
-    <?php // echo $form->field($model, 'order_payment_method') ?>
+            <?= $form->field($model, 'order_ip_address') ?>
+            
+        </div>
+        <div class="col-md-3">
+            
+            <?= $form->field($model, 'order_payment_method') ?>
 
-    <?php // echo $form->field($model, 'order_transaction_id') ?>
+            <?= $form->field($model, 'order_transaction_id') ?>
 
-    <?php // echo $form->field($model, 'order_gateway_percentage') ?>
+            <?= $form->field($model, 'order_gateway_percentage') ?>
 
-    <?php // echo $form->field($model, 'order_gateway_total') ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'order_gateway_total') ?>
 
-    <?php // echo $form->field($model, 'order_datetime') ?>
+            <?= $form->field($model, 'created_datetime')->label('Created Date'); ?>
 
-    <?php // echo $form->field($model, 'order_ip_address') ?>
+            <?= $form->field($model, 'modified_datetime')->label('Modified Date'); ?>
 
-    <?php // echo $form->field($model, 'created_by') ?>
-
-    <?php // echo $form->field($model, 'modified_by') ?>
-
-    <?php // echo $form->field($model, 'created_datetime') ?>
-
-    <?php // echo $form->field($model, 'modified_datetime') ?>
-
-    <?php // echo $form->field($model, 'trash') ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

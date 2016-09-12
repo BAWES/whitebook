@@ -88,12 +88,12 @@ class SubOrderSearch extends Suborder
             'suborder_commission_percentage' => $this->suborder_commission_percentage,
             'suborder_commission_total' => $this->suborder_commission_total,
             'suborder_vendor_total' => $this->suborder_vendor_total,
-            'created_by' => $this->created_by,
-            'modified_by' => $this->modified_by,
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
+            'whitebook_suborder.created_by' => $this->created_by,
+            'whitebook_suborder.modified_by' => $this->modified_by,
+            'DATE(whitebook_suborder.created_datetime)' => $this->created_datetime,
+            'DATE(whitebook_suborder.modified_datetime)' => $this->modified_datetime,
         ]);
-
+        
         $query->andFilterWhere(['like', 'trash', $this->trash]);
 
         $query->joinWith(['status' => function ($q) {

@@ -83,10 +83,10 @@ class OrderSearch extends Order
             'order_total_with_delivery' => $this->order_total_with_delivery,
             'order_gateway_percentage' => $this->order_gateway_percentage,
             'order_gateway_total' => $this->order_gateway_total,
-            'created_by' => $this->created_by,
-            'modified_by' => $this->modified_by,
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
+            'whitebook_order.created_by' => $this->created_by,
+            'whitebook_order.modified_by' => $this->modified_by,
+            'DATE(whitebook_order.created_datetime)' => $this->created_datetime,
+            'DATE(whitebook_order.modified_datetime)' => $this->modified_datetime,
         ]);
 
         $query->andFilterWhere(['like', 'order_payment_method', $this->order_payment_method])
