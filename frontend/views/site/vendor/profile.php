@@ -204,9 +204,9 @@ if ($event_status > 0) {
                                     <div id="accordion" class="panel-group">
                                         <!-- BEGIN CATEGORY FILTER  -->
                                         <?php 
-                                            echo $this->render('vendor_profile_filter/category.php',['slug'=>$slug]);
-                                            echo $this->render('vendor_profile_filter/theme.php',['themes'=>$themes]);
-                                            echo $this->render('vendor_profile_filter/price.php',['vendorData'=>$vendorData]);
+                                            echo $this->render('_filter/category.php',['slug'=>$slug]);
+                                            echo $this->render('_filter/theme.php',['themes'=>$themes]);
+                                            echo $this->render('_filter/price.php',['vendorData'=>$vendorData]);
                                         ?>
                                     </div>
                             </nav>
@@ -220,7 +220,6 @@ if ($event_status > 0) {
                     <div class="events_listing">
                         <ul>
                         <?php
-
                             if (!empty($vendorData)) {
                                 foreach ($vendorData as $key => $value) {
                                     echo $this->render('/plan/item',['value'=>$value,'customer_events_list'=>$customer_events_list]);
