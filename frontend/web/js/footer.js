@@ -843,9 +843,11 @@ function forgot_password()
 }
 
 jQuery('#search_input_header').keydown(function(e) {
+    
     jQuery("#search_list_fail1").html('');
-    if (e.keyCode == 13)
-    {
+    
+    if (e.keyCode == 13) {
+        
         var search1=jQuery("#search_input_header").val();
         var search2 = search1.replace(' ', '-');
 

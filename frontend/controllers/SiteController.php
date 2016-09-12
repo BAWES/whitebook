@@ -291,7 +291,7 @@ class SiteController extends BaseController
         if($search == 'all') {
             $search = '';
         }
-
+        
         //item type sale
         $sale = 2;
         $search = str_replace('and', '&', $search);
