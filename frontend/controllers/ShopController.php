@@ -12,7 +12,7 @@ use frontend\models\Vendoritem;
 use common\models\Vendoritemthemes;
 use frontend\models\Themes;
 use frontend\models\Vendor;
-
+use yii\helpers\Url;
 
 /**
  * Category controller.
@@ -327,10 +327,11 @@ class ShopController extends BaseController
             ->asArray()
             ->one();
 
-        $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
-
-        if (file_exists(Yii::getAlias('@vendor_images/').$output['image_path'])) {
-            $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $output['image_path'];
+        if (!empty($model->images[0])) {
+            $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $model->images[0]['image_path'];
+        } else {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+            //$baselink = Yii::getAlias("@s3/vendor_item_images_530/") . 'no_image.jpg';
         }
 
         /* BEGIN DELIVERY AREAS --VENDOR */
@@ -341,13 +342,29 @@ class ShopController extends BaseController
             ->asArray()
             ->all();
 
-        \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => 'Whitebook Application '.ucfirst($model->vendor->vendor_name)]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI'])]);
+        \Yii::$app->view->registerMetaTag([
+            'property' => 'og:title', 
+            'content' => 'Whitebook Application - '.ucfirst($model->vendor->vendor_name)
+        ]);
+        
+        \Yii::$app->view->registerMetaTag([
+            'property' => 'og:url', 
+            'content' => Url::toRoute(["shop/product", 'slug' => $model->slug], true)
+        ]);
+
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => 'Whitebook Application '.ucfirst($model->vendor->vendor_name).' '.ucfirst($model->item_name)]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => $baselink]);
+        
+        \Yii::$app->view->registerMetaTag([
+            'property' => 'og:site_name', 
+            'content' => 'Whitebook Application - '.ucfirst($model->vendor->vendor_name).' - '.ucfirst($model->item_name)
+        ]);
+        
+        \Yii::$app->view->registerMetaTag([
+            'property' => 'og:description', 
+            'content' => trim(strip_tags($model->item_description))
+        ]);
 
         if (Yii::$app->user->isGuest) {
             return $this->render('product_detail', [
