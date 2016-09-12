@@ -63,9 +63,11 @@ class ProductController extends BaseController
             ->asArray()
             ->all();
 
-        $title = 'Whitebook Application '.ucfirst($model->vendor->vendor_name);
-        $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
-        $summary = 'Whitebook Application '.ucfirst($model->vendor->vendor_name).' '.ucfirst($model['item_name']);
+        $title = 'Whitebook Application - '.ucfirst($model->vendor->vendor_name);
+        
+        $url = Url::toRoute(["product/product", 'slug' => $model->slug], true);
+
+        $summary = 'Whitebook Application - '.ucfirst($model->vendor->vendor_name).' - '.ucfirst($model['item_name']);
 
         $image = $baselink;
 
@@ -76,9 +78,9 @@ class ProductController extends BaseController
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => $summary]);
         
-        \Yii::$app->view->registerMetaTag(['
-            property' => 'og:description', 
-            'content' => strip_tags($model->item_description)
+        \Yii::$app->view->registerMetaTag([
+            'property' => 'og:description', 
+            'content' => trim(strip_tags($model->item_description))
         ]);
 
         if (Yii::$app->user->isGuest) {
