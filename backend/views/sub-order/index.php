@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\web\View;
 
 $this->title = 'Sub Orders';
 $this->params['breadcrumbs'][] = $this->title;
@@ -42,3 +43,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+<?php 
+
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.min.css', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJs("
+    jQuery('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+    });
+", View::POS_READY);
