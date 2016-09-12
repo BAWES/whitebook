@@ -846,6 +846,7 @@ class SiteController extends BaseController
     public function actionThemeSearch($slug = '', $category = '',$subcategory = '', $vendor='', $price='')
     {
         if ($slug) {
+            $url = \yii\helpers\Url::to(['site/theme-search','slug'=>$slug,'subcategory'=>$subcategory,'vendor'=>$vendor,'price'=>$price]);
             $itemList = '';
             $themeName = Themes::findOne(['slug' => $slug, 'trash' => 'Default']);
             if ($themeName) {
@@ -856,7 +857,7 @@ class SiteController extends BaseController
                 $category_slug = '';
                 $condition = '( {{%vendor_item}}.trash = "Default") ';
                 /* BEGIN GET VENDORS */
-                if (!empty($category)) {
+                if (!empty($category) && $category!='All') {
                     $category_val = Category::find()->select('category_id')
                         ->where(['slug' => $category])
                         ->asArray()
@@ -936,6 +937,7 @@ class SiteController extends BaseController
 
                     return $this->render('theme/search', [
                         //'model' => $model,
+                        'url' => $url,
                         'themeName' => $themeName,
                         'imageData' => $imageData,
                         'vendor' => $vendor,
@@ -952,6 +954,7 @@ class SiteController extends BaseController
 
                     return $this->render('theme/search', [
                         //'model' => $model,
+                        'url' => $url,
                         'themeName' => $themeName,
                         'imageData' => $imageData,
                         'vendor' => $vendor,
