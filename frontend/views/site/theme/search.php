@@ -41,7 +41,7 @@ $get = Yii::$app->request->get();
 						<div class="responsive-category-top">
 							<div class="listing_sub_cat1">
 								<span class="title_filter">Categories</span>
-								<select class="selectpicker" style="display: none;" id="main-category">
+								<select class="selectpicker" style="display: none;" id="main-categories" title="Category">
 									<option data-icon="venues-category" selected="selected" name="category"><?= Yii::t("frontend", "All"); ?></option>
 									<option data-icon="venues-category" value="venues" <?php  if($category_id == Category::VENUES) { ?> selected="selected" <?php } ?> ><?= Yii::t("frontend", "Venues") ?></option>
 									<option data-icon="invitation-category" value="invitations" <?php  if($category_id == Category::INVITATIONS) { ?> selected="selected"<?php } ?> name="category"><?= Yii::t("frontend", "Invitations") ?></option>
@@ -91,8 +91,7 @@ $get = Yii::$app->request->get();
 						<?php
 
 						if(!empty($imageData)) {
-							foreach ($imageData as $key => $value) {
-								if(isset($value->image->image_path)) { ?>
+							foreach ($imageData as $key => $value) { ?>
 									<li>
 										<div class="events_items">
 											<div class="events_images">
@@ -128,7 +127,11 @@ $get = Yii::$app->request->get();
 													</div>
 
 													<a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title="" >
-                                                        <?= Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value->image->image_path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?>
+                                                        <?php if(isset($value->image->image_path))  { ?>
+                                                            <?= Html::img(Yii::getAlias("@s3/vendor_item_images_210/").$value->image->image_path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']); ?>
+                                                        <?php } else {
+                                                            echo Html::img('http://placehold.it/210x208',['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
+                                                            } ?>
                                                         <br/>
                                                     </a>
 												</div>
@@ -140,7 +143,6 @@ $get = Yii::$app->request->get();
 											</div>
 									</li>
 							<?php
-								}
 							}
 						} else {
 							echo "No records found";
@@ -214,9 +216,8 @@ $(document).ready(function () {
 		loop: true
 		});
 });
-</script>
-<!-- end -->
-<script type="text/javascript">
+
+
 function setupLabel() {
 	if (jQuery('.label_check input').length ) {
 		jQuery('.label_check').each(function () {
@@ -364,13 +365,13 @@ jQuery('button#loadmore').click(function(event)
 });
 
 /* BEGIN load category and reload the page */
-jQuery('#main-category').change(function(){
-	//alert(jQuery('option[name=category]').val());
-	var s = jQuery('#main-category :selected').val();
-	var hostname = window.location.href;
-	var newUrl1 = url.substring(0, url.indexOf('plan'));
-	window.location.href = jQuery(this).val();
-});
+//jQuery('#main-categories').change(function(){
+//	//alert(jQuery('option[name=category]').val());
+//	var s = jQuery('#main-categories :selected').val();
+//	var hostname = window.location.href;
+//	var newUrl1 = url.substring(0, url.indexOf('plan'));
+//	window.location.href = jQuery(this).val();
+//});
 /* END load category and reload the page */
 var loadmore=0;
 function filter() {
@@ -502,9 +503,9 @@ if (jQuery(window).width() < 991) {
 jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
 
 /* BEGIN load category and reload the page */
-jQuery('#main-category').change(function(){
-	var category = jQuery('#main-category :selected').val();
-	var hostname = window.location.href;
+jQuery('#main-categories').change(function(){
+	var category = jQuery('#main-categories :selected').val();
+	var hostname = '<?=$url?>';
 	window.location.href = hostname+'&category='+category;
 });
 /* END load category and reload the page */

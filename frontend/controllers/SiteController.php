@@ -864,6 +864,7 @@ class SiteController extends BaseController
     public function actionThemeSearch($slug = '', $category = '',$subcategory = '', $vendor='', $price='')
     {
         if ($slug) {
+            $url = \yii\helpers\Url::to(['site/theme-search','slug'=>$slug,'subcategory'=>$subcategory,'vendor'=>$vendor,'price'=>$price]);
             $itemList = '';
             $themeName = Themes::findOne(['slug' => $slug, 'trash' => 'Default']);
             if ($themeName) {
@@ -874,7 +875,7 @@ class SiteController extends BaseController
                 $category_slug = '';
                 $condition = '( {{%vendor_item}}.trash = "Default") ';
                 /* BEGIN GET VENDORS */
-                if (!empty($category)) {
+                if (!empty($category) && $category!='All') {
                     $category_val = Category::find()->select('category_id')
                         ->where(['slug' => $category])
                         ->asArray()
@@ -891,9 +892,11 @@ class SiteController extends BaseController
                     }
 
                     if ($vendor != '') {
-                        $vendor = str_replace(' ', ',', $vendor);
-                        $condition .= ' AND ({{%vendor}}.slug IN("' . $vendor . '")) AND ({{%vendor}}.vendor_id IS NOT NULL) ';
+
+                        $vendor = str_replace(' ', '","', $vendor);
+                        $condition .= ' AND ({{%vendor}}.slug IN("' . $vendor . '")) ';
                     }
+
 
                     /* BEGIN PRICE FILTER */
                     if ($price != '') {
@@ -909,25 +912,23 @@ class SiteController extends BaseController
                     /* END PRICE FILTER */
                 }
 
-
                 $active_vendors = Vendor::loadvalidvendorids($category_id);
                 if (!is_null($itemThemeList)) {
 
                     $imageData = Vendoritem::find()
-                        ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+                        //->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                         ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                         ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
                         ->where($condition)
                         ->andWhere(['{{%vendor_item}}.item_id' => $item])
                         ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                         ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-                        ->andWhere(['{{%vendor_item}}.type_id' => "2"])
+                        //->andWhere(['{{%vendor_item}}.type_id' => "2"])
                         ->andWhere(['{{%vendor}}.vendor_id' => $active_vendors])
                         ->andWhere(['{{%vendor}}.trash' => 'Default'])
                         ->groupBy('{{%vendor_item}}.item_id')
                         ->all();
                 }
-
                 // print_r($active_vendors);die;
                 /* VENDOR HAVIG ATLEAST ONE PRODUCT */
                 $vendor = Vendoritem::find()
@@ -954,6 +955,7 @@ class SiteController extends BaseController
 
                     return $this->render('theme/search', [
                         //'model' => $model,
+                        'url' => $url,
                         'themeName' => $themeName,
                         'imageData' => $imageData,
                         'vendor' => $vendor,
@@ -970,6 +972,7 @@ class SiteController extends BaseController
 
                     return $this->render('theme/search', [
                         //'model' => $model,
+                        'url' => $url,
                         'themeName' => $themeName,
                         'imageData' => $imageData,
                         'vendor' => $vendor,
