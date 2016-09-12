@@ -38,30 +38,30 @@ class ProductController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $similarProductModel = Vendoritem::find()->where(['vendor_id'=>$model->vendor_id,'item_status'=>'Active','item_approved'=>'Yes','trash' => 'Default'])
+        $similarProductModel = Vendoritem::find()
+            ->where([
+                'vendor_id' => $model->vendor_id,
+                'item_status' => 'Active',
+                'item_approved' => 'Yes',
+                'trash' => 'Default'
+            ])
             ->andWhere(['<>','item_id', $model->item_id])
             ->all();
+
         $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
 
-        if (isset($model->images) && count($model->images) > 0) {
-            foreach ($model->images as $img) {
-                if ($img) {
-                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . $img['image_path'];
-                } else {
-                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg';
-                }
-            }
+        if (!empty($model->images[0])) {
+            $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $model->images[0]['image_path'];
+        } else {
+            $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . 'no_image.jpg';
         }
 
-        /* BEGIN DELIVERY AREAS --VENDOR */
-
         $vendr_area = Vendorlocation::find()
-        ->select(['{{%vendor_location}}.area_id','{{%location}}.*'])
-        ->leftJoin('{{%location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
-        ->where(['{{%location}}.trash' => 'Default'])
-        ->asArray()
-        ->all();
-        /* END DELIVERY AREAS --VENDOR */
+            ->select(['{{%vendor_location}}.area_id','{{%location}}.*'])
+            ->leftJoin('{{%location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
+            ->where(['{{%location}}.trash' => 'Default'])
+            ->asArray()
+            ->all();
 
         $title = 'Whitebook Application '.ucfirst($model->vendor->vendor_name);
         $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
@@ -75,7 +75,11 @@ class ProductController extends BaseController
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => $summary]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => $baselink]);
+        
+        \Yii::$app->view->registerMetaTag(['
+            property' => 'og:description', 
+            'content' => strip_tags($model->item_description)
+        ]);
 
         if (Yii::$app->user->isGuest) {
 
