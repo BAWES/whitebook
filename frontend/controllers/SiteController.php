@@ -399,68 +399,21 @@ class SiteController extends BaseController
 
         if ($request->post('search') && $request->post('_csrf')) {
 
-            $search_data = $request->post('search');
-            $item = new Vendoritem();
-            $item_details = $item->vendoritem_search_details($request->post('search'));
+            $item_details = Vendoritem::find()
+                ->select(['item_name','slug'])
+                ->where(['like', 'item_name',$request->post('search')])
+                ->andwhere(['whitebook_vendor_item.trash' =>'Default','item_for_sale' =>'Yes','item_status'=>'Active'])
+                ->distinct()
+                ->asArray()
+                ->all();
 
             $k = '';
-            $slug1 = array();
-            $itm = array();
-            
-            if (!empty($item_details)) {
-                foreach ($item_details as $i) {
-                    $slug1[] = $i['wcslug'];
-                    $category[] = $i['category_name'];
-                }
-            }
-
-            if (!empty($slug1)) {
-                $slg = array_unique($slug1);
-            } else {
-                $slg = '';
-            }
-            
-            if (!empty($category)) {
-                $cat = array_unique($category);
-            } else {
-                $cat = '';
-            }
-            
-            if (!empty($cat)) {
-                for ($i = 0;$i < count($cat); ++$i) {
-                    if (!empty($cat[$i])) {
-                        $url = str_replace('&', 'and', $cat[$i]);
-                        $url = str_replace(' ', '-', $url);
-                        $k = $k.'<li><a href='.Url::toRoute('searchresult/').$url.'>'.$cat[$i].'</a></li>';
-                    }
-                }
-            }
-
-            $ven_slug = array();
-            $ven_name = array();
-            foreach ($item_details as $i) {
-                $ven_slug[] = $i['wvslug'];
-                $ven_name[] = $i['vendor_name'];
-            }
-            $ven_slug = array_unique($ven_slug);
-            $ven_name = array_unique($ven_name);
-            if (!empty($ven_name)) {
-                for ($i = 0;$i < count($ven_name); ++$i) {
-                    if (!empty($ven_name[$i])) {
-                        $url2 = str_replace(' ', '-', $ven_name[$i]);
-                        $k = $k.'<li><a href='.Url::toRoute('searchresult/').$url2.'>'.$ven_name[$i].'</a></li>';
-                    }
-                }
-            }
-
             if (!empty($item_details)) {
                 foreach ($item_details as $i) {
                     if (!empty($i['item_name'])) {
-                        $url3 = str_replace(' ', '-', $i['item_name']);
-                        $k = $k.'<li><a href='.Url::toRoute('searchresult/').$url3.'>'.$i['item_name'].'</a></li>';
+                        $k = $k.'<li><a href='.\yii\helpers\Url::to(['/search-result/'.$i['slug']]).'>'.$i['item_name'].'</a></li>';
                     }
                 }
-
                 return '<ul>'.$k.'</ul>';
             } else {
                 echo '0';
