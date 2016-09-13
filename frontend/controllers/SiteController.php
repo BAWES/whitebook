@@ -285,45 +285,19 @@ class SiteController extends BaseController
         }
     }
 
-    public function actionSearchresult($search = '')
+    public function actionSearchresult($search)
     {
-        //to display all items
-        if($search == 'all') {
-            $search = '';
-        }
-        
         //item type sale
         $sale = 2;
         $search = str_replace('and', '&', $search);
         $search = str_replace('-', ' ', $search);
-        $searchlength = strlen($search);
-
-        $model = new Category();
-        //$active_vendors = Vendor::loadvalidvendors();
-
-        if ($searchlength > 1) {
-            $cat_item_details = $model->category_search_details($search);
-        }
-
-        if (!empty($cat_item_details)) {
-            $cat_id = $cat_item_details[0]['category_id'];
-        } else {
-            $cat_id = '';
-        }
 
         $k = '';
         $slug = '';
-        $imageData = '';
 
     	$imageData = Vendoritem::find()
-		//->select('{{%vendor_item}}.item_price_per_unit,{{%image}}.image_path,{{%vendor_item}}.item_id,{{%vendor_item}}.item_name,{{%vendor_item}}.slug,{{%vendor_item}}.category_id,{{%vendor}}.vendor_name,count({{%vendor_item}}.item_id) as total')
-		->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
-		->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-		->Where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.type_id' => '2','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%image}}.module_type' => 'vendor_item','{{%vendor_item}}.category_id' => $cat_id,'{{%vendor_item}}.subcategory_id' => $cat_id,'{{%vendor_item}}.child_category' => $cat_id])
-		->orWhere(['like','{{%vendor_item}}.item_name',$search])
-		->orWhere(['like','{{%vendor}}.vendor_name',$search])
-		->groupBy('{{%image}}.item_id')
-		//->asArray()
+		->where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active'])
+		->andWhere(['like','{{%vendor_item}}.item_name',$search])
 		->all();
 
         foreach ($imageData as $data) {
@@ -357,40 +331,28 @@ class SiteController extends BaseController
                     }
                 }
             }
-
             $p = array_unique($p);
 
             $themes1 = Themes::load_all_themename($p);
-
             $vendor = Vendor::loadvendor_item($k);
         }
-
         $usermodel = new Users();
 
         if (Yii::$app->user->isGuest) {
-            
-            return $this->render('search', [
-                'imageData' => $imageData,
-                'themes' => $themes1, 
-                'vendor' => $vendor, 
-                'customer_events_list' => [],
-                'slug' => $slug,
-                'search' => $search
-            ]);
-
+            $customer_events_list = [];
         } else {
             $customer_id = Yii::$app->user->identity->customer_id;
             $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
-
-            return $this->render('search', [
-                'imageData' => $imageData,
-                'themes' => $themes1, 
-                'vendor' => $vendor, 
-                'slug' => $slug, 
-                'customer_events_list' => $customer_events_list, 
-                'search' => $search
-            ]);
         }
+
+        return $this->render('search', [
+            'imageData' => $imageData,
+            'themes' => $themes1,
+            'vendor' => $vendor,
+            'slug' => $slug,
+            'customer_events_list' => $customer_events_list,
+            'search' => $search
+        ]);
     }
 
     public function actionSearch()
