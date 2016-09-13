@@ -68,7 +68,7 @@ class ProductController extends BaseController
         $title = 'Whitebook Application - '.ucfirst($model->vendor->vendor_name);
         
         $url = Url::toRoute(["product/product", 'slug' => $model->slug], true);
-        
+
         $summary = 'Whitebook Application - '.ucfirst($model->vendor->vendor_name).' - '.ucfirst($model['item_name']);
 
         $image = $baselink;
