@@ -1,4 +1,11 @@
- <?php use yii\helpers\Html; ?>
+<?php 
+
+use yii\helpers\Html; 
+use admin\models\Vendoritem;
+
+$item_pending_count = Vendoritem::item_pending_count();
+
+?>
 <!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->
 	<div class="page-sidebar" id="main-menu">
@@ -31,6 +38,11 @@
 			<li class="<?php if ($menu_act == 'SiteController') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
 			</li>
+			
+			<li class="<?php if ($menu_act == 'VendorItemPendingController') { echo "active"; } else { echo "noactive"; } ?>">
+				<?= Html::a('<i class="glyphicon glyphicon-send"></i><span class="title">Item Pending</span><span class="item_pending_count">'.$item_pending_count.'</span>', ['vendor-item-pending/index'], ['class'=>'link-title']) ?>
+			</li>
+
 			<li class="<?php if ($menu_act == 'OrderController') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Order</span>', ['order/index'], ['class'=>'link-title']) ?>
 			</li>
@@ -177,7 +189,7 @@
 
 			<li class="<?php if (in_array($menu_act,$eighth_menu)) {echo "open"; } else  {echo "noactive";}?>">
 				<a href="javascript:;">
-					<i class="fa fa-bullseye"></i>
+					<i class="glyphicon glyphicon-user"></i>
 					<span class="title">Manage Customer</span>
 					<span class="<?php if (in_array($menu_act,$eighth_menu)) {echo "arrow open"; } else  {echo "arrow";}?>"></span>
 				  </a>

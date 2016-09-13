@@ -50,6 +50,14 @@ class Vendoritem extends \common\models\Vendoritem
         return Vendoritem::find()->where(['trash' => 'Default'])->count();
     }
 
+    public static function item_pending_count()
+    {
+        return Vendoritem::find()->where([
+                'trash' => 'Default',
+                'item_approved' => 'Pending'
+            ])->count();
+    }
+
     public static function itemmonthcount()
     {
         $month=date('m');
