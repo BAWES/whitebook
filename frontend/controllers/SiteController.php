@@ -288,7 +288,6 @@ class SiteController extends BaseController
     public function actionSearchresult($search)
     {
         //item type sale
-        $sale = 2;
         $search = str_replace('and', '&', $search);
         $search = str_replace('-', ' ', $search);
 
@@ -296,7 +295,7 @@ class SiteController extends BaseController
         $slug = '';
 
     	$imageData = Vendoritem::find()
-		->where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active'])
+		->where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_approved' => 'Yes'])
 		->andWhere(['like','{{%vendor_item}}.item_name',$search])
 		->all();
 
