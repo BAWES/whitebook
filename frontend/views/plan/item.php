@@ -2,6 +2,15 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+
+//if item for sale 
+if($value['item_for_sale'] == 'Yes'){
+	//will change to shop later
+	$item_url = Url::to(["product/product", 'slug' => $value['slug']]);
+}else{
+	$item_url = Url::to(["product/product", 'slug' => $value['slug']]);
+}
+
 ?>
 <li>
 <div class="events_items">
@@ -11,13 +20,13 @@ use yii\helpers\Url;
 				<?php if(Yii::$app->user->isGuest) { ?>
 					<a href="" role="button" class="" data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
 				<?php } else { ?>
-					<a  href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+					<a href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class="" data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
 				<?php } ?>
 			</div>
 
 			<?php if(Yii::$app->user->isGuest) { ?>
 			<div class="faver_icons">
-				<a href=""  role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+				<a href="" role="button" class="" data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
 			</div>
 			<?php } else {
 
@@ -35,11 +44,11 @@ use yii\helpers\Url;
 			<?php } else { ?>
 					<div class="faver_icons">
 			<?php }?>
-					<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
+					<a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
 			<?php } ?>
 			</div>
 
-			<a href="<?= Url::to(["product/product", 'slug' => $value['slug']]) ?>" title="" >
+			<a href="<?= $item_url ?>">
 				<?php 
 
 				if(isset($value->image)) {
@@ -54,7 +63,9 @@ use yii\helpers\Url;
 			</a>
 		</div>
 		<div class="events_descrip">
-			<?=Html::a($value->vendor->vendor_name, Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
+			<a href="<?= $item_url ?>">
+				<?= $value->vendor->vendor_name ?>
+			</a>
 			<h3><?= $value['item_name']  ?></h3>
 			<p>
 				<?=($value['item_price_per_unit'] !='') ? $value['item_price_per_unit'].'.00 KD' : '-'; ?>
