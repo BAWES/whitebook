@@ -177,11 +177,25 @@ if (!empty($feature_group_sql_result)) {
                                 $imglink = Yii::getAlias("@web/images/no_image.jpg");
                             }
 
+                            if($product_val['item_for_sale'] == 'Yes'){
+                                
+                                $item_url = Url::to(['shop/product', 
+                                    'slug' => $product_val["slug"]
+                                ]);
+
+                            } else {
+                                
+                                $item_url = Url::to(['product/product', 
+                                    'slug' => $product_val["slug"]
+                                ]);
+                                
+                            }
+
                             ?>
                             <div class="item">
-                                <div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $product_val["slug"], true]); ?>'>
+                                <div class="fetu_product_list index_redirect" data-hr='<?= $item_url ?>'>
 
-                                    <a href="<?= Url::toRoute(['product/product','slug' => $product_val["slug"]]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['product/product', $product_val['slug']]); ?>'>
+                                    <a href="<?= $item_url ?>" class='index_redirect' data-hr='<?= $item_url; ?>'>
 
                                         <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
 
