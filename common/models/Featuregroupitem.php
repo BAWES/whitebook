@@ -167,6 +167,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
             '{{%feature_group_item}}.item_id as gid',
             '{{%vendor}}.vendor_name as vname',
             '{{%vendor_item}}.item_name as iname',
+            '{{%vendor_item}}.item_for_sale',
             '{{%vendor}}.vendor_name_ar as vname_ar',
             '{{%vendor_item}}.item_name_ar as iname_ar',
             '{{%vendor_item}}.item_price_per_unit as price',

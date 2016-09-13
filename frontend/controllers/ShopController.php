@@ -2,17 +2,18 @@
 
 namespace frontend\controllers;
 
-use common\models\Location;
-use common\models\Vendorlocation;
 use Yii;
+use yii\helpers\Url;
 use frontend\models\Users;
 use frontend\models\Website;
-use common\models\Category;
 use frontend\models\Vendoritem;
-use common\models\Vendoritemthemes;
 use frontend\models\Themes;
 use frontend\models\Vendor;
-use yii\helpers\Url;
+use common\models\Category;
+use common\models\Vendoritemthemes;
+use common\models\City;
+use common\models\Location;
+use common\models\Vendorlocation;
 
 /**
  * Category controller.
@@ -376,9 +377,16 @@ class ShopController extends BaseController
 
         } else {
             $user = new Users();
+            
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
+
+            $cities = City::find()
+                    ->where('status="Active" AND trash="Default"')
+                    ->all();
+
             return $this->render('product_detail', [
                 'model' => $model,
+                'cities' => $cities,
                 'similiar_item' => $Similar->similiar_details(),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
