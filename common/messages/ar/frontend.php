@@ -244,6 +244,7 @@ return [
     'Save Changes' => 'حفظ التغييرات',
     'Search' => 'بحث',
     'Select' => 'اختار',
+    'Delivery Area' => 'حدد منطقة التسليم',
     'Select Delivery Area' => 'حدد منطقة التسليم',
     'Select Delivery Time' => 'اختر التسليم في الوقت المحدد',
     'Select Gender' => 'إختر الجنس',

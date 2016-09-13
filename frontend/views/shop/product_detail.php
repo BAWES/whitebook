@@ -1,9 +1,11 @@
 <?php
+
 use yii\helpers\Url;
 use yii\helpers\Html;
-use common\models\Vendoritempricing;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
+use common\models\Vendoritempricing;
+use common\models\Location;
 
 if (Yii::$app->language == "en") {
     $item_name = $model->item_name;
@@ -182,13 +184,103 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                             echo Html::a(Yii::t('frontend', 'Buy'),'#',['onclick'=>"show_login_modal('-2')",'class'=>'buy_item','data-target'=>'#myModal','data-toggle'=>"modal"]);
                                         } else if (!$AvailableStock) {
                                             echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
-                                        } else if ($AvailableStock) {
-                                            echo Html::a(Yii::t('frontend', 'Buy'),'#',['class'=>'buy_item','id'=>$model['item_id'],'data-slug'=>$model['slug']]);
                                         } ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <form id="form_product_option" method="POST" class="form center-block">
+
+                                <input name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label><?= Yii::t('frontend', 'Quantity');?></label>
+                                            <input type="text" name="quantity" id="quantity" class="form-control" />
+                                            <span class="error cart_quantity"></span>
+                                        </div>
+                                    </div><!-- END .col-md-6 -->
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label><?= Yii::t('frontend', 'Delivery date');?></label>
+                                            <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" style="position: relative;"  id="delivery_date_wrapper">
+                                                <input readonly="true" name="delivery_date" id="delivery_date" class="form-control required"  placeholder="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>" style="height: 40px;">
+                                                <span class="add-on position_product_option"> <i class="flaticon-calendar189"></i></span>
+                                            </div>
+                                            <span class="error cart_delivery_date"></span>
+                                        </div>
+                                        
+                                    </div><!-- END .col-md-6 -->
+                                </div><!-- END .row -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label><?= Yii::t('frontend', 'Delivery Area') ?></label>
+                                            <div class="select_boxes">
+                                                <select name="area_id" data-height="100px" data-live-search="true" id="area_id" class="selectpicker" data-size="10" data-style="btn-primary">
+                                                   
+                                                <?php 
+
+                                                foreach ($cities as $city) { 
+
+                                                    if(Yii::$app->language == 'en') {
+                                                        $city_name = $city['city_name'];
+                                                    } else{ 
+                                                        $city_name = $city['city_name_ar'];
+                                                    }
+
+                                                    //get areas
+                                                    $areas = Location::find()
+                                                        ->select('id, location, location_ar')
+                                                        ->where(['city_id' => $city['city_id']])
+                                                        ->asArray()
+                                                        ->all();
+
+                                                ?>    
+                                                    <optgroup label="<?= $city_name ?>">
+
+                                                    <?php 
+
+                                                    foreach ($areas as $area) {
+                                                        if(Yii::$app->language == 'en') { ?>
+                                                            <option value="<?= $area['id'] ?>">
+                                                                <?= $area['location']; ?>
+                                                            </option>
+                                                        <?php } else { ?>
+                                                            <option value="<?= $area['id'] ?>">
+                                                                <?= $area['location_ar']; ?>
+                                                            </option>
+                                                        <?php } 
+                                                    } ?>  
+                                                    
+                                                    </optgroup>
+
+                                                    <?php 
+                                                    } ?>
+                                                </select>                                
+                                            </div>    
+                                            <span class="error area_id"></span>
+                                        </div>      
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label><?= Yii::t('frontend', 'Delivery timeslot');?></label>
+                                            <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary">
+                                            </select>
+                                            <span class="error timeslot_id"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="button-signin">
+                                    <button type="submit" class="btn btn-primary btn-custome-1" name="submit">
+                                        <?= Yii::t('frontend', 'Buy') ?>
+                                    </button>
+                                </div>
+                            </form>
+
 
                             <div class="accad_menus">
                                 <div class="panel-group" id="accordion">
@@ -350,7 +442,7 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                             
                             foreach ($similiar_item as $s) {
                                 
-                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' and module_type="vendor_item" order by vendorimage_sort_order';
+                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' order by vendorimage_sort_order';
                                 
                                 $command = Yii::$app->DB->createCommand($sql);
                                 
@@ -364,11 +456,17 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                     $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
                                 }
 
+                                if($s['item_for_sale'] == 'Yes'){
+                                    $item_url = Url::to(["shop/product", 'slug' => $s['slug']]);
+                                }else{
+                                    $item_url = Url::to(["product/product", 'slug' => $s['slug']]);
+                                }
+
                                 ?>
                                 <div class="item">
                                     <div class="fetu_product_list">
                                         <?php if ($s['slug'] != '') { ?>
-                                            <a href="<?= Url::to(["shop/product", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
+                                            <a href="<?= $item_url ?>" title="Products" class="similar">
                                                 
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
                                         

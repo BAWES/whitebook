@@ -6,8 +6,7 @@ use yii\helpers\Url;
 //if item for sale 
 if($value['item_for_sale'] == 'Yes'){
 	$item_url = Url::to(["shop/product", 'slug' => $value['slug']]);
-}
-else{
+}else{
 	$item_url = Url::to(["product/product", 'slug' => $value['slug']]);
 }
 

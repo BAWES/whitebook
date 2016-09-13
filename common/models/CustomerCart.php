@@ -115,13 +115,14 @@ class CustomerCart extends \yii\db\ActiveRecord
             'item_for_sale' => 'Yes'
         ])->one();
 
-        $vendor_id = $item->vendor_id;
-
         if(!$item) {
             $errors['warning'] = [
                 Yii::t('frontend', 'Item not available for sell!')
             ];
+            return $errors;  
         }
+
+        $vendor_id = $item->vendor_id;
 
         //check if same item with same date available in cart 
         $in_cart = CustomerCart::find()

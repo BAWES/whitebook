@@ -1584,3 +1584,29 @@ a.thing_cont:hover {
     background-color: #0d0d0d;
     border-color: #0d0d0d;
 }   
+#form_product_option{
+    margin-top: 20px;
+}
+#form_product_option .form-control{
+    border-radius: 0;
+}
+#form_product_option #quantity{
+    height: 40px;    
+}
+#form_product_option .selectpicker.btn-primary{
+    padding-top: 10px;
+    height: 40px;
+}
+#form_product_option button[type="submit"] {
+    border: 1px solid #000;
+    display: inline-block;
+    padding: 12px 27px 10px;
+    font-family: 'OpenSansRegular';
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    background: #000000;
+    text-align: center;
+    border-radius: 0;
+    width: 180px;
+}

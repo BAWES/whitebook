@@ -372,22 +372,6 @@
             e.preventDefault();
         });
 
-        jQuery(document).delegate('#option_modal_wrapper #city_id', 'change', function() {
-
-            $city_id = $(this).val();
-
-            jQuery.post(
-                area_option_url,
-                {
-                    city_id : $city_id
-                },
-                function(data) {
-                    jQuery('#area_id').html(data);
-                    jQuery('#area_id').selectpicker('refresh');
-                }
-            );
-        });
-
         jQuery(document).delegate('#delivery_date', 'change', function () {
             jQuery.ajax({
                 type: 'POST',
