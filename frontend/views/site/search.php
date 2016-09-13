@@ -6,6 +6,7 @@ use frontend\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
+$this->title = 'Search Result | Whitebook';
 
 $get = Yii::$app->request->get();
 
