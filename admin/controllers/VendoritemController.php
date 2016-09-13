@@ -64,7 +64,7 @@ class VendoritemController extends Controller
                     'roles' => ['?'],
                 ],
                 [
-                    'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'check', 'itemactive', 'status', 'removequestion', 'sort_vendor_item', 'addquestion', 'renderquestion', 'renderanswer', 'guideimage', 'viewrenderquestion', 'itemgallery', 'uploadhandler', 'uploadhandler1', 'galleryupload', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck'],
+                    'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'check', 'itemactive', 'status', 'approve', 'removequestion', 'sort_vendor_item', 'addquestion', 'renderquestion', 'renderanswer', 'guideimage', 'viewrenderquestion', 'itemgallery', 'uploadhandler', 'uploadhandler1', 'galleryupload', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck'],
                     'allow' => true,
                     'roles' => ['@'],
                 ],
@@ -777,6 +777,22 @@ public function actionBlock()
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
     } else {
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
+}
+
+//Approve item 
+public function actionApprove()
+{
+    if (Yii::$app->request->isAjax) {
+        $data = Yii::$app->request->post();
+    }
+
+    $command = Vendoritem::updateAll(['item_approved' => $data['item_approved']],['item_id' =>$data['keylist']]);
+
+    if ($command) {
+        echo Yii::$app->session->setFlash('success', 'Vendor item approve status changed to "'.$data['item_approved'].'" successfully!');
+    } else {
+        echo Yii::$app->session->setFlash('danger', 'Something went wrong');
     }
 }
 

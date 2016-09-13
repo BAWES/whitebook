@@ -45,28 +45,32 @@ class VendoritemSearch extends Vendoritem
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $item_approved = '')
     {
 		$paramss = array('No','Yes','Rejected');
 		$v = array_reverse(array_keys($paramss));
+
 		$query = Vendoritem::find()
         ->where(['!=', 'whitebook_vendor_item.trash', 'Deleted'])       
         ->orderBy(['item_id' => SORT_DESC])
         ->orderBy([new Expression('FIELD (item_approved,'. implode(',', array_reverse(array_keys($paramss))) . ')')]);
-         $dataProvider = new ActiveDataProvider([
+
+        if($item_approved) {
+           $query->andFilterWhere(['item_approved' => $item_approved]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'sort'=> ['defaultOrder' => ['item_id'=>SORT_DESC]],
 			'pagination' =>[
 				'pageSize'=> 40,
-				],
+			],
         ]);     
-
      
         $query->joinWith(['vendor']); 
 
         $this->load($params);   
        
-
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails
             // $query->where('0=1');
