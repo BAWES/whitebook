@@ -190,6 +190,7 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                 </div>
                             </div>
 
+                            <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
                             <form id="form_product_option" method="POST" class="form center-block">
 
                                 <input name="item_id" value="<?= $model->item_id ?>" type="hidden" />
@@ -280,7 +281,7 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                     </button>
                                 </div>
                             </form>
-
+                            <?php } ?>
 
                             <div class="accad_menus">
                                 <div class="panel-group" id="accordion">
