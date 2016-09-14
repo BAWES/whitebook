@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
 
             <?= $form->field($model, 'order_id') ?>
 
-            <?= $form->field($model, 'vendor_id') ?>
+            <?= $form->field($model, 'suborder_vendor_total')->label('Profit (KWD)') ?>
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'status_id')
@@ -40,7 +40,7 @@ use yii\helpers\ArrayHelper;
             <?= $form->field($model, 'suborder_commission_total') ?>
         </div>
         <div class="col-md-3">
-            <?= $form->field($model, 'suborder_vendor_total') ?>
+            
 
             <?= $form
                 ->field($model, 'created_datetime')

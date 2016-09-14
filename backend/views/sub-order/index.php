@@ -21,12 +21,23 @@ $this->params['breadcrumbs'][] = $this->title;
             
             'suborder_id',
             'statusName',
-            'suborder_delivery_charge',
-            'suborder_total_with_delivery',
-            //'suborder_commission_percentage',
-            'suborder_commission_total',
-            'suborder_vendor_total',
-            'profit',
+            
+            [
+                'label' => 'DELIVERY CHARGE',
+                'attribute' => 'suborder_delivery_charge'
+            ],
+            [
+                'label' => 'TOTAL',
+                'attribute' => 'suborder_total_with_delivery'
+            ],
+            [
+                'label' => 'Commission',
+                'attribute' => 'suborder_commission_total'
+            ],
+            [
+                'label' => 'Profit (KWD)',
+                'attribute' => 'suborder_vendor_total'
+            ],
             'created_datetime',
             
             [

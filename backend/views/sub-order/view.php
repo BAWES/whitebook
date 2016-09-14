@@ -27,8 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'suborder_total_with_delivery',
             'suborder_commission_percentage',
             'suborder_commission_total',
-            'suborder_vendor_total',
-            'profit',
+            [
+                'label' => 'Profit (KWD)',
+                'attribute' => 'suborder_vendor_total'
+            ],
             'created_datetime',
         ],
     ]);
