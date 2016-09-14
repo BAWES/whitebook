@@ -81,8 +81,35 @@ class Vendorlocation extends \yii\db\ActiveRecord
         ];
     }
 
+    # relation with location table
     public function getLocation()
     {
         return $this->hasOne(Location::className(), ['id' => 'area_id']);
+    }
+
+    # relation with city table
+    public function getCity()
+    {
+        return $this->hasOne(City::className(), ['city_id' => 'city_id']);
+    }
+
+    # fetch city name on base of language
+    public function getCityName()
+    {
+        if(Yii::$app->language == 'en') {
+            return isset($this->city->city_name) ? $this->city->city_name : $this->city_id;
+        } else{
+            return isset($this->city->city_name_ar) ? $this->city->city_name_ar : $this->city_id;
+        }
+    }
+
+    # fetch location name on base of language
+    public function getLocationName()
+    {
+        if(Yii::$app->language == 'en') {
+            return isset($this->location->location) ? $this->location->location : $this->area_id;
+        } else{
+            return isset($this->location->location_ar) ? $this->location->location_ar : $this->area_id;
+        }
     }
 }

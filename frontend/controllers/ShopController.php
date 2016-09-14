@@ -337,12 +337,6 @@ class ShopController extends BaseController
 
         /* BEGIN DELIVERY AREAS --VENDOR */
 
-        $VendorArea = Vendorlocation::find()
-            ->joinWith('location')
-            ->where(['{{%location}}.trash'=>'Default'])
-            ->asArray()
-            ->all();
-
         \Yii::$app->view->registerMetaTag([
             'property' => 'og:title', 
             'content' => 'Whitebook Application - '.ucfirst($model->vendor->vendor_name)
@@ -372,25 +366,19 @@ class ShopController extends BaseController
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
                 'similiar_item' => $Similar->similiar_details(),
-                'vendor_area' => $VendorArea
+                'vendor_area' => []
             ]);
 
         } else {
             $user = new Users();
-            
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
-
-            $cities = City::find()
-                    ->where('status="Active" AND trash="Default"')
-                    ->all();
 
             return $this->render('product_detail', [
                 'model' => $model,
-                'cities' => $cities,
                 'similiar_item' => $Similar->similiar_details(),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
-                'vendor_area' => $VendorArea
+                'vendor_area' => Vendorlocation::findAll(['vendor_id'=>$model->vendor_id])
             ]);
         }
 
