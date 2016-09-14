@@ -10,7 +10,24 @@ $cities = \common\models\City::find()->select(['{{%city}}.*'])
     ->all();
 
 $locations = \common\models\Location::findAll(['trash'=>'Default']);
-$col = 1;
+
+$customer_id = Yii::$app->user->getId();
+
+if($customer_id) {
+    
+    $my_addresses =  \common\models\CustomerAddress::find()
+        ->select(['{{%location}}.*'])
+        ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
+        ->where(['{{%customer_address}}.trash'=>'Default'])
+        ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+        ->groupby(['{{%location}}.id'])
+        ->asArray()
+        ->all();
+
+} else {
+    $my_addresses = array();    
+}
+
 ?>
 
 <div class="panel panel-default" >
@@ -28,18 +45,36 @@ $col = 1;
         <div class="panel-body">
             <div class="table">
                 <ul class="test_scroll">
-                    <?php
+
+                    <?php 
+
+                    if($my_addresses) { ?>
+                        <label style="margin-left: 12px;"><b> My Addresses</b></label>
+                        <?php foreach ($my_addresses as $key => $value) {  ?>
+                        <li>
+                            <label class="label_check" for="checkbox-<?= $value['location']; ?>">
+                                <input type="checkbox" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
+                                <?= $value['location']; ?>
+                            </label>
+                        </li>
+                        <?php
+                        }//foreach my addresses 
+                    }//if my addresses 
+
                     foreach ($cities as $key => $value) {  ?>
                         <input type="hidden" name="city[]" value=<?= $value['city_id']; ?>>
                         <label style="margin-left: 12px;"><b> <?= $value['city_name']; ?></b></label>
                         <?php
+                        
                         $area = \common\models\Location::find()->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $value['city_id']])->orderBy('city_id')->asArray()->all();
-                        foreach ($area as $key => $value) {
-                            $vendor_area = \common\models\Vendorlocation::find()->select('area_id')->where(['area_id'=>$value['id']])->one(); ?>
+
+                        foreach ($area as $key => $value) {  ?>
                             <li>
                                 <label class="label_check" for="checkbox-<?= $value['location']; ?>">
                                     <input type="checkbox" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
+
                                     <?= $value['location']; ?>
+
                                 </label>
                             </li>
                             <?php
