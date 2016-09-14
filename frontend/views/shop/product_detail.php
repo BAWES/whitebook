@@ -26,7 +26,6 @@ $this->title = 'Whitebook - ' . $item_name;
 $this->params['breadcrumbs'][] = ['label' => ucfirst($category_name), 'url' => Url::to(["shop/products", 'slug' => $model->category->slug])];
 $this->params['breadcrumbs'][] = ucfirst($item_name);
 ?>
-
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com">
 
@@ -215,9 +214,6 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                         
                                     </div><!-- END .col-md-6 -->
                                 </div><!-- END .row -->
-                                <?php
-
-                                ?>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -229,9 +225,9 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                                     ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]
                                                 );
                                                 ?>
-                                            </div>    
+                                            </div>
                                             <span class="error area_id"></span>
-                                        </div>      
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -245,8 +241,9 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                 <div class="button-signin">
                                     <button type="submit" class="btn btn-primary btn-custome-1" name="submit">
                                         <?= Yii::t('frontend', 'Buy') ?>
-                                    </button>
+                                    </button>&nbsp;&nbsp;&nbsp;
                                 </div>
+                                <span style="display: block;margin-top: 18px;" id="available"></span>
                             </form>
                             <?php } ?>
 
@@ -482,7 +479,36 @@ $this->registerJs("
     var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
     var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
-
+    var availablity = '".Url::toRoute('shop/product-available')."';
 ", View::POS_HEAD);
+
+$this->registerJs("
+    function loadProductAvailability() {
+            jQuery.post(
+                availablity,
+                jQuery('#form_product_option').serialize(),
+                function (data) {
+                    console.log(data);
+                    jQuery('#available').html(data);
+                    return false;
+                }
+            );
+        }
+
+    loadProductAvailability();
+", View::POS_READY);
+
+$this->registerCss("
+.datepicker{
+        border: 2px solid rgb(242, 242, 242);
+    }
+    .datepicker table {
+        font-size: 12px;
+    }
+    .form-group{
+        margin-bottom: 15px;
+        width: 92%;
+        margin-left: 11px;
+   }");
 
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
