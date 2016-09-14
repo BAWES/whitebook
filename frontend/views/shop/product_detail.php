@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
@@ -216,52 +215,20 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                         
                                     </div><!-- END .col-md-6 -->
                                 </div><!-- END .row -->
+                                <?php
+
+                                ?>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label><?= Yii::t('frontend', 'Delivery Area') ?></label>
                                             <div class="select_boxes">
-                                                <select name="area_id" data-height="100px" data-live-search="true" id="area_id" class="selectpicker" data-size="10" data-style="btn-primary">
-                                                   
-                                                <?php 
-
-                                                foreach ($cities as $city) { 
-
-                                                    if(Yii::$app->language == 'en') {
-                                                        $city_name = $city['city_name'];
-                                                    } else{ 
-                                                        $city_name = $city['city_name_ar'];
-                                                    }
-
-                                                    //get areas
-                                                    $areas = Location::find()
-                                                        ->select('id, location, location_ar')
-                                                        ->where(['city_id' => $city['city_id']])
-                                                        ->asArray()
-                                                        ->all();
-
-                                                ?>    
-                                                    <optgroup label="<?= $city_name ?>">
-
-                                                    <?php 
-
-                                                    foreach ($areas as $area) {
-                                                        if(Yii::$app->language == 'en') { ?>
-                                                            <option value="<?= $area['id'] ?>">
-                                                                <?= $area['location']; ?>
-                                                            </option>
-                                                        <?php } else { ?>
-                                                            <option value="<?= $area['id'] ?>">
-                                                                <?= $area['location_ar']; ?>
-                                                            </option>
-                                                        <?php } 
-                                                    } ?>  
-                                                    
-                                                    </optgroup>
-
-                                                    <?php 
-                                                    } ?>
-                                                </select>                                
+                                                <?php
+                                                echo Html::dropDownList('area_id', null,
+                                                    \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' ),
+                                                    ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]
+                                                );
+                                                ?>
                                             </div>    
                                             <span class="error area_id"></span>
                                         </div>      
