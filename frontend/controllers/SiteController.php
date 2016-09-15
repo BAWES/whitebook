@@ -385,76 +385,75 @@ class SiteController extends BaseController
 
     public function actionVendor_profile($slug)
     {
+        $website_model = new Website();
+        $vendor_details = Vendor::findOne(['slug'=>$slug]);
 
-            $website_model = new Website();
-            $vendor_details = Vendor::findOne(['slug'=>$slug]);
+        if (empty($vendor_details)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            if (empty($vendor_details)) {
-                throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-            }
+        $vendor_item_details = $website_model->vendor_item_details($vendor_details['vendor_id']);
+        $main_category = $website_model->get_main_category();
 
-            $vendor_item_details = $website_model->vendor_item_details($vendor_details['vendor_id']);
-            $main_category = $website_model->get_main_category();
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$vendor_details['vendor_name'];
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-            \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$vendor_details['vendor_name'];
-            \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
-            \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+    // FOR FILTER
+        $themes = \common\models\Vendoritemthemes::find()
+        ->select(['wt.theme_id','wt.slug','wt.theme_name'])
+        ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
+        ->Where(['wt.theme_status'=>'Active'])
+        ->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details['vendor_id']])
+        ->groupby(['wt.theme_id'])
+        ->asArray()
+        ->all();
 
-        // FOR FILTER
-			$themes = \common\models\Vendoritemthemes::find()
-			->select(['wt.theme_id','wt.slug','wt.theme_name'])
-			->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
-			->Where(['wt.theme_status'=>'Active'])
-			->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details['vendor_id']])
-			->groupby(['wt.theme_id'])
-			->asArray()
-			->all();
+        $vendorData = Vendoritem::find()
+        ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
+        ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+        ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
+        ->Where([
+            '{{%vendor_item}}.trash'=> 'Default',
+            '{{%vendor_item}}.item_approved'=> 'Yes',
+            '{{%vendor_item}}.item_status'=> 'Active',
+            '{{%vendor}}.slug'=> $slug
+        ])
+        ->groupby(['{{%vendor_item}}.item_id'])
+        ->all();
 
-			$vendorData = Vendoritem::find()
-			->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
-			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-			->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-			->Where([
-                '{{%vendor_item}}.trash'=> 'Default',
-                '{{%vendor_item}}.item_approved'=> 'Yes',
-                '{{%vendor_item}}.item_status'=> 'Active',
-                '{{%vendor}}.slug'=> $slug
-            ])
-			->groupby(['{{%vendor_item}}.item_id'])
-			->all();
+        if (!isset(Yii::$app->user->identity->customer_id)) {
+            return $this->render('vendor/profile', [
+                'vendor_detail' => $vendor_details,
+                'vendor_item_details' => $vendor_item_details,
+                'themes' => $themes,
+                'category' => $main_category,
+                'vendorData' => $vendorData,
+                'customer_events_list' => [],
+                'slug'=>$slug,
+            ]);
+        } else {
+            $event_limit = 8;
+            $wish_limit = 6;
+            $offset = 0;
+            $type = '';
+            $customer_id = Yii::$app->user->identity->customer_id;
 
-            if (!isset(Yii::$app->user->identity->customer_id)) {
-                return $this->render('vendor/profile', [
-                    'vendor_detail' => $vendor_details,
-                    'vendor_item_details' => $vendor_item_details,
-                    'themes' => $themes,
-                    'category' => $main_category,
-                    'vendorData' => $vendorData,
-                    'customer_events_list' => [],
-                    'slug'=>$slug,
-                ]);
-            } else {
-                $event_limit = 8;
-                $wish_limit = 6;
-                $offset = 0;
-                $type = '';
-                $customer_id = Yii::$app->user->identity->customer_id;
+            $model = new Users();
+            $customer_events_list = $model->get_customer_wishlist_details($customer_id);
+            $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
 
-                $model = new Users();
-                $customer_events_list = $model->get_customer_wishlist_details($customer_id);
-                $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
-
-                return $this->render('vendor/profile', [
-                  'vendor_detail' => $vendor_details, 
-                  'vendor_item_details' => $vendor_item_details, 
-                  'themes' => $themes, 
-                  'vendorData' => $vendorData,
-                  'category' => $main_category, 
-                  'customer_events' => $customer_events, 
-                  'slug' => $slug, 
-                  'customer_events_list' => $customer_events_list,
-                  'slug'=>$slug
-                ]);
+            return $this->render('vendor/profile', [
+              'vendor_detail' => $vendor_details,
+              'vendor_item_details' => $vendor_item_details,
+              'themes' => $themes,
+              'vendorData' => $vendorData,
+              'category' => $main_category,
+              'customer_events' => $customer_events,
+              'slug' => $slug,
+              'customer_events_list' => $customer_events_list,
+              'slug'=>$slug
+            ]);
         }
     }
 
