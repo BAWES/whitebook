@@ -885,33 +885,32 @@ class UsersController extends BaseController
         
         if(Yii::$app->request->isPost) {
 
-            $customer_address = new CustomerAddress();
+            $questions = Yii::$app->request->post('question');
+
+            if(!$questions) {
+                $questions = array();
+            }
+
+            //save address
+            $customer_address = new CustomerAddress();          
+            $customer_address->load(Yii::$app->request->post());            
+            $customer_address->customer_id = $customer_id;
+            
+            $location = Location::findOne($customer_address->area_id);
+
+            $customer_address->city_id = $location->city_id;
+            $customer_address->country_id = $location->country_id;
+            $customer_address->save(false);
           
-            if ($customer_address->load(Yii::$app->request->post())) {
-              
-                $customer_address->customer_id = $customer_id;
+            $address_id = $customer_address->address_id;
 
-                //get city id & country 
-                $location = Location::findOne($customer_address->area_id);
-
-                $customer_address->city_id = $location->city_id;
-                $customer_address->country_id = $location->country_id;
-
-                if ($customer_address->save(false)) {
-                  
-                    $address_id = $customer_address->address_id;
-
-                    //save customer address response 
-                    $questions = Yii::$app->request->post('question');
-
-                    foreach ($questions as $key => $value) {
-                        $customer_address_response = new CustomerAddressResponse();
-                        $customer_address_response->address_id = $address_id;
-                        $customer_address_response->address_type_question_id = $key;
-                        $customer_address_response->response_text = $value;
-                        $customer_address_response->save();
-                    }
-                }
+            //save address questions 
+            foreach ($questions as $key => $value) {
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $key;
+                $customer_address_response->response_text = $value;
+                $customer_address_response->save();
             }
         }
 

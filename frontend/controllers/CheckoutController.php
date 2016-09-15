@@ -79,34 +79,37 @@ class CheckoutController extends BaseController
 
 		$json = array();
 
+        $questions = Yii::$app->request->post('question');
+
+        if(!$questions) {
+            $questions = array();
+        }
+
 		$customer_address = new CustomerAddress();
           
-        if ($customer_address->load(Yii::$app->request->post())) {
+        $customer_address->load(Yii::$app->request->post());
           
-            $customer_address->customer_id = Yii::$app->user->getId();
+        $customer_address->customer_id = Yii::$app->user->getId();
 
-            $location = Location::findOne($customer_address->area_id);
+        $location = Location::findOne($customer_address->area_id);
 
-            $customer_address->city_id = $location->city_id;
-            $customer_address->country_id = $location->country_id;
+        $customer_address->city_id = $location->city_id;
+        $customer_address->country_id = $location->country_id;
 
-            if ($customer_address->save()) {
-              
-                $address_id = $customer_address->address_id;
+        if ($customer_address->save()) {
+          
+            $address_id = $customer_address->address_id;
 
-                //save customer address response 
-                $questions = Yii::$app->request->post('question');
-
-                foreach ($questions as $key => $value) {
-                    $customer_address_response = new CustomerAddressResponse();
-                    $customer_address_response->address_id = $address_id;
-                    $customer_address_response->address_type_question_id = $key;
-                    $customer_address_response->response_text = $value;                                        
-                    $customer_address_response->save();
-                }
-            }else{
-            	$json['errors'] = $customer_address->getErrors();
+            //save customer address response 
+            foreach ($questions as $key => $value) {
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $key;
+                $customer_address_response->response_text = $value;                                        
+                $customer_address_response->save();
             }
+        }else{
+        	$json['errors'] = $customer_address->getErrors();
         }
 
         Yii::$app->response->format = Response::FORMAT_JSON;
