@@ -10,7 +10,6 @@ use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 
 $get = Yii::$app->request->get();
-
 ?>
 
 <section id="inner_pages_white_back">
@@ -20,7 +19,7 @@ $get = Yii::$app->request->get();
 		<div class="breadcrumb_common">
 			<div class="bs-example">
 				<?php
-				$this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($themeName->theme_name), 'url' => Url::to(["site/themesearch", 'slug' => $themeName->slug])];
+				$this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($themeName->theme_name), 'url' => Url::to(["/themes/detail", 'slug' => $themeName->slug])];
 				echo Breadcrumbs::widget([
 					'options' => ['class' => 'new breadcrumb'],
 					'homeLink' => [
@@ -127,7 +126,6 @@ $get = Yii::$app->request->get();
 <link href="<?= Url::to("@web/css/bootstrap-select.min.css") ?>" rel="stylesheet">
 <link href="<?= Url::to("@web/css/jquery.mCustomScrollbar.css") ?>" rel="stylesheet">
 <script src="<?= Url::to("@web/js/jquery.mCustomScrollbar.concat.min.js") ?>"></script>
-
 
 <!-- megamenu script -->
 <!-- plan last:child script -->
@@ -328,6 +326,7 @@ jQuery('button#loadmore').click(function(event)
 /* END load category and reload the page */
 var loadmore=0;
 function filter() {
+	var main_categories = $('#main-categories').val();
 	jQuery("#planloader").show();
 	jQuery(".events_listing").css({"opacity":"0.5","position":"relative"});
 	var category_name = jQuery("input[name=items]:checked").map(function() {
@@ -360,30 +359,28 @@ function filter() {
 	}
 
 	if (category_name !="" || theme_name !="" || vendor_name !="" || price_val !="") {
-		url_path = 'subcategory='+category_name+'&vendor='+vendor_name+'&price='+price_val;
+		url_path = 'subcategory='+category_name+'&vendor='+vendor_name+'&price='+price_val+'&category='+main_categories;
 		window.history.pushState("test", "Title", '?slug='+slug+'&'+url_path);
 	} else {
-		url_path = '?slug='+slug+'&subcategory='+category_name+'&vendor='+vendor_name+'&price='+price_val;
+		url_path = '?slug='+slug+'&subcategory='+category_name+'&vendor='+vendor_name+'&price='+price_val+'&category='+main_categories;
 		window.history.pushState("test", "Title", url_path);
 	}
 
-	var path = window.location.href;//"<?= Url::to(['site/theme-search']); ?> ";
+	var path = window.location.href;//"<?= Url::to(['/themes/detail']); ?> ";
 	<?php $giflink= Url::to("@web/images/ajax-loader.gif");?>
 	jQuery.ajax({
 		type:'POST',
 		url:path,
-		data:{item_ids: category_name, themes : theme_name,vendor : vendor_name,price : price_val,slug: slug, _csrf : csrfToken},
+		data:{item_ids: category_name, themes : theme_name,vendor : vendor_name,price : price_val,slug: slug,category:main_categories, _csrf : csrfToken},
 		success:function(data){
-			console.log(data);
 			jQuery('.events_listing ul').html(data);
 			// Every fourth li change margin
 			jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass("margin-rightnone");
 			jQuery("#planloader").hide();
 			jQuery(".events_listing").css({"opacity":"1.0","position":"relative"});
 		}
-	}).done(function(){
+		}).done(function(){
 			jQuery(".add_to_favourite").click(function(){
-
 				jQuery('#loading_img_list').show();
 				jQuery('#loading_img_list').html('<img id="loading-image" src="<?= $giflink;?>" alt="Loading..." />');
 
