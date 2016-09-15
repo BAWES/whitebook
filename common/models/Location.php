@@ -121,6 +121,39 @@ class Location extends \yii\db\ActiveRecord
         return $location;
     }
 
+    public static function areaOptions(){
+        
+        $options = [];
+
+        $cities = City::find()->where(['status'=>'Active', 'trash' => 'Default'])->all();
+
+        foreach ($cities as $key => $value) { 
+                       
+            $areas = Location::find()
+                ->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $value['city_id']])
+                ->all();
+
+            $child_options = [];
+
+            foreach ($areas as $area) {
+
+                if(Yii::$app->language == 'en') {
+                    $child_options[$area->id] = $area->location;
+                } else {
+                    $child_options[$area->id] = $area->location_ar;
+                }
+            }            
+
+            if(Yii::$app->language == 'en') {
+                $options[$value->city_name] = $child_options;
+            }else{
+                $options[$value->city_name_ar] = $child_options;
+            }
+        }
+
+        return $options;
+    }
+
     public static function getlocation($id)
     {
         $model = Location::find()->where(['id'=>$id])->one();

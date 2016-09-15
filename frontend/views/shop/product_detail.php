@@ -238,12 +238,14 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                         </div>
                                     </div>
                                 </div>
-                                <div class="button-signin">
-                                    <button type="submit" class="btn btn-primary btn-custome-1" name="submit">
-                                        <?= Yii::t('frontend', 'Buy') ?>
-                                    </button>&nbsp;&nbsp;&nbsp;
+                                <div style="margin-left: 11px;">
+                                    <div class="button-signin">
+                                        <button type="submit" class="btn btn-primary btn-custome-1" name="submit">
+                                            <?= Yii::t('frontend', 'Buy') ?>
+                                        </button>&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <span style="display: block;margin-top: 18px;" id="available"></span>
                                 </div>
-                                <span style="display: block;margin-top: 18px;" id="available"></span>
                             </form>
                             <?php } ?>
 

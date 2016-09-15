@@ -1,6 +1,6 @@
 //glyphicon-ok-sign
 
-jQuery(function(){	
+$(function(){	
 	address();
 });
 
@@ -11,7 +11,8 @@ function address() {
 
 	$.get(address_url, function(html) {
 		if(html) {
-			$('.checkout_content_wrapper').html(html);		
+			$('.checkout_content_wrapper').html(html);	
+			jQuery('.selectpicker').selectpicker();
 		}else{
 			location = cart_url;
 		}
@@ -109,13 +110,34 @@ $(document).delegate('.address_block', 'click', function(){
 
 $(document).delegate('#modal_create_address form', 'submit', function(e){
 	
+	$('.has-error').removeClass('has-error');
+    $('.has-success').removeClass('has-success');
+
+    //check all textarea 
+    $('#modal_create_address textarea').each(function(){
+        if(!$(this).val()){
+            $(this).parent().addClass('has-error');
+        }
+    })
+
+    //check address type
+    var address_type_id = $('#customeraddress-address_type_id').val();
+
+    if(!address_type_id) {
+        $('.field-customeraddress-address_type_id').addClass('has-error');
+    }
+
+    if($('#modal_create_address .has-error').length > 0){
+        return false;
+    }
+
 	$.post(add_address_url, $(this).serialize(), function(data) {
 
 		if(data['errors']) {
 
 			$.each(data['errors'], function(index, errors) {
 	            $.each(errors, function() {
-	                jQuery('#modal_create_address form .error.' + index).append('<p>' + this + '</p>');
+	                $('#modal_create_address form .error.' + index).append('<p>' + this + '</p>');
 	            });
 	        });
 
@@ -127,12 +149,6 @@ $(document).delegate('#modal_create_address form', 'submit', function(e){
 
 	e.preventDefault();
 });
-
-/*$(document).delegate('.panel-pg-list .radio label', 'click', function(){
-	
-	$(this).find('input').attr('checked', 'checked');
-
-});*/
 
 $(function (){
 
@@ -150,35 +166,4 @@ $(function (){
             }
         });
     });
-
-    $(document).delegate('#customeraddress-country_id', 'change', function (){
-        var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-        var country_id = $('#customeraddress-country_id').val();
-        var path = city_url;
-        
-        $.ajax({
-            type: 'POST',
-            url: path, //url to be called
-            data: { country_id: country_id ,_csrf : csrfToken}, //data to be send
-            success: function( data ) {
-                $('#customeraddress-city_id').html(data);
-            }
-        });
-    });
-
-    $(document).delegate('#customeraddress-city_id', 'change', function (){
-        var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-        var city_id = $('#customeraddress-city_id').val();
-        var path = area_url;
-        
-        $.ajax({
-            type: 'POST',
-            url: path, //url to be called
-            data: { city_id: city_id ,_csrf : csrfToken}, //data to be send
-            success: function( data ) {
-                $('#customeraddress-area_id').html(data);
-            }
-        });
-    });
 });
-
