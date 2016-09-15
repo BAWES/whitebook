@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
 
     <div id="event_slider_wrapper">
         <div class="container paddng0">
-            <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+            <?php $this->render('/product/events_slider.php'); ?>
         </div>
     </div>
 
@@ -484,18 +484,19 @@ $this->registerJs("
 
 $this->registerJs("
     function loadProductAvailability() {
-            jQuery.post(
-                availablity,
-                jQuery('#form_product_option').serialize(),
-                function (data) {
-                    console.log(data);
-                    jQuery('#available').html(data);
-                    return false;
-                }
-            );
-        }
+        jQuery.post(
+            availablity,
+            jQuery('#form_product_option').serialize(),
+            function (data) {
+                jQuery('#available').html(data);
+                return false;
+            }
+        );
+    }
 
-    loadProductAvailability();
+    if ($('#form_product_option').length>0) {
+        loadProductAvailability();
+    }
 ", View::POS_READY);
 
 $this->registerCss("
