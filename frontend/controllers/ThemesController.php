@@ -2,29 +2,14 @@
 namespace frontend\controllers;
 
 use Yii;
-use yii\web\Controller;
-use common\models\Cms;
 use common\models\Vendoritem;
 use common\models\Vendoritemthemes;
 use frontend\models\Vendor;
 use frontend\models\Category;
-use common\models\Siteinfo;
-use common\models\Events;
-use common\models\City;
-use common\models\Location;
-use common\models\Faq;
 use frontend\models\Themes;
-use common\models\Featuregroupitem;
 use frontend\models\Website;
-use frontend\models\Wishlist;
 use frontend\models\Users;
-use yii\web\Session;
-use yii\db\Query;
 use common\models\Smtp;
-use frontend\models\Contacts;
-use frontend\models\FaqGroup;
-use yii\helpers\ArrayHelper;
-
 
 class ThemesController extends BaseController
 {
@@ -95,7 +80,6 @@ class ThemesController extends BaseController
     {
         if ($slug) {
             $url = \yii\helpers\Url::to(['themes/detail','slug'=>$slug,'subcategory'=>$subcategory,'vendor'=>$vendor,'price'=>$price]);
-            $itemList = '';
             $themeName = Themes::findOne(['slug' => $slug, 'trash' => 'Default']);
 
             if ($themeName) {
@@ -149,16 +133,15 @@ class ThemesController extends BaseController
                 if (!is_null($itemThemeList)) {
 
                     $imageData = Vendoritem::find()
-                        //->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                         ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                         ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
                         ->where($condition)
                         ->andWhere(['{{%vendor_item}}.item_id' => $item])
                         ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
                         ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-                        //->andWhere(['{{%vendor_item}}.type_id' => "2"])
                         ->andWhere(['{{%vendor}}.vendor_id' => $active_vendors])
                         ->andWhere(['{{%vendor}}.trash' => 'Default'])
+                        ->andWhere(['{{%vendor_item}}.trash' => "Default"])
                         ->groupBy('{{%vendor_item}}.item_id')
                         ->all();
                 }
@@ -187,7 +170,6 @@ class ThemesController extends BaseController
                 if (Yii::$app->user->isGuest) {
 
                     return $this->render('search', [
-                        //'model' => $model,
                         'url' => $url,
                         'themeName' => $themeName,
                         'imageData' => $imageData,
@@ -204,7 +186,6 @@ class ThemesController extends BaseController
                     $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
 
                     return $this->render('search', [
-                        //'model' => $model,
                         'url' => $url,
                         'themeName' => $themeName,
                         'imageData' => $imageData,
