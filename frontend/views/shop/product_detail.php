@@ -493,7 +493,6 @@ $this->registerJs("
             }
         );
     }
-
     if ($('#form_product_option').length>0) {
         loadProductAvailability();
     }
@@ -510,6 +509,7 @@ $this->registerCss("
         margin-bottom: 15px;
         width: 92%;
         margin-left: 11px;
-   }");
+   }
+   ");
 
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
