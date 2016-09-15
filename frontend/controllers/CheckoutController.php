@@ -5,13 +5,15 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\helpers\Url;
 use common\models\CustomerCart;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use common\models\Country;
+use common\models\Location;
 use common\models\PaymentGateway;
 use frontend\models\Addresstype;
-use yii\helpers\Url;
+
 
 /**
  * Checkout controller.
@@ -82,6 +84,11 @@ class CheckoutController extends BaseController
         if ($customer_address->load(Yii::$app->request->post())) {
           
             $customer_address->customer_id = Yii::$app->user->getId();
+
+            $location = Location::findOne($customer_address->area_id);
+
+            $customer_address->city_id = $location->city_id;
+            $customer_address->country_id = $location->country_id;
 
             if ($customer_address->save()) {
               

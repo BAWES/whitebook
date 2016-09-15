@@ -378,7 +378,7 @@ class ShopController extends BaseController
                 'similiar_item' => $Similar->similiar_details(),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
-                'vendor_area' => Vendorlocation::findAll(['vendor_id'=>$model->vendor_id])
+                'vendor_area' => Vendorlocation::findAll(['vendor_id' => $model->vendor_id])
             ]);
         }
 

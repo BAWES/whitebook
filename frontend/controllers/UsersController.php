@@ -6,6 +6,7 @@ use Yii;
 use arturoliveira\ExcelView;
 use frontend\models\Basket;
 use common\models\Country;
+use common\models\Location;
 use frontend\models\Addresstype;
 use frontend\models\AddressQuestion;
 use frontend\models\Customer;
@@ -889,6 +890,12 @@ class UsersController extends BaseController
             if ($customer_address->load(Yii::$app->request->post())) {
               
                 $customer_address->customer_id = $customer_id;
+
+                //get city id & country 
+                $location = Location::findOne($customer_address->area_id);
+
+                $customer_address->city_id = $location->city_id;
+                $customer_address->country_id = $location->country_id;
 
                 if ($customer_address->save(false)) {
                   

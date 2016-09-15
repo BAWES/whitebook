@@ -1,8 +1,9 @@
 <?php
 
-use common\models\CustomerCart;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use common\models\Location;
+use common\models\CustomerCart;
 
 ?>
 
@@ -98,26 +99,16 @@ use yii\widgets\ActiveForm;
         <div class="modal-body" style="background: white; margin-top: 0;">
 
                 <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, 
-                    ['prompt' => Yii::t('frontend', 'Select...')]
+                    ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
                 ); ?>
 
                 <div class="question_wrapper">
-                        <!-- question will go here -->
+                    <!-- question will go here -->
                 </div>
 
-                <?= $form->field($customer_address_modal, 'country_id')->dropDownList($country, 
-                    ['prompt' => Yii::t('frontend', 'Select...')]
-                ); ?>
-                <span class="error country_id"></span>
-
-                <?= $form->field($customer_address_modal, 'city_id')->dropDownList([], 
-                    ['prompt' => Yii::t('frontend', 'Select...')]
-                ); ?>
-                <span class="error city_id"></span>
-
-                <?= $form->field($customer_address_modal, 'area_id')->dropDownList([], 
-                    ['prompt' => Yii::t('frontend', 'Select...')]
-                ); ?>
+                <?= $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(), 
+                        ['class' => 'selectpicker', 'data-live-search' => 'true', 'data-size' => 10]
+                    ); ?>
                 <span class="error area_id"></span>
 
                 <div class="form-group">
