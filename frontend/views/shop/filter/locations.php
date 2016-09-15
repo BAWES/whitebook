@@ -52,8 +52,8 @@ if($customer_id) {
                         <label style="margin-left: 12px;"><b> My Addresses</b></label>
                         <?php foreach ($my_addresses as $key => $value) {  ?>
                         <li>
-                            <label class="label_check" for="checkbox-<?= $value['location']; ?>">
-                                <input type="checkbox" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
+                            <label class="label_check" for="chk-<?= $value['location']; ?>">
+                                <input type="checkbox" data-element="input" name="location" class="items" id="chk-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
                                 <?= $value['location']; ?>
                             </label>
                         </li>
