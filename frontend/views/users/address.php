@@ -121,7 +121,7 @@ $this->title ='Address Book | Whitebook';
 			</div>
 
 	  <div class="modal-footer submitt_buttons">
-        <button type="button" class="btn btn-submit-address btn-default">
+        <button type="submit" class="btn btn-submit-address btn-default">
             <?= Yii::t('frontend', 'Submit') ?>
         </button>
       </div>
@@ -135,7 +135,7 @@ ActiveForm::end();
     
 $this->registerJs("
 
-    jQuery('.btn-submit-address').click(function(){
+    jQuery('.btn-submit-address').click(function(e){
 
         jQuery('.has-error').removeClass('has-error');
         jQuery('.has-success').removeClass('has-success');
@@ -156,9 +156,9 @@ $this->registerJs("
 
         if(jQuery('#modal_create_address .has-error').length > 0){
             return false;
+            e.preventDefault();
+            e.stopPropagation();
         }
-
-        jQuery('#modal_create_address form').submit();
     });
 
 	jQuery('.address_delete').click(function(){
