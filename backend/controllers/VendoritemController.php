@@ -618,7 +618,7 @@ class VendoritemController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Vendoritem::findOne($id)) !== null) {
+        if (($model = Vendoritem::findOne(['item_id'=>$id,'vendor_id'=>Yii::$app->user->getId()])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
