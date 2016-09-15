@@ -60,9 +60,6 @@ class ShopController extends BaseController
             $ActiveVendors = Vendor::loadvalidvendorids($Category->category_id);
             
             $imageData = Vendoritem::find()
-                    //->select(['{{%image}}.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name,
-                      //  {{%vendor_item}}.slug, {{%vendor_item}}.child_category, {{%vendor_item}}.item_id,
-//                        {{%vendor}}.vendor_name'])
                     ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
                     ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                     ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
@@ -74,7 +71,6 @@ class ShopController extends BaseController
                     ->andWhere(['{{%vendor_item}}.vendor_id' =>$ActiveVendors])
                     ->andWhere(['{{%vendor_item}}.category_id' => $Category->category_id])
                     ->groupBy('{{%vendor_item}}.item_id')
-                    //->asArray()
                     ->all();
         }
 
@@ -170,100 +166,89 @@ class ShopController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
 
+            $result = '';
             $data = Yii::$app->request->post();
             $condition = 'AND (wvi.trash = "Default") ';
             $join = '';
             if ($data['slug'] != '') {
-
-                if ($data['location'] != '') {
-                    $location = explode('+', $data['location']);
-                    $condition .= ' AND (wvl.area_id IN('.implode(',',$location).')) ';
-                }
-
-                /* CATEGORY FILTER */
-            if ($data['item_ids'] != '') {
-                $condition .= ' AND (wc.slug IN("'.$data['item_ids'].'")) ';
+            if ($data['location'] != '') {
+                $location = explode('+', $data['location']);
+                $condition .= ' AND (wvl.area_id IN(' . implode(',', $location) . ')) ';
             }
-
+            /* CATEGORY FILTER */
+            if ($data['item_ids'] != '') {
+                $ids = explode('+', $data['item_ids']);
+                $item_ids = implode('","', $ids);
+                $condition .= ' AND (wc.slug IN("' . $item_ids . '")) ';
+            }
             if ($data['date'] != '') {
-                $date = date('Y-m-d',strtotime($data['date']));
+                $date = date('Y-m-d', strtotime($data['date']));
                 $condition .= " AND (wv.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '$date')) ";
             }
             /* THEMES FILTER */
             if ($data['themes'] != '') {
                 $theme = explode('+', $data['themes']);
                 foreach ($theme as $key => $value) {
-                    $themes[] = Themes::find()->select('theme_id')->where(['slug'=>[$value]])->asArray()->all();
+                    $themes[] = Themes::find()->select('theme_id')->where(['slug' => [$value]])->asArray()->all();
                 }
-
                 $all_valid_themes = array();
                 foreach ($themes as $key => $value) {
                     $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
-                    ->where(['trash'=>"Default"])
-                    ->andWhere(['theme_id'=>[$value[0]['theme_id']]])
-                    ->asArray()
-                    ->all();
-
+                        ->where(['trash' => "Default"])
+                        ->andWhere(['theme_id' => [$value[0]['theme_id']]])
+                        ->asArray()
+                        ->all();
                     foreach ($get_themes as $key => $value) {
-                         $all_valid_themes[] = $value['item_id'];
+                        $all_valid_themes[] = $value['item_id'];
                     }
                 }
-
-                $all_valid_themes = (count($all_valid_themes)==1) ? $all_valid_themes[0] : implode('","', $all_valid_themes);
-
-
-                 /* END Multiple themes match comma seperate values in table*/
-                $condition .= ' AND wvi.item_id IN("'.$all_valid_themes.'")';
+                $all_valid_themes = (count($all_valid_themes) == 1) ? $all_valid_themes[0] : implode('","', $all_valid_themes);
+                /* END Multiple themes match comma seperate values in table*/
+                $condition .= ' AND wvi.item_id IN("' . $all_valid_themes . '")';
             }
-
-                if ($data['vendor'] != '') {
-                    $vendor = explode('+', $data['vendor']);
-                    $v = implode('","', $vendor);
-                    $condition .= ' AND (wv.slug IN("'.$v.'") AND wv.vendor_id IS NOT NULL) ';
-                }
-                /* BEGIN PRICE FILTER */
-                if ($data['price'] != '') {
-                    $price = explode('+', $data['price']);
-                    foreach ($price as $key => $value) {
-                        $prices[] = $value;
-                        $price_val = explode('-', $value);
-                        $price_val1[] = ' AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].') ';
-                    }
-                    $condition1 = implode(' OR ', $price_val1);
-                    $condition .= str_replace('OR AND', 'OR', $condition1);
-                }
-                /* END PRICE FILTER */
-
-                $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
-
-                $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
-
-                    if (!is_null($model1)) {
-                        $vendor_ids = implode(',',$active_vendors);
-                        $category_id = $model1['category_id'];
-                        $q  = "select * from whitebook_vendor_item as wvi ";
-                        $q .= " left join whitebook_vendor as wv ON wvi.vendor_id = wv.vendor_id";
-                        $q .= " left join whitebook_category as wc ON wc.category_id = wvi.child_category";
-                        $q .= " left join whitebook_vendor_location as wvl ON wv.vendor_id = wvl.vendor_id";
-                        $q .= " where (wvi.item_approved = 'Yes') AND (wvi.item_status = 'Active') AND (wvi.type_id = 2) ";
-                        $q .=   $condition;
-                        $q .= " AND (wvi.item_for_sale = 'Yes') AND (wvi.vendor_id IN ($vendor_ids))";
-                        $q .= " AND (wvi.category_id = $category_id) group by wvi.item_id";
-                        $imageData = Vendoritem::findBySql($q)->limit(12)->all();
-                    }
-                }
+            if ($data['vendor'] != '') {
+                $vendor = explode('+', $data['vendor']);
+                $v = implode('","', $vendor);
+                $condition .= ' AND (wv.slug IN("' . $v . '") AND wv.vendor_id IS NOT NULL) ';
             }
-            $customer_events_list = array();
-
-            if (!Yii::$app->user->isGuest) {
-                $usermodel = new Users();
-                $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
+            /* BEGIN PRICE FILTER */
+            if ($data['price'] != '') {
+                $price = explode('+', $data['price']);
+                foreach ($price as $key => $value) {
+                    $prices[] = $value;
+                    $price_val = explode('-', $value);
+                    $price_val1[] = ' AND (wvi.item_price_per_unit between ' . $price_val[0] . ' and ' . $price_val[1] . ') ';
+                }
+                $condition1 = implode(' OR ', $price_val1);
+                $condition .= str_replace('OR AND', 'OR', $condition1);
             }
-
-        return $this->renderPartial('_ajax', [
-            'imageData' => $imageData, 
-            'customer_events_list' => $customer_events_list
-        ]);
+            /* END PRICE FILTER */
+            $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
+            $active_vendors = Vendor::loadvalidvendorids($model1['category_id']);
+            if (!is_null($model1)) {
+                $vendor_ids = implode(',', $active_vendors);
+                $category_id = $model1['category_id'];
+                $q  = "select wvi.item_price_per_unit, wvi.item_name, wvi.item_id, wv.vendor_id, wv.vendor_name, wv.vendor_name_ar, wvi.slug from whitebook_vendor_item as wvi ";
+                $q .= " left join whitebook_vendor as wv ON wvi.vendor_id = wv.vendor_id";
+                $q .= " left join whitebook_category as wc ON wc.category_id = wvi.child_category";
+                $q .= " left join whitebook_vendor_location as wvl ON wv.vendor_id = wvl.vendor_id";
+                $q .= " where (wvi.item_approved = 'Yes') AND (wvi.item_status = 'Active') AND (wvi.type_id = 2) ";
+                $q .=   $condition;
+                $q .= " AND (wvi.item_for_sale = 'Yes') AND (wvi.vendor_id IN ($vendor_ids))";
+                $q .= " AND (wvi.category_id = $category_id) group by wvi.item_id";
+                $result = Vendoritem::findBySql($q)->limit(12)->all();
+            }
+        }
+        $customer_events_list = [];
+        if (!Yii::$app->user->isGuest) {
+            $usermodel = new Users();
+            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
+        }
+          return $this->renderPartial('product_list_ajax', [
+              'imageData' => $result,
+              'customer_events_list' => $customer_events_list
+          ]);
+    }
     }
 
     public function actionLoadMoreItems()
@@ -301,10 +286,14 @@ class ShopController extends BaseController
 
     public function actionProduct($slug)
     {
-        $Similar = new \common\models\Featuregroupitem();
 
         $model = Vendoritem::findOne(['slug' => $slug]);
 
+        if (empty($model)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $Similar = new \common\models\Featuregroupitem();
         if (
             $model->item_approved == 'Yes' &&
             $model->trash == 'Default' &&
@@ -318,13 +307,9 @@ class ShopController extends BaseController
             $AvailableStock = false;
         }
 
-        if (empty($model)) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
         $output = \common\models\Image::find()->select(['image_path'])
             ->where(['item_id' => $model['item_id']])
-            ->orderby(['vendorimage_sort_order'=>SORT_ASC])
+            ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->asArray()
             ->one();
 
@@ -338,26 +323,26 @@ class ShopController extends BaseController
         /* BEGIN DELIVERY AREAS --VENDOR */
 
         \Yii::$app->view->registerMetaTag([
-            'property' => 'og:title', 
-            'content' => 'Whitebook Application - '.ucfirst($model->vendor->vendor_name)
+            'property' => 'og:title',
+            'content' => 'Whitebook Application - ' . ucfirst($model->vendor->vendor_name)
         ]);
-        
+
         \Yii::$app->view->registerMetaTag([
-            'property' => 'og:url', 
+            'property' => 'og:url',
             'content' => Url::toRoute(["shop/product", 'slug' => $model->slug], true)
         ]);
 
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
-        
+
         \Yii::$app->view->registerMetaTag([
-            'property' => 'og:site_name', 
-            'content' => 'Whitebook Application - '.ucfirst($model->vendor->vendor_name).' - '.ucfirst($model->item_name)
+            'property' => 'og:site_name',
+            'content' => 'Whitebook Application - ' . ucfirst($model->vendor->vendor_name) . ' - ' . ucfirst($model->item_name)
         ]);
-        
+
         \Yii::$app->view->registerMetaTag([
-            'property' => 'og:description', 
+            'property' => 'og:description',
             'content' => trim(strip_tags($model->item_description))
         ]);
 
@@ -378,10 +363,9 @@ class ShopController extends BaseController
                 'similiar_item' => $Similar->similiar_details(),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
-                'vendor_area' => Vendorlocation::findAll(['vendor_id'=>$model->vendor_id])
+                'vendor_area' => Vendorlocation::findAll(['vendor_id' => $model->vendor_id])
             ]);
         }
-
     }
 
     public function actionGetLocationList(){
