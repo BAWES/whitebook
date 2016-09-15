@@ -161,7 +161,7 @@ $action = Yii::$app->controller->action->id;
                                 </a>
                             </li>
                             <li  class="<?php if ($action == "themes") { echo "active";} ?>">
-                                <a href="<?= Url::toRoute('site/themes', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>">
+                                <a href="<?= Url::toRoute('/themes/index', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>">
                                     <?php echo Yii::t('frontend', 'Themes'); ?>
                                 </a>
                             </li>
@@ -412,7 +412,7 @@ echo $search_div;
             <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('site/shop', true); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
             </li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
-            <li class="ma5-li-3"><a href="<?= Url::toRoute('site/themes', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>
+            <li class="ma5-li-3"><a href="<?= Url::toRoute('/themes/index', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/directory', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
 
 
