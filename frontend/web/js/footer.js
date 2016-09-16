@@ -12,7 +12,9 @@ jQuery(window).resize(function(){
 
     //set left position for dropdown ment
     $left = jQuery('.nav.navbar-nav').offset().left;
-    jQuery('.mega-dropdown-menu').css('left', '-' + $left + 'px');
+    jQuery('.plan_menu').css('left', '-' + $left + 'px');
+
+    jQuery('.shop_menu').css('left', '-' + ($left + 68) + 'px');
 
     if(jQuery(window).width() <= 990) {
         jQuery('#home_slider').css('padding-top', $('#top_header').height() + 'px');
