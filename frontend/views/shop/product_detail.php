@@ -479,6 +479,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
 <?php
 
 $this->registerJs("
+    var deliver_date = '".$deliver_date."';
     var isGuest = ".(int)Yii::$app->user->isGuest.";
     var vendor_id = '".$model['vendor_id']."';
     var customer_id = '".Yii::$app->user->id."';
