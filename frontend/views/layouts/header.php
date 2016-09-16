@@ -94,7 +94,7 @@ $action = Yii::$app->controller->action->id;
                         <ul class="nav navbar-nav">
                             <li class="dropdown mega-dropdown">
                                 <?= Html::a(Yii::t('frontend', 'Plan'), ['plan/plans'], ['title' => Yii::t('frontend', 'Plan')]); ?>
-                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav">
+                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav plan_menu">
                                     <ul class="nav-list list-inline">
                                         <li>
                                             <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["plan/plan", 'slug' => 'venues']); ?>">
@@ -154,8 +154,65 @@ $action = Yii::$app->controller->action->id;
                                 </div>
                             </li>
 
-                            <li class="">
+                            <li class="dropdown mega-dropdown">
                                 <?= Html::a(Yii::t('frontend', 'Shop'), ['shop/index'], ['title' => Yii::t('frontend', 'Shop')]); ?>
+                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav shop_menu">
+                                    <ul class="nav-list list-inline">
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["shop/products", 'slug' => 'venues']); ?>">
+                                                <span class="venus_icon"></span>
+                                                <span> <?php echo Yii::t('frontend', 'Venues'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title=" <?php echo Yii::t('frontend', 'Invitations'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'invitations']); ?>">
+                                                <span class="invit_icon"></span>
+                                                <span> <?php echo Yii::t('frontend', 'Invitations'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Food & Beverage'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'food-beverage']); ?>">
+                                                <span class="food_map"></span>
+                                                <span><?php echo Yii::t('frontend', 'Food & Beverage') ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Decor'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'decor']); ?>">
+                                                <span class="decor"></span>
+                                                <span><?php echo Yii::t('frontend', 'Decor'); ?> </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Supplies'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'supplies']); ?>">
+                                                <span class="supplies"></span>
+                                                <span><?php echo Yii::t('frontend', 'Supplies'); ?> </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Entertainment'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'entertainment']); ?>">
+                                                <span class="entert"></span>
+                                                <span><?php echo Yii::t('frontend', 'Entertainment'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title=" <?php echo Yii::t('frontend', 'Services'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'services']); ?>">
+                                                <span class="serv"></span>
+                                                <span> <?php echo Yii::t('frontend', 'Services'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Other'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'others']); ?>">
+                                                <span class="other"></span>
+                                                <span><?php echo Yii::t('frontend', 'Other'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'gift-favors']); ?>">
+                                                <span class="say_thank"></span>
+                                                <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
 
                             <li  class="<?php if ($action == "experience") { echo "active";} ?>">
@@ -353,8 +410,8 @@ $action = Yii::$app->controller->action->id;
 <nav class="ma5-menu-mobile mobile-menu">
     <div class="navbar-collapse">
         <ul class="nav navbar-nav ma5-ul" style=" border:none;">
-            <li class="ma5-li-1"> <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Plan'); ?></a>
-
+            <li class="ma5-li-1"> 
+                <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Plan'); ?></a>
                 <ul class="ma5-ul-1 navbar-nav">
                     <li class="ma5-li-1-0">
                         <div class="ma5-leave-bar">
@@ -418,10 +475,74 @@ $action = Yii::$app->controller->action->id;
                             <span class="say_thank"></span>
                             <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
                         </a></li>
-
                 </ul>
             </li>
-            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::to('shop/index'); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
+            <li class="ma5-li-2"> 
+                <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Shop'); ?></a>
+                <ul class="ma5-ul-2 navbar-nav">
+                    <li class="ma5-li-2-0">
+                        <div class="ma5-leave-bar">
+                            <span class="ma5-btn-leave"></span>
+                            <a style="color:#000;" class="ma5-path-to-active ma5-btn-enter" href="#node1">
+                                <?= Yii::t('frontend', 'Back'); ?>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["shop/products", 'slug' => 'venues']); ?>">
+                            <span class="venus_icon"></span>
+                            <span> <?php echo Yii::t('frontend', 'Venues'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title=" <?php echo Yii::t('frontend', 'Invitations'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'invitations']); ?>">
+                            <span class="invit_icon"></span>
+                            <span> <?php echo Yii::t('frontend', 'Invitations'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Food & Beverage'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'food-beverage']); ?>">
+                            <span class="food_map"></span>
+                            <span><?php echo Yii::t('frontend', 'Food & Beverage') ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Decor'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'decor']); ?>">
+                            <span class="decor"></span>
+                            <span><?php echo Yii::t('frontend', 'Decor'); ?> </span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Supplies'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'supplies']); ?>">
+                            <span class="supplies"></span>
+                            <span><?php echo Yii::t('frontend', 'Supplies'); ?> </span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Entertainment'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'entertainment']); ?>">
+                            <span class="entert"></span>
+                            <span><?php echo Yii::t('frontend', 'Entertainment'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title=" <?php echo Yii::t('frontend', 'Services'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'services']); ?>">
+                            <span class="serv"></span>
+                            <span> <?php echo Yii::t('frontend', 'Services'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Other'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'others']); ?>">
+                            <span class="other"></span>
+                            <span><?php echo Yii::t('frontend', 'Other'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'gift-favors']); ?>">
+                            <span class="say_thank"></span>
+                            <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('/themes/index', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>
