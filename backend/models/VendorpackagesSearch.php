@@ -44,7 +44,7 @@ class VendorpackagesSearch extends Vendorpackages
     public function search($params)
     {        
         $query = Vendorpackages::find()        
-        ->where(['vendor_id'=>Vendor::getVendor('vendor_id')])    
+        ->where(['vendor_id' => Yii::$app->user->getID(), 'trash' => 'Default'])    
         ->orderBy(['created_datetime' => SORT_DESC]);
 
         $dataProvider = new ActiveDataProvider([
