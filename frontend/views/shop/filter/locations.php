@@ -71,10 +71,14 @@ if($customer_id) {
                         foreach ($area as $key => $value) {  ?>
                             <li>
                                 <label class="label_check" for="checkbox-<?= $value['location']; ?>">
-                                    <input type="checkbox" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
-
+                                    <?php
+                                    $checked = '';
+                                    if ($deliver_location != null) {
+                                        $checked = ($deliver_location == $value['id']) ? 'checked="checked"' : '';
+                                    }
+                                    ?>
+                                    <input <?=$checked?> type="checkbox" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
                                     <?= $value['location']; ?>
-
                                 </label>
                             </li>
                             <?php
