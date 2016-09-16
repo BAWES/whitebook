@@ -2,20 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
 ?>
-<style>
-    .datepicker{
-        border: 2px solid rgb(242, 242, 242);
-    }
-    .datepicker table {
-        font-size: 12px;
-    }
-    .m-0{margin:0px! important;}
-    .padding-left-0{padding-left: 0px!important;}
-    .padding-right-0{padding-right: 0px!important;}
-    .new_popup_common .bootstrap-select button,#dp3 input[type="text"]{color: #0a0a0a!important;}
-</style>
 <section id="inner_pages_white_back">
     <div class="container paddng0">
         <div class="shop_sect">
@@ -148,7 +135,6 @@ use yii\widgets\ActiveForm;
                                         </div>
                                     </div>
                                 <?php ActiveForm::end() ?>
-
                             </div>
                         </div>
                     </div>
@@ -157,71 +143,42 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
-
 <?php
-/*
-$this->registerJS("
-jQuery.noConflict();
-jQuery('#AreaModal').modal('show');
 
-    jQuery('#area').on('change',function(){
-        var csrfToken = $('meta[name=\"csrf-token\"]').attr(\"content\");
-        var path = '".\Yii\helpers\Url::to(['shop/get-location-list'])."';
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { city_id: jQuery(this).val(), _csrf : csrfToken}, //data to be send
+if (!Yii::$app->user->isGuest) {
+    $session = Yii::$app->session;
+    if (!$session->has('deliver-location')) {
+        echo $this->render('_popup');
+        $this->registerJS("
+            jQuery('#ShopLocationDateModal').modal('show');
 
-        beforeSend: function (xhr) {
-            $('#location_div').html('Please Wait....');
-        },
-        success: function(data) {
-		        $('#location_div').html(data);
-		        jQuery('.selectpicker').selectpicker({
-                    style: 'btn-primary',
-                    size: 2
-                });
-		        return false;
-            }
-        });
-        return false;
-    });
+            jQuery('#select_date_button').click(function(event)
+            {
+                jQuery.ajax({
+                    type:'POST',
+                    url:'" . yii\helpers\Url::to(['shop/location-date-selection']) . "',
+                    data:jQuery('#shop-date-location-hook').serialize(),
+                    success:function(data){
 
-    jQuery('#submit').on('click',function(){
-        if($('#area').val() == '') {
-            alert('Please select area');
-            return false;
-        } else if($('#Location').val() == '') {
-            alert('Please select location');
-            return false;
-        } else if($('#delivery_date').val() == '') {
-            alert('Please select delivery date');
-            return false;
-        } else {
-
-            var csrfToken = $('meta[name=\"csrf-token\"]').attr(\"content\");
-            var path = '".\Yii\helpers\Url::to(['shop/set-user-location'])."';
-            $.ajax({
-            type: 'POST',
-            url: path, //url to be called
-            data: { city_id: jQuery(this).val(), _csrf : csrfToken},
-
-            beforeSend: function (xhr) {
-                $('#location_div').html('Please Wait....');
-            },
-            success: function(data) {
-                    $('#location_div').html(data);
-                    jQuery('.selectpicker').selectpicker({
-                        style: 'btn-primary',
-                        size: 2
-                    });
-                    return false;
+                    if (jQuery.trim(data) == 'date') {
+                        jQuery('.datetimepicker').addClass('border-red');
+                    } else {
+                        jQuery('#ShopLocationDateModal').modal('hide');
+                    }
+                    jQuery('.event_loader').hide();
                 }
-            });
-            return false;
-
-        }
-    });
-
-");*/
+            })
+        });", \yii\web\View::POS_READY);
+    }
+    $this->registerCss("
+    .border-red{border:1px solid red! important;}
+    .datepicker{border: 2px solid rgb(242, 242, 242);}
+    .datepicker table {font-size: 15px;}
+    .product_popup_signup_log > form {padding: 2px 0 0;}
+    .m-0{margin:0px! important;}
+    .padding-left-0{padding-left: 0px!important;}
+    .padding-right-0{padding-right: 0px!important;}
+    .new_popup_common .bootstrap-select button,#dp3 input[type=\"text\"]{color: #0a0a0a!important;}
+    ");
+}
 ?>

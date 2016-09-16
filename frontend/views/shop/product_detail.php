@@ -25,6 +25,10 @@ if (Yii::$app->language == "en") {
 $this->title = 'Whitebook - ' . $item_name;
 $this->params['breadcrumbs'][] = ['label' => ucfirst($category_name), 'url' => Url::to(["shop/products", 'slug' => $model->category->slug])];
 $this->params['breadcrumbs'][] = ucfirst($item_name);
+
+$session = $session = Yii::$app->session;
+$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+$deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 ?>
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com">
@@ -206,7 +210,7 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                         <div class="form-group">
                                             <label><?= Yii::t('frontend', 'Delivery date');?></label>
                                             <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" style="position: relative;"  id="delivery_date_wrapper">
-                                                <input readonly="true" name="delivery_date" id="delivery_date" class="form-control required"  placeholder="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>" style="height: 40px;">
+                                                <input value="<?=$deliver_date?>" readonly="true" name="delivery_date" id="delivery_date" class="form-control required"  placeholder="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>" style="height: 40px;">
                                                 <span class="add-on position_product_option"> <i class="flaticon-calendar189"></i></span>
                                             </div>
                                             <span class="error cart_delivery_date"></span>
@@ -220,7 +224,7 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
                                             <label><?= Yii::t('frontend', 'Delivery Area') ?></label>
                                             <div class="select_boxes">
                                                 <?php
-                                                echo Html::dropDownList('area_id', null,
+                                                echo Html::dropDownList('area_id', $deliver_location,
                                                     \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' ),
                                                     ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]
                                                 );
