@@ -286,6 +286,7 @@ class SiteController extends BaseController
             $themes1 = Themes::load_all_themename($p);
             $vendor = Vendor::loadvendor_item($k);
         }
+        
         $usermodel = new Users();
 
         if (Yii::$app->user->isGuest) {
@@ -617,6 +618,7 @@ class SiteController extends BaseController
                     return $this->renderPartial('/users/user_wish_list', ['wishlist' => $wishlist]);
                 }
             }
+
     public function actionLoadeventlist()
     {
         $customer_id = Yii::$app->user->identity->customer_id;

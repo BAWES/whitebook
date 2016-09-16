@@ -74,38 +74,38 @@ if($event_status>0){
 	</div>
 	<div class="plan_venues" id="wrapper">
 		<div class="overlay"></div>
-			<div class="col-md-3 paddingleft0" id="left_side_cate">
-				<div class="filter_content">
-					<div class="filter_section">
-						<div class="responsive-category-bottom search-list col-xs-12 teat-right pull-right">
-							<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0 pull-right" data-toggle="offcanvas">Filter</span>
-							<div class="filter_title">
-								<span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
-							</div>
-							<div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
-								<img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
-							</div>
-							<nav class="row-offcanvas row-offcanvas-left">
-								<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
-									<div id="accordion" class="panel-group">
-
-										<?= $this->render('@frontend/views/plan/filter/theme',[
-											'themes' => $themes]); ?>
-
-										<?= $this->render('@frontend/views/plan/filter/vendor',[
-											'vendor' => $vendor]); ?>
-
-										<?= $this->render('@frontend/views/plan/filter/price',[
-											'imageData' => $imageData]); ?>
-											
-									</div>
-								</div>
-							</nav>
-						</div>
+		<div class="overlay_filter"></div>
+		<div class="col-md-3 paddingleft0" id="left_side_cate">
+			<div class="filter_content">
+			<div class="filter_section">
+				<div class="responsive-category-bottom search-list col-xs-12 teat-right pull-right">
+					<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0 pull-right" data-toggle="offcanvas">Filter</span>
+					<div class="filter_title">
+						<span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
 					</div>
+					<div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
+						<img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
+					</div>
+					<nav class="row-offcanvas row-offcanvas-left">
+						<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
+							<div id="accordion" class="panel-group">
+
+								<?= $this->render('@frontend/views/plan/filter/theme',[
+									'themes' => $themes]); ?>
+
+								<?= $this->render('@frontend/views/plan/filter/vendor',[
+									'vendor' => $vendor]); ?>
+
+								<?= $this->render('@frontend/views/plan/filter/price',[
+									'imageData' => $imageData]); ?>
+									
+							</div>
+						</div>
+					</nav>
 				</div>
 			</div>
-
+			</div>
+		</div>
 		<div class="col-md-9 paddingright0">
 		<div class="banner_section_plan">
 			<h3>Search Result for:<?= $search?> (<?= count($imageData);?>)</h3>
@@ -146,11 +146,8 @@ if($event_status>0){
 	</div>
 </section>
 
-<!-- continer end -->
-<link href="<?= Url::to("@web/css/owl.carousel.css") ?>" rel="stylesheet">
-<link href="<?= Url::to("@web/css/bootstrap-select.min.css") ?>" rel="stylesheet">
-<link href="<?= Url::to("@web/css/jquery.mCustomScrollbar.css") ?>" rel="stylesheet">
 <?php
+
 $this->registerJs("
 
     var slug                = '".$search."',
@@ -160,10 +157,14 @@ $this->registerJs("
         wishlist_url        = '".Url::to(['/users/add_to_wishlist'])."',
         addevent            = '".Url::to(['/product/addevent'])."',
         load_more           = '".Yii::$app->urlManager->createAbsoluteUrl('plan/loadmoreitems')."'
-    ", \yii\web\View::POS_END, 'searching-options');
+    ", \yii\web\View::POS_END, 'searching-options'
+);
 
-echo $this->registerJsFile('js/jquery.mCustomScrollbar.concat.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-echo $this->registerJsFile('js/pages/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerCssFile("@web/css/owl.carousel.css");
+$this->registerCssFile("@web/css/bootstrap-select.min.css");
+$this->registerCssFile("@web/css/jquery.mCustomScrollbar.css");
+$this->registerJsFile('@web/js/jquery.mCustomScrollbar.concat.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/pages/search.js?V=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 //$this->registerCssFile("http://example.com/css/themes/black-and-white.css", [
 //'depends' => [BootstrapAsset::className()],
