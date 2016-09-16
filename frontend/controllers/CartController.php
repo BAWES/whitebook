@@ -187,7 +187,9 @@ class CartController extends BaseController
             ->asArray()->all();
 
             foreach ($vendor_timeslot as $key => $value) {
-                echo '<option value="'.$value['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
+                $start = date('g:i A',strtotime($value['timeslot_start_time']));
+                $end = date('g:i A',strtotime($value['timeslot_end_time']));
+                echo '<option value="'.$value['timeslot_id'].'">'.$start.' - '.$end.'</option>';
             }
         }
     }
