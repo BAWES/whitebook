@@ -2,7 +2,6 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
 ?>
 <section id="inner_pages_white_back">
     <div class="container paddng0">
@@ -144,20 +143,42 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
-
 <?php
-echo $this->render('_popup');
-$this->registerJS("jQuery('#ShopLocationDateModal').modal('show');",\yii\web\View::POS_READY);
-$this->registerCss("
-    .datepicker{
-        border: 2px solid rgb(242, 242, 242);
+
+if (!Yii::$app->user->isGuest) {
+    $session = Yii::$app->session;
+    if (!$session->has('deliver-location')) {
+        echo $this->render('_popup');
+        $this->registerJS("
+            jQuery('#ShopLocationDateModal').modal('show');
+
+            jQuery('#select_date_button').click(function(event)
+            {
+                jQuery.ajax({
+                    type:'POST',
+                    url:'" . yii\helpers\Url::to(['shop/location-date-selection']) . "',
+                    data:jQuery('#shop-date-location-hook').serialize(),
+                    success:function(data){
+
+                    if (jQuery.trim(data) == 'date') {
+                        jQuery('.datetimepicker').addClass('border-red');
+                    } else {
+                        jQuery('#ShopLocationDateModal').modal('hide');
+                    }
+                    jQuery('.event_loader').hide();
+                }
+            })
+        });", \yii\web\View::POS_READY);
     }
-    .datepicker table {
-        font-size: 15px;
-    }
+    $this->registerCss("
+    .border-red{border:1px solid red! important;}
+    .datepicker{border: 2px solid rgb(242, 242, 242);}
+    .datepicker table {font-size: 15px;}
+    .product_popup_signup_log > form {padding: 2px 0 0;}
     .m-0{margin:0px! important;}
     .padding-left-0{padding-left: 0px!important;}
     .padding-right-0{padding-right: 0px!important;}
     .new_popup_common .bootstrap-select button,#dp3 input[type=\"text\"]{color: #0a0a0a!important;}
     ");
+}
 ?>

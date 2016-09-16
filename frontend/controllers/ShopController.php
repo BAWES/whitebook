@@ -422,4 +422,19 @@ class ShopController extends BaseController
             exit;
         }
     }
+
+    public function actionLocationDateSelection()
+    {
+        $location_name = $_REQUEST['location_name'];
+        $delivery_date = $_REQUEST['delivery_date'];
+
+        if (trim($_REQUEST['delivery_date']) == '') {
+            echo 'date';
+            exit;
+        } else {
+            $session = Yii::$app->session;
+            $session->set('deliver-location', $location_name);
+            $session->set('deliver-date', $delivery_date);
+        }
+    }
 }

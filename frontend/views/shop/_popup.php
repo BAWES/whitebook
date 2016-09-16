@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
                                             <input type="text"  name="delivery_date" id="delivery_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
                                             <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                                         </div>
-                                        <label for="delivery_date" class="error"></label>
+                                        <label for="delivery_date" id="delivery_date_error" class="error"></label>
                                     </div>
                                     <div class="form-group new_popup_common">
                                         <div class="bs-docs-example">
@@ -38,7 +38,6 @@ use yii\widgets\ActiveForm;
                                                     $list = '';
                                                     foreach ($cities as $city) {
                                                         $city_name = (Yii::$app->language == 'en') ? $city->city_name : $city->city_name_ar;
-
                                                         $list .= '<optgroup label='.$city_name.'>';
                                                         if (isset($city->locations)) {
                                                             foreach ($city->locations as $location) {
