@@ -136,4 +136,9 @@ class City extends \yii\db\ActiveRecord
         return 'Activate';
         return 'Deactivate';
     }
+
+
+    public function getLocations(){
+        return $this->hasMany(Location::className(),['city_id'=>'city_id']);
+    }
 }
