@@ -80,24 +80,12 @@ class ShopController extends BaseController
             $q .= " where (wvi.trash = 'Default') AND (wvi.item_approved = 'Yes') ";
             $q .= " AND (wvi.item_status = 'Active') AND (wvi.type_id = 2) ";
             $q .=   $condition;
-            $q .= " AND (wvi.item_for_sale = 'Yes') AND (wvi.vendor_id IN ($vendor))";
+            $q .= " AND (wvi.item_for_sale = 'Yes')";
+            if ($vendor) {
+                $q .= " AND (wvi.vendor_id IN ($vendor))";
+            }
             $q .= " AND (wvi.category_id = $Category->category_id) group by wvi.item_id";
             $imageData = Vendoritem::findBySql($q)->limit(12)->all();
-
-//            $imageData = Vendoritem::find()
-//                    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
-//                    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-//
-//                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
-//                    ->where(['{{%vendor_item}}.trash' => "Default"])
-//                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
-//                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-//                    ->andWhere(['{{%vendor_item}}.type_id' => "2"])
-//                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-//                    ->andWhere(['{{%vendor_item}}.vendor_id' =>$ActiveVendors])
-//                    ->andWhere(['{{%vendor_item}}.category_id' => $Category->category_id])
-//                    ->groupBy('{{%vendor_item}}.item_id')
-//                    ->all();
         }
 
         /* END CATEGORY */
