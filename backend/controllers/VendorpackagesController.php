@@ -43,7 +43,9 @@ class VendorpackagesController extends Controller
     public function actionIndex()
     {
         $searchModel = new VendorpackagesSearch();
+        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
