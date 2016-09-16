@@ -7,6 +7,10 @@
     use yii\web\view;
     $this->params['breadcrumbs'][] = ['label' => ucfirst($Category->category_name), 'url' => Url::to(["shop/products", 'slug' => $slug])];
     $get = Yii::$app->request->get();
+
+$session = $session = Yii::$app->session;
+$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+$deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 ?>
     <!-- coniner start -->
     <section id="inner_pages_white_back">
@@ -77,12 +81,12 @@
                                 <nav class="row-offcanvas row-offcanvas-left">
                                     <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                                         <div id="accordion" class="panel-group">
-                                            <?php echo $this->render('filter/date.php');  ?>
-                                            <?php echo $this->render('filter/locations.php');  ?>
-                                            <?php echo $this->render('filter/price.php');  ?>
-                                            <?php echo $this->render('filter/category.php',['slug'=>$slug]); ?>
-                                            <?php echo $this->render('filter/theme.php',['themes'=>$themes]); ?>
-                                            <?php echo $this->render('filter/vendor.php',['vendor'=>$vendor]); ?>
+                                            <?=$this->render('filter/date.php',['deliver_date'=>$deliver_date]);  ?>
+                                            <?=$this->render('filter/locations.php',['deliver_location'=>$deliver_location]);  ?>
+                                            <?=$this->render('filter/price.php');  ?>
+                                            <?=$this->render('filter/category.php',['slug'=>$slug]); ?>
+                                            <?=$this->render('filter/theme.php',['themes'=>$themes]); ?>
+                                            <?=$this->render('filter/vendor.php',['vendor'=>$vendor]); ?>
                                         </div>
                                 </nav>
                             </div>
