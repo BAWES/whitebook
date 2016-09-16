@@ -372,17 +372,25 @@
             e.preventDefault();
         });
 
-        jQuery(document).delegate('#delivery_date', 'change', function () {
+        function deliveryTimeSlot(date){
             jQuery.ajax({
                 type: 'POST',
                 url: getdeliverytimeslot_url,
-                data: { 'vendor_id': vendor_id, 'sel_date': jQuery(this).val()},
+                data: { 'vendor_id': vendor_id, 'sel_date': date},
                 success: function (data)
                 {
                     jQuery('#timeslot_id').html(data);
-                    jQuery('#timeslot_id').selectpicker('refresh');                    
+                    jQuery('#timeslot_id').selectpicker('refresh');
                 }
             });
+        }
+
+        if (deliver_date) {
+            deliveryTimeSlot(jQuery('#delivery_date').val());
+        }
+
+        jQuery(document).delegate('#delivery_date', 'change', function () {
+            deliveryTimeSlot(jQuery(this).val());
         });
     }
 
