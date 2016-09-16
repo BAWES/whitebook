@@ -1375,12 +1375,13 @@ a.boxclose{
 .address_box li {
     list-style: none;
 }
-.address_box {
-    padding: 5px;
-    border: 1px solid rgba(0, 0, 0, .15);
-    background: white;
+.address_delete{
+    background: #d9534f;
+    color: white;
 }
-
+.address_delete:hover{
+    color: white;
+}
 .creatfirst_events .btn {
 	border: 1px solid #000;
     background: #000;

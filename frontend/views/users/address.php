@@ -6,7 +6,7 @@ use yii\base;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 use common\models\Location;
-
+use frontend\models\Addresstype;
 
 $this->title ='Address Book | Whitebook';
 
@@ -28,49 +28,55 @@ $this->title ='Address Book | Whitebook';
             <div class="col-md-8">
                 <div class="accont_informations">
                     <div class="accont_info">                        
-                        <div class="row">
+                        <table class="table table-bordered">
                             <?php foreach ($addresses as $address) { ?>
-                            	<div class="col-lg-4">
+                            <tr>
+                            	<td>
                             		<div class="address_box">
                             			
-                            			<a data-id="<?= $address['address_id'] ?>" class="address_delete pull-right">
-                            				<i class="glyphicon glyphicon-trash"></i>
-                            			</a>
+                                        <a data-id="<?= $address['address_id'] ?>" class="address_delete btn pull-right">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                        </a>
+                                        
+                                        <!-- address type -->
+                                        <?= Addresstype::type_name($address['address_type_id']); ?>
 
-                            			<?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
+                                        <br />
+
+                                        <!-- address -->
+                                        <?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
                             			
+                                        <!-- address question response -->
+                                        <?php if($address['questions']) { ?>
+                                        <ul>
+                                        <?php foreach ($address['questions'] as $row) { ?>
+                                            <li>
+                                                <?= $row['response_text'] ?>
+                                            </li>
+                                        <?php } ?>
+                                        <?php } ?>
+                                        </ul>
+
+                                        <!-- address area and city -->
                                         <?php 
 
                                         if(Yii::$app->language == 'en') { 
 
                             			    echo $address['location']?$address['location'].'<br />':'';
                                             echo $address['city_name']?$address['city_name'].'<br />':'';
+
                                         } else {
 
                                             echo $address['location_ar']?$address['location_ar'].'<br />':'';
                                             echo $address['city_name_ar']?$address['city_name_ar'].'<br />':'';
                                         }
                             			
-                            			if($address['questions']) { ?>
-                            			<h4><?php echo Yii::t('frontend', 'Questions') ?></h4>
-                            			<ul>
-                            			<?php foreach ($address['questions'] as $row) { ?>
-                            				<li>
-                            					<?php if(Yii::$app->language == 'en') { ?>
-                                                    <b><?= $row['question'] ?></b>
-                                                <?php } else{ ?>
-                                                    <b><?= $row['question_ar'] ?></b>
-                                                <?php } ?>
-
-                            					<p><?= $row['response_text'] ?></p>
-                            				</li>
-                            			<?php } ?>
-                            			<?php } ?>
-                            			</ul>
+                            			?>
                             		</div>
-                            	</div>
+                            	</td>
+                            </tr>    
                             <?php } ?>
-                            </div>
+                            </table>
 
                             <div class="clearfix"></div>
 
