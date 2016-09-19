@@ -190,7 +190,7 @@ class Vendoritem extends \yii\db\ActiveRecord
     */
     public function getFeatureGroupItems()
     {
-        return $this->hasMany(FeatureGroupItem::className(), ['item_id' => 'item_id']);
+        return $this->hasMany(Featuregroupitem::className(), ['item_id' => 'item_id']);
     }
 
     /**
