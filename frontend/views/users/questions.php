@@ -12,7 +12,7 @@
 				
 		</label>
 		<div class="controls">
-			<textarea id="question[<?= $question['ques_id'] ?>]" class="form-control" name="question[<?= $question['ques_id'] ?>]"></textarea>
+			<textarea id="question[<?= $question['ques_id'] ?>]" class="form-control" name="question[<?= $question['ques_id'] ?>]"><?= isset($question['response_text'])?$question['response_text']:'' ?></textarea>
 		</div>  
 	</div>
 

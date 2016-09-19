@@ -939,13 +939,69 @@ class UsersController extends BaseController
 
         $customer_address_modal = new CustomerAddress();
         $addresstype = Addresstype::loadAddresstype();
-        $country = Country::loadcountry();
 
         return $this->render('address', [
             'addresses' => $addresses,
             'customer_address_modal' => $customer_address_modal,
-            'addresstype' => $addresstype,
-            'country' => $country
+            'addresstype' => $addresstype
+        ]);
+    }
+
+    public function actionEditAddress($address_id)
+    {
+        $customer_id = Yii::$app->user->getId();
+        
+        if ($customer_id == '') {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
+            return $this->goHome();
+        }
+        
+        $customer_address = CustomerAddress::findone([
+            'address_id' => $address_id, 
+            'customer_id' => $customer_id
+        ]);     
+
+        if(!$customer_address) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+        
+        if(Yii::$app->request->isPost) {
+
+            $questions = Yii::$app->request->post('question');
+
+            if(!$questions) {
+                $questions = array();
+            }
+
+            //save address               
+            $customer_address->load(Yii::$app->request->post());            
+            
+            $location = Location::findOne($customer_address->area_id);
+
+            $customer_address->city_id = $location->city_id;
+            $customer_address->country_id = $location->country_id;
+            $customer_address->save(false);
+          
+            //remove old questions 
+            CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
+
+            //save address questions 
+            foreach ($questions as $key => $value) {
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $key;
+                $customer_address_response->response_text = $value;
+                $customer_address_response->save();
+            }
+
+            return $this->redirect(['users/address']);
+        }
+
+        //display edit form 
+        return $this->render('address_edit', [
+            'address' => $customer_address,
+            'address_id' => $address_id,
+            'addresstype' => Addresstype::loadAddresstype()
         ]);
     }
 
@@ -981,12 +1037,49 @@ class UsersController extends BaseController
     public function actionQuestions()
     {
         $address_type_id = Yii::$app->request->post('address_type_id');
+        $address_id = Yii::$app->request->post('address_id');
 
-        $questions = AddressQuestion::find()->where([
-            'address_type_id' => $address_type_id,
-            'trash' => 'Default',
-            'status' => 'Active'
-        ])->all();
+        if($address_id) {
+       
+            $questions = array();
+
+            //get questions
+            $result = AddressQuestion::find()
+                ->where([
+                    'address_type_id' => $address_type_id,
+                    'trash' => 'Default',
+                    'status' => 'Active'])
+                ->asArray()
+                ->all();
+
+            //get questions response 
+            foreach ($result as $value) {
+                
+                $response = CustomerAddressResponse::findone([
+                    'address_id' => $address_id,
+                    'address_type_question_id' => $value['ques_id']
+                ]);
+
+                if($response) {
+                    $value['response_text'] = $response->response_text;
+                }else{
+                    $value['response_text'] = '';
+                }
+                
+                $questions[] = $value;
+            }       
+
+        } else {
+            
+            $questions = AddressQuestion::find()
+                ->where([
+                    'address_type_id' => $address_type_id,
+                    'trash' => 'Default',
+                    'status' => 'Active'])
+                ->asArray()
+                ->all();
+
+        }        
 
         return $this->renderPartial('questions', [
             'questions' => $questions
