@@ -516,6 +516,14 @@ $this->registerJs("
     if ($('#form_product_option').length>0) {
         loadProductAvailability();
     }
+
+    $('#quantity').change(function(){
+        $('span#available').hide();
+    });
+    jQuery(document).delegate('#area_id,#timeslot_id', 'change', function () {
+        $('span#available').hide();
+    });
+
 ", View::POS_READY);
 
 $this->registerCss("
