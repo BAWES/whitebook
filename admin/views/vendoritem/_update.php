@@ -229,7 +229,7 @@ function cmp($a, $b)
 			</div>
 			<div class="border-top"></div>
 			<div class="padding-top-bottom form-group clearfix">
-				<?php echo $form->field($model, 'groups')->checkboxlist($grouplist);?>
+				<?=$form->field($model, 'groups')->checkboxlist($grouplist);?>
 				<?php //$form->field($model, 'groups',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($grouplist , ['multiple'=>'multiple']) ?>
 			</div>
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
