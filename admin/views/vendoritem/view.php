@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         ],
                         [
                             'label'=>'Group',
-                            'value'  => Featuregroupitem::groupdetails($model->item_id),
+                            'value'  => Featuregroupitem::groupList($model),
                         ],
                         [
                             'attribute'=>'created_datetime',
