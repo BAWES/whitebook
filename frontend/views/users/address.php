@@ -37,13 +37,20 @@ $this->title ='Address Book | Whitebook';
                                         <a data-id="<?= $address['address_id'] ?>" class="address_delete btn pull-right">
                                             <i class="glyphicon glyphicon-trash"></i>
                                         </a>
+
+                                        <a href="<?= Url::to(['users/edit-address', 'address_id' => $address['address_id']]) ?>" class="btn-edit btn-primary btn pull-right" >
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        </a>
                                         
                                         <!-- address type -->
+                                        <b>Address Type:</b> <br />
                                         <?= Addresstype::type_name($address['address_type_id']); ?>
 
                                         <br />
+                                        <br />
 
                                         <!-- address -->
+                                        <b>Address:</b> <br />
                                         <?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
                             			
                                         <!-- address question response -->
@@ -51,27 +58,40 @@ $this->title ='Address Book | Whitebook';
                                         <ul>
                                         <?php foreach ($address['questions'] as $row) { ?>
                                             <li>
+                                                <br />
+                                                <b><?= $row['question'] ?></b>
+                                                <br />
                                                 <?= $row['response_text'] ?>
                                             </li>
                                         <?php } ?>
                                         <?php } ?>
                                         </ul>
 
-                                        <!-- address area and city -->
+                                        <br />
+
+                                        <b>Area:</b> <br />
                                         <?php 
 
                                         if(Yii::$app->language == 'en') { 
-
                             			    echo $address['location']?$address['location'].'<br />':'';
-                                            echo $address['city_name']?$address['city_name'].'<br />':'';
-
                                         } else {
-
                                             echo $address['location_ar']?$address['location_ar'].'<br />':'';
-                                            echo $address['city_name_ar']?$address['city_name_ar'].'<br />':'';
                                         }
                             			
                             			?>
+                                        
+                                        <br />
+
+                                        <b>City:</b> <br />
+                                        <?php 
+
+                                        if(Yii::$app->language == 'en') { 
+                                            echo $address['city_name']?$address['city_name'].'<br />':'';
+                                        } else {
+                                            echo $address['city_name_ar']?$address['city_name_ar'].'<br />':'';
+                                        }
+                                        
+                                        ?>
                             		</div>
                             	</td>
                             </tr>    
@@ -135,6 +155,8 @@ $this->title ='Address Book | Whitebook';
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+
 <?php 
 
 ActiveForm::end(); 
@@ -168,6 +190,7 @@ $this->registerJs("
     });
 
 	jQuery('.address_delete').click(function(){
+
 		var csrfToken = jQuery('meta[name=\"csrf-token\"]').attr('content');
         var path = '".Url::to(['/users/address_delete'])."';
 
