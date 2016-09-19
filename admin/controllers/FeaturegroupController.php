@@ -2,6 +2,7 @@
 
 namespace admin\controllers;
 
+use common\models\Featuregroupitem;
 use Yii;
 use common\models\Vendor;
 use admin\models\Featuregroup;
@@ -166,10 +167,8 @@ class FeaturegroupController extends Controller
     {
         $access = Authitem::AuthitemCheck('3', '17');
         if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $model->trash = 'Deleted';
-            $model->load(Yii::$app->request->post());
-            $model->save();
+            $this->findModel($id)->delete();
+            Featuregroupitem::deleteAll(['group_id'=>$id]); // delete all products
             echo Yii::$app->session->setFlash('success', 'Feature group deleted successfully!');
 
             return $this->redirect(['index']);
