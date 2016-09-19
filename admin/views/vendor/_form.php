@@ -29,6 +29,7 @@ use yii\helpers\Url;
     <li>
       <a href="#4" data-toggle="tab" class="twovalid2">Social Info</a>
     </li>
+    <li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
   </ul>
   <div class="tab-content">
 <!-- Begin First Tab -->
@@ -230,12 +231,51 @@ use yii\helpers\Url;
 
 	<div class="form-groups">
 	<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-
-    <?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
-    </div>
-    <?php ActiveForm::end(); ?>
+	<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">   
  </div>
+ </div>
+ <div class="tab-pane" id="5">
+
+	Email address list to get order notification 
+
+	<br />
+	<br />
+
+	<table class="table table-bordered table-email-list">
+		<tbody>
+			<tr>
+				<th>Email address</th>
+				<th></th>
+			</tr>
+			<?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
+			<tr>
+				<td>
+					<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />									
+				</td>
+				<td>
+					<button class="btn btn-danger" type="button">
+						<i class="glyphicon glyphicon-trash"></i>
+					</button>
+				</td>
+			</tr>
+			<?php } ?>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="2">
+					<button type="button" class="btn btn-primary btn-add-address">Add new address</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+
+	<div class="form-group">
+		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+		<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
+	</div>
 </div>
+
+<?php ActiveForm::end(); ?>	
 </div>
 <!--End Third Tab -->
 </div>
@@ -253,6 +293,27 @@ use yii\helpers\Url;
 
 <!-- END PAGE LEVEL PLUGINS -->
 <script>
+
+$('.btn-add-address').click(function(){
+	
+	$html  = '<tr>';
+	$html += '	<td>';
+	$html += '		<input value="" name="vendor_order_alert_emails[]" class="form-control" />';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<button class="btn btn-danger" type="button">';
+	$html += '			<i class="glyphicon glyphicon-trash"></i>';
+	$html += '		</button>';
+	$html += '	</td>';
+	$html += '</tr>';
+
+	$('.table-email-list tbody').append($html);
+});
+
+$(document).delegate('.table-email-list .btn-danger','click', function(){
+	$(this).parent().parent().remove();
+});
+
 $('.controls1').find('#remove').remove();
 $('.datepicker').datepicker();
 $('select#package').hide();

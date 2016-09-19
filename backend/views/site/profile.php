@@ -36,6 +36,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 				<li><a href="#2" data-toggle="tab" class="onevalid1">Main Info</a></li>
 				<li><a href="#3" data-toggle="tab" class="twovalid2">Additional Info</a></li>
 				<li><a href="#4" data-toggle="tab" class="twovalid2">Social Info</a></li>
+				<li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
 			</ul>
 			<div class="tab-content">
 				<!-- Begin First Tab -->
@@ -148,6 +149,47 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 					<div class="form-group"><?= $form->field($model, 'vendor_skype',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
 					<div class="form-group">
 						<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+						<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+					</div>
+				</div>
+
+				<div class="tab-pane" id="5">
+
+					Email address list to get order notification 
+
+					<br />
+					<br />
+
+					<table class="table table-bordered table-email-list">
+						<tbody>
+							<tr>
+								<th>Email address</th>
+								<th></th>
+							</tr>
+							<?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
+							<tr>
+								<td>
+									<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />									
+								</td>
+								<td>
+									<button class="btn btn-danger" type="button">
+										<i class="glyphicon glyphicon-trash"></i>
+									</button>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="2">
+									<button type="button" class="btn btn-primary btn-add-address">Add new address</button>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+
+					<div class="form-group">
+						<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 						<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
 					</div>
 				</div>
@@ -157,5 +199,6 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 </div>
 
 <?php
+
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js');
 $this->registerJsFile('@web/themes/default/js/profile.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

@@ -6,11 +6,12 @@ use yii\web\Controller;
 use yii\web\Session;
 use common\models\Package;
 use common\models\Category;
+use common\models\Siteinfo;
+use common\models\VendorOrderAlertEmails;
 use backend\models\Vendor;
 use backend\models\Vendoritem;
 use backend\models\VendorLogin;
 use backend\models\VendorPassword;
-use common\models\Siteinfo;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\Security;
@@ -237,7 +238,9 @@ class SiteController extends Controller
         $siteinfo = Siteinfo::find()->all();
         $to = $siteinfo[0]['email_id']; // admin email
 
-        $model = Vendor::findOne(\Yii::$app->user->getId());
+        $vendor_id = Yii::$app->user->getId();
+
+        $model = Vendor::findOne($vendor_id);
         $model->scenario = 'vendorprofile';
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
@@ -257,13 +260,28 @@ class SiteController extends Controller
         $vendor_contact_number = explode(',',$model['vendor_contact_number']);
 
         if ($model->load(Yii::$app->request->post())) {
-            $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
-            $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
+            $vendor_working_am_pm_from = Yii::$app->request->post('vendor_working_am_pm_from');
+            $vendor_working_am_pm_to = Yii::$app->request->post('vendor_working_am_pm_to');
 
             $vendor = Yii::$app->request->post('Vendor');
             $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
             $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
             $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
+
+            //remove old alert emails 
+            VendorOrderAlertEmails::deleteAll(['vendor_id' => $vendor_id]);
+
+            //save vendor order alert email 
+            $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+            if($vendor_order_alert_emails) {
+                foreach ($vendor_order_alert_emails as $key => $value) {
+                    $email = new VendorOrderAlertEmails;
+                    $email->vendor_id = $vendor_id;
+                    $email->email_address = $value;
+                    $email->save();
+                }
+            }
 
             $file = UploadedFile::getInstances($model, 'vendor_logo_path');
 
@@ -311,8 +329,14 @@ class SiteController extends Controller
             }
         }
 
+        //get vendor order notification email address 
+        $vendor_order_alert_emails = VendorOrderAlertEmails::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->all();
+
         return $this->render('profile', [
             'model' => $model,
+            'vendor_order_alert_emails' => $vendor_order_alert_emails,
             'vendor_contact_number' => $vendor_contact_number,
             'vendor_categories' => $vendor_categories
         ]);

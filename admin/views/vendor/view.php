@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <li><a href="#4" data-toggle="tab">Vendor Item Details</a></li>
         <li><a href="#5" data-toggle="tab">Delivery timeslot</a></li>
         <li><a href="#6" data-toggle="tab">Exception dates</a></li>
+        <li><a href="#7" data-toggle="tab">Email addresses</a></li>
     </ul>
 <div class="tab-content">
 <!-- Begin First Tab -->
@@ -50,9 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 'vendor_name',
                 'vendor_name_ar',
-//                  ['label'=>'package id',
-//                 'value'=> isset($model->package->package_name) ? $model->package->package_name : 'Not set' ,
-//                ],
                 'vendor_brief',
                 [
                     'label'=>'vendor_return_policy',
@@ -317,6 +315,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
 <?php } else {
 	echo 'No data Found';
 }
@@ -348,8 +347,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'exception_capacity',
         ],
     ]); ?>
+</div>
 <!--End sixth Tab -->
 
+
+<div class="tab-pane" id="7">
+
+    Email address list to get order notification 
+
+    <br />
+    <br />
+
+    <table class="table table-bordered table-email-list">
+        <tbody>
+            <?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
+            <tr>
+                <td>
+                    <?= $value->email_address ?>           
+                </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
 
 <?php 
 

@@ -4,24 +4,25 @@ namespace admin\controllers;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use common\models\Prioritylog;
-use common\models\PrioritylogSearch;
-use common\models\Siteinfo;
 use admin\models\Vendor;
 use admin\models\Authitem;
 use admin\models\Category;
 use admin\models\VendorSearch;
-use common\models\Vendorpackages;
 use admin\models\Package;
+use admin\models\VendorPackagesSearch;
+use common\models\Prioritylog;
+use common\models\PrioritylogSearch;
+use common\models\Siteinfo;
+use common\models\Vendorpackages;
 use common\models\VendorItemCapacityExceptionSearch;
 use common\models\VendoritemSearch;
+use common\models\VendorOrderAlertEmails;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use yii\web\Response;
-use admin\models\VendorPackagesSearch;
 
 /**
  * VendorController implements the CRUD actions for Vendor model.
@@ -83,12 +84,19 @@ class VendorController extends Controller
         $searchModel1 = new PrioritylogSearch();
         $dataProvider1 = $searchModel1->vendorviewsearch(Yii::$app->request->queryParams, $id);
 
-        $vendorPackage = VendorPackagesSearch::find()->where(['!=', 'trash', 'Deleted'])->andwhere(['vendor_id' => $id])->orderBy('id')->all();
+        $vendorPackage = VendorPackagesSearch::find()
+            ->where(['!=', 'trash', 'Deleted'])
+            ->andwhere(['vendor_id' => $id])
+            ->orderBy('id')
+            ->all();
 
         $searchModel3 = new VendorItemCapacityExceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
 
-        //print_r($dataProvider3);die;
+        $vendor_order_alert_emails = VendorOrderAlertEmails::find()
+            ->where(['vendor_id' => $id])
+            ->all();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
@@ -97,6 +105,7 @@ class VendorController extends Controller
             'dataProvider1' => $dataProvider1,
             'dataProvider3' => $dataProvider3,
             'vendorPackage' => $vendorPackage,
+            'vendor_order_alert_emails' => $vendor_order_alert_emails
         ]);
     }
 
@@ -150,6 +159,7 @@ class VendorController extends Controller
                 $model->slug = str_replace(' ', '-', $model->slug);
 
                 $vendor_password = Yii::$app->getSecurity()->generatePasswordHash($vendor['vendor_password']);
+
                 $file = UploadedFile::getInstances($model, 'vendor_logo_path');
 
                 if ($file) {
@@ -174,6 +184,7 @@ class VendorController extends Controller
 
                             //Save to S3
                             $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
+
                             if($awsResult){
                                 $model->vendor_logo_path = $filename;
                             }
@@ -182,6 +193,22 @@ class VendorController extends Controller
                 }
 
                 if ($model->save(false)) {
+
+                    //remove old alert emails 
+                    VendorOrderAlertEmails::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                    //save vendor order alert email 
+                    $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+                    if($vendor_order_alert_emails) {
+                        foreach ($vendor_order_alert_emails as $key => $value) {
+                            $email = new VendorOrderAlertEmails;
+                            $email->vendor_id = $model->vendor_id;
+                            $email->email_address = $value;
+                            $email->save();
+                        }
+                    }
+
                     //Add to log
                     Yii::info('[New Vendor] '. Yii::$app->user->identity->admin_name .' created new vendor '.$model['vendor_name'], __METHOD__);
 
@@ -203,12 +230,14 @@ class VendorController extends Controller
 
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
-                return $this->render('create', ['package' => $package,
-                'model' => $model,
-            ]);
+                return $this->render('create', [
+                    'package' => $package,
+                    'model' => $model
+                ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -257,10 +286,25 @@ class VendorController extends Controller
                 $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
                 $model->approve_status = 'Yes';
                 $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
-                $model->category_id = implode(',', $model->category_id);                            /*
-                /*--- Vendor logo ---*/
+                $model->category_id = implode(',', $model->category_id);                            
+                
+                //remove old alert emails 
+                VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
+
+                //save vendor order alert email 
+                $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+                if($vendor_order_alert_emails) {
+                    foreach ($vendor_order_alert_emails as $key => $value) {
+                        $email = new VendorOrderAlertEmails;
+                        $email->vendor_id = $id;
+                        $email->email_address = $value;
+                        $email->save();
+                    }
+                }
 
                 $file = UploadedFile::getInstances($model, 'vendor_logo_path');
+
                 if (!empty($file)) {
                     foreach ($file as $files) {
                         if($files instanceof yii\web\UploadedFile){
@@ -292,15 +336,17 @@ class VendorController extends Controller
                 else {
                     $model->vendor_logo_path = $exist_logo_image;
                 }
+
                 if($model->save(false))
                 {
                     Yii::$app->resourceManager->delete("vendor_logo/" . $exist_logo_image);
-                    echo Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+                    Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
                 }
 
-
                 return $this->redirect(['index']);
+
             } else {
+
                 if (($model->commision) > 1) {
                 } else {
                     $model_siteinfo = Siteinfo::find()->all();
@@ -312,12 +358,23 @@ class VendorController extends Controller
                     }
                 }
 
+                //get vendor order notification email address 
+                $vendor_order_alert_emails = VendorOrderAlertEmails::find()
+                    ->where(['vendor_id' => $id])
+                    ->all();
+
                 return $this->render('update', [
-                'model' => $model, 'package' => $package, 'vendor_contact_number' => $vendor_contact_number, 'present_package' => $present_package,
-            ]);
+                    'model' => $model, 
+                    'package' => $package, 
+                    'vendor_contact_number' => $vendor_contact_number, 
+                    'present_package' => $present_package,
+                    'vendor_order_alert_emails' => $vendor_order_alert_emails
+                ]);
             }
+        
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
