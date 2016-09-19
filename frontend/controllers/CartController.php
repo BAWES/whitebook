@@ -116,6 +116,17 @@ class CartController extends BaseController
             
             if($cart->save()) {
                 
+                $item = Vendoritem::findOne($data['item_id']);
+
+                Yii::$app->getSession()->setFlash('success', Yii::t(
+                    'frontend', 
+                    'Success: Product <a href="{product_link}">{product_name}</a> added to cart!', 
+                    [
+                        'product_link' => Url::to(['shop/product', 'slug' => $item->slug]),
+                        'product_name' => Yii::$app->language == 'en'? $item->item_name : $item->item_name_ar
+                    ]
+                ));
+
                 return [
                     'success' => 1
                 ];
