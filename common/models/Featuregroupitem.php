@@ -150,6 +150,16 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     }
 
 
+    public static function groupList($model){
+        $string = [];
+        if (isset($model->featureGroupItems) && count($model->featureGroupItems)>0) {
+            foreach ($model->featureGroupItems as $theme) {
+                $string[] = ucfirst($theme->group->group_name);
+            }
+        }
+        return implode(', ',$string);
+    }
+
     public static function loadcategoryname()
     {
         $output= Featuregroupitem::find()

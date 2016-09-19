@@ -222,14 +222,17 @@ public function actionCreate($vid = '')
                 /* Themes table End */
 
                 /* Groups table Begin*/
-                if ($vendor_item['groups']) {
-                    $group_id = implode(',', $vendor_item['groups']);
-                    $feature_group_item = new Featuregroupitem();
-                    $feature_group_item->item_id = $itemid;
-                    $feature_group_item->group_id = $group_id;
-                    $feature_group_item->vendor_id = $model['vendor_id'];
-                    $feature_group_item->save();
+
+                if (isset($vendor_item['groups']) && $_POST['Vendoritem']['groups'] != '' && count($vendor_item['groups'])>0 ) {
+                    foreach ($vendor_item['groups'] as $value) {
+                        $groupModel = new Featuregroupitem();
+                        $groupModel->item_id = $itemid;
+                        $groupModel->group_id = $value;
+                        $groupModel->vendor_id = $model['vendor_id'];
+                        $groupModel->save();
+                    }
                 }
+
                 /* Groups table End */
 
                 /* Begin Upload guide image table  */
@@ -381,12 +384,13 @@ public function actionUpdate($id, $vid = false)
         $model = $this->findModel($id);
 
         $model->themes = \yii\helpers\ArrayHelper::map($model->vendorItemThemes, 'theme_id', 'theme_id');
+        $model->groups = \yii\helpers\ArrayHelper::map($model->featureGroupItems, 'group_id', 'group_id');
 
         $model_question = Vendoritemquestion::find()
-        ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
-        ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
-        ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
-        ->asArray()->all();
+            ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
+            ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
+            ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
+            ->asArray()->all();
 
         /* BEGIN gallery */
         $item_id = $model->item_id;
@@ -401,15 +405,15 @@ public function actionUpdate($id, $vid = false)
 
         // BEGIN themes and groups
         $themelist = Themes::loadthemename();
-        $selected_themes = Vendoritemthemes::find()->where('item_id = "'.$id.'"')->one();
+        $selected_themes = Vendoritemthemes::find()->where('item_id = "' . $id . '"')->one();
 
         $theme_selected = Themes::loadthemenameupdate($selected_themes['theme_id']);
         $exist_themes = explode(',', $selected_themes['theme_id']);
 
 
-        $selected_groups = Featuregroupitem::find()->where('item_id = "'.$id.'"')->one();
+        $selected_groups = Featuregroupitem::find()->where('item_id = "' . $id . '"')->one();
         $exist_groups = explode(',', $selected_groups['group_id']);
-        $model->groups = $exist_groups;
+        //$model->groups = $exist_groups;
         // END themes and groups
 
         $grouplist = Featuregroup::loadfeaturegroup();
@@ -427,7 +431,7 @@ public function actionUpdate($id, $vid = false)
             $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
             $model->slug = $c_slug4;
 
-            $chk_item_exist = Vendoritem::find()->where(['trash'=>'default'])->andWhere(['LIKE','slug',$c_slug4])->one();
+            $chk_item_exist = Vendoritem::find()->where(['trash' => 'default'])->andWhere(['LIKE', 'slug', $c_slug4])->one();
 
             if (!empty($chk_item_exist)) {
 
@@ -439,7 +443,7 @@ public function actionUpdate($id, $vid = false)
                     ->one();
 
                 $vendorname = str_replace(' ', '-', $tbl_vendor['vendor_name']);
-                $model->slug = $c_slug4.'-'.$vendorname;
+                $model->slug = $c_slug4 . '-' . $vendorname;
             }
 
             $model->item_for_sale = (Yii::$app->request->post()['Vendoritem']['item_for_sale']) ? 'Yes' : 'No';
@@ -451,13 +455,13 @@ public function actionUpdate($id, $vid = false)
                 if (count($guide_image) > 0) {
                     $i = 0;
                     foreach ($guide_image as $files) {
-                        if($files instanceof yii\web\UploadedFile){
+                        if ($files instanceof yii\web\UploadedFile) {
                             $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
                             //Resize file using imagine
                             $resize = true;
 
-                            if($resize){
+                            if ($resize) {
                                 $newTmpName = $files->tempName . "." . $files->extension;
                                 $imagine = new \Imagine\Gd\Imagine();
                                 $image = $imagine->open($files->tempName);
@@ -468,9 +472,9 @@ public function actionUpdate($id, $vid = false)
                                 $files->tempName = $newTmpName;
                             }
 
-                             //Save to S3
+                            //Save to S3
                             $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADSALESGUIDE . $filename);
-                            if($awsResult){
+                            if ($awsResult) {
                                 $model->guide_image = $filename;
                             }
 
@@ -488,15 +492,15 @@ public function actionUpdate($id, $vid = false)
 
                 /* Begin Upload guide image table  */
                 $product_file = UploadedFile::getInstances($model, 'image_path');
-                if (count($product_file)>0) {
+                if (count($product_file) > 0) {
                     foreach ($product_file as $files) {
-                        if($files instanceof yii\web\UploadedFile){
+                        if ($files instanceof yii\web\UploadedFile) {
                             $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
 
                             $resize = true; //Resize file using imagine
 
-                            if($resize){
+                            if ($resize) {
 
                                 $newTmpName2 = $files->tempName . "." . $files->extension;
                                 $imagine = new \Imagine\Gd\Imagine();
@@ -529,7 +533,7 @@ public function actionUpdate($id, $vid = false)
                                 $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename); //Save to S3
                             }
 
-                            if($awsResult){
+                            if ($awsResult) {
                                 $model->image_path = $filename;
                             }
                         }
@@ -552,10 +556,10 @@ public function actionUpdate($id, $vid = false)
 
                 if ($model->priority != $priorityvalue) {
                     $query = Prioritylog::find()->select('log_id')
-                    ->where(['vendor_id' => $vendorid, 'item_id' => $itemid])
-                    ->orderBy(['log_id' => SORT_DESC])
-                    ->limit(1)
-                    ->all();
+                        ->where(['vendor_id' => $vendorid, 'item_id' => $itemid])
+                        ->orderBy(['log_id' => SORT_DESC])
+                        ->limit(1)
+                        ->all();
 
                     if ($query) {
                         $prioritylog = Prioritylog::findOne($query[0]['log_id']);
@@ -583,7 +587,7 @@ public function actionUpdate($id, $vid = false)
                     $to = $vendoritem_item_price['to'];
                     $price = $vendoritem_item_price['price'];
 
-                    for ($opt = 0;$opt < count($from);++$opt) {
+                    for ($opt = 0; $opt < count($from); ++$opt) {
                         $vendor_item_pricing = new Vendoritempricing();
                         $vendor_item_pricing->item_id = $itemid;
                         $vendor_item_pricing->range_from = $from[$opt];
@@ -596,45 +600,27 @@ public function actionUpdate($id, $vid = false)
 
                 /* Themes table Begin*/
                 $vendor_item = Yii::$app->request->post('Vendoritem');
-                Vendoritemthemes::deleteAll(['item_id'=>$id]); # to clear old values
-                if (isset($vendor_item['themes']) && count($vendor_item['themes'])>0 && $_POST['Vendoritem']['themes'] !='') {
+                Vendoritemthemes::deleteAll(['item_id' => $id]); # to clear old values
+                if (isset($vendor_item['themes']) && count($vendor_item['themes']) > 0 && $_POST['Vendoritem']['themes'] != '') {
                     foreach ($vendor_item['themes'] as $values) {
                         $themesModel = new Vendoritemthemes();
                         $themesModel->item_id = $id;
                         $themesModel->theme_id = $values;
                         $themesModel->save();
                     }
-//
-//                    $save = 'update';
-//
-//                    if (!isset($selected_themes)) {
-//                        $selected_themes = new Vendoritemthemes();
-//                        $selected_themes->vendor_id = $model['vendor_id'];
-//                        $save = 'save';
-//                    }
-//
-//                    $theme_id = implode(',', $vendor_item['themes']);
-//                    $selected_themes->item_id = $itemid;
-//                    $selected_themes->theme_id = $theme_id;
-//                    $selected_themes->$save();
                 }
-                /* Themes table End */
+
 
                 /* Groups table Begin*/
-                if ($vendor_item['groups']) {
-
-                    $save = 'update';
-
-                    if (!isset($selected_groups)) {
-                        $selected_groups = new Featuregroupitem();
-                        $selected_groups->vendor_id = $model['vendor_id'];
-                        $save = 'save';
+                if (isset($vendor_item['groups']) && $_POST['Vendoritem']['groups'] != '' && count($vendor_item['groups']) > 0) {
+                    Featuregroupitem::deleteAll(['item_id' => $id]); # to clear old values
+                    foreach ($vendor_item['groups'] as $value) {
+                        $groupModel = new Featuregroupitem();
+                        $groupModel->item_id = $itemid;
+                        $groupModel->group_id = $value;
+                        $groupModel->vendor_id = $model['vendor_id'];
+                        $groupModel->save();
                     }
-
-                    $group_id = implode(',', $vendor_item['groups']);
-                    $selected_groups->item_id = $itemid;
-                    $selected_groups->group_id = $group_id;
-                    $selected_groups->$save();
                 }
                 /* Groups table End */
 
@@ -678,33 +664,34 @@ public function actionUpdate($id, $vid = false)
                         }
                     }
                 }
+
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                if (Yii::$app->request->get('vid')) {
+                    return $this->redirect(['vendor/view?id=' . Yii::$app->request->get('vid')]);
+                } else {
+                    return $this->redirect(['index']);
+                }
+            }
             }
 
-            Yii::$app->session->setFlash('success', 'Vendor item With ID '.$id.' updated successfully!');
-
-            Yii::info('[Item Updated] Admin updated '.addslashes($model->item_name).' item information', __METHOD__);
-
-            if (Yii::$app->request->get('vid')) {
-                return $this->redirect(['vendor/view?id='.Yii::$app->request->get('vid')]);
-            } else {
-                return $this->redirect(['index']);
-            }
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-                'itemType' => Itemtype::findAll(['trash'=>'Default']),
-                'subcategory' => $subcategory,
-                'categoryname' => $categoryname,
-                'images' => Image::findAll(['item_id' => $id,'module_type'=>'vendor_item']),
-                'model_question' => $model_question,
-                'themes' => Themes::findAll(['theme_status'=>'Active','trash'=>'Default']),
-                'grouplist' => $grouplist,
-                'exist_themes' => $exist_themes,
-                'childcategory' => $childcategory,
-                'itemPricing' => Vendoritempricing::findAll(['item_id'=>$item_id]),
-                'guideImages' => Image::findAll(['item_id' => $id,'module_type'=>'guides']),
-            ]);
-        }
+                return $this->render('update', [
+                    'model' => $model,
+                    'itemType' => Itemtype::findAll(['trash' => 'Default']),
+                    'subcategory' => $subcategory,
+                    'categoryname' => $categoryname,
+                    'images' => Image::findAll(['item_id' => $id, 'module_type' => 'vendor_item']),
+                    'model_question' => $model_question,
+                    'themes' => Themes::findAll(['theme_status' => 'Active', 'trash' => 'Default']),
+                    'grouplist' => $grouplist,
+                    'exist_themes' => $exist_themes,
+                    'childcategory' => $childcategory,
+                    'itemPricing' => Vendoritempricing::findAll(['item_id' => $item_id]),
+                    'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
+                ]);
     } else {
         Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
