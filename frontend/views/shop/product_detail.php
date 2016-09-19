@@ -55,6 +55,19 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                 ?>
             </div>
         </div>
+
+        <?php 
+
+        $message = Yii::$app->getSession()->getFlash('success');
+
+        if($message) { ?> 
+            <div class="alert alert-success" style="margin-top: 20px; margin-bottom: 0px;">
+                <i class="glyphicon glyphicon-ok"></i>
+                <?= $message ?>
+                <button data-dismiss="alert" class="close">&times;</button>
+            </div>
+        <?php } ?>
+
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
