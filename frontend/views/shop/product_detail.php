@@ -517,6 +517,6 @@ $this->registerCss("
         width: 92%;
         margin-left: 11px;
    }
+   #form_product_option .selectpicker.btn-primary {color: #555!important;}
    ");
-
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
