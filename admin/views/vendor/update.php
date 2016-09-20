@@ -11,12 +11,11 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="vendor-update">
 
-   <?= $this->render('_form', [
+   <?= $this->render('_update', [
         'model' => $model,
         'package' => $package,
         'vendor_contact_number' => $vendor_contact_number,
         'present_package' => $present_package,
         'vendor_order_alert_emails' => $vendor_order_alert_emails
-    ]) ?>
-
+]);?>
 </div>
