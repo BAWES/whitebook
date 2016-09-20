@@ -13,6 +13,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 use yii\web\Request;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "whitebook_order".
@@ -275,5 +276,84 @@ class Order extends \yii\db\ActiveRecord
             ->sum('suborder_commission_total');
 
         return $result;
+    }
+
+    public function sendStatusEmail($suborder_id, $status_id){
+
+        $sub_order = Suborder::findOne($suborder_id);
+        $order = $sub_order->order;
+        $status = OrderStatus::findOne($status_id)->name;
+        $vendor = Vendor::findOne($sub_order->vendor_id);
+
+        //send to customer
+        Yii::$app->mailer->compose([
+            "html" => "customer/order-status"
+        ],[
+            'user' => $order->customer->customer_name,
+            'order_id' => $order->order_id,
+            'sub_order_id' => $suborder_id,
+            'vendor' => $vendor->vendor_name,
+            'message' => 'Order status changed to "'.$status.'"'
+        ])
+        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setTo($order->customer->customer_email)
+        ->setSubject('Sub Order Status changed')
+        ->send();
+    }
+
+    public function sendNewOrderEmails($order_id) {
+
+        $order = self::findOne($order_id);
+
+        $suborder = Suborder::find()
+            ->where(['order_id' => $order_id])
+            ->all();
+        
+        //send to customer
+        Yii::$app->mailer->compose([
+            "html" => "customer/new-order"
+        ],[
+            'user'  => $order->customer->customer_name,
+            'order' => $order,
+            'suborder' => $suborder
+        ])
+        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setTo($order->customer->customer_email)
+        ->setSubject('New Order Placed #'.$order_id)
+        ->send();
+        
+        //send to admin
+        Yii::$app->mailer->compose([
+            "html" => "customer/new-order"
+        ],[
+            'user'  => 'Admin',
+            'order' => $order,
+            'suborder' => $suborder
+        ])
+        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setTo(Yii::$app->params['adminEmail'])
+        ->setSubject('New Order Placed #'.$order_id)
+        ->send();
+        
+        //foreach suborder
+        foreach ($suborder as $key => $value) {
+            
+            //get all vendor alert email 
+            $emails = VendorOrderAlertEmails::find()
+                ->where(['vendor_id' => $value->vendor_id])
+                ->all();
+
+            $emails = ArrayHelper::getColumn($emails, 'email_address');
+
+            Yii::$app->mailer->compose([
+                "html" => "vendor/new-order"
+            ],[
+                'model' => $value
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($emails)
+            ->setSubject('New Order Placed #'.$value->suborder_id)
+            ->send();
+        }
     }
 }

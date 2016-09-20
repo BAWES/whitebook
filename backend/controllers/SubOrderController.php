@@ -110,6 +110,8 @@ class SubOrderController extends Controller
         $suborder = Suborder::findOne(Yii::$app->request->post('suborder_id'));
         $suborder->status_id = Yii::$app->request->post('status_id');
         $suborder->save();
+
+        Order::sendStatusEmail($suborder->suborder_id, $suborder->status_id);
     }
 
     /**

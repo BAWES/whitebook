@@ -24,6 +24,9 @@ class CodController extends Controller
 
         Yii::$app->session->set('order_id', $order_id);
 
+        //send order emails
+        Order::sendNewOrderEmails($order_id);
+
         //redirect to order success 
         $this->redirect(['checkout/success']);
     }

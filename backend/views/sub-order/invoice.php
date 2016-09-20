@@ -52,7 +52,7 @@ $site_info = Siteinfo::find()->one();
     
     <?php 
 
-        $vendor = Vendor::findOne($suborder->vendor_id);
+        $vendor = Vendor::findOne($model->vendor_id);
 
     ?>
 
@@ -69,9 +69,9 @@ $site_info = Siteinfo::find()->one();
                 <td>
                    <?= Yii::t('frontend', 'Order status') ?>: 
                     <?php if(Yii::$app->language == 'en') { 
-                            echo OrderStatus::findOne($suborder->status_id)->name;
+                            echo OrderStatus::findOne($model->status_id)->name;
                           } else {
-                            echo OrderStatus::findOne($suborder->status_id)->name_ar;
+                            echo OrderStatus::findOne($model->status_id)->name_ar;
                           } ?>  
                 </td>
                 <td>
@@ -94,7 +94,7 @@ $site_info = Siteinfo::find()->one();
             </tr>
         </thead>    
         <tbody>
-        <?php foreach (Order::subOrderItems($suborder->suborder_id) as $item) { ?>
+        <?php foreach (Order::subOrderItems($model->suborder_id) as $item) { ?>
             <tr>
                 <td align="left">
                     <?php if(Yii::$app->language == 'en') {
@@ -112,15 +112,15 @@ $site_info = Siteinfo::find()->one();
             <?php } ?>
             <tr>
                 <td align="right" colspan="5">Sub Total</td>
-                <td align="right"><?= $suborder->suborder_total_without_delivery ?> KWD</td>
+                <td align="right"><?= $model->suborder_total_without_delivery ?> KWD</td>
             </tr>
             <tr>
                 <td align="right" colspan="5">Delivery Charge</td>
-                <td align="right"><?= $suborder->suborder_delivery_charge ?> KWD</td>
+                <td align="right"><?= $model->suborder_delivery_charge ?> KWD</td>
             </tr>
             <tr>
                 <td align="right" colspan="5">Total</td>
-                <td align="right"><?= $suborder->suborder_total_with_delivery ?> KWD</td>
+                <td align="right"><?= $model->suborder_total_with_delivery ?> KWD</td>
             </tr>
         </tbody>
     </table>

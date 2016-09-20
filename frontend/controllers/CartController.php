@@ -13,6 +13,7 @@ use common\models\City;
 use common\models\Location;
 use common\models\CustomerCart;
 use common\models\Deliverytimeslot;
+use common\models\Order;
 
 class CartController extends BaseController
 {
