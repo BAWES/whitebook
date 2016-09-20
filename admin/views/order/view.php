@@ -171,6 +171,9 @@ $this->registerJs("
 
     jQuery('.save_status').click(function(){
 
+        jQuery(this).html('Sending Status Mail...');
+        jQuery(this).attr('disabled', 'disabled');
+        
         var status_id = jQuery('#status_id option:selected').attr('val');
         var status =  jQuery('#status_id option:selected').html();
         var suborder_id = jQuery('#suborder_id').val();
@@ -181,6 +184,9 @@ $this->registerJs("
         }, function(){
             jQuery('#status_modal').modal('hide');
             jQuery('[data-id=\'' + suborder_id + '\'] span').html(status); 
+
+            jQuery('.save_status').html('Submit');
+            jQuery('.save_status').removeAttr('disabled');
         });
     });
 ", View::POS_READY);

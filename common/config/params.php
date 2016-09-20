@@ -3,7 +3,7 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     //'adminEmail' => 'khalid@thewhitebook.com.kw',
     //testing purpose
-    'adminEmail' => 'hello@thewhitebook.com.kw',
+    'adminEmail' => 'me@iamkrushn.com',//thewhitebook.com.kw
     'supportEmail' => 'hello@thewhitebook.com.kw',
     'dateFormat'=> 'php:d/m/Y',
     'Currency' => 'KD',
