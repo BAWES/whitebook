@@ -373,7 +373,6 @@
         });
 
         function deliveryTimeSlot(date){
-            $('span#available').hide();
             jQuery.ajax({
                 type: 'POST',
                 url: getdeliverytimeslot_url,
