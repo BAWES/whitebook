@@ -6,6 +6,23 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model common\models\Vendor */
 /* @var $form yii\widgets\ActiveForm */
+
+$from_am = explode(':',$model->vendor_working_hours);
+$to_am = explode(':',$model->vendor_working_hours_to);
+
+$from_hour = (isset($from_am[0])) ? $from_am[0] : '';
+$to_hour = (isset($to_am[0])) ? $to_am[0] : '';
+
+$from_min = (isset($from_am[1])) ? $from_am[1] : '';
+$to_min = (isset($to_am[1])) ? $to_am[1] : '';
+
+$from = (isset($from_am[2])) ? $from_am[2] : '';
+$to = (isset($to_am[2])) ? $to_am[2] : '';
+$model->vendor_working_hours = $from_hour;
+$model->vendor_working_min = $from_min;
+$model->vendor_working_hours_to = $to_hour;
+$model->vendor_working_min_to = $to_min;
+
 ?>
 <div class="col-md-12 col-sm-12 col-xs-12">
 <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]);?>
@@ -33,9 +50,27 @@ use yii\helpers\Url;
   <div class="tab-content">
 <!-- Begin First Tab -->
     <div class="tab-pane" id="1" >
-    <div class="form-group vendor_logo"><?= $form->field($model, 'vendor_logo_path',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))->fileInput()->hint('Logo Size 150 * 250') ?></div>
-    <div class="form-group"><?= $form->field($model, 'vendor_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
+    <div class="form-group vendor_logo">
+	<?= $form->field($model, 'vendor_logo_path',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))->fileInput()->hint('Logo Size 150 * 250') ?>
+
+	<?php  if(!$model->isNewRecord) { ?>
+	<!-- Venodr logo begin -->
+	<?php if(isset($model->vendor_logo_path)) {
+		echo Html::img(Yii::getAlias('@vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
+		} ?>
+	<!-- Venodr logo end -->
+
+	<?php } ?>
+	</div>
+
+    <div class="form-group">
+	<?= $form->field($model, 'vendor_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+	])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
+	</div>
+
 	<div class="form-group"><?= $form->field($model, 'vendor_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
+
 	<?php if(!$model->isNewRecord) { ?>
 
 	<div class="form-group">
@@ -51,7 +86,7 @@ use yii\helpers\Url;
 
 	 <?php } ?>
 	<input type="hidden" name="email_valid" value="" />
-	 <div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
+ 	<div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
 
 	<?php if($model->isNewRecord) { $count_vendor = 1;?>
 	<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
@@ -71,18 +106,19 @@ use yii\helpers\Url;
 
 	<?php $i++; } ?>
 	<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" style="margin:5px;" />
+
 	</div>
 	<?php } ?>
-
 	<div class="form-group"><?= $form->field($model, 'vendor_contact_address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
 	<div class="form-group"><?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+
 		<div class="form-group clearfix">
 			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
 			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
 			<div class="col-lg-4">
 				<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
 				<div class="controls">
-					<?= Html::dropDownList( 'vendor_working_am_pm_from','',['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
+					<?= Html::dropDownList( 'vendor_working_am_pm_from',$from,['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
 				</div>
 			</div>
 		</div>
@@ -92,11 +128,14 @@ use yii\helpers\Url;
 			<div class="col-lg-4">
 				<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
 				<div class="controls">
-					<?= Html::dropDownList( 'vendor_working_am_pm_to','',['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
+					<?= Html::dropDownList( 'vendor_working_am_pm_to',$to,['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
 				</div>
 			</div>
 		</div>
-		<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
+
+		<div class="form-group" style="height: 10px;">
+			<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next">
+		</div>
 	</div>
 
 	<!--End First Tab -->
@@ -129,19 +168,21 @@ use yii\helpers\Url;
 	</div>
 		<!--End Third Tab -->
 
-	<div class="tab-pane" id="4">
-		<div class="form-group"><?= $form->field($model, 'vendor_website',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Website URL',['class'=> 'form-label-cap']) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_facebook',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Facebook URL',['class'=> 'form-label-cap']) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_twitter',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Twitter URL',['class'=> 'form-label-cap']) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_instagram',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Instagram URL',['class'=> 'form-label-cap']) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_googleplus',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Google Plus URL',['class'=> 'form-label-cap']) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_skype',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Skype ID',['class'=> 'form-label-cap']) ?></div>
-		<div class="form-groups">
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
-		</div>
-		<?php ActiveForm::end(); ?>
-	</div>
+<div class="tab-pane" id="4">
+	<div class="form-group"><?= $form->field($model, 'vendor_website',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Website URL',['class'=> 'form-label-cap']) ?></div>
+	<div class="form-group"><?= $form->field($model, 'vendor_facebook',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Facebook URL',['class'=> 'form-label-cap']) ?></div>
+	<div class="form-group"><?= $form->field($model, 'vendor_twitter',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Twitter URL',['class'=> 'form-label-cap']) ?></div>
+	<div class="form-group"><?= $form->field($model, 'vendor_instagram',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Instagram URL',['class'=> 'form-label-cap']) ?></div>
+	<div class="form-group"><?= $form->field($model, 'vendor_googleplus',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Google Plus URL',['class'=> 'form-label-cap']) ?></div>
+	<div class="form-group"><?= $form->field($model, 'vendor_skype',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Skype ID',['class'=> 'form-label-cap']) ?></div>
+
+	<div class="form-groups">
+	<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+
+    <?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
+    </div>
+    <?php ActiveForm::end(); ?>
+ </div>
 </div>
 </div>
 <!--End Third Tab -->
@@ -280,7 +321,7 @@ $('#vendor-package_end_date').datepicker({  format: 'dd-mm-yyyy', });
 	else
 	{
 		if($model->approve_status=='Yes'){?>
-	$("#vendor-vendor_logo_path").val('image');
+	$("#vendor-vendor_logo_path").val()='image';
 	$('#vendor-approve_status').prop('checked', true);
 		<?php }	else { ?>
 	$('#vendor-approve_status').prop('checked', false);
