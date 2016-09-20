@@ -178,6 +178,7 @@ class ShopController extends BaseController
     public function actionLoadItems()
     {
         if (Yii::$app->request->isAjax) {
+            $session = Yii::$app->session;
 
             $result = '';
             $data = Yii::$app->request->post();
@@ -185,8 +186,10 @@ class ShopController extends BaseController
             $join = '';
             if ($data['slug'] != '') {
             if ($data['location'] != '') {
-                $location = explode('+', $data['location']);
-                $condition .= ' AND (wvl.area_id IN(' . implode(',', $location) . ')) ';
+                //$location = explode('+', $data['location']);
+                $location = $data['location'];
+                $condition .= ' AND (wvl.area_id IN('.$location.')) ';
+                $session->set('deliver-location', $location);
             }
             /* CATEGORY FILTER */
             if ($data['item_ids'] != '') {
@@ -195,6 +198,7 @@ class ShopController extends BaseController
                 $condition .= ' AND (wc.slug IN("' . $item_ids . '")) ';
             }
             if ($data['date'] != '') {
+                $session->set('deliver-date', $data['date']);
                 $date = date('Y-m-d', strtotime($data['date']));
                 $condition .= " AND (wv.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '$date')) ";
             }

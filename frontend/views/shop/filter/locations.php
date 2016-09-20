@@ -77,7 +77,7 @@ if($customer_id) {
                                         $checked = ($deliver_location == $value['id']) ? 'checked="checked"' : '';
                                     }
                                     ?>
-                                    <input <?=$checked?> type="checkbox" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
+                                    <input <?=$checked?> type="radio" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
                                     <?= $value['location']; ?>
                                 </label>
                             </li>
