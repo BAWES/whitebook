@@ -261,7 +261,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                             <?= Yii::t('frontend', 'Buy') ?>
                                         </button>&nbsp;&nbsp;&nbsp;
                                     </div>
-                                    <span style="display: block;margin-top: 18px;" id="available"></span>
+                                    <span style="display: none;margin-top: 18px;" id="available"></span>
                                 </div>
                             </form>
                             <?php } ?>
@@ -513,16 +513,10 @@ $this->registerJs("
             }
         );
     }
-    if ($('#form_product_option').length>0) {
-        loadProductAvailability();
-    }
+//    if ($('#form_product_option').length>0) {
+//        loadProductAvailability();
+//    }
 
-    $('#quantity').change(function(){
-        $('span#available').hide();
-    });
-    jQuery(document).delegate('#area_id,#timeslot_id', 'change', function () {
-        $('span#available').hide();
-    });
 
 ", View::POS_READY);
 
