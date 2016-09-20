@@ -7,7 +7,7 @@ use yii\helpers\Url;
 /* @var $model common\models\Vendor */
 /* @var $form yii\widgets\ActiveForm */
 ?>
- <div class="col-md-12 col-sm-12 col-xs-12">
+<div class="col-md-12 col-sm-12 col-xs-12">
 <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]);?>
 <div class="loadingmessage" style="display: none;">
 <p>
@@ -34,30 +34,9 @@ use yii\helpers\Url;
   <div class="tab-content">
 <!-- Begin First Tab -->
     <div class="tab-pane" id="1" >
-    <div class="form-group vendor_logo">
-	<?= $form->field($model, 'vendor_logo_path',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))->fileInput()->hint('Logo Size 150 * 250') ?>
-
-	<?php  if(!$model->isNewRecord) { ?>
-	<!-- Venodr logo begin -->
-	<?php if(isset($model->vendor_logo_path)) {
-		echo Html::img(Yii::getAlias('@vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
-		} ?>
-	<!-- Venodr logo end -->
-
-	<?php } ?>
-	</div>
-
-    <div class="form-group">
-	<?= $form->field($model, 'vendor_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
-	</div>
-
+    <div class="form-group vendor_logo"><?= $form->field($model, 'vendor_logo_path',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))->fileInput()->hint('Logo Size 150 * 250') ?></div>
+    <div class="form-group"><?= $form->field($model, 'vendor_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
+	<div class="form-group"><?= $form->field($model, 'vendor_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
 	<?php if(!$model->isNewRecord) { ?>
 
 	<div class="form-group">
@@ -67,27 +46,13 @@ use yii\helpers\Url;
 
 	<?php } else {?>
 
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_password',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->passwordInput() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'confirm_password',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->passwordInput() ?>
-	</div>
+	<div class="form-group"><?= $form->field($model, 'vendor_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
+	<div class="form-group"><?= $form->field($model, 'vendor_password',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->passwordInput() ?></div>
+	<div class="form-group"><?= $form->field($model, 'confirm_password',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->passwordInput() ?></div>
 
 	 <?php } ?>
 	<input type="hidden" name="email_valid" value="" />
-	 <div class="form-group">
-	<?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
-	</div>
+	 <div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
 
 	<?php if($model->isNewRecord) { $count_vendor = 1;?>
 	<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
@@ -103,112 +68,69 @@ use yii\helpers\Url;
 	$count_vendor =  count($vendor_contact_number);
 	foreach($vendor_contact_number as $contact_numbers)
 	{ ?>
-	<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "<div class='controls".$i."'>{input}<input type='button' name='remove' id='remove' value='Remove' onClick='removePhone(".$i.")' style='margin:5px;' /></div> {hint} {error}"
-	])->textInput(['multiple' => 'multiple','autocomplete' => 'off','value'=>$contact_numbers]) ?>
+	<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "<div class='controls".$i."'>{input}<input type='button' name='remove' id='remove' value='Remove' onClick='removePhone(".$i.")' style='margin:5px;' /></div> {hint} {error}"])->textInput(['multiple' => 'multiple','autocomplete' => 'off','value'=>$contact_numbers]) ?>
 
 	<?php $i++; } ?>
 	<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" style="margin:5px;" />
-
 	</div>
 	<?php } ?>
 
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_contact_address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textArea() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textArea() ?>
-	</div>
-
-	<div class="form-group" style="height: 10px;">
-	<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next">
-	</div>
-
+	<div class="form-group"><?= $form->field($model, 'vendor_contact_address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+	<div class="form-group"><?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+		<div class="form-group clearfix">
+			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
+			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
+			<div class="col-lg-4">
+				<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
+				<div class="controls">
+					<?= Html::dropDownList( 'vendor_working_am_pm_from','',['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
+				</div>
+			</div>
+		</div>
+		<div class="form-group clearfix">
+			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
+			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
+			<div class="col-lg-4">
+				<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
+				<div class="controls">
+					<?= Html::dropDownList( 'vendor_working_am_pm_to','',['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
+				</div>
+			</div>
+		</div>
+		<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
 	</div>
 
 	<!--End First Tab -->
 
 	<div class="tab-pane" id="2">
-	<input type="hidden" id="test1" value="0" name="tests">
-	 <div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-{error}"])->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']) ?>
-</div>
-
-	<input type='hidden' id='test' value='0' name='tests1'>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->checkbox(['Active' => 'Active'])?>
-	</div>
-
-
-	<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-	<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		<input type="hidden" id="test1" value="0" name="tests">
+		<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']) ?></div>
+		<input type='hidden' id='test' value='0' name='tests1'>
+		<div class="form-group"><?= $form->field($model, 'vendor_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Active' => 'Active'])?></div>
+		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 	</div>
 
 	<!--End Second Tab -->
 
     <div class="tab-pane" id="3">
-
-    <div class="form-group">
-	<?= $form->field($model, 'vendor_return_policy',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textArea(['id'=>'text-editor']) ?>
+		<div class="form-group"><?= $form->field($model, 'vendor_return_policy',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea(['id'=>'text-editor']) ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_return_policy_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea(['id'=>'text-editor-2']) ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_fax',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
+		<div class="form-group"><?= $form->field($model, 'short_description',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+		<div class="form-group"><?= $form->field($model, 'short_description_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_bank_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_bank_branch',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_account_no',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_emergency_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]) ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_emergency_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]) ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_emergency_contact_number',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]) ?></div>
+		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_return_policy_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textArea(['id'=>'text-editor-2']) ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_fax',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'short_description',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textArea() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'short_description_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textArea() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_bank_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_bank_branch',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_account_no',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput() ?>
-	</div>
-
-	<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-	<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
-</div>
 		<!--End Third Tab -->
 
-<div class="tab-pane" id="4">
-
-	<div class="form-group">
-		<?= $form->field($model, 'vendor_website',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput()->label('Vendor Website URL',['class'=> 'form-label-cap']) ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_facebook',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput()->label('Vendor Facebook URL',['class'=> 'form-label-cap']) ?>
-	</div>
-
+	<div class="tab-pane" id="4">
 	<div class="form-group">
 	<?= $form->field($model, 'vendor_twitter',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->textInput()->label('Vendor Twitter URL',['class'=> 'form-label-cap']) ?>
@@ -231,13 +153,11 @@ use yii\helpers\Url;
 
 	<div class="form-groups">
 	<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-	<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">   
+	<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
  </div>
  </div>
  <div class="tab-pane" id="5">
-
-	Email address list to get order notification 
-
+	Email address list to get order notification
 	<br />
 	<br />
 
@@ -250,7 +170,7 @@ use yii\helpers\Url;
 			<?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
 			<tr>
 				<td>
-					<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />									
+					<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />
 				</td>
 				<td>
 					<button class="btn btn-danger" type="button">
@@ -434,7 +354,7 @@ $('#vendor-package_end_date').datepicker({  format: 'dd-mm-yyyy', });
 	else
 	{
 		if($model->approve_status=='Yes'){?>
-	$("#vendor-vendor_logo_path").val()='image';
+	$("#vendor-vendor_logo_path").val('image');
 	$('#vendor-approve_status').prop('checked', true);
 		<?php }	else { ?>
 	$('#vendor-approve_status').prop('checked', false);

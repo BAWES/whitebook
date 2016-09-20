@@ -148,10 +148,20 @@ class VendorController extends Controller
                 $model->commision = $first_id;
             }
             if ($model->load(Yii::$app->request->post())) {
-                $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
 
-                $model->approve_status = 'Yes';
+                $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
+                $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
+
                 $vendor = Yii::$app->request->post('Vendor');
+                $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
+                $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
+
+                $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
+                $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
+                $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
+
+                $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
+                $model->approve_status = 'Yes';
                 $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
                 $model->category_id = implode(',', $vendor['category_id']);
 
@@ -280,7 +290,14 @@ class VendorController extends Controller
             $vendor_contact_number = explode(',', $model['vendor_contact_number']);
 
             if ($model->load(Yii::$app->request->post())) {
+
+                $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
+                $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
+
                 $vendor = Yii::$app->request->post('Vendor');
+                $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
+                $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
+
                 $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
                 $model->slug = str_replace(' ', '-', $model->slug);
                 $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
@@ -302,6 +319,10 @@ class VendorController extends Controller
                         $email->save();
                     }
                 }
+
+                $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
+                $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
+                $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
 
                 $file = UploadedFile::getInstances($model, 'vendor_logo_path');
 
