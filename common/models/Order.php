@@ -235,6 +235,12 @@ class Order extends \yii\db\ActiveRecord
            $purchase_delivery_address .= $response->response_text.'<br />';
         }
 
+        //area 
+        $purchase_delivery_address .= $address_model->location->location.'<br />';
+
+        //city 
+        $purchase_delivery_address .= $address_model->city->city_name;
+
         return $purchase_delivery_address;
     }    
 
