@@ -106,7 +106,9 @@ $site_info = Siteinfo::find()->one();
                         } ?>
                     </th>
                     <td align="left"><?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?></th>
-                    <td aligh="left"><?= $item->purchase_delivery_address ?></th>
+                    <td aligh="left">
+                        <?= $item->purchase_delivery_address ?>
+                    </th>
                     <td aligh="left"><?= $item->purchase_quantity ?></th>
                     <td align="right"><?= $item->purchase_price_per_unit ?> KWD</th>
                     <td align="right"><?= $item->purchase_total_price ?> KWD</th>   
