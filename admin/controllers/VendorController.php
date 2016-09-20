@@ -290,7 +290,6 @@ class VendorController extends Controller
             $vendor_contact_number = explode(',', $model['vendor_contact_number']);
 
             if ($model->load(Yii::$app->request->post())) {
-
                 $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
                 $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
 
@@ -348,23 +347,20 @@ class VendorController extends Controller
 
                             //Save to S3
                             $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
+
                             if($awsResult){
                                 $model->vendor_logo_path = $filename;
+                                Yii::$app->resourceManager->delete("vendor_logo/" . $exist_logo_image);
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     $model->vendor_logo_path = $exist_logo_image;
                 }
-
-                if($model->save(false))
-                {
-                    Yii::$app->resourceManager->delete("vendor_logo/" . $exist_logo_image);
-                    Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+                if($model->save(false)) {
+                    echo Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+                    return $this->redirect(['index']);
                 }
-
-                return $this->redirect(['index']);
 
             } else {
 
