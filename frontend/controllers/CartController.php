@@ -204,7 +204,7 @@ class CartController extends BaseController
                     if (strtotime($data['time']) < strtotime($value['timeslot_start_time'])) {
                         $start = date('g:i A', strtotime($value['timeslot_start_time']));
                         $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                        echo '<option value="' . $value['timeslot_id'] . '">today : ' .$start . ' - ' . $end . '</option>';
+                        echo '<option value="' . $value['timeslot_id'] . '">' .$start . ' - ' . $end . '</option>';
                     }
                 } else {
                     $start = date('g:i A', strtotime($value['timeslot_start_time']));
