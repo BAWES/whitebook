@@ -122,38 +122,50 @@ if ($event_status > 0) {
                                                 <div class="contact_information">
                                                     <address>
                                                         <div class="clearfix">
-                                                        <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
-                                                            <h3>
-                                                                <a href="#" title="<?php echo $vendor_detail['vendor_public_email']; ?>"><?php echo $vendor_detail['vendor_public_email']; ?>&nbsp;</a>
-                                                            </h3>
-                                                            <span class="border-bottom"></span>
-                                                                <h4 style="margin-top: 13px;">
-                                                                    <?php echo $vendor_detail['vendor_public_phone']; ?>&nbsp;
-                                                                </h4>
-
-                                                            <span class="border-bottom border-bottom-none"></span>
-                                                        </div>
-                                                        <div class="col-md-6 col-xs-6 paddingright0 cont_ifo_right">
-                                                                <span class="links_left"><a href="<?php echo $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>"><?php echo $vendor_detail['vendor_website']; ?>&nbsp;</a></span>
+                                                        <?php if (trim($vendor_detail['vendor_public_email']) || trim($vendor_detail['vendor_public_phone'])) { ?>
+                                                            <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
+                                                                <?php if (trim($vendor_detail['vendor_public_email'])) { ?>
+                                                                    <h3>
+                                                                        <a href="#" title="<?php echo $vendor_detail['vendor_public_email']; ?>"><?php echo $vendor_detail['vendor_public_email']; ?>&nbsp;</a>
+                                                                    </h3>
+                                                                <?php } ?>
+                                                                <?php if (trim($vendor_detail['vendor_public_phone'])) { ?>
                                                                 <span class="border-bottom"></span>
-
-                                                                <span class="timer_common"><?php
-                                                                    $from = explode(':',$vendor_detail['vendor_working_hours']);
-                                                                    echo (isset($from[0])) ? $from[0] : '';
-                                                                    echo (isset($from[1])) ? ':'.$from[1] : '';
-                                                                    echo (isset($from[2])) ? ' '.$from[2] : ''
-                                                                    ?></span>
-
-                                                                - <span class="timer_common">
-                                                                    <?php
-                                                                    $to = explode(':',$vendor_detail['vendor_working_hours_to']);
-                                                                    echo (isset($to[0])) ? $to[0] : '';
-                                                                    echo (isset($to[1])) ? ':'.$to[1] : '';
-                                                                    echo (isset($to[2])) ? ' '.$to[2] : ''
-                                                                    ?>
-                                                                </span>
+                                                                    <h4 style="margin-top: 13px;">
+                                                                        <?php echo $vendor_detail['vendor_public_phone']; ?>&nbsp;
+                                                                    </h4>
+                                                                <span class="border-bottom border-bottom-none"></span>
+                                                                <?php } ?>
                                                             </div>
+                                                        <?php } ?>
+                                                            <?php if (trim($vendor_detail['vendor_website']) || trim($vendor_detail['vendor_working_hours'])) { ?>
+                                                                <div class="col-md-6 col-xs-6 paddingright0 paddingleft0 cont_ifo_right">
+                                                                    <?php if (trim($vendor_detail['vendor_website'])) { ?>
+                                                                        <span class="links_left"><a href="<?php echo $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>"><?php echo $vendor_detail['vendor_website']; ?>&nbsp;</a></span>
+                                                                    <?php } ?>
+                                                                    <?php if (trim($vendor_detail['vendor_working_hours'])) { ?>
+                                                                        <span class="border-bottom"></span>
+
+                                                                        <span class="timer_common"><?php
+                                                                            $from = explode(':',$vendor_detail['vendor_working_hours']);
+                                                                            echo (isset($from[0])) ? $from[0] : '';
+                                                                            echo (isset($from[1])) ? ':'.$from[1] : '';
+                                                                            echo (isset($from[2])) ? ' '.$from[2] : ''
+                                                                            ?></span>
+
+                                                                        - <span class="timer_common">
+                                                                            <?php
+                                                                            $to = explode(':',$vendor_detail['vendor_working_hours_to']);
+                                                                            echo (isset($to[0])) ? $to[0] : '';
+                                                                            echo (isset($to[1])) ? ':'.$to[1] : '';
+                                                                            echo (isset($to[2])) ? ' '.$to[2] : ''
+                                                                            ?>
+                                                                        </span>
+                                                                    <?php } ?>
+                                                                </div>
+                                                            <?php } ?>
                                                         </div>
+                                                        <?php if (trim($vendor_detail['vendor_contact_address']) || $vendor_detail['vendor_contact_address'] != 'n/a') { ?>
                                                         <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
                                                             <h5 class="margin-top-13">
                                                                 <?php
@@ -162,6 +174,7 @@ if ($event_status > 0) {
                                                                 ?>
                                                             </h5>
                                                         </div>
+                                                        <?php } ?>
                                                     </address>
                                                 </div>
                                             </div>
