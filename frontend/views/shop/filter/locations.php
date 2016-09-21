@@ -42,52 +42,66 @@ if($customer_id) {
 <!--        </div>-->
     </div>
     <div id="delivery-area" class="panel-collapse" aria-expanded="false" style="display: none;">
-        <div class="panel-body">
-            <div class="table">
-                <ul class="test_scroll">
+        <div class="">
+
+            <div class="form-group">
+                <select id="delivery_area_filter" class="selectpicker" data-live-search="true" data-size="10">
+
+                    <option value=""><?= Yii::t('frontend', 'All') ?></option>
 
                     <?php 
 
                     if($my_addresses) { ?>
-                        <label style="margin-left: 12px;"><b> My Addresses</b></label>
+                        <optgroup label="My Addresses">
                         <?php foreach ($my_addresses as $key => $value) {  ?>
-                        <li>
-                            <label class="label_check" for="chk-<?= $value['location']; ?>">
-                                <input type="checkbox" data-element="input" name="location" class="items" id="chk-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
-                                <?= $value['location']; ?>
-                            </label>
-                        </li>
+                            <option value="<?= $value['id']; ?>">
+                                <?php 
+                                if(Yii::$app->language == 'en') { 
+                                    echo $value['location'];
+                                } else { 
+                                    echo $value['location_ar'];    
+                                } ?>                            
+                            </option>
                         <?php
-                        }//foreach my addresses 
+                        }//foreach my addresses ?>
+                        </optgroup>
+                    <?php     
                     }//if my addresses 
 
                     foreach ($cities as $key => $value) {  ?>
-                        <input type="hidden" name="city[]" value=<?= $value['city_id']; ?>>
-                        <label style="margin-left: 12px;"><b> <?= $value['city_name']; ?></b></label>
+                        <optgroup label="<?= $value['city_name']; ?>">
                         <?php
                         
                         $area = \common\models\Location::find()->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $value['city_id']])->orderBy('city_id')->asArray()->all();
 
-                        foreach ($area as $key => $value) {  ?>
-                            <li>
-                                <label class="label_check" for="checkbox-<?= $value['location']; ?>">
-                                    <?php
-                                    $checked = '';
-                                    if ($deliver_location != null) {
-                                        $checked = ($deliver_location == $value['id']) ? 'checked="checked"' : '';
-                                    }
-                                    ?>
-                                    <input <?=$checked?> type="radio" data-element="input" name="location" class="items" id="checkbox-<?= $value['location']; ?>" value="<?= $value['id']; ?>">
-                                    <?= $value['location']; ?>
-                                </label>
-                            </li>
+                        foreach ($area as $key => $value) {  
+
+                            $checked = '';
+                           
+                            if ($deliver_location != null) {
+                                $checked = ($deliver_location == $value['id']) ? 'checked="checked"' : '';
+                            }
+                        ?>
+                            
+                            <option value="<?= $value['id']; ?>">
+                                <?php 
+                                if(Yii::$app->language == 'en') { 
+                                    echo $value['location'];
+                                } else { 
+                                    echo $value['location_ar'];    
+                                } ?>                            
+                            </option>
                             <?php
-                        }
-                    }
+                        }//foreach area ?>
+                        </optgroup>
+                    <?php     
+                    } //foreach city 
                     ?>
-                </ul>
+                </select>
             </div>
+
         </div>
     </div>
 </div>
+
 <?php $this->registerJS("$('#delivery-area').fadeIn(1000);",\yii\web\View::POS_READY) ?>

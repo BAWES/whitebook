@@ -436,6 +436,7 @@ textarea .form-group{ min-height: 126px;}
 .plan_venues .listing_sub_cat1 .btn.dropdown-toggle.selectpicker.btn-default{line-height:34px;border:none;background:transparent;box-shadow:none;  padding: 5px;}
 .plan_venues .btn-primary{ background: transparent; border-radius: 0px; border: none; color: #272727;font-family:'OpenSansRegular' ;font-size:13px;   }
 .plan_venues .btn{ padding:15px 12px;}
+
 .plan_venues .listing_sub_cat1 ul li{ padding: 7px 0;}
 .plan_venues .caret{ border-left: 4px solid hsla(0, 0%, 0%, 0);    border-right: 4px solid hsla(0, 0%, 0%, 0);    border-top: 7px dashed;border-bottom:0;}
 .plan_venues .btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open > .dropdown-toggle.btn-primary{ background: transparent; box-shadow: none; color: #272727;}
@@ -1618,4 +1619,14 @@ a.thing_cont:hover {
 }
 .address_box .btn-edit:hover{
     color: white;
+}
+
+#sidebar .btn.selectpicker {
+    padding: 9px 10px;    
+}
+#sidebar .dropdown-menu {
+    width: 100%;
+}
+#sidebar .dropdown-menu li a {
+    white-space: normal;
 }
