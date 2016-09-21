@@ -134,6 +134,11 @@ $model->vendor_working_min_to = $to_min;
 			</div>
 		</div>
 
+		<div class="form-group"><?= $form->field($model, 'vendor_brief',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_public_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_public_phone',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_delivery_charge',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+
 		<div class="form-group" style="height: 10px;">
 			<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next">
 		</div>
@@ -393,8 +398,8 @@ $model->vendor_working_min_to = $to_min;
 		else
 		{
 		if($model->approve_status=='Yes'){?>
-		$("#vendor-vendor_logo_path").val('image');
-		$('#vendor-approve_status').prop('checked', true);
+	$("#vendor-vendor_logo_path").val('image');
+	$('#vendor-approve_status').prop('checked', true);
 		<?php }	else { ?>
 		$('#vendor-approve_status').prop('checked', false);
 		<?php } ?>

@@ -97,6 +97,10 @@ use yii\helpers\Url;
 				</div>
 			</div>
 		</div>
+		<div class="form-group"><?= $form->field($model, 'vendor_brief',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_public_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]); ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_public_phone',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]); ?></div>
+		<div class="form-group"><?= $form->field($model, 'vendor_delivery_charge',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]); ?></div>
 		<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
 	</div>
 
