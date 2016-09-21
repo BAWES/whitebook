@@ -247,10 +247,10 @@ $action = Yii::$app->controller->action->id;
                         <?php } ?>
 
         <?php if(Yii::$app->language == "en"){ ?>
-            <a  href="<?= Url::to(['site/index', 'language'=>'ar']) ?>"
+            <a  href="<?= Url::to(['', 'language'=>'ar']) ?>"
                 style="position: absolute; top: 9px; right: <?= Yii::$app->user->isGuest?0:120 ?>px;" class="respo_hidde">العربية</a>
         <?php }else{ ?>
-            <a  href="<?= Url::to(['site/index', 'language'=>'en']) ?>"
+            <a  href="<?= Url::to(['', 'language'=>'en']) ?>"
                 style="position: absolute; top: 9px; right: <?= Yii::$app->user->isGuest?0:120 ?>px;" class="respo_hidde">English</a>
         <?php } ?>
 
@@ -587,9 +587,9 @@ $action = Yii::$app->controller->action->id;
 <?php } ?>
 
         <?php if(Yii::$app->language == "en"){ ?>
-        <li class=""><a href="<?= Url::to(['site/index', 'language'=>'ar']) ?>">العربية</a></li>
+        <li class=""><a href="<?= Url::to(['', 'language'=>'ar']) ?>">العربية</a></li>
         <?php }else{ ?>
-        <li class=""><a href="<?= Url::to(['site/index', 'language'=>'en']) ?>">English</a></li>
+        <li class=""><a href="<?= Url::to(['', 'language'=>'en']) ?>">English</a></li>
         <?php } ?>
 
             </div>
