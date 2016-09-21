@@ -280,6 +280,10 @@ $this->registerJs("
 	var url = window.location.href;     // Returns full URL
 	setupLabel();
 
+	jQuery('#delivery_area_filter').on('change',function() {
+        filter();
+	});
+
 	jQuery('.label_check input').on('change',function() {
         filter();
 	});
@@ -342,9 +346,11 @@ $this->registerJs("
 		var price_val = jQuery('.price_slider').val().replace(',', '-');
 		/* URL format */
 
-        var areas = jQuery('input[name=location]:checked').map(function() {
+        var areas = jQuery('#delivery_area_filter').val();
+
+        /*input[name=location]:checked').map(function() {
 			return this.value;
-		}).get().join('+');
+		}).get().join('+');*/
 
 		var date = jQuery('#delivery_date_2').val()
 		var price_val = jQuery('.price_slider').val().replace(',', '-');
