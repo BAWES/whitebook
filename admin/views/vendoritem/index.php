@@ -11,6 +11,7 @@ use common\models\Vendor;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Vendor items';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <div class="vendoritem-index">
@@ -21,11 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Delete', [''], ['class' => 'btn btn-info','id'=>'Delete','onclick'=>'return Status("Delete")', 'style'=>'float:right;']) ?>
         <?= Html::a('Deactivate', [''], ['class' => 'btn btn-info','id'=>'Deactive','onclick'=>'return Status("Deactivate")', 'style'=>'float:right;']) ?>
 		<?= Html::a('Activate', [''], ['class' => 'btn btn-info','id'=>'Reject','onclick'=>'return Status("Activate")', 'style'=>'float:right;']) ?>			
-</p>
-	<?php Pjax::begin(['enablePushState' => false]); ?>
+	</p>
+	
+	<?= $this->render('_search', [
+        'model' => $searchModel,
+    ]) ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'id'=>'items',
         'columns' => [
 			['class' => 'yii\grid\CheckboxColumn'],
@@ -44,16 +49,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				'label'=>'Category Name',			
 				'value'=>function($data){
 					return $data->getCategoryName($data->category_id);
-					},	
-				'filter' => Html::activeDropDownList($searchModel, 'category_id', ArrayHelper::map(common\models\Category::find()->where(['category_allow_sale'=>'Yes','parent_category_id'=>Null])->orderBy('category_name')->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),			
+				}
 			],           
 			[
 				'attribute'=>'type_id',
 				'label'=>'Item Type',			
 				'value'=>function($data){
 					return $data->getItemType($data->type_id);
-				},
-				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),													
+				}											
 			],
 			[
 				'attribute'=>'item_status',
@@ -92,8 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
-
+  
 </div>
 <p>
 	<?= Html::a('Reject', [''], ['class' => 'btn btn-info','id'=>'active','onclick'=>'return Status("Reject")', 'style'=>'float:right;']) ?>

@@ -1,13 +1,40 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use common\models\Category;
+use common\models\Itemtype;
+use common\models\Themes;
+use common\models\FeatureGroup;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\VendoritemSearch */
-/* @var $form yii\widgets\ActiveForm */
+$category_options = ArrayHelper::map(
+        Category::find()->where([
+                'category_allow_sale' => 'Yes', 'parent_category_id' => Null
+            ])->orderBy('category_name')->asArray()->all(), 
+        'category_id', 
+        'category_name'
+    );
+
+$type_options = ArrayHelper::map(
+        Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 
+        'type_id',
+        'type_name'
+    );
+
+$theme_options = ArrayHelper::map(
+        Themes::find()->where(['!=','trash','Deleted'])->asArray()->all(), 
+        'theme_id',
+        'theme_name'
+    );
+
+$group_options = ArrayHelper::map(
+        FeatureGroup::find()->where(['!=','trash','Deleted'])->asArray()->all(), 
+        'group_id',
+        'group_name'
+    );
+
 ?>
-
 <div class="vendoritem-search">
 
     <?php $form = ActiveForm::begin([
@@ -15,47 +42,66 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'item_id') ?>
+    <div class="row">
 
-    <?= $form->field($model, 'type_id') ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'item_name') ?>
 
-    <?= $form->field($model, 'vendor_id') ?>
+            <?= $form->field($model, 'vendor_name') ?>
 
-    <?= $form->field($model, 'category_id') ?>
+            <?= $form->field($model, 'item_status')->dropDownList(
+                [
+                    'Active',
+                    'Deactive'
+                ],           
+                ['prompt' => 'All']    
+            ); ?> 
+        </div>    
 
-    <?= $form->field($model, 'item_name') ?>
+        <div class="col-md-4">    
+            
+            <?= $form->field($model, 'theme_id')->dropDownList(
+                $theme_options,           
+                ['prompt' => 'All']    
+            )->label('Theme'); ?>
 
-    <?php // echo $form->field($model, 'item_description') ?>
+            <?= $form->field($model, 'group_id')->dropDownList(
+                    $group_options,           
+                    ['prompt' => 'All']    
+                )->label('Group'); ?>
 
-    <?php // echo $form->field($model, 'item_additional_info') ?>
+            <?= $form->field($model, 'category_id')->dropDownList(
+                    $category_options,           
+                    ['prompt' => 'All']    
+                ); ?>
 
-    <?php // echo $form->field($model, 'item_amount_in_stock') ?>
+        </div>
 
-    <?php // echo $form->field($model, 'item_default_capacity') ?>
+        <div class="col-md-4">        
+            <?= $form->field($model, 'type_id')->dropDownList(
+                    $type_options,           
+                    ['prompt' => 'All']    
+                ); ?>
 
-    <?php // echo $form->field($model, 'item_price_per_unit') ?>
-
-    <?php // echo $form->field($model, 'item_customization_description') ?>
-
-    <?php // echo $form->field($model, 'item_price_description') ?>
-
-    <?php // echo $form->field($model, 'item_for_sale') ?>
-
-    <?php // echo $form->field($model, 'item_how_long_to_make') ?>
-
-    <?php // echo $form->field($model, 'item_minimum_quantity_to_order') ?>
-
-    <?php // echo $form->field($model, 'item_approved') ?>
-
-    <?php // echo $form->field($model, 'created_by') ?>
-
-    <?php // echo $form->field($model, 'modified_by') ?>
-
-    <?php // echo $form->field($model, 'created_datetime') ?>
-
-    <?php // echo $form->field($model, 'modified_datetime') ?>
-
-    <?php // echo $form->field($model, 'trash') ?>
+            <?= $form->field($model, 'item_for_sale')->dropDownList(
+                [
+                    'Yes',
+                    'No'
+                ],           
+                ['prompt' => 'All']    
+            ); ?> 
+            
+            <?= $form->field($model, 'item_approved')->dropDownList(
+                [
+                    'Yes',
+                    'Pending',
+                    'Rejected'
+                ],           
+                ['prompt' => 'All']    
+            );?>     
+        </div>
+        
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

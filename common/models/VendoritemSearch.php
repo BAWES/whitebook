@@ -14,7 +14,7 @@ use yii\db\Expression;
  */
 class VendoritemSearch extends Vendoritem
 {
-    public $vendor_name;
+    public $vendor_name, $theme_id, $group_id;
     /**
      * @inheritdoc
      */
@@ -22,7 +22,7 @@ class VendoritemSearch extends Vendoritem
     {
         return [
             [['item_id', 'type_id', 'vendor_id', 'category_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
-            [['item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale',  'item_approved','priority',], 'safe'],
+            [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale',  'item_approved','priority',], 'safe'],
             [['item_price_per_unit'], 'number'],
            
         ];
@@ -38,6 +38,8 @@ class VendoritemSearch extends Vendoritem
         return Model::scenarios();
     }
 
+
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -48,12 +50,13 @@ class VendoritemSearch extends Vendoritem
     public function search($params, $item_approved = '')
     {
 		$paramss = array('No','Yes','Rejected');
+
 		$v = array_reverse(array_keys($paramss));
 
 		$query = Vendoritem::find()
-        ->where(['!=', 'whitebook_vendor_item.trash', 'Deleted'])       
-        ->orderBy(['item_id' => SORT_DESC])
-        ->orderBy([new Expression('FIELD (item_approved,'. implode(',', array_reverse(array_keys($paramss))) . ')')]);
+            ->where(['!=', 'whitebook_vendor_item.trash', 'Deleted'])       
+            ->orderBy(['item_id' => SORT_DESC])
+            ->orderBy([new Expression('FIELD (item_approved,'. implode(',', array_reverse(array_keys($paramss))) . ')')]);
 
         if($item_approved) {
            $query->andFilterWhere(['item_approved' => $item_approved]);
@@ -67,6 +70,14 @@ class VendoritemSearch extends Vendoritem
 			],
         ]);     
      
+        if(!empty($params['VendoritemSearch']['group_id'])) {
+            $query->joinWith(['featureGroupItems']);     
+        }
+
+        if(!empty($params['VendoritemSearch']['theme_id'])) {
+            $query->joinWith(['vendorItemThemes']);     
+        }
+
         $query->joinWith(['vendor']); 
 
         $this->load($params);   
@@ -93,6 +104,20 @@ class VendoritemSearch extends Vendoritem
             'modified_datetime' => $this->modified_datetime,
         ]);
 
+        if(!empty($params['VendoritemSearch']['theme_id'])) {
+            $query->andFilterWhere([
+                '{{%vendor_item_theme}}.trash' => 'Default',
+                '{{%vendor_item_theme}}.theme_id' =>  $params['VendoritemSearch']['theme_id']
+            ]);
+        }
+
+        if(!empty($params['VendoritemSearch']['group_id'])) {
+            $query->andFilterWhere([
+                '{{%feature_group_item}}.trash' => 'Default',
+                '{{%feature_group_item}}.group_id' =>  $params['VendoritemSearch']['group_id']
+            ]);
+        }
+
         $query->andFilterWhere(['like', 'item_name', $this->item_name])            
             ->andFilterWhere(['like', 'item_description', $this->item_description])
             ->andFilterWhere(['like', 'item_additional_info', $this->item_additional_info])
@@ -103,6 +128,7 @@ class VendoritemSearch extends Vendoritem
             ->andFilterWhere(['like', 'priority', $this->priority])
             ->andFilterWhere(['like', 'trash', $this->trash])
             ->andFilterWhere(['like', '{{%vendor}}.vendor_name',$this->vendor_name]);
+
        return $dataProvider;
     }
     
@@ -166,27 +192,31 @@ class VendoritemSearch extends Vendoritem
 
 
 
-    public function searchviewVendor($params,$vendor_id=false)
+    public function searchviewVendor($params, $vendor_id=false)
     {
         $pagination = 10;
+        
         if(empty($vendor_id))
         {          
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
+        
         $query = Vendoritem::find()
-        ->where(['!=', 'trash', 'Deleted'])   
-        ->andwhere(['vendor_id'=> $vendor_id])    
-        ->orderBy(['item_id' => SORT_DESC])
-        ->all();
+            ->where(['!=', 'trash', 'Deleted'])   
+            ->andwhere(['vendor_id'=> $vendor_id])    
+            ->orderBy(['item_id' => SORT_DESC])
+            ->all();
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' =>[
                 'pageSize'=> $pagination,
-                ],
+            ],
         ]);
 
         return $dataProvider;
+
         $this->load($params);
 
         if (!$this->validate()) {
