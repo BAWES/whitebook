@@ -5,7 +5,6 @@ use yii\widgets\Breadcrumbs;
 use yii\web\view;
 use common\models\Vendoritempricing;
 use common\models\Location;
-
 if (Yii::$app->language == "en") {
     $item_name = $model->item_name;
     $category_name = $model->category->category_name;

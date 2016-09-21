@@ -187,7 +187,7 @@ class CartController extends BaseController
     public function actionGetdeliverytimeslot()
     {
         if (Yii::$app->request->isAjax) {
-        
+
             $data = Yii::$app->request->post();
             $string = $data['sel_date'];
             $timestamp = strtotime($string);
@@ -198,10 +198,19 @@ class CartController extends BaseController
             ->andwhere(['timeslot_day' => date("l", $timestamp)])
             ->asArray()->all();
 
+
             foreach ($vendor_timeslot as $key => $value) {
-                $start = date('g:i A',strtotime($value['timeslot_start_time']));
-                $end = date('g:i A',strtotime($value['timeslot_end_time']));
-                echo '<option value="'.$value['timeslot_id'].'">'.$start.' - '.$end.'</option>';
+                if (strtotime($data['sel_date']) == (strtotime($data['currentDate']))) {
+                    if (strtotime($data['time']) < strtotime($value['timeslot_start_time'])) {
+                        $start = date('g:i A', strtotime($value['timeslot_start_time']));
+                        $end = date('g:i A', strtotime($value['timeslot_end_time']));
+                        echo '<option value="' . $value['timeslot_id'] . '">today : ' .$start . ' - ' . $end . '</option>';
+                    }
+                } else {
+                    $start = date('g:i A', strtotime($value['timeslot_start_time']));
+                    $end = date('g:i A', strtotime($value['timeslot_end_time']));
+                    echo '<option value="' . $value['timeslot_id'] . '">' . $start . ' - ' . $end . '</option>';
+                }
             }
         }
     }

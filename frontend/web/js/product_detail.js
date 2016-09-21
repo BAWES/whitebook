@@ -373,10 +373,13 @@
         });
 
         function deliveryTimeSlot(date){
+            var myDate = new Date()
+            time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
+            currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
             jQuery.ajax({
                 type: 'POST',
                 url: getdeliverytimeslot_url,
-                data: { 'vendor_id': vendor_id, 'sel_date': date},
+                data: { 'vendor_id': vendor_id, 'sel_date': date,'time':time,currentDate:currentDate},
                 success: function (data)
                 {
                     jQuery('#timeslot_id').html(data);
@@ -393,6 +396,26 @@
             deliveryTimeSlot(jQuery(this).val());
         });
     }
+    //
+    //function formatAMPM(date) { // This is to display 12 hour format like you asked
+    //    var hours = date.getHours();
+    //    var minutes = date.getMinutes();
+    //    var ampm = hours >= 12 ? 'pm' : 'am';
+    //    hours = hours % 12;
+    //    hours = hours ? hours : 12; // the hour '0' should be '12'
+    //    minutes = minutes < 10 ? '0'+minutes : minutes;
+    //    var strTime = hours + ':' + minutes + ' ' + ampm;
+    //    return strTime;
+    //}
+    //
+    var myDate = new Date();
+    var displayDate = ("0" + (myDate.getMonth() + 1)).slice(-2) + '/' +myDate.getDate()+ '/' +myDate.getFullYear();
+    console.log(displayDate);
+    console.log(myDate);
+    console.log(myDate.getHours());
+    console.log(myDate.getMinutes());
+    console.log(myDate.getSeconds());
+
 
     /* END BUY Item */
     
