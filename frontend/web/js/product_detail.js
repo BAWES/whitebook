@@ -373,10 +373,13 @@
         });
 
         function deliveryTimeSlot(date){
+            var myDate = new Date()
+            time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
+            currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
             jQuery.ajax({
                 type: 'POST',
                 url: getdeliverytimeslot_url,
-                data: { 'vendor_id': vendor_id, 'sel_date': date},
+                data: { 'vendor_id': vendor_id, 'sel_date': date,'time':time,currentDate:currentDate},
                 success: function (data)
                 {
                     jQuery('#timeslot_id').html(data);
@@ -393,6 +396,7 @@
             deliveryTimeSlot(jQuery(this).val());
         });
     }
+
 
     /* END BUY Item */
     
