@@ -60,10 +60,12 @@ class Vendoritem extends \yii\db\ActiveRecord
     const UPLOADFOLDER_530 = "vendor_item_images_530/";
     const UPLOADFOLDER_1000 = "vendor_item_images_1000/";
     const UPLOADSALESGUIDE = "sales_guide_images/";
+    
     public $themes;
     public $groups;
     public $image_path;
     public $guide_image;
+    
     /**
     * @inheritdoc
     */
@@ -107,7 +109,9 @@ class Vendoritem extends \yii\db\ActiveRecord
             [['type_id', 'vendor_id', 'category_id','subcategory_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','child_category', 'created_by', 'modified_by'], 'integer'],
             [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash'], 'string'],
             [['item_price_per_unit'], 'number'],
+            
             [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
+
             [['item_name', 'item_name_ar'], 'string', 'max' => 128],
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
@@ -183,14 +187,6 @@ class Vendoritem extends \yii\db\ActiveRecord
     public function getEventItemLinks()
     {
         return $this->hasMany(EventItemLink::className(), ['item_id' => 'item_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getFeatureGroupItems()
-    {
-        return $this->hasMany(Featuregroupitem::className(), ['item_id' => 'item_id']);
     }
 
     /**
@@ -282,6 +278,14 @@ class Vendoritem extends \yii\db\ActiveRecord
     public function getVendorItemRequests()
     {
         return $this->hasMany(VendorItemRequest::className(), ['item_id' => 'item_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getFeatureGroupItems()
+    {
+        return $this->hasMany(Featuregroupitem::className(), ['item_id' => 'item_id']);
     }
 
     /**

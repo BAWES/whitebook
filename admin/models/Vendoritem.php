@@ -6,15 +6,13 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use admin\models\Vendor;
 
-
 class Vendoritem extends \common\models\Vendoritem
 {
-
    /*
     *
     *   To save created, modified user & date time
     */
-      public function behaviors()
+    public function behaviors()
     {
         return parent::behaviors();
     }
@@ -27,13 +25,13 @@ class Vendoritem extends \common\models\Vendoritem
 
     public static function vendorpriorityitemitem($id)
     {
-            $item= Vendoritem::find()
+        $item = Vendoritem::find()
             ->select(['item_id','item_name'])
             ->where(['=', 'item_id',$id])
             ->andwhere(['trash' =>'Default','item_for_sale' =>'Yes'])
             ->all();
-            $item=ArrayHelper::map($item,'item_id','item_name');
-            return $item;
+
+        return ArrayHelper::map($item,'item_id','item_name');
     }
 
     public static function loadsubcategoryvendoritem($subcategory)

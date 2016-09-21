@@ -82,16 +82,20 @@ public function actionIndex()
 {
 
     $access = Authitem::AuthitemCheck('4', '23');
+
     if (yii::$app->user->can($access)) {
+        
         $searchModel = new VendoritemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            ]);
+        ]);
+
     } else {
-        echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+
+        Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
         return $this->redirect(['site/index']);
     }
 }
