@@ -128,9 +128,9 @@ if ($event_status > 0) {
                                                                     <h3>
                                                                         <a href="#" title="<?php echo $vendor_detail['vendor_public_email']; ?>"><?php echo $vendor_detail['vendor_public_email']; ?>&nbsp;</a>
                                                                     </h3>
+                                                                    <span class="border-bottom"></span>
                                                                 <?php } ?>
                                                                 <?php if (trim($vendor_detail['vendor_public_phone'])) { ?>
-                                                                <span class="border-bottom"></span>
                                                                     <h4 style="margin-top: 13px;">
                                                                         <?php echo $vendor_detail['vendor_public_phone']; ?>&nbsp;
                                                                     </h4>
@@ -142,9 +142,9 @@ if ($event_status > 0) {
                                                                 <div class="col-md-6 col-xs-6 paddingright0 paddingleft0 cont_ifo_right">
                                                                     <?php if (trim($vendor_detail['vendor_website'])) { ?>
                                                                         <span class="links_left"><a href="<?php echo $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>"><?php echo $vendor_detail['vendor_website']; ?>&nbsp;</a></span>
+                                                                        <span class="border-bottom"></span>
                                                                     <?php } ?>
                                                                     <?php if (trim($vendor_detail['vendor_working_hours'])) { ?>
-                                                                        <span class="border-bottom"></span>
 
                                                                         <span class="timer_common"><?php
                                                                             $from = explode(':',$vendor_detail['vendor_working_hours']);
