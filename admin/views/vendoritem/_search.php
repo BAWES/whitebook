@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 use common\models\Category;
 use common\models\Itemtype;
 use common\models\Themes;
-use common\models\FeatureGroup;
+use common\models\Featuregroup;
 
 $category_options = ArrayHelper::map(
         Category::find()->where([
@@ -29,7 +29,7 @@ $theme_options = ArrayHelper::map(
     );
 
 $group_options = ArrayHelper::map(
-        FeatureGroup::find()->where(['!=','trash','Deleted'])->asArray()->all(), 
+        Featuregroup::find()->where(['!=','trash','Deleted'])->asArray()->all(), 
         'group_id',
         'group_name'
     );
