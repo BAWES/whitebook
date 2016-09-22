@@ -410,7 +410,7 @@ $( ".onevalid1" ).click(function() {
 			$(".field-vendor-vendor_logo_path").addClass('has-error');
 			$(".field-vendor-vendor_logo_path").find('.help-block').html('Please upload a file.');
 			c1=false;
-  }
+  	}
   <?php } ?>
   if($("#vendor-vendor_name").val()=='')
 	{
@@ -460,77 +460,77 @@ $( ".onevalid1" ).click(function() {
 			 }
 			});
 		}else c1=false;
-  }
+  	}
   <?php } ?>
   // check only if its new record
 
  // check only if its new record
 
-  if($("#vendor-vendor_password").val()=='')
+  	if($("#vendor-vendor_password").val()=='')
 	{
 			$(".field-vendor-vendor_password").addClass('has-error');
 			$(".field-vendor-vendor_password").find('.help-block').html('Password cannot be blank');
 			c1=false;
-  }
-  <?php if($model->isNewRecord) { ?>
-  if($("#vendor-vendor_password").val()!='')
+  	}
+  	<?php if($model->isNewRecord) { ?>
+  	if($("#vendor-vendor_password").val()!='')
 	{
 			var pass=$("#vendor-vendor_password").val();
 			if(pass.length<6)
 			{$(".field-vendor-vendor_password").addClass('has-error');
 			$(".field-vendor-vendor_password").find('.help-block').html('Password should contain minimum 6 Letter.');
 			c1=false;}
-  }
-  if($("#vendor-confirm_password").val()=='')
+  	}
+  	if($("#vendor-confirm_password").val()=='')
 	{
 			$(".field-vendor-confirm_password").addClass('has-error');
 			$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
 			c1=false;
-  }else  if($("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val())
+  	}else  if($("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val())
 	{
 			$(".field-vendor-confirm_password").addClass('has-error');
 			$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
 			c1=false;
-  }
-  <?php } ?>
+  	}
+  	<?php } ?>
     if($("#vendor-vendor_contact_name").val()=='')
 	{
 			$(".field-vendor-vendor_contact_name").addClass('has-error');
 			$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
 			c1=false;
-  }
+  	}
     if($("#vendor-vendor_contact_number").val()=='')
 	{
 			$(".field-vendor-vendor_contact_number").addClass('has-error');
 			$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
 			c1=false;
-  }
-    if($("#vendor-vendor_contact_address").val()=='')
+  	}
+//    if($("#vendor-vendor_contact_address").val()=='')
+//	{
+//			$(".field-vendor-vendor_contact_address").addClass('has-error');
+//			$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
+//			c1=false;
+//  	}
+	if(c1==false)
 	{
-			$(".field-vendor-vendor_contact_address").addClass('has-error');
-			$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
-			c1=false;
-  }
-	  if(c1==false)
-	  {
-		  c1='';
-		  return false;
-		}
+		c1='';
+		return false;
+	}
 
 	var item_len = $("#vendor-vendor_name").val().length;
      if($("#vendor-vendor_name").val()=='')
 	 {
 	 	$(".field-vendor-vendor_name").addClass('has-error');
-			$(".field-vendor-vendor_name").find('.help-block').html('Item name cannot be blank.');
-			c1=false;
+		$(".field-vendor-vendor_name").find('.help-block').html('Item name cannot be blank.');
+		c1=false;
 	 }
 	 else if(item_len < 3){
 
-	 			$(".field-vendor-vendor_name").addClass('has-error');
-	 			$(".field-vendor-vendor_name").find('.help-block').html('Item name minimum 4 letters.');
-				c1=false;
+		$(".field-vendor-vendor_name").addClass('has-error');
+		$(".field-vendor-vendor_name").find('.help-block').html('Item name minimum 4 letters.');
+		c1=false;
 	 }
-return c1;
+	return c1;
 });
 function validateEmail(email) {
     var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
@@ -548,57 +548,57 @@ $( ".twovalid2" ).click(function() {
 			$(".field-vendor-vendor_logo_path").addClass('has-error');
 			$(".field-vendor-vendor_logo_path").find('.help-block').html('Please upload a file.');
 			return false;
-  }
-  if($("#vendor-vendor_name").val()=='')
+  	}
+  	if($("#vendor-vendor_name").val()=='')
 	{
 			$(".field-vendor-vendor_name").addClass('has-error');
 			$(".field-vendor-vendor_name").find('.help-block').html('Vendor name cannot be blank.');
 			return false;
-  }
-  if($("#vendor-vendor_contact_email").val()=='')
+	}
+  	if($("#vendor-vendor_contact_email").val()=='')
 	{
 			$(".field-vendor-vendor_contact_email").addClass('has-error');
 			$(".field-vendor-vendor_contact_email").find('.help-block').html('Email cannot be blank.');
 			return false;
-  }
-  <?php if($model->isNewRecord) { ?>
-  if($("#vendor-vendor_password").val()=='')
+  	}
+  	<?php if($model->isNewRecord) { ?>
+  	if($("#vendor-vendor_password").val()=='')
 	{
 			$(".field-vendor-vendor_password").addClass('has-error');
 			$(".field-vendor-vendor_password").find('.help-block').html('Password cannot be blank.');
 			return false;
-  }
-  if($("#vendor-confirm_password").val()=='')
+  	}
+  	if($("#vendor-confirm_password").val()=='')
 	{
 			$(".field-vendor-confirm_password").addClass('has-error');
 			$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
 			return false;
-  }
- if($("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val())
- {
+  	}
+ 	if($("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val())
+ 	{
 			$(".field-vendor-confirm_password").addClass('has-error');
 			$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
 			return false;
-  }
-  <?php } ?>
+  	}
+  	<?php } ?>
     if($("#vendor-vendor_contact_name").val()=='')
 	{
 			$(".field-vendor-vendor_contact_name").addClass('has-error');
 			$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
 			return false;
-  }
+  	}
     if($("#vendor-vendor_contact_number").val()=='')
 	{
 			$(".field-vendor-vendor_contact_number").addClass('has-error');
 			$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
 			return false;
-  }
-    if($("#vendor-vendor_contact_address").val()=='')
-	{
-			$(".field-vendor-vendor_contact_address").addClass('has-error');
-			$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
-			return false;
-  }
+  	}
+//    if($("#vendor-vendor_contact_address").val()=='')
+//	{
+//			$(".field-vendor-vendor_contact_address").addClass('has-error');
+//			$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
+//			return false;
+//  	}
 
    // check only if its new record
   <?php if($model->isNewRecord) {?>

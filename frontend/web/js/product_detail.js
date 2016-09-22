@@ -382,8 +382,16 @@
                 data: { 'vendor_id': vendor_id, 'sel_date': date,'time':time,currentDate:currentDate},
                 success: function (data)
                 {
-                    jQuery('#timeslot_id').html(data);
-                    jQuery('#timeslot_id').selectpicker('refresh');
+                    if (jQuery.trim(data) == 0) {
+                        $('.timeslot_id_div').show();
+                        $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                        $('.timeslot_id_select').hide();
+                    } else {
+                        $('.timeslot_id_div').hide();
+                        $('.timeslot_id_select').show();
+                        jQuery('#timeslot_id').html(data);
+                        jQuery('#timeslot_id').selectpicker('refresh');
+                    }
                 }
             });
         }

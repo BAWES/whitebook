@@ -55,8 +55,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
             </div>
         </div>
 
-        <?php 
-
+        <?php
         $message = Yii::$app->getSession()->getFlash('success');
 
         if($message) { ?> 
@@ -66,12 +65,53 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                 <button data-dismiss="alert" class="close">&times;</button>
             </div>
         <?php } ?>
-
+        <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
+        <form id="form_product_option" method="POST" class="form center-block margin-top-0">
+        <div class="col-md-12 filter-bar" style="display: none;">
+            <div class="row">
+                <div class="width-20-percent col-md-3 padding-right-0">
+                    <div class="form-group margin-left-0">
+                        <label><?=Yii::t('frontend', 'Area'); ?></label>
+                        <div class="select_boxes">
+                            <?php
+                                echo Html::dropDownList('area_id', $deliver_location,
+                                \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' ),
+                                ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
+                            ?>
+                        </div>
+                        <span class="error area_id"></span>
+                    </div>
+                </div>
+                <div class="col-md-2 padding-left-0">
+                    <div class="form-group">
+                        <label><?=Yii::t('frontend', 'Delivery Date'); ?></label>
+                        <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
+                            <input value="<?=$deliver_date?>" readonly="true" name="delivery_date" id="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </div>
+                        <span class="error cart_delivery_date"></span>
+                    </div>
+                </div>
+                <div class="col-md-5 padding-left-0 timeslot_id_div" style="display: none;">
+                    <div class="form-group">
+                        <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+                        <div class="text padding-top-12"></div>
+                    </div>
+                </div>
+                <div class="col-md-2 padding-left-0 timeslot_id_select">
+                    <div class="form-group">
+                        <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+                        <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
+                        <span class="error timeslot_id"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
                 <div class="product_detials_common normal_tables">
-
                     <div class="col-md-6 paddig0 resp_hide">
                         <div class="left_descrip mobile-view">
                             <h2><?= $vendor_name; ?></h2>
@@ -205,64 +245,29 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             </div>
 
                             <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
-                            <form id="form_product_option" method="POST" class="form center-block">
-
                                 <input name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
-                                <div class="row">
+                                <div class="row margin-top-20">
+                                    <div class="col-md-2">
+                                        <label><?= Yii::t('frontend', 'Quantity');?></label>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label><?= Yii::t('frontend', 'Quantity');?></label>
                                             <input type="text" name="quantity" id="quantity" class="form-control" />
                                             <span class="error cart_quantity"></span>
                                         </div>
                                     </div><!-- END .col-md-6 -->
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label><?= Yii::t('frontend', 'Delivery date');?></label>
-                                            <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" style="position: relative;"  id="delivery_date_wrapper">
-                                                <input value="<?=$deliver_date?>" readonly="true" name="delivery_date" id="delivery_date" class="form-control required"  placeholder="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>" style="height: 40px;">
-                                                <span class="add-on position_product_option"> <i class="flaticon-calendar189"></i></span>
-                                            </div>
-                                            <span class="error cart_delivery_date"></span>
-                                        </div>
-                                        
-                                    </div><!-- END .col-md-6 -->
                                 </div><!-- END .row -->
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label><?= Yii::t('frontend', 'Delivery Area') ?></label>
-                                            <div class="select_boxes">
-                                                <?php
-                                                echo Html::dropDownList('area_id', $deliver_location,
-                                                    \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' ),
-                                                    ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]
-                                                );
-                                                ?>
-                                            </div>
-                                            <span class="error area_id"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label><?= Yii::t('frontend', 'Delivery timeslot');?></label>
-                                            <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary">
-                                            </select>
-                                            <span class="error timeslot_id"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-left: 11px;">
+                                <div>
                                     <div class="button-signin">
-                                        <button type="submit" class="btn btn-primary btn-custome-1" name="submit">
+                                        <button type="submit" class="width-63-percent btn btn-primary btn-custome-1" name="submit">
                                             <?= Yii::t('frontend', 'Buy') ?>
                                         </button>&nbsp;&nbsp;&nbsp;
                                     </div>
                                     <span style="display: none;margin-top: 18px;" id="available"></span>
                                 </div>
-                            </form>
+                                </form>
                             <?php } ?>
 
                             <div class="accad_menus">
@@ -512,25 +517,29 @@ $this->registerJs("
             }
         );
     }
-//    if ($('#form_product_option').length>0) {
-//        loadProductAvailability();
-//    }
-
+    $('.filter-bar').show();
 
 ", View::POS_READY);
 
 $this->registerCss("
-.datepicker{
-        border: 2px solid rgb(242, 242, 242);
-    }
-    .datepicker table {
-        font-size: 12px;
-    }
-    .form-group{
-        margin-bottom: 15px;
-        width: 92%;
-        margin-left: 11px;
-   }
-   #form_product_option .selectpicker.btn-primary {color: #555!important;}
-   ");
+.margin-top-20{margin-top:20px;}
+.width-20-percent{width: 20%;}
+.width-63-percent{width: 63%!important;}
+.datepicker{border: 2px solid rgb(242, 242, 242);}
+.datepicker table {font-size: 12px;}
+.form-group{margin-bottom: 15px;width: 92%;margin-left: 11px;}
+.filter-bar{    margin-top: 22px;padding-left: 0px;}
+.date-picker-box{    height: 44px;border-radius: 0px;box-shadow: none;border-color: #e6e6e6;}
+.filter-bar .fa-calendar{position: absolute;right: 8px;top: 12px;font-size: 15px;color:#e6e6e6;}
+#form_product_option .selectpicker.btn-primary {color: #555!important;}
+#delivery_date_wrapper{position:relative;}
+.padding-right-0{padding-right:0px!important;}
+.padding-left-0{padding-left:0px!important;}
+.selectpicker,#area_id,#delivery_date,#timeslot_id{color:#000!important;}
+.margin-left-0{margin-left:0px!important;}
+.filter-bar .submit-btn{border-radius: 0px;padding: 10px;width: 72%;}
+.filter-bar .form-group label{font-weight:normal;color: #999 !important;font-size: 13px;}
+.margin-top-0{margin-top:0px!important;}
+.padding-top-12{    padding-top: 12px;}
+");
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

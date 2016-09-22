@@ -545,12 +545,12 @@ $model->vendor_working_min_to = $to_min;
 				$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
 				c1=false;
 			}
-			if($("#vendor-vendor_contact_address").val()=='')
-			{
-				$(".field-vendor-vendor_contact_address").addClass('has-error');
-				$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
-				c1=false;
-			}
+//			if($("#vendor-vendor_contact_address").val()=='')
+//			{
+//				$(".field-vendor-vendor_contact_address").addClass('has-error');
+//				$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
+//				c1=false;
+//			}
 			if(c1==false)
 			{
 				c1='';
@@ -633,12 +633,12 @@ $model->vendor_working_min_to = $to_min;
 				$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
 				return false;
 			}
-			if($("#vendor-vendor_contact_address").val()=='')
-			{
-				$(".field-vendor-vendor_contact_address").addClass('has-error');
-				$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
-				return false;
-			}
+//			if($("#vendor-vendor_contact_address").val()=='')
+//			{
+//				$(".field-vendor-vendor_contact_address").addClass('has-error');
+//				$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
+//				return false;
+//			}
 
 			// check only if its new record
 			<?php if($model->isNewRecord) {?>
