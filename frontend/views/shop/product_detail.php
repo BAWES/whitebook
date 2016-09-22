@@ -92,7 +92,13 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                         <span class="error cart_delivery_date"></span>
                     </div>
                 </div>
-                <div class="col-md-2 padding-left-0">
+                <div class="col-md-5 padding-left-0 timeslot_id_div" style="display: none;">
+                    <div class="form-group">
+                        <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+                        <div class="text padding-top-12"></div>
+                    </div>
+                </div>
+                <div class="col-md-2 padding-left-0 timeslot_id_select">
                     <div class="form-group">
                         <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
                         <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
@@ -534,5 +540,6 @@ $this->registerCss("
 .filter-bar .submit-btn{border-radius: 0px;padding: 10px;width: 72%;}
 .filter-bar .form-group label{font-weight:normal;color: #999 !important;font-size: 13px;}
 .margin-top-0{margin-top:0px!important;}
+.padding-top-12{    padding-top: 12px;}
 ");
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

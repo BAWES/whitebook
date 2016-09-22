@@ -197,20 +197,24 @@ class CartController extends BaseController
             ->where(['vendor_id' => $data['vendor_id']])
             ->andwhere(['timeslot_day' => date("l", $timestamp)])
             ->asArray()->all();
+            if ($vendor_timeslot) {
 
-
-            foreach ($vendor_timeslot as $key => $value) {
-                if (strtotime($data['sel_date']) == (strtotime($data['currentDate']))) {
-                    if (strtotime($data['time']) < strtotime($value['timeslot_start_time'])) {
+                foreach ($vendor_timeslot as $key => $value) {
+                    if (strtotime($data['sel_date']) == (strtotime($data['currentDate']))) {
+                        if (strtotime($data['time']) < strtotime($value['timeslot_start_time'])) {
+                            $start = date('g:i A', strtotime($value['timeslot_start_time']));
+                            $end = date('g:i A', strtotime($value['timeslot_end_time']));
+                            echo '<option value="' . $value['timeslot_id'] . '">' . $start . ' - ' . $end . '</option>';
+                        }
+                    } else {
                         $start = date('g:i A', strtotime($value['timeslot_start_time']));
                         $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                        echo '<option value="' . $value['timeslot_id'] . '">' .$start . ' - ' . $end . '</option>';
+                        echo '<option value="' . $value['timeslot_id'] . '">' . $start . ' - ' . $end . '</option>';
                     }
-                } else {
-                    $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                    $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                    echo '<option value="' . $value['timeslot_id'] . '">' . $start . ' - ' . $end . '</option>';
                 }
+            } else {
+                echo 0;
+                exit;
             }
         }
     }
