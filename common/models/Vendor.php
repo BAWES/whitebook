@@ -102,31 +102,21 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['category_id','package_id', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number', 'vendor_contact_address', 'vendor_contact_address_ar'], 'required'],
-            
-            [['category_id','vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number','vendor_contact_address', 'vendor_contact_address_ar' ,'confirm_password'], 'required', 'on'=>'register'],
-
-
+            [['category_id','package_id', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number'], 'required'],
+            [['category_id','vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number','confirm_password'], 'required', 'on'=>'register'],
             [['category_id','vendor_name', 'vendor_name_ar', 'vendor_contact_name'], 'required', 'on'=>'vendorprofile'],
-            
-            [['category_id','vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number', 'vendor_contact_address', 'vendor_contact_address_ar'], 'required', 'on'=>'vendorUpdate'],
-            
+            [['category_id','vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number'], 'required', 'on'=>'vendorUpdate'],
             [['package_id', 'created_by', 'modified_by'], 'integer'],
-            
             [['vendor_brief', 'vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name',], 'string'],
-            
             [['package_start_date', 'package_end_date', 'created_datetime', 'modified_datetime','pack'], 'safe'],
             [['package_end_date'], 'default', 'value' => null],
             [['vendor_delivery_charge'], 'number'],
             [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus'],'url', 'defaultScheme' => 'http'],
-            
             /* Validation Rules */
             [['confirm_password'], 'compare', 'compareAttribute'=>'vendor_password','message'=>'Password and confirm password not same' ],
             [['vendor_contact_email'],'email'],
             ['vendor_contact_email', 'unique'],
-            
             [['approve_status','vendor_name', 'vendor_name_ar', 'vendor_public_email','vendor_contact_name', 'vendor_public_phone','vendor_contact_email','vendor_contact_address', 'vendor_contact_address_ar' ,'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number','vendor_logo_path', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no', 'vendor_website', 'vendor_facebook', 'vendor_twitter', 'vendor_instagram', 'vendor_googleplus', 'vendor_skype'], 'string', 'max' => 128],
-
             ['vendor_logo_path', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'on' => 'register'],
         ];
     }
@@ -266,12 +256,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(VendorItem::className(), ['vendor_id' => 'vendor_id']);
     }
 
-    /*
-    *  Relation functions END here
-    */
-
-
-
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
     /**
     * @inheritdoc
@@ -293,7 +277,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     /**
     * Finds user by username
     *
-    * @param  string      $username
+    * @param string $email
     * @return static|null
     */
     public static function findByUsername($email)
@@ -408,8 +392,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         $vendorname= \yii\helpers\ArrayHelper::map($vendorname,'vendor_id','vendor_name');
         return $vendorname;
     }
-
-
 
     public static function getVendor($arr='')
     {
