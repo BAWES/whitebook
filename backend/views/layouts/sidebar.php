@@ -64,7 +64,7 @@ use common\models\Vendoritem;
 				</a>
 				<ul class="sub-menu" style='<?= in_array($menu_act,$deliveryMenu)?"display:block":"" ?>'>
                     <li class="<?php if ($menu_act == 'VendorlocationController') {echo "active"; } else  {echo "noactive";}?>">
-        				<?= Html::a('<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', ['vendorlocation/edit'], ['class'=>'link-title']) ?>
+        				<?= Html::a('<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', ['vendorlocation'], ['class'=>'link-title']) ?>
         			</li>
         			<!-- Manage Address End-->
         			<li class="<?php if ($menu_act == 'DeliverytimeslotController') {echo "active"; } else  {echo "noactive";}?>">
