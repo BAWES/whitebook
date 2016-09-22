@@ -39,8 +39,8 @@ class Vendorlocation extends \yii\db\ActiveRecord
         return [
             //[[''], 'required'],
             [['vendor_id'], 'integer'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
-            [['city_id', 'area_id'], 'string', 'max' => 150]
+            [['delivery_price', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['city_id', 'area_id'], 'integer']
         ];
     }
 
@@ -58,7 +58,6 @@ class Vendorlocation extends \yii\db\ActiveRecord
             'modified_datetime' => 'Modified Datetime',
         ];
     }
-
 
     /*
     *
