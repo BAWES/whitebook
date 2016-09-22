@@ -32,7 +32,6 @@ use yii\db\Expression;
 * @property string $vendor_website
 * @property string $package_start_date
 * @property string $package_end_date
-* @property string $vendor_delivery_charge
 * @property string $vendor_password
 * @property string $vendor_status
 * @property integer $created_by
@@ -110,7 +109,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             [['vendor_brief', 'vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name',], 'string'],
             [['package_start_date', 'package_end_date', 'created_datetime', 'modified_datetime','pack'], 'safe'],
             [['package_end_date'], 'default', 'value' => null],
-            [['vendor_delivery_charge'], 'number'],
             [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus'],'url', 'defaultScheme' => 'http'],
             /* Validation Rules */
             [['confirm_password'], 'compare', 'compareAttribute'=>'vendor_password','message'=>'Password and confirm password not same' ],
@@ -169,7 +167,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             'vendor_skype' => 'Vendor Skype id',
             'package_start_date' => 'Package Start Date',
             'package_end_date' => 'Package End Date',
-            'vendor_delivery_charge' => 'Vendor Delivery Charge',
             'vendor_password' => 'Password',
             'vendor_status' => 'Active Vendor',
             'created_by' => 'Created By',

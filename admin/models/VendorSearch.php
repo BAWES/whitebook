@@ -21,7 +21,6 @@ class VendorSearch extends Vendor
         return [
             [['vendor_id', 'package_id', 'image_id', 'created_by', 'modified_by'], 'integer'],
             [['vendor_name', 'vendor_brief', 'vendor_return_policy', 'vendor_public_email', 'vendor_public_phone', 'vendor_working_hours', 'vendor_contact_name', 'vendor_contact_email', 'vendor_contact_number', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_website', 'package_end_date', 'package_start_date', 'vendor_password', 'vendor_status','package_name',], 'safe'],
-            [['vendor_delivery_charge'], 'number'],
         ];
     }
 
@@ -66,7 +65,6 @@ class VendorSearch extends Vendor
             'image_id' => $this->image_id,
             'package_end_date' => $this->package_end_date,
             'package_start_date' => $this->package_start_date,
-            'vendor_delivery_charge' => $this->vendor_delivery_charge,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,
             'created_datetime' => $this->created_datetime,
