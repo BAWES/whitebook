@@ -66,36 +66,36 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
             </div>
         <?php } ?>
         <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
-        <form id="form_product_option" method="POST" class="form center-block">
+        <form id="form_product_option" method="POST" class="form center-block margin-top-0">
         <div class="col-md-12 filter-bar" style="display: none;">
             <div class="row">
                 <div class="width-20-percent col-md-3 padding-right-0">
                     <div class="form-group margin-left-0">
+                        <label><?=Yii::t('frontend', 'Area'); ?></label>
                         <div class="select_boxes">
                             <?php
-                            echo Html::dropDownList('area_id', $deliver_location,
+                                echo Html::dropDownList('area_id', $deliver_location,
                                 \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' ),
-                                ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]
-                            );
+                                ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
                             ?>
                         </div>
                         <span class="error area_id"></span>
                     </div>
                 </div>
-
                 <div class="col-md-2 padding-left-0">
                     <div class="form-group">
+                        <label><?=Yii::t('frontend', 'Delivery Date'); ?></label>
                         <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
                             <input value="<?=$deliver_date?>" readonly="true" name="delivery_date" id="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
                         <span class="error cart_delivery_date"></span>
                     </div>
-                </div><!-- END .col-md-6 -->
+                </div>
                 <div class="col-md-2 padding-left-0">
                     <div class="form-group">
-                        <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary">
-                        </select>
+                        <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+                        <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
                         <span class="error timeslot_id"></span>
                     </div>
                 </div>
@@ -532,6 +532,7 @@ $this->registerCss("
 .selectpicker,#area_id,#delivery_date,#timeslot_id{color:#000!important;}
 .margin-left-0{margin-left:0px!important;}
 .filter-bar .submit-btn{border-radius: 0px;padding: 10px;width: 72%;}
-
+.filter-bar .form-group label{font-weight:normal;color: #999 !important;font-size: 13px;}
+.margin-top-0{margin-top:0px!important;}
 ");
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
