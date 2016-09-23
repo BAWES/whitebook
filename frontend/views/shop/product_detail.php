@@ -116,7 +116,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                         <div class="left_descrip mobile-view">
                             <h2><?= $vendor_name; ?></h2>
                             <label><?= $item_name; ?></label>
-                            <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
+                            <b class="font-27"><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -181,12 +181,12 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <div class="col-md-6 product-right-width paddng0">
                         <div class="right_descr_product">
                             <div class="product_name">
-                                <div class="left_descrip desktop-view">
+                                <div class="left_descrip desktop-view margin-bottom-14">
                                     <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>">
                                         <h2><?= $vendor_name; ?></h2>
                                     </a>
                                     <label><?= $item_name; ?></label>
-                                    <b><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
+                                    <b class="font-27"><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
@@ -245,30 +245,32 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             </div>
 
                             <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
-                                <input name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+                            <input name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
-                                <div class="row margin-top-20">
-                                    <div class="col-md-2">
-                                        <label><?= Yii::t('frontend', 'Quantity');?></label>
+                            <div class="row margin-top-20">
+                                <div class="col-md-2 padding-top-12">
+                                    <label><?= Yii::t('frontend', 'Quantity');?></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group qty">
+                                        <a href="#" class="btn-stepper" data-case="0">-</a>
+                                        <input type="text" name="quantity" id="quantity" class="form-control" value="1"/>
+                                        <a href="#" class="btn-stepper" data-case="1">+</a>
+
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" name="quantity" id="quantity" class="form-control" />
-                                            <span class="error cart_quantity"></span>
-                                        </div>
-                                    </div><!-- END .col-md-6 -->
-
-                                </div><!-- END .row -->
-                                <div>
+                                </div><!-- END .col-md-6 -->
+                                <div class="col-lg-6">
                                     <div class="button-signin">
-                                        <button type="submit" class="width-63-percent btn btn-primary btn-custome-1" name="submit">
+                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit">
                                             <?= Yii::t('frontend', 'Buy') ?>
                                         </button>&nbsp;&nbsp;&nbsp;
                                     </div>
-                                    <span style="display: none;margin-top: 18px;" id="available"></span>
                                 </div>
-                                </form>
-                            <?php } ?>
+                                <span class=" error cart_quantity"></span>
+                                <span style="display: none;margin-top: 18px;" id="available"></span>
+                            </div><!-- END .row -->
+                        </form>
+                        <?php } ?>
 
                             <div class="accad_menus">
                                 <div class="panel-group" id="accordion">
@@ -520,16 +522,16 @@ $this->registerJs("
     $('.filter-bar').show();
 
 ", View::POS_READY);
-
 $this->registerCss("
+.width-100-percent{width:100%!important;}
 .margin-top-20{margin-top:20px;}
 .width-20-percent{width: 20%;}
 .width-63-percent{width: 63%!important;}
 .datepicker{border: 2px solid rgb(242, 242, 242);}
-.datepicker table {font-size: 12px;}
-.form-group{margin-bottom: 15px;width: 92%;margin-left: 11px;}
-.filter-bar{    margin-top: 22px;padding-left: 0px;}
-.date-picker-box{    height: 44px;border-radius: 0px;box-shadow: none;border-color: #e6e6e6;}
+.datepicker table{font-size: 12px;}
+.form-group{margin-bottom:15px;width: 92%;margin-left: 11px;}
+.filter-bar{margin-top: 22px;padding-left: 0px;}
+.date-picker-box{height: 44px;border-radius: 0px;box-shadow: none;border-color: #e6e6e6;}
 .filter-bar .fa-calendar{position: absolute;right: 8px;top: 12px;font-size: 15px;color:#e6e6e6;}
 #form_product_option .selectpicker.btn-primary {color: #555!important;}
 #delivery_date_wrapper{position:relative;}
@@ -540,6 +542,21 @@ $this->registerCss("
 .filter-bar .submit-btn{border-radius: 0px;padding: 10px;width: 72%;}
 .filter-bar .form-group label{font-weight:normal;color: #999 !important;font-size: 13px;}
 .margin-top-0{margin-top:0px!important;}
-.padding-top-12{    padding-top: 12px;}
+.padding-top-12{padding-top: 12px;}
+.btn-stepper {width: 31%;color: white;background-color: #000;display: inline-block;text-align: center;height: 100%;float: left;line-height: 43px;font-size: 25px;font-style: normal;font-weight: bold;}
+.form-group input[name=quantity] {float: left;width: 38%;line-height: 38px;height: 100%!important;text-align: center;margin: 0;border-top: 1px solid #e6e6e6;box-shadow: none;border-bottom: 1px solid #e6e6e6;}
+.qty {width: 91%;display: block;float: left;height: 45px;margin-right: 8px;overflow: hidden;}
+.product_detail_section .panel-body p{text-align:justify;}
+.font-27{font-size:27px!important;}
+.margin-bottom-14{margin-bottom:14px!important;}
+.qty a:hover, .qty a:focus {color: #fff!important;}
+.error.cart_quantity p{margin-left:15px;}
+    button.dropdown-toggle{
+    background: #fff;
+    color: #000;
+    border-radius: 0px;
+    height: 42px;
+    border-color: #e6e6e6;
+    }
 ");
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

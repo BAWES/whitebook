@@ -403,6 +403,19 @@
         jQuery(document).delegate('#delivery_date', 'change', function () {
             deliveryTimeSlot(jQuery(this).val());
         });
+
+        // Shop product page quantity increment and decrement stepper
+        jQuery(document).on('click','.btn-stepper',function(){
+            if (jQuery(this).data('case') == 0) {
+                if (parseInt(jQuery('#quantity').val()) >= 2) {
+                    jQuery('#quantity').val(parseInt(jQuery('#quantity').val()) - 1);
+                }
+            } else if (jQuery(this).data('case') == 1) {
+                jQuery('#quantity').val(parseInt(jQuery('#quantity').val())+1);
+            }
+            return false;
+        })
+
     }
 
 
