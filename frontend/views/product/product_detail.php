@@ -193,9 +193,9 @@ $this->title = 'Whitebook - ' . $item_name;
                             <div class="product_name">
                                 <div class="left_descrip desktop-view">
                                     <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $vendor_det['slug']]) ?>">
-                                        <h2><?= $vendor_name; ?></h2>
+                                        <h2><?= $item_name; ?></h2>
                                     </a>
-                                    <label><?= $item_name; ?></label>
+                                    <label><?= $vendor_name; ?></label>
                                     <b><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
                                 </div>
                                 <div class="right_descrip">

@@ -183,9 +183,9 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             <div class="product_name">
                                 <div class="left_descrip desktop-view margin-bottom-14">
                                     <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>">
-                                        <h2><?= $vendor_name; ?></h2>
+                                        <h2><?= $item_name; ?></h2>
                                     </a>
-                                    <label><?= $item_name; ?></label>
+                                    <label><?= $vendor_name; ?></label>
                                     <b class="font-27"><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
                                 </div>
                                 <div class="right_descrip">
