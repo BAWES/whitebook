@@ -100,7 +100,7 @@ if ($model->isNewRecord) {
 } else {
     $this->registerJs("
         var check_time_url = '".Url::to(['/deliverytimeslot/checktime'])."';
-        var update_value = '".$model->exception_id."';
+        var update_value = '".$model->timeslot_id."';
     ", View::POS_HEAD);
 }
 
