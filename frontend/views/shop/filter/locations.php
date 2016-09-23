@@ -66,7 +66,7 @@ if($customer_id) {
                         }//foreach my addresses ?>
                         </optgroup>
                     <?php     
-                    }//if my addresses 
+                    }//if my addresses
 
                     foreach ($cities as $key => $value) {  ?>
                         <optgroup label="<?= $value['city_name']; ?>">
@@ -79,11 +79,11 @@ if($customer_id) {
                             $checked = '';
                            
                             if ($deliver_location != null) {
-                                $checked = ($deliver_location == $value['id']) ? 'checked="checked"' : '';
+                                $checked = ($deliver_location == $value['id']) ? 'selected' : '';
                             }
                         ?>
                             
-                            <option value="<?= $value['id']; ?>">
+                            <option <?=$checked?> value="<?= $value['id']; ?>">
                                 <?php 
                                 if(Yii::$app->language == 'en') { 
                                     echo $value['location'];
