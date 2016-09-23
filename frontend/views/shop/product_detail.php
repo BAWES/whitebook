@@ -116,7 +116,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                         <div class="left_descrip mobile-view">
                             <h2><?= $vendor_name; ?></h2>
                             <label><?= $item_name; ?></label>
-                            <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
+                            <b class="font-27"><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
