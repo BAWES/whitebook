@@ -120,7 +120,7 @@ $this->title = 'Whitebook - ' . $item_name;
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
                             <label><?= $vendor_name; ?></label>
-                            <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
+                            <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['Currency']; ?></b>
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -192,10 +192,14 @@ $this->title = 'Whitebook - ' . $item_name;
                         <div class="right_descr_product">
                             <div class="product_name">
                                 <div class="left_descrip desktop-view">
-                                    <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $vendor_det['slug']]) ?>">
-                                        <h2><?= $item_name; ?></h2>
-                                    </a>
-                                    <label><?= $vendor_name; ?></label>
+                                    <h2><?= $item_name; ?></h2>
+                                    
+                                    <label>
+                                        <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $vendor_det['slug']]) ?>"  style="color: #999999">
+                                            <?= $vendor_name; ?>
+                                        </a>
+                                    </label>
+
                                     <b><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
                                 </div>
                                 <div class="right_descrip">

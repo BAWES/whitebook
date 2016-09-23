@@ -128,7 +128,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
                             <label><?= $vendor_name; ?></label>
-                            <b class="font-27"><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
+                            <b class="font-27"><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['Currency']; ?></b>
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -194,10 +194,14 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                         <div class="right_descr_product">
                             <div class="product_name">
                                 <div class="left_descrip desktop-view margin-bottom-14">
-                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>">
-                                        <h2><?= $item_name; ?></h2>
+                                    <h2><?= $item_name; ?></h2>
+                                    
+                                    <label>
+                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" style="color: #999999">
+                                        <?= $vendor_name; ?>
                                     </a>
-                                    <label><?= $vendor_name; ?></label>
+                                    </label>
+
                                     <b class="font-27"><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
                                 </div>
                                 <div class="right_descrip">
