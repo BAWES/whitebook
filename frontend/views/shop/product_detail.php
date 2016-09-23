@@ -19,7 +19,7 @@ if (Yii::$app->language == "en") {
     $item_description = strip_tags($model->item_description_ar);
     $item_additional_info = strip_tags($model->item_additional_info_ar);
     $vendor_contact_address = $model->vendor->vendor_contact_address_ar;
-}             
+}
 
 $this->title = 'Whitebook - ' . $item_name;
 $this->params['breadcrumbs'][] = ['label' => ucfirst($category_name), 'url' => Url::to(["shop/products", 'slug' => $model->category->slug])];
@@ -27,7 +27,19 @@ $this->params['breadcrumbs'][] = ucfirst($item_name);
 
 $session = $session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
-$deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$quantity = $model->item_minimum_quantity_to_order;
+
+
+
+if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapacityExceptions)>0) {
+    $exceptionDate = \yii\helpers\ArrayHelper::map($model->vendorItemCapacityExceptions, 'exception_date', 'exception_capacity');
+    if (isset($exceptionDate) && count($exceptionDate) > 0) {
+        if ($deliver_date && isset($exceptionDate[date('Y-m-d',strtotime($deliver_date))])) {
+            $quantity = $exceptionDate[date('Y-m-d',strtotime($deliver_date))];
+        }
+    }
+}
 ?>
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com">
@@ -254,7 +266,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                 <div class="col-md-4">
                                     <div class="form-group qty">
                                         <a href="#" class="btn-stepper" data-case="0">-</a>
-                                        <input type="text" name="quantity" id="quantity" class="form-control" value="1"/>
+                                        <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>"/>
                                         <a href="#" class="btn-stepper" data-case="1">+</a>
 
                                     </div>

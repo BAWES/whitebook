@@ -407,7 +407,7 @@
         // Shop product page quantity increment and decrement stepper
         jQuery(document).on('click','.btn-stepper',function(){
             if (jQuery(this).data('case') == 0) {
-                if (parseInt(jQuery('#quantity').val()) >= 2) {
+                if (parseInt(jQuery('#quantity').val()) >= parseInt(jQuery('#quantity').data('min'))+1) {
                     jQuery('#quantity').val(parseInt(jQuery('#quantity').val()) - 1);
                 }
             } else if (jQuery(this).data('case') == 1) {
