@@ -52,19 +52,28 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => ['date', 'php:d/m/Y'],
 				'label'=>'created date',			
 			],
-            ['class' => 'yii\grid\ActionColumn',
-             'header'=>'Action',
-             'template' => '{update} {delete}{view}{link}',
-             'buttons' => [            
-             'link' => function ($url, $model) {
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header'=>'Action',
+                'template' => '{update} {password} {delete} {view} {link}',
+                'buttons' => [            
+                    'link' => function ($url, $model) {
 
-                $url = Url::to(['vendoritem/index', 'VendoritemSearch[vendor_name]' => $model->vendor_name]); 
+                        $url = Url::to(['vendoritem/index', 'VendoritemSearch[vendor_name]' => $model->vendor_name]); 
 
-                 return  Html::a('<span class="fa fa-bars"></span>', $url, [
-                            'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
-                ]);
-            },            
-            ],
+                        return  Html::a('<span class="fa fa-bars"></span>', $url, [
+                                'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
+                        ]);
+                    },
+                    'password' => function ($url, $model) {
+
+                        $url = Url::to(['vendor/password', 'id' => $model->vendor_id]); 
+
+                        return  Html::a('<span class="fa fa-key fa-rotate-90"></span>', $url, [
+                            'title' => Yii::t('app', 'Change Password'), 'data-pjax'=>"0",
+                        ]);
+                    }            
+                ],
             ],
         ],
     ]); ?>
