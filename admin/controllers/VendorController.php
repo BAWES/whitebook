@@ -36,7 +36,7 @@ class VendorController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                    [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'loadcategory', 'loadsubcategory', 'vendoritemview', 'vendorname', 'changepackage', 'changeeditpackage', 'emailcheck', 'loadpackagedate', 'packageupdate', 'vendornamecheck'],
+                       'actions' => ['password', 'create', 'update', 'index', 'view', 'delete', 'block', 'loadcategory', 'loadsubcategory', 'vendoritemview', 'vendorname', 'changepackage', 'changeeditpackage', 'emailcheck', 'loadpackagedate', 'packageupdate', 'vendornamecheck'],
                        'allow' => true,
                        'roles' => ['@'],
                    ],
@@ -122,6 +122,30 @@ class VendorController extends Controller
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionPassword($id){
+    
+        $model = $this->findModel($id);
+
+        $model->scenario = 'change';
+
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->vendor_password = Yii::$app->getSecurity()->generatePasswordHash($model->vendor_password);
+
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'Password changed successfully!');
+            
+                return $this->redirect(['index']);    
+            }
+        }
+
+        $model->vendor_password = '';
+
+        return $this->render('password',[
+            'model' => $model
         ]);
     }
 
