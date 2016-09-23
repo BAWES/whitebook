@@ -551,5 +551,12 @@ $this->registerCss("
 .margin-bottom-14{margin-bottom:14px!important;}
 .qty a:hover, .qty a:focus {color: #fff!important;}
 .error.cart_quantity p{margin-left:15px;}
+    button.dropdown-toggle{
+    background: #fff;
+    color: #000;
+    border-radius: 0px;
+    height: 42px;
+    border-color: #e6e6e6;
+    }
 ");
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
