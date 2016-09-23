@@ -32,7 +32,7 @@ use yii\widgets\ActiveForm;
                                     </div>
                                     <div class="form-group new_popup_common">
                                         <div class="bs-docs-example">
-                                            <select class="selectpicker required trigger" name="location_name" data-style="btn-primary" id="location_name" >
+                                            <select class="selectpicker required trigger" name="location_name" data-style="btn-primary" id="location_name" data-live-search="true" data-size="10">
                                             <?php
                                                     $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
                                                     $list = '';
