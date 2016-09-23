@@ -368,10 +368,39 @@ class ShopController extends BaseController
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
                 'similiar_item' => $Similar->similiar_details(),
-                'vendor_area' => []
+                'vendor_area' => [],
+                'my_addresses' => []
             ]);
 
         } else {
+                $vendor_area = Vendorlocation::findAll(['vendor_id' => $model->vendor_id]);
+                $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
+                $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
+
+                $customer_id = Yii::$app->user->getId();
+
+                $my_addresses =  \common\models\CustomerAddress::find()
+                    ->select(['{{%location}}.*'])
+                    ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
+                    ->where(['{{%customer_address}}.trash'=>'Default'])
+                    ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+                    ->andwhere(['{{%location}}.id' => $area_ids])
+                    ->groupby(['{{%location}}.id'])
+                    ->asArray()
+                    ->all();
+
+            if (Yii::$app->language == 'en'){
+                $location = 'location';
+            } else {
+                $location = 'location_ar';
+            }
+            $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'id', $location);
+
+            if (count($myaddress_area_list)>0) {
+                $combined_myaddress['My Addresses'] = $myaddress_area_list;
+                $vendor_area_list = $combined_myaddress+$vendor_area_list;
+            }
+
             $user = new Users();
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
@@ -380,7 +409,7 @@ class ShopController extends BaseController
                 'similiar_item' => $Similar->similiar_details(),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
-                'vendor_area' => Vendorlocation::findAll(['vendor_id' => $model->vendor_id])
+                'vendor_area' => $vendor_area_list,
             ]);
         }
     }

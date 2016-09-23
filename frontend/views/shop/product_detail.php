@@ -75,7 +75,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                         <div class="select_boxes">
                             <?php
                                 echo Html::dropDownList('area_id', $deliver_location,
-                                \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' ),
+                                $vendor_area,
                                 ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
                             ?>
                         </div>
