@@ -18,7 +18,6 @@ use yii\widgets\ActiveForm;
                         <div class="product_popup_signup_box">
                             <div class="product_popup_signup_log">
                                     <?php
-
                                     $form = ActiveForm::begin([
                                         'id' => 'shop-date-location-hook',
                                     ]) ?>
