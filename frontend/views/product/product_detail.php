@@ -118,8 +118,8 @@ $this->title = 'Whitebook - ' . $item_name;
 
                     <div class="col-md-6 paddig0 resp_hide">
                         <div class="left_descrip mobile-view">
-                            <h2><?= $vendor_name; ?></h2>
-                            <label><?= $item_name; ?></label>
+                            <h2><?= $item_name; ?></h2>
+                            <label><?= $vendor_name; ?></label>
                             <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
                         </div>
                         <!-- Indicators responsive slider -->
