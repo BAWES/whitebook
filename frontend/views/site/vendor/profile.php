@@ -131,7 +131,7 @@ if ($event_status > 0) {
                                                                 <?php } ?>
                                                                 <?php if (trim($vendor_detail['vendor_public_phone'])) { ?>
                                                                     <h4 style="margin-top: 13px;">
-                                                                        <a href="tel:<?=$vendor_detail['vendor_public_phone']; ?>"><?=$vendor_detail['vendor_public_phone']; ?></a>&nbsp;
+                                                                        <a class="color-808080" href="tel:<?=$vendor_detail['vendor_public_phone']; ?>"><?=$vendor_detail['vendor_public_phone']; ?></a>&nbsp;
                                                                     </h4>
                                                                 <span class="border-bottom border-bottom-none"></span>
                                                                 <?php } ?>
@@ -434,3 +434,7 @@ if ($event_status > 0) {
         });
     })(jQuery);
 </script>
+
+<?php $this->registerCss("
+.color-808080{color: #808080!important;}
+")?>
