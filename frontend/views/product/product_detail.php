@@ -330,20 +330,79 @@ $this->title = 'Whitebook - ' . $item_name;
                                             </div>
                                             <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                                 <div class="panel-body">
-                                                    <p>
-                                                        <?php echo $vendor_contact_address; ?>
-                                                    </p>
-                                                    <p>
-                                                        <?php
+                                                    <div class="contact_information margin-4">
+                                                        <address>
+                                                            <div class="clearfix">
+                                                                <?php if (trim($model->vendor->vendor_public_email) || trim($model->vendor->vendor_public_phone)) { ?>
+                                                                    <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
+                                                                        <?php if (trim($model->vendor->vendor_public_email)) { ?>
+                                                                            <h3>
+                                                                                <a href="mailto:<?=$model->vendor->vendor_public_email; ?>" title="<?=$model->vendor->vendor_public_email; ?>"><?=$model->vendor->vendor_public_email; ?>&nbsp;</a>
+                                                                            </h3>
+                                                                            <span class="border-bottom"></span>
+                                                                        <?php } ?>
+                                                                        <?php if (trim($model->vendor->vendor_public_phone)) { ?>
+                                                                            <h4 style="margin-top: 13px;">
+                                                                                <a class="color-808080" href="tel:<?=$model->vendor->vendor_public_phone; ?>"><?=$model->vendor->vendor_public_phone; ?></a>&nbsp;
+                                                                            </h4>
+                                                                            <span class="border-bottom border-bottom-none"></span>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                <?php } ?>
+                                                                <?php if (trim($model->vendor->vendor_website) || trim($model->vendor->vendor_working_hours)) { ?>
+                                                                    <div class="col-md-6 col-xs-6 paddingright0 paddingleft0 cont_ifo_right">
+                                                                        <?php if (trim($model->vendor->vendor_website)) { ?>
+                                                                            <span class="links_left">
+                                                                            <?php
+                                                                            if (strpos($model->vendor->vendor_website,'http://') === false){
+                                                                                $vendor_website = 'http://'.$model->vendor->vendor_website;
+                                                                            } else {
+                                                                                $vendor_website = $model->vendor->vendor_website;
+                                                                            }
+                                                                            ?>
+                                                                                <a target="_blank" href="<?=$vendor_website; ?>" title="<?php echo $vendor_website; ?>">
+                                                                                    <?php echo $vendor_website; ?>&nbsp;
+                                                                                </a>
+                                                                        </span>
+                                                                            <span class="border-bottom"></span>
+                                                                        <?php } ?>
+                                                                        <?php if (trim($model->vendor->vendor_working_hours)) { ?>
 
-                                                        $num = explode(
-                                                            ',', $vendor_det['vendor_contact_number']);
+                                                                            <span class="timer_common"><?php
+                                                                                $from = explode(':',$model->vendor->vendor_working_hours);
+                                                                                echo (isset($from[0])) ? $from[0] : '';
+                                                                                echo (isset($from[1])) ? ':'.$from[1] : '';
+                                                                                echo (isset($from[2])) ? ' '.$from[2] : ''
+                                                                                ?></span>
 
-                                                        echo $num[0];
-
-                                                        ?>
-                                                    </p>
-                                                    <h1 class="space_height"></h1>
+                                                                            - <span class="timer_common">
+                                                                            <?php
+                                                                            $to = explode(':',$model->vendor->vendor_working_hours_to);
+                                                                            echo (isset($to[0])) ? $to[0] : '';
+                                                                            echo (isset($to[1])) ? ':'.$to[1] : '';
+                                                                            echo (isset($to[2])) ? ' '.$to[2] : ''
+                                                                            ?>
+                                                                        </span>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                <?php } ?>
+                                                            </div>
+                                                            <?php if (trim($model->vendor->vendor_contact_address)) { ?>
+                                                                <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
+                                                                    <h5 class="margin-top-13">
+                                                                        <?php
+                                                                        if (Yii::$app->language == "en")  {
+                                                                            echo $model->vendor->vendor_contact_address;
+                                                                        } else {
+                                                                            echo $model->vendor->vendor_contact_address_ar;
+                                                                        }
+                                                                        ?>
+                                                                    </h5>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </address>
+                                                    </div>
+                                                    <h1 class="height-2"></h1>
                                                 </div>
                                             </div>
                                         </div>
@@ -495,3 +554,10 @@ $this->registerJs("
 ", View::POS_HEAD);
 
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+
+$this->registerCss("
+.color-808080{color: #808080!important;}
+.height-2{height:2px!important;}
+.margin-4{margin: 4px 0 0px;}
+");
