@@ -50,6 +50,45 @@ class VendorlocationController extends Controller
         ]);
     }
 
+    public function actionBulk()
+    {
+        $vendor_id = Yii::$app->user->getId();
+
+        if (Yii::$app->request->isPost) {
+
+            //remove all old values 
+            Vendorlocation::deleteAll(['vendor_id' => $vendor_id]);
+
+            $selected = Yii::$app->request->post('selected');
+            $area = Yii::$app->request->post('area');
+
+            if(!$selected) {
+                $selected = array();
+            }
+
+            foreach ($selected as $area_id => $value) {
+                
+                $location = Location::findOne($area_id);
+
+                //add vendor location 
+                $vl = new Vendorlocation;
+                $vl->vendor_id = $vendor_id;
+                $vl->city_id = $location->city_id;
+                $vl->area_id = $area_id;
+                $vl->delivery_price = $area[$area_id];
+                $vl->save();
+            }
+
+            Yii::$app->session->setFlash('success', 'Success: Delivery area updated successfully!');
+
+            return $this->redirect(['index']);            
+        } 
+   
+        return $this->render('bulk', [
+            'vendor_id' => $vendor_id
+        ]);
+    }
+
     /**
      * Creates a new Vendorlocation model.
      * If creation is successful, the browser will be redirected to the 'view' page.
