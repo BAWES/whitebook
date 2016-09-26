@@ -18,7 +18,6 @@ use yii\db\Expression;
 * @property string $package_id
 * @property string $image_id
 * @property string $vendor_name
-* @property string $vendor_brief
 * @property string $vendor_return_policy
 * @property string $vendor_public_email
 * @property string $vendor_public_phone
@@ -113,11 +112,10 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             
             [['package_id', 'created_by', 'modified_by'], 'integer'],
             
-            [['vendor_brief', 'vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name',], 'string'],
+            [[ 'vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name',], 'string'],
             
             [['package_start_date', 'package_end_date', 'created_datetime', 'modified_datetime','pack'], 'safe'],
             [['package_end_date'], 'default', 'value' => null],
-            [['vendor_delivery_charge'], 'number'],
             [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus'],'url', 'defaultScheme' => 'http'],
             
             /* Validation Rules */
@@ -156,7 +154,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             'vendor_name_ar' => 'Vendor Name - Arabic', 
             'vendor_contact_address' => 'Contact Address',
             'vendor_contact_address_ar' => 'Contact Address - Arabic',
-            'vendor_brief' => 'Vendor Brief',
             'vendor_return_policy' => 'Vendor Return Policy',
             'vendor_return_policy_ar' => 'Vendor Return Policy - Arabic',
             'vendor_public_email' => 'Vendor Public Email',
@@ -179,7 +176,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             'vendor_skype' => 'Vendor Skype id',
             'package_start_date' => 'Package Start Date',
             'package_end_date' => 'Package End Date',
-            'vendor_delivery_charge' => 'Vendor Delivery Charge',
             'vendor_password' => 'Password',
             'vendor_status' => 'Active Vendor',
             'created_by' => 'Created By',

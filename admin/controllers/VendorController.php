@@ -151,10 +151,8 @@ class VendorController extends Controller
                 $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
                 $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
 
-                $model->vendor_brief= $vendor['vendor_brief'];
                 $model->vendor_public_email= $vendor['vendor_public_email'];
                 $model->vendor_public_phone= $vendor['vendor_public_phone'];
-                $model->vendor_delivery_charge= $vendor['vendor_delivery_charge'];
 
                 $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
                 $model->approve_status = 'Yes';
@@ -285,10 +283,8 @@ class VendorController extends Controller
                 $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
                 $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
 
-                $model->vendor_brief= $vendor['vendor_brief'];
                 $model->vendor_public_email= $vendor['vendor_public_email'];
                 $model->vendor_public_phone= $vendor['vendor_public_phone'];
-                $model->vendor_delivery_charge= $vendor['vendor_delivery_charge'];
 
                 $file = UploadedFile::getInstances($model, 'vendor_logo_path');
                 if (!empty($file)) {
