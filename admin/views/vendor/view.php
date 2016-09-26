@@ -51,7 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 'vendor_name',
                 'vendor_name_ar',
-                'vendor_brief',
+//                  ['label'=>'package id',
+//                 'value'=> isset($model->package->package_name) ? $model->package->package_name : 'Not set' ,
+//                ],
+
                 [
                     'label'=>'vendor_return_policy',
                     'value'=>strip_tags($model->vendor_return_policy)
