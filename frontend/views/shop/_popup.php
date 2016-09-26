@@ -1,5 +1,23 @@
 <?php
 use yii\widgets\ActiveForm;
+
+$customer_id = Yii::$app->user->getId();
+
+if($customer_id) {
+
+    $my_addresses =  \common\models\CustomerAddress::find()
+        ->select(['{{%location}}.*'])
+        ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
+        ->where(['{{%customer_address}}.trash'=>'Default'])
+        ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+        ->groupby(['{{%location}}.id'])
+        ->asArray()
+        ->all();
+
+} else {
+    $my_addresses = array();
+}
+
 ?>
 <!-- BEGIN Create event Modal Box -->
 <div class="modal fade" id="ShopLocationDateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
@@ -33,7 +51,26 @@ use yii\widgets\ActiveForm;
                                         <div class="bs-docs-example">
                                             <select class="selectpicker required trigger" name="location_name" data-style="btn-primary" id="location_name" data-live-search="true" data-size="10">
                                             <?php
-                                                    $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
+
+                                            if($my_addresses) { ?>
+                                                <optgroup label="My Addresses">
+                                                    <?php foreach ($my_addresses as $key => $value) {  ?>
+                                                        <option value="<?= $value['id']; ?>">
+                                                            <?php
+                                                            if(Yii::$app->language == 'en') {
+                                                                echo $value['location'];
+                                                            } else {
+                                                                echo $value['location_ar'];
+                                                            } ?>
+                                                        </option>
+                                                        <?php
+                                                    }//foreach my addresses ?>
+                                                </optgroup>
+                                                <?php
+                                            }//if my addresses
+
+
+                                            $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
                                                     $list = '';
                                                     foreach ($cities as $city) {
                                                         $city_name = (Yii::$app->language == 'en') ? $city->city_name : $city->city_name_ar;
