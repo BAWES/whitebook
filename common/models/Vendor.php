@@ -117,7 +117,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             
             [['package_start_date', 'package_end_date', 'created_datetime', 'modified_datetime','pack'], 'safe'],
             [['package_end_date'], 'default', 'value' => null],
-            [['vendor_delivery_charge'], 'number'],
             [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus'],'url', 'defaultScheme' => 'http'],
             
             /* Validation Rules */
@@ -179,7 +178,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             'vendor_skype' => 'Vendor Skype id',
             'package_start_date' => 'Package Start Date',
             'package_end_date' => 'Package End Date',
-            'vendor_delivery_charge' => 'Vendor Delivery Charge',
             'vendor_password' => 'Password',
             'vendor_status' => 'Active Vendor',
             'created_by' => 'Created By',
