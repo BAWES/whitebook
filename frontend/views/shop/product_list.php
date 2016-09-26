@@ -8,7 +8,7 @@
     $this->params['breadcrumbs'][] = ['label' => ucfirst($Category->category_name), 'url' => Url::to(["shop/products", 'slug' => $slug])];
     $get = Yii::$app->request->get();
 
-$session = $session = Yii::$app->session;
+$session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 ?>

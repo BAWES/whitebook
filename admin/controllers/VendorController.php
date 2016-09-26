@@ -184,7 +184,6 @@ class VendorController extends Controller
                 $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
                 $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
 
-                $model->vendor_brief= $vendor['vendor_brief'];
                 $model->vendor_public_email= $vendor['vendor_public_email'];
                 $model->vendor_public_phone= $vendor['vendor_public_phone'];
 
@@ -351,7 +350,6 @@ class VendorController extends Controller
                 $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
                 $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
 
-                $model->vendor_brief= $vendor['vendor_brief'];
                 $model->vendor_public_email= $vendor['vendor_public_email'];
                 $model->vendor_public_phone= $vendor['vendor_public_phone'];
 
