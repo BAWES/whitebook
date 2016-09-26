@@ -3,8 +3,8 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use common\models\Image;
+use common\components\CFormatter;
 
-//print_r($wishlist);die;
 if (!empty($wishlist)) {
     foreach ($wishlist as $key => $value) {
         ?>
@@ -23,9 +23,9 @@ if (!empty($wishlist)) {
                 <div class="events_descrip">
                     <a title="" href="#"><?= $value['vendor_name']; ?>
                         <h3><?= $value['item_name']; ?></h3>
-                        <p><?php if ($value['item_price_per_unit'] != '') {
-            echo $value['item_price_per_unit'] . '.00 KD';
-        } else echo '-'; ?></p>
+
+                        <p><?= CFormatter::asCurrency($f['item_price_per_unit']); ?></p>
+
                     </a>
                 </div>
             </div>

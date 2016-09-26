@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\components\CFormatter;
 
 //if item for sale 
 if($value['item_for_sale'] == 'Yes'){
@@ -67,7 +68,7 @@ if($value['item_for_sale'] == 'Yes'){
 			</a>
 			<h3><?= $value['item_name']  ?></h3>
 			<p>
-				<?=($value['item_price_per_unit'] !='') ? $value['item_price_per_unit'].'.00 KD' : '-'; ?>
+				<?= CFormatter::asCurrency($value->item_price_per_unit)  ?>				
 			</p>
 		</a>
 		</div>

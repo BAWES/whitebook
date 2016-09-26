@@ -3,6 +3,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\components\CFormatter;
 
 if (!empty($imageData)) {
     foreach ($imageData as $key => $value) {
@@ -56,7 +57,9 @@ if (!empty($imageData)) {
                             }
                             echo Html::a($vendor_name, Url::toRoute(['/shop/product/','slug'=>$value['slug']])) ?>
                             <h3><?= $value['item_name']  ?></h3>
-                            <p><?=($value['item_price_per_unit'] !='') ? $value['item_price_per_unit'].'.00 KD' : '-';?></p></a>
+                            <p>
+                                <?= CFormatter::asCurrency($value->item_price_per_unit) ?>
+                            </p></a>
                         </div>
                     </div>
             </li>

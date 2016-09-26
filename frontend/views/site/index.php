@@ -10,6 +10,7 @@ use common\models\Vendor;
 use common\models\Themes;
 use common\models\Image;
 use frontend\models\Website;
+use common\components\CFormatter;
 
 $this->title = 'Home | Whitebook';
 
@@ -209,7 +210,9 @@ if (!empty($feature_group_sql_result)) {
                                                 <h3><?php echo $product_val['item_name_ar']; ?></h3>
                                             <?php } ?>
 
-                                            <p><?php echo number_format($product_val['item_price_per_unit'], 2) . "KD"; ?></p>
+                                            <p>
+                                                <?= CFormatter::asCurrency($product_val['item_price_per_unit']) ?>
+                                            </p>
                                         </div>
                                     </a>
                                 </div>
@@ -254,7 +257,7 @@ foreach ($featured_product as $f) {
                             <h4><?php echo $f['vendor']['vendor_name']; ?></h4>
                             <h3><?php echo $f['item_name']; ?></h3>
                             <div class="text-center"><span class="borderslid"></span></div>
-                            <h5><?php echo number_format($f['item_price_per_unit'], 2) . "KWD"; ?></h5>
+                            <h5><?= CFormatter::asCurrency($f['item_price_per_unit']) ?></h5>
                         </div>
                     </div>
                 </div>

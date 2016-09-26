@@ -6,6 +6,7 @@ use common\models\Vendoritem;
 use common\models\Category;
 use yii\grid\GridView;
 use yii\web\view;
+use common\components\CFormatter;
 
 ?>
 <!-- coniner start -->
@@ -180,7 +181,9 @@ if (is_numeric ($result)) { ?>
 <?= /* Url::toRoute(['/product/product/','slug'=>$value['slug']]) */
 Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])) ?>
 <h3><?= $value['item_name']  ?></h3>
-<p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p>
+
+<p><?= CFormatter::asCurrency($value['item_price_per_unit']) ?></p>
+
 </div>
 </div>
 </li>

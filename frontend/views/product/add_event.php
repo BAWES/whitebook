@@ -1,7 +1,10 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\components\CFormatter;
+
 foreach ($model as $key => $value) { ?>
+
 <div class="product_popup_signup">
 <div class="product_popup_prod">
 <span class="prod_popu">
@@ -11,7 +14,9 @@ foreach ($model as $key => $value) { ?>
 <h4><?= $value['vendor_name']  ?></h4>
 <h3><?= $value['item_name']  ?></h3>
 <div class="text-center"><span class="borderslid"></span></div>
-<h5><? if($value['item_price_per_unit'] !='') { echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></h5>
+<h5>
+	<?= CFormatter::asCurrency($value['item_price_per_unit'])  ?>		
+</h5>
 </div>
 </div>
 </div>
