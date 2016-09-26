@@ -7,7 +7,6 @@ use frontend\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
-
 $event_status = Yii::$app->session->get('event_status');
 
 if ($event_status == -1) {
@@ -126,13 +125,13 @@ if ($event_status > 0) {
                                                             <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
                                                                 <?php if (trim($vendor_detail['vendor_public_email'])) { ?>
                                                                     <h3>
-                                                                        <a href="#" title="<?php echo $vendor_detail['vendor_public_email']; ?>"><?php echo $vendor_detail['vendor_public_email']; ?>&nbsp;</a>
+                                                                        <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?=$vendor_detail['vendor_public_email']; ?>"><?=$vendor_detail['vendor_public_email']; ?>&nbsp;</a>
                                                                     </h3>
                                                                     <span class="border-bottom"></span>
                                                                 <?php } ?>
                                                                 <?php if (trim($vendor_detail['vendor_public_phone'])) { ?>
                                                                     <h4 style="margin-top: 13px;">
-                                                                        <?php echo $vendor_detail['vendor_public_phone']; ?>&nbsp;
+                                                                        <a href="tel:<?=$vendor_detail['vendor_public_phone']; ?>"><?=$vendor_detail['vendor_public_phone']; ?></a>&nbsp;
                                                                     </h4>
                                                                 <span class="border-bottom border-bottom-none"></span>
                                                                 <?php } ?>
@@ -141,7 +140,17 @@ if ($event_status > 0) {
                                                             <?php if (trim($vendor_detail['vendor_website']) || trim($vendor_detail['vendor_working_hours'])) { ?>
                                                                 <div class="col-md-6 col-xs-6 paddingright0 paddingleft0 cont_ifo_right">
                                                                     <?php if (trim($vendor_detail['vendor_website'])) { ?>
-                                                                        <span class="links_left"><a href="<?php echo $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>"><?php echo $vendor_detail['vendor_website']; ?>&nbsp;</a></span>
+                                                                        <span class="links_left">
+                                                                            <?php
+                                                                            if (strpos($vendor_detail['vendor_website'],'http://') === false){
+                                                                                $vendor_detail['vendor_website'] = 'http://'.$vendor_detail['vendor_website'];
+                                                                            }
+                                                                            ?>
+
+                                                                            <a target="_blank" href="<?=$vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>">
+                                                                                <?php echo $vendor_detail['vendor_website']; ?>&nbsp;
+                                                                            </a>
+                                                                        </span>
                                                                         <span class="border-bottom"></span>
                                                                     <?php } ?>
                                                                     <?php if (trim($vendor_detail['vendor_working_hours'])) { ?>
