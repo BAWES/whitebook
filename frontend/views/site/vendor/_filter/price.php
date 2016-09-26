@@ -1,5 +1,7 @@
 <?php 
 
+use common\components\CFormatter;
+
 $min_price = Yii::$app->db->createCommand('SELECT MIN(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
 
 $max_price = Yii::$app->db->createCommand('SELECT MAX(item_price_per_unit) as price FROM `whitebook_vendor_item` WHERE trash="Default" and item_approved="Yes"  and item_status="Active" and item_for_sale="Yes"')->queryAll();
@@ -43,9 +45,18 @@ if($max_price[0]['price'] != $min_price[0]['price']) { ?>
                                     <li>
                                         <label class="label_check" for="checkbox-<?php echo $x; ?>">
                                             <input name="price" id="checkbox-<?php echo $x; ?>" value=<?php echo $min_kd . '-' . $x; ?> type="checkbox">
-                                            <?php echo $min_kd = floor($min_kd / 100) * 100; ?> KD  
+
+                                            <?php 
+
+                                            $min_kd = floor($min_kd / 100) * 100;
+
+                                            echo CFormatter::asCurrency($min_kd) ?>
                                             -  
-                                            <?php echo $x = ceil($x / 100) * 100; ?> KD
+                                            <?php 
+
+                                            $x = ceil($x / 100) * 100; 
+
+                                            echo CFormatter::asCurrency($x) ?>
                                         </label>
                                     </li>
                     <?php

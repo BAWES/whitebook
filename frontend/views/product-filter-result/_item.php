@@ -2,11 +2,11 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\components\CFormatter;
 
 ?>
-	<li>
-	<?php foreach ($imageData as $key => $value) {
-	?>
+<li>
+<?php foreach ($imageData as $key => $value) { ?>
 
 	<div class="events_items">
 		<div class="events_images">
@@ -59,7 +59,7 @@ use yii\helpers\Url;
 				<?=Html::a($value->vendor->vendor_name, Url::to(['/product/product/','slug'=>$value['slug']])) ?>
 				<h3><?= $value['item_name']  ?></h3>
 				<p>
-					<?=($value['item_price_per_unit'] !='') ? $value['item_price_per_unit'].'.00 KD' : '-'; ?>
+					<?= CFormatter::asCurrency($value->item_price_per_unit) ?>		
 				</p>
 			</a>
 			</div>

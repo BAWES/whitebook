@@ -5,6 +5,8 @@ use yii\widgets\Breadcrumbs;
 use yii\web\view;
 use common\models\Vendoritempricing;
 use common\models\Location;
+use common\components\CFormatter;
+
 if (Yii::$app->language == "en") {
     $item_name = $model->item_name;
     $category_name = $model->category->category_name;
@@ -128,7 +130,9 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
                             <label><?= $vendor_name; ?></label>
-                            <b class="font-27"><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['Currency']; ?></b>
+                            <b class="font-27">
+                                <?= CFormatter::asCurrency($model['item_price_per_unit']) ?>
+                            </b>
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -202,7 +206,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     </a>
                                     </label>
 
-                                    <b class="font-27"><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
+                                    <b class="font-27"><?= CFormatter::asCurrency($model['item_price_per_unit']) ?></b>
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">

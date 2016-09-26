@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\components\CFormatter;
 
 if (!empty($imageData)) {
 	
@@ -65,7 +66,7 @@ if (!empty($imageData)) {
 					<div class="events_descrip">
 						<a href="<?= $item_url ?>"><?= $value->vendor->vendor_name ?></a>
 						<h3><?= $value['item_name']  ?></h3>
-						<p><?=($value['item_price_per_unit'] !='') ? $value['item_price_per_unit'].'.00 KD' : '-'; ?></p>
+						<p><?= CFormatter::asCurrency($value['item_price_per_unit'])?></p>
 					</div>
 				</div>
 			</div>

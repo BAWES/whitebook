@@ -7,6 +7,8 @@ use common\models\Itemtype;
 use frontend\models\Category;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
+use common\components\CFormatter;
+
 $vendor_det = $model->vendor;
 $category_det = Category::category_slug($model['category_id']);
 
@@ -120,7 +122,9 @@ $this->title = 'Whitebook - ' . $item_name;
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
                             <label><?= $vendor_name; ?></label>
-                            <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['Currency']; ?></b>
+                            <b>
+                                <?= CFormatter::asCurrency($model->item_price_per_unit)  ?>       
+                            </b>
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -200,7 +204,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                         </a>
                                     </label>
 
-                                    <b><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
+                                    <b><?= CFormatter::asCurrency($model->item_price_per_unit)  ?></b>
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">

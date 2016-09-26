@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\web\view;
 use common\models\Image;
 use common\models\CustomerCart;
+use common\components\CFormatter;
 
 ?>
 
@@ -113,8 +114,8 @@ use common\models\CustomerCart;
 	        		<?= $item['cart_quantity'] ?>
                     </div>
                 </td>
-        		<td align="right"><?= $item['item_price_per_unit'] ?> KWD</td>
-        		<td align="right"><?= $row_total ?> KWD </td>
+        		<td align="right"><?= CFormatter::asCurrency($item['item_price_per_unit'])  ?></td>
+        		<td align="right"><?= CFormatter::asCurrency($row_total) ?></td>
         	</tr>
         	<?php } ?>
         </tbody>        	
@@ -128,15 +129,15 @@ use common\models\CustomerCart;
         <tbody>
         <tr>
           <td class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
-          <td class="text-right"><?= $sub_total ?> KWD</td>
+          <td class="text-right"><?= CFormatter::asCurrency($sub_total) ?></td>
         </tr>
         <tr>
           <td class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong></td>
-          <td class="text-right"><?= $delivery_charge ?> KWD</td>
+          <td class="text-right"><?= CFormatter::asCurrency($delivery_charge) ?></td>
         </tr>
         <tr>
           <td class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
-          <td class="text-right"><?= $sub_total + $delivery_charge ?> KWD</td>
+          <td class="text-right"><?= CFormatter::asCurrency($sub_total + $delivery_charge) ?></td>
         </tr>
         </tbody>
       </table>
