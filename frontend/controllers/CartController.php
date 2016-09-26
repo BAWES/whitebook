@@ -178,6 +178,13 @@ class CartController extends BaseController
             }            
         }
 
+        //from checkout button 
+        $btn_checkout = Yii::$app->request->post('btn_checkout');
+
+        if($btn_checkout) {
+            return $this->redirect(['checkout/index']);
+        }
+
         return $this->redirect(['index']);
     }
 
