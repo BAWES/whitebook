@@ -168,11 +168,21 @@ class VendorController extends Controller
             foreach ($model_siteinfo as $key => $val) {
                 $first_id = $val['commision'];
             }
+
             if (count($model_siteinfo) == 1) {
                 $model->commision = $first_id;
             }
+
             if ($model->load(Yii::$app->request->post())) {
 
+                $vendor_working_days = Yii::$app->request->post('vendor_working_days');
+
+                if(is_array($vendor_working_days)) {
+                    $model->working_days = implode(',', $vendor_working_days);    
+                }else{
+                    $model->working_days = '';
+                }
+                
                 $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
                 $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
 
@@ -317,6 +327,15 @@ class VendorController extends Controller
             $vendor_contact_number = explode(',', $model['vendor_contact_number']);
 
             if ($model->load(Yii::$app->request->post())) {
+
+                $vendor_working_days = Yii::$app->request->post('vendor_working_days');
+
+                if(is_array($vendor_working_days)) {
+                    $model->working_days = implode(',', $vendor_working_days);    
+                }else{
+                    $model->working_days = '';
+                }
+                
                 $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
                 $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
 
@@ -394,6 +413,8 @@ class VendorController extends Controller
 
             } else {
 
+                $working_days = explode(',', $model->working_days);
+
                 if (($model->commision) > 1) {
                 } else {
                     $model_siteinfo = Siteinfo::find()->all();
@@ -415,7 +436,8 @@ class VendorController extends Controller
                     'package' => $package, 
                     'vendor_contact_number' => $vendor_contact_number, 
                     'present_package' => $present_package,
-                    'vendor_order_alert_emails' => $vendor_order_alert_emails
+                    'vendor_order_alert_emails' => $vendor_order_alert_emails,
+                    'working_days' => $working_days
                 ]);
             }
         
