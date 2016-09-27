@@ -1630,3 +1630,12 @@ a.thing_cont:hover {
 #sidebar .dropdown-menu li a {
     white-space: normal;
 }
+.vender_profile_new .working_days {
+    font: 300 13px 'OpenSansRegular';
+    color: #808080;
+    padding: 0 0 0 25px;
+    background: url(../images/time.png) left center no-repeat;
+    margin-top: 13px;
+    display: block;
+    margin-bottom: 2px;
+}

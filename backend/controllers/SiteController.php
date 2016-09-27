@@ -260,6 +260,15 @@ class SiteController extends Controller
         $vendor_contact_number = explode(',',$model['vendor_contact_number']);
 
         if ($model->load(Yii::$app->request->post())) {
+
+            $vendor_working_days = Yii::$app->request->post('vendor_working_days');
+
+            if(is_array($vendor_working_days)) {
+                $model->working_days = implode(',', $vendor_working_days);    
+            }else{
+                $model->working_days = '';
+            }
+            
             $vendor_working_am_pm_from = Yii::$app->request->post('vendor_working_am_pm_from');
             $vendor_working_am_pm_to = Yii::$app->request->post('vendor_working_am_pm_to');
 
@@ -329,6 +338,8 @@ class SiteController extends Controller
             }
         }
 
+        $working_days = explode(',', $model->working_days);
+
         //get vendor order notification email address 
         $vendor_order_alert_emails = VendorOrderAlertEmails::find()
             ->where(['vendor_id' => $vendor_id])
@@ -338,7 +349,8 @@ class SiteController extends Controller
             'model' => $model,
             'vendor_order_alert_emails' => $vendor_order_alert_emails,
             'vendor_contact_number' => $vendor_contact_number,
-            'vendor_categories' => $vendor_categories
+            'vendor_categories' => $vendor_categories,
+            'working_days' => $working_days
         ]);
     }
 

@@ -13,7 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'model' => $model,
         'package' => $package,
-        'vendor_order_alert_emails' => []
+        'vendor_order_alert_emails' => [],
+        'working_days' => []
     ]) ?>
 
 </div>
