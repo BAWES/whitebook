@@ -175,31 +175,33 @@ if ($event_status > 0) {
                                                             <?php } ?>
                                                         </div>
 
+                                                        <?php 
+
+                                                        $search = array(0, 1, 2, 3, 4, 5, 6, ',');
+
+                                                        $replace = array(
+                                                            Yii::t('frontend', 'Sunday'),
+                                                            Yii::t('frontend', 'Monday'),
+                                                            Yii::t('frontend', 'Tuesday'),
+                                                            Yii::t('frontend', 'Wednesday'),
+                                                            Yii::t('frontend', 'Thirsday'),
+                                                            Yii::t('frontend', 'Friday'),
+                                                            Yii::t('frontend', 'Saturday'),
+                                                            ', '   
+                                                        );
+                                                        
+                                                        $working_days = explode(',', $vendor_detail['working_days']);
+
+                                                        $txt_w_days = str_replace($search, $replace, $vendor_detail['working_days']);
+
+                                                        if($txt_w_days) { ?>
                                                         <div class="cont_ifo_right col-md-6 col-xs-6 paddingleft0 left border-top">
                                                             <span class="working_days">
-                                                                <?php 
-
-                                                                $search = array(0, 1, 2, 3, 4, 5, 6, ',');
-
-                                                                $replace = array(
-                                                                    Yii::t('frontend', 'Sunday'),
-                                                                    Yii::t('frontend', 'Monday'),
-                                                                    Yii::t('frontend', 'Tuesday'),
-                                                                    Yii::t('frontend', 'Wednesday'),
-                                                                    Yii::t('frontend', 'Thirsday'),
-                                                                    Yii::t('frontend', 'Friday'),
-                                                                    Yii::t('frontend', 'Saturday'),
-                                                                    ', '   
-                                                                );
-                                                                
-                                                                $working_days = explode(',', $vendor_detail['working_days']);
-
-                                                                echo str_replace($search, $replace, $vendor_detail['working_days']);
-
-                                                                ?> 
+                                                                <?= $txt_w_days ?>
                                                             </span> 
                                                         </div>
-
+                                                        <?php } ?>
+                                                        
                                                         <?php if (trim($vendor_detail['vendor_contact_address']) || $vendor_detail['vendor_contact_address'] != 'n/a') { ?>
                                                         <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
                                                             <h5 class="margin-top-13">
