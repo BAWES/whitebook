@@ -618,6 +618,7 @@ $this->registerJs("
     $('.filter-bar').show();
 
 ", View::POS_READY);
+
 $this->registerCss("
 .width-100-percent{width:100%!important;}
 .margin-top-20{margin-top:20px;}
@@ -652,4 +653,5 @@ button.dropdown-toggle{background: #fff;color: #000;border-radius: 0px;height: 4
 .height-2{height:2px!important;}
 .margin-4{margin: 4px 0 0px;}
 ");
-$this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile('@web/js/product_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);

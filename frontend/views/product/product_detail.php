@@ -71,52 +71,7 @@ $this->title = 'Whitebook - ' . $item_name;
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
-                <div class="select_items_select desktop-menu" style="display:none">
-                    <div data-example-id="basic-forms" class="bs-example responsive_inner_top">
-                        <form>
-                            <div class="col-md-3 padding-right0 padding-right8">
-                                <div class="form-group left_select_common">
-                                    <div class="bs-docs-example">
-                                        <select class="selectpicker" data-style="btn-primary" style="display: none;">
-                                            <option><?= Yii::t('frontend', 'Select Delivery Area'); ?></option>
-                                            <?php foreach ($vendor_area as $key => $value) { ?>
-                                                <option><?= $value['location']; ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 padding8">
-                                <div class="form-group date-time">
-                                    <input class="form-control required datetimepicker date1" type="text" id="delivery_date" placeholder="Delivery Date">
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 padding8">
-                                <div class="form-group">
-                                    <div class="bs-docs-example">
-                                        <select class="selectpicker" data-style="btn-primary" style="display: none;" id="delivery-time">
-                                            <option><?= Yii::t('frontend', 'Select Delivery Time') ?></option>
-                                            <?php /* foreach ($vendor_timeslot as $key => $value1) { ?>
-                                              <option><?= $value1['timeslot_start_time'].' - '.$value1['timeslot_end_time'];?></option>
-                                              <?php } */ ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1 padding8 select_buttons">
-                                <button class="btn btn-default" type="submit" title="Select">
-                                    <?= Yii::t('frontend', 'Select'); ?>
-                                </button>
-                            </div>
-                            <div class="col-md-4">
-                                <!-- <em class="error_text">This item is not available at the selected time</em> -->
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
+                
                 <div class="product_detials_common normal_tables">
 
                     <div class="col-md-6 paddig0 resp_hide">

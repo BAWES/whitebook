@@ -386,11 +386,13 @@
                         $('.timeslot_id_div').show();
                         $('.timeslot_id_div .text').html('Delivery not available for the selected date');
                         $('.timeslot_id_select').hide();
+                        jQuery('#timeslot_id').html('');
                     } else {
                         $('.timeslot_id_div').hide();
                         $('.timeslot_id_select').show();
                         jQuery('#timeslot_id').html(data);
                         jQuery('#timeslot_id').selectpicker('refresh');
+                        jQuery('.error.timeslot_id').html('');
                     }
                 }
             });
@@ -407,20 +409,18 @@
                         $('.timeslot_id_div').show();
                         $('.timeslot_id_div .text').html(data);
                         $('.timeslot_id_select').hide();
+                        $('#timeslot_id').html('');
                         return false;
+                    }else{
+                        deliveryTimeSlot(date);
                     }
                 }
             });
         }
 
         if (deliver_date) {
-            deliveryTimeSlot(jQuery('#delivery_date').val());
+            productAvailability(jQuery('#delivery_date').val());
         }
-
-        jQuery(document).delegate('#delivery_date', 'change', function () {
-            deliveryTimeSlot(jQuery(this).val());
-            productAvailability(jQuery(this).val());
-        });
 
         // Shop product page quantity increment and decrement stepper
         jQuery(document).on('click','.btn-stepper',function(){
@@ -436,6 +436,11 @@
 
     }
 
+    jQuery(document).delegate('#delivery_date', 'change', function () {        
+        $('.error.cart_delivery_date').html('');
+        productAvailability(jQuery(this).val());
+    });
 
+       
     /* END BUY Item */
     
