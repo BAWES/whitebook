@@ -396,12 +396,30 @@
             });
         }
 
+        function productAvailability(date){
+            jQuery.ajax({
+                type: 'POST',
+                url: product_availability,
+                data: $('#form_product_option').serialize(),
+                success: function (data)
+                {
+                    if (jQuery.trim(data) != '1') {
+                        $('.timeslot_id_div').show();
+                        $('.timeslot_id_div .text').html(data);
+                        $('.timeslot_id_select').hide();
+                        return false;
+                    }
+                }
+            });
+        }
+
         if (deliver_date) {
             deliveryTimeSlot(jQuery('#delivery_date').val());
         }
 
         jQuery(document).delegate('#delivery_date', 'change', function () {
             deliveryTimeSlot(jQuery(this).val());
+            productAvailability(jQuery(this).val());
         });
 
         // Shop product page quantity increment and decrement stepper

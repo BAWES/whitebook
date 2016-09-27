@@ -589,6 +589,7 @@ $this->registerJs("
     var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
     var availablity = '".Url::toRoute('shop/product-available')."';
+    var product_availability = '".Url::toRoute('cart/validation-product-available')."';
 ", View::POS_HEAD);
 
 $this->registerJs("
