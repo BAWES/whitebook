@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'More from {vendor_name}' => 'أكثر من {vendor_name}',
     'Please, select payment method!' => 'رجاءا، اختر طريقة الدفع !',
     'Delivery Address' => 'عنوان التوصيل',
     'You have not placed any order yet!' => 'هل لم توضع أي أمر حتى الآن !',
