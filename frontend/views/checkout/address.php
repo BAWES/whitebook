@@ -35,8 +35,7 @@ use common\models\CustomerCart;
 
                         <div class="address_block_wrapper">
                         <?php 
-
-                        $addresses = CustomerCart::customerAddress($item['area_id']);
+                        $addresses = CustomerCart::customerAddress($item['area_id'],Yii::$app->user->id);
 
                         foreach ($addresses as $address) { ?>
                                 <div class="address_block" data-id="<?= $address['address_id'] ?>">
