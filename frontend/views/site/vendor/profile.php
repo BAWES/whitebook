@@ -119,7 +119,7 @@ if ($event_status > 0) {
                                         <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                                             <div class="panel-body">
                                                 <div class="contact_information">
-                                                    <address>
+                                                    <address>                                               
                                                         <div class="clearfix">
                                                         <?php if (trim($vendor_detail['vendor_public_email']) || trim($vendor_detail['vendor_public_phone'])) { ?>
                                                             <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
@@ -174,6 +174,32 @@ if ($event_status > 0) {
                                                                 </div>
                                                             <?php } ?>
                                                         </div>
+
+                                                        <div class="cont_ifo_right col-md-6 col-xs-6 paddingleft0 left border-top">
+                                                            <span class="working_days">
+                                                                <?php 
+
+                                                                $search = array(0, 1, 2, 3, 4, 5, 6, ',');
+
+                                                                $replace = array(
+                                                                    Yii::t('frontend', 'Sunday'),
+                                                                    Yii::t('frontend', 'Monday'),
+                                                                    Yii::t('frontend', 'Tuesday'),
+                                                                    Yii::t('frontend', 'Wednesday'),
+                                                                    Yii::t('frontend', 'Thirsday'),
+                                                                    Yii::t('frontend', 'Friday'),
+                                                                    Yii::t('frontend', 'Saturday'),
+                                                                    ', '   
+                                                                );
+                                                                
+                                                                $working_days = explode(',', $vendor_detail['working_days']);
+
+                                                                echo str_replace($search, $replace, $vendor_detail['working_days']);
+
+                                                                ?> 
+                                                            </span> 
+                                                        </div>
+
                                                         <?php if (trim($vendor_detail['vendor_contact_address']) || $vendor_detail['vendor_contact_address'] != 'n/a') { ?>
                                                         <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
                                                             <h5 class="margin-top-13">
@@ -184,6 +210,8 @@ if ($event_status > 0) {
                                                             </h5>
                                                         </div>
                                                         <?php } ?>
+
+                                                       
                                                     </address>
                                                 </div>
                                             </div>
