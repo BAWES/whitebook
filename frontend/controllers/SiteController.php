@@ -351,6 +351,25 @@ class SiteController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
+
+
+        $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
+
+        if(isset($vendor_detail['vendor_logo_path'])) {
+            $baselink = Html::img(Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path']);
+        }
+
+        $url = \yii\helpers\Url::toRoute(["site/vendor_profile", 'slug' => $vendor_details->slug], true);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => ucfirst($vendor_details->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => ucfirst($vendor_details->short_description)]);
+
+
+
     // FOR FILTER
         $themes = \common\models\Vendoritemthemes::find()
         ->select(['wt.theme_id','wt.slug','wt.theme_name'])
@@ -532,92 +551,92 @@ class SiteController extends BaseController
     }
 
         // BEGIN wish list manage page load vendorss based on category
-        public function actionLoadvendorlist()
-        {
-            if (Yii::$app->request->isAjax) {
-                $data = Yii::$app->request->post();
-                 $loadvendorid = \common\models\Vendoritem::find()
-					->select(['vendor_id'])
-					->Where(['category_id'=>$data['cat_id']])
-					->asArray()
-					->all();
-                 $loadvendor = \common\models\Vendor::find()
-					->select(['DISTINCT(vendor_id)','vendor_name'])
-					->Where(['IN','vendor_id'=>$loadvendorid])
-					->asArray()
-					->all();
-                foreach ($loadvendor as $key => $value) {
-                    echo '<option value='.$value['vendor_id'].'>'.$value['vendor_name'].'</option>';
-                }
-                die;
+    public function actionLoadvendorlist()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+             $loadvendorid = \common\models\Vendoritem::find()
+                ->select(['vendor_id'])
+                ->Where(['category_id'=>$data['cat_id']])
+                ->asArray()
+                ->all();
+             $loadvendor = \common\models\Vendor::find()
+                ->select(['DISTINCT(vendor_id)','vendor_name'])
+                ->Where(['IN','vendor_id'=>$loadvendorid])
+                ->asArray()
+                ->all();
+            foreach ($loadvendor as $key => $value) {
+                echo '<option value='.$value['vendor_id'].'>'.$value['vendor_name'].'</option>';
+            }
+            die;
+        }
+    }
+    // END wish list manage page load vendorss based on category
+
+    // BEGIN wish list manage page load vendorss based on category
+    public function actionLoadthemelist()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $themes = \common\models\Vendoritemthemes::find()
+            ->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
+            ->Where(['vendor_id'=>$data['v_id']])
+            ->asArray()
+            ->all();
+            $loadtheme_ids=array_unique($themes);
+            $loadthemes = Themes::find()->select('theme_id, theme_name')->where(['theme_id' => $loadtheme_ids[0]['theme_id']])->asArray()->all();
+            foreach ($loadthemes as $key => $value) {
+                echo '<option value='.$value['theme_id'].'>'.$value['theme_name'].'</option>';
             }
         }
-          // END wish list manage page load vendorss based on category
-
-          // BEGIN wish list manage page load vendorss based on category
-          public function actionLoadthemelist()
-          {
-              if (Yii::$app->request->isAjax) {
-                  $data = Yii::$app->request->post();
-                  $themes = \common\models\Vendoritemthemes::find()
-					->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
-					->Where(['vendor_id'=>$data['v_id']])
-					->asArray()
-					->all();
-					$loadtheme_ids=array_unique($themes);
-                  $loadthemes = Themes::find()->select('theme_id, theme_name')->where(['theme_id' => $loadtheme_ids[0]['theme_id']])->asArray()->all();
-                  foreach ($loadthemes as $key => $value) {
-                      echo '<option value='.$value['theme_id'].'>'.$value['theme_name'].'</option>';
-                  }
-              }
-          }
+    }
             // END wish list manage page load vendorss based on category
 
             // BEGIN wish list manage page load vendorss based on category
-        public function actionLoadwishlist()
-        {
-            $customer_id = Yii::$app->user->identity->customer_id;
-            if (Yii::$app->request->isAjax) {
-                $data = Yii::$app->request->post();
+    public function actionLoadwishlist()
+    {
+        $customer_id = Yii::$app->user->identity->customer_id;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
 
-   		$condition ='';
-		$condition = "'"."1"."'";
-		$condition .= " AND ".""."{{%wishlist}}.wish_status"."";
-		$condition .= "=";
-		$condition .= "'"."1"."'";
-		$condition .= " AND ".""."{{%wishlist}}.customer_id"."";
-		$condition .= "=";
-		$condition .= "'".$customer_id."'";
-		$condition .= " AND ".""."{{%vendor_item}}.trash"."";
-		$condition .= "=";
-		$condition .= "'"."Default"."'";
-		if (!empty($data['v_id'])) {
-		$condition .= " AND ".""."{{%vendor_item}}.vendor_id"."";
-		$condition .= "=";
-		$condition .= "'".$data['v_id']."'";
-		}
-		if (!empty($data['a_id'])) {
-		$condition .= " AND ".""."{{%vendor_item}}.item_for_sale"."";
-		$condition .= "=";
-		$condition .= "'".$data['a_id']."'";
-		}
-		if (!empty($data['t_id'])) {
-		$condition .= " AND FIND_IN_SET ("."'".$data['t_id']."'";
-		$condition .= ",";
-		$condition .= ""." {{%vendor_item_theme}}.theme_id"."";
-		$condition .= ")";
-		}
-		$wishlist = \frontend\models\Wishlist::find()
-					->select(['{{%wishlist}}.*','{{%vendor}}.vendor_name','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit'])
-					->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
-					->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-					->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item_theme}}.item_id = {{%vendor_item}}.item_id')
-					->Where($condition)
-					->asArray()
-					->all();
-                    return $this->renderPartial('/users/user_wish_list', ['wishlist' => $wishlist]);
-                }
+            $condition ='';
+            $condition = "'"."1"."'";
+            $condition .= " AND ".""."{{%wishlist}}.wish_status"."";
+            $condition .= "=";
+            $condition .= "'"."1"."'";
+            $condition .= " AND ".""."{{%wishlist}}.customer_id"."";
+            $condition .= "=";
+            $condition .= "'".$customer_id."'";
+            $condition .= " AND ".""."{{%vendor_item}}.trash"."";
+            $condition .= "=";
+            $condition .= "'"."Default"."'";
+            if (!empty($data['v_id'])) {
+            $condition .= " AND ".""."{{%vendor_item}}.vendor_id"."";
+            $condition .= "=";
+            $condition .= "'".$data['v_id']."'";
             }
+            if (!empty($data['a_id'])) {
+            $condition .= " AND ".""."{{%vendor_item}}.item_for_sale"."";
+            $condition .= "=";
+            $condition .= "'".$data['a_id']."'";
+            }
+            if (!empty($data['t_id'])) {
+            $condition .= " AND FIND_IN_SET ("."'".$data['t_id']."'";
+            $condition .= ",";
+            $condition .= ""." {{%vendor_item_theme}}.theme_id"."";
+            $condition .= ")";
+            }
+            $wishlist = \frontend\models\Wishlist::find()
+                        ->select(['{{%wishlist}}.*','{{%vendor}}.vendor_name','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit'])
+                        ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
+                        ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+                        ->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item_theme}}.item_id = {{%vendor_item}}.item_id')
+                        ->Where($condition)
+                        ->asArray()
+                        ->all();
+            return $this->renderPartial('/users/user_wish_list', ['wishlist' => $wishlist]);
+        }
+    }
 
     public function actionLoadeventlist()
     {
