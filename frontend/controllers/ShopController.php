@@ -339,24 +339,12 @@ class ShopController extends BaseController
 
         /* BEGIN DELIVERY AREAS --VENDOR */
 
-        \Yii::$app->view->registerMetaTag([
-            'property' => 'og:title',
-            'content' => 'Whitebook Application - ' . ucfirst($model->vendor->vendor_name)
-        ]);
-
-        \Yii::$app->view->registerMetaTag([
-            'property' => 'og:url',
-            'content' => Url::toRoute(["shop/product", 'slug' => $model->slug], true)
-        ]);
-
+        \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => Yii::$app->name.' - ' . ucfirst($model->vendor->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => Url::toRoute(["shop/product", 'slug' => $model->slug], true)]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
-
-        \Yii::$app->view->registerMetaTag([
-            'property' => 'og:site_name',
-            'content' => 'Whitebook Application - ' . ucfirst($model->vendor->vendor_name) . ' - ' . ucfirst($model->item_name)
-        ]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => Yii::$app->name.' - ' . ucfirst($model->item_name) .' from '. ucfirst($model->vendor->vendor_name)]);
 
         \Yii::$app->view->registerMetaTag([
             'property' => 'og:description',

@@ -366,7 +366,7 @@ class SiteController extends BaseController
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => ucfirst($vendor_details->vendor_name)]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => ucfirst($vendor_details->short_description)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($vendor_details->short_description))]);
 
 
 
