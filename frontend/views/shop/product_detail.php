@@ -491,7 +491,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
                                     
                                     <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
-                                    
+                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
                                     <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>
                                            " title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
                                     
