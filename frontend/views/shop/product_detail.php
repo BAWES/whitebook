@@ -106,13 +106,13 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                         <span class="error cart_delivery_date"></span>
                     </div>
                 </div>
-                <div class="col-md-5 padding-left-0 timeslot_id_div" style="display: none;">
+                <div class="col-md-5 padding-left-0 timeslot_id_div">
                     <div class="form-group">
                         <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
-                        <div class="text padding-top-12"></div>
+                        <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date');?></div>
                     </div>
                 </div>
-                <div class="col-md-2 padding-left-0 timeslot_id_select">
+                <div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">
                     <div class="form-group">
                         <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
                         <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
@@ -601,6 +601,7 @@ $this->registerJs("
     var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
     var availablity = '".Url::toRoute('shop/product-available')."';
+    var product_availability = '".Url::toRoute('cart/validation-product-available')."';
 ", View::POS_HEAD);
 
 $this->registerJs("

@@ -356,12 +356,13 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $result;
     }
 
-    public static function customerAddress($area_id){
+    public static function customerAddress($area_id,$customer_id){
         
         $result = CustomerAddress::find()
             ->joinWith('location')
             ->joinWith('city')
             ->where([
+                '{{%customer_address}}.customer_id' => $customer_id,
                 '{{%customer_address}}.trash' => 'Default',
                 '{{%location}}.id' => $area_id,
                 '{{%location}}.status' => 'Active',
