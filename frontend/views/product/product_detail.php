@@ -86,6 +86,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-2 padding8">
                                 <div class="form-group date-time">
                                     <input class="form-control required datetimepicker date1" type="text" id="delivery_date" placeholder="Delivery Date">
@@ -487,7 +488,19 @@ $this->title = 'Whitebook - ' . $item_name;
                 <?php if($similiar_item) { ?>
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
-                        <h2><?= Yii::t('frontend', 'Similar products') ?></h2>
+                        <h2>
+                            <?php 
+
+                            if(Yii::$app->language == 'en') {
+                                $vendor = $model->vendor->vendor_name;
+                            }else{
+                                $vendor = $model->vendor->vendor_name_ar;
+                            }
+
+                            echo Yii::t('frontend', 'More from {vendor_name}', [
+                                        'vendor_name' => '<b>'.$vendor.'</b>'
+                                    ]); ?>                            
+                        </h2>
                     </div>
                     <div class="feature_product_slider">
                         <div id="similar-products-slider">
