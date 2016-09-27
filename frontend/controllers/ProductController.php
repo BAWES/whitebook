@@ -65,11 +65,11 @@ class ProductController extends BaseController
             ->asArray()
             ->all();
 
-        $title = 'Whitebook Application - '.ucfirst($model->vendor->vendor_name);
+        $title = Yii::$app->name. ' - '.ucfirst($model->vendor->vendor_name);
         
         $url = Url::toRoute(["product/product", 'slug' => $model->slug], true);
 
-        $summary = 'Whitebook Application - '.ucfirst($model->vendor->vendor_name).' - '.ucfirst($model['item_name']);
+        $summary = Yii::$app->name.' - '.ucfirst($model['item_name']).' from '.ucfirst($model->vendor->vendor_name);
 
         $image = $baselink;
 
