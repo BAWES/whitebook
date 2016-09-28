@@ -347,15 +347,7 @@ class SiteController extends BaseController
         $vendor_item_details = $website_model->vendor_item_details($vendor_details['vendor_id']);
         $main_category = $website_model->get_main_category();
 
-    // FOR FILTER
-        $themes = \common\models\Vendoritemthemes::find()
-        ->select(['wt.theme_id','wt.slug','wt.theme_name'])
-        ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
-        ->Where(['wt.theme_status'=>'Active'])
-        ->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details['vendor_id']])
-        ->groupby(['wt.theme_id'])
-        ->asArray()
-        ->all();
+     //FOR FILTER
 
         $vendorData = Vendoritem::find()
         ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
@@ -369,6 +361,17 @@ class SiteController extends BaseController
         ])
         ->groupby(['{{%vendor_item}}.item_id'])
         ->all();
+
+        $item_ids = ArrayHelper::map($vendor_details->vendorItems,'item_id','item_id');
+        $themes = \common\models\Vendoritemthemes::find()
+        ->select(['wt.theme_id','wt.slug','wt.theme_name'])
+        ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
+        ->Where(['wt.theme_status'=>'Active'])
+        ->andWhere(['{{%vendor_item_theme}}.item_id'=> $item_ids])
+        ->groupby(['wt.theme_id'])
+        ->asArray()
+        ->all();
+
 
         if (!isset(Yii::$app->user->identity->customer_id)) {
             return $this->render('vendor/profile', [
