@@ -127,6 +127,13 @@ $(document).delegate('#modal_create_address form', 'submit', function(e){
         $('.field-customeraddress-address_type_id').addClass('has-error');
     }
 
+    //address name
+    var address_name = jQuery('#customeraddress-address_name').val();
+
+    if(!address_name) {
+        jQuery('.field-customeraddress-address_name').addClass('has-error');
+    }
+
     if($('#modal_create_address .has-error').length > 0){
         return false;
     }

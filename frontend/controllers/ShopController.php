@@ -368,7 +368,7 @@ class ShopController extends BaseController
                 $customer_id = Yii::$app->user->getId();
 
                 $my_addresses =  \common\models\CustomerAddress::find()
-                    ->select(['{{%location}}.*'])
+                    ->select(['{{%location}}.id, {{%customer_address}}.address_name'])
                     ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
                     ->where(['{{%customer_address}}.trash'=>'Default'])
                     ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
@@ -377,17 +377,16 @@ class ShopController extends BaseController
                     ->asArray()
                     ->all();
 
-            if (Yii::$app->language == 'en'){
-                $location = 'location';
-            } else {
-                $location = 'location_ar';
-            }
-            $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'id', $location);
+                $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'id', 'address_name');
 
-            if (count($myaddress_area_list)>0) {
-                $combined_myaddress['My Addresses'] = $myaddress_area_list;
-                $vendor_area_list = $combined_myaddress+$vendor_area_list;
-            }
+                if (count($myaddress_area_list)>0) {
+
+                    $combined_myaddress = array(
+                        Yii::t('frontend', 'My Addresses') => $myaddress_area_list
+                    );
+
+                    $vendor_area_list = $combined_myaddress + $vendor_area_list;
+                }
 
             $user = new Users();
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
