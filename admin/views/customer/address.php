@@ -41,7 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
 				<i class="glyphicon glyphicon-trash"></i>
 			</a>
 
-			<?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
+			<?= $address['address_name']?nl2br($address['address_name']).'<br />':'' ?>
+
+            <?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
 			
 			<?= $address['location']?$address['location'].'<br />':'' ?>
 			
@@ -87,6 +89,8 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="modal-body" style="background: white;">
 
 			<?php $form = ActiveForm::begin(); ?>
+
+            <?= $form->field($customer_address_modal, 'address_name'); ?>
 
 			<?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, ['prompt'=>'Select...']); ?>
 

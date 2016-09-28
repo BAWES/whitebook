@@ -16,7 +16,7 @@ $customer_id = Yii::$app->user->getId();
 if($customer_id) {
     
     $my_addresses =  \common\models\CustomerAddress::find()
-        ->select(['{{%location}}.*'])
+        ->select(['{{%location}}.id, {{%customer_address}}.address_name'])
         ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
         ->where(['{{%customer_address}}.trash'=>'Default'])
         ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
@@ -55,12 +55,7 @@ if($customer_id) {
                         <optgroup label="My Addresses">
                         <?php foreach ($my_addresses as $key => $value) {  ?>
                             <option value="<?= $value['id']; ?>">
-                                <?php 
-                                if(Yii::$app->language == 'en') { 
-                                    echo $value['location'];
-                                } else { 
-                                    echo $value['location_ar'];    
-                                } ?>                            
+                                <?= $value['address_name'] ?>   
                             </option>
                         <?php
                         }//foreach my addresses ?>

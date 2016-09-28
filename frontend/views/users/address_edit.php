@@ -42,6 +42,11 @@ $this->title ='Address Book | Whitebook';
 		        </div>
 		                
 		        <div class="col-md-6 paddingleft0">
+
+					<div class="form-group">
+						<?= $form->field($address, 'address_name'); ?>
+					</div>
+
 					<div class="form-group">
 						<?= $form->field($address, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
 						])->textArea(['rows' => 6]) ?>
@@ -52,7 +57,7 @@ $this->title ='Address Book | Whitebook';
 		</div>
 
 		<div class="submitt_buttons">
-			<button class="btn btn-default" type="submit" title="Save Changes" id="saved" name="saved">
+			<button class="btn btn-default btn-submit-address" type="submit" title="Save Changes" id="saved" name="saved">
 				Save Changes	
 			</button>
 		</div>
@@ -64,6 +69,39 @@ $this->title ='Address Book | Whitebook';
 ActiveForm::end(); 
 
 $this->registerJs("
+
+	jQuery('.btn-submit-address').click(function(e){
+
+        jQuery('.has-error').removeClass('has-error');
+        jQuery('.has-success').removeClass('has-success');
+
+        //check all textarea 
+        jQuery('.edit_address_sections textarea').each(function(){
+            if(!jQuery(this).val()){
+                jQuery(this).parent().addClass('has-error');
+            }
+        })
+
+        //check address type
+        var address_type_id = jQuery('#customeraddress-address_type_id').val();
+
+        if(!address_type_id) {
+            jQuery('.field-customeraddress-address_type_id').addClass('has-error');
+        }
+
+        //address name
+        var address_name = jQuery('#customeraddress-address_name').val();
+
+        if(!address_name) {
+            jQuery('.field-customeraddress-address_name').addClass('has-error');
+        }
+
+        if(jQuery('.edit_address_sections .has-error').length > 0){
+            return false;
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
 
 	jQuery('#customeraddress-address_type_id').on('change', function(){
        

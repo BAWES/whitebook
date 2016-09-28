@@ -42,6 +42,13 @@ $this->title ='Address Book | Whitebook';
                                             <i class="glyphicon glyphicon-pencil"></i>
                                         </a>
                                         
+                                        <?php if($address['address_name']) { ?>
+                                            <b>Address Name:</b> <br />
+                                            <?= $address['address_name'] ?>
+                                            <br />
+                                            <br />
+                                        <?php } ?>
+
                                         <!-- address type -->
                                         <b>Address Type:</b> <br />
                                         <?= Addresstype::type_name($address['address_type_id']); ?>
@@ -129,7 +136,9 @@ $this->title ='Address Book | Whitebook';
       </div>
       <div class="modal-body" style="background: white; margin-top: 0;">
 
-			<?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, 
+			<?= $form->field($customer_address_modal, 'address_name'); ?>
+
+            <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, 
                     ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
                 ); ?>
 
@@ -180,6 +189,13 @@ $this->registerJs("
 
         if(!address_type_id) {
             jQuery('.field-customeraddress-address_type_id').addClass('has-error');
+        }
+
+        //address name
+        var address_name = jQuery('#customeraddress-address_name').val();
+
+        if(!address_name) {
+            jQuery('.field-customeraddress-address_name').addClass('has-error');
         }
 
         if(jQuery('#modal_create_address .has-error').length > 0){

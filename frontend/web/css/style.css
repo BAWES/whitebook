@@ -36,7 +36,12 @@ a:focus, a:hover{text-decoration:none;}
 .navbar-nav li a:hover,.navbar-nav li.active a{  color:#ebc000;}
 .navbar-toggle .icon-bar {    background-color: #fff;}
 .mega-dropdown-menu {    padding: 20px 15px 15px;    text-align: center;    width: 1581px;}
-.dropdown-menu{ left: -929%; box-shadow: none; border: none;}
+.dropdown-menu { 
+    left: -929%; 
+    box-shadow: none; 
+    border: none;
+    border-radius: 0 !important;
+}
 /* banner section css start*/.owl-item a:hover{text-decoration: none;}
 #banner_sections { background: #eaeaea; display: inline-block; width:100%; min-height: 596px; vertical-align: top; text-align: center;}
 #content_section{ display: inline-block; width: 100%; vertical-align: middle;}
@@ -74,6 +79,11 @@ a:focus, a:hover{text-decoration:none;}
 #label.active #search-labl,#label3.active #search-labl3{font-size:0;}
 #label1.active #search-labl{font-size:0;}
 #label2.active #search-labl1{font-size:0;}
+
+.btn, textarea{
+    border-radius: 0 !important;
+}
+
 input[type="text"]{-webkit-appearance: none!important;     border-radius: 0;outline:none!important;}
 
 input[type="text"],input[type="button"],input[type="submit"],select{appearance:none;-moz-appearance:none; /* Firefox */-webkit-appearance:none; /* Safari and Chrome*/}
@@ -1331,9 +1341,8 @@ a.boxclose{
   background-color: #fff;
   -webkit-background-clip: padding-box;
           background-clip: padding-box;
-  border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, .15);
-  border-radius: 4px;
+  border-radius: 0px;
   -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
           box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
@@ -1550,8 +1559,8 @@ a.thing_cont:hover {
     padding: 5px;
     margin: 5px;
     cursor: pointer;
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
 }
 .active.address_block {
     border: 1px solid gray;
@@ -1560,14 +1569,14 @@ a.thing_cont:hover {
 .address_insert_block {
     float: left;
     border: 1px solid #ccc;
-    padding: 20px;
+    padding: 25px;
     margin: 5px;
     display: block;
     cursor: pointer;
     vertical-align: middle;
     text-align: center;
-    height: 120px;
-    width: 120px;
+    height: 130px;
+    width: 130px;
 }
 
 .border-top{ display: inline-block; width: 100%;  border-top: 1px solid #e6e6e6; vertical-align: top; margin: 10px 0 0 0;}
@@ -1638,4 +1647,8 @@ a.thing_cont:hover {
     margin-top: 13px;
     display: block;
     margin-bottom: 2px;
+}
+
+.btn[data-id="delivery_area_filter"]{
+    padding: 10px !important;
 }
