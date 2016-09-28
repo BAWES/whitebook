@@ -411,27 +411,22 @@ $this->title = 'Whitebook - ' . $item_name;
                             <div class="social_share">
                                 <?php
 
-                                $title = 'Whitebook Application' . ucfirst($vendor_name);
-                                $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
-                                $summary = 'Whitebook Application' . ucfirst($vendor_name) . ucfirst($item_name);
+                                $title = Yii::$app->name.' ' . ucfirst($vendor_name);
+                                $summary = Yii::$app->name.' '. ucfirst($item_name).' from '.ucfirst($vendor_name);
 
-                                if(isset($baselink)) {
-                                    $image = $baselink;
-                                } else {
-                                    $image = '';
-                                }
-
+                                $image = isset($baselink) ? $baselink : '';
+                                $url = Url::toRoute(['shop/product','slug'=>$model->slug],true);
+                                $mailbody = "Check out ".ucfirst($item_name)." on ".Yii::$app->name." ".$url;
                                 ?>
                                 <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
                                 <ul>
-                                    <li>
-                                    <a title="Facebook" onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=<?php echo $title; ?>&amp;p[summary]=<?php echo $summary; ?>&amp;p[url]=<?php echo $url; ?>&amp;&p[images][0]=<?php echo $image; ?>', 'sharer', 'toolbar=0,status=0,width=620,height=280');" href="javascript: void(0)"><span class="flaticon-facebook55"></span></a></li>
-                                    <li><a  title="Twitter" href="https://twitter.com/share" class="twitter" target="_blank" data-url="<?php echo $url; ?>" data-text="<?php echo $title; ?>" data-lang="en" data-size="medium" data-count="none"><span class="flaticon-twitter13"></span></a></li>
+                                    <li><a title="Facebook" href='https://www.facebook.com/sharer/sharer.php?u=<?=urlencode($url)?>' onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><span class="flaticon-facebook55"></span></a></li>
+                                    <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$summary?>&url=<?=$url; ?>" ><span class="flaticon-twitter13"></span></a></li>
                                     <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
                                     <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
+                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=><?=$mailbody?>!" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
                                     <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>" title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
-                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
-                                    <li><a href="mailto:<?= $model->vendor->vendor_contact_email; ?>" title="<?= $model->vendor->vendor_contact_email; ?>"><i class="flaticon-email5"></i> </a></li>
+                                    <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                 </ul>
                             </div>
                         </div>
