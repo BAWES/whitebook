@@ -95,6 +95,9 @@ class TapController extends Controller
             //gateway info 
             $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
 
+            print_r($gateway);
+            die();
+
             if($request['crdtype'] == 'KNET') {
                 $order->order_payment_method = 'Tap - Paid with KNET';
                 $order->order_gateway_fees = $gateway->fees;
