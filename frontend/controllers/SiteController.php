@@ -354,11 +354,9 @@ class SiteController extends BaseController
 
 
         $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
-
-        if(isset($vendor_detail['vendor_logo_path'])) {
-            $baselink = Html::img(Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path']);
+        if(isset($vendor_details['vendor_logo_path'])) {
+            $baselink = Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path'];
         }
-
         $url = \yii\helpers\Url::toRoute(["site/vendor_profile", 'slug' => $vendor_details->slug], true);
         \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
