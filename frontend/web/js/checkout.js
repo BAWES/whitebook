@@ -49,6 +49,8 @@ function save_address() {
 
 function payment() {
 
+	$('.checkout_message_wrapper').html('');
+
 	$('.checkout-wizard .text-success').removeClass('text-success');
 	$('#ar-step-address').addClass('text-success');
 
@@ -89,6 +91,8 @@ function save_payment() {
 
 function confirm() {
 
+	$('.checkout_message_wrapper').html('');
+	
 	$('#ar-step-address').addClass('text-success');
 	$('#ar-step-payment').addClass('text-success');
 
@@ -125,6 +129,13 @@ $(document).delegate('#modal_create_address form', 'submit', function(e){
 
     if(!address_type_id) {
         $('.field-customeraddress-address_type_id').addClass('has-error');
+    }
+
+    //address name
+    var address_name = jQuery('#customeraddress-address_name').val();
+
+    if(!address_name) {
+        jQuery('.field-customeraddress-address_name').addClass('has-error');
     }
 
     if($('#modal_create_address .has-error').length > 0){

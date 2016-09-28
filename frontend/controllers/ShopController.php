@@ -340,11 +340,14 @@ class ShopController extends BaseController
         /* BEGIN DELIVERY AREAS --VENDOR */
 
         \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => Yii::$app->name.' - ' . ucfirst($model->vendor->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => Url::toRoute(["shop/product", 'slug' => $model->slug], true)]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => Yii::$app->name.' - ' . ucfirst($model->item_name) .' from '. ucfirst($model->vendor->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($model->item_description))]);
+        \Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
 
         \Yii::$app->view->registerMetaTag([
             'property' => 'og:description',
@@ -368,7 +371,7 @@ class ShopController extends BaseController
                 $customer_id = Yii::$app->user->getId();
 
                 $my_addresses =  \common\models\CustomerAddress::find()
-                    ->select(['{{%location}}.*'])
+                    ->select(['{{%location}}.id, {{%customer_address}}.address_name'])
                     ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
                     ->where(['{{%customer_address}}.trash'=>'Default'])
                     ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
@@ -377,17 +380,16 @@ class ShopController extends BaseController
                     ->asArray()
                     ->all();
 
-            if (Yii::$app->language == 'en'){
-                $location = 'location';
-            } else {
-                $location = 'location_ar';
-            }
-            $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'id', $location);
+                $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'id', 'address_name');
 
-            if (count($myaddress_area_list)>0) {
-                $combined_myaddress['My Addresses'] = $myaddress_area_list;
-                $vendor_area_list = $combined_myaddress+$vendor_area_list;
-            }
+                if (count($myaddress_area_list)>0) {
+
+                    $combined_myaddress = array(
+                        Yii::t('frontend', 'My Addresses') => $myaddress_area_list
+                    );
+
+                    $vendor_area_list = $combined_myaddress + $vendor_area_list;
+                }
 
             $user = new Users();
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);

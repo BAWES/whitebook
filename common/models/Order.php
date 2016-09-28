@@ -303,7 +303,7 @@ class Order extends \yii\db\ActiveRecord
 
     public function sendNewOrderEmails($order_id) {
 
-        $order = self::findOne($order_id);
+        $order = Order::findOne($order_id);
 
         $suborder = Suborder::find()
             ->where(['order_id' => $order_id])

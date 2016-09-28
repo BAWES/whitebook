@@ -74,4 +74,4 @@ $this->registerJs("
 
 ", View::POS_HEAD);
 
-$this->registerJsFile('@web/js/checkout.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/checkout.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);

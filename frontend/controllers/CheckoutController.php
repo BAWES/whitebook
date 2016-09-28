@@ -22,7 +22,7 @@ class CheckoutController extends BaseController
 {
 	public function init(){
         if(Yii::$app->user->isGuest) {
-            $this->redirect(['site/index']);
+            $this->redirect(['/site/index']);
         }
     }
 
@@ -227,8 +227,14 @@ class CheckoutController extends BaseController
 
     public function actionSuccess() {
 
+        $customer_id = Yii::$app->user->getId();
+
+        if(!$customer_id) {
+            $this->redirect(['site/index']);
+        }
+
         //clear cart 
-        CustomerCart::deleteAll('customer_id = '.Yii::$app->user->getId());
+        CustomerCart::deleteAll('customer_id = "'.Yii::$app->user->getId().'"');
 
         //clear temp session data
         Yii::$app->session->remove('payment_method');

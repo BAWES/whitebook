@@ -39,17 +39,21 @@ use common\models\CustomerCart;
 
                         foreach ($addresses as $address) { ?>
                                 <div class="address_block" data-id="<?= $address['address_id'] ?>">
-                                        <?php 
+                                    <?php 
 
-                                        echo $address['address_data'].'<br />';
+                                    if($address['address_name']) {
+                                        echo $address['address_name'].'<br />';    
+                                    }
+                                                                            
+                                    echo $address['address_data'].'<br />';
 
-                                        if(Yii::$app->language == 'en'){ 
-                                                echo $address['location']['location'].'<br />';
-                                                echo $address['city']['city_name'];
-                                        }else{
-                                                echo $address['location']['location_ar'].'<br />';
-                                                echo $address['city']['city_name_ar'];
-                                        } ?>
+                                    if(Yii::$app->language == 'en'){ 
+                                            echo $address['location']['location'].'<br />';
+                                            echo $address['city']['city_name'];
+                                    }else{
+                                            echo $address['location']['location_ar'].'<br />';
+                                            echo $address['city']['city_name_ar'];
+                                    } ?>
                                 </div>
                         <?php } ?>
                                 
@@ -97,6 +101,8 @@ use common\models\CustomerCart;
         </div>
         <div class="modal-body" style="background: white; margin-top: 0;">
 
+                <?= $form->field($customer_address_modal, 'address_name'); ?>
+                
                 <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, 
                     ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
                 ); ?>
