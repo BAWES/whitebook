@@ -63,9 +63,9 @@ class TapController extends Controller
 
         $order_id = $request['trackid'];
 
-        $order_info = Order::findOne($order_id);
+        $order = Order::findOne($order_id);
 
-        if ($order_info) {
+        if ($order) {
             $error = '';
             
             $key = $this->tap_merchantid;
@@ -92,9 +92,9 @@ class TapController extends Controller
             
         } else {
             
-            //load order 
-            $order = Order::findOne($order_id);
-
+            echo 'no error';
+            die();
+            
             //gateway info 
             $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
 

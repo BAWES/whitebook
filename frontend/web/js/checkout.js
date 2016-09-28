@@ -49,6 +49,8 @@ function save_address() {
 
 function payment() {
 
+	$('.checkout_message_wrapper').html('');
+
 	$('.checkout-wizard .text-success').removeClass('text-success');
 	$('#ar-step-address').addClass('text-success');
 
@@ -89,6 +91,8 @@ function save_payment() {
 
 function confirm() {
 
+	$('.checkout_message_wrapper').html('');
+	
 	$('#ar-step-address').addClass('text-success');
 	$('#ar-step-payment').addClass('text-success');
 
