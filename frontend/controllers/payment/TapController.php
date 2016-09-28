@@ -59,6 +59,10 @@ class TapController extends Controller
 
     public function actionCallback() {
 
+
+            echo '1';
+            die();
+            
         $request = Yii::$app->request->get();
 
         $order_id = $request['trackid'];
@@ -91,9 +95,6 @@ class TapController extends Controller
             ]);
             
         } else {
-            
-            echo 'no error';
-            die();
             
             //gateway info 
             $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
