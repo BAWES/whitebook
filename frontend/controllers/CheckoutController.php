@@ -234,7 +234,7 @@ class CheckoutController extends BaseController
         }
 
         //clear cart 
-        CustomerCart::deleteAll('customer_id = '.Yii::$app->user->getId());
+        CustomerCart::deleteAll('customer_id = "'.Yii::$app->user->getId().'"');
 
         //clear temp session data
         Yii::$app->session->remove('payment_method');
