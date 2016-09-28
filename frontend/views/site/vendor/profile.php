@@ -78,7 +78,7 @@ if ($event_status > 0) {
                 <div class="col-md-6 padding0">
                     <a href="#" title="">
                     <?php if(isset($vendor_detail['vendor_logo_path'])) {
-                        echo Html::img(Yii::getAlias('@vendor_logo/').$vendor_detail['vendor_logo_path'], ['class'=>'','width'=>'565','height'=>'470','alt'=>'Logo']);
+                        echo Html::img(Yii::getAlias('@vendor_logo/').$vendor_detail['vendor_logo_path'], ['class'=>'','width'=>'565','alt'=>'Logo']);
                     } ?>
                     </a>
                 </div>
