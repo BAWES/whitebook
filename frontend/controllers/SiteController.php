@@ -359,6 +359,7 @@ class SiteController extends BaseController
         }
         $url = \yii\helpers\Url::toRoute(["site/vendor_profile", 'slug' => $vendor_details->slug], true);
         \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
