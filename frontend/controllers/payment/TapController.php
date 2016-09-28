@@ -59,10 +59,6 @@ class TapController extends Controller
 
     public function actionCallback() {
 
-
-            echo '1';
-            die();
-            
         $request = Yii::$app->request->get();
 
         $order_id = $request['trackid'];
