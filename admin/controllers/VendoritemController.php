@@ -22,6 +22,7 @@ use common\models\VendoritemSearch;
 use common\models\Itemtype;
 use common\models\Vendoritempricing;
 use common\models\Prioritylog;
+use common\models\VendorItemToCategory;
 use admin\models\Priorityitem;
 use yii\helpers\Html;
 use yii\web\Controller;
@@ -190,31 +191,47 @@ public function actionCreate($vid = '')
             }
 
             if ($model->save()) {
+
                 $itemid = $model->item_id;
 
-            //BEGIN Manage item pricing table
-            $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
+                //add all category
+                $category = Yii::$app->request->post('category');
 
-            if ($vendoritem_item_price['from']) {
-
-                $from = $vendoritem_item_price['from'];
-                $to = $vendoritem_item_price['to'];
-                $price = $vendoritem_item_price['price'];
-
-                for ($opt = 0;$opt < count($from);++$opt) {
-                    $vendor_item_pricing = new Vendoritempricing();
-                    $vendor_item_pricing->item_id = $itemid;
-                    $vendor_item_pricing->range_from = $from[$opt];
-                    $vendor_item_pricing->range_to = $to[$opt];
-                    $vendor_item_pricing->pricing_price_per_unit = $price[$opt];
-                    $vendor_item_pricing->save();
+                if(!$category) {
+                    $category = array();
                 }
-            }
-            //END Manage item pricing table
+
+                foreach($category as $key => $value) {
+                    $vic = new VendorItemToCategory();
+                    $vic->item_id = $model->item_id;
+                    $vic->category_id = $value;
+                    $vic->save();
+                }
+
+                //BEGIN Manage item pricing table
+                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
+
+                if ($vendoritem_item_price['from']) {
+
+                    $from = $vendoritem_item_price['from'];
+                    $to = $vendoritem_item_price['to'];
+                    $price = $vendoritem_item_price['price'];
+
+                    for ($opt = 0;$opt < count($from);++$opt) {
+                        $vendor_item_pricing = new Vendoritempricing();
+                        $vendor_item_pricing->item_id = $itemid;
+                        $vendor_item_pricing->range_from = $from[$opt];
+                        $vendor_item_pricing->range_to = $to[$opt];
+                        $vendor_item_pricing->pricing_price_per_unit = $price[$opt];
+                        $vendor_item_pricing->save();
+                    }
+                }
+                //END Manage item pricing table
 
                 /* Themes table Begin*/
 
                 $vendor_item = Yii::$app->request->post('Vendoritem');
+
                 if (isset($vendor_item['themes']) && $_POST['Vendoritem']['themes'] != '' && count($vendor_item['themes'])>0 ) {
                     foreach($vendor_item['themes'] as $value) {
                         $themeModel = new Vendoritemthemes();
@@ -356,6 +373,11 @@ public function actionCreate($vid = '')
     }
 
 } else {
+
+    $categories = Category::find()
+        ->where(['trash' => 'Default'])
+        ->all();
+
     return $this->render('create', [
         'model' => $model,
         'model1' => $model1,
@@ -364,7 +386,8 @@ public function actionCreate($vid = '')
         'model_question' => $model_question,
         'themelist' => $themelist,
         'grouplist' => $grouplist,
-        ]);
+        'categories' => $categories
+    ]);
 }
 } else {
     Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -427,6 +450,24 @@ public function actionUpdate($id, $vid = false)
         $priorityvalue = $model->priority;
 
         if ($model->load(Yii::$app->request->post())) {
+
+            //remove all old category 
+            VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+
+            //add all category
+            $category = Yii::$app->request->post('category');
+
+            if(!$category) {
+                $category = array();
+            }
+
+            foreach($category as $key => $value) {
+                $vic = new VendorItemToCategory();
+                $vic->item_id = $model->item_id;
+                $vic->category_id = $value;
+                $vic->save();
+            }
+
             $model->slug = Yii::$app->request->post()['Vendoritem']['item_name'];
 
             $c_slug1 = strtolower($model->slug);
@@ -682,6 +723,12 @@ public function actionUpdate($id, $vid = false)
             }
             }
 
+                $categories = Category::find()
+                    ->where(['trash' => 'Default'])
+                    ->all();
+
+                $vendor_item_to_category = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
+
                 return $this->render('update', [
                     'model' => $model,
                     'itemType' => Itemtype::findAll(['trash' => 'Default']),
@@ -695,6 +742,8 @@ public function actionUpdate($id, $vid = false)
                     'childcategory' => $childcategory,
                     'itemPricing' => Vendoritempricing::findAll(['item_id' => $item_id]),
                     'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
+                    'vendor_item_to_category' => $vendor_item_to_category,
+                    'categories' => $categories
                 ]);
     } else {
         Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');

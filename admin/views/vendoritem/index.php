@@ -45,13 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				},
 			],
             [
-				'attribute'=>'category_id',
-				'label'=>'Category Name',			
-				'value'=>function($data){
-					return $data->getCategoryName($data->category_id);
-				}
-			],           
-			[
 				'attribute'=>'type_id',
 				'label'=>'Item Type',			
 				'value'=>function($data){

@@ -70,11 +70,15 @@ $group_options = ArrayHelper::map(
                     ['prompt' => 'All']    
                 )->label('Group'); ?>
 
-            <?= $form->field($model, 'category_id')->dropDownList(
-                    $category_options,           
-                    ['prompt' => 'All']    
-                ); ?>
-
+            
+            <?= $form->field($model, 'item_approved')->dropDownList(
+                [
+                    'Yes',
+                    'Pending',
+                    'Rejected'
+                ],           
+                ['prompt' => 'All']    
+            );?>     
         </div>
 
         <div class="col-md-4">        
@@ -91,14 +95,6 @@ $group_options = ArrayHelper::map(
                 ['prompt' => 'All']    
             ); ?> 
             
-            <?= $form->field($model, 'item_approved')->dropDownList(
-                [
-                    'Yes',
-                    'Pending',
-                    'Rejected'
-                ],           
-                ['prompt' => 'All']    
-            );?>     
         </div>
         
     </div>
