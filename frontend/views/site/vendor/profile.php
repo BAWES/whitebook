@@ -1,5 +1,4 @@
 <?php
-
 use frontend\models\Category;
 use common\models\ChildCategory;
 use common\models\SubCategory;
@@ -22,6 +21,7 @@ if ($event_status == -1) {
 }
 if ($event_status > 0) {
     ?>
+
     <script type="text/javascript">
         /* BEGIN ADD EVENT */
         function addevent1(item_id)
@@ -218,17 +218,17 @@ if ($event_status > 0) {
                                                 </div>
                                             </div>
                                         </div>
-                                            <?php if (count($vendor_detail) > 0) {
+
+                                        <?php if (count($vendor_detail) > 0) {
 
                                                 if ($vendor_detail['vendor_logo_path'] != '') {
                                                     $baselink = Yii::getAlias('@vendor_logo/').$vendor_detail['vendor_logo_path'];
                                                 } else {
                                                     $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
                                                 }
-
                                                 $title = Yii::$app->name .' '. ucfirst($vendor_detail->vendor_name);
                                                 $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
-                                                $summary = Yii::$app->name .' '. substr(trim(strip_tags($vendor_detail->vendor_name)),0,50);
+                                                $summary = Yii::$app->name .' '. substr(strip_tags($vendor_detail->short_description),0,10);
                                                 $image = isset($baselink) ? $baselink : '';
                                                 $vendorUrl = \yii\helpers\Url::toRoute(["site/vendor_profile", 'slug' => $vendor_detail->slug], true);
                                                 $mailbody = "Check out ".ucfirst($vendor_detail->vendor_name)." on ".Yii::$app->name." ".$vendorUrl;
@@ -236,8 +236,8 @@ if ($event_status > 0) {
                                             <div class="social_share">
                                                 <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
                                                 <ul>
-                                                    <li><a title="Facebook" onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=<?php echo $title; ?>&amp;p[summary]=<?php echo $summary; ?>&amp;p[url]=<?php echo $url; ?>&amp;&p[images][0]=<?php echo $image; ?>', 'sharer', 'toolbar=0,status=0,width=620,height=280');" href="javascript: void(0)"><span class="flaticon-facebook55"></span></a></li>
-                                                    <li><a  title="Twitter" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"  href="https://twitter.com/share" class="twitter" target="_blank" data-url="<?php echo $url; ?>" data-text="<?php echo $title; ?>" data-lang="en" data-size="medium" data-count="none"><span class="flaticon-twitter13"></span></a></li>
+                                                    <li><a title="Facebook" href='https://www.facebook.com/sharer/sharer.php?u=<?=urlencode($vendorUrl)?>' onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><span class="flaticon-facebook55"></span></a></li>
+                                                    <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$summary?>&url=<?=$vendorUrl; ?>" ><span class="flaticon-twitter13"></span></a></li>
                                                     <?php if ($vendor_detail['vendor_instagram']) { ?>
                                                         <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-instagram7"></span></a></li>
                                                     <?php } ?>
@@ -479,7 +479,6 @@ if ($event_status > 0) {
         });
     })(jQuery);
 </script>
-
 <?php $this->registerCss("
 .color-808080{color: #808080!important;}
 ")?>
