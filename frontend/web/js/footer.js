@@ -149,7 +149,7 @@ jQuery('#delivery_date_2').datepicker({
     format: 'dd-mm-yyyy',
     startDate:'today',
     autoclose:true,
-}).on("change", function (e) {
+}).on("changeDate", function (e) {
     filter();
     jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block');
 });
