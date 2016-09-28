@@ -209,7 +209,7 @@ if ($event_status > 0) {
                                                             Yii::t('frontend', 'Monday'),
                                                             Yii::t('frontend', 'Tuesday'),
                                                             Yii::t('frontend', 'Wednesday'),
-                                                            Yii::t('frontend', 'Thirsday'),
+                                                            Yii::t('frontend', 'Thursday'),
                                                             Yii::t('frontend', 'Friday'),
                                                             Yii::t('frontend', 'Saturday'),
                                                             ', '   
