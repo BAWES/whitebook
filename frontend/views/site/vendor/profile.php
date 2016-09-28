@@ -6,6 +6,31 @@ use frontend\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
+
+
+$vendor_details = $vendor_detail;
+
+\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$vendor_details['vendor_name'];
+\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
+$baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
+if(isset($vendor_details['vendor_logo_path'])) {
+    $baselink = Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path'];
+}
+$url = \yii\helpers\Url::toRoute(["site/vendor_profile", 'slug' => $vendor_details->slug], true);
+\Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
+\Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
+\Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
+\Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
+\Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
+\Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
+\Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => ucfirst($vendor_details->vendor_name)]);
+\Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($vendor_details->short_description))]);
+
+\Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
+
+
 $event_status = Yii::$app->session->get('event_status');
 
 if ($event_status == -1) {
@@ -241,7 +266,7 @@ if ($event_status > 0) {
                                                     <?php if ($vendor_detail['vendor_instagram']) { ?>
                                                         <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-instagram7"></span></a></li>
                                                     <?php } ?>
-                                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
+                                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
                                                     <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                                 </ul>
                                             </div>

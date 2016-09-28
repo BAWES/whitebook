@@ -347,28 +347,6 @@ class SiteController extends BaseController
         $vendor_item_details = $website_model->vendor_item_details($vendor_details['vendor_id']);
         $main_category = $website_model->get_main_category();
 
-        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$vendor_details['vendor_name'];
-        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
-        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-
-
-
-        $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
-        if(isset($vendor_details['vendor_logo_path'])) {
-            $baselink = Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path'];
-        }
-        $url = \yii\helpers\Url::toRoute(["site/vendor_profile", 'slug' => $vendor_details->slug], true);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
-        \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => ucfirst($vendor_details->vendor_name)]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($vendor_details->short_description))]);
-
-
-
     // FOR FILTER
         $themes = \common\models\Vendoritemthemes::find()
         ->select(['wt.theme_id','wt.slug','wt.theme_name'])
@@ -422,7 +400,6 @@ class SiteController extends BaseController
               'customer_events' => $customer_events,
               'slug' => $slug,
               'customer_events_list' => $customer_events_list,
-              'slug'=>$slug
             ]);
         }
     }
