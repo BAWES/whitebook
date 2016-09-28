@@ -74,12 +74,16 @@ class ProductController extends BaseController
         $image = $baselink;
 
         \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => $title]);
+        \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => $summary]);
-        
+        \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => Yii::$app->name.' - ' . ucfirst($model->item_name) .' from '. ucfirst($model->vendor->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($model->item_description))]);
+        \Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
+
         \Yii::$app->view->registerMetaTag([
             'property' => 'og:description', 
             'content' => trim(strip_tags($model->item_description))
