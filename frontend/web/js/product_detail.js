@@ -258,12 +258,6 @@
         var owl = jQuery("#owl-demo2");
 
         owl.owlCarousel({
-// Define custom and unlimited items depending from the width
-// If this option is set, itemsDeskop, itemsDesktopSmall, itemsTablet, itemsMobile etc. are disabled
-// For better preview, order the arrays by screen size, but it's not mandatory
-// Don't forget to include the lowest available screen size, otherwise it will take the default one for screens lower than lowest available.
-// In the example there is dimension with 0 with which cover screens between 0 and 450px
-
             itemsCustom: [
                 [0, 1],
                 [450, 2],
@@ -296,11 +290,6 @@
         var owl = jQuery("#owl-demo");
         
         owl.owlCarousel({
-// Define custom and unlimited items depending from the width
-// If this option is set, itemsDeskop, itemsDesktopSmall, itemsTablet, itemsMobile etc. are disabled
-// For better preview, order the arrays by screen size, but it's not mandatory
-// Don't forget to include the lowest available screen size, otherwise it will take the default one for screens lower than lowest available.
-// In the example there is dimension with 0 with which cover screens between 0 and 450px
             itemsCustom: [
                 [0, 1],
                 [450, 2],
@@ -432,8 +421,7 @@ if (!isGuest) {
             jQuery('#quantity').val(parseInt(jQuery('#quantity').val())+1);
         }
         return false;
-    })
-
+    });
 }
 
 // product detail page Delivery Date change event
