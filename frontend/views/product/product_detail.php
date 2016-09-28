@@ -77,7 +77,11 @@ $this->title = 'Whitebook - ' . $item_name;
                     <div class="col-md-6 paddig0 resp_hide">
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
-                            <label><?= $vendor_name; ?></label>
+                            <label>
+                                <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $vendor_det['slug']]) ?>"  style="color: #999999">
+                                    <?= $vendor_name; ?>
+                                </a>
+                            </label>
                             <b>
                                 <?= CFormatter::asCurrency($model->item_price_per_unit)  ?>       
                             </b>
