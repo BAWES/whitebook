@@ -22,7 +22,7 @@ class CheckoutController extends BaseController
 {
 	public function init(){
         if(Yii::$app->user->isGuest) {
-            $this->redirect(['site/index']);
+            $this->redirect(['/site/index']);
         }
     }
 
