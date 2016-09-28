@@ -69,11 +69,6 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
     {
         return [
             [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by',
-            ],
-            [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_datetime',
                 'updatedAtAttribute' => 'modified_datetime',
