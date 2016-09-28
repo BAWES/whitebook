@@ -227,6 +227,12 @@ class CheckoutController extends BaseController
 
     public function actionSuccess() {
 
+        $customer_id = Yii::$app->user->getId();
+
+        if(!$customer_id) {
+            $this->redirect(['site/index']);
+        }
+
         //clear cart 
         CustomerCart::deleteAll('customer_id = "'.Yii::$app->user->getId().'"');
 

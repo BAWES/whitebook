@@ -92,9 +92,6 @@ class TapController extends Controller
             
         } else {
             
-            echo 'no error';
-            die();
-            
             //gateway info 
             $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
 
