@@ -270,7 +270,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                             <input name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
                             <div class="row margin-top-20">
-                                <div class="col-md-2 padding-top-12" style="float: left;margin-left: 10px;">
+                                <div class="col-md-3 padding-top-12" style="float: left;">
                                     <label><?= Yii::t('frontend', 'Quantity');?></label>
                                 </div>
                                 <div class="col-md-4">
@@ -278,7 +278,6 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                         <a href="#" class="btn-stepper" data-case="0">-</a>
                                         <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>"/>
                                         <a href="#" class="btn-stepper" data-case="1">+</a>
-
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
@@ -288,7 +287,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                         </button>&nbsp;&nbsp;&nbsp;
                                     </div>
                                 </div>
-                                <span class=" error cart_quantity"></span>
+                                <span class=" col-lg-12 error cart_quantity"></span>
                                 <span style="display: none;margin-top: 18px;" id="available"></span>
                             </div><!-- END .row -->
                         </form>
@@ -643,7 +642,6 @@ $this->registerCss("
 .font-27{font-size:27px!important;}
 .margin-bottom-14{margin-bottom:14px!important;}
 .qty a:hover, .qty a:focus {color: #fff!important;}
-.error.cart_quantity p{margin-left:15px;}
 button.dropdown-toggle{background: #fff;color: #000;border-radius: 0px;height: 42px;border-color: #e6e6e6;}
 .color-808080{color: #808080!important;}
 .height-2{height:2px!important;}
