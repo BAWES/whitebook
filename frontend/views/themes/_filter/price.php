@@ -73,7 +73,7 @@ if($min_kd > 0 )
 
 	$min_kd = floor($min_kd / 100) * 100; 
 
-	echo CFormatter::asCurrency($min_kd) ?>
+	echo CFormatter::format($min_kd) ?>
 	 
 	-
 
@@ -81,7 +81,7 @@ if($min_kd > 0 )
 
 	$x = ceil($x / 100) * 100;
 
-	echo CFormatter::asCurrency($x) ?>
+	echo CFormatter::format($x) ?>
 	
 	</label>
 	</li>

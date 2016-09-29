@@ -68,7 +68,7 @@ if($value['item_for_sale'] == 'Yes'){
 			</a>
 			<h3><?= $value['item_name']  ?></h3>
 			<p>
-				<?= CFormatter::asCurrency($value->item_price_per_unit)  ?>				
+				<?= CFormatter::format($value->item_price_per_unit)  ?>				
 			</p>
 		</a>
 		</div>

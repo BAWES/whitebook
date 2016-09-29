@@ -182,7 +182,7 @@ if (is_numeric ($result)) { ?>
 Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])) ?>
 <h3><?= $value['item_name']  ?></h3>
 
-<p><?= CFormatter::asCurrency($value['item_price_per_unit']) ?></p>
+<p><?= CFormatter::format($value['item_price_per_unit']) ?></p>
 
 </div>
 </div>

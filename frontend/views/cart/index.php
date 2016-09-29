@@ -147,10 +147,10 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	                    </div>
                     </td>
 	        		<td align="right">
-	        			<?= CFormatter::asCurrency($item['item_price_per_unit'])  ?>
+	        			<?= CFormatter::format($item['item_price_per_unit'])  ?>
 	        		</td>
 	        		<td align="right">
-	        			<?= CFormatter::asCurrency($row_total)  ?>
+	        			<?= CFormatter::format($row_total)  ?>
 	        			<?= Yii::$app->params['Currency']; ?>
 	        		</td>
 	        	</tr>
@@ -164,15 +164,15 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	            <tbody>
 	            <tr>
 	              <td class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
-	              <td class="text-right"><?= CFormatter::asCurrency($sub_total) ?></td>
+	              <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
 	            </tr>
 	            <tr>
 	              <td class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong></td>
-	              <td class="text-right"><?= CFormatter::asCurrency($delivery_charge) ?></td>
+	              <td class="text-right"><?= CFormatter::format($delivery_charge) ?></td>
 	            </tr>
 	            <tr>
 	              <td class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
-	              <td class="text-right"><?= CFormatter::asCurrency($sub_total + $delivery_charge) ?></td>
+	              <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
 	            </tr>
 	            </tbody>
 	          </table>

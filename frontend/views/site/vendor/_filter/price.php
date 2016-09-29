@@ -50,13 +50,13 @@ if($max_price[0]['price'] != $min_price[0]['price']) { ?>
 
                                             $min_kd = floor($min_kd / 100) * 100;
 
-                                            echo CFormatter::asCurrency($min_kd) ?>
+                                            echo CFormatter::format($min_kd) ?>
                                             -  
                                             <?php 
 
                                             $x = ceil($x / 100) * 100; 
 
-                                            echo CFormatter::asCurrency($x) ?>
+                                            echo CFormatter::format($x) ?>
                                         </label>
                                     </li>
                     <?php

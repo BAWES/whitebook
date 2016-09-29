@@ -2,9 +2,9 @@
 
 namespace common\components;
 
-class CFormatter extends \yii\i18n\Formatter
+class CFormatter
 {
-    public function asCurrency($value, $currency = NULL, $options = [], $textOptions = [])
+    public function format($value)
     {
         return 'KD ' . number_format($value, 3);
     }

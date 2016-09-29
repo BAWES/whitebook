@@ -133,7 +133,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                 </a>
                             </label>
                             <b class="font-27">
-                                <?= CFormatter::asCurrency($model['item_price_per_unit']) ?>
+                                <?= CFormatter::format($model['item_price_per_unit']) ?>
                             </b>
                         </div>
                         <!-- Indicators responsive slider -->
@@ -208,7 +208,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     </a>
                                     </label>
 
-                                    <b class="font-27"><?= CFormatter::asCurrency($model['item_price_per_unit']) ?></b>
+                                    <b class="font-27"><?= CFormatter::format($model['item_price_per_unit']) ?></b>
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">

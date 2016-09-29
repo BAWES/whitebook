@@ -58,7 +58,7 @@ if (!empty($imageData)) {
                             echo Html::a($vendor_name, Url::toRoute(['/shop/product/','slug'=>$value['slug']])) ?>
                             <h3><?= $value['item_name']  ?></h3>
                             <p>
-                                <?= CFormatter::asCurrency($value->item_price_per_unit) ?>
+                                <?= CFormatter::format($value->item_price_per_unit) ?>
                             </p></a>
                         </div>
                     </div>
