@@ -249,6 +249,7 @@ public function actionCreate($vid = '')
                         $groupModel = new Featuregroupitem();
                         $groupModel->item_id = $itemid;
                         $groupModel->group_id = $value;
+                        $groupModel->vendor_id = $vendor_item['vendor_id'];
                         $groupModel->save();
                     }
                 }
@@ -662,6 +663,7 @@ public function actionUpdate($id, $vid = false)
                         $groupModel = new Featuregroupitem();
                         $groupModel->item_id = $itemid;
                         $groupModel->group_id = $value;
+                        $groupModel->vendor_id = $model->vendor_id;
                         $groupModel->save();
                     }
                 }

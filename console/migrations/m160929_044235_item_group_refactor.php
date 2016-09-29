@@ -13,6 +13,7 @@ class m160929_044235_item_group_refactor extends Migration
         $this->dropColumn('whitebook_feature_group_item', 'modified_by');
         $this->dropColumn('whitebook_feature_group_item', 'subcategory_id');
         $this->dropColumn('whitebook_feature_group_item', 'category_id');
+        $this->alterColumn('whitebook_feature_group_item', 'group_id', $this->integer(11));
     }
 
     public function down()
@@ -24,6 +25,7 @@ class m160929_044235_item_group_refactor extends Migration
         $this->addColumn('whitebook_feature_group_item', 'modified_by',$this->integer(11));
         $this->addColumn('whitebook_feature_group_item', 'subcategory_id',$this->integer(11));
         $this->addColumn('whitebook_feature_group_item', 'category_id',$this->integer(11));
+        $this->alterColumn('whitebook_feature_group_item', 'group_id', $this->text());
         return false;
     }
 }
