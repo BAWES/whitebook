@@ -51,7 +51,6 @@ class Category extends \yii\db\ActiveRecord
     const OTHERS = 126;
     const GIFT_FAVORS = 127;
 
-
     /**
     * @inheritdoc
     */
@@ -91,7 +90,7 @@ class Category extends \yii\db\ActiveRecord
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_allow_sale', 'default', 'value' => true],
-            [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
+            [['category_title', 'created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
             [['category_name'], 'string', 'max' => 128]
         ];
     }
@@ -149,6 +148,25 @@ class Category extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItem::className(), ['category_id' => 'category_id']);
     }
 
+    public function getCategory_title() 
+    { 
+        $result = CategoryPath::find()
+            ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
+            ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
+            ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+            ->where(['{{%category_path}}.category_id' => $this->category_id])
+            ->groupBy('{{%category_path}}.category_id')
+            ->orderBy('category_name')
+            ->asArray()
+            ->one();
+
+        if($result) {
+            return $result['category_name'];
+        }else{
+            return $this->category_name;
+        }
+    }
+
     /**
     * @return \yii\db\ActiveQuery
     */
@@ -156,7 +174,6 @@ class Category extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
     }
-
 
     public static function vendorcategory($id)
     {
@@ -172,5 +189,4 @@ class Category extends \yii\db\ActiveRecord
         return $category;
 
     }
-
 }

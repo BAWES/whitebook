@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="vendoritem-update">
     <?php
+    
     echo $this->render('_update', [
         'model' => $model,
         'itemtype'=>$itemtype,
@@ -21,9 +22,10 @@ $this->params['breadcrumbs'][] = 'Update';
         'images'=>$images,
         'model1' => $model1,
         'childcategory'=>$childcategory,
+        'categories' => $categories,
+        'vendor_item_to_category' => $vendor_item_to_category,
         'loadpricevalues'=>$loadpricevalues,
         'guide_images'=>$guide_images,
-        'model_question' => $model_question,
-        
+        'model_question' => $model_question        
     ]) ?>
 </div>

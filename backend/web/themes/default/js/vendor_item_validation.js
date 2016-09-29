@@ -670,3 +670,32 @@ function questionView(q_id,tis){
 		$(this).toggleClass('expanded');
 	}
 }
+
+
+//add categort 
+$('.btn-add-category').click(function(){
+	
+	$category_id = $('#category_id').val();
+
+	if($category_id.length == 0) {
+		return false;
+	}
+
+	$html  = '<tr>';
+	$html += '	<td>';
+	$html += 		$('#category_id option:selected').html();
+	$html += '		<input value="' + $category_id + '" name="category[]" type="hidden" />';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<button class="btn btn-danger" type="button">';
+	$html += '			<i class="glyphicon glyphicon-trash"></i>';
+	$html += '		</button>';
+	$html += '	</td>';
+	$html += '</tr>';
+
+	$('.table-category-list tbody').append($html);
+});
+
+$(document).delegate('.table-category-list .btn-danger','click', function(){
+	$(this).parent().parent().remove();
+});

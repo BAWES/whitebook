@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'package' => $package,
         'vendor_order_alert_emails' => [],
-        'working_days' => []
+        'day_off' => []
     ]) ?>
 
 </div>

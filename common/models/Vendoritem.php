@@ -104,9 +104,8 @@ class Vendoritem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'vendor_id', 'category_id', 'item_name', 'item_name_ar', 'subcategory_id',
-            'child_category'], 'required'],
-            [['type_id', 'vendor_id', 'category_id','subcategory_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','child_category', 'created_by', 'modified_by'], 'integer'],
+            [['type_id', 'vendor_id', 'item_name', 'item_name_ar'], 'required'],
+            [['type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash'], 'string'],
             [['item_price_per_unit'], 'number'],
             
@@ -116,20 +115,19 @@ class Vendoritem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'category_id',  'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
+            [['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
             'item_default_capacity', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_how_long_to_make',
-            'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'subcategory_id',
-            'item_for_sale','item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['VendorItemAdd'] = ['type_id', 'category_id',  'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
+        $scenarios['VendorItemAdd'] = ['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
         'item_default_capacity', 'item_customization_description', 'item_price_description',
             'item_price_description_ar', 'item_how_long_to_make',
-        'item_minimum_quantity_to_order','item_name','item_name_ar', 'subcategory_id','child_category',
+        'item_minimum_quantity_to_order','item_name','item_name_ar',
         'item_for_sale','item_price_per_unit'];
         return $scenarios;
     }
@@ -356,9 +354,9 @@ class Vendoritem extends \yii\db\ActiveRecord
             return $item['item_name'];
         }
 
-        public static function groupvendoritem($categoryid,$subcategory)
+        public static function groupvendoritem($categoryid, $subcategory)
         {
-            $vendor_item= Vendoritem::find()
+            $vendor_item = Vendoritem::find()
             ->where(['=', 'category_id', $categoryid])
             ->andwhere(['=', 'subcategory_id',$subcategory])
             ->all();
