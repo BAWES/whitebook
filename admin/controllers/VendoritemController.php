@@ -16,6 +16,7 @@ use admin\models\Vendor;
 use admin\models\Themes;
 use admin\models\Image;
 use admin\models\Category;
+use admin\models\Priorityitem;
 use common\models\SubCategory;
 use common\models\ChildCategory;
 use common\models\VendoritemSearch;
@@ -23,7 +24,7 @@ use common\models\Itemtype;
 use common\models\Vendoritempricing;
 use common\models\Prioritylog;
 use common\models\VendorItemToCategory;
-use admin\models\Priorityitem;
+use common\models\CategoryPath;
 use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -111,24 +112,38 @@ public function actionIndex()
 public function actionView($id)
 {
     $access = Authitem::AuthitemviewCheck('view', '23');
+    
     if (yii::$app->user->can($access)) {
+        
         $dataProvider1=  Priorityitem::find()
         ->select(['priority_level','priority_start_date','priority_end_date'])
         ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
 
         $model_question = Vendoritemquestion::find()
-        ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
-        ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
-        ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
-        ->asArray()->all();
+            ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
+            ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
+            ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
+            ->asArray()->all();
 
         $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
 
+        $categories = VendorItemToCategory::find()
+            ->with('category')
+            ->Where(['item_id' => $id])
+            ->all();
+
         return $this->render('view', [
-            'model' => $this->findModel($id), 'dataProvider1' => $dataProvider1, 'model_question' => $model_question, 'imagedata' => $imagedata,
-            ]);
+            'model' => $this->findModel($id), 
+            'dataProvider1' => $dataProvider1, 
+            'model_question' => $model_question, 
+            'imagedata' => $imagedata,
+            'categories' => $categories
+        ]);
+
     } else {
-        echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+        
+        Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+        
         return $this->redirect(['site/index']);
     }
 }
@@ -373,8 +388,13 @@ public function actionCreate($vid = '')
 
 } else {
 
-    $categories = Category::find()
-        ->where(['trash' => 'Default'])
+    $categories = CategoryPath::find()
+        ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
+        ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
+        ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+        ->groupBy('{{%category_path}}.category_id')
+        ->orderBy('category_name')
+        ->asArray()
         ->all();
 
     return $this->render('create', [
@@ -721,8 +741,13 @@ public function actionUpdate($id, $vid = false)
             }
             }
 
-                $categories = Category::find()
-                    ->where(['trash' => 'Default'])
+                $categories = CategoryPath::find()
+                    ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
+                    ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
+                    ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+                    ->groupBy('{{%category_path}}.category_id')
+                    ->orderBy('category_name')
+                    ->asArray()
                     ->all();
 
                 $vendor_item_to_category = VendorItemToCategory::findAll(['item_id' => $model->item_id]);

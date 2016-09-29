@@ -17,6 +17,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Sunday' => 'الأحد',
+    'Monday' => 'الإثنين',
+    'Tuesday' => 'الثلاثاء',
+    'Wednesday' => 'الأربعاء',
+    'Thursday' => 'الخميس',
+    'Friday' => 'الجمعة',
+    'Saturday' => 'يوم السبت',
+    '{txt_day_off} off' => '{txt_day_off} قبالة',
     'More from {vendor_name}' => 'أكثر من {vendor_name}',
     'Please, select payment method!' => 'رجاءا، اختر طريقة الدفع !',
     'Delivery Address' => 'عنوان التوصيل',

@@ -27,6 +27,8 @@ use common\models\Featuregroupitem;
 use common\models\Priorityitem;
 use common\models\ChildCategory;
 use common\models\Vendoritempricing;
+use common\models\VendorItemToCategory;
+use common\models\CategoryPath;
 use yii\db\Expression;
 use yii\helpers\Url;
 
@@ -153,10 +155,9 @@ class VendoritemController extends Controller
 
         $model = $this->findModel($id);
 
-        $categories = Category::find()->select(['category_name'])
-            ->Where(['IN','category_id',  [$model->category_id, $model->subcategory_id, $model->child_category]])
-            ->orderBy(['category_level' => SORT_ASC])
-            ->asArray()
+        $categories = VendorItemToCategory::find()
+            ->with('category')
+            ->Where(['item_id' => $id])
             ->all();
 
         $item_type = Itemtype::itemtypename($model->type_id);
@@ -227,6 +228,21 @@ class VendoritemController extends Controller
             {
                 //BEGIN Manage item pricing table
                 $itemid = $model->item_id;
+
+                //add all category
+                $category = Yii::$app->request->post('category');
+
+                if(!$category) {
+                    $category = array();
+                }
+
+                foreach($category as $key => $value) {
+                    $vic = new VendorItemToCategory();
+                    $vic->item_id = $model->item_id;
+                    $vic->category_id = $value;
+                    $vic->save();
+                }
+
                 $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
                 if(!empty($vendoritem_item_price['from'])) {
@@ -362,13 +378,24 @@ class VendoritemController extends Controller
                 return $this->redirect(['index']);
             }
         } else {
+
+            $categories = CategoryPath::find()
+                ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
+                ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
+                ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+                ->groupBy('{{%category_path}}.category_id')
+                ->orderBy('category_name')
+                ->asArray()
+                ->all();
+
             return $this->render('create', [
                 'model' => $model,
                 'model1' => $model1,
                 'itemtype' => $itemtype,
                 'vendorname' => $vendorname,
                 'categoryname' => $categoryname,
-                'subcategory' => $subcategory
+                'subcategory' => $subcategory,
+                'categories' => $categories
             ]);
         }
     }
@@ -419,13 +446,30 @@ class VendoritemController extends Controller
             }
             /* END Scenario if item for sale is no not required below four fields */
 
-
             /* Vendor make it any changes item status should be deactivaed */
             $model->item_approved = 'Pending';
 
             if ($model->save()) {
 
                 $itemid = $model->item_id;
+
+                //remove all old category 
+                VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+
+                //add all category
+                $category = Yii::$app->request->post('category');
+
+                if(!$category) {
+                    $category = array();
+                }
+
+                foreach($category as $key => $value) {
+                    $vic = new VendorItemToCategory();
+                    $vic->item_id = $model->item_id;
+                    $vic->category_id = $value;
+                    $vic->save();
+                }
+
                 $file = UploadedFile::getInstances($model, 'image_path');
                 /* Begin Upload guide image table  */
                 $guide_image = UploadedFile::getInstances($model, 'guide_image');
@@ -573,6 +617,18 @@ class VendoritemController extends Controller
             return $this->redirect(['index']);
 
         } else {
+
+            $categories = CategoryPath::find()
+                ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
+                ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
+                ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+                ->groupBy('{{%category_path}}.category_id')
+                ->orderBy('category_name')
+                ->asArray()
+                ->all();
+
+            $vendor_item_to_category = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
+
             return $this->render('update', [
                 'model' => $model,
                 'itemtype' => $itemtype,
@@ -584,7 +640,9 @@ class VendoritemController extends Controller
                 'model1' => $model1,
                 'childcategory' => $childcategory,
                 'loadpricevalues' => $loadpricevalues,
-                'model_question' => $model_question
+                'model_question' => $model_question,
+                'vendor_item_to_category' => $vendor_item_to_category,
+                'categories' => $categories
             ]);
         }
     }
@@ -863,7 +921,6 @@ class VendoritemController extends Controller
             }
         }
     }
-
 
     /*
     *   To check Item name

@@ -37,14 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				},
 			],
 			[
-				'attribute'=>'category_id',
-				'label'=>'Category Name',
-				'value'=>function($data){
-					return $data->getCategoryName($data->category_id);
-				},
-				'filter' => $vendor_category,
-			],
-			[
 				'attribute'=>'type_id',
 				'contentOptions' => ['class' => 'text-center'],
 				'headerOptions' => ['class' => 'text-center'],

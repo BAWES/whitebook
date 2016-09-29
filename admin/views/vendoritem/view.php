@@ -12,8 +12,11 @@ use common\models\Image;
 use common\models\Vendoritemquestion;
 use common\models\Vendoritemquestionguide;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Vendoritem */
+$arr_categories = [];
+
+foreach($categories as $key => $value) { 
+    $arr_categories[] = $value->category->category_title;
+} 
 
 $this->title = 'Vendor Item Details';
 //$this->title = $model->item_name;
@@ -58,8 +61,9 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value'  => Vendoritem::getVendorName($model->vendor_id),
                         ],
                         [
-                            'label'=>'Parent Category Name',
-                            'value'  => Vendoritem::getCategoryName($model->category_id),
+                            'label'=>'Categories',
+                            'format'=>'raw',
+                            'value'  => implode('<br />', $arr_categories)
                         ],
                         [
                             'label'=>'Subparent Category Name',

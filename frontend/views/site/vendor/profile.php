@@ -215,14 +215,16 @@ if ($event_status > 0) {
                                                             ', '   
                                                         );
                                                         
-                                                        $working_days = explode(',', $vendor_detail['working_days']);
+                                                        $day_off = explode(',', $vendor_detail['day_off']);
 
-                                                        $txt_w_days = str_replace($search, $replace, $vendor_detail['working_days']);
+                                                        $txt_day_off = str_replace($search, $replace, $vendor_detail['day_off']);
 
-                                                        if($txt_w_days) { ?>
+                                                        if($txt_day_off) { ?>
                                                         <div class="cont_ifo_right col-md-6 col-xs-6 paddingleft0 left border-top">
                                                             <span class="working_days">
-                                                                <?= $txt_w_days ?>
+                                                                <?= Yii::t('frontend', '{txt_day_off} off', [
+                                                                        'txt_day_off' => $txt_day_off
+                                                                ]); ?>
                                                             </span> 
                                                         </div>
                                                         <?php } ?>

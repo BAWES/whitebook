@@ -41,9 +41,43 @@ function cmp($a, $b)
 			<div class="tab-pane" id="1">
 				<div class="form-group"><?= $form->field($model, 'item_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128]) ?></div>
 				<div class="form-group"><?= $form->field($model, 'item_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128]) ?></div>
-				<div class="form-group"><?= $form->field($model, 'category_id', ['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList($categoryname, ['prompt'=>'Select...']) ?></div>
-				<div class="form-group"><?= $form->field($model, 'subcategory_id',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList($subcategory, ['prompt'=>'Select...']) ?></div>
-				<div class="form-group"><?= $form->field($model, 'child_category',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList($childcategory, ['prompt'=>'Select...']) ?></div>
+				
+				<label>Categories</label>
+				<table class="table table-bordered table-category-list">
+					<tbody>
+						<?php foreach($vendor_item_to_category as $key => $value) { ?>
+						<tr>	
+							<td>
+								<?= $value->category->category_title ?>
+								<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
+							</td>	
+							<td>		
+								<button class="btn btn-danger" type="button">			
+									<i class="glyphicon glyphicon-trash"></i>
+								</button>	
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td>
+								<select id="category_id">
+									<option></option>
+									<?php foreach($categories as $key => $value) { ?>
+										<option value="<?= $value['category_id'] ?>">
+											<?= $value['category_name'] ?>
+										</option>
+									<?php } ?>
+								</select>
+							</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-add-category">Add</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+				
 				<div class="form-group"><?= $form->field($model, 'item_status',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList(['Active'=>'Yes','Deactive'=>'No']) ?></div>
 				<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" /></div>
 			</div>

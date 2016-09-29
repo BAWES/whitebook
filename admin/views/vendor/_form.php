@@ -99,46 +99,46 @@ use yii\helpers\Url;
 		</div>
 
 		<div class="form-group">
-			<label>Working days</label>
+			<label>Days off</label>
 			<div class="checkbox-inline">
 				<label for="day_1">
-					<input type="checkbox" name="vendor_working_days[]" value="1" id="day_1" <?php if(in_array('1', $working_days)) echo 'checked'; ?> />
+					<input type="checkbox" name="vendor_day_off[]" value="1" id="day_1" <?php if(in_array('1', $day_off)) echo 'checked'; ?> />
 					Monday								
 				</label>
 			</div>
 			<div class="checkbox-inline">
 				<label for="day_2">
-					<input type="checkbox" name="vendor_working_days[]" value="2" id="day_2" <?php if(in_array('2', $working_days)) echo 'checked'; ?> />
+					<input type="checkbox" name="vendor_day_off[]" value="2" id="day_2" <?php if(in_array('2', $day_off)) echo 'checked'; ?> />
 					Tuesday								
 				</label>
 			</div>
 			<div class="checkbox-inline">
 				<label for="day_3">
-					<input type="checkbox" name="vendor_working_days[]" value="3" id="day_3" <?php if(in_array('3', $working_days)) echo 'checked'; ?> />
+					<input type="checkbox" name="vendor_day_off[]" value="3" id="day_3" <?php if(in_array('3', $day_off)) echo 'checked'; ?> />
 					Wednesday								
 				</label>
 			</div>
 			<div class="checkbox-inline">
 				<label for="day_4">
-					<input type="checkbox" name="vendor_working_days[]" value="4" id="day_4" <?php if(in_array('4', $working_days)) echo 'checked'; ?> />
+					<input type="checkbox" name="vendor_day_off[]" value="4" id="day_4" <?php if(in_array('4', $day_off)) echo 'checked'; ?> />
 					Thirsday							
 				</label>
 			</div>
 			<div class="checkbox-inline">
 				<label for="day_5">
-					<input type="checkbox" name="vendor_working_days[]" value="5" id="day_5" <?php if(in_array('5', $working_days)) echo 'checked'; ?> />
+					<input type="checkbox" name="vendor_day_off[]" value="5" id="day_5" <?php if(in_array('5', $day_off)) echo 'checked'; ?> />
 					Friday							
 				</label>
 			</div>
 			<div class="checkbox-inline">
 				<label for="day_6">
-					<input type="checkbox" name="vendor_working_days[]" value="6" id="day_6" <?php if(in_array('6', $working_days)) echo 'checked'; ?> />
+					<input type="checkbox" name="vendor_day_off[]" value="6" id="day_6" <?php if(in_array('6', $day_off)) echo 'checked'; ?> />
 					Saturday						
 				</label>
 			</div>
 			<div class="checkbox-inline">
 				<label for="day_0">
-					<input type="checkbox" name="vendor_working_days[]" value="0" id="day_0" <?php if(in_array('0', $working_days)) echo 'checked'; ?> />
+					<input type="checkbox" name="vendor_day_off[]" value="0" id="day_0" <?php if(in_array('0', $day_off)) echo 'checked'; ?> />
 					Sunday						
 				</label>
 			</div>

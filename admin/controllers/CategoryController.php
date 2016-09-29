@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Customer;
 use common\models\ChildCategory;
 use common\models\SubCategory;
+use common\models\CategoryPath;
 use admin\models\Image;
 use admin\models\Admin;
 use admin\models\Authitem;
@@ -218,10 +219,38 @@ class CategoryController extends Controller
                 $model->category_level = Category::FIRST_LEVEL;
                 $model->save(false);
                 
+                // MySQL Hierarchical Data Closure Table Pattern for category 
+
+                $level = 0;
+
+                $paths = CategoryPath::find()
+                        ->where(['category_id' => $model->parent_category_id])
+                        ->orderBy('level ASC')
+                        ->all();
+
+                foreach ($paths as $path) {
+
+                    $cp = new CategoryPath();
+                    $cp->category_id = $model->category_id;
+                    $cp->level = $level;
+                    $cp->path_id = $path->path_id;
+                    $cp->save();
+
+                    $level++;
+                }
+
+                $cp = new CategoryPath();
+                $cp->category_id = $model->category_id;
+                $cp->path_id = $model->category_id;
+                $cp->level = $level;
+                $cp->save();
+
                 Yii::$app->session->setFlash('success', 'Category created successfully!');
                 
                 Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
+                
                 return $this->redirect(['index']);
+
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -254,6 +283,33 @@ class CategoryController extends Controller
                 $model->sort = $sort;
                 $model->category_level = Category::SECOND_LEVEL;
                 $model->save(false);
+
+                // MySQL Hierarchical Data Closure Table Pattern for category 
+
+                $level = 0;
+
+                $paths = CategoryPath::find()
+                        ->where(['category_id' => $model->parent_category_id])
+                        ->orderBy('level ASC')
+                        ->all();
+
+                foreach ($paths as $path) {
+
+                    $cp = new CategoryPath();
+                    $cp->category_id = $model->category_id;
+                    $cp->level = $level;
+                    $cp->path_id = $path->path_id;
+                    $cp->save();
+
+                    $level++;
+                }
+
+                $cp = new CategoryPath();
+                $cp->category_id = $model->category_id;
+                $cp->path_id = $model->category_id;
+                $cp->level = $level;
+                $cp->save();
+
                 echo Yii::$app->session->setFlash('success', 'Subcategory added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
 
@@ -298,6 +354,33 @@ class CategoryController extends Controller
                 $sort = ($max_sort['sort'] + 1);
                 $model->sort = $sort;
                 $model->save(false);
+
+                // MySQL Hierarchical Data Closure Table Pattern for category 
+
+                $level = 0;
+
+                $paths = CategoryPath::find()
+                        ->where(['category_id' => $model->parent_category_id])
+                        ->orderBy('level ASC')
+                        ->all();
+
+                foreach ($paths as $path) {
+
+                    $cp = new CategoryPath();
+                    $cp->category_id = $model->category_id;
+                    $cp->level = $level;
+                    $cp->path_id = $path->path_id;
+                    $cp->save();
+
+                    $level++;
+                }
+
+                $cp = new CategoryPath();
+                $cp->category_id = $model->category_id;
+                $cp->path_id = $model->category_id;
+                $cp->level = $level;
+                $cp->save();
+
                 echo Yii::$app->session->setFlash('success', 'Child category added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
 
@@ -340,6 +423,34 @@ class CategoryController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 $model->category_name = strtolower($model->category_name);
                 
+                // MySQL Hierarchical Data Closure Table Pattern for category 
+                CategoryPath::deleteAll(['category_id' => $model->category_id]);
+
+                $level = 0;
+
+                $paths = CategoryPath::find()
+                        ->where(['category_id' => $model->parent_category_id])
+                        ->orderBy('level ASC')
+                        ->all();
+
+                foreach ($paths as $path) {
+
+                    $cp = new CategoryPath();
+                    $cp->category_id = $model->category_id;
+                    $cp->level = $level;
+                    $cp->path_id = $path->path_id;
+                    $cp->save();
+
+                    $level++;
+                }
+
+                $cp = new CategoryPath();
+                $cp->category_id = $model->category_id;
+                $cp->path_id = $model->category_id;
+                $cp->level = $level;
+                $cp->save();
+
+
                 Yii::$app->session->setFlash('success', 'Category updated successfully!');
                 Yii::info('[Category Updated] Admin updated category '.$model->category_name, __METHOD__);
                 
@@ -368,6 +479,35 @@ class CategoryController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
                 $model->save();
+
+                // MySQL Hierarchical Data Closure Table Pattern for category 
+                CategoryPath::deleteAll(['category_id' => $model->category_id]);
+
+                $level = 0;
+
+                $paths = CategoryPath::find()
+                        ->where(['category_id' => $model->parent_category_id])
+                        ->orderBy('level ASC')
+                        ->all();
+
+                foreach ($paths as $path) {
+
+                    $cp = new CategoryPath();
+                    $cp->category_id = $model->category_id;
+                    $cp->level = $level;
+                    $cp->path_id = $path->path_id;
+                    $cp->save();
+
+                    $level++;
+                }
+
+                $cp = new CategoryPath();
+                $cp->category_id = $model->category_id;
+                $cp->path_id = $model->category_id;
+                $cp->level = $level;
+                $cp->save();
+
+
                 echo Yii::$app->session->setFlash('success', 'Subcategory updated successfully!');
                 Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
                 return $this->redirect(['manage_subcategory']);
@@ -402,6 +542,35 @@ class CategoryController extends Controller
                 $model->category_level = Category::THIRD_LEVEL;
                 $model->category_name;
                 $model->save(false);
+
+                // MySQL Hierarchical Data Closure Table Pattern for category 
+                CategoryPath::deleteAll(['category_id' => $model->category_id]);
+
+                $level = 0;
+
+                $paths = CategoryPath::find()
+                        ->where(['category_id' => $model->parent_category_id])
+                        ->orderBy('level ASC')
+                        ->all();
+
+                foreach ($paths as $path) {
+
+                    $cp = new CategoryPath();
+                    $cp->category_id = $model->category_id;
+                    $cp->level = $level;
+                    $cp->path_id = $path->path_id;
+                    $cp->save();
+
+                    $level++;
+                }
+
+                $cp = new CategoryPath();
+                $cp->category_id = $model->category_id;
+                $cp->path_id = $model->category_id;
+                $cp->level = $level;
+                $cp->save();
+
+
                 echo Yii::$app->session->setFlash('success', 'Child category updated successfully!');
                 Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
 
@@ -475,7 +644,8 @@ class CategoryController extends Controller
             $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$id]);
 
             if ($category) {
-                echo Yii::$app->session->setFlash('success', 'Category deleted successfully!');
+
+                Yii::$app->session->setFlash('success', 'Category deleted successfully!');
 
                 return $this->redirect(['index']);
             } else {

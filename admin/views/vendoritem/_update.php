@@ -70,7 +70,7 @@ function cmp($a, $b)
 					<?php foreach($vendor_item_to_category as $key => $value) { ?>
 					<tr>	
 						<td>
-							<?= $value->category->category_name ?>
+							<?= $value->category->category_title ?>
 							<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
 						</td>	
 						<td>		
