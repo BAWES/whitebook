@@ -15,7 +15,7 @@ foreach ($model as $key => $value) { ?>
 <h3><?= $value['item_name']  ?></h3>
 <div class="text-center"><span class="borderslid"></span></div>
 <h5>
-	<?= CFormatter::asCurrency($value['item_price_per_unit'])  ?>		
+	<?= CFormatter::format($value['item_price_per_unit'])  ?>		
 </h5>
 </div>
 </div>

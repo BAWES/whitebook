@@ -211,7 +211,7 @@ if (!empty($feature_group_sql_result)) {
                                             <?php } ?>
 
                                             <p>
-                                                <?= CFormatter::asCurrency($product_val['item_price_per_unit']) ?>
+                                                <?= CFormatter::format($product_val['item_price_per_unit']) ?>
                                             </p>
                                         </div>
                                     </a>
@@ -257,7 +257,7 @@ foreach ($featured_product as $f) {
                             <h4><?php echo $f['vendor']['vendor_name']; ?></h4>
                             <h3><?php echo $f['item_name']; ?></h3>
                             <div class="text-center"><span class="borderslid"></span></div>
-                            <h5><?= CFormatter::asCurrency($f['item_price_per_unit']) ?></h5>
+                            <h5><?= CFormatter::format($f['item_price_per_unit']) ?></h5>
                         </div>
                     </div>
                 </div>

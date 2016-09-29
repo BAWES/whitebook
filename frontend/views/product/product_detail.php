@@ -83,7 +83,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                 </a>
                             </label>
                             <b>
-                                <?= CFormatter::asCurrency($model->item_price_per_unit)  ?>       
+                                <?= CFormatter::format($model->item_price_per_unit)  ?>       
                             </b>
                         </div>
                         <!-- Indicators responsive slider -->
@@ -164,7 +164,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                         </a>
                                     </label>
 
-                                    <b><?= CFormatter::asCurrency($model->item_price_per_unit)  ?></b>
+                                    <b><?= CFormatter::format($model->item_price_per_unit)  ?></b>
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">

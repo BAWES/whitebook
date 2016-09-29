@@ -66,7 +66,7 @@ if (!empty($imageData)) {
 					<div class="events_descrip">
 						<a href="<?= $item_url ?>"><?= $value->vendor->vendor_name ?></a>
 						<h3><?= $value['item_name']  ?></h3>
-						<p><?= CFormatter::asCurrency($value['item_price_per_unit'])?></p>
+						<p><?= CFormatter::format($value['item_price_per_unit'])?></p>
 					</div>
 				</div>
 			</div>

@@ -59,7 +59,7 @@ use common\components\CFormatter;
 				<?=Html::a($value->vendor->vendor_name, Url::to(['/product/product/','slug'=>$value['slug']])) ?>
 				<h3><?= $value['item_name']  ?></h3>
 				<p>
-					<?= CFormatter::asCurrency($value->item_price_per_unit) ?>		
+					<?= CFormatter::format($value->item_price_per_unit) ?>		
 				</p>
 			</a>
 			</div>

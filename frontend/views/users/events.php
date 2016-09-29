@@ -169,7 +169,7 @@ $this->title = 'Events/Wishlist | Whitebook';
 							<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']]));?>
 							<h3><?= $value['item_name']; ?></h3>
 
-							<p><?= CFormatter::asCurrency($value['item_price_per_unit'])?></p>
+							<p><?= CFormatter::format($value['item_price_per_unit'])?></p>
 
 							</div>
 							</div>
@@ -280,7 +280,7 @@ foreach($customer_wishlist as $f) {  ?>
 <h3><?php echo $f['item_name'];?></h3>
 <div class="text-center"><span class="borderslid"></span></div>
 
-<h5><?= CFormatter::asCurrency($f['item_price_per_unit']); ?></h5>
+<h5><?= CFormatter::format($f['item_price_per_unit']); ?></h5>
 
 </div>
 </div>

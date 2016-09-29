@@ -24,7 +24,7 @@ if (!empty($wishlist)) {
                     <a title="" href="#"><?= $value['vendor_name']; ?>
                         <h3><?= $value['item_name']; ?></h3>
 
-                        <p><?= CFormatter::asCurrency($f['item_price_per_unit']); ?></p>
+                        <p><?= CFormatter::format($f['item_price_per_unit']); ?></p>
 
                     </a>
                 </div>
