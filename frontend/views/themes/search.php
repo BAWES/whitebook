@@ -91,7 +91,7 @@ $get = Yii::$app->request->get();
 
 						if(!empty($imageData)) {
 							foreach ($imageData as $key => $value) {
-								echo $this->render('@frontend/views/plan/item', [ 
+								echo $this->render('_item', [ 
 									'value' => $value,
 									'customer_events_list' => $customer_events_list
 								]); 

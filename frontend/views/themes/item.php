@@ -51,8 +51,8 @@ if($value['item_for_sale'] == 'Yes'){
 			<a href="<?= $item_url ?>">
 				<?php 
 
-				if(isset($value['image_path'])) {
-					$path = Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'];
+				if(isset($value->image->image_path)) {
+					$path = Yii::getAlias("@s3/vendor_item_images_210/").$value->image->image_path;
 				} else {
 					$path = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
 				}
@@ -66,12 +66,12 @@ if($value['item_for_sale'] == 'Yes'){
 
 			<?php if(Yii::$app->language == 'en') { ?>
 				<a href="<?= $item_url ?>">
-					<?= $value['vendor_name'] ?>
+					<?= $value->vendor->vendor_name ?>
 				</a>
 				<h3><?= $value['item_name']  ?></h3>
 			<?php } else { ?>
 				<a href="<?= $item_url ?>">
-					<?= $value['vendor_name_ar'] ?>
+					<?= $value->vendor->vendor_name_ar ?>
 				</a>
 				<h3><?= $value['item_name_ar']  ?></h3>
 			<?php } ?>

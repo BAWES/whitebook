@@ -1,56 +1,90 @@
 <?php
 
 use yii\web\View;
+use common\models\CategoryPath;
+use frontend\models\Themes;
+use frontend\models\Vendor;
+use common\models\Vendoritemthemes;
 
-//price for selected category + selected theme + selected vendor 
+$get = Yii::$app->request->get();
 
-$sql = 'SELECT MIN(vi.item_price_per_unit) as min, MAX(vi.item_price_per_unit) as max FROM `whitebook_vendor_item` vi ';
+$items_query = CategoryPath::find()
+    ->select('MAX({{%vendor_item}}.item_price_per_unit) as max, min({{%vendor_item}}.item_price_per_unit) as min')
+    ->leftJoin(
+        '{{%vendor_item_to_category}}', 
+        '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+    )
+    ->leftJoin(
+        '{{%vendor_item}}',
+        '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
+    )
+    ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+    ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+    ->where([
+        '{{%vendor_item}}.trash' => 'Default',
+        '{{%vendor_item}}.item_approved' => 'Yes',
+        '{{%vendor_item}}.item_status' => 'Active',
+    ]);
 
-$implode = array();
 
 //from child categories 
 if (isset($get['category']) && $get['category'] !="") {
     
-    $sub_sql = 'select category_id from whitebook_category where slug IN ("' . str_replace(' ', '", "', $get['category']) . '")';
-    
-    $implode[] = '(vi.category_id IN ('.$sub_sql.') OR vi.subcategory_id IN ('.$sub_sql.') OR child_category IN ('.$sub_sql.'))';        
+    $items_query->andWhere('{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ("'.str_replace(' ', '", "', $get['category']).'") and trash = "Default")');
 
 //from main category
 } elseif (isset($get['slug']) && $get['slug'] !="") {
     
-    $sub_sql = 'select category_id from whitebook_category where slug = "'.$get['slug'].'"';
-
-    $implode[] = '(vi.category_id IN ('.$sub_sql.') OR vi.subcategory_id IN ('.$sub_sql.') OR child_category IN ('.$sub_sql.'))';        
+    $items_query->andWhere('{{%category_path}}.path_id IN (select category_id from {{%category}} where slug = "' . $get['slug'] .'" and trash = "Default")');
 }
 
-if (isset($get['themes']) && $get['themes'] !="") {
-    
-    $sql .= 'inner join whitebook_vendor_item_theme it on it.theme_id= vi.item_id ';
-    $sql .= 'inner join whitebook_theme t on t.theme_id = it.theme_id ';
-
-    $implode[] = 'it.trash = Default ';
-    $implode[] = 't.slug IN ("' . str_replace(' ', '", "', $get['themes']) . '")';
+//vendor filter
+if (isset($get['vendor'])) {
+    $items_query->andWhere(['in', '{{%vendor}}.slug', explode('+', $get['vendor'])]);
 }
 
-if (isset($get['vendor']) && $get['vendor'] !="") {
-    
-    $sql .= 'inner join whitebook_vendor v on v.vendor_id = vi.vendor_id ';
+//theme filter 
+if (isset($get['themes'])) {
 
-    $implode[] = 'v.slug IN ("'.str_replace(' ', '", "', $get['vendor']).'")';
-}
+    $theme = explode('+', $get['themes']);
 
-//stock availability 
-$implode[] = 'vi.trash = "Default"';
-$implode[] = 'vi.item_approved = "Yes"';
-$implode[] = 'vi.item_status = "Active"';
+    foreach ($theme as $key => $value) {
+        $themes[] = Themes::find()
+            ->select('theme_id')
+            ->where(['slug' => [$value]])
+            ->asArray()
+            ->one();
+    }
 
-if($implode) {
-    $sql .= ' WHERE '.implode(' AND ', $implode);
-}
+    $all_valid_themes = array();
 
-$result = Yii::$app->db->createCommand($sql)->queryOne();
+    foreach ($themes as $key => $value) {
 
-if($result['max'] != $result['min']) { ?>
+        $get_themes = Vendoritemthemes::find()
+            ->select('theme_id, item_id')
+            ->where(['trash' => "Default"])
+            ->andWhere(['theme_id' => $value['theme_id']])
+            ->asArray()
+            ->all();
+
+        foreach ($get_themes as $key => $value) {
+            $all_valid_themes[] = $value['item_id'];
+        }
+    }
+
+    if (count($all_valid_themes)==1) {
+        $all_valid_themes = $all_valid_themes[0];
+    } else {
+        $all_valid_themes = implode('","', $all_valid_themes);
+    }
+
+    $items_query->andWhere('{{%vendor_item}}.item_id IN("'.$all_valid_themes.'")');
+
+}//if themes 
+
+$result = $items_query->asArray()->one();
+
+if($result && $result['max'] != $result['min']) { ?>
 <div class="panel panel-default" >
     <div class="panel-heading">
         <div class="clear_left">

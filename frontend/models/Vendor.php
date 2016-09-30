@@ -85,7 +85,11 @@ class Vendor extends \common\models\Vendor
         }
     }
 
-    public static function loadvalidvendorids($cat_id=false)
+    public static function loadvalidvendorids(
+        $cat_id = false, 
+        $arr_vendor_slugs = [], 
+        $block_date = '', 
+        $location = '')
     {
 		$vendor_query = Vendor::find()
             ->select('{{%vendor}}.vendor_id')
@@ -96,11 +100,26 @@ class Vendor extends \common\models\Vendor
                 '{{%vendor_item}}.trash' => 'Default',
                 '{{%vendor_item}}.item_status' => 'Active']);
             
-        $vendor_query
-            ->andWhere('{{%vendor}}.vendor_id NOT IN (select vendor_id from {{%vendor_blocked_date}} WHERE DATE(block_date) = DATE(NOW()))');
-                
-        if($cat_id!='') {
+        if($cat_id != '') {
             $vendor_query->andWhere(['{{%vendor_item}}.category_id' => $cat_id]);
+        }
+
+        if($block_date) {
+            $vendor_query->andWhere('{{%vendor}}.vendor_id NOT IN (select vendor_id from {{%vendor_blocked_date}} WHERE DATE(block_date) = DATE('.$block_date.'))');
+        }else{
+            $vendor_query->andWhere('{{%vendor}}.vendor_id NOT IN (select vendor_id from {{%vendor_blocked_date}} WHERE DATE(block_date) = DATE(NOW()))');
+        }
+
+        if($arr_vendor_slugs) {
+            $vendor_query->andWhere(['in', '{{%vendor}}.slug', $arr_vendor_slugs]);
+        }
+
+        if($location) {
+            $vendor_query->leftJoin(
+                '{{%vendor_location}}',
+                '{{%vendor_location}}.vendor_id = {{%vendor}}.vendor_id'
+            );
+            $vendor_query->andWhere(['{{%vendor_location}}.area_id' => $location]);
         }
 
         $vendor = $vendor_query
@@ -108,6 +127,7 @@ class Vendor extends \common\models\Vendor
             ->all();
 
         $package = array();
+
         foreach ($vendor as $key => $value) {
             $package[] = Vendor::packageCheck($value['vendor_id'], $check_vendor="Notempty");
         }

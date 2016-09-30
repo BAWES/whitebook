@@ -97,7 +97,7 @@ if($event_status>0){
 									'vendor' => $vendor]); ?>
 
 								<?= $this->render('@frontend/views/plan/filter/price',[
-									'imageData' => $imageData]); ?>
+									'items' => $items]); ?>
 									
 							</div>
 						</div>
@@ -108,15 +108,15 @@ if($event_status>0){
 		</div>
 		<div class="col-md-9 paddingright0">
 		<div class="banner_section_plan">
-			<h3>Search Result for:<?= $search?> (<?= count($imageData);?>)</h3>
+			<h3>Search Result for:<?= $search?> (<?= count($items);?>)</h3>
 		</div>
 		<!-- BEGIN Item lists -->
 		<div class="listing_right">
 		<div class="events_listing">
             <ul>
             <?php
-                if(!empty($imageData))  {
-                    foreach ($imageData as $key => $value) {
+                if(!empty($items))  {
+                    foreach ($items as $key => $value) {
                         echo $this->render('@frontend/views/plan/item',[
                             'value' => $value,
                             'customer_events_list' => $customer_events_list
@@ -132,7 +132,7 @@ if($event_status>0){
 		<?php /*
 		<div class="add_more_commons">
 		<?php
-		if((!empty($imageData)) && (count($imageData) > 20)) { ?>
+		if((!empty($items)) && (count($items) > 20)) { ?>
 		<div class="lode_more_buttons">
 		<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
 		</div>

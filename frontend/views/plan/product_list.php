@@ -98,10 +98,9 @@ $get = Yii::$app->request->get();
 						<!--  END PRICE FILTER-->
 
 						<!-- BEGIN CATEGORY FILTER  -->
-						<?=$this->render('filter/category',['slug'=>$slug]);?>
-						<?=$this->render('filter/theme',['themes'=>$themes]); ?>
-						<?=$this->render('filter/vendor',['vendor'=>$vendor]); ?>
-						<?=$this->render('filter/price',['imageData'=>$imageData]); ?>
+						<?=$this->render('filter/category',['slug' => $slug]);?>
+						<?=$this->render('filter/theme',['themes' => $themes]); ?>
+						<?=$this->render('filter/vendor',['vendor' => $vendor]); ?>
 						<!--  END PRICE FILTER-->
 					<!-- END FILTER  -->
 					</div>
@@ -122,8 +121,8 @@ $get = Yii::$app->request->get();
 			<ul>
 			<?php
 
-			if(!empty($imageData))  {
-				foreach ($imageData as $key => $value) {
+			if(!empty($items))  {
+				foreach ($items as $key => $value) {
 					echo $this->render('item',['value'=>$value,'customer_events_list'=>$customer_events_list]);
 				}  
 			} else {
@@ -137,7 +136,7 @@ $get = Yii::$app->request->get();
 			</div>
 		</div>
 		<div class="add_more_commons">
-			<?php if(count($imageData) > 12) { ?>
+			<?php if(count($items) > 12) { ?>
 			<div class="lode_more_buttons">
 				<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">
 					 <?php echo Yii::t('frontend', 'Load More') ?>
