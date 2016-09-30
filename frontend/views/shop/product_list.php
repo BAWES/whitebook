@@ -110,7 +110,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             </div>
                         </div>
                         <div class="add_more_commons">
-                            <?php if(count($imageData) > 12) { ?>
+                            <?php if(count($items) > 12) { ?>
                                 <div class="lode_more_buttons">
                                     <button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">
                                         <?php Yii::t('frontend', 'Load More') ?>

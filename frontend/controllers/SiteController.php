@@ -21,6 +21,7 @@ use frontend\models\Users;
 use yii\web\Session;
 use yii\db\Query;
 use common\models\Smtp;
+use common\models\CategoryPath;
 use frontend\models\Contacts;
 use frontend\models\FaqGroup;
 use yii\helpers\ArrayHelper;
@@ -238,19 +239,45 @@ class SiteController extends BaseController
 
     public function actionSearchresult($search)
     {
-        //item type sale
+        if($search == 'all') {
+            $search = '';
+        }
+
         $search = str_replace('and', '&', $search);
         $search = str_replace('-', ' ', $search);
 
         $k = '';
         $slug = '';
 
-    	$imageData = Vendoritem::find()
-		->where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_approved' => 'Yes'])
-		->andWhere(['like','{{%vendor_item}}.item_name',$search])
-		->all();
+    	$items_query = CategoryPath::find()
+            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
+            ->leftJoin(
+                '{{%vendor_item_to_category}}', 
+                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+            )
+            ->leftJoin(
+                '{{%vendor_item}}',
+                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
+            )
+            ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+            ->where([
+                '{{%vendor_item}}.trash' => 'Default',
+                '{{%vendor_item}}.item_approved' => 'Yes',
+                '{{%vendor_item}}.item_status' => 'Active',
+            ]);
 
-        foreach ($imageData as $data) {
+        //if search query given 
+        if($search) {
+            $items_query->andWhere(['like','{{%vendor_item}}.item_name', $search]);    
+        }            
+
+        $items = $items_query->groupBy('{{%vendor_item}}.item_id')
+            ->orderBy('{{%image}}.vendorimage_sort_order', SORT_ASC)
+            ->asArray()
+            ->all();
+
+        foreach ($items as $data) {
             $k[] = $data['item_id'];
         }
 
@@ -297,7 +324,7 @@ class SiteController extends BaseController
         }
 
         return $this->render('search', [
-            'imageData' => $imageData,
+            'items' => $items,
             'themes' => $themes1,
             'vendor' => $vendor,
             'slug' => $slug,

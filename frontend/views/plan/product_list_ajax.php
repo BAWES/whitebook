@@ -5,9 +5,9 @@ use yii\helpers\Url;
 ?>
 
 <?php
-if (!empty($imageData)) {
+if (!empty($items)) {
 
-    foreach ($imageData as $key => $value) {
+    foreach ($items as $key => $value) {
         require 'item.php';
     }
 } else {

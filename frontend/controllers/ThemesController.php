@@ -164,7 +164,10 @@ class ThemesController extends BaseController
                 /* END get current category to load sub category */
 
                 if (Yii::$app->request->isAjax) {
-                    return $this->renderPartial('_item', ['imageData' => $imageData,'customer_events_list'=>[]]);
+                    return $this->renderPartial('search_ajax', [
+                        'imageData' => $imageData,
+                        'customer_events_list'=>[]
+                    ]);
                 }
 
                 if (Yii::$app->user->isGuest) {

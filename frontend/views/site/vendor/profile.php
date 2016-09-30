@@ -316,7 +316,7 @@ if ($event_status > 0) {
                         <?php
                             if (!empty($vendorData)) {
                                 foreach ($vendorData as $key => $value) {
-                                    echo $this->render('@frontend/views/plan/item',[
+                                    echo $this->render('item',[
                                         'value' => $value,
                                         'customer_events_list' => $customer_events_list
                                     ]);
