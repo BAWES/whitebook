@@ -16,7 +16,7 @@ $customer_id = Yii::$app->user->getId();
 if($customer_id) {
     
     $my_addresses =  \common\models\CustomerAddress::find()
-        ->select(['{{%location}}.id, {{%customer_address}}.address_name'])
+        ->select(['{{%location}}.id, {{%customer_address}}.address_id,{{%customer_address}}.address_name'])
         ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
         ->where(['{{%customer_address}}.trash'=>'Default'])
         ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
@@ -27,7 +27,6 @@ if($customer_id) {
 } else {
     $my_addresses = array();    
 }
-
 ?>
 
 <div class="panel panel-default" >
@@ -49,16 +48,22 @@ if($customer_id) {
 
                     <option value=""><?= Yii::t('frontend', 'All') ?></option>
 
-                    <?php 
-
+                    <?php
                     if($my_addresses) { ?>
                         <optgroup label="My Addresses">
-                        <?php foreach ($my_addresses as $key => $value) {  ?>
-                            <option value="<?= $value['id']; ?>">
+                        <?php foreach ($my_addresses as $key => $value) {
+                            $checked = '';
+                            if ($deliver_location != null) {
+                                $checked = ($deliver_location == 'address_'.$value['address_id']) ? 'selected' : '';
+                            }
+                            ?>
+
+                            <option <?=$checked; ?> value="address_<?= $value['address_id']; ?>">
                                 <?= $value['address_name'] ?>   
                             </option>
                         <?php
                         }//foreach my addresses ?>
+
                         </optgroup>
                     <?php     
                     }//if my addresses

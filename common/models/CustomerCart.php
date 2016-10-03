@@ -139,7 +139,20 @@ class CustomerCart extends \yii\db\ActiveRecord
         */
         if(!empty($data['area_id'])) {
 
-            $delivery_area = CustomerCart::checkLocation($data['area_id'], $vendor_id);    
+
+            if ($data['area_id'] != '') {
+                $deliverlocation = $data['area_id'];
+                if (is_numeric($deliverlocation)) {
+                    $location = $deliverlocation;
+                } else {
+                    $end = strlen($deliverlocation);
+                    $from = strpos($deliverlocation, '_') + 1;
+                    $address_id = substr($deliverlocation, $from, $end);
+                    $location = CustomerAddress::findOne($address_id)->area_id;
+                }
+            }
+
+            $delivery_area = CustomerCart::checkLocation($location, $vendor_id);
 
             if(!$delivery_area) {
                 

@@ -102,10 +102,24 @@ class CartController extends BaseController
              */
             if(!$cart) {
 
+                if (isset($data['area_id']) && $data['area_id'] != '') {
+                    $deliverlocation = $data['area_id'];
+                    if (is_numeric($deliverlocation)) {
+                        $location = $deliverlocation;
+                    } else {
+                        $end = strlen($deliverlocation);
+                        $from = strpos($deliverlocation, '_') + 1;
+                        $address_id = substr($deliverlocation, $from, $end);
+                        $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
+                    }
+                } else {
+                    $location = '';
+                }
+
                 $cart = new CustomerCart();
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
-                $cart->area_id = isset($data['area_id'])?$data['area_id']:'';
+                $cart->area_id = $location;
                 $cart->timeslot_id = isset($data['timeslot_id'])?$data['timeslot_id']:'';
                 $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                 $cart->cart_customization_price_per_unit = 0;
@@ -177,7 +191,19 @@ class CartController extends BaseController
         */
         if(!empty($data['area_id'])) {
 
-            $delivery_area = CustomerCart::checkLocation($data['area_id'], $vendor_id);
+            if ($data['area_id'] != '') {
+                $deliverlocation = $data['area_id'];
+                if (is_numeric($deliverlocation)) {
+                    $location = $deliverlocation;
+                } else {
+                    $end = strlen($deliverlocation);
+                    $from = strpos($deliverlocation, '_') + 1;
+                    $address_id = substr($deliverlocation, $from, $end);
+                    $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
+                }
+            }
+
+            $delivery_area = CustomerCart::checkLocation($location, $vendor_id);
 
             if (!$delivery_area) {
                 return Yii::t('frontend', 'Delivery not available on selected area');
