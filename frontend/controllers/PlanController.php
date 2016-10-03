@@ -154,7 +154,7 @@ class PlanController extends BaseController
             ->asArray()
             ->all();
         
-        if (Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest) {
             $usermodel = new Users();            
             $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
         } else {
