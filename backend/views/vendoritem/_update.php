@@ -38,7 +38,7 @@ function cmp($a, $b)
 			<li><a href="#5" data-toggle="tab" id="validthree3">Images</a></li>
 		</ul>
 		<div class="tab-content">
-			<div class="tab-pane" id="1">
+			<div class="tab-pane clearfix" id="1">
 				<div class="form-group"><?= $form->field($model, 'item_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128]) ?></div>
 				<div class="form-group"><?= $form->field($model, 'item_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128]) ?></div>
 				
@@ -79,25 +79,34 @@ function cmp($a, $b)
 				</table>
 				
 				<div class="form-group"><?= $form->field($model, 'item_status',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList(['Active'=>'Yes','Deactive'=>'No']) ?></div>
-				<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" /></div>
+				<div class="form-group">
+					<div class="col-lg-6">
+						<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete','style'=>'float:left;']) ?>
+					</div>
+					<div class="col-lg-6">
+						<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
+					</div>
+
+				</div>
 			</div>
 			<!--End First Tab -->
 
 			<!--BEGIN second Tab -->
-			<div class="tab-pane" id="2">
+			<div class="tab-pane clearfix" id="2">
 				<div class="form-group"><?= $form->field($model, 'type_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($itemtype, ['prompt'=>'Select...']) ?></div>
 				<div class="form-group"><?= $form->field($model, 'item_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item description'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?></div>
 				<div class="form-group"><?= $form->field($model, 'item_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item description - Arabic'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?></div>
 				<div class="form-group"><?= $form->field($model, 'item_additional_info',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
 				<div class="form-group"><?= $form->field($model, 'item_additional_info_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+				<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+				<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+				<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 			</div>
 
 			<!--End Second Tab -->
 
 			<!--BEGIN Third Tab -->
-			<div class="tab-pane" id="3">
+			<div class="tab-pane clearfix" id="3">
 				<input type="hidden" id="test" value="0" name="tests">
 				<div class="form-group">
 					<?= $form->field($model, 'item_for_sale',['template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])->dropDownList(['Yes'=>'Yes','No'=>'No']) ?>
@@ -176,9 +185,9 @@ function cmp($a, $b)
 				</div>
 
 				<!-- END display exist images -->
-
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+				<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+				<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+				<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 			</div>
 			<!--End Third Tab -->
 

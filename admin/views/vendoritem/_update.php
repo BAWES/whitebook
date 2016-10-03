@@ -16,20 +16,7 @@ function cmp($a, $b)
 {
 	return strcmp($a["vendorimage_sort_order"], $b["vendorimage_sort_order"]);
 }
-
 ?>
-<style>
-	#vendoritem-groups label,#vendoritem-themes label {
-		float: left;
-		min-width: 15%;
-		margin-right: 43px;
-	}
-	.border-top{
-		border-top: 1px solid;
-	}
-	.padding-top-bottom{padding: 36px 0;}
-</style>
-
 <div class="col-md-12 col-sm-12 col-xs-12">
 
 <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
@@ -57,7 +44,7 @@ function cmp($a, $b)
 
 	<div class="tab-content">
 		<!-- Begin First Tab -->
-		<div class="tab-pane active" id="1">
+		<div class="tab-pane active clearfix" id="1">
 			<!-- vid - click create item button from item view page for the particular item view page-->
 			<div class="form-group"><?= $form->field($model, 'vendor_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList([$model->vendor->vendor_id => $model->vendor->vendor_name], ['prompt'=>'Select...','disabled'=>'disabled']) ?></div>
 			<?=$form->field($model,'vendor_id')->hiddenInput()->label(false); ?>
@@ -100,12 +87,15 @@ function cmp($a, $b)
 				</tfoot>
 			</table>
 
-			<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
+			<div class="form-group" >
+			<div class="col-lg-6 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete pull-left']) ?></div>
+			<div class="col-lg-6"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
+			</div>
 		</div>
 		<!--End First Tab -->
 
 		<!--BEGIN second Tab -->
-		<div class="tab-pane" id="2">
+		<div class="tab-pane clearfix" id="2">
 			<!-- BEGIN ITEM TYPE -->
 			<div class="form-group"><?= $form->field($model, 'type_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($itemType, ['prompt'=>'Select...']) ?></div>
 			<!-- END ITEM TYPE -->
@@ -113,13 +103,15 @@ function cmp($a, $b)
 			<div class="form-group"><?= $form->field($model, 'item_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item description - Arabic '.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?></div>
 			<div class="form-group"><?= $form->field($model, 'item_additional_info',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
 			<div class="form-group"><?= $form->field($model, 'item_additional_info_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+			<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+			<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+			<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
+
 		</div>
 		<!--End Second Tab -->
 
 		<!--BEGIN Third Tab -->
-		<div class="tab-pane" id="3">
+		<div class="tab-pane clearfix" id="3">
 			<input type="hidden" id="test" value="0" name="tests">
 			<div class="form-group"><?php
                 $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
@@ -190,25 +182,24 @@ function cmp($a, $b)
                     ?>
                 </div>
 			<!-- END display exist images -->
-
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+			<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+			<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+			<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 		</div>
 		<!--End third Tab -->
 
-		<div class="tab-pane" id="4">
+		<div class="tab-pane clearfix" id="4">
 			<div class="form-group"><?= $form->field($model, 'item_approved',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList([ 'Pending' => 'Pending','Yes' => 'Yes', 'Rejected'=>'Rejected']) ?></div>
 			<div class="form-group"><?php
-                //echo ">>".$model->item_status;
-                //exit;
                 $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
                 echo $form->field($model, 'item_status',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Value' => true])?></div>
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+			<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+			<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+			<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 		</div>
 		<!--End fourth Tab -->
 
-		<div class="tab-pane" id="5">
+		<div class="tab-pane clearfix" id="5">
 			<div class="file-block" style="color:red;display: none;"> Please upload aleast a file</div>
             <?php
 			$imageInitialPreview = [];
@@ -251,12 +242,13 @@ function cmp($a, $b)
             ]);
             ?>
 
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+			<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+			<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+			<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 		</div>
 		<!--End fifth Tab -->
 
-		<div class="tab-pane" id="6">
+		<div class="tab-pane clearfix" id="6">
 			<div class="form-group clearfix padding-top-bottom">
 				<?php echo $form->field($model, 'themes')->checkboxlist($themelist);?>
 				<?php //$form->field($model, 'themes',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($themelist , ['multiple'=>'multiple',]) ?>
@@ -388,6 +380,9 @@ $this->registerCss("
 	.superbox-s > li > b { margin:10px 0px 5px 0px;}
 	.question_title{font-weight: bold;  margin-top: 15px;  line-height: 31px;  font-size: 15px;}
 	.upimage {margin: 5px 0px 10px 0px;}
+	#vendoritem-groups label,#vendoritem-themes label {float: left;min-width: 15%;margin-right: 43px;}
+	.border-top{border-top: 1px solid;}
+	.padding-top-bottom{padding: 36px 0;}
 ");
 
 

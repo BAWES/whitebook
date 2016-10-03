@@ -28,7 +28,7 @@ class CheckoutController extends BaseController
 
 	public function actionIndex()
 	{
-		//validate cart 
+		//validate cart
 		foreach (CustomerCart::items() as $item) {
     		$errors = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],

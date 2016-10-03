@@ -62,15 +62,6 @@ class ShopController extends BaseController
 
             $ActiveVendors = Vendor::loadvalidvendorids($Category->category_id);
 
-            if ($session->has('deliver-location')) {
-                $location = $session->get('deliver-location');
-                $condition .= ' AND ({{%vendor_location}}.area_id IN(' .$location. ')) ';
-            }
-
-            if ($session->has('deliver-date')) {
-                $date = date('Y-m-d', strtotime($session->get('deliver-date')));
-                $condition .= " AND ({{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')) ";
-            }
 
             $vendor = implode(',', $ActiveVendors);
 
@@ -98,7 +89,18 @@ class ShopController extends BaseController
                 ]);
                     
             $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
-                
+
+            if ($session->has('deliver-location')) {
+                $location = $session->get('deliver-location');
+                $item_query->andWhere(['in', '{{%vendor_location}}.area_id', $location]);
+            }
+
+
+            if ($session->has('deliver-date')) {
+                $date = date('Y-m-d', strtotime($session->get('deliver-date')));
+                $condition .= " ({{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')) ";
+            }
+
             $item_query->andWhere($condition);
 
             $items = $item_query
