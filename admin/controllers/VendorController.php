@@ -36,7 +36,7 @@ class VendorController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                    [
-                       'actions' => ['password', 'create', 'update', 'index', 'view', 'delete', 'block', 'loadcategory', 'loadsubcategory', 'vendoritemview', 'vendorname', 'changepackage', 'changeeditpackage', 'emailcheck', 'loadpackagedate', 'packageupdate', 'vendornamecheck'],
+                       'actions' => ['password', 'create', 'update', 'index', 'view', 'delete', 'block', 'loadcategory', 'loadsubcategory', 'vendoritemview', 'vendorname', 'changepackage', 'changeeditpackage', 'emailcheck', 'loadpackagedate', 'packageupdate', 'vendornamecheck', 'validate-vendor'],
                        'allow' => true,
                        'roles' => ['@'],
                    ],
@@ -230,16 +230,42 @@ class VendorController extends Controller
                             }
 
                             //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
+                           /* $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
 
                             if($awsResult){
                                 $model->vendor_logo_path = $filename;
-                            }
+                            }*/
                         }
                     }
                 }
 
                 if ($model->save(false)) {
+
+                    //remove old packages
+                    Vendorpackages::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                    //save packages 
+                    $vendor_packages = Yii::$app->request->post('vendor_packages');
+
+                    if($vendor_packages) {
+                        foreach ($vendor_packages as $key => $value) {
+
+                            $package = Package::findOne($value['package_id']);
+
+                            if(!$package) {
+                                continue;
+                            }
+
+                            $vp = new Vendorpackages;
+                            $vp->vendor_id = $model->vendor_id;
+                            $vp->package_id = $value['package_id'];
+                            $vp->package_price = $package->package_pricing;
+                            $vp->package_start_date = date('Y-m-d', strtotime($value['package_start_date']));
+                            $vp->package_end_date = date('Y-m-d', strtotime($value['package_end_date']));
+                            $vp->trash = 'Default';
+                            $vp->save();
+                        }
+                    }
 
                     //remove old alert emails 
                     VendorOrderAlertEmails::deleteAll(['vendor_id' => $model->vendor_id]);
@@ -278,7 +304,7 @@ class VendorController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [
-                    'package' => $package,
+                    'packages' => $package,
                     'model' => $model
                 ]);
             }
@@ -406,6 +432,7 @@ class VendorController extends Controller
                 } else {
                     $model->vendor_logo_path = $exist_logo_image;
                 }
+
                 if($model->save(false)) {
                     echo Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
                     return $this->redirect(['index']);
@@ -431,13 +458,20 @@ class VendorController extends Controller
                     ->where(['vendor_id' => $id])
                     ->all();
 
+                $vendor_packages = Vendorpackages::findAll(['vendor_id' => $model->vendor_id]);
+
+                $packages = Package::findAll([
+                    'package_status' => 'Active',
+                    'trash' => 'Default'
+                ]);
+
                 return $this->render('update', [
                     'model' => $model, 
-                    'package' => $package, 
                     'vendor_contact_number' => $vendor_contact_number, 
-                    'present_package' => $present_package,
                     'vendor_order_alert_emails' => $vendor_order_alert_emails,
-                    'day_off' => $day_off
+                    'day_off' => $day_off,
+                    'vendor_packages' => $vendor_packages,
+                    'packages' => $packages
                 ]);
             }
         
@@ -755,5 +789,52 @@ class VendorController extends Controller
           ->andwhere(['trash' => 'Default'])
           ->all();
         return $result = count($vendorname);
+    }
+
+    //check vendor package conflict on create vendor 
+    public function actionValidateVendor()
+    {
+        if (!Yii::$app->request->isAjax)
+            die();
+
+        $json = ['errors' => []];
+
+        $data = Yii::$app->request->post();
+
+        //check if date is valid
+        if (strtotime($data['start_date']) >= strtotime($data['end_date'])) {
+            $json['errors'][] = Yii::t('admin', 'Given Date is not a valid one. Kindly entered valid date!');
+        }
+
+        //check if other package available in selected date
+        $packages = Yii::$app->request->post('vendor_packages');
+
+        if(!$packages) {
+            $packages = [];
+        }
+
+        foreach ($packages as $key => $value) {
+            
+            if(strtotime($data['start_date']) >= strtotime($value['package_start_date'])  &&
+                    strtotime($data['start_date']) <= strtotime($value['package_end_date'])){
+
+                $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
+                    'start_date' => $value['package_start_date'],
+                    'end_date' => $value['package_end_date']
+                ]);
+
+            } elseif(strtotime($data['end_date']) >= strtotime($value['package_start_date'])  &&
+                    strtotime($data['end_date']) <= strtotime($value['package_end_date'])){
+
+                $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
+                    'start_date' => $value['package_start_date'],
+                    'end_date' => $value['package_end_date']
+                ]);
+            }
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return $json;
     }
 }
