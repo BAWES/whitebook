@@ -30,6 +30,7 @@ use yii\helpers\Url;
       <a href="#4" data-toggle="tab" class="twovalid2">Social Info</a>
     </li>
     <li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
+    <li><a href="#6" data-toggle="tab" class="twovalid2">Packages</a></li>
   </ul>
   <div class="tab-content">
 <!-- Begin First Tab -->
@@ -205,6 +206,7 @@ use yii\helpers\Url;
 	<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
  </div>
  </div>
+
  <div class="tab-pane" id="5">
 	Email address list to get order notification
 	<br />
@@ -240,6 +242,54 @@ use yii\helpers\Url;
 
 	<div class="form-group">
 		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+	</div>
+</div>
+
+ <div class="tab-pane" id="6">
+	Vendor package list  
+	<br />
+	<br />
+
+	<div class="package-list-error"></div>
+
+	<table class="table table-bordered table-package-list">
+		<tbody>
+			<tr>
+				<th>Package</th>
+				<th>Start date</th>
+				<th>End date</th>
+				<th></th>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td>
+					<select id="package_id" class="form-control">
+						<?php foreach ($packages as $key => $value) { ?>
+							<option value="<?= $key ?>">
+								<?= $value ?>
+							</option>
+						<?php } ?>
+					</select>
+				</td>
+				<td>
+					<input id="package_start_date" name="start_date" class="form-control" />
+				</td>
+				<td>
+					<input id="package_end_date" name="end_date" class="form-control" />
+				</td>	
+				<td>
+					<button type="button" class="btn btn-primary btn-add-package">
+						<i class="fa fa-plus"></i>
+					</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+
+	<div class="form-group">
+		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 		<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
 	</div>
 </div>
@@ -262,6 +312,62 @@ use yii\helpers\Url;
 
 <!-- END PAGE LEVEL PLUGINS -->
 <script>
+
+$package_count = 0;
+
+$('.btn-add-package').click(function() {
+
+	$('.package-list-error').html('');
+
+	$.post('<?= Url::to(['vendor/validate-vendor']) ?>', $('form').serialize(), function(json) {
+
+		if(json.errors.length > 0) {
+
+			$.each(json.errors, function(key, value) {
+				$('.package-list-error').append('<div class="alert alert-warning">' + value + '</div>');	
+			});
+
+			return false;
+		}
+
+		$html  = '<tr>';
+		$html += '	<td>';
+		$html += 		$('#package_id option:selected').text();
+		$html += '		<input value="' + $('#package_id').val() + '" type="hidden"';
+		$html += '			name="vendor_packages['+$package_count+'][package_id]" />';
+		$html += '	</td>';
+		
+		$html += '	<td>';
+		$html += 		$('#package_start_date').val();
+		$html += '		<input value="' + $('#package_start_date').val() + '" type="hidden"';
+		$html += '			name="vendor_packages['+$package_count+'][package_start_date]" />';
+		$html += '	</td>';
+
+		$html += '	<td>';
+		$html += 		$('#package_end_date').val();
+		$html += '		<input value="' + $('#package_end_date').val() + '" type="hidden"';
+		$html += '			name="vendor_packages['+$package_count+'][package_end_date]" />';
+		$html += '	</td>';
+
+		$html += '	<td>';
+		$html += '		<button class="btn btn-danger" type="button">';
+		$html += '			<i class="glyphicon glyphicon-trash"></i>';
+		$html += '		</button>';
+		$html += '	</td>';
+		$html += '</tr>';
+
+		$('.table-package-list tbody').append($html);
+
+		$('#package_start_date').val('');
+		$('#package_end_date').val('');
+	});
+
+	$package_count++;
+});
+
+$(document).delegate('.table-package-list .btn-danger','click', function(){
+	$(this).parent().parent().remove();
+});
 
 $('.btn-add-address').click(function(){
 	
@@ -377,8 +483,8 @@ function removePhone(phone) {
 <!-- END PAGE LEVEL PLUGINS -->
 
 <script>
-$('#vendor-package_start_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
-$('#vendor-package_end_date').datepicker({  format: 'dd-mm-yyyy', });
+$('#package_start_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
+$('#package_end_date').datepicker({  format: 'dd-mm-yyyy', });
 </script>
 
 

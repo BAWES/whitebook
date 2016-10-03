@@ -93,8 +93,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php   $package = Package::loadpackage();
 	                    $form = ActiveForm::begin([]); $model->package_id='';$model->package_start_date='';$model->package_end_date='';
 	echo $form->field($model, 'package_id')->dropdownList($package,['prompt'=>'Select Package',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"],'style' => 'margin-top:10px;'])->label(false); ?></td>
-	<td><?= $form->field($model, 'package_start_date',['template' => "{label}<div class='controls mystart'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'Start date',])->label(false);?></td>
-	<td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date',])->label(false);?></td>
+	
+    <td><?= $form->field($model, 'package_start_date',['template' => "{label}<div class='controls mystart'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'Start date',])->label(false);?></td>
+	
+    <td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date',])->label(false);?></td>
+
 	<td style="float:left;"><?php echo Html::Button($model->isNewRecord ? 'Add' : 'Add', [ 'onclick' => 'return check_validation();','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary-ads','style'=>'float:right;margin-top:10px;']);
 	echo $form->field($model, 'vendor_id')->hiddenInput()->label('');
 	ActiveForm::end();
