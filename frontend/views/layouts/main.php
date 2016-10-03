@@ -68,6 +68,7 @@ $this->beginPage()
         <!-- Header Section Start -->
         <?php
         $this->beginBody();
+        echo Alert::widget();
         $this->beginContent('@app/views/layouts/header.php');
         ?>
 <?php $this->endContent(); ?>
@@ -78,6 +79,7 @@ $this->beginPage()
         <!-- Footer Section Start -->
 <?php $this->beginContent('@app/views/layouts/footer.php', ['socialinfo' => Socialinfo::socialinformation(), 'siteinfo' => Siteinfo::siteinformation()]); ?>
 <?php $this->endContent(); ?>
+<?php $this->registerJs('$(".alert").animate({opacity: 1.0}, 3000).fadeOut("slow");',yii\web\View::POS_READY); ?>
 <?php $this->endBody() ?>
         <!-- Footer Section End -->
     </body>

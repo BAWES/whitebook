@@ -32,7 +32,7 @@ use yii\helpers\Url;
 <div class="btn-set">
         <button onclick="address();" class="btn btn-primary btn-checkout pull-left" style="margin-left: 0;">
                 <?= Yii::t('frontend', 'Back') ?>
-        </a>
+        </button>
 
         <button class="btn btn-primary btn-checkout pull-right" onclick="save_payment();">
                 <?= Yii::t('frontend', 'Next') ?>

@@ -68,17 +68,6 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                 ?>
             </div>
         </div>
-
-        <?php
-        $message = Yii::$app->getSession()->getFlash('success');
-
-        if($message) { ?> 
-            <div class="alert alert-success" style="margin-top: 20px; margin-bottom: 0px;">
-                <i class="glyphicon glyphicon-ok"></i>
-                <?= $message ?>
-                <button data-dismiss="alert" class="close">&times;</button>
-            </div>
-        <?php } ?>
         <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
         <div class="col-md-12 filter-bar" style="display: none;">
