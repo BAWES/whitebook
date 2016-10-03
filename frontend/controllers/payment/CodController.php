@@ -19,7 +19,14 @@ class CodController extends Controller
             $this->redirect(['checkout/index']);
         }
 
-        //place order     
+        if (Order::confirmOrder()) // Confirming order before payment
+        {
+            $msg = Order::confirmOrder();
+            Yii::$app->session->setFlash('danger',$msg);
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        exit;
+        //place order
         $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['fees'], $gateway['order_status_id'], '-');
 
         Yii::$app->session->set('order_id', $order_id);
