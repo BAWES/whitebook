@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\CustomerAddress;
 use Yii;
 use yii\helpers\Url;
 use frontend\models\Users;
@@ -91,7 +92,16 @@ class ShopController extends BaseController
             $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
 
             if ($session->has('deliver-location')) {
-                $location = $session->get('deliver-location');
+
+                if (is_numeric($session->get('deliver-location'))) {
+                    $location = $session->get('deliver-location');
+                } else {
+                    $end = strlen($session->get('deliver-location'));
+                    $from = strpos($session->get('deliver-location'), '_') + 1;
+                    $address_id = substr($session->get('deliver-location'), $from, $end);
+
+                    $location = CustomerAddress::findOne($address_id)->area_id;
+                }
                 $item_query->andWhere(['in', '{{%vendor_location}}.area_id', $location]);
             }
 
@@ -219,7 +229,15 @@ class ShopController extends BaseController
         // delivery filter 
         if ($data['location'] != '') {
             $session->set('deliver-location', $data['location']);
-            $location = $data['location'];
+            $deliverlocation = $session->get('deliver-location');
+            if (is_numeric($deliverlocation)) {
+                $location = $deliverlocation;
+            } else {
+                $end = strlen($deliverlocation);
+                $from = strpos($deliverlocation, '_') + 1;
+                $address_id = substr($deliverlocation, $from, $end);
+                $location = CustomerAddress::findOne($address_id)->area_id;
+            }
         }else{
             $location = '';
         }
@@ -445,7 +463,7 @@ class ShopController extends BaseController
                 $customer_id = Yii::$app->user->getId();
 
                 $my_addresses =  \common\models\CustomerAddress::find()
-                    ->select(['{{%location}}.id, {{%customer_address}}.address_name'])
+                    ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
                     ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
                     ->where(['{{%customer_address}}.trash'=>'Default'])
                     ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
@@ -454,12 +472,19 @@ class ShopController extends BaseController
                     ->asArray()
                     ->all();
 
-                $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'id', 'address_name');
+
+                    $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
 
                 if (count($myaddress_area_list)>0) {
 
+                    // add prefix to address id ex: address_14,address_15
+                    $myNewArray = array_combine(
+                        array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
+                        $myaddress_area_list
+                    );
+
                     $combined_myaddress = array(
-                        Yii::t('frontend', 'My Addresses') => $myaddress_area_list
+                        Yii::t('frontend', 'My Addresses') => $myNewArray
                     );
 
                     $vendor_area_list = $combined_myaddress + $vendor_area_list;
@@ -474,6 +499,7 @@ class ShopController extends BaseController
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
                 'vendor_area' => $vendor_area_list,
+                'my_addresses' => $my_addresses,
             ]);
         }
     }

@@ -2,22 +2,21 @@
 use yii\widgets\ActiveForm;
 
 $customer_id = Yii::$app->user->getId();
-
 if($customer_id) {
 
     $my_addresses =  \common\models\CustomerAddress::find()
-        ->select(['{{%location}}.id, {{%customer_address}}.address_name'])
+        ->select(['{{%customer_address}}.address_id, {{%location}}.id, {{%customer_address}}.address_name'])
         ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
         ->where(['{{%customer_address}}.trash'=>'Default'])
         ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
         ->groupby(['{{%location}}.id'])
         ->asArray()
         ->all();
-
 } else {
     $my_addresses = array();
 }
 
+$cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
 ?>
 <!-- BEGIN Create event Modal Box -->
 <div class="modal fade" id="ShopLocationDateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
@@ -55,7 +54,7 @@ if($customer_id) {
                                             if($my_addresses) { ?>
                                                 <optgroup label="My Addresses">
                                                     <?php foreach ($my_addresses as $key => $value) {  ?>
-                                                        <option value="<?= $value['id']; ?>">
+                                                        <option value="address_<?= $value['address_id']; ?>">
                                                             <?= $value['address_name'] ?>
                                                         </option>
                                                         <?php
@@ -64,8 +63,7 @@ if($customer_id) {
                                                 <?php
                                             }//if my addresses
 
-
-                                            $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
+                                                    //$data
                                                     $list = '';
                                                     foreach ($cities as $city) {
                                                         $city_name = (Yii::$app->language == 'en') ? $city->city_name : $city->city_name_ar;
