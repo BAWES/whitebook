@@ -51,7 +51,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         	}
        	?>
 
-        <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">
+        <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">	
 
         <table class="table table-bordered cart-table">
 	        <thead>
@@ -59,7 +59,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-	        		<td aligh="center" class="text-center"><?= Yii::t('frontend', 'Quantity') ?></th>
+	        		<td aligh="left" class="text-center"><?= Yii::t('frontend', 'Quantity') ?></th>
 	        		<td align="right"><?= Yii::t('frontend', 'Unit Price') ?></th>
 	        		<td align="right"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
@@ -117,6 +117,14 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 	        				?>
 	        				
+	        				<?php if(Yii::$app->language == 'en') { ?>
+	            				<?= $delivery_area->location->location; ?> <br />
+	            				<?= $delivery_area->location->city->city_name; ?> <br />
+	                        <?php } else { ?>
+	                            <?= $delivery_area->location->location_ar; ?> <br />
+	                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
+	                        <?php } ?>
+
 	        				<?= $item['cart_delivery_date'] ?> <br />
 	        			
 	        				<?= $item['timeslot_start_time'].' - '.$item['timeslot_end_time'] ?>
@@ -129,13 +137,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		</td>
 	        		<td align="center">
 		        		<div class="input-group btn-block" style="max-width: 140px;">
-		                    
 		                    <input type="text" name="quantity[<?= $item['cart_id'] ?>]" value="<?= $item['cart_quantity'] ?>" size="1" class="form-control">
-
 		                    <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Update"><i class="glyphicon glyphicon-refresh"></i></button>
-
 		                    <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="glyphicon glyphicon-trash"></i></button>
-
 	                    </div>
                     </td>
 	        		<td align="right">
@@ -170,16 +174,12 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	          </table>
 	        </div>
         </div>
+        
+        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">
+        	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
+        </button>
 
-		<a href="<?= Url::to(['cart/confirm']) ?>" class="btn btn-primary pull-right btn-checkout">
-			<?= Yii::t('frontend', 'Proceed to Checkout') ?>
-		</a>
-
-<!--        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">-->
-<!--        	--><?//= Yii::t('frontend', 'Proceed to Checkout') ?>
-<!--        </button>-->
-
-        <a href="<?= Url::to(['shop/index']) ?>" class="btn btn-primary pull-right btn-checkout">
+        <a href="<?= Url::to(['cart/index']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
         </a>
 
