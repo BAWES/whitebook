@@ -46,6 +46,22 @@ class CartController extends BaseController
         ]);
     }
 
+
+    //list all products
+    public function actionConfirm()
+    {
+        $items = CustomerCart::items();
+        if (Order::confirmOrder()) // Confirming order before payment
+        {
+            $msg = Order::confirmOrder();
+            Yii::$app->session->setFlash('danger',$msg);
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        return $this->render('confirm', [
+            'items' => $items
+        ]);
+    }
+
     /*  
      *  Add product to cart  
      ----------------------------
@@ -269,7 +285,6 @@ class CartController extends BaseController
         Update item quantity 
     */
     public function actionUpdate() {
-        
         $quantity = Yii::$app->request->post('quantity');
 
         foreach ($quantity as $key => $value) {
@@ -293,7 +308,6 @@ class CartController extends BaseController
         if($btn_checkout) {
             return $this->redirect(['checkout/index']);
         }
-
         return $this->redirect(['index']);
     }
 
