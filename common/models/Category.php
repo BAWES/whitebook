@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use common\models\User;
+use common\models\VendorCategory;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -140,14 +141,6 @@ class Category extends \yii\db\ActiveRecord
         return $this->hasMany(Category::className(), ['parent_category_id' => 'category_id']);
     }
 
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendorItems()
-    {
-        return $this->hasMany(VendorItem::className(), ['category_id' => 'category_id']);
-    }
-
     public function getCategory_title() 
     { 
         $result = CategoryPath::find()
@@ -167,26 +160,19 @@ class Category extends \yii\db\ActiveRecord
         }
     }
 
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendorItemRequests()
-    {
-        return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
-    }
-
     public static function vendorcategory($id)
     {
-        $vendor = Vendor::find()->select(['category_id'])->where(['vendor_id' => $id])->all();
-        $vendor_id = $vendor[0]['category_id'];
-        $vendor_exp = explode(',',$vendor_id);
-        //$vendor_imp = implode('","',$vendor_exp);
-        $categories = Category::find()
-        ->select(['category_id','category_name'])
-        ->where(['IN', 'category_id', $vendor_exp])
-        ->all();
-        $category =ArrayHelper::map($categories,'category_id','category_name');
-        return $category;
+        $categories = VendorCategory::find()
+            ->select('{{%category}}.category_name, {{%category}}.category_id')
+            ->innerJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_category}}.category_id')
+            ->where([
+                '{{%vendor_category}}.vendor_id' => $id,
+                '{{%category}}.trash' => 'default'
+            ])
+            ->all();
 
+        $category = ArrayHelper::map($categories, 'category_id', 'category_name');
+
+        return $category;
     }
 }

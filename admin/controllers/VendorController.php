@@ -4,6 +4,7 @@ namespace admin\controllers;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use admin\models\Vendor;
 use admin\models\Authitem;
 use admin\models\Category;
@@ -17,6 +18,7 @@ use common\models\Vendorpackages;
 use common\models\VendorItemCapacityExceptionSearch;
 use common\models\VendoritemSearch;
 use common\models\VendorOrderAlertEmails;
+use common\models\VendorCategory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -200,7 +202,18 @@ class VendorController extends Controller
                 $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
                 $model->approve_status = 'Yes';
                 $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
-                $model->category_id = implode(',', $vendor['category_id']);
+
+                //add categories 
+                if(!$vendor['category_id']) {
+                    $vendor['category_id'] = [];
+                }
+
+                foreach ($vendor['category_id'] as $key => $value) {
+                   $vc = new VendorCategory;
+                   $vc->vendor_id = $model->vendor_id;
+                   $vc->category_id = $value;
+                   $vc->save();
+                }
 
                 $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
                 $model->slug = str_replace(' ', '-', $model->slug);
@@ -230,11 +243,11 @@ class VendorController extends Controller
                             }
 
                             //Save to S3
-                           /* $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
+                            $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
 
                             if($awsResult){
                                 $model->vendor_logo_path = $filename;
-                            }*/
+                            }
                         }
                     }
                 }
@@ -303,6 +316,7 @@ class VendorController extends Controller
 
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
+
                 return $this->render('create', [
                     'packages' => $package,
                     'model' => $model
@@ -343,9 +357,6 @@ class VendorController extends Controller
             $packname = Package::findOne($model->package_id);
             $present_package = $packname['package_name'];
 
-            // list of categories
-            $model->category_id = explode(',', $model->category_id);
-
             // Current logo
             $exist_logo_image = $model->vendor_logo_path;
 
@@ -374,7 +385,21 @@ class VendorController extends Controller
                 $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
                 $model->approve_status = 'Yes';
                 $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
-                $model->category_id = implode(',', $model->category_id);                            
+
+                //remove old categories 
+                VendorCategory::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                //add categories 
+                if(!$vendor['category_id']) {
+                    $vendor['category_id'] = [];
+                }
+
+                foreach ($vendor['category_id'] as $key => $value) {
+                   $vc = new VendorCategory;
+                   $vc->vendor_id = $model->vendor_id;
+                   $vc->category_id = $value;
+                   $vc->save();
+                }
                 
                 //remove old alert emails 
                 VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
@@ -465,6 +490,10 @@ class VendorController extends Controller
                     'trash' => 'Default'
                 ]);
 
+                $vendor_category = VendorCategory::findAll(['vendor_id' => $model->vendor_id]);
+
+                $model->category_id = ArrayHelper::map($vendor_category, 'category_id', 'category_id');
+
                 return $this->render('update', [
                     'model' => $model, 
                     'vendor_contact_number' => $vendor_contact_number, 
@@ -496,11 +525,16 @@ class VendorController extends Controller
         $access = Authitem::AuthitemCheck('3', '22');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
+
+            VendorCategory::deleteAll(['vendor_id' => $id]);
+
+            Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
 
             return $this->redirect(['index']);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
