@@ -199,6 +199,35 @@ jQuery(function() {
 
 
 
+jQuery('body').on('click','.btn-cart-change',function(){
+    jQuery.ajax({
+        type: 'POST',
+        url: update_cart_url,
+        data: jQuery('#form-update-cart').serialize(),
+        success: function (data)
+        {
+            jQuery('#form-update-cart .error').html('');
+
+            if(data['success']) {
+                location = location;
+            } else {
+
+                $.each(data['errors'], function(index, errors) {
+                    $.each(errors, function() {
+                        jQuery('#form-update-cart .error.' + index).append('<p>' + this + '</p>');
+                    });
+                });
+
+            }
+        }
+    });
+    console.log(jQuery('#update-cart').serialize());
+    return false;
+});
+
+
+
+
 
 // megamenu script end
 
