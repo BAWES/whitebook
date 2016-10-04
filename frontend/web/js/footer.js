@@ -153,6 +153,53 @@ jQuery('#delivery_date_2').datepicker({
     filter();
     jQuery(this).parents('.panel-default').find('a.filter-clear').css('display','inline-block');
 });
+
+
+
+function deliveryTimeSlot(date){
+    var myDate = new Date()
+    time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
+        currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
+    jQuery.ajax({
+        type: 'POST',
+        url: getdeliverytimeslot_url,
+        data: { vendor_id : jQuery('#vendor_id').val(), sel_date: date,time:time,currentDate:currentDate},
+        success: function (data)
+        {
+            if (jQuery.trim(data) == 0) {
+                $('.timeslot_id_div').show();
+                $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                $('.timeslot_id_select').hide();
+                jQuery('#timeslot_id').html('');
+            } else {
+                $('.timeslot_id_div').hide();
+                $('.timeslot_id_select').show();
+                jQuery('#timeslot_id').html(data);
+                jQuery('#timeslot_id').selectpicker('refresh');
+                jQuery('.error.timeslot_id').html('');
+            }
+        }
+    });
+}
+
+
+jQuery(function() {
+    jQuery('#update-cart-modal').on('shown.bs.modal', function() {
+        jQuery('#delivery_date3').datepicker({
+            format: 'dd-mm-yyyy',
+            startDate:'today',
+            autoclose:true,
+            container: '#update-cart-modal modal-body'
+        }).on("changeDate", function(e) {
+            $('.error.cart_delivery_date').html('');
+            deliveryTimeSlot(jQuery(this).val());
+        });
+    });
+});
+
+
+
+
 // megamenu script end
 
 // plan last:child script

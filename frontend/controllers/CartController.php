@@ -46,6 +46,14 @@ class CartController extends BaseController
         ]);
     }
 
+    public function actionUpdateCartItem(){
+        if(Yii::$app->request->isAjax) {
+            $items = CustomerCart::findOne($_REQUEST['id']);
+            return $this->renderPartial('edit_cart', [
+                'items' => $items
+            ]);
+        }
+    }
 
     //list all products
     public function actionConfirm()
