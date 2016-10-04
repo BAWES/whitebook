@@ -51,7 +51,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         	}
        	?>
 
-        <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">
+        <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">	
 
         <table class="table table-bordered cart-table">
 	        <thead>
@@ -59,7 +59,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-	        		<td aligh="center" class="text-center"><?= Yii::t('frontend', 'Quantity') ?></th>
+	        		<td aligh="left" class="text-center"><?= Yii::t('frontend', 'Quantity') ?></th>
 	        		<td align="right"><?= Yii::t('frontend', 'Unit Price') ?></th>
 	        		<td align="right"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
@@ -96,6 +96,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
                         }
 
                         echo Html::img($imglink, ['style'=>'width:50px; height:50px;']);
+
                         ?>
 	        		</td>
 	        		<td>
@@ -107,14 +108,27 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        				} ?>
 	        			</a>
 	        		</td>
-	        		<td class="position-relative">
-	        			<?php
-	        			if(isset($delivery_area->location)) {
+	        		<td>
+	        			<?php 
+
+	        			if(isset($delivery_area->location)) { 
+
 							$delivery_charge += $delivery_area->delivery_price;
+
 	        				?>
-	        					<?= $item['cart_delivery_date'] ?><br />
-								<?= $item['timeslot_start_time'].' - '.$item['timeslot_end_time'] ?>
-								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>">&nbsp;</i>
+	        				
+	        				<?php if(Yii::$app->language == 'en') { ?>
+	            				<?= $delivery_area->location->location; ?> <br />
+	            				<?= $delivery_area->location->city->city_name; ?> <br />
+	                        <?php } else { ?>
+	                            <?= $delivery_area->location->location_ar; ?> <br />
+	                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
+	                        <?php } ?>
+
+	        				<?= $item['cart_delivery_date'] ?> <br />
+	        			
+	        				<?= $item['timeslot_start_time'].' - '.$item['timeslot_end_time'] ?>
+
 	        			<?php } else { ?>
 	        				<span class="error">
 	        					<?= Yii::t('frontend', 'We cannot delivery this item!'); ?>
@@ -160,16 +174,12 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	          </table>
 	        </div>
         </div>
+        
+        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">
+        	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
+        </button>
 
-		<a href="<?= Url::to(['cart/confirm']) ?>" class="btn btn-primary pull-right btn-checkout">
-			<?= Yii::t('frontend', 'Proceed to Checkout') ?>
-		</a>
-
-<!--        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">-->
-<!--        	--><?//= Yii::t('frontend', 'Proceed to Checkout') ?>
-<!--        </button>-->
-
-        <a href="<?= Url::to(['shop/index']) ?>" class="btn btn-primary pull-right btn-checkout">
+        <a href="<?= Url::to(['cart/index']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
         </a>
 
@@ -182,100 +192,26 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         <br />
 
         <?php } else { ?>
+        	
         	<p class="text-center">
         		<?= Yii::t('frontend', 'Your cart is empty!') ?>
         	</p>
+
         	<br />
         	<br />
         	<br />
         	<br />
+
         <?php } ?>
+
     </div>
 </section>
 
 <?php
-
-$this->registerCss("
-.position-relative {position:relative;}
-.fa-edit{position: absolute;right: 33px;top: 23px;cursor: pointer;}
-");
-
-$this->registerJs("
-    var vendor_id = '';
-    var isGuest = ".(int)Yii::$app->user->isGuest.";
-    var customer_id = '".Yii::$app->user->id."';
-    var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
-    var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
-    var area_option_url = '".Url::toRoute('site/area')."';
-    var availablity = '".Url::toRoute('shop/product-available')."';
-    var product_availability = '".Url::toRoute('cart/validation-product-available')."';
-", View::POS_HEAD);
 
 $this->registerJs("
 	jQuery('.btn-danger').click(function() {
 		jQuery(this).parent().find('input').val(0);
 		jQuery('#cart-form').submit();
 	});
-
-	jQuery('.fa-edit').click(function(){
-		jQuery.ajax({
-                url: '".Url::to(['cart/update-cart-item'])."',
-                type:'post',
-                data:{id:$(this).data('cart-id')},
-                success:function(data)
-                {
-                	jQuery('#update-cart-modal').modal('show');
-                	jQuery('#update-cart-modal .modal-body').html(data);
-                }
-            });
-	});
-", View::POS_READY);
-
-?>
-
-<div class="modal fade" id="update-cart-modal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content update-cart row">
-			<div class="modal-header">
-
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<div class="text-center">
-					<span class="yellow_top"></span>
-				</div>
-				<h4 class="modal-title text-center" id="myModalLabel">
-					<span><?= Yii::t('frontend', 'Update Cart Item') ?></span>
-				</h4>
-			</div>
-			<div class="modal-body">
-				<form class="form col-md-12 center-block" id="loginForm" name="update-cart" method="POST">
-
-					<input type="hidden" id="_csrf" name="_csrf" value="QVc1WjZPZ1d0Gw0xeDoBODRjd2lUNwIxBBNvCF97LWENFgQ8fCseYQ==" />
-
-					<div class="col-md-2 padding-left-0">
-						<div class="form-group">
-							<label>Delivery Date</label>
-							<div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
-								<input value="" readonly="true" name="delivery_date" id="delivery_date" class="date-picker-box form-control required"  placeholder="Date" >
-								<i class="fa fa-calendar" aria-hidden="true"></i>
-							</div>
-							<span class="error cart_delivery_date"></span>
-						</div>
-					</div>
-					<div class="col-md-5 padding-left-0 timeslot_id_div">
-						<div class="form-group">
-							<label>Delivery Time Slot</label>
-							<div class="text padding-top-12">Please Select Delivery Date</div>
-						</div>
-					</div>
-					<div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">
-						<div class="form-group">
-							<label>Delivery Time Slot</label>
-							<select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
-							<span class="error timeslot_id"></span>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+", View::POS_READY);	 
