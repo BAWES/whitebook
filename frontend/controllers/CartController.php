@@ -46,12 +46,57 @@ class CartController extends BaseController
         ]);
     }
 
-    public function actionUpdateCartItem(){
+    public function actionUpdateCartItemPopup(){
         if(Yii::$app->request->isAjax) {
             $items = CustomerCart::findOne($_REQUEST['id']);
             return $this->renderPartial('edit_cart', [
                 'items' => $items
             ]);
+        }
+    }
+
+
+    public function actionUpdateCartItem(){
+        if(Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            $data = Yii::$app->request->post();
+
+            if($this->validate_item($data)) {
+                $cart = CustomerCart::findOne($data['cart_id']);
+                if ($cart) {
+                    $cart->cart_delivery_date = $data['delivery_date'];
+                    $cart->timeslot_id  =   $data['timeslot_id'];
+                    $cart->cart_quantity =  $data['quantity'];
+                    $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
+                    $cart->modified_datetime  = date('Y-d-m h:i:s');
+
+                    if ($cart->save()) {
+
+                        Yii::$app->getSession()->setFlash('success', Yii::t(
+                            'frontend',
+                            'Success: Product <a href="{product_link}">{product_name}</a> added to cart!',
+                            [
+                                'product_link' => Url::to(['shop/product', 'slug' => $cart->item->slug]),
+                                'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
+                            ]
+                        ));
+
+                        return [
+                            'success' => 1
+                        ];
+                    } else {
+                        return [
+                            'error' => Yii::t('frontend','Error while updateing cart')
+                        ];
+                    }
+                }
+                exit;
+            } else {
+                return [
+                    'errors' => $this->errors
+                ];
+            }
         }
     }
 

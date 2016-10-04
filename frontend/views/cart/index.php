@@ -209,6 +209,7 @@ $this->registerJs("
     var area_option_url = '".Url::toRoute('site/area')."';
     var availablity = '".Url::toRoute('shop/product-available')."';
     var product_availability = '".Url::toRoute('cart/validation-product-available')."';
+    var update_cart_url = '".Url::toRoute('cart/update-cart-item')."';
 ", View::POS_HEAD);
 
 $this->registerJs("
@@ -219,7 +220,7 @@ $this->registerJs("
 
 	jQuery('.fa-edit').click(function(){
 		jQuery.ajax({
-                url: '".Url::to(['cart/update-cart-item'])."',
+                url: '".Url::to(['cart/update-cart-item-popup'])."',
                 type:'post',
                 data:{id:$(this).data('cart-id')},
                 success:function(data)
