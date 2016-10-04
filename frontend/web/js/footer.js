@@ -363,7 +363,7 @@ function logincheck()
                     if(status==-1)
                     {
                         jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-success alert fade in');
+                        jQuery('#result').addClass('alert-warning alert fade in');
                         jQuery('#result').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                         jQuery('#login_forget').show();
                         jQuery('#loader').hide();
@@ -376,13 +376,13 @@ function logincheck()
                     else if(status==-3)
                     {
                         jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-success alert fade in');
+                        jQuery('#result').addClass('alert-warning alert fade in');
                         jQuery('#result').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-4)
                     {
                         jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-success alert fade in');
+                        jQuery('#result').addClass('alert-warning alert fade in');
                         jQuery('#result').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==1)
