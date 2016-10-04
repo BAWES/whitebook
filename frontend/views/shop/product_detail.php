@@ -9,14 +9,14 @@ use common\components\CFormatter;
 
 if (Yii::$app->language == "en") {
     $item_name = $model->item_name;
-    $category_name = $model->category->category_name;
+    //$category_name = $model->category->category_name;
     $vendor_name = $model->vendor->vendor_name;
     $item_description = strip_tags($model->item_description);
     $item_additional_info = strip_tags($model->item_additional_info);
     $vendor_contact_address = $model->vendor->vendor_contact_address;
 } else {
     $item_name = $model->item_name_ar;
-    $category_name = $model->category->category_name_ar;
+    //$category_name = $model->category->category_name_ar;
     $vendor_name = $model->vendor->vendor_name_ar;
     $item_description = strip_tags($model->item_description_ar);
     $item_additional_info = strip_tags($model->item_additional_info_ar);
@@ -24,7 +24,7 @@ if (Yii::$app->language == "en") {
 }
 
 $this->title = 'Whitebook - ' . $item_name;
-$this->params['breadcrumbs'][] = ['label' => ucfirst($category_name), 'url' => Url::to(["shop/products", 'slug' => $model->category->slug])];
+//$this->params['breadcrumbs'][] = ['label' => ucfirst($category_name), 'url' => Url::to(["shop/products", 'slug' => ''])];
 $this->params['breadcrumbs'][] = ucfirst($item_name);
 
 $session = $session = Yii::$app->session;
