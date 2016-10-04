@@ -115,22 +115,6 @@ class SubCategory extends \yii\db\ActiveRecord
         return $this->hasMany(Category::className(), ['parent_category_id' => 'category_id']);
     }
 
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendorItems()
-    {
-        return $this->hasMany(VendorItem::className(), ['category_id' => 'category_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendorItemRequests()
-    {
-        return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
-    }
-
     public static function statusImageurl($sale)
     {
         if($sale == 'yes')
@@ -178,29 +162,22 @@ class SubCategory extends \yii\db\ActiveRecord
     // load sub category front-end plan page
     public static function loadsubcat($slug)
     {
-        $subcategory_slug= SubCategory::find()->where(['slug'=>$slug])->asArray()->one();
+        $subcategory_slug = SubCategory::find()->where(['slug'=>$slug])->asArray()->one();
 
         if(!empty($subcategory_slug['category_id'])){
-            return $subcategory = Vendoritem::find()
-            ->select([
-                '{{%vendor_item}}.subcategory_id as category_id',
-                '{{%category}}.category_name',
-                '{{%category}}.category_name_ar',
-                '{{%category}}.slug'])
-            ->join('INNER JOIN','{{%category}}', '{{%category}}.category_allow_sale = "yes" AND
-            {{%vendor_item}}.trash = "Default" AND
-            {{%category}}.category_level = 1 AND
-            {{%vendor_item}}.subcategory_id = {{%category}}.category_id AND
-            {{%category}}.category_allow_sale = "yes" AND
-            {{%category}}.trash = "Default" AND
-            {{%category}}.category_level = 1 AND
-            {{%vendor_item}}.item_status = "Active" AND
-            {{%vendor_item}}.item_for_sale = "Yes" AND
-            {{%category}}.parent_category_id ='.$subcategory_slug["category_id"].' AND
-            {{%vendor_item}}.item_approved = "Yes"')
-            ->groupby(['{{%vendor_item}}.subcategory_id'])
-            ->asArray()
-            ->all();
+
+            return SubCategory::find()
+                ->select([
+                    '{{%category}}.category_id',
+                    '{{%category}}.category_name',
+                    '{{%category}}.category_name_ar',
+                    '{{%category}}.slug'])
+                ->where([
+                    '{{%category}}.parent_category_id' => $subcategory_slug['category_id'],
+                    '{{%category}}.trash' => 'Default'
+                ])
+                ->asArray()
+                ->all();
         }
     }
 }

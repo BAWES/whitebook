@@ -39,7 +39,7 @@ class Priorityitem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vendor_id', 'category_id', 'subcategory_id', 'child_category', 'item_id', 'priority_start_date', 'priority_end_date', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
+            [['vendor_id', 'item_id', 'priority_start_date', 'priority_end_date', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
             [['vendor_id', 'category_id', 'subcategory_id', 'child_category', 'created_by', 'modified_by'], 'integer'],
             [['priority_level', 'status', 'trash'], 'string'],
             [['priority_start_date', 'priority_end_date', 'created_datetime', 'modified_datetime'], 'safe'],
@@ -55,9 +55,6 @@ class Priorityitem extends \yii\db\ActiveRecord
         return [
             'priority_id' => 'Priority ID',
             'vendor_id' => 'Vendor ID',
-            'category_id' => 'Category ID',
-            'subcategory_id' => 'Subcategory ID',
-            'child_category' => 'Child Category',
             'item_id' => 'Item ID',
             'priority_level' => 'Priority Level',
             'priority_start_date' => 'Priority Start Date',

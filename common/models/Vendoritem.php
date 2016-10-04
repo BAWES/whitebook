@@ -273,14 +273,6 @@ class Vendoritem extends \yii\db\ActiveRecord
     /**
     * @return \yii\db\ActiveQuery
     */
-    public function getVendorItemRequests()
-    {
-        return $this->hasMany(VendorItemRequest::className(), ['item_id' => 'item_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
     public function getFeatureGroupItems()
     {
         return $this->hasMany(Featuregroupitem::className(), ['item_id' => 'item_id']);

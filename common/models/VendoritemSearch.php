@@ -21,7 +21,7 @@ class VendoritemSearch extends Vendoritem
     public function rules()
     {
         return [
-            [['item_id', 'type_id', 'vendor_id', 'category_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
+            [['item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale',  'item_approved','priority',], 'safe'],
             [['item_price_per_unit'], 'number'],
            
@@ -91,7 +91,6 @@ class VendoritemSearch extends Vendoritem
         $query->andFilterWhere([
             'item_id' => $this->item_id,
             'type_id' => $this->type_id,
-            'whitebook_vendor_item.category_id' => $this->category_id,
             'item_status' => $this->item_status,
             'item_amount_in_stock' => $this->item_amount_in_stock,
             'item_default_capacity' => $this->item_default_capacity,
@@ -164,8 +163,7 @@ class VendoritemSearch extends Vendoritem
             'item_id' => $this->item_id,
             'type_id' => $this->type_id,
             'vendor_id' => $this->vendor_id,
-            'category_id' => $this->category_id,
-			'item_status' => $this->item_status,
+          	'item_status' => $this->item_status,
             'item_amount_in_stock' => $this->item_amount_in_stock,
             'item_default_capacity' => $this->item_default_capacity,
             'item_price_per_unit' => $this->item_price_per_unit,
@@ -229,7 +227,6 @@ class VendoritemSearch extends Vendoritem
             'item_id' => $this->item_id,
             'type_id' => $this->type_id,
             'vendor_id' => $this->vendor_id,
-            'category_id' => $this->category_id,
             'item_status' => $this->item_status,
             'item_amount_in_stock' => $this->item_amount_in_stock,
             'item_default_capacity' => $this->item_default_capacity,
