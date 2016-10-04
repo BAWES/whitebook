@@ -192,8 +192,10 @@ $model->vendor_working_min_to = $to_min;
 
 	<div class="tab-pane" id="2">
 		<input type="hidden" id="test1" value="0" name="tests">
-		<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']) ?></div>
 		<input type='hidden' id='test' value='0' name='tests1'>
+
+		<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']) ?></div>
+		
 		<div class="form-group"><?= $form->field($model, 'vendor_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Active' => 'Active'])?></div>
 		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">

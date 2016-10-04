@@ -106,14 +106,6 @@ class Itemtype extends \yii\db\ActiveRecord
         }
     }
 
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendorItems()
-    {
-        return $this->hasMany(VendorItem::className(), ['type_id' => 'type_id']);
-    }
-
     public static function loaditemtype()
     {
         $itemtype= Itemtype::find()

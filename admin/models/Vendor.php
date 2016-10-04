@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 
 class Vendor extends \common\models\Vendor
 {
+    public $category_id;
 
     public function behaviors()
     {
