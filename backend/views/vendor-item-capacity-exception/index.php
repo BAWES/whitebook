@@ -45,15 +45,12 @@ $this->params['breadcrumbs'][] = $this->title;
    </div>
 </div>
 <?php
-
 $this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css');
-
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
 $this->registerJs("
   $(\"[name='VendorItemCapacityExceptionSearch[exception_date]']\").datepicker({
   	startDate: '".$startdate."',
     autoclose:true,
-  	format: 'dd-mm-yyyy',
+  	format: 'yyyy-mm-dd',
   });
 ");
