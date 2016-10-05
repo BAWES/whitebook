@@ -60,9 +60,7 @@ class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacit
             // $query->where('0=1');
             return $dataProvider;
         }
-        if($this->exception_date!=''){
-            $this->exception_date = strtotime($this->exception_date);
-        }
+
         $query->andFilterWhere([
             'exception_id' => $this->exception_id,
             'exception_date' => $this->exception_date,
