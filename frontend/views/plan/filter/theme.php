@@ -24,7 +24,9 @@ if($themes) { ?>
 				/* END Display scroll for more than three li */
 				?>
 				<ul class="<?= $class; ?>">
-					<?php foreach ($themes as $key => $value) {
+					<?php
+					foreach ($themes as $key => $value) {
+
 						if(isset($get['themes']) && $get['themes'] !="")
 						{
 							$val = explode(' ',$get['themes']);
@@ -38,20 +40,22 @@ if($themes) { ?>
 								$checked1 = '';
 							}
 						}
-
-						if(Yii::$app->language == "en"){
-						  	$theme_name = ucfirst(strtolower($value['theme_name']));
-						}else{
-							$theme_name = ucfirst(strtolower($value['theme_name_ar']));
-						}
+							if (isset($value['theme_name'])) {
+								if (Yii::$app->language == "en") {
+									$theme_name = ucfirst(strtolower($value['theme_name']));
+								} else {
+									$theme_name = ucfirst(strtolower($value['theme_name_ar']));
+								}
 
 						?>
-						<li>
-							<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">
+							<li>
+								<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">
 
-							<input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> ><?= $theme_name ?></label>
-						</li>
-						<?php } ?>
+								<input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> ><?= $theme_name ?></label>
+							</li>
+						<?php
+							}
+						} ?>
 					</ul>
 				</div>
 			</div>
