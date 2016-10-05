@@ -19,7 +19,7 @@ $get = Yii::$app->request->get();
 		<div class="breadcrumb_common">
 			<div class="bs-example">
 				<?php
-				$this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($themeName->theme_name), 'url' => Url::to(["/themes/detail", 'slug' => $themeName->slug])];
+				$this->params['breadcrumbs'][] = ['label' => 'Themes >  '.ucfirst($theme->theme_name), 'url' => Url::to(["/themes/detail", 'slug' => $theme->slug])];
 				echo Breadcrumbs::widget([
 					'options' => ['class' => 'new breadcrumb'],
 					'homeLink' => [
@@ -89,9 +89,9 @@ $get = Yii::$app->request->get();
 						<ul>
 						<?php
 
-						if(!empty($imageData)) {
-							foreach ($imageData as $key => $value) {
-								echo $this->render('_item', [ 
+						if(!empty($items)) {
+							foreach ($items as $key => $value) {
+								echo $this->render('item', [ 
 									'value' => $value,
 									'customer_events_list' => $customer_events_list
 								]); 
@@ -105,8 +105,10 @@ $get = Yii::$app->request->get();
 						<img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
 					</div>
 					</div>
+
+					<!--
 					<div class="add_more_commons">
-						<?php if(count($imageData) > 12) { ?>
+						<?php if(count($items) > 12) { ?>
 							<div class="lode_more_buttons">
 								<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
 							</div>
@@ -115,6 +117,7 @@ $get = Yii::$app->request->get();
 							<?= Html::img("@web/images/banner_plan.png") ?>
 						</div>
 					</div>
+					-->
 				</div>
 			</div>
 		</div>

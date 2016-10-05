@@ -3,6 +3,7 @@ namespace frontend\models;
 
 use Yii;
 use common\models\Blockeddate;
+use common\models\VendorCategory;
 
 class Vendor extends \common\models\Vendor
 {
@@ -101,7 +102,15 @@ class Vendor extends \common\models\Vendor
                 '{{%vendor_item}}.item_status' => 'Active']);
             
         if($cat_id != '') {
-            $vendor_query->andWhere(['{{%vendor_item}}.category_id' => $cat_id]);
+            $vendor_query->leftJoin(
+                '{{%vendor_item_to_category}}', 
+                '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
+            );
+            $vendor_query->leftJoin(
+                '{{%category_path}}', 
+                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+            );
+            $vendor_query->andWhere(['{{%category_path}}.path_id' => $cat_id]);
         }
 
         if($block_date) {
@@ -140,14 +149,11 @@ class Vendor extends \common\models\Vendor
     }
 
     /* Load who vendor having category  */
-    public static function Vendorcategories($slug){
-        $vendor_category = Vendor::find()
-            ->select(['category_id'])
-            ->where(['slug'=>$slug])
-            ->asArray()
-            ->one();
-            return $vendor_category;
-        }
+    public static function Vendorcategories($vendor_id){
+        return VendorCategory::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->all();
+    }
 
     public static function Vendorid_item($slug){
         $vendor_category = Vendor::find()

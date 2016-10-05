@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use common\components\CFormatter;
 
-if (!empty($imageData)) {
+if (!empty($items)) {
 	
-	foreach ($imageData as $key => $value) {
+	foreach ($items as $key => $value) {
 		require 'item.php';
 	}
 

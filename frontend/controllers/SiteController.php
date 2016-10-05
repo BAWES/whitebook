@@ -371,46 +371,47 @@ class SiteController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $vendor_item_details = $website_model->vendor_item_details($vendor_details['vendor_id']);
         $main_category = $website_model->get_main_category();
 
-     //FOR FILTER
+        $vendor_items = Vendoritem::find()
+            ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
+            ->Where([
+                '{{%vendor_item}}.trash'=> 'Default',
+                '{{%vendor_item}}.item_approved'=> 'Yes',
+                '{{%vendor_item}}.item_status'=> 'Active',
+                '{{%vendor_item}}.vendor_id'=> $vendor_details->vendor_id
+            ])
+            ->groupby(['{{%vendor_item}}.item_id'])
+            ->all();
 
-        $vendorData = Vendoritem::find()
-        ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
-        ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-        ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->Where([
-            '{{%vendor_item}}.trash'=> 'Default',
-            '{{%vendor_item}}.item_approved'=> 'Yes',
-            '{{%vendor_item}}.item_status'=> 'Active',
-            '{{%vendor}}.slug'=> $slug
-        ])
-        ->groupby(['{{%vendor_item}}.item_id'])
-        ->all();
+        $item_ids = ArrayHelper::map($vendor_items, 'item_id', 'item_id');
 
-        $item_ids = ArrayHelper::map($vendor_details->vendorItems,'item_id','item_id');
         $themes = \common\models\Vendoritemthemes::find()
-        ->select(['wt.theme_id','wt.slug','wt.theme_name'])
-        ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
-        ->Where(['wt.theme_status'=>'Active'])
-        ->andWhere(['{{%vendor_item_theme}}.item_id'=> $item_ids])
-        ->groupby(['wt.theme_id'])
-        ->asArray()
-        ->all();
-
+            ->select(['wt.theme_id','wt.slug','wt.theme_name'])
+            ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
+            ->Where([
+                'wt.theme_status' => 'Active',
+                'wt.trash' => 'Default',
+                '{{%vendor_item_theme}}.trash' => 'Default'
+            ])
+            ->andWhere(['IN', '{{%vendor_item_theme}}.item_id', $item_ids])
+            ->groupby(['wt.theme_id'])
+            ->asArray()
+            ->all();
 
         if (!isset(Yii::$app->user->identity->customer_id)) {
+            
             return $this->render('vendor/profile', [
                 'vendor_detail' => $vendor_details,
-                'vendor_item_details' => $vendor_item_details,
+                'vendor_items' => $vendor_items,
                 'themes' => $themes,
                 'category' => $main_category,
-                'vendorData' => $vendorData,
                 'customer_events_list' => [],
                 'slug'=>$slug,
             ]);
+
         } else {
+
             $event_limit = 8;
             $wish_limit = 6;
             $offset = 0;

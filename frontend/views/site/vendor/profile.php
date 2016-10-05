@@ -300,7 +300,7 @@ if ($event_status > 0) {
                                         <?php 
                                             echo $this->render('_filter/category.php',['slug'=>$slug]);
                                             echo $this->render('_filter/theme.php',['themes'=>$themes]);
-                                            echo $this->render('_filter/price.php',['vendorData'=>$vendorData]);
+                                            echo $this->render('_filter/price.php',['vendorData' => $vendor_items]);
                                         ?>
                                     </div>
                             </nav>
@@ -314,8 +314,8 @@ if ($event_status > 0) {
                     <div class="events_listing">
                         <ul>
                         <?php
-                            if (!empty($vendorData)) {
-                                foreach ($vendorData as $key => $value) {
+                            if (!empty($vendor_items)) {
+                                foreach ($vendor_items as $key => $value) {
                                     echo $this->render('item',[
                                         'value' => $value,
                                         'customer_events_list' => $customer_events_list
@@ -331,7 +331,7 @@ if ($event_status > 0) {
                         <img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader" style="margin-top: 15%;" />
                     </div>
                     <div class="add_more_commons">
-                        <?php if (!empty($vendor_item_details)) { ?>
+                        <?php if (!empty($vendor_items)) { ?>
                             <div class="lode_more_buttons">
                                 <!-- <button title="Load More" class="btn btn-danger" type="button">Load More</button> -->
                             </div>
