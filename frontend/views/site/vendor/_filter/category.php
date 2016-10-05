@@ -1,11 +1,17 @@
 <?php
 
-use frontend\models\Vendor;
-use frontend\models\Category;
+use common\models\VendorCategory;
 
-$category_ids = Vendor::Vendorcategories($slug);
-$category_list = Category::Vendorcategorylist($category_ids['category_id']);
-
+$category_list = VendorCategory::find()
+       ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.slug'])
+       ->leftJoin('{{%category}}','{{%category}}.category_id = {{%vendor_category}}.category_id')
+       ->where([
+            '{{%category}}.trash' =>'Default',
+            '{{%category}}.category_level' => 0
+        ])
+       ->asArray()
+       ->all();
+       
 if (count($category_list) > 3) {
     $class = "test_scroll";
 } else {

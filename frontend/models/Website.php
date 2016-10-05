@@ -87,8 +87,15 @@ class Website extends Model {
     }
 
     public static function vendor_item_details($id) {
-        return $vendor = Vendoritem::find()->select('*')->where(['item_for_sale'=>'yes','item_approved'=>"yes",
-        'item_status'=>"active", 'vendor_id'=>$id])->asArray()->all();
+        return $vendor = Vendoritem::find()
+            ->where([
+                'item_for_sale' => 'yes',
+                'item_approved' => "yes",
+                'item_status' => "active", 
+                'vendor_id' => $id
+            ])
+            ->asArray()
+            ->all();
     }
 
     public static function vendor_social_info($vendor_id) {

@@ -35,13 +35,13 @@ $divide = round($max / 5);
 //$maxx = $max+
 $i = 0;
 for ($x = $min_price[0]['price'] ; $x <= 1000 ; $x+=$divide) {
-//$item_price = $imageData[$i]['item_price_per_unit'];
+//$item_price = $items[$i]['item_price_per_unit'];
 $min_kd = round($x-$divide);
 
 //if($min_kd > 0 && $item_price >= $min_kd && $item_price <= $x)
 if($min_kd > 0 )
 {
-	foreach ($imageData as $key => $value) {
+	foreach ($items as $key => $value) {
 	/* Check checkbox based on URL */
 	if(isset($get['price']) && $get['price'] !="")
 	{

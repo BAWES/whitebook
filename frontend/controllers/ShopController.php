@@ -162,22 +162,11 @@ class ShopController extends BaseController
             $themes = Themes::load_all_themename($get_unique_themes, 'theme_name_ar');
         }
 
-        $vendor = Vendoritem::find()
+        $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
-            ->join('INNER JOIN', '{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
-            ->where(['{{%vendor_item}}.vendor_id' => $ActiveVendors])
-            ->andWhere(['{{%vendor}}.vendor_status' => "Active"])
-            ->andWhere(['{{%vendor}}.approve_status' => "Yes"])
-            ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-            ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
-            ->andWhere(['{{%vendor_item}}.trash' => "Default"])
-            ->andWhere(['{{%vendor_item}}.item_for_sale' =>'Yes'])
-            ->groupBy('{{%vendor_item}}.vendor_id')
+            ->where(['IN', '{{%vendor}}.vendor_id', $ActiveVendors])
             ->asArray()
             ->all();
-        /* END get current category to load sub category */
-        /* END GET VENDORS */
 
         if (Yii::$app->user->isGuest) {
 
