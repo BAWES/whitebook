@@ -30,6 +30,7 @@ class CheckoutController extends BaseController
 	{
 		//validate cart
 		foreach (CustomerCart::items() as $item) {
+            
     		$errors = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],

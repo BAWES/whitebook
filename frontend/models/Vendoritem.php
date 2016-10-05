@@ -1,14 +1,16 @@
 <?php
+
 namespace frontend\models;
-use frontend\models\Vendor;
+
 use Yii;
+use frontend\models\Vendor;
+use common\models\VendorItemToCategory;
 
 class Vendoritem extends \common\models\Vendoritem
 {
-
    public static function vendoritem_search_details($name)
     {   
-          return  $item= Vendoritem::find()
+        return  $item= Vendoritem::find()
             ->joinWith(['category'])
             ->joinWith(['vendor'])
             ->select(['item_name','whitebook_vendor_item.category_id','whitebook_vendor_item.vendor_id','whitebook_vendor_item.item_id','whitebook_vendor_item.slug as wvislug','whitebook_category.category_name','whitebook_category.slug as wcslug','whitebook_vendor.vendor_name','whitebook_vendor.slug as wvslug'])
@@ -23,36 +25,19 @@ class Vendoritem extends \common\models\Vendoritem
 
     public static function findvendoritem($slug)
     {       
-        $item= Vendoritem::find()
-        ->where(['=', 'slug',$slug])
-        ->one();
-        return $item; 
+        return Vendoritem::find()
+            ->where(['slug' => $slug])
+            ->one();
     }
 
-    public static function get_category_itemlist($itemid)
+    public static function get_category_itemlist($item_id)
     {
-        $k=array();
-        if (!empty($itemid)) {
-            foreach ($itemid as $i) {
-                $categories[]= Vendoritem::find()
-                ->select(['category_id'])
-                ->where(['item_id' => $i])
-                ->one();
-            }
-            foreach($categories as  $cat) {
-                $k[]=$cat['category_id'];
-            }
-        }
-        if(!empty($k)){
-        $k1=(array_unique($k));
-            foreach($k1 as $c) {
-                $category_result[]= \common\models\Category::find()
-                ->select(['category_id','category_name'])
-                ->where(['category_id' => $c])
-                ->one();
-            }
-            return ($category_result);
-        }
+        return VendorItemToCategory::find()
+            ->select('{{%category}}.category_id, {{%category}}.category_name, {{%category}}.category_name_ar') 
+            ->joinWith('category')
+            ->where(['IN', '{{%vendor_item_to_category}}.item_id', $item_id])
+            ->asArray()
+            ->all();
     }
 
     public static function get_vendor_itemlist($itemid)

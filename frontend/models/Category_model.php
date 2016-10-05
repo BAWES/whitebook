@@ -31,7 +31,7 @@ class Category_model extends Model
     // get the category id based oin the category name
     public function get_category_id($category = '')
     {
-				return $category = \common\models\Category::find()
+		return $category = \common\models\Category::find()
 			->select(['category_id','category_name'])
 			->Where(['trash'=>'default'])
 			->andWhere(['category_allow_sale'=>'yes'])

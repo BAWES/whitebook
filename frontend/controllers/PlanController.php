@@ -29,11 +29,17 @@ class PlanController extends BaseController
         \Yii::$app->view->title = 'The White Book | Plan';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-        $db = Yii::$app->db;// or Category::getDb()
-      /*  $category = $db->cache(function ($db) use ($id) {
-            return Category::find()->select('category_id,category_name, slug')->where(['category_level'=>0,'category_allow_sale'=>'yes','trash'=>'Default'])->asArray()->all();
-        }, CACHE_TIMEOUT);*/
-        $category = Category::find()->select('category_id,category_name, slug')->where(['category_level' => 0, 'category_allow_sale' => 'yes', 'trash' => 'Default'])->asArray()->all();
+
+        $db = Yii::$app->db;
+      
+        $category = Category::find()->select('category_id,category_name, slug')
+            ->where([
+                'category_level' => 0, 
+                'category_allow_sale' => 'yes', 
+                'trash' => 'Default'
+            ])
+            ->asArray()
+            ->all();
 
         return $this->render('plans', ['category' => $category]);
     }
@@ -68,7 +74,6 @@ class PlanController extends BaseController
                 ->asArray()
                 ->all();
                 
-        /* BEGIN GET VENDORS */
         $active_vendors = Vendor::loadvalidvendorids($category_model['category_id']);        
 
         $item_query = CategoryPath::find()

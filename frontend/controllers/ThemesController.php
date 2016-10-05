@@ -16,7 +16,6 @@ use yii\helpers\ArrayHelper;
 
 class ThemesController extends BaseController
 {
-
     /**
      * @inheritdoc
      */
@@ -77,7 +76,6 @@ class ThemesController extends BaseController
         ]);
     }
 
-    // END wish list manage page load vendorss based on category
 
     public function actionDetail($slug = '', $category = '',$subcategory = '', $vendor='', $price='')
     {

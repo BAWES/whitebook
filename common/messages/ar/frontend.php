@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Select Event' => 'حدد الحدث',
     'Sunday' => 'الأحد',
     'Monday' => 'الإثنين',
     'Tuesday' => 'الثلاثاء',
