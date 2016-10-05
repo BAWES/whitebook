@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use Yii;
@@ -56,13 +57,16 @@ class SiteController extends BaseController
         }
         
         return $this->render('index', [
-          'home_slider_alias' => Siteinfo::find()->one()->home_slider_alias,
-          'featured_product' => $featured_product,
-          'banner' => $banner,
-          'key' => '0',
+            'home_slider_alias' => Siteinfo::find()->one()->home_slider_alias,
+            'featured_product' => $featured_product,
+            'banner' => $banner,
+            'key' => '0',
         ]);
     }
 
+    /*
+        Activate customer account from email 
+    */
     public function actionActivate()
     {
         Yii::$app->session->set('reset_password_mail', '');
@@ -161,79 +165,61 @@ class SiteController extends BaseController
         $request = Yii::$app->request;
 
         if (Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
                        
-            if ($request->post('slug') != 'All') {
-                
-                $categoryid = Category::category_value($request->post('slug'));
-                
-                if(Yii::$app->language == "en") {
-                    $directory = $website_model->get_search_directory_list($categoryid['category_id']);
-                }else{
-                    $directory = $website_model->get_search_directory_list($categoryid['category_id'], 'vendor_name_ar');
-                }
-
-                $prevLetter = '';
-                $result = array();
-                foreach ($directory as $d) {
-
-                    if(Yii::$app->language == "en") {
-                        $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
-                    }else{
-                        $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
-                    }
-
-                    if ($firstLetter != $prevLetter) {
-                        $result[] = strtoupper($firstLetter);
-                    }
-
-                    $prevLetter = $firstLetter;
-                }
-
-                $result = array_unique($result);
-
-            } else {
-                
-                if(Yii::$app->language == "en") {
-                    $directory = $website_model->get_search_directory_all_list();
-                }else{
-                    $directory = $website_model->get_search_directory_all_list('vendor_name_ar');
-                }
-
-                $prevLetter = '';
-
-                $result = array();
-                
-                foreach ($directory as $d) {
-
-                    if(Yii::$app->language == "en") {
-                        $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
-                    }else{
-                        $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
-                    }
-
-                    if ($firstLetter != $prevLetter) {
-                        $result[] = strtoupper($firstLetter);
-                    }
-                    $prevLetter = $firstLetter;
-                }
-
-                $result = array_unique($result);
+        if ($request->post('slug') != 'All') {
+            
+            $categoryid = Category::category_value($request->post('slug'));
+            
+            if(Yii::$app->language == "en") {
+                $directory = $website_model->get_search_directory_list($categoryid['category_id']);
+            }else{
+                $directory = $website_model->get_search_directory_list($categoryid['category_id'], 'vendor_name_ar');
             }
 
-            if ($request->post('ajaxdata') == 0) {
-                
-                return $this->renderPartial('searchdirectory', [
-                    'directory' => $directory,
-                    'first_letter' => $result, 
-                ]);
+        } else {
+            
+            if(Yii::$app->language == "en") {
+                $directory = $website_model->get_search_directory_all_list();
+            }else{
+                $directory = $website_model->get_search_directory_all_list('vendor_name_ar');
+            }            
+        }
 
-            } else {
-                
-                return $this->renderPartial('searchresponsedirectory', [
-                    'directory' => $directory,
-                    'first_letter' => $result
-                ]);
+        $prevLetter = '';
+
+        $result = array();
+        
+        foreach ($directory as $d) {
+
+            if(Yii::$app->language == "en") {
+                $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
+            }else{
+                $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
             }
+
+            if ($firstLetter != $prevLetter) {
+                $result[] = strtoupper($firstLetter);
+            }
+            $prevLetter = $firstLetter;
+        }
+
+        $result = array_unique($result);
+
+        if ($request->post('ajaxdata') == 0) {
+            
+            return $this->renderPartial('searchdirectory', [
+                'directory' => $directory,
+                'first_letter' => $result, 
+            ]);
+
+        } else {
+            
+            return $this->renderPartial('searchresponsedirectory', [
+                'directory' => $directory,
+                'first_letter' => $result
+            ]);
         }
     }
 
@@ -423,14 +409,14 @@ class SiteController extends BaseController
             $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
 
             return $this->render('vendor/profile', [
-              'vendor_detail' => $vendor_details,
-              'vendor_item_details' => $vendor_item_details,
-              'themes' => $themes,
-              'vendorData' => $vendorData,
-              'category' => $main_category,
-              'customer_events' => $customer_events,
-              'slug' => $slug,
-              'customer_events_list' => $customer_events_list,
+                'vendor_detail' => $vendor_details,
+                'vendor_item_details' => $vendor_item_details,
+                'themes' => $themes,
+                'vendorData' => $vendorData,
+                'category' => $main_category,
+                'customer_events' => $customer_events,
+                'slug' => $slug,
+                'customer_events_list' => $customer_events_list
             ]);
         }
     }

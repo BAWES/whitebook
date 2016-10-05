@@ -595,7 +595,8 @@ class UsersController extends BaseController
             'customer_events_count' => $customer_events_count,
             'customer_wishlist' => $customer_wishlist,
             'customer_wishlist_count' => $customer_wishlist_count,
-            'vendor' => $vendor, 'category' => $categorylist,
+            'vendor' => $vendor, 
+            'category' => $categorylist,
             'themes' => $themes,
             'customer_unique_events' => $customer_unique_events,
             'categorylist' => $categorylist,
@@ -841,31 +842,25 @@ class UsersController extends BaseController
 
     public function actionDeleteeventitem()
     {
-        if (Yii::$app->request->isAjax) {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
             
-            $data = Yii::$app->request->post();
+        $data = Yii::$app->request->post();
 
-            //check if login customer's link
-            $sub_query = (new Query())
-                ->select('event_id')
-                ->from('whitebook_events')
-                ->where(['customer_id' => Yii::$app->user->identity->customer_id])->one();
+        //check if login customer's link
+        $event = Events::find()
+            ->where(['customer_id' => Yii::$app->user->getId()])
+            ->one();
 
-            $command = Eventitemlink::deleteAll(['link_id' => $data['item_link_id'],
-                'event_id'=> $sub_query['event_id']]);
+        if($event) {
 
-            if ($command) {
+            $command = Eventitemlink::deleteAll([
+                'link_id' => $data['item_link_id'],
+                'event_id'=> $data['event_id']
+            ]);   
 
-                $cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
-                ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
-                ->Where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%vendor_item}}.category_id'=>$data['category_id'],'{{%event_item_link}}.event_id'=>$data['event_id']])
-                ->asArray()
-                ->all();
-                
-                return count($cat_list1);
-            } else {
-                return Users::SUCCESS; // Event item removed successfully
-            }
+            return Users::SUCCESS; // Event item removed successfully 
         }
     }
 
@@ -917,24 +912,24 @@ class UsersController extends BaseController
         $addresses = array();
 
         $result = CustomerAddress::find()
-        ->select('whitebook_city.city_name, whitebook_city.city_name_ar, whitebook_location.location, 
-            whitebook_location.location_ar, whitebook_customer_address.*')
-        ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
-        ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
-        ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
-        ->asArray()
-        ->all();
+            ->select('whitebook_city.city_name, whitebook_city.city_name_ar, whitebook_location.location, 
+                whitebook_location.location_ar, whitebook_customer_address.*')
+            ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
+            ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
+            ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
+            ->asArray()
+            ->all();
 
         foreach($result as $row) {
 
-          $row['questions'] = CustomerAddressResponse::find()
-          ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
-          ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
-          ->where('address_id = :address_id', [':address_id' => $row['address_id']])
-          ->asArray()
-          ->all();
+            $row['questions'] = CustomerAddressResponse::find()
+              ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
+              ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
+              ->where('address_id = :address_id', [':address_id' => $row['address_id']])
+              ->asArray()
+              ->all();
 
-          $addresses[] = $row;
+            $addresses[] = $row;
         }
 
         $customer_address_modal = new CustomerAddress();
@@ -1078,7 +1073,6 @@ class UsersController extends BaseController
                     'status' => 'Active'])
                 ->asArray()
                 ->all();
-
         }        
 
         return $this->renderPartial('questions', [

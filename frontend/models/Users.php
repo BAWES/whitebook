@@ -18,13 +18,14 @@ class Users extends Model
     //Success
     const KEY_MATCH = 2;
     const SUCCESS = 1;
+
     // Failure
     const FAILURE = 0;
     const KEY_NOT_MATCH = 1;
     const EMAIL_NOT_EXIST = -1;
     
-
     public $content;
+
     public static function tableName()
     {
         return '{{%customer}}';
@@ -213,31 +214,21 @@ class Users extends Model
 
     public function getCustomerEvents($customer_id, $limit, $offset, $type)
     {
-		$condn='';
-        if ($type != '') {
-			$condn.= "{{events}}.event_type=".$type;
-        }
-        else
-        {
-            $condn.= "{{events}}.type_id=";
-        }
-
         $events = Events::find()
-        ->select(['{{%event_item_link}}.event_id as item_count','{{%events}}.event_id','{{%events}}.event_name','{{%events}}.slug','{{%events}}.event_type','{{%events}}.event_date'])
-        ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.event_id = {{%events}}.event_id')
-        ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
-        ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->with('{{%events}}');
+            ->select(['{{%event_item_link}}.event_id as item_count','{{%events}}.event_id','{{%events}}.event_name','{{%events}}.slug','{{%events}}.event_type','{{%events}}.event_date'])
+            ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.event_id = {{%events}}.event_id')
+            ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
+            ->with('{{%events}}');
 
-        if(!empty($type)){
-            $events->where([$condn]);
+        if ($type != '') {
+            $events->where(['{{events}}.event_type' => $type]);
         }
 
         $events->groupby(['{{%events}}.event_id'])
-        ->orderby(['{{%events}}.event_date' => SORT_ASC])
-        ->limit($offset,$limit)
-        ->asArray()
-        ->all();
+            ->orderby(['{{%events}}.event_date' => SORT_ASC])
+            ->limit($offset, $limit)
+            ->asArray()
+            ->all();
 
         return $events;
     }
@@ -252,120 +243,133 @@ class Users extends Model
 
     public function get_customer_wishlist_count($customer_id, $category, $price, $vendor, $avail_sale, $theme)
     {
-		 //print_r ($category);die;
-        $condn = '';
-        $order_by = '';
-        $join = '';
-        if ($category != '') {
-			$condn.= '["{{category}}.category_id"=> $category]';
-        }
-        $vendr='';
-        if ($vendor != '') {
-			$vendr .= '["{{vendor}}.vendor_id"=> $vendor]';
-        }
-        $availsafe='';
+        $today = date('Y-m-d H:i:s');
+
+        $item_query = Wishlist::find()
+            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
+            ->leftJoin(
+                '{{%vendor_item}}',
+                '{{%vendor_item}}.item_id = {{%wishlist}}.item_id'
+            )
+            ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+            ->where([
+                '{{%vendor_item}}.trash' => 'Default',
+                '{{%vendor_item}}.item_approved' => 'Yes',
+                '{{%vendor_item}}.item_status' => 'Active',
+                '{{%wishlist}}.customer_id'=> $customer_id,
+                '{{%vendor}}.trash'=> 'Default',
+                '{{%vendor}}.approve_status'=> 'Yes',
+                '{{%vendor_item}}.item_archived'=>'no'
+            ])  
+            ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
+            ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
+            ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0]);
+
         if ($avail_sale != '') {
-            if ($avail_sale == 0) {
-				$availsafe .= '["{{vendor_item}}.item_for_sale"=> "no"]';
-            } else {
-				$availsafe .= '["{{vendor_item}}.item_for_sale"=> "yes"]';
-            }
+            $item_query->andWhere(['{{vendor_item}}.item_for_sale' => 'no']);
         }
 
+        if ($category != '') {
+            $item_query->leftJoin(
+                '{{%vendor_item_to_category}}', 
+                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+            );
+            $item_query->leftJoin(
+                '{{%category_path}}', 
+                '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id'
+            );            
+            $item_query->andWhere(['{{%category_path}}.path_id' => $category]);
+        }
+
+        if ($vendor != '') {
+            $item_query->andWhere(['{{%vendor}}.vendor_id' => $vendor]);
+        }
+        
         if ($price != '') {
             if ($price == 0) {
-				//'usertype'=>SORT_ASC,
-
-				$order_by .= '["{{vendor_item}}.item_price_per_unit"=> SORT_ASC]';
+                $item_query->orderBy("{{%vendor_item}}.item_price_per_unit ASC");
             } elseif ($price == 1) {
-				$order_by .= '["{{vendor_item}}.item_price_per_unit"=> SORT_DESC]';
+                $item_query->orderBy("{{%vendor_item}}.item_price_per_unit DESC");
             }
         } else {
-			$order_by .= '["{{vendor_item}}.item_name"=> ASC_DESC]';
+            $item_query->orderBy("{{%vendor_item}}.item_name ASC");
         }
-        $today = date('Y-m-d H:i:s');
-        return $wishlist=Wishlist::find()->select(['{{%wishlist}}.customer_id','{{%wishlist}}.item_id','{{%vendor_item}}.item_name','{{%vendor_item}}.item_description','{{%vendor_item}}.item_price_per_unit','{{%vendor}}.vendor_name'])
-        ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
-        ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-        ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->where(['{{%wishlist}}.customer_id'=> $customer_id])
-        ->andwhere(['{{%vendor}}.trash'=> 'Default'])
-        ->andWhere(['{{%vendor}}.approve_status'=> 'Yes'])
-        ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
-        ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
-        ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0])
-        ->andWhere(['{{%vendor_item}}.item_approved'=>'yes'])
-        ->andWhere(['{{%vendor_item}}.item_archived'=>'no'])
-        ->andWhere(['{{%category}}.category_allow_sale'=>'yes'])
-        ->andWhere(['{{%category}}.trash'=>'Default'])
-        ->andWhere(['{{%vendor_item}}.trash'=>'Default'])
-        ->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
-        ->andWhere($condn)
-        ->andWhere($vendr)
-        ->andWhere($availsafe)
-        ->asArray()
-        ->count();
+
+        return $item_query
+            ->asArray()
+            ->count();
     }
 
-    public function get_customer_wishlist($customer_id, $limit, $offset, $category, $price, $vendor, $avail_sale, $theme)
+    public function get_customer_wishlist(
+        $customer_id, 
+        $limit, 
+        $offset, 
+        $category, 
+        $price, 
+        $vendor, 
+        $avail_sale, 
+        $theme)
     {
-        //print_r ($category);die;
-        $condn = '';
-        $order_by = '';
-        $join = '';
-        if ($category != '') {
-			$condn.= '["{{category}}.category_id"=> $category]';
-        }
-        $vendr='';
-        if ($vendor != '') {
-			$vendr .= '["{{vendor}}.vendor_id"=> $vendor]';
-        }
-        $availsafe='';
+
+        $today = date('Y-m-d H:i:s');
+
+        $item_query = Wishlist::find()
+            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
+            ->leftJoin(
+                '{{%vendor_item}}',
+                '{{%vendor_item}}.item_id = {{%wishlist}}.item_id'
+            )
+            ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
+            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+            ->where([
+                '{{%vendor_item}}.trash' => 'Default',
+                '{{%vendor_item}}.item_approved' => 'Yes',
+                '{{%vendor_item}}.item_status' => 'Active',
+                '{{%wishlist}}.customer_id'=> $customer_id,
+                '{{%vendor}}.trash'=> 'Default',
+                '{{%vendor}}.approve_status'=> 'Yes',
+                '{{%vendor_item}}.item_archived'=>'no'
+            ])  
+            ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
+            ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
+            ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0]);
+
         if ($avail_sale != '') {
-            if ($avail_sale == 0) {
-				$availsafe .= '["{{vendor_item}}.item_for_sale"=> "no"]';
-            } else {
-				$availsafe .= '["{{vendor_item}}.item_for_sale"=> "yes"]';
-            }
+            $item_query->andWhere(['{{vendor_item}}.item_for_sale' => 'no']);
         }
 
+        if ($category != '') {
+            $item_query->leftJoin(
+                '{{%vendor_item_to_category}}', 
+                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+            );
+            $item_query->leftJoin(
+                '{{%category_path}}', 
+                '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id'
+            );            
+			$item_query->andWhere(['{{%category_path}}.path_id' => $category]);
+        }
+
+        if ($vendor != '') {
+			$item_query->andWhere(['{{%vendor}}.vendor_id' => $vendor]);
+        }
+        
         if ($price != '') {
             if ($price == 0) {
-				//'usertype'=>SORT_ASC,
-
-				$order_by .= '["{{vendor_item}}.item_price_per_unit"=> SORT_ASC]';
+                $item_query->orderBy("{{%vendor_item}}.item_price_per_unit ASC");
             } elseif ($price == 1) {
-				$order_by .= '["{{vendor_item}}.item_price_per_unit"=> SORT_DESC]';
+                $item_query->orderBy("{{%vendor_item}}.item_price_per_unit DESC");
             }
         } else {
-			$order_by .= '["{{vendor_item}}.item_name"=> SORT_ASC]';
+            $item_query->orderBy("{{%vendor_item}}.item_name ASC");
         }
-        $today = date('Y-m-d H:i:s');
-        return $wishlist=Wishlist::find()->select(['{{%wishlist}}.customer_id','{{%wishlist}}.item_id','{{%vendor_item}}.item_name','{{%vendor_item}}.item_description','{{%vendor_item}}.item_price_per_unit','{{%vendor}}.vendor_name'])
-        ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
-        ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-        ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->where(['{{%wishlist}}.customer_id'=> $customer_id])
-        ->andwhere(['{{%vendor}}.trash'=> 'Default'])
-        ->andWhere(['{{%vendor}}.approve_status'=> 'Yes'])
-        ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
-        ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
-        ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0])
-        ->andWhere(['{{%vendor_item}}.item_approved'=>'yes'])
-        ->andWhere(['{{%vendor_item}}.item_archived'=>'no'])
-        ->andWhere(['{{%category}}.category_allow_sale'=>'yes'])
-        ->andWhere(['{{%category}}.trash'=>'Default'])
-        ->andWhere(['{{%vendor_item}}.trash'=>'Default'])
-        ->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
-        ->andWhere($condn)
-        ->andWhere($vendr)
-        ->andWhere($availsafe)
-        //->orderby($order_by)
-        ->asArray()
-        ->all();
+
+        return $item_query
+            ->asArray()
+            ->all();
     }
 
-    /* BEGIN Get customer wish list */
     public static function loadCustomerWishlist($customer_id)
     {
 		$today = date('Y-m-d H:i:s');
@@ -387,7 +391,6 @@ class Users extends Model
 			->all();
         return $data;
     }
-    /* END Get customer wish list */
 
     public static function vendor_list()
     {

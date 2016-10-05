@@ -55,7 +55,6 @@ class CartController extends BaseController
         }
     }
 
-
     public function actionUpdateCartItem(){
         if(Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -104,12 +103,14 @@ class CartController extends BaseController
     public function actionConfirm()
     {
         $items = CustomerCart::items();
+        
         if (Order::confirmOrder()) // Confirming order before payment
         {
             $msg = Order::confirmOrder();
             Yii::$app->session->setFlash('danger',$msg);
             return $this->redirect(Yii::$app->request->referrer);
         }
+
         return $this->render('confirm', [
             'items' => $items
         ]);
@@ -299,6 +300,7 @@ class CartController extends BaseController
         } else {
             $capacity = $item->item_default_capacity;
         }
+        
         //2) get no of item purchased for selected date
         $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "'.$data['item_id'].'" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
 

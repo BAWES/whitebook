@@ -36,9 +36,11 @@ class CategoryController extends BaseController
 
         $customer_id = Yii::$app->user->identity->customer_id;
         $customer_events = array();
+        
         if ($customer_id != '') {
             $customer_events = $this->category_model->getCustomerEvents($customer_id);
         }
+
         $event_type = $this->category_model->get_event_types();
 
         $seo_content = Website::SEOdata('category', 'category_id', 8, array('category_meta_title', 'category_meta_keywords', 'category_meta_description'));
@@ -50,7 +52,15 @@ class CategoryController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['category_meta_description']) ? $seo_content[0]['category_meta_description'] : META_DESCRIPTION]);
 
         return $this->render('/product/category', [
-            'category_products' => $category_product_list, 'main_category' => $category_list, 'category_name' => $cat_name, 'top_ad' => $top_ad, 'bottom_ad' => $bottom_ad, 'vendors' => $vendors, 'themes' => $themes, 'customer_events' => $customer_events, 'event_type' => $event_type,
+            'category_products' => $category_product_list, 
+            'main_category' => $category_list, 
+            'category_name' => $cat_name, 
+            'top_ad' => $top_ad, 
+            'bottom_ad' => $bottom_ad, 
+            'vendors' => $vendors, 
+            'themes' => $themes, 
+            'customer_events' => $customer_events, 
+            'event_type' => $event_type
         ]);
     }
 }

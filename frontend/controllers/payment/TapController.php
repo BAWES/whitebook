@@ -24,7 +24,6 @@ class TapController extends Controller
             $this->redirect(['checkout/index']);
         }
 
-
         if (Order::confirmOrder()) // Confirming order before payment
         {
             $msg = Order::confirmOrder();
