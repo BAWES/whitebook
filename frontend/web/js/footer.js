@@ -156,6 +156,8 @@ jQuery('#delivery_date_2').datepicker({
 
 
 
+// Edit Cart Section
+
 function deliveryTimeSlot(date){
     var myDate = new Date()
     time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
@@ -182,6 +184,26 @@ function deliveryTimeSlot(date){
     });
 }
 
+function productAvailability(date) {
+    jQuery.ajax({
+        type: 'POST',
+        url: product_availability,
+        data: $('#form-update-cart').serialize(),
+        success: function (data)
+        {
+            if (jQuery.trim(data) != '1') {
+                $('.timeslot_id_div').show();
+                $('.timeslot_id_div .text').html(data);
+                $('.timeslot_id_select').hide();
+                $('#timeslot_id').html('');
+                return false;
+            }else{
+                deliveryTimeSlot(date);
+            }
+        }
+    });
+}
+
 
 jQuery(function() {
     jQuery('#update-cart-modal').on('shown.bs.modal', function() {
@@ -192,12 +214,10 @@ jQuery(function() {
             container: '#update-cart-modal modal-body'
         }).on("changeDate", function(e) {
             $('.error.cart_delivery_date').html('');
-            deliveryTimeSlot(jQuery(this).val());
+            productAvailability(jQuery(this).val());
         });
     });
 });
-
-
 
 jQuery('body').on('click','.btn-cart-change',function(){
     jQuery.ajax({
@@ -225,7 +245,7 @@ jQuery('body').on('click','.btn-cart-change',function(){
     return false;
 });
 
-
+// Edit Cart Section
 
 
 
