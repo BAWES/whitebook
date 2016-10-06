@@ -268,7 +268,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         
         if($block_date) {
             $errors['cart_delivery_date'] = [
-                Yii::t('frontend', 'Item not available for selected date .')
+                Yii::t('frontend', 'Item is not available on selected date')
             ];    
         }
 
@@ -278,7 +278,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         if(in_array($day, $blocked_days)) {
             $errors['cart_delivery_date'] = [
-                Yii::t('frontend', 'Item not available for selected date .')
+                Yii::t('frontend', 'Item is not available on selected date')
             ];             
         }
         
