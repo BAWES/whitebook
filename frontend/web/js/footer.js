@@ -1729,15 +1729,17 @@ jQuery('.dropdown').hover(
 
 
 /* Mega menu ends */
-(function(jQuery){
-    jQuery(window).load(function(){
-        jQuery('.test_scroll').mCustomScrollbar({
-            theme: 'rounded-dark',
-            mouseWheelPixels: 50,
-            scrollInertia: 0
+if ((jQuery('.test_scroll').length)>0) {
+    (function (jQuery) {
+        jQuery(window).load(function () {
+            jQuery('.test_scroll').mCustomScrollbar({
+                theme: 'rounded-dark',
+                mouseWheelPixels: 50,
+                scrollInertia: 0
+            });
         });
-    });
-})(jQuery);
+    })(jQuery);
+}
 
 /* BEGIN filter item list */
 var csrfToken = jQuery('meta[name=\"csrf-token\"]').attr('content');
@@ -1745,7 +1747,6 @@ var url = window.location.href;     // Returns full URL
 setupLabel();
 
 jQuery('.label_check input').on('change',function() {
-    console.log('test');
     filter();
 });
 
@@ -1807,6 +1808,7 @@ var loadmore = 0;
 function filter(){
     var date = '';
     var areas = '';
+    var search = '';
     jQuery('#planloader').show();
     jQuery('.events_listing').css({'opacity' : '0.5', 'position' : 'relative'});
 
@@ -1861,6 +1863,7 @@ function filter(){
             item_ids: category_name,
             themes : theme_name,
             vendor : vendor_name,
+            search : search,
             price : price_val,
             date : date,
             location: areas,
@@ -1900,6 +1903,35 @@ function filter(){
 
 
 
+/* BEGIN RESPONSIVE FILTER NAVIGATION */
+var trigger = jQuery('.filter_butt'),
+    overlay = jQuery('.overlay'),
+    isClosed = false;
 
+trigger.click(function () {
+    filter_butt();
+});
 
+function filter_butt() {
 
+    if (isClosed == true) {
+        overlay.hide();
+        trigger.removeClass('ses_act');
+        trigger.addClass('ses_dct');
+        isClosed = false;
+    } else {
+        overlay.show();
+        trigger.removeClass('ses_act');
+        trigger.addClass('ses_dct');
+        isClosed = true;
+    }
+}
+
+jQuery("#left_side_cate nav").removeClass ("navbar navbar-fixed-top ");
+jQuery("#left_side_cate ul").removeClass ("nav sidebar-nav ");
+jQuery("#left_side_cate nav").removeAttr ("id")
+if (jQuery(window).width() < 991) {
+    jQuery("#left_side_cate nav").addClass ("navbar navbar-fixed-top ");
+    jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");
+    jQuery("#left_side_cate nav").attr ('id','sidebar-wrapper')
+}
