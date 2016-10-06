@@ -7,7 +7,6 @@ use yii\helpers\Html;
 
 $this->title = 'Update Blocked date ';
 $this->params['breadcrumbs'][] = ['label' => 'Blocked dates', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->block_id, 'url' => ['view', 'id' => $model->block_id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="blockeddate-update">

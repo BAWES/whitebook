@@ -72,7 +72,7 @@ class VendorItemCapacityExceptionSearch extends \common\models\VendorItemCapacit
         ]);
 
         $query->andFilterWhere(['like', '{{%vendor_item}}.item_name',$this->item_name]);
+        
         return $dataProvider;
     }
-
 }

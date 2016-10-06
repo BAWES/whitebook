@@ -42,4 +42,9 @@ class VendorCategory extends \yii\db\ActiveRecord
             'vendor_id' => 'Vendor ID',
         ];
     }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
+    }
 }

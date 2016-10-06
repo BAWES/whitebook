@@ -44,42 +44,10 @@ class VendorpackagesSearch extends Vendorpackages
     public function search($params)
     {        
         $query = Vendorpackages::find()        
-        ->where(['vendor_id' => Yii::$app->user->getID(), 'trash' => 'Default'])    
-        ->orderBy(['created_datetime' => SORT_DESC]);
+            ->where(['vendor_id' => Yii::$app->user->getID(), 'trash' => 'Default'])    
+            ->orderBy(['created_datetime' => SORT_DESC]);
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'vendor_id' => $this->vendor_id,
-            'package_id' => $this->package_id,
-            'package_price' => $this->package_price,
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
-            'created_by' => $this->created_by,
-            'modified_by' => $this->modified_by,
-        ]);
-
-        return $dataProvider;
-    }
-    
-        public function vendorviewsearch($params,$vendorid)
-    {        
-        $query = Vendorpackages::find()        
-        ->where(['vendor_id'=>$vendorid,'trash'=>'Default'])
-        ->orderBy(['id' => SORT_DESC])
-        ->all();
-      return  $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 

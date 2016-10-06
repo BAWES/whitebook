@@ -6,6 +6,7 @@ use yii\web\Controller;
 use yii\web\Session;
 use common\models\Package;
 use common\models\Category;
+use common\models\VendorCategory;
 use common\models\Siteinfo;
 use common\models\VendorOrderAlertEmails;
 use backend\models\Vendor;
@@ -245,9 +246,14 @@ class SiteController extends Controller
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
 
-        $vendor_category = explode(",", $model['category_id']);
-        $v_category = Category::find()->select('category_name')
-        ->where(['IN','category_id',$vendor_category])->asArray()->all();
+        $v_category = VendorCategory::find()
+            ->select('{{%category}}.category_name')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_category}}.category_id')
+            ->where(['{{%vendor_category}}.vendor_id' => $vendor_id])
+            ->asArray()
+            ->all();
+
+        $vendor_categories = [];
 
         foreach ($v_category as $key => $value) {
             $vendor_categories[] = $value['category_name'];

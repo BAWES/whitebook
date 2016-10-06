@@ -169,6 +169,7 @@ class Category extends \yii\db\ActiveRecord
                 '{{%vendor_category}}.vendor_id' => $id,
                 '{{%category}}.trash' => 'default'
             ])
+            ->asArray()
             ->all();
 
         $category = ArrayHelper::map($categories, 'category_id', 'category_name');

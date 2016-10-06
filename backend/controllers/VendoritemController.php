@@ -68,69 +68,9 @@ class VendoritemController extends Controller
 
         $dataProvider = $searchModel->searchVendor(Yii::$app->request->queryParams);
 
-        $vendr_id = Vendor::getVendor('vendor_id');
-
-        $result= Vendor::find()
-            ->select(['category_id'])
-            ->where(['!=','vendor_id', $vendr_id])
-            ->asArray()
-            ->All();
-
-        $single_cat[]= array();
-
-        $multiple_cat[]= array();
-
-        foreach ($result as $r)
-        {
-            if(is_numeric($r['category_id']))
-            {
-               $single_cat[]= $r['category_id'];
-            }
-
-            if(!is_numeric($r['category_id']))
-            {
-                $multiple_cat[]= explode(',',$r['category_id']);
-            }
-        }
-
-        $get_unique_ids=array();
-
-        foreach($multiple_cat as $id)
-        {
-            foreach($id as $key)
-                $get_unique_ids[] = $key;
-        }
-
-        if(count ($single_cat)){
-            foreach ($single_cat as $single)
-            {
-                if(!empty($single)){
-                $get_unique_ids[]=$single;
-                }
-            }
-        }
-
-        $cat_id1= Category::find()
-            ->select(['category_id','category_name'])
-            ->where(['category_level' => '0'])
-            ->andWhere(['trash' => 'Default'])
-            ->andWhere(['IN', 'category_id', $get_unique_ids])
-            ->asArray()->all();
-
-        $cat_val1[]=0;
-
-        foreach($cat_id1 as $key=>$val)
-        {
-            $cat_val1[] = $val['category_id'];
-        }
-
-        $categories1 = Category::find()->where(['category_id' => $cat_val1])->all();
-        $category1 = ArrayHelper::map($categories1,'category_id','category_name');
-
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'vendor_category'=>$category1
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -185,25 +125,13 @@ class VendoritemController extends Controller
         $model = new Vendoritem();
         $model->vendor_id = Vendor::getVendor('vendor_id');
 
-        $vendor = Vendor::find()->select('category_id')->where(['vendor_id'=>Vendor::getVendor('vendor_id')])->one();
-
-        $v_category = explode(",", $vendor['category_id']);
-
-        $load_category = Category::find()->select(['category_id','category_name'])
-        ->where(['category_allow_sale'=>'Yes'])
-        ->andWhere(['category_level'=>0])
-        ->andWhere(['trash'=>'Default'])
-        ->andWhere(['IN','category_id',$v_category])->asArray()->all();
-        $categoryname = ArrayHelper::map($load_category,'category_id','category_name');
-
         $model1 = new Image();
 
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
         $itemtype = Itemtype::loaditemtype();
         $vendorname = Vendor::loadvendorname();
-        $subcategory= Subcategory::loadsubcategoryname();
-
+        
         if($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $model->item_for_sale = (Yii::$app->request->post()['Vendoritem']['item_for_sale'])?'Yes':'No';
@@ -219,7 +147,11 @@ class VendoritemController extends Controller
             /* END Scenario if item for sale is no not required below four fields */
 
             // get the max sort order
-            $max_sort = Vendoritem::find()->select('MAX(`sort`) as sort')->where(['trash'=>'Default','vendor_id'=>$model->vendor_id])->asArray()->all();
+            $max_sort = Vendoritem::find()
+                ->select('MAX(`sort`) as sort')
+                ->where(['trash' => 'Default', 'vendor_id' => $model->vendor_id])
+                ->asArray()
+                ->all();
             $sort = ($max_sort[0]['sort'] + 1);
             $model->item_status='Deactive';
             $model->sort = $sort;
@@ -393,8 +325,6 @@ class VendoritemController extends Controller
                 'model1' => $model1,
                 'itemtype' => $itemtype,
                 'vendorname' => $vendorname,
-                'categoryname' => $categoryname,
-                'subcategory' => $subcategory,
                 'categories' => $categories
             ]);
         }
@@ -423,14 +353,10 @@ class VendoritemController extends Controller
             ->asArray()
             ->all();
 
-        $cat_id = $model->category_id;
-        $subcat_id = $model->subcategory_id;
         $itemtype = Itemtype::loaditemtype();
         $vendorname = Vendor::loadvendorname();
         $categoryname = Category::vendorcategory(Yii::$app->user->getId());
-        $subcategory = Subcategory::loadsubcategory($cat_id);
-        $childcategory = Childcategory::loadchildcategory($subcat_id);
-
+        
         $loadpricevalues = Vendoritempricing::loadpricevalues($item_id);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -634,11 +560,9 @@ class VendoritemController extends Controller
                 'itemtype' => $itemtype,
                 'vendorname' => $vendorname,
                 'categoryname' => $categoryname,
-                'subcategory' => $subcategory,
                 'guide_images' => Image::findAll(['item_id' => $id,'module_type'=>'guides']),
                 'images' => Image::findAll(['item_id' => $id,'module_type'=>'vendor_item']),
                 'model1' => $model1,
-                'childcategory' => $childcategory,
                 'loadpricevalues' => $loadpricevalues,
                 'model_question' => $model_question,
                 'vendor_item_to_category' => $vendor_item_to_category,

@@ -24,20 +24,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterModel' => $searchModel,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-            [
-                'attribute'=>'item_name',
-                'label'=>'Item Name',
-                'value'=>function($data){
-                    return $data->vendoritem->item_name;
-                }
-            ],
-            [
-                'attribute'=>'exception_date',
-                'format' => ['date', Yii::$app->params['dateFormat']],
-                'label'=>'exception date',
-            ],
-            'exception_capacity',
-            ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'attribute'=>'item_name',
+                    'label'=>'Item Name',
+                    'value'=>function($data){
+                        return $data->vendoritem->item_name;
+                    }
+                ],
+                [
+                    'attribute'=>'exception_date',
+                    'format' => ['date', Yii::$app->params['dateFormat']],
+                    'label'=>'exception date',
+                ],
+                'exception_capacity',
+                [
+                  'class' => 'yii\grid\ActionColumn',
+                  'template' => '{update} {delete}'
+                ],
             ],
         ]); ?>
 	   </div>
