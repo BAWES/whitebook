@@ -228,10 +228,9 @@ class SiteController extends BaseController
         if($search == 'all') {
             $search = '';
         }
-
         $search = str_replace('and', '&', $search);
         $search = str_replace('-', ' ', $search);
-
+        $data = Yii::$app->request->get();
         $k = '';
         $slug = '';
 
@@ -250,18 +249,79 @@ class SiteController extends BaseController
             ->where([
                 '{{%vendor_item}}.trash' => 'Default',
                 '{{%vendor_item}}.item_approved' => 'Yes',
-                '{{%vendor_item}}.item_status' => 'Active',
+                '{{%vendor_item}}.item_status' => 'Active'
             ]);
 
         //if search query given 
-        if($search) {
+        if ($search) {
             $items_query->andWhere(['like','{{%vendor_item}}.item_name', $search]);    
-        }            
+        }
+
+        if (isset($data['vendor']) && $data['vendor'] != '') {
+
+
+            $items_query->andWhere(['in', '{{%vendor}}.slug', explode('+', $data['vendor'])]);
+        }
+
+        //price filter
+        if (isset($data['price']) && $data['price'] != '') {
+
+            $price_condition = [];
+
+            foreach (explode('+', $data['price']) as $key => $value) {
+                $arr_min_max = explode('-', $value);
+                $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
+            }
+
+            $items_query->andWhere(implode(' OR ', $price_condition));
+        }
+
+
+        //theme filter
+        if (isset($data['themes']) && $data['themes'] != '') {
+
+            $theme = explode('+', $data['themes']);
+
+            foreach ($theme as $key => $value) {
+                $themes[] = Themes::find()
+                    ->select('theme_id')
+                    ->where(['slug' => [$value]])
+                    ->asArray()
+                    ->all();
+            }
+
+            $all_valid_themes = array();
+
+            foreach ($themes as $key => $value) {
+                $get_themes = Vendoritemthemes::find()
+                    ->select('theme_id, item_id')
+                    ->where(['trash' => "Default"])
+                    ->andWhere(['theme_id' => [$value[0]['theme_id']]])
+                    ->asArray()
+                    ->all();
+
+                foreach ($get_themes as $key => $value) {
+                    $all_valid_themes[] = $value['item_id'];
+                }
+            }
+
+            if (count($all_valid_themes)==1) {
+                $all_valid_themes = $all_valid_themes[0];
+            } else {
+                $all_valid_themes = implode('","', $all_valid_themes);
+            }
+
+            $items_query->andWhere('{{%vendor_item}}.item_id IN("'.$all_valid_themes.'")');
+
+        }//if themes
+
+
 
         $items = $items_query->groupBy('{{%vendor_item}}.item_id')
             ->orderBy('{{%image}}.vendorimage_sort_order', SORT_ASC)
             ->asArray()
             ->all();
+
 
         foreach ($items as $data) {
             $k[] = $data['item_id'];

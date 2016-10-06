@@ -82,7 +82,7 @@ class ProductFilterResultController extends BaseController
             $theme = explode('+', $data['themes']);
 
             foreach ($theme as $key => $value) {
-                $themes[] = Themes::find()
+                $themes[] = \common\models\Themes::find()
                     ->select('theme_id')
                     ->where(['slug' => [$value]])
                     ->asArray()
@@ -92,7 +92,7 @@ class ProductFilterResultController extends BaseController
             $all_valid_themes = array();
 
             foreach ($themes as $key => $value) {
-                $get_themes = Vendoritemthemes::find()
+                $get_themes = \common\models\Vendoritemthemes::find()
                     ->select('theme_id, item_id')
                     ->where(['trash' => "Default"])
                     ->andWhere(['theme_id' => [$value[0]['theme_id']]])
