@@ -4,6 +4,8 @@ namespace common\models;
 
 use Yii;
 use yii\web\IdentityInterface;
+use common\models\CustomerAddress;
+use common\models\CustomerCart;
 
 /**
 * This is the model class for table "whitebook_customer".
@@ -258,4 +260,13 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
         $this->customer_password_reset_token = null;
     }
 
+    public function getCustomerAddress()
+    {
+        return $this->hasMany(CustomerAddress::className(), ['customer_id' => 'customer_id']);
+    }
+
+    public function getCustomerCart()
+    {
+        return $this->hasMany(CustomerCart::className(), ['customer_id' => 'customer_id']);
+    }
 }

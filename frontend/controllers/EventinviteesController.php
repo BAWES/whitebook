@@ -177,20 +177,23 @@ class EventinviteesController extends BaseController
 
     public function actionUpdateinvitees()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
+        $data = Yii::$app->request->post();
+
         $event_invite = Eventinvitees::findOne($data['invitees_id']);
         $event_invite->name = $data['name'];
         $event_invite->email = $data['email'];
         $event_invite->phone_number = $data['phone_number'];
         $event_invite->save();
+        
         if ($event_invite) {
             echo 'done';
         } else {
             echo 'not';
         }
-        die;
     }
 
     public function actionInviteedetails()
