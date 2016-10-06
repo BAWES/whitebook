@@ -98,7 +98,6 @@ if($event_status>0){
 
 								<?= $this->render('@frontend/views/plan/filter/price',[
 									'items' => $items]); ?>
-									
 							</div>
 						</div>
 					</nav>
@@ -150,13 +149,13 @@ if($event_status>0){
 
 $this->registerJs("
 
-    var slug                = '".$search."',
+    var product_slug        = '".$search."',
         search              = '".$search."',
-        path                = '".Yii::$app->urlManager->createAbsoluteUrl('product-filter-result/searching-page-filter')."',
+        load_items          = '".Yii::$app->urlManager->createAbsoluteUrl('product-filter-result/searching-page-filter')."',
         giflink             = '".Url::to("@web/images/ajax-loader.gif")."',
         wishlist_url        = '".Url::to(['/users/add_to_wishlist'])."',
         addevent            = '".Url::to(['/product/addevent'])."',
-        load_more           = '".Yii::$app->urlManager->createAbsoluteUrl('plan/loadmoreitems')."'
+        load_more_items		= '".Yii::$app->urlManager->createAbsoluteUrl('plan/loadmoreitems')."'
     ", \yii\web\View::POS_END, 'searching-options'
 );
 
@@ -165,10 +164,4 @@ $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerCssFile("@web/css/jquery.mCustomScrollbar.css");
 $this->registerJsFile('@web/js/jquery.mCustomScrollbar.concat.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/pages/search.js?V=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
-//$this->registerCssFile("http://example.com/css/themes/black-and-white.css", [
-//'depends' => [BootstrapAsset::className()],
-//'media' => 'print',
-//], 'css-print-theme');
-
 ?>
