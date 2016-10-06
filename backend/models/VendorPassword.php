@@ -32,7 +32,6 @@ class VendorPassword extends Model
             [['old_password','new_password','confirm_password'],'required','on' => 'change'],
         ];
     }       
-
     
     public function scenarios()
     {
@@ -41,7 +40,6 @@ class VendorPassword extends Model
         return $scenarios;
     }
     
-
     /**
      * Finds user by [[username]]
      *
@@ -56,7 +54,4 @@ class VendorPassword extends Model
 
         return $this->_user;
     }
-    
-    
-    
 }

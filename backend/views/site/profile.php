@@ -40,29 +40,41 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 			</ul>
 			<div class="tab-content">
 				<!-- Begin First Tab -->
-				<div class="tab-pane" id="1" >
-				   <?php /*if(!$model->isNewRecord)
-				   {
-						$time = explode(':',$model->vendor_working_hours);
-						 $model->vendor_working_hours = $time[0];
-						 $model->vendor_working_min = $time[1];
-						 $time1 = explode(':',$model->vendor_working_hours_to);
-						 $model->vendor_working_hours_to = $time1[0];
-						 $model->vendor_working_min_to = $time1[1];
-				   }*/ ?>
-					<div class="form-group vendor_logo">
-					<?= $form->field($model, 'vendor_logo_path',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-					])->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))->fileInput()->hint('Logo Size 150 * 250') ?>
-					<!-- Venodr logo begin -->
-					<?php if(isset($model->vendor_logo_path)) {
-						echo Html::img(Yii::getAlias('@vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
-						} ?>
-					</div>
+				<div class="tab-pane" id="1">
 
-				   <div class="form-group"><?= $form->field($model, 'vendor_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'readonly'=>true,]) ?></div>
+					<?php 
+
+					$lbl = 'Vendor logo'.Html::tag('span', '*',['class'=>'required']);
+
+					if(isset($model->vendor_logo_path)) {						
+						$lbl .= '<br />';
+						$lbl .= Html::img(Yii::getAlias('@vendor_logo/').$model->vendor_logo_path, [
+									'class' => '',
+									'width' => '125px',
+									'height' => '125px',
+									'alt' => 'Logo',
+									'style' => 'margin-top: 10px;'
+								]);
+					} ?>
+											
+					<?= $form->field($model, 'vendor_logo_path')
+							->label($lbl)
+							->fileInput(['class' => 'form-group vendor_logo'])
+							->hint('Logo Size 150 * 250'); ?>
+
+
+				    <?= $form->field($model, 'vendor_name')
+				    		->textInput(['maxlength' => 100]); ?>
+
+					<?= $form->field($model, 'vendor_name_ar')
+							->textInput(['maxlength' => 100]); ?>
+	
+					<?= $form->field($model, 'vendor_contact_name')
+							->textInput(['maxlength' => 100]); ?>
+
+					<?= $form->field($model, 'vendor_contact_email')
+							->textInput(['maxlength' => 100, 'readonly' => true]) ?>
+
 					<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
 						<label class="control-label" for="vendor-vendor_contact_number">Contact Phone Number</label>
 						<?php
@@ -77,6 +89,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 						<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" style="margin:5px;" />
 
 					</div>
+
 					<div class="row margin-left-2">
 						<div class="form-group" style="width: 150px; float: left;"><?php
                             $model->vendor_working_hours = $from_hour;
@@ -91,6 +104,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 							</div>
 						</div>
 					</div>
+					
 					<div class="row margin-left-2">
 						<div class="form-group" style="width: 150px; float: left;"><?php
                             $model->vendor_working_hours_to = $to_hour;
@@ -162,38 +176,59 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 				<div class="tab-pane" id="2">
 
 					<div class="form-group">
-					<p style="font-size:14px;"> Category</p><p style="font-weight:bold; border:1px solid #ccc;padding:5px"> <?php echo implode(' , ',$vendor_categories); ?> </p>
+					<p style="font-size:14px;"> Category</p><p style="font-weight:bold; border:1px solid #ccc;padding:5px"> <?php echo implode(' , ', $vendor_categories); ?> </p>
 					</div>
+					
 					<input type="hidden" id="test1" value="0" name="tests">
 
-					<div class="form-group"><?= $form->field($model, 'vendor_return_policy',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea(['id'=>'text-editor']) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_return_policy_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea(['id'=>'text-editor-2']) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_fax',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
-					<div class="form-group"><?= $form->field($model, 'short_description',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
-					<div class="form-group"><?= $form->field($model, 'short_description_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_bank_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_bank_branch',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_account_no',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
+					<?= $form->field($model, 'vendor_return_policy')->textArea(['id'=>'text-editor']); ?>
+					
+					<?= $form->field($model, 'vendor_return_policy_ar')->textArea(['id'=>'text-editor-2']); ?>
+
+					<?= $form->field($model, 'vendor_fax'); ?>
+
+					<?= $form->field($model, 'short_description')->textArea(); ?>
+
+					<?= $form->field($model, 'short_description_ar')->textArea() ?>
+
+					<?= $form->field($model, 'vendor_bank_name'); ?>
+
+					<?= $form->field($model, 'vendor_bank_branch'); ?>
+
+					<?= $form->field($model, 'vendor_account_no'); ?>
+
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 				</div>
-					<!--End Third Tab -->
+				<!--End Third Tab -->
 
 				<div class="tab-pane" id="3">
-					<div class="form-group"><?= $form->field($model, 'vendor_public_phone',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_public_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_emergency_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_website',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
+				
+					<?= $form->field($model, 'vendor_public_phone')->textInput(['maxlength' => 100]); ?>
+
+					<?= $form->field($model, 'vendor_public_email')->textInput(['maxlength' => 100]); ?>
+
+					<?= $form->field($model, 'vendor_emergency_contact_email')
+							->textInput(['maxlength' => 100]); ?>
+
+					<?= $form->field($model, 'vendor_website')->textInput(['maxlength' => 100]); ?>
+
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 				</div>
 
 				<div class="tab-pane" id="4">
-					<div class="form-group"><?= $form->field($model, 'vendor_facebook',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_twitter',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_instagram',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_googleplus',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
-					<div class="form-group"><?= $form->field($model, 'vendor_skype',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100]) ?></div>
+
+					<?= $form->field($model, 'vendor_facebook')->textInput(['maxlength' => 100]); ?>
+
+					<?= $form->field($model, 'vendor_twitter')->textInput(['maxlength' => 100]); ?>
+
+					<?= $form->field($model, 'vendor_instagram')->textInput(['maxlength' => 100]); ?>
+
+					<?= $form->field($model, 'vendor_googleplus')->textInput(['maxlength' => 100]); ?>
+					
+					<?= $form->field($model, 'vendor_skype')->textInput(['maxlength' => 100]); ?>
+
 					<div class="form-group">
 						<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 						<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">

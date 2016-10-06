@@ -9,7 +9,6 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = 'Manage weekly off';
-$this->params['breadcrumbs'][] = ['label' => 'Block date', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

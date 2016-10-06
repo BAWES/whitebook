@@ -50,5 +50,4 @@ class VendorItemCapacityException extends \common\models\VendorItemCapacityExcep
     {
         return parent::behaviors();
     }
-
 }
