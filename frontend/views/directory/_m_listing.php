@@ -11,17 +11,15 @@
                     foreach ($directory as $d) {
 
                         if(Yii::$app->language == "en") {
-                            $ltr = strtoupper(mb_substr($d['vname'], 0, 1, 'utf8'));
-                            $vname = strtoupper($d['vname']);
+                            $ltr = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
+                            $vname = strtoupper($d['vendor_name']);
                         }else{
-                            $ltr = strtoupper(mb_substr($d['vname_ar'], 0, 1, 'utf8'));
-                            $vname = strtoupper($d['vname_ar']);    
+                            $ltr = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
+                            $vname = strtoupper($d['vendor_name_ar']);
                         }
 
                         if ($ltr == $f) { ?>
-
                             <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a></li>
-                            
                         <?php }
                     } ?>
                 <?php } ?>

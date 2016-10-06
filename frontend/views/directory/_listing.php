@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 
 $total = count($directory);
-if ((!empty($directory)) && ($total > 1)) {
+if ((!empty($directory)) && ($total > 0)) {
     $first = $total / 3;
     $second = $first + $first;
     $third = $second + $first;
@@ -24,18 +24,18 @@ if ((!empty($directory)) && ($total > 1)) {
                             foreach ($directory as $d) {
                                
                                 if(Yii::$app->language == "en") {
-                                    $first_letter = strtoupper(mb_substr($d['vname'], 0, 1, 'utf8'));
-                                    $vname = strtoupper($d['vname']);
+                                    $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
+                                    $vendor_name = strtoupper($d['vendor_name']);
                                 }else{
-                                    $first_letter = strtoupper(mb_substr($d['vname_ar'], 0, 1, 'utf8'));
-                                    $vname = strtoupper($d['vname_ar']);    
+                                    $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
+                                    $vendor_name = strtoupper($d['vendor_name_ar']);
                                 }
 
                                 if ($first_letter == $f) {
                                     if ($i < $first) {
                                         ?>
                                         <li>
-                                            <a href="<?= Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a>
+                                            <a href="<?= Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
                                         </li>
                                 <?php }
                                 }
@@ -63,15 +63,15 @@ if ((!empty($directory)) && ($total > 1)) {
                 foreach ($directory as $d) {
 
                 if(Yii::$app->language == "en") {
-                    $first_letter = strtoupper(mb_substr($d['vname'], 0, 1, 'utf8'));
-                    $vname = strtoupper($d['vname']);
+                    $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
+                    $vendor_name = strtoupper($d['vendor_name']);
                 }else{
-                    $first_letter = strtoupper(mb_substr($d['vname_ar'], 0, 1, 'utf8'));
-                    $vname = strtoupper($d['vname_ar']);    
+                    $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
+                    $vendor_name = strtoupper($d['vendor_name_ar']);    
                 }
 
                 if ($first_letter == $f) { ?>
-                    <li><a href="<?= Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a></li>
+                    <li><a href="<?= Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a></li>
                 <?php 
                 }
                 } ?>
@@ -102,16 +102,16 @@ if ((!empty($directory)) && ($total > 1)) {
                         foreach ($directory as $d) {
                             
                             if(Yii::$app->language == "en") {
-                                $first_letter = strtoupper(mb_substr($d['vname'], 0, 1, 'utf8'));
-                                $vname = strtoupper($d['vname']);
+                                $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
+                                $vendor_name = strtoupper($d['vendor_name']);
                             }else{
-                                $first_letter = strtoupper(mb_substr($d['vname_ar'], 0, 1, 'utf8'));
-                                $vname = strtoupper($d['vname_ar']);    
+                                $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
+                                $vendor_name = strtoupper($d['vendor_name_ar']);    
                             }
 
                             if ($first_letter == $f) { ?>
 
-                                <li><a href="<?php Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a></li>
+                                <li><a href="<?php Url::toRoute(['/site/vendor_profile/','slug'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a></li>
                             <?php 
                             }
                         } ?>
