@@ -323,7 +323,7 @@ class CartController extends BaseController
         ]);
 
         if($block_date) {
-            return Yii::t('frontend', 'Item not available for selected date .');
+            return Yii::t('frontend', 'Item is not available on selected date');
         }
 
         //day should not in week off
@@ -331,7 +331,7 @@ class CartController extends BaseController
         $day = date('N', strtotime($data['delivery_date']));//7-sunday, 1-monday
 
         if(in_array($day, $blocked_days)) {
-            return Yii::t('frontend', 'Item not available for selected date .');
+            return Yii::t('frontend', 'Item is not available on selected date');
         }
 
         return 1;
