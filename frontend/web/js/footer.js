@@ -158,7 +158,7 @@ jQuery('#delivery_date_2').datepicker({
 
 // Edit Cart Section
 
-function deliveryTimeSlot(date){
+function deliveryTimeSlotCart(date){
     var myDate = new Date()
     time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
         currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
@@ -184,7 +184,7 @@ function deliveryTimeSlot(date){
     });
 }
 
-function productAvailability(date) {
+function productAvailabilityCart(date) {
     jQuery.ajax({
         type: 'POST',
         url: product_availability,
@@ -198,7 +198,7 @@ function productAvailability(date) {
                 $('#timeslot_id').html('');
                 return false;
             }else{
-                deliveryTimeSlot(date);
+                deliveryTimeSlotCart(date);
             }
         }
     });
@@ -214,7 +214,7 @@ jQuery(function() {
             container: '#update-cart-modal modal-body'
         }).on("changeDate", function(e) {
             $('.error.cart_delivery_date').html('');
-            productAvailability(jQuery(this).val());
+            productAvailabilityCart(jQuery(this).val());
         });
     });
 });
