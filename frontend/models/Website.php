@@ -78,12 +78,18 @@ class Website extends Model {
     }
 
     public static function get_category_id($category_url) {
-        $general = Category::find()->select('category_id')->where(['category_url'=>$category_url])->asArray()->all();
-        return $general[0]['category_id'];
+        
+        $general = Category::find()
+            ->select('category_id')
+            ->where(['category_url' => $category_url])
+            ->asArray()
+            ->one();
+
+        return $general['category_id'];
     }
 
     public static function vendor_details($slug) {
-        return $vendor = Vendor::find()->select('*')->where(['slug'=>$slug])->asArray()->all();
+        return Vendor::find()->select('*')->where(['slug'=>$slug])->asArray()->all();
     }
 
     public static function vendor_item_details($id) {
@@ -100,10 +106,10 @@ class Website extends Model {
 
     public static function vendor_social_info($vendor_id) {
         return $vendor = (new Query())
-                ->select('*')
-                ->from('whitebook_vendor_social_info')
-                ->where(['vendor_id' => $vendor_id])
-                ->all();
+            ->select('*')
+            ->from('whitebook_vendor_social_info')
+            ->where(['vendor_id' => $vendor_id])
+            ->all();
     }
 
     public static function getSEOdata($table = '', $field = '', $value = '', $data = '') {
@@ -126,78 +132,38 @@ class Website extends Model {
                      ->all();
     }
 
-    public static function check_user_fav($item_id) {
-        $customer_id = CUSTOMER_ID;
-        return $user_fav = (new Query())
-            ->select($data)
-            ->from('{{%_wishlist}}')
-            ->where(['item_id'=>$item_id])
-            ->andwhere(['customer_id'=>$customer_id])
-            ->all();
-    }
-
-    public static function get_products_list($limit, $offset) {
-        $today = date('Y-m-d H:i:s');
-                		return $data=Vendoritem::find()
-        ->select(['{{%vendor_item}}.item_id AS item_id','{{%vendor_item}}.item_name AS item_name',
-        '{{%vendor_item}}.item_description AS item_description','{{%vendor_item}}.item_price_per_unit AS item_price_per_unit',
-                    '{{%vendor}}.vendor_name AS vendor_name',
-                    '{{%category}}.category_id AS category_id'])
-            ->LEFTJOIN('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
-            ->LEFTJOIN('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-            ->where(['>','{{%vendor_item}}.item_amount_in_stock','0'])
-			->andwhere(['{{%vendor}}.trash'=>'Default'])
-			->andwhere(['{{%vendor}}.approve_status'=>'Yes'])
-			->andwhere(['{{%vendor}}.vendor_status'=>'Active'])
-			->andwhere(['<=','{{%vendor}}.package_start_date',$today])
-            ->andwhere(['>=','{{%vendor}}.package_end_date',$today])
-			->andwhere(['{{%vendor_item}}.item_approved'=>'yes'])
-			->andwhere(['{{%vendor_item}}.item_archived'=>'no'])
-			->andwhere(['{{%vendor_item}}.trash'=>'Default'])
-			->andwhere(['{{%vendor_item}}.item_status'=>'Active'])
-			->andwhere(['{{%vendor_item}}.item_for_sale'=>'yes'])
-			->andwhere(['{{%category}}.trash'=>'default'])
-			->andwhere(['{{%category}}.category_allow_sale'=>'Yes'])
-			->andwhere(new \yii\db\Expression('FIND_IN_SET({{%vendor}}.category_id,'.$categoryid.')'))
-			->orderby(['{{%vendor}}.vendor_name'=>SORT_ASC])
-			->groupby(['{{%vendor}}.vendor_id'])
-			->limit($offset,$limit)
-			->asArray()
-			->all();
-    }
-
     public static function get_user_event_types($customer_id) {
-		return $data=Events::find()
-        ->select(['{{%events}}.event_name AS event_name','{{%events}}.event_id AS event_id'])
+		return Events::find()
+            ->select(['{{%events}}.event_name AS event_name','{{%events}}.event_id AS event_id'])
             ->INNERJOIN('{{%event_type}}', '{{%event_type}}.type_name = {{%events}}.event_type')
             ->where(['{{%events}}.customer_id'=>$customer_id])
 			->andwhere(['{{%event_type}}.trash'=>'Default'])
 			->orderby(['{{%events}}.event_id'=>SORT_DESC])
 			->asArray()
-			->all();
-			
+			->all();			
     }
 
     // user event type birthday, wedding,etc
     public static function get_user_event($customer_id) {
-        return $event_type = Events::find()->select('event_type')->where(['customer_id'=>$customer_id])->asArray()->distinct()-> all();
+        return $event_type = Events::find()
+            ->select('event_type')
+            ->where(['customer_id' => $customer_id])
+            ->asArray()
+            ->distinct()
+            ->all();
     }
 
     // GET SEO DATA
-    public static function SEOdata($table_name='',$field='',$value='',$data=''){
+    public static function SEOdata($table_name='',$field='',$value='',$data='') {
+
         if(is_array($data)){
             $select = implode(',',$data);
         }
+
         if($table_name && $field && $value && $data){
             return Website::getSEOdata($table_name,$field,$value,$select);
         }else{
             return;
         }
     }
-
-    public function printdata($table)
-    {      
-     var_dump($table->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);die;
-    }
-
 }

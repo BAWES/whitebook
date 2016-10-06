@@ -115,9 +115,4 @@ class Customer extends \common\models\Customer {
     public static function findByEmail($email) {
         return static::findOne(['customer_email' => $email]);
     }
-
-    public function getCustomerAddress()
-    {
-        return $this->hasMany(\common\models\CustomerAddress::className(), ['customer_id' => 'customer_id']);
-    }
 }

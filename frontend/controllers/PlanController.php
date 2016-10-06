@@ -408,39 +408,6 @@ class PlanController extends BaseController
         ]);
     }
 
-    public function actionLoadmoreitems()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            if ($data['slug'] != '') {
-                /* BEGIN CATEGORY*/
-                $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
-                if (empty($model1)) {
-                    throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-                }
-            }
-
-            $limit = $data['limit'];
-
-            $imageData = Vendoritem::find()
-                    ->select('{{%vendor_item}}.slug, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
-                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
-                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
-                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
-                    ->where(['{{%vendor_item}}.trash' => "Default"])
-                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
-                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-                    ->groupBy('{{%vendor_item}}.item_id')
-                    ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
-                    ->limit(4)
-                    //limit 4 offset '.$limit.'
-                    ->asArray()
-                    ->all();
-            return $this->renderPartial('product_list_ajax', ['imageData' => $imageData]);
-        }
-    }
-
     /* BEGIN VENDOR PROFILE PAGE LOAD ITEMS BASED ON VENDOR */
     public function actionLoadvendoritems()
     {
@@ -556,102 +523,7 @@ class PlanController extends BaseController
             'customer_events_list' => $customer_events_list
         ]);
     }
-    /* END VENDOR PROFILE PAGE LOAD ITEMS BASED ON VENDOR */
 
-    /* BEGIN LOAD SEARCH RESULTS PAGE ITEMS */
-    public function actionLoadsearchresultitems()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $condition = '';
-            $join = '';
-            if (!empty($data['slug'])) {
-                $cat_item_details = \frontend\models\Category::category_search_details($data['slug']);
-                if (!empty($cat_item_details)) {
-                    $cat_id = $cat_item_details[0]['category_id'];
-                    $join .= ' (wvi.category_id  = ("'.$cat_id.'")
-   or wvi.subcategory_id  = ("'.$cat_id.'") or wvi.child_category  = ("'.$cat_id.'") OR wvi.item_name
-   LIKE "%'.$data['slug'].'%" )';
-                }
-
-                if (!empty($data['vendor'])) {
-                        $vendor = explode('+', $data['vendor']);
-                    //print_r($vendor);die;
-                    foreach ($vendor as $key => $val) {
-                        $vendor_ids[] = Vendor::Vendorid_item($val)['vendor_id'];
-                    }
-                    //print_r($vendor_ids);die;
-                    $v = implode('","', $vendor_ids);
-
-                   // $active_vendors = Vendor::loadvalidvendors();
-                    $condition .= ' AND wvi.vendor_id IN("'.$v.'")';
-                }
-
-            /* THEMES FILTER */
-            if ($data['themes'] != '') {
-                $theme = explode('+', $data['themes']);
-                foreach ($theme as $key => $value) {
-                    $themes[] = Themes::find()->select('theme_id')->where(['slug'=>[$value]])->asArray()->all();
-                }
-
-                $all_valid_themes = array();
-                foreach ($themes as $key => $value) {
-                    $get_themes = Vendoritemthemes::find()->select('theme_id, item_id')
-                                    ->where(['trash'=>"Default"])
-                                    ->andWhere(['theme_id'=>[$value[0]['theme_id']]])
-                                    ->asArray()
-                                    ->all();
-                foreach ($get_themes as $key => $value) {
-                     $all_valid_themes[] = $value['item_id'];
-                 }
-                }
-
-                if (count($all_valid_themes) <= 1) {
-                    $all_valid_themes = $all_valid_themes[0];
-                } else {
-                    //$all_valid_themes = implode('","', $all_valid_themes);
-                    $all_valid_themes = implode(',', $all_valid_themes);
-                }
-             /* END Multiple themes match comma seperate values in table*/
-
-          //  $join .= ' inner join whitebook_theme as wt ON wt.slug REGEXP "'.$theme_ids.'" ';
-              $condition .= ' AND wvi.item_id IN('.$all_valid_themes.') ';
-            }
-
-             /* BEGIN PRICE FILTER */
-            if ($data['price'] != '') {
-                $price = explode('+', $data['price']);
-                foreach ($price as $key => $value) {
-                    $prices[] = $value;
-                    $price_val = explode('-', $value);
-                    $price_val1[] = 'AND (wvi.item_price_per_unit between '.$price_val[0].' and '.$price_val[1].')';
-                }
-                $condition1 = implode(' OR ', $price_val1);
-                $condition .= str_replace('OR AND', 'OR', $condition1);
-            }
-
-            /* END PRICE FILTER */
-
-                $q = 'select wvi.category_id, wi.image_path, wvi.item_price_per_unit, wvi.item_name, wvi.slug, wvi.child_category, wvi.item_id, wv.vendor_name, wvi.category_id, count(*) as total from whitebook_vendor_item as wvi ';
-                $q .= 'left join whitebook_image as wi on wvi.item_id = wi.item_id left join whitebook_vendor as wv on wvi.vendor_id = wv.vendor_id ';
-                $q .= 'where wvi.trash = "Default" AND wvi. item_approved = "Yes" AND wvi.item_status = "Active" AND wvi.type_id = "2" AND wvi.item_for_sale = "Yes" AND wi.module_type = "vendor_item" AND wv.slug = "'.$data["slug"].'" ';
-                $q .= $condition;
-                $q .= 'group by wi.item_id LIMIT 12';
-
-                $result = Vendoritem::findBySql($q)->asArray()->all();
-
-                if (Yii::$app->user->isGuest) {
-                    $customer_events_list = [];
-                } else {
-                    $customer_id = Yii::$app->user->identity->customer_id;
-                    $usermodel = new Users();
-                    $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
-                }
-                return $this->renderPartial('loaditems', ['imageData' => $result, 'customer_events_list' => $customer_events_list]);
-            }
-        }
-    }
-    /* END LOAD SEARCH RESULTS PAGE ITEMS */
     public function actionToggle()
     {
         $model = new SubCategory();

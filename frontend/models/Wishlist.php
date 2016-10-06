@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use frontend\models\Customer;
 
 /**
  * This is the model class for table "{{%wishlist}}".
@@ -49,5 +50,10 @@ class Wishlist extends \yii\db\ActiveRecord
             'wishlist_id' => 'Wishlist ID',
             'last_updated_date' => 'Last updated date',
         ];
+    }
+
+    public function getCustomer()
+    {
+        return $this->hasMany(Customer::className(), ['customer_id' => 'customer_id']);
     }
 }
