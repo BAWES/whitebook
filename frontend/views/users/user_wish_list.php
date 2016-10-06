@@ -18,13 +18,13 @@ if (!empty($wishlist)) {
                     <?php
                     $image = Image::find()->select('image_path')->where(['item_id' => $value['item_id'], 'module_type' => 'vendor_item', 'trash' => 'Default'])->asArray()->one();
                     ?>
-        <?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $image['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?>
+                    <?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $image['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?>
                 </div>
                 <div class="events_descrip">
                     <a title="" href="#"><?= $value['vendor_name']; ?>
                         <h3><?= $value['item_name']; ?></h3>
 
-                        <p><?= CFormatter::format($f['item_price_per_unit']); ?></p>
+                        <p><?= CFormatter::format($value['item_price_per_unit']); ?></p>
 
                     </a>
                 </div>
