@@ -22,8 +22,7 @@ class FeaturegroupController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -32,9 +31,9 @@ class FeaturegroupController extends Controller
     public function behaviors()
     {
         return [
-                    'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
-               'rules' => [
+                'rules' => [
                    [
                        'actions' => [],
                        'allow' => true,
@@ -64,16 +63,20 @@ class FeaturegroupController extends Controller
     public function actionIndex()
     {   
         $access = Authitem::AuthitemCheck('4', '17');
+        
         if (yii::$app->user->can($access)) {
+            
             $searchModel = new FeaturegroupSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -108,7 +111,7 @@ class FeaturegroupController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->group_name = strtolower($model->group_name);
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Feature group added successfully!');
+                Yii::$app->session->setFlash('success', 'Feature group added successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -117,7 +120,7 @@ class FeaturegroupController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -140,7 +143,7 @@ class FeaturegroupController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->group_name = strtolower($model->group_name);
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Feature group updated successfully!');
+                Yii::$app->session->setFlash('success', 'Feature group updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -149,7 +152,7 @@ class FeaturegroupController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -169,11 +172,11 @@ class FeaturegroupController extends Controller
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
             Featuregroupitem::deleteAll(['group_id'=>$id]); // delete all products
-            echo Yii::$app->session->setFlash('success', 'Feature group deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Feature group deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

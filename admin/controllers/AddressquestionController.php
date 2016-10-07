@@ -19,7 +19,8 @@ class AddressquestionController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
+
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -83,10 +84,8 @@ class AddressquestionController extends Controller
         if ($command) {
             Yii::$app->session->setFlash('success', 'Questions sort order updated successfully!');
             echo 1;
-            exit;
         } else {
             echo 0;
-            exit;
         }
     }
 
@@ -98,7 +97,7 @@ class AddressquestionController extends Controller
 
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
         
-        $command=Addressquestion::updateAll(['status' => $status],'ques_id= '.$data['cid']);
+        $command = Addressquestion::updateAll(['status' => $status],'ques_id= '.$data['cid']);
         
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
