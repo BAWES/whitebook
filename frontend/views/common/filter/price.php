@@ -63,8 +63,6 @@ $this->registerJs("
         ondragend: function(e){filter();}
     });
 
-    jQuery('.price_slider').jRange('updateRange', '".$result['min'].",".$result['max']."', '25,50');
-
 ", View::POS_READY);
 
 if (isset($get['price'])) {
