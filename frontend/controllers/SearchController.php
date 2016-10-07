@@ -28,6 +28,7 @@ class SearchController extends BaseController
         if($search == 'all') {
             $search = '';
         }
+
         $search = str_replace('and', '&', $search);
         $search = str_replace('-', ' ', $search);
         $k = '';
