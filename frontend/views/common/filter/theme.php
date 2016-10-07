@@ -1,7 +1,7 @@
 <?php
 
 //we already getting theme for listed items, so no need to have sql like price filter here
-
+$get = Yii::$app->request->get();
 if($themes) { ?>
 
 <div class="panel panel-default" >
@@ -26,31 +26,16 @@ if($themes) { ?>
 				<ul class="<?= $class; ?>">
 					<?php
 					foreach ($themes as $key => $value) {
-
-						if(isset($get['themes']) && $get['themes'] !="")
-						{
+						if (isset($get['themes']) && $get['themes'] !="") {
 							$val = explode(' ',$get['themes']);
-
-							if(in_array($value['slug'],$val))
-							{
-								$checked1 = 'checked=checked';
-							}
-							else
-							{
-								$checked1 = '';
-							}
+							$checked1 = (in_array($value['slug'],$val))? 'checked=checked' : '';
 						}
 							if (isset($value['theme_name'])) {
-								if (Yii::$app->language == "en") {
-									$theme_name = ucfirst(strtolower($value['theme_name']));
-								} else {
-									$theme_name = ucfirst(strtolower($value['theme_name_ar']));
-								}
-
+								$lang_name = (Yii::$app->language == "en") ? 'theme_name' : 'theme_name_ar';
+								$theme_name = ucfirst(strtolower($value[$lang_name]));
 						?>
 							<li>
 								<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">
-
 								<input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> ><?= $theme_name ?></label>
 							</li>
 						<?php

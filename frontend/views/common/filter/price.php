@@ -23,7 +23,6 @@ $items_query = CategoryPath::find()
 
 $result = $items_query->asArray()->one();
 
-
 if($result && $result['max'] != $result['min']) { ?>
 <div class="panel panel-default" >
     <div class="panel-heading">
@@ -46,29 +45,33 @@ if($result && $result['max'] != $result['min']) { ?>
         </div>
     </div>
 </div>
-
 <?php 
 
 $this->registerCssFile('@web/css/jquery.range.css');
 $this->registerJsFile('@web/js/jquery.range.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJs("
-    jQuery('.price_slider').jRange({
+        jQuery('.price_slider').jRange({
         from: ".$result['min'].",
         to: ".$result['max'].",
         //step: 0.5,
         //scale: [-2.0,-1.0,0.0,1.0,2.0],
-//        format: '%s KWD',
+        format: '%s',
         width: 200,
         showLabels: true,
         snap: true,
-        onbarclicked: function(e){
-            filter();
-        },
-        ondragend: function(e){
-            filter();
-        }
+        onbarclicked: function(e){filter();},
+        ondragend: function(e){filter();}
     });
+
+    jQuery('.price_slider').jRange('updateRange', '".$result['min'].",".$result['max']."', '25,50');
+
 ", View::POS_READY);
+
+if (isset($get['price'])) {
+        $price = explode('-',$get['price']);
+    $this->registerJs("jQuery('.price_slider').jRange('updateRange', '".$result['min'].",".$result['max']."', '".$price[0].",".$price[1]."');", View::POS_READY);
+}
+
 
 }//END if 
 
