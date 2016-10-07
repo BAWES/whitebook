@@ -4,8 +4,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\Website;
 use common\models\CustomerCart;
-
-//define('ACTION',Yii::$app->controller->action->id);
 $action = Yii::$app->controller->action->id;
 
 ?>
@@ -31,17 +29,17 @@ $action = Yii::$app->controller->action->id;
                     <div class="search_header col-xs-3">
                         <div class="input-group">
                             <div id="navigation-bar">
-                                <form id="search" method="post" action="#" onsubmit="return false;">
+                                <form id="search_form" method="get" action="<?=Url::toRoute(['/search/index'],true); ?>">
                                     <div id="input1" class="left_slider">
-                                        <input type="text" name="search-terms" id="search-terms2" onkeyup="show_close()" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>" class="search-box" autocomplete="off" >
-                                        <button class="js-search-cancel"> <?= Yii::t("frontend", "Cancel") ?> </button>
+                                        <input type="text" name="search" id="search-terms2" onkeyup="show_close()" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>" class="search-box" autocomplete="off">
+                                        <button class="js-search-cancel"> <?= Yii::t("frontend", "Cancel") ?></button>
                                         <button id="search-close" class="search-clear icon-search_clear" type="reset" ><?= Yii::t("frontend", "Clear") ?></button>
                                     </div>
                                     <div id="label1">
                                         <div id="search-labl" class="search_for"></div>
                                         <div id="search_list2"></div>
-                                        <label for="search-terms" id="search-label" class="search-lbl-mobile">
-                                        </label></div>
+                                        <label for="search-terms" id="search-label" class="search-lbl-mobile"></label>
+                                    </div>
                                 </form>
                             </div>
                         </div><!-- /input-group -->
@@ -296,7 +294,7 @@ $action = Yii::$app->controller->action->id;
                     <div class="search_header">
                         <div class="input-group">
                             <div id="navigation-bar">
-                                <form id="search"  method="post" onsubmit="return false;">
+                                <form id="search_form" method="get" action="<?=Url::toRoute(['/search/index'],true); ?>">
                                     <?php
                                     if (!Yii::$app->user->isGuest) {
                                         $search_div = '<div class="form-group has-feedback" style="margin-bottom:0px">';
@@ -306,7 +304,7 @@ $action = Yii::$app->controller->action->id;
                                     echo $search_div;
                                     ?>
                                     <label for="search" class="sr-only"><?= Yii::t("frontend", "Search") ?></label>
-                                    <input type="search" class="form-control sear_ip_head" onkeyup="show_close3()" autofocus name="search_input_desk" id="search_input_header" autocomplete="off" title="search" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>">
+                                    <input type="search" class="form-control sear_ip_head" onkeyup="show_close3()" autofocus name="search" id="search_input_header" autocomplete="off" title="search" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>">
                                     <button id="search-close1" class="search-clear icon-search_clear" type="reset"><?= Yii::t("frontend", "Clear") ?></button>
                                     <a id="sear_button" href="#" class=" "></a>
                                     <input type="submit" id="sear_button_submit"/>
@@ -645,9 +643,9 @@ $action = Yii::$app->controller->action->id;
             //jQuery('#search_input_header').focus();
             return false;
         });
-        jQuery("#search_input_header").click(function () {
-            return false;
-        });
+//        jQuery("#search_input_header").click(function () {
+//            return false;
+//        });
         jQuery('#desk-search-label').css({'position': 'absolute'});
     });
     /*jQuery('.container_eventslider').click(function(){

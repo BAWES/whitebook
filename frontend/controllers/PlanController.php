@@ -176,7 +176,7 @@ class PlanController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $data = Yii::$app->request->post();
+        $data = Yii::$app->request->get();
 
         //items only from active vendors 
         $top_category = Category::find()

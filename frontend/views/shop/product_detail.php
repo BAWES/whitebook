@@ -256,7 +256,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                             </div>
 
                             <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
-                            <input name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+                            <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
                             <div class="row margin-top-20">
                                 <div class="col-md-3 padding-top-12" style="float: left;">
