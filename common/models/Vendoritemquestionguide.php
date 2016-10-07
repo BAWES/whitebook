@@ -87,5 +87,4 @@ class Vendoritemquestionguide extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorItemQuestion::className(), ['question_id' => 'question_id']);
     }
-
 }

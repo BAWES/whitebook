@@ -36,7 +36,7 @@ class ThemeitemController extends Controller
     public function behaviors()
     {
         return [
-                    'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
                'rules' => [
                    [
@@ -68,16 +68,19 @@ class ThemeitemController extends Controller
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('4', '18');
+        
         if (yii::$app->user->can($access)) {
+            
             $searchModel = new VendoritemthemesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -119,7 +122,7 @@ class ThemeitemController extends Controller
       			$model->theme_start_date = Yii::$app->formatter->asDate($model->theme_start_date, 'php:Y-m-d');
       			$model->theme_end_date = Yii::$app->formatter->asDate($model->theme_end_date, 'php:Y-m-d');
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Theme group item created successfully!');
+                Yii::$app->session->setFlash('success', 'Theme group item created successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -128,7 +131,7 @@ class ThemeitemController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -165,7 +168,7 @@ class ThemeitemController extends Controller
 
                 $model->item_id = $item_id;
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Theme item updated successfully!');
+                Yii::$app->session->setFlash('success', 'Theme item updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -175,7 +178,7 @@ class ThemeitemController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -194,11 +197,11 @@ class ThemeitemController extends Controller
         $access = Authitem::AuthitemCheck('3', '18');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Feature group item deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Feature group item deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

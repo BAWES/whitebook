@@ -89,7 +89,7 @@ class PriorityitemController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -199,7 +199,7 @@ class PriorityitemController extends Controller
       			
       			
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Priority item updated successfully!');
+                Yii::$app->session->setFlash('success', 'Priority item updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -209,7 +209,7 @@ class PriorityitemController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -228,10 +228,10 @@ class PriorityitemController extends Controller
              $access = Authitem::AuthitemCheck('3', '19');
              if (yii::$app->user->can($access)) {
 				 $command=Priorityitem::updateAll(['trash' => 'Deleted'],'priority_id= '.$id);
-                 echo Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');
+                 Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');
                  return $this->redirect(['index']);
              } else {
-                 echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+                 Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
                  return $this->redirect(['site/index']);
              }
          }
@@ -418,16 +418,16 @@ class PriorityitemController extends Controller
         if ($data['status'] == 'Normal') {
 			   $command=Priorityitem::updateAll(['priority_level' => 'Normal'],['IN', 'priority_id', $data['keylist']]);
             if ($command) {
-                echo Yii::$app->session->setFlash('success', 'Priority item level updated!');
+                Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+                Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } elseif ($data['status'] == 'Super') {
 			   $command=Priorityitem::updateAll(['priority_level' => 'Super'],['IN', 'priority_id', $data['keylist']]);
 			if ($command) {
-                echo Yii::$app->session->setFlash('success', 'Priority item level updated!');
+                Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+                Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         }
     }

@@ -69,7 +69,7 @@ class AdminController extends Controller
                 'dataProvider' => $dataProvider,
             ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -105,7 +105,7 @@ class AdminController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->admin_password = Yii::$app->getSecurity()->generatePasswordHash($model->admin_password);
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'New admin user created successfully!');
+                Yii::$app->session->setFlash('success', 'New admin user created successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -114,7 +114,7 @@ class AdminController extends Controller
                 ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -135,7 +135,7 @@ class AdminController extends Controller
             $model = $this->findModel($id);
             $role = Admin::roles();
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'New admin user updated successfully!');
+                Yii::$app->session->setFlash('success', 'New admin user updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -144,7 +144,7 @@ class AdminController extends Controller
                 ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -163,11 +163,11 @@ class AdminController extends Controller
         $access = Authitem::AuthitemCheck('3', '9');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Admin user deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Admin user deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

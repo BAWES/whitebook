@@ -79,7 +79,7 @@ class SocialinfoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -112,7 +112,7 @@ class SocialinfoController extends Controller
         if (yii::$app->user->can($access)) {
             $model = new Socialinfo();
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Social info created successfully!');
+                Yii::$app->session->setFlash('success', 'Social info created successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -121,7 +121,7 @@ class SocialinfoController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -143,7 +143,7 @@ class SocialinfoController extends Controller
             $model = $this->findModel($store_social_id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Social info updated successfully!');
+                Yii::$app->session->setFlash('success', 'Social info updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -152,7 +152,7 @@ class SocialinfoController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -175,7 +175,7 @@ class SocialinfoController extends Controller
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

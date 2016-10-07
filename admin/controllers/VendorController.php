@@ -70,7 +70,7 @@ class VendorController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -312,7 +312,7 @@ class VendorController extends Controller
                     ->send();
                 }
                 $command=Vendor::updateAll(['vendor_password' => $vendor_password],'vendor_id= '.$model->id);
-                echo Yii::$app->session->setFlash('success', 'Vendor created successfully!');
+                Yii::$app->session->setFlash('success', 'Vendor created successfully!');
 
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -459,7 +459,7 @@ class VendorController extends Controller
                 }
 
                 if($model->save(false)) {
-                    echo Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+                    Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
                     return $this->redirect(['index']);
                 }
 
