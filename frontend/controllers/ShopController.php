@@ -206,7 +206,7 @@ class ShopController extends BaseController
 
         $session = Yii::$app->session;
 
-        $data = Yii::$app->request->post();
+        $data = Yii::$app->request->get();
 
         //items only from active vendors 
         $top_category = Category::find()
