@@ -70,7 +70,7 @@ class RoleController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -102,7 +102,7 @@ class RoleController extends Controller
         if (yii::$app->user->can($access)) {
             $model = new Role();
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'New user role created successfully!');
+                Yii::$app->session->setFlash('success', 'New user role created successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -111,7 +111,7 @@ class RoleController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -131,7 +131,7 @@ class RoleController extends Controller
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'User role updated successfully!');
+                Yii::$app->session->setFlash('success', 'User role updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -140,7 +140,7 @@ class RoleController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -159,11 +159,11 @@ class RoleController extends Controller
         $access = Authitem::AuthitemCheck('3', '10');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'User role deleted successfully!');
+            Yii::$app->session->setFlash('success', 'User role deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

@@ -846,9 +846,9 @@ class VendoritemController extends Controller
         $command = Vendoritem::updateAll(['item_approved' => $data['item_approved']],['item_id' =>$data['keylist']]);
 
         if ($command) {
-            echo Yii::$app->session->setFlash('success', 'Vendor item approve status changed to "'.$data['item_approved'].'" successfully!');
+            Yii::$app->session->setFlash('success', 'Vendor item approve status changed to "'.$data['item_approved'].'" successfully!');
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+            Yii::$app->session->setFlash('danger', 'Something went wrong');
         }
     }
 
@@ -863,23 +863,23 @@ class VendoritemController extends Controller
         if ($data['status'] == 'Delete') {
             $command = Vendoritem::deleteAll(['item_id'=>$data['keylist']]);
             if ($command) {
-                echo Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
+                Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+                Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } elseif ($data['status'] == 'Reject') {
             $command = Vendoritem::updateAll(['item_approved' => "rejected"],['item_id' =>$data['keylist']]);
             if($command) {
-                echo Yii::$app->session->setFlash('success', 'Vendor item rejected successfully!');
+                Yii::$app->session->setFlash('success', 'Vendor item rejected successfully!');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+                Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } else {
             $command = Vendoritem::updateAll(['item_status' => $data['status']],['item_id' =>$data['keylist']]);
             if ($command) {
-                echo Yii::$app->session->setFlash('success', 'Vendor item status updated!');
+                Yii::$app->session->setFlash('success', 'Vendor item status updated!');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+                Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         }
     }
@@ -1183,7 +1183,11 @@ class VendoritemController extends Controller
                 die;
             }
         }
-        return $this->renderPartial('salesguide', ['model' => $model, 'guideimagedata' => (isset($guideimagedata) && is_array($guideimagedata)) ? $guideimagedata : array(), 'question_id' => $data['question_id']]);
+        return $this->renderPartial('salesguide', [
+            'model' => $model, 
+            'guideimagedata' => (isset($guideimagedata) && is_array($guideimagedata)) ? $guideimagedata : array(), 
+            'question_id' => $data['question_id']
+        ]);
     }
     }
 

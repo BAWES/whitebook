@@ -70,7 +70,7 @@ class PackageController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -104,7 +104,7 @@ class PackageController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->save();
                 $pack = Yii::$app->request->post();
-                echo Yii::$app->session->setFlash('success', 'Package created successfully!');
+                Yii::$app->session->setFlash('success', 'Package created successfully!');
                 Yii::info('[Package Created] '. Yii::$app->user->identity->admin_name .' created new '.$model->package_name.' package', __METHOD__);
 
                 return $this->redirect(['index']);
@@ -114,7 +114,7 @@ class PackageController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -134,7 +134,7 @@ class PackageController extends Controller
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Package Updated successfully!');
+                Yii::$app->session->setFlash('success', 'Package Updated successfully!');
                 Yii::info('[Package Updated] '. Yii::$app->user->identity->admin_name .' updated '.$model->package_name.' package information', __METHOD__);
                 return $this->redirect(['index']);
             } else {
@@ -143,7 +143,7 @@ class PackageController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -164,11 +164,11 @@ class PackageController extends Controller
             $model->trash = 'Deleted';
             $model->load(Yii::$app->request->post());
             $model->save();
-            echo Yii::$app->session->setFlash('success', 'Package deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Package deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }

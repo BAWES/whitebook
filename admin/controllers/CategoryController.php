@@ -322,7 +322,7 @@ class CategoryController extends Controller
                 $cp->level = $level;
                 $cp->save();
 
-                echo Yii::$app->session->setFlash('success', 'Subcategory added successfully!');
+                Yii::$app->session->setFlash('success', 'Subcategory added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
 
                 return $this->redirect(['manage_subcategory']);
@@ -406,7 +406,7 @@ class CategoryController extends Controller
                 $cp->level = $level;
                 $cp->save();
 
-                echo Yii::$app->session->setFlash('success', 'Child category added successfully!');
+                Yii::$app->session->setFlash('success', 'Child category added successfully!');
                 Yii::info('[New Subcategory] Admin created new sub category '.$model->category_name, __METHOD__);
 
                 return $this->redirect(['child_category_index']);
@@ -622,7 +622,7 @@ class CategoryController extends Controller
                 $cp->save();
 
 
-                echo Yii::$app->session->setFlash('success', 'Child category updated successfully!');
+                Yii::$app->session->setFlash('success', 'Child category updated successfully!');
                 Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
 
                 return $this->redirect(['child_category_index']);
@@ -685,7 +685,7 @@ class CategoryController extends Controller
             $vendor_item = Vendoritem::find()->where(['category_id' => $id, 'trash' => 'Default'])->count();
         
             if (!empty($vendor_item)) {
-                echo Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
+                Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
 
                 return $this->redirect(['index']);
             }

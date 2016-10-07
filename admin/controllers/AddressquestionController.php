@@ -225,7 +225,7 @@ class AddressquestionController extends Controller
         $model->trash = 'Deleted';
         $model->load(Yii::$app->request->post());
         $model->save();  // equivalent to $model->update();
-        echo Yii::$app->session->setFlash('success', 'Address Question Deleted successfully!');
+        Yii::$app->session->setFlash('success', 'Address Question Deleted successfully!');
 
         return $this->redirect(['index']);
     }
