@@ -34,6 +34,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 	public $password_hash;
 	public $password_reset_token;
 	public $file;
+
 	/**
 	* @inheritdoc
 	*/
@@ -133,8 +134,6 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 		]);
 	}
 
-
-
 	/**
 	* @inheritdoc
 	*/
@@ -210,56 +209,55 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 	public static function Roles()
 	{
 		$roles = Role::find()->all();
-		$role=ArrayHelper::map($roles,'role_id','role_name');
-		return $role;
+		return ArrayHelper::map($roles,'role_id','role_name');
 	}
 
 
 	public static function Accessroles()
 	{
 		$role = Role::find()
-		->select(['role_id','role_name'])
-		->asArray()
-		->all();
-		$roles=ArrayHelper::map($role,'role_id','role_name');
-		return $roles;
+			->select(['role_id','role_name'])
+			->asArray()
+			->all();
+
+		return ArrayHelper::map($role,'role_id','role_name');
 	}
 
 	public static function Admin()
 	{
 		$accessdata = Accesscontroller::find()
-		->select(['admin_id'])
-		->groupBy('admin_id')
-		->asArray()
-		->all();
-		for($i=0; $i<count($accessdata); $i++)
+			->select(['admin_id'])
+			->groupBy('admin_id')
+			->asArray()
+			->all();
+
+		for($i=0; $i < count($accessdata); $i++)
 		{
-			$data[]=$accessdata[$i]['admin_id'];
+			$data[] = $accessdata[$i]['admin_id'];
 		}
 
-		$data=implode(',',$data);
-		$admin=Admin::find()
-		->select(["CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id",'admin_name'])
-		->where(['admin_status'=>'Active'])
-		->andwhere(['not in','id',$data])
-		->asArray()
-		->all();
+		$data = implode(',', $data);
 
-		$admin=ArrayHelper::map($admin,'id','admin_name');
-		return $admin;
+		$admin = Admin::find()
+			->select(["CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id", 'admin_name'])
+			->where(['admin_status' => 'Active'])
+			->andwhere(['not in', 'id', $data])
+			->asArray()
+			->all();
+
+		return ArrayHelper::map($admin,'id','admin_name');
 	}
 
 	public static function Adminupdate()
 	{
 		$admin=Admin::find()
-		->select(["CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id",'admin_name'])
-		->where(['admin_status'=>'Active'])
-		->asArray()
-		->all();
-		$admin=ArrayHelper::map($admin,'id','admin_name');
-		return $admin;
-	}
+			->select(["CONCAT(CAST(id as CHAR),'_', CAST(role_id as CHAR)) AS id",'admin_name'])
+			->where(['admin_status' => 'Active'])
+			->asArray()
+			->all();
 
+		return ArrayHelper::map($admin, 'id', 'admin_name');
+	}
 
 	public static function getAdmin($arr='')
 	{

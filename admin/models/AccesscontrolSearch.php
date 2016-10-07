@@ -44,6 +44,7 @@ class AccesscontrolSearch extends Accesscontroller
         $query = Accesscontroller::find()
             ->where(['=', 'default', '0'])
             ->groupBy('admin_id');
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort'=> ['defaultOrder' => ['access_id'=>SORT_DESC]]
