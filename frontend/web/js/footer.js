@@ -1901,7 +1901,7 @@ function filter(){
         },
         success:function(data){
             window.history.pushState('test', 'Title', url_path);
-            jQuery('.events_listing ul').html(data);
+            jQuery('.events_listing').html(data);
             // Every fourth li change margin
             jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
             jQuery('#planloader').hide();

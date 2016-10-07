@@ -170,7 +170,7 @@ class SearchController extends BaseController
         }
 
         if (Yii::$app->request->isAjax) {
-            return $this->renderPartial('@frontend/views/plan/product_list_ajax', [
+            return $this->renderPartial('@frontend/views/common/items', [
                 'items' => $items,
                 'customer_events_list' => $customer_events_list
             ]);

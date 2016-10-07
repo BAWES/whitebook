@@ -100,9 +100,7 @@ if($event_status>0){
 			</div>
 			<div class="listing_right">
 				<div class="events_listing">
-					<ul>
 						<?=$this->render('@frontend/views/common/items',['items' => $items, 'customer_events_list' => $customer_events_list]); ?>
-					</ul>
 					<div id="planloader"><img src="<?=Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;"></div>
 				</div>
 				<?php /*

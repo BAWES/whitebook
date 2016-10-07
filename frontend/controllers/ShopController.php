@@ -86,7 +86,8 @@ class ShopController extends BaseController
                     '{{%vendor_item}}.trash' => 'Default',
                     '{{%category_path}}.path_id' => $Category->category_id,
                     '{{%vendor_item}}.item_approved' => 'Yes',
-                    '{{%vendor_item}}.item_status' => 'Active'                    
+                    '{{%vendor_item}}.item_status' => 'Active',
+                    '{{%vendor_item}}.item_for_sale' => 'Yes',
                 ]);
                     
             $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
@@ -177,7 +178,8 @@ class ShopController extends BaseController
                 'themes' => $themes, 
                 'vendor' => $vendor, 
                 'slug' => $slug,
-                'Category' => $Category
+                'Category' => $Category,
+                'customer_events_list' => []
             ]);
 
         } else {
