@@ -28,7 +28,7 @@ $this->registerJs("
     var reg_email_id = '".Yii::t('frontend','Enter registered email')."';
     var search_result_url = '".Url::toRoute('/search-result/')."/';
     var home_url = '".Yii::$app->homeUrl."';
-    var site_search = '".Url::toRoute('/site/search')."';
+    var site_search = '".Url::toRoute('/search/search')."';
     var event_slider_url = '".Url::toRoute('/product/event_slider')."';
     var item_removed_fav = '".Yii::t('frontend','Item removed from Things I like')."';
     var remove_from_wishlist = '".Url::toRoute('/users/remove_from_wishlist')."';
@@ -91,6 +91,6 @@ Yii::$app->session->set('key','0');
 Yii::$app->session->set('show_login_modal', 0);
 
 //$this->registerJsFile('@web/js/jquery.touchSwipe.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+//$this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/footer.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
