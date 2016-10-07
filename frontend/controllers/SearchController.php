@@ -34,6 +34,8 @@ class SearchController extends BaseController
         $k = '';
         $slug = '';
 
+        $data = Yii::$app->request->get();
+
         $items_query = CategoryPath::find()
             ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
             ->leftJoin(
@@ -52,8 +54,65 @@ class SearchController extends BaseController
                 '{{%vendor_item}}.item_status' => 'Active'
             ]);
 
+        //vendor filter
+        if (isset($data['vendor'])  && $data['vendor'] != '') {
+            $items_query->andWhere(['in', '{{%vendor}}.slug', explode('+', $data['vendor'])]);
+        }
+
+        //price filter
+        if (isset($data['price']) && $data['price'] != '') {
+
+            $price_condition = [];
+
+            foreach (explode('+', $data['price']) as $key => $value) {
+                $arr_min_max = explode('-', $value);
+                $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
+            }
+
+            $items_query->andWhere(implode(' OR ', $price_condition));
+        }
+
+        //theme filter
+        if (isset($data['themes']) && $data['themes'] != '') {
+
+            $theme = explode('+', $data['themes']);
+
+            foreach ($theme as $key => $value) {
+                $themes[] = \common\models\Themes::find()
+                    ->select('theme_id')
+                    ->where(['slug' => [$value]])
+                    ->asArray()
+                    ->all();
+            }
+
+            $all_valid_themes = array();
+
+            foreach ($themes as $key => $value) {
+                $get_themes = \common\models\Vendoritemthemes::find()
+                    ->select('theme_id, item_id')
+                    ->where(['trash' => "Default"])
+                    ->andWhere(['theme_id' => [$value[0]['theme_id']]])
+                    ->asArray()
+                    ->all();
+
+                foreach ($get_themes as $key => $value) {
+                    $all_valid_themes[] = $value['item_id'];
+                }
+            }
+
+            if (count($all_valid_themes)==1) {
+                $all_valid_themes = $all_valid_themes[0];
+            } else {
+                $all_valid_themes = implode('","', $all_valid_themes);
+            }
+
+            $items_query->andWhere('{{%vendor_item}}.item_id IN("'.$all_valid_themes.'")');
+
+        }//if themes
+
+
         //if search query given
-        if ($search) {
+        if ($search != 'All') {
             $items_query->andWhere(['like','{{%vendor_item}}.item_name', $search]);
         }
 
@@ -107,6 +166,13 @@ class SearchController extends BaseController
         } else {
             $customer_id = Yii::$app->user->identity->customer_id;
             $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderPartial('@frontend/views/plan/product_list_ajax', [
+                'items' => $items,
+                'customer_events_list' => $customer_events_list
+            ]);
         }
 
         return $this->render('search', [

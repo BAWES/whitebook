@@ -36,7 +36,6 @@ if($event_status>0){
 			}
 		});
 	}
-
 	/* END ADD EVENT */
 	var x='<?= $event_status;?>';
 	window.onload=addevent1(x);
@@ -85,15 +84,9 @@ if($event_status>0){
 					<nav class="row-offcanvas row-offcanvas-left">
 						<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 							<div id="accordion" class="panel-group">
-
-								<?= $this->render('@frontend/views/common/filter/theme',[
-									'themes' => $themes]); ?>
-
-								<?= $this->render('@frontend/views/common/filter/vendor',[
-									'vendor' => $vendor]); ?>
-
-								<?= $this->render('@frontend/views/common/filter/price',[
-									'items' => $items]); ?>
+								<?= $this->render('@frontend/views/common/filter/theme',['themes' => $themes]); ?>
+								<?= $this->render('@frontend/views/common/filter/vendor',['vendor' => $vendor]); ?>
+								<?= $this->render('@frontend/views/common/filter/price',['items' => $items]); ?>
 							</div>
 						</div>
 					</nav>
@@ -102,42 +95,28 @@ if($event_status>0){
 			</div>
 		</div>
 		<div class="col-md-9 paddingright0">
-		<div class="banner_section_plan">
-			<h3>Search Result for:<?= $search?> (<?= count($items);?>)</h3>
+			<div class="banner_section_plan">
+				<h3>Search Result for:<?= $search?> (<?= count($items);?>)</h3>
+			</div>
+			<div class="listing_right">
+				<div class="events_listing">
+					<ul>
+						<?=$this->render('@frontend/views/common/items',['items' => $items, 'customer_events_list' => $customer_events_list]); ?>
+					</ul>
+					<div id="planloader"><img src="<?=Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;"></div>
+				</div>
+				<?php /*
+				<div class="add_more_commons">
+				<?php
+				if((!empty($items)) && (count($items) > 20)) { ?>
+				<div class="lode_more_buttons">
+				<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
+				</div>
+				<?php } ?>
+				</div>
+				</div> */ ?>
+			</div>
 		</div>
-		<!-- BEGIN Item lists -->
-		<div class="listing_right">
-		<div class="events_listing">
-            <ul>
-            <?php
-                if(!empty($items))  {
-                    foreach ($items as $key => $value) {
-                        echo $this->render('@frontend/views/common/item',[
-                            'value' => $value,
-                            'customer_events_list' => $customer_events_list
-                        ]);
-                    }
-                } else {
-                    echo Yii::t('frontend', "No records found");
-                }
-            ?>
-            </ul>
-            <div id="planloader"><img src="<?=Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;"></div>
-		</div>
-		<?php /*
-		<div class="add_more_commons">
-		<?php
-		if((!empty($items)) && (count($items) > 20)) { ?>
-		<div class="lode_more_buttons">
-		<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
-		</div>
-		<?php } ?>
-		</div>
-		</div> */ ?>
-		<!-- END Item lists -->
-		</div>
-		</div>
-
 	</div>
 </section>
 
@@ -145,7 +124,7 @@ if($event_status>0){
 $this->registerJs("
 	var page = 'search',
         search_keyword      = '".$search."',
-        load_items          = '".Url::toRoute(['product-filter-result/searching-page-filter'],true)."',
+        load_items          = '".Url::toRoute(['/search/index'],true)."',
         load_more_items		= '".Url::toRoute(['plan/loadmoreitems'],true)."'
 	", \yii\web\View::POS_HEAD, 'searching-options'
 );
