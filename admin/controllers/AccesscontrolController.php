@@ -23,7 +23,8 @@ class AccesscontrolController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
+        
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -62,17 +63,20 @@ class AccesscontrolController extends Controller
     */
     public function actionIndex()
     {
-	 $access = Authitem::AuthitemCheck('4', '29');
+	   $access = Authitem::AuthitemCheck('4', '29');
+
         if (yii::$app->user->can($access)) {
             $searchModel = new AccesscontrolSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
+        
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -114,10 +118,11 @@ class AccesscontrolController extends Controller
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
-                $command =Accesscontroller::deleteAll(['admin_id' => $adminid]);
-                $command1 =Authassignment::deleteAll(['user_id' => $adminid]);
+                $command = Accesscontroller::deleteAll(['admin_id' => $adminid]);
+                $command1 = Authassignment::deleteAll(['user_id' => $adminid]);
                 $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
                 $p = 1;
+
                 foreach ($model->controller as $key => $val) {
                     if (count($val) > 1) {
                         $controller_id = $create = $update = $view = $delete = $manage = '';
@@ -195,17 +200,19 @@ class AccesscontrolController extends Controller
                         }
                     }
                 }
-                echo Yii::$app->session->setFlash('success', 'Access controller created successfully!');
-
+                
+                Yii::$app->session->setFlash('success', 'Access controller created successfully!');
                 return $this->redirect(['index']);
+
             } else {
                 return $this->render('create', [
                     'model' => $model, 'admin' => $admin, 'authitem' => $authitem, 'controller' => $controller,
                 ]);
             }
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
+        } else {
+
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -306,15 +313,20 @@ class AccesscontrolController extends Controller
 						$access_ctrl->save();
                     }
                 }
-                echo Yii::$app->session->setFlash('success', 'Access controller Updated successfully!');
+                
+                Yii::$app->session->setFlash('success', 'Access controller Updated successfully!');
                 return $this->redirect(['index']);
+
             } else {
+                
                 return $this->render('update', [
                     'model' => $model, 'admin' => $admin, 'authitem' => $authitem, 'controller' => $controller, 'accesslist' => $accesslist,
                 ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -331,6 +343,7 @@ class AccesscontrolController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '29');
+
         if (yii::$app->user->can($access)) {
             $admin_id = Accesscontroller::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
             $admin_id = $admin_id['admin_id'];
@@ -338,11 +351,12 @@ class AccesscontrolController extends Controller
             $command =Accesscontroller::deleteAll(['admin_id' => $admin_id]);
             $command =Authassignment::deleteAll(['user_id' => $admin_id]);
 
-            echo Yii::$app->session->setFlash('success', 'Access controller deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Access controller deleted successfully!');
 
             return $this->redirect(['index']);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -372,20 +386,19 @@ class AccesscontrolController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
+
 		$subQuery = (new Query())
                 ->select('*')
                 ->from('{{%access_control}} t')
                 ->where('t.admin_id = p2.id');
+
 		$query = (new Query())
                 ->select('*')
                 ->from('{{%admin}} p2')
                 ->where(['exists', $subQuery]);
-            $command = $query->createCommand();
-			$city=($command->queryall());
 
-
-
-
+        $command = $query->createCommand();
+		$city=($command->queryall());
 
         if (!empty($city)) {
             echo  '<option value="">Select</option>';
@@ -402,55 +415,66 @@ class AccesscontrolController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
+
         $admin_id = $data['admin_id'];
-        $control_id = Authassignment::find()->select('controller_id')->where(['user_id' => $admin_id])
-        ->groupBy(['controller_id'])
-		->all();
+        
+        $control_id = Authassignment::find()
+            ->select('controller_id')
+            ->where(['user_id' => $admin_id])
+            ->groupBy(['controller_id'])
+		    ->all();
 
-            if (!empty($control_id)) {
-                foreach ($control_id as $controll_id) {
-                    $controller_id[] = "'".$controll_id['controller_id']."'";
-                }
-                $controller_id = implode(',', $controller_id);
+        if (!empty($control_id)) {
+            foreach ($control_id as $controll_id) {
+                $controller_id[] = "'".$controll_id['controller_id']."'";
             }
-            if (!empty($controller_id)) {
-                $command = \Yii::$app->DB->createCommand('SELECT id,controller FROM whitebook_controller where id NOT IN ('.$controller_id.')');
-            } else {
-                $command = \Yii::$app->DB->createCommand('SELECT id,controller FROM whitebook_controller');
-            }
-            $role = $command->queryall();
-            echo '<input type="checkbox" onclick="checkall(this.checked);">Select all';
-            foreach ($role as $key => $val) {
-                echo '<label><input type="checkbox" name="Accesscontroller[controller][]" value="'.$val['id'].'" class="checkbox_all">'.$val['controller'].'</label><br>';
-            }
+            $controller_id = implode(',', $controller_id);
         }
+        
+        if (!empty($controller_id)) {
+            $command = \Yii::$app->DB->createCommand('SELECT id,controller FROM whitebook_controller where id NOT IN ('.$controller_id.')');
+        } else {
+            $command = \Yii::$app->DB->createCommand('SELECT id,controller FROM whitebook_controller');
+        }
+        
+        $role = $command->queryall();
+        
+        echo '<input type="checkbox" onclick="checkall(this.checked);">Select all';
+        foreach ($role as $key => $val) {
+            echo '<label><input type="checkbox" name="Accesscontroller[controller][]" value="'.$val['id'].'" class="checkbox_all">'.$val['controller'].'</label><br>';
+        }
+    }
 
-        public function actionAuthitem()
-        {
-            if (Yii::$app->request->isAjax) {
-                $data = Yii::$app->request->post();
-            }
-            $admin_id = $data['admin_id'];
-            $controller_id = $data['controller_id'];
+    public function actionAuthitem()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+        
+        $data = Yii::$app->request->post();
 
-			$subQuery = (new Query())
-                ->select('item_name')
-                ->from('{{%auth_assignment}} t')
-                ->where('t.item_name = p2.name')
-                ->andwhere('t.item_name = p2.name')
-                ->andwhere('t.user_id = '.$admin_id.'')
-                ->andwhere('t.controller_id = '.$controller_id.'');
-			$role = (new Query())
-                ->select('name')
-                ->from('{{%auth_item}} p2')
-                ->where(['exists', $subQuery]);
+        $admin_id = $data['admin_id'];
+        $controller_id = $data['controller_id'];
 
-            $command = $role->createCommand();
-			$role=($command->queryall());
-			//echo die;
-                    foreach ($role as $key => $val) {
-                        echo  '<option value="'.$val['name'].'">'.$val['name'].'</option>';
-                    }
+		$subQuery = (new Query())
+            ->select('item_name')
+            ->from('{{%auth_assignment}} t')
+            ->where('t.item_name = p2.name')
+            ->andwhere('t.item_name = p2.name')
+            ->andwhere('t.user_id = '.$admin_id.'')
+            ->andwhere('t.controller_id = '.$controller_id.'');
+		
+        $role = (new Query())
+            ->select('name')
+            ->from('{{%auth_item}} p2')
+            ->where(['exists', $subQuery]);
 
-                }
-            }
+        $command = $role->createCommand();
+		
+        $role=($command->queryall());
+
+        foreach ($role as $key => $val) {
+            echo  '<option value="'.$val['name'].'">'.$val['name'].'</option>';
+        }
+    }
+}

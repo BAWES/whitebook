@@ -36,9 +36,9 @@ class FeaturegroupitemController extends Controller
     public function behaviors()
     {
         return [
-                    'access' => [
+              'access' => [
                 'class' => AccessControl::className(),
-               'rules' => [
+                'rules' => [
                    [
                        'actions' => [],
                        'allow' => true,
@@ -68,16 +68,20 @@ class FeaturegroupitemController extends Controller
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('4', '18');
+        
         if (yii::$app->user->can($access)) {
+            
             $searchModel = new FeaturegroupitemSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+              'searchModel' => $searchModel,
+              'dataProvider' => $dataProvider,
+            ]);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -125,7 +129,9 @@ class FeaturegroupitemController extends Controller
     public function actionCreate()
     {
         $access = Authitem::AuthitemCheck('1', '18');
+        
         if (yii::$app->user->can($access)) {
+        
             $group = Featuregroup::loadfeaturegroup();
             $category = Category::loadcategoryname();
             $subcategory = Subcategory::loadsubcategoryname();
@@ -134,41 +140,57 @@ class FeaturegroupitemController extends Controller
             $model = new Featuregroupitem();
 
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
+                
                 if (count($model->item_id) >= 2) {
                     echo $item_id = implode(',', $model->item_id);
                 } else {
                     $item_id = $model->item_id[0];
                 }
+                
                 $model->item_id = $item_id;
+                
                 $exists = Featuregroupitem::findOne(['item_id' => $item_id, 'trash' => 'Default']);
+                
                 if ($exists) {
-                    echo Yii::$app->session->setFlash('danger', 'Feature group item already exists!');
+                    Yii::$app->session->setFlash('danger', 'Feature group item already exists!');
 
                     return $this->redirect(['index']);
                 }
+                
                 $model->featured_start_date = Yii::$app->formatter->asDate($model->featured_start_date, 'php:Y-m-d');
-      			$model->featured_end_date = Yii::$app->formatter->asDate($model->featured_end_date, 'php:Y-m-d');
+      			    
+                $model->featured_end_date = Yii::$app->formatter->asDate($model->featured_end_date, 'php:Y-m-d');
+                
                 $max_sort = Featuregroupitem::find()
-                ->select('max(featured_sort) as sort')
-				->where(['parent_category_id' => null])
-				->andwhere(['trash' => 'default'])
-				->andwhere(['category_level' => '0'])
-				->one();
+                  ->select('max(featured_sort) as sort')
+          				->where(['parent_category_id' => null])
+          				->andwhere(['trash' => 'default'])
+          				->andwhere(['category_level' => '0'])
+          				->one();
+
                 $sort = ($max_sort[0]['sort'] + 1);
-            // }
-            $model->featured_sort = $sort;
+            
+                $model->featured_sort = $sort;
 
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Feature Froup item created successfully!');
+            
+                Yii::$app->session->setFlash('success', 'Feature Froup item created successfully!');
 
                 return $this->redirect(['index']);
+            
             } else {
                 return $this->render('create', [
-                'model' => $model, 'group' => $group, 'vendoritem' => $vendoritem, 'category' => $category, 'subcategory' => $subcategory,
-            ]);
+                  'model' => $model, 
+                  'group' => $group, 
+                  'vendoritem' => $vendoritem, 
+                  'category' => $category, 
+                  'subcategory' => $subcategory
+                ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -185,7 +207,9 @@ class FeaturegroupitemController extends Controller
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '18');
+        
         if (yii::$app->user->can($access)) {
+        
             $model = $this->findModel($id);
             $vendorname = Vendor::loadvendorname();
             $group = Featuregroup::loadfeaturegroup();
@@ -200,29 +224,40 @@ class FeaturegroupitemController extends Controller
             $themid = array('0' => $themid);
             $themid = $themid['0'];
             $featuregroupitem = Vendoritem ::groupvendoritem($model->category_id, $model->subcategory_id);
+            
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
 				
-				$model->featured_start_date = Yii::$app->formatter->asDate($model->featured_start_date, 'php:Y-m-d');
-      			$model->featured_end_date = Yii::$app->formatter->asDate($model->featured_end_date, 'php:Y-m-d');
+				        $model->featured_start_date = Yii::$app->formatter->asDate($model->featured_start_date, 'php:Y-m-d');
+      			    $model->featured_end_date = Yii::$app->formatter->asDate($model->featured_end_date, 'php:Y-m-d');
       			
                 if (count($model->item_id) >= 2) {
                     $item_id = implode(',', $model->item_id);
                 } else {
                     $item_id = $model->item_id[0];
                 }
+            
                 $model->item_id = $item_id;
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Feature group item updated successfully!');
+                Yii::$app->session->setFlash('success', 'Feature group item updated successfully!');
 
                 return $this->redirect(['index']);
+            
             } else {
+            
                 return $this->render('update', [
-                'model' => $model, 'group' => $group, 'vendoritem' => $vendoritem, 'vendorname' => $vendorname,
-                'category' => $category, 'subcategory_id' => $subcategory_id, 'featuregroupitem' => $featuregroupitem,
-            ]);
+                  'model' => $model, 
+                  'group' => $group, 
+                  'vendoritem' => $vendoritem, 
+                  'vendorname' => $vendorname,
+                  'category' => $category, 
+                  'subcategory_id' => $subcategory_id, 
+                  'featuregroupitem' => $featuregroupitem
+                ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -239,13 +274,18 @@ class FeaturegroupitemController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '18');
+        
         if (yii::$app->user->can($access)) {
+            
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Feature group item deleted successfully!');
+            
+            Yii::$app->session->setFlash('success', 'Feature group item deleted successfully!');
 
             return $this->redirect(['index']);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

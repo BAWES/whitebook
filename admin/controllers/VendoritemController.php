@@ -75,18 +75,20 @@ class VendoritemController extends Controller
         ];
     }
 
-/**
-* Lists all Vendoritem models.
-*
-* @return mixed
-*/
-public function actionIndex()
-{
+    /**
+    * Lists all Vendoritem models.
+    *
+    * @return mixed
+    */
+    public function actionIndex()
+    {
+        $access = Authitem::AuthitemCheck('4', '23');
 
-    $access = Authitem::AuthitemCheck('4', '23');
-
-    if (yii::$app->user->can($access)) {
-        
+        if (!yii::$app->user->can($access)) {
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            return $this->redirect(['site/index']);
+        }
+            
         $searchModel = new VendoritemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -94,38 +96,41 @@ public function actionIndex()
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-
-    } else {
-
-        Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-        return $this->redirect(['site/index']);
     }
-}
 
-/**
-* Displays a single Vendoritem model.
-*
-* @param string $id
-*
-* @return mixed
-*/
-public function actionView($id)
-{
-    $access = Authitem::AuthitemviewCheck('view', '23');
-    
-    if (yii::$app->user->can($access)) {
+    /**
+    * Displays a single Vendoritem model.
+    *
+    * @param string $id
+    *
+    * @return mixed
+    */
+    public function actionView($id)
+    {
+        $access = Authitem::AuthitemviewCheck('view', '23');
         
+        if (!yii::$app->user->can($access)) {
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');            
+            return $this->redirect(['site/index']);
+        }
+
         $dataProvider1=  Priorityitem::find()
-        ->select(['priority_level','priority_start_date','priority_end_date'])
-        ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
+            ->select(['priority_level','priority_start_date','priority_end_date'])
+            ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
+            ->addParams([':item_id' => $id])
+            ->all();
 
         $model_question = Vendoritemquestion::find()
             ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
             ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
             ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
-            ->asArray()->all();
+            ->asArray()
+            ->all();
 
-        $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
+        $imagedata = Image::find()
+            ->where('item_id = :id', [':id' => $id])
+            ->orderby(['vendorimage_sort_order' => SORT_ASC])
+            ->all();
 
         $categories = VendorItemToCategory::find()
             ->with('category')
@@ -139,26 +144,22 @@ public function actionView($id)
             'imagedata' => $imagedata,
             'categories' => $categories
         ]);
-
-    } else {
-        
-        Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-        
-        return $this->redirect(['site/index']);
     }
-}
 
-/**
-* Creates a new Vendoritem model.
-* If creation is successful, the browser will be redirected to the 'view' page.
-*
-* @return mixed
-*/
-public function actionCreate($vid = '')
-{
-    $access = Authitem::AuthitemCheck('1', '23');
+    /**
+    * Creates a new Vendoritem model.
+    * If creation is successful, the browser will be redirected to the 'view' page.
+    *
+    * @return mixed
+    */
+    public function actionCreate($vid = '')
+    {
+        $access = Authitem::AuthitemCheck('1', '23');
 
-    if (yii::$app->user->can($access)) {
+        if (!yii::$app->user->can($access)) {
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            return $this->redirect(['site/index']);
+        }
 
         $model = new Vendoritem();
         $model_question = new Vendoritemquestion();
@@ -175,7 +176,6 @@ public function actionCreate($vid = '')
 
             $model->item_for_sale = (Yii::$app->request->post()['Vendoritem']['item_for_sale']) ? 'Yes' : 'No';
 
-            /* END Scenario if item for sale is no not required below four fields */
             $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_vendor_item` where trash = 'Default'")->asArray()->all();
 
             $sort = ($max_sort[0]['sort'] + 1);
@@ -184,13 +184,16 @@ public function actionCreate($vid = '')
             $model->slug = Yii::$app->request->post()['Vendoritem']['item_name'];
             $c_slug1 = strtolower($model->slug);
             $c_slug2 = str_replace(' ', '-', $c_slug1);
-        //Make alphanumeric (removes all other characters)
+            //Make alphanumeric (removes all other characters)
             $c_slug3 = preg_replace("/[^a-z0-9_\s-]/", '', $c_slug2);
-        //Convert whitespaces and underscore to dash
+            //Convert whitespaces and underscore to dash
             $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
             $model->slug = $c_slug4;
 
-            $chk_item_exist = Vendoritem::find()->where(['trash'=>'default'])->andWhere(['LIKE','slug',$c_slug4])->one();
+            $chk_item_exist = Vendoritem::find()
+                ->where(['trash'=>'default'])
+                ->andWhere(['LIKE','slug',$c_slug4])
+                ->one();
 
             if (!empty($chk_item_exist)) {
 
@@ -310,9 +313,9 @@ public function actionCreate($vid = '')
                             $image_tbl->vendorimage_sort_order = $i;
                             $image_tbl->save();
                             ++$i;
-                        }
-                    }
-                }
+                        }//if files 
+                    }//foreach images 
+                }//if images 
 
                 /* Begin Upload product image table  */
                 $product_file = UploadedFile::getInstances($model, 'image_path');
@@ -365,7 +368,7 @@ public function actionCreate($vid = '')
                             if($awsResult){
                                 $model->image_path = $filename;
                             }
-                        }
+                        }//if files
 
                         $image_tbl = new Image();
                         $image_tbl->image_path = $filename;
@@ -376,58 +379,59 @@ public function actionCreate($vid = '')
                         $image_tbl->vendorimage_sort_order = $i;
                         $image_tbl->save();
                         ++$i;
-            }//foreach product files
+                    }//foreach product files
+                }//if product files
+
+                /*  Upload image table End */
+
+                Yii::$app->session->setFlash('success', 'Vendor item added successfully!');
+                Yii::info('[New Item Created by '. Yii::$app->user->identity->admin_name .'] New Item added: '.addslashes($model->item_name), __METHOD__);
+
+                return $this->redirect(['index']);
+
+            }//if model->savel()
+
+        } else {
+
+            $categories = CategoryPath::find()
+                ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
+                ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
+                ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+                ->groupBy('{{%category_path}}.category_id')
+                ->orderBy('category_name')
+                ->asArray()
+                ->all();
+
+            return $this->render('create', [
+                'model' => $model,
+                'model1' => $model1,
+                'itemtype' => $itemtype,
+                'vendorname' => $vendorname,
+                'model_question' => $model_question,
+                'themelist' => $themelist,
+                'grouplist' => $grouplist,
+                'categories' => $categories
+            ]);
         }
-
-        /*  Upload image table End */
-
-        Yii::$app->session->setFlash('success', 'Vendor item added successfully!');
-        Yii::info('[New Item Created by '. Yii::$app->user->identity->admin_name .'] New Item added: '.addslashes($model->item_name), __METHOD__);
-
-        return $this->redirect(['index']);
     }
 
-} else {
+    /**
+    * Updates an existing Vendoritem model.
+    * If update is successful, the browser will be redirected to the 'view' page.
+    *
+    * @param string $id
+    *
+    * @return mixed
+    */
+    public function actionUpdate($id, $vid = false)
+    {
+        $access = Authitem::AuthitemCheck('2', '23');
 
-    $categories = CategoryPath::find()
-        ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
-        ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
-        ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
-        ->groupBy('{{%category_path}}.category_id')
-        ->orderBy('category_name')
-        ->asArray()
-        ->all();
+        if (!yii::$app->user->can($access)) {
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            return $this->redirect(['site/index']);
+        }
 
-    return $this->render('create', [
-        'model' => $model,
-        'model1' => $model1,
-        'itemtype' => $itemtype,
-        'vendorname' => $vendorname,
-        'model_question' => $model_question,
-        'themelist' => $themelist,
-        'grouplist' => $grouplist,
-        'categories' => $categories
-    ]);
-}
-} else {
-    Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-    return $this->redirect(['site/index']);
-}
-}
-
-/**
-* Updates an existing Vendoritem model.
-* If update is successful, the browser will be redirected to the 'view' page.
-*
-* @param string $id
-*
-* @return mixed
-*/
-public function actionUpdate($id, $vid = false)
-{
-    $access = Authitem::AuthitemCheck('2', '23');
-    if (yii::$app->user->can($access)) {
         $model = $this->findModel($id);
 
         $model->themes = \yii\helpers\ArrayHelper::map($model->vendorItemThemes, 'theme_id', 'theme_id');
@@ -439,16 +443,9 @@ public function actionUpdate($id, $vid = false)
             ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
             ->asArray()->all();
 
-        /* BEGIN gallery */
         $item_id = $model->item_id;
 
-        $cat_id = $model->category_id;
-        $subcat_id = $model->subcategory_id;
         $categoryname = Category::vendorcategory($model->vendor_id);
-
-        $subcategory = Subcategory::loadsubcategory($cat_id);
-        $childcategory = Childcategory::loadchildcategory($subcat_id);
-
 
         // BEGIN themes and groups
         $themelist = Themes::loadthemename();
@@ -457,13 +454,11 @@ public function actionUpdate($id, $vid = false)
         $theme_selected = Themes::loadthemenameupdate($selected_themes['theme_id']);
         $exist_themes = explode(',', $selected_themes['theme_id']);
 
-
         $selected_groups = Featuregroupitem::find()->where('item_id = "' . $id . '"')->one();
         $exist_groups = explode(',', $selected_groups['group_id']);
-        //$model->groups = $exist_groups;
-        // END themes and groups
 
         $grouplist = Featuregroup::loadfeaturegroup();
+
         // Values for priority log table dont delete...
         $vendorid = $model->vendor_id;
         $itemid = $model->item_id;
@@ -496,7 +491,10 @@ public function actionUpdate($id, $vid = false)
             $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
             $model->slug = $c_slug4;
 
-            $chk_item_exist = Vendoritem::find()->where(['trash' => 'default'])->andWhere(['LIKE', 'slug', $c_slug4])->one();
+            $chk_item_exist = Vendoritem::find()
+                ->where(['trash' => 'default'])
+                ->andWhere(['LIKE', 'slug', $c_slug4])
+                ->one();
 
             if (!empty($chk_item_exist)) {
 
@@ -517,8 +515,10 @@ public function actionUpdate($id, $vid = false)
             if ($model->save()) {
                 /* Begin Upload guide image table  */
                 $guide_image = UploadedFile::getInstances($model, 'guide_image');
+                
                 if (count($guide_image) > 0) {
                     $i = 0;
+                
                     foreach ($guide_image as $files) {
                         if ($files instanceof yii\web\UploadedFile) {
                             $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
@@ -617,7 +617,6 @@ public function actionUpdate($id, $vid = false)
                 if ($model->type_id == 2) {
                     Vendoritempricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
                 }
-
 
                 if ($model->priority != $priorityvalue) {
                     $query = Prioritylog::find()->select('log_id')
@@ -730,7 +729,6 @@ public function actionUpdate($id, $vid = false)
                     }
                 }
 
-
                 Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $id . ' updated successfully!');
 
                 Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -740,207 +738,200 @@ public function actionUpdate($id, $vid = false)
                 } else {
                     return $this->redirect(['index']);
                 }
-            }
-            }
+            }//if model->savel
+        }//if model-load 
 
-                $categories = CategoryPath::find()
-                    ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
-                    ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
-                    ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
-                    ->groupBy('{{%category_path}}.category_id')
-                    ->orderBy('category_name')
-                    ->asArray()
-                    ->all();
+        $categories = CategoryPath::find()
+            ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
+            ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
+            ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+            ->groupBy('{{%category_path}}.category_id')
+            ->orderBy('category_name')
+            ->asArray()
+            ->all();
 
-                $vendor_item_to_category = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
+        $vendor_item_to_category = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
 
-                return $this->render('update', [
-                    'model' => $model,
-                    'itemType' => Itemtype::findAll(['trash' => 'Default']),
-                    'subcategory' => $subcategory,
-                    'categoryname' => $categoryname,
-                    'images' => Image::findAll(['item_id' => $id, 'module_type' => 'vendor_item']),
-                    'model_question' => $model_question,
-                    'themes' => Themes::findAll(['theme_status' => 'Active', 'trash' => 'Default']),
-                    'grouplist' => $grouplist,
-                    'exist_themes' => $exist_themes,
-                    'childcategory' => $childcategory,
-                    'itemPricing' => Vendoritempricing::findAll(['item_id' => $item_id]),
-                    'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
-                    'vendor_item_to_category' => $vendor_item_to_category,
-                    'categories' => $categories
-                ]);
-    } else {
-        Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-        return $this->redirect(['site/index']);
+        return $this->render('update', [
+            'model' => $model,
+            'itemType' => Itemtype::findAll(['trash' => 'Default']),
+            'categoryname' => $categoryname,
+            'images' => Image::findAll(['item_id' => $id, 'module_type' => 'vendor_item']),
+            'model_question' => $model_question,
+            'themes' => Themes::findAll(['theme_status' => 'Active', 'trash' => 'Default']),
+            'grouplist' => $grouplist,
+            'exist_themes' => $exist_themes,
+            'itemPricing' => Vendoritempricing::findAll(['item_id' => $item_id]),
+            'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
+            'vendor_item_to_category' => $vendor_item_to_category,
+            'categories' => $categories
+        ]);         
     }
-}
 
-/**
-* Deletes an existing Vendoritem model.
-* If deletion is successful, the browser will be redirected to the 'index' page.
-*
-* @param string $id
-*
-* @return mixed
-*/
-public function actionDelete($id)
-{
-    $access = Authitem::AuthitemCheck('3', '23');
-    if (yii::$app->user->can($access)) {
-        Priorityitem::deleteAll('item_id ='.$id);
-        Featuregroupitem::deleteAll('item_id ='.$id);
-        Image::deleteAll('item_id ='.$id);
-        $vendor_item_update = Vendoritem::findOne('item_id ='.$id);
-        $vendor_item_update->trash='Deleted';
+    /**
+    * Deletes an existing Vendoritem model.
+    * If deletion is successful, the browser will be redirected to the 'index' page.
+    *
+    * @param string $id
+    *
+    * @return mixed
+    */
+    public function actionDelete($id)
+    {
+        $access = Authitem::AuthitemCheck('3', '23');
+        if (yii::$app->user->can($access)) {
+            Priorityitem::deleteAll('item_id ='.$id);
+            Featuregroupitem::deleteAll('item_id ='.$id);
+            Image::deleteAll('item_id ='.$id);
+            $vendor_item_update = Vendoritem::findOne('item_id ='.$id);
+            $vendor_item_update->trash='Deleted';
+            $vendor_item_update->update();
+
+            Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            return $this->redirect(['site/index']);
+        }
+    }
+
+    public function actionCheck($image_id)
+    {
+        $user = Image::findOne($image_id);
+        $user->delete();
+    }
+
+    /**
+    * Finds the Vendoritem model based on its primary key value.
+    * If the model is not found, a 404 HTTP exception will be thrown.
+    *
+    * @param string $id
+    *
+    * @return Vendoritem the loaded model
+    *
+    * @throws NotFoundHttpException if the model cannot be found
+    */
+    protected function findModel($id)
+    {
+        if (($model = Vendoritem::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionBlock()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+        $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
+        $vendor_item_update = Vendoritem::findOne($data['id']);
+        $vendor_item_update->item_status = $status;
         $vendor_item_update->update();
-
-        Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
-        return $this->redirect(['index']);
-    } else {
-        Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-        return $this->redirect(['site/index']);
-    }
-}
-
-public function actionCheck($image_id)
-{
-    $user = Image::findOne($image_id);
-    $user->delete();
-}
-
-/**
-* Finds the Vendoritem model based on its primary key value.
-* If the model is not found, a 404 HTTP exception will be thrown.
-*
-* @param string $id
-*
-* @return Vendoritem the loaded model
-*
-* @throws NotFoundHttpException if the model cannot be found
-*/
-protected function findModel($id)
-{
-    if (($model = Vendoritem::findOne($id)) !== null) {
-        return $model;
-    } else {
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
-}
-
-public function actionBlock()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-    }
-    $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-    $vendor_item_update = Vendoritem::findOne($data['id']);
-    $vendor_item_update->item_status = $status;
-    $vendor_item_update->update();
-    if ($status == 'Active') {
-        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-    } else {
-        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-    }
-}
-
-//Approve item 
-public function actionApprove()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
+        if ($status == 'Active') {
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        } else {
+            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+        }
     }
 
-    $command = Vendoritem::updateAll(['item_approved' => $data['item_approved']],['item_id' =>$data['keylist']]);
+    //Approve item 
+    public function actionApprove()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
 
-    if ($command) {
-        echo Yii::$app->session->setFlash('success', 'Vendor item approve status changed to "'.$data['item_approved'].'" successfully!');
-    } else {
-        echo Yii::$app->session->setFlash('danger', 'Something went wrong');
-    }
-}
+        $command = Vendoritem::updateAll(['item_approved' => $data['item_approved']],['item_id' =>$data['keylist']]);
 
-/* Vendor item gridview status changes */
-public function actionStatus()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-    }
-
-    //$ids = implode('","', $data['keylist']);
-    if ($data['status'] == 'Delete') {
-        $command = Vendoritem::deleteAll(['item_id'=>$data['keylist']]);
         if ($command) {
-            echo Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
+            echo Yii::$app->session->setFlash('success', 'Vendor item approve status changed to "'.$data['item_approved'].'" successfully!');
         } else {
             echo Yii::$app->session->setFlash('danger', 'Something went wrong');
         }
-    } elseif ($data['status'] == 'Reject') {
-        $command = Vendoritem::updateAll(['item_approved' => "rejected"],['item_id' =>$data['keylist']]);
-        if($command) {
-            echo Yii::$app->session->setFlash('success', 'Vendor item rejected successfully!');
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+    }
+
+    /* Vendor item gridview status changes */
+    public function actionStatus()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
         }
-    } else {
-        $command = Vendoritem::updateAll(['item_status' => $data['status']],['item_id' =>$data['keylist']]);
+
+        //$ids = implode('","', $data['keylist']);
+        if ($data['status'] == 'Delete') {
+            $command = Vendoritem::deleteAll(['item_id'=>$data['keylist']]);
+            if ($command) {
+                echo Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
+            } else {
+                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+            }
+        } elseif ($data['status'] == 'Reject') {
+            $command = Vendoritem::updateAll(['item_approved' => "rejected"],['item_id' =>$data['keylist']]);
+            if($command) {
+                echo Yii::$app->session->setFlash('success', 'Vendor item rejected successfully!');
+            } else {
+                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+            }
+        } else {
+            $command = Vendoritem::updateAll(['item_status' => $data['status']],['item_id' =>$data['keylist']]);
+            if ($command) {
+                echo Yii::$app->session->setFlash('success', 'Vendor item status updated!');
+            } else {
+                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+            }
+        }
+    }
+
+    public function actionUploadhandler()
+    {
+        $fileupload = new UploadHandler('', true, '', 23);
+    }
+    
+    public function actionUploadhandler1()
+    {
+        $fileupload = new UploadHandler('', true, '', 23);
+    }
+
+    public function actionRemovequestion()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+        $command = Vendoritemquestion::deleteAll('question_id='.$data['question_id']);
         if ($command) {
-            echo Yii::$app->session->setFlash('success', 'Vendor item status updated!');
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+            echo 'Question and answers deleted successfully';
         }
     }
-}
 
-public function actionUploadhandler()
-{
-    $fileupload = new UploadHandler('', true, '', 23);
-}
-public function actionUploadhandler1()
-{
-    $fileupload = new UploadHandler('', true, '', 23);
-}
+    public function actionSort_vendor_item()
+    {
+        $request = Yii::$app->request;
 
-public function actionRemovequestion()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
+        $sort = $request->post('sort_val');
+        $item_id = $request->post('item_id');
+
+        $command = Vendoritem::findOne($item_id);
+        $command->sort = $sort;
+        $command->update();
+
+        if ($command->execute()) {
+            Yii::$app->session->setFlash('success', 'Item sort order updated successfully!');
+            echo 1;
+            exit;
+        } else {
+            echo 0;
+            exit;
+        }
     }
-    $command = Vendoritemquestion::deleteAll('question_id='.$data['question_id']);
-    if ($command) {
-        echo 'Question and answers deleted successfully';
-    }
-}
 
-public function actionSort_vendor_item()
-{
-    $request = Yii::$app->request;
-
-    $sort = $request->post('sort_val');
-    $item_id = $request->post('item_id');
-
-    $command = Vendoritem::findOne($item_id);
-    $command->sort = $sort;
-    $command->update();
-
-    if ($command->execute()) {
-        Yii::$app->session->setFlash('success', 'Item sort order updated successfully!');
-        echo 1;
-        exit;
-    } else {
-        echo 0;
-        exit;
-    }
-}
-
-public function actionAddquestion()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-        $q_id = array();
-        if (isset($data['serial_div']) && $data['serial_div'] != '') {
-    // check if exist question
+    public function actionAddquestion()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $q_id = array();
+            if (isset($data['serial_div']) && $data['serial_div'] != '') {
             if ($data['serial_div'][0]['value'] != '') {
                 $exist = Vendoritemquestion::findOne($data['serial_div'][0]['value']);
                 if (!empty($exist)) {
@@ -961,300 +952,327 @@ public function actionAddquestion()
                     $q_id[] = $model_question->question_id;
                 }
                 $json['response'] = array('parent_id' => $q_id[0]);
-    // If attribute is text
-                if ($data['serial_div'][2]['value'] == 'text') {
-                    if (count($data['serial_div']) == 4) {
-                        $model_answer_option = new Vendoritemquestionansweroption();
-                        if (isset($data['serial_div'][3]['value']) && $data['serial_div'][3]['value'] != '') {
-                            $model_answer_option->answer_price_added = $data['serial_div'][3]['value'];
-                        } else {
-                            $model_answer_option->answer_price_added = 0;
-                        }
-                    } else {
-                        $ques_id = $data['serial_div'][3]['value'];
-                        $model_answer_option = Vendoritemquestionansweroption::findOne($ques_id);
-                        if (isset($data['serial_div'][4]['value']) && $data['serial_div'][4]['value'] != '') {
-                            $model_answer_option->answer_price_added = $data['serial_div'][4]['value'];
-                        } else {
-                            $model_answer_option->answer_price_added = 0;
-                        }
-                    }
-
-                    $model_answer_option->question_id = $q_id[0];
-                    $model_answer_option->save();
-                } elseif ($data['serial_div'][2]['value'] == 'selection') {
-                    $selection1 = array_slice($data['serial_div'], 3);
-                    $qa_values = array_chunk($selection1, 3);
-                    $price = $json = $exist = $ans = array();
-
-                    foreach ($qa_values as $key => $value) {
-                        if ($value[2]['value'] != '') {
-                            $ques_id = $value[2]['value'];
-                            $model_answer_option = Vendoritemquestionansweroption::findOne($ques_id);
-                        } else {
+        // If attribute is text
+                    if ($data['serial_div'][2]['value'] == 'text') {
+                        if (count($data['serial_div']) == 4) {
                             $model_answer_option = new Vendoritemquestionansweroption();
-                        }
-                        $model_answer_option->question_id = $q_id[0];
-                        $model_answer_option->answer_text = $value[0]['value'];
-                        if ($value[1]['value'] == '') {
-                            $model_answer_option->answer_price_added = 0;
+                            if (isset($data['serial_div'][3]['value']) && $data['serial_div'][3]['value'] != '') {
+                                $model_answer_option->answer_price_added = $data['serial_div'][3]['value'];
+                            } else {
+                                $model_answer_option->answer_price_added = 0;
+                            }
                         } else {
-                            $model_answer_option->answer_price_added = $value[1]['value'];
+                            $ques_id = $data['serial_div'][3]['value'];
+                            $model_answer_option = Vendoritemquestionansweroption::findOne($ques_id);
+                            if (isset($data['serial_div'][4]['value']) && $data['serial_div'][4]['value'] != '') {
+                                $model_answer_option->answer_price_added = $data['serial_div'][4]['value'];
+                            } else {
+                                $model_answer_option->answer_price_added = 0;
+                            }
                         }
-                        if ($model_answer_option->save()) {
-                            array_push($ans, $model_answer_option->answer_id);
+
+                        $model_answer_option->question_id = $q_id[0];
+                        $model_answer_option->save();
+                    } elseif ($data['serial_div'][2]['value'] == 'selection') {
+                        $selection1 = array_slice($data['serial_div'], 3);
+                        $qa_values = array_chunk($selection1, 3);
+                        $price = $json = $exist = $ans = array();
+
+                        foreach ($qa_values as $key => $value) {
+                            if ($value[2]['value'] != '') {
+                                $ques_id = $value[2]['value'];
+                                $model_answer_option = Vendoritemquestionansweroption::findOne($ques_id);
+                            } else {
+                                $model_answer_option = new Vendoritemquestionansweroption();
+                            }
+                            $model_answer_option->question_id = $q_id[0];
+                            $model_answer_option->answer_text = $value[0]['value'];
+                            if ($value[1]['value'] == '') {
+                                $model_answer_option->answer_price_added = 0;
+                            } else {
+                                $model_answer_option->answer_price_added = $value[1]['value'];
+                            }
+                            if ($model_answer_option->save()) {
+                                array_push($ans, $model_answer_option->answer_id);
+                            }
                         }
+                        $json['response'] = array('answers' => $ans, 'parent_id' => $q_id[0]);
                     }
-                    $json['response'] = array('answers' => $ans, 'parent_id' => $q_id[0]);
+                    echo '['.json_encode($json).']';
+                    die;
                 }
-                echo '['.json_encode($json).']';
-                die;
             }
         }
     }
-}
-public function actionGuideimage()
-{
-    $base = Yii::$app->basePath;
-    $len = rand(1, 1000);
-    $path = $base.'/web/uploads/vendor_images/';//server path
+    
+    public function actionGuideimage()
+    {
+        $base = Yii::$app->basePath;
+        $len = rand(1, 1000);
+        $path = $base.'/web/uploads/vendor_images/';//server path
 
-    $item_id = Yii::$app->request->post('item_id');
-    $question_id  = Yii::$app->request->post('question_id');
+        $item_id = Yii::$app->request->post('item_id');
+        $question_id  = Yii::$app->request->post('question_id');
 
-    foreach ($_FILES as $key) {
+        foreach ($_FILES as $key) {
 
-        if ($key['error'] == UPLOAD_ERR_OK) {
-            $name = $len.'_'.$key['name'];
-            $temp = $key['tmp_name'];
-            $size = ($key['size'] / 1000).'Kb';
-            $v = move_uploaded_file($temp, $path.$name);
-        } else {
-            echo $key['error'];
-        }
-
-        // image table
-        $image_tbl = new Image;
-        $image_tbl->image_path = $name;
-        $image_tbl->item_id = $item_id;
-        $image_tbl->image_user_id = Yii::$app->user->getId();
-        $image_tbl->module_type = 'guides';
-        $image_tbl->image_user_type ='admin';
-        $image_tbl->vendorimage_sort_order = 0;
-        $image_tbl->save();
-
-        $last_id = Yii::$app->db->getLastInsertID();
-
-        // guide image table
-        $question_tbl = new Vendoritemquestionguide;
-        $question_tbl->question_id = $question_id;
-        $question_tbl->guide_image_id = $last_id;
-        $question_tbl->save();
-        echo $path.$name;
-    }
-}
-
-public function actionRenderquestion()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-        $question = Vendoritemquestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
-
-        if ($question[0]['question_answer_type'] == 'image') {
-            $answers = Vendoritemquestionguide::find()->where(['question_id' => $data['q_id']])->asArray()->all();
-        } else {
-            $answers = Vendoritemquestionansweroption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
-        }
-
-        return $this->renderPartial('questionanswer', ['question' => $question, 'answers' => $answers]);
-    }
-}
-
-public function actionViewrenderquestion()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-        $question = Vendoritemquestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
-
-        if ($question[0]['question_answer_type'] == 'image') {
-            $answers = Vendoritemquestionguide::find()->where(['question_id' => $data['q_id']])->asArray()->all();
-        } else {
-            $answers = Vendoritemquestionansweroption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
-        }
-        return $this->renderPartial('viewquestionanswer', ['question' => $question, 'answers' => $answers]);
-        die; /* ALL DIE STATEMENT IMPORTANT FOR VENDOR PANEL*/
-    }
-}
-
-public function actionRenderanswer()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-        $question = Vendoritemquestion::find()->where('answer_id = "'.$data['q_id'].'"')->asArray()->all();
-        $answers = Vendoritemquestionansweroption::find()->where(['question_id' => $question[0]['question_id']])->asArray()->all();
-        return $this->renderPartial('questionanswer', ['question' => $question, 'answers' => $answers]);
-    }
-}
-
-public function actionGalleryupload($id)
-{
-    $base = Yii::$app->basePath;
-    $len = rand(1, 1000);
-    $model = new Image();
-    $imagedata = Image::find()->where('item_id = :id AND module_type = :status', [':id' => $id, ':status' => 'vendor_item'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
-
-    if ($model->load(Yii::$app->request->post())) {
-        $file = UploadedFile::getInstances($model, 'image_path');
-
-        if ($file) {
-            $i = count($imagedata) + 1;
-            foreach ($file as $files) {
-                $files->saveAs($base.'/web/uploads/vendor_images/'.$files->baseName.'_'.$len.'.'.$files->extension);
-                $model->image_path = $files->baseName.'_'.$len.'.'.$files->extension;
-                $model->item_id = $id;
-            $model->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
-            $model->image_user_type = 1;
-            // image table
-            $image_tbl = new Image;
-            $image_tbl->image_path = $model->image_path;
-            $image_tbl->item_id = $id;
-            $image_tbl->image_user_id = $model->image_user_id;
-            $image_tbl->module_type = 'vendor_item';
-            $image_tbl->vendorimage_sort_order = $i;
-            $image_tbl->save();
-            ++$i;
-        }
-    }
-    return $this->redirect(['galleryupload?id='.$id]);
-}
-
-return $this->render('galleryupload', ['model' => $model, 'imagedata' => $imagedata]);
-}
-
-public function actionItemgallery()
-{
-    return $this->render('gallery');
-}
-public function actionSalesguideimage($id = '')
-{
-    $base = Yii::$app->basePath;
-    $len = rand(1, 1000);
-    $model = new Vendoritem();
-    $model1 = new Image();
-
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-
-        if (isset($data['question_id']) &&  $data['question_id'] != '') {
-            $guideimageval = Vendoritemquestionguide::find()->select('guide_image_id')->where('question_id = :id', [':id' => $data['question_id']])->all();
-
-            if (!empty($guideimageval)) {
-                foreach ($guideimageval as $key => $value) {
-                    $guide_img[] = $value['guide_image_id'];
-                }
-                $guideimagedata = Image::loadimageids($guide_img);
+            if ($key['error'] == UPLOAD_ERR_OK) {
+                $name = $len.'_'.$key['name'];
+                $temp = $key['tmp_name'];
+                $size = ($key['size'] / 1000).'Kb';
+                $v = move_uploaded_file($temp, $path.$name);
+            } else {
+                echo $key['error'];
             }
-        }
-        $file = UploadedFile::getInstances($model, 'guide_image');
-
-        if ($file) {
-            foreach ($file as $files) {
-                $files->saveAs($base.'/web/uploads/guide_images/'.$files->baseName.'_'.$len.'.'.$files->extension);
-                $model1->image_path = $files->baseName.'_'.$len.'.'.$files->extension;
-                $model1->item_id = '001';
-            $model1->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
-            $model1->image_user_type = 1;
 
             // image table
             $image_tbl = new Image;
-            $image_tbl->image_path = $model->image_path;
-            $image_tbl->item_id = '001';
-            $image_tbl->image_user_id = $model->image_user_id;
-            $image_tbl->module_type = 'sales_guides';
+            $image_tbl->image_path = $name;
+            $image_tbl->item_id = $item_id;
+            $image_tbl->image_user_id = Yii::$app->user->getId();
+            $image_tbl->module_type = 'guides';
+            $image_tbl->image_user_type ='admin';
             $image_tbl->vendorimage_sort_order = 0;
             $image_tbl->save();
 
             $last_id = Yii::$app->db->getLastInsertID();
-            $quide_tbl = new Vendoritemquestionguide;
-            $quide_tbl->question_id = $id;
-            $quide_tbl->guide_image_id = $last_id;;
-            $quide_tbl->save();
-            die;
-        }
-    }
-    return $this->renderPartial('salesguide', ['model' => $model, 'guideimagedata' => (isset($guideimagedata) && is_array($guideimagedata)) ? $guideimagedata : array(), 'question_id' => $data['question_id']]);
-}
-}
 
-    // Delete item type sales image
-public function actionDeletesalesimage()
-{
-    $model1 = new Image();
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-        if (isset($data['key']) &&  $data['key'] != '') {
-            $image_path = Image::loadimageids($data['key']);
-            unlink(Yii::getAlias('@sales_guide_images').$image_path[0]['image_path']);
-            Image::deleteAll('image_id='.$data['key']);
-            Vendoritemquestionquide::deleteAll('guide_image_id='.$data['key']);
+            // guide image table
+            $question_tbl = new Vendoritemquestionguide;
+            $question_tbl->question_id = $question_id;
+            $question_tbl->guide_image_id = $last_id;
+            $question_tbl->save();
+            echo $path.$name;
         }
     }
-}
-    // Delete item image
-public function actionDeleteitemimage()
-{
-    if (Yii::$app->request->isAjax) {
-       $data = Yii::$app->request->post();
-        if (isset($data['key']) &&  $data['key'] != '') {
-            $imageData = Image::findOne(['image_id'=>$data['key']]);
-            if ($imageData){
-                Vendoritem::deleteFiles($imageData->image_path);
-                echo $imageData->delete();
+
+    public function actionRenderquestion()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $question = Vendoritemquestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+
+            if ($question[0]['question_answer_type'] == 'image') {
+                $answers = Vendoritemquestionguide::find()->where(['question_id' => $data['q_id']])->asArray()->all();
+            } else {
+                $answers = Vendoritemquestionansweroption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+            }
+
+            return $this->renderPartial('questionanswer', ['question' => $question, 'answers' => $answers]);
+        }
+    }
+
+    public function actionViewrenderquestion()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $question = Vendoritemquestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+
+            if ($question[0]['question_answer_type'] == 'image') {
+                $answers = Vendoritemquestionguide::find()->where(['question_id' => $data['q_id']])->asArray()->all();
+            } else {
+                $answers = Vendoritemquestionansweroption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+            }
+            return $this->renderPartial('viewquestionanswer', ['question' => $question, 'answers' => $answers]);
+            die; /* ALL DIE STATEMENT IMPORTANT FOR VENDOR PANEL*/
+        }
+    }
+
+    public function actionRenderanswer()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $question = Vendoritemquestion::find()->where('answer_id = "'.$data['q_id'].'"')->asArray()->all();
+            $answers = Vendoritemquestionansweroption::find()->where(['question_id' => $question[0]['question_id']])->asArray()->all();
+            return $this->renderPartial('questionanswer', ['question' => $question, 'answers' => $answers]);
+        }
+    }
+
+    public function actionGalleryupload($id)
+    {
+        $base = Yii::$app->basePath;
+        $len = rand(1, 1000);
+        $model = new Image();
+
+        $imagedata = Image::find()
+            ->where('item_id = :id AND module_type = :status', [
+                ':id' => $id, ':status' => 'vendor_item'
+            ])
+            ->orderby(['vendorimage_sort_order' => SORT_ASC])
+            ->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $file = UploadedFile::getInstances($model, 'image_path');
+
+            if ($file) {
+                $i = count($imagedata) + 1;
+                foreach ($file as $files) {
+                    $files->saveAs($base.'/web/uploads/vendor_images/'.$files->baseName.'_'.$len.'.'.$files->extension);
+                    $model->image_path = $files->baseName.'_'.$len.'.'.$files->extension;
+                    $model->item_id = $id;
+                    $model->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
+                    $model->image_user_type = 1;
+                    // image table
+                    $image_tbl = new Image;
+                    $image_tbl->image_path = $model->image_path;
+                    $image_tbl->item_id = $id;
+                    $image_tbl->image_user_id = $model->image_user_id;
+                    $image_tbl->module_type = 'vendor_item';
+                    $image_tbl->vendorimage_sort_order = $i;
+                    $image_tbl->save();
+                    ++$i;
+                }
+            }
+
+            return $this->redirect(['galleryupload?id='.$id]);
+        }
+
+        return $this->render('galleryupload', ['model' => $model, 'imagedata' => $imagedata]);
+    }
+
+    public function actionItemgallery()
+    {
+        return $this->render('gallery');
+    }
+
+    public function actionSalesguideimage($id = '')
+    {
+        $base = Yii::$app->basePath;
+        $len = rand(1, 1000);
+        $model = new Vendoritem();
+        $model1 = new Image();
+
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+
+            if (isset($data['question_id']) &&  $data['question_id'] != '') {
+                $guideimageval = Vendoritemquestionguide::find()->select('guide_image_id')->where('question_id = :id', [':id' => $data['question_id']])->all();
+
+                if (!empty($guideimageval)) {
+                    foreach ($guideimageval as $key => $value) {
+                        $guide_img[] = $value['guide_image_id'];
+                    }
+                    $guideimagedata = Image::loadimageids($guide_img);
+                }
+            }
+            $file = UploadedFile::getInstances($model, 'guide_image');
+
+            if ($file) {
+                foreach ($file as $files) {
+                    $files->saveAs($base.'/web/uploads/guide_images/'.$files->baseName.'_'.$len.'.'.$files->extension);
+                    $model1->image_path = $files->baseName.'_'.$len.'.'.$files->extension;
+                    $model1->item_id = '001';
+                $model1->image_user_id = Yii::$app->user->getId();// no need for validation rule on user_id as you set it yourself
+                $model1->image_user_type = 1;
+
+                // image table
+                $image_tbl = new Image;
+                $image_tbl->image_path = $model->image_path;
+                $image_tbl->item_id = '001';
+                $image_tbl->image_user_id = $model->image_user_id;
+                $image_tbl->module_type = 'sales_guides';
+                $image_tbl->vendorimage_sort_order = 0;
+                $image_tbl->save();
+
+                $last_id = Yii::$app->db->getLastInsertID();
+                $quide_tbl = new Vendoritemquestionguide;
+                $quide_tbl->question_id = $id;
+                $quide_tbl->guide_image_id = $last_id;;
+                $quide_tbl->save();
+                die;
+            }
+        }
+        return $this->renderPartial('salesguide', ['model' => $model, 'guideimagedata' => (isset($guideimagedata) && is_array($guideimagedata)) ? $guideimagedata : array(), 'question_id' => $data['question_id']]);
+    }
+    }
+
+        // Delete item type sales image
+    
+    public function actionDeletesalesimage()
+    {
+        $model1 = new Image();
+        if (Yii::$app->request->isAjax) {
+            
+            $data = Yii::$app->request->post();
+
+            if (isset($data['key']) &&  $data['key'] != '') {
+                $image_path = Image::loadimageids($data['key']);
+                unlink(Yii::getAlias('@sales_guide_images').$image_path[0]['image_path']);
+                Image::deleteAll('image_id='.$data['key']);
+                Vendoritemquestionquide::deleteAll('guide_image_id='.$data['key']);
             }
         }
     }
-}
+        // Delete item image
+
+    public function actionDeleteitemimage()
+    {
+        if (Yii::$app->request->isAjax) {
+
+            $data = Yii::$app->request->post();
+            
+            if (isset($data['key']) &&  $data['key'] != '') {
+                $imageData = Image::findOne(['image_id'=>$data['key']]);
+            
+                if ($imageData){
+                    Vendoritem::deleteFiles($imageData->image_path);
+                    echo $imageData->delete();
+                }
+            }
+        }
+    }
 
     // Delete item type service or rental image
-public function actionDeleteserviceguideimage()
-{
-    $model1 = new Image();
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-        if (isset($data['key']) &&  $data['key'] != '') {
-            $image_path = Image::loadserviceguideimageids($data['key']);
-            unlink(Yii::getAlias('@sales_guide_images').$image_path[0]['image_path']);
-            Image::deleteAll('image_id='.$data['key']);
+    public function actionDeleteserviceguideimage()
+    {
+        $model1 = new Image();
+
+        if (Yii::$app->request->isAjax) {
+        
+            $data = Yii::$app->request->post();
+        
+            if (isset($data['key']) &&  $data['key'] != '') {
+                $image_path = Image::loadserviceguideimageids($data['key']);
+                unlink(Yii::getAlias('@sales_guide_images').$image_path[0]['image_path']);
+                Image::deleteAll('image_id='.$data['key']);
+            }
         }
     }
-}
 
-public function actionItemnamecheck()
-{
-    if (Yii::$app->request->isAjax) {
-        $data = Yii::$app->request->post();
-    }
-    if ($data['item_id'] == 0) {
-        $itemname = Vendoritem::find()->select('item_name')
-        ->where(['item_name' => $data['item']])
-        ->andwhere(['trash' => 'Default'])
-        ->all();
-    } else {
-        $itemname = Vendoritem::find()->select('item_name')
-        ->where(['item_name' => $data['item']])
-        ->where(['item_id' => $data['item_id']])
-        ->andwhere(['trash' => 'Default'])
-        ->all();
-        if (count($itemname) > 0) {
-            echo  $result = 0;
-            die;
+    public function actionItemnamecheck()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }
+
+        if ($data['item_id'] == 0) {
+            
+            $itemname = Vendoritem::find()->select('item_name')
+                ->where(['item_name' => $data['item']])
+                ->andwhere(['trash' => 'Default'])
+                ->all();
+
         } else {
-            echo  $result = 1;
-            die;
-        }
-    }
-    echo $result = count($itemname);
-    die;
-}
+            
+            $itemname = Vendoritem::find()
+                ->select('item_name')
+                ->where([
+                    'item_name' => $data['item'],
+                    'trash' => 'Default'
+                ])
+                ->andWhere(['!=', 'item_id', $data['item_id']])
+                ->all();
 
+            if (count($itemname) > 0) {
+                echo 0;
+                die;
+            } else {
+                echo 1;
+                die;
+            }
+        }
+
+        echo count($itemname);
+    }
 }

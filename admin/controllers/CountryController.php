@@ -18,8 +18,7 @@ class CountryController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -30,7 +29,7 @@ class CountryController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-               'rules' => [
+                'rules' => [
                    [
                        'actions' => [],
                        'allow' => true,
@@ -60,17 +59,20 @@ class CountryController extends Controller
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('4', '11');
+        
         if (yii::$app->user->can($access)) {
+            
             $searchModel = new CountrySearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            //echo '<pre>';print_r($dataProvider);die;
+            
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -98,20 +100,25 @@ class CountryController extends Controller
     public function actionCreate()
     {
         $access = Authitem::AuthitemCheck('1', '11');
+
         if (yii::$app->user->can($access)) {
+        
             $model = new Country();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Country info created successfully!');
+                
+                Yii::$app->session->setFlash('success', 'Country info created successfully!');
 
                 return $this->redirect(['index']);
             } else {
                 return $this->render('create', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -128,20 +135,26 @@ class CountryController extends Controller
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '11');
+        
         if (yii::$app->user->can($access)) {
+        
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Country info updated successfully!');
-
+                
+                Yii::$app->session->setFlash('success', 'Country info updated successfully!');
                 return $this->redirect(['index']);
+
             } else {
+
                 return $this->render('update', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -158,13 +171,17 @@ class CountryController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '11');
+
         if (yii::$app->user->can($access)) {
+        
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Country deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Country deleted successfully!');
 
             return $this->redirect(['index']);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -191,11 +208,16 @@ class CountryController extends Controller
 
     public function actionBlock()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
+        $data = Yii::$app->request->post();
+
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
+        
         $command = Country::updateAll(['country_status' => $status],'country_id= '.$data['cid']);
+        
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
