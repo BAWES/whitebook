@@ -1805,10 +1805,21 @@ jQuery('#main-category').change(function(){
 var loadmore = 0;
 
 function filter(){
-    var date = '';
-    var areas = '';
-    var search = '';
+    var date = '',
+        areas = '',
+        slug = '',
+        search = '',
+        category_name = '',
+        theme_name = '',
+        price_val = '',
+        vendor_name = '',
+        url_path = '',
+        url = window.location.href;
+
+    url_path += '?filter=1'; //intializing url_path
+
     jQuery('#planloader').show();
+
     jQuery('.events_listing').css({'opacity' : '0.5', 'position' : 'relative'});
 
     var category_name = jQuery('input[name=items]:checked').map(function() {
@@ -1826,31 +1837,50 @@ function filter(){
     var price_val = jQuery('.price_slider').val().replace(',', '-');
 
     if (jQuery('#delivery_date_2').length>0) {
-        var date = jQuery('#delivery_date_2').val()
+        var date = jQuery('#delivery_date_2').val();
     }
     if (jQuery('#delivery_area_filter').length>0) {
         var areas = jQuery('#delivery_area_filter').val();
     }
 
-
-
-    var url_path;
-    /* BEGIN GET SLUG FROM URL */
-    var url = window.location.href;
-    slug = product_slug;
-    /* END GET SLUG FROM URL */
-
-    /* if all checkbox uncheck load items based on category */
-    if(category_name == '' && theme_name == '' && vendor_name == '') {
-        window.history.pushState('test', 'Title', newUrl);
+    if (typeof product_slug !== "undefined") {
+        slug = product_slug;
     }
 
-    if(category_name != '' || theme_name != '' || vendor_name != '' || price_val != '') {
-        url_path = '?slug=' + slug + '&category=' + category_name + '&themes=' + theme_name + '&vendor=' + vendor_name + '&price=' + price_val;
+    if (typeof search_keyword !== "undefined") {
+        search = search_keyword;
     }
 
-    if(category_name != '' || theme_name != '' || vendor_name != '' || price_val != '') {
-        url_path = '?slug=' + slug + '&category=' + category_name + '&themes=' + theme_name + '&vendor=' + vendor_name + '&price=' + price_val+ '&date=' + date+ '&location=' + areas;
+
+    if (slug != '') {
+        url_path += '&slug='+slug;
+    }
+
+    if (search != '') {
+        url_path += '&search=' + search;
+    }
+
+    if (category_name != '') {
+        url_path += '&category=' + category_name;
+    }
+    if(theme_name != '') {
+        url_path += '&themes=' + theme_name;
+    }
+
+    if(vendor_name != '') {
+        url_path += '&vendor=' + vendor_name;
+    }
+
+    if (price_val != '') {
+        url_path += '&price=' + price_val;
+    }
+
+    if(date != '') {
+        url_path += '&date=' + date;
+    }
+
+    if(areas != '') {
+        url_path += '&location=' + areas;
     }
 
     var path = load_items;
@@ -1876,10 +1906,10 @@ function filter(){
             jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
             jQuery('#planloader').hide();
             jQuery('.events_listing').css({'opacity' : '1.0', 'position' : 'relative'});
+            imgError(); // to initialize after result comes
         }
     }).done(function(){
-        jQuery('.add_to_favourite').click(function(){
-
+        jQuery('.add_to_favourite').click(function() {
             jQuery('#loading_img_list').show();
             jQuery('#loading_img_list').html('<img id=\"loading-image\" src=\"".giflink."\" alt=\"Loading...\" />');
 
@@ -1934,3 +1964,10 @@ if (jQuery(window).width() < 991) {
     jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");
     jQuery("#left_side_cate nav").attr ('id','sidebar-wrapper')
 }
+
+function imgError() {
+    $("img").error(function () {
+        $(this).unbind("error").attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208");
+    });
+}
+imgError(); // to initialize on page load

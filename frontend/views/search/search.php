@@ -7,6 +7,7 @@ $this->title = 'Search Result | Whitebook';
 $get = Yii::$app->request->get();
 $controller = get_class($this->context);
 $event_status=Yii::$app->session->get('event_status');
+$search = ($search != '') ? $search : 'All';
 if($event_status==-1) { ?>
 
 	<script type="text/javascript">
@@ -32,7 +33,6 @@ if($event_status>0){
 				jQuery('#addevent').html(data);
 				jQuery('#eventlist'+item_id).selectpicker('refresh');
 				jQuery('#add_to_event').modal('show');
-
 			}
 		});
 	}
@@ -44,15 +44,12 @@ if($event_status>0){
 <?php } ?>
 <!-- coniner start -->
 <section id="inner_pages_white_back">
-
 	<div id="event_slider_wrapper">
 		<div class="container paddng0">
 			<?=$this->render('/product/events_slider.php'); ?>
 		</div>
 	</div>
-
 	<div class="container paddng0">
-
 		<div class="breadcrumb_common">
 			<div class="bs-example">
 			<!-- <ul class="breadcrumb"> -->
@@ -68,7 +65,6 @@ if($event_status>0){
 				'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
 				]);
 			?>
-
 		<!-- </ul> -->
 		</div>
 	</div>
@@ -90,13 +86,13 @@ if($event_status>0){
 						<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 							<div id="accordion" class="panel-group">
 
-								<?= $this->render('@frontend/views/plan/filter/theme',[
+								<?= $this->render('@frontend/views/common/filter/theme',[
 									'themes' => $themes]); ?>
 
-								<?= $this->render('@frontend/views/plan/filter/vendor',[
+								<?= $this->render('@frontend/views/common/filter/vendor',[
 									'vendor' => $vendor]); ?>
 
-								<?= $this->render('@frontend/views/plan/filter/price',[
+								<?= $this->render('@frontend/views/common/filter/price',[
 									'items' => $items]); ?>
 							</div>
 						</div>
@@ -116,7 +112,7 @@ if($event_status>0){
             <?php
                 if(!empty($items))  {
                     foreach ($items as $key => $value) {
-                        echo $this->render('@frontend/views/plan/item',[
+                        echo $this->render('@frontend/views/common/item',[
                             'value' => $value,
                             'customer_events_list' => $customer_events_list
                         ]);
@@ -146,22 +142,17 @@ if($event_status>0){
 </section>
 
 <?php
-
 $this->registerJs("
-
-    var product_slug        = '".$search."',
-        search              = '".$search."',
-        load_items          = '".Yii::$app->urlManager->createAbsoluteUrl('product-filter-result/searching-page-filter')."',
-        giflink             = '".Url::to("@web/images/ajax-loader.gif")."',
-        wishlist_url        = '".Url::to(['/users/add_to_wishlist'])."',
-        addevent            = '".Url::to(['/product/addevent'])."',
-        load_more_items		= '".Yii::$app->urlManager->createAbsoluteUrl('plan/loadmoreitems')."'
-    ", \yii\web\View::POS_END, 'searching-options'
+	var page = 'search',
+        search_keyword      = '".$search."',
+        load_items          = '".Url::toRoute(['product-filter-result/searching-page-filter'],true)."',
+        load_more_items		= '".Url::toRoute(['plan/loadmoreitems'],true)."'
+	", \yii\web\View::POS_HEAD, 'searching-options'
 );
 
 $this->registerCssFile("@web/css/owl.carousel.css");
 $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerCssFile("@web/css/jquery.mCustomScrollbar.css");
 $this->registerJsFile('@web/js/jquery.mCustomScrollbar.concat.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/js/pages/search.js?V=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
+//$this->registerJsFile('@web/js/pages/search.js?V=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>

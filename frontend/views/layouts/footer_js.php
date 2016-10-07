@@ -77,7 +77,8 @@ $this->registerJs("
     var enter_a_valid_email_id = '".Yii::t('frontend', 'Enter a valid email')."';
     var kindly_select_event_type = '".Yii::t('frontend', 'Kindly select Event type')."';
     var no_record_found = '".Yii::t('frontend', 'No Record found')."';
-
+    var giflink             = '".Url::to("@web/images/ajax-loader.gif")."';
+    var addevent            = '".Url::to(['/product/addevent'])."';
 ", View::POS_HEAD);
 
 Yii::$app->session->set('default',0);
