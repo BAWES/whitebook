@@ -33,6 +33,11 @@ class SearchController extends BaseController
         $search = str_replace('-', ' ', $search);
         $k = '';
         $slug = '';
+        $explode = ' ';
+
+        if (Yii::$app->request->isAjax) {
+            $explode = '+';
+        }
 
         $data = Yii::$app->request->get();
 
@@ -56,7 +61,7 @@ class SearchController extends BaseController
 
         //vendor filter
         if (isset($data['vendor'])  && $data['vendor'] != '') {
-            $items_query->andWhere(['in', '{{%vendor}}.slug', explode('+', $data['vendor'])]);
+            $items_query->andWhere(['in', '{{%vendor}}.slug', explode($explode, $data['vendor'])]);
         }
 
         //price filter
@@ -64,19 +69,16 @@ class SearchController extends BaseController
 
             $price_condition = [];
 
-            foreach (explode('+', $data['price']) as $key => $value) {
+            foreach (explode($explode, $data['price']) as $key => $value) {
                 $arr_min_max = explode('-', $value);
                 $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
             }
 
             $items_query->andWhere(implode(' OR ', $price_condition));
         }
-
         //theme filter
         if (isset($data['themes']) && $data['themes'] != '') {
-
-            $theme = explode('+', $data['themes']);
-
+            $theme = explode($explode, $data['themes']);
             foreach ($theme as $key => $value) {
                 $themes[] = \common\models\Themes::find()
                     ->select('theme_id')
@@ -86,7 +88,6 @@ class SearchController extends BaseController
             }
 
             $all_valid_themes = array();
-
             foreach ($themes as $key => $value) {
                 $get_themes = \common\models\Vendoritemthemes::find()
                     ->select('theme_id, item_id')
