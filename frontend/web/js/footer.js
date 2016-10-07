@@ -1886,7 +1886,7 @@ function filter(){
     var path = load_items;
 
     jQuery.ajax({
-        type:'POST',
+        type:'GET',
         url:path,
         data:{
             item_ids: category_name,
