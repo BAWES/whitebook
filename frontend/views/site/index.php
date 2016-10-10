@@ -109,7 +109,10 @@ $model = new Website();
 <!-- BEGIN FEATURE GROUP ITEM-->
 <?php
 
-$featured_produc = Featuregroup::find()->select(['group_id', 'group_name_ar', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
+$featured_produc = Featuregroup::find()
+    ->select(['group_id', 'group_name_ar', 'group_name'])
+    ->where(['group_status' => 'Active', 'trash' => 'Default'])
+    ->asArray()->all();
 
 $i = 1;
 foreach ($featured_produc as $key => $value) {

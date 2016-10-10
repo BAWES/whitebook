@@ -98,22 +98,27 @@ class Addresstype extends \yii\db\ActiveRecord
     public static function loadAddress()
     {
         $Addresstype = Addresstype::find()
-        ->select(['type_id','type_name'])
-        ->where(['status'=>'Active'])->asarray()->all();
+            ->select(['type_id','type_name'])
+            ->where(['status'=>'Active'])
+            ->asarray()
+            ->all();
 
-        $Addresstype=ArrayHelper::map($Addresstype,'type_id','type_name');
-        return $Addresstype;
+        return ArrayHelper::map($Addresstype,'type_id','type_name');
     }
+
     public static function getAddresstype($id)
     {
-        $model = Addresstype::find()->where(['type_id'=>$id])->one();
+        $model = Addresstype::find()
+            ->where(['type_id' => $id])
+            ->one();
+
         return $model->type_name;
     }
 
     public function statusImageurl($img_status)
     {
         if($img_status == 'Active')
-        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
@@ -121,8 +126,7 @@ class Addresstype extends \yii\db\ActiveRecord
     public function statusTitle($status)
     {
         if($status == 'Active')
-        return 'Activate';
+            return 'Activate';
         return 'Deactivate';
     }
-
 }

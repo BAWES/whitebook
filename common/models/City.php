@@ -47,12 +47,12 @@ class City extends \yii\db\ActiveRecord
 
     public static function loadcity()
     {
-        $city= City::find()
-        ->where(['!=', 'status', 'Deactive'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-        ->all();
-        $city=ArrayHelper::map($city,'city_id','city_name');
-        return $city;
+        $city = City::find()
+            ->where(['!=', 'status', 'Deactive'])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+            ->all();
+
+        return ArrayHelper::map($city, 'city_id', 'city_name');
     }
 
     /**
@@ -68,7 +68,6 @@ class City extends \yii\db\ActiveRecord
             'status' => 'Governorate Status',
         ];
     }
-
 
     /*
     *
@@ -94,38 +93,19 @@ class City extends \yii\db\ActiveRecord
     /**
     * @return \yii\db\ActiveQuery
     */
-    public static function getCountryName($id)
+    public static function getCountry()
     {
-        $model = Country::find()->where(['country_id'=>$id])->one();
-        return $model->country_name;
-    }
-    public static function getCityname($id)
-    {
-        $model = City::find()->where(['city_id'=>$id])->one();
-        return $model->city_name;
+        return $this->hasOne(Country::className(), ['country_id' => 'country_id']);
     }
 
-    public static function listcityname($id)
-    {
-        $model = City::find()
-        ->select(['city_id','city_name'])
-        ->where(['country_id'=>$id])->all();
-        $city=ArrayHelper::map($model,'city_id','city_name');
-        return $city;
-    }
-    public static function fullcityname()
-    {
-        $model = City::find()
-        ->select(['city_id','city_name'])
-        ->all();
-        $city=ArrayHelper::map($model,'city_id','city_name');
-        return $city;
+    public function getLocations(){
+        return $this->hasMany(Location::className(), ['city_id' => 'city_id']);
     }
 
     public function statusImageurl($img_status)
     {
         if($img_status == 'Active')
-        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
@@ -133,12 +113,7 @@ class City extends \yii\db\ActiveRecord
     public function statusTitle($status)
     {
         if($status == 'Active')
-        return 'Activate';
+            return 'Activate';
         return 'Deactivate';
-    }
-
-
-    public function getLocations(){
-        return $this->hasMany(Location::className(),['city_id'=>'city_id']);
-    }
+    }    
 }

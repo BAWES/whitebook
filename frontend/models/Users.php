@@ -68,21 +68,7 @@ class Users extends Model
 
     public function get_customer_details($customer_id)
     {
-     return $ads = (new Query())
-            ->select('item_id')
-            ->from('{{%wishlist}}')
-            ->where(['customer_id'=>$customer_id])
-            ->all();
-    }
-
-    public static function get_user_details()
-    {
-        return $ads = Customer::find()
-        ->select('{{%customer_address}}.*,{{%customer}}.*')
-        ->leftjoin('{{%customer_address}}','{{%customer_address}}.customer_id = {{%customer}}.customer_id')
-        ->where(['{{%customer}}.customer_id'=>Yii::$app->user->identity->customer_id])
-        ->asArray()
-        ->all();
+     
     }
 
     public function check_authorization($email)
@@ -125,8 +111,8 @@ class Users extends Model
                 'customer_dateofbirth' => $customer_dateofbirth,
                 'customer_mobile' => $post['mobile_number']
             ],[
-                'customer_id'=>$customer_id]
-            );
+                'customer_id'=>$customer_id
+            ]);
     }
 
 
