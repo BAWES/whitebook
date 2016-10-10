@@ -1,6 +1,7 @@
 <?php
 
 namespace admin\models;
+
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -22,41 +23,28 @@ use yii\helpers\ArrayHelper;
 class Themes extends \common\models\Themes
 {
 
-  public static function loadthemename()
-  {       
-      $theme_name= Themes::find()
-        ->where(['!=', 'theme_status', 'Deactive'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-        ->all();
+    public static function loadthemename()
+    {       
+        $theme_name= Themes::find()
+          ->where(['!=', 'theme_status', 'Deactive'])
+          ->andwhere(['!=', 'trash', 'Deleted'])
+          ->all();
 
-      $themename = ArrayHelper::map($theme_name,'theme_id','theme_name');
-      
-      return $themename;
-  } 
+        return ArrayHelper::map($theme_name, 'theme_id', 'theme_name');
+    } 
 
-  public static function loadthemenameupdate($id)
-  {
-     $ids = explode(",", $id);
-     $id = implode("','", $ids);
-     $val = "'".$id."'";
-     
-     $theme_name =  Themes::find()->where(['theme_id' => [$val]])->all();
+    public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')     
+          return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
 
-     return ArrayHelper::map($theme_name,'theme_id','theme_name');
-  }
-
-  public function statusImageurl($img_status)
-  {
-      if($img_status == 'Active')     
-        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-      return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-  }
-
-  // Status Image title
-  public function statusTitle($status)
-  {           
-      if($status == 'Active')     
-        return 'Activate';
-      return 'Deactivate';
-  }
+    // Status Image title
+    public function statusTitle($status)
+    {           
+        if($status == 'Active')     
+          return 'Activate';
+        return 'Deactivate';
+    }
 }

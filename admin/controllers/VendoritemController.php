@@ -447,16 +447,6 @@ class VendoritemController extends Controller
 
         $categoryname = Category::vendorcategory($model->vendor_id);
 
-        // BEGIN themes and groups
-        $themelist = Themes::loadthemename();
-        $selected_themes = Vendoritemthemes::find()->where('item_id = "' . $id . '"')->one();
-
-        $theme_selected = Themes::loadthemenameupdate($selected_themes['theme_id']);
-        $exist_themes = explode(',', $selected_themes['theme_id']);
-
-        $selected_groups = Featuregroupitem::find()->where('item_id = "' . $id . '"')->one();
-        $exist_groups = explode(',', $selected_groups['group_id']);
-
         $grouplist = Featuregroup::loadfeaturegroup();
 
         // Values for priority log table dont delete...
@@ -760,7 +750,6 @@ class VendoritemController extends Controller
             'model_question' => $model_question,
             'themes' => Themes::findAll(['theme_status' => 'Active', 'trash' => 'Default']),
             'grouplist' => $grouplist,
-            'exist_themes' => $exist_themes,
             'itemPricing' => Vendoritempricing::findAll(['item_id' => $item_id]),
             'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
             'vendor_item_to_category' => $vendor_item_to_category,

@@ -2,8 +2,9 @@
 
 namespace admin\models;
 
-use yii\helpers\ArrayHelper;
 use Yii;
+use yii\helpers\ArrayHelper;
+
 
 /**
  * This is the model class for table "whitebook_feature_group".
@@ -41,7 +42,7 @@ class Featuregroup extends \common\models\Featuregroup
     public static function statusImageurl($img_status)
    	{			
    		if($img_status == 'Active')		
-   		return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+   		 return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
    		return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
    	}
 	
@@ -49,19 +50,19 @@ class Featuregroup extends \common\models\Featuregroup
     public static function loadfeaturegroup()
    	{       
    			$featuregroup= Featuregroup::find()
-   			->where(['!=', 'group_status', 'Deactive'])
-   			->andwhere(['!=', 'trash', 'Deleted'])
-   			->all();
-   			$featuregroup=ArrayHelper::map($featuregroup,'group_id','group_name');
-   			return $featuregroup;
+     			->where(['!=', 'group_status', 'Deactive'])
+     			->andwhere(['!=', 'trash', 'Deleted'])
+     			->all();
+
+   			return ArrayHelper::map($featuregroup,'group_id','group_name');
    	}
 
-
-        // Status Image title
+  // Status Image title
     public function statusTitle($status)
     {           
-    if($status == 'Active')
-        return 'Activate';
+        if($status == 'Active')
+            return 'Activate';
+
         return 'Deactivate';
     }
 }

@@ -38,7 +38,7 @@ class CategoryController extends BaseController
         $customer_events = array();
         
         if ($customer_id != '') {
-            $customer_events = $this->category_model->getCustomerEvents($customer_id);
+            $customer_events = Website::getCustomerEvents($customer_id);
         }
 
         $event_type = $this->category_model->get_event_types();

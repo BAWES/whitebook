@@ -107,4 +107,15 @@ class Vendoritem extends \common\models\Vendoritem
     {
         return $status = ['Yes' => 'Yes', 'Pending' => 'Pending','Rejected'=>'Rejected'];
     }
+
+    public function getThemeName() {
+
+        $string = [];
+        
+        foreach ($this->vendorItemThemes as $theme) {
+              $string[] = ucfirst($theme->themeDetail->theme_name);
+        }
+        
+        return implode(', ',$string);
+    }
 }

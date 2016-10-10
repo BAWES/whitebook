@@ -41,17 +41,20 @@ class Package extends \common\models\Package
 
   public static function loadpackage()
   {
-    $packages=Package::find()->where(['package_status' => 'Active','trash'=>'Default'])
-    ->all();
-    return $package=ArrayHelper::map($packages,'package_id','package_name');
+    $packages = Package::find()
+      ->where(['package_status' => 'Active','trash'=>'Default'])
+      ->all();
+
+    return ArrayHelper::map($packages,'package_id','package_name');
   }
 
   public static function PackageData($pack_id)
   {
     if($pack_id){
-      $package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();
-    			//return $package_data;
-      return $package_data[0]['package_name'];
+      return Package::find()
+        ->where(['package_id' => $pack_id, 'package_status' => 'Active'])
+        ->one()
+        ->package_name;
     }else {
       return '----';
     }
@@ -59,27 +62,27 @@ class Package extends \common\models\Package
 
   public static function loadpackageall()
   {
-    return $packages=Package::find()->where(['package_status' => 'Active','trash'=>'default'])->all();
+    return Package::find()
+      ->where(['package_status' => 'Active','trash'=>'default'])
+      ->all();
   }
 
   public static function loadpackageprice($pack_id)
   {
-    $package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();
-
-    foreach($package_data as $pack => $data)
-    {
-      return  $package_price = $data['package_pricing'];
-    }
+    return Package::find()
+      ->where(['package_id' => $pack_id,'package_status' => 'Active'])
+      ->one()
+      ->package_pricing;
   }
 
   public static function packagecount($pack_id)
   {
-    return $package_data= Vendor::find()->where(['package_id' => $pack_id])->count();
+    return Vendor::find()->where(['package_id' => $pack_id])->count();
   }
 
   //All Gridview Status Filter
   public static function Activestatus()
   {
-    return $status = ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
+    return ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
   }
 }

@@ -112,40 +112,20 @@ class Website extends Model {
             ->all();
     }
 
-    public static function getSEOdata($table = '', $field = '', $value = '', $data = '') {
-        return $result = (new Query())
-            ->select($data)
-            ->from("{{%$table}}")
-            ->where([$field=>$value])
+    public static function get_event_types() {
+        return Eventtype::find()
+            ->select('type_name, type_id')
+            ->asArray()
             ->all();
     }
 
-    public static function get_event_types() {
-        return $event_type = Eventtype::find()->select('type_name,type_id')->asArray()->all();
-    }
-
-    public static function getCustomerEvents($customer_id) {
-      return $events = Events::find()->select(['event_id','event_name','event_type','event_date','slug'])
-                     ->where(['customer_id'=>$customer_id])
-                     ->orderBy('event_date ASC')
-                     ->asArray()
-                     ->all();
-    }
-
+    /**
+     * Returns event type list for specific customer 
+     * @param integer $customer_id
+     * @return array of event type 
+     */
     public static function get_user_event_types($customer_id) {
-		return Events::find()
-            ->select(['{{%events}}.event_name AS event_name','{{%events}}.event_id AS event_id'])
-            ->INNERJOIN('{{%event_type}}', '{{%event_type}}.type_name = {{%events}}.event_type')
-            ->where(['{{%events}}.customer_id'=>$customer_id])
-			->andwhere(['{{%event_type}}.trash'=>'Default'])
-			->orderby(['{{%events}}.event_id'=>SORT_DESC])
-			->asArray()
-			->all();			
-    }
-
-    // user event type birthday, wedding,etc
-    public static function get_user_event($customer_id) {
-        return $event_type = Events::find()
+		return $event_type = Events::find()
             ->select('event_type')
             ->where(['customer_id' => $customer_id])
             ->asArray()
@@ -153,17 +133,41 @@ class Website extends Model {
             ->all();
     }
 
-    // GET SEO DATA
-    public static function SEOdata($table_name='',$field='',$value='',$data='') {
+    /**
+     * Returns event list for specific customer 
+     * @param integer $customer_id
+     * @return array of event data 
+     */
+    public static function getCustomerEvents($customer_id) {
+        return Events::find()
+            ->select(['{{%events}}.*'])
+            ->INNERJOIN('{{%event_type}}', '{{%event_type}}.type_name = {{%events}}.event_type')
+            ->where(['{{%events}}.customer_id'=>$customer_id])
+            ->andwhere(['{{%event_type}}.trash'=>'Default'])
+            ->orderby(['{{%events}}.event_id'=>SORT_DESC])
+            ->asArray()
+            ->all();        
+    }
+
+    /**
+     * Returns the seo content from specific table 
+     * @param string $table_name, $field, $value, array $data
+     * @return array of seo data 
+     */
+    public static function SEOdata($table_name='', $field='', $value='', $data='') {
 
         if(is_array($data)){
-            $select = implode(',',$data);
+            $select = implode(',', $data);
         }
 
         if($table_name && $field && $value && $data){
-            return Website::getSEOdata($table_name,$field,$value,$select);
-        }else{
-            return;
+            
+            return (new Query())
+                ->select($data)
+                ->from("{{%".$table_name."}}")
+                ->where([$field => $value])
+                ->all();
+
         }
     }
 }

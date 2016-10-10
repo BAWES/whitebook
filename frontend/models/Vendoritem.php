@@ -30,36 +30,12 @@ class Vendoritem extends \common\models\Vendoritem
             ->one();
     }
 
-    public static function get_category_itemlist($item_id)
+    public static function get_category_from_itemlist($item_id)
     {
-        return VendorItemToCategory::find()
-            ->select('{{%category}}.category_id, {{%category}}.category_name, {{%category}}.category_name_ar') 
-            ->joinWith('category')
-            ->where(['IN', '{{%vendor_item_to_category}}.item_id', $item_id])
-            ->asArray()
-            ->all();
+       
     }
 
     public static function get_vendor_itemlist($itemid)
     {
-        if(!empty($itemid)){
-            foreach($itemid as $i) {
-                $vendorlist[]= Vendoritem::find()
-                ->select(['vendor_id'])
-                ->where(['item_id' => $i])
-                ->one();
-            }
-            foreach($vendorlist as  $ven) {
-                $k[]=$ven['vendor_id'];
-            }
-            $k1=(array_unique($k));
-            foreach ($k1 as $v) {
-                $vendor_result[]= Vendor::find()
-                ->select(['vendor_id','vendor_name'])
-                ->where(['vendor_id' => $v])
-                ->one();
-            }
-            return $vendor_result;
-        }
     }
 }

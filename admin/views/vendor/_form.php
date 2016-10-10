@@ -33,51 +33,55 @@ use yii\helpers\Url;
     <li><a href="#6" data-toggle="tab" class="twovalid2">Packages</a></li>
   </ul>
   <div class="tab-content">
-<!-- Begin First Tab -->
+
     <div class="tab-pane" id="1" >
-    <div class="form-group vendor_logo"><?= $form->field($model, 'vendor_logo_path',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))->fileInput()->hint('Logo Size 150 * 250') ?></div>
-    <div class="form-group"><?= $form->field($model, 'vendor_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
-	<div class="form-group"><?= $form->field($model, 'vendor_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
-	<?php if(!$model->isNewRecord) { ?>
+    	
+		<?= $form->field($model, 'vendor_logo_path',['options' => ['class' => 'form-group vendor_logo']])
+				->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))
+				->fileInput()
+				->hint('Logo Size 150 * 250') ?>
 
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100]) ?>
-	</div>
+    	<?= $form->field($model, 'vendor_name')
+    			->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>
+		
+		<?= $form->field($model, 'vendor_name_ar')
+				->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>	
 
-	<?php } else {?>
+		<?= $form->field($model, 'vendor_contact_email')
+				->textInput(['maxlength' => 100, 'autocomplete' => 'off']); ?>
 
-	<div class="form-group"><?= $form->field($model, 'vendor_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
-	<div class="form-group"><?= $form->field($model, 'vendor_password',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->passwordInput() ?></div>
-	<div class="form-group"><?= $form->field($model, 'confirm_password',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->passwordInput() ?></div>
+		<?= $form->field($model, 'vendor_password')->passwordInput() ?>
 
-	 <?php } ?>
-	<input type="hidden" name="email_valid" value="" />
-	 <div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
+		<?= $form->field($model, 'confirm_password')->passwordInput() ?>
 
-	<?php if($model->isNewRecord) { $count_vendor = 1;?>
-	<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
-	<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['multiple' => 'multiple','autocomplete' => 'off']) ?>
-	<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" />
-	</div>
-	<?php } else { ?>
-	<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
-		<label class="control-label" for="vendor-vendor_contact_number">Contact Phone Number</label>
-	<?php
-	$i =1;
-	$count_vendor =  count($vendor_contact_number);
-	foreach($vendor_contact_number as $contact_numbers)
-	{ ?>
-	<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "<div class='controls".$i."'>{input}<input type='button' name='remove' id='remove' value='Remove' onClick='removePhone(".$i.")' style='margin:5px;' /></div> {hint} {error}"])->textInput(['multiple' => 'multiple','autocomplete' => 'off','value'=>$contact_numbers]) ?>
+		<input type="hidden" name="email_valid" value="" />
+	 	<div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
 
-	<?php $i++; } ?>
-	<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" style="margin:5px;" />
-	</div>
-	<?php } ?>
+		<?php if($model->isNewRecord) { $count_vendor = 1;?>
+		<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
+		<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+		])->textInput(['multiple' => 'multiple','autocomplete' => 'off']) ?>
+		<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" />
+		</div>
+		<?php } else { ?>
+		<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
+			<label class="control-label" for="vendor-vendor_contact_number">Contact Phone Number</label>
+		<?php
+		$i =1;
+		$count_vendor =  count($vendor_contact_number);
+		foreach($vendor_contact_number as $contact_numbers)
+		{ ?>
+		<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "<div class='controls".$i."'>{input}<input type='button' name='remove' id='remove' value='Remove' onClick='removePhone(".$i.")' style='margin:5px;' /></div> {hint} {error}"])->textInput(['multiple' => 'multiple','autocomplete' => 'off','value'=>$contact_numbers]) ?>
 
-	<div class="form-group"><?= $form->field($model, 'vendor_contact_address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
-	<div class="form-group"><?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+		<?php $i++; } ?>
+		<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" style="margin:5px;" />
+		</div>
+		<?php } ?>
+
+		<?= $form->field($model, 'vendor_contact_address')->textArea(); ?>
+
+		<?= $form->field($model, 'vendor_contact_address_ar')->textArea(); ?>
+
 		<div class="form-group clearfix">
 			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
 			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
@@ -88,6 +92,7 @@ use yii\helpers\Url;
 				</div>
 			</div>
 		</div>
+
 		<div class="form-group clearfix">
 			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
 			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
@@ -145,160 +150,183 @@ use yii\helpers\Url;
 			</div>
 		</div>
 		
-		<div class="form-group"><?= $form->field($model, 'vendor_public_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]); ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_public_phone',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]); ?></div>
-		<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
-	</div>
+		<?= $form->field($model, 'vendor_public_email'); ?>
 
+		<?= $form->field($model, 'vendor_public_phone'); ?>
+
+		<div class="form-group" style="height: 10px;">
+			<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
+		</div>
+	</div>
 	<!--End First Tab -->
 
 	<div class="tab-pane" id="2">
 		<input type="hidden" id="test1" value="0" name="tests">
 		<input type='hidden' id='test' value='0' name='tests1'>
-		<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']) ?></div>
 		
-		<div class="form-group"><?= $form->field($model, 'vendor_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Active' => 'Active'])?></div>
-		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		<?= $form->field($model, 'category_id')
+				->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']); ?>
+		
+		<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
+
+		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+
 	</div>
 
 	<!--End Second Tab -->
 
     <div class="tab-pane" id="3">
-		<div class="form-group"><?= $form->field($model, 'vendor_return_policy',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea(['id'=>'text-editor']) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_return_policy_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea(['id'=>'text-editor-2']) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_fax',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
-		<div class="form-group"><?= $form->field($model, 'short_description',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
-		<div class="form-group"><?= $form->field($model, 'short_description_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_bank_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_bank_branch',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_account_no',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput() ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_emergency_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_emergency_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]) ?></div>
-		<div class="form-group"><?= $form->field($model, 'vendor_emergency_contact_number',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"]) ?></div>
-		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		
+		<?= $form->field($model, 'vendor_return_policy')->textArea(['id'=>'text-editor']); ?>
+
+		<?= $form->field($model, 'vendor_return_policy_ar')->textArea(['id'=>'text-editor-2']); ?>
+
+		<?= $form->field($model, 'vendor_fax')->textInput(); ?>
+		
+		<?= $form->field($model, 'short_description')->textArea(); ?>
+		
+		<?= $form->field($model, 'short_description_ar')->textArea(); ?>
+
+		<?= $form->field($model, 'vendor_bank_name')->textInput(); ?>
+
+		<?= $form->field($model, 'vendor_bank_branch')->textInput(); ?>
+
+		<?= $form->field($model, 'vendor_account_no')->textInput(); ?>
+		
+		<?= $form->field($model, 'vendor_emergency_contact_name'); ?>
+		
+		<?= $form->field($model, 'vendor_emergency_contact_email'); ?>
+
+		<?= $form->field($model, 'vendor_emergency_contact_number'); ?>
+		
+		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
 	</div>
-		<!--End Third Tab -->
+	<!--End Third Tab -->
 
 	<div class="tab-pane" id="4">
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_twitter',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput()->label('Vendor Twitter URL',['class'=> 'form-label-cap']) ?>
+	
+		<?= $form->field($model, 'vendor_twitter')
+				->textInput()
+				->label('Vendor Twitter URL', ['class'=> 'form-label-cap']); ?>
+	
+		<?= $form->field($model, 'vendor_instagram')
+				->textInput()
+				->label('Vendor Instagram URL', ['class'=> 'form-label-cap']) ?>
+	
+		<?= $form->field($model, 'vendor_googleplus')
+				->textInput()
+				->label('Vendor Google Plus URL', ['class'=> 'form-label-cap']); ?>
+
+		<?= $form->field($model, 'vendor_skype')
+				->textInput()
+				->label('Skype ID',['class'=> 'form-label-cap']); ?>
+
+		<div class="form-groups">
+			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		</div>
+ 	</div><!-- END tab-4 -->
+
+	<div class="tab-pane" id="5">
+		Email address list to get order notification
+		<br />
+		<br />
+
+		<table class="table table-bordered table-email-list">
+			<tbody>
+				<tr>
+					<th>Email address</th>
+					<th></th>
+				</tr>
+				<?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
+				<tr>
+					<td>
+						<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />
+					</td>
+					<td>
+						<button class="btn btn-danger" type="button">
+							<i class="glyphicon glyphicon-trash"></i>
+						</button>
+					</td>
+				</tr>
+				<?php } ?>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="2">
+						<button type="button" class="btn btn-primary btn-add-address">Add new address</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+
+		<div class="form-group">
+			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		</div>
 	</div>
 
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_instagram',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput()->label('Vendor Instagram URL',['class'=> 'form-label-cap']) ?>
+	<div class="tab-pane" id="6">
+		Vendor package list  
+		<br />
+		<br />
+
+		<div class="package-list-error"></div>
+
+		<table class="table table-bordered table-package-list">
+			<tbody>
+				<tr>
+					<th>Package</th>
+					<th>Start date</th>
+					<th>End date</th>
+					<th></th>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>
+						<select id="package_id" class="form-control">
+							<?php foreach ($packages as $key => $value) { ?>
+								<option value="<?= $key ?>">
+									<?= $value ?>
+								</option>
+							<?php } ?>
+						</select>
+					</td>
+					<td>
+						<input id="package_start_date" name="start_date" class="form-control" />
+					</td>
+					<td>
+						<input id="package_end_date" name="end_date" class="form-control" />
+					</td>	
+					<td>
+						<button type="button" class="btn btn-primary btn-add-package">
+							<i class="fa fa-plus"></i>
+						</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+
+		<div class="form-group">
+			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+			<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
+		</div>
 	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_googleplus',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput()->label('Vendor Google Plus URL',['class'=> 'form-label-cap']) ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_skype',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput()->label('Skype ID',['class'=> 'form-label-cap']) ?>
-	</div>
-
-	<div class="form-groups">
-	<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-	<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
- </div>
- </div>
-
- <div class="tab-pane" id="5">
-	Email address list to get order notification
-	<br />
-	<br />
-
-	<table class="table table-bordered table-email-list">
-		<tbody>
-			<tr>
-				<th>Email address</th>
-				<th></th>
-			</tr>
-			<?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
-			<tr>
-				<td>
-					<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />
-				</td>
-				<td>
-					<button class="btn btn-danger" type="button">
-						<i class="glyphicon glyphicon-trash"></i>
-					</button>
-				</td>
-			</tr>
-			<?php } ?>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="2">
-					<button type="button" class="btn btn-primary btn-add-address">Add new address</button>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
-
-	<div class="form-group">
-		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
-	</div>
-</div>
-
- <div class="tab-pane" id="6">
-	Vendor package list  
-	<br />
-	<br />
-
-	<div class="package-list-error"></div>
-
-	<table class="table table-bordered table-package-list">
-		<tbody>
-			<tr>
-				<th>Package</th>
-				<th>Start date</th>
-				<th>End date</th>
-				<th></th>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td>
-					<select id="package_id" class="form-control">
-						<?php foreach ($packages as $key => $value) { ?>
-							<option value="<?= $key ?>">
-								<?= $value ?>
-							</option>
-						<?php } ?>
-					</select>
-				</td>
-				<td>
-					<input id="package_start_date" name="start_date" class="form-control" />
-				</td>
-				<td>
-					<input id="package_end_date" name="end_date" class="form-control" />
-				</td>	
-				<td>
-					<button type="button" class="btn btn-primary btn-add-package">
-						<i class="fa fa-plus"></i>
-					</button>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
-
-	<div class="form-group">
-		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-		<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
-	</div>
-</div>
 
 <?php ActiveForm::end(); ?>	
 </div>
 <!--End Third Tab -->
 </div>
+
+<style>
+	.field-vendor-category_id .dropdown-toggle{
+		width: 100%;
+	}
+</style>
+
 <!-- BEGIN PLUGIN CSS -->
 <link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 
