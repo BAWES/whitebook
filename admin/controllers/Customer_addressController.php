@@ -19,8 +19,7 @@ class Customer_addressController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -35,9 +34,9 @@ class Customer_addressController extends Controller
                     'delete' => ['post'],
                 ],
             ],
-                'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
-               'rules' => [
+                'rules' => [
                    [
                        'actions' => [],
                        'allow' => true,
@@ -71,8 +70,10 @@ class Customer_addressController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
+        
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -108,11 +109,13 @@ class Customer_addressController extends Controller
                 return $this->redirect(['view', 'id' => $model->address_id]);
             } else {
                 return $this->render('create', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -129,19 +132,22 @@ class Customer_addressController extends Controller
     public function actionUpdate($id)
     {
         $access = Authitem::AuthitemCheck('2', '30');
+
         if (yii::$app->user->can($access)) {
+        
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->address_id]);
             } else {
                 return $this->render('update', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
+        } else {
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -157,13 +163,15 @@ class Customer_addressController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '30');
+        
         if (yii::$app->user->can($access)) {
+        
             $this->findModel($id)->delete();
-
             return $this->redirect(['index']);
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
+        } else {
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }

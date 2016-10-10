@@ -69,7 +69,7 @@ class ItemtypeController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -108,7 +108,7 @@ class ItemtypeController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -135,7 +135,7 @@ class ItemtypeController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -154,11 +154,11 @@ class ItemtypeController extends Controller
         $access = Authitem::AuthitemCheck('3', '21');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Item type deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Item type deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

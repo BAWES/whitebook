@@ -19,8 +19,7 @@ class ThemesController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
+        if (Yii::$app->user->isGuest) {
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -29,7 +28,7 @@ class ThemesController extends Controller
     public function behaviors()
     {
         return [
-                'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                    [
@@ -70,7 +69,7 @@ class ThemesController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -105,7 +104,7 @@ class ThemesController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->theme_name = strtolower($model->theme_name);               
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Theme added successfully!');
+                Yii::$app->session->setFlash('success', 'Theme added successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -114,7 +113,7 @@ class ThemesController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -140,7 +139,7 @@ class ThemesController extends Controller
                 $model->theme_name = strtolower($model->theme_name);
                 $model->save();
 
-                echo Yii::$app->session->setFlash('success', 'Theme updated successfully!');
+                Yii::$app->session->setFlash('success', 'Theme updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -150,7 +149,7 @@ class ThemesController extends Controller
                 ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -172,11 +171,11 @@ class ThemesController extends Controller
                  $model->trash = 'Deleted';
                  $model->load(Yii::$app->request->post());
                  $model->save();
-                 echo Yii::$app->session->setFlash('success', 'Theme deleted successfully!');
+                 Yii::$app->session->setFlash('success', 'Theme deleted successfully!');
 
                  return $this->redirect(['index']);
              } else {
-                 echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+                 Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
                  return $this->redirect(['site/index']);
              }

@@ -129,11 +129,11 @@ class SiteController extends Controller
 				$command=Admin::updateAll(['admin_password' => $password],['admin_email= '.$form['admin_email']]);
                 if($command)
                 {
-                    echo Yii::$app->session->setFlash('success', 'New password send to your registered email-id.');
+                    Yii::$app->session->setFlash('success', 'New password send to your registered email-id.');
                 }
                 return $this->redirect('recoverypassword');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'email is not registered!');
+                Yii::$app->session->setFlash('danger', 'email is not registered!');
 
                 return $this->redirect('recoverypassword');
             }
@@ -194,7 +194,7 @@ class SiteController extends Controller
         $query->scenario = 'profile';
         if ($query->load(Yii::$app->request->post())) {
             if ($query->save()) {
-                echo Yii::$app->session->setFlash('success', 'Successfully updated your profile!');
+                Yii::$app->session->setFlash('success', 'Successfully updated your profile!');
                 $vendoritemcnt = Vendoritem::itemcount();
                 $monthitemcnt = Vendoritem::itemmonthcount();
                 $dateitemcnt = Vendoritem::itemdatecount();
@@ -210,7 +210,7 @@ class SiteController extends Controller
         'vendorcnt' => $vendorcnt, 'vendormonth' => $vendormonth, 'vendorday' => $vendorday,
         'customercnt' => $customercnt,'vendorperiod' => $vendorperiod,  'customermonth' => $customermonth, 'customerday' => $customerday, ]);
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Something went wrong!');
+                Yii::$app->session->setFlash('danger', 'Something went wrong!');
 
                 return $this->render('profile', ['model' => $query]);
             }

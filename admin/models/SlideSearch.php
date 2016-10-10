@@ -42,8 +42,8 @@ class SlideSearch extends Slide
     public function search($params)
     {
         $query = Slide::find()
-        ->where(['!=', 'trash', 'Deleted'])
-		->orderBy('slide_id');
+            ->where(['!=', 'trash', 'Deleted'])
+    		->orderBy('slide_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

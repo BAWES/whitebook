@@ -58,12 +58,14 @@ class Role extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
+    
     public static function getRoleName($id)
     {
         $rolename= Role::find()
-        ->select ('role_name')
-        ->where(['=', 'role_id', $id])
-        ->one();
+            ->select ('role_name')
+            ->where(['=', 'role_id', $id])
+            ->one();
+
         return ($rolename['role_name']);
     }
 

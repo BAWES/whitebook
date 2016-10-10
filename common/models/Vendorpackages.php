@@ -4,10 +4,11 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+use common\models\Vendor;
 
 /**
 * This is the model class for table "{{%vendor_packages}}".
@@ -87,6 +88,14 @@ class Vendorpackages extends \yii\db\ActiveRecord
     public function getPackage()
     {
         return $this->hasOne(Package::className(), ['package_id' => 'package_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }
 
     /**

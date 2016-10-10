@@ -10,6 +10,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 use common\models\City;
 use common\models\Location;
+use common\models\Vendor;
 
 /**
 * This is the model class for table "{{%vendor_location}}".
@@ -84,6 +85,14 @@ class Vendorlocation extends \yii\db\ActiveRecord
     public function getLocation()
     {
         return $this->hasOne(Location::className(), ['id' => 'area_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }
 
     # relation with city table

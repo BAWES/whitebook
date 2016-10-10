@@ -16,8 +16,7 @@ class EventtypeController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -58,15 +57,20 @@ class EventtypeController extends Controller
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('4', '21');
+        
         if (yii::$app->user->can($access)) {
+            
             $searchModel = new EventtypeSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -95,18 +99,23 @@ class EventtypeController extends Controller
     public function actionCreate()
     {
         $access = Authitem::AuthitemCheck('1', '21');
+        
         if (yii::$app->user->can($access)) {
+        
             $model = new Eventtype();
             $model->scenario = 'insert';
+        
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['index']);
             } else {
                 return $this->render('create', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -124,16 +133,21 @@ class EventtypeController extends Controller
     {
         $access = Authitem::AuthitemCheck('2', '21');
         if (yii::$app->user->can($access)) {
+            
             $model = $this->findModel($id);
+            
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                
                 return $this->redirect(['index']);
+
             } else {
                 return $this->render('update', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+                ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -150,13 +164,15 @@ class EventtypeController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '21');
+        
         if (yii::$app->user->can($access)) {
+            
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Event type deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Event type deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

@@ -44,8 +44,8 @@ class AddressQuestionSearch extends AddressQuestion
     public function search($params)
     {
 		$query = Addressquestion::find()
-        ->where(['!=', 'whitebook_address_question.trash', 'Deleted'])
-		->orderBy('address_type_id');
+            ->where(['!=', 'whitebook_address_question.trash', 'Deleted'])
+    		->orderBy('address_type_id');
 
         $query->joinWith(['type' => function ($q) {
             $q->where('whitebook_address_type.type_name LIKE "%' . $this->typeName . '%"');

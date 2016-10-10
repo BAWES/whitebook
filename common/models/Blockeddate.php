@@ -4,10 +4,11 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+use common\models\Vendor;
 
 /**
 * This is the model class for table "{{%vendor_blocked_date}}".
@@ -27,6 +28,7 @@ class Blockeddate extends \yii\db\ActiveRecord
     * @inheritdoc
     */
     public $sunday,$monday,$tuesday,$wednesday,$thursday,$friday,$saturday;
+
     public static function tableName()
     {
         return '{{%vendor_blocked_date}}';
@@ -67,6 +69,14 @@ class Blockeddate extends \yii\db\ActiveRecord
     }
 
     /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
+    }
+
+    /**
     * @inheritdoc
     */
     public function attributeLabels()
@@ -88,32 +98,30 @@ class Blockeddate extends \yii\db\ActiveRecord
     public  function blockvalidation($attribute_name,$params)
     {
         if(!empty($this->block_date) ){
-            //echo '111';die;
+
             $block_date= date ("Y-m-d",strtotime("0 day", strtotime($this->block_date)));
 
-
             $model = Blockeddate::find()
-            ->where(['block_date'=>$block_date])
-            ->andwhere(['!=','block_id',$this->block_id])
-            ->one();
+                ->where(['block_date'=>$block_date])
+                ->andwhere(['!=','block_id',$this->block_id])
+                ->one();
+
             if($model){
                 $this->addError('block_date','Block date "'.$this->block_date.'" has already been taken');
             }
-
         }
     }
-
-
 
     public  function createblockvalidation($attribute_name,$params)
     {
         if(!empty($this->block_date) ){
+            
             $block_date= date ("Y-m-d",strtotime("0 day", strtotime($this->block_date)));
 
-
             $model = Blockeddate::find()
-            ->where(['block_date'=>$block_date])
-            ->one();
+                ->where(['block_date' => $block_date])
+                ->one();
+
             if($model){
                 $this->addError('block_date','Block date "'.$this->block_date.'" has already been taken');
             }

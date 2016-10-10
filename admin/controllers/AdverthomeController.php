@@ -76,7 +76,7 @@ class AdverthomeController extends Controller
             }
 
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -109,7 +109,7 @@ class AdverthomeController extends Controller
             $model = new Adverthome();
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Home advertisement script created successfully!');
+                Yii::$app->session->setFlash('success', 'Home advertisement script created successfully!');
 
                 return $this->redirect(['view', 'id' => $model->advert_id]);
             } else {
@@ -118,7 +118,7 @@ class AdverthomeController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -142,7 +142,7 @@ class AdverthomeController extends Controller
         $model1 = new Image();
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Advertisement details updated successfully!');
+                Yii::$app->session->setFlash('success', 'Advertisement details updated successfully!');
 
                 return $this->redirect(['update', 'id' => $model->advert_id]);
             } else {
@@ -151,7 +151,7 @@ class AdverthomeController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -171,11 +171,11 @@ class AdverthomeController extends Controller
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
             $user = Image::deleteAll('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads']);
-            echo Yii::$app->session->setFlash('success', 'Home ads deleted successfully!');
+            Yii::$app->session->setFlash('success', 'Home ads deleted successfully!');
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
