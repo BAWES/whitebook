@@ -12,7 +12,11 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="accesscontrol-update">
 
     <?= $this->render('_form', [
-        'model' => $model,'admin'=>$admin,'authitem'=>$authitem,'controller'=>$controller,'accesslist'=>$accesslist,
+        'model' => $model,
+        'admin' => $admin,
+        'authitem' => $authitem,
+        'controller' => $controller,
+        'accesslist' => $accesslist,
     ]) ?>
 
 </div>
