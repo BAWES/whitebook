@@ -69,11 +69,6 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
     {
         return [
             [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by',
-            ],
-            [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_datetime',
                 'updatedAtAttribute' => 'modified_datetime',
@@ -122,51 +117,15 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
         ];
     }
 
-
-    public static function getthemelist($t)
-    {
-        $themeid= Vendoritemthemes::find()
-        ->select(['theme_id','id'])
-        ->where(['=', 'item_id', $t])
-        ->one();
-        return $themeid=$themeid['theme_id'];
-    }
-
-
-
-    public static function getthemeid($t)
-    {
-        $id= Vendoritemthemes::find()
-        ->select(['id'])
-        ->where(['=', 'item_id', $t])
-        ->one();
-        return $id=$id['id'];
-    }
-
-    public static function themedetails($model)
-    {
-        $string = [];
-        if (isset($model->vendorItemThemes) && count($model->vendorItemThemes)>0) {
-            foreach ($model->vendorItemThemes as $theme) {
-                $string[] = ucfirst($theme->themeDetail->theme_name);
-            }
-        }
-        return implode(', ',$string);
-    }
-
-
     public function getThemeName($id)
     {
-        $theme_name= ItemTheme::find()
-        ->select('theme_name')
-        ->where(['!=', 'theme_status', 'Deactive'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-        ->andwhere(['theme_id' => $id])
-        ->one();
+        $theme_name = ItemTheme::find()
+            ->select('theme_name')
+            ->where(['!=', 'theme_status', 'Deactive'])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+            ->andwhere(['theme_id' => $id])
+            ->one();
+
         return $theme_name['theme_name'];
     }
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-
 }

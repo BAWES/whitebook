@@ -5,9 +5,11 @@
 *   http://mobile-menu.ma5.pl
 *   GitHub: https://github.com/ma-5/ma5-mobile-menu
 */
+
 jQuery(document).ready(function(){
     jQuery('body').append('<div class="ma5-mobile-menu-container"/>');
     jQuery('.ma5-menu-mobile').find('ul').clone().addClass('ma5-menu-panel').appendTo('.ma5-mobile-menu-container').find('ul').remove();
+
     jQuery('.ma5-toggle-menu').on('click touch', function () {
         if(jQuery(".plan_venues").hasClass("toggled")){
             jQuery(".plan_venues").removeClass("toggled");
@@ -15,7 +17,10 @@ jQuery(document).ready(function(){
             isClosed = false;
             // jQuery(".overlay").css("display","block");
         }
-        jQuery('html').toggleClass('ma5-menu-active')});
+
+        jQuery('html').toggleClass('ma5-menu-active');
+    });
+
     jQuery('.ma5-btn-enter').on('click touch', function () {
         jQuery('.ma5-menu-panel').removeClass('ma5-active-ul');
         jQuery('.ma5-menu-panel li').removeClass('ma5-active-li');
@@ -27,6 +32,7 @@ jQuery(document).ready(function(){
         jQuery('.ma5-menu-panel.' + itemParent).addClass('ma5-parent-enter');
         jQuery('.ma5-menu-panel.' + itemPath).addClass('ma5-active-enter');
     });
+
     jQuery('.ma5-leave-bar').on('click touch', function () {
         var itemParent = jQuery(this).parent().attr('class').replace("li", "ul").split('-');
         var splicedParent = itemParent.splice(-1, 1);
@@ -42,38 +48,39 @@ jQuery(document).ready(function(){
 });
 
 /* BEGIN RESPONSIVE FILTER NAVIGATION */
- var overlay = jQuery('.overlay');
- var isClosed = false;
+var overlay = jQuery('.overlay');
+var isClosed = false;
 
- jQuery(document).delegate('.filter_butt', 'click', function () {
+jQuery(document).delegate('.filter_butt', 'click', function () {
 
-     if(jQuery("html").hasClass("ma5-menu-active")) {
-         jQuery("html").removeClass("ma5-menu-active");
-     }
+    if(jQuery("html").hasClass("ma5-menu-active")) {
+        jQuery("html").removeClass("ma5-menu-active");
+    }
 
-     if (isClosed == true) {
-         overlay.hide();
-         jQuery(this).removeClass('ses_dct');
-         jQuery(this).addClass('ses_act');
-         isClosed = false;
-     } else {
-         overlay.show();
-         jQuery(this).removeClass('ses_act');
-         jQuery(this).addClass('ses_dct');
-         isClosed = true;
-     }
- });
+    if (isClosed == true) {
+        overlay.hide();
+        jQuery(this).removeClass('ses_dct');
+        jQuery(this).addClass('ses_act');
+        isClosed = false;
+    } else {
+        overlay.show();
+        jQuery(this).removeClass('ses_act');
+        jQuery(this).addClass('ses_dct');
+        isClosed = true;
+    }
+});
 
- jQuery(document).delegate('.search_header', 'click', function () {
-     if(jQuery("html").hasClass("ma5-menu-active")) {
-         jQuery("html").removeClass("ma5-menu-active");
-     }
+jQuery(document).delegate('.search_header', 'click', function () {
 
-     if (isClosed == true) {
-         overlay.hide();
-         jQuery(this).removeClass('ses_dct');
-         jQuery(this).addClass('ses_act');
-         isClosed = false;
+    if(jQuery("html").hasClass("ma5-menu-active")) {
+        jQuery("html").removeClass("ma5-menu-active");
+    }
+
+    if (isClosed == true) {
+        overlay.hide();
+        jQuery(this).removeClass('ses_dct');
+        jQuery(this).addClass('ses_act');
+        isClosed = false;
     } else {
         overlay.show();
         jQuery(this).removeClass('ses_act');
@@ -89,6 +96,7 @@ jQuery(document).ready(function(){
 //    jQuery(this).hide();
 //    filter();
 //})
+
 /* BEGIN CLEAR FILTER */
 jQuery(document).delegate('a#filter-clear', 'click', function(){
     jQuery(this).parents('.panel-default').find('label.label_check').removeClass('c_on');

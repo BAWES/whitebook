@@ -44,8 +44,10 @@ class AddressQuestion extends \common\models\AddressQuestion
     // Status Image title
     public function statusTitle($status)
     {           
-    if($status == 'Active')
-        return 'Activate';
+        if($status == 'Active')
+            return 'Activate';
         return 'Deactivate';
     }
+
+
 }

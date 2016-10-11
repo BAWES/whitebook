@@ -53,8 +53,7 @@ class VendorLogin extends Model
      * @return boolean whether the user is logged in successfully
      */
     public function login()
-    {
-		
+    {		
         if ($this->validate()) {			
             return Yii::$app->user->login($this->getUsers(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
@@ -81,12 +80,11 @@ class VendorLogin extends Model
         return $this->_user;
     }
     
-     public function attributeLabels()
+    public function attributeLabels()
     {
         return [
             'vendor_contact_email' => 'Email',
-            'vendor_password' => 'Password',
-            
+            'vendor_password' => 'Password',            
         ];
     }
 }

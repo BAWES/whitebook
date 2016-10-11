@@ -1,8 +1,10 @@
-  <?php
- use yii\helpers\Html;
- use common\models\Vendor;
- use common\models\Vendoritem;
- ?>
+<?php
+use yii\helpers\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use common\models\Vendor;
+use common\models\Vendoritem;
+?>
  	<!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->
 	<div class="page-sidebar" id="main-menu">
@@ -29,9 +31,13 @@
 		<!-- END MINI-PROFILE -->
 		<!-- BEGIN SIDEBAR MENU -->
 		<p class="menu-title">NAVIGATION</p>
-		<ul>
+		<ul>			
 			<li class="<?php if ($menu_act == 'SiteController'  && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
+			</li>
+
+			<li class="<?php if ($menu_act == 'SubOrderController') {echo "active"; } else  {echo "noactive";}?>">
+				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Sub Order</span>', ['sub-order/index'], ['class'=>'link-title']) ?>
 			</li>
 
             <li class="<?php if (in_array($menu_act,$first_menu)) {echo "open"; } else  {echo "noactive";}?>">
@@ -45,7 +51,7 @@
         				<?= Html::a('<i class="fa fa-certificate"></i><span class="title">Manage Item</span>', ['vendoritem/index'], ['class'=>'link-title']) ?>
         			</li>
                     <li class="<?php if ($menu_act == 'VendoritemcapacityexceptionController'  && $action == 'index') {echo "active"; } else  {echo "noactive";}?>">
-						<?= Html::a('<i class="fa fa-calendar-o"></i><span class="title">Exception Dates</span>', ['vendoritemcapacityexception/index'], ['class'=>'link-title']) ?>
+						<?= Html::a('<i class="fa fa-calendar-o"></i><span class="title">Exception Dates</span>', ['vendor-item-capacity-exception/index'], ['class'=>'link-title']) ?>
         			</li>
                 </ul>
             </li>
@@ -58,7 +64,7 @@
 				</a>
 				<ul class="sub-menu" style='<?= in_array($menu_act,$deliveryMenu)?"display:block":"" ?>'>
                     <li class="<?php if ($menu_act == 'VendorlocationController') {echo "active"; } else  {echo "noactive";}?>">
-        				<?= Html::a('<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', ['vendorlocation/edit'], ['class'=>'link-title']) ?>
+        				<?= Html::a('<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', ['vendorlocation/index'], ['class'=>'link-title']) ?>
         			</li>
         			<!-- Manage Address End-->
         			<li class="<?php if ($menu_act == 'DeliverytimeslotController') {echo "active"; } else  {echo "noactive";}?>">

@@ -1,10 +1,11 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\Website;
-
-//define('ACTION',Yii::$app->controller->action->id);
+use common\models\CustomerCart;
 $action = Yii::$app->controller->action->id;
+
 ?>
 <!-- header main start  -->
 <header id="top_header" class="ma5-page">
@@ -28,17 +29,17 @@ $action = Yii::$app->controller->action->id;
                     <div class="search_header col-xs-3">
                         <div class="input-group">
                             <div id="navigation-bar">
-                                <form id="search" method="post" action="#" onsubmit="return false;">
+                                <form id="search_form" method="get" action="<?=Url::toRoute(['/search/index'],true); ?>">
                                     <div id="input1" class="left_slider">
-                                        <input type="text" name="search-terms" id="search-terms2" onkeyup="show_close()" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>" class="search-box" autocomplete="off" >
-                                        <button class="js-search-cancel"> <?= Yii::t("frontend", "Cancel") ?> </button>
+                                        <input type="text" name="search" id="search-terms2" onkeyup="show_close()" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>" class="search-box" autocomplete="off">
+                                        <button class="js-search-cancel"> <?= Yii::t("frontend", "Cancel") ?></button>
                                         <button id="search-close" class="search-clear icon-search_clear" type="reset" ><?= Yii::t("frontend", "Clear") ?></button>
                                     </div>
                                     <div id="label1">
                                         <div id="search-labl" class="search_for"></div>
                                         <div id="search_list2"></div>
-                                        <label for="search-terms" id="search-label" class="search-lbl-mobile">
-                                        </label></div>
+                                        <label for="search-terms" id="search-label" class="search-lbl-mobile"></label>
+                                    </div>
                                 </form>
                             </div>
                         </div><!-- /input-group -->
@@ -53,13 +54,13 @@ $action = Yii::$app->controller->action->id;
                 <?php if (Yii::$app->user->isGuest) { ?>
 
                     <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK">
-                        My Events
+                        <?= Yii::t('frontend', 'My Events') ?>
                     </a>
 
                 <?php } else { ?>
 
                     <a href="<?= Url::toRoute(['/users/events','slug'=>'events' ]); ?>" title="THEWHITEBOOK">
-                        My Events
+                        <?= Yii::t('frontend', 'My Events') ?>
                     </a>
                 <?php } ?>
             </div>
@@ -69,7 +70,7 @@ $action = Yii::$app->controller->action->id;
                 <div class="col-md-6 col-xs-12 col-sm-6">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
+                            <span class="sr-only"><?= Yii::t('frontend', 'Toggle navigation') ?></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -91,7 +92,7 @@ $action = Yii::$app->controller->action->id;
                         <ul class="nav navbar-nav">
                             <li class="dropdown mega-dropdown">
                                 <?= Html::a(Yii::t('frontend', 'Plan'), ['plan/plans'], ['title' => Yii::t('frontend', 'Plan')]); ?>
-                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav">
+                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav plan_menu">
                                     <ul class="nav-list list-inline">
                                         <li>
                                             <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["plan/plan", 'slug' => 'venues']); ?>">
@@ -151,8 +152,65 @@ $action = Yii::$app->controller->action->id;
                                 </div>
                             </li>
 
-                            <li class="">
-                                <?= Html::a(Yii::t('frontend', 'Shop'), ['site/shop'], ['title' => Yii::t('frontend', 'Shop')]); ?>
+                            <li class="dropdown mega-dropdown">
+                                <?= Html::a(Yii::t('frontend', 'Shop'), ['shop/index'], ['title' => Yii::t('frontend', 'Shop')]); ?>
+                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav shop_menu">
+                                    <ul class="nav-list list-inline">
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["shop/products", 'slug' => 'venues']); ?>">
+                                                <span class="venus_icon"></span>
+                                                <span> <?php echo Yii::t('frontend', 'Venues'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title=" <?php echo Yii::t('frontend', 'Invitations'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'invitations']); ?>">
+                                                <span class="invit_icon"></span>
+                                                <span> <?php echo Yii::t('frontend', 'Invitations'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Food & Beverage'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'food-beverage']); ?>">
+                                                <span class="food_map"></span>
+                                                <span><?php echo Yii::t('frontend', 'Food & Beverage') ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Decor'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'decor']); ?>">
+                                                <span class="decor"></span>
+                                                <span><?php echo Yii::t('frontend', 'Decor'); ?> </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Supplies'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'supplies']); ?>">
+                                                <span class="supplies"></span>
+                                                <span><?php echo Yii::t('frontend', 'Supplies'); ?> </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Entertainment'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'entertainment']); ?>">
+                                                <span class="entert"></span>
+                                                <span><?php echo Yii::t('frontend', 'Entertainment'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title=" <?php echo Yii::t('frontend', 'Services'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'services']); ?>">
+                                                <span class="serv"></span>
+                                                <span> <?php echo Yii::t('frontend', 'Services'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a title="<?php echo Yii::t('frontend', 'Other'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'others']); ?>">
+                                                <span class="other"></span>
+                                                <span><?php echo Yii::t('frontend', 'Other'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'gift-favors']); ?>">
+                                                <span class="say_thank"></span>
+                                                <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
 
                             <li  class="<?php if ($action == "experience") { echo "active";} ?>">
@@ -166,7 +224,7 @@ $action = Yii::$app->controller->action->id;
                                 </a>
                             </li>
                             <li class="<?php if ($action == "directory") { echo "active";} ?>">
-                                <a href="<?= Url::toRoute('site/directory', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>">
+                                <a href="<?= Url::toRoute('/directory/index', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>">
                                     <?php echo Yii::t('frontend', 'Directory'); ?>
                                 </a>
                             </li>
@@ -178,15 +236,19 @@ $action = Yii::$app->controller->action->id;
 } ?>">
                         <?php if (!Yii::$app->user->isGuest) { ?>
                         <div class="user_name_cont">
-                            <p>Hi, <?= Yii::$app->user->identity->customer_name; ?>!</p>
+                            <p>
+                            <?= Yii::t('frontend', 'Hi, {customer_name}!', [
+                                    'customer_name' => Yii::$app->user->identity->customer_name
+                                ]) ?>
+                            </p>
                         </div>
                         <?php } ?>
 
         <?php if(Yii::$app->language == "en"){ ?>
-            <a  href="<?= Url::to(['site/index', 'language'=>'ar']) ?>"
+            <a  href="<?= Url::current(['language'=>'ar', ]) ?>"
                 style="position: absolute; top: 9px; right: <?= Yii::$app->user->isGuest?0:120 ?>px;" class="respo_hidde">العربية</a>
         <?php }else{ ?>
-            <a  href="<?= Url::to(['site/index', 'language'=>'en']) ?>"
+            <a  href="<?= Url::current(['language'=>'en']) ?>"
                 style="position: absolute; top: 9px; right: <?= Yii::$app->user->isGuest?0:120 ?>px;" class="respo_hidde">English</a>
         <?php } ?>
 
@@ -213,11 +275,16 @@ $action = Yii::$app->controller->action->id;
         <?php echo Yii::t('frontend', 'My Account'); ?>
     </a>
     <ul class="account-dropdown-menu">
+        <li><a href="<?php echo Url::to(['orders/index']); ?>" title="<?php echo Yii::t('frontend', 'My Orders'); ?>"><?php echo Yii::t('frontend', 'My Orders'); ?></a></li>
         <li><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'Account Settings'); ?>"><?php echo Yii::t('frontend', 'Account Settings'); ?></a></li>
         <li><a href="<?php echo Url::toRoute('/users/address', true); ?>" title="<?php echo Yii::t('frontend', 'Address Book'); ?>"><?php echo Yii::t('frontend', 'Address Book'); ?></a></li>
     </ul>
 </li>
-
+<li>
+    <a href="<?php echo Url::to(['cart/index']); ?>">
+        <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
+    </a>
+</li>    
 <li><a href="<?php echo Url::toRoute(['/users/events','slug'=>'events' ]) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
 <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
@@ -227,17 +294,17 @@ $action = Yii::$app->controller->action->id;
                     <div class="search_header">
                         <div class="input-group">
                             <div id="navigation-bar">
-                                <form id="search"  method="post" onsubmit="return false;">
-<?php
-if (!Yii::$app->user->isGuest) {
-    $search_div = '<div class="form-group has-feedback" style="margin-bottom:0px">';
-} else {
-    $search_div = '<div class="form-group has-feedback">';
-}
-echo $search_div;
-?>
+                                <form id="search_form" method="get" action="<?=Url::toRoute(['/search/index'],true); ?>">
+                                    <?php
+                                    if (!Yii::$app->user->isGuest) {
+                                        $search_div = '<div class="form-group has-feedback" style="margin-bottom:0px">';
+                                    } else {
+                                        $search_div = '<div class="form-group has-feedback">';
+                                    }
+                                    echo $search_div;
+                                    ?>
                                     <label for="search" class="sr-only"><?= Yii::t("frontend", "Search") ?></label>
-                                    <input type="search" class="form-control sear_ip_head" onkeyup="show_close3()" autofocus name="search_input_desk" id="search_input_header" autocomplete="off" title="search" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>">
+                                    <input type="search" class="form-control sear_ip_head" onkeyup="show_close3()" autofocus name="search" id="search_input_header" autocomplete="off" title="search" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>">
                                     <button id="search-close1" class="search-clear icon-search_clear" type="reset"><?= Yii::t("frontend", "Clear") ?></button>
                                     <a id="sear_button" href="#" class=" "></a>
                                     <input type="submit" id="sear_button_submit"/>
@@ -341,8 +408,8 @@ echo $search_div;
 <nav class="ma5-menu-mobile mobile-menu">
     <div class="navbar-collapse">
         <ul class="nav navbar-nav ma5-ul" style=" border:none;">
-            <li class="ma5-li-1"> <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Plan'); ?></a>
-
+            <li class="ma5-li-1"> 
+                <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Plan'); ?></a>
                 <ul class="ma5-ul-1 navbar-nav">
                     <li class="ma5-li-1-0">
                         <div class="ma5-leave-bar">
@@ -406,14 +473,78 @@ echo $search_div;
                             <span class="say_thank"></span>
                             <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
                         </a></li>
-
                 </ul>
             </li>
-            <li class="ma5-li-2"> <a class="ma5-path-to-active ma5-btn-enter" href="<?= Url::toRoute('site/shop', true); ?>"><?= Yii::t('frontend', 'Shop'); ?></a>
+            <li class="ma5-li-2"> 
+                <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Shop'); ?></a>
+                <ul class="ma5-ul-2 navbar-nav">
+                    <li class="ma5-li-2-0">
+                        <div class="ma5-leave-bar">
+                            <span class="ma5-btn-leave"></span>
+                            <a style="color:#000;" class="ma5-path-to-active ma5-btn-enter" href="#node1">
+                                <?= Yii::t('frontend', 'Back'); ?>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["shop/products", 'slug' => 'venues']); ?>">
+                            <span class="venus_icon"></span>
+                            <span> <?php echo Yii::t('frontend', 'Venues'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title=" <?php echo Yii::t('frontend', 'Invitations'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'invitations']); ?>">
+                            <span class="invit_icon"></span>
+                            <span> <?php echo Yii::t('frontend', 'Invitations'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Food & Beverage'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'food-beverage']); ?>">
+                            <span class="food_map"></span>
+                            <span><?php echo Yii::t('frontend', 'Food & Beverage') ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Decor'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'decor']); ?>">
+                            <span class="decor"></span>
+                            <span><?php echo Yii::t('frontend', 'Decor'); ?> </span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Supplies'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'supplies']); ?>">
+                            <span class="supplies"></span>
+                            <span><?php echo Yii::t('frontend', 'Supplies'); ?> </span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Entertainment'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'entertainment']); ?>">
+                            <span class="entert"></span>
+                            <span><?php echo Yii::t('frontend', 'Entertainment'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title=" <?php echo Yii::t('frontend', 'Services'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'services']); ?>">
+                            <span class="serv"></span>
+                            <span> <?php echo Yii::t('frontend', 'Services'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Other'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'others']); ?>">
+                            <span class="other"></span>
+                            <span><?php echo Yii::t('frontend', 'Other'); ?></span>
+                        </a>
+                    </li>
+                    <li class="ma5-li-2-1">
+                        <a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["shop/products", 'slug' => 'gift-favors']); ?>">
+                            <span class="say_thank"></span>
+                            <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('/themes/index', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>
-            <li class="ma5-li-3"><a href="<?= Url::toRoute('site/directory', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
+            <li class="ma5-li-3"><a href="<?= Url::toRoute('/directory/index', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
 
 
             <div class="logout_part" style="border:none;">
@@ -423,17 +554,40 @@ echo $search_div;
     } ?>"><a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'About Us'); ?>"><?php echo Yii::t('frontend', 'About Us'); ?></a></li>
                     <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a></li>
 <?php } else { ?>
-                    <li class="<?php if ($action == "account-settings") {
-        echo "active";
-    } ?>"><a href="<?= Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'My Account'); ?>"><?php echo Yii::t('frontend', 'My Account'); ?></a></li>
-                    <li><a href="<?= Url::toRoute(['/users/events','slug'=>'events']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
-                    <li><a href="<?= Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
+        
+        <li>
+            <a href="<?php echo Url::to(['cart/index']); ?>">
+                <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
+            </a>
+        </li>  
+
+         <li class="<?php if ($action == "account-settings") { echo "active"; } ?>">
+            <a href="<?= Url::toRoute('/users/account_settings', true); ?>">
+                <?php echo Yii::t('frontend', 'My Account'); ?>
+            </a>
+        </li>
+
+        <li>
+            <a href="<?php echo Url::to(['orders/index']); ?>">
+                <?php echo Yii::t('frontend', 'My Orders'); ?>
+            </a>
+        </li>
+
+        <li><a href="<?= Url::toRoute(['/users/events','slug'=>'events']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
+
+        <li>
+            <a href="<?php echo Url::toRoute('/users/address', true); ?>">
+                <?php echo Yii::t('frontend', 'Address Book'); ?>
+            </a>
+        </li>
+
+        <li><a href="<?= Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
 
         <?php if(Yii::$app->language == "en"){ ?>
-        <li class=""><a href="<?= Url::to(['site/index', 'language'=>'ar']) ?>">العربية</a></li>
+        <li class=""><a href="<?= Url::current(['language'=>'ar']) ?>">العربية</a></li>
         <?php }else{ ?>
-        <li class=""><a href="<?= Url::to(['site/index', 'language'=>'en']) ?>">English</a></li>
+        <li class=""><a href="<?= Url::current(['language'=>'en']) ?>">English</a></li>
         <?php } ?>
 
             </div>
@@ -489,9 +643,9 @@ echo $search_div;
             //jQuery('#search_input_header').focus();
             return false;
         });
-        jQuery("#search_input_header").click(function () {
-            return false;
-        });
+//        jQuery("#search_input_header").click(function () {
+//            return false;
+//        });
         jQuery('#desk-search-label').css({'position': 'absolute'});
     });
     /*jQuery('.container_eventslider').click(function(){

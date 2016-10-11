@@ -75,7 +75,7 @@ class SiteinfoController extends Controller
                 $this->redirect('create');
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['index']);
         }
@@ -129,7 +129,7 @@ class SiteinfoController extends Controller
                 }
 
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Application info created successfully!');
+                Yii::$app->session->setFlash('success', 'Application info created successfully!');
                 Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' created site information.', __METHOD__);
 
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -139,7 +139,7 @@ class SiteinfoController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -163,7 +163,7 @@ class SiteinfoController extends Controller
 
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Application info updated successfully!');
+                Yii::$app->session->setFlash('success', 'Application info updated successfully!');
                 Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' updated site information.', __METHOD__);
 
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -173,7 +173,7 @@ class SiteinfoController extends Controller
                     'model' => $model,
                 ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -195,7 +195,7 @@ class SiteinfoController extends Controller
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

@@ -29,8 +29,7 @@ class CustomerController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -71,7 +70,9 @@ class CustomerController extends Controller
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('4', '26');
+        
         if (yii::$app->user->can($access)) {
+            
             $searchModel = new CustomerSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -82,8 +83,10 @@ class CustomerController extends Controller
                 'dataProvider' => $dataProvider,
                 'count' => $count,
             ]);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -112,13 +115,10 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
-		    $command=Customer::updateAll(['message_status' => 0],'customer_id= '.$id);
-
-        $model1 = CustomerAddress::find()
-        ->where('customer_id = :customer_id', [':customer_id' => $id])->one();
+		    $command = Customer::updateAll(['message_status' => 0],'customer_id= '.$id);
 
         return $this->render('view', [
-            'model' => $this->findModel($id), 'model1' => $model1,
+            'model' => $this->findModel($id)
         ]);
     }
 
@@ -169,21 +169,21 @@ class CustomerController extends Controller
         $addresses = array();
 
         $result = CustomerAddress::find()
-        ->select('whitebook_city.city_name, whitebook_location.location, whitebook_customer_address.*')
-        ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
-        ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
-        ->where('customer_id = :customer_id', [':customer_id' => $id])
-        ->asArray()
-        ->all();
+          ->select('whitebook_city.city_name, whitebook_location.location, whitebook_customer_address.*')
+          ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
+          ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
+          ->where('customer_id = :customer_id', [':customer_id' => $id])
+          ->asArray()
+          ->all();
 
         foreach($result as $row) {
 
           $row['questions'] = CustomerAddressResponse::find()
-          ->select('aq.question, whitebook_customer_address_response.*')
-          ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
-          ->where('address_id = :address_id', [':address_id' => $row['address_id']])
-          ->asArray()
-          ->all();
+            ->select('aq.question, whitebook_customer_address_response.*')
+            ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
+            ->where('address_id = :address_id', [':address_id' => $row['address_id']])
+            ->asArray()
+            ->all();
 
           $addresses[] = $row;
         }
@@ -245,7 +245,7 @@ class CustomerController extends Controller
                     Yii::info('[Customer Created] Admin created customer '.$model->customer_name, __METHOD__);
                 }
 
-                echo Yii::$app->session->setFlash('success', 'Customer detail added successfully!');
+                Yii::$app->session->setFlash('success', 'Customer detail added successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -254,8 +254,9 @@ class CustomerController extends Controller
                     'model' => $model, 
                 ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -286,7 +287,7 @@ class CustomerController extends Controller
                
                 $model->save();
                
-                echo Yii::$app->session->setFlash('success', 'Customer detail updated successfully!');
+                Yii::$app->session->setFlash('success', 'Customer detail updated successfully!');
 
                 Yii::info('[Customer Updated] Admin updated customer '.$model->customer_name.' information', __METHOD__);
 
@@ -300,7 +301,8 @@ class CustomerController extends Controller
 
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -319,19 +321,24 @@ class CustomerController extends Controller
       {
           $access = Authitem::AuthitemCheck('3', '26');
           if (yii::$app->user->can($access)) {
+              
               $model = $this->findModel($id);
+              
               if ($this->findModel($id)->delete()) {
 
-                  echo Yii::$app->session->setFlash('success', 'Customer deleted successfully!');
+                  Yii::$app->session->setFlash('success', 'Customer deleted successfully!');
 
                   return $this->redirect(['index']);
               }
+
           } else {
-              echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+              
+              Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
               return $this->redirect(['site/index']);
           }
       }
+
     /**
      * Finds the Customer model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -350,13 +357,17 @@ class CustomerController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
     public function actionBlock()
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
+    
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
+    
         $command=Customer::updateAll(['customer_status' => $status],'customer_id= '.$data['id']);
+    
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
@@ -417,12 +428,13 @@ class CustomerController extends Controller
 
                 return $this->redirect(['index']);
             } else {
-                return $this->render('news', [
-                'model' => $model, 'customer_email' => $customer_email,
-            ]);
+              return $this->render('news', [
+                'model' => $model, 
+                'customer_email' => $customer_email
+              ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

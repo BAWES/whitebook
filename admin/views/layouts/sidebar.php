@@ -1,4 +1,11 @@
- <?php use yii\helpers\Html; ?>
+<?php 
+
+use yii\helpers\Html; 
+use admin\models\Vendoritem;
+
+$item_pending_count = Vendoritem::item_pending_count();
+
+?>
 <!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->
 	<div class="page-sidebar" id="main-menu">
@@ -17,19 +24,27 @@
 		$menu = explode('\\',$controller);
 		$menu_act = $menu[2];
 		$first_menu = array('SiteinfoController','ContactsController','SocialinfoController',
-				   'SlideController','RoleController','AdminController','AccesscontrolController','FaqController','AdverthomeController');
+				   'SlideController','RoleController','AdminController','AccesscontrolController','FaqController','AdverthomeController', 'OrderStatusController', 'PaymentGatewayController');
 		$second_menu = array('CountryController','CityController','LocationController','AddresstypeController','AddressquestionController');
 		$third_menu = array('CategoryController');
 		$fourth_menu = array('FeaturegroupController','EventtypeController','ThemesController','ItemtypeController','PriorityitemController',);
 		$fifth_menu = array('PackageController','VendorController','VendoritemController','PrioritylogController');
 		$seventh_menu = array('CategoryadsController','AdverthomeController');
 		$eighth_menu = array('CustomerController');
-
+		$nineth_menu = array('ReportController');
 		?>
 		 <p class="menu-title">NAVIGATION</p>
 		<ul>
 			<li class="<?php if ($menu_act == 'SiteController') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
+			</li>
+			
+			<li class="<?php if ($menu_act == 'VendorItemPendingController') { echo "active"; } else { echo "noactive"; } ?>">
+				<?= Html::a('<i class="glyphicon glyphicon-send"></i><span class="title">Item Pending</span><span class="item_pending_count">'.$item_pending_count.'</span>', ['vendor-item-pending/index'], ['class'=>'link-title']) ?>
+			</li>
+
+			<li class="<?php if ($menu_act == 'OrderController') {echo "active"; } else  {echo "noactive";}?>">
+				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Order</span>', ['order/index'], ['class'=>'link-title']) ?>
 			</li>
 			<li class="<?php if (in_array($menu_act,$first_menu)) {echo "open"; } else  {echo "noactive";}?>">
 				<a href="javascript:;">
@@ -66,7 +81,13 @@
 						<?= Html::a('Manage FAQ', ['faq/index'], ['class'=>'link-title']) ?>
 					</li>
 					<li class="<?php if ($menu_act == 'AdverthomeController') {echo "active"; } else  {echo "noactive";}?>">
-					<?= Html::a('Home Ads', ['adverthome/index'], ['class'=>'link-title']) ?>
+						<?= Html::a('Home Ads', ['adverthome/index'], ['class'=>'link-title']) ?>
+					</li>
+					<li class="<?php if ($menu_act == 'OrderStatusController') {echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Order Status', ['order-status/index'], ['class'=>'link-title']) ?>
+					</li>
+					<li class="<?php if ($menu_act == 'PaymentGatewayController') {echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Payment Gateway', ['payment-gateway/index'], ['class'=>'link-title']) ?>
 					</li>
 				</ul>
 			</li>
@@ -168,7 +189,7 @@
 
 			<li class="<?php if (in_array($menu_act,$eighth_menu)) {echo "open"; } else  {echo "noactive";}?>">
 				<a href="javascript:;">
-					<i class="fa fa-bullseye"></i>
+					<i class="glyphicon glyphicon-user"></i>
 					<span class="title">Manage Customer</span>
 					<span class="<?php if (in_array($menu_act,$eighth_menu)) {echo "arrow open"; } else  {echo "arrow";}?>"></span>
 				  </a>
@@ -178,6 +199,23 @@
 					</li>
 				</ul>
 			</li>
+
+			<li class="<?php if (in_array($menu_act, $nineth_menu)) { echo "open"; } else { echo "noactive";} ?>">
+				<a href="javascript:;">
+					<i class="fa fa-bullseye"></i>
+					<span class="title">Reports</span>
+					<span class="<?php if (in_array($menu_act,$nineth_menu)) {echo "arrow open"; } else { echo "arrow";}?>"></span>
+				</a>
+				<ul class="sub-menu">
+					<li class="<?php if(($menu_act=='ReportController') && ($action == 'package')){echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Vendor packages', ['report/package'], ['class'=>'link-title']) ?>
+					</li>
+					<li class="<?php if(($menu_act=='ReportController') && ($action == 'commission')){echo "active"; } else  {echo "noactive";}?>">
+						<?= Html::a('Vendor commission', ['report/commission'], ['class'=>'link-title']) ?>
+					</li>
+				</ul>
+			</li>
+
 			<li class="<?php if ($menu_act == 'CmsController') {echo "active"; } else  {echo "noactive";}?>">
 				<?= Html::a('<i class="fa fa-tasks"></i><span class="title">Static Pages</span>', ['cms/index'], ['class'=>'link-title']) ?>
 			</li>

@@ -3,7 +3,10 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\base;
+use yii\web\View;
 use yii\widgets\ActiveForm;
+use common\models\Location;
+use frontend\models\Addresstype;
 
 $this->title ='Address Book | Whitebook';
 
@@ -25,36 +28,82 @@ $this->title ='Address Book | Whitebook';
             <div class="col-md-8">
                 <div class="accont_informations">
                     <div class="accont_info">                        
-                        <div class="row">
+                        <table class="table table-bordered">
                             <?php foreach ($addresses as $address) { ?>
-                            	<div class="col-lg-4">
+                            <tr>
+                            	<td>
                             		<div class="address_box">
                             			
-                            			<a data-id="<?= $address['address_id'] ?>" class="address_delete pull-right">
-                            				<i class="glyphicon glyphicon-trash"></i>
-                            			</a>
+                                        <a data-id="<?= $address['address_id'] ?>" class="address_delete btn pull-right">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                        </a>
 
-                            			<?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
+                                        <a href="<?= Url::to(['users/edit-address', 'address_id' => $address['address_id']]) ?>" class="btn-edit btn-primary btn pull-right" >
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        </a>
+                                        
+                                        <?php if($address['address_name']) { ?>
+                                            <b>Address Name:</b> <br />
+                                            <?= $address['address_name'] ?>
+                                            <br />
+                                            <br />
+                                        <?php } ?>
+
+                                        <!-- address type -->
+                                        <b>Address Type:</b> <br />
+                                        <?= Addresstype::type_name($address['address_type_id']); ?>
+
+                                        <br />
+                                        <br />
+
+                                        <!-- address -->
+                                        <b>Address:</b> <br />
+                                        <?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
                             			
-                            			<?= $address['location']?$address['location'].'<br />':'' ?>
+                                        <!-- address question response -->
+                                        <?php if($address['questions']) { ?>
+                                        <ul>
+                                        <?php foreach ($address['questions'] as $row) { ?>
+                                            <li>
+                                                <br />
+                                                <b><?= $row['question'] ?></b>
+                                                <br />
+                                                <?= $row['response_text'] ?>
+                                            </li>
+                                        <?php } ?>
+                                        <?php } ?>
+                                        </ul>
+
+                                        <br />
+
+                                        <b>Area:</b> <br />
+                                        <?php 
+
+                                        if(Yii::$app->language == 'en') { 
+                            			    echo $address['location']?$address['location'].'<br />':'';
+                                        } else {
+                                            echo $address['location_ar']?$address['location_ar'].'<br />':'';
+                                        }
                             			
-                            			<?= $address['city_name']?$address['city_name'].'<br />':'' ?>
-                            			
-                            			<?php if($address['questions']) { ?>
-                            			<h4>Questions</h4>
-                            			<ul>
-                            			<?php foreach ($address['questions'] as $row) { ?>
-                            				<li>
-                            					<b><?= $row['question'] ?></b>
-                            					<p><?= $row['response_text'] ?></p>
-                            				</li>
-                            			<?php } ?>
-                            			<?php } ?>
-                            			</ul>
+                            			?>
+                                        
+                                        <br />
+
+                                        <b>City:</b> <br />
+                                        <?php 
+
+                                        if(Yii::$app->language == 'en') { 
+                                            echo $address['city_name']?$address['city_name'].'<br />':'';
+                                        } else {
+                                            echo $address['city_name_ar']?$address['city_name_ar'].'<br />':'';
+                                        }
+                                        
+                                        ?>
                             		</div>
-                            	</div>
+                            	</td>
+                            </tr>    
                             <?php } ?>
-                            </div>
+                            </table>
 
                             <div class="clearfix"></div>
 
@@ -62,7 +111,7 @@ $this->title ='Address Book | Whitebook';
 
                             <center class="submitt_buttons">
                             <a class="btn btn-default" data-toggle="modal" data-target="#modal_create_address">
-                            	Add new address
+                            	<?php echo Yii::t('frontend','Add new address') ?>
                             </a>
                             </center>
                         </div>
@@ -74,7 +123,6 @@ $this->title ='Address Book | Whitebook';
     </div>
 </section>
 
-
 <?php $form = ActiveForm::begin(); ?>
 
 <div class="modal fade" id="modal_create_address">
@@ -84,21 +132,23 @@ $this->title ='Address Book | Whitebook';
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Add new address</h4>
+        <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
       </div>
       <div class="modal-body" style="background: white; margin-top: 0;">
 
-			<?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, ['prompt'=>'Select...']); ?>
+			<?= $form->field($customer_address_modal, 'address_name'); ?>
+
+            <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, 
+                    ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
+                ); ?>
 
 			<div class="question_wrapper">
 				<!-- question will go here -->
 			</div>
 
-			<?= $form->field($customer_address_modal, 'country_id')->dropDownList($country, ['prompt'=>'Select...']); ?>
-
-			<?= $form->field($customer_address_modal, 'city_id')->dropDownList([], ['prompt'=>'Select...']); ?>
-
-			<?= $form->field($customer_address_modal, 'area_id')->dropDownList([], ['prompt'=>'Select...']); ?>
+			<?= $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(), 
+                    ['class' => 'selectpicker', 'data-live-search' => 'true', 'data-size' => 10]
+                ); ?>
 
 			<div class="form-group">
 				<?= $form->field($customer_address_modal, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
@@ -106,11 +156,15 @@ $this->title ='Address Book | Whitebook';
 			</div>
 
 	  <div class="modal-footer submitt_buttons">
-        <button type="submit" class="btn btn-submit-address btn-default">Submit</button>
+        <button type="submit" class="btn btn-submit-address btn-default">
+            <?= Yii::t('frontend', 'Submit') ?>
+        </button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
 
 <?php 
 
@@ -118,81 +172,75 @@ ActiveForm::end();
     
 $this->registerJs("
 
-    function add_address() {
+    jQuery('.btn-submit-address').click(function(e){
 
+        jQuery('.has-error').removeClass('has-error');
+        jQuery('.has-success').removeClass('has-success');
 
+        //check all textarea 
+        jQuery('#modal_create_address textarea').each(function(){
+            if(!jQuery(this).val()){
+                jQuery(this).parent().addClass('has-error');
+            }
+        })
 
-        $('#modal_create_address form').submit();    
-    }
-    
+        //check address type
+        var address_type_id = jQuery('#customeraddress-address_type_id').val();
 
-    $(function (){
+        if(!address_type_id) {
+            jQuery('.field-customeraddress-address_type_id').addClass('has-error');
+        }
 
-    	$('.address_delete').click(function(){
-    		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-            var path = '".Url::to(['/users/address_delete'])."';
+        //address name
+        var address_name = jQuery('#customeraddress-address_name').val();
 
-            var address_id = $(this).attr('data-id');
+        if(!address_name) {
+            jQuery('.field-customeraddress-address_name').addClass('has-error');
+        }
 
-            $.ajax({
-                type: 'POST',
-                url: path, //url to be called
-                data: { address_id: address_id, _csrf : csrfToken}, //data to be send
-                success: function( data ) {
-                     $('#customeraddress-city_id').html(data);
-                }
-            });
-
-            $(this).parent().parent().remove();
-    	});
-
-    	$('#customeraddress-address_type_id').change(function (){
-            var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-            var address_type_id = $('#customeraddress-address_type_id').val();
-            var path = '".Url::to(['/users/questions'])."';
-            
-            $.ajax({
-                type: 'POST',
-                url: path, //url to be called
-                data: { address_type_id: address_type_id ,_csrf : csrfToken}, //data to be send
-                success: function( data ) {
-                     $('.question_wrapper').html(data);
-                }
-            });
-        });
-
-        $('#customeraddress-country_id').change(function (){
-            var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-            var country_id = $('#customeraddress-country_id').val();
-            var path = '".Url::to(['/site/city'])."';
-            
-            $.ajax({
-                type: 'POST',
-                url: path, //url to be called
-                data: { country_id: country_id ,_csrf : csrfToken}, //data to be send
-                success: function( data ) {
-                    $('#customeraddress-city_id').html(data);
-                    $('#customeraddress-city_id').selectpicker('refresh');
-                }
-            });
-        });
-    
-        $('#customeraddress-city_id').change(function (){
-            var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-            var city_id = $('#customeraddress-city_id').val();
-            var path = '".Url::to(['/site/area'])."';
-            
-            $.ajax({
-                type: 'POST',
-                url: path, //url to be called
-                data: { city_id: city_id ,_csrf : csrfToken}, //data to be send
-                success: function( data ) {
-                    $('#customeraddress-area_id').html(data);
-                    $('#customeraddress-area_id').selectpicker('refresh');
-                }
-            });
-         });
+        if(jQuery('#modal_create_address .has-error').length > 0){
+            return false;
+            e.preventDefault();
+            e.stopPropagation();
+        }
     });
-");
+
+	jQuery('.address_delete').click(function(){
+
+		var csrfToken = jQuery('meta[name=\"csrf-token\"]').attr('content');
+        var path = '".Url::to(['/users/address_delete'])."';
+
+        var address_id = jQuery(this).attr('data-id');
+
+        jQuery.ajax({
+            type: 'POST',
+            url: path, //url to be called
+            data: { address_id: address_id, _csrf : csrfToken}, //data to be send
+            success: function( data ) {
+                 jQuery('#customeraddress-city_id').html(data);
+            }
+        });
+
+        jQuery(this).parent().parent().remove();
+	});
+
+    //.field-customeraddress-address_type_id select
+    jQuery('#customeraddress-address_type_id').on('change', function(){
+       
+        var csrfToken = jQuery('meta[name=\"csrf-token\"]').attr('content');
+        var address_type_id = jQuery('#customeraddress-address_type_id').val();
+        var path = '".Url::to(['/users/questions'])."';
+        
+        jQuery.ajax({
+            type: 'POST',
+            url: path, //url to be called
+            data: { address_type_id: address_type_id ,_csrf : csrfToken}, //data to be send
+            success: function( data ) {
+                 jQuery('.question_wrapper').html(data);
+            }
+        });
+    });
+
+", View::POS_READY);
 
     

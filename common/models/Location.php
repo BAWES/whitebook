@@ -39,7 +39,8 @@ class Location extends \yii\db\ActiveRecord
         return [
             [['country_id', 'city_id', 'location',], 'required'],
             [['country_id', 'city_id'], 'integer'],
-            [['location'], 'string', 'max' => 50]
+            [['location', 'location_ar'], 'string', 'max' => 50],
+            [['cityName'], 'safe']
         ];
     }
 
@@ -51,8 +52,10 @@ class Location extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'country_id' => 'Country Name',
-            'city_id' => 'City Name',
+            'city_id' => 'Governorate',
+            'cityName' => 'Governorate',
             'location' => 'Area',
+            'location_ar' => 'Area - Arabic',
             'status'=>'Status',
         ];
     }
@@ -65,6 +68,10 @@ class Location extends \yii\db\ActiveRecord
         return $this->hasOne(City::className(), ['city_id' => 'city_id']);
     }
 
+    public function getCityName() {
+        return $this->city->city_name;
+    }
+ 
     /**
     * @return \yii\db\ActiveQuery
     */
@@ -113,6 +120,40 @@ class Location extends \yii\db\ActiveRecord
         $location=ArrayHelper::map($location,'id','location');
         return $location;
     }
+
+    public static function areaOptions(){
+        
+        $options = [];
+
+        $cities = City::find()->where(['status'=>'Active', 'trash' => 'Default'])->all();
+
+        foreach ($cities as $key => $value) { 
+                       
+            $areas = Location::find()
+                ->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $value['city_id']])
+                ->all();
+
+            $child_options = [];
+
+            foreach ($areas as $area) {
+
+                if(Yii::$app->language == 'en') {
+                    $child_options[$area->id] = $area->location;
+                } else {
+                    $child_options[$area->id] = $area->location_ar;
+                }
+            }            
+
+            if(Yii::$app->language == 'en') {
+                $options[$value->city_name] = $child_options;
+            }else{
+                $options[$value->city_name_ar] = $child_options;
+            }
+        }
+
+        return $options;
+    }
+
     public static function getlocation($id)
     {
         $model = Location::find()->where(['id'=>$id])->one();
@@ -130,7 +171,8 @@ class Location extends \yii\db\ActiveRecord
     public function statusTitle($status)
     {
         if($status == 'Active')
-        return 'Activate';
+            return 'Activate';
+
         return 'Deactivate';
     }
 }

@@ -6,6 +6,7 @@ use common\models\Vendoritem;
 use common\models\Category;
 use yii\grid\GridView;
 use yii\web\view;
+use common\components\CFormatter;
 
 ?>
 <!-- coniner start -->
@@ -77,37 +78,49 @@ echo Breadcrumbs::widget([
 
 <?php
 
-$cust_id = Yii::$app->user->identity->customer_id;
+$cust_id = Yii::$app->user->getId();
 
 foreach ($cat_exist as $key => $value1) {
 
-$cat_list1=Vendoritem::find()->select(['{{%vendor_item}}.item_id'])
- ->join('INNER JOIN','{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
- ->where(['{{%vendor_item}}.item_status'=>'Active'])
- ->andWhere(['{{%vendor_item}}.trash'=>'Default'])
- ->andWhere(['{{%vendor_item}}.item_for_sale'=>'Yes'])
- ->andWhere(['{{%vendor_item}}.category_id'=>$value1['category_id']])
- ->andWhere(['{{%vendor_item}}.type_id'=>2])
- ->andWhere(['{{%event_item_link}}.trash'=>'Default'])
-  ->andWhere(['{{%event_item_link}}.event_id'=>$event_details[0]['event_id']])
- ->asArray()
- ->all();
+$items = Vendoritem::find()
+    ->select(['{{%vendor}}.vendor_name','{{%vendor_item}}.item_id','{{%event_item_link}}.link_id',
+        '{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
+        '{{%vendor_item}}.item_name','{{%vendor_item}}.slug', '{{%vendor_item}}.item_id'
+    ])
+    ->innerJoin('{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
+    ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
+    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+    ->leftJoin(
+        '{{%vendor_item_to_category}}', 
+        '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
+    )
+    ->where([
+        '{{%vendor_item}}.item_status' => 'Active',
+        '{{%vendor_item}}.trash' => 'Default',
+        '{{%vendor_item}}.item_for_sale' => 'Yes',
+        '{{%vendor_item_to_category}}.category_id' => $value1['category_id'],
+        '{{%vendor_item}}.type_id' => 2,
+        '{{%event_item_link}}.trash' => 'Default',
+        '{{%event_item_link}}.event_id' => $event_details[0]['event_id']
+    ])
+    ->andWhere('{{%image}}.image_path != ""')    
+    ->asArray()
+    ->all();
 ?>
 <div class="panel panel-default">
 <div class="panel-heading" role="tab" id="heading<?= $key ?>">
-<h4 class="panel-title">
+    <h4 class="panel-title">
+        <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapse<?= $key ?>" aria-expanded="false" aria-controls="collapse<?= $key ?>" class="collapsed">
 
-<a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapse<?= $key ?>" aria-expanded="false" aria-controls="collapse<?= $key ?>" class="collapsed">
+        <?php if(Yii::$app->language == "en"){
+                echo $value1['category_name'].' - '.'<span data-cateogry-id="'.$value1['category_id'].'" id="item_count">' .count($items). '</span>';
+              }else{
+                echo $value1['category_name_ar'].' - '.'<span id="item_count">' .count($items). '</span>';
+              }
+        ?>
 
-<?php if(Yii::$app->language == "en"){
-        echo $value1['category_name'].' - '.'<span data-cateogry-id="'.$value1['category_id'].'" id="item_count">' .count($cat_list1). '</span>';
-      }else{
-        echo $value1['category_name_ar'].' - '.'<span id="item_count">' .count($cat_list1). '</span>';
-      }
-?>
-
-<span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
-</h4>
+        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
+    </h4>
 </div>
 <div id="collapse<?= $key ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?= $key ?>" aria-expanded="false">
 <div class="panel-body">
@@ -115,82 +128,56 @@ $cat_list1=Vendoritem::find()->select(['{{%vendor_item}}.item_id'])
 <div class="events_listing">
 <ul>
 <?php
-
-$cat_list=Vendoritem::find()->select(['{{%vendor_item}}.item_id'])
- ->join('INNER JOIN','{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
- ->where(['{{%vendor_item}}.item_status'=>'Active'])
- ->andWhere(['{{%vendor_item}}.category_id'=>$value1['category_id']])
- ->andWhere(['{{%event_item_link}}.trash'=>'Default'])
- ->andWhere(['{{%event_item_link}}.event_id'=>$event_details[0]['event_id']])
- ->asArray()
- ->distinct()
- ->all();
-
-if(!empty($cat_list))
+if(!empty($items))
 {
-foreach ($cat_list as $key => $cat_list_value) {
-
-  $imageData=Vendoritem::find()->select(['{{%vendor}}.vendor_name','{{%vendor_item}}.item_id','{{%event_item_link}}.link_id',
-   '{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
-    '{{%vendor_item}}.item_name','{{%vendor_item}}.slug', '{{%vendor_item}}.child_category', '{{%vendor_item}}.item_id'
-    ])
- ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
- ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
- ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
- ->leftJoin('{{%event_item_link}}', '{{%event_item_link}}.item_id ={{%vendor_item}}.item_id')
- ->where(['{{%vendor_item}}.item_approved'=>'Yes'])
- ->andWhere(['{{%vendor_item}}.trash'=>'Default'])
- ->andWhere(['{{%vendor_item}}.item_for_sale'=>'Yes'])
- ->andWhere(['{{%vendor_item}}.type_id'=>'2'])
- ->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
- ->andWhere(['{{%image}}.module_type'=>'vendor_item'])
- ->andWhere(['{{%event_item_link}}.event_id'=>$event_details[0]['event_id']])
- ->andWhere(['{{%vendor_item}}.item_id'=>$cat_list_value['item_id']])
- ->groupBy('{{%vendor_item}}.item_id')
- ->limit(5)
- ->asArray()
- ->all();
-}
-
-if(!empty($imageData))
-{
-foreach ($imageData as $key => $value) {
-if($value['image_path'] !="")  {
+    foreach ($items as $key => $value) {
 ?>
 <li>
-<div class="events_items">
-<div class="events_images">
-<div class="hover_events">
-<div class="event_delete_icons"><a href="javascript:void(0)" id="<?= $value['link_id']; ?>" onclick="deleteeventitem('<?= $value['link_id']; ?>','<?= $value1['category_name']; ?>','<?= $value1['category_id']; ?>','<?= $event_details[0]["event_id"]; ?>',this.id)" title="Delete"></a></div>
-<?php $k=array();
-foreach($customer_events_list as $l){
-$k[]=$l['item_id'];
-}
-$result=array_search($value['item_id'],$k);
-if (is_numeric ($result)) { ?>
-<div class="faver_icons faverited_icons"> <?php } else { ?>
-<div class="faver_icons">
-<?php }?>
-<a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
-</div>
-<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
-</div>
-<div class="events_descrip">
+    <div class="events_items">
+        <div class="events_images">
+            <div class="hover_events">
+                <div class="event_delete_icons">
+                    <a href="javascript:void(0)" id="<?= $value['link_id']; ?>" onclick="deleteeventitem('<?= $value['link_id']; ?>','<?= $value1['category_name']; ?>','<?= $value1['category_id']; ?>','<?= $event_details[0]["event_id"]; ?>',this.id)" title="Delete"></a>
+                </div>
+                <?php 
+                
+                $k = array();
+                
+                foreach($customer_events_list as $l){
+                    $k[] = $l['item_id'];
+                }
 
-<?= /* Url::toRoute(['/product/product/','slug'=>$value['slug']]) */
-Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])) ?>
-<h3><?= $value['item_name']  ?></h3>
-<p><? if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-';?></p>
-</div>
-</div>
+                $result = array_search($value['item_id'], $k);
+
+                if (is_numeric ($result)) { ?>
+                    <div class="faver_icons faverited_icons"><a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+                    </div> 
+                <?php } else { ?>
+                    <div class="faver_icons">
+                        <a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+                    </div>
+                <?php }?>
+            
+            </div><!-- END .hover_events -->
+            
+            <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
+        </div><!-- END .events_images -->
+
+        <div class="events_descrip">
+
+            <?= Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])) ?>
+            
+            <h3><?= $value['item_name']  ?></h3>
+
+            <p><?= CFormatter::format($value['item_price_per_unit']) ?></p>
+        </div><!-- END .events_descrip --> 
+    </div><!-- END .events_items -->
 </li>
-<?php } }
-$imageData=array();
-}
+<?php 
+    } //foreach items 
+} //if items 
 ?>
 </ul>
-<?php   } ?>
-
 <div class="events_brows_buttons_common">
     <div class="margin_0_auto">
         <a href="<?= Url::toRoute(['/plan/plan/','slug'=>$value1['slug']]);?>" class="btn btn-danger">
@@ -204,66 +191,68 @@ $imageData=array();
 </div>
 </div>
 </div>
-<?php  }
+<?php  
+}//for each category 
 ?>
 <!-- heading seven end -->
 
 <div class="invates_common" id="invitee">
 <h4><?= Yii::t('frontend','Invitees');?></h4>
-<p><?= Yii::t('frontend','Invite your friends, relatives for this event');?></p>
-<div class="invite_error" style="color:red;display:none;"><?= Yii::t('frontend','Email already exist with this event.');?></div>
+<p><?= Yii::t('frontend','Invite your friends, relatives for this event'); ?></p>
+<div class="invite_error" style="color:red;display:none;">
+    <?= Yii::t('frontend','Email already exist with this event.'); ?>    
+</div>
 <div class="add_detials_form">
-<div data-example-id="basic-forms" class="bs-example">
-<form>
-<div class="col-md-4 padding-right0">
+    <div data-example-id="basic-forms" class="bs-example">
+        <form>
+            <div class="col-md-4 padding-right0">
+                <div class="form-group">
+                    <input type="hidden" placeholder="id" name="invitees_id" id="invitees_id" class="form-control">
+                    <input type="text" placeholder="<?= Yii::t('frontend','Name') ?>" name="invitees_name" id="invitees_name" class="form-control">
+                </div>
+            </div>
 
-<div class="form-group">
-<input type="hidden" placeholder="id" name="invitees_id" id="invitees_id" class="form-control">
-<input type="text" placeholder="<?= Yii::t('frontend','Name') ?>" name="invitees_name" id="invitees_name" class="form-control">
-</div>
-</div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="email" placeholder="<?= Yii::t('frontend','Email');?>" name="invitees_email" id="invitees_email" class="form-control">
+                </div>
+            </div>
 
-<div class="col-md-4">
-<div class="form-group">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="phone" placeholder="<?= Yii::t('frontend','Phone');?>" name="invitees_phone" id="invitees_phone" class="form-control">
+                </div>
+            </div>
 
-<input type="email" placeholder="<?= Yii::t('frontend','Email');?>" name="invitees_email" id="invitees_email" class="form-control">
-</div>
-</div>
-<div class="col-md-3">
-<div class="form-group">
-
-<input type="phone" placeholder="<?= Yii::t('frontend','Phone');?>" name="invitees_phone" id="invitees_phone" class="form-control">
-</div>
-</div>
-<div class="col-md-1 padding0">
-<div class="add_events_new">
-<input type="button" class="btn btn-default" id="submit" value="<?= Yii::t('frontend','Add');?>" onClick="addinvitees()">
-</div>
-</div>
-</form>
-</div>
+            <div class="col-md-1 padding0">
+                <div class="add_events_new">
+                    <input type="button" class="btn btn-default" id="submit" value="<?= Yii::t('frontend','Add');?>" onClick="addinvitees()">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 <div class="left_search_content">
 <div data-example-id="basic-forms" class="bs-example">
-<form>
-<?php require(__DIR__ . '/_search.php'); ?>
-<div class="col-md-8 padding0">
-<div class="col-md-3 pull-left text-left padding0 desktop-hide">
-<div class="input-group">
-<div id="navigation-bar">
-<form id="search" action="#" method="post">
-    <div id="input3" class="right_slider">
+    <form>
+    <?php require(__DIR__ . '/_search.php'); ?>
+    <div class="col-md-8 padding0">
+    <div class="col-md-3 pull-left text-left padding0 desktop-hide">
+    <div class="input-group">
+    <div id="navigation-bar">
+    <form id="search" action="#" method="post">
+        <div id="input3" class="right_slider">
 
-        <input type="text" placeholder="<?= Yii::t('frontend','Name/Phone/Email');?>" id="inviteesearch1" class="form-control">
+            <input type="text" placeholder="<?= Yii::t('frontend','Name/Phone/Email');?>" id="inviteesearch1" class="form-control">
 
-        <span class="input-group-btn mobile-search-icon">
-            <button class="btn btn-default" type="button" onClick="Searchinvitee('<?php echo $event_details[0]['event_id'];?>')"><?= Yii::t('frontend','Go!');?></button>
-        </span>
-    </div>
-    <div id="label3">
-    <div id="search1" class="search_for"></div>
-    <label for="search-terms" id="search-labl3"></label></div>
-</form>
+            <span class="input-group-btn mobile-search-icon">
+                <button class="btn btn-default" type="button" onClick="Searchinvitee('<?php echo $event_details[0]['event_id'];?>')"><?= Yii::t('frontend','Go!');?></button>
+            </span>
+        </div>
+        <div id="label3">
+        <div id="search1" class="search_for"></div>
+        <label for="search-terms" id="search-labl3"></label></div>
+    </form>
 </div>
 
 </div><!-- /input-group -->

@@ -46,6 +46,7 @@ $model->vendor_working_min_to = $to_min;
     <li>
       <a href="#4" data-toggle="tab" class="twovalid2">Social Info</a>
     </li>
+	  <li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
   </ul>
   <div class="tab-content">
 <!-- Begin First Tab -->
@@ -133,6 +134,52 @@ $model->vendor_working_min_to = $to_min;
 			</div>
 		</div>
 
+		<div class="form-group">
+			<label>Days off</label>
+			<div class="checkbox-inline">
+				<label for="day_1">
+					<input type="checkbox" name="vendor_day_off[]" value="1" id="day_1" <?php if(in_array('1', $day_off)) echo 'checked'; ?> />
+					Monday								
+				</label>
+			</div>
+			<div class="checkbox-inline">
+				<label for="day_2">
+					<input type="checkbox" name="vendor_day_off[]" value="2" id="day_2" <?php if(in_array('2', $day_off)) echo 'checked'; ?> />
+					Tuesday								
+				</label>
+			</div>
+			<div class="checkbox-inline">
+				<label for="day_3">
+					<input type="checkbox" name="vendor_day_off[]" value="3" id="day_3" <?php if(in_array('3', $day_off)) echo 'checked'; ?> />
+					Wednesday								
+				</label>
+			</div>
+			<div class="checkbox-inline">
+				<label for="day_4">
+					<input type="checkbox" name="vendor_day_off[]" value="4" id="day_4" <?php if(in_array('4', $day_off)) echo 'checked'; ?> />
+					Thirsday							
+				</label>
+			</div>
+			<div class="checkbox-inline">
+				<label for="day_5">
+					<input type="checkbox" name="vendor_day_off[]" value="5" id="day_5" <?php if(in_array('5', $day_off)) echo 'checked'; ?> />
+					Friday							
+				</label>
+			</div>
+			<div class="checkbox-inline">
+				<label for="day_6">
+					<input type="checkbox" name="vendor_day_off[]" value="6" id="day_6" <?php if(in_array('6', $day_off)) echo 'checked'; ?> />
+					Saturday						
+				</label>
+			</div>
+			<div class="checkbox-inline">
+				<label for="day_0">
+					<input type="checkbox" name="vendor_day_off[]" value="0" id="day_0" <?php if(in_array('0', $day_off)) echo 'checked'; ?> />
+					Sunday						
+				</label>
+			</div>
+		</div>
+		
 		<div class="form-group"><?= $form->field($model, 'vendor_public_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
 		<div class="form-group"><?= $form->field($model, 'vendor_public_phone',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
 
@@ -145,8 +192,10 @@ $model->vendor_working_min_to = $to_min;
 
 	<div class="tab-pane" id="2">
 		<input type="hidden" id="test1" value="0" name="tests">
-		<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']) ?></div>
 		<input type='hidden' id='test' value='0' name='tests1'>
+
+		<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']) ?></div>
+		
 		<div class="form-group"><?= $form->field($model, 'vendor_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Active' => 'Active'])?></div>
 		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
@@ -171,550 +220,622 @@ $model->vendor_working_min_to = $to_min;
 	</div>
 		<!--End Third Tab -->
 
-<div class="tab-pane" id="4">
-	<div class="form-group"><?= $form->field($model, 'vendor_website',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Website URL',['class'=> 'form-label-cap']) ?></div>
-	<div class="form-group"><?= $form->field($model, 'vendor_facebook',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Facebook URL',['class'=> 'form-label-cap']) ?></div>
-	<div class="form-group"><?= $form->field($model, 'vendor_twitter',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Twitter URL',['class'=> 'form-label-cap']) ?></div>
-	<div class="form-group"><?= $form->field($model, 'vendor_instagram',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Instagram URL',['class'=> 'form-label-cap']) ?></div>
-	<div class="form-group"><?= $form->field($model, 'vendor_googleplus',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Vendor Google Plus URL',['class'=> 'form-label-cap']) ?></div>
-	<div class="form-group"><?= $form->field($model, 'vendor_skype',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput()->label('Skype ID',['class'=> 'form-label-cap']) ?></div>
+	  <div class="tab-pane" id="4">
+		  <div class="form-group">
+			  <?= $form->field($model, 'vendor_twitter',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+			  ])->textInput()->label('Vendor Twitter URL',['class'=> 'form-label-cap']) ?>
+		  </div>
 
-	<div class="form-groups">
-	<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+		  <div class="form-group">
+			  <?= $form->field($model, 'vendor_instagram',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+			  ])->textInput()->label('Vendor Instagram URL',['class'=> 'form-label-cap']) ?>
+		  </div>
 
-    <?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
-    </div>
-    <?php ActiveForm::end(); ?>
- </div>
+		  <div class="form-group">
+			  <?= $form->field($model, 'vendor_googleplus',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+			  ])->textInput()->label('Vendor Google Plus URL',['class'=> 'form-label-cap']) ?>
+		  </div>
+
+		  <div class="form-group">
+			  <?= $form->field($model, 'vendor_skype',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+			  ])->textInput()->label('Skype ID',['class'=> 'form-label-cap']) ?>
+		  </div>
+
+		  <div class="form-groups">
+			  <input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+			  <input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		  </div>
+	  </div>
+	  <div class="tab-pane" id="5">
+		  Email address list to get order notification
+		  <br />
+		  <br />
+
+		  <table class="table table-bordered table-email-list">
+			  <tbody>
+			  <tr>
+				  <th>Email address</th>
+				  <th></th>
+			  </tr>
+			  <?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
+				  <tr>
+					  <td>
+						  <input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />
+					  </td>
+					  <td>
+						  <button class="btn btn-danger" type="button">
+							  <i class="glyphicon glyphicon-trash"></i>
+						  </button>
+					  </td>
+				  </tr>
+			  <?php } ?>
+			  </tbody>
+			  <tfoot>
+			  <tr>
+				  <td colspan="2">
+					  <button type="button" class="btn btn-primary btn-add-address">Add new address</button>
+				  </td>
+			  </tr>
+			  </tfoot>
+		  </table>
+
+		  <div class="form-group">
+			  <input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+			  <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
+		  </div>
+	  </div>
+
+	  <?php ActiveForm::end(); ?>
+  </div>
+	<!--End Third Tab -->
 </div>
-</div>
-<!--End Third Tab -->
-</div>
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
+	<!-- BEGIN PLUGIN CSS -->
+	<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 
-<!-- END PLUGIN CSS -->
-<!-- multi select begin -->
-<script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js") ?>"></script>
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css") ?>" rel="stylesheet" type="text/css" />
-<!-- multi select end -->
+	<!-- END PLUGIN CSS -->
+	<!-- multi select begin -->
+	<script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js") ?>"></script>
+	<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css") ?>" rel="stylesheet" type="text/css" />
+	<!-- multi select end -->
 
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
+	<!-- BEGIN PAGE LEVEL PLUGINS -->
+	<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
 
-<!-- END PAGE LEVEL PLUGINS -->
-<script>
-$('.controls1').find('#remove').remove();
-$('.datepicker').datepicker();
-$('select#package').hide();
+	<!-- END PAGE LEVEL PLUGINS -->
+	<script>
 
-/*$("#change_pack").live('click',function(){
-   $('select#package').show();
-});*/
+		$('.btn-add-address').click(function(){
 
-$(function()
-{	/* Begin when loading page first tab opened */
- 	$('.nav-tabs li:first').addClass("active");
- 	$(".tab-content div:first").addClass("active");
- 	/* End when loading page first tab opened */
+			$html  = '<tr>';
+			$html += '	<td>';
+			$html += '		<input value="" name="vendor_order_alert_emails[]" class="form-control" />';
+			$html += '	</td>';
+			$html += '	<td>';
+			$html += '		<button class="btn btn-danger" type="button">';
+			$html += '			<i class="glyphicon glyphicon-trash"></i>';
+			$html += '		</button>';
+			$html += '	</td>';
+			$html += '</tr>';
 
-	CKEDITOR.replace('text-editor');
-	CKEDITOR.replace('text-editor-2');
-});
+			$('.table-email-list tbody').append($html);
+		});
 
-var j= <?= $count_vendor+1; ?>;
-function addPhone(current)
-{
-$('#addnumber').before('<div class="controls'+j+'"><input type="text" id="vendor-vendor_contact_number'+j+'" class="form-control" name="Vendor[vendor_contact_number][]" multiple = "multiple" maxlength="15" Placeholder="Phone Number" style="margin:5px 0px;"><input type="button" name="remove" id="remove" value="Remove" onClick="removePhone('+j+')" style="margin:5px;" /></div>');
+		$(document).delegate('.table-email-list .btn-danger','click', function(){
+			$(this).parent().parent().remove();
+		});
 
-   j++;
+		$('.controls1').find('#remove').remove();
+		$('.datepicker').datepicker();
+		$('select#package').hide();
 
-  $("#vendor-vendor_contact_number2").keypress(function (e) {
-     //if the letter is not digit then display error and don't type anything
-     if (  e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57 )) {
-        //display error message
-          $(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only+.').animate({ color: "#a94442" }).show().fadeOut(2000);
-               return false;
-    }
-   });
-  $("#vendor-vendor_contact_number3").keypress(function (e) {
-     //if the letter is not digit then display error and don't type anything
-     if ( e.which  != 43   && e.which  != 45  && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-        //display error message
-          $(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
-               return false;
-    }
-   });
-  $("#vendor-vendor_contact_number4").keypress(function (e) {
-     //if the letter is not digit then display error and don't type anything
-     if ( e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-        //display error message
-          $(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
-               return false;
-    }
-   });
+		/*$("#change_pack").live('click',function(){
+		 $('select#package').show();
+		 });*/
 
+		$(function()
+		{	/* Begin when loading page first tab opened */
+			$('.nav-tabs li:first').addClass("active");
+			$(".tab-content div:first").addClass("active");
+			/* End when loading page first tab opened */
 
-  $("#vendor-vendor_contact_number5").keypress(function (e) {
-     //if the letter is not digit then display error and don't type anything
-     if ( e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-        //display error message
-          $(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
-               return false;
-    }
-   });
-}
+			CKEDITOR.replace('text-editor');
+			CKEDITOR.replace('text-editor-2');
+		});
 
-function removePhone(phone) {
-	$(".controls"+phone).remove();
-}
+		var j= <?= $count_vendor+1; ?>;
+		function addPhone(current)
+		{
+			$('#addnumber').before('<div class="controls'+j+'"><input type="text" id="vendor-vendor_contact_number'+j+'" class="form-control" name="Vendor[vendor_contact_number][]" multiple = "multiple" maxlength="15" Placeholder="Phone Number" style="margin:5px 0px;"><input type="button" name="remove" id="remove" value="Remove" onClick="removePhone('+j+')" style="margin:5px;" /></div>');
 
-	/* Begin Tabs NEXT & PREV buttons */
-	$('.btnNext').click(function(){
-	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
-	});
+			j++;
 
-	//category add drop downlist
-	$(".vendor-category_id:last-child").css({"clear" : "both","float" :"inherit"});
-	$('#option').hide();
-
-	  $('.btnPrevious').click(function(){
-	  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-	});
-	/* End Tabs NEXT & PREV buttons */
-
-	$(function(){
-	 $('#vendor-category_id').multiselect({
-			'enableFiltering': true,
-			'filterPlaceholder': 'Search for something...'
+			$("#vendor-vendor_contact_number2").keypress(function (e) {
+				//if the letter is not digit then display error and don't type anything
+				if (  e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57 )) {
+					//display error message
+					$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only+.').animate({ color: "#a94442" }).show().fadeOut(2000);
+					return false;
+				}
 			});
-	});
+			$("#vendor-vendor_contact_number3").keypress(function (e) {
+				//if the letter is not digit then display error and don't type anything
+				if ( e.which  != 43   && e.which  != 45  && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+					//display error message
+					$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
+					return false;
+				}
+			});
+			$("#vendor-vendor_contact_number4").keypress(function (e) {
+				//if the letter is not digit then display error and don't type anything
+				if ( e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+					//display error message
+					$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
+					return false;
+				}
+			});
+
+
+			$("#vendor-vendor_contact_number5").keypress(function (e) {
+				//if the letter is not digit then display error and don't type anything
+				if ( e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+					//display error message
+					$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
+					return false;
+				}
+			});
+		}
+
+		function removePhone(phone) {
+			$(".controls"+phone).remove();
+		}
+
+		/* Begin Tabs NEXT & PREV buttons */
+		$('.btnNext').click(function(){
+			$('.nav-tabs > .active').next('li').find('a').trigger('click');
+		});
+
+		//category add drop downlist
+		$(".vendor-category_id:last-child").css({"clear" : "both","float" :"inherit"});
+		$('#option').hide();
+
+		$('.btnPrevious').click(function(){
+			$('.nav-tabs > .active').prev('li').find('a').trigger('click');
+		});
+		/* End Tabs NEXT & PREV buttons */
+
+		$(function(){
+			$('#vendor-category_id').multiselect({
+				'enableFiltering': true,
+				'filterPlaceholder': 'Search for something...'
+			});
+		});
 
 
 
-</script>
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/ckeditor/ckeditor.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+	</script>
+	<!-- BEGIN PAGE LEVEL PLUGINS -->
+	<script src="<?= Url::to("@web/themes/default/plugins/ckeditor/ckeditor.js") ?>" type="text/javascript"></script>
+	<!-- END PAGE LEVEL PLUGINS -->
 
-<script>
-$('#vendor-package_start_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
-$('#vendor-package_end_date').datepicker({  format: 'dd-mm-yyyy', });
-</script>
+	<script>
+		$('#vendor-package_start_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
+		$('#vendor-package_end_date').datepicker({  format: 'dd-mm-yyyy', });
+	</script>
 
 
 
-<script>
-	<?php if($model->isNewRecord){ ?>
-	$('#vendor-vendor_status').prop('checked', true);
-	<?php }
-	else
-	{ if($model->vendor_status=='Active'){?>
-	$('#vendor-vendor_status').prop('checked', true);
+	<script>
+		<?php if($model->isNewRecord){ ?>
+		$('#vendor-vendor_status').prop('checked', true);
+		<?php }
+		else
+		{ if($model->vendor_status=='Active'){?>
+		$('#vendor-vendor_status').prop('checked', true);
 		<?php }	else { ?>
-	$('#vendor-vendor_status').prop('checked', false);
-			<?php } ?>
-	<?php } ?>
-</script>
+		$('#vendor-vendor_status').prop('checked', false);
+		<?php } ?>
+		<?php } ?>
+	</script>
 
-<script>
-	<?php if($model->isNewRecord){ ?>
-	$('#vendor-approve_status').prop('checked', true);
-	<?php }
-	else
-	{
+	<script>
+		<?php if($model->isNewRecord){ ?>
+		$('#vendor-approve_status').prop('checked', true);
+		<?php }
+		else
+		{
 		if($model->approve_status=='Yes'){?>
 	$("#vendor-vendor_logo_path").val('image');
 	$('#vendor-approve_status').prop('checked', true);
 		<?php }	else { ?>
-	$('#vendor-approve_status').prop('checked', false);
-			<?php } ?>
-	<?php } ?>
-</script>
+		$('#vendor-approve_status').prop('checked', false);
+		<?php } ?>
+		<?php } ?>
+	</script>
 
-<script>
-$(document).ready(function () {
-	//called when key is pressed in textbox
-  $("#vendor-vendor_contact_number").keypress(function (e) {
-     //if the letter is not digit then display error and don't type anything
-     if ( e.which  != 43  && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-        //display error message
+	<script>
+		$(document).ready(function () {
+			//called when key is pressed in textbox
+			$("#vendor-vendor_contact_number").keypress(function (e) {
+				//if the letter is not digit then display error and don't type anything
+				if ( e.which  != 43  && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+					//display error message
 
 
-          $(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
-               return false;
-    }
-   });
-});
-
-$(document).ready(function () {
-  //called when key is pressed in textbox
-  $("#vendor-vendor_contact_number2").keypress(function (e) {alert(1);
-   });
-});
-
-</script>
-<?php // Validation only on update scenario ?>
-
-<script>
-  var csrfToken = $('meta[name="csrf-token"]').attr("content");
-  var c1 = true;
-$( ".onevalid1" ).click(function() {
-	if($('#test').val()==1)
-	{
-		return false;
-	}
-	if($('#test1').val()==1)
-	{
-		return false;
-	}
-
-	<?php if($model->isNewRecord) { ?>
-
-	if($("#vendor-vendor_logo_path").val()=='')
-	{
-			$(".field-vendor-vendor_logo_path").addClass('has-error');
-			$(".field-vendor-vendor_logo_path").find('.help-block').html('Please upload a file.');
-			c1=false;
-  }
-  <?php } ?>
-  if($("#vendor-vendor_name").val()=='')
-	{
-			$(".field-vendor-vendor_name").addClass('has-error');
-			$(".field-vendor-vendor_name").find('.help-block').html('Vendor name cannot be blank.');
-			c1=false;
-  	}
-  	if($("#vendor-vendor_contact_email").val()=='')
-	{
-			$(".field-vendor-vendor_contact_email").addClass('has-error');
-			$(".field-vendor-vendor_contact_email").find('.help-block').html('Email cannot be blank.');
-			c1=false;
-  	}
-  	<?php if($model->isNewRecord) {?>
-   	if($("#vendor-vendor_contact_email").val()!='')
-	{
-		if(validateEmail($("#vendor-vendor_contact_email").val()) == true){
-			var mail=$("#vendor-vendor_contact_email").val();
-			var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
-			$('.loadingmessage').show();
-			$.ajax({
-			type: 'POST',
-			url: path, //url to be called
-			async:true,
-			data: { id: mail ,_csrf : csrfToken}, //data to be send
-			success: function( data ) {
-				$(".loadingmessage").ajaxComplete(function(event, request, settings){
-				$("input[name=email_valid]").val(data);
-				if(data>0)
-				{
-				$(".field-vendor-vendor_contact_email").removeClass('has-success');
-				$(".field-vendor-vendor_contact_email").addClass('has-error');
-				$(".field-vendor-vendor_contact_email").find('.help-block').html('Email already exists.');
-				c1=false;
-				$('.loadingmessage').hide();
+					$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
+					return false;
 				}
-				else
-				{
-				$(".field-vendor-vendor_contact_email").removeClass('has-error');
-				$(".field-vendor-vendor_contact_email").addClass('has-success');
-				$(".field-vendor-vendor_contact_email").find('.help-block').html('');
-					 $('.loadingmessage').hide();
-					$('#test').val(0);
-					c1=true;
-				}
-				});
-			 }
 			});
-		}else c1=false;
-  }
-  <?php } ?>
-  // check only if its new record
+		});
 
- // check only if its new record
+		$(document).ready(function () {
+			//called when key is pressed in textbox
+			$("#vendor-vendor_contact_number2").keypress(function (e) {alert(1);
+			});
+		});
 
-  if($("#vendor-vendor_password").val()=='')
-	{
-			$(".field-vendor-vendor_password").addClass('has-error');
-			$(".field-vendor-vendor_password").find('.help-block').html('Password cannot be blank');
-			c1=false;
-  }
-  <?php if($model->isNewRecord) { ?>
-  if($("#vendor-vendor_password").val()!='')
-	{
-			var pass=$("#vendor-vendor_password").val();
-			if(pass.length<6)
-			{$(".field-vendor-vendor_password").addClass('has-error');
-			$(".field-vendor-vendor_password").find('.help-block').html('Password should contain minimum 6 Letter.');
-			c1=false;}
-  }
-  if($("#vendor-confirm_password").val()=='')
-	{
-			$(".field-vendor-confirm_password").addClass('has-error');
-			$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
-			c1=false;
-  }else  if($("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val())
-	{
-			$(".field-vendor-confirm_password").addClass('has-error');
-			$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
-			c1=false;
-  }
-  <?php } ?>
-    if($("#vendor-vendor_contact_name").val()=='')
-	{
-			$(".field-vendor-vendor_contact_name").addClass('has-error');
-			$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
-			c1=false;
-  }
-    if($("#vendor-vendor_contact_number").val()=='')
-	{
-			$(".field-vendor-vendor_contact_number").addClass('has-error');
-			$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
-			c1=false;
-  }
-    if($("#vendor-vendor_contact_address").val()=='')
-	{
-			$(".field-vendor-vendor_contact_address").addClass('has-error');
-			$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
-			c1=false;
-  }
-	  if(c1==false)
-	  {
-		  c1='';
-		  return false;
+	</script>
+	<?php // Validation only on update scenario ?>
+
+	<script>
+		var csrfToken = $('meta[name="csrf-token"]').attr("content");
+		var c1 = true;
+		$( ".onevalid1" ).click(function() {
+			if($('#test').val()==1)
+			{
+				return false;
+			}
+			if($('#test1').val()==1)
+			{
+				return false;
+			}
+
+			<?php if($model->isNewRecord) { ?>
+
+			if($("#vendor-vendor_logo_path").val()=='')
+			{
+				$(".field-vendor-vendor_logo_path").addClass('has-error');
+				$(".field-vendor-vendor_logo_path").find('.help-block').html('Please upload a file.');
+				c1=false;
+			}
+			<?php } ?>
+			if($("#vendor-vendor_name").val()=='')
+			{
+				$(".field-vendor-vendor_name").addClass('has-error');
+				$(".field-vendor-vendor_name").find('.help-block').html('Vendor name cannot be blank.');
+				c1=false;
+			}
+			if($("#vendor-vendor_contact_email").val()=='')
+			{
+				$(".field-vendor-vendor_contact_email").addClass('has-error');
+				$(".field-vendor-vendor_contact_email").find('.help-block').html('Email cannot be blank.');
+				c1=false;
+			}
+			<?php if($model->isNewRecord) {?>
+			if($("#vendor-vendor_contact_email").val()!='')
+			{
+				if(validateEmail($("#vendor-vendor_contact_email").val()) == true){
+					var mail=$("#vendor-vendor_contact_email").val();
+					var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
+					$('.loadingmessage').show();
+					$.ajax({
+						type: 'POST',
+						url: path, //url to be called
+						async:true,
+						data: { id: mail ,_csrf : csrfToken}, //data to be send
+						success: function( data ) {
+							$(".loadingmessage").ajaxComplete(function(event, request, settings){
+								$("input[name=email_valid]").val(data);
+								if(data>0)
+								{
+									$(".field-vendor-vendor_contact_email").removeClass('has-success');
+									$(".field-vendor-vendor_contact_email").addClass('has-error');
+									$(".field-vendor-vendor_contact_email").find('.help-block').html('Email already exists.');
+									c1=false;
+									$('.loadingmessage').hide();
+								}
+								else
+								{
+									$(".field-vendor-vendor_contact_email").removeClass('has-error');
+									$(".field-vendor-vendor_contact_email").addClass('has-success');
+									$(".field-vendor-vendor_contact_email").find('.help-block').html('');
+									$('.loadingmessage').hide();
+									$('#test').val(0);
+									c1=true;
+								}
+							});
+						}
+					});
+				}else c1=false;
+			}
+			<?php } ?>
+			// check only if its new record
+
+			// check only if its new record
+
+			if($("#vendor-vendor_password").val()=='')
+			{
+				$(".field-vendor-vendor_password").addClass('has-error');
+				$(".field-vendor-vendor_password").find('.help-block').html('Password cannot be blank');
+				c1=false;
+			}
+			<?php if($model->isNewRecord) { ?>
+			if($("#vendor-vendor_password").val()!='')
+			{
+				var pass=$("#vendor-vendor_password").val();
+				if(pass.length<6)
+				{$(".field-vendor-vendor_password").addClass('has-error');
+					$(".field-vendor-vendor_password").find('.help-block').html('Password should contain minimum 6 Letter.');
+					c1=false;}
+			}
+			if($("#vendor-confirm_password").val()=='')
+			{
+				$(".field-vendor-confirm_password").addClass('has-error');
+				$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
+				c1=false;
+			}else  if($("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val())
+			{
+				$(".field-vendor-confirm_password").addClass('has-error');
+				$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
+				c1=false;
+			}
+			<?php } ?>
+			if($("#vendor-vendor_contact_name").val()=='')
+			{
+				$(".field-vendor-vendor_contact_name").addClass('has-error');
+				$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
+				c1=false;
+			}
+			if($("#vendor-vendor_contact_number").val()=='')
+			{
+				$(".field-vendor-vendor_contact_number").addClass('has-error');
+				$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
+				c1=false;
+			}
+//			if($("#vendor-vendor_contact_address").val()=='')
+//			{
+//				$(".field-vendor-vendor_contact_address").addClass('has-error');
+//				$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
+//				c1=false;
+//			}
+			if(c1==false)
+			{
+				c1='';
+				return false;
+			}
+
+			var item_len = $("#vendor-vendor_name").val().length;
+			if($("#vendor-vendor_name").val()=='')
+			{
+				$(".field-vendor-vendor_name").addClass('has-error');
+				$(".field-vendor-vendor_name").find('.help-block').html('Item name cannot be blank.');
+				c1=false;
+			}
+			else if(item_len < 3){
+
+				$(".field-vendor-vendor_name").addClass('has-error');
+				$(".field-vendor-vendor_name").find('.help-block').html('Item name minimum 4 letters.');
+				c1=false;
+			}
+			return c1;
+		});
+		function validateEmail(email) {
+			var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
+			return re.test(email);
 		}
 
-	var item_len = $("#vendor-vendor_name").val().length;
-     if($("#vendor-vendor_name").val()=='')
-	 {
-	 	$(".field-vendor-vendor_name").addClass('has-error');
-			$(".field-vendor-vendor_name").find('.help-block').html('Item name cannot be blank.');
-			c1=false;
-	 }
-	 else if(item_len < 3){
+	</script>
 
-	 			$(".field-vendor-vendor_name").addClass('has-error');
-	 			$(".field-vendor-vendor_name").find('.help-block').html('Item name minimum 4 letters.');
-				c1=false;
-	 }
-return c1;
-});
-function validateEmail(email) {
-    var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
-    return re.test(email);
-}
+	<script>
+		$( ".twovalid2" ).click(function() {
+			var y=$('#vendor-category_id').val();
 
-</script>
-
-<script>
-$( ".twovalid2" ).click(function() {
-	var y=$('#vendor-category_id').val();
-
-	if($("#vendoritem-item_amount_in_stock").val()=='')
-	{
-			$(".field-vendor-vendor_logo_path").addClass('has-error');
-			$(".field-vendor-vendor_logo_path").find('.help-block').html('Please upload a file.');
-			return false;
-  }
-  if($("#vendor-vendor_name").val()=='')
-	{
-			$(".field-vendor-vendor_name").addClass('has-error');
-			$(".field-vendor-vendor_name").find('.help-block').html('Vendor name cannot be blank.');
-			return false;
-  }
-  if($("#vendor-vendor_contact_email").val()=='')
-	{
-			$(".field-vendor-vendor_contact_email").addClass('has-error');
-			$(".field-vendor-vendor_contact_email").find('.help-block').html('Email cannot be blank.');
-			return false;
-  }
-  <?php if($model->isNewRecord) { ?>
-  if($("#vendor-vendor_password").val()=='')
-	{
-			$(".field-vendor-vendor_password").addClass('has-error');
-			$(".field-vendor-vendor_password").find('.help-block').html('Password cannot be blank.');
-			return false;
-  }
-  if($("#vendor-confirm_password").val()=='')
-	{
-			$(".field-vendor-confirm_password").addClass('has-error');
-			$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
-			return false;
-  }
- if($("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val())
- {
-			$(".field-vendor-confirm_password").addClass('has-error');
-			$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
-			return false;
-  }
-  <?php } ?>
-    if($("#vendor-vendor_contact_name").val()=='')
-	{
-			$(".field-vendor-vendor_contact_name").addClass('has-error');
-			$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
-			return false;
-  }
-    if($("#vendor-vendor_contact_number").val()=='')
-	{
-			$(".field-vendor-vendor_contact_number").addClass('has-error');
-			$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
-			return false;
-  }
-    if($("#vendor-vendor_contact_address").val()=='')
-	{
-			$(".field-vendor-vendor_contact_address").addClass('has-error');
-			$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
-			return false;
-  }
-
-   // check only if its new record
-  <?php if($model->isNewRecord) {?>
-  else if($("#vendor-vendor_contact_email").val()!='')
-	{
-		if(validateEmail($("#vendor-vendor_contact_email").val()) == true){
-			var mail=$("#vendor-vendor_contact_email").val();
-			var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
-			//$('.loadingmessage').show();
-			$.ajax({
-			type: 'POST',
-			url: path, //url to be called
-			async:true,
-			data: { id: mail ,_csrf : csrfToken}, //data to be send
-			success: function( data ) {
-				$(".loadingmessage").ajaxComplete(function(event, request, settings){
-				$("input[name=email_valid]").val(data);
-				 if(data>0)
-				 {
-				$(".field-vendor-vendor_contact_email").removeClass('has-success');
-				$(".field-vendor-vendor_contact_email").addClass('has-error');
-				$(".field-vendor-vendor_contact_email").find('.help-block').html('Email already exists.');
-				c1=false;
-				$('.loadingmessage').hide();
-				}
-				else
-				{
-				$(".field-vendor-vendor_contact_email").removeClass('has-error');
-				$(".field-vendor-vendor_contact_email").addClass('has-success');
-				$(".field-vendor-vendor_contact_email").find('.help-block').html('');
-					 $('.loadingmessage').hide();
-					$('#test').val(0);
-					c1=true;
-				}
-				});
-			 }
-			});
-		}else c1=false;
-  }
-  <?php } ?>
-
-	if((y=='')||(y==null))
-	{
-			$(".field-vendor-category_id").addClass('has-error');
-			$(".field-vendor-category_id").find('.help-block').html('category name  cannot be blank.');
-			return false;
-  }
-  else
-  {return true;}
-});
-
-
-$(document).ready(function(){
-  $('#vendor-vendor_contact_number').bind("paste",function(e) {
-      e.preventDefault();
-  });
-  $('#vendor-vendor_contact_email').bind("paste",function(e) {
-      e.preventDefault();
-  });
-});
-
-<?php if($model->isNewRecord) {?>
-$(function () {
- $("#vendor-vendor_contact_email").on('focusout',function () {//keyup keypress 
-	 if(validateEmail($(this).val()) == true){
-	if($("#vendor-vendor_contact_email").val()!='')
-	{
-		$(".field-vendor-vendor_contact_email").removeClass('has-success');
-		$(".field-vendor-vendor_contact_email").addClass('has-error');
-		$('.loadingmessage').show();
-		var mail=$("#vendor-vendor_contact_email").val();
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
-        $('.loadingmessage').show();
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        async:true,
-        data: { id: mail ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {
-			$(document).ajaxComplete(function(event, request, settings){//".loadingmessage"
-				$("input[name=email_valid]").val(data);
-				 if(data>0)
-				 {
-				$(".field-vendor-vendor_contact_email").removeClass('has-success');
-				$(".field-vendor-vendor_contact_email").addClass('has-error');
-				$(".field-vendor-vendor_contact_email").find('.help-block').html('Email already exists.');
-				c1=false;
-				$('.loadingmessage').hide();
-				}
-				else
-				{
-				$(".field-vendor-vendor_contact_email").removeClass('has-error');
-				$(".field-vendor-vendor_contact_email").addClass('has-success');
-				$(".field-vendor-vendor_contact_email").find('.help-block').html('');
-					 $('.loadingmessage').hide();
-					$('#test').val(0);
-					c1=true;
-				}
-				});
+			if($("#vendoritem-item_amount_in_stock").val()=='')
+			{
+				$(".field-vendor-vendor_logo_path").addClass('has-error');
+				$(".field-vendor-vendor_logo_path").find('.help-block').html('Please upload a file.');
+				return false;
 			}
-});
- }
-}
-	     });
+			if($("#vendor-vendor_name").val()=='')
+			{
+				$(".field-vendor-vendor_name").addClass('has-error');
+				$(".field-vendor-vendor_name").find('.help-block').html('Vendor name cannot be blank.');
+				return false;
+			}
+			if($("#vendor-vendor_contact_email").val()=='')
+			{
+				$(".field-vendor-vendor_contact_email").addClass('has-error');
+				$(".field-vendor-vendor_contact_email").find('.help-block').html('Email cannot be blank.');
+				return false;
+			}
+			<?php if($model->isNewRecord) { ?>
+			if($("#vendor-vendor_password").val()=='')
+			{
+				$(".field-vendor-vendor_password").addClass('has-error');
+				$(".field-vendor-vendor_password").find('.help-block').html('Password cannot be blank.');
+				return false;
+			}
+			if($("#vendor-confirm_password").val()=='')
+			{
+				$(".field-vendor-confirm_password").addClass('has-error');
+				$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
+				return false;
+			}
+			if($("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val())
+			{
+				$(".field-vendor-confirm_password").addClass('has-error');
+				$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
+				return false;
+			}
+			<?php } ?>
+			if($("#vendor-vendor_contact_name").val()=='')
+			{
+				$(".field-vendor-vendor_contact_name").addClass('has-error');
+				$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
+				return false;
+			}
+			if($("#vendor-vendor_contact_number").val()=='')
+			{
+				$(".field-vendor-vendor_contact_number").addClass('has-error');
+				$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
+				return false;
+			}
+//			if($("#vendor-vendor_contact_address").val()=='')
+//			{
+//				$(".field-vendor-vendor_contact_address").addClass('has-error');
+//				$(".field-vendor-vendor_contact_address").find('.help-block').html('Contact address cannot be blank.');
+//				return false;
+//			}
 
-});
-<?php } ?>
-</script>
-<script>
-$(document).ready(function(){
- $('#vendor-vendor_name').bind("paste",function(e) {
-     e.preventDefault();
- });
-});
- $(function () {
- $("#vendor-vendor_name").on('focusout',function () {//keyup keypress 
-	if($("#vendor-vendor_name").val().length > 3)
-	{
-		var mail=$("#vendor-vendor_name").val();
-        var path = "<?php echo Url::to(['/vendor/vendornamecheck']); ?> ";
-        $('.loadingmessage').show();
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { vendor_name: mail ,_csrf : csrfToken}, //data to be send
-        success: function( data ) {
-			$("#test1").val(mail);
-            if(data>0)
-            {
-			$('.loadingmessage').hide();
-			$(".field-vendor-vendor_name").removeClass('has-success');
-			$(".field-vendor-vendor_name").addClass('has-error');
-			$(".field-vendor-vendor_name").find('.help-block').html('Vendor name already exists.');
-			$(".field-vendor-vendor_name" ).focus();
-			$('#test1').val(1);
-			return false
+			// check only if its new record
+			<?php if($model->isNewRecord) {?>
+			else if($("#vendor-vendor_contact_email").val()!='')
+			{
+				if(validateEmail($("#vendor-vendor_contact_email").val()) == true){
+					var mail=$("#vendor-vendor_contact_email").val();
+					var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
+					//$('.loadingmessage').show();
+					$.ajax({
+						type: 'POST',
+						url: path, //url to be called
+						async:true,
+						data: { id: mail ,_csrf : csrfToken}, //data to be send
+						success: function( data ) {
+							$(".loadingmessage").ajaxComplete(function(event, request, settings){
+								$("input[name=email_valid]").val(data);
+								if(data>0)
+								{
+									$(".field-vendor-vendor_contact_email").removeClass('has-success');
+									$(".field-vendor-vendor_contact_email").addClass('has-error');
+									$(".field-vendor-vendor_contact_email").find('.help-block').html('Email already exists.');
+									c1=false;
+									$('.loadingmessage').hide();
+								}
+								else
+								{
+									$(".field-vendor-vendor_contact_email").removeClass('has-error');
+									$(".field-vendor-vendor_contact_email").addClass('has-success');
+									$(".field-vendor-vendor_contact_email").find('.help-block').html('');
+									$('.loadingmessage').hide();
+									$('#test').val(0);
+									c1=true;
+								}
+							});
+						}
+					});
+				}else c1=false;
+			}
+			<?php } ?>
+
+			if((y=='')||(y==null))
+			{
+				$(".field-vendor-category_id").addClass('has-error');
+				$(".field-vendor-category_id").find('.help-block').html('category name  cannot be blank.');
+				return false;
 			}
 			else
-			{
-			$(".field-vendoritem-item_name").find('.help-block').html('');
-			$('.loadingmessage').hide();
-			$('#test1').val(0);
-			return false;
-			}
-         }
-        });
-	//}
-  }
-});
-});
+			{return true;}
+		});
 
-</script>
+
+		$(document).ready(function(){
+			$('#vendor-vendor_contact_number').bind("paste",function(e) {
+				e.preventDefault();
+			});
+			$('#vendor-vendor_contact_email').bind("paste",function(e) {
+				e.preventDefault();
+			});
+		});
+
+		<?php if($model->isNewRecord) {?>
+		$(function () {
+			$("#vendor-vendor_contact_email").on('focusout',function () {//keyup keypress
+				if(validateEmail($(this).val()) == true){
+					if($("#vendor-vendor_contact_email").val()!='')
+					{
+						$(".field-vendor-vendor_contact_email").removeClass('has-success');
+						$(".field-vendor-vendor_contact_email").addClass('has-error');
+						$('.loadingmessage').show();
+						var mail=$("#vendor-vendor_contact_email").val();
+						var csrfToken = $('meta[name="csrf-token"]').attr("content");
+						var path = "<?php echo Url::to(['/vendor/emailcheck']); ?> ";
+						$('.loadingmessage').show();
+						$.ajax({
+							type: 'POST',
+							url: path, //url to be called
+							async:true,
+							data: { id: mail ,_csrf : csrfToken}, //data to be send
+							success: function( data ) {
+								$(document).ajaxComplete(function(event, request, settings){//".loadingmessage"
+									$("input[name=email_valid]").val(data);
+									if(data>0)
+									{
+										$(".field-vendor-vendor_contact_email").removeClass('has-success');
+										$(".field-vendor-vendor_contact_email").addClass('has-error');
+										$(".field-vendor-vendor_contact_email").find('.help-block').html('Email already exists.');
+										c1=false;
+										$('.loadingmessage').hide();
+									}
+									else
+									{
+										$(".field-vendor-vendor_contact_email").removeClass('has-error');
+										$(".field-vendor-vendor_contact_email").addClass('has-success');
+										$(".field-vendor-vendor_contact_email").find('.help-block').html('');
+										$('.loadingmessage').hide();
+										$('#test').val(0);
+										c1=true;
+									}
+								});
+							}
+						});
+					}
+				}
+			});
+
+		});
+		<?php } ?>
+	</script>
+	<script>
+		$(document).ready(function(){
+			$('#vendor-vendor_name').bind("paste",function(e) {
+				e.preventDefault();
+			});
+		});
+		$(function () {
+			$("#vendor-vendor_name").on('focusout',function () {//keyup keypress
+				if($("#vendor-vendor_name").val().length > 3)
+				{
+					var mail=$("#vendor-vendor_name").val();
+					var path = "<?php echo Url::to(['/vendor/vendornamecheck']); ?> ";
+					$('.loadingmessage').show();
+					$.ajax({
+						type: 'POST',
+						url: path, //url to be called
+						data: { vendor_name: mail ,_csrf : csrfToken}, //data to be send
+						success: function( data ) {
+							$("#test1").val(mail);
+							if(data>0)
+							{
+								$('.loadingmessage').hide();
+								$(".field-vendor-vendor_name").removeClass('has-success');
+								$(".field-vendor-vendor_name").addClass('has-error');
+								$(".field-vendor-vendor_name").find('.help-block').html('Vendor name already exists.');
+								$(".field-vendor-vendor_name" ).focus();
+								$('#test1').val(1);
+								return false
+							}
+							else
+							{
+								$(".field-vendoritem-item_name").find('.help-block').html('');
+								$('.loadingmessage').hide();
+								$('#test1').val(0);
+								return false;
+							}
+						}
+					});
+					//}
+				}
+			});
+		});
+
+	</script>
+

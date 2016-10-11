@@ -28,7 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
             				'format' => ['date', Yii::$app->params['dateFormat']],
             				'label'=>'blocked date',
             			],
-                  ['class' => 'yii\grid\ActionColumn'],
+                  [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{update} {delete}'
+                  ],
                 ],
             ]); ?>
 	       </div>

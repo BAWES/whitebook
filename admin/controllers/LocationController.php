@@ -74,7 +74,7 @@ class LocationController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -107,7 +107,7 @@ class LocationController extends Controller
             $model = new Location();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Location info created successfully!');
+                Yii::$app->session->setFlash('success', 'Location info created successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -119,7 +119,7 @@ class LocationController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -139,7 +139,7 @@ class LocationController extends Controller
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Area info updated successfully!');
+                Yii::$app->session->setFlash('success', 'Area info updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -153,7 +153,7 @@ class LocationController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -175,7 +175,7 @@ class LocationController extends Controller
 
             return $this->redirect(['index']);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }

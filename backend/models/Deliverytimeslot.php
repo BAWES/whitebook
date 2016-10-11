@@ -27,13 +27,21 @@ class Deliverytimeslot extends \common\models\Deliverytimeslot
 {
     public static function deliverytimeslot($day)
     {
-        return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>Yii::$app->user->getId(), 'timeslot_day'=>$day])->asArray()->all();;
+        return $time_slot = Deliverytimeslot::find()
+        	->where([
+        		'vendor_id' => Yii::$app->user->getId(), 
+        		'timeslot_day' => $day
+        	])
+        	->asArray()
+        	->all();
     }
-
 
     public static function vendor_deliverytimeslot($id,$day)
     {
-        return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id, 'timeslot_day'=>$day])->asArray()->all();;
+        return $time_slot = Deliverytimeslot::find()
+        	->where(['vendor_id' => $id, 'timeslot_day' => $day])
+        	->asArray()
+        	->all();
     }
 
 }

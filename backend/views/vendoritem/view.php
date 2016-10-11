@@ -34,8 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>Categories</th>
                             <td>
                               <ul>
-                                  <?php foreach($categories as $category) { ?>
-                                      <li><?= $category['category_name'] ?></li>
+                                  <?php foreach($categories as $key => $value) { ?>
+                                      <li><?= $value->category->category_title ?></li>
                                   <?php } ?>
                               </ul>
                             </td>

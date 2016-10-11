@@ -81,16 +81,19 @@ class Country extends \yii\db\ActiveRecord
         ];
     }
 
-
-
-
     public static function loadcountry()
     {
-        $country= Country::find()
-        ->where(['!=', 'status', 'Deactive'])
-        ->where(['!=', 'trash', 'Deleted'])
-        ->all();
-        $country=ArrayHelper::map($country,'country_id','country_name');
+        $country = Country::find()
+            ->where(['!=', 'country_status', 'Deactive'])
+            ->andWhere(['!=', 'trash', 'Deleted'])
+            ->all();
+        
+        if(Yii::$app->language == 'en') {
+            $country = ArrayHelper::map($country, 'country_id', 'country_name');
+        } else {
+            $country = ArrayHelper::map($country, 'country_id', 'country_name_ar');
+        }
+                
         return $country;
     }
 

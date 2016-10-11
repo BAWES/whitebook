@@ -1,4 +1,5 @@
 <?php
+
 namespace admin\models;
 
 use Yii;
@@ -77,6 +78,7 @@ class Slide extends \common\models\Slide {
      */
     public function uploadImage() {
         if($this->slide_image instanceof yii\web\UploadedFile){
+
             $filename = Yii::$app->security->generateRandomString() . "." . $this->slide_image->extension;
 
             //Resize file using imagine
@@ -96,6 +98,7 @@ class Slide extends \common\models\Slide {
 
             //Save to S3
             $awsResult = Yii::$app->resourceManager->save($this->slide_image, self::UPLOADFOLDER . $filename);
+
             if($awsResult){
                 $this->slide_image = $filename;
             }
@@ -120,16 +123,16 @@ class Slide extends \common\models\Slide {
     public function statusImageurl($img_status)
     {
         if($img_status == 'Active')
-        return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
+        
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
 
     // Status Image title
     public function statusTitle($status)
     {
-    if($status == 'Active')
-        return 'Activate';
+        if($status == 'Active')
+            return 'Activate';
         return 'Deactivate';
     }
-
 }

@@ -12,8 +12,11 @@ use common\models\Image;
 use common\models\Vendoritemquestion;
 use common\models\Vendoritemquestionguide;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Vendoritem */
+$arr_categories = [];
+
+foreach($categories as $key => $value) { 
+    $arr_categories[] = $value->category->category_title;
+} 
 
 $this->title = 'Vendor Item Details';
 //$this->title = $model->item_name;
@@ -58,16 +61,9 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value'  => Vendoritem::getVendorName($model->vendor_id),
                         ],
                         [
-                            'label'=>'Parent Category Name',
-                            'value'  => Vendoritem::getCategoryName($model->category_id),
-                        ],
-                        [
-                            'label'=>'Subparent Category Name',
-                            'value'  => Vendoritem::getCategoryName($model->subcategory_id),
-                        ],
-                        [
-                            'label'=>'Child Category Name',
-                            'value'  => Vendoritem::getCategoryName($model->child_category),
+                            'label'=>'Categories',
+                            'format'=>'raw',
+                            'value'  => implode('<br />', $arr_categories)
                         ],
                         'item_name',
                         'item_name_ar',
@@ -108,8 +104,8 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value'  =>strip_tags($model->item_price_description),
                         ],
                         [
-                            'label'=>'Item price description - Arabic',
-                            'value'  =>strip_tags($model->item_price_description_ar),
+                            'label' =>'Item price description - Arabic',
+                            'value' => strip_tags($model->item_price_description_ar),
                         ],
                         'item_for_sale',
                         'item_how_long_to_make',
@@ -117,7 +113,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         'item_approved',
                         [
                             'label'=>'Themes',
-                            'value'  => Vendoritemthemes::themedetails($model),
+                            'value'  => $model->getThemeName(),
                         ],
                         [
                             'label'=>'Group',

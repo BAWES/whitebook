@@ -7,19 +7,18 @@ use common\models\Itemtype;
 use frontend\models\Category;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
+use common\components\CFormatter;
+
 $vendor_det = $model->vendor;
-$category_det = Category::category_slug($model['category_id']);
 
 if(Yii::$app->language == "en"){
     $item_name = $model['item_name'];
-    $category_name = $category_det['category_name'];
     $vendor_name = $vendor_det['vendor_name'];
     $item_description = $model['item_description'];
     $item_additional_info = $model['item_additional_info'];
     $vendor_contact_address = $vendor_det['vendor_contact_address'];
 }else{
     $item_name = $model['item_name_ar'];
-    $category_name = $category_det['category_name_ar'];
     $vendor_name = $vendor_det['vendor_name_ar'];
     $item_description = $model['item_description_ar'];
     $item_additional_info = $model['item_additional_info_ar'];
@@ -43,25 +42,14 @@ $this->title = 'Whitebook - ' . $item_name;
         <div class="breadcrumb_common">
             <div class="bs-example">
 
-                <?php
-                $this->params['breadcrumbs'][] = [
-                    'label' => ucfirst($category_name),
-                    'url' => Url::to(["plan/plan", 'slug' => $category_det['slug']])
-                ];
-
-                $this->params['breadcrumbs'][] = ucfirst($item_name);
-                ?>
-
-                <?=
-                Breadcrumbs::widget([
-                    'options' => ['class' => 'new breadcrumb'],
-                    'homeLink' => [
-                        'label' => Yii::t('yii', 'Home'),
-                        'url' => Yii::$app->homeUrl,
-                    ],
-                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                ]);
-                ?>
+                <?= Breadcrumbs::widget([
+                        'options' => ['class' => 'new breadcrumb'],
+                        'homeLink' => [
+                            'label' => Yii::t('yii', 'Home'),
+                            'url' => Yii::$app->homeUrl,
+                        ],
+                        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                    ]); ?>
 
             </div>
         </div>
@@ -69,58 +57,20 @@ $this->title = 'Whitebook - ' . $item_name;
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
-                <div class="select_items_select desktop-menu" style="display:none">
-                    <div data-example-id="basic-forms" class="bs-example responsive_inner_top">
-                        <form>
-                            <div class="col-md-3 padding-right0 padding-right8">
-                                <div class="form-group left_select_common">
-                                    <div class="bs-docs-example">
-                                        <select class="selectpicker" data-style="btn-primary" style="display: none;">
-                                            <option><?= Yii::t('frontend', 'Select Delivery Area'); ?></option>
-                                            <?php foreach ($vendor_area as $key => $value) { ?>
-                                                <option><?= $value['location']; ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2 padding8">
-                                <div class="form-group date-time">
-                                    <input class="form-control required datetimepicker date1" type="text" id="delivery_date" placeholder="Delivery Date">
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 padding8">
-                                <div class="form-group">
-                                    <div class="bs-docs-example">
-                                        <select class="selectpicker" data-style="btn-primary" style="display: none;" id="delivery-time">
-                                            <option><?= Yii::t('frontend', 'Select Delivery Time') ?></option>
-                                            <?php /* foreach ($vendor_timeslot as $key => $value1) { ?>
-                                              <option><?= $value1['timeslot_start_time'].' - '.$value1['timeslot_end_time'];?></option>
-                                              <?php } */ ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1 padding8 select_buttons">
-                                <button class="btn btn-default" type="submit" title="Select">
-                                    <?= Yii::t('frontend', 'Select'); ?>
-                                </button>
-                            </div>
-                            <div class="col-md-4">
-                                <!-- <em class="error_text">This item is not available at the selected time</em> -->
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
+                
                 <div class="product_detials_common normal_tables">
 
                     <div class="col-md-6 paddig0 resp_hide">
                         <div class="left_descrip mobile-view">
-                            <h2><?= $vendor_name; ?></h2>
-                            <label><?= $item_name; ?></label>
-                            <b><?php echo number_format($model['item_price_per_unit'], 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></b>
+                            <h2><?= $item_name; ?></h2>
+                            <label>
+                                <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $vendor_det['slug']]) ?>"  style="color: #999999">
+                                    <?= $vendor_name; ?>
+                                </a>
+                            </label>
+                            <b>
+                                <?= CFormatter::format($model->item_price_per_unit)  ?>       
+                            </b>
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -192,11 +142,15 @@ $this->title = 'Whitebook - ' . $item_name;
                         <div class="right_descr_product">
                             <div class="product_name">
                                 <div class="left_descrip desktop-view">
-                                    <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $vendor_det['slug']]) ?>">
-                                        <h2><?= $vendor_name; ?></h2>
-                                    </a>
-                                    <label><?= $item_name; ?></label>
-                                    <b><?= Yii::$app->formatter->asCurrency($model['item_price_per_unit'])  ?></b>
+                                    <h2><?= $item_name; ?></h2>
+                                    
+                                    <label>
+                                        <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $vendor_det['slug']]) ?>"  style="color: #999999">
+                                            <?= $vendor_name; ?>
+                                        </a>
+                                    </label>
+
+                                    <b><?= CFormatter::format($model->item_price_per_unit)  ?></b>
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
@@ -322,20 +276,79 @@ $this->title = 'Whitebook - ' . $item_name;
                                             </div>
                                             <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                                 <div class="panel-body">
-                                                    <p>
-                                                        <?php echo $vendor_contact_address; ?>
-                                                    </p>
-                                                    <p>
-                                                        <?php
+                                                    <div class="contact_information margin-4">
+                                                        <address>
+                                                            <div class="clearfix">
+                                                                <?php if (trim($model->vendor->vendor_public_email) || trim($model->vendor->vendor_public_phone)) { ?>
+                                                                    <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
+                                                                        <?php if (trim($model->vendor->vendor_public_email)) { ?>
+                                                                            <h3>
+                                                                                <a href="mailto:<?=$model->vendor->vendor_public_email; ?>" title="<?=$model->vendor->vendor_public_email; ?>"><?=$model->vendor->vendor_public_email; ?>&nbsp;</a>
+                                                                            </h3>
+                                                                            <span class="border-bottom"></span>
+                                                                        <?php } ?>
+                                                                        <?php if (trim($model->vendor->vendor_public_phone)) { ?>
+                                                                            <h4 style="margin-top: 13px;">
+                                                                                <a class="color-808080" href="tel:<?=$model->vendor->vendor_public_phone; ?>"><?=$model->vendor->vendor_public_phone; ?></a>&nbsp;
+                                                                            </h4>
+                                                                            <span class="border-bottom border-bottom-none"></span>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                <?php } ?>
+                                                                <?php if (trim($model->vendor->vendor_website) || trim($model->vendor->vendor_working_hours)) { ?>
+                                                                    <div class="col-md-6 col-xs-6 paddingright0 paddingleft0 cont_ifo_right">
+                                                                        <?php if (trim($model->vendor->vendor_website)) { ?>
+                                                                            <span class="links_left">
+                                                                            <?php
+                                                                            if (strpos($model->vendor->vendor_website,'http://') === false){
+                                                                                $vendor_website = 'http://'.$model->vendor->vendor_website;
+                                                                            } else {
+                                                                                $vendor_website = $model->vendor->vendor_website;
+                                                                            }
+                                                                            ?>
+                                                                                <a target="_blank" href="<?=$vendor_website; ?>" title="<?php echo $vendor_website; ?>">
+                                                                                    <?php echo $vendor_website; ?>&nbsp;
+                                                                                </a>
+                                                                        </span>
+                                                                            <span class="border-bottom"></span>
+                                                                        <?php } ?>
+                                                                        <?php if (trim($model->vendor->vendor_working_hours)) { ?>
 
-                                                        $num = explode(
-                                                            ',', $vendor_det['vendor_contact_number']);
+                                                                            <span class="timer_common"><?php
+                                                                                $from = explode(':',$model->vendor->vendor_working_hours);
+                                                                                echo (isset($from[0])) ? $from[0] : '';
+                                                                                echo (isset($from[1])) ? ':'.$from[1] : '';
+                                                                                echo (isset($from[2])) ? ' '.$from[2] : ''
+                                                                                ?></span>
 
-                                                        echo $num[0];
-
-                                                        ?>
-                                                    </p>
-                                                    <h1 class="space_height"></h1>
+                                                                            - <span class="timer_common">
+                                                                            <?php
+                                                                            $to = explode(':',$model->vendor->vendor_working_hours_to);
+                                                                            echo (isset($to[0])) ? $to[0] : '';
+                                                                            echo (isset($to[1])) ? ':'.$to[1] : '';
+                                                                            echo (isset($to[2])) ? ' '.$to[2] : ''
+                                                                            ?>
+                                                                        </span>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                <?php } ?>
+                                                            </div>
+                                                            <?php if (trim($model->vendor->vendor_contact_address)) { ?>
+                                                                <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
+                                                                    <h5 class="margin-top-13">
+                                                                        <?php
+                                                                        if (Yii::$app->language == "en")  {
+                                                                            echo $model->vendor->vendor_contact_address;
+                                                                        } else {
+                                                                            echo $model->vendor->vendor_contact_address_ar;
+                                                                        }
+                                                                        ?>
+                                                                    </h5>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </address>
+                                                    </div>
+                                                    <h1 class="height-2"></h1>
                                                 </div>
                                             </div>
                                         </div>
@@ -388,26 +401,22 @@ $this->title = 'Whitebook - ' . $item_name;
                             <div class="social_share">
                                 <?php
 
-                                $title = 'Whitebook Application' . ucfirst($vendor_name);
-                                $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
-                                $summary = 'Whitebook Application' . ucfirst($vendor_name) . ucfirst($item_name);
+                                $title = Yii::$app->name.' ' . ucfirst($vendor_name);
+                                $summary = Yii::$app->name.' '. ucfirst($item_name).' from '.ucfirst($vendor_name);
 
-                                if(isset($baselink)) {
-                                    $image = $baselink;
-                                } else {
-                                    $image = '';
-                                }
-
+                                $image = isset($baselink) ? $baselink : '';
+                                $url = Url::toRoute(['shop/product','slug'=>$model->slug],true);
+                                $mailbody = "Check out ".ucfirst($item_name)." on ".Yii::$app->name." ".$url;
                                 ?>
                                 <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
                                 <ul>
-                                    <li>
-                                    <a title="Facebook" onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=<?php echo $title; ?>&amp;p[summary]=<?php echo $summary; ?>&amp;p[url]=<?php echo $url; ?>&amp;&p[images][0]=<?php echo $image; ?>', 'sharer', 'toolbar=0,status=0,width=620,height=280');" href="javascript: void(0)"><span class="flaticon-facebook55"></span></a></li>
-                                    <li><a  title="Twitter" href="https://twitter.com/share" class="twitter" target="_blank" data-url="<?php echo $url; ?>" data-text="<?php echo $title; ?>" data-lang="en" data-size="medium" data-count="none"><span class="flaticon-twitter13"></span></a></li>
+                                    <li><a title="Facebook" href='https://www.facebook.com/sharer/sharer.php?u=<?=urlencode($url)?>' onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><span class="flaticon-facebook55"></span></a></li>
+                                    <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$summary?>&url=<?=$url; ?>" ><span class="flaticon-twitter13"></span></a></li>
                                     <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
                                     <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
+                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
                                     <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>" title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
-                                    <li><a href="mailto:<?= $model->vendor->vendor_contact_email; ?>" title="<?= $model->vendor->vendor_contact_email; ?>"><i class="flaticon-email5"></i> </a></li>
+                                    <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -420,7 +429,19 @@ $this->title = 'Whitebook - ' . $item_name;
                 <?php if($similiar_item) { ?>
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
-                        <h2><?= Yii::t('frontend', 'Similar products') ?></h2>
+                        <h2>
+                            <?php 
+
+                            if(Yii::$app->language == 'en') {
+                                $vendor = $model->vendor->vendor_name;
+                            }else{
+                                $vendor = $model->vendor->vendor_name_ar;
+                            }
+
+                            echo Yii::t('frontend', 'More from {vendor_name}', [
+                                        'vendor_name' => '<b>'.$vendor.'</b>'
+                                    ]); ?>                            
+                        </h2>
                     </div>
                     <div class="feature_product_slider">
                         <div id="similar-products-slider">
@@ -487,3 +508,10 @@ $this->registerJs("
 ", View::POS_HEAD);
 
 $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+
+$this->registerCss("
+.color-808080{color: #808080!important;}
+.height-2{height:2px!important;}
+.margin-4{margin: 4px 0 0px;}
+");

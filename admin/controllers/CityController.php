@@ -27,8 +27,7 @@ class CityController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -66,7 +65,9 @@ class CityController extends Controller
     public function actionIndex()
     {
         $access = Authitem::AuthitemCheck('4', '12');
+
         if (yii::$app->user->can($access)) {
+        
             $searchModel = new CitySearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -74,9 +75,10 @@ class CityController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
+        } else {
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -105,13 +107,18 @@ class CityController extends Controller
     public function actionCreate()
     {
         $access = Authitem::AuthitemCheck('1', '12');
+        
         if (yii::$app->user->can($access)) {
+            
             $model = new City();
+            
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Governorate info created successfully!');
-
+                
+                Yii::$app->session->setFlash('success', 'Governorate info created successfully!');
                 return $this->redirect(['index']);
+            
             } else {
+
                 $countries = Country::find()->all();
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
@@ -119,9 +126,10 @@ class CityController extends Controller
                     'model' => $model, 'country' => $country,
                 ]);
             }
+        
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -138,23 +146,31 @@ class CityController extends Controller
     public function actionUpdate($city_id, $country_id)
     {
         $access = Authitem::AuthitemCheck('2', '12');
+        
         if (yii::$app->user->can($access)) {
+            
             $model = $this->findModel($city_id, $country_id);
+            
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                echo Yii::$app->session->setFlash('success', 'Governorate info updated successfully!');
+                
+                Yii::$app->session->setFlash('success', 'Governorate info updated successfully!');
 
                 return $this->redirect(['index']);
+            
             } else {
+
                 $countries = Country::find()->all();
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
                 return $this->render('update', [
-                    'model' => $model, 'country' => $country,
+                    'model' => $model, 
+                    'country' => $country,
                 ]);
             }
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
+        } else {
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -171,14 +187,17 @@ class CityController extends Controller
     public function actionDelete($city_id, $country_id)
     {
         $access = Authitem::AuthitemCheck('3', '12');
+
         if (yii::$app->user->can($access)) {
+        
             $this->findModel($city_id, $country_id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
 
+            Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
             return $this->redirect(['index']);
-        } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
+        } else {
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
     }
@@ -205,11 +224,16 @@ class CityController extends Controller
 
     public function actionBlock()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
+        $data = Yii::$app->request->post();
+        
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
+        
         $command=\common\models\City::updateAll(['status' => $status],'city_id= '.$data['cid']);
+        
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {

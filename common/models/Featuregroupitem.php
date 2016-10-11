@@ -45,11 +45,6 @@ class Featuregroupitem extends \yii\db\ActiveRecord
     {
         return [
             [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by',
-            ],
-            [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_datetime',
                 'updatedAtAttribute' => 'modified_datetime',
@@ -77,17 +72,10 @@ class Featuregroupitem extends \yii\db\ActiveRecord
             'featured_id' => 'Featured',
             'group_id' => 'Group',
             'item_id' => 'Item ',
-            'featured_start_date' => 'Featured Start Date',
-            'featured_end_date' => 'Featured End Date',
-            'featured_sort' => 'Featured Sort',
             'group_item_status' => 'Group Item Status',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
             'modified_datetime' => 'Modified Datetime',
             'trash' => 'Trash',
-            'subcategory_id'=>'Sub category',
-            'category_id'=>'category',
             'vendor_id'=>'Vendor Name',
         ];
     }
@@ -177,6 +165,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
             '{{%feature_group_item}}.item_id as gid',
             '{{%vendor}}.vendor_name as vname',
             '{{%vendor_item}}.item_name as iname',
+            '{{%vendor_item}}.item_for_sale',
             '{{%vendor}}.vendor_name_ar as vname_ar',
             '{{%vendor_item}}.item_name_ar as iname_ar',
             '{{%vendor_item}}.item_price_per_unit as price',
@@ -202,8 +191,6 @@ class Featuregroupitem extends \yii\db\ActiveRecord
         ->where(['{{%feature_group_item}}.group_item_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor}}.approve_status' => 'Yes'])
         ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
         ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
-        ->andWhere(['<=','{{%feature_group_item}}.featured_start_date',$today_date])
-        ->andWhere(['>=','{{%feature_group_item}}.featured_end_date',$today_date])
         ->all();
     }
 }

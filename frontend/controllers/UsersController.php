@@ -3,31 +3,34 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\db\Query;
+use yii\helpers\Arrayhelper;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\web\Controller;
 use arturoliveira\ExcelView;
-use frontend\models\Basket;
 use common\models\Country;
-use frontend\models\Addresstype;
-use frontend\models\AddressQuestion;
-use frontend\models\Customer;
+use common\models\Location;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use common\models\Siteinfo;
-use frontend\models\Themes;
-use frontend\models\Vendoritem;
 use common\models\Featuregroupitem;
 use common\models\LoginForm;
 use common\models\Vendor;
 use common\models\City;
-use frontend\models\Website;
-use yii\web\Controller;
-use frontend\models\EventinviteesSearch;
-use frontend\models\Eventitemlink;
-use yii\helpers\Arrayhelper;
-use yii\helpers\Url;
-use yii\helpers\Html;
 use common\models\Events;
+use frontend\models\EventinviteesSearch;
+use frontend\models\Website;
+use frontend\models\Eventitemlink;
+use frontend\models\Wishlist;
 use frontend\models\Users;
-use yii\db\Query;
+use frontend\models\Addresstype;
+use frontend\models\AddressQuestion;
+use frontend\models\Customer;
+use frontend\models\Themes;
+use frontend\models\Vendoritem;
+use common\models\VendorItemToCategory;
+use common\models\Vendoritemthemes;
 
 /**
 * Site controller.
@@ -267,6 +270,9 @@ class UsersController extends BaseController
         }
     }
 
+    /**
+     * Account settings for login customer   
+     */
     public function actionAccount_settings()
     {
         if (Yii::$app->user->isGuest) {
@@ -274,47 +280,24 @@ class UsersController extends BaseController
             return $this->goHome();
         }
 
-        $country = Country::loadcountry();
+        $model = Customer::findOne(Yii::$app->user->getId());
 
-        $model = new Users();
-
-        $user_detail = $model->get_user_details();
-
-        if (!empty($customer_detail['country_id'])) {
-            $city = City::listcityname($customer_detail['country_id']);
-        } else {
-            $city = City::fullcityname();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            
+            Yii::$app->getSession()->setFlash('success', Yii::t(
+                'frontend',
+                'Success: Account updated successfully!'
+            ));
         }
 
         return $this->render('account-settings', [
-            'user_detail' => $user_detail, 
-            'loadcountry' => $country, 
-            'loadcity' => $city
+            'model' => $model
         ]);
     }
 
-    public function actionEdit_profile()
-    {
-        $customer_id = Yii::$app->user->identity->customer_id;
-        
-        if ($customer_id == '') {
-            return $this->goHome();
-        }
-
-        $model = new Users();
-        
-        if (Yii::$app->request->isPost) {
-            
-            $data = Yii::$app->request->post();
-            
-            $update_customer = $model->update_customer_profile($data, $customer_id);
-            
-            if ($update_customer) {
-                return Users::SUCCESS; // User profile updated successfully
-            }
-        }
-    }
-
+    /**
+     * Create events    
+     */
     public function actionCreate_event()
     {
         if (Yii::$app->user->isGuest) {
@@ -399,6 +382,9 @@ class UsersController extends BaseController
         }
     }
 
+    /**
+     * Update events    
+     */
     public function actionUpdate_event()
     {
         if (Yii::$app->user->isGuest) {
@@ -424,6 +410,9 @@ class UsersController extends BaseController
         }
     }
 
+    /**
+     * Insert items to events    
+     */
     public function actionAdd_event()
     {
         if (Yii::$app->user->isGuest) {
@@ -503,12 +492,10 @@ class UsersController extends BaseController
 
         $request = Yii::$app->request;
 
-        /* Begin events & things I like active tabs */
         $events = ($request->get('slug') == 'events' ? 'active' : '');
         $thingsilike = ($request->get('slug') ==  'thingsilike' ?  'active' : '');
-        /* End active tabs */
-
-        $customer_id = Yii::$app->user->identity->customer_id;
+        
+        $customer_id = Yii::$app->user->getId();
 
         $website_model = new Website();
         $event_type = $website_model->get_event_types();
@@ -523,70 +510,50 @@ class UsersController extends BaseController
         $price = $vendor = $avail_sale = $theme = '';
 
         $themes = $model->get_themes();
-        $customer_unique_events = $website_model->get_user_event_types($customer_id);
+        $customer_unique_events = $website_model->getCustomerEvents($customer_id);
+        $customer_event_type = $website_model->get_user_event_types($customer_id);
 
-        $customer_event_type = $website_model->get_user_event($customer_id);
+        $wishlist = Wishlist::find()
+            ->where(['customer_id' => $customer_id])
+            ->all();
 
-        $customer_category = $model->get_customer_details($customer_id);
+        $arr_item_id = Arrayhelper::map($wishlist, 'item_id', 'item_id');
 
-        $vendoritem_model = new Vendoritem();
+        $categorylist = VendorItemToCategory::find()
+            ->select('{{%category}}.category_id, {{%category}}.category_name, {{%category}}.category_name_ar') 
+            ->joinWith('category')
+            ->where(['IN', '{{%vendor_item_to_category}}.item_id', $arr_item_id])
+            ->asArray()
+            ->all();
 
-        $categorylist = $vendoritem_model->get_category_itemlist($customer_category);
+        $vendorlist = Vendoritem::find()
+            ->select('{{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.vendor_id')
+            ->joinWith('vendor')
+            ->where(['IN', '{{%vendor_item}}.item_id', $arr_item_id])
+            ->asArray()
+            ->all();
 
-        $vendorlist = $vendoritem_model->get_vendor_itemlist($customer_category);
+        $themelist =  Vendoritemthemes::find()
+            ->select('{{%theme}}.theme_id, {{%theme}}.theme_name, {{%theme}}.theme_name_ar')
+            ->joinWith('themeDetail')
+            ->where(['trash' => 'default'])
+            ->where(['IN', '{{%vendor_item_theme}}.item_id', $arr_item_id])
+            ->asArray()
+            ->all();
 
-        $k = array();
-
-        foreach ($customer_category as $c) {
-            $k[] = $c['item_id'];
-        }
-
-        /* start */
-        $result = Themes::loadthemename_item($k);
-        $out1[] = array();
-        $out2[] = array();
-
-        foreach ($result as $r) {
-            if (is_numeric($r['theme_id'])) {
-                $out1[] = $r['theme_id'];
-                //$out2[]=0;
-            }
-            if (!is_numeric($r['theme_id'])) {
-                $out2[] = explode(',', $r['theme_id']);
-
-                //$out1[]=0;
-            }
-        }
-
-        $p = array();
-        foreach ($out2 as $id) {
-            foreach ($id as $key) {
-                $p[] = $key;
-            }
-        }
-        if (count($out1)) {
-            foreach ($out1 as $o) {
-                if (!empty($o)) {
-                    $p[] = $o;
-                }
-            }
-        }
-        $p = array_unique($p);
-        $themelist = Themes::load_all_themename($p);
-
-        /*  end */
         $avail_sale = $category_id = $vendor = $theme = '';
-        $customer_wishlist = $model->get_customer_wishlist($customer_id, $wish_limit, $offset, $category_id, $price, $vendor, $avail_sale, $theme);
 
-        $customer_wishlist_count = $model->get_customer_wishlist_count($customer_id, $category_id, $price, $vendor, $avail_sale, $theme);
+        $customer_wishlist = $model->get_customer_wishlist(
+            $customer_id, $wish_limit, $offset, $category_id, $price, $vendor, $avail_sale, $theme);
 
-        /* BEGIN load user events */
+        $customer_wishlist_count = $model->get_customer_wishlist_count(
+            $customer_id, $category_id, $price, $vendor, $avail_sale, $theme);
+
         $user_events = Events::find()
             ->where(['customer_id' => Yii::$app->user->identity->customer_id])
             ->asArray()
             ->all();
-        /* END load user events */
-
+        
         return $this->render('events', [
             'event_type' => $event_type,
             'customer_event_type' => $customer_event_type,
@@ -594,15 +561,14 @@ class UsersController extends BaseController
             'customer_events_count' => $customer_events_count,
             'customer_wishlist' => $customer_wishlist,
             'customer_wishlist_count' => $customer_wishlist_count,
-            'vendor' => $vendor, 'category' => $categorylist,
-            'themes' => $themes,
+            'vendor' => $vendor, 
             'customer_unique_events' => $customer_unique_events,
             'categorylist' => $categorylist,
             'vendorlist' => $vendorlist,
             'themelist' => $themelist,
-            'slug'=>'events',
-            'events'=>$events,
-            'thingsilike'=>$thingsilike,
+            'slug' => 'events',
+            'events' => $events,
+            'thingsilike' => $thingsilike,
         ]);
     }
 
@@ -840,31 +806,25 @@ class UsersController extends BaseController
 
     public function actionDeleteeventitem()
     {
-        if (Yii::$app->request->isAjax) {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
             
-            $data = Yii::$app->request->post();
+        $data = Yii::$app->request->post();
 
-            //check if login customer's link
-            $sub_query = (new Query())
-                ->select('event_id')
-                ->from('whitebook_events')
-                ->where(['customer_id' => Yii::$app->user->identity->customer_id])->one();
+        //check if login customer's link
+        $event = Events::find()
+            ->where(['customer_id' => Yii::$app->user->getId()])
+            ->one();
 
-            $command = Eventitemlink::deleteAll(['link_id' => $data['item_link_id'],
-                'event_id'=> $sub_query['event_id']]);
+        if($event) {
 
-            if ($command) {
+            $command = Eventitemlink::deleteAll([
+                'link_id' => $data['item_link_id'],
+                'event_id'=> $data['event_id']
+            ]);   
 
-                $cat_list1 = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
-                ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
-                ->Where(['{{%vendor_item}}.item_status'=>'Active','{{%vendor_item}}.trash'=>'Default','{{%vendor_item}}.item_for_sale'=>'Yes','{{%vendor_item}}.type_id'=>'2','{{%vendor_item}}.category_id'=>$data['category_id'],'{{%event_item_link}}.event_id'=>$data['event_id']])
-                ->asArray()
-                ->all();
-                
-                return count($cat_list1);
-            } else {
-                return Users::SUCCESS; // Event item removed successfully
-            }
+            return Users::SUCCESS; // Event item removed successfully 
         }
     }
 
@@ -884,64 +844,134 @@ class UsersController extends BaseController
         
         if(Yii::$app->request->isPost) {
 
-            $customer_address = new CustomerAddress();
+            $questions = Yii::$app->request->post('question');
+
+            if(!$questions) {
+                $questions = array();
+            }
+
+            //save address
+            $customer_address = new CustomerAddress();          
+            $customer_address->load(Yii::$app->request->post());            
+            $customer_address->customer_id = $customer_id;
+            
+            $location = Location::findOne($customer_address->area_id);
+
+            $customer_address->city_id = $location->city_id;
+            $customer_address->country_id = $location->country_id;
+            $customer_address->save(false);
           
-            if ($customer_address->load(Yii::$app->request->post())) {
-              
-                $customer_address->customer_id = $customer_id;
+            $address_id = $customer_address->address_id;
 
-                if ($customer_address->save(false)) {
-                  
-                    $address_id = $customer_address->address_id;
-
-                    //save customer address response 
-                    $questions = Yii::$app->request->post('question');
-
-                    foreach ($questions as $key => $value) {
-                        $customer_address_response = new CustomerAddressResponse();
-                        $customer_address_response->address_id = $address_id;
-                        $customer_address_response->address_type_question_id = $key;
-                        $customer_address_response->response_text = $value;
-                        $customer_address_response->save();
-                    }
-                }
+            //save address questions 
+            foreach ($questions as $key => $value) {
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $key;
+                $customer_address_response->response_text = $value;
+                $customer_address_response->save();
             }
         }
 
         $addresses = array();
 
         $result = CustomerAddress::find()
-        ->select('whitebook_city.city_name, whitebook_location.location, whitebook_customer_address.*')
-        ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
-        ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
-        ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
-        ->asArray()
-        ->all();
+            ->select('whitebook_city.city_name, whitebook_city.city_name_ar, whitebook_location.location, 
+                whitebook_location.location_ar, whitebook_customer_address.*')
+            ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
+            ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
+            ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
+            ->asArray()
+            ->all();
 
         foreach($result as $row) {
 
-          $row['questions'] = CustomerAddressResponse::find()
-          ->select('aq.question, whitebook_customer_address_response.*')
-          ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
-          ->where('address_id = :address_id', [':address_id' => $row['address_id']])
-          ->asArray()
-          ->all();
+            $row['questions'] = CustomerAddressResponse::find()
+              ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
+              ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
+              ->where('address_id = :address_id', [':address_id' => $row['address_id']])
+              ->asArray()
+              ->all();
 
-          $addresses[] = $row;
+            $addresses[] = $row;
         }
 
         $customer_address_modal = new CustomerAddress();
-        $addresstype = Addresstype::loadAddress();
-        $country = Country::loadcountry();
+        $addresstype = Addresstype::loadAddresstype();
 
         return $this->render('address', [
             'addresses' => $addresses,
             'customer_address_modal' => $customer_address_modal,
-            'addresstype' => $addresstype,
-            'country' => $country
+            'addresstype' => $addresstype
         ]);
     }
 
+    /**
+     * Display customer address form to edit and save address on post 
+     * @param integer $address_id and POST data 
+     */
+    public function actionEditAddress($address_id)
+    {
+        $customer_id = Yii::$app->user->getId();
+        
+        if ($customer_id == '') {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
+            return $this->goHome();
+        }
+        
+        $customer_address = CustomerAddress::findone([
+            'address_id' => $address_id, 
+            'customer_id' => $customer_id
+        ]);     
+
+        if(!$customer_address) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+        
+        if(Yii::$app->request->isPost) {
+
+            $questions = Yii::$app->request->post('question');
+
+            if(!$questions) {
+                $questions = array();
+            }
+
+            //save address               
+            $customer_address->load(Yii::$app->request->post());            
+            
+            $location = Location::findOne($customer_address->area_id);
+
+            $customer_address->city_id = $location->city_id;
+            $customer_address->country_id = $location->country_id;
+            $customer_address->save(false);
+          
+            //remove old questions 
+            CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
+
+            //save address questions 
+            foreach ($questions as $key => $value) {
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $key;
+                $customer_address_response->response_text = $value;
+                $customer_address_response->save();
+            }
+
+            return $this->redirect(['users/address']);
+        }
+
+        //display edit form 
+        return $this->render('address_edit', [
+            'address' => $customer_address,
+            'address_id' => $address_id,
+            'addresstype' => Addresstype::loadAddresstype()
+        ]);
+    }
+
+    /**
+     * Delete customer address
+     * @param integer $address_id
+     */
     public function actionAddress_delete()
     {
         $customer_id = Yii::$app->user->identity->customer_id;
@@ -964,18 +994,54 @@ class UsersController extends BaseController
     }
 
     /**
-     * Updates address questions 
-     * If update is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param string $id
-     *
-     * @return mixed
+     * Returns the Question form for address for specific address type 
+     * @param integer $address_id, integer $address_type_id 
      */
     public function actionQuestions()
     {
         $address_type_id = Yii::$app->request->post('address_type_id');
+        $address_id = Yii::$app->request->post('address_id');
 
-        $questions = AddressQuestion::find()->where('address_type_id = '. $address_type_id)->all();
+        if($address_id) {
+       
+            $questions = array();
+
+            //get questions
+            $result = AddressQuestion::find()
+                ->where([
+                    'address_type_id' => $address_type_id,
+                    'trash' => 'Default',
+                    'status' => 'Active'])
+                ->asArray()
+                ->all();
+
+            //get questions response 
+            foreach ($result as $value) {
+                
+                $response = CustomerAddressResponse::findone([
+                    'address_id' => $address_id,
+                    'address_type_question_id' => $value['ques_id']
+                ]);
+
+                if($response) {
+                    $value['response_text'] = $response->response_text;
+                }else{
+                    $value['response_text'] = '';
+                }
+                
+                $questions[] = $value;
+            }       
+
+        } else {
+            
+            $questions = AddressQuestion::find()
+                ->where([
+                    'address_type_id' => $address_type_id,
+                    'trash' => 'Default',
+                    'status' => 'Active'])
+                ->asArray()
+                ->all();
+        }        
 
         return $this->renderPartial('questions', [
             'questions' => $questions

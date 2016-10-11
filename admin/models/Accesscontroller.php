@@ -2,14 +2,14 @@
 
 namespace admin\models;
 
-use admin\models\Usercontroller;
-use admin\models\Admin;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use admin\models\Usercontroller;
+use admin\models\Admin;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
 
 /**
 * This is the model class for table "{{%access_control}}".
@@ -97,44 +97,47 @@ class Accesscontroller extends \yii\db\ActiveRecord
         return $this->hasOne(Admin::className(), ['id' => 'admin_id']);
     }
 
-
-
-
     public static function getAdminName($id)
     {
-        $admin= Admin::find()
-        ->select ('admin_name')
-        ->where(['=', 'id', $id])
-        ->one();
-        return ($admin['admin_name']);
+        return Admin::find()
+            ->select ('admin_name')
+            ->where(['=', 'id', $id])
+            ->one()
+            ->admin_name;
     }
+
     public static function getControllerName($id)
     {
-        $controller= Usercontroller::find()
-        ->select ('controller')
-        ->where(['=', 'id', $id])
-        ->one();
-        return ($controller['controller']);
+        return Usercontroller::find()
+            ->select ('controller')
+            ->where(['=', 'id', $id])
+            ->one()
+            ->controller;        
     }
 
     public static function itemcontroller($ctrllist)
     {
-        $k=explode(",",$ctrllist);
+        $k = explode(",", $ctrllist);
 
-        $g=array();
+        $g = array();
+        
         foreach ($k as $f)
         {
             $controller= Usercontroller::find()
-            ->select ('controller')
-            ->where(['=', 'id', $f])
-            ->one();
-            $g[]=$controller;
+                ->select ('controller')
+                ->where(['=', 'id', $f])
+                ->one();
+                
+            $g[] = $controller;
         }
-        $m=array();
+        
+        $m = array();
+        
         foreach ($g as $r)
         {
-            $m[]= $r['controller'];
+            $m[] = $r['controller'];
         }
+
         return implode(" , ",$m);
     }
 

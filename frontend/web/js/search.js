@@ -3,6 +3,7 @@
 |* Some JS to help with our search
 |* ------------------------------------------------------------ *|
 \* ------------------------------------------------------------ */
+
 (function(window){
 
 	// get vars
@@ -163,7 +164,7 @@ if(labelE4){
             }
             ;
 
-            /*responsiveactive*/
+            //responsiveactive
            
 
 

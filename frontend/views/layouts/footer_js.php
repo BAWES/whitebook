@@ -28,7 +28,7 @@ $this->registerJs("
     var reg_email_id = '".Yii::t('frontend','Enter registered email')."';
     var search_result_url = '".Url::toRoute('/search-result/')."/';
     var home_url = '".Yii::$app->homeUrl."';
-    var site_search = '".Url::toRoute('/site/search')."';
+    var site_search = '".Url::toRoute('/search/search')."';
     var event_slider_url = '".Url::toRoute('/product/event_slider')."';
     var item_removed_fav = '".Yii::t('frontend','Item removed from Things I like')."';
     var remove_from_wishlist = '".Url::toRoute('/users/remove_from_wishlist')."';
@@ -60,36 +60,25 @@ $this->registerJs("
     var session_register = '".Yii::$app->session->get('register')."';
     var session_show_login_modal = '".Yii::$app->session->get('show_login_modal')."';
     var you_are_login_and = '".Yii::t('frontend','You are now logged in and')."';
-
     var session_key = '".Yii::$app->session->get('key')."';
     var add_to_favourite_successfully = '".Yii::t('frontend','Added to Things I like')."';
-
     var pwd_fail_msg = '".Yii::t('frontend','Password reset failed!')."';
     var product_add_event_url = '".Url::toRoute('product/addevent')."';
     var session_event_status = '".Yii::$app->session->get('event_status')."';
     var reg_success_msg = '".Yii::t('frontend','A confirmation link will be sent to your email to activate your account')."';
     var pwd_success_msg = '".Yii::t('frontend','Your password has been reset and you are now logged in')."';
-
     //language variables
     var tick_the_terms_of_services_and_privacy_policy = '".Yii::t('frontend','You must agree to the terms and conditions and the privacy policy')."';
-
     var password_should_contain_minimum_six_letters = '".Yii::t('frontend','Password should contain minimum six letters')."';
-
     var confirm_password_should_be_equal_to_password  = '".Yii::t('frontend','Password and confirm password should match')."';
-
     var password_and_confirm_password_should_be_minimum_six_letters_and_same = '".Yii::t('frontend','Password and confirm password should match and contain a minimum of 6 letters')."';
-
     var the_field_is_required = '".Yii::t('frontend','The field is required')."';
-
     var entered_email_id_is_already_exists = '".Yii::t('frontend', 'Email already exists')."';
-
     var enter_a_valid_email_id = '".Yii::t('frontend', 'Enter a valid email')."';
-
     var kindly_select_event_type = '".Yii::t('frontend', 'Kindly select Event type')."';
-
     var no_record_found = '".Yii::t('frontend', 'No Record found')."';
-
-
+    var giflink             = '".Url::to("@web/images/ajax-loader.gif")."';
+    var addevent            = '".Url::to(['/product/addevent'])."';
 ", View::POS_HEAD);
 
 Yii::$app->session->set('default',0);
@@ -103,6 +92,6 @@ Yii::$app->session->set('key','0');
 Yii::$app->session->set('show_login_modal', 0);
 
 //$this->registerJsFile('@web/js/jquery.touchSwipe.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/js/footer.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
+//$this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/footer.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

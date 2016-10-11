@@ -258,12 +258,6 @@
         var owl = jQuery("#owl-demo2");
 
         owl.owlCarousel({
-// Define custom and unlimited items depending from the width
-// If this option is set, itemsDeskop, itemsDesktopSmall, itemsTablet, itemsMobile etc. are disabled
-// For better preview, order the arrays by screen size, but it's not mandatory
-// Don't forget to include the lowest available screen size, otherwise it will take the default one for screens lower than lowest available.
-// In the example there is dimension with 0 with which cover screens between 0 and 450px
-
             itemsCustom: [
                 [0, 1],
                 [450, 2],
@@ -296,11 +290,6 @@
         var owl = jQuery("#owl-demo");
         
         owl.owlCarousel({
-// Define custom and unlimited items depending from the width
-// If this option is set, itemsDeskop, itemsDesktopSmall, itemsTablet, itemsMobile etc. are disabled
-// For better preview, order the arrays by screen size, but it's not mandatory
-// Don't forget to include the lowest available screen size, otherwise it will take the default one for screens lower than lowest available.
-// In the example there is dimension with 0 with which cover screens between 0 and 450px
             itemsCustom: [
                 [0, 1],
                 [450, 2],
@@ -318,35 +307,126 @@
     });
 
 
-    /* BEGIN Buy Item */
-    if (!isGuest) { 
-        jQuery('.buy_item').click(function () {
-            
-            var item_id = jQuery(this).attr('id');
-            
-            jQuery.ajax({
-                type: 'POST',
-                url: addtobasket_url,
-                data: {'item_id': item_id, 'cust_id': customer_id },
-                success: function (data)
-                {
-                    // alert(data);
+/* BEGIN Buy Item */
+if (!isGuest) {
+
+    jQuery(document).delegate('#form_product_option', 'submit', function(e) {
+        jQuery.post(
+            addtobasket_url,
+            jQuery('#form_product_option').serialize(),
+            function (data)
+            {
+                jQuery('#form_product_option .error').html('');
+
+                if(data['success']) {
+                    location = location;
+                } else {
+
+                    $.each(data['errors'], function(index, errors) {
+                        $.each(errors, function() {
+                            jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');
+                        });
+                    });
+
                 }
-            });
-        });
-    }
+            }
+        );
 
+        e.preventDefault();
+    });
 
-    /* END BUY Item */
-    jQuery('#delivery_date').on('change', function () {
+    jQuery('.buy_item').click(function (e) {
+
+        var item_id = jQuery(this).attr('id');
+
+        jQuery.get(
+            addtobasket_url,
+            {
+                'item_id': item_id,
+                'cust_id': customer_id
+            },
+            function (data)
+            {
+                jQuery('#option_modal_wrapper').html(data);
+                jQuery('#productOptionModal').modal('show');
+                jQuery('.selectpicker').selectpicker();
+
+                jQuery('.date').datepicker({
+                    container:'#delivery_date_wrapper'
+                });
+            }
+        );
+
+        e.preventDefault();
+    });
+
+    function deliveryTimeSlot(date){
+        var myDate = new Date()
+        time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
+        currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
         jQuery.ajax({
             type: 'POST',
             url: getdeliverytimeslot_url,
-            data: {'vendor_id': vendor_id, 'sel_date': jQuery(this).val()},
+            data: { 'vendor_id': vendor_id, 'sel_date': date,'time':time,currentDate:currentDate},
             success: function (data)
             {
-                jQuery('.bs-docs-example #delivery-time').selectpicker('refresh');
-                jQuery('.bs-docs-example #delivery-time').html(data);
+                if (jQuery.trim(data) == 0) {
+                    $('.timeslot_id_div').show();
+                    $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                    $('.timeslot_id_select').hide();
+                    jQuery('#timeslot_id').html('');
+                } else {
+                    $('.timeslot_id_div').hide();
+                    $('.timeslot_id_select').show();
+                    jQuery('#timeslot_id').html(data);
+                    jQuery('#timeslot_id').selectpicker('refresh');
+                    jQuery('.error.timeslot_id').html('');
+                }
             }
         });
+    }
+
+    function productAvailability(date){
+        jQuery.ajax({
+            type: 'POST',
+            url: product_availability,
+            data: $('#form_product_option').serialize(),
+            success: function (data)
+            {
+                if (jQuery.trim(data) != '1') {
+                    $('.timeslot_id_div').show();
+                    $('.timeslot_id_div .text').html(data);
+                    $('.timeslot_id_select').hide();
+                    $('#timeslot_id').html('');
+                    return false;
+                }else{
+                    deliveryTimeSlot(date);
+                }
+            }
+        });
+    }
+
+    // pre set value for Delivery date on product detail page
+    if (deliver_date) {
+        productAvailability(jQuery('#delivery_date').val());
+    }
+
+    // Shop product page quantity increment and decrement stepper
+    jQuery(document).on('click','.btn-stepper',function(){
+        if (jQuery(this).data('case') == 0) {
+            if (parseInt(jQuery('#quantity').val()) >= parseInt(jQuery('#quantity').data('min'))+1) {
+                jQuery('#quantity').val(parseInt(jQuery('#quantity').val()) - 1);
+            }
+        } else if (jQuery(this).data('case') == 1) {
+            jQuery('#quantity').val(parseInt(jQuery('#quantity').val())+1);
+        }
+        return false;
     });
+}
+
+// product detail page Delivery Date change event
+$("#delivery_date").on("changeDate", function(e) {
+    $('.error.cart_delivery_date').html('');
+    productAvailability(jQuery(this).val());
+});
+/* END BUY Item */

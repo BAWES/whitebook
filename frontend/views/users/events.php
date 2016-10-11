@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Users;
 use common\models\Image;
+use common\components\CFormatter;
 
 $this->title = 'Events/Wishlist | Whitebook';
 
@@ -167,7 +168,9 @@ $this->title = 'Events/Wishlist | Whitebook';
 							<div class="events_descrip">
 							<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']]));?>
 							<h3><?= $value['item_name']; ?></h3>
-							<p><?php if($value['item_price_per_unit'] !='') {echo $value['item_price_per_unit'].'.00 KD'; }else echo '-'; ?></p>
+
+							<p><?= CFormatter::format($value['item_price_per_unit'])?></p>
+
 							</div>
 							</div>
 							</li>
@@ -276,7 +279,9 @@ foreach($customer_wishlist as $f) {  ?>
 <h4><?php echo $f['vendor_name'];?></h4>
 <h3><?php echo $f['item_name'];?></h3>
 <div class="text-center"><span class="borderslid"></span></div>
-<h5><?php echo number_format($f['item_price_per_unit'],2).CURRENCY_CODE;?></h5>
+
+<h5><?= CFormatter::format($f['item_price_per_unit']); ?></h5>
+
 </div>
 </div>
 </div>

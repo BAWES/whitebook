@@ -10,6 +10,7 @@ use common\models\Vendor;
 use common\models\Themes;
 use common\models\Image;
 use frontend\models\Website;
+use common\components\CFormatter;
 
 $this->title = 'Home | Whitebook';
 
@@ -108,7 +109,10 @@ $model = new Website();
 <!-- BEGIN FEATURE GROUP ITEM-->
 <?php
 
-$featured_produc = Featuregroup::find()->select(['group_id', 'group_name_ar', 'group_name'])->where(['group_status' => 'Active', 'trash' => 'Default'])->asArray()->all();
+$featured_produc = Featuregroup::find()
+    ->select(['group_id', 'group_name_ar', 'group_name'])
+    ->where(['group_status' => 'Active', 'trash' => 'Default'])
+    ->asArray()->all();
 
 $i = 1;
 foreach ($featured_produc as $key => $value) {
@@ -177,11 +181,25 @@ if (!empty($feature_group_sql_result)) {
                                 $imglink = Yii::getAlias("@web/images/no_image.jpg");
                             }
 
+                            if($product_val['item_for_sale'] == 'Yes'){
+                                
+                                $item_url = Url::to(['shop/product', 
+                                    'slug' => $product_val["slug"]
+                                ]);
+
+                            } else {
+                                
+                                $item_url = Url::to(['product/product', 
+                                    'slug' => $product_val["slug"]
+                                ]);
+                                
+                            }
+
                             ?>
                             <div class="item">
-                                <div class="fetu_product_list index_redirect" data-hr='<?= Url::toRoute(['/product/product', $product_val["slug"], true]); ?>'>
+                                <div class="fetu_product_list index_redirect" data-hr='<?= $item_url ?>'>
 
-                                    <a href="<?= Url::toRoute(['product/product','slug' => $product_val["slug"]]); ?>" title="" class='index_redirect' data-hr='<?= Url::toRoute(['product/product', $product_val['slug']]); ?>'>
+                                    <a href="<?= $item_url ?>" class='index_redirect' data-hr='<?= $item_url; ?>'>
 
                                         <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
 
@@ -195,7 +213,9 @@ if (!empty($feature_group_sql_result)) {
                                                 <h3><?php echo $product_val['item_name_ar']; ?></h3>
                                             <?php } ?>
 
-                                            <p><?php echo number_format($product_val['item_price_per_unit'], 2) . "KD"; ?></p>
+                                            <p>
+                                                <?= CFormatter::format($product_val['item_price_per_unit']) ?>
+                                            </p>
                                         </div>
                                     </a>
                                 </div>
@@ -240,7 +260,7 @@ foreach ($featured_product as $f) {
                             <h4><?php echo $f['vendor']['vendor_name']; ?></h4>
                             <h3><?php echo $f['item_name']; ?></h3>
                             <div class="text-center"><span class="borderslid"></span></div>
-                            <h5><?php echo number_format($f['item_price_per_unit'], 2) . "KWD"; ?></h5>
+                            <h5><?= CFormatter::format($f['item_price_per_unit']) ?></h5>
                         </div>
                     </div>
                 </div>

@@ -39,7 +39,12 @@ class EventinviteesController extends BaseController
             $data = Yii::$app->request->post();
 
             $searchModel = new EventinviteesSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $data['search_val'], $data['event_id']);
+
+            $dataProvider = $searchModel->search(
+                Yii::$app->request->queryParams,
+                $data['search_val'], 
+                $data['event_id']
+            );
 
             return $this->renderPartial('/users/invitee_search_details', [
               'searchModel' => $searchModel,
@@ -140,52 +145,55 @@ class EventinviteesController extends BaseController
 
     public function actionAddinvitees()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
-        $exist = Eventinvitees::find()->select('invitees_id')->where(['event_id ='.$data['event_id']])
-        ->andWhere(['email'=>$data['email']])
-        ->count();
+
+        $data = Yii::$app->request->post();
+        
+        $exist = Eventinvitees::find()
+            ->select('invitees_id')
+            ->where([
+                'event_id' => $data['event_id'],
+                'email' => $data['email']
+            ])
+            ->count();
+        
         // Check count
-         if ($exist == 0) {
-                $event_invite = new Eventinvitees;
-                $event_invite->name = $data['name'];
-                $event_invite->email = $data['email'];
-                $event_invite->event_id = $data['event_id'];
-                $event_invite->customer_id = Yii::$app->user->identity->customer_id;
-                $event_invite->phone_number = $data['phone_number'];
-                $eventinvitees->save();
-              if ($insert) {
-                  $customer_info = Users::get_user_details(Yii::$app->user->identity->customer_id);
-                  $to = $data['email'];
-                  $message = 'Hi '.$data['name'].',<br/><br/> '.$customer_info[0]['customer_name'].' is invite you '.$data['event_name'].' event ';
-                  $subject = 'Event Invitation';
-                  $content = 'test';              
-              } else {
-                  echo 'not';
-              }
-          } else {
+        if ($exist == 0) {
+            
+            $event_invite = new Eventinvitees;
+            $event_invite->name = $data['name'];
+            $event_invite->email = $data['email'];
+            $event_invite->event_id = $data['event_id'];
+            $event_invite->customer_id = Yii::$app->user->identity->customer_id;
+            $event_invite->phone_number = $data['phone_number'];
+            $eventinvitees->save();
+
+        } else {
               echo 2;
-              die;
-          }
+        }
     }
 
     public function actionUpdateinvitees()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
+        $data = Yii::$app->request->post();
+
         $event_invite = Eventinvitees::findOne($data['invitees_id']);
         $event_invite->name = $data['name'];
         $event_invite->email = $data['email'];
         $event_invite->phone_number = $data['phone_number'];
         $event_invite->save();
+        
         if ($event_invite) {
             echo 'done';
         } else {
             echo 'not';
         }
-        die;
     }
 
     public function actionInviteedetails()
@@ -199,20 +207,29 @@ class EventinviteesController extends BaseController
 
     public function actionAddevent()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $model = Vendoritem::find()
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+      
+        $data = Yii::$app->request->post();
+
+        $model = Vendoritem::find()
             ->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name',
                 '{{%image}}.image_path'])
             ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-            ->where(['{{%image}}.module_type' => 'vendor_item'])
             ->andwhere(['{{%vendor_item}}.item_id' => $data['item_id']])
             ->asArray()
             ->all();
             
-            $customer_events = Events::find()->where(['customer_id' => Yii::$app->user->identity->customer_id])->asArray()->all();
-            return $this->renderPartial('/product/add_event', array('model' => $model, 'customer_events' => $customer_events));
-        }
+        $customer_events = Events::find()
+            ->where(['customer_id' => Yii::$app->user->identity->customer_id])
+            ->asArray()
+            ->all();
+
+        return $this->renderPartial('/product/add_event', array(
+            'model' => $model, 
+            'customer_events' => $customer_events
+        ));
     }
 }

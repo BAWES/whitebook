@@ -16,20 +16,7 @@ function cmp($a, $b)
 {
 	return strcmp($a["vendorimage_sort_order"], $b["vendorimage_sort_order"]);
 }
-
 ?>
-<style>
-	#vendoritem-groups label,#vendoritem-themes label {
-		float: left;
-		min-width: 15%;
-		margin-right: 43px;
-	}
-	.border-top{
-		border-top: 1px solid;
-	}
-	.padding-top-bottom{padding: 36px 0;}
-</style>
-
 <div class="col-md-12 col-sm-12 col-xs-12">
 
 <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
@@ -57,48 +44,129 @@ function cmp($a, $b)
 
 	<div class="tab-content">
 		<!-- Begin First Tab -->
-		<div class="tab-pane active" id="1">
+		<div class="tab-pane active clearfix" id="1">
 			<!-- vid - click create item button from item view page for the particular item view page-->
-			<div class="form-group"><?= $form->field($model, 'vendor_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList([$model->vendor->vendor_id => $model->vendor->vendor_name], ['prompt'=>'Select...','disabled'=>'disabled']) ?></div>
-			<?=$form->field($model,'vendor_id')->hiddenInput()->label(false); ?>
-			<div class="form-group"><?= $form->field($model, 'item_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'autocomplete' => 'off'])?></div>
-			<div class="form-group"><?= $form->field($model, 'item_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'autocomplete' => 'off'])?></div>
-			<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($categoryname, ['prompt'=>'Select...']) ?></div>
-			<div class="form-group"><?= $form->field($model, 'subcategory_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($subcategory, ['prompt'=>'Select...']) ?></div>
-			<div class="form-group"><?= $form->field($model, 'child_category',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($childcategory, ['prompt'=>'Select...']) ?></div>
-			<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
+			
+			<?= $form->field($model, 'vendor_id')
+					->dropDownList([
+						$model->vendor->vendor_id => $model->vendor->vendor_name
+					], 
+					[
+						'prompt' => 'Select...',
+						'disabled' => 'disabled'
+					]) ?>
+
+			<?= $form->field($model,'vendor_id')->hiddenInput()->label(false); ?>
+
+			<?= $form->field($model, 'item_name')->textInput(['maxlength' => 128,'autocomplete' => 'off']); ?>
+
+			<?= $form->field($model, 'item_name_ar')->textInput(['maxlength' => 128,'autocomplete' => 'off']); ?>
+			
+			<label>Categories</label>
+			<table class="table table-bordered table-category-list">
+				<tbody>
+					<?php foreach($vendor_item_to_category as $key => $value) { ?>
+					<tr>	
+						<td>
+							<?= $value->category->category_title ?>
+							<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
+						</td>	
+						<td>		
+							<button class="btn btn-danger" type="button">			
+								<i class="glyphicon glyphicon-trash"></i>
+							</button>	
+						</td>
+					</tr>
+					<?php } ?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>
+							<select id="category_id">
+								<option></option>
+								<?php foreach($categories as $key => $value) { ?>
+									<option value="<?= $value['category_id'] ?>">
+										<?= $value['category_name'] ?>
+									</option>
+								<?php } ?>
+							</select>
+						</td>
+						<td>
+							<button type="button" class="btn btn-primary btn-add-category">Add</button>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+
+			<div class="form-group" >
+			<div class="col-lg-6 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete pull-left']) ?></div>
+			<div class="col-lg-6"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
+			</div>
 		</div>
 		<!--End First Tab -->
 
 		<!--BEGIN second Tab -->
-		<div class="tab-pane" id="2">
-			<!-- BEGIN ITEM TYPE -->
-			<div class="form-group"><?= $form->field($model, 'type_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($itemType, ['prompt'=>'Select...']) ?></div>
-			<!-- END ITEM TYPE -->
-			<div class="form-group"><?= $form->field($model, 'item_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item description'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?></div>
-			<div class="form-group"><?= $form->field($model, 'item_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item description - Arabic '.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?></div>
-			<div class="form-group"><?= $form->field($model, 'item_additional_info',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
-			<div class="form-group"><?= $form->field($model, 'item_additional_info_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		<div class="tab-pane clearfix" id="2">
+			
+			<?= $form->field($model, 'type_id')->dropDownList($itemType, ['prompt'=>'Select...']) ?>
+
+			<?= $form->field($model, 'item_description')
+					->label('Item description'.Html::tag('span', '*',['class'=>'required']))
+					->textarea(['maxlength' => 128]); ?>
+
+			<?= $form->field($model, 'item_description_ar')
+					->label('Item description - Arabic '.Html::tag('span', '*',['class'=>'required']))
+					->textarea(['maxlength' => 128]); ?>
+
+			<?= $form->field($model, 'item_additional_info')->textarea(['maxlength' => 128]); ?>
+
+			<?= $form->field($model, 'item_additional_info_ar')->textarea(['maxlength' => 128]); ?>
+
+			<div class="col-lg-4">
+				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+			</div>
+			<div class="col-lg-4 text-center">
+				<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?>
+			</div>
+			<div class="col-lg-4">
+				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+			</div>
 		</div>
 		<!--End Second Tab -->
 
 		<!--BEGIN Third Tab -->
-		<div class="tab-pane" id="3">
+		<div class="tab-pane clearfix" id="3">
 			<input type="hidden" id="test" value="0" name="tests">
-			<div class="form-group"><?php
+			
+			<?php
                 $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
-                echo $form->field($model, 'item_for_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Yes' => 'Yes'])
-                ?></div>
-			<div class="form-group"><?= $form->field($model, 'item_amount_in_stock',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?></div>
-			<div class="form-group"><?= $form->field($model, 'item_default_capacity',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?></div>
-			<div class="form-group"><?= $form->field($model, 'item_how_long_to_make',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('No of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?></div>
-			<div class="form-group"><?= $form->field($model, 'item_minimum_quantity_to_order',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?></div>
+                echo $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
 
-			<div class="form-group single_price"><?= $form->field($model, 'item_price_per_unit',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?></div>
+			<?= $form->field($model, 'item_amount_in_stock')
+				->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))
+				->textInput(['maxlength' => 128]); ?>
 
-				<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price  From - To </div>
+			<?= $form->field($model, 'item_default_capacity')
+				->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
+				->textInput(['maxlength' => 128]); ?>
+
+			<?= $form->field($model, 'item_how_long_to_make')
+				->label('No of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))
+				->textInput(['maxlength' => 128]); ?>
+
+			<?= $form->field($model, 'item_minimum_quantity_to_order')
+				->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))
+				->textInput(['maxlength' => 128]); ?>
+
+			<?= $form->field($model, 'item_price_per_unit', 
+				['options' => [
+					'class' => 'single_price'
+				]])
+				->textInput([
+					'maxlength' => 128
+				]); ?>
+
+			<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price  From - To </div>
 
 					<?php $t=0;
 					foreach ($itemPricing as $value) {  ?>
@@ -109,12 +177,24 @@ function cmp($a, $b)
 					<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
 				</div>
 
-				<div class="form-group"><?= $form->field($model, 'item_price_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
-				<div class="form-group"><?= $form->field($model, 'item_price_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
-				<div class="form-group custom_description"><?= $form->field($model, 'item_customization_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
-				<div class="form-group custom_description_ar"><?= $form->field($model, 'item_customization_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?></div>
-            <?php if ($model->item_for_sale == 'No') { ?>
-            <div class="form-group guide_image" >
+				<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
+
+				<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
+
+				<?= $form->field($model, 'item_customization_description',
+						['options' => ['class' => 'form-group custom_description']]
+					)->textarea(
+						['maxlength' => 128]
+					); ?>
+
+				<?= $form->field($model, 'item_customization_description_ar',
+						['options' => ['class' => 'form-group custom_description_ar']]
+					)->textarea(
+						['maxlength' => 128]
+					); ?>
+
+            	<?php if ($model->item_for_sale == 'No') { ?>
+            	<div class="form-group guide_image" >
                 <?php } else { ?>
                 <div class="form-group guide_image" style="display: none;">
                     <?php } ?>
@@ -156,25 +236,45 @@ function cmp($a, $b)
                     ?>
                 </div>
 			<!-- END display exist images -->
+			<div class="col-lg-4">
+				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+			</div>
 
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+			<div class="col-lg-4 text-center">
+				<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?>
+			</div>
+			
+			<div class="col-lg-4">
+				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+			</div>
+
 		</div>
 		<!--End third Tab -->
 
-		<div class="tab-pane" id="4">
-			<div class="form-group"><?= $form->field($model, 'item_approved',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList([ 'Pending' => 'Pending','Yes' => 'Yes', 'Rejected'=>'Rejected']) ?></div>
-			<div class="form-group"><?php
-                //echo ">>".$model->item_status;
-                //exit;
-                $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
-                echo $form->field($model, 'item_status',['template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Value' => true])?></div>
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		<div class="tab-pane clearfix" id="4">
+			
+			<?= $form->field($model, 'item_approved')
+					->dropDownList([ 'Pending' => 'Pending','Yes' => 'Yes', 'Rejected'=>'Rejected']); ?>
+
+			<?php 
+
+				$model->item_status = ($model->item_status == 'Active') ? 1 : 0;
+                
+                echo $form->field($model, 'item_status')->checkbox(['Value' => true]); ?>
+
+			<div class="col-lg-4">
+				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+			</div>
+			<div class="col-lg-4 text-center">
+				<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?>
+			</div>
+			<div class="col-lg-4">
+				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+			</div>
 		</div>
 		<!--End fourth Tab -->
 
-		<div class="tab-pane" id="5">
+		<div class="tab-pane clearfix" id="5">
 			<div class="file-block" style="color:red;display: none;"> Please upload aleast a file</div>
             <?php
 			$imageInitialPreview = [];
@@ -217,12 +317,13 @@ function cmp($a, $b)
             ]);
             ?>
 
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+			<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+			<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+			<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 		</div>
 		<!--End fifth Tab -->
 
-		<div class="tab-pane" id="6">
+		<div class="tab-pane clearfix" id="6">
 			<div class="form-group clearfix padding-top-bottom">
 				<?php echo $form->field($model, 'themes')->checkboxlist($themelist);?>
 				<?php //$form->field($model, 'themes',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($themelist , ['multiple'=>'multiple',]) ?>
@@ -333,7 +434,7 @@ $this->registerJsFile("@web/themes/default/plugins/jquery-superbox/js/superbox.j
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.2", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
@@ -354,6 +455,9 @@ $this->registerCss("
 	.superbox-s > li > b { margin:10px 0px 5px 0px;}
 	.question_title{font-weight: bold;  margin-top: 15px;  line-height: 31px;  font-size: 15px;}
 	.upimage {margin: 5px 0px 10px 0px;}
+	#vendoritem-groups label,#vendoritem-themes label {float: left;min-width: 15%;margin-right: 43px;}
+	.border-top{border-top: 1px solid;}
+	.padding-top-bottom{padding: 36px 0;}
 ");
 
 

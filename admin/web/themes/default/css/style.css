@@ -8258,10 +8258,6 @@ input.check{  background: #1F3853;  color: white;  border: none;  padding: 7px; 
 .check_box > input {    vertical-align: top;}
 .mrg_top{  margin-top: 20px;  display: inline-block;}
 
-
-
-
-
 .form-group .form-label #accesscontroller-controller1{
 	height:350px;
 	width: 250px;
@@ -8417,4 +8413,12 @@ a.delivery_href:hover{
 }
 .address_box ul li {
     list-style: none;
+}
+
+.item_pending_count{
+  background: red;
+  color: white;
+  border-radius: 100%;
+  padding: 0 5px;
+  margin-left: 10px;
 }

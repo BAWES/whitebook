@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <li><a href="#4" data-toggle="tab">Vendor Item Details</a></li>
         <li><a href="#5" data-toggle="tab">Delivery timeslot</a></li>
         <li><a href="#6" data-toggle="tab">Exception dates</a></li>
+        <li><a href="#7" data-toggle="tab">Email addresses</a></li>
     </ul>
 <div class="tab-content">
 <!-- Begin First Tab -->
@@ -53,6 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                  ['label'=>'package id',
 //                 'value'=> isset($model->package->package_name) ? $model->package->package_name : 'Not set' ,
 //                ],
+
                 [
                     'label'=>'vendor_return_policy',
                     'value'=>strip_tags($model->vendor_return_policy)
@@ -75,7 +77,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vendor_emergency_contact_email',
                 'vendor_emergency_contact_number',
                 'vendor_website',
-                'vendor_delivery_charge',
                 'vendor_status'
             ]
         ]);?>
@@ -92,8 +93,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php   $package = Package::loadpackage();
 	                    $form = ActiveForm::begin([]); $model->package_id='';$model->package_start_date='';$model->package_end_date='';
 	echo $form->field($model, 'package_id')->dropdownList($package,['prompt'=>'Select Package',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"],'style' => 'margin-top:10px;'])->label(false); ?></td>
-	<td><?= $form->field($model, 'package_start_date',['template' => "{label}<div class='controls mystart'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'Start date',])->label(false);?></td>
-	<td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date',])->label(false);?></td>
+	
+    <td><?= $form->field($model, 'package_start_date',['template' => "{label}<div class='controls mystart'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'Start date',])->label(false);?></td>
+	
+    <td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date',])->label(false);?></td>
+
 	<td style="float:left;"><?php echo Html::Button($model->isNewRecord ? 'Add' : 'Add', [ 'onclick' => 'return check_validation();','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary-ads','style'=>'float:right;margin-top:10px;']);
 	echo $form->field($model, 'vendor_id')->hiddenInput()->label('');
 	ActiveForm::end();
@@ -316,6 +320,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
 <?php } else {
 	echo 'No data Found';
 }
@@ -347,8 +352,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'exception_capacity',
         ],
     ]); ?>
+</div>
 <!--End sixth Tab -->
 
+
+<div class="tab-pane" id="7">
+
+    Email address list to get order notification 
+
+    <br />
+    <br />
+
+    <table class="table table-bordered table-email-list">
+        <tbody>
+            <?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
+            <tr>
+                <td>
+                    <?= $value->email_address ?>           
+                </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
 
 <?php 
 

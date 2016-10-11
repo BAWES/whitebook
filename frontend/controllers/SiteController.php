@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use Yii;
@@ -21,6 +22,7 @@ use frontend\models\Users;
 use yii\web\Session;
 use yii\db\Query;
 use common\models\Smtp;
+use common\models\CategoryPath;
 use frontend\models\Contacts;
 use frontend\models\FaqGroup;
 use yii\helpers\ArrayHelper;
@@ -55,13 +57,16 @@ class SiteController extends BaseController
         }
         
         return $this->render('index', [
-          'home_slider_alias' => Siteinfo::find()->one()->home_slider_alias,
-          'featured_product' => $featured_product,
-          'banner' => $banner,
-          'key' => '0',
+            'home_slider_alias' => Siteinfo::find()->one()->home_slider_alias,
+            'featured_product' => $featured_product,
+            'banner' => $banner,
+            'key' => '0',
         ]);
     }
 
+    /*
+        Activate customer account from email 
+    */
     public function actionActivate()
     {
         Yii::$app->session->set('reset_password_mail', '');
@@ -97,244 +102,6 @@ class SiteController extends BaseController
         ]);
     }
 
-    public function actionDirectory()
-    {
-        $website_model = new Website();
-        $category_url = Yii::$app->request->get('name');
-
-        $main_category = $website_model->get_main_category();
-        
-        if ($category_url != '') {
-            $category_id = $website_model->get_category_id($category_url);
-        } else {
-            $category_id = '';
-        }
-
-        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Directory';
-        
-        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
-        
-        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-        
-        if(Yii::$app->language == "en") {
-            $directory = Vendor::get_directory_list();
-        }else{
-            $directory = Vendor::get_directory_list('vendor_name_ar');
-        }
-        
-        $prevLetter = '';
-        
-        $result = array();
-        
-        foreach ($directory as $d) {
-            
-            if(Yii::$app->language == "en") {
-                $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
-            }else{
-                $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
-            }
-
-            if ($firstLetter != $prevLetter) {
-                $result[] = strtoupper($firstLetter);
-            }
-            
-            $prevLetter = $firstLetter;
-        }
-
-
-        $result = array_unique($result);
-
-        return $this->render('directory', [
-          'category' => $main_category,
-          'directory' => $directory,
-          'first_letter' => $result,
-        ]);
-    }
-
-    public function actionSearchdirectory()
-    {
-        $website_model = new Website();
-
-        $main_category = $website_model->get_main_category();
-        
-        $request = Yii::$app->request;
-
-        if (Yii::$app->request->isAjax) {
-                       
-            if ($request->post('slug') != 'All') {
-                
-                $categoryid = Category::category_value($request->post('slug'));
-                
-                if(Yii::$app->language == "en") {
-                    $directory = $website_model->get_search_directory_list($categoryid['category_id']);
-                }else{
-                    $directory = $website_model->get_search_directory_list($categoryid['category_id'], 'vendor_name_ar');
-                }
-
-                $prevLetter = '';
-                $result = array();
-                foreach ($directory as $d) {
-
-                    if(Yii::$app->language == "en") {
-                        $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
-                    }else{
-                        $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
-                    }
-
-                    if ($firstLetter != $prevLetter) {
-                        $result[] = strtoupper($firstLetter);
-                    }
-
-                    $prevLetter = $firstLetter;
-                }
-
-                $result = array_unique($result);
-
-            } else {
-                
-                if(Yii::$app->language == "en") {
-                    $directory = $website_model->get_search_directory_all_list();
-                }else{
-                    $directory = $website_model->get_search_directory_all_list('vendor_name_ar');
-                }
-
-                $prevLetter = '';
-
-                $result = array();
-                
-                foreach ($directory as $d) {
-
-                    if(Yii::$app->language == "en") {
-                        $firstLetter = mb_substr($d['vname'], 0, 1, 'utf8');
-                    }else{
-                        $firstLetter = mb_substr($d['vname_ar'], 0, 1, 'utf8');
-                    }
-
-                    if ($firstLetter != $prevLetter) {
-                        $result[] = strtoupper($firstLetter);
-                    }
-                    $prevLetter = $firstLetter;
-                }
-
-                $result = array_unique($result);
-            }
-
-            if ($request->post('ajaxdata') == 0) {
-                
-                return $this->renderPartial('searchdirectory', [
-                    'directory' => $directory,
-                    'first_letter' => $result, 
-                ]);
-
-            } else {
-                
-                return $this->renderPartial('searchresponsedirectory', [
-                    'directory' => $directory,
-                    'first_letter' => $result
-                ]);
-            }
-        }
-    }
-
-    public function actionSearchresult($search)
-    {
-        //item type sale
-        $search = str_replace('and', '&', $search);
-        $search = str_replace('-', ' ', $search);
-
-        $k = '';
-        $slug = '';
-
-    	$imageData = Vendoritem::find()
-		->where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_approved' => 'Yes'])
-		->andWhere(['like','{{%vendor_item}}.item_name',$search])
-		->all();
-
-        foreach ($imageData as $data) {
-            $k[] = $data['item_id'];
-        }
-
-        $themes1 = array();
-        $vendor = array();
-        if (!empty($k)) {
-            $result = Themes::loadthemename_item($k);
-            $out1[] = array();
-            $out2[] = array();
-            foreach ($result as $r) {
-                if (is_numeric($r['theme_id'])) {
-                    $out1[] = $r['theme_id'];
-                }
-                if (!is_numeric($r['theme_id'])) {
-                    $out2[] = explode(',', $r['theme_id']);
-                }
-            }
-            $p = array();
-            foreach ($out2 as $id) {
-                foreach ($id as $key) {
-                    $p[] = $key;
-                }
-            }
-            if (count($out1)) {
-                foreach ($out1 as $o) {
-                    if (!empty($o)) {
-                        $p[] = $o;
-                    }
-                }
-            }
-            $p = array_unique($p);
-
-            $themes1 = Themes::load_all_themename($p);
-            $vendor = Vendor::loadvendor_item($k);
-        }
-        
-        $usermodel = new Users();
-
-        if (Yii::$app->user->isGuest) {
-            $customer_events_list = [];
-        } else {
-            $customer_id = Yii::$app->user->identity->customer_id;
-            $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
-        }
-
-        return $this->render('search', [
-            'imageData' => $imageData,
-            'themes' => $themes1,
-            'vendor' => $vendor,
-            'slug' => $slug,
-            'customer_events_list' => $customer_events_list,
-            'search' => $search
-        ]);
-    }
-
-    public function actionSearch()
-    {
-        $request = Yii::$app->request;
-
-        if ($request->post('search') && $request->post('_csrf')) {
-
-            $item_details = Vendoritem::find()
-                ->select(['item_name','slug'])
-                ->where(['like', 'item_name',$request->post('search')])
-                ->andwhere(['whitebook_vendor_item.trash' =>'Default','item_for_sale' =>'Yes','item_status'=>'Active'])
-                ->distinct()
-                ->asArray()
-                ->all();
-
-            $k = '';
-            if (!empty($item_details)) {
-                foreach ($item_details as $i) {
-                    if (!empty($i['item_name'])) {
-                        $k = $k.'<li><a href='.\yii\helpers\Url::to(['/search-result/'.$i['slug']]).'>'.$i['item_name'].'</a></li>';
-                    }
-                }
-                return '<ul>'.$k.'</ul>';
-            } else {
-                echo '0';
-                die;
-            }
-        }
-    }
-
     public function actionVendor_profile($slug)
     {
         $website_model = new Website();
@@ -344,47 +111,41 @@ class SiteController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $vendor_item_details = $website_model->vendor_item_details($vendor_details['vendor_id']);
         $main_category = $website_model->get_main_category();
 
-        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$vendor_details['vendor_name'];
-        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
-        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+        $vendor_items = Vendoritem::find()
+            ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
+            ->Where([
+                '{{%vendor_item}}.trash'=> 'Default',
+                '{{%vendor_item}}.item_approved'=> 'Yes',
+                '{{%vendor_item}}.item_status'=> 'Active',
+                '{{%vendor_item}}.vendor_id'=> $vendor_details->vendor_id
+            ])
+            ->groupby(['{{%vendor_item}}.item_id'])
+            ->all();
 
-    // FOR FILTER
+        $item_ids = ArrayHelper::map($vendor_items, 'item_id', 'item_id');
+
         $themes = \common\models\Vendoritemthemes::find()
-        ->select(['wt.theme_id','wt.slug','wt.theme_name'])
-        ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
-        ->Where(['wt.theme_status'=>'Active'])
-        ->andWhere(['{{%vendor_item_theme}}.vendor_id'=> $vendor_details['vendor_id']])
-        ->groupby(['wt.theme_id'])
-        ->asArray()
-        ->all();
-
-        $vendorData = Vendoritem::find()
-        ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
-        ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-        ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
-        ->Where([
-            '{{%vendor_item}}.trash'=> 'Default',
-            '{{%vendor_item}}.item_approved'=> 'Yes',
-            '{{%vendor_item}}.item_status'=> 'Active',
-            '{{%vendor}}.slug'=> $slug
-        ])
-        ->groupby(['{{%vendor_item}}.item_id'])
-        ->all();
+            ->select(['wt.theme_id','wt.slug','wt.theme_name'])
+            ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
+            ->Where([
+                'wt.theme_status' => 'Active',
+                'wt.trash' => 'Default',
+                '{{%vendor_item_theme}}.trash' => 'Default'
+            ])
+            ->andWhere(['IN', '{{%vendor_item_theme}}.item_id', $item_ids])
+            ->groupby(['wt.theme_id'])
+            ->asArray()
+            ->all();
 
         if (!isset(Yii::$app->user->identity->customer_id)) {
-            return $this->render('vendor/profile', [
-                'vendor_detail' => $vendor_details,
-                'vendor_item_details' => $vendor_item_details,
-                'themes' => $themes,
-                'category' => $main_category,
-                'vendorData' => $vendorData,
-                'customer_events_list' => [],
-                'slug'=>$slug,
-            ]);
+            
+            $customer_events_list = [];
+            $customer_events = [];
+
         } else {
+
             $event_limit = 8;
             $wish_limit = 6;
             $offset = 0;
@@ -393,25 +154,24 @@ class SiteController extends BaseController
 
             $model = new Users();
             $customer_events_list = $model->get_customer_wishlist_details($customer_id);
-            $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
-
-            return $this->render('vendor/profile', [
-              'vendor_detail' => $vendor_details,
-              'vendor_item_details' => $vendor_item_details,
-              'themes' => $themes,
-              'vendorData' => $vendorData,
-              'category' => $main_category,
-              'customer_events' => $customer_events,
-              'slug' => $slug,
-              'customer_events_list' => $customer_events_list,
-              'slug'=>$slug
-            ]);
+            $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);            
         }
+
+        return $this->render('vendor/profile', [
+            'vendor_detail' => $vendor_details,
+            'vendor_items' => $vendor_items,
+            'themes' => $themes,
+            'category' => $main_category,
+            'slug' => $slug,
+            'customer_events' => $customer_events,
+            'customer_events_list' => $customer_events_list
+        ]);
     }
 
     public function actionContact()
     {
         if (Yii::$app->request->isAjax) {
+
             $date = date('Y/m/d');
             $data = Yii::$app->request->post();
 
@@ -481,30 +241,33 @@ class SiteController extends BaseController
 
     public function actionCmspages($slug = '')
     {
-        if ($slug != '') {
-            $cms = new Cms();
-            $cms_details = $cms->cms_details($slug);
-            $seo_content = Website::SEOdata('cms', 'page_id', $cms_details['page_id'], array('page_name', 'cms_meta_title', 'cms_meta_keywords', 'cms_meta_description'));
+        if (!$slug) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            \Yii::$app->view->title = ($seo_content[0]['cms_meta_title']) ? $seo_content[0]['cms_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['page_name'];
-            \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['cms_meta_description']) ? $seo_content[0]['cms_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
-            \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['cms_meta_keywords']) ? $seo_content[0]['cms_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
+        $cms = new Cms();
+        $cms_details = $cms->cms_details($slug);
+        
+        $seo_content = Website::SEOdata('cms', 'page_id', $cms_details['page_id'], array('page_name', 'cms_meta_title', 'cms_meta_keywords', 'cms_meta_description'));
+
+        \Yii::$app->view->title = ($seo_content[0]['cms_meta_title']) ? $seo_content[0]['cms_meta_title'] : Yii::$app->params['SITE_NAME'].' | '.$seo_content[0]['page_name'];
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($seo_content[0]['cms_meta_description']) ? $seo_content[0]['cms_meta_description'] : Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($seo_content[0]['cms_meta_keywords']) ? $seo_content[0]['cms_meta_keywords'] : Yii::$app->params['META_KEYWORD']]);
 
 
-            if(Yii::$app->language == "en"){
-                
-                return $this->render('cmspages', [
-                    'title' => $cms_details['page_name'], 
-                    'content' => $cms_details['page_content']
-                ]);
+        if(Yii::$app->language == "en") {
+            
+            return $this->render('cmspages', [
+                'title' => $cms_details['page_name'], 
+                'content' => $cms_details['page_content']
+            ]);
 
-            }else{
+        } else {
 
-                return $this->render('cmspages', [
-                    'title' => $cms_details['page_name_ar'], 
-                    'content' => $cms_details['page_content_ar']
-                ]);
-            }
+            return $this->render('cmspages', [
+                'title' => $cms_details['page_name_ar'], 
+                'content' => $cms_details['page_content_ar']
+            ]);
         }
     }
 
@@ -532,110 +295,126 @@ class SiteController extends BaseController
     }
 
         // BEGIN wish list manage page load vendorss based on category
-        public function actionLoadvendorlist()
-        {
-            if (Yii::$app->request->isAjax) {
-                $data = Yii::$app->request->post();
-                 $loadvendorid = \common\models\Vendoritem::find()
-					->select(['vendor_id'])
-					->Where(['category_id'=>$data['cat_id']])
-					->asArray()
-					->all();
-                 $loadvendor = \common\models\Vendor::find()
-					->select(['DISTINCT(vendor_id)','vendor_name'])
-					->Where(['IN','vendor_id'=>$loadvendorid])
-					->asArray()
-					->all();
-                foreach ($loadvendor as $key => $value) {
-                    echo '<option value='.$value['vendor_id'].'>'.$value['vendor_name'].'</option>';
-                }
-                die;
-            }
+    public function actionLoadvendorlist()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
-          // END wish list manage page load vendorss based on category
 
-          // BEGIN wish list manage page load vendorss based on category
-          public function actionLoadthemelist()
-          {
-              if (Yii::$app->request->isAjax) {
-                  $data = Yii::$app->request->post();
-                  $themes = \common\models\Vendoritemthemes::find()
-					->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
-					->Where(['vendor_id'=>$data['v_id']])
-					->asArray()
-					->all();
-					$loadtheme_ids=array_unique($themes);
-                  $loadthemes = Themes::find()->select('theme_id, theme_name')->where(['theme_id' => $loadtheme_ids[0]['theme_id']])->asArray()->all();
-                  foreach ($loadthemes as $key => $value) {
-                      echo '<option value='.$value['theme_id'].'>'.$value['theme_name'].'</option>';
-                  }
-              }
-          }
-            // END wish list manage page load vendorss based on category
+        $data = Yii::$app->request->post();
+        
+        $loadvendorid = \common\models\Vendoritem::find()
+            ->select(['vendor_id'])
+            ->Where(['category_id'=>$data['cat_id']])
+            ->asArray()
+            ->all();
+        
+        $loadvendor = \common\models\Vendor::find()
+            ->select(['DISTINCT(vendor_id)','vendor_name'])
+            ->Where(['IN','vendor_id'=>$loadvendorid])
+            ->asArray()
+            ->all();
+        
+        foreach ($loadvendor as $key => $value) {
+            echo '<option value='.$value['vendor_id'].'>'.$value['vendor_name'].'</option>';
+        }
+    }
+    
+    public function actionLoadthemelist()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            // BEGIN wish list manage page load vendorss based on category
-        public function actionLoadwishlist()
-        {
-            $customer_id = Yii::$app->user->identity->customer_id;
-            if (Yii::$app->request->isAjax) {
-                $data = Yii::$app->request->post();
+        $data = Yii::$app->request->post();
 
-   		$condition ='';
-		$condition = "'"."1"."'";
-		$condition .= " AND ".""."{{%wishlist}}.wish_status"."";
-		$condition .= "=";
-		$condition .= "'"."1"."'";
-		$condition .= " AND ".""."{{%wishlist}}.customer_id"."";
-		$condition .= "=";
-		$condition .= "'".$customer_id."'";
-		$condition .= " AND ".""."{{%vendor_item}}.trash"."";
-		$condition .= "=";
-		$condition .= "'"."Default"."'";
-		if (!empty($data['v_id'])) {
-		$condition .= " AND ".""."{{%vendor_item}}.vendor_id"."";
-		$condition .= "=";
-		$condition .= "'".$data['v_id']."'";
-		}
-		if (!empty($data['a_id'])) {
-		$condition .= " AND ".""."{{%vendor_item}}.item_for_sale"."";
-		$condition .= "=";
-		$condition .= "'".$data['a_id']."'";
-		}
-		if (!empty($data['t_id'])) {
-		$condition .= " AND FIND_IN_SET ("."'".$data['t_id']."'";
-		$condition .= ",";
-		$condition .= ""." {{%vendor_item_theme}}.theme_id"."";
-		$condition .= ")";
-		}
-		$wishlist = \frontend\models\Wishlist::find()
-					->select(['{{%wishlist}}.*','{{%vendor}}.vendor_name','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit'])
-					->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
-					->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-					->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item_theme}}.item_id = {{%vendor_item}}.item_id')
-					->Where($condition)
-					->asArray()
-					->all();
-                    return $this->renderPartial('/users/user_wish_list', ['wishlist' => $wishlist]);
-                }
-            }
+        $themes = \common\models\Vendoritemthemes::find()
+            ->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
+            ->Where(['vendor_id'=>$data['v_id']])
+            ->asArray()
+            ->all();
+        
+        $loadtheme_ids = array_unique($themes);
+        
+        $loadthemes = Themes::find()
+            ->select('theme_id, theme_name')
+            ->where(['theme_id' => $loadtheme_ids[0]['theme_id']])
+            ->asArray()
+            ->all();
+
+        foreach ($loadthemes as $key => $value) {
+            echo '<option value='.$value['theme_id'].'>'.$value['theme_name'].'</option>';
+        }
+    }
+    
+    public function actionLoadwishlist()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $customer_id = Yii::$app->user->identity->customer_id;
+        
+        $data = Yii::$app->request->post();
+
+        $wishlist_query = \frontend\models\Wishlist::find()
+            ->select(['{{%wishlist}}.*','{{%vendor}}.vendor_name','{{%vendor_item}}.item_name','{{%vendor_item}}.item_price_per_unit'])
+            ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
+            ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+            ->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item_theme}}.item_id = {{%vendor_item}}.item_id')
+            ->Where([
+                '{{%wishlist}}.wish_status' => 1,
+                '{{%wishlist}}.customer_id' => $customer_id,
+                '{{%vendor_item}}.trash' => 'Default'
+            ]);
+
+        if (!empty($data['v_id'])) {
+            $wishlist_query->andWhere(['{{%vendor_item}}.vendor_id' => $data['v_id']]);
+        }
+    
+        if (!empty($data['a_id'])) {
+            $wishlist_query->andWhere(['{{%vendor_item}}.item_for_sale' => $data['a_id']]);
+        }
+
+        if (!empty($data['t_id'])) {
+            $wishlist_query->andWhere('FIND_IN_SET ("'.$data['t_id'].'", {{%vendor_item_theme}}.theme_id)');
+        }
+
+        $wishlist = $wishlist_query
+            ->asArray()
+            ->all();
+            
+        return $this->renderPartial('/users/user_wish_list', [
+            'wishlist' => $wishlist
+        ]);
+    }
 
     public function actionLoadeventlist()
     {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
         $customer_id = Yii::$app->user->identity->customer_id;
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $event = $data['event_name'];
-            if ($event == 'all') {
-				$user_event_list = \common\models\Events::find()
-			->select(['event_name','event_id','event_date','event_type','slug'])
-			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
-			->Where(['et.trash'=>'default'])
-			->andWhere(['{{%events}}.customer_id'=>$customer_id])
-			->asArray()
-			->all();
-                return $this->renderPartial('/users/user_event_list', ['user_event_list' => $user_event_list]);
-            }
+        
+        $data = Yii::$app->request->post();
+        
+        $event = $data['event_name'];
+
+        if ($event == 'all') {
+			
             $user_event_list = \common\models\Events::find()
+    			->select(['event_name','event_id','event_date','event_type','slug'])
+    			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
+    			->Where(['et.trash'=>'default'])
+    			->andWhere(['{{%events}}.customer_id'=>$customer_id])
+    			->asArray()
+    			->all();
+        
+            return $this->renderPartial('/users/user_event_list', ['user_event_list' => $user_event_list]);
+        }
+            
+        $user_event_list = \common\models\Events::find()
 			->select(['event_name','event_id','event_date','event_type','slug'])
 			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
 			->Where(['et.trash'=>'default'])
@@ -643,31 +422,41 @@ class SiteController extends BaseController
 			->andWhere(['{{%events}}.customer_id'=>$customer_id])
 			->asArray()
 			->all();
-            return $this->renderPartial('/users/user_event_list', ['user_event_list' => $user_event_list]);
-        }
+
+        return $this->renderPartial('/users/user_event_list', [
+            'user_event_list' => $user_event_list
+        ]);
     }
 
     public function actionDeleteevent()
     {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
         $customer_id = Yii::$app->user->identity->customer_id;
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            if (!empty($data['event_id'])) {
-				$command = Events::deleteAll('event_id='.$data['event_id']);
-                if ($command) {
-                    $user_event_list = \common\models\Events::find()
-					->select(['event_name','event_id','event_date','event_type','slug'])
-					->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
-					->Where(['et.trash'=>'default'])
-					->andWhere(['{{%events}}.customer_id'=>$customer_id])
-					->asArray()
-					->all();
-			        return $this->renderPartial('/users/user_event_list', ['user_event_list' => $user_event_list]);
-                    die;
-                } else {
-                    return 0;
-                    die;
-                }
+        
+        $data = Yii::$app->request->post();
+        
+        if (!empty($data['event_id'])) {
+			
+            $command = Events::deleteAll('event_id='.$data['event_id']);
+            
+            if ($command) {
+                $user_event_list = \common\models\Events::find()
+    				->select(['event_name','event_id','event_date','event_type','slug'])
+    				->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
+    				->Where(['et.trash'=>'default'])
+    				->andWhere(['{{%events}}.customer_id'=>$customer_id])
+    				->asArray()
+    				->all();
+
+		        return $this->renderPartial('/users/user_event_list', [
+                    'user_event_list' => $user_event_list
+                ]);
+
+            } else {
+                return 0;
             }
         }
     }
@@ -679,15 +468,19 @@ class SiteController extends BaseController
         }
 
         $area = Location::find()
-            ->select('id, location')
+            ->select('id, location, location_ar')
             ->where(['city_id' => $data['city_id']])
             ->all();
 
-        $options = '<option value="">Select</option>';
+        $options = '<option value="">'.Yii::t('frontend', 'Select').'</option>';
         
         if (!empty($area)) {
             foreach ($area as $key => $val) {
-                $options .=  '<option value="'.$val['id'].'">'.$val['location'].'</option>';
+                if(Yii::$app->language == 'en') {
+                    $options .=  '<option value="'.$val['id'].'">'.$val['location'].'</option>';
+                } else {
+                    $options .=  '<option value="'.$val['id'].'">'.$val['location_ar'].'</option>';
+                }
             }
         }
         return $options;
@@ -698,16 +491,26 @@ class SiteController extends BaseController
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $city = City::find()->select('city_id,city_name')->where(['country_id' => $data['country_id']])->all();
-        $options = '<option value="">Select</option>';
+
+        $city = City::find()
+            ->select('city_id, city_name, city_name_ar')
+            ->where(['country_id' => $data['country_id']])
+            ->all();
+        
+        $options = '<option value="">'.Yii::t('frontend', 'Select').'</option>';
+        
         if (!empty($city)) {
             foreach ($city as $key => $val) {
-                $options .=  '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
+                if(Yii::$app->language == 'en') {
+                    $options .=  '<option value="'.$val['city_id'].'">'.$val['city_name'].'</option>';
+                }else{
+                    $options .=  '<option value="'.$val['city_id'].'">'.$val['city_name_ar'].'</option>';    
+                }
             }
         }
+        
         return $options;
     }
-    // END wish list manage page load vendorss based on category
 }
 
 

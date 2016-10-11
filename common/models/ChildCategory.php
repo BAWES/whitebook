@@ -95,22 +95,6 @@ class ChildCategory extends \yii\db\ActiveRecord
         return $this->hasMany(Category::className(), ['parent_category_id' => 'category_id']);
     }
 
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendorItems()
-    {
-        return $this->hasMany(VendorItem::className(), ['category_id' => 'category_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendorItemRequests()
-    {
-        return $this->hasMany(VendorItemRequest::className(), ['category_id' => 'category_id']);
-    }
-
     /*
     *
     *   To save created, modified user & date time
@@ -140,17 +124,20 @@ class ChildCategory extends \yii\db\ActiveRecord
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }
+
     public static function statusTitle($sale)
     {
         if($sale == 'yes')
         return 'Active';
         return 'Deactive';
     }
+    
     public static function getCategoryName($id)
     {
         $model = Category::find()->where(['category_id'=>$id])->one();
         return $model->category_name;
     }
+    
     public static function getGrandCategoryName($id)
     {
         $model = Category::find()
@@ -229,21 +216,16 @@ class ChildCategory extends \yii\db\ActiveRecord
     /* load child category used by frontend*/
     public static function loadchildcategoryslug($id)
     {
-
-        return $childcategory = Category::find()->select([
+        return ChildCategory::find()
+            ->select([
                 '{{%category}}.category_id',
                 '{{%category}}.category_name',
                 '{{%category}}.category_name_ar',
                 '{{%category}}.slug'])
-            ->leftJoin('{{%vendor_item}}', '{{%category}}.category_id = {{%vendor_item}}.child_category')
-            ->where(['{{%category}}.category_allow_sale'=>'Yes'])
-            ->andWhere(['{{%category}}.trash'=>'Default'])
-            ->andWhere(['{{%category}}.category_level'=>'2'])
-            ->andWhere(['{{%vendor_item}}.item_for_sale'=>'Yes'])
-            ->andWhere(['{{%vendor_item}}.item_approved'=>'Yes'])
-            ->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
-            ->andWhere(['{{%category}}.parent_category_id'=>$id])
-            ->groupby(['{{%vendor_item}}.child_category'])
+            ->where([
+                '{{%category}}.parent_category_id' => $id,
+                '{{%category}}.trash' => 'Default'
+            ])
             ->asArray()
             ->all();
     }

@@ -89,7 +89,7 @@ class PriorityitemController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -118,31 +118,49 @@ class PriorityitemController extends Controller
     public function actionCreate()
     {
         $access = Authitem::AuthitemCheck('1', '19');
+        
         if (yii::$app->user->can($access)) {
+
             $model = new Priorityitem();
             $category = Category::loadcategoryname();
             $subcategory = Subcategory::loadsubcategoryname();
             $childcategory = ChildCategory::loadchild();
+            
             $priority = Vendoritem::find()->select(['item_id','item_name'])
-            ->where(['item_status' => 'Active'])
-            ->andwhere(['item_for_sale' => 'yes'])
-            ->andwhere(['!=', 'trash', 'Deleted'])
-			      ->all();
-            $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
-            if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-				    $model->priority_start_date = Yii::$app->formatter->asDate($model->priority_start_date, 'php:Y-m-d');
-      			$model->priority_end_date = Yii::$app->formatter->asDate($model->priority_end_date, 'php:Y-m-d');
-                $model->save();
-                echo Yii::$app->session->setFlash('success', 'Priority item added successfully!');
+              ->where(['item_status' => 'Active'])
+              ->andwhere(['!=', 'trash', 'Deleted'])
+  			      ->all();
 
-                return $this->redirect(['index']);
+            $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
+            
+            if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
+  				    
+              $model->priority_start_date = Yii::$app->formatter->asDate(
+                $model->priority_start_date, 'php:Y-m-d');
+        			
+              $model->priority_end_date = Yii::$app->formatter->asDate(
+                $model->priority_end_date, 'php:Y-m-d');
+                
+              $model->save();
+              
+              Yii::$app->session->setFlash('success', 'Priority item added successfully!');
+
+              return $this->redirect(['index']);
+
             } else {
-                return $this->render('create', [
-                'model' => $model, 'priorityitem' => $priorityitem, 'category' => $category, 'subcategory' => $subcategory, 'childcategory' => $childcategory,
-            ]);
+              
+              return $this->render('create', [
+                'model' => $model, 
+                'priorityitem' => $priorityitem, 
+                'category' => $category, 
+                'subcategory' => $subcategory, 
+                'childcategory' => $childcategory,
+              ]);
             }
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -181,7 +199,7 @@ class PriorityitemController extends Controller
       			
       			
                 $model->save();
-                echo Yii::$app->session->setFlash('success', 'Priority item updated successfully!');
+                Yii::$app->session->setFlash('success', 'Priority item updated successfully!');
 
                 return $this->redirect(['index']);
             } else {
@@ -191,7 +209,7 @@ class PriorityitemController extends Controller
             ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -210,10 +228,10 @@ class PriorityitemController extends Controller
              $access = Authitem::AuthitemCheck('3', '19');
              if (yii::$app->user->can($access)) {
 				 $command=Priorityitem::updateAll(['trash' => 'Deleted'],'priority_id= '.$id);
-                 echo Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');
+                 Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');
                  return $this->redirect(['index']);
              } else {
-                 echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+                 Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
                  return $this->redirect(['site/index']);
              }
          }
@@ -400,16 +418,16 @@ class PriorityitemController extends Controller
         if ($data['status'] == 'Normal') {
 			   $command=Priorityitem::updateAll(['priority_level' => 'Normal'],['IN', 'priority_id', $data['keylist']]);
             if ($command) {
-                echo Yii::$app->session->setFlash('success', 'Priority item level updated!');
+                Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+                Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } elseif ($data['status'] == 'Super') {
 			   $command=Priorityitem::updateAll(['priority_level' => 'Super'],['IN', 'priority_id', $data['keylist']]);
 			if ($command) {
-                echo Yii::$app->session->setFlash('success', 'Priority item level updated!');
+                Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
-                echo Yii::$app->session->setFlash('danger', 'Something went wrong');
+                Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         }
     }

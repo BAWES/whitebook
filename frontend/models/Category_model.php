@@ -31,7 +31,7 @@ class Category_model extends Model
     // get the category id based oin the category name
     public function get_category_id($category = '')
     {
-				return $category = \common\models\Category::find()
+		return $category = \common\models\Category::find()
 			->select(['category_id','category_name'])
 			->Where(['trash'=>'default'])
 			->andWhere(['category_allow_sale'=>'yes'])
@@ -77,19 +77,6 @@ class Category_model extends Model
 			->asArray()
 			->all();
         return $vendor;
-    }
-
-    public function getCustomerEvents($customer_id)
-    {
-		$events = \common\models\Events::find()
-			->select(['event_name','event_id','event_date','event_type','slug'])
-			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
-			->Where(['et.trash'=>'default'])
-			->andWhere(['{{%events}}.customer_id'=>$customer_id])
-			->orderBy(['event_date'=>ASC])
-			->asArray()
-			->all();
-        return $events;
     }
 
     public function get_event_types()

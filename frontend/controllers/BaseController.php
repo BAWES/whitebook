@@ -15,5 +15,4 @@ class BaseController extends Controller
     {
         parent::init();
     }
-
 }

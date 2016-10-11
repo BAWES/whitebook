@@ -19,7 +19,8 @@ class AddressquestionController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
+
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -83,10 +84,8 @@ class AddressquestionController extends Controller
         if ($command) {
             Yii::$app->session->setFlash('success', 'Questions sort order updated successfully!');
             echo 1;
-            exit;
         } else {
             echo 0;
-            exit;
         }
     }
 
@@ -98,7 +97,7 @@ class AddressquestionController extends Controller
 
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
         
-        $command=Addressquestion::updateAll(['status' => $status],'ques_id= '.$data['cid']);
+        $command = Addressquestion::updateAll(['status' => $status],'ques_id= '.$data['cid']);
         
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
@@ -130,23 +129,31 @@ class AddressquestionController extends Controller
     public function actionCreate()
     {
         $model = new AddressQuestion();
+        
+        $data = Yii::$app->request->post('AddressQuestion');
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            foreach ($model->question as $ques) {
-                if ($ques) {
-                    $models = new AddressQuestion();
-                    $models->address_type_id = $model->address_type_id;
-                    $models->question = $ques;
-                    $models->save();
-                }
+            
+            for ($i = 0; $i < count($data['question']); $i++) { 
+               
+                $models = new AddressQuestion();
+                $models->address_type_id = $model->address_type_id;
+                $models->question = $data['question'][$i];
+                $models->question_ar = $data['question_ar'][$i];
+                $models->save();
             }
-            echo Yii::$app->session->setFlash('success', 'Address Question created successfully!');
+
+            Yii::$app->session->setFlash('success', 'Address Question created successfully!');
 
             return $this->redirect(['index']);
+        
         } else {
+            
             $addresstype = Addresstype::loadAddresstype();
 
             return $this->render('create', [
-                'model' => $model, 'addresstype' => $addresstype,
+                'model' => $model, 
+                'addresstype' => $addresstype,
             ]);
         }
     }
@@ -164,26 +171,42 @@ class AddressquestionController extends Controller
         $model = $this->findModel($id);
         $addresstype = Addresstype::loadAddress();
         $addressquestion = AddressQuestion::loadAddressquestion($model->address_type_id);
+        $data = Yii::$app->request->post('AddressQuestion');
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $i = 0;
-            foreach ($model->question as $ques) {
-                if ($ques && $i < count($addressquestion)) {
-                    $model->address_type_id;
-                    $model->question[$i];
-                    $command=Addressquestion::updateAll(['question' => $model->question[$i],'address_type_id'=>$model->address_type_id],'ques_id= '.$addressquestion[$i]['ques_id']);
-                } elseif ($ques) {
-                    $models = new AddressQuestion();
-                    $models->address_type_id = $model->address_type_id;
-                    $models->question = $ques;
-                    $models->save();
-                }
-                ++$i;
+            
+            //update all old questions
+            for($i = 0; $i < count($addressquestion); $i++) {
+                
+                Addressquestion::updateAll([
+                        'question' => $data['question'][$i],
+                        'question_ar' => $data['question_ar'][$i],
+                        'address_type_id' => $model->address_type_id
+                    ],
+                    'ques_id= '.$addressquestion[$i]['ques_id']
+                );
             }
-            echo Yii::$app->session->setFlash('success', 'Address Question updated successfully!');
+
+            //add all newquestions
+            for ($i = count($addressquestion) - 1; $i < count($data['question']); $i++) { 
+               
+                $models = new AddressQuestion();
+                $models->address_type_id = $model->address_type_id;
+                $models->question = $data['question'][$i];
+                $models->question_ar = $data['question_ar'][$i];
+                $models->save();
+            }
+
+            Yii::$app->session->setFlash('success', 'Address Question updated successfully!');
+            
             return $this->redirect(['index']);
+
         } else {
+
             return $this->render('update', [
-                'model' => $model, 'addresstype' => $addresstype, 'addressquestion' => $addressquestion,
+                'model' => $model, 
+                'addresstype' => $addresstype, 
+                'addressquestion' => $addressquestion,
             ]);
         }
     }
@@ -202,7 +225,7 @@ class AddressquestionController extends Controller
         $model->trash = 'Deleted';
         $model->load(Yii::$app->request->post());
         $model->save();  // equivalent to $model->update();
-        echo Yii::$app->session->setFlash('success', 'Address Question Deleted successfully!');
+        Yii::$app->session->setFlash('success', 'Address Question Deleted successfully!');
 
         return $this->redirect(['index']);
     }

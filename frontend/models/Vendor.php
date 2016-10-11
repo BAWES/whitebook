@@ -3,6 +3,7 @@ namespace frontend\models;
 
 use Yii;
 use common\models\Blockeddate;
+use common\models\VendorCategory;
 
 class Vendor extends \common\models\Vendor
 {
@@ -85,7 +86,11 @@ class Vendor extends \common\models\Vendor
         }
     }
 
-    public static function loadvalidvendorids($cat_id=false)
+    public static function loadvalidvendorids(
+        $cat_id = false, 
+        $arr_vendor_slugs = [], 
+        $block_date = '', 
+        $location = '')
     {
 		$vendor_query = Vendor::find()
             ->select('{{%vendor}}.vendor_id')
@@ -96,11 +101,34 @@ class Vendor extends \common\models\Vendor
                 '{{%vendor_item}}.trash' => 'Default',
                 '{{%vendor_item}}.item_status' => 'Active']);
             
-        $vendor_query
-            ->andWhere('{{%vendor}}.vendor_id NOT IN (select vendor_id from {{%vendor_blocked_date}} WHERE DATE(block_date) = DATE(NOW()))');
-                
-        if($cat_id!='') {
-            $vendor_query->andWhere(['{{%vendor_item}}.category_id' => $cat_id]);
+        if($cat_id != '') {
+            $vendor_query->leftJoin(
+                '{{%vendor_item_to_category}}', 
+                '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
+            );
+            $vendor_query->leftJoin(
+                '{{%category_path}}', 
+                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+            );
+            $vendor_query->andWhere(['{{%category_path}}.path_id' => $cat_id]);
+        }
+
+        if($block_date) {
+            $vendor_query->andWhere('{{%vendor}}.vendor_id NOT IN (select vendor_id from {{%vendor_blocked_date}} WHERE DATE(block_date) = DATE('.$block_date.'))');
+        }else{
+            $vendor_query->andWhere('{{%vendor}}.vendor_id NOT IN (select vendor_id from {{%vendor_blocked_date}} WHERE DATE(block_date) = DATE(NOW()))');
+        }
+
+        if($arr_vendor_slugs) {
+            $vendor_query->andWhere(['in', '{{%vendor}}.slug', $arr_vendor_slugs]);
+        }
+
+        if($location) {
+            $vendor_query->leftJoin(
+                '{{%vendor_location}}',
+                '{{%vendor_location}}.vendor_id = {{%vendor}}.vendor_id'
+            );
+            $vendor_query->andWhere(['{{%vendor_location}}.area_id' => $location]);
         }
 
         $vendor = $vendor_query
@@ -108,6 +136,7 @@ class Vendor extends \common\models\Vendor
             ->all();
 
         $package = array();
+
         foreach ($vendor as $key => $value) {
             $package[] = Vendor::packageCheck($value['vendor_id'], $check_vendor="Notempty");
         }
@@ -120,14 +149,11 @@ class Vendor extends \common\models\Vendor
     }
 
     /* Load who vendor having category  */
-    public static function Vendorcategories($slug){
-        $vendor_category = Vendor::find()
-            ->select(['category_id'])
-            ->where(['slug'=>$slug])
-            ->asArray()
-            ->one();
-            return $vendor_category;
-        }
+    public static function Vendorcategories($vendor_id){
+        return VendorCategory::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->all();
+    }
 
     public static function Vendorid_item($slug){
         $vendor_category = Vendor::find()

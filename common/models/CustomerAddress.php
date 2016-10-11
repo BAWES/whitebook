@@ -50,28 +50,51 @@ class CustomerAddress extends \yii\db\ActiveRecord
             [['country_id', 'city_id'], 'required'],
             [['customer_id', 'address_type_id', 'country_id', 'city_id', 'area_id', 'created_by', 'modified_by'], 'integer'],
             [['address_archived', 'trash'], 'string'],
-            [['customer', 'address_data', 'created_datetime', 'modified_datetime'], 'safe']
+            [['customer', 'address_name', 'address_data', 'created_datetime', 'modified_datetime'], 'safe']
         ];
     }
 
+    /*
+    *
+    *   To save created, modified user & date time
+    */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+    
     /**
     * @inheritdoc
     */
     public function attributeLabels()
     {
         return [
-            'address_id' => 'Address name',
-            'customer_id' => 'Customer name',
-            'address_type_id' => 'Address type',
-            'country_id' => 'Country name',
-            'city_id' => 'City name',
-            'area_id' => 'Area name',
-            'address_archived' => 'Delete',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
-            'created_datetime' => 'Created Datetime',
-            'modified_datetime' => 'Modified Datetime',
-            'trash' => 'Trash',
+            'address_id' => Yii::t('frontend', 'Address ID'),
+            'address_name' => Yii::t('frontend', 'Address name'),
+            'customer_id' => Yii::t('frontend', 'Customer name'),
+            'address_type_id' => Yii::t('frontend', 'Address type'),
+            'country_id' => Yii::t('frontend', 'Country name'),
+            'city_id' => Yii::t('frontend', 'Governorate'),
+            'area_id' => Yii::t('frontend', 'Area name'),
+            'address_archived' => Yii::t('frontend', 'Delete'),
+            'address_data' =>  Yii::t('frontend', 'Address Data'),
+            'created_by' => Yii::t('frontend', 'Created By'),
+            'modified_by' => Yii::t('frontend', 'Modified By'),
+            'created_datetime' => Yii::t('frontend', 'Created Datetime'),
+            'modified_datetime' => Yii::t('frontend', 'Modified Datetime'),
+            'trash' => Yii::t('frontend', 'Trash')
         ];
     }
 
@@ -99,6 +122,11 @@ class CustomerAddress extends \yii\db\ActiveRecord
         return $this->hasOne(AddressType::className(), ['type_id' => 'address_type_id']);
     }
 
+    public function getLocation()
+    {
+        return $this->hasOne(Location::className(), ['id' => 'area_id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -121,26 +149,5 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function getSuborderItemPurchases()
     {
         return $this->hasMany(SuborderItemPurchase::className(), ['address_id' => 'address_id']);
-    }
-
-    /*
-    *
-    *   To save created, modified user & date time
-    */
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by',
-            ],
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_datetime',
-                'updatedAtAttribute' => 'modified_datetime',
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
+    }    
 }

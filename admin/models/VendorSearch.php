@@ -16,6 +16,7 @@ class VendorSearch extends Vendor
      * @inheritdoc
      */
     public $package_name;
+
     public function rules()
     {
         return [
@@ -48,7 +49,7 @@ class VendorSearch extends Vendor
 			'sort'=> ['defaultOrder' => ['vendor_id'=>SORT_DESC]],
 			'pagination' =>[
 				'pageSize'=> 40,
-				],
+			],
         ]);
 
         $this->load($params);

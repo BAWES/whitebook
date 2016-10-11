@@ -4,15 +4,16 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\helpers\Json;
+use yii\helpers\Url;
 use frontend\models\Vendoritem;
 use frontend\models\Vendor;
-use common\models\Featuregroupitem;
 use frontend\models\Users;
+use common\models\Featuregroupitem;
+use common\models\Deliverytimeslot;
 use common\models\Events;
 use common\models\Vendorlocation;
 use common\models\Image;
-use yii\helpers\Json;
-use yii\helpers\Url;
 
 /**
 * Site controller.
@@ -53,7 +54,8 @@ class ProductController extends BaseController
         if (!empty($model->images[0])) {
             $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $model->images[0]['image_path'];
         } else {
-            $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . 'no_image.jpg';
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+            //$baselink = Yii::getAlias("@s3/vendor_item_images_530/") . 'no_image.jpg';
         }
 
         $vendr_area = Vendorlocation::find()
@@ -63,21 +65,25 @@ class ProductController extends BaseController
             ->asArray()
             ->all();
 
-        $title = 'Whitebook Application - '.ucfirst($model->vendor->vendor_name);
+        $title = Yii::$app->name. ' - '.ucfirst($model->vendor->vendor_name);
         
         $url = Url::toRoute(["product/product", 'slug' => $model->slug], true);
 
-        $summary = 'Whitebook Application - '.ucfirst($model->vendor->vendor_name).' - '.ucfirst($model['item_name']);
+        $summary = Yii::$app->name.' - '.ucfirst($model['item_name']).' from '.ucfirst($model->vendor->vendor_name);
 
         $image = $baselink;
 
         \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => $title]);
+        \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => $summary]);
-        
+        \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => Yii::$app->name.' - ' . ucfirst($model->item_name) .' from '. ucfirst($model->vendor->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($model->item_description))]);
+        \Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
+
         \Yii::$app->view->registerMetaTag([
             'property' => 'og:description', 
             'content' => trim(strip_tags($model->item_description))
@@ -118,34 +124,6 @@ class ProductController extends BaseController
             $data = Yii::$app->request->post();
             $edit_eventinfo = Events::find()->where(['event_id' => $data['event_id']])->asArray()->all();
             return $this->renderPartial('edit_event', array('edit_eventinfo' => $edit_eventinfo));
-        }
-    }
-
-    /* BEGIN DELIVERY TIME SLOT -- VENDOR */
-    public function actionGetdeliverytime()
-    {
-		$vendor_timeslot = Deliverytimeslot::find()
-		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
-		->where(['vendor_id' => $model['vendor_id']])
-		->asArray()->all();
-    }
-    /* END DELIVERY TIME SLOT -- VENDOR */
-    public function actionGetdeliverytimeslot()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $string = $data['sel_date'];
-            $timestamp = strtotime($string);
-
-		$vendor_timeslot = Deliverytimeslot::find()
-		->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
-		->where(['vendor_id' => $model['vendor_id']])
-		->andwhere(['timeslot_day' => date("l", $timestamp)])
-		->asArray()->all();
-
-            foreach ($vendor_timeslot as $key => $value) {
-                echo '<option value="'.$key['timeslot_id'].'">'.$value['timeslot_start_time'].' - '.$value['timeslot_end_time'].'</option>';
-            }
         }
     }
 }

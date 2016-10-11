@@ -4,24 +4,27 @@ namespace admin\controllers;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use common\models\Prioritylog;
-use common\models\PrioritylogSearch;
-use common\models\Siteinfo;
+use yii\helpers\ArrayHelper;
 use admin\models\Vendor;
 use admin\models\Authitem;
 use admin\models\Category;
 use admin\models\VendorSearch;
-use common\models\Vendorpackages;
 use admin\models\Package;
-use common\models\VendoritemcapacityexceptionSearch;
+use admin\models\VendorPackagesSearch;
+use common\models\Prioritylog;
+use common\models\PrioritylogSearch;
+use common\models\Siteinfo;
+use common\models\Vendorpackages;
+use common\models\VendorItemCapacityExceptionSearch;
 use common\models\VendoritemSearch;
+use common\models\VendorOrderAlertEmails;
+use common\models\VendorCategory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use yii\web\Response;
-use admin\models\VendorPackagesSearch;
 
 /**
  * VendorController implements the CRUD actions for Vendor model.
@@ -35,7 +38,7 @@ class VendorController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                    [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'loadcategory', 'loadsubcategory', 'vendoritemview', 'vendorname', 'changepackage', 'changeeditpackage', 'emailcheck', 'loadpackagedate', 'packageupdate', 'vendornamecheck'],
+                       'actions' => ['password', 'create', 'update', 'index', 'view', 'delete', 'block', 'loadcategory', 'loadsubcategory', 'vendoritemview', 'vendorname', 'changepackage', 'changeeditpackage', 'emailcheck', 'loadpackagedate', 'packageupdate', 'vendornamecheck', 'validate-vendor'],
                        'allow' => true,
                        'roles' => ['@'],
                    ],
@@ -67,7 +70,7 @@ class VendorController extends Controller
             'dataProvider' => $dataProvider,
         ]);
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -83,12 +86,19 @@ class VendorController extends Controller
         $searchModel1 = new PrioritylogSearch();
         $dataProvider1 = $searchModel1->vendorviewsearch(Yii::$app->request->queryParams, $id);
 
-        $vendorPackage = VendorPackagesSearch::find()->where(['!=', 'trash', 'Deleted'])->andwhere(['vendor_id' => $id])->orderBy('id')->all();
+        $vendorPackage = VendorPackagesSearch::find()
+            ->where(['!=', 'trash', 'Deleted'])
+            ->andwhere(['vendor_id' => $id])
+            ->orderBy('id')
+            ->all();
 
-        $searchModel3 = new VendoritemcapacityexceptionSearch();
+        $searchModel3 = new VendorItemCapacityExceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
 
-        //print_r($dataProvider3);die;
+        $vendor_order_alert_emails = VendorOrderAlertEmails::find()
+            ->where(['vendor_id' => $id])
+            ->all();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
@@ -97,6 +107,7 @@ class VendorController extends Controller
             'dataProvider1' => $dataProvider1,
             'dataProvider3' => $dataProvider3,
             'vendorPackage' => $vendorPackage,
+            'vendor_order_alert_emails' => $vendor_order_alert_emails
         ]);
     }
 
@@ -113,6 +124,30 @@ class VendorController extends Controller
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionPassword($id){
+    
+        $model = $this->findModel($id);
+
+        $model->scenario = 'change';
+
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->vendor_password = Yii::$app->getSecurity()->generatePasswordHash($model->vendor_password);
+
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'Password changed successfully!');
+            
+                return $this->redirect(['index']);    
+            }
+        }
+
+        $model->vendor_password = '';
+
+        return $this->render('password',[
+            'model' => $model
         ]);
     }
 
@@ -135,11 +170,21 @@ class VendorController extends Controller
             foreach ($model_siteinfo as $key => $val) {
                 $first_id = $val['commision'];
             }
+
             if (count($model_siteinfo) == 1) {
                 $model->commision = $first_id;
             }
+
             if ($model->load(Yii::$app->request->post())) {
 
+                $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+                if(is_array($vendor_day_off)) {
+                    $model->day_off = implode(',', $vendor_day_off);    
+                }else{
+                    $model->day_off = '';
+                }
+                
                 $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
                 $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
 
@@ -157,12 +202,24 @@ class VendorController extends Controller
                 $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
                 $model->approve_status = 'Yes';
                 $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
-                $model->category_id = implode(',', $vendor['category_id']);
+
+                //add categories 
+                if(!$vendor['category_id']) {
+                    $vendor['category_id'] = [];
+                }
+
+                foreach ($vendor['category_id'] as $key => $value) {
+                   $vc = new VendorCategory;
+                   $vc->vendor_id = $model->vendor_id;
+                   $vc->category_id = $value;
+                   $vc->save();
+                }
 
                 $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
                 $model->slug = str_replace(' ', '-', $model->slug);
 
                 $vendor_password = Yii::$app->getSecurity()->generatePasswordHash($vendor['vendor_password']);
+
                 $file = UploadedFile::getInstances($model, 'vendor_logo_path');
 
                 if ($file) {
@@ -187,6 +244,7 @@ class VendorController extends Controller
 
                             //Save to S3
                             $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
+
                             if($awsResult){
                                 $model->vendor_logo_path = $filename;
                             }
@@ -195,6 +253,48 @@ class VendorController extends Controller
                 }
 
                 if ($model->save(false)) {
+
+                    //remove old packages
+                    Vendorpackages::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                    //save packages 
+                    $vendor_packages = Yii::$app->request->post('vendor_packages');
+
+                    if($vendor_packages) {
+                        foreach ($vendor_packages as $key => $value) {
+
+                            $package = Package::findOne($value['package_id']);
+
+                            if(!$package) {
+                                continue;
+                            }
+
+                            $vp = new Vendorpackages;
+                            $vp->vendor_id = $model->vendor_id;
+                            $vp->package_id = $value['package_id'];
+                            $vp->package_price = $package->package_pricing;
+                            $vp->package_start_date = date('Y-m-d', strtotime($value['package_start_date']));
+                            $vp->package_end_date = date('Y-m-d', strtotime($value['package_end_date']));
+                            $vp->trash = 'Default';
+                            $vp->save();
+                        }
+                    }
+
+                    //remove old alert emails 
+                    VendorOrderAlertEmails::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                    //save vendor order alert email 
+                    $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+                    if($vendor_order_alert_emails) {
+                        foreach ($vendor_order_alert_emails as $key => $value) {
+                            $email = new VendorOrderAlertEmails;
+                            $email->vendor_id = $model->vendor_id;
+                            $email->email_address = $value;
+                            $email->save();
+                        }
+                    }
+
                     //Add to log
                     Yii::info('[New Vendor] '. Yii::$app->user->identity->admin_name .' created new vendor '.$model['vendor_name'], __METHOD__);
 
@@ -212,16 +312,19 @@ class VendorController extends Controller
                     ->send();
                 }
                 $command=Vendor::updateAll(['vendor_password' => $vendor_password],'vendor_id= '.$model->id);
-                echo Yii::$app->session->setFlash('success', 'Vendor created successfully!');
+                Yii::$app->session->setFlash('success', 'Vendor created successfully!');
 
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
-                return $this->render('create', ['package' => $package,
-                'model' => $model,
-            ]);
+
+                return $this->render('create', [
+                    'packages' => $package,
+                    'model' => $model
+                ]);
             }
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -254,9 +357,6 @@ class VendorController extends Controller
             $packname = Package::findOne($model->package_id);
             $present_package = $packname['package_name'];
 
-            // list of categories
-            $model->category_id = explode(',', $model->category_id);
-
             // Current logo
             $exist_logo_image = $model->vendor_logo_path;
 
@@ -264,6 +364,15 @@ class VendorController extends Controller
             $vendor_contact_number = explode(',', $model['vendor_contact_number']);
 
             if ($model->load(Yii::$app->request->post())) {
+
+                $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+                if(is_array($vendor_day_off)) {
+                    $model->day_off = implode(',', $vendor_day_off);    
+                }else{
+                    $model->day_off = '';
+                }
+                
                 $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
                 $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
 
@@ -276,8 +385,36 @@ class VendorController extends Controller
                 $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
                 $model->approve_status = 'Yes';
                 $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
-                $model->category_id = implode(',', $model->category_id);                            /*
-                /*--- Vendor logo ---*/
+
+                //remove old categories 
+                VendorCategory::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                //add categories 
+                if(!$vendor['category_id']) {
+                    $vendor['category_id'] = [];
+                }
+
+                foreach ($vendor['category_id'] as $key => $value) {
+                   $vc = new VendorCategory;
+                   $vc->vendor_id = $model->vendor_id;
+                   $vc->category_id = $value;
+                   $vc->save();
+                }
+                
+                //remove old alert emails 
+                VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
+
+                //save vendor order alert email 
+                $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+                if($vendor_order_alert_emails) {
+                    foreach ($vendor_order_alert_emails as $key => $value) {
+                        $email = new VendorOrderAlertEmails;
+                        $email->vendor_id = $id;
+                        $email->email_address = $value;
+                        $email->save();
+                    }
+                }
 
                 $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
                 $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
@@ -287,6 +424,7 @@ class VendorController extends Controller
                 $model->vendor_public_phone= $vendor['vendor_public_phone'];
 
                 $file = UploadedFile::getInstances($model, 'vendor_logo_path');
+
                 if (!empty($file)) {
                     foreach ($file as $files) {
                         if($files instanceof yii\web\UploadedFile){
@@ -319,11 +457,16 @@ class VendorController extends Controller
                 } else {
                     $model->vendor_logo_path = $exist_logo_image;
                 }
+
                 if($model->save(false)) {
-                    echo Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+                    Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
                     return $this->redirect(['index']);
                 }
+
             } else {
+
+                $day_off = explode(',', $model->day_off);
+
                 if (($model->commision) > 1) {
                 } else {
                     $model_siteinfo = Siteinfo::find()->all();
@@ -335,12 +478,35 @@ class VendorController extends Controller
                     }
                 }
 
+                //get vendor order notification email address 
+                $vendor_order_alert_emails = VendorOrderAlertEmails::find()
+                    ->where(['vendor_id' => $id])
+                    ->all();
+
+                $vendor_packages = Vendorpackages::findAll(['vendor_id' => $model->vendor_id]);
+
+                $packages = Package::findAll([
+                    'package_status' => 'Active',
+                    'trash' => 'Default'
+                ]);
+
+                $vendor_category = VendorCategory::findAll(['vendor_id' => $model->vendor_id]);
+
+                $model->category_id = ArrayHelper::map($vendor_category, 'category_id', 'category_id');
+
                 return $this->render('update', [
-                'model' => $model, 'package' => $package, 'vendor_contact_number' => $vendor_contact_number, 'present_package' => $present_package,
-            ]);
+                    'model' => $model, 
+                    'vendor_contact_number' => $vendor_contact_number, 
+                    'vendor_order_alert_emails' => $vendor_order_alert_emails,
+                    'day_off' => $day_off,
+                    'vendor_packages' => $vendor_packages,
+                    'packages' => $packages
+                ]);
             }
+        
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -359,11 +525,16 @@ class VendorController extends Controller
         $access = Authitem::AuthitemCheck('3', '22');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
-            echo Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
+
+            VendorCategory::deleteAll(['vendor_id' => $id]);
+
+            Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
 
             return $this->redirect(['index']);
+
         } else {
-            echo Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            
+            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
             return $this->redirect(['site/index']);
         }
@@ -652,5 +823,52 @@ class VendorController extends Controller
           ->andwhere(['trash' => 'Default'])
           ->all();
         return $result = count($vendorname);
+    }
+
+    //check vendor package conflict on create vendor 
+    public function actionValidateVendor()
+    {
+        if (!Yii::$app->request->isAjax)
+            die();
+
+        $json = ['errors' => []];
+
+        $data = Yii::$app->request->post();
+
+        //check if date is valid
+        if (strtotime($data['start_date']) >= strtotime($data['end_date'])) {
+            $json['errors'][] = Yii::t('admin', 'Given Date is not a valid one. Kindly entered valid date!');
+        }
+
+        //check if other package available in selected date
+        $packages = Yii::$app->request->post('vendor_packages');
+
+        if(!$packages) {
+            $packages = [];
+        }
+
+        foreach ($packages as $key => $value) {
+            
+            if(strtotime($data['start_date']) >= strtotime($value['package_start_date'])  &&
+                    strtotime($data['start_date']) <= strtotime($value['package_end_date'])){
+
+                $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
+                    'start_date' => $value['package_start_date'],
+                    'end_date' => $value['package_end_date']
+                ]);
+
+            } elseif(strtotime($data['end_date']) >= strtotime($value['package_start_date'])  &&
+                    strtotime($data['end_date']) <= strtotime($value['package_end_date'])){
+
+                $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
+                    'start_date' => $value['package_start_date'],
+                    'end_date' => $value['package_end_date']
+                ]);
+            }
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return $json;
     }
 }

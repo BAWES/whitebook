@@ -76,41 +76,54 @@ if($model->isNewRecord){
 		<div class="tab-pane active" id="1">
 			<!-- vid - click create item button from item view page for the particular item view page-->
 			<?php if($request->get('vid')) {	
+			
 			$vendor_name = Vendor::getvendorname($request->get('vid')); ?>
-			<div class="form-group"><?= $form->field($model, 'vendor_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($vendor_name) ?></div>
+			
+			<?= $form->field($model, 'vendor_id')->dropDownList($vendor_name) ?>
 
 			<!-- if its update form disable particular vendor-->
 			<?php } else if (!$model->isNewRecord) { ?>
-			<div class="form-group"><?= $form->field($model, 'vendor_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($vendorname, ['prompt'=>'Select...','disabled'=>'disabled']) ?></div>
-			<?= $form->field($model,'vendor_id')->hiddenInput(); ?>
+			
+				<?= $form->field($model, 'vendor_id')
+					->dropDownList($vendorname, ['prompt'=>'Select...','disabled'=>'disabled']) ?>
+			
+				<?= $form->field($model,'vendor_id')->hiddenInput(); ?>
+			
+			<!-- if its create form-->
 			<?php } else { ?>
 
-			<!-- if its create form-->
-			<div class="form-group"><?= $form->field($model, 'vendor_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($vendorname, ['prompt'=>'Select...']) ?></div>
+				<?= $form->field($model, 'vendor_id')->dropDownList($vendorname, ['prompt'=>'Select...']) ?>
 			<?php } ?>
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'autocomplete' => 'off'])?>
-			</div>
-
-			<div class="form-group">
-				<?= $form->field($model, 'item_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'autocomplete' => 'off'])?>
-			</div>
+			<?= $form->field($model, 'item_name')->textInput(['maxlength' => 128,'autocomplete' => 'off']); ?>
 			
-			<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($categoryname, ['prompt'=>'Select...']) ?></div>
+			<?= $form->field($model, 'item_name_ar')->textInput(['maxlength' => 128,'autocomplete' => 'off']); ?>
 
-			<div class="form-group"><?= $form->field($model, 'subcategory_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($subcategory, ['prompt'=>'Select...']) ?></div>
-
-			<div class="form-group"><?= $form->field($model, 'child_category',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($childcategory, ['prompt'=>'Select...']) ?></div>
+			<label>Categories</label>
+			<table class="table table-bordered table-category-list">
+				<tbody>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>
+							<select id="category_id">
+								<option></option>
+								<?php foreach($categories as $key => $value) { ?>
+									<option value="<?= $value['category_id'] ?>">
+										<?= $value['category_name'] ?>
+									</option>
+								<?php } ?>
+							</select>
+						</td>
+						<td>
+							<button type="button" class="btn btn-primary btn-add-category">Add</button>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
 
 			<div class="form-group" style="height: 10px;">
-			<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next">
+				<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
 			</div>
 		</div>
 		<!--End First Tab -->
@@ -118,33 +131,23 @@ if($model->isNewRecord){
 		<!--BEGIN second Tab -->
 		<div class="tab-pane" id="2">
 
-			<!-- BEGIN ITEM TYPE -->
+			<?= $form->field($model, 'type_id')->dropDownList($itemtype, ['prompt'=>'Select...']) ?>
 
-			<div class="form-group"><?= $form->field($model, 'type_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-			{error}"])->dropDownList($itemtype, ['prompt'=>'Select...']) ?></div>
+			<?= $form->field($model, 'item_description')
+					->label('Item description'.Html::tag('span', '*',['class'=>'required']))
+					->textarea(['maxlength' => 128]); ?>
+		
+			<?= $form->field($model, 'item_description_ar')
+				->label('Item description - Arabic '.Html::tag('span', '*',['class'=>'required']))
+				->textarea(['maxlength' => 128]); ?>
 
-			<!-- END ITEM TYPE -->
+			<?= $form->field($model, 'item_additional_info')->textarea(['maxlength' => 128]); ?>
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
-				->label('Item description'.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?>
-			</div>
+			<?= $form->field($model, 'item_additional_info_ar')->textarea(['maxlength' => 128]); ?>
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
-				->label('Item description - Arabic '.Html::tag('span', '*',['class'=>'required']))->textarea(['maxlength' => 128])?>
-			</div>
+			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_additional_info',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
-
-			<div class="form-group">
-				<?= $form->field($model, 'item_additional_info_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
-
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 		</div>
 		<!--End Second Tab -->
 
@@ -152,35 +155,30 @@ if($model->isNewRecord){
 		<div class="tab-pane" id="3">
 
 			<input type="hidden" id="test" value="0" name="tests">
-			<div class="form-group">
-			<?= $form->field($model, 'item_for_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-			])->checkbox(['Yes' => 'Yes'])?>
-			</div>
+			
+			<?= $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
+			
+			<?= $form->field($model, 'item_amount_in_stock')
+					->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))
+					->textInput(['maxlength' => 128]); ?>
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_amount_in_stock',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
-				->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?>
-			</div>
+			<?= $form->field($model, 'item_default_capacity')
+					->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
+					->textInput(['maxlength' => 128]); ?>
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_default_capacity',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
-				->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?>
-			</div>
+			<?= $form->field($model, 'item_how_long_to_make')
+				->label('No of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))
+				->textInput(['maxlength' => 128]); ?>
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_how_long_to_make',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
-				->label('No of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?>
-			</div>
-
-			<div class="form-group">
-				<?= $form->field($model, 'item_minimum_quantity_to_order',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])
-				->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))->textInput(['maxlength' => 128])?>
-			</div>
+			<?= $form->field($model, 'item_minimum_quantity_to_order')
+				->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))
+				->textInput(['maxlength' => 128]); ?>
 
 			<!-- BEGIN if type is sale -->
-			<div class="form-group single_price">
-				<?= $form->field($model, 'item_price_per_unit',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-			</div>
+			<?= $form->field($model, 'item_price_per_unit')->textInput([
+					'class' => 'form-group single_price', 
+					'maxlength' => 128
+				]); ?>
 			<!-- END if type is sale -->
 
 			<!-- BEGIN if type is rental or service -->
@@ -190,22 +188,20 @@ if($model->isNewRecord){
 				<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
 			</div>
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_price_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
+			<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
 
-			<div class="form-group">
-				<?= $form->field($model, 'item_price_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
+			<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
 
-			<div class="form-group custom_description">
-				<?= $form->field($model, 'item_customization_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
-
-			<div class="form-group custom_description_ar">
-				<?= $form->field($model, 'item_customization_description_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-			</div>
-
+			<?= $form->field($model, 'item_customization_description')->textarea([
+					'class' => 'custom_description',
+					'maxlength' => 128
+				]); ?>
+			
+			<?= $form->field($model, 'item_customization_description_ar')->textarea([
+					'class' => 'custom_description_ar',
+					'maxlength' => 128
+				]); ?>
+			
 			<div class="form-group guide_image">
 				<?php
 
@@ -237,18 +233,14 @@ if($model->isNewRecord){
 		<!--End third Tab -->
 
 		<div class="tab-pane" id="4">
-			<div class="form-group">
-				<?= $form->field($model, 'item_approved',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList([ 'Pending' => 'Pending','Yes' => 'Yes', 'Rejected'=>'Rejected']) ?>
-			</div>
-
-			<div class="form-group">
-
-			<?= $form->field($model, 'item_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-			])->checkbox(['Value' => true])?>
-			</div>
-
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+		
+			<?= $form->field($model, 'item_approved')
+					->dropDownList([ 'Pending' => 'Pending','Yes' => 'Yes', 'Rejected'=>'Rejected']) ?>
+		
+			<?= $form->field($model, 'item_status')->checkbox(['Value' => true]); ?>
+		
+			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
 		</div>
 		<!--End fourth Tab -->
 
@@ -441,7 +433,7 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.2", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

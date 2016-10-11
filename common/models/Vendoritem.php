@@ -60,10 +60,12 @@ class Vendoritem extends \yii\db\ActiveRecord
     const UPLOADFOLDER_530 = "vendor_item_images_530/";
     const UPLOADFOLDER_1000 = "vendor_item_images_1000/";
     const UPLOADSALESGUIDE = "sales_guide_images/";
+    
     public $themes;
     public $groups;
     public $image_path;
     public $guide_image;
+    
     /**
     * @inheritdoc
     */
@@ -102,30 +104,30 @@ class Vendoritem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'vendor_id', 'category_id', 'item_name', 'item_name_ar', 'subcategory_id',
-            'child_category'], 'required'],
-            [['type_id', 'vendor_id', 'category_id','subcategory_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','child_category', 'created_by', 'modified_by'], 'integer'],
+            [['type_id', 'vendor_id', 'item_name', 'item_name_ar'], 'required'],
+            [['type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash'], 'string'],
             [['item_price_per_unit'], 'number'],
+            
             [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
+
             [['item_name', 'item_name_ar'], 'string', 'max' => 128],
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'category_id',  'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
+            [['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
             'item_default_capacity', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_how_long_to_make',
-            'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'subcategory_id',
-            'item_for_sale','item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['VendorItemAdd'] = ['type_id', 'category_id',  'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
+        $scenarios['VendorItemAdd'] = ['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
         'item_default_capacity', 'item_customization_description', 'item_price_description',
             'item_price_description_ar', 'item_how_long_to_make',
-        'item_minimum_quantity_to_order','item_name','item_name_ar', 'subcategory_id','child_category',
+        'item_minimum_quantity_to_order','item_name','item_name_ar',
         'item_for_sale','item_price_per_unit'];
         return $scenarios;
     }
@@ -188,14 +190,6 @@ class Vendoritem extends \yii\db\ActiveRecord
     /**
     * @return \yii\db\ActiveQuery
     */
-    public function getFeatureGroupItems()
-    {
-        return $this->hasMany(Featuregroupitem::className(), ['item_id' => 'item_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
     public function getSuborderItemPurchases()
     {
         return $this->hasMany(SuborderItemPurchase::className(), ['item_id' => 'item_id']);
@@ -206,7 +200,7 @@ class Vendoritem extends \yii\db\ActiveRecord
     */
     public function getType()
     {
-        return $this->hasOne(ItemType::className(), ['type_id' => 'type_id']);
+        return $this->hasOne(Itemtype::className(), ['type_id' => 'type_id']);
     }
 
     /**
@@ -279,9 +273,9 @@ class Vendoritem extends \yii\db\ActiveRecord
     /**
     * @return \yii\db\ActiveQuery
     */
-    public function getVendorItemRequests()
+    public function getFeatureGroupItems()
     {
-        return $this->hasMany(VendorItemRequest::className(), ['item_id' => 'item_id']);
+        return $this->hasMany(Featuregroupitem::className(), ['item_id' => 'item_id']);
     }
 
     /**
@@ -352,9 +346,9 @@ class Vendoritem extends \yii\db\ActiveRecord
             return $item['item_name'];
         }
 
-        public static function groupvendoritem($categoryid,$subcategory)
+        public static function groupvendoritem($categoryid, $subcategory)
         {
-            $vendor_item= Vendoritem::find()
+            $vendor_item = Vendoritem::find()
             ->where(['=', 'category_id', $categoryid])
             ->andwhere(['=', 'subcategory_id',$subcategory])
             ->all();
@@ -408,4 +402,4 @@ class Vendoritem extends \yii\db\ActiveRecord
                       ->asArray()
                       ->all();
             }
-    }
+}

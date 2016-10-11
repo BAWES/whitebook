@@ -42,8 +42,9 @@ class themesSearch extends Themes
     public function search($params)
     {
 		$query = Themes::find()
-        ->where(['!=', 'trash', 'Deleted'])
-		->orderBy('theme_id');
+            ->where(['!=', 'trash', 'Deleted'])
+    		->orderBy('theme_id');
+            
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'sort'=> ['defaultOrder' => ['theme_id'=>SORT_DESC]]

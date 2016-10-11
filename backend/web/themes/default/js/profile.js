@@ -180,3 +180,23 @@ function addPhone(current)
     	}
     });
 }
+
+$('.btn-add-address').click(function(){
+	
+	$html  = '<tr>';
+	$html += '	<td>';
+	$html += '		<input value="" name="vendor_order_alert_emails[]" class="form-control" />';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<button class="btn btn-danger" type="button">';
+	$html += '			<i class="glyphicon glyphicon-trash"></i>';
+	$html += '		</button>';
+	$html += '	</td>';
+	$html += '</tr>';
+
+	$('.table-email-list tbody').append($html);
+});
+
+$(document).delegate('.table-email-list .btn-danger','click', function(){
+	$(this).parent().parent().remove();
+});
