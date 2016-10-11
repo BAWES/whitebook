@@ -13,6 +13,7 @@ use common\models\Customer;
 use common\models\ChildCategory;
 use common\models\SubCategory;
 use common\models\CategoryPath;
+use common\models\VendorItemToCategory;
 use admin\models\Image;
 use admin\models\Admin;
 use admin\models\Authitem;
@@ -277,6 +278,9 @@ class CategoryController extends Controller
         
             $model = new SubCategory();
         
+            //print_r($_POST);
+            //die();
+
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 
                 $model->category_allow_sale = (Yii::$app->request->post()['SubCategory']['category_allow_sale']) ? 'yes' : 'no';
@@ -682,9 +686,9 @@ class CategoryController extends Controller
         
         if (yii::$app->user->can($access)) {
 
-            $vendor_item = Vendoritem::find()->where(['category_id' => $id, 'trash' => 'Default'])->count();
+            $vendor_item = VendorItemToCategory::find()->where(['category_id' => $id])->count();
         
-            if (!empty($vendor_item)) {
+            if ($vendor_item) {
                 Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
 
                 return $this->redirect(['index']);
@@ -704,7 +708,7 @@ class CategoryController extends Controller
                 $subcategory = Category::find()
                     ->select('category_id, parent_category_id')
                     ->where(['parent_category_id' => $parentcategory[0]['category_id']])
-                    -->all();
+                    ->all();
 
                 $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$parentcategory[0]['category_id']]);
             }
