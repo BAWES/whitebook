@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute'=>'admin_id',
 				'label'=>'User',		
 				'value'=>function($data){
-				return $data->getAdminName($data->admin_id);
+					return $data->getAdminName($data->admin_id);
 				},
 				'filter' => Html::activeDropDownList($searchModel, 'admin_id', ArrayHelper::map(admin\models\Admin::find()->where(['!=','trash','Deleted'])
 				->andwhere(['=','admin_status','Active'])->asArray()->all(), 'id','admin_name'),['class'=>'form-control','prompt' => 'All']),		
@@ -48,9 +48,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				'label'=>'created date',			
 			],
             
-            ['class' => 'yii\grid\ActionColumn',
-            'header'=>'Action',
-            'template' => '{update} {delete}{link}',],
+            [
+            	'class' => 'yii\grid\ActionColumn',
+            	'header'=>'Action',
+            	'template' => '{update} {delete}{link}'
+            ],
         ],
     ]); ?>
 	   </div>
