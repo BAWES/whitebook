@@ -509,57 +509,34 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                         <div id="similar-products-slider">
                             <?php
                             
+                            $imgUrl = '';
+                            
                             foreach ($similiar_item as $s) {
-                                
-                                $sql = 'SELECT image_path FROM whitebook_image WHERE item_id=' . $s['gid'] . ' order by vendorimage_sort_order';
-                                
-                                $command = Yii::$app->DB->createCommand($sql);
-                                
-                                $out = $command->queryAll();
-                                
-                                if ($out) {
-                                    $imglink = Yii::getAlias('@vendor_images/') . $out[0]['image_path'];
-                                    $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $out[0]['image_path'];
-                                } else {
-                                    $imglink = Yii::getAlias('@vendor_images/no_image.png');
-                                    $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
-                                }
+                                if (isset($s->images) && count($s->images) > 0) {
 
-                                if($s['item_for_sale'] == 'Yes'){
-                                    $item_url = Url::to(["shop/product", 'slug' => $s['slug']]);
-                                }else{
-                                    $item_url = Url::to(["product/product", 'slug' => $s['slug']]);
+                                    foreach ($s->images as $img) {
+                                        $imgUrl = $img['image_path'];
+                                        break;
+                                    }
+                                    $baselink = Yii::getAlias("@s3/vendor_item_images_210/") . $imgUrl;
                                 }
-
                                 ?>
                                 <div class="item">
                                     <div class="fetu_product_list">
                                         <?php if ($s['slug'] != '') { ?>
-                                            <a href="<?= $item_url ?>" title="Products" class="similar">
-                                                
+                                            <a href="<?= Url::to(["product/product", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
+
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
-                                        
-                                                <?php if (file_exists($imglink)) { ?>
-                                                    <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
-                                                <?php } ?>
 
                                                 <div class="deals_listing_cont">
-                                                    
-                                                    <?php if(Yii::$app->language == "en"){ ?>
-                                                        <?= $s['vname']; ?>
-                                                        <h3><?= $s['iname']; ?></h3>
-                                                    <?php }else{ ?>
-                                                        <?= $s['vname_ar']; ?>
-                                                        <h3><?= $s['iname_ar']; ?></h3>
-                                                    <?php } ?>
-
-                                                    <p><?= $s['price']; ?>KD</p>
+                                                    <h3><?= (Yii::$app->language == "en") ? $s->item_name : $s->item_name_ar; ?></h3>
+                                                    <p><?= CFormatter::format($s['item_price_per_unit'])  ?></p>
                                                 </div>
                                             </a>
                                         <?php } ?>
                                     </div>
                                 </div>
-                            <?php 
+                            <?php
                             }//END foreach ?>
                         </div>
                     </div>

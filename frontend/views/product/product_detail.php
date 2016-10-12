@@ -446,20 +446,17 @@ $this->title = 'Whitebook - ' . $item_name;
                     <div class="feature_product_slider">
                         <div id="similar-products-slider">
                             <?php
+                            
                             $imgUrl = '';
-                            $imglink = Yii::getAlias('@vendor_images/no_image.png');
-                            $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
+                            
                             foreach ($similiar_item as $s) {
                                 if (isset($s->images) && count($s->images) > 0) {
 
                                     foreach ($s->images as $img) {
-                                        if ($img['module_type'] == 'vendor_item') {
-                                            $imgUrl = $img['image_path'];
-                                            break;
-                                        }
+                                        $imgUrl = $img['image_path'];
+                                        break;
                                     }
-                                    $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $imgUrl;
-                                    $imglink = Yii::getAlias('@vendor_images/') . $imgUrl;
+                                    $baselink = Yii::getAlias("@s3/vendor_item_images_210/") . $imgUrl;
                                 }
                                 ?>
                                 <div class="item">
@@ -469,13 +466,9 @@ $this->title = 'Whitebook - ' . $item_name;
 
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
 
-                                                <?php if (file_exists($imglink)) { ?>
-                                                    <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
-                                                <?php } ?>
-
                                                 <div class="deals_listing_cont">
                                                     <h3><?= (Yii::$app->language == "en") ? $s->item_name : $s->item_name_ar; ?></h3>
-                                                    <p><?= $s['item_price_per_unit']; ?>KD</p>
+                                                    <p><?= CFormatter::format($s['item_price_per_unit'])  ?></p>
                                                 </div>
                                             </a>
                                         <?php } ?>
