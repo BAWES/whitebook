@@ -3,16 +3,20 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\City;
 use admin\models\CitySearch;
 use admin\models\Admin;
 use admin\models\Authitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use common\models\Country;
-use yii\filters\AccessControl;
+use common\models\City;
+use common\models\CustomerAddress;
+use common\models\CustomerCart;
+use common\models\Location;
+use common\models\Vendorlocation;
 
 /**
 * CityController implements the CRUD actions for City model.
@@ -191,6 +195,19 @@ class CityController extends Controller
         if (yii::$app->user->can($access)) {
         
             $this->findModel($city_id, $country_id)->delete();
+
+            //delete all customer address 
+            CustomerAddress::deleteAll(['city_id' => $city_id]);
+
+            //delete customer cart - area_id 
+            CustomerCart::deleteAll('area_id in (select area_id from {{%location}} 
+                where city_id = "'.$city_id.'")');
+
+            //delete all location - city_id 
+            Location::deleteAll(['city_id' => $city_id]);
+
+            //delete all vendor location - city_id 
+            Vendorlocation::deleteAll(['city_id' => $city_id]);
 
             Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
             return $this->redirect(['index']);
