@@ -2,13 +2,18 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Country;
-use admin\models\Authitem;
-use admin\models\CountrySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use admin\models\Authitem;
+use admin\models\CountrySearch;
+use common\models\Country;
+use common\models\City;
+use common\models\CustomerAddress;
+use common\models\CustomerCart;
+use common\models\Location;
+use common\models\Vendorlocation;
 
 /**
  * CountryController implements the CRUD actions for Country model.
@@ -175,6 +180,28 @@ class CountryController extends Controller
         if (yii::$app->user->can($access)) {
         
             $this->findModel($id)->delete();
+
+            $cities = City::findAll(['country_id' => $id]);
+
+            //delete all customer address 
+            CustomerAddress::deleteAll(['country_id' => $id]);
+
+            //delete all cities 
+            City::deleteAll(['country_id' => $id]);
+
+            //delete all location 
+            Location::deleteAll(['country_id' => $id]);
+
+            foreach ($cities as $key => $value) {
+                
+                //delete customer cart - area_id 
+                CustomerCart::deleteAll('area_id in (select area_id from {{%location}} 
+                    where city_id = "'.$value->city_id.'")');
+
+                //delete all vendor location - city_id 
+                Vendorlocation::deleteAll(['city_id' => $value->city_id]);                
+            }
+
             Yii::$app->session->setFlash('success', 'Country deleted successfully!');
 
             return $this->redirect(['index']);

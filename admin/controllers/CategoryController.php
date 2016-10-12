@@ -686,55 +686,41 @@ class CategoryController extends Controller
         
         if (yii::$app->user->can($access)) {
 
+            //check category exists 
+            $model = $this->findModel($id);
+
+            if(!$model) {
+                Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
+
+                return $this->redirect(['index']);
+            }   
+
+            //check assing to items 
             $vendor_item = VendorItemToCategory::find()->where(['category_id' => $id])->count();
         
             if ($vendor_item) {
+
                 Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
 
                 return $this->redirect(['index']);
             }
 
-            $model = $this->findModel($id);
+            //update all child and self
+            $affected = Category::updateAll(
+                ['trash' => 'Deleted'], 
+                '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
+            );
 
-            $parentcategory = Category::find()
-                ->select('category_id,parent_category_id')
-                ->where(['parent_category_id' => $id])
-                ->all();
-
-            $subcategory = array();
-            
-            if (count($parentcategory) && (!empty($parentcategory))) {
-                
-                $subcategory = Category::find()
-                    ->select('category_id, parent_category_id')
-                    ->where(['parent_category_id' => $parentcategory[0]['category_id']])
-                    ->all();
-
-                $category=Category::updateAll(['trash' => 'Deleted'],['category_id'=>$parentcategory[0]['category_id']]);
-            }
-
-            if (count($subcategory) && (!empty($subcategory))) {
-                
-                $childcategory = Category::find()
-                    ->select('category_id,parent_category_id')
-                    ->where(['parent_category_id' => $subcategory[0]['category_id']])
-                    ->all();
-
-                $category = Category::updateAll(['trash' => 'Deleted'], [
-                    'category_id' => $subcategory[0]['category_id']
-                ]);
-            }
-
-            $category = Category::updateAll(['trash' => 'Deleted'],['category_id'=>$id]);
-
-            if ($category) {
+            if ($affected) {
 
                 Yii::$app->session->setFlash('success', 'Category deleted successfully!');
+
                 return $this->redirect(['index']);
 
             } else {
                 
                 Yii::$app->session->setFlash('success', 'Category delete failed!');
+                
                 return $this->redirect(['index']);
             }
 
@@ -751,11 +737,12 @@ class CategoryController extends Controller
 
         if (yii::$app->user->can($access)) {
             
-            $model = $this->findModel($id);            
-            $model->trash = 'Deleted';
-            $model->load(Yii::$app->request->post());
-            $model->save();
-            
+            //update all child and self
+            Category::updateAll(
+                ['trash' => 'Deleted'], 
+                '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
+            );
+
             Yii::$app->session->setFlash('success', 'Subcategory deleted successfully!');
 
             return $this->redirect(['index']);
@@ -772,9 +759,18 @@ class CategoryController extends Controller
         $access = Authitem::AuthitemCheck('3', '3');
         
         if (yii::$app->user->can($access)) {
-            
-            $vendor_item = Vendoritem::find()
-                ->where(['subcategory_id' => $id, 'trash' => 'Default'])
+
+            //check if category exists             
+            $model = $this->findModel($id);
+
+            if(!$model) {
+                Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
+                return $this->redirect(['manage_subcategory']);
+            }
+
+            //check if assigned to items 
+            $vendor_item = VendorItemToCategory::find()
+                ->where(['category_id' => $id])
                 ->count();
             
             if (!empty($vendor_item)) {
@@ -782,26 +778,13 @@ class CategoryController extends Controller
                 return $this->redirect(['manage_subcategory']);
             }
 
-            $model = $this->findModel($id);
+            //update all child and self
+            $affected = Category::updateAll(
+                ['trash' => 'Deleted'], 
+                '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
+            );
 
-            $parentcategory = Category::find()
-                ->select('category_id, parent_category_id')
-                ->where(['parent_category_id' => $id])
-                ->all();
-
-            if (count($parentcategory)) {
-                
-                $subcategory = Category::find()
-                    ->select('category_id, parent_category_id')
-                    ->where(['parent_category_id' => $parentcategory[0]['category_id']])
-                    ->all();
-
-                $command = Category::updateAll(['trash' => 'Deleted'],['category_id'=>$parentcategory[0]['category_id']]);
-            }
-
-            $category = Category::updateAll(['trash' => 'Deleted'], ['category_id' => $id]);
-
-            if ($category) {
+            if ($affected) {
                 
                 Yii::$app->session->setFlash('success', 'Subcategory deleted successfully!');
                 return $this->redirect(['manage_subcategory']);
@@ -825,22 +808,28 @@ class CategoryController extends Controller
 
         if (yii::$app->user->can($access)) {
             
-            $vendor_item = Vendoritem::find()
-                ->where(['child_category' => $id, 'trash' => 'Default'])
+            $model = $this->findModel($id);
+
+            if(!$model) {
+                Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
+                return $this->redirect(['child_category_index']);            
+            }
+
+            $vendor_item = VendorItemToCategory::find()
+                ->where(['category' => $id])
                 ->count();
             
-            if (!empty($vendor_item)) {
-                
+            if (!empty($vendor_item)) {                
                 Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
-
                 return $this->redirect(['child_category_index']);
             }
 
-            $model = $this->findModel($id);
-            
-            $category = Category::updateAll(['trash' => 'Deleted'], ['category_id' => $id]);
+            $affected = Category::updateAll(
+                ['trash' => 'Deleted'], 
+                '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
+            );
 
-            if ($category) {
+            if ($affected) {
 
                 Yii::$app->session->setFlash('success', 'Child category deleted successfully!');
                 return $this->redirect(['child_category_index']);
