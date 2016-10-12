@@ -52,6 +52,10 @@ class PlanController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
+        $data = Yii::$app->request->get();
+
+        $explode = (Yii::$app->request->isAjax) ? '+' : ' ';
+
         $category_model = Category::find()
             ->select(['category_id', 'category_name_ar', 'category_name'])
             ->where(['slug' => $slug])
@@ -90,12 +94,79 @@ class PlanController extends BaseController
             ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->where([
                 '{{%vendor_item}}.trash' => 'Default',
-                '{{%category_path}}.path_id' => $category_model['category_id'],
                 '{{%vendor_item}}.item_approved' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
             ]);            
         
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $active_vendors]);
+
+
+
+        if (isset($data['vendor']) && $data['vendor'] != '') {
+            $item_query->andWhere(['in', '{{%vendor}}.slug', explode($explode, $data['vendor'])]);
+        }
+
+        //price filter
+        if (isset($data['price']) && $data['price'] != '') {
+
+            $price_condition = [];
+
+            foreach (explode($explode, $data['price']) as $key => $value) {
+                $arr_min_max = explode('-', $value);
+                $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
+            }
+
+            $item_query->andWhere(implode(' OR ', $price_condition));
+        }
+
+        //theme filter
+        if (isset($data['themes']) && $data['themes'] != '') {
+
+            $theme = explode($explode, $data['themes']);
+
+            foreach ($theme as $key => $value) {
+                $themes[] = Themes::find()
+                    ->select('theme_id')
+                    ->where(['slug' => [$value]])
+                    ->asArray()
+                    ->all();
+            }
+
+            $all_valid_themes = array();
+
+            foreach ($themes as $key => $value) {
+                $get_themes = Vendoritemthemes::find()
+                    ->select('theme_id, item_id')
+                    ->where(['trash' => "Default"])
+                    ->andWhere(['theme_id' => [$value[0]['theme_id']]])
+                    ->asArray()
+                    ->all();
+
+                foreach ($get_themes as $key => $value) {
+                    $all_valid_themes[] = $value['item_id'];
+                }
+            }
+
+            if (count($all_valid_themes)==1) {
+                $all_valid_themes = $all_valid_themes[0];
+            } else {
+                $all_valid_themes = implode('","', $all_valid_themes);
+            }
+
+            $item_query->andWhere('{{%vendor_item}}.item_id IN("'.$all_valid_themes.'")');
+
+        }//if themes
+
+        //category filter
+        $cats = $slug;
+        $categories = [];
+        if (isset($data['category']) && $data['category'] != '') {
+            $categories = array_merge($categories,explode($explode, $data['category']));
+            $cats = implode("','",$categories);
+        }
+        $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
+        $item_query->andWhere($q);
+
 
         $items = $item_query->groupBy('{{%vendor_item}}.item_id')
             ->orderBy('{{%image}}.vendorimage_sort_order', SORT_ASC)
@@ -158,6 +229,13 @@ class PlanController extends BaseController
             $customer_events_list = [];
         }
 
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderPartial('@frontend/views/common/items', [
+                'items' => $items,
+                'customer_events_list' => $customer_events_list
+            ]);
+        }
         return $this->render('product_list', [
             'model' => $model, 
             'top_categories' => $top_categories,
@@ -166,124 +244,6 @@ class PlanController extends BaseController
             'vendor' => $vendor, 
             'category_id' => $category_model['category_id'],
             'slug' => $slug, 
-            'customer_events_list' => $customer_events_list
-        ]);
-    }
-
-    public function actionLoaditems()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->get();
-
-        //items only from active vendors 
-        $top_category = Category::find()
-            ->select(['category_id', 'category_name'])
-            ->where(['slug' => $data['slug']])
-            ->asArray()
-            ->one();
-
-        $active_vendors = Vendor::loadvalidvendorids($top_category['category_id']);
-
-        $items_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
-            ->leftJoin(
-                '{{%vendor_item_to_category}}', 
-                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
-            )
-            ->leftJoin(
-                '{{%vendor_item}}',
-                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
-            )
-            ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
-            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->where([
-                '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_approved' => 'Yes',
-                '{{%vendor_item}}.item_status' => 'Active',
-                '{{%vendor_item}}.vendor_id' => $active_vendors
-            ]);
-
-        //vendor filter
-        if ($data['vendor'] != '') {
-            $items_query->andWhere(['in', '{{%vendor}}.slug', explode('+', $data['vendor'])]);
-        }
-
-        //price filter 
-        if ($data['price'] != '') {
-
-            $price_condition = [];
-
-            foreach (explode('+', $data['price']) as $key => $value) {
-                $arr_min_max = explode('-', $value);
-                $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
-            }
-
-            $items_query->andWhere(implode(' OR ', $price_condition));
-        }
-
-        //theme filter 
-        if ($data['themes'] != '') {
-
-            $theme = explode('+', $data['themes']);
-
-            foreach ($theme as $key => $value) {
-                $themes[] = Themes::find()
-                    ->select('theme_id')
-                    ->where(['slug' => [$value]])
-                    ->asArray()
-                    ->all();
-            }
-
-            $all_valid_themes = array();
-
-            foreach ($themes as $key => $value) {
-                $get_themes = Vendoritemthemes::find()
-                    ->select('theme_id, item_id')
-                    ->where(['trash' => "Default"])
-                    ->andWhere(['theme_id' => [$value[0]['theme_id']]])
-                    ->asArray()
-                    ->all();
-
-                foreach ($get_themes as $key => $value) {
-                    $all_valid_themes[] = $value['item_id'];
-                }
-            }
-
-            if (count($all_valid_themes)==1) {
-                $all_valid_themes = $all_valid_themes[0];
-            } else {
-                $all_valid_themes = implode('","', $all_valid_themes);
-            }
-
-            $items_query->andWhere('{{%vendor_item}}.item_id IN("'.$all_valid_themes.'")');
-
-        }//if themes 
-
-        //category filter 
-        if ($data['item_ids'] != '') {
-            $items_query->andWhere('{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ("'.str_replace('+', '","', $data['item_ids']).'") and trash = "Default")');
-        }
-
-        $items_query
-            ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy('{{%image}}.vendorimage_sort_order', SORT_ASC);
-        
-        $items = $items_query->asArray()->all();
-
-        $customer_events_list = array();
-
-        if (!Yii::$app->user->isGuest) {
-            $usermodel = new Users();
-            $customer_events_list = $usermodel->get_customer_wishlist_details(
-                Yii::$app->user->identity->customer_id
-            );
-        }
-
-        return $this->renderPartial('product_list_ajax', [
-            'items' => $items, 
             'customer_events_list' => $customer_events_list
         ]);
     }

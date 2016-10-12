@@ -26,21 +26,27 @@ if($themes) { ?>
 				<ul class="<?= $class; ?>">
 					<?php
 					foreach ($themes as $key => $value) {
-						if (isset($get['themes']) && $get['themes'] !="") {
-							$val = explode(' ',$get['themes']);
-							$checked1 = (in_array($value['slug'],$val))? 'checked=checked' : '';
-						}
+						if (isset($value['theme_name'])) {
+							if (isset($get['themes']) && $get['themes'] != "") {
+								$val = explode(' ', $get['themes']);
+								$checked1 = (in_array($value['slug'], $val)) ? 'checked=checked' : '';
+							}
 							if (isset($value['theme_name'])) {
 								$lang_name = (Yii::$app->language == "en") ? 'theme_name' : 'theme_name_ar';
 								$theme_name = ucfirst(strtolower($value[$lang_name]));
-						?>
-							<li>
-								<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">
-								<input name="themes" data-element="input" class="items" id="checkbox-<?= $value['theme_name'] ?>" step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> ><?= $theme_name ?></label>
-							</li>
-						<?php
+								?>
+								<li>
+									<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">
+										<input name="themes" data-element="input" class="items"
+											   id="checkbox-<?= $value['theme_name'] ?>"
+											   step="<?= $value['theme_id'] ?>" value="<?= $value['slug'] ?>"
+											   type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> ><?= $theme_name ?>
+									</label>
+								</li>
+								<?php
 							}
-						} ?>
+						}
+					}?>
 					</ul>
 				</div>
 			</div>
