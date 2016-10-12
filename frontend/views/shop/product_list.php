@@ -9,7 +9,7 @@
     $get = Yii::$app->request->get();
 
 $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+echo $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 ?>
     <!-- coniner start -->
@@ -81,13 +81,14 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                 <nav class="row-offcanvas row-offcanvas-left">
                                     <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                                         <div id="accordion" class="panel-group">
-                                            <?=$this->render('filter/date.php',['deliver_date'=>$deliver_date]);  ?>
-                                            <?=$this->render('filter/locations.php',['deliver_location'=>$deliver_location]);  ?>
-                                            <?=$this->render('filter/price.php');  ?>
-                                            <?=$this->render('filter/category.php',['slug'=>$slug]); ?>
-                                            <?=$this->render('filter/theme.php',['themes'=>$themes]); ?>
-                                            <?=$this->render('filter/vendor.php',['vendor'=>$vendor]); ?>
+                                            <?=$this->render('@frontend/views/common/filter/date.php',['deliver_date'=>$deliver_date]);  ?>
+                                            <?=$this->render('@frontend/views/common/filter/locations.php',['deliver_location'=>$deliver_location]);  ?>
+                                            <?=$this->render('@frontend/views/common/filter/price.php');  ?>
+                                            <?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]); ?>
+                                            <?=$this->render('@frontend/views/common/filter/theme.php',['themes'=>$themes]); ?>
+                                            <?=$this->render('@frontend/views/common/filter/vendor.php',['vendor'=>$vendor]); ?>
                                         </div>
+                                    </div>
                                 </nav>
                             </div>
                         </div>
@@ -100,11 +101,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <!-- BEGIN Item lists -->
                     <div class="listing_right">
                         <div class="events_listing">
-                            <ul>
-                                <?php 
-                                    require 'product_list_ajax.php';
-                                ?>
-                            </ul>
+                            <?=$this->render('@frontend/views/common/items',['items' => $items, 'customer_events_list' => $customer_events_list]); ?>
                             <div id="planloader">
                                 <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
                             </div>
@@ -135,7 +132,8 @@ $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
 var load_more_items = '".Url::to(['shop/load-more-items'])."';
-var load_items = '".Url::to(['shop/load-items'])."';
+//var load_items = '".Url::to(['shop/load-items'])."';
+var load_items = '".Url::to(['shop/products'])."';
 var product_slug = '".$get['slug']."';
 ", View::POS_BEGIN);
 

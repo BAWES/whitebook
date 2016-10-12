@@ -7,12 +7,11 @@ use common\components\CFormatter;
 
 if (!empty($items)) {
     foreach ($items as $key => $value) { ?>
-        <li>
+        <div class="col-lg-3">
             <div class="events_items">
             <div class="events_images">
                 <div class="hover_events">
                     <div class="pluse_cont">
-
                         <?php if(Yii::$app->user->isGuest) { ?>
                             <a href=""  role="button" class=""  data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
                         <?php } else { ?>
@@ -24,16 +23,16 @@ if (!empty($items)) {
                             <a href=""  role="button" class=""  data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
                         </div>
                     <?php } else {
-                    
+
                     $k=array();
-                    
+
                     foreach((array)$customer_events_list as $l){
                         $k[]=$l['item_id'];
                     }
-                    
+
                     $result = array_search($value['item_id'],$k);
 
-                    if (is_numeric ($result)) { ?>  
+                    if (is_numeric ($result)) { ?>
                         <div class="faver_icons faverited_icons">
                             <?php } else { ?>
                         <div class="faver_icons">
@@ -46,9 +45,9 @@ if (!empty($items)) {
                 </div>
                 <div class="events_descrip">
                     <?php
-                    
+
                     $vendor_name = '';
-                    
+
                     if (Yii::$app->language == "en") {
                         $vendor_name = $value['vendor_name'];
                         $item_name = $value['item_name'];
@@ -56,20 +55,20 @@ if (!empty($items)) {
                         $vendor_name = $value['vendor_name_ar'];
                         $item_name = $value['item_name_ar'];
                     }
-                
+
                     echo Html::a(
-                        $vendor_name, 
+                        $vendor_name,
                         Url::toRoute(['/shop/product/','slug' => $value['slug']])
                     ) ?>
 
                     <h3><?= $item_name ?></h3>
-                    
+
                     <p>
                         <?= CFormatter::format($value['item_price_per_unit']) ?>
                     </p></a>
                 </div>
             </div>
-        </li>
+        </div>
     <?php }
 } else {
     echo '<div class="no-record-found">'.Yii::t('frontend', "No records found").'</div>';
