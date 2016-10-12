@@ -109,19 +109,7 @@ $get = Yii::$app->request->get();
 	<!-- BEGIN Item lists -->
 	<div class="listing_right">
 		<div class="events_listing">
-			<ul>
-			<?php
-
-			if(!empty($items))  {
-				foreach ($items as $key => $value) {
-					echo $this->render('item',['value'=>$value,'customer_events_list'=>$customer_events_list]);
-				}  
-			} else {
-				echo Yii::t('frontend', "No records found");
-			}
-
-			?>
-			</ul>
+			<?=$this->render('@frontend/views/common/items',['items' => $items, 'customer_events_list' => $customer_events_list]); ?>
 			<div id="planloader">
 				<img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
 			</div>
@@ -137,12 +125,10 @@ $get = Yii::$app->request->get();
 			<div class="banner_section_plan">
 				<?= Html::img("@web/images/banner_plan.png") ?>
 			</div>
-		</div><!-- END .add_more_commons -->
-	</div><!-- END Item lists -->
-
-</div><!-- END .col-md-9 -->
+		</div>
+	</div>
+	</div>
 </div>
-
 </div>
 </section>
 
@@ -154,6 +140,7 @@ $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends
 $this->registerJS("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
 var load_more_items = '".Yii::$app->urlManager->createAbsoluteUrl('plan/loadmoreitems')."';
-var load_items = '".Url::to(['plan/loaditems'])."';
+//var load_items = '".Url::to(['plan/loaditems'])."';
+var load_items = '".Url::to(['plan/plan'])."';
 var product_slug = '".$get['slug']."';
 ", yii\web\View::POS_BEGIN);
