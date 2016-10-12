@@ -1,4 +1,3 @@
-
 function validateEmail(email) {
     // http://stackoverflow.com/a/46181/11236
     var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
@@ -1822,7 +1821,6 @@ function filter(){
 
     jQuery('.events_listing').css({'opacity' : '0.5', 'position' : 'relative'});
 
-    item_check() // to check and uncheck all parent child categories
     var category_name = jQuery('input[name=category]:checked').map(function() {
         return this.value;
     }).get().join('+');
@@ -1835,7 +1833,9 @@ function filter(){
         return this.value;
     }).get().join('+');
 
-    var price_val = jQuery('.price_slider').val().replace(',', '-');
+    if ((jQuery('.price_slider').length)>0) {
+        var price_val = jQuery('.price_slider').val().replace(',', '-');
+    }
 
     if (jQuery('#delivery_date_2').length>0) {
         var date = jQuery('#delivery_date_2').val();
@@ -1960,6 +1960,7 @@ function filter_butt() {
 jQuery("#left_side_cate nav").removeClass ("navbar navbar-fixed-top ");
 jQuery("#left_side_cate ul").removeClass ("nav sidebar-nav ");
 jQuery("#left_side_cate nav").removeAttr ("id")
+
 if (jQuery(window).width() < 991) {
     jQuery("#left_side_cate nav").addClass ("navbar navbar-fixed-top ");
     jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");
@@ -1972,7 +1973,3 @@ function imgError() {
     });
 }
 imgError(); // to initialize on page load
-
-function item_check(){
-
-}

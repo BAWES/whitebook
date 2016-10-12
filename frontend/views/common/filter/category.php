@@ -73,16 +73,17 @@ $get = Yii::$app->request->get();
 								$category_name = ucfirst(strtolower($value[$lang_name]));
 								?>
 								<li for="<?= "class_" . $value['slug'] ?>">
-									<label class="label_check" for="checkbox-<?= $value['category_name'] ?>"
+									<label class="label_check" for="checkbox-<?= $value['slug'] ?>"
 										   data-class="<?= "class_" . $value['slug'] ?>">
 										<input
 											name="category"
 											data-element="input"
-											class="items"
-											id="checkbox-<?= $value['category_name'] ?>"
+											class="items category <?=$value['slug'] ?>"
+											id="checkbox-<?= $value['slug'] ?>"
 											step="<?= $value['category_id'] ?>"
 											value="<?= $value['slug'] ?>"
-											data-class="<?= "class_" . $value['slug'] ?>"
+											data-slug="<?=$value['slug'] ?>"
+											data-parent = "yes"
 											type="checkbox"
 											<?php echo (in_array($value['slug'], array_values($val))) ? 'checked="checked"' : ''; ?> >
 										<strong><?= $category_name ?></strong>
@@ -92,26 +93,28 @@ $get = Yii::$app->request->get();
 								<?php
 								$_subcategory = SubCategory::loadsubcat($value['slug']);
 								if ($_subcategory) {
+									echo  "<ul class=".$value['slug'].">";
 									foreach ($_subcategory as $_key => $_value) {
 										$_category_name = ucfirst(strtolower($_value[$lang_name]));
 										?>
 										<li class="subcat" for="<?= "class_" . $value['slug'] ?>">
 											<label class="label_check"
-												   for="checkbox-<?= $_value['category_name'] ?>"
+												   for="checkbox-<?= $_value['slug'] ?>"
 												   data-class="<?= "class_" . $value['slug'] ?>">
-												<input name="category" data-element="input" class="items"
-													   id="checkbox-<?= $_value['category_name'] ?>"
+												<input name="category" data-element="input"
+													   class="items <?=$value['slug'] ?>"
+													   id="checkbox-<?= $_value['slug'] ?>"
 													   step="<?= $_value['category_id'] ?>"
-													   class="items"
 													   value="<?= $_value['slug'] ?>"
-													   data-class="<?= "class_" . $value['slug'] ?>"
 													   type="checkbox"
+													   data-slug="<?=$value['slug'] ?>"
 													<?php echo (in_array($_value['slug'], array_values($val))) ? 'checked="checked"' : ''; ?> >
 												<?= $_category_name ?>
 											</label>
 										</li>
 										<?php
 									}
+									echo "</ul>";
 								}
 								?>
 								<?php
