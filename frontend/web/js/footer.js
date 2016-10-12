@@ -1822,7 +1822,7 @@ function filter(){
 
     jQuery('.events_listing').css({'opacity' : '0.5', 'position' : 'relative'});
 
-    var category_name = jQuery('input[name=items]:checked').map(function() {
+    var category_name = jQuery('input[name=category]:checked').map(function() {
         return this.value;
     }).get().join('+');
 
