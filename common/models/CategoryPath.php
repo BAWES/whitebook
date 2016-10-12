@@ -45,4 +45,12 @@ class CategoryPath extends \yii\db\ActiveRecord
             'level' => 'Level',
         ];
     }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
+    }
 }

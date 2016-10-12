@@ -27,7 +27,7 @@ class Blockeddate extends \yii\db\ActiveRecord
     /**
     * @inheritdoc
     */
-    public $sunday,$monday,$tuesday,$wednesday,$thursday,$friday,$saturday;
+    public $sunday, $monday, $tuesday, $wednesday, $thursday, $friday, $saturday;
 
     public static function tableName()
     {
@@ -83,8 +83,6 @@ class Blockeddate extends \yii\db\ActiveRecord
     {
         return [
             'block_id' => 'Block ID',
-
-
             'vendor_id' => 'Vendor ID',
             'block_date' => 'Block Date',
             'created_by' => 'Created By',

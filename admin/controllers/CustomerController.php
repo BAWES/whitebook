@@ -115,15 +115,10 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
-		    $command=Customer::updateAll(['message_status' => 0],'customer_id= '.$id);
-
-        $model1 = CustomerAddress::find()
-          ->where('customer_id = :customer_id', [':customer_id' => $id])
-          ->one();
+		    $command = Customer::updateAll(['message_status' => 0],'customer_id= '.$id);
 
         return $this->render('view', [
-            'model' => $this->findModel($id), 
-            'model1' => $model1
+            'model' => $this->findModel($id)
         ]);
     }
 

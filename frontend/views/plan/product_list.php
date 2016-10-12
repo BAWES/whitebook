@@ -24,7 +24,7 @@ $get = Yii::$app->request->get();
 			<div class="bs-example">
 			<?php
 
-			$category_det=Category::category_value($slug);
+			$category_det = Category::category_value($slug);
 
 			$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $slug])];
 			?>

@@ -65,14 +65,6 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'format'=>'raw',
                             'value'  => implode('<br />', $arr_categories)
                         ],
-                        [
-                            'label'=>'Subparent Category Name',
-                            'value'  => Vendoritem::getCategoryName($model->subcategory_id),
-                        ],
-                        [
-                            'label'=>'Child Category Name',
-                            'value'  => Vendoritem::getCategoryName($model->child_category),
-                        ],
                         'item_name',
                         'item_name_ar',
                         [
@@ -112,8 +104,8 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value'  =>strip_tags($model->item_price_description),
                         ],
                         [
-                            'label'=>'Item price description - Arabic',
-                            'value'  =>strip_tags($model->item_price_description_ar),
+                            'label' =>'Item price description - Arabic',
+                            'value' => strip_tags($model->item_price_description_ar),
                         ],
                         'item_for_sale',
                         'item_how_long_to_make',
@@ -121,7 +113,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         'item_approved',
                         [
                             'label'=>'Themes',
-                            'value'  => Vendoritemthemes::themedetails($model),
+                            'value'  => $model->getThemeName(),
                         ],
                         [
                             'label'=>'Group',

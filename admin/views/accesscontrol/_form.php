@@ -3,25 +3,29 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\ActiveField;
-/* @var $this yii\web\View */
-/* @var $model common\models\Accesscontrol */
-/* @var $form yii\widgets\ActiveForm */
+
 ?>
+
 <?= Html::csrfMetaTags() ?>
+
 <div class="accesscontrol-form">
 	<div class="col-md-8 col-sm-8 col-xs-8">
 	
-    <?php $form = ActiveForm::begin(array('options' => array('id' => 'myform','onsubmit'=>'return check_validation();'))); ?>
+    <?php $form = ActiveForm::begin(array(
+                'options' => array('id' => 'myform','onsubmit'=>'return check_validation();')
+            )); ?>
 	
-    <div class="form-group">
     <?php if ($model->isNewRecord) { ?>
-    	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-    	])->label('Select a user')->dropDownList($admin,['prompt'=>'Select...']) ?>
-	<?php } else { ?>
-    	<?= $form->field($model, 'admin_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-    	])->label('Select a user')->dropDownList($admin,['prompt'=>'Select...','disabled' => true,]) ?>
+    	<?= $form->field($model, 'admin_id')
+                ->label('Select a user')
+                ->dropDownList($admin,['prompt' => 'Select...']) ?>
+	
+    <?php } else { ?>
+    
+    	<?= $form->field($model, 'admin_id')
+                ->label('Select a user')
+                ->dropDownList($admin, ['prompt' => 'Select...','disabled' => true]); ?>
     <?php } ?>
-	</div>
 	
     <div class="form-group">
 	   <div id="no-more-tables">

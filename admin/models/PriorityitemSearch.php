@@ -15,7 +15,8 @@ class PriorityitemSearch extends Priorityitem
     /**
      * @inheritdoc
      */
-     public $item_name;
+    public $item_name;
+
     public function rules()
     {
         return [

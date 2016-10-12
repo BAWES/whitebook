@@ -79,19 +79,6 @@ class Category_model extends Model
         return $vendor;
     }
 
-    public function getCustomerEvents($customer_id)
-    {
-		$events = \common\models\Events::find()
-			->select(['event_name','event_id','event_date','event_type','slug'])
-			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
-			->Where(['et.trash'=>'default'])
-			->andWhere(['{{%events}}.customer_id'=>$customer_id])
-			->orderBy(['event_date'=>ASC])
-			->asArray()
-			->all();
-        return $events;
-    }
-
     public function get_event_types()
     {
 		$events = \common\models\Eventtype::find()
