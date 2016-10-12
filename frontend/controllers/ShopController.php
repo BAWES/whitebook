@@ -391,7 +391,6 @@ class ShopController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $Similar = new \common\models\Featuregroupitem();
         if (
             $model->item_approved == 'Yes' &&
             $model->trash == 'Default' &&
@@ -436,10 +435,11 @@ class ShopController extends BaseController
         ]);
 
         if (Yii::$app->user->isGuest) {
+
             return $this->render('product_detail', [
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
-                'similiar_item' => $Similar->similiar_details(),
+                'similiar_item' => Vendoritem::more_from_vendor($model),
                 'vendor_area' => [],
                 'my_addresses' => []
             ]);
@@ -484,7 +484,7 @@ class ShopController extends BaseController
 
             return $this->render('product_detail', [
                 'model' => $model,
-                'similiar_item' => $Similar->similiar_details(),
+                'similiar_item' => Vendoritem::more_from_vendor($model),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
                 'vendor_area' => $vendor_area_list,
