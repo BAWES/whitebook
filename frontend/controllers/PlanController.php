@@ -44,13 +44,9 @@ class PlanController extends BaseController
         return $this->render('plans', ['category' => $category]);
     }
 
-    public function actionPlan($slug = '')
+    public function actionPlan($slug)
     {
         $model = new Website();
-
-        if ($slug == '') {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
 
         $data = Yii::$app->request->get();
 
