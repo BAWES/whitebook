@@ -90,10 +90,6 @@ class ShopController extends BaseController
             ''//delivery on location available
         );
 
-//        echo "<pre>";
-//        print_r($ActiveVendors);
-//        echo "</pre>";
-
         $item_query = CategoryPath::find()
             ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
             ->leftJoin(

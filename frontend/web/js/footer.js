@@ -1825,9 +1825,11 @@ function filter(){
         return this.value;
     }).get().join('+');
 
-    var theme_name = jQuery('input[name=themes]:checked').map(function() {
-        return this.value;
-    }).get().join('+');
+    if ((jQuery('input[name=themes]').length)>0) {
+        var theme_name = jQuery('input[name=themes]:checked').map(function () {
+            return this.value;
+        }).get().join('+');
+    }
 
     var vendor_name = jQuery('input[name=vendor]:checked').map(function() {
         return this.value;
@@ -1850,6 +1852,10 @@ function filter(){
 
     if (typeof search_keyword !== "undefined") {
         search = search_keyword;
+    }
+
+    if (typeof theme !== "undefined") {
+        theme_name = theme;
     }
 
 
