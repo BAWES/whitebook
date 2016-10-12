@@ -39,18 +39,20 @@ $get = Yii::$app->request->get();
 		clear: both;
 	}
 </style>
-	<div class="panel panel-default" >
+<?php if ($subcategory) { ?>
+	<div class="panel panel-default">
 		<div class="panel-heading">
 			<div class="clear_left">
 				<p>Categories
-				<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">
-					- <?= Yii::t('frontend', 'Clear') ?></a>
+					<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">
+						- <?= Yii::t('frontend', 'Clear') ?></a>
 				</p>
 			</div>
 			<div class="clear_right">
-				<a href="#sub_categories" id="category" data-parent="#accordion" data-toggle="collapse" class="collapsed">
+				<a href="#sub_categories" id="category" data-parent="#accordion" data-toggle="collapse"
+				   class="collapsed">
 					<h4 class="panel-title">
-						<span class="<?= $s_class;?>"></span>
+						<span class="<?= $s_class; ?>"></span>
 					</h4>
 				</a>
 			</div>
@@ -61,8 +63,8 @@ $get = Yii::$app->request->get();
 					<ul class="list-group test_scroll">
 						<?php
 						$val = [];
-						if (isset($get['category']) && $get['category'] !="") {
-							$val = explode(' ',$get['category']);
+						if (isset($get['category']) && $get['category'] != "") {
+							$val = explode(' ', $get['category']);
 						}
 						foreach ($subcategory as $key => $value) {
 
@@ -70,18 +72,19 @@ $get = Yii::$app->request->get();
 								$lang_name = (Yii::$app->language == "en") ? 'category_name' : 'category_name_ar';
 								$category_name = ucfirst(strtolower($value[$lang_name]));
 								?>
-								<li for="<?="class_".$value['slug']?>" >
-									<label class="label_check" for="checkbox-<?= $value['category_name'] ?>" data-class="<?="class_".$value['slug']?>">
+								<li for="<?= "class_" . $value['slug'] ?>">
+									<label class="label_check" for="checkbox-<?= $value['category_name'] ?>"
+										   data-class="<?= "class_" . $value['slug'] ?>">
 										<input
 											name="category"
 											data-element="input"
-										    class="items"
+											class="items"
 											id="checkbox-<?= $value['category_name'] ?>"
 											step="<?= $value['category_id'] ?>"
 											value="<?= $value['slug'] ?>"
-											data-class="<?="class_".$value['slug']?>"
+											data-class="<?= "class_" . $value['slug'] ?>"
 											type="checkbox"
-											<?php echo (in_array($value['slug'],array_values($val))) ?  'checked="checked"' : ''; ?> >
+											<?php echo (in_array($value['slug'], array_values($val))) ? 'checked="checked"' : ''; ?> >
 										<strong><?= $category_name ?></strong>
 									</label>
 								</li>
@@ -92,21 +95,22 @@ $get = Yii::$app->request->get();
 									foreach ($_subcategory as $_key => $_value) {
 										$_category_name = ucfirst(strtolower($_value[$lang_name]));
 										?>
-										<li class="subcat" for="<?="class_".$value['slug']?>">
+										<li class="subcat" for="<?= "class_" . $value['slug'] ?>">
 											<label class="label_check"
-												   for="checkbox-<?= $_value['category_name'] ?>" data-class="<?="class_".$value['slug']?>">
+												   for="checkbox-<?= $_value['category_name'] ?>"
+												   data-class="<?= "class_" . $value['slug'] ?>">
 												<input name="category" data-element="input" class="items"
 													   id="checkbox-<?= $_value['category_name'] ?>"
 													   step="<?= $_value['category_id'] ?>"
 													   class="items"
 													   value="<?= $_value['slug'] ?>"
-													   data-class="<?="class_".$value['slug']?>"
+													   data-class="<?= "class_" . $value['slug'] ?>"
 													   type="checkbox"
-													<?php echo (in_array($_value['slug'],array_values($val))) ?  'checked="checked"' : ''; ?>  >
+													<?php echo (in_array($_value['slug'], array_values($val))) ? 'checked="checked"' : ''; ?> >
 												<?= $_category_name ?>
 											</label>
 										</li>
-									<?php
+										<?php
 									}
 								}
 								?>
@@ -118,4 +122,5 @@ $get = Yii::$app->request->get();
 			</div>
 		</div>
 	</div>
-<?php $col++; ?>
+	<?php $col++;
+}?>

@@ -89,9 +89,9 @@ $get = Yii::$app->request->get();
 					<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 					<div id="accordion" class="panel-group">
 						<?php require 'filter/price.php'; ?>
-						<?=$this->render('filter/category',['slug' => $slug]);?>
-						<?=$this->render('filter/theme',['themes' => $themes]); ?>
-						<?=$this->render('filter/vendor',['vendor' => $vendor]); ?>
+						<?=$this->render('@frontend/views/common/filter/category',['slug' => $slug]);?>
+						<?=$this->render('@frontend/views/common/filter/theme',['themes' => $themes]); ?>
+						<?=$this->render('@frontend/views/common/filter/vendor',['vendor' => $vendor]); ?>
 						<!--  END PRICE FILTER-->
 					<!-- END FILTER  -->
 					</div>
