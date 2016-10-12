@@ -1806,7 +1806,7 @@ var loadmore = 0;
 
 function filter(){
     var date = '',
-        areas = '',
+        areas = 'All',
         slug = '',
         search = '',
         category_name = '',
@@ -1822,6 +1822,7 @@ function filter(){
 
     jQuery('.events_listing').css({'opacity' : '0.5', 'position' : 'relative'});
 
+    item_check() // to check and uncheck all parent child categories
     var category_name = jQuery('input[name=category]:checked').map(function() {
         return this.value;
     }).get().join('+');
@@ -1889,7 +1890,7 @@ function filter(){
         type:'GET',
         url:path,
         data:{
-            item_ids: category_name,
+            category: category_name,
             themes : theme_name,
             vendor : vendor_name,
             search : search,
@@ -1971,3 +1972,7 @@ function imgError() {
     });
 }
 imgError(); // to initialize on page load
+
+function item_check(){
+
+}

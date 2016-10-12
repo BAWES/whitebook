@@ -18,7 +18,7 @@ $col = 1;
 	}else{
 		$s_class='plus_acc';
 	}
-
+$get = Yii::$app->request->get();
 	?>
 <style>
 	li.subcat {
@@ -45,7 +45,6 @@ $col = 1;
 				<p>Categories
 				<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">
 					- <?= Yii::t('frontend', 'Clear') ?></a>
-
 				</p>
 			</div>
 			<div class="clear_right">
@@ -61,18 +60,28 @@ $col = 1;
 				<div class="table clearfix">
 					<ul class="list-group test_scroll">
 						<?php
+						$val = [];
+						if (isset($get['category']) && $get['category'] !="") {
+							$val = explode(' ',$get['category']);
+						}
 						foreach ($subcategory as $key => $value) {
-//							if (isset($get['themes']) && $get['themes'] !="") {
-//								$val = explode(' ',$get['themes']);
-//								$checked1 = (in_array($value['slug'],$val))? 'checked=checked' : '';
-//							}
+
 							if (isset($value['category_name'])) {
 								$lang_name = (Yii::$app->language == "en") ? 'category_name' : 'category_name_ar';
 								$category_name = ucfirst(strtolower($value[$lang_name]));
 								?>
-								<li>
-									<label class="label_check" for="checkbox-<?= $value['category_name'] ?>">
-										<input name="category" data-element="input" class="items" id="checkbox-<?= $value['category_name'] ?>" step="<?= $value['category_id'] ?>" value="<?= $value['slug'] ?>" type="checkbox" <?php echo (isset($checked1) && $checked1 !="") ?  $checked1 : ''; ?> >
+								<li for="<?="class_".$value['slug']?>" >
+									<label class="label_check" for="checkbox-<?= $value['category_name'] ?>" data-class="<?="class_".$value['slug']?>">
+										<input
+											name="category"
+											data-element="input"
+										    class="items"
+											id="checkbox-<?= $value['category_name'] ?>"
+											step="<?= $value['category_id'] ?>"
+											value="<?= $value['slug'] ?>"
+											data-class="<?="class_".$value['slug']?>"
+											type="checkbox"
+											<?php echo (in_array($value['slug'],array_values($val))) ?  'checked="checked"' : ''; ?> >
 										<strong><?= $category_name ?></strong>
 									</label>
 								</li>
@@ -80,23 +89,25 @@ $col = 1;
 								<?php
 								$_subcategory = SubCategory::loadsubcat($value['slug']);
 								if ($_subcategory) {
-
-									?>
-										<?php foreach ($_subcategory as $_key => $_value) {
-											$_category_name = ucfirst(strtolower($_value[$lang_name]));
-											?>
-											<li class="subcat">
-												<label class="label_check"
-													   for="checkbox-<?= $_value['category_name'] ?>">
-													<input name="category" data-element="input" class="items"
-														   id="checkbox-<?= $_value['category_name'] ?>"
-														   step="<?= $_value['category_id'] ?>"
-														   value="<?= $_value['slug'] ?>"
-														   type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
-													<?= $_category_name ?>
-												</label>
-											</li>
-										<?php }
+									foreach ($_subcategory as $_key => $_value) {
+										$_category_name = ucfirst(strtolower($_value[$lang_name]));
+										?>
+										<li class="subcat" for="<?="class_".$value['slug']?>">
+											<label class="label_check"
+												   for="checkbox-<?= $_value['category_name'] ?>" data-class="<?="class_".$value['slug']?>">
+												<input name="category" data-element="input" class="items"
+													   id="checkbox-<?= $_value['category_name'] ?>"
+													   step="<?= $_value['category_id'] ?>"
+													   class="items"
+													   value="<?= $_value['slug'] ?>"
+													   data-class="<?="class_".$value['slug']?>"
+													   type="checkbox"
+													<?php echo (in_array($_value['slug'],array_values($val))) ?  'checked="checked"' : ''; ?>  >
+												<?= $_category_name ?>
+											</label>
+										</li>
+									<?php
+									}
 								}
 								?>
 								<?php

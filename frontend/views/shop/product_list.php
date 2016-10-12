@@ -9,7 +9,7 @@
     $get = Yii::$app->request->get();
 
 $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+echo $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 ?>
     <!-- coniner start -->
@@ -132,7 +132,8 @@ $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
 var load_more_items = '".Url::to(['shop/load-more-items'])."';
-var load_items = '".Url::to(['shop/load-items'])."';
+//var load_items = '".Url::to(['shop/load-items'])."';
+var load_items = '".Url::to(['shop/products'])."';
 var product_slug = '".$get['slug']."';
 ", View::POS_BEGIN);
 

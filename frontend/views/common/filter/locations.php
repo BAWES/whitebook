@@ -35,13 +35,13 @@ if($customer_id) {
     </div>
     <div id="delivery-area" class="panel-collapse" aria-expanded="false" style="display: none;">
         <div class="">
-
             <div class="form-group">
                 <select id="delivery_area_filter" class="selectpicker" data-live-search="true" data-size="10">
 
                     <option value=""><?= Yii::t('frontend', 'All') ?></option>
 
                     <?php
+
                     if($my_addresses) { ?>
                         <optgroup label="My Addresses">
                         <?php foreach ($my_addresses as $key => $value) {
