@@ -12,7 +12,7 @@ if(!empty($items))  {
             $item_url = Url::to(["product/product", 'slug' => $value['slug']]);
         }
         ?>
-        <li>
+        <div class="col-lg-3">
             <div class="events_items">
                 <div class="events_images">
                     <div class="hover_events">
@@ -81,10 +81,15 @@ if(!empty($items))  {
                         </a>
                     </div>
                 </div>
-        </li>
+        </div>
     <?php
     }
 } else {
-    echo Yii::t('frontend', "No records found");
+    echo '<div class="no-record-found">'.Yii::t('frontend', "No records found").'</div>';
 }
+
+$this->registerCss("
+.no-record-found {padding: 12px 0 36px 0px;text-align: center;}
+.col-lg-3{margin-bottom: 28px;}
+")
 ?>

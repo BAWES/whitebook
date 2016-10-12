@@ -732,4 +732,5 @@ $action = Yii::$app->controller->action->id;
     div#style-3 li:first-child{padding:0}
     .cart-button button{height:35px;background:#000;color:#fff;}
     .cart-button button:hover{background:#333;color:#fff;}
+    .plan_venues {  margin-bottom: 30px;  }
 </style>

@@ -5,7 +5,6 @@ namespace frontend\models;
 use yii\base\Model;
 use Yii\db\Query;
 use Yii;
-use frontend\models\Users;
 use common\models\Events;
 use frontend\models\Themes;
 use common\models\CustomerAddress;
