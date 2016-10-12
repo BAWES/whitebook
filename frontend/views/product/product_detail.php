@@ -449,16 +449,15 @@ $this->title = 'Whitebook - ' . $item_name;
                             
                             $imgUrl = '';
                             
+                            $baselink = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
+                            
                             foreach ($similiar_item as $s) {
+                                
                                 if (isset($s->images) && count($s->images) > 0) {
-
-                                    foreach ($s->images as $img) {
-                                        $imgUrl = $img['image_path'];
-                                        break;
-                                    }
-                                    $baselink = Yii::getAlias("@s3/vendor_item_images_210/") . $imgUrl;
+                                    $baselink = Yii::getAlias("@s3/vendor_item_images_210/") . $s->images[0]['image_path'];
                                 }
-                                ?>
+
+                            ?>
                                 <div class="item">
                                     <div class="fetu_product_list">
                                         <?php if ($s['slug'] != '') { ?>

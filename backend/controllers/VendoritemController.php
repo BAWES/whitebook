@@ -1,10 +1,17 @@
 <?php
-namespace backend\controllers;
 
+namespace backend\controllers;
 
 use Yii;
 use yii\base\Model;
-use backend\models\Vendoritem;
+use yii\web\UploadedFile;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\db\Expression;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use common\models\Vendoritemthemes;
 use common\models\Vendoritemquestion;
 use common\models\Vendoritemquestionansweroption;
@@ -15,12 +22,6 @@ use common\models\Category;
 use common\models\SubCategory;
 use common\models\VendoritemSearch;
 use common\models\Itemtype;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
 use common\models\Themes;
 use common\models\Featuregroup;
 use common\models\Featuregroupitem;
@@ -29,8 +30,11 @@ use common\models\ChildCategory;
 use common\models\Vendoritempricing;
 use common\models\VendorItemToCategory;
 use common\models\CategoryPath;
-use yii\db\Expression;
-use yii\helpers\Url;
+use common\models\VendorItemCapacityException;
+use common\models\CustomerCart;
+use common\models\Eventitemlink;
+use backend\models\Vendoritem;
+
 
 /**
  * VendoritemController implements the CRUD actions for Vendoritem model.
@@ -580,6 +584,17 @@ class VendoritemController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        VendorItemCapacityException::deleteAll(['item_id' => $id]);
+        Image::deleteAll(['item_id' => $id]);
+        Vendoritempricing::deleteAll(['item_id' => $id]);
+        Vendoritemthemes::deleteAll(['item_id' => $id]);
+        VendorItemToCategory::deleteAll(['item_id' => $id]);
+        CustomerCart::deleteAll(['item_id' => $id]);
+        Priorityitem::deleteAll(['item_id' => $id]);
+        Eventitemlink::deleteAll(['item_id' => $id]);
+        Featuregroupitem::deleteAll(['item_id' => $id]);
+
         Yii::$app->session->setFlash('success', "Item deleted successfully!");
 
         return $this->redirect(['index']);
