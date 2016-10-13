@@ -169,12 +169,17 @@ class FeaturegroupController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '17');
+        
         if (yii::$app->user->can($access)) {
+            
             $this->findModel($id)->delete();
+            
             Featuregroupitem::deleteAll(['group_id'=>$id]); // delete all products
+            
             Yii::$app->session->setFlash('success', 'Feature group deleted successfully!');
 
             return $this->redirect(['index']);
+
         } else {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 

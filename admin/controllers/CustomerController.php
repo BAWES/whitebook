@@ -4,22 +4,26 @@ namespace admin\controllers;
 
 use Yii;
 use yii\base\Model;
-use admin\models\Customer;
-use common\models\City;
-use common\models\Country;
-use admin\models\Authitem;
-use common\models\Location;
-use admin\models\Addresstype;
-use admin\models\AddressQuestion;
-use common\models\CustomerAddress;
-use common\models\CustomerAddressResponse;
-use admin\models\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use arturoliveira\ExcelView;
+use admin\models\Customer;
+use admin\models\Authitem;
+use admin\models\Addresstype;
+use admin\models\AddressQuestion;
+use admin\models\CustomerSearch;
+use common\models\City;
+use common\models\Country;
+use common\models\Location;
+use common\models\CustomerAddress;
+use common\models\CustomerAddressResponse;
+use common\models\CustomerCart;
+use common\models\Order;
+use common\models\Suborder;
+use common\models\SuborderItemPurchase;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -326,6 +330,29 @@ class CustomerController extends Controller
               
               if ($this->findModel($id)->delete()) {
 
+                  //address
+                  CustomerAddressResponse::deleteAll('address_id IN 
+                    (select address_id from {{%customer_address}} where customer_id="'.$id.'")');
+
+                  CustomerAddress::deleteAll(['customer_id' => $id]);
+                  
+                  //cart
+                  CustomerCart::deleteAll(['customer_id' => $id]);
+                  
+                  //orders
+                  $orders = Order::findAll(['customer_id' => $id]);
+
+                  foreach ($orders as $key => $value) {
+
+                    Order::updateAll(['trash' => 'Deleted'], 'order_id = ' . $value->order_id);
+
+                    //delete suborder 
+                    Suborder::updateAll(['trash' => 'Deleted'], 'order_id = ' . $value->order_id);
+
+                    //delete items 
+                    SuborderItemPurchase::updateAll(['trash' => 'Deleted'], 'suborder_id IN (select suborder_id from whitebook_suborder WHERE order_id="'.$value->order_id.'")');
+                  }
+                  
                   Yii::$app->session->setFlash('success', 'Customer deleted successfully!');
 
                   return $this->redirect(['index']);

@@ -4,6 +4,13 @@ namespace admin\controllers;
 
 use Yii;
 use yii\base\Model;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\helpers\UploadHandler;
+use yii\helpers\Html;
 use admin\models\Vendoritem;
 use common\models\Vendoritemquestion;
 use admin\models\Vendoritemquestionansweroption;
@@ -25,13 +32,9 @@ use common\models\Vendoritempricing;
 use common\models\Prioritylog;
 use common\models\VendorItemToCategory;
 use common\models\CategoryPath;
-use yii\helpers\Html;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use yii\filters\AccessControl;
-use yii\helpers\UploadHandler;
+use common\models\VendorItemCapacityException;
+use common\models\CustomerCart;
+use common\models\Eventitemlink;
 
 /**
 * VendoritemController implements the CRUD actions for Vendoritem model.
@@ -768,13 +771,20 @@ class VendoritemController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '23');
+
         if (yii::$app->user->can($access)) {
-            Priorityitem::deleteAll('item_id ='.$id);
-            Featuregroupitem::deleteAll('item_id ='.$id);
-            Image::deleteAll('item_id ='.$id);
-            $vendor_item_update = Vendoritem::findOne('item_id ='.$id);
-            $vendor_item_update->trash='Deleted';
-            $vendor_item_update->update();
+        
+            $this->findModel($id)->delete();
+
+            VendorItemCapacityException::deleteAll(['item_id' => $id]);
+            Image::deleteAll(['item_id' => $id]);
+            Vendoritempricing::deleteAll(['item_id' => $id]);
+            Vendoritemthemes::deleteAll(['item_id' => $id]);
+            VendorItemToCategory::deleteAll(['item_id' => $id]);
+            CustomerCart::deleteAll(['item_id' => $id]);
+            Priorityitem::deleteAll(['item_id' => $id]);
+            Eventitemlink::deleteAll(['item_id' => $id]);
+            Featuregroupitem::deleteAll(['item_id' => $id]);
 
             Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
             return $this->redirect(['index']);
