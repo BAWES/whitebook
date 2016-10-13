@@ -51,11 +51,7 @@ class ShopController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $explode = ' ';
-
-        if (Yii::$app->request->isAjax) {
-            $explode = '+';
-        }
+        $explode = (Yii::$app->request->isAjax) ? '+' : ' ';
 
         \Yii::$app->view->title = ($Category->category_meta_title) ? $Category->category_meta_title : Yii::$app->params['SITE_NAME'].' | '.$Category->category_name;
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($Category->category_meta_description) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
