@@ -1804,7 +1804,8 @@ jQuery('#main-category').change(function(){
 var loadmore = 0;
 
 function filter(){
-    var date = '',
+    var ajax_data = {},
+        date = '',
         areas = 'All',
         slug = '',
         search = '',
@@ -1831,9 +1832,11 @@ function filter(){
         }).get().join('+');
     }
 
-    var vendor_name = jQuery('input[name=vendor]:checked').map(function() {
-        return this.value;
-    }).get().join('+');
+    if ((jQuery('input[name=vendor]').length)>0) {
+        var vendor_name = jQuery('input[name=vendor]:checked').map(function () {
+            return this.value;
+        }).get().join('+');
+    }
 
     if ((jQuery('.price_slider').length)>0) {
         var price_val = jQuery('.price_slider').val().replace(',', '-');
@@ -1854,58 +1857,64 @@ function filter(){
         search = search_keyword;
     }
 
+
+    // for theme page
     if (typeof theme !== "undefined") {
         theme_name = theme;
     }
 
+    // for vendor profile page
+    if (typeof vendor_profile !== "undefined") {
+        vendor_name = vendor_profile;
+    }
+
+    ajax_data._csrf = csrfToken;
 
     if (slug != '') {
         url_path += '&slug='+slug;
+        ajax_data.slug = slug;
     }
 
     if (search != '') {
         url_path += '&search=' + search;
+        ajax_data.search = search;
     }
 
     if (category_name != '') {
         url_path += '&category=' + category_name;
+        ajax_data.category = category_name;
     }
     if(theme_name != '') {
         url_path += '&themes=' + theme_name;
+        ajax_data.themes = theme_name;
     }
 
     if(vendor_name != '') {
         url_path += '&vendor=' + vendor_name;
+        ajax_data.vendor = vendor_name;
     }
 
     if (price_val != '') {
         url_path += '&price=' + price_val;
+        ajax_data.price = price_val;
     }
 
     if(date != '') {
         url_path += '&date=' + date;
+        ajax_data.date = date;
     }
 
     if(areas != '') {
         url_path += '&location=' + areas;
+        ajax_data.location = areas;
     }
-
+console.log(ajax_data);
     var path = load_items;
 
     jQuery.ajax({
         type:'GET',
         url:path,
-        data:{
-            category: category_name,
-            themes : theme_name,
-            vendor : vendor_name,
-            search : search,
-            price : price_val,
-            date : date,
-            location: areas,
-            slug: slug,
-            _csrf : csrfToken
-        },
+        data:ajax_data,
         success:function(data){
             window.history.pushState('test', 'Title', url_path);
             jQuery('.events_listing').html(data);

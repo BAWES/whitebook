@@ -19,7 +19,7 @@
                         }
 
                         if ($ltr == $f) { ?>
-                            <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/<?php echo $d['slug']; ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a></li>
+                            <li><a href="<?php echo Yii::$app->homeUrl; ?>/experience/all?vendor=<?php echo $d['slug']; ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a></li>
                         <?php }
                     } ?>
                 <?php } ?>
