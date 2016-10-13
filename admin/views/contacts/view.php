@@ -3,13 +3,12 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Contacts */
-
 $this->title = $model->contact_name;
 $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="contacts-view">
 
     <p>

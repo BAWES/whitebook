@@ -1,15 +1,9 @@
 <?php
+
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use dosamigos\ckeditor\CKEditor;
-
-/* @var $this yii\web\View */
-/* @var $model common\models\Cms */
-/* @var $form yii\widgets\ActiveForm */
-?>
-
-<?php
 
 $this->registerJs(
    '$("document").ready(function(){
@@ -18,43 +12,27 @@ $this->registerJs(
         });
     });'
 );
+
 ?>
- <div class="col-md-8 col-sm-8 col-xs-8">
+
+<div class="col-md-8 col-sm-8 col-xs-8">
     
     <?php $form = ActiveForm::begin(['options' => ['data-pjax' => true ]]); ?>
     
-    <div class="form-group">
-	<?= $form->field($model, 'page_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100]) ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'page_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100]) ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'cms_meta_title',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div>
-
-    <div class="form-group">
-	<?= $form->field($model, 'cms_meta_keywords',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div>
-
-    <div class="form-group">
-	<?= $form->field($model, 'cms_meta_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'page_content',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textArea(['id'=>'text-editor']) ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'page_content_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textArea(['id'=>'text-editor-ar']) ?>
-	</div>
-
+    <?= $form->field($model, 'page_name')->textInput(['maxlength' => 100]) ?>
+	
+	<?= $form->field($model, 'page_name_ar')->textInput(['maxlength' => 100]) ?>
+	
+	<?= $form->field($model, 'cms_meta_title')->textArea(['maxlength' => 250])?>
+	
+	<?= $form->field($model, 'cms_meta_keywords')->textArea(['maxlength' => 250])?>
+	
+	<?= $form->field($model, 'cms_meta_description')->textArea(['maxlength' => 250])?>
+	
+	<?= $form->field($model, 'page_content')->textArea(['id'=>'text-editor']) ?>
+	
+	<?= $form->field($model, 'page_content_ar')->textArea(['id'=>'text-editor-ar']) ?>
+	
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?= Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>

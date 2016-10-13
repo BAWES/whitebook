@@ -2,13 +2,12 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Customer */
-
 $this->title = 'Update Customer';
 $this->params['breadcrumbs'][] = ['label' => 'Customers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Update';
+
 ?>
+
 <div class="customer-update">
    <?= $this->render('_form', [
         'model' => $model

@@ -4,15 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
-/* @var $this yii\web\View */
-/* @var $model common\models\Customer */
-/* @var $form yii\widgets\ActiveForm */
-
 
 $this->title = 'Newsletter';
 $this->params['breadcrumbs'][] = ['label' => 'Customers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="customer-create">
 
 <div class="customer-form">
@@ -20,15 +18,18 @@ $this->params['breadcrumbs'][] = $this->title;
         
         <?php $form = ActiveForm::begin();?>
         
-        <div class="form-group">
-        	<?= $form->field($model, 'newsmail',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-        	])->dropDownList($customer_email, ['id'=>'customer_email','multiple'=>true,'placeholder'=>'Select user']) ?>
-        </div>
-
-        <div class="form-group">
-        	<?= $form->field($model, 'content',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textarea(['maxlength' => 128])?>
-        </div>
-
+    	<?= $form->field($model, 'newsmail')
+                ->dropDownList(
+                    $customer_email, 
+                    [
+                        'id' => 'customer_email',
+                        'multiple' => true,
+                        'placeholder' => 'Select user'
+                    ]
+                ); ?>
+    
+    	<?= $form->field($model, 'content')->textarea(['maxlength' => 128]); ?>
+    
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? 'Send' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
             <?= Html::a('Back', ['index', ], ['class' => 'btn btn-defauult']) ?>

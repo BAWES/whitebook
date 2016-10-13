@@ -3,55 +3,30 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Admin */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
  <div class="col-md-8 col-sm-8 col-xs-8">	
 
     <?php $form = ActiveForm::begin(); ?>
     
-    <div class="form-group">   
-	<?= $form->field($model, 'role_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->dropDownList($role,['prompt'=>'Select...']) ?>
-	</div>
+    <?= $form->field($model, 'role_id')->dropDownList($role,['prompt'=>'Select...']); ?>
+
+	<?= $form->field($model, 'admin_name')->textInput(['maxlength' => 100]) ?>
 	
-	<div class="form-group">   
-	<?= $form->field($model, 'admin_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->textInput(['maxlength' => 100]) ?>
-	</div>
+	<?= $form->field($model, 'admin_email')->textInput(['maxlength' => 100]) ?>
 	
-	<div class="form-group">   
-	<?= $form->field($model, 'admin_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->textInput(['maxlength' => 100]) ?>
-	</div>
-	
-	 <?php if($model->isNewRecord) {?>
+	<?php if($model->isNewRecord) {?>
 		 
-	<div class="form-group">   
-	<?= $form->field($model, 'admin_password',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->PasswordInput(['maxlength' => 100]) ?>
-	</div>
+		<?= $form->field($model, 'admin_password')->PasswordInput(['maxlength' => 100]) ?>
 	
 	<?php } ?>
-	
-	<div class="form-group">   
-	<?= $form->field($model, 'address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->textArea(['maxlength' => 100]) ?>
-	</div>
-	
-	<div class="form-group">   
-	<?= $form->field($model, 'phone',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->textInput(['maxlength' => 100]) ?>
-	</div>
-	
-	<div class="form-group">   
-	<?= $form->field($model, 'admin_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->dropDownList(['Active' => 'Active', 'Deactive' => 'Deactive']) ?>
-	</div>
+		
+	<?= $form->field($model, 'address')->textArea(['maxlength' => 100]) ?>
 
+	<?= $form->field($model, 'phone')->textInput(['maxlength' => 100]) ?>
 
+	<?= $form->field($model, 'admin_status')->dropDownList(['Active' => 'Active', 'Deactive' => 'Deactive']) ?>
+	
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?= Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>

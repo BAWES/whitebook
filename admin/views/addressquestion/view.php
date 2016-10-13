@@ -2,18 +2,17 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
+use yii\widgets\DetailView;
 
 use common\models\AddressQuestion;
 use common\models\Addresstype;
-use yii\widgets\DetailView;
-use yii\helpers\ArrayHelper;
-/* @var $this yii\web\View */
-/* @var $model common\models\AddressQuestion */
 
 $this->title = 'Address Questions';
 $this->params['breadcrumbs'][] = ['label' => 'Address Questions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <p>

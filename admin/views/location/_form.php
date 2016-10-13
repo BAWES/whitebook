@@ -1,39 +1,29 @@
 <?php
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use yii\helpers\Url;
+
 use yii\web\View;
-/* @var $this yii\web\View */
-/* @var $model common\models\Location */
-/* @var $form yii\widgets\ActiveForm */
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
+
 ?>
+
 <?= Html::csrfMetaTags() ?>
 
 <div class="col-md-8 col-sm-8 col-xs-8">	
 
     <?php $form = ActiveForm::begin(); ?>
+    
     <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
 
-    <div class="form-group">   
-	<?= $form->field($model, 'country_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->dropDownList($country, ['prompt'=>'Select...']) ?>
-	</div>
-   
-   <?php if($model->isNewRecord) { $city = array(); } ?>
-   <div class="form-group">   
-	<?= $form->field($model, 'city_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->dropDownList($city, ['prompt'=>'Select...']);  ?>
-	</div>	
+    <?= $form->field($model, 'country_id')->dropDownList($country, ['prompt'=>'Select...']) ?>
+	
+    <?php if($model->isNewRecord) { $city = array(); } ?>
+
+	<?= $form->field($model, 'city_id')->dropDownList($city, ['prompt'=>'Select...']); ?>
 		
-	<div class="form-group">   
-	<?= $form->field($model, 'location',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->textInput(['maxlength' => 50])  ?>
-	</div>
-	  
-    <div class="form-group">   
-    <?= $form->field($model, 'location_ar', [  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-    ])->textInput(['maxlength' => 50])  ?>
-    </div>
+	<?= $form->field($model, 'location')->textInput(['maxlength' => 50])  ?>
+	
+    <?= $form->field($model, 'location_ar')->textInput(['maxlength' => 50])  ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

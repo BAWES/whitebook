@@ -3,13 +3,12 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Log */
-
 $this->title = $model->message;
 $this->params['breadcrumbs'][] = 'Logs';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="log-view">
 
     <h1><?= $model->message ?></h1>

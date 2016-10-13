@@ -1,18 +1,18 @@
 <?php
+
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 
-/* @var $searchModel common\models\SearchCategory */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'Sub categories';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="category-index">
-<p>
+	<p>
         <?= Html::a('Create sub category', ['create_subcategory'], ['class' => 'btn btn-success']) ?>
     </p>
 
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => 'raw',		
 				'value'=>function($data){
 					return '<b>'.ucfirst($data->getCategoryName($data->parent_category_id)).'</b>';
-					},	
+				},	
 				'filter' => Html::activeDropDownList($searchModel, 'parent_category_id', ArrayHelper::map(common\models\Category::find()->where(['!=','trash','Deleted'])
 				->andwhere(['parent_category_id' => null])
 				->andwhere(['=','category_allow_sale','Yes'])->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),

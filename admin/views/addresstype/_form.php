@@ -1,10 +1,8 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Addresstype */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <?= Html::csrfMetaTags() ?>
@@ -14,15 +12,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'type_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-	</div>    
+	<?= $form->field($model, 'type_name')->textInput(['maxlength' => 128]); ?>
 
-	<div class="form-group">   
-		<?= $form->field($model, 'status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-		])->checkbox(['label'=>'Address type status','Active' => 'Active']) ?>
-	</div>
-    
+	<?= $form->field($model, 'status')->checkbox(['label'=>'Address type status','Active' => 'Active']) ?>
+	
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
