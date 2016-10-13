@@ -98,9 +98,12 @@ class ThemesController extends BaseController
         Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.ucfirst($theme->theme_name);
 
 
-        $category = Category::find()->select('category_id')->where(['slug' => $slug])->asArray()->one();
-
-        $active_vendors = Vendor::loadvalidvendorids($category['category_id']);
+        if ($slug != 'all') {
+            $category = Category::find()->select('category_id')->where(['slug' => $slug])->asArray()->one();
+            $active_vendors = Vendor::loadvalidvendorids($category['category_id']);
+        } else {
+            $active_vendors = Vendor::loadvalidvendorids();
+        }
 
         $items_query = CategoryPath::find()
             ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
@@ -126,8 +129,10 @@ class ThemesController extends BaseController
             $categories = array_merge($categories,explode($explode, $data['category']));
             $cats = implode("','",$categories);
         }
-        $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
-        $items_query->andWhere($q);
+        if ($cats != 'all') {
+            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
+            $items_query->andWhere($q);
+        }
 
 
         if (isset($data['vendor']) && $data['vendor'] != '') {

@@ -40,7 +40,7 @@ use yii\web\view;
 					                //for arabic last letter will be first letter 
 					            }
 								if($ltr === $f) { ?>
-									<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'venues-category','themes'=>$d['slug']]) ?></li>
+									<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php }
 							}	?>
 						<?php } ?>
@@ -85,7 +85,7 @@ use yii\web\view;
 
 							if($first_letter == $f)
 								{if($i<$first){ ?>
-								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'venues-category','themes'=>$d['slug']]) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php }  } }?>
 							</ul>
 						</div><!-- END .direct_list -->
@@ -115,7 +115,7 @@ use yii\web\view;
 							}
 
 							if($first_letter == $f) { ?>
-								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'venues-category','themes'=>$d['slug']]) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php  
 
 							} //if
@@ -155,7 +155,7 @@ use yii\web\view;
 							}
 
 							if($first_letter == $f) { ?>
-								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'venues-category','themes'=>$d['slug']]) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php  
 							}//if
 
