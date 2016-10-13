@@ -14,28 +14,30 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="row-fluid">
-   <div class="span12">
-       <div class="grid simple">
-		   <div class="tools"> 
-			<?= Html::a('Create admin', ['create'], ['class' => 'btn btn-success']) ?>
+    <div class="span12">
+        <div class="grid simple">
+		    <div class="tools"> 
+			 <?= Html::a('Create admin', ['create'], ['class' => 'btn btn-success']) ?>
 			</div>     
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'admin_name',
-            'admin_email:email',
-			[
-				'attribute'=>'created_datetime',
-				'format' => ['date', Yii::$app->params['dateFormat']],
-				'label'=>'created date',			
-			],
-            ['class' => 'yii\grid\ActionColumn',
-            'header'=>'Action'],
-        ],
-    ]); ?>
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+                    'admin_name',
+                    'admin_email:email',
+        			[
+        				'attribute'=>'created_datetime',
+        				'format' => ['date', Yii::$app->params['dateFormat']],
+        				'label'=>'created date',			
+        			],
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'header'=>'Action'
+                    ],
+                ],
+            ]); ?>
 		</div>
 	</div>
 </div>

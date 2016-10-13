@@ -4,52 +4,38 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
-/* @var $this yii\web\View */
-/* @var $model common\models\Customer */
-/* @var $form yii\widgets\ActiveForm */
+
 ?>
 
 <div class="customer-form">
 <div class="col-md-8 col-sm-8 col-xs-8">
-    <?php 
+ 
+    <?php $form = ActiveForm::begin(); ?>
 
-    $form = ActiveForm::begin();
+	<?= $form->field($model, 'customer_name')->textInput(['maxlength' => 128])?>
 
-    ?>
-
-    <div class="form-group">
-    	<?= $form->field($model, 'customer_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-    </div>
-
-    <div class="form-group">
-    	<?= $form->field($model, 'customer_email',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-    </div>
+	<?= $form->field($model, 'customer_email')->textInput(['maxlength' => 128])?>
 
     <?php if($model->isNewRecord) { ?>
 
-    <div class="form-group">
-    	<?= $form->field($model, 'customer_password',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->passwordInput(['maxlength' => 128])?>
-    </div>
-
-    <div class="form-group">
-    	<?= $form->field($model, 'customer_dateofbirth',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-    </div>
+    	<?= $form->field($model, 'customer_password')->passwordInput(['maxlength' => 128])?>
+    
+    	<?= $form->field($model, 'customer_dateofbirth')->textInput(['maxlength' => 128])?>
+    
     <?php } else { ?>
 
-    <div class="form-group">
-    	<?= $form->field($model, 'customer_dateofbirth',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlenght' => 255, 'value' => date( 'd-m-Y', strtotime( $model->customer_dateofbirth ) )])?>
-    </div>
+    	<?= $form->field($model, 'customer_dateofbirth')
+                ->textInput([
+                    'maxlenght' => 255, 
+                    'value' => date( 'd-m-Y', strtotime( $model->customer_dateofbirth))
+                ]); ?>
+    
     <?php } ?>
 
-    <div class="form-group">
-    	<?= $form->field($model, 'customer_gender',[
-                'template' => "{label}<div class='controls'>{input}</div>{hint}{error}"
-            ])->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', ], ['prompt' => 'Select Gender']) ?>
-    </div>
+	<?= $form->field($model, 'customer_gender')
+            ->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', ], ['prompt' => 'Select Gender']) ?>
 
-    <div class="form-group">
-    	<?= $form->field($model, 'customer_mobile',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-    </div>
+	<?= $form->field($model, 'customer_mobile')->textInput(['maxlength' => 128])?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

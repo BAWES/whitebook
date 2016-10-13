@@ -14,40 +14,41 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row-fluid">
    <div class="span12">
        <div class="grid simple">
-		   <div class="tools"> 
-			<?= Html::a('Create static page', ['create'], ['class' => 'btn btn-success']) ?>
+		    <div class="tools"> 
+				<?= Html::a('Create static page', ['create'], ['class' => 'btn btn-success']) ?>
 			</div>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'page_name',
-             [
-				'attribute'=>'page_content',
-				'label'=>'Page Content',	
-				'value' => function ($data) {
-					return strip_tags($data->getContent($data->page_id));                      
-					},	
-			],	
-            [
-			  'header'=>'page status',			
-			  'format' => 'raw',
-			  'value'=>function($data) {
-				return HTML::a('<img src='.$data->statusImageurl($data->page_status).' id="image-'.$data->page_id.'" title='.$data->statusTitle($data->page_status).'>','javascript:void(0)',['id'=>'status', 
-				'onclick'=>'change("'.$data->page_status.'","'.$data->page_id.'")']);
-				},
-			 ],             
-			[
-				'attribute'=>'created_datetime',
-				'format' => ['date', 'php:d/m/Y'],
-				'label'=>'created date',			
-			],
-         ['class' => 'yii\grid\ActionColumn',
-            'header'=>'Action',
-            'template' => '{view}{update} {delete}{link}',],
-        ],
-    ]); ?>  
+			
+		    <?= GridView::widget([
+		        'dataProvider' => $dataProvider,
+		        'filterModel' => $searchModel,
+		        'columns' => [
+		            ['class' => 'yii\grid\SerialColumn'],
+		            'page_name',
+		             [
+						'attribute'=>'page_content',
+						'label'=>'Page Content',	
+						'value' => function ($data) {
+							return strip_tags($data->getContent($data->page_id));                      
+							},	
+					],	
+		            [
+					  'header'=>'page status',			
+					  'format' => 'raw',
+					  'value'=>function($data) {
+						return HTML::a('<img src='.$data->statusImageurl($data->page_status).' id="image-'.$data->page_id.'" title='.$data->statusTitle($data->page_status).'>','javascript:void(0)',['id'=>'status', 
+						'onclick'=>'change("'.$data->page_status.'","'.$data->page_id.'")']);
+						},
+					 ],             
+					[
+						'attribute'=>'created_datetime',
+						'format' => ['date', 'php:d/m/Y'],
+						'label'=>'created date',			
+					],
+		         ['class' => 'yii\grid\ActionColumn',
+		            'header'=>'Action',
+		            'template' => '{view}{update} {delete}{link}',],
+		        ],
+		    ]); ?>  
 		</div>
 	</div>
 </div>

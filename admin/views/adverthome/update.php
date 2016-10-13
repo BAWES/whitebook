@@ -12,7 +12,8 @@ $this->params['breadcrumbs'][] = 'Update ads';
 <div class="adverthome-update">
 
     <?= $this->render('_form', [
-        'model' => $model,'imagedata'=>$imagedata,
+        'model' => $model,
+        'imagedata'=>$imagedata,
     ]) ?>
 
 </div>

@@ -3,45 +3,29 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Vendoritemquestionansweroption */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="vendoritemquestionansweroption-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="form-group">
-    <?= $form->field($model, 'question_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->dropDownList($questions, ['prompt'=>'Select...']); ?>
-	</div>
+    <?= $form->field($model, 'question_id')->dropDownList($questions, ['prompt'=>'Select...']); ?>
 
-	<div class="form-group">
-	<?= $form->field($model, 'answer_background_image_id',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
-	])->fileInput() ?>
-	</div>
+	<?= $form->field($model, 'answer_background_image_id')->fileInput() ?>
+	
+	<?= $form->field($model, 'answer_text')->textInput() ?>
 
-	<div class="form-group">
-	<?= $form->field($model, 'answer_text',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
-	])->textInput() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'answer_background_color',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
-	])->textInput() ?>
-	</div>
-
-	<div class="form-group">
-	<?= $form->field($model, 'answer_price_added',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"
-	])->textInput() ?>
-	</div>
-
-	<div class="form-group">
-   <?= $form->field($model, 'answer_archived',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"
-					])->dropDownList([ 'yes' => 'Yes', 'no' => 'No', ], ['prompt' => '']) ?>
-	</div>
-
+	<?= $form->field($model, 'answer_background_color', [
+				'options' => ['class' => 'controls append_address']
+			])->textInput(); ?>
+	
+	<?= $form->field($model, 'answer_price_added',[
+				'options' => ['class' => 'controls append_address']
+			])->textInput() ?>
+	
+   <?= $form->field($model, 'answer_archived')
+   			->dropDownList([ 'yes' => 'Yes', 'no' => 'No', ], ['prompt' => '']) ?>
+   			
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

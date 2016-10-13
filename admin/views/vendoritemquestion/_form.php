@@ -1,78 +1,50 @@
 <?php
+
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Vendoritemquestion */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="vendor item question-form">
 	<div class="col-md-8 col-sm-8 col-xs-8">	
+    
     <?php $form = ActiveForm::begin(); ?>
    
-    <div class="form-group"> 
-    <?= $form->field($model, 'vendor_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->dropDownList($vendorname, ['prompt'=>'Select...']); ?>
-	</div>
+    <?= $form->field($model, 'vendor_id')->dropDownList($vendorname, ['prompt'=>'Select...']); ?>
+
+    <?= $form->field($model, 'category_id')->dropDownList($category, ['prompt'=>'Select...']); ?>
 	
-    <div class="form-group"> 
-    <?= $form->field($model, 'category_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->dropDownList($category, ['prompt'=>'Select...']); ?>
-	</div>
+    <?= $form->field($model, 'subcategory_id')->dropDownList($subcategory, ['prompt'=>'Select...']); ?>
 	
-	<div class="form-group"> 
-    <?= $form->field($model, 'subcategory_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->dropDownList($subcategory, ['prompt'=>'Select...']); ?>
-	</div>
-
+	<?= $form->field($model, 'item_id[]')->checkboxList($vendoritem); ?> 
 	
-    <div class="form-group"> 
-	    <?= $form->field($model, 'item_id[]',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->checkboxList($vendoritem); ?> 
-	</div>  
+    <?= $form->field($model, 'answer_id')->textInput(['maxlength' => 11]) ?>
 
-<div class="form-group"> 
-   <?= $form->field($model, 'answer_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"
-					])->textInput(['maxlength' => 11]) ?>
+    <?= $form->field($model, 'question_text')->textInput([]) ?>
 
-</div>
+    <?= $form->field($model, 'question_answer_type')
+            ->dropDownList(
+                ['text' => 'Text', 'image' => 'Image', 'selection' => 'Selection'], 
+                ['prompt' => '']
+        ) ?>
 
-<div class="form-group"> 
-   <?= $form->field($model, 'question_text',[
-		  'template' => "{label}<div class='controls'>{input}</div>{hint}{error}"
-					])->textInput([]) ?>
-</div>
+	<?= $form->field($model, 'question_max_characters')->textInput() ?>
 
-<div class="form-group"> 
-   <?= $form->field($model, 'question_answer_type',['template' => "{label}<div class='append_address'>{input}</div>{hint}{error}"
-					])->dropDownList([ 'text' => 'Text', 'image' => 'Image', 'selection' => 'Selection', ], ['prompt' => '']) ?>
+    <?= $form->field($model, 'question_sort_order')->textInput() ?>
 
-</div>
-
-<div class="form-group"> 
-	<?= $form->field($model, 'question_max_characters',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"
-					])->textInput() ?>
-</div>
-
-<div class="form-group"> 
-   <?= $form->field($model, 'question_sort_order',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"
-					])->textInput() ?>
-</div>
-
-<div class="form-group"> 
-   <?= $form->field($model, 'question_archived',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"
-					])->dropDownList([ 'yes' => 'Yes', 'no' => 'No', ], ['prompt' => '']) ?>
-</div>
+    <?= $form->field($model, 'question_archived')->dropDownList(
+            ['yes' => 'Yes', 'no' => 'No', ], ['prompt' => '']); ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
     </div>
-	</div>
-    <?php ActiveForm::end(); ?>
 
+	<?php ActiveForm::end(); ?>
+
+    </div>
+    
 </div>
 
 <script type="text/javascript">

@@ -47,16 +47,16 @@ $this->params['breadcrumbs'][] = $this->title;
     				src='.$data->statusImageurl($data->status).' id="image-'.$data->type_id.'" title='.$data->statusTitle($data->status).'>','javascript:void(0)',['id'=>'status',
     				'onclick'=>'change("'.$data->status.'","'.$data->type_id.'")']);
     				},
-    			 ],
-    			 
+    			],    			 
                 [
     				'attribute'=>'created_datetime',
     				'format' => ['date', Yii::$app->params['dateFormat']],
     				'label'=>'created date',			
     			],
-    			['class' => 'yii\grid\ActionColumn',
-                'header'=>'Action',
-                'template' => ' {update} {delete}{link}',
+    			[
+                    'class' => 'yii\grid\ActionColumn',
+                    'header'=>'Action',
+                    'template' => ' {update} {delete}{link}',
     			],
             ],
         ]); ?>

@@ -21,7 +21,8 @@ use yii\web\View;
 
         <?php if($model->isNewRecord){?>
 
-        <div class="question-box">       
+        <div class="question-box">  
+             
             <div class="form-group">    
                 <?= $form->field($model, 'question[]',['template' => "{label}<div >{input}</div>{hint}{error}"]
                     )->textInput(['multiple' => 'multiple']) ?> 

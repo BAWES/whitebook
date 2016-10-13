@@ -11,15 +11,12 @@ use yii\widgets\ActiveForm;
 <div class="featuregroup-form">
 
 	<div class="col-md-8 col-sm-8 col-xs-8">    
+    
     <?php $form = ActiveForm::begin(); ?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'group_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-	</div> 
+	<?= $form->field($model, 'group_name')->textInput(['maxlength' => 128])?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'group_name_ar', ['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-	</div> 
+	<?= $form->field($model, 'group_name_ar')->textInput(['maxlength' => 128])?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
