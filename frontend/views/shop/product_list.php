@@ -5,6 +5,9 @@
     use yii\helpers\Url;
     use yii\widgets\Breadcrumbs;
     use yii\web\view;
+
+\Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
+
     $this->params['breadcrumbs'][] = ['label' => ucfirst($Category->category_name), 'url' => Url::to(["shop/products", 'slug' => $slug])];
     $get = Yii::$app->request->get();
 
