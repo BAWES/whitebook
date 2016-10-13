@@ -3,13 +3,14 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Themes;
-use admin\models\ThemesSearch;
-use admin\models\Authitem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use admin\models\Themes;
+use admin\models\ThemesSearch;
+use admin\models\Authitem;
+use common\models\Vendoritemthemes;
 
 /**
  * ThemesController implements the CRUD actions for Themes model.
@@ -167,13 +168,19 @@ class ThemesController extends Controller
          {
              $access = Authitem::AuthitemCheck('3', '20');
              if (yii::$app->user->can($access)) {
-                 $model = $this->findModel($id);
-                 $model->trash = 'Deleted';
-                 $model->load(Yii::$app->request->post());
-                 $model->save();
-                 Yii::$app->session->setFlash('success', 'Theme deleted successfully!');
+                 
+                $model = $this->findModel($id);
+                $model->trash = 'Deleted';
+                $model->load(Yii::$app->request->post());
+                $model->save();
 
-                 return $this->redirect(['index']);
+                //delete vendor item theme 
+                Vendoritemthemes::deleteAll(['theme_id' => $id]);
+
+                Yii::$app->session->setFlash('success', 'Theme deleted successfully!');
+
+                return $this->redirect(['index']);
+
              } else {
                  Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 

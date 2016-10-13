@@ -1,7 +1,14 @@
 <?php
+
 namespace admin\controllers;
 
 use Yii;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\UploadedFile;
+use yii\web\Response;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
@@ -15,17 +22,25 @@ use common\models\Prioritylog;
 use common\models\PrioritylogSearch;
 use common\models\Siteinfo;
 use common\models\Vendorpackages;
+use common\models\VendorItemCapacityException;
 use common\models\VendorItemCapacityExceptionSearch;
 use common\models\VendoritemSearch;
 use common\models\VendorOrderAlertEmails;
+use common\models\Suborder;
+use common\models\Image;
+use common\models\Vendoritempricing;
+use common\models\Vendoritemthemes;
+use common\models\VendorItemToCategory;
+use common\models\CustomerCart;
+use common\models\Priorityitem;
+use common\models\Eventitemlink;
+use common\models\Featuregroupitem;
+use common\models\Vendorlocation;
+use common\models\Vendoritem;
 use common\models\VendorCategory;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use yii\web\UploadedFile;
-use yii\web\Response;
-
+use common\models\Blockeddate;
+use common\models\Deliverytimeslot;
+ 
 /**
  * VendorController implements the CRUD actions for Vendor model.
  */
@@ -523,21 +538,51 @@ class VendorController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '22');
-        if (yii::$app->user->can($access)) {
-            $this->findModel($id)->delete();
-
-            VendorCategory::deleteAll(['vendor_id' => $id]);
-
-            Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
-
-            return $this->redirect(['index']);
-
-        } else {
-            
+        
+        if (!yii::$app->user->can($access)) {            
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
             return $this->redirect(['site/index']);
         }
+
+        //Shouldn't be able to delete a vendor who has orders
+        $count = Suborder::find()
+            ->joinWith('order')
+            ->where(['{{%suborder}}.vendor_id' => $id])
+            ->andWhere(['!=', '{{%order}}.order_transaction_id', ''])
+            ->count();
+
+        if($count) {
+            Yii::$app->session->setFlash('danger', 'You can\'t delete a vendor who has orders!');
+            return $this->redirect(['vendor/index']);
+        }
+
+        $this->findModel($id)->delete();
+
+        //vendor items 
+        $sub_query = 'item_id IN (select item_id from {{%vendor_item}} where vendor_id="'.$id.'")';
+
+        VendorItemCapacityException::deleteAll($sub_query);
+        Image::deleteAll($sub_query);
+        Vendoritempricing::deleteAll($sub_query);
+        Vendoritemthemes::deleteAll($sub_query);
+        VendorItemToCategory::deleteAll($sub_query);
+        CustomerCart::deleteAll($sub_query);
+        Priorityitem::deleteAll($sub_query);
+        Eventitemlink::deleteAll($sub_query);
+        Featuregroupitem::deleteAll($sub_query);
+
+        //vendor related data 
+        VendorCategory::deleteAll(['vendor_id' => $id]);
+        Blockeddate::deleteAll(['vendor_id' => $id]);
+        Deliverytimeslot::deleteAll(['vendor_id' => $id]);
+        Vendorlocation::deleteAll(['vendor_id' => $id]);
+        VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
+        Vendorpackages::deleteAll(['vendor_id' => $id]);
+        Vendoritem::deleteAll(['vendor_id' => $id]);
+
+        Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
+
+        return $this->redirect(['index']);
     }
 
     /**
