@@ -96,8 +96,6 @@ class PlanController extends BaseController
         
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $active_vendors]);
 
-
-
         if (isset($data['vendor']) && $data['vendor'] != '') {
             $item_query->andWhere(['in', '{{%vendor}}.slug', explode($explode, $data['vendor'])]);
         }
