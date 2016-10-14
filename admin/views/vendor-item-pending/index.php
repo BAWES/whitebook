@@ -39,15 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value'=>function($data){
 					return (strlen($data->item_name)>30) ? substr($data->item_name,0,30) : $data->item_name;
 				},
-			],
-            [
-				'attribute'=>'category_id',
-				'label'=>'Category Name',			
-				'value'=>function($data){
-					return $data->getCategoryName($data->category_id);
-					},	
-				'filter' => Html::activeDropDownList($searchModel, 'category_id', ArrayHelper::map(common\models\Category::find()->where(['category_allow_sale'=>'Yes','parent_category_id'=>Null])->orderBy('category_name')->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),			
-			],           
+			],  
 			[
 				'attribute'=>'type_id',
 				'label'=>'Item Type',			
