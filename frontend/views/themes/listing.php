@@ -39,6 +39,15 @@ $get = Yii::$app->request->get();
 					<div class="filter_section">
 						<?=$this->render('@frontend/views/common/filter/top_cat.php',['path'=>'themes/detail','theme'=>$theme->slug]); ?>
 						<div class="responsive-category-bottom">
+							<nav class="row-offcanvas row-offcanvas-left">
+								<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
+									<div id="accordion" class="panel-group">
+										<?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]); ?>
+										<!-- END FILTER  -->
+									</div><!-- END -->
+								</div>
+							</nav>
+
 							<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">
 								<?= Yii::t("frontend", "Filter") ?>
 							</span>
@@ -51,7 +60,6 @@ $get = Yii::$app->request->get();
 							<nav class="row-offcanvas row-offcanvas-left">
 								<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 									<div id="accordion" class="panel-group">
-										<?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]); ?>
 										<?=$this->render('@frontend/views/common/filter/vendor.php',['vendor'=>$vendor]); ?>
 										<?=$this->render('@frontend/views/common/filter/price.php');  ?>
 										<!-- END FILTER  -->
