@@ -74,6 +74,14 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             </div><!-- END .responsive-category-top -->
 
                             <div class="responsive-category-bottom">
+
+                                <nav class="row-offcanvas row-offcanvas-left">
+                                    <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
+                                        <div id="accordion" class="panel-group">
+                                            <?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]); ?>
+                                        </div>
+                                    </div>
+                                </nav>
                                 <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas"><?= Yii::t('frontend', 'Filter') ?></span>
                                 <div class="filter_title">
                                     <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by') ?></span>
@@ -87,7 +95,6 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                             <?=$this->render('@frontend/views/common/filter/date.php',['deliver_date'=>$deliver_date]);  ?>
                                             <?=$this->render('@frontend/views/common/filter/locations.php',['deliver_location'=>$deliver_location]);  ?>
                                             <?=$this->render('@frontend/views/common/filter/price.php');  ?>
-                                            <?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]); ?>
                                             <?=$this->render('@frontend/views/common/filter/theme.php',['themes'=>$themes]); ?>
                                             <?=$this->render('@frontend/views/common/filter/vendor.php',['vendor'=>$vendor]); ?>
                                         </div>
