@@ -24,7 +24,7 @@ use yii\helpers\Html;
                 <table style="width:600px; background:#fff; height:110px; border-bottom:2px solid #ccc;">
                     <td width="20"></td>
                     <td width="140">
-                        <?= Html::img('@web/uploads/app_img/logo.png',['class'=>"logo",'style'=>"height:33px; width:233px;margin-left:125px;"]) ?>
+                        <?= Html::img('@web/images/logo.png',['class'=>"logo",'style'=>"height:33px; width:233px;margin-left:125px;"]) ?>
                     </td>
                     <td width="20"></td>
                 </table>
