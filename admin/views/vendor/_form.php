@@ -1,324 +1,352 @@
 <?php
+
+use yii\web\View;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\Url;
-use yii\web\View;
 
 ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
-<?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]);?>
-<div class="loadingmessage" style="display: none;">
-<p>
-<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
-</p>
-</div>
-<!-- Begin Twitter Tabs-->
-<div class="tabbable">
-  <ul class="nav nav-tabs">
-    <li class="active">
-      <a href="#1" data-toggle="tab">Basic Info </a>
-    </li>
-    <li>
-      <a href="#2" data-toggle="tab" class="onevalid1">Main Info</a>
-    </li>
-    <li>
-      <a href="#3" data-toggle="tab" class="twovalid2">Additional Info</a>
-    </li>
-    <li>
-      <a href="#4" data-toggle="tab" class="twovalid2">Social Info</a>
-    </li>
-    <li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
-    <li><a href="#6" data-toggle="tab" class="twovalid2">Packages</a></li>
-  </ul>
-  <div class="tab-content">
-
-    <div class="tab-pane" id="1" >
-    	
-		<?= $form->field($model, 'vendor_logo_path',['options' => ['class' => 'form-group vendor_logo']])
-				->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))
-				->fileInput()
-				->hint('Logo Size 150 * 250') ?>
-
-    	<?= $form->field($model, 'vendor_name')
-    			->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>
-		
-		<?= $form->field($model, 'vendor_name_ar')
-				->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>	
-
-		<?= $form->field($model, 'vendor_contact_email')
-				->textInput(['maxlength' => 100, 'autocomplete' => 'off']); ?>
-
-		<?= $form->field($model, 'vendor_password')->passwordInput() ?>
-
-		<?= $form->field($model, 'confirm_password')->passwordInput() ?>
-
-		<input type="hidden" name="email_valid" value="" />
-	 	<div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
-
-		<?php if($model->isNewRecord) { $count_vendor = 1;?>
-		<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
-		<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-		])->textInput(['multiple' => 'multiple','autocomplete' => 'off']) ?>
-		<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" />
+		<?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]);?>
+		<div class="loadingmessage" style="display: none;">
+		<p>
+		<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
+		</p>
 		</div>
-		<?php } else { ?>
-		<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
-			<label class="control-label" for="vendor-vendor_contact_number">Contact Phone Number</label>
-		<?php
-		$i =1;
-		$count_vendor =  count($vendor_contact_number);
-		foreach($vendor_contact_number as $contact_numbers)
-		{ ?>
-		<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "<div class='controls".$i."'>{input}<input type='button' name='remove' id='remove' value='Remove' onClick='removePhone(".$i.")' style='margin:5px;' /></div> {hint} {error}"])->textInput(['multiple' => 'multiple','autocomplete' => 'off','value'=>$contact_numbers]) ?>
+		<!-- Begin Twitter Tabs-->
+		<div class="tabbable">
+		  <ul class="nav nav-tabs">
+		    <li class="active">
+		      <a href="#1" data-toggle="tab">Basic Info </a>
+		    </li>
+		    <li>
+		      <a href="#2" data-toggle="tab" class="onevalid1">Main Info</a>
+		    </li>
+		    <li>
+		      <a href="#3" data-toggle="tab" class="twovalid2">Additional Info</a>
+		    </li>
+		    <li>
+		      <a href="#4" data-toggle="tab" class="twovalid2">Social Info</a>
+		    </li>
+		    <li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
+		    <?php if($model->isNewRecord) { ?>
+		    <li><a href="#6" data-toggle="tab" class="twovalid2">Packages</a></li>
+		    <?php } ?>
+		  </ul>
+		  <div class="tab-content">
 
-		<?php $i++; } ?>
-		<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" style="margin:5px;" />
-		</div>
-		<?php } ?>
+		    <div class="tab-pane" id="1" >
+		    	
+		    	<?php  
 
-		<?= $form->field($model, 'vendor_contact_address')->textArea(); ?>
+		    	$logo = '';
 
-		<?= $form->field($model, 'vendor_contact_address_ar')->textArea(); ?>
+		    	if(!$model->isNewRecord) { 
+					if($model->vendor_logo_path) {
+						$logo = Html::img(Yii::getAlias('@vendor_logo/').$model->vendor_logo_path, [
+								'class'=>'', 
+								'width'=>'125px',
+								'height'=>'125px', 
+								'alt'=>'Logo', 
+								'style'=>'margin-right: 10px;'
+							]).'<br />';
+					} 
+				} ?>
 
-		<div class="form-group clearfix">
-			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
-			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
-			<div class="col-lg-4">
-				<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
-				<div class="controls">
-					<?= Html::dropDownList( 'vendor_working_am_pm_from','',['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
-				</div>
-			</div>
-		</div>
+				<?= $form->field($model, 'vendor_logo_path',['options' => ['class' => 'form-group vendor_logo']])
+						->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']) . $logo)
+						->fileInput()
+						->hint('Logo Size 150 * 250') ?>
 
-		<div class="form-group clearfix">
-			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
-			<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
-			<div class="col-lg-4">
-				<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
-				<div class="controls">
-					<?= Html::dropDownList( 'vendor_working_am_pm_to','',['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
-				</div>
-			</div>
-		</div>
+		    	<?= $form->field($model, 'vendor_name')
+		    			->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>
+				
+				<?= $form->field($model, 'vendor_name_ar')
+						->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>	
 
-		<div class="form-group">
-			<label>Days off</label>
-			<div class="checkbox-inline">
-				<label for="day_1">
-					<input type="checkbox" name="vendor_day_off[]" value="1" id="day_1" <?php if(in_array('1', $day_off)) echo 'checked'; ?> />
-					Monday								
-				</label>
-			</div>
-			<div class="checkbox-inline">
-				<label for="day_2">
-					<input type="checkbox" name="vendor_day_off[]" value="2" id="day_2" <?php if(in_array('2', $day_off)) echo 'checked'; ?> />
-					Tuesday								
-				</label>
-			</div>
-			<div class="checkbox-inline">
-				<label for="day_3">
-					<input type="checkbox" name="vendor_day_off[]" value="3" id="day_3" <?php if(in_array('3', $day_off)) echo 'checked'; ?> />
-					Wednesday								
-				</label>
-			</div>
-			<div class="checkbox-inline">
-				<label for="day_4">
-					<input type="checkbox" name="vendor_day_off[]" value="4" id="day_4" <?php if(in_array('4', $day_off)) echo 'checked'; ?> />
-					Thirsday							
-				</label>
-			</div>
-			<div class="checkbox-inline">
-				<label for="day_5">
-					<input type="checkbox" name="vendor_day_off[]" value="5" id="day_5" <?php if(in_array('5', $day_off)) echo 'checked'; ?> />
-					Friday							
-				</label>
-			</div>
-			<div class="checkbox-inline">
-				<label for="day_6">
-					<input type="checkbox" name="vendor_day_off[]" value="6" id="day_6" <?php if(in_array('6', $day_off)) echo 'checked'; ?> />
-					Saturday						
-				</label>
-			</div>
-			<div class="checkbox-inline">
-				<label for="day_0">
-					<input type="checkbox" name="vendor_day_off[]" value="0" id="day_0" <?php if(in_array('0', $day_off)) echo 'checked'; ?> />
-					Sunday						
-				</label>
-			</div>
-		</div>
-		
-		<?= $form->field($model, 'vendor_public_email'); ?>
+				<?= $form->field($model, 'vendor_contact_email')
+						->textInput(['maxlength' => 100, 'autocomplete' => 'off']); ?>
 
-		<?= $form->field($model, 'vendor_public_phone'); ?>
-
-		<div class="form-group" style="height: 10px;">
-			<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
-		</div>
-	</div>
-	<!--End First Tab -->
-
-	<div class="tab-pane" id="2">
-		<input type="hidden" id="test1" value="0" name="tests">
-		<input type='hidden' id='test' value='0' name='tests1'>
-		
-		<?= $form->field($model, 'category_id')
-				->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']); ?>
-		
-		<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
-
-		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
-		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
-
-	</div>
-
-	<!--End Second Tab -->
-
-    <div class="tab-pane" id="3">
-		
-		<?= $form->field($model, 'vendor_return_policy')->textArea(['id'=>'text-editor']); ?>
-
-		<?= $form->field($model, 'vendor_return_policy_ar')->textArea(['id'=>'text-editor-2']); ?>
-
-		<?= $form->field($model, 'vendor_fax')->textInput(); ?>
-		
-		<?= $form->field($model, 'short_description')->textArea(); ?>
-		
-		<?= $form->field($model, 'short_description_ar')->textArea(); ?>
-
-		<?= $form->field($model, 'vendor_bank_name')->textInput(); ?>
-
-		<?= $form->field($model, 'vendor_bank_branch')->textInput(); ?>
-
-		<?= $form->field($model, 'vendor_account_no')->textInput(); ?>
-		
-		<?= $form->field($model, 'vendor_emergency_contact_name'); ?>
-		
-		<?= $form->field($model, 'vendor_emergency_contact_email'); ?>
-
-		<?= $form->field($model, 'vendor_emergency_contact_number'); ?>
-		
-		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
-		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
-	</div>
-	<!--End Third Tab -->
-
-	<div class="tab-pane" id="4">
-	
-		<?= $form->field($model, 'vendor_twitter')
-				->textInput()
-				->label('Vendor Twitter URL', ['class'=> 'form-label-cap']); ?>
-	
-		<?= $form->field($model, 'vendor_instagram')
-				->textInput()
-				->label('Vendor Instagram URL', ['class'=> 'form-label-cap']) ?>
-	
-		<?= $form->field($model, 'vendor_googleplus')
-				->textInput()
-				->label('Vendor Google Plus URL', ['class'=> 'form-label-cap']); ?>
-
-		<?= $form->field($model, 'vendor_skype')
-				->textInput()
-				->label('Skype ID',['class'=> 'form-label-cap']); ?>
-
-		<div class="form-groups">
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
-		</div>
- 	</div><!-- END tab-4 -->
-
-	<div class="tab-pane" id="5">
-		Email address list to get order notification
-		<br />
-		<br />
-
-		<table class="table table-bordered table-email-list">
-			<tbody>
-				<tr>
-					<th>Email address</th>
-					<th></th>
-				</tr>
-				<?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
-				<tr>
-					<td>
-						<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />
-					</td>
-					<td>
-						<button class="btn btn-danger" type="button">
-							<i class="glyphicon glyphicon-trash"></i>
-						</button>
-					</td>
-				</tr>
+				<?php if($model->isNewRecord) { ?>
+					<?= $form->field($model, 'vendor_password')->passwordInput() ?>
+					<?= $form->field($model, 'confirm_password')->passwordInput() ?>
 				<?php } ?>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="2">
-						<button type="button" class="btn btn-primary btn-add-address">Add new address</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
 
-		<div class="form-group">
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+				<input type="hidden" name="email_valid" value="" />
+			 	<div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
+
+				<?php if($model->isNewRecord) { $count_vendor = 1;?>
+				<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
+				<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
+				])->textInput(['multiple' => 'multiple','autocomplete' => 'off']) ?>
+				<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" />
+				</div>
+				<?php } else { ?>
+				<div class="form-group" style="border: 1px solid #ccc;  padding: 5px;  font-size: 14px;">
+					<label class="control-label" for="vendor-vendor_contact_number">Contact Phone Number</label>
+				<?php
+				$i =1;
+				$count_vendor =  count($vendor_contact_number);
+				foreach($vendor_contact_number as $contact_numbers)
+				{ ?>
+				<?= $form->field($model, 'vendor_contact_number[]',[  'template' => "<div class='controls".$i."'>{input}<input type='button' name='remove' id='remove' value='Remove' onClick='removePhone(".$i.")' style='margin:5px;' /></div> {hint} {error}"])->textInput(['multiple' => 'multiple','autocomplete' => 'off','value'=>$contact_numbers]) ?>
+
+				<?php $i++; } ?>
+				<input type="button" name="add_item" id="addnumber" value="Add phone numbers" onClick="addPhone('current');" style="margin:5px;" />
+				</div>
+				<?php } ?>
+
+				<?= $form->field($model, 'vendor_contact_address')->textArea(); ?>
+
+				<?= $form->field($model, 'vendor_contact_address_ar')->textArea(); ?>
+
+				<div class="form-group clearfix">
+					<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
+					<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
+					<div class="col-lg-4">
+						<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
+						<div class="controls">
+							<?= Html::dropDownList( 'vendor_working_am_pm_from','',['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group clearfix">
+					<div class="col-lg-4"><?=$form->field($model, 'vendor_working_hours_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
+					<div class="col-lg-4"><?=$form->field($model, 'vendor_working_min_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
+					<div class="col-lg-4">
+						<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
+						<div class="controls">
+							<?= Html::dropDownList( 'vendor_working_am_pm_to','',['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label>Days off</label>
+					<div class="checkbox-inline">
+						<label for="day_1">
+							<input type="checkbox" name="vendor_day_off[]" value="1" id="day_1" <?php if(in_array('1', $day_off)) echo 'checked'; ?> />
+							Monday								
+						</label>
+					</div>
+					<div class="checkbox-inline">
+						<label for="day_2">
+							<input type="checkbox" name="vendor_day_off[]" value="2" id="day_2" <?php if(in_array('2', $day_off)) echo 'checked'; ?> />
+							Tuesday								
+						</label>
+					</div>
+					<div class="checkbox-inline">
+						<label for="day_3">
+							<input type="checkbox" name="vendor_day_off[]" value="3" id="day_3" <?php if(in_array('3', $day_off)) echo 'checked'; ?> />
+							Wednesday								
+						</label>
+					</div>
+					<div class="checkbox-inline">
+						<label for="day_4">
+							<input type="checkbox" name="vendor_day_off[]" value="4" id="day_4" <?php if(in_array('4', $day_off)) echo 'checked'; ?> />
+							Thirsday							
+						</label>
+					</div>
+					<div class="checkbox-inline">
+						<label for="day_5">
+							<input type="checkbox" name="vendor_day_off[]" value="5" id="day_5" <?php if(in_array('5', $day_off)) echo 'checked'; ?> />
+							Friday							
+						</label>
+					</div>
+					<div class="checkbox-inline">
+						<label for="day_6">
+							<input type="checkbox" name="vendor_day_off[]" value="6" id="day_6" <?php if(in_array('6', $day_off)) echo 'checked'; ?> />
+							Saturday						
+						</label>
+					</div>
+					<div class="checkbox-inline">
+						<label for="day_0">
+							<input type="checkbox" name="vendor_day_off[]" value="0" id="day_0" <?php if(in_array('0', $day_off)) echo 'checked'; ?> />
+							Sunday						
+						</label>
+					</div>
+				</div>
+				
+				<?= $form->field($model, 'vendor_public_email'); ?>
+
+				<?= $form->field($model, 'vendor_public_phone'); ?>
+
+				<div class="form-group" style="height: 10px;">
+					<input type="button" class="btn btn-info btnNext" value="Next" />
+				</div>
+			</div>
+			<!--End First Tab -->
+
+			<div class="tab-pane" id="2">
+				<input type="hidden" id="test1" value="0" name="tests">
+				<input type='hidden' id='test' value='0' name='tests1'>
+				
+				<?= $form->field($model, 'category_id')
+						->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']); ?>
+				
+				<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
+
+				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+
+			</div>
+
+			<!--End Second Tab -->
+
+		    <div class="tab-pane" id="3">
+				
+				<?= $form->field($model, 'vendor_return_policy')->textArea(['id'=>'text-editor']); ?>
+
+				<?= $form->field($model, 'vendor_return_policy_ar')->textArea(['id'=>'text-editor-2']); ?>
+
+				<?= $form->field($model, 'vendor_fax')->textInput(); ?>
+				
+				<?= $form->field($model, 'short_description')->textArea(); ?>
+				
+				<?= $form->field($model, 'short_description_ar')->textArea(); ?>
+
+				<?= $form->field($model, 'vendor_bank_name')->textInput(); ?>
+
+				<?= $form->field($model, 'vendor_bank_branch')->textInput(); ?>
+
+				<?= $form->field($model, 'vendor_account_no')->textInput(); ?>
+				
+				<?= $form->field($model, 'vendor_emergency_contact_name'); ?>
+				
+				<?= $form->field($model, 'vendor_emergency_contact_email'); ?>
+
+				<?= $form->field($model, 'vendor_emergency_contact_number'); ?>
+				
+				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+			</div>
+			<!--End Third Tab -->
+
+			<div class="tab-pane" id="4">
+			
+				<?= $form->field($model, 'vendor_twitter')
+						->textInput()
+						->label('Vendor Twitter URL', ['class'=> 'form-label-cap']); ?>
+			
+				<?= $form->field($model, 'vendor_instagram')
+						->textInput()
+						->label('Vendor Instagram URL', ['class'=> 'form-label-cap']) ?>
+			
+				<?= $form->field($model, 'vendor_googleplus')
+						->textInput()
+						->label('Vendor Google Plus URL', ['class'=> 'form-label-cap']); ?>
+
+				<?= $form->field($model, 'vendor_skype')
+						->textInput()
+						->label('Skype ID',['class'=> 'form-label-cap']); ?>
+
+				<div class="form-groups">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+				</div>
+		 	</div><!-- END tab-4 -->
+
+			<div class="tab-pane" id="5">
+				Email address list to get order notification
+				<br />
+				<br />
+
+				<table class="table table-bordered table-email-list">
+					<tbody>
+						<tr>
+							<th>Email address</th>
+							<th></th>
+						</tr>
+						<?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
+						<tr>
+							<td>
+								<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />
+							</td>
+							<td>
+								<button class="btn btn-danger" type="button">
+									<i class="glyphicon glyphicon-trash"></i>
+								</button>
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="2">
+								<button type="button" class="btn btn-primary btn-add-address">Add new address</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+
+				<div class="form-group">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+
+					<?php if($model->isNewRecord) { ?>
+						<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+					<?php } else { ?>
+						<?= Html::submitButton('Update', ['class' => 'btn btn-primary','style'=>'float:right;']) ?>
+					<?php } ?>
+
+				</div>
+			</div>
+
+			<?php if($model->isNewRecord) { ?>
+			<div class="tab-pane" id="6">
+				Vendor package list  
+				<br />
+				<br />
+
+				<div class="package-list-error"></div>
+
+				<table class="table table-bordered table-package-list">
+					<tbody>
+						<tr>
+							<th>Package</th>
+							<th>Start date</th>
+							<th>End date</th>
+							<th></th>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td>
+								<select id="package_id" class="form-control">
+									<?php foreach ($packages as $key => $value) { ?>
+										<option value="<?= $key ?>">
+											<?= $value ?>
+										</option>
+									<?php } ?>
+								</select>
+							</td>
+							<td>
+								<input id="package_start_date" name="start_date" class="form-control" />
+							</td>
+							<td>
+								<input id="package_end_date" name="end_date" class="form-control" />
+							</td>	
+							<td>
+								<button type="button" class="btn btn-primary btn-add-package">
+									<i class="fa fa-plus"></i>
+								</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+
+				<div class="form-group">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+					<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
+				</div>
+			</div>
+			<?php } ?>
+
+		<?php ActiveForm::end(); ?>	
 		</div>
+		<!--End Third Tab -->
 	</div>
-
-	<div class="tab-pane" id="6">
-		Vendor package list  
-		<br />
-		<br />
-
-		<div class="package-list-error"></div>
-
-		<table class="table table-bordered table-package-list">
-			<tbody>
-				<tr>
-					<th>Package</th>
-					<th>Start date</th>
-					<th>End date</th>
-					<th></th>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td>
-						<select id="package_id" class="form-control">
-							<?php foreach ($packages as $key => $value) { ?>
-								<option value="<?= $key ?>">
-									<?= $value ?>
-								</option>
-							<?php } ?>
-						</select>
-					</td>
-					<td>
-						<input id="package_start_date" name="start_date" class="form-control" />
-					</td>
-					<td>
-						<input id="package_end_date" name="end_date" class="form-control" />
-					</td>	
-					<td>
-						<button type="button" class="btn btn-primary btn-add-package">
-							<i class="fa fa-plus"></i>
-						</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
-
-		<div class="form-group">
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
-		</div>
-	</div>
-
-<?php ActiveForm::end(); ?>	
-</div>
-<!--End Third Tab -->
-</div>
 
 <?php 
 
@@ -328,12 +356,16 @@ $this->registerCss('
 	}
 ');
 
-//$model->isNewRecord?1:0
+if($model->isNewRecord) {
+	$is_new_record = 1;
+} else {
+	$is_new_record = 0;
+}
 
 $this->registerJs('
 	var validate_vendor_url = "'.Url::to(['vendor/validate-vendor']).'";
 	var vendornamecheck_url = "'.Url::to(['/vendor/vendornamecheck']).'";
-	var is_new_record = "1";
+	var is_new_record = '.$is_new_record.';
 	var emailcheck_url = "'.Url::to(['/vendor/emailcheck']).'";
 	var vendor_status = "'.$model->vendor_status.'";
 	var approve_status = "'.$model->approve_status.'";
