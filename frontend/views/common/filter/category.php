@@ -43,21 +43,21 @@ $get = Yii::$app->request->get();
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<div class="clear_left">
-				<p>Categories
+				<p>
 					<a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">
 						- <?= Yii::t('frontend', 'Clear') ?></a>
 				</p>
 			</div>
-			<div class="clear_right">
-				<a href="#sub_categories" id="category" data-parent="#accordion" data-toggle="collapse"
-				   class="collapsed">
-					<h4 class="panel-title">
-						<span class="<?= $s_class; ?>"></span>
-					</h4>
-				</a>
-			</div>
+<!--			<div class="clear_right">-->
+<!--				<a href="#sub_categories" id="category" data-parent="#accordion" data-toggle="collapse"-->
+<!--				   class="collapsed">-->
+<!--					<h4 class="panel-title">-->
+<!--						<span class="--><?//= $s_class; ?><!--"></span>-->
+<!--					</h4>-->
+<!--				</a>-->
+<!--			</div>-->
 		</div>
-		<div id="sub_categories" class="panel-collapse collapse in" aria-expanded="false">
+		<div id="sub_categories">
 			<div class="panel-body" style="background-color: #f8f8f8">
 				<div class="table clearfix">
 					<ul class="list-group test_scroll">
