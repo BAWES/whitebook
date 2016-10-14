@@ -43,7 +43,7 @@ class SiteController extends BaseController
     }
 
     public function actionIndex()
-    {
+    {     
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();
