@@ -1,10 +1,13 @@
+<div class="events_listing">
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
 use common\components\CFormatter;
+use yii\widgets\Pjax;
+//  Pjax::begin();
 
-if(!empty($items))  {
-    foreach ($items as $key => $value) {
+if(!empty($items->getModels()))  {
+    foreach ($items->getModels() as $key => $value) {
 
         if($value['item_for_sale'] == 'Yes'){
             $item_url = Url::to(["shop/product", 'slug' => $value['slug']]);
@@ -39,12 +42,10 @@ if(!empty($items))  {
                             $result = array_search($value['item_id'], $k);
                         }
 
-                        if (is_numeric ($result)) { ?>
-                        <div class="faver_icons faverited_icons">
-                            <?php } else { ?>
-                            <div class="faver_icons">
-                                <?php }?>
-                                <a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
+                        ?>
+                            <div class="faver_icons <?=(is_numeric ($result)) ? 'faverited_icons' : ''?>">
+                                <a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+                            </div>
                             <?php } ?>
                         </div>
 
@@ -81,7 +82,7 @@ if(!empty($items))  {
                         </a>
                     </div>
                 </div>
-        </div>
+            </div>
     <?php
     }
 } else {
@@ -93,3 +94,16 @@ $this->registerCss("
 .col-lg-3{margin-bottom: 28px;}
 ")
 ?>
+            <div id="planloader">
+                <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
+            </div>
+        </div>
+    <div class="add_more_commons text-center">
+        <?php
+        echo \yii\widgets\LinkPager::widget([
+            'pagination'=>$items->pagination,
+        ]);
+        ?>
+    </div>
+<?php //Pjax::end();
+ ?>

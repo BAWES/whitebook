@@ -1,14 +1,9 @@
 <?php
 
-use common\models\ChildCategory;
-use common\models\SubCategory;
 use frontend\models\Category;
-use common\models\Vendor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
-use yii\web\view;
-
 $get = Yii::$app->request->get();
 ?>
 
@@ -25,7 +20,6 @@ $get = Yii::$app->request->get();
 			<?php
 
 			$category_det = Category::category_value($slug);
-
 			$this->params['breadcrumbs'][] = ['label' => ucfirst($category_det['category_name']), 'url' => Url::to(["plan/plan", 'slug' => $slug])];
 			?>
 
@@ -52,22 +46,12 @@ $get = Yii::$app->request->get();
 					<select class="selectpicker" style="display: none;" id="main-category">
 						<?php
 						foreach($top_categories as $category) {
-
-							if ($category_id == $category['category_id']) {
-								$selected = 'selected="selected"';
-							} else {
-								$selected = '';
-							}
-
-							if(Yii::$app->language == "en"){
-								$category_name = $category['category_name'];
-							}else{
-								$category_name = $category['category_name_ar'];
-							}
+							$selected = ($category_id == $category['category_id']) ? 'selected="selected"' : '' ;
+							$category_name = (Yii::$app->language == "en") ? $category['category_name'] : $category['category_name_ar'];
 						?>
 							<option
 								data-icon="<?= $category['icon'] ?>"
-								value="<?= Url::toRoute(['plan/plan', 'slug'=> $category['slug']]) ?>"
+								value="<?= Url::toRoute(['plan/products', 'slug'=> $category['slug']]) ?>"
 								name="category" <?= $selected ?>>
 								<?= $category_name ?>
 							</option>
@@ -78,7 +62,6 @@ $get = Yii::$app->request->get();
 			</div><!-- END .responsive-category-top -->
 
 			<div class="responsive-category-bottom">
-
 				<nav class="row-offcanvas row-offcanvas-left">
 					<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 						<div id="accordion" class="panel-group">
@@ -87,8 +70,6 @@ $get = Yii::$app->request->get();
 							<!-- END FILTER  -->
 						</div>
 				</nav>
-
-
 				<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas"><?= Yii::t('frontend', 'Filter') ?></span>
 				<div class="filter_title">
 					<span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by') ?></span>
@@ -115,29 +96,13 @@ $get = Yii::$app->request->get();
 	<div class="banner_section_plan">
 		<?= Html::img("@web/images/banner_plan.png") ?>
 	</div>
-
-	<!-- BEGIN Item lists -->
 	<div class="listing_right">
-		<div class="events_listing">
-			<?=$this->render('@frontend/views/common/items',['items' => $items, 'customer_events_list' => $customer_events_list]); ?>
-			<div id="planloader">
-				<img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
-			</div>
-		</div>
-		<div class="add_more_commons">
-			<?php if(count($items) > 12) { ?>
-			<div class="lode_more_buttons">
-				<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">
-					 <?php echo Yii::t('frontend', 'Load More') ?>
-				</button>
-			</div>
-			<?php } ?>
-			<div class="banner_section_plan">
-				<?= Html::img("@web/images/banner_plan.png") ?>
-			</div>
-		</div>
+		<?=$this->render('@frontend/views/common/items',['items' => $provider, 'customer_events_list' => $customer_events_list]); ?>
 	</div>
+	<div class="banner_section_plan">
+		<?= Html::img("@web/images/banner_plan.png") ?>
 	</div>
+</div>
 </div>
 </div>
 </section>
@@ -149,8 +114,6 @@ $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJS("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-var load_more_items = '".Yii::$app->urlManager->createAbsoluteUrl('plan/loadmoreitems')."';
-//var load_items = '".Url::to(['plan/loaditems'])."';
-var load_items = '".Url::to(['plan/plan'])."';
+var load_items = '".Url::to(['plan/products/'])."';
 var product_slug = '".$get['slug']."';
 ", yii\web\View::POS_BEGIN);
