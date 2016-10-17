@@ -70,9 +70,6 @@ class TapController extends Controller
         $data['uname'] = $this->tap_username;
         $data['pwd'] = $this->tap_password;
 
-        print_r($data);
-        die();
-
         $data['itemprice1'] = $order->order_total_with_delivery;
         $data['itemname1'] ='Order ID - '.$order_id;
         $data['currencycode'] = 'KWD';
