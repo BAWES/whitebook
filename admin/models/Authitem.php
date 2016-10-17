@@ -106,6 +106,7 @@ class Authitem extends \yii\db\ActiveRecord
             ->one();
 
         $itemname= $item['name'];
+        
         $id=Admin::getAdmin('id');
 
         $final1=Authassignment::find()
