@@ -110,24 +110,10 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     </div>
                     <!-- BEGIN Item lists -->
                     <div class="listing_right">
-                        <div class="events_listing">
-                            <?=$this->render('@frontend/views/common/items',['items' => $items, 'customer_events_list' => $customer_events_list]); ?>
-                            <div id="planloader">
-                                <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
-                            </div>
-                        </div>
-                        <div class="add_more_commons">
-                            <?php if(count($items) > 12) { ?>
-                                <div class="lode_more_buttons">
-                                    <button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">
-                                        <?php Yii::t('frontend', 'Load More') ?>
-                                    </button>
-                                </div>
-                            <?php } ?>
-                            <div class="banner_section_plan">
-                                <?= Html::img("@web/images/banner_plan.png") ?>
-                            </div>
-                        </div><!-- END .add_more_commons -->
+                        <?=$this->render('@frontend/views/common/items',['items' => $provider, 'customer_events_list' => $customer_events_list]); ?>
+                    </div>
+                    <div class="banner_section_plan">
+                        <?= Html::img("@web/images/banner_plan.png") ?>
                     </div>
                     <!-- END Item lists -->
                 </div>
