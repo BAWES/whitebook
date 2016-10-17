@@ -1984,3 +1984,92 @@ function imgError() {
     });
 }
 imgError(); // to initialize on page load
+
+
+
+/* =========================== Event Actions ===================================*/
+
+
+function addinvitees()
+{
+    var action = '';
+
+    if(jQuery('#invitees_name').val() =='')
+    {
+        alert('Enter invitees name.');
+        return false;
+    }
+
+    if(jQuery('#invitees_email').val() =='')
+    {
+        alert('Enter invitees email');
+        return false;
+
+    } else if(isEmail(jQuery('#invitees_email').val()) == false ){
+        alert('Enter valid email');
+        return false;
+    }
+
+    var act = '';
+    if(jQuery('#invitees_id').val() =='')
+    {
+        action = 'addinvitees';
+        act = 'new';
+    }
+    else{
+        action = 'updateinvitees';
+        act = 'updated';
+    }
+
+    var path = add_invite;
+
+    jQuery.ajax({
+        type :'POST',
+        url:path,
+        data: {
+            invitees_id: jQuery('#invitees_id').val(),
+            event_id: event_id,
+            name: jQuery('#invitees_name').val(),
+            email:jQuery('#invitees_email').val(),
+            phone_number: jQuery('#invitees_phone').val(),
+            event_name:event_name,
+            action:act
+        },
+        success:function(data)
+        {
+            if(data==2)
+            {
+                jQuery('.invite_error').show();
+            }
+            else if(data==1)
+            {
+                jQuery('#login_success').modal('show');
+                jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\">Success! Invitee '+act+' successfully!</span>');
+                window.setTimeout(function(){location.reload()},2000)
+            }
+            // jQuery.pjax.reload({container:'#itemtype'});
+        }
+    });
+}
+function inviteeDetail(invitee_id)
+{
+    jQuery.ajax({
+        url: invite_detail,
+        type : 'POST',
+        data :{id:invitee_id},
+        dataType:'JSON',
+        success : function(data)
+        {
+            jQuery('#invitees_id').val(data.invitees_id);
+            jQuery('#invitees_name').val(data.name);
+            jQuery('#invitees_email').val(data.email);
+            jQuery('#invitees_phone').val(data.phone_number);
+            jQuery('#submit').val('Update');
+        }
+
+    });
+    return false;
+}
+
+/* =========================== Event Actions ===================================*/
+
