@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\CustomerAddress;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\models\Users;
 use frontend\models\Website;
@@ -12,10 +13,10 @@ use frontend\models\Themes;
 use frontend\models\Vendor;
 use common\models\Category;
 use common\models\Vendoritemthemes;
-use common\models\City;
 use common\models\Location;
 use common\models\Vendorlocation;
 use common\models\CategoryPath;
+use yii\data\ArrayDataProvider;
 
 /**
  * Category controller.
@@ -73,7 +74,7 @@ class ShopController extends BaseController
 
 
         if (isset($data['vendor']) && $data['vendor'] != '') {
-            $arr_vendor_slugs = explode($explode, $data['vendor']);
+            $arr_vendor_slugs = $data['vendor'];
         }else{
             $arr_vendor_slugs = [];
         }
@@ -112,62 +113,43 @@ class ShopController extends BaseController
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
 
 
+
+        //price filter
         if (isset($data['price']) && $data['price'] != '') {
 
             $price_condition = [];
 
-            foreach (explode($explode, $data['price']) as $key => $value) {
-                $arr_min_max = explode('-', $value);
-                $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
-            }
+            $arr_min_max = explode('-', $data['price']);
+            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
+
 
             $item_query->andWhere(implode(' OR ', $price_condition));
         }
 
 
+
         //theme filter
-        if (isset($data['themes']) && $data['themes'] != '') {
+        if (isset($data['themes']) && count($data['themes'])>0) {
 
-            $theme = explode($explode, $data['themes']);
-
-            foreach ($theme as $key => $value) {
-                $themes[] = Themes::find()
-                    ->select('theme_id')
-                    ->where(['slug' => [$value]])
-                    ->asArray()
-                    ->all();
-            }
-
-            $all_valid_themes = array();
-
-            foreach ($themes as $key => $value) {
-                $get_themes = Vendoritemthemes::find()
-                    ->select('theme_id, item_id')
-                    ->where(['trash' => "Default"])
-                    ->andWhere(['theme_id' => [$value[0]['theme_id']]])
-                    ->asArray()
-                    ->all();
-
-                foreach ($get_themes as $key => $value) {
-                    $all_valid_themes[] = $value['item_id'];
-                }
-            }
-
-            if (count($all_valid_themes)==1) {
-                $all_valid_themes = $all_valid_themes[0];
-            } else {
-                $all_valid_themes = implode('","', $all_valid_themes);
-            }
-
-            $item_query->andWhere('{{%vendor_item}}.item_id IN("'.$all_valid_themes.'")');
+            $themes = Themes::find()->select('theme_id')->where(['IN','slug',$data['themes']])->asArray()->all();
+            $themes_map = ArrayHelper::map($themes,'theme_id','theme_id');
+            $vendor_item_themes = Vendoritemthemes::find()
+                ->select('item_id')
+                ->where(['trash' => "Default"])
+                ->andWhere(['IN','theme_id',$themes_map])
+                ->asArray()
+                ->all();
+            $vendor_item_themes_map = ArrayHelper::getColumn($vendor_item_themes,'item_id');
+            $item_query->andWhere('{{%vendor_item}}.item_id IN('.implode(',',$vendor_item_themes_map).')');
 
         }//if themes
+
 
         //category filter
         $cats = $Category->slug;
         $categories = [];
-        if (isset($data['category']) && $data['category'] != '') {
-            $categories = array_merge($categories,explode($explode, $data['category']));
+        if (isset($data['category']) && count($data['category'])>0) {
+            $categories = array_merge($categories,$data['category']);
             $cats = implode("','",$categories);
         }
         $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
@@ -202,48 +184,26 @@ class ShopController extends BaseController
             ->asArray()
             ->all();
 
+        $provider = new ArrayDataProvider([
+            'allModels' => $items,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
 
         $get_unique_themes = array();
 
         if (!empty($items)) {
-
-            $ids = [];
-
-            foreach ($items as $data) {
-                $ids[] = $data['item_id'];
-            }
-
-            $theme_names = Themes::loadthemename_item($ids);
-            $single_themes[] = array();
-            $multi_themes[] = array();
-            foreach ($theme_names as $themes) {
-                if (is_numeric($themes['theme_id'])) {
-                    $single_themes[] = $themes['theme_id'];
-                }
-                if (!is_numeric($themes['theme_id'])) {
-                    $multi_themes[] = explode(',', $themes['theme_id']);
-                }
-            }
-            foreach ($multi_themes as $multiple) {
-                foreach ($multiple as $key) {
-                    $get_unique_themes[] = $key;
-                }
-            }
-            if (count($single_themes)) {
-                foreach ($single_themes as $single) {
-                    if (!empty($single)) {
-                        $get_unique_themes[] = $single;
-                    }
-                }
-            }
-            $get_unique_themes = array_unique($get_unique_themes);
+            $item_ids = ArrayHelper::map($items, 'item_id', 'item_id');
+            $themes = Vendoritemthemes::find()
+                ->select(['theme_id'])
+                ->with('themeDetail')
+                ->where("trash='default' and item_id IN(".implode(',', array_keys($item_ids)).")")
+                ->groupBy('theme_id')
+                ->asArray()
+                ->all();
         }
 
-        if (Yii::$app->language == "en") {
-            $themes = Themes::load_all_themename($get_unique_themes, 'theme_name');
-        } else {
-            $themes = Themes::load_all_themename($get_unique_themes, 'theme_name_ar');
-        }
 
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
@@ -268,7 +228,7 @@ class ShopController extends BaseController
 
         if (Yii::$app->request->isAjax) {
             return $this->renderPartial('@frontend/views/common/items', [
-                'items' => $items,
+                'items' => $provider,
                 'customer_events_list' => $customer_events_list
             ]);
         }
@@ -278,44 +238,12 @@ class ShopController extends BaseController
             'TopCategories' => $TopCategories,
             'items' => $items,
             'themes' => $themes,
+            'provider' => $provider,
             'vendor' => $vendor,
             'Category' => $Category,
             'slug' => $slug,
             'customer_events_list' => $customer_events_list
         ]);
-    }
-
-    public function actionLoadMoreItems()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            if ($data['slug'] != '') {
-                /* BEGIN CATEGORY*/
-                $model1 = Category::find()->select(['category_id', 'category_name'])->where(['slug' => $data['slug']])->asArray()->one();
-                if (empty($model1)) {
-                    throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-                }
-            }
-
-            $limit = $data['limit'];
-
-            $imageData = Vendoritem::find()
-                    ->select('{{%vendor_item}}.slug, wi.image_path, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_name, {{%vendor_item}}.child_category, wvi.item_id, wv.vendor_name')
-                    ->leftJoin('{{%image}} as wi', '{{%vendor_item}}.item_id = wi.item_id')
-                    ->leftJoin('{{%vendor}} as wv', '{{%vendor_item}}.vendor_id = wv.vendor_id')
-                    ->leftJoin('{{%category}} as wc', 'wc.category_id = {{%vendor_item}}.child_category')
-                    ->where(['{{%vendor_item}}.trash' => "Default"])
-                    ->andWhere(['{{%vendor_item}}.item_approved' => "Yes"])
-                    ->andWhere(['{{%vendor_item}}.item_status' => "Active"])
-                    ->andWhere(['{{%vendor_item}}.item_for_sale' => "Yes"])
-                    ->groupBy('{{%vendor_item}}.item_id')
-                    ->having(['{{%vendor_item}}.category_id'=>$model1['category_id']])
-                    ->limit(4)
-                    //limit 4 offset '.$limit.'
-                    ->asArray()
-                    ->all();
-            return $this->renderPartial('product_list_ajax', ['imageData' => $imageData]);
-        }
     }
 
     public function actionProduct($slug)
