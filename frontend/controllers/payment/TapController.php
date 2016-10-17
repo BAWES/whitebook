@@ -16,6 +16,21 @@ class TapController extends Controller
     private $tap_password = '123tap';
     private $tap_api_key = '1tap7';
 
+    public function init()
+    {
+        parent::init();
+
+        $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
+
+        //live credential
+        if(!$gateway['under_testing']) {
+            $this->tap_merchantid = '195516';
+            $this->tap_username = 'Jj2z4@tap';
+            $this->tap_password = 'Jj2z4@q8';
+            $this->tap_api_key = '55tap19';
+        }
+    }
+
     public function actionIndex()
     {
         $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
