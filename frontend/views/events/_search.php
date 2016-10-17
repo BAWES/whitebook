@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
 <div class="col-md-1 padding0">
     <div class="add_events_new">
-        <a class="btn btn-default search-hide" onClick="Searchinvitee('<?php echo $event_details[0]['event_id']; ?>')" type="button" title="Search">
+        <a class="btn btn-default search-hide" onClick="Searchinvitee('<?php echo $event_details->event_id; ?>')" type="button" title="Search">
             <?= Yii::t('frontend', 'Search') ?>
         </a>
     </div>

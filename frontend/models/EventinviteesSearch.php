@@ -77,16 +77,9 @@ class EventinviteesSearch extends Eventinvitees
         return $dataProvider;
     }
 
-    public function loadsearch($params, $slug)
+    public function loadsearch($params, $id)
     {
-		$event_details = \common\models\Events::find()
-			->select(['event_id'])
-			->Where(['slug'=>$slug])
-			->asArray()
-			->all();
-			
-        $query = Eventinvitees::find()
-        ->andwhere(['event_id' => $event_details[0]['event_id']]);
+		$query = Eventinvitees::find()->andwhere(['event_id' => $id]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
