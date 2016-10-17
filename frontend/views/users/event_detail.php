@@ -8,7 +8,7 @@ use yii\grid\GridView;
 use yii\web\view;
 use common\components\CFormatter;
 
-$this->title = 'Events | '.$event_details[0]['event_name'];
+$this->title = 'My Event | '.$event_details[0]['event_name'];
 
 
 ?>
