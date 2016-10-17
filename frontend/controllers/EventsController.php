@@ -157,203 +157,129 @@ class EventsController extends BaseController
         ]);
     }
 
-//    public function actionIndex()
-//    {
-//        if (Yii::$app->request->isAjax) {
-//            $data = Yii::$app->request->post();
-//
-//            $searchModel = new EventinviteesSearch();
-//
-//            $dataProvider = $searchModel->search(
-//                Yii::$app->request->queryParams,
-//                $data['search_val'],
-//                $data['event_id']
-//            );
-//
-//            return $this->renderPartial('/users/invitee_search_details', [
-//              'searchModel' => $searchModel,
-//              'dataProvider' => $dataProvider,
-//            ]);
-//        }
-//    }
-
-    /**
-     * Displays a single Eventinvitees model.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
-    public function actionView($id)
+    public function actionDetail($slug)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
+            return $this->goHome();
+        }
+
+        $event_details = Events::findOne(['customer_id' => Yii::$app->user->identity->customer_id, 'slug' => $slug]);
+
+        if (empty($event_details)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
+
+        $eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
+            ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
+            ->Where(['{{%vendor_item}}.item_status'=>'Active',
+                '{{%vendor_item}}.trash'=>'Default',
+                '{{%vendor_item}}.item_for_sale'=>'Yes',
+                '{{%vendor_item}}.type_id'=>'2',
+                '{{%event_item_link}}.event_id' => $event_details->event_id])
+            ->asArray()
+            ->all();
+
+        $searchModel = new EventinviteesSearch();
+
+        $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $event_details->event_id);
+
+        /* Load level 1 category */
+        $cat_exist = \frontend\models\Category::find()
+            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->asArray()
+            ->all();
+
+        return $this->render('detail', [
+            'slug' => $slug,
+            'event_details' => $event_details,
+            'customer_events_list' => $customer_events_list,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'cat_exist'=>$cat_exist
         ]);
     }
 
-    /**
-     * Creates a new Eventinvitees model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     *
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Eventinvitees();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->invitees_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Eventinvitees model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->invitees_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Eventinvitees model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
-    public function actionDelete($id)
+    public function actionAddInvitee()
     {
         if (Yii::$app->request->isAjax) {
-            return $this->findModel($id)->delete();
-        }
 
-        return $this->redirect(['index']);
+            $data = Yii::$app->request->post();
+
+            if ($data['action'] == 'new') {
+                $exist = Eventinvitees::find()
+                    ->select('invitees_id')
+                    ->where([
+                        'event_id' => $data['event_id'],
+                        'email' => $data['email']
+                    ])
+                    ->count();
+
+                // Check count
+                if ($exist == 0) {
+
+                    $event_invite = new Eventinvitees;
+                    $event_invite->name = $data['name'];
+                    $event_invite->email = $data['email'];
+                    $event_invite->event_id = $data['event_id'];
+                    $event_invite->customer_id = Yii::$app->user->identity->customer_id;
+                    $event_invite->phone_number = $data['phone_number'];
+                    echo $event_invite->save(false);
+                    exit;
+
+                } else {
+                    echo 2;
+                }
+            } else {
+                $user = Eventinvitees::findOne($data['invitees_id']);
+                $user->name = $data['name'];
+                $user->email = $data['email'];
+                $user->phone_number = $data['phone_number'];
+                echo $user->save(false);
+            }
+        }
     }
 
-    /**
-     * Finds the Eventinvitees model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param int $id
-     *
-     * @return Eventinvitees the loaded model
-     *
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
+    public function actionDeleteInvitee($id)
     {
-        if (($model = Eventinvitees::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
+        Eventinvitees::findOne($id)->delete();
+        Yii::$app->session->setFlash('success','Invitee Deleted Successfully');
+        return $this->redirect(['events/detail','slug'=>$_REQUEST['slug']]);
     }
 
-    public function actionAddinvitees()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-        
-        $exist = Eventinvitees::find()
-            ->select('invitees_id')
-            ->where([
-                'event_id' => $data['event_id'],
-                'email' => $data['email']
-            ])
-            ->count();
-        
-        // Check count
-        if ($exist == 0) {
-            
-            $event_invite = new Eventinvitees;
-            $event_invite->name = $data['name'];
-            $event_invite->email = $data['email'];
-            $event_invite->event_id = $data['event_id'];
-            $event_invite->customer_id = Yii::$app->user->identity->customer_id;
-            $event_invite->phone_number = $data['phone_number'];
-            $eventinvitees->save();
-
-        } else {
-              echo 2;
-        }
-    }
-
-    public function actionUpdateinvitees()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-
-        $event_invite = Eventinvitees::findOne($data['invitees_id']);
-        $event_invite->name = $data['name'];
-        $event_invite->email = $data['email'];
-        $event_invite->phone_number = $data['phone_number'];
-        $event_invite->save();
-        
-        if ($event_invite) {
-            echo 'done';
-        } else {
-            echo 'not';
-        }
-    }
-
-    public function actionInviteedetails()
+    public function actionInviteeDetails()
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $event_invite = Eventinvitees::find()->where(['invitees_id'=>$data['id']]);
-            return json_encode($details[0]);
+            $event_invite = Eventinvitees::find()->where(['invitees_id'=>$data['id']])->asArray()->one();
+            return json_encode($event_invite);
         }
     }
 
-    public function actionAddevent()
+    public function actionExport($id)
     {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
+            return $this->goHome();
         }
-      
-        $data = Yii::$app->request->post();
+        $searchModel = new EventinviteesSearch();
+        $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $id);
 
-        $model = Vendoritem::find()
-            ->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name',
-                '{{%image}}.image_path'])
-            ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
-            ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-            ->andwhere(['{{%vendor_item}}.item_id' => $data['item_id']])
-            ->asArray()
-            ->all();
-            
-        $customer_events = Events::find()
-            ->where(['customer_id' => Yii::$app->user->identity->customer_id])
-            ->asArray()
-            ->all();
-
-        return $this->renderPartial('/product/add_event', array(
-            'model' => $model, 
-            'customer_events' => $customer_events
-        ));
+        ExcelView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'filename' => 'Invites list',
+            'fullExportType' => 'xls', //can change to html,xls,csv and so on
+            'grid_mode' => 'export',
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'name',
+                'email',
+                'phone_number',
+            ],
+        ]);
     }
 }

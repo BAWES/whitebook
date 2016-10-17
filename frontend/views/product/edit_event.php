@@ -54,7 +54,7 @@ use frontend\models\Website;
                                 </div>
                                 <div id="eventresult" style="color:red"></div>
                                 <div class="eventErrorMsg error" style="color:red;margin-bottom: 10px;"></div>
-                                <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
+                                <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo yii\helpers\Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
                                 <div class="buttons">
                                     <div class="creat_evn_sig">
                                         <button type="button" id="update_event_button" name="update_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'Update Event'); ?>"><?php echo Yii::t('frontend', 'Update Event'); ?></button>
