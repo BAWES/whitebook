@@ -8,6 +8,9 @@ use yii\grid\GridView;
 use yii\web\view;
 use common\components\CFormatter;
 
+$this->title = 'Events | '.$event_details[0]['event_name'];
+
+
 ?>
 <!-- coniner start -->
 <section id="inner_pages_white_back">

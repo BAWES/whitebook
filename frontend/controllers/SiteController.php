@@ -3,12 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use yii\web\Controller;
 use common\models\Cms;
 use common\models\Vendoritem;
-use common\models\Vendoritemthemes;
-use frontend\models\Vendor;
-use frontend\models\Category;
 use common\models\Siteinfo;
 use common\models\Events;
 use common\models\City;
@@ -17,12 +13,7 @@ use common\models\Faq;
 use frontend\models\Themes;
 use common\models\Featuregroupitem;
 use frontend\models\Website;
-use frontend\models\Wishlist;
-use frontend\models\Users;
-use yii\web\Session;
-use yii\db\Query;
 use common\models\Smtp;
-use common\models\CategoryPath;
 use frontend\models\Contacts;
 use frontend\models\FaqGroup;
 use yii\helpers\ArrayHelper;
