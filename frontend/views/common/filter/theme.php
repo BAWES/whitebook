@@ -26,9 +26,10 @@ if($themes) { ?>
 				<ul class="<?= $class; ?>">
 					<?php
 					foreach ($themes as $key => $value) {
+						$value = (isset($value['themeDetail'])) ? $value['themeDetail'] : $value;
 						if (isset($value['theme_name'])) {
-							if (isset($get['themes']) && $get['themes'] != "") {
-								$val = explode(' ', $get['themes']);
+							if (isset($get['themes']) && count($get['themes']) >0) {
+								$val = $get['themes'];
 								$checked1 = (in_array($value['slug'], $val)) ? 'checked=checked' : '';
 							}
 							if (isset($value['theme_name'])) {

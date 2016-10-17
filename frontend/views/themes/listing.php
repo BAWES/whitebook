@@ -74,32 +74,14 @@ $get = Yii::$app->request->get();
 				<div class="banner_section_plan">
 					<?= Html::img("@web/images/banner_plan.png") ?>
 				</div>
+				<!-- BEGIN Item lists -->
 				<div class="listing_right">
-					<div class="events_listing">
-						<?php
-						echo $this->render('@frontend/views/common/items', [
-							'items' => $items,
-							'customer_events_list' => $customer_events_list
-						]);
-						?>
-						<div id="planloader">
-							<img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
-						</div>
-					</div>
-
-					<!--
-					<div class="add_more_commons">
-						<?php if(count($items) > 12) { ?>
-							<div class="lode_more_buttons">
-								<button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">Load More</button>
-							</div>
-						<?php } ?>
-						<div class="banner_section_plan">
-							<?= Html::img("@web/images/banner_plan.png") ?>
-						</div>
-					</div>
-					-->
+					<?=$this->render('@frontend/views/common/items',['items' => $provider, 'customer_events_list' => $customer_events_list]); ?>
 				</div>
+				<div class="banner_section_plan">
+					<?= Html::img("@web/images/banner_plan.png") ?>
+				</div>
+				<!-- END Item lists -->
 			</div>
 		</div>
 	</div>

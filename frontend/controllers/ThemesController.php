@@ -13,6 +13,7 @@ use common\models\Smtp;
 use common\models\CategoryPath;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use yii\data\ArrayDataProvider;
 
 class ThemesController extends BaseController
 {
@@ -83,11 +84,6 @@ class ThemesController extends BaseController
 
         $theme = Themes::findOne(['slug' => $themes, 'trash' => 'Default']);
 
-        $explode = ' ';
-        if (Yii::$app->request->isAjax) {
-            $explode = '+';
-        }
-
         $theme_result  = Vendoritemthemes::find()->select('item_id')
             ->where(['trash' => "Default"])
             ->andWhere(['theme_id' => $theme->theme_id])
@@ -125,8 +121,8 @@ class ThemesController extends BaseController
             ]);
         $cats = $slug;
         $categories = [];
-        if (isset($data['category']) && $data['category'] != '') {
-            $categories = array_merge($categories,explode($explode, $data['category']));
+        if (isset($data['category']) && count($data['category'])>0) {
+            $categories = array_merge($categories,$data['category']);
             $cats = implode("','",$categories);
         }
         if ($cats != 'all') {
@@ -134,9 +130,8 @@ class ThemesController extends BaseController
             $items_query->andWhere($q);
         }
 
-
         if (isset($data['vendor']) && $data['vendor'] != '') {
-            $items_query->andWhere(['in', '{{%vendor}}.slug', explode($explode, $data['vendor'])]);
+            $items_query->andWhere(['in', '{{%vendor}}.slug', $data['vendor']]);
         }
 
         //price filter
@@ -144,10 +139,9 @@ class ThemesController extends BaseController
 
             $price_condition = [];
 
-            foreach (explode($explode, $data['price']) as $key => $value) {
-                $arr_min_max = explode('-', $value);
-                $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
-            }
+            $arr_min_max = explode('-', $data['price']);
+            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
+
 
             $items_query->andWhere(implode(' OR ', $price_condition));
         }
@@ -159,6 +153,12 @@ class ThemesController extends BaseController
         
         $items = $items_query->asArray()->all();
 
+        $provider = new ArrayDataProvider([
+            'allModels' => $items,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
        
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
@@ -169,7 +169,7 @@ class ThemesController extends BaseController
         if (Yii::$app->request->isAjax) {
 
             return $this->renderPartial('@frontend/views/common/items', [
-                'items' => $items,
+                'items' => $provider,
                 'customer_events_list'=>[]
             ]);
         }
@@ -189,6 +189,7 @@ class ThemesController extends BaseController
         return $this->render('listing', [
             'theme' => $theme,
             'items' => $items,
+            'provider' => $provider,
             'vendor' => $vendor,
             'slug' => $slug,
             'customer_events_list' => $customer_events_list,

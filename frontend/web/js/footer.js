@@ -1785,7 +1785,6 @@ jQuery('button#loadmore').click(function(event) {
         success:function(data){
             jQuery('.events_listing ul li:last-child').after(data);
             // Every fourth li change margin
-            jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
             jQuery('#planloader').hide();
         }
     });
@@ -1820,22 +1819,22 @@ function filter(){
 
     jQuery('#planloader').show();
 
-    jQuery('.events_listing').css({'opacity' : '0.5', 'position' : 'relative'});
+    jQuery('.listing_right').css({'opacity' : '0.5', 'position' : 'relative'});
 
     var category_name = jQuery('input[name=category]:checked').map(function() {
         return this.value;
-    }).get().join('+');
+    }).get();
 
     if ((jQuery('input[name=themes]').length)>0) {
         var theme_name = jQuery('input[name=themes]:checked').map(function () {
             return this.value;
-        }).get().join('+');
+        }).get();
     }
 
     if ((jQuery('input[name=vendor]').length)>0) {
         var vendor_name = jQuery('input[name=vendor]:checked').map(function () {
             return this.value;
-        }).get().join('+');
+        }).get();
     }
 
     if ((jQuery('.price_slider').length)>0) {
@@ -1868,8 +1867,6 @@ function filter(){
         vendor_name = vendor_profile;
     }
 
-    ajax_data._csrf = csrfToken;
-
     if (slug != '') {
         url_path += '&slug='+slug;
         ajax_data.slug = slug;
@@ -1881,7 +1878,7 @@ function filter(){
     }
 
     if (category_name != '') {
-        url_path += '&category=' + category_name;
+        url_path += '&category[]=' + category_name;
         ajax_data.category = category_name;
     }
     if(theme_name != '') {
@@ -1908,7 +1905,7 @@ function filter(){
         url_path += '&location=' + areas;
         ajax_data.location = areas;
     }
-console.log(ajax_data);
+
     var path = load_items;
 
     jQuery.ajax({
@@ -1916,12 +1913,11 @@ console.log(ajax_data);
         url:path,
         data:ajax_data,
         success:function(data){
-            window.history.pushState('test', 'Title', url_path);
-            jQuery('.events_listing').html(data);
-            // Every fourth li change margin
-            jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
+            //window.history.pushState('test', 'Title', $.param(ajax_data));
+            window.history.pushState(null, null, path+'?'+$.param(ajax_data));
+            jQuery('.listing_right').html(data);
             jQuery('#planloader').hide();
-            jQuery('.events_listing').css({'opacity' : '1.0', 'position' : 'relative'});
+            jQuery('.listing_right').css({'opacity' : '1.0', 'position' : 'relative'});
             imgError(); // to initialize after result comes
         }
     }).done(function(){
