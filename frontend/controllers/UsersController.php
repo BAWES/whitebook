@@ -483,94 +483,94 @@ class UsersController extends BaseController
         }
     }
 
-    public function actionEvents($type = '', $events ='', $thingsilike ='')
-    {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->set('show_login_modal', 1);//to display login modal
-            return $this->goHome();
-        }
-
-        $request = Yii::$app->request;
-
-        $events = ($request->get('slug') == 'events' ? 'active' : '');
-        $thingsilike = ($request->get('slug') ==  'thingsilike' ?  'active' : '');
-        
-        $customer_id = Yii::$app->user->getId();
-
-        $website_model = new Website();
-        $event_type = $website_model->get_event_types();
-
-        $model = new Users();
-        $event_limit = 8;
-        $wish_limit = 6;
-        $offset = 0;
-
-        $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
-        $customer_events_count = $model->get_customer_events_count($customer_id, $type);
-        $price = $vendor = $avail_sale = $theme = '';
-
-        $themes = $model->get_themes();
-        $customer_unique_events = $website_model->getCustomerEvents($customer_id);
-        $customer_event_type = $website_model->get_user_event_types($customer_id);
-
-        $wishlist = Wishlist::find()
-            ->where(['customer_id' => $customer_id])
-            ->all();
-
-        $arr_item_id = Arrayhelper::map($wishlist, 'item_id', 'item_id');
-
-        $categorylist = VendorItemToCategory::find()
-            ->select('{{%category}}.category_id, {{%category}}.category_name, {{%category}}.category_name_ar') 
-            ->joinWith('category')
-            ->where(['IN', '{{%vendor_item_to_category}}.item_id', $arr_item_id])
-            ->asArray()
-            ->all();
-
-        $vendorlist = Vendoritem::find()
-            ->select('{{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.vendor_id')
-            ->joinWith('vendor')
-            ->where(['IN', '{{%vendor_item}}.item_id', $arr_item_id])
-            ->asArray()
-            ->all();
-
-        $themelist =  Vendoritemthemes::find()
-            ->select('{{%theme}}.theme_id, {{%theme}}.theme_name, {{%theme}}.theme_name_ar')
-            ->joinWith('themeDetail')
-            ->where(['trash' => 'default'])
-            ->where(['IN', '{{%vendor_item_theme}}.item_id', $arr_item_id])
-            ->asArray()
-            ->all();
-
-        $avail_sale = $category_id = $vendor = $theme = '';
-
-        $customer_wishlist = $model->get_customer_wishlist(
-            $customer_id, $wish_limit, $offset, $category_id, $price, $vendor, $avail_sale, $theme);
-
-        $customer_wishlist_count = $model->get_customer_wishlist_count(
-            $customer_id, $category_id, $price, $vendor, $avail_sale, $theme);
-
-        $user_events = Events::find()
-            ->where(['customer_id' => Yii::$app->user->identity->customer_id])
-            ->asArray()
-            ->all();
-        
-        return $this->render('events', [
-            'event_type' => $event_type,
-            'customer_event_type' => $customer_event_type,
-            'customer_events' => $customer_events,
-            'customer_events_count' => $customer_events_count,
-            'customer_wishlist' => $customer_wishlist,
-            'customer_wishlist_count' => $customer_wishlist_count,
-            'vendor' => $vendor, 
-            'customer_unique_events' => $customer_unique_events,
-            'categorylist' => $categorylist,
-            'vendorlist' => $vendorlist,
-            'themelist' => $themelist,
-            'slug' => 'events',
-            'events' => $events,
-            'thingsilike' => $thingsilike,
-        ]);
-    }
+//    public function actionEvents($type = '', $events ='', $thingsilike ='')
+//    {
+//        if (Yii::$app->user->isGuest) {
+//            Yii::$app->session->set('show_login_modal', 1);//to display login modal
+//            return $this->goHome();
+//        }
+//
+//        $request = Yii::$app->request;
+//
+//        $events = ($request->get('slug') == 'events' ? 'active' : '');
+//        $thingsilike = ($request->get('slug') ==  'thingsilike' ?  'active' : '');
+//
+//        $customer_id = Yii::$app->user->getId();
+//
+//        $website_model = new Website();
+//        $event_type = $website_model->get_event_types();
+//
+//        $model = new Users();
+//        $event_limit = 8;
+//        $wish_limit = 6;
+//        $offset = 0;
+//
+//        $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);
+//        $customer_events_count = $model->get_customer_events_count($customer_id, $type);
+//        $price = $vendor = $avail_sale = $theme = '';
+//
+//        $themes = $model->get_themes();
+//        $customer_unique_events = $website_model->getCustomerEvents($customer_id);
+//        $customer_event_type = $website_model->get_user_event_types($customer_id);
+//
+//        $wishlist = Wishlist::find()
+//            ->where(['customer_id' => $customer_id])
+//            ->all();
+//
+//        $arr_item_id = Arrayhelper::map($wishlist, 'item_id', 'item_id');
+//
+//        $categorylist = VendorItemToCategory::find()
+//            ->select('{{%category}}.category_id, {{%category}}.category_name, {{%category}}.category_name_ar')
+//            ->joinWith('category')
+//            ->where(['IN', '{{%vendor_item_to_category}}.item_id', $arr_item_id])
+//            ->asArray()
+//            ->all();
+//
+//        $vendorlist = Vendoritem::find()
+//            ->select('{{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.vendor_id')
+//            ->joinWith('vendor')
+//            ->where(['IN', '{{%vendor_item}}.item_id', $arr_item_id])
+//            ->asArray()
+//            ->all();
+//
+//        $themelist =  Vendoritemthemes::find()
+//            ->select('{{%theme}}.theme_id, {{%theme}}.theme_name, {{%theme}}.theme_name_ar')
+//            ->joinWith('themeDetail')
+//            ->where(['trash' => 'default'])
+//            ->where(['IN', '{{%vendor_item_theme}}.item_id', $arr_item_id])
+//            ->asArray()
+//            ->all();
+//
+//        $avail_sale = $category_id = $vendor = $theme = '';
+//
+//        $customer_wishlist = $model->get_customer_wishlist(
+//            $customer_id, $wish_limit, $offset, $category_id, $price, $vendor, $avail_sale, $theme);
+//
+//        $customer_wishlist_count = $model->get_customer_wishlist_count(
+//            $customer_id, $category_id, $price, $vendor, $avail_sale, $theme);
+//
+//        $user_events = Events::find()
+//            ->where(['customer_id' => Yii::$app->user->identity->customer_id])
+//            ->asArray()
+//            ->all();
+//
+//        return $this->render('events', [
+//            'event_type' => $event_type,
+//            'customer_event_type' => $customer_event_type,
+//            'customer_events' => $customer_events,
+//            'customer_events_count' => $customer_events_count,
+//            'customer_wishlist' => $customer_wishlist,
+//            'customer_wishlist_count' => $customer_wishlist_count,
+//            'vendor' => $vendor,
+//            'customer_unique_events' => $customer_unique_events,
+//            'categorylist' => $categorylist,
+//            'vendorlist' => $vendorlist,
+//            'themelist' => $themelist,
+//            'slug' => 'events',
+//            'events' => $events,
+//            'thingsilike' => $thingsilike,
+//        ]);
+//    }
 
     public function actionRemove_from_wishlist()
     {
