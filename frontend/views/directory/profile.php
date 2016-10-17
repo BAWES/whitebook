@@ -21,7 +21,7 @@ $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
 if(isset($vendor_details['vendor_logo_path'])) {
     $baselink = Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path'];
 }
-$url = \yii\helpers\Url::toRoute(["site/vendor_profile", 'slug' => $vendor_details->slug], true);
+$url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details->slug], true);
 \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
 \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
 \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
@@ -260,7 +260,7 @@ if ($event_status > 0) {
                                             $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
                                             $summary = Yii::$app->name .' '. substr(strip_tags($vendor_detail->short_description),0,10);
                                             $image = isset($baselink) ? $baselink : '';
-                                            $vendorUrl = \yii\helpers\Url::toRoute(["site/vendor_profile", 'slug' => $vendor_detail->slug], true);
+                                            $vendorUrl = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_detail->slug], true);
                                             $mailbody = "Check out ".ucfirst($vendor_detail->vendor_name)." on ".Yii::$app->name." ".$vendorUrl;
                                             ?>
                                             <div class="social_share">
@@ -314,7 +314,7 @@ if ($event_status > 0) {
                                 <div class="listing_sub_cat1">
                                     <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
                                     <select class="selectpicker" style="display: none;" id="main-category">
-                                        <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute(['site/vendor_profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>">All</option>
+                                        <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute(['directory/profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>">All</option>
                                         <?php
                                         foreach($category_list as $category) {
 
@@ -332,7 +332,7 @@ if ($event_status > 0) {
                                             ?>
                                             <option
                                                 data-icon="<?= $category['icon'] ?>"
-                                                value="<?=yii\helpers\Url::toRoute(['site/vendor_profile','slug' => $category['slug'],'vendor'=>$data['vendor']]); ?>"
+                                                value="<?=yii\helpers\Url::toRoute(['directory/profile','slug' => $category['slug'],'vendor'=>$data['vendor']]); ?>"
                                                 name="category" <?= $selected ?>>
                                                 <?= $category_name ?>
                                             </option>
@@ -373,19 +373,7 @@ if ($event_status > 0) {
                 </div>
                 <div class="col-md-9 paddingright0">
                     <div class="listing_right">
-                        <div class="events_listing">
-                            <?=$this->render('@frontend/views/common/items',['items' => $vendor_items , 'customer_events_list' => $customer_events_list]); ?>
-                        </div>
-                        <div id="planloader">
-                            <img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader" style="margin-top: 15%;" />
-                        </div>
-                        <div class="add_more_commons">
-                            <?php if (!empty($vendor_items)) { ?>
-                                <div class="lode_more_buttons">
-                                    <!-- <button title="Load More" class="btn btn-danger" type="button">Load More</button> -->
-                                </div>
-                            <?php } ?>
-                        </div>
+                        <?=$this->render('@frontend/views/common/items',['items' => $provider, 'customer_events_list' => $customer_events_list]); ?>
                     </div>
                 </div>
             </div>
@@ -401,7 +389,7 @@ $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends
 $get = Yii::$app->request->get();
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-var load_items = '".Url::to(['site/vendor_profile'])."';
+var load_items = '".Url::to(['directory/profile'])."';
 var product_slug = '".$get['slug']."';
 var vendor_profile = '".$get['vendor']."';
 ", yii\web\View::POS_BEGIN);

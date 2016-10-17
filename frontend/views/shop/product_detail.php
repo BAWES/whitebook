@@ -192,7 +192,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     <h2><?= $item_name; ?></h2>
                                     
                                     <label>
-                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" style="color: #999999">
+                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" style="color: #999999">
                                         <?= $vendor_name; ?>
                                     </a>
                                     </label>
