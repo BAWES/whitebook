@@ -11,10 +11,10 @@ use common\models\Customer;
 
 class TapController extends Controller
 {
-    private $tap_merchantid = '1230';
-    private $tap_username = 'test';
-    private $tap_password = '123tap';
-    private $tap_api_key = '1tap7';
+    private $tap_merchantid;
+    private $tap_username;
+    private $tap_password;
+    private $tap_api_key;
 
     public function init()
     {
@@ -23,11 +23,16 @@ class TapController extends Controller
         $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
 
         //live credential
-        if(!$gateway['under_testing']) {
-            $this->tap_merchantid = '195516';
-            $this->tap_username = 'Jj2z4@tap';
-            $this->tap_password = 'Jj2z4@q8';
-            $this->tap_api_key = '55tap19';
+        if($gateway['under_testing']) {
+            $this->tap_merchantid = Yii::$app->params['tap_test_merchantid'];
+            $this->tap_username = Yii::$app->params['tap_test_username'];
+            $this->tap_password = Yii::$app->params['tap_test_password'];
+            $this->tap_api_key = Yii::$app->params['tap_test_api_key'];
+        } else {
+            $this->tap_merchantid = Yii::$app->params['tap_merchantid'];
+            $this->tap_username = Yii::$app->params['tap_username'];
+            $this->tap_password = Yii::$app->params['tap_password'];
+            $this->tap_api_key = Yii::$app->params['tap_api_key'];
         }
     }
 
@@ -53,6 +58,7 @@ class TapController extends Controller
 
         if (!$gateway['under_testing']) {
             $data['action'] = 'https://www.gotapnow.com/webpay.aspx';
+            //https://www.gotapnow.com/webservice/paygatewayservice.svc
         } else {
             $data['action'] = 'http://live.gotapnow.com/webpay.aspx';
         }
@@ -63,7 +69,10 @@ class TapController extends Controller
         $data['meid'] = $this->tap_merchantid;
         $data['uname'] = $this->tap_username;
         $data['pwd'] = $this->tap_password;
-        
+
+        print_r($data);
+        die();
+
         $data['itemprice1'] = $order->order_total_with_delivery;
         $data['itemname1'] ='Order ID - '.$order_id;
         $data['currencycode'] = 'KWD';
