@@ -64,7 +64,7 @@ $get = Yii::$app->request->get();
 						<?php
 						$val = [];
 						if (isset($get['category']) && $get['category'] != "") {
-							$val = explode(' ', $get['category']);
+							$val = $get['category'];
 						}
 						foreach ($subcategory as $key => $value) {
 

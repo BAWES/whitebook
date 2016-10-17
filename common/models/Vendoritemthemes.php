@@ -9,7 +9,6 @@ use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
-use common\models\Vendoritemthemes;
 use common\models\vendoritemthemesSearch;
 use frontend\models\Themes as ItemTheme;
 

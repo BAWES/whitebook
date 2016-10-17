@@ -21,9 +21,9 @@
 				<ul class="<?= $class; ?>">
 					<?php foreach ($vendor as $key => $value) {
 
-					if (isset($get['vendor']) && $get['vendor'] !="") {
+					if (isset($get['vendor']) && count($get['vendor'])>0) {
 
-						$val = explode(' ',$get['vendor']);
+						$val = $get['vendor'];
 						$checked2 = (in_array($value['slug'],$val)) ? 'checked=checked' : '';
 					}
 					$name = (Yii::$app->language == "en") ? 'vendor_name' : 'vendor_name_ar';
