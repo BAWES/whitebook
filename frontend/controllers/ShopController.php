@@ -2,8 +2,9 @@
 
 namespace frontend\controllers;
 
-use common\models\CustomerAddress;
+
 use Yii;
+use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\models\Users;
@@ -16,7 +17,7 @@ use common\models\Vendoritemthemes;
 use common\models\Location;
 use common\models\Vendorlocation;
 use common\models\CategoryPath;
-use yii\data\ArrayDataProvider;
+use common\models\CustomerAddress;
 
 /**
  * Category controller.
