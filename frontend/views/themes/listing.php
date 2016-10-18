@@ -34,7 +34,12 @@ $get = Yii::$app->request->get();
 		<div class="plan_venues" id="wrapper">
 			<div class="overlay"></div>
 			<div class="overlay_filter"></div>
-			<div class="col-md-3 paddingleft0" id="left_side_cate">
+
+			<span class="filter_butt visible-xs visible-sm">
+                <i class="fa fa-filter"></i>
+            </span>
+
+			<div class="col-md-3 paddingleft0 hidden-xs hidden-sm" id="left_side_cate">
 				<div class="filter_content">
 					<div class="filter_section">
 						<?=$this->render('@frontend/views/common/filter/top_cat.php',['path'=>'themes/detail','theme'=>$theme->slug]); ?>
@@ -48,15 +53,10 @@ $get = Yii::$app->request->get();
 								</div>
 							</nav>
 
-							<span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">
-								<?= Yii::t("frontend", "Filter") ?>
-							</span>
 							<div class="filter_title">
 								<span class="title_filter color_yellow"><?= Yii::t("frontend", "Filter by") ?></span>
 							</div>
-							<div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
-								<img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
-							</div>
+
 							<nav class="row-offcanvas row-offcanvas-left">
 								<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 									<div id="accordion" class="panel-group">
@@ -68,6 +68,9 @@ $get = Yii::$app->request->get();
 							</nav>
 						</div>
 					</div><!-- END .filter_section -->
+
+					<button class="btn btn-close-filter visible-sm visible-xs">Close filter</button>
+
 				</div><!-- END .filter_content -->
 			</div><!-- END .left_side_cate -->
 			<div class="col-md-9 paddingright0">

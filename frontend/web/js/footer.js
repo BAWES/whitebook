@@ -1945,7 +1945,7 @@ function filter(){
 
 
 /* BEGIN RESPONSIVE FILTER NAVIGATION */
-var trigger = jQuery('.filter_butt'),
+/*var trigger = jQuery('.filter_butt'),
     overlay = jQuery('.overlay'),
     isClosed = false;
 
@@ -1966,9 +1966,9 @@ function filter_butt() {
         trigger.addClass('ses_dct');
         isClosed = true;
     }
-}
+}*/
 
-jQuery("#left_side_cate nav").removeClass ("navbar navbar-fixed-top ");
+/*jQuery("#left_side_cate nav").removeClass ("navbar navbar-fixed-top ");
 jQuery("#left_side_cate ul").removeClass ("nav sidebar-nav ");
 jQuery("#left_side_cate nav").removeAttr ("id")
 
@@ -1977,6 +1977,7 @@ if (jQuery(window).width() < 991) {
     jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");
     jQuery("#left_side_cate nav").attr ('id','sidebar-wrapper')
 }
+*/
 
 function imgError() {
     $("img").error(function () {

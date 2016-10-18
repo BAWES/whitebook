@@ -112,8 +112,6 @@ class ShopController extends BaseController
 
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
 
-
-
         //price filter
         if (isset($data['price']) && $data['price'] != '') {
 
@@ -122,28 +120,17 @@ class ShopController extends BaseController
             $arr_min_max = explode('-', $data['price']);
             $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
 
-
             $item_query->andWhere(implode(' OR ', $price_condition));
         }
-
-
 
         //theme filter
         if (isset($data['themes']) && count($data['themes'])>0) {
 
-            $themes = Themes::find()->select('theme_id')->where(['IN','slug',$data['themes']])->asArray()->all();
-            $themes_map = ArrayHelper::map($themes,'theme_id','theme_id');
-            $vendor_item_themes = Vendoritemthemes::find()
-                ->select('item_id')
-                ->where(['trash' => "Default"])
-                ->andWhere(['IN','theme_id',$themes_map])
-                ->asArray()
-                ->all();
-            $vendor_item_themes_map = ArrayHelper::getColumn($vendor_item_themes,'item_id');
-            $item_query->andWhere('{{%vendor_item}}.item_id IN('.implode(',',$vendor_item_themes_map).')');
+            $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
+            $item_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
+            $item_query->andWhere(['IN', '{{%theme}}.slug', $data['themes']]);
 
         }//if themes
-
 
         //category filter
         $cats = $Category->slug;
@@ -154,7 +141,6 @@ class ShopController extends BaseController
         }
         $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
         $item_query->andWhere($q);
-
 
         if ($session->has('deliver-location')) {
 
