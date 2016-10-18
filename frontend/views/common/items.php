@@ -3,21 +3,15 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use common\components\CFormatter;
-use yii\widgets\Pjax;
-//  Pjax::begin();
 
 if(!empty($items->getModels()))  {
+    $result = \yii\helpers\ArrayHelper::getColumn($customer_events_list,'item_id');
     foreach ($items->getModels() as $key => $value) {
-
-        if($value['item_for_sale'] == 'Yes'){
-            $item_url = Url::to(["shop/product", 'slug' => $value['slug']]);
-        }else{
-            $item_url = Url::to(["product/product", 'slug' => $value['slug']]);
-        }
+        $item_url = ($value['item_for_sale'] == 'Yes') ? Url::to(["shop/product", 'slug' => $value['slug']]) : Url::to(["product/product", 'slug' => $value['slug']]);
         ?>
         <div class="col-lg-3">
             <div class="events_items">
-                <div class="events_images">
+                <div class="events_images text-center">
                     <div class="hover_events">
                         <div class="pluse_cont">
                             <?php if(Yii::$app->user->isGuest) { ?>
@@ -31,19 +25,8 @@ if(!empty($items->getModels()))  {
                             <div class="faver_icons">
                                 <a href="" role="button" class="" data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
                             </div>
-                        <?php } else {
-
-                        $k = array();
-                        $result  = '';
-                        if (count($customer_events_list) > 0) {
-                            foreach ((array)$customer_events_list as $l) {
-                                $k[] = $l['item_id'];
-                            }
-                            $result = array_search($value['item_id'], $k);
-                        }
-
-                        ?>
-                            <div class="faver_icons <?=(is_numeric ($result)) ? 'faverited_icons' : ''?>">
+                        <?php } else { ?>
+                            <div class="faver_icons <?=(in_array($value['item_id'],$result)) ? 'faverited_icons' : ''?>">
                                 <a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
                             </div>
                             <?php } ?>
@@ -51,34 +34,21 @@ if(!empty($items->getModels()))  {
 
                         <a href="<?= $item_url ?>">
                             <?php
-
-                            if(isset($value['image_path'])) {
-                                $path = Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'];
-                            } else {
-                                $path = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
-                            }
-
+                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
                             echo Html::img($path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
-
                             ?>
                         </a>
                     </div>
                     <div class="events_descrip">
 
                         <?php if(Yii::$app->language == 'en') { ?>
-                            <a href="<?= $item_url ?>">
-                                <?= $value['vendor_name'] ?>
-                            </a>
+                            <a href="<?= $item_url ?>"><?= $value['vendor_name'] ?></a>
                             <h3><?= $value['item_name']  ?></h3>
                         <?php } else { ?>
-                            <a href="<?= $item_url ?>">
-                                <?= $value['vendor_name_ar'] ?>
-                            </a>
+                            <a href="<?= $item_url ?>"><?= $value['vendor_name_ar'] ?></a>
                             <h3><?= $value['item_name_ar']  ?></h3>
                         <?php } ?>
-                        <p>
-                            <?= CFormatter::format($value['item_price_per_unit'])  ?>
-                        </p>
+                        <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
                         </a>
                     </div>
                 </div>
@@ -105,5 +75,3 @@ $this->registerCss("
         ]);
         ?>
     </div>
-<?php //Pjax::end();
- ?>
