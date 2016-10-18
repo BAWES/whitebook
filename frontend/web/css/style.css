@@ -1661,9 +1661,8 @@ a.thing_cont:hover {
     text-align: center;
     border-radius: 0px;
 }
-
 .filter_butt {
-    background: #E40046;
+    background: black;
     color: white;
     padding: 14px 15px;
     border-radius: 100%;
@@ -1671,7 +1670,7 @@ a.thing_cont:hover {
     right: 30px;
     bottom: 40px;
     z-index: 11;
-    box-shadow: 1px 1px 12px 4px #E40046;
+    border: 1px solid white;
 }
 .btn-close-filter{
     width: 100%;
