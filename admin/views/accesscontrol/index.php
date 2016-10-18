@@ -46,8 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute'=>'created_datetime',
 				'format' => ['date', 'php:d/m/Y'],
 				'label'=>'created date',			
-			],
-            
+			],            
             [
             	'class' => 'yii\grid\ActionColumn',
             	'header'=>'Action',

@@ -3,12 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use yii\web\Controller;
 use common\models\Cms;
 use common\models\Vendoritem;
-use common\models\Vendoritemthemes;
-use frontend\models\Vendor;
-use frontend\models\Category;
 use common\models\Siteinfo;
 use common\models\Events;
 use common\models\City;
@@ -17,12 +13,7 @@ use common\models\Faq;
 use frontend\models\Themes;
 use common\models\Featuregroupitem;
 use frontend\models\Website;
-use frontend\models\Wishlist;
-use frontend\models\Users;
-use yii\web\Session;
-use yii\db\Query;
 use common\models\Smtp;
-use common\models\CategoryPath;
 use frontend\models\Contacts;
 use frontend\models\FaqGroup;
 use yii\helpers\ArrayHelper;
@@ -43,7 +34,7 @@ class SiteController extends BaseController
     }
 
     public function actionIndex()
-    {
+    {     
         $website_model = new Website();
         $featuremodel = new Featuregroupitem();
         $product_list = $featuremodel->get_featured_product_id();
@@ -99,72 +90,6 @@ class SiteController extends BaseController
               'ads' => $ads,
               'customer_events' => $customer_events,
               'key' => '1',
-        ]);
-    }
-
-    public function actionVendor_profile($slug)
-    {
-        $website_model = new Website();
-        $vendor_details = Vendor::findOne(['slug'=>$slug]);
-
-        if (empty($vendor_details)) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $main_category = $website_model->get_main_category();
-
-        $vendor_items = Vendoritem::find()
-            ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
-            ->Where([
-                '{{%vendor_item}}.trash'=> 'Default',
-                '{{%vendor_item}}.item_approved'=> 'Yes',
-                '{{%vendor_item}}.item_status'=> 'Active',
-                '{{%vendor_item}}.vendor_id'=> $vendor_details->vendor_id
-            ])
-            ->groupby(['{{%vendor_item}}.item_id'])
-            ->all();
-
-        $item_ids = ArrayHelper::map($vendor_items, 'item_id', 'item_id');
-
-        $themes = \common\models\Vendoritemthemes::find()
-            ->select(['wt.theme_id','wt.slug','wt.theme_name'])
-            ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
-            ->Where([
-                'wt.theme_status' => 'Active',
-                'wt.trash' => 'Default',
-                '{{%vendor_item_theme}}.trash' => 'Default'
-            ])
-            ->andWhere(['IN', '{{%vendor_item_theme}}.item_id', $item_ids])
-            ->groupby(['wt.theme_id'])
-            ->asArray()
-            ->all();
-
-        if (!isset(Yii::$app->user->identity->customer_id)) {
-            
-            $customer_events_list = [];
-            $customer_events = [];
-
-        } else {
-
-            $event_limit = 8;
-            $wish_limit = 6;
-            $offset = 0;
-            $type = '';
-            $customer_id = Yii::$app->user->identity->customer_id;
-
-            $model = new Users();
-            $customer_events_list = $model->get_customer_wishlist_details($customer_id);
-            $customer_events = $model->getCustomerEvents($customer_id, $event_limit, $offset, $type);            
-        }
-
-        return $this->render('vendor/profile', [
-            'vendor_detail' => $vendor_details,
-            'vendor_items' => $vendor_items,
-            'themes' => $themes,
-            'category' => $main_category,
-            'slug' => $slug,
-            'customer_events' => $customer_events,
-            'customer_events_list' => $customer_events_list
         ]);
     }
 

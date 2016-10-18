@@ -1,10 +1,10 @@
 <?php
-use yii\helpers\Html;
 
-/* @var $this \yii\web\View view component instance */
-/* @var $message \yii\mail\MessageInterface the message being composed */
-/* @var $content string main view render result */
+use yii\helpers\Html;
+use yii\helpers\Url;
+
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -24,7 +24,10 @@ use yii\helpers\Html;
                 <table style="width:600px; background:#fff; height:110px; border-bottom:2px solid #ccc;">
                     <td width="20"></td>
                     <td width="140">
-                        <?= Html::img('@web/uploads/app_img/logo.png',['class'=>"logo",'style'=>"height:33px; width:233px;margin-left:125px;"]) ?>
+                        <?= Html::img(Url::to('@web/images/logo.png', true),[
+                            'class' => "logo",
+                            'style' => "height:33px; width:233px;margin-left:125px;"
+                        ]) ?>
                     </td>
                     <td width="20"></td>
                 </table>

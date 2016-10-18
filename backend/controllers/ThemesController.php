@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\Themes;
 use common\models\themesSearch;
+use common\models\Vendoritemthemes;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -117,6 +118,9 @@ class ThemesController extends Controller
         $model->load(Yii::$app->request->post());
         $model->save();
         
+        //delete vendor item theme 
+        Vendoritemthemes::deleteAll(['theme_id' => $id]);
+
         Yii::$app->session->setFlash('success', "Theme Deleted successfully!");
         
         return $this->redirect(['index']);

@@ -5,11 +5,14 @@
     use yii\helpers\Url;
     use yii\widgets\Breadcrumbs;
     use yii\web\view;
+
+\Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
+
     $this->params['breadcrumbs'][] = ['label' => ucfirst($Category->category_name), 'url' => Url::to(["shop/products", 'slug' => $slug])];
     $get = Yii::$app->request->get();
 
 $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+echo $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 ?>
     <!-- coniner start -->
@@ -35,11 +38,16 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
             <div class="plan_venues" id="wrapper">
                 <div class="overlay"></div>
                 <div class="overlay_filter"></div>
-                <div class="col-md-3 paddingleft0" id="left_side_cate">
+
+                <span class="filter_butt visible-xs visible-sm">
+                    <i class="fa fa-filter"></i>
+                </span>
+
+                <div class="col-md-3 paddingleft0 hidden-xs hidden-sm" id="left_side_cate">
                     <div class="filter_content">
                         <div class="filter_section">
 
-                            <div class="responsive-category-top">
+                            <div class=""><!-- responsive-category-top -->
                                 <div class="listing_sub_cat1">
                                     <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
                                     <select class="selectpicker" id="main-category">
@@ -71,25 +79,33 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             </div><!-- END .responsive-category-top -->
 
                             <div class="responsive-category-bottom">
-                                <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas"><?= Yii::t('frontend', 'Filter') ?></span>
-                                <div class="filter_title">
-                                    <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by') ?></span>
-                                </div>
-                                <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
-                                    <img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg");?>" alt="click here">
-                                </div>
+
                                 <nav class="row-offcanvas row-offcanvas-left">
                                     <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                                         <div id="accordion" class="panel-group">
-                                            <?=$this->render('filter/date.php',['deliver_date'=>$deliver_date]);  ?>
-                                            <?=$this->render('filter/locations.php',['deliver_location'=>$deliver_location]);  ?>
-                                            <?=$this->render('filter/price.php');  ?>
-                                            <?=$this->render('filter/category.php',['slug'=>$slug]); ?>
-                                            <?=$this->render('filter/theme.php',['themes'=>$themes]); ?>
-                                            <?=$this->render('filter/vendor.php',['vendor'=>$vendor]); ?>
+                                            <?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]); ?>
                                         </div>
+                                    </div>
+                                </nav>
+                                                                
+                                <div class="filter_title">
+                                    <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by') ?></span>
+                                </div>
+
+                                <nav class="row-offcanvas row-offcanvas-left">
+                                    <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
+                                        <div id="accordion" class="panel-group">
+                                            <?=$this->render('@frontend/views/common/filter/date.php',['deliver_date'=>$deliver_date]);  ?>
+                                            <?=$this->render('@frontend/views/common/filter/locations.php',['deliver_location'=>$deliver_location]);  ?>
+                                            <?=$this->render('@frontend/views/common/filter/price.php');  ?>
+                                            <?=$this->render('@frontend/views/common/filter/theme.php',['themes'=>$themes]); ?>
+                                            <?=$this->render('@frontend/views/common/filter/vendor.php',['vendor'=>$vendor]); ?>
+                                        </div>
+                                    </div>
                                 </nav>
                             </div>
+
+                            <button class="btn btn-close-filter visible-sm visible-xs">Close filter</button>
                         </div>
                     </div>
                 </div>
@@ -99,28 +115,10 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     </div>
                     <!-- BEGIN Item lists -->
                     <div class="listing_right">
-                        <div class="events_listing">
-                            <ul>
-                                <?php 
-                                    require 'product_list_ajax.php';
-                                ?>
-                            </ul>
-                            <div id="planloader">
-                                <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
-                            </div>
-                        </div>
-                        <div class="add_more_commons">
-                            <?php if(count($items) > 12) { ?>
-                                <div class="lode_more_buttons">
-                                    <button title="Load More" data-element="button" id="loadmore" class="btn btn-danger loadmore" type="button">
-                                        <?php Yii::t('frontend', 'Load More') ?>
-                                    </button>
-                                </div>
-                            <?php } ?>
-                            <div class="banner_section_plan">
-                                <?= Html::img("@web/images/banner_plan.png") ?>
-                            </div>
-                        </div><!-- END .add_more_commons -->
+                        <?=$this->render('@frontend/views/common/items',['items' => $provider, 'customer_events_list' => $customer_events_list]); ?>
+                    </div>
+                    <div class="banner_section_plan">
+                        <?= Html::img("@web/images/banner_plan.png") ?>
                     </div>
                     <!-- END Item lists -->
                 </div>
@@ -135,7 +133,8 @@ $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
 var load_more_items = '".Url::to(['shop/load-more-items'])."';
-var load_items = '".Url::to(['shop/load-items'])."';
+//var load_items = '".Url::to(['shop/load-items'])."';
+var load_items = '".Url::to(['shop/products'])."';
 var product_slug = '".$get['slug']."';
 ", View::POS_BEGIN);
 

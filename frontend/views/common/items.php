@@ -1,20 +1,17 @@
+<div class="events_listing">
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
 use common\components\CFormatter;
 
-if(!empty($items))  {
-    foreach ($items as $key => $value) {
-
-        if($value['item_for_sale'] == 'Yes'){
-            $item_url = Url::to(["shop/product", 'slug' => $value['slug']]);
-        }else{
-            $item_url = Url::to(["product/product", 'slug' => $value['slug']]);
-        }
+if(!empty($items->getModels()))  {
+    $result = \yii\helpers\ArrayHelper::getColumn($customer_events_list,'item_id');
+    foreach ($items->getModels() as $key => $value) {
+        $item_url = ($value['item_for_sale'] == 'Yes') ? Url::to(["shop/product", 'slug' => $value['slug']]) : Url::to(["product/product", 'slug' => $value['slug']]);
         ?>
-        <li>
+        <div class="col-lg-3">
             <div class="events_items">
-                <div class="events_images">
+                <div class="events_images text-center">
                     <div class="hover_events">
                         <div class="pluse_cont">
                             <?php if(Yii::$app->user->isGuest) { ?>
@@ -28,63 +25,53 @@ if(!empty($items))  {
                             <div class="faver_icons">
                                 <a href="" role="button" class="" data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
                             </div>
-                        <?php } else {
-
-                        $k = array();
-                        $result  = '';
-                        if (count($customer_events_list) > 0) {
-                            foreach ((array)$customer_events_list as $l) {
-                                $k[] = $l['item_id'];
-                            }
-                            $result = array_search($value['item_id'], $k);
-                        }
-
-                        if (is_numeric ($result)) { ?>
-                        <div class="faver_icons faverited_icons">
-                            <?php } else { ?>
-                            <div class="faver_icons">
-                                <?php }?>
-                                <a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a></div>
+                        <?php } else { ?>
+                            <div class="faver_icons <?=(in_array($value['item_id'],$result)) ? 'faverited_icons' : ''?>">
+                                <a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+                            </div>
                             <?php } ?>
                         </div>
 
                         <a href="<?= $item_url ?>">
                             <?php
-
-                            if(isset($value['image_path'])) {
-                                $path = Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'];
-                            } else {
-                                $path = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
-                            }
-
+                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
                             echo Html::img($path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
-
                             ?>
                         </a>
                     </div>
                     <div class="events_descrip">
 
                         <?php if(Yii::$app->language == 'en') { ?>
-                            <a href="<?= $item_url ?>">
-                                <?= $value['vendor_name'] ?>
-                            </a>
+                            <a href="<?= $item_url ?>"><?= $value['vendor_name'] ?></a>
                             <h3><?= $value['item_name']  ?></h3>
                         <?php } else { ?>
-                            <a href="<?= $item_url ?>">
-                                <?= $value['vendor_name_ar'] ?>
-                            </a>
+                            <a href="<?= $item_url ?>"><?= $value['vendor_name_ar'] ?></a>
                             <h3><?= $value['item_name_ar']  ?></h3>
                         <?php } ?>
-                        <p>
-                            <?= CFormatter::format($value['item_price_per_unit'])  ?>
-                        </p>
+                        <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
                         </a>
                     </div>
                 </div>
-        </li>
+            </div>
     <?php
     }
 } else {
-    echo Yii::t('frontend', "No records found");
+    echo '<div class="no-record-found">'.Yii::t('frontend', "No records found").'</div>';
 }
+
+$this->registerCss("
+.no-record-found {padding: 12px 0 36px 0px;text-align: center;}
+.col-lg-3{margin-bottom: 28px;}
+")
 ?>
+            <div id="planloader">
+                <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
+            </div>
+        </div>
+    <div class="add_more_commons text-center">
+        <?php
+        echo \yii\widgets\LinkPager::widget([
+            'pagination'=>$items->pagination,
+        ]);
+        ?>
+    </div>

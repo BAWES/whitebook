@@ -11,6 +11,9 @@ $this->params['breadcrumbs'][] = 'Subcategory_update';
 ?>
 <div class="category-update">
     <?= $this->render('subcategory_form', [
-        'model' => $model,'subcategory'=>$subcategory,'userid'=>$userid,'id'=>$id
+        'model' => $model,
+        'subcategory' => $subcategory,
+        'userid' => $userid,
+        'id' => $id
     ]) ?>
 </div>

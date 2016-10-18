@@ -3,13 +3,14 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Authitem;
-use admin\models\Package;
-use admin\models\PackageSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use admin\models\Authitem;
+use admin\models\Package;
+use admin\models\PackageSearch;
+use common\models\Vendorpackages;
 
 /**
  * PackageController implements the CRUD actions for Package model.
@@ -19,8 +20,7 @@ class PackageController extends Controller
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            //$this->redirect('login');
+        if (Yii::$app->user->isGuest) { 
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -159,11 +159,17 @@ class PackageController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '16');
+        
         if (yii::$app->user->can($access)) {
+            
             $model = $this->findModel($id);
             $model->trash = 'Deleted';
             $model->load(Yii::$app->request->post());
             $model->save();
+
+            //remove from vendor package 
+            Vendorpackages::deleteAll(['package_id' => $id]);
+
             Yii::$app->session->setFlash('success', 'Package deleted successfully!');
 
             return $this->redirect(['index']);
@@ -176,7 +182,7 @@ class PackageController extends Controller
     public function actionPackagedelete()
     {
         if (Yii::$app->request->isAjax) {
-            $data = \common\models\Vendorpackages::findOne($_POST['packid']);
+            $data = Vendorpackages::findOne(Yii::$app->request->post('packid'));
             return $data->delete();
         }
     }

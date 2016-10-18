@@ -4,12 +4,9 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\CountrySearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'Countries';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="row-fluid">
    <div class="span12">

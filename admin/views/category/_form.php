@@ -3,9 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Category */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="category-form">
@@ -13,46 +10,29 @@ use yii\widgets\ActiveForm;
     
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'category_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-	</div> 
+	<?= $form->field($model, 'category_name')->textInput(['maxlength' => 128])?>
+	
+	<?= $form->field($model, 'category_name_ar')->textInput(['maxlength' => 128])?>
+	
+	<?= $form->field($model, 'icon')->textInput(['maxlength' => 128])?>
+	
+	<?= $form->field($model, 'category_meta_title')->textArea(['maxlength' => 250])?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'category_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-	</div> 
+	<?= $form->field($model, 'category_meta_keywords')->textArea(['maxlength' => 250])?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'icon',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-	</div> 
+	<?= $form->field($model, 'category_meta_description')->textArea(['maxlength' => 250])?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'category_meta_title',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div> 
+	<?= $form->field($model, 'category_allow_sale')->checkbox(['yes' => 'yes']) ?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'category_meta_keywords',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div> 
+	<?= $form->field($model, 'top_ad')->textArea(['maxlength' => 250])?>
 
-	<div class="form-group">
-		<?= $form->field($model, 'category_meta_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div>
-
-	<div class="form-group">   
-		<?= $form->field($model, 'category_allow_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-		])->checkbox(['yes' => 'yes']) ?>
-	</div>
+	<?= $form->field($model, 'bottom_ad')->textArea(['maxlength' => 250])?>
 
     <div class="form-group">
-		<?= $form->field($model, 'top_ad',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div>
-
-    <div class="form-group">
-		<?= $form->field($model, 'bottom_ad',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div>
-
-    <div class="form-group">
+        
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?= Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
+
+        <?= Html::a('Back', ['index'], ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

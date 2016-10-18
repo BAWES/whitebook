@@ -3,17 +3,19 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Location;
-use common\models\City;
-use admin\models\Authitem;
-use admin\models\LocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\Country;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
-
+use admin\models\Authitem;
+use admin\models\LocationSearch;
+use common\models\Country;
+use common\models\Location;
+use common\models\City;
+use common\models\CustomerAddress;
+use common\models\CustomerCart;
+use common\models\Vendorlocation;
 
 /**
  * LocationController implements the CRUD actions for Location model.
@@ -170,8 +172,14 @@ class LocationController extends Controller
     public function actionDelete($id)
     {
         $access = Authitem::AuthitemCheck('3', '13');
+        
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
+
+            //remove customer address 
+            CustomerAddress::deleteAll(['area_id' => $id]);
+            CustomerCart::deleteAll(['area_id' => $id]);
+            Vendorlocation::deleteAll(['area_id' => $id]);
 
             return $this->redirect(['index']);
         } else {

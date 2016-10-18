@@ -1,29 +1,4 @@
-<?php
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use yii\helpers\Url;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Vendor */
-/* @var $form yii\widgets\ActiveForm */
-
-$from_am = explode(':',$model->vendor_working_hours);
-$to_am = explode(':',$model->vendor_working_hours_to);
-
-$from_hour = (isset($from_am[0])) ? $from_am[0] : '';
-$to_hour = (isset($to_am[0])) ? $to_am[0] : '';
-
-$from_min = (isset($from_am[1])) ? $from_am[1] : '';
-$to_min = (isset($to_am[1])) ? $to_am[1] : '';
-
-$from = (isset($from_am[2])) ? $from_am[2] : '';
-$to = (isset($to_am[2])) ? $to_am[2] : '';
-$model->vendor_working_hours = $from_hour;
-$model->vendor_working_min = $from_min;
-$model->vendor_working_hours_to = $to_hour;
-$model->vendor_working_min_to = $to_min;
-
-?>
 <div class="col-md-12 col-sm-12 col-xs-12">
 <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]);?>
 <div class="loadingmessage" style="display: none;">
@@ -52,6 +27,7 @@ $model->vendor_working_min_to = $to_min;
 <!-- Begin First Tab -->
     <div class="tab-pane" id="1" >
     <div class="form-group vendor_logo">
+
 	<?= $form->field($model, 'vendor_logo_path',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
 	])->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']))->fileInput()->hint('Logo Size 150 * 250') ?>
 
@@ -65,18 +41,12 @@ $model->vendor_working_min_to = $to_min;
 	<?php } ?>
 	</div>
 
-    <div class="form-group">
-	<?= $form->field($model, 'vendor_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
-	</div>
-
-	<div class="form-group"><?= $form->field($model, 'vendor_name_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
+    <?= $form->field($model, 'vendor_name')->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
+	
+	<?= $form->field($model, 'vendor_name_ar')->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?>
 
 	<?php if(!$model->isNewRecord) { ?>
-
-	<div class="form-group">
-	<?= $form->field($model, 'vendor_contact_email',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
-	])->textInput(['maxlength' => 100]) ?>
+		<?= $form->field($model, 'vendor_contact_email')->textInput(['maxlength' => 100]) ?>
 	</div>
 
 	<?php } else {?>
@@ -197,6 +167,7 @@ $model->vendor_working_min_to = $to_min;
 		<div class="form-group"><?= $form->field($model, 'category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']) ?></div>
 		
 		<div class="form-group"><?= $form->field($model, 'vendor_status',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->checkbox(['Active' => 'Active'])?></div>
+		
 		<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 		<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 	</div>
@@ -289,6 +260,7 @@ $model->vendor_working_min_to = $to_min;
   </div>
 	<!--End Third Tab -->
 </div>
+
 	<!-- BEGIN PLUGIN CSS -->
 	<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
 

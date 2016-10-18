@@ -11,6 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="eventtype-form">
 
 	<div class="col-md-8 col-sm-8 col-xs-8">  
+    
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'type_name')->textInput(['maxlength' => 100]) ?>   

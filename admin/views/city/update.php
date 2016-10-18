@@ -12,7 +12,8 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="city-update">
 
       <?= $this->render('_form', [
-        'model' => $model,'country' => $country,
+        'model' => $model,
+        'country' => $country
     ]) ?>
 
 </div>

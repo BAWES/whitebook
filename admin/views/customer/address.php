@@ -1,16 +1,12 @@
 <?php
 
+use yii\base;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\grid\Column;
 use yii\grid\DataColumn;
-use yii\base;
 use yii\widgets\ActiveForm;
-
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\SearchCustomer */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Customer address';
 $this->params['breadcrumbs'][] = ['label' => 'Customers', 'url' => ['index']];

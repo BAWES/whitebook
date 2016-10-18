@@ -3,13 +3,14 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Addresstype;
-use admin\models\AddressQuestion;
-use admin\models\AddressQuestionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use admin\models\Addresstype;
+use admin\models\AddressQuestion;
+use admin\models\AddressQuestionSearch;
+use common\models\CustomerAddressResponse;
 
 /**
 * AddressquestionController implements the CRUD actions for AddressQuestion model.
@@ -225,6 +226,10 @@ class AddressquestionController extends Controller
         $model->trash = 'Deleted';
         $model->load(Yii::$app->request->post());
         $model->save();  // equivalent to $model->update();
+
+        //delete related data 
+        CustomerAddressResponse::deleteAll(['address_type_question_id' => $id]);
+
         Yii::$app->session->setFlash('success', 'Address Question Deleted successfully!');
 
         return $this->redirect(['index']);

@@ -2,12 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
 use common\models\Location;
 use common\models\Addresstype;
 use common\models\City;
-/* @var $this yii\web\View */
-/* @var $model common\models\Customer */
 
 $this->title = 'Customer Details';
 $this->params['breadcrumbs'][] = ['label' => 'Customers', 'url' => ['index']];

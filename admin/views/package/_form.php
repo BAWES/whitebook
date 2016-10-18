@@ -10,21 +10,18 @@ use yii\widgets\ActiveForm;
 
 <div class="package-form">
 <div class="col-md-8 col-sm-8 col-xs-8">    
+    
     <?php $form = ActiveForm::begin(); ?>
 
+	<?= $form->field($model, 'package_name')->textInput(['maxlength' => 128])?>
 
-<div class="form-group">
-	<?= $form->field($model, 'package_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
-	<div class="form-group">
-	<?= $form->field($model, 'package_max_number_of_listings',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div>
-<div class="form-group">
-	<?= $form->field($model, 'package_sales_commission',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div>
-		<div class="form-group">
-	<?= $form->field($model, 'package_pricing',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])->label('Pricing KD',['class'=> 'form-label-cap'])?>
-</div> 
+	<?= $form->field($model, 'package_max_number_of_listings')->textInput(['maxlength' => 128])?>
+
+	<?= $form->field($model, 'package_sales_commission')->textInput(['maxlength' => 128])?>
+
+	<?= $form->field($model, 'package_pricing')
+			->textInput(['maxlength' => 128])
+			->label('Pricing KD', ['class' => 'form-label-cap']); ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

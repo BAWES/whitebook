@@ -143,38 +143,6 @@ class EventinviteesController extends BaseController
         }
     }
 
-    public function actionAddinvitees()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-        
-        $exist = Eventinvitees::find()
-            ->select('invitees_id')
-            ->where([
-                'event_id' => $data['event_id'],
-                'email' => $data['email']
-            ])
-            ->count();
-        
-        // Check count
-        if ($exist == 0) {
-            
-            $event_invite = new Eventinvitees;
-            $event_invite->name = $data['name'];
-            $event_invite->email = $data['email'];
-            $event_invite->event_id = $data['event_id'];
-            $event_invite->customer_id = Yii::$app->user->identity->customer_id;
-            $event_invite->phone_number = $data['phone_number'];
-            $eventinvitees->save();
-
-        } else {
-              echo 2;
-        }
-    }
-
     public function actionUpdateinvitees()
     {
         if (!Yii::$app->request->isAjax) {

@@ -11,7 +11,7 @@ use yii\web\view;
 
 <div id="event_slider_wrapper">
 	<div class="container paddng0">
-		<?php require(__DIR__ . '/../product/events_slider.php'); ?>
+		<?php $this->render('/product/events_slider.php'); ?>
 	</div>
 </div>
 
@@ -40,7 +40,7 @@ use yii\web\view;
 					                //for arabic last letter will be first letter 
 					            }
 								if($ltr === $f) { ?>
-									<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>$d['slug']]) ?></li>
+									<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php }
 							}	?>
 						<?php } ?>
@@ -85,7 +85,7 @@ use yii\web\view;
 
 							if($first_letter == $f)
 								{if($i<$first){ ?>
-								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>$d['slug']]) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php }  } }?>
 							</ul>
 						</div><!-- END .direct_list -->
@@ -115,7 +115,7 @@ use yii\web\view;
 							}
 
 							if($first_letter == $f) { ?>
-								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>$d['slug']]) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php  
 
 							} //if
@@ -155,7 +155,7 @@ use yii\web\view;
 							}
 
 							if($first_letter == $f) { ?>
-								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>$d['slug']]) ?></li>
+								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php  
 							}//if
 

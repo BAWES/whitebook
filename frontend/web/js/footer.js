@@ -1,4 +1,3 @@
-
 function validateEmail(email) {
     // http://stackoverflow.com/a/46181/11236
     var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
@@ -1786,7 +1785,6 @@ jQuery('button#loadmore').click(function(event) {
         success:function(data){
             jQuery('.events_listing ul li:last-child').after(data);
             // Every fourth li change margin
-            jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
             jQuery('#planloader').hide();
         }
     });
@@ -1805,8 +1803,9 @@ jQuery('#main-category').change(function(){
 var loadmore = 0;
 
 function filter(){
-    var date = '',
-        areas = '',
+    var ajax_data = {},
+        date = '',
+        areas = 'All',
         slug = '',
         search = '',
         category_name = '',
@@ -1820,21 +1819,27 @@ function filter(){
 
     jQuery('#planloader').show();
 
-    jQuery('.events_listing').css({'opacity' : '0.5', 'position' : 'relative'});
+    jQuery('.listing_right').css({'opacity' : '0.5', 'position' : 'relative'});
 
-    var category_name = jQuery('input[name=items]:checked').map(function() {
+    var category_name = jQuery('input[name=category]:checked').map(function() {
         return this.value;
-    }).get().join('+');
+    }).get();
 
-    var theme_name = jQuery('input[name=themes]:checked').map(function() {
-        return this.value;
-    }).get().join('+');
+    if ((jQuery('input[name=themes]').length)>0) {
+        var theme_name = jQuery('input[name=themes]:checked').map(function () {
+            return this.value;
+        }).get();
+    }
 
-    var vendor_name = jQuery('input[name=vendor]:checked').map(function() {
-        return this.value;
-    }).get().join('+');
+    if ((jQuery('input[name=vendor]').length)>0) {
+        var vendor_name = jQuery('input[name=vendor]:checked').map(function () {
+            return this.value;
+        }).get();
+    }
 
-    var price_val = jQuery('.price_slider').val().replace(',', '-');
+    if ((jQuery('.price_slider').length)>0) {
+        var price_val = jQuery('.price_slider').val().replace(',', '-');
+    }
 
     if (jQuery('#delivery_date_2').length>0) {
         var date = jQuery('#delivery_date_2').val();
@@ -1852,35 +1857,53 @@ function filter(){
     }
 
 
+    // for theme page
+    if (typeof theme !== "undefined") {
+        theme_name = theme;
+    }
+
+    // for vendor profile page
+    if (typeof vendor_profile !== "undefined") {
+        vendor_name = vendor_profile;
+    }
+
     if (slug != '') {
         url_path += '&slug='+slug;
+        ajax_data.slug = slug;
     }
 
     if (search != '') {
         url_path += '&search=' + search;
+        ajax_data.search = search;
     }
 
     if (category_name != '') {
-        url_path += '&category=' + category_name;
+        url_path += '&category[]=' + category_name;
+        ajax_data.category = category_name;
     }
     if(theme_name != '') {
         url_path += '&themes=' + theme_name;
+        ajax_data.themes = theme_name;
     }
 
     if(vendor_name != '') {
         url_path += '&vendor=' + vendor_name;
+        ajax_data.vendor = vendor_name;
     }
 
     if (price_val != '') {
         url_path += '&price=' + price_val;
+        ajax_data.price = price_val;
     }
 
     if(date != '') {
         url_path += '&date=' + date;
+        ajax_data.date = date;
     }
 
     if(areas != '') {
         url_path += '&location=' + areas;
+        ajax_data.location = areas;
     }
 
     var path = load_items;
@@ -1888,24 +1911,13 @@ function filter(){
     jQuery.ajax({
         type:'GET',
         url:path,
-        data:{
-            item_ids: category_name,
-            themes : theme_name,
-            vendor : vendor_name,
-            search : search,
-            price : price_val,
-            date : date,
-            location: areas,
-            slug: slug,
-            _csrf : csrfToken
-        },
+        data:ajax_data,
         success:function(data){
-            window.history.pushState('test', 'Title', url_path);
-            jQuery('.events_listing ul').html(data);
-            // Every fourth li change margin
-            jQuery('.listing_right .events_listing ul li:nth-child(4n)').addClass('margin-rightnone');
+            //window.history.pushState('test', 'Title', $.param(ajax_data));
+            window.history.pushState(null, null, path+'?'+$.param(ajax_data));
+            jQuery('.listing_right').html(data);
             jQuery('#planloader').hide();
-            jQuery('.events_listing').css({'opacity' : '1.0', 'position' : 'relative'});
+            jQuery('.listing_right').css({'opacity' : '1.0', 'position' : 'relative'});
             imgError(); // to initialize after result comes
         }
     }).done(function(){
@@ -1933,7 +1945,7 @@ function filter(){
 
 
 /* BEGIN RESPONSIVE FILTER NAVIGATION */
-var trigger = jQuery('.filter_butt'),
+/*var trigger = jQuery('.filter_butt'),
     overlay = jQuery('.overlay'),
     isClosed = false;
 
@@ -1954,16 +1966,18 @@ function filter_butt() {
         trigger.addClass('ses_dct');
         isClosed = true;
     }
-}
+}*/
 
-jQuery("#left_side_cate nav").removeClass ("navbar navbar-fixed-top ");
+/*jQuery("#left_side_cate nav").removeClass ("navbar navbar-fixed-top ");
 jQuery("#left_side_cate ul").removeClass ("nav sidebar-nav ");
 jQuery("#left_side_cate nav").removeAttr ("id")
+
 if (jQuery(window).width() < 991) {
     jQuery("#left_side_cate nav").addClass ("navbar navbar-fixed-top ");
     jQuery("#left_side_cate ul").addClass ("nav sidebar-nav ");
     jQuery("#left_side_cate nav").attr ('id','sidebar-wrapper')
 }
+*/
 
 function imgError() {
     $("img").error(function () {
@@ -1971,3 +1985,92 @@ function imgError() {
     });
 }
 imgError(); // to initialize on page load
+
+
+
+/* =========================== Event Actions ===================================*/
+
+
+function addinvitees()
+{
+    var action = '';
+
+    if(jQuery('#invitees_name').val() =='')
+    {
+        alert('Enter invitees name.');
+        return false;
+    }
+
+    if(jQuery('#invitees_email').val() =='')
+    {
+        alert('Enter invitees email');
+        return false;
+
+    } else if(isEmail(jQuery('#invitees_email').val()) == false ){
+        alert('Enter valid email');
+        return false;
+    }
+
+    var act = '';
+    if(jQuery('#invitees_id').val() =='')
+    {
+        action = 'addinvitees';
+        act = 'new';
+    }
+    else{
+        action = 'updateinvitees';
+        act = 'updated';
+    }
+
+    var path = add_invite;
+
+    jQuery.ajax({
+        type :'POST',
+        url:path,
+        data: {
+            invitees_id: jQuery('#invitees_id').val(),
+            event_id: event_id,
+            name: jQuery('#invitees_name').val(),
+            email:jQuery('#invitees_email').val(),
+            phone_number: jQuery('#invitees_phone').val(),
+            event_name:event_name,
+            action:act
+        },
+        success:function(data)
+        {
+            if(data==2)
+            {
+                jQuery('.invite_error').show();
+            }
+            else if(data==1)
+            {
+                jQuery('#login_success').modal('show');
+                jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\">Success! Invitee '+act+' successfully!</span>');
+                window.setTimeout(function(){location.reload()},2000)
+            }
+            // jQuery.pjax.reload({container:'#itemtype'});
+        }
+    });
+}
+function inviteeDetail(invitee_id)
+{
+    jQuery.ajax({
+        url: invite_detail,
+        type : 'POST',
+        data :{id:invitee_id},
+        dataType:'JSON',
+        success : function(data)
+        {
+            jQuery('#invitees_id').val(data.invitees_id);
+            jQuery('#invitees_name').val(data.name);
+            jQuery('#invitees_email').val(data.email);
+            jQuery('#invitees_phone').val(data.phone_number);
+            jQuery('#submit').val('Update');
+        }
+
+    });
+    return false;
+}
+
+/* =========================== Event Actions ===================================*/
+

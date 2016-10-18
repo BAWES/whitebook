@@ -13,6 +13,7 @@ use common\models\Smtp;
 use common\models\CategoryPath;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use yii\data\ArrayDataProvider;
 
 class ThemesController extends BaseController
 {
@@ -77,41 +78,28 @@ class ThemesController extends BaseController
     }
 
 
-    public function actionDetail($slug = '', $category = '',$subcategory = '', $vendor='', $price='')
+    public function actionDetail($themes, $slug)
     {
-        if (!$slug) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
+        $data = Yii::$app->request->get();
 
-        $theme = Themes::findOne(['slug' => $slug, 'trash' => 'Default']);
+        $theme = Themes::findOne(['slug' => $themes, 'trash' => 'Default']);
 
-        if (!$theme) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $url = Url::to([
-            'themes/detail',
-            'slug' => $slug,
-            'subcategory' => $subcategory,
-            'vendor' => $vendor,
-            'price' => $price
-        ]);
+        $theme_result  = Vendoritemthemes::find()->select('item_id')
+            ->where(['trash' => "Default"])
+            ->andWhere(['theme_id' => $theme->theme_id])
+            ->asArray()
+            ->all();
+        $theme_items = ArrayHelper::map($theme_result,'item_id','item_id');
 
         Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.ucfirst($theme->theme_name);
 
-        $category_id = '';
-        $category_slug = '';
 
-        if (!empty($category) && $category != 'All') {                    
-            $category_val = Category::find()->select('category_id')
-                ->where(['slug' => $category])
-                ->asArray()
-                ->one();
-            $category_id = $category_val['category_id'];
-            $category_slug = $category; 
+        if ($slug != 'all') {
+            $category = Category::find()->select('category_id')->where(['slug' => $slug])->asArray()->one();
+            $active_vendors = Vendor::loadvalidvendorids($category['category_id']);
+        } else {
+            $active_vendors = Vendor::loadvalidvendorids();
         }
-
-        $active_vendors = Vendor::loadvalidvendorids($category_id);
 
         $items_query = CategoryPath::find()
             ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
@@ -129,43 +117,48 @@ class ThemesController extends BaseController
                 '{{%vendor_item}}.trash' => 'Default',
                 '{{%vendor_item}}.item_approved' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
-            ]);            
-        
-        if ($category_id) {
-            $items_query->andWhere(['{{%category_path}}.path_id' => $category_id]);
+                '{{%vendor_item}}.item_id' => $theme_items,
+            ]);
+        $cats = $slug;
+        $categories = [];
+        if (isset($data['category']) && count($data['category'])>0) {
+            $categories = array_merge($categories,$data['category']);
+            $cats = implode("','",$categories);
+        }
+        if ($cats != 'all') {
+            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
+            $items_query->andWhere($q);
         }
 
-        if (Yii::$app->request->isAjax) {
-
-            if ($subcategory != '') {
-                $subcat = str_replace(' ', '","', $subcategory);
-                $items_query->andWhere('{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ("'.$subcat.'") and trash = "Default")');
-            }
-
-            if ($vendor != '') {
-                $items_query->andWhere(['IN', '{{%vendor}}.slug', explode(' ', $vendor)]);
-            }
-
-            if ($price != '') {
-
-                $price_condition = [];
-
-                foreach (explode('+', $price) as $key => $value) {
-                    $arr_min_max = explode('-', $value);
-                    $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
-                }
-
-                $items_query->andWhere(implode(' OR ', $price_condition));
-            }
-        } else {
-            $items_query->andWhere(['IN', '{{%vendor}}.vendor_id', $active_vendors]);
+        if (isset($data['vendor']) && $data['vendor'] != '') {
+            $items_query->andWhere(['in', '{{%vendor}}.slug', $data['vendor']]);
         }
+
+        //price filter
+        if (isset($data['price']) && $data['price'] != '') {
+
+            $price_condition = [];
+
+            $arr_min_max = explode('-', $data['price']);
+            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
+
+
+            $items_query->andWhere(implode(' OR ', $price_condition));
+        }
+
 
         $items_query
             ->groupBy('{{%vendor_item}}.item_id')
             ->orderBy('{{%image}}.vendorimage_sort_order', SORT_ASC);
         
         $items = $items_query->asArray()->all();
+
+        $provider = new ArrayDataProvider([
+            'allModels' => $items,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
        
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
@@ -175,8 +168,8 @@ class ThemesController extends BaseController
 
         if (Yii::$app->request->isAjax) {
 
-            return $this->renderPartial('search_ajax', [
-                'items' => $items,
+            return $this->renderPartial('@frontend/views/common/items', [
+                'items' => $provider,
                 'customer_events_list'=>[]
             ]);
         }
@@ -188,21 +181,18 @@ class ThemesController extends BaseController
             $customer_events_list = $usermodel->get_customer_wishlist_details(
                 Yii::$app->user->identity->id
             );
-
         } else {
 
             $customer_events_list = [];
         }
 
-        return $this->render('search', [
-            'url' => $url,
+        return $this->render('listing', [
             'theme' => $theme,
             'items' => $items,
+            'provider' => $provider,
             'vendor' => $vendor,
             'slug' => $slug,
-            'category_slug' => $category_slug,
             'customer_events_list' => $customer_events_list,
-            'category_id' => $category_id
         ]);
     }
 }

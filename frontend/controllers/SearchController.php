@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\data\ArrayDataProvider;
 use common\models\Vendoritem;
 use frontend\models\Vendor;
 use frontend\models\Themes;
@@ -76,41 +77,14 @@ class SearchController extends BaseController
 
             $items_query->andWhere(implode(' OR ', $price_condition));
         }
+
         //theme filter
         if (isset($data['themes']) && $data['themes'] != '') {
-            $theme = explode($explode, $data['themes']);
-            foreach ($theme as $key => $value) {
-                $themes[] = \common\models\Themes::find()
-                    ->select('theme_id')
-                    ->where(['slug' => [$value]])
-                    ->asArray()
-                    ->all();
-            }
 
-            $all_valid_themes = array();
-            foreach ($themes as $key => $value) {
-                $get_themes = \common\models\Vendoritemthemes::find()
-                    ->select('theme_id, item_id')
-                    ->where(['trash' => "Default"])
-                    ->andWhere(['theme_id' => [$value[0]['theme_id']]])
-                    ->asArray()
-                    ->all();
-
-                foreach ($get_themes as $key => $value) {
-                    $all_valid_themes[] = $value['item_id'];
-                }
-            }
-
-            if (count($all_valid_themes)==1) {
-                $all_valid_themes = $all_valid_themes[0];
-            } else {
-                $all_valid_themes = implode('","', $all_valid_themes);
-            }
-
-            $items_query->andWhere('{{%vendor_item}}.item_id IN("'.$all_valid_themes.'")');
-
-        }//if themes
-
+            $items_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
+            $items_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
+            $items_query->andWhere(['IN', '{{%theme}}.slug', $data['themes']]);
+        }
 
         //if search query given
         if ($search != 'All') {
@@ -122,6 +96,7 @@ class SearchController extends BaseController
             ->asArray()
             ->all();
 
+        $count = sizeof($items);
 
         foreach ($items as $data) {
             $k[] = $data['item_id'];
@@ -169,15 +144,23 @@ class SearchController extends BaseController
             $customer_events_list = $usermodel->get_customer_wishlist_details($customer_id);
         }
 
+        $provider = new ArrayDataProvider([
+            'allModels' => $items,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
         if (Yii::$app->request->isAjax) {
-            return $this->renderPartial('@frontend/views/plan/product_list_ajax', [
-                'items' => $items,
+            return $this->renderPartial('@frontend/views/common/items', [
+                'items' => $provider,
                 'customer_events_list' => $customer_events_list
             ]);
         }
 
         return $this->render('search', [
-            'items' => $items,
+            'count' => $count,
+            'items' => $provider,
             'themes' => $themes1,
             'vendor' => $vendor,
             'slug' => $slug,

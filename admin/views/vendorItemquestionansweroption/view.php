@@ -3,12 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Vendoritemquestionansweroption */
-
 $this->title = $model->answer_id;
 $this->params['breadcrumbs'][] = ['label' => 'Vendoritemquestionansweroptions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="vendoritemquestionansweroption-view">
 

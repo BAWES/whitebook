@@ -2,16 +2,19 @@
 
 namespace admin\controllers;
 
-use yii\helpers\ArrayHelper;
 use Yii;
-use admin\models\Addresstype;
-use admin\models\Admin;
-use admin\models\Authitem;
-use admin\models\AddresstypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
+use common\models\AddressQuestion;
+use common\models\CustomerAddress;
+use common\models\CustomerAddressResponse;
+use admin\models\Addresstype;
+use admin\models\Admin;
+use admin\models\Authitem;
+use admin\models\AddresstypeSearch;
 
 /**
  * AddresstypeController implements the CRUD actions for Addresstype model.
@@ -179,8 +182,21 @@ class AddresstypeController extends Controller
             $model = $this->findModel($id);
             $model->trash = 'Deleted';
             $model->load(Yii::$app->request->post());
-            $model->save();  // equivalent to $model->update();
+            $model->save();  
             
+            //delete all question for this type 
+            AddressQuestion::deleteAll(['address_type_id' => $id]);
+
+            //delete all address question response for this type 
+            $addresses = CustomerAddress::findAll(['address_type_id' => $id]);
+
+            foreach ($addresses as $key => $value) {
+                CustomerAddressResponse::deleteAll(['address_id' => $value->address_id]);
+            }
+            
+            //delete all address for this type 
+            CustomerAddress::deleteAll(['address_type_id' => $id]);
+
             Yii::$app->session->setFlash('success', 'Address Type Deleted successfully!');
 
             return $this->redirect(['index']);

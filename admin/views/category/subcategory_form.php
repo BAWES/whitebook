@@ -1,18 +1,15 @@
 <?php
 
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
-
 use common\models\Category;
 use common\models\SubCategory;
 use common\models\CategorySearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
-/* @var $this yii\web\View */
-/* @var $model common\models\Category */
-/* @var $form yii\widgets\ActiveForm */
+
 ?>
 
 <div class="category-form">
@@ -20,40 +17,23 @@ use yii\helpers\ArrayHelper;
     
 	<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 	
-    
-<div class="form-group"><?= $form->field($model, 'parent_category_id',['template' => "{label}<div class='controls'>{input}</div>{hint}
-{error}"])->dropDownList($subcategory, ['prompt'=>'Select...']) ?></div>
+    <?= $form->field($model, 'parent_category_id')->dropDownList($subcategory, ['prompt'=>'Select...']) ?></div>
 
-<div class="form-group">
-	<?= $form->field($model, 'category_name',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+	<?= $form->field($model, 'category_name')->textInput(['maxlength' => 128])?>
 
-<div class="form-group">
-	<?= $form->field($model, 'category_name_ar',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128])?>
-</div> 
+	<?= $form->field($model, 'category_name_ar')->textInput(['maxlength' => 128])?>
 
-<div class="form-group">
-	<?= $form->field($model, 'category_meta_title',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-</div> 
-    <div class="form-group">
-	<?= $form->field($model, 'category_meta_keywords',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-</div> 
-    <div class="form-group">
-	<?= $form->field($model, 'category_meta_description',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-</div>
+	<?= $form->field($model, 'category_meta_title')->textArea(['maxlength' => 250])?>
+
+	<?= $form->field($model, 'category_meta_keywords')->textArea(['maxlength' => 250])?>
+
+	<?= $form->field($model, 'category_meta_description')->textArea(['maxlength' => 250])?>
+
+	<?= $form->field($model, 'category_allow_sale')->checkbox(['yes' => 'yes']) ?>
+
+	<?= $form->field($model, 'top_ad')->textArea(['maxlength' => 250])?>
 	
-	<div class="form-group">   
-	<?= $form->field($model, 'category_allow_sale',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}" 
-	])->checkbox(['yes' => 'yes']) ?>
-    </div>    
-
-  <div class="form-group"><br>
-		<?= $form->field($model, 'top_ad',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
- 	</div>
-
-    <div class="form-group">
-		<?= $form->field($model, 'bottom_ad',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textArea(['maxlength' => 250])?>
-	</div>
+	<?= $form->field($model, 'bottom_ad')->textArea(['maxlength' => 250])?>
 
     <div class="form-group" style="margin-top:10px;">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

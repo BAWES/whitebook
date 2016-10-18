@@ -23,11 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'rowOptions' => function ($data) {
-                            if ($data->status($data->customer_id)) {
-                                return ['class' => 'danger'];
-                            } else {return [];
-                            }
-                         },
+            if ($data->status($data->customer_id)) {
+                return ['class' => 'danger'];
+            } else {return [];
+            }
+         },
         'filterModel' => $searchModel,
          'showFooter'=>true,
         'columns' => [
