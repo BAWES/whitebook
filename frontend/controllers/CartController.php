@@ -111,9 +111,8 @@ class CartController extends BaseController
             return $this->redirect(Yii::$app->request->referrer);
         }
 
-        return $this->render('confirm', [
-            'items' => $items
-        ]);
+        //redirect to checkout after cart validation 
+        return $this->redirect(['checkout/index']);
     }
 
     /*  
