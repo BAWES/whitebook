@@ -816,7 +816,7 @@ class CategoryController extends Controller
             }
 
             $vendor_item = VendorItemToCategory::find()
-                ->where(['category' => $id])
+                ->where(['category_id' => $id])
                 ->count();
             
             if (!empty($vendor_item)) {                
