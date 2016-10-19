@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\models\Location;
-use common\models\Addresstype;
+use common\models\AddressType;
 use common\models\City;
 
 $this->title = 'Customer Details';

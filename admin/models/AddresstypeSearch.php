@@ -4,7 +4,7 @@ namespace admin\models;
 
 use Yii;
 use yii\base\Model;
-use admin\models\Addresstype;
+use admin\models\AddressType;
 use admin\models\AddresstypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -14,9 +14,9 @@ use yii\base;
 use yii\data\ActiveDataProvider;
 
 /**
- * AddresstypeSearch represents the model behind the search form about `common\models\Addresstype`.
+ * AddresstypeSearch represents the model behind the search form about `common\models\AddressType`.
  */
-class AddresstypeSearch extends Addresstype
+class AddresstypeSearch extends AddressType
 {
     /**
      * @inheritdoc
@@ -46,7 +46,7 @@ class AddresstypeSearch extends Addresstype
      */
     public function search($params)
     {
-		$query = Addresstype::find()
+		$query = AddressType::find()
         ->where(['!=', 'trash', 'Deleted'])
 		->orderBy('type_id');
 

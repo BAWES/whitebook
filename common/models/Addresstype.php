@@ -24,7 +24,7 @@ use yii\db\Expression;
 *
 * @property CustomerAddress[] $customerAddresses
 */
-class Addresstype extends \yii\db\ActiveRecord
+class AddressType extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
@@ -97,7 +97,7 @@ class Addresstype extends \yii\db\ActiveRecord
 
     public static function loadAddress()
     {
-        $Addresstype = Addresstype::find()
+        $Addresstype = AddressType::find()
             ->select(['type_id','type_name'])
             ->where(['status'=>'Active'])
             ->asarray()
@@ -108,7 +108,7 @@ class Addresstype extends \yii\db\ActiveRecord
 
     public static function getAddresstype($id)
     {
-        $model = Addresstype::find()
+        $model = AddressType::find()
             ->where(['type_id' => $id])
             ->one();
 

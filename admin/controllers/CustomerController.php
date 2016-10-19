@@ -12,7 +12,7 @@ use yii\filters\AccessControl;
 use arturoliveira\ExcelView;
 use admin\models\Customer;
 use admin\models\Authitem;
-use admin\models\Addresstype;
+use admin\models\AddressType;
 use admin\models\AddressQuestion;
 use admin\models\CustomerSearch;
 use common\models\City;
@@ -193,7 +193,7 @@ class CustomerController extends Controller
         }
 
         $customer_address_modal = new CustomerAddress();
-        $addresstype = Addresstype::loadAddress();
+        $addresstype = AddressType::loadAddress();
         $country = Country::loadcountry();
 
         return $this->render('address', [

@@ -19,7 +19,7 @@ use Yii;
  *
  * @property CustomerAddress[] $customerAddresses
  */
-class Addresstype extends \common\models\Addresstype
+class AddressType extends \common\models\AddressType
 {
 
     public function behaviors()
@@ -38,7 +38,7 @@ class Addresstype extends \common\models\Addresstype
 
     public static function loadAddresstype() {
 
-        $query = Addresstype::find()
+        $query = AddressType::find()
                     ->select(['type_id', 'type_name', 'type_name_ar'])
                     ->where([
                         'status' => 'Active',
@@ -60,7 +60,7 @@ class Addresstype extends \common\models\Addresstype
 
   	public static function loadAddress()
   	{
-    		$addresstype = Addresstype::find()
+    		$addresstype = AddressType::find()
       		->select(['type_id','type_name'])
       		->where(['status'=>'Active'])
           ->andWhere(['trash'=>'Default'])

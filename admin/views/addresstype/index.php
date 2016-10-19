@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 
 
-use common\models\Addresstype;
+use common\models\AddressType;
 use common\models\AddresstypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

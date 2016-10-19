@@ -24,7 +24,7 @@ use frontend\models\Website;
 use frontend\models\Eventitemlink;
 use frontend\models\Wishlist;
 use frontend\models\Users;
-use frontend\models\Addresstype;
+use frontend\models\AddressType;
 use frontend\models\AddressQuestion;
 use frontend\models\Customer;
 use frontend\models\Themes;
@@ -818,7 +818,7 @@ class UsersController extends BaseController
         }
 
         $customer_address_modal = new CustomerAddress();
-        $addresstype = Addresstype::loadAddresstype();
+        $addresstype = AddressType::loadAddresstype();
 
         return $this->render('address', [
             'addresses' => $addresses,
@@ -885,7 +885,7 @@ class UsersController extends BaseController
         return $this->render('address_edit', [
             'address' => $customer_address,
             'address_id' => $address_id,
-            'addresstype' => Addresstype::loadAddresstype()
+            'addresstype' => AddressType::loadAddresstype()
         ]);
     }
 
