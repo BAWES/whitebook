@@ -97,7 +97,7 @@ class Deliverytimeslot extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getVendor()
+    public function getVendor()
     {
         return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }

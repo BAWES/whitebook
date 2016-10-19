@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
 use common\models\AddressQuestion;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
-use admin\models\Addresstype;
+use admin\models\AddressType;
 use admin\models\Admin;
 use admin\models\Authitem;
 use admin\models\AddresstypeSearch;
@@ -85,7 +85,7 @@ class AddresstypeController extends Controller
     }
 
     /**
-     * Displays a single Addresstype model.
+     * Displays a single AddressType model.
      *
      * @param string $id
      *
@@ -99,7 +99,7 @@ class AddresstypeController extends Controller
     }
 
     /**
-     * Creates a new Addresstype model.
+     * Creates a new AddressType model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
@@ -109,11 +109,11 @@ class AddresstypeController extends Controller
         $access = Authitem::AuthitemCheck('1', '14');
 
         if (yii::$app->user->can($access)) {
-            $model = new Addresstype();
+            $model = new AddressType();
 
             if($model->load(Yii::$app->request->post()) && $model->validate())
             {            
-                $model->status = (Yii::$app->request->post()['Addresstype']['status']) ? 'Active' : 'Deactive';
+                $model->status = (Yii::$app->request->post()['AddressType']['status']) ? 'Active' : 'Deactive';
                 $model->save();
                 
                 Yii::$app->session->setFlash('success', 'Address Type created successfully!');
@@ -133,7 +133,7 @@ class AddresstypeController extends Controller
     }
 
     /**
-     * Updates an existing Addresstype model.
+     * Updates an existing AddressType model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -150,7 +150,7 @@ class AddresstypeController extends Controller
         
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
         
-                $model->status = (Yii::$app->request->post()['Addresstype']['status']) ? 'Active' : 'Deactive';
+                $model->status = (Yii::$app->request->post()['AddressType']['status']) ? 'Active' : 'Deactive';
                 $model->save();
                 
                 Yii::$app->session->setFlash('success', 'Address Type Updated successfully!');
@@ -167,7 +167,7 @@ class AddresstypeController extends Controller
     }
 
     /**
-     * Deletes an existing Addresstype model.
+     * Deletes an existing AddressType model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param string $id
@@ -209,18 +209,18 @@ class AddresstypeController extends Controller
     }
 
     /**
-     * Finds the Addresstype model based on its primary key value.
+     * Finds the AddressType model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Addresstype the loaded model
+     * @return AddressType the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Addresstype::findOne($id)) !== null) {
+        if (($model = AddressType::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -237,7 +237,7 @@ class AddresstypeController extends Controller
         
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
         
-        $command = Addresstype::updateAll(['status' => $status], 'type_id= '.$data['cid']);
+        $command = AddressType::updateAll(['status' => $status], 'type_id= '.$data['cid']);
         
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');

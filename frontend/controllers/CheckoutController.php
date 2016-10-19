@@ -12,7 +12,7 @@ use common\models\CustomerAddressResponse;
 use common\models\Country;
 use common\models\Location;
 use common\models\PaymentGateway;
-use frontend\models\Addresstype;
+use frontend\models\AddressType;
 
 
 /**
@@ -65,7 +65,7 @@ class CheckoutController extends BaseController
 		}
 
 		$customer_address_modal = new CustomerAddress();
-        $addresstype = Addresstype::loadAddresstype();
+        $addresstype = AddressType::loadAddresstype();
         $country = Country::loadcountry();
 
         return $this->renderPartial('address', [

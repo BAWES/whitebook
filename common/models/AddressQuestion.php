@@ -1,7 +1,7 @@
 <?php
 namespace common\models;
 
-use common\models\Addresstype;
+use common\models\AddressType;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
@@ -88,7 +88,7 @@ class AddressQuestion extends \yii\db\ActiveRecord
     }
 
     public function getType(){
-        return $this->hasOne(Addresstype::ClassName(), ['type_id' => 'address_type_id']);
+        return $this->hasOne(AddressType::ClassName(), ['type_id' => 'address_type_id']);
     }
 
     public function getTypeName(){
@@ -97,7 +97,7 @@ class AddressQuestion extends \yii\db\ActiveRecord
 
     public static function  getAddresstype($id)
     {
-        $model = Addresstype::find()->where(['type_id'=>$id])->one();
+        $model = AddressType::find()->where(['type_id'=>$id])->one();
         return $model->type_name;
     }
 

@@ -29,7 +29,7 @@ use common\models\City;
 use frontend\models\Website;
 use frontend\models\Eventitemlink;
 use frontend\models\Wishlist;
-use frontend\models\Addresstype;
+use frontend\models\AddressType;
 use frontend\models\AddressQuestion;
 use frontend\models\Customer;
 use frontend\models\Themes;
