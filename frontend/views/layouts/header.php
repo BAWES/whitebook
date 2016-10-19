@@ -547,13 +547,17 @@ $action = Yii::$app->controller->action->id;
             <li class="ma5-li-3"><a href="<?= Url::toRoute('/directory/index', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
 
 
-            <div class="logout_part" style="border:none;">
-<?php if (Yii::$app->user->isGuest) { ?>
-                    <li class="<?php if ($action == "about-us") {
-        echo "active";
-    } ?>"><a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'About Us'); ?>"><?php echo Yii::t('frontend', 'About Us'); ?></a></li>
-                    <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a></li>
-<?php } else { ?>
+        <div class="logout_part" style="border:none;">
+            <li class="<?php if ($action == "contact-us") { echo "active"; } ?>">
+                <a href="<?= Url::toRoute('/contact-us', true); ?>" title="<?php echo Yii::t('frontend', 'About and Contact'); ?>"><?php echo Yii::t('frontend', 'About and Contact'); ?></a>
+            </li>
+                    
+
+        <?php if (Yii::$app->user->isGuest) { ?>
+            <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a>
+            </li>
+
+        <?php } else { ?>
         
         <li>
             <a href="<?php echo Url::to(['cart/index']); ?>">
