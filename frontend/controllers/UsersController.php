@@ -21,7 +21,7 @@ use common\models\City;
 use common\models\Events;
 use frontend\models\EventInviteesSearch;
 use frontend\models\Website;
-use frontend\models\Eventitemlink;
+use frontend\models\EventItemlink;
 use frontend\models\Wishlist;
 use frontend\models\Users;
 use frontend\models\AddressType;
@@ -355,17 +355,17 @@ class UsersController extends BaseController
                     $item_id = $request->post('item_id');
                     $event_id = $event_modal->event_id;
                     
-                    $check = Eventitemlink::find()
+                    $check = EventItemlink::find()
                         ->select(['link_id'])
                         ->where(['event_id'=> $event_id])
                         ->andwhere(['item_id'=> $item_id])
                         ->count();
 
                     if($check > 0) {
-                        return Eventitemlink::EVENT_ITEM_LINK_EXIST;
+                        return EventItemlink::EVENT_ITEM_LINK_EXIST;
                     } else {
                         $event_date = date('Y-m-d H:i:s');
-                        $event_item_modal = new Eventitemlink;
+                        $event_item_modal = new EventItemlink;
                         $event_item_modal->event_id=$event_id;
                         $event_item_modal->item_id=$item_id;
                         $event_item_modal->link_datetime=$event_date;
@@ -373,7 +373,7 @@ class UsersController extends BaseController
                         $event_item_modal->modified_datetime=$event_date;
                         $event_item_modal->save();
 
-                       return Eventitemlink::EVENT_ITEM_CREATED;
+                       return EventItemlink::EVENT_ITEM_CREATED;
                    }
                 }
 
@@ -740,7 +740,7 @@ class UsersController extends BaseController
 
         if($event) {
 
-            $command = Eventitemlink::deleteAll([
+            $command = EventItemlink::deleteAll([
                 'link_id' => $data['item_link_id'],
                 'event_id'=> $data['event_id']
             ]);   

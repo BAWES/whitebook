@@ -33,7 +33,7 @@ use common\models\Vendoritemthemes;
 use common\models\VendorItemToCategory;
 use common\models\CustomerCart;
 use common\models\Priorityitem;
-use common\models\Eventitemlink;
+use common\models\EventItemlink;
 use common\models\Featuregroupitem;
 use common\models\Vendorlocation;
 use common\models\Vendoritem;
@@ -568,7 +568,7 @@ class VendorController extends Controller
         VendorItemToCategory::deleteAll($sub_query);
         CustomerCart::deleteAll($sub_query);
         Priorityitem::deleteAll($sub_query);
-        Eventitemlink::deleteAll($sub_query);
+        EventItemlink::deleteAll($sub_query);
         Featuregroupitem::deleteAll($sub_query);
 
         //vendor related data 
