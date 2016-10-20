@@ -1,8 +1,6 @@
 <?php
 
 namespace backend\models;
-use backend\models\Vendoritem;
-use yii\helpers\ArrayHelper;
 
 use Yii;
 

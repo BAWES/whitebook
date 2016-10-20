@@ -3,7 +3,7 @@ namespace backend\models;
 use backend\models\Vendor;
 use Yii;
 
-class Vendoritem extends \common\models\Vendoritem
+class VendorItem extends \common\models\VendorItem
 {
     public function behaviors()
     {
@@ -17,7 +17,7 @@ class Vendoritem extends \common\models\Vendoritem
         
         $id = Vendor::getVendor('vendor_id');
 
-        return  Vendoritem::find()
+        return  VendorItem::find()
             ->where(['MONTH(created_datetime)' => $month])
             ->andwhere(['vendor_id' => $id])
             ->andwhere(['YEAR(created_datetime)' => $year])
@@ -32,7 +32,7 @@ class Vendoritem extends \common\models\Vendoritem
         
         $id = Vendor::getVendor('vendor_id');
 
-        return  Vendoritem::find()
+        return  VendorItem::find()
             ->where([
                 'MONTH(created_datetime)' => $month,
                 'YEAR(created_datetime)' => $year,

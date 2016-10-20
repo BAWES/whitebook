@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\web\view;
 use common\models\Featuregroup;
 use common\models\Featuregroupitem;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\Vendor;
 use common\models\Themes;
 use common\models\Image;

@@ -8,7 +8,7 @@ use frontend\models\EventInviteesSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Users;
-use frontend\models\Vendoritem;
+use frontend\models\VendorItem;
 use common\models\Events;
 
 use yii\db\Query;
@@ -112,7 +112,7 @@ class EventsController extends BaseController
             ->asArray()
             ->all();
 
-        $vendorlist = Vendoritem::find()
+        $vendorlist = VendorItem::find()
             ->select('{{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.vendor_id')
             ->joinWith('vendor')
             ->where(['IN', '{{%vendor_item}}.item_id', $arr_item_id])

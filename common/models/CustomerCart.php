@@ -4,12 +4,9 @@ namespace common\models;
 
 use Yii;
 use yii\db\Expression;
-use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use common\models\Vendorlocation;
-use common\models\Vendoritem;
-use common\models\BlockedDate;
+use common\models\VendorItem;
 
 /**
  * This is the model class for table "whitebook_customer_cart".
@@ -98,7 +95,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public function getItem()
     {
-        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
 
     public function getTimeslot()
@@ -110,7 +107,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         $errors = [];
 
-        $item = Vendoritem::find()->where([
+        $item = VendorItem::find()->where([
             'item_id' => $data['item_id'], 
             'item_for_sale' => 'Yes'
         ])->one();

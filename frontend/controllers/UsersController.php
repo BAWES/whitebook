@@ -28,7 +28,7 @@ use frontend\models\AddressType;
 use frontend\models\AddressQuestion;
 use frontend\models\Customer;
 use frontend\models\Themes;
-use frontend\models\Vendoritem;
+use frontend\models\VendorItem;
 use common\models\VendorItemToCategory;
 use common\models\Vendoritemthemes;
 

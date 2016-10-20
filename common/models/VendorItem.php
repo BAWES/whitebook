@@ -52,7 +52,7 @@ use yii\db\Expression;
 * @property VendorItemTheme[] $vendorItemThemes
 * @property Theme[] $themes
 */
-class Vendoritem extends \yii\db\ActiveRecord
+class VendorItem extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";
@@ -301,7 +301,7 @@ class Vendoritem extends \yii\db\ActiveRecord
         if(!isset($vid) && $vid =='') {
             $vid=Vendor::getVendor('vendor_id');
         }
-        return $s = Vendoritem::find()
+        return $s = VendorItem::find()
         ->where(['trash' => 'Default'])
         ->where(['vendor_id' => $vid])
         ->count();
@@ -328,7 +328,7 @@ class Vendoritem extends \yii\db\ActiveRecord
 
         public static function loadvendoritem()
         {
-            $item= Vendoritem::find()
+            $item= VendorItem::find()
             ->where(['trash' =>'Default','item_for_sale' =>'Yes'])
             ->all();
             $item=ArrayHelper::map($item,'item_id','item_name');
@@ -338,7 +338,7 @@ class Vendoritem extends \yii\db\ActiveRecord
 
         public static function vendoritemname($id)
         {
-            $item= Vendoritem::find()
+            $item= VendorItem::find()
             ->select(['item_name'])
             ->where(['=', 'item_id',$id])
             ->andwhere(['trash' =>'Default'])
@@ -348,7 +348,7 @@ class Vendoritem extends \yii\db\ActiveRecord
 
         public static function groupvendoritem($categoryid, $subcategory)
         {
-            $vendor_item = Vendoritem::find()
+            $vendor_item = VendorItem::find()
             ->where(['=', 'category_id', $categoryid])
             ->andwhere(['=', 'subcategory_id',$subcategory])
             ->all();
@@ -361,7 +361,7 @@ class Vendoritem extends \yii\db\ActiveRecord
         /* backend */
         public static function loaditems()
         {
-            $item= Vendoritem::find()
+            $item= VendorItem::find()
             ->where(['!=', 'item_status', 'Deactive'])
             ->andwhere(['!=', 'trash', 'Deleted'])
             ->andwhere(['vendor_id'=> Vendor::getVendor('vendor_id')])
@@ -395,7 +395,7 @@ class Vendoritem extends \yii\db\ActiveRecord
         }
 
         public static function get_featured_product() {
-          return $feature = \frontend\models\Vendoritem::find()
+          return $feature = \frontend\models\VendorItem::find()
                       ->select(['{{%vendor_item}}.*'])
                       ->where(['item_status' => 'Active'])
                       ->with('vendor')

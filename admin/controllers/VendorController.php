@@ -36,7 +36,7 @@ use common\models\Priorityitem;
 use common\models\EventItemlink;
 use common\models\Featuregroupitem;
 use common\models\Vendorlocation;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\VendorCategory;
 use common\models\BlockedDate;
 use common\models\Deliverytimeslot;
@@ -578,7 +578,7 @@ class VendorController extends Controller
         Vendorlocation::deleteAll(['vendor_id' => $id]);
         VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
         Vendorpackages::deleteAll(['vendor_id' => $id]);
-        Vendoritem::deleteAll(['vendor_id' => $id]);
+        VendorItem::deleteAll(['vendor_id' => $id]);
 
         Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
 

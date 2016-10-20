@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Cms;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\Siteinfo;
 use common\models\Events;
 use common\models\City;
@@ -44,7 +44,7 @@ class SiteController extends BaseController
         $featured_product = array();
         
         if (!Yii::$app->user->isGuest) {
-            $featured_product = Vendoritem::get_featured_product();
+            $featured_product = VendorItem::get_featured_product();
         }
         
         return $this->render('index', [
@@ -71,7 +71,7 @@ class SiteController extends BaseController
         $featured_product = array();
         
         if (!Yii::$app->user->isGuest) {
-            $featured_product = Vendoritem::get_featured_product();
+            $featured_product = VendorItem::get_featured_product();
         }
 
         $ads = $website_model->get_home_ads();
@@ -228,7 +228,7 @@ class SiteController extends BaseController
 
         $data = Yii::$app->request->post();
         
-        $loadvendorid = \common\models\Vendoritem::find()
+        $loadvendorid = \common\models\VendorItem::find()
             ->select(['vendor_id'])
             ->Where(['category_id'=>$data['cat_id']])
             ->asArray()

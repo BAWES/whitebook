@@ -10,7 +10,7 @@ use common\models\VendorCategory;
 use common\models\Siteinfo;
 use common\models\VendorOrderAlertEmails;
 use backend\models\Vendor;
-use backend\models\Vendoritem;
+use backend\models\VendorItem;
 use backend\models\VendorLogin;
 use backend\models\VendorPassword;
 use yii\db\Query;
@@ -57,9 +57,9 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $vendor_id = Yii::$app->user->getId();
-        $vendoritemcnt = Vendoritem::vendoritemcount();
-        $monthitemcnt = Vendoritem::vendoritemmonthcount();
-        $dateitemcnt = Vendoritem::vendoritemdatecount();
+        $vendoritemcnt = VendorItem::vendoritemcount();
+        $monthitemcnt = VendorItem::vendoritemmonthcount();
+        $dateitemcnt = VendorItem::vendoritemdatecount();
         $packageenddate = Vendor::getVendor_packagedate($vendor_id);
 
         return $this->render('index', [
@@ -146,9 +146,9 @@ class SiteController extends Controller
         $model = new VendorPassword;
         $model->scenario = 'change';
 
-        $vendoritemcnt = Vendoritem::vendoritemcount();
-        $monthitemcnt = Vendoritem::vendoritemmonthcount();
-        $dateitemcnt = Vendoritem::vendoritemdatecount();
+        $vendoritemcnt = VendorItem::vendoritemcount();
+        $monthitemcnt = VendorItem::vendoritemmonthcount();
+        $dateitemcnt = VendorItem::vendoritemdatecount();
         $packageenddate = Vendor::getVendor_packagedate(Yii::$app->user->identity->id);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {

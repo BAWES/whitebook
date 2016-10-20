@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -98,6 +98,6 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
     
     public function getVendoritem()
     {
-        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     } 
 }

@@ -20,7 +20,7 @@ use admin\models\Authitem;
 use admin\models\Category;
 use admin\models\Vendor;
 use admin\models\CategorySearch;
-use admin\models\Vendoritem;
+use admin\models\VendorItem;
 
 /**
  * CategoryController implements the CRUD actions for Category model.

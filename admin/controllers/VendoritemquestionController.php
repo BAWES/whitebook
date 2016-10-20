@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use common\models\Category;
 use common\models\SubCategory;
 use common\models\Vendor;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 
 /**
  * VendoritemquestionController implements the CRUD actions for Vendoritemquestion model.
@@ -82,7 +82,7 @@ class VendoritemquestionController extends Controller
         $category = Category::loadcategoryname();
         $subcategory = Subcategory::loadsubcategoryname();
         $vendorname = Vendor::loadvendorname();
-        $vendoritem = Vendoritem::loadvendoritem();
+        $vendoritem = VendorItem::loadvendoritem();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->item_id = implode(',', $model->item_id);
@@ -93,7 +93,7 @@ class VendoritemquestionController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model, 'category' => $category, 'subcategory' => $subcategory, 'vendorname' => $vendorname,
-                'vendoritem' => $vendoritem,
+                'VendorItem' => $vendoritem,
             ]);
         }
     }
@@ -113,7 +113,7 @@ class VendoritemquestionController extends Controller
         $category = Category::loadcategoryname();
         $subcategory = Subcategory::loadsubcategoryname();
         $vendorname = Vendor::loadvendorname();
-        $vendoritem = Vendoritem::loadvendoritem();
+        $vendoritem = VendorItem::loadvendoritem();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->item_id = implode(',', $model->item_id);
@@ -123,7 +123,7 @@ class VendoritemquestionController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model, 'category' => $category, 'subcategory' => $subcategory, 'vendorname' => $vendorname,
-                'vendoritem' => $vendoritem,
+                'VendorItem' => $vendoritem,
             ]);
         }
     }

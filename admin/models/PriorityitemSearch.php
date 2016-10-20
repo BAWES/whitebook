@@ -4,7 +4,6 @@ namespace admin\models;
 
 use Yii;
 use yii\base\Model;
-use admin\models\Vendoritem;
 use yii\data\ActiveDataProvider;
 
 /**

@@ -8,7 +8,7 @@ use frontend\models\EventInviteesSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Users;
-use frontend\models\Vendoritem;
+use frontend\models\VendorItem;
 use common\models\Events;
 
 /**
@@ -181,7 +181,7 @@ class EventinviteesController extends BaseController
       
         $data = Yii::$app->request->post();
 
-        $model = Vendoritem::find()
+        $model = VendorItem::find()
             ->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name',
                 '{{%image}}.image_path'])
             ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')

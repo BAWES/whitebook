@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image-'.$data->item_id.'" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','javascript:void(0)',['id'=>'status',
 					'onclick'=>'change("'.$data->item_status.'","'.$data->item_id.'")']);
 				}, 
-				'filter' => \admin\models\Vendoritem::Activestatus(),
+				'filter' => \admin\models\VendorItem::Activestatus(),
 			
 			],
 			[
