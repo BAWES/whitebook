@@ -22,9 +22,9 @@ $model = new Website();
 <div id="home_slider">
     <?php
         if(Yii::$app->language == 'en'){
-            $url = 'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias;
+            $url = 'https://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias;
         }else{
-            $url = 'http://slider.thewhitebook.com.kw/embed_whitebook.php?alias=arabic-slider';
+            $url = 'https://slider.thewhitebook.com.kw/embed_whitebook.php?alias=arabic-slider';
         }
 
         $ch = curl_init();
@@ -182,17 +182,17 @@ if (!empty($feature_group_sql_result)) {
                             }
 
                             if($product_val['item_for_sale'] == 'Yes'){
-                                
-                                $item_url = Url::to(['shop/product', 
+
+                                $item_url = Url::to(['shop/product',
                                     'slug' => $product_val["slug"]
                                 ]);
 
                             } else {
-                                
-                                $item_url = Url::to(['product/product', 
+
+                                $item_url = Url::to(['product/product',
                                     'slug' => $product_val["slug"]
                                 ]);
-                                
+
                             }
 
                             ?>
