@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Url;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\Itemtype;
 use admin\models\Category;
 use common\models\Package;
@@ -176,7 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php foreach ($dataProvider->query as $log) { ?>
         <tr>
             <td><?= Itemtype::itemtypename($log['type_id']); ?></td>
-            <td><?= Vendoritem::vendoritemname($log['item_id']); ?></td>
+            <td><?= VendorItem::vendoritemname($log['item_id']); ?></td>
             <td><?= Category::viewcategoryname($log['category_id']); ?></td>
             <td><?= ($log['item_status']); ?></td>
             <td><?= ($log['priority']); ?></td>

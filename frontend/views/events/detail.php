@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\Category;
 use yii\grid\GridView;
 use yii\web\view;
@@ -85,7 +85,7 @@ $cust_id = Yii::$app->user->getId();
 
 foreach ($cat_exist as $key => $value1) {
 
-$items = Vendoritem::find()
+$items = VendorItem::find()
     ->select(['{{%vendor}}.vendor_name','{{%vendor_item}}.item_id','{{%event_item_link}}.link_id',
         '{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
         '{{%vendor_item}}.item_name','{{%vendor_item}}.slug', '{{%vendor_item}}.item_id'

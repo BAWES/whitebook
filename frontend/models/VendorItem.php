@@ -6,11 +6,11 @@ use Yii;
 use frontend\models\Vendor;
 use common\models\VendorItemToCategory;
 
-class Vendoritem extends \common\models\Vendoritem
+class VendorItem extends \common\models\VendorItem
 {
    public static function vendoritem_search_details($name)
     {   
-        return  $item= Vendoritem::find()
+        return  $item= VendorItem::find()
             ->joinWith(['category'])
             ->joinWith(['vendor'])
             ->select(['item_name','whitebook_vendor_item.category_id','whitebook_vendor_item.vendor_id','whitebook_vendor_item.item_id','whitebook_vendor_item.slug as wvislug','whitebook_category.category_name','whitebook_category.slug as wcslug','whitebook_vendor.vendor_name','whitebook_vendor.slug as wvslug'])
@@ -25,13 +25,13 @@ class Vendoritem extends \common\models\Vendoritem
 
     public static function findvendoritem($slug)
     {       
-        return Vendoritem::find()
+        return VendorItem::find()
             ->where(['slug' => $slug])
             ->one();
     }
 
     public static function more_from_vendor($model) {
-        return Vendoritem::find()
+        return VendorItem::find()
             ->where([
                 'vendor_id' => $model->vendor_id,
                 'item_status' => 'Active',

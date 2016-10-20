@@ -6,7 +6,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use admin\models\Vendor;
 
-class Vendoritem extends \common\models\Vendoritem
+class VendorItem extends \common\models\VendorItem
 {
    /*
     *
@@ -25,7 +25,7 @@ class Vendoritem extends \common\models\Vendoritem
 
     public static function vendorpriorityitemitem($id)
     {
-        $item = Vendoritem::find()
+        $item = VendorItem::find()
             ->select(['item_id','item_name'])
             ->where(['=', 'item_id',$id])
             ->andwhere(['trash' =>'Default','item_for_sale' =>'Yes'])
@@ -36,7 +36,7 @@ class Vendoritem extends \common\models\Vendoritem
 
     public static function loadsubcategoryvendoritem($subcategory)
     {
-        $item= Vendoritem::find()
+        $item= VendorItem::find()
             ->where(['trash' =>'Default','item_for_sale' =>'Yes','subcategory_id'=>$subcategory])
             ->all();
 
@@ -45,12 +45,12 @@ class Vendoritem extends \common\models\Vendoritem
 
     public static function itemcount()
     {
-        return Vendoritem::find()->where(['trash' => 'Default'])->count();
+        return VendorItem::find()->where(['trash' => 'Default'])->count();
     }
 
     public static function item_pending_count()
     {
-        return Vendoritem::find()->where([
+        return VendorItem::find()->where([
                 'trash' => 'Default',
                 'item_approved' => 'Pending'
             ])->count();
@@ -61,7 +61,7 @@ class Vendoritem extends \common\models\Vendoritem
         $month = date('m');
         $year = date('Y');
 
-        return  Vendoritem::find()
+        return  VendorItem::find()
             ->where(['MONTH(created_datetime)' => $month])
             ->andwhere(['YEAR(created_datetime)' => $year])
             ->count();
@@ -73,7 +73,7 @@ class Vendoritem extends \common\models\Vendoritem
         $month = date('m');
         $year = date('Y');
 
-        return  Vendoritem::find()
+        return  VendorItem::find()
             ->where(['MONTH(created_datetime)' => $month])
             ->andwhere(['YEAR(created_datetime)' => $year])
             ->andwhere(['DAYOFMONTH(created_datetime)' => $date])

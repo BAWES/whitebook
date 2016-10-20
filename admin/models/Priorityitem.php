@@ -2,7 +2,7 @@
 
 namespace admin\models;
 use Yii;
-use admin\models\Vendoritem;
+use admin\models\VendorItem;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
@@ -91,12 +91,12 @@ class Priorityitem extends \yii\db\ActiveRecord
     }
     public function getpriorityitem()
     {
-        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
 
     public function getvendoritem()
     {
-        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
 
     /*
@@ -126,7 +126,7 @@ class Priorityitem extends \yii\db\ActiveRecord
         //print_r ($id);die;
         foreach($id as $i)
         {
-            $model = Vendoritem::find()->where(['item_id'=>$i])->one();
+            $model = VendorItem::find()->where(['item_id'=>$i])->one();
             $item[]=$model['item_name'];
         }
         return $item=implode(',',$item);

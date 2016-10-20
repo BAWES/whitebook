@@ -5,14 +5,14 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\Vendor;
 use yii\db\Expression;
 
 /**
- * VendoritemSearch represents the model behind the search form about `common\models\Vendoritem`.
+ * VendoritemSearch represents the model behind the search form about `common\models\VendorItem`.
  */
-class VendoritemSearch extends Vendoritem
+class VendoritemSearch extends VendorItem
 {
     public $vendor_name, $theme_id, $group_id;
     /**
@@ -53,7 +53,7 @@ class VendoritemSearch extends Vendoritem
 
 		$v = array_reverse(array_keys($paramss));
 
-		$query = Vendoritem::find()
+		$query = VendorItem::find()
             ->where(['!=', 'whitebook_vendor_item.trash', 'Deleted'])       
             ->orderBy(['item_id' => SORT_DESC])
             ->orderBy([new Expression('FIELD (item_approved,'. implode(',', array_reverse(array_keys($paramss))) . ')')]);
@@ -140,7 +140,7 @@ class VendoritemSearch extends Vendoritem
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
-		$query = Vendoritem::find()
+		$query = VendorItem::find()
         ->where(['!=', 'trash', 'Deleted'])   
         ->andwhere(['vendor_id'=> $vendor_id])    
         ->orderBy(['item_id' => SORT_DESC]);
@@ -200,7 +200,7 @@ class VendoritemSearch extends Vendoritem
             $pagination = 40;
         }
         
-        $query = Vendoritem::find()
+        $query = VendorItem::find()
             ->where(['!=', 'trash', 'Deleted'])   
             ->andwhere(['vendor_id'=> $vendor_id])    
             ->orderBy(['item_id' => SORT_DESC])

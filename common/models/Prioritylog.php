@@ -93,7 +93,7 @@ class Prioritylog extends \yii\db\ActiveRecord
     */
     public function getItem()
     {
-        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
 
     /**

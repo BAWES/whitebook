@@ -1,9 +1,9 @@
 <?php 
 
 use yii\helpers\Html; 
-use admin\models\Vendoritem;
+use admin\models\VendorItem;
 
-$item_pending_count = Vendoritem::item_pending_count();
+$item_pending_count = VendorItem::item_pending_count();
 
 ?>
 <!-- BEGIN SIDEBAR -->

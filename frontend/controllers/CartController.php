@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Response;
 use frontend\models\Vendor;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\City;
 use common\models\Location;
 use common\models\CustomerCart;
@@ -200,7 +200,7 @@ class CartController extends BaseController
             
             if($cart->save()) {
                 
-                $item = Vendoritem::findOne($data['item_id']);
+                $item = VendorItem::findOne($data['item_id']);
 
                 Yii::$app->getSession()->setFlash('success', Yii::t(
                     'frontend', 
@@ -244,7 +244,7 @@ class CartController extends BaseController
 
         $data = Yii::$app->request->post();
 
-        $item = Vendoritem::find()->where([
+        $item = VendorItem::find()->where([
             'item_id' => $data['item_id'],
             'item_for_sale' => 'Yes'
         ])->one();

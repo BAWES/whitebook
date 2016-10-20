@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\models\Users;
 use frontend\models\Website;
-use frontend\models\Vendoritem;
+use frontend\models\VendorItem;
 use frontend\models\Themes;
 use frontend\models\Vendor;
 use common\models\Category;
@@ -236,7 +236,7 @@ class ShopController extends BaseController
     public function actionProduct($slug)
     {
 
-        $model = Vendoritem::findOne(['slug' => $slug]);
+        $model = VendorItem::findOne(['slug' => $slug]);
 
         if (empty($model)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
@@ -290,7 +290,7 @@ class ShopController extends BaseController
             return $this->render('product_detail', [
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
-                'similiar_item' => Vendoritem::more_from_vendor($model),
+                'similiar_item' => VendorItem::more_from_vendor($model),
                 'vendor_area' => [],
                 'my_addresses' => []
             ]);
@@ -335,7 +335,7 @@ class ShopController extends BaseController
 
             return $this->render('product_detail', [
                 'model' => $model,
-                'similiar_item' => Vendoritem::more_from_vendor($model),
+                'similiar_item' => VendorItem::more_from_vendor($model),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
                 'vendor_area' => $vendor_area_list,
@@ -385,7 +385,7 @@ class ShopController extends BaseController
             } else {
                 $selectedDate = $_POST['delivery_date'];
             }
-            $item = Vendoritem::findOne($_POST['item_id']);
+            $item = VendorItem::findOne($_POST['item_id']);
             if ($item) {
                 $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
                 $date = date('d-m-Y', strtotime($selectedDate));

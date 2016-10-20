@@ -1,7 +1,7 @@
 <?php
 
 namespace common\models;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
@@ -87,7 +87,7 @@ class VendorItemCapacityException extends \yii\db\ActiveRecord
         $id=explode(',',$id);
         foreach($id as $i)
         {
-            $model = Vendoritem::find()->where(['item_id'=>$i])->one();
+            $model = VendorItem::find()->where(['item_id'=>$i])->one();
             $item[]=$model['item_name'];
         }
         return $item=implode(',',$item);
@@ -96,7 +96,7 @@ class VendorItemCapacityException extends \yii\db\ActiveRecord
 
     public function getVendoritem()
     {
-        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
 
 }

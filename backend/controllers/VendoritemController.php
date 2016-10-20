@@ -33,7 +33,7 @@ use common\models\CategoryPath;
 use common\models\VendorItemCapacityException;
 use common\models\CustomerCart;
 use common\models\EventItemlink;
-use backend\models\Vendoritem;
+use backend\models\VendorItem;
 
 
 /**
@@ -126,7 +126,7 @@ class VendoritemController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Vendoritem();
+        $model = new VendorItem();
         $model->vendor_id = Vendor::getVendor('vendor_id');
 
         $model1 = new Image();
@@ -138,7 +138,7 @@ class VendoritemController extends Controller
         
         if($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $model->item_for_sale = (Yii::$app->request->post()['Vendoritem']['item_for_sale'])?'Yes':'No';
+            $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale'])?'Yes':'No';
 
             /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
             if($model->item_for_sale == 'No')
@@ -151,7 +151,7 @@ class VendoritemController extends Controller
             /* END Scenario if item for sale is no not required below four fields */
 
             // get the max sort order
-            $max_sort = Vendoritem::find()
+            $max_sort = VendorItem::find()
                 ->select('MAX(`sort`) as sort')
                 ->where(['trash' => 'Default', 'vendor_id' => $model->vendor_id])
                 ->asArray()
@@ -179,7 +179,7 @@ class VendoritemController extends Controller
                     $vic->save();
                 }
 
-                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
+                $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
 
                 if(!empty($vendoritem_item_price['from'])) {
 
@@ -221,7 +221,7 @@ class VendoritemController extends Controller
                             }
 
                             //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADSALESGUIDE . $filename);
+                            $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADSALESGUIDE . $filename);
 
                             if($awsResult){
                                 $model->guide_image = $filename;
@@ -264,7 +264,7 @@ class VendoritemController extends Controller
 
                                 //Overwrite old filename for S3 uploading
                                 $files->tempName = $newTmpName2;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_1000 . $filename);
+                                $awsResult1 = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_1000 . $filename);
 
                                 /* Begin Product image resolution 530 */
                                 $newTmpName1 = $files->tempName . "." . $files->extension;
@@ -274,7 +274,7 @@ class VendoritemController extends Controller
 
                                 //Overwrite old filename for S3 uploading
                                 $files->tempName = $newTmpName1;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_530 . $filename);
+                                $awsResult1 = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_530 . $filename);
 
                                 /* Begin Product image resolution 210 */
                                 $newTmpName = $files->tempName . "." . $files->extension;
@@ -286,7 +286,7 @@ class VendoritemController extends Controller
                                 $files->tempName = $newTmpName;
 
                                 //Save to S3
-                                $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename);
+                                $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_210 . $filename);
                             }
 
                             if($awsResult){
@@ -335,7 +335,7 @@ class VendoritemController extends Controller
     }
 
     /**
-     * Updates an existing Vendoritem model.
+     * Updates an existing VendorItem model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -365,7 +365,7 @@ class VendoritemController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $vendor_item = Yii::$app->request->post('Vendoritem');
+            $vendor_item = Yii::$app->request->post('VendorItem');
 
             /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
             if ($model->item_for_sale == 'No') {
@@ -427,7 +427,7 @@ class VendoritemController extends Controller
                             }
 
                             //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADSALESGUIDE . $filename);
+                            $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADSALESGUIDE . $filename);
 
                             if($awsResult){
                                 $model->guide_image = $filename;
@@ -477,7 +477,7 @@ class VendoritemController extends Controller
 
                                 //Overwrite old filename for S3 uploading
                                 $files->tempName = $newTmpName2;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_1000 . $filename);
+                                $awsResult1 = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_1000 . $filename);
 
                                 /* Begin Product image resolution 530 */
                                 $newTmpName1 = $files->tempName . "." . $files->extension;
@@ -487,7 +487,7 @@ class VendoritemController extends Controller
 
                                 //Overwrite old filename for S3 uploading
                                 $files->tempName = $newTmpName1;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_530 . $filename);
+                                $awsResult1 = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_530 . $filename);
 
                                 /* Begin Product image resolution 210 */
                                 $newTmpName = $files->tempName . "." . $files->extension;
@@ -499,7 +499,7 @@ class VendoritemController extends Controller
                                 $files->tempName = $newTmpName;
 
                                 //Save to S3
-                                $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename);
+                                $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_210 . $filename);
                             }//if resize
 
                             if ($awsResult) {
@@ -523,7 +523,7 @@ class VendoritemController extends Controller
             }//end model->save()
 
             //BEGIN Manage item pricing table
-            $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
+            $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
 
             if(!empty($vendoritem_item_price['from'])) {
 
@@ -576,7 +576,7 @@ class VendoritemController extends Controller
     }
 
     /**
-     * Deletes an existing Vendoritem model.
+     * Deletes an existing VendorItem model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -607,15 +607,15 @@ class VendoritemController extends Controller
     }
 
     /**
-     * Finds the Vendoritem model based on its primary key value.
+     * Finds the VendorItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return Vendoritem the loaded model
+     * @return VendorItem the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Vendoritem::findOne(['item_id'=>$id,'vendor_id'=>Yii::$app->user->getId()])) !== null) {
+        if (($model = VendorItem::findOne(['item_id'=>$id,'vendor_id'=>Yii::$app->user->getId()])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -630,7 +630,7 @@ class VendoritemController extends Controller
         $data = Yii::$app->request->post();
         $status = $data['status'] == 'Active' ? 'Deactive' : 'Active';
 
-        $command = Vendoritem::updateAll(['item_status' => $status], ['item_id= '.$data['id']]);
+        $command = VendorItem::updateAll(['item_status' => $status], ['item_id= '.$data['id']]);
 
         if($status == 'Active')
         {
@@ -708,7 +708,7 @@ class VendoritemController extends Controller
         $sort = Yii::$app->request->post('sort_val');
         $item_id = Yii::$app->request->post('item_id');
 
-        $command=Vendoritem::updateAll(['sort' => $sort],['item_id= '.$item_id]);
+        $command=VendorItem::updateAll(['sort' => $sort],['item_id= '.$item_id]);
 
         if($command) {
 
@@ -734,7 +734,7 @@ class VendoritemController extends Controller
 
         if($data['status'] == 'Delete') {
 
-            $command=Vendoritem::deleteAll(['IN','item_id',$ids]);
+            $command=VendorItem::deleteAll(['IN','item_id',$ids]);
 
             if($command) {
                 Yii::$app->session->setFlash('success', "Item deleted successfully!");
@@ -743,7 +743,7 @@ class VendoritemController extends Controller
             }
         } else if($data['status'] == 'Reject') {
 
-            $command=Vendoritem::updateAll(['item_approved' => 'rejected'],['IN','item_id',$ids]);
+            $command=VendorItem::updateAll(['item_approved' => 'rejected'],['IN','item_id',$ids]);
 
             if($command) {
                 Yii::$app->session->setFlash('success', "Item rejected successfully!");
@@ -753,7 +753,7 @@ class VendoritemController extends Controller
 
         } else {
 
-            $command=Vendoritem::updateAll(['item_status' => $data['status']],['IN','item_id',$ids]);
+            $command=VendorItem::updateAll(['item_status' => $data['status']],['IN','item_id',$ids]);
 
             if($command) {
                 Yii::$app->session->setFlash('success', "Item status updated!");
@@ -839,7 +839,7 @@ class VendoritemController extends Controller
                 $model = Image::findOne(['image_id'=>$data['key'],'module_type'=>'vendor_item']);
                 $image_path = $model['image_path'];
                 $model->delete();
-                Vendoritem::deleteFiles($image_path);
+                VendorItem::deleteFiles($image_path);
                 return 1;
             }
         }
@@ -855,7 +855,7 @@ class VendoritemController extends Controller
                 $model = Image::findOne(['image_id'=>$data['key'],'module_type'=>'guides']);
                 $image_path = $model['image_path'];
                 $model->delete();
-                Vendoritem::deleteFiles($image_path);
+                VendorItem::deleteFiles($image_path);
                 return 1;
             }
         }
@@ -873,14 +873,14 @@ class VendoritemController extends Controller
 
         if ($data['item_id'] == 0) {
 
-            $itemname = Vendoritem::find()->select('item_name')
+            $itemname = VendorItem::find()->select('item_name')
             ->where(['item_name' => $data['item']])
             ->andwhere(['trash' => 'Default'])
             ->all();
 
         } else {
 
-            $itemname = Vendoritem::find()->select('item_name')
+            $itemname = VendorItem::find()->select('item_name')
             ->where(['item_name' => $data['item']])
             ->where(['item_id' => $data['item_id']])
             ->andwhere(['trash' => 'Default'])

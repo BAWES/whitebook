@@ -2,7 +2,7 @@
 namespace frontend\controllers;
 
 use Yii;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\Vendoritemthemes;
 use frontend\models\Vendor;
 use frontend\models\Category;

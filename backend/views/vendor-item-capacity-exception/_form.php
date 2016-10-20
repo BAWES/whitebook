@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
         <div class="col-md-4 col-sm-4 col-xs-4">
             <?= $form->field($model, 'item_id', [
                 'template' => "{label}<div class='controls'>{input}</div>{hint} {error}"])
-                ->dropDownList(\yii\helpers\ArrayHelper::map(\common\models\Vendoritem::findAll(['item_status'=>'Active','trash'=>'Default','vendor_id'=>Yii::$app->user->getId()]),'item_id','item_name'), ['prompt'=>'Select...']) ?>
+                ->dropDownList(\yii\helpers\ArrayHelper::map(\common\models\VendorItem::findAll(['item_status'=>'Active','trash'=>'Default','vendor_id'=>Yii::$app->user->getId()]),'item_id','item_name'), ['prompt'=>'Select...']) ?>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-4">
             <?= $form->field($model, 'exception_date',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->textInput(['maxlenght' => 255]) ?>

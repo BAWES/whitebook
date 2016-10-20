@@ -1,9 +1,6 @@
 <?php
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use common\models\Vendor;
-use common\models\Vendoritem;
 ?>
  	<!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->

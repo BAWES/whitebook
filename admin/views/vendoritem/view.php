@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use admin\models\Vendoritem;
+use admin\models\VendorItem;
 use common\models\Vendoritemthemes;
 use common\models\Vendoritempricing;
 use common\models\Featuregroupitem;
@@ -54,11 +54,11 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         //'item_id',
                         [
                             'label'=>'Vendor Type',
-                            'value'  => Vendoritem::getItemType($model->type_id),
+                            'value'  => VendorItem::getItemType($model->type_id),
                         ],
                         [
                             'label'=>'Vendor',
-                            'value'  => Vendoritem::getVendorName($model->vendor_id),
+                            'value'  => VendorItem::getVendorName($model->vendor_id),
                         ],
                         [
                             'label'=>'Categories',

@@ -5,7 +5,7 @@ namespace admin\controllers;
 use Yii;
 use admin\models\Priorityitem;
 use admin\models\PriorityitemSearch;
-use admin\models\Vendoritem;
+use admin\models\VendorItem;
 use admin\models\Vendor;
 use admin\models\Category;
 use common\models\ChildCategory;
@@ -126,7 +126,7 @@ class PriorityitemController extends Controller
             $subcategory = Subcategory::loadsubcategoryname();
             $childcategory = ChildCategory::loadchild();
             
-            $priority = Vendoritem::find()->select(['item_id','item_name'])
+            $priority = VendorItem::find()->select(['item_id','item_name'])
               ->where(['item_status' => 'Active'])
               ->andwhere(['!=', 'trash', 'Deleted'])
   			      ->all();
@@ -184,9 +184,9 @@ class PriorityitemController extends Controller
             $category = Category::loadcategoryname();
             $subcategory = Subcategory::loadsubcategoryname();
             $childcategory = ChildCategory::loadchild();
-            $vendorpriorityitem = Vendoritem::vendorpriorityitemitem($model->item_id);
+            $vendorpriorityitem = VendorItem::vendorpriorityitemitem($model->item_id);
             
-            $priority = Vendoritem::find()->select(['item_id','item_name'])
+            $priority = VendorItem::find()->select(['item_id','item_name'])
             ->where(['item_status' => 'Active'])
             ->andwhere(['item_for_sale' => 'yes'])
             ->andwhere(['!=', 'trash', 'Deleted'])
@@ -314,7 +314,7 @@ class PriorityitemController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $itemlist = Vendoritem::find()->select(['item_id','item_name'])
+        $itemlist = VendorItem::find()->select(['item_id','item_name'])
             ->where(['item_status' => 'Active'])
             ->andWhere(['item_for_sale' => 'yes'])
             ->andWhere(['category_id' => $data['id2']])

@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\helpers\Json;
 use yii\helpers\Url;
-use frontend\models\Vendoritem;
+use frontend\models\VendorItem;
 use frontend\models\Vendor;
 use frontend\models\Users;
 use common\models\Featuregroupitem;
@@ -33,13 +33,13 @@ class ProductController extends BaseController
     */
     public function actionProduct($slug)
     {
-        $model = Vendoritem::findOne(['slug'=>$slug,'item_status'=>'Active','item_approved'=>'Yes','trash' => 'Default']);
+        $model = VendorItem::findOne(['slug'=>$slug,'item_status'=>'Active','item_approved'=>'Yes','trash' => 'Default']);
 
         if (empty($model)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $similarProductModel = Vendoritem::more_from_vendor($model);
+        $similarProductModel = VendorItem::more_from_vendor($model);
 
         $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
 

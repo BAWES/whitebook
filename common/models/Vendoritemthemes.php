@@ -92,7 +92,7 @@ class Vendoritemthemes extends \yii\db\ActiveRecord
     */
     public function getVendoritem()
     {
-        return $this->hasOne(Vendoritem::className(), ['vendor_id' => 'vendor_id']);
+        return $this->hasOne(VendorItem::className(), ['vendor_id' => 'vendor_id']);
     }
 
     /**

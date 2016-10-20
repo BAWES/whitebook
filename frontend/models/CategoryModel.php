@@ -5,7 +5,7 @@ namespace frontend\models;
 use yii\base\Model;
 use Yii;
 
-class Category_model extends Model
+class CategoryModel extends Model
 {
     public function get_products_based_category($category = '', $limit, $offset)
     {
