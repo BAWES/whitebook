@@ -23,7 +23,7 @@ use admin\models\Vendor;
 use admin\models\Themes;
 use admin\models\Image;
 use admin\models\Category;
-use admin\models\Priorityitem;
+use admin\models\PriorityItem;
 use common\models\SubCategory;
 use common\models\ChildCategory;
 use common\models\VendoritemSearch;
@@ -117,7 +117,7 @@ class VendoritemController extends Controller
             return $this->redirect(['site/index']);
         }
 
-        $dataProvider1=  Priorityitem::find()
+        $dataProvider1=  PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
             ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
             ->addParams([':item_id' => $id])
@@ -782,7 +782,7 @@ class VendoritemController extends Controller
             Vendoritemthemes::deleteAll(['item_id' => $id]);
             VendorItemToCategory::deleteAll(['item_id' => $id]);
             CustomerCart::deleteAll(['item_id' => $id]);
-            Priorityitem::deleteAll(['item_id' => $id]);
+            PriorityItem::deleteAll(['item_id' => $id]);
             EventItemlink::deleteAll(['item_id' => $id]);
             FeatureGroupItem::deleteAll(['item_id' => $id]);
 

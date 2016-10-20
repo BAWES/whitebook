@@ -7,9 +7,9 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * PriorityitemSearch represents the model behind the search form about `common\models\Priorityitem`.
+ * PriorityitemSearch represents the model behind the search form about `common\models\PriorityItem`.
  */
-class PriorityitemSearch extends Priorityitem
+class PriorityitemSearch extends PriorityItem
 {
     /**
      * @inheritdoc
@@ -44,7 +44,7 @@ class PriorityitemSearch extends Priorityitem
 
         if($start =="" && $end !="")
         {
-		 $startdate= Priorityitem::find()
+		 $startdate= PriorityItem::find()
 		 ->select('priority_start_date')
          ->where(['trash'=>'Default'])
          ->orderby(['priority_start_date'=>SORT_ASC])
@@ -55,7 +55,7 @@ class PriorityitemSearch extends Priorityitem
         }
         elseif($start !="" && $end =="")
         {         
-		 $enddate= Priorityitem::find()
+		 $enddate= PriorityItem::find()
 		 ->select('priority_end_date')
          ->where(['trash'=>'Default'])
          ->orderby(['priority_end_date'=>SORT_DESC])
@@ -66,7 +66,7 @@ class PriorityitemSearch extends Priorityitem
         }    
         if($start !="" && $end !="" && $status !="" && $level !="")
         {
-  		    $all_priority= Priorityitem::find()
+  		    $all_priority= PriorityItem::find()
   		     ->select(['priority_end_date','priority_start_date','priority_id'])
            ->where(['trash'=>'Default'])
            ->orderby(['priority_end_date'=>SORT_DESC])
@@ -103,27 +103,27 @@ class PriorityitemSearch extends Priorityitem
             $item_val = array_unique($avlble_id);
             if($status =='All' && $level=='All')
             {
-             $query = Priorityitem::find()
+             $query = PriorityItem::find()
                 ->where(['priority_id'=>$item_val])                                      
                 ->orderBy('priority_id');
             }
             else if($status !='All' && $level=='All')
             {
-             $query = Priorityitem::find()
+             $query = PriorityItem::find()
                 ->where(['priority_id'=>$item_val])   
                 ->andwhere(['status'=>$status]) 
                 ->orderBy('priority_id');
             }
             else if($status =='All' && $level!='All')
             {
-             $query = Priorityitem::find()
+             $query = PriorityItem::find()
                 ->where(['priority_id'=>$item_val])                                      
                 ->andwhere(['priority_level'=>$level])   
                 ->orderBy('priority_id');
             }
             else
             {
-            $query = Priorityitem::find()
+            $query = PriorityItem::find()
                 ->where(['priority_id'=>$item_val])                      
                 ->andwhere(['=', 'status', $status])
                 ->andwhere(['=', 'priority_level', $level])
@@ -134,26 +134,26 @@ class PriorityitemSearch extends Priorityitem
         {            
             if($status =='All'&& $level=='All')
             {
-             $query = Priorityitem::find()
+             $query = PriorityItem::find()
                 ->where(['!=', '{{%priority_item}}.trash', 'Deleted'])
                 ->orderBy('priority_id');
             }
             else if($status !='All' && $level=='All')
             {
-                $query = Priorityitem::find()
+                $query = PriorityItem::find()
                 ->where(['!=', '{{%priority_item}}.trash', 'Deleted'])  
                 ->andwhere(['status'=>$status])                                  
                 ->orderBy('priority_id');
             }
             else if($status =='All' && $level!='All')
             {
-             $query = Priorityitem::find()
+             $query = PriorityItem::find()
              ->where(['!=', '{{%priority_item}}.trash', 'Deleted'])  
                 ->andwhere(['priority_level'=>$level])                                      
                 ->orderBy('priority_id');
             }else
             {
-            $query = Priorityitem::find()                                     
+            $query = PriorityItem::find()                                     
                 ->where(['=', 'status', $status])
                 ->andwhere(['=', 'priority_level', $level])
                 ->andwhere(['trash'=>'Default'])
@@ -163,7 +163,7 @@ class PriorityitemSearch extends Priorityitem
         } 
         else
         {            
-            $query = Priorityitem::find()
+            $query = PriorityItem::find()
                 ->where(['!=', '{{%priority_item}}.trash', 'Deleted'])
                 ->orderBy('priority_id');
         }   
