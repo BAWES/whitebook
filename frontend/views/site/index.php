@@ -3,7 +3,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\view;
-use common\models\Featuregroup;
+use common\models\FeatureGroup;
 use common\models\Featuregroupitem;
 use common\models\VendorItem;
 use common\models\Vendor;
@@ -109,7 +109,7 @@ $model = new Website();
 <!-- BEGIN FEATURE GROUP ITEM-->
 <?php
 
-$featured_produc = Featuregroup::find()
+$featured_produc = FeatureGroup::find()
     ->select(['group_id', 'group_name_ar', 'group_name'])
     ->where(['group_status' => 'Active', 'trash' => 'Default'])
     ->asArray()->all();

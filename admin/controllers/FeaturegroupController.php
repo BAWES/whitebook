@@ -5,7 +5,7 @@ namespace admin\controllers;
 use common\models\Featuregroupitem;
 use Yii;
 use common\models\Vendor;
-use admin\models\Featuregroup;
+use admin\models\FeatureGroup;
 use common\models\BlockedDate;
 use admin\models\FeaturegroupSearch;
 use yii\web\Controller;
@@ -15,7 +15,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * FeaturegroupController implements the CRUD actions for Featuregroup model.
+ * FeaturegroupController implements the CRUD actions for FeatureGroup model.
  */
 class FeaturegroupController extends Controller
 {
@@ -56,7 +56,7 @@ class FeaturegroupController extends Controller
     }
 
     /**
-     * Lists all Featuregroup models.
+     * Lists all FeatureGroup models.
      *
      * @return mixed
      */
@@ -83,7 +83,7 @@ class FeaturegroupController extends Controller
     }
 
     /**
-     * Displays a single Featuregroup model.
+     * Displays a single FeatureGroup model.
      *
      * @param string $id
      *
@@ -97,7 +97,7 @@ class FeaturegroupController extends Controller
     }
 
     /**
-     * Creates a new Featuregroup model.
+     * Creates a new FeatureGroup model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
@@ -106,7 +106,7 @@ class FeaturegroupController extends Controller
     {
         $access = Authitem::AuthitemCheck('1', '17');
         if (yii::$app->user->can($access)) {
-            $model = new Featuregroup();
+            $model = new FeatureGroup();
 
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->group_name = strtolower($model->group_name);
@@ -127,7 +127,7 @@ class FeaturegroupController extends Controller
     }
 
     /**
-     * Updates an existing Featuregroup model.
+     * Updates an existing FeatureGroup model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -159,7 +159,7 @@ class FeaturegroupController extends Controller
     }
 
     /**
-     * Deletes an existing Featuregroup model.
+     * Deletes an existing FeatureGroup model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param string $id
@@ -188,18 +188,18 @@ class FeaturegroupController extends Controller
     }
 
     /**
-     * Finds the Featuregroup model based on its primary key value.
+     * Finds the FeatureGroup model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Featuregroup the loaded model
+     * @return FeatureGroup the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Featuregroup::findOne($id)) !== null) {
+        if (($model = FeatureGroup::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -214,7 +214,7 @@ class FeaturegroupController extends Controller
 
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
         
-        $command=Featuregroup::updateAll(['group_status' => $status],'group_id= '.$data['id']);
+        $command=FeatureGroup::updateAll(['group_status' => $status],'group_id= '.$data['id']);
         
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');

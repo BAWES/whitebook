@@ -17,7 +17,7 @@ use admin\models\Vendoritemquestionansweroption;
 use admin\models\Vendoritemquestionguide;
 use common\models\Vendoritemthemes;
 use common\models\Featuregroupitem;
-use admin\models\Featuregroup;
+use admin\models\FeatureGroup;
 use admin\models\Authitem;
 use admin\models\Vendor;
 use admin\models\Themes;
@@ -169,7 +169,7 @@ class VendoritemController extends Controller
         $model1 = new Image();
         $themelist = Themes::loadthemename();
 
-        $grouplist = Featuregroup::loadfeaturegroup();
+        $grouplist = FeatureGroup::loadfeaturegroup();
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
         $itemtype = Itemtype::loaditemtype();
@@ -450,7 +450,7 @@ class VendoritemController extends Controller
 
         $categoryname = Category::vendorcategory($model->vendor_id);
 
-        $grouplist = Featuregroup::loadfeaturegroup();
+        $grouplist = FeatureGroup::loadfeaturegroup();
 
         // Values for priority log table dont delete...
         $vendorid = $model->vendor_id;

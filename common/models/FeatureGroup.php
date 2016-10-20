@@ -23,7 +23,7 @@ use yii\db\Expression;
 *
 * @property FeatureGroupItem[] $featureGroupItems
 */
-class Featuregroup extends \yii\db\ActiveRecord
+class FeatureGroup extends \yii\db\ActiveRecord
 {
     const STATUS_ACTIVE = "Active";
     const STATUS_DEACTIVE = "Deactive";

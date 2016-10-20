@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property FeatureGroupItem[] $featureGroupItems
  */
-class Featuregroup extends \common\models\Featuregroup
+class FeatureGroup extends \common\models\FeatureGroup
 {
 
    /* 
@@ -49,7 +49,7 @@ class Featuregroup extends \common\models\Featuregroup
 	   
     public static function loadfeaturegroup()
    	{       
-   			$featuregroup= Featuregroup::find()
+   			$featuregroup= FeatureGroup::find()
      			->where(['!=', 'group_status', 'Deactive'])
      			->andwhere(['!=', 'trash', 'Deleted'])
      			->all();

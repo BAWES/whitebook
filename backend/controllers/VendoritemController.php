@@ -23,7 +23,7 @@ use common\models\SubCategory;
 use common\models\VendoritemSearch;
 use common\models\Itemtype;
 use common\models\Themes;
-use common\models\Featuregroup;
+use common\models\FeatureGroup;
 use common\models\Featuregroupitem;
 use common\models\Priorityitem;
 use common\models\ChildCategory;
