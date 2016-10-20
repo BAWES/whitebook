@@ -5,7 +5,7 @@ use yii\widgets\DetailView;
 use admin\models\VendorItem;
 use common\models\Vendoritemthemes;
 use common\models\Vendoritempricing;
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 
 
 use common\models\Image;
@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         ],
                         [
                             'label'=>'Group',
-                            'value'  => Featuregroupitem::groupList($model),
+                            'value'  => FeatureGroupItem::groupList($model),
                         ],
                         [
                             'attribute'=>'created_datetime',

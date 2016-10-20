@@ -16,7 +16,7 @@ use common\models\Vendoritemquestion;
 use admin\models\Vendoritemquestionansweroption;
 use admin\models\Vendoritemquestionguide;
 use common\models\Vendoritemthemes;
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 use admin\models\FeatureGroup;
 use admin\models\Authitem;
 use admin\models\Vendor;
@@ -267,7 +267,7 @@ class VendoritemController extends Controller
 
                 if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups'])>0 ) {
                     foreach ($vendor_item['groups'] as $value) {
-                        $groupModel = new Featuregroupitem();
+                        $groupModel = new FeatureGroupItem();
                         $groupModel->item_id = $itemid;
                         $groupModel->group_id = $value;
                         $groupModel->vendor_id = $vendor_item['vendor_id'];
@@ -670,9 +670,9 @@ class VendoritemController extends Controller
 
                 /* Groups table Begin*/
                 if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups']) > 0) {
-                    Featuregroupitem::deleteAll(['item_id' => $id]); # to clear old values
+                    FeatureGroupItem::deleteAll(['item_id' => $id]); # to clear old values
                     foreach ($vendor_item['groups'] as $value) {
-                        $groupModel = new Featuregroupitem();
+                        $groupModel = new FeatureGroupItem();
                         $groupModel->item_id = $itemid;
                         $groupModel->group_id = $value;
                         $groupModel->vendor_id = $model->vendor_id;
@@ -784,7 +784,7 @@ class VendoritemController extends Controller
             CustomerCart::deleteAll(['item_id' => $id]);
             Priorityitem::deleteAll(['item_id' => $id]);
             EventItemlink::deleteAll(['item_id' => $id]);
-            Featuregroupitem::deleteAll(['item_id' => $id]);
+            FeatureGroupItem::deleteAll(['item_id' => $id]);
 
             Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
             return $this->redirect(['index']);

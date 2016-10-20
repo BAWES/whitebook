@@ -22,7 +22,7 @@ use common\models\Location;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use common\models\Siteinfo;
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 use common\models\LoginForm;
 use common\models\Vendor;
 use common\models\City;
