@@ -22,7 +22,7 @@ use common\models\Vendor;
 * @property string $modified_datetime
 * @property string $trash
 */
-class Blockeddate extends \yii\db\ActiveRecord
+class BlockedDate extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -99,7 +99,7 @@ class Blockeddate extends \yii\db\ActiveRecord
 
             $block_date= date ("Y-m-d",strtotime("0 day", strtotime($this->block_date)));
 
-            $model = Blockeddate::find()
+            $model = BlockedDate::find()
                 ->where(['block_date'=>$block_date])
                 ->andwhere(['!=','block_id',$this->block_id])
                 ->one();
@@ -116,7 +116,7 @@ class Blockeddate extends \yii\db\ActiveRecord
             
             $block_date= date ("Y-m-d",strtotime("0 day", strtotime($this->block_date)));
 
-            $model = Blockeddate::find()
+            $model = BlockedDate::find()
                 ->where(['block_date' => $block_date])
                 ->one();
 

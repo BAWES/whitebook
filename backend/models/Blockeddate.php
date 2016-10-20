@@ -16,7 +16,7 @@ use Yii;
  * @property string $modified_datetime
  * @property string $trash
  */
-class Blockeddate extends \common\models\Blockeddate
+class BlockedDate extends \common\models\BlockedDate
 {
 
     public function behaviors()
@@ -30,7 +30,7 @@ class Blockeddate extends \common\models\Blockeddate
             
             $block_date= date ("Y-m-d", strtotime("0 day", strtotime($this->block_date)));
             
-            $model = Blockeddate::find()
+            $model = BlockedDate::find()
                 ->where(['block_date'=>$block_date])
                 ->andwhere(['!=','block_id',$this->block_id])
                 ->one();
@@ -47,7 +47,7 @@ class Blockeddate extends \common\models\Blockeddate
             
             $block_date = date ("Y-m-d", strtotime("0 day", strtotime($this->block_date)));
             
-            $model = Blockeddate::find()
+            $model = BlockedDate::find()
                 ->where(['block_date'=>$block_date])
                 ->one();
 
