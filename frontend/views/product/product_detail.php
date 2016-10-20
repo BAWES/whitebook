@@ -14,14 +14,14 @@ $vendor_det = $model->vendor;
 if(Yii::$app->language == "en"){
     $item_name = $model['item_name'];
     $vendor_name = $vendor_det['vendor_name'];
-    $item_description = strip_tags($model['item_description']);
-    $item_additional_info = strip_tags($model['item_additional_info']);
+    $item_description = $model['item_description'];
+    $item_additional_info = $model['item_additional_info'];
     $vendor_contact_address = $vendor_det['vendor_contact_address'];
 }else{
     $item_name = $model['item_name_ar'];
     $vendor_name = $vendor_det['vendor_name_ar'];
-    $item_description = strip_tags($model['item_description_ar']);
-    $item_additional_info = strip_tags($model['item_additional_info_ar']);
+    $item_description = $model['item_description_ar'];
+    $item_additional_info = $model['item_additional_info_ar'];
     $vendor_contact_address = $vendor_det['vendor_contact_address_ar'];
 }
 
