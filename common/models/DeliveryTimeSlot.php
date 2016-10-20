@@ -22,7 +22,7 @@ use yii\db\Expression;
 * @property string $modified_datetime
 * @property string $trash
 */
-class Deliverytimeslot extends \yii\db\ActiveRecord
+class DeliveryTimeSlot extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -105,12 +105,12 @@ class Deliverytimeslot extends \yii\db\ActiveRecord
     /* common */
     public static function vendor_delivery_details($id)
     {
-        return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id])->asArray()->count();
+        return $time_slot = DeliveryTimeSlot::find()->where(['vendor_id'=>$id])->asArray()->count();
     }
 
     public static function vendor_deliverytimeslot($id,$day)
     {
-        return $time_slot = Deliverytimeslot::find()->where(['vendor_id'=>$id, 'timeslot_day'=>$day])->asArray()->all();;
+        return $time_slot = DeliveryTimeSlot::find()->where(['vendor_id'=>$id, 'timeslot_day'=>$day])->asArray()->all();;
     }
 
 }

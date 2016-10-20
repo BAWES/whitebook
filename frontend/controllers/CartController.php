@@ -12,7 +12,7 @@ use common\models\VendorItem;
 use common\models\City;
 use common\models\Location;
 use common\models\CustomerCart;
-use common\models\Deliverytimeslot;
+use common\models\DeliveryTimeSlot;
 use common\models\Order;
 
 class CartController extends BaseController
@@ -376,7 +376,7 @@ class CartController extends BaseController
             $string = $data['sel_date'];
             $timestamp = strtotime($string);
 
-            $vendor_timeslot = Deliverytimeslot::find()
+            $vendor_timeslot = DeliveryTimeSlot::find()
             ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
             ->where(['vendor_id' => $data['vendor_id']])
             ->andwhere(['timeslot_day' => date("l", $timestamp)])

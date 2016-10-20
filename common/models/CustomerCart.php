@@ -100,7 +100,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public function getTimeslot()
     {
-        return $this->hasOne(Deliverytimeslot::className(), ['timeslot_id' => 'timeslot_id']);
+        return $this->hasOne(DeliveryTimeSlot::className(), ['timeslot_id' => 'timeslot_id']);
     }
 
     public function validate_item($data, $valid_for_cart_item = false) {

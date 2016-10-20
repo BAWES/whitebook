@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\Vendor;
-use backend\models\Deliverytimeslot;
+use backend\models\DeliveryTimeSlot;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +12,7 @@ use yii\i18n\Formatter;
 use yii\filters\AccessControl;
 
 /**
- * DeliverytimeslotController implements the CRUD actions for Deliverytimeslot model.
+ * DeliverytimeslotController implements the CRUD actions for DeliveryTimeSlot model.
  */
 class DeliverytimeslotController extends Controller
 {
@@ -38,7 +38,7 @@ class DeliverytimeslotController extends Controller
     }
 
     /**
-     * Lists all Deliverytimeslot models.
+     * Lists all DeliveryTimeSlot models.
      * @return mixed
      */
     public function actionIndex()
@@ -47,7 +47,7 @@ class DeliverytimeslotController extends Controller
     }
 
     /**
-     * Displays a single Deliverytimeslot model.
+     * Displays a single DeliveryTimeSlot model.
      * @param string $id
      * @return mixed
      */
@@ -59,13 +59,13 @@ class DeliverytimeslotController extends Controller
     }
 
     /**
-     * Creates a new Deliverytimeslot model.
+     * Creates a new DeliveryTimeSlot model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Deliverytimeslot();
+        $model = new DeliveryTimeSlot();
         $vendor = Vendor::loadvendorname();
         $model->vendor_id = Vendor::getVendor('vendor_id');
         $day = array('Sunday'=>'Sunday','Monday'=>'Monday','Tuesday'=>'Tuesday','Wednesday'=>'Wednesday','Thursday'=>'Thursday','Friday'=>'Friday','Saturday'=>'Saturday');
@@ -88,7 +88,7 @@ class DeliverytimeslotController extends Controller
     }
 
     /**
-     * Updates an existing Deliverytimeslot model.
+     * Updates an existing DeliveryTimeSlot model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -119,7 +119,7 @@ class DeliverytimeslotController extends Controller
     }
 
     /**
-     * Deletes an existing Deliverytimeslot model.
+     * Deletes an existing DeliveryTimeSlot model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -155,13 +155,13 @@ class DeliverytimeslotController extends Controller
 
         //get all timeslot for given day and current vendor and not current record
         if($data['update']){
-            $timeslots = Deliverytimeslot::find()
+            $timeslots = DeliveryTimeSlot::find()
             ->where(['timeslot_day' => $data['day'], 'vendor_id'=>Yii::$app->user->getId()])
             ->andwhere(['!=','timeslot_id', $data['update']])
             ->asArray()
             ->all();
         }else{
-            $timeslots = Deliverytimeslot::find()
+            $timeslots = DeliveryTimeSlot::find()
             ->where(['timeslot_day' => $data['day'], 'vendor_id'=>Yii::$app->user->getId()])
             ->asArray()
             ->all();
@@ -196,15 +196,15 @@ class DeliverytimeslotController extends Controller
 
 
     /**
-     * Finds the Deliverytimeslot model based on its primary key value.
+     * Finds the DeliveryTimeSlot model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return Deliverytimeslot the loaded model
+     * @return DeliveryTimeSlot the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Deliverytimeslot::findOne($id)) !== null) {
+        if (($model = DeliveryTimeSlot::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

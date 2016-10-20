@@ -23,11 +23,11 @@ use yii\db\Expression;
 * @property string $modified_datetime
 * @property string $trash
 */
-class Deliverytimeslot extends \common\models\Deliverytimeslot
+class DeliveryTimeSlot extends \common\models\DeliveryTimeSlot
 {
     public static function deliverytimeslot($day)
     {
-        return $time_slot = Deliverytimeslot::find()
+        return $time_slot = DeliveryTimeSlot::find()
         	->where([
         		'vendor_id' => Yii::$app->user->getId(), 
         		'timeslot_day' => $day
@@ -38,7 +38,7 @@ class Deliverytimeslot extends \common\models\Deliverytimeslot
 
     public static function vendor_deliverytimeslot($id,$day)
     {
-        return $time_slot = Deliverytimeslot::find()
+        return $time_slot = DeliveryTimeSlot::find()
         	->where(['vendor_id' => $id, 'timeslot_day' => $day])
         	->asArray()
         	->all();
