@@ -1,7 +1,7 @@
 <?php
 
 namespace common\models;
-use common\models\Featuregroup;
+use common\models\FeatureGroup;
 use common\models\VendorItem;
 use yii\db\Query;
 use Yii;
@@ -106,7 +106,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
 
     public static function getGroupName($id)
     {
-        $model = Featuregroup::find()->where(['group_id'=>$id])->one();
+        $model = FeatureGroup::find()->where(['group_id'=>$id])->one();
         return $model->group_name;
     }
 
@@ -121,7 +121,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
         $k=explode(',',$id);
         foreach ($k as $key=>$value)
         {
-            $group_name[]= Featuregroup::find()
+            $group_name[]= FeatureGroup::find()
             ->select('group_name')
             ->where(['!=', 'group_status', 'Deactive'])
             ->andwhere(['!=', 'trash', 'Deleted'])

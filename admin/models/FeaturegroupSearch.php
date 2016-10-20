@@ -5,12 +5,12 @@ namespace admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use admin\models\Featuregroup;
+use admin\models\FeatureGroup;
 
 /**
- * FeaturegroupSearch represents the model behind the search form about `common\models\Featuregroup`.
+ * FeaturegroupSearch represents the model behind the search form about `common\models\FeatureGroup`.
  */
-class FeaturegroupSearch extends Featuregroup
+class FeaturegroupSearch extends FeatureGroup
 {
     /**
      * @inheritdoc
@@ -41,7 +41,7 @@ class FeaturegroupSearch extends Featuregroup
      */
     public function search($params)
     {
-        $query = Featuregroup::find()
+        $query = FeatureGroup::find()
         ->where(['!=', 'trash', 'Deleted'])
 		->orderBy('group_id');
 		
