@@ -11,7 +11,7 @@ use common\models\City;
 use common\models\Location;
 use common\models\Faq;
 use frontend\models\Themes;
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 use frontend\models\Website;
 use common\models\Smtp;
 use frontend\models\Contacts;
@@ -36,7 +36,7 @@ class SiteController extends BaseController
     public function actionIndex()
     {     
         $website_model = new Website();
-        $featuremodel = new Featuregroupitem();
+        $featuremodel = new FeatureGroupItem();
         $product_list = $featuremodel->get_featured_product_id();
         
         $banner = $website_model->get_banner_details();
@@ -63,7 +63,7 @@ class SiteController extends BaseController
         Yii::$app->session->set('reset_password_mail', '');
 
         $website_model = new Website();
-        $featuremodel = new Featuregroupitem();
+        $featuremodel = new FeatureGroupItem();
         $product_list = $featuremodel->get_featured_product_id();
         
         $banner = $website_model->get_banner_details();

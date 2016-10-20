@@ -29,7 +29,7 @@ use yii\db\Expression;
 * @property FeatureGroup $group
 * @property VendorItem $item
 */
-class Featuregroupitem extends \yii\db\ActiveRecord
+class FeatureGroupItem extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -112,7 +112,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
 
     public static function groupdetails($t)
     {
-        $id= Featuregroupitem::find()
+        $id= FeatureGroupItem::find()
         ->select(['group_id'])
         ->where(['=', 'item_id', $t])
         ->one();
@@ -150,7 +150,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
 
     public static function loadcategoryname()
     {
-        $output= Featuregroupitem::find()
+        $output= FeatureGroupItem::find()
         ->where(['!=', 'category_status', 'Deactive'])
         ->where(['!=', 'trash', 'Deleted'])
         ->where(['parent_category_id' => null])
@@ -164,7 +164,7 @@ class Featuregroupitem extends \yii\db\ActiveRecord
         $today = date('Y-m-d H:i:s');
         $today_date = date('Y-m-d');
 
-        return $vendor = Featuregroupitem::find()
+        return $vendor = FeatureGroupItem::find()
         ->select('{{%feature_group_item}}.item_id')
         ->joinWith('vendor')
         ->where(['{{%feature_group_item}}.group_item_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor}}.approve_status' => 'Yes'])

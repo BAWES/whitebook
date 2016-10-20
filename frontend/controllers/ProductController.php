@@ -9,7 +9,7 @@ use yii\helpers\Url;
 use frontend\models\VendorItem;
 use frontend\models\Vendor;
 use frontend\models\Users;
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 use common\models\DeliveryTimeSlot;
 use common\models\Events;
 use common\models\Vendorlocation;

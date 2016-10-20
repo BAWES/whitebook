@@ -24,7 +24,7 @@ use common\models\VendoritemSearch;
 use common\models\Itemtype;
 use common\models\Themes;
 use common\models\FeatureGroup;
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 use common\models\Priorityitem;
 use common\models\ChildCategory;
 use common\models\Vendoritempricing;
@@ -593,7 +593,7 @@ class VendoritemController extends Controller
         CustomerCart::deleteAll(['item_id' => $id]);
         Priorityitem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
-        Featuregroupitem::deleteAll(['item_id' => $id]);
+        FeatureGroupItem::deleteAll(['item_id' => $id]);
 
         Yii::$app->session->setFlash('success', "Item deleted successfully!");
 

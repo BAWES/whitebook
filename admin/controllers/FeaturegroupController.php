@@ -2,7 +2,7 @@
 
 namespace admin\controllers;
 
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 use Yii;
 use common\models\Vendor;
 use admin\models\FeatureGroup;
@@ -174,7 +174,7 @@ class FeaturegroupController extends Controller
             
             $this->findModel($id)->delete();
             
-            Featuregroupitem::deleteAll(['group_id'=>$id]); // delete all products
+            FeatureGroupItem::deleteAll(['group_id'=>$id]); // delete all products
             
             Yii::$app->session->setFlash('success', 'Feature group deleted successfully!');
 
