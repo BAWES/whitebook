@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Eventinvitees;
-use frontend\models\EventinviteesSearch;
+use frontend\models\EventInvitees;
+use frontend\models\EventInviteesSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Users;
@@ -12,7 +12,7 @@ use frontend\models\Vendoritem;
 use common\models\Events;
 
 /**
- * EventinviteesController implements the CRUD actions for Eventinvitees model.
+ * EventinviteesController implements the CRUD actions for EventInvitees model.
  */
 class EventinviteesController extends BaseController
 {
@@ -29,7 +29,7 @@ class EventinviteesController extends BaseController
     }
 
     /**
-     * Lists all Eventinvitees models.
+     * Lists all EventInvitees models.
      *
      * @return mixed
      */
@@ -38,7 +38,7 @@ class EventinviteesController extends BaseController
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
 
-            $searchModel = new EventinviteesSearch();
+            $searchModel = new EventInviteesSearch();
 
             $dataProvider = $searchModel->search(
                 Yii::$app->request->queryParams,
@@ -54,7 +54,7 @@ class EventinviteesController extends BaseController
     }
 
     /**
-     * Displays a single Eventinvitees model.
+     * Displays a single EventInvitees model.
      *
      * @param int $id
      *
@@ -68,14 +68,14 @@ class EventinviteesController extends BaseController
     }
 
     /**
-     * Creates a new Eventinvitees model.
+     * Creates a new EventInvitees model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Eventinvitees();
+        $model = new EventInvitees();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->invitees_id]);
@@ -87,7 +87,7 @@ class EventinviteesController extends BaseController
     }
 
     /**
-     * Updates an existing Eventinvitees model.
+     * Updates an existing EventInvitees model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param int $id
@@ -108,7 +108,7 @@ class EventinviteesController extends BaseController
     }
 
     /**
-     * Deletes an existing Eventinvitees model.
+     * Deletes an existing EventInvitees model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param int $id
@@ -125,18 +125,18 @@ class EventinviteesController extends BaseController
     }
 
     /**
-     * Finds the Eventinvitees model based on its primary key value.
+     * Finds the EventInvitees model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param int $id
      *
-     * @return Eventinvitees the loaded model
+     * @return EventInvitees the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Eventinvitees::findOne($id)) !== null) {
+        if (($model = EventInvitees::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -151,7 +151,7 @@ class EventinviteesController extends BaseController
 
         $data = Yii::$app->request->post();
 
-        $event_invite = Eventinvitees::findOne($data['invitees_id']);
+        $event_invite = EventInvitees::findOne($data['invitees_id']);
         $event_invite->name = $data['name'];
         $event_invite->email = $data['email'];
         $event_invite->phone_number = $data['phone_number'];
@@ -168,7 +168,7 @@ class EventinviteesController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $event_invite = Eventinvitees::find()->where(['invitees_id'=>$data['id']]);
+            $event_invite = EventInvitees::find()->where(['invitees_id'=>$data['id']]);
             return json_encode($details[0]);
         }
     }

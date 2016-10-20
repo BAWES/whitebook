@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Eventinvitees;
-use frontend\models\EventinviteesSearch;
+use frontend\models\EventInvitees;
+use frontend\models\EventInviteesSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Users;
@@ -37,7 +37,7 @@ use common\models\VendorItemToCategory;
 use common\models\Vendoritemthemes;
 
 /**
- * EventinviteesController implements the CRUD actions for Eventinvitees model.
+ * EventinviteesController implements the CRUD actions for EventInvitees model.
  */
 class EventsController extends BaseController
 {
@@ -54,7 +54,7 @@ class EventsController extends BaseController
     }
 
     /**
-     * Lists all Eventinvitees models.
+     * Lists all EventInvitees models.
      *
      * @return mixed
      */
@@ -182,7 +182,7 @@ class EventsController extends BaseController
             ->asArray()
             ->all();
 
-        $searchModel = new EventinviteesSearch();
+        $searchModel = new EventInviteesSearch();
 
         $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $event_details->event_id);
 
@@ -210,7 +210,7 @@ class EventsController extends BaseController
             $data = Yii::$app->request->post();
 
             if ($data['action'] == 'new') {
-                $exist = Eventinvitees::find()
+                $exist = EventInvitees::find()
                     ->select('invitees_id')
                     ->where([
                         'event_id' => $data['event_id'],
@@ -221,7 +221,7 @@ class EventsController extends BaseController
                 // Check count
                 if ($exist == 0) {
 
-                    $event_invite = new Eventinvitees;
+                    $event_invite = new EventInvitees;
                     $event_invite->name = $data['name'];
                     $event_invite->email = $data['email'];
                     $event_invite->event_id = $data['event_id'];
@@ -234,7 +234,7 @@ class EventsController extends BaseController
                     echo 2;
                 }
             } else {
-                $user = Eventinvitees::findOne($data['invitees_id']);
+                $user = EventInvitees::findOne($data['invitees_id']);
                 $user->name = $data['name'];
                 $user->email = $data['email'];
                 $user->phone_number = $data['phone_number'];
@@ -245,7 +245,7 @@ class EventsController extends BaseController
 
     public function actionDeleteInvitee($id)
     {
-        Eventinvitees::findOne($id)->delete();
+        EventInvitees::findOne($id)->delete();
         Yii::$app->session->setFlash('success','Invitee Deleted Successfully');
         return $this->redirect(['events/detail','slug'=>$_REQUEST['slug']]);
     }
@@ -254,7 +254,7 @@ class EventsController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $event_invite = Eventinvitees::find()->where(['invitees_id'=>$data['id']])->asArray()->one();
+            $event_invite = EventInvitees::find()->where(['invitees_id'=>$data['id']])->asArray()->one();
             return json_encode($event_invite);
         }
     }
@@ -265,7 +265,7 @@ class EventsController extends BaseController
             Yii::$app->session->set('show_login_modal', 1);//to display login modal
             return $this->goHome();
         }
-        $searchModel = new EventinviteesSearch();
+        $searchModel = new EventInviteesSearch();
         $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $id);
 
         ExcelView::widget([
