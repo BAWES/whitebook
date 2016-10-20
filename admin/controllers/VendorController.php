@@ -39,7 +39,7 @@ use common\models\Vendorlocation;
 use common\models\VendorItem;
 use common\models\VendorCategory;
 use common\models\BlockedDate;
-use common\models\Deliverytimeslot;
+use common\models\DeliveryTimeSlot;
  
 /**
  * VendorController implements the CRUD actions for Vendor model.
@@ -574,7 +574,7 @@ class VendorController extends Controller
         //vendor related data 
         VendorCategory::deleteAll(['vendor_id' => $id]);
         BlockedDate::deleteAll(['vendor_id' => $id]);
-        Deliverytimeslot::deleteAll(['vendor_id' => $id]);
+        DeliveryTimeSlot::deleteAll(['vendor_id' => $id]);
         Vendorlocation::deleteAll(['vendor_id' => $id]);
         VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
         Vendorpackages::deleteAll(['vendor_id' => $id]);
