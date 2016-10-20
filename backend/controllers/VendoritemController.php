@@ -25,7 +25,7 @@ use common\models\Itemtype;
 use common\models\Themes;
 use common\models\FeatureGroup;
 use common\models\FeatureGroupItem;
-use common\models\Priorityitem;
+use common\models\PriorityItem;
 use common\models\ChildCategory;
 use common\models\Vendoritempricing;
 use common\models\VendorItemToCategory;
@@ -85,7 +85,7 @@ class VendoritemController extends Controller
      */
     public function actionView($id)
     {
-        $dataProvider1=Priorityitem::find()
+        $dataProvider1=PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
             ->where(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
 
@@ -591,7 +591,7 @@ class VendoritemController extends Controller
         Vendoritemthemes::deleteAll(['item_id' => $id]);
         VendorItemToCategory::deleteAll(['item_id' => $id]);
         CustomerCart::deleteAll(['item_id' => $id]);
-        Priorityitem::deleteAll(['item_id' => $id]);
+        PriorityItem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
 

@@ -23,7 +23,7 @@ use Yii;
  * @property string $modified_datetime
  * @property string $trash
  */
-class Priorityitem extends \yii\db\ActiveRecord
+class PriorityItem extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

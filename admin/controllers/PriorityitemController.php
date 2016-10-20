@@ -3,7 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Priorityitem;
+use admin\models\PriorityItem;
 use admin\models\PriorityitemSearch;
 use admin\models\VendorItem;
 use admin\models\Vendor;
@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 
 /**
- * PriorityitemController implements the CRUD actions for Priorityitem model.
+ * PriorityitemController implements the CRUD actions for PriorityItem model.
  */
 class PriorityitemController extends Controller
 {
@@ -60,7 +60,7 @@ class PriorityitemController extends Controller
     }
 
     /**
-     * Lists all Priorityitem models.
+     * Lists all PriorityItem models.
      *
      * @return mixed
      */
@@ -96,7 +96,7 @@ class PriorityitemController extends Controller
     }
 
     /**
-     * Displays a single Priorityitem model.
+     * Displays a single PriorityItem model.
      *
      * @param string $id
      *
@@ -110,7 +110,7 @@ class PriorityitemController extends Controller
     }
 
     /**
-     * Creates a new Priorityitem model.
+     * Creates a new PriorityItem model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
@@ -121,7 +121,7 @@ class PriorityitemController extends Controller
         
         if (yii::$app->user->can($access)) {
 
-            $model = new Priorityitem();
+            $model = new PriorityItem();
             $category = Category::loadcategoryname();
             $subcategory = Subcategory::loadsubcategoryname();
             $childcategory = ChildCategory::loadchild();
@@ -167,7 +167,7 @@ class PriorityitemController extends Controller
     }
 
     /**
-     * Updates an existing Priorityitem model.
+     * Updates an existing PriorityItem model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -216,7 +216,7 @@ class PriorityitemController extends Controller
     }
 
          /**
-          * Deletes an existing Priorityitem model.
+          * Deletes an existing PriorityItem model.
           * If deletion is successful, the browser will be redirected to the 'index' page.
           *
           * @param string $id
@@ -227,7 +227,7 @@ class PriorityitemController extends Controller
          {
              $access = Authitem::AuthitemCheck('3', '19');
              if (yii::$app->user->can($access)) {
-				 $command=Priorityitem::updateAll(['trash' => 'Deleted'],'priority_id= '.$id);
+				 $command=PriorityItem::updateAll(['trash' => 'Deleted'],'priority_id= '.$id);
                  Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');
                  return $this->redirect(['index']);
              } else {
@@ -237,18 +237,18 @@ class PriorityitemController extends Controller
          }
 
     /**
-     * Finds the Priorityitem model based on its primary key value.
+     * Finds the PriorityItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Priorityitem the loaded model
+     * @return PriorityItem the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Priorityitem::findOne($id)) !== null) {
+        if (($model = PriorityItem::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -341,7 +341,7 @@ class PriorityitemController extends Controller
         }
         if ($data['item']):
 			
-			$datetime = Priorityitem::find()->select('priority_start_date','priority_end_date')
+			$datetime = PriorityItem::find()->select('priority_start_date','priority_end_date')
             ->where(['priority_id' => $data['priority_id']])
             ->andwhere(['item_id' => $data['item']])
             ->andwhere(['!=', 'trash', 'Deleted'])
@@ -363,8 +363,8 @@ class PriorityitemController extends Controller
             }
         }
         $cnt = count($k);
-        $as = '<input type="text" id="priorityitem-priority_start_date" class="form-control" name="Priorityitem[priority_start_date]">';
-        $ae = '<input type="text" id="priorityitem-priority_end_date" class="form-control" name="Priorityitem[priority_end_date]">';
+        $as = '<input type="text" id="priorityitem-priority_start_date" class="form-control" name="PriorityItem[priority_start_date]">';
+        $ae = '<input type="text" id="priorityitem-priority_end_date" class="form-control" name="PriorityItem[priority_end_date]">';
         echo json_encode(array('date' => $k, 'date1' => $k1, 'count' => $cnt, 'input1' => $as, 'input2' => $ae));
         exit;
         endif;
@@ -416,14 +416,14 @@ class PriorityitemController extends Controller
         $ids = implode('","', $data['keylist']);
         //print_r($ids);die;
         if ($data['status'] == 'Normal') {
-			   $command=Priorityitem::updateAll(['priority_level' => 'Normal'],['IN', 'priority_id', $data['keylist']]);
+			   $command=PriorityItem::updateAll(['priority_level' => 'Normal'],['IN', 'priority_id', $data['keylist']]);
             if ($command) {
                 Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
                 Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } elseif ($data['status'] == 'Super') {
-			   $command=Priorityitem::updateAll(['priority_level' => 'Super'],['IN', 'priority_id', $data['keylist']]);
+			   $command=PriorityItem::updateAll(['priority_level' => 'Super'],['IN', 'priority_id', $data['keylist']]);
 			if ($command) {
                 Yii::$app->session->setFlash('success', 'Priority item level updated!');
             } else {
@@ -438,7 +438,7 @@ class PriorityitemController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Inactive' : 'Active');
-        $command=Priorityitem::updateAll(['priority_level' => $status],['priority_id'=>$data['aid']]);
+        $command=PriorityItem::updateAll(['priority_level' => $status],['priority_id'=>$data['aid']]);
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
