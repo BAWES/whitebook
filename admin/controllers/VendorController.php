@@ -38,7 +38,7 @@ use common\models\Featuregroupitem;
 use common\models\Vendorlocation;
 use common\models\Vendoritem;
 use common\models\VendorCategory;
-use common\models\Blockeddate;
+use common\models\BlockedDate;
 use common\models\Deliverytimeslot;
  
 /**
@@ -573,7 +573,7 @@ class VendorController extends Controller
 
         //vendor related data 
         VendorCategory::deleteAll(['vendor_id' => $id]);
-        Blockeddate::deleteAll(['vendor_id' => $id]);
+        BlockedDate::deleteAll(['vendor_id' => $id]);
         Deliverytimeslot::deleteAll(['vendor_id' => $id]);
         Vendorlocation::deleteAll(['vendor_id' => $id]);
         VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);

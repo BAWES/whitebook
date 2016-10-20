@@ -316,7 +316,7 @@ class CartController extends BaseController
         //-------------- END Item Capacity -----------------//
 
         //current date should not in blocked date
-        $block_date = \common\models\Blockeddate::findOne([
+        $block_date = \common\models\BlockedDate::findOne([
             'vendor_id' => $vendor_id,
             'block_date' => date('Y-m-d', strtotime($data['delivery_date']))
         ]);
