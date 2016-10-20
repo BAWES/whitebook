@@ -17,7 +17,7 @@ use Yii;
  * @property integer $created_by
  * @property integer $modified_by
  */
-class Eventinvitees extends \yii\db\ActiveRecord
+class EventInvitees extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
