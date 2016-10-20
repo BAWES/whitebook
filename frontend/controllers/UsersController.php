@@ -19,7 +19,7 @@ use common\models\LoginForm;
 use common\models\Vendor;
 use common\models\City;
 use common\models\Events;
-use frontend\models\EventinviteesSearch;
+use frontend\models\EventInviteesSearch;
 use frontend\models\Website;
 use frontend\models\Eventitemlink;
 use frontend\models\Wishlist;
