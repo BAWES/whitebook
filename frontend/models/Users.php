@@ -443,7 +443,7 @@ class Users extends Model
     public function insert_item_to_event($item_id, $event_id)
     {
         $customer_id = Yii::$app->user->identity->customer_id;
-        $check = Eventitemlink::find()->select('link_id')
+        $check = EventItemlink::find()->select('link_id')
                         ->where(['event_id'=>$event_id])
                         ->andWhere(['item_id'=>$item_id])
                         ->count();
@@ -451,7 +451,7 @@ class Users extends Model
             return Events::EVENT_ALREADY_EXIST;
         } else {
             $event_date = date('Y-m-d H:i:s');
-            $command = new Eventitemlink();
+            $command = new EventItemlink();
             $command->event_id = $event_id;
             $command->item_id = $item_id;
             $command->link_datetime = $event_date;

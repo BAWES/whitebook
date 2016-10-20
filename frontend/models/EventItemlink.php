@@ -20,7 +20,7 @@ use yii\db\Expression;
 * @property integer $created_by
 * @property integer $modified_by
 */
-class Eventitemlink extends \yii\db\ActiveRecord
+class EventItemlink extends \yii\db\ActiveRecord
 {
     const EVENT_ITEM_LINK_EXIST = -2;
     const EVENT_ITEM_CREATED = 2;

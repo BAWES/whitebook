@@ -27,7 +27,7 @@ use common\models\LoginForm;
 use common\models\Vendor;
 use common\models\City;
 use frontend\models\Website;
-use frontend\models\Eventitemlink;
+use frontend\models\EventItemlink;
 use frontend\models\Wishlist;
 use frontend\models\AddressType;
 use frontend\models\AddressQuestion;
@@ -172,7 +172,7 @@ class EventsController extends BaseController
 
         $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
-        $eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
+        $eventitem_details = EventItemlink::find()->select(['{{%event_item_link}}.item_id'])
             ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
             ->Where(['{{%vendor_item}}.item_status'=>'Active',
                 '{{%vendor_item}}.trash'=>'Default',
