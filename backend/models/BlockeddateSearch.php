@@ -5,12 +5,12 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Blockeddate;
+use backend\models\BlockedDate;
 
 /**
- * BlockeddateSearch represents the model behind the search form about `common\models\Blockeddate`.
+ * BlockeddateSearch represents the model behind the search form about `common\models\BlockedDate`.
  */
-class BlockeddateSearch extends Blockeddate
+class BlockeddateSearch extends BlockedDate
 {
     /**
      * @inheritdoc
@@ -46,7 +46,7 @@ class BlockeddateSearch extends Blockeddate
             $vendor_id = Vendor::getVendor('vendor_id');
             $pagination = 40;
         }
-        $query = Blockeddate::find()
+        $query = BlockedDate::find()
         ->where(['!=', 'trash', 'Deleted'])   
         ->andwhere(['created_by'=> $vendor_id]);
 

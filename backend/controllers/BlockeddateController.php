@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Blockeddate;
+use backend\models\BlockedDate;
 use backend\models\Vendor;
 use backend\models\BlockeddateSearch;
 use yii\web\Controller;
@@ -65,7 +65,7 @@ class BlockeddateController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Blockeddate();
+        $model = new BlockedDate();
         $model->scenario = 'insert';
         $model->vendor_id = Vendor::getVendor('vendor_id');
         $blockdays=Vendor::Vendorblockeddays($model->vendor_id);
@@ -88,7 +88,7 @@ class BlockeddateController extends Controller
 
     public function actionCreateweek()
     {
-        $model = new Blockeddate();
+        $model = new BlockedDate();
         $model->vendor_id = Vendor::getVendor('vendor_id');
         $blockdays=Vendor::Vendorblockeddays($model->vendor_id);
 
@@ -211,7 +211,7 @@ class BlockeddateController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Blockeddate::findOne($id)) !== null) {
+        if (($model = BlockedDate::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -223,7 +223,7 @@ class BlockeddateController extends Controller
 	    if(Yii::$app->request->isAjax)
 	    {
     	    $data = Yii::$app->request->post();
-    	    $model = new Blockeddate();
+    	    $model = new BlockedDate();
     	    $model = Vendor::getVendor('vendor_id');
         } else {
 		  return $this->render('dateblocked');

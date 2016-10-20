@@ -9,7 +9,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\Vendorlocation;
 use common\models\Vendoritem;
-use common\models\Blockeddate;
+use common\models\BlockedDate;
 
 /**
  * This is the model class for table "whitebook_customer_cart".
@@ -261,7 +261,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             return $errors;
 
         //current date should not in blocked date 
-        $block_date = Blockeddate::findOne([
+        $block_date = BlockedDate::findOne([
             'vendor_id' => $vendor_id,
             'block_date' => date('Y-m-d', strtotime($data['delivery_date']))
         ]);

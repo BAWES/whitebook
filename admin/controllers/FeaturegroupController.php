@@ -6,7 +6,7 @@ use common\models\Featuregroupitem;
 use Yii;
 use common\models\Vendor;
 use admin\models\Featuregroup;
-use common\models\Blockeddate;
+use common\models\BlockedDate;
 use admin\models\FeaturegroupSearch;
 use yii\web\Controller;
 use admin\models\Authitem;

@@ -387,7 +387,7 @@ class ShopController extends BaseController
             }
             $item = Vendoritem::findOne($_POST['item_id']);
             if ($item) {
-                $exist = \common\models\Blockeddate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
+                $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
                 $date = date('d-m-Y', strtotime($selectedDate));
                 if ($exist) {
                     echo "<i class='fa fa-warning' style='color: Red; font-size: 19px;' aria-hidden='true'></i> Item Not Available for on this date '$date' for this location '$AreaName' ";
