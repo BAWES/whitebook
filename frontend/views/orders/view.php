@@ -101,7 +101,14 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
         					echo $item->vendoritem->item_name_ar; 
         				} ?>
 		        	</th>
-		    		<td align="left"><?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?></th>
+		    		<td align="left">
+		    			<?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
+
+		    			<br />
+
+		    			<?= date('h:m A', strtotime($item->timeslot->timeslot_start_time)) ?> - 
+		    			<?=	date('h:m A', strtotime($item->timeslot->timeslot_end_time)); ?>
+		    		</th>
 		    		<td aligh="left"><?= $item->purchase_delivery_address ?></th>
 		    		<td aligh="left"><?= $item->purchase_quantity ?></th>
 		    		<td align="right"><?= Yii::$app->params['Currency']; ?> <?= $item->purchase_price_per_unit ?></th>
