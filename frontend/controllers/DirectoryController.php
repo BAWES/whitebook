@@ -40,11 +40,11 @@ class DirectoryController extends BaseController
             $sort = 'vendor_name_ar';
         }
 
-
         $today = date('Y-m-d H:i:s');
+
         $query = Vendor::find()
             ->leftJoin('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
-            ->leftJoin('{{%vendor_category}}', '{{%vendor}}.vendor_id = {{%vendor_category}}.vendor_id')
+           // ->leftJoin('{{%vendor_category}}', '{{%vendor}}.vendor_id = {{%vendor_category}}.vendor_id')
             ->where(['<=','{{%vendor_packages}}.package_start_date', $today])
             ->andWhere(['>=','{{%vendor_packages}}.package_end_date', $today])
             ->andWhere(['{{%vendor}}.trash'=>'Default'])
@@ -55,7 +55,10 @@ class DirectoryController extends BaseController
             if (Yii::$app->request->isAjax) {
                 $category_id = Yii::$app->request->post('slug');
                 if ($category_id != 'All') {
-                    $query->andWhere(['{{%vendor_category}}.category_id' => $category_id]);
+                    $query->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id');
+                    $query->leftJoin('{{%vendor_item_to_category}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id');
+                    $query->leftJoin('{{%category_path}}', '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id');
+                    $query->andWhere(['{{%category_path}}.path_id' => $category_id]);
                 }
             }
 
