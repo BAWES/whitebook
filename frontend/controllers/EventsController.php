@@ -151,7 +151,7 @@ class EventsController extends BaseController
             'categorylist' => $categorylist,
             'vendorlist' => $vendorlist,
             'themelist' => $themelist,
-            'slug' => 'events',
+            'slug' => (isset($_REQUEST['slug'])) ? $_REQUEST['slug'] : 'events',
             'events' => $events,
             'thingsilike' => $thingsilike,
         ]);
