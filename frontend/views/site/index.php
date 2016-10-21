@@ -3,9 +3,9 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\view;
-use common\models\Featuregroup;
-use common\models\Featuregroupitem;
-use common\models\Vendoritem;
+use common\models\FeatureGroup;
+use common\models\FeatureGroupItem;
+use common\models\VendorItem;
 use common\models\Vendor;
 use common\models\Themes;
 use common\models\Image;
@@ -44,7 +44,7 @@ $model = new Website();
     <br />
     <div id="event_slider_wrapper">
         <div class="container paddng0">
-        <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+        <?=$this->render('/product/events_slider.php'); ?>
         </div>
     </div>
     <br />
@@ -70,7 +70,7 @@ $model = new Website();
 <?php } ?>
 
 <!-- Events slider end -->
-
+<!-- hide temporary
 <div class="plan_sections">
 <ul>
     <li>
@@ -104,12 +104,12 @@ $model = new Website();
         </div>
     </li>
 </ul>
-</div>
+</div>-->
 
 <!-- BEGIN FEATURE GROUP ITEM-->
 <?php
 
-$featured_produc = Featuregroup::find()
+$featured_produc = FeatureGroup::find()
     ->select(['group_id', 'group_name_ar', 'group_name'])
     ->where(['group_status' => 'Active', 'trash' => 'Default'])
     ->asArray()->all();
@@ -117,7 +117,7 @@ $featured_produc = Featuregroup::find()
 $i = 1;
 foreach ($featured_produc as $key => $value) {
 
- $feature_group_sql_result = Featuregroupitem::find()->select([
+ $feature_group_sql_result = FeatureGroupItem::find()->select([
         '{{%vendor_item}}.*',
         '{{%feature_group_item}}.vendor_id',
         '{{%vendor}}.vendor_name',

@@ -3,7 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\web\view;
-use backend\models\Deliverytimeslot;
+use backend\models\DeliveryTimeSlot;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\DeliverytimeslotSearch */
@@ -28,7 +28,7 @@ $timesot_id = 2;
       <div class="day_head">SUNDAY</div>
       <div class="clearfix"></div>
       <ul>
-      <?php  $sun = Deliverytimeslot::deliverytimeslot('Sunday');
+      <?php  $sun = DeliveryTimeSlot::deliverytimeslot('Sunday');
 
       foreach ($sun as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
@@ -47,7 +47,7 @@ $timesot_id = 2;
       <div class="day_head">MONDAY</div>
       <div class="clearfix"></div>
         <ul>
-      <?php  $mon = Deliverytimeslot::deliverytimeslot('Monday');
+      <?php  $mon = DeliveryTimeSlot::deliverytimeslot('Monday');
 
       foreach ($mon as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
@@ -65,7 +65,7 @@ $timesot_id = 2;
       <div class="day_head">TUESDAY</div>
       <div class="clearfix"></div>
           <ul>
-      <?php  $tue = Deliverytimeslot::deliverytimeslot('Tuesday');
+      <?php  $tue = DeliveryTimeSlot::deliverytimeslot('Tuesday');
 
       foreach ($tue as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
@@ -83,7 +83,7 @@ $timesot_id = 2;
       <div class="day_head">WEDNESDAY</div>
       <div class="clearfix"></div>
           <ul>
-      <?php  $wed = Deliverytimeslot::deliverytimeslot('Wednesday');
+      <?php  $wed = DeliveryTimeSlot::deliverytimeslot('Wednesday');
       foreach ($wed as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));
@@ -100,7 +100,7 @@ $timesot_id = 2;
       <div class="day_head">THURSDAY</div>
       <div class="clearfix"></div>
           <ul>
-      <?php  $thu = Deliverytimeslot::deliverytimeslot('Thursday');
+      <?php  $thu = DeliveryTimeSlot::deliverytimeslot('Thursday');
       foreach ($thu as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));
@@ -117,7 +117,7 @@ $timesot_id = 2;
       <div class="day_head">FRIDAY</div>
       <div class="clearfix"></div>
           <ul>
-      <?php  $fri = Deliverytimeslot::deliverytimeslot('Friday');
+      <?php  $fri = DeliveryTimeSlot::deliverytimeslot('Friday');
 
       foreach ($fri as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
@@ -135,7 +135,7 @@ $timesot_id = 2;
       <div class="day_head">SATURDAY</div>
       <div class="clearfix"></div>
           <ul>
-      <?php  $sat = Deliverytimeslot::deliverytimeslot('Saturday');
+      <?php  $sat = DeliveryTimeSlot::deliverytimeslot('Saturday');
       foreach ($sat as $key => $value) {
         $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
         $start = date('g:ia', strtotime($value['timeslot_start_time']));

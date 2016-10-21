@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Vendor;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\VendoritemSearch */
+/* @var $searchModel common\models\VendorItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Vendor items';
 $this->params['breadcrumbs'][] = $this->title;
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image-'.$data->item_id.'" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','javascript:void(0)',['id'=>'status',
 					'onclick'=>'change("'.$data->item_status.'","'.$data->item_id.'")']);
 				}, 
-				'filter' => \admin\models\Vendoritem::Activestatus(),
+				'filter' => \admin\models\VendorItem::Activestatus(),
 			
 			],
 			[
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'contentOptions' => ['class' => 'text-center'],
 				'headerOptions' => ['class' => 'text-center'],
              	'label'=>'item approved',
-             	'filter' => \admin\models\Vendoritem::Vendoritemstatus()
+             	'filter' => \admin\models\VendorItem::Vendoritemstatus()
 
 			], 			
             /*[

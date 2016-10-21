@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\data\ArrayDataProvider;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use frontend\models\Vendor;
 use frontend\models\Themes;
 use frontend\models\Users;
@@ -175,7 +175,7 @@ class SearchController extends BaseController
 
         if ($request->post('search') && $request->post('_csrf')) {
 
-            $item_details = Vendoritem::find()
+            $item_details = VendorItem::find()
                 ->select(['item_name','slug'])
                 ->where(['like', 'item_name',$request->post('search')])
                 ->andwhere(['whitebook_vendor_item.trash' =>'Default','item_for_sale' =>'Yes','item_status'=>'Active'])

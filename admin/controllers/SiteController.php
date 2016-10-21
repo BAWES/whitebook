@@ -10,7 +10,7 @@ use yii\web\Session;
 use admin\models\Admin;
 use admin\models\Customer;
 use admin\models\Vendor;
-use admin\models\Vendoritem;
+use admin\models\VendorItem;
 use yii\web\UploadedFile;
 use common\models\PasswordForm;
 use admin\models\LoginForm;
@@ -64,9 +64,9 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $vendoritemcnt = Vendoritem::itemcount();
-        $monthitemcnt = Vendoritem::itemmonthcount();
-        $dateitemcnt = Vendoritem::itemdatecount();
+        $vendoritemcnt = VendorItem::itemcount();
+        $monthitemcnt = VendorItem::itemmonthcount();
+        $dateitemcnt = VendorItem::itemdatecount();
         $vendorcnt = Vendor::vendorcount();
         $vendormonth = Vendor::vendormonthcount();
         $vendorday = Vendor::vendordatecount();
@@ -168,9 +168,9 @@ class SiteController extends Controller
                 $users_tbl->admin_password = Yii::$app->getSecurity()->generatePasswordHash($form['new_password']);
                 $users_tbl->save();
                 Yii::$app->session->setFlash('success', 'Successfully changed your password!');
-                $vendoritemcnt = Vendoritem::itemcount();
-                $monthitemcnt = Vendoritem::itemmonthcount();
-                $dateitemcnt = Vendoritem::itemdatecount();
+                $vendoritemcnt = VendorItem::itemcount();
+                $monthitemcnt = VendorItem::itemmonthcount();
+                $dateitemcnt = VendorItem::itemdatecount();
                 $vendorcnt = Vendor::vendorcount();
                 $vendormonth = Vendor::vendormonthcount();
                 $vendorday = Vendor::vendordatecount();
@@ -195,9 +195,9 @@ class SiteController extends Controller
         if ($query->load(Yii::$app->request->post())) {
             if ($query->save()) {
                 Yii::$app->session->setFlash('success', 'Successfully updated your profile!');
-                $vendoritemcnt = Vendoritem::itemcount();
-                $monthitemcnt = Vendoritem::itemmonthcount();
-                $dateitemcnt = Vendoritem::itemdatecount();
+                $vendoritemcnt = VendorItem::itemcount();
+                $monthitemcnt = VendorItem::itemmonthcount();
+                $dateitemcnt = VendorItem::itemdatecount();
                 $vendorcnt = Vendor::vendorcount();
                 $vendorperiod = Vendor::vendorperiod();
                 $vendormonth = Vendor::vendormonthcount();

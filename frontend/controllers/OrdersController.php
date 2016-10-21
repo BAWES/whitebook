@@ -12,6 +12,11 @@ class OrdersController extends BaseController
 {
 	public function actionIndex() {
 
+		if (Yii::$app->user->isGuest) {
+			Yii::$app->session->set('show_login_modal', 1);//to display login modal			
+	        return $this->redirect(['/site/index']);
+	    }
+
 		$query = Order::find()
 			->where('customer_id = ' . Yii::$app->user->getId())
 			->andWhere('order_transaction_id != ""')
@@ -34,6 +39,11 @@ class OrdersController extends BaseController
 	//View order detail 
 	public function actionView() {
 
+		if (Yii::$app->user->isGuest) {
+			Yii::$app->session->set('show_login_modal', 1);//to display login modal			
+	        return $this->redirect(['/site/index']);
+	    }
+	    
 		$order_id = Yii::$app->request->get('order_id');
 
 		$order = Order::findOne($order_id);

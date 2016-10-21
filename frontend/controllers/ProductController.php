@@ -6,13 +6,13 @@ use Yii;
 use yii\web\Controller;
 use yii\helpers\Json;
 use yii\helpers\Url;
-use frontend\models\Vendoritem;
+use frontend\models\VendorItem;
 use frontend\models\Vendor;
 use frontend\models\Users;
-use common\models\Featuregroupitem;
-use common\models\Deliverytimeslot;
+use common\models\FeatureGroupItem;
+use common\models\DeliveryTimeSlot;
 use common\models\Events;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 use common\models\Image;
 
 /**
@@ -33,13 +33,13 @@ class ProductController extends BaseController
     */
     public function actionProduct($slug)
     {
-        $model = Vendoritem::findOne(['slug'=>$slug,'item_status'=>'Active','item_approved'=>'Yes','trash' => 'Default']);
+        $model = VendorItem::findOne(['slug'=>$slug,'item_status'=>'Active','item_approved'=>'Yes','trash' => 'Default']);
 
         if (empty($model)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $similarProductModel = Vendoritem::more_from_vendor($model);
+        $similarProductModel = VendorItem::more_from_vendor($model);
 
         $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
 
@@ -50,7 +50,7 @@ class ProductController extends BaseController
             //$baselink = Yii::getAlias("@s3/vendor_item_images_530/") . 'no_image.jpg';
         }
 
-        $vendr_area = Vendorlocation::find()
+        $vendr_area = VendorLocation::find()
             ->select(['{{%vendor_location}}.area_id','{{%location}}.*'])
             ->leftJoin('{{%location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
             ->where(['{{%location}}.trash' => 'Default'])

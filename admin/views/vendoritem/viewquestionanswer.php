@@ -2,8 +2,8 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use common\models\Image;
-use common\models\Vendoritemquestion;
-use common\models\Vendoritemquestionguide;
+use common\models\VendorItemQuestion;
+use common\models\VendorItemQuestionGuide;
 	 $count_q=(count($question)); // for initial count questions used in javascript
 	 $t=0;	 
 	 ?>

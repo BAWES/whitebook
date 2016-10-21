@@ -6,7 +6,7 @@ use yii\base;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 use common\models\Location;
-use frontend\models\Addresstype;
+use frontend\models\AddressType;
 
 $this->title ='Address Book | Whitebook';
 
@@ -51,7 +51,7 @@ $this->title ='Address Book | Whitebook';
 
                                         <!-- address type -->
                                         <b>Address Type:</b> <br />
-                                        <?= Addresstype::type_name($address['address_type_id']); ?>
+                                        <?= AddressType::type_name($address['address_type_id']); ?>
 
                                         <br />
                                         <br />

@@ -98,6 +98,7 @@ $(document).ready(function () {
     });
 
     $('#user-options').click(function () {
+        $(this).parent().toggleClass('open');
         $('#my-task-list').popover('hide');
     });
     //*********************************** BEGIN CHAT POPUP*****************************

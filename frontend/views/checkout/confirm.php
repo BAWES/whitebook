@@ -9,9 +9,6 @@ use common\components\CFormatter;
 
 ?>
 
-<br />
-<br />
-
 <h3>
 	<?= Yii::t('frontend', 'Payment method selected : <strong>{payment_method}</strong>', [
 		'payment_method' => $payment_method
@@ -30,9 +27,16 @@ use common\components\CFormatter;
         		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-        		<td aligh="left"><?= Yii::t('frontend', 'Quantity') ?></th>
-        		<td align="right"><?= Yii::t('frontend', 'Unit Price') ?></th>
-        		<td align="right"><?= Yii::t('frontend', 'Total') ?></th>
+        		<td aligh="left">
+                    <span class="visible-md visible-lg">
+                        <?= Yii::t('frontend', 'Quantity') ?>
+                    </span>
+                    <span class="visible-xs visible-sm">
+                        <?= Yii::t('frontend', 'Qty') ?>
+                    </span>
+                </td>
+        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
+        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
         	</tr>
         </thead>
         <tbody>
@@ -80,6 +84,10 @@ use common\components\CFormatter;
         					echo $item['item_name_ar']; 
         				} ?>
         			</a>
+
+                    <div class="visible-xs visible-sm">                         
+                        x <?= $item['cart_quantity'] ?> = <?= CFormatter::format($row_total); ?>
+                    </div>
         		</td>
         		<td>
         			<?php 
@@ -102,7 +110,8 @@ use common\components\CFormatter;
 
         				<?= $item['cart_delivery_date'] ?> <br />
         			
-        				<?= $item['timeslot_start_time'].' - '.$item['timeslot_end_time'] ?>
+                        <?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
+                        <?= date('h:m A', strtotime($item['timeslot_end_time'])); ?>
 
         			<?php } else { ?>
         				<span class="error">
@@ -114,8 +123,12 @@ use common\components\CFormatter;
 	        		<?= $item['cart_quantity'] ?>
                     </div>
                 </td>
-        		<td align="right"><?= CFormatter::format($item['item_price_per_unit'])  ?></td>
-        		<td align="right"><?= CFormatter::format($row_total) ?></td>
+        		<td align="right" class="visible-md visible-lg">
+                    <?= CFormatter::format($item['item_price_per_unit']); ?>
+                </td>
+        		<td align="right" class="visible-md visible-lg">
+                    <?= CFormatter::format($row_total) ?>
+                </td>
         	</tr>
         	<?php } ?>
         </tbody>        	

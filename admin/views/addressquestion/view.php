@@ -7,7 +7,7 @@ use yii\grid\GridView;
 use yii\widgets\DetailView;
 
 use common\models\AddressQuestion;
-use common\models\Addresstype;
+use common\models\AddressType;
 
 $this->title = 'Address Questions';
 $this->params['breadcrumbs'][] = ['label' => 'Address Questions', 'url' => ['index']];

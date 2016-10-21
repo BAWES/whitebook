@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
 use yii\base;
 use yii\base\Object;
 use yii\helpers\ArrayHelper;
-use common\models\Priorityitem;
+use common\models\PriorityItem;
 use yii\grid\CheckboxColumn;
 ?>
 <?php Pjax::begin(['enablePushState' => false]); ?>

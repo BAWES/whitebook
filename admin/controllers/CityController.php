@@ -5,7 +5,7 @@ namespace admin\controllers;
 use Yii;
 use admin\models\CitySearch;
 use admin\models\Admin;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -16,7 +16,7 @@ use common\models\City;
 use common\models\CustomerAddress;
 use common\models\CustomerCart;
 use common\models\Location;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 
 /**
 * CityController implements the CRUD actions for City model.
@@ -68,7 +68,7 @@ class CityController extends Controller
 
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '12');
+        $access = AuthItem::AuthitemCheck('4', '12');
 
         if (yii::$app->user->can($access)) {
         
@@ -110,7 +110,7 @@ class CityController extends Controller
     */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '12');
+        $access = AuthItem::AuthitemCheck('1', '12');
         
         if (yii::$app->user->can($access)) {
             
@@ -149,7 +149,7 @@ class CityController extends Controller
     */
     public function actionUpdate($city_id, $country_id)
     {
-        $access = Authitem::AuthitemCheck('2', '12');
+        $access = AuthItem::AuthitemCheck('2', '12');
         
         if (yii::$app->user->can($access)) {
             
@@ -190,7 +190,7 @@ class CityController extends Controller
     */
     public function actionDelete($city_id, $country_id)
     {
-        $access = Authitem::AuthitemCheck('3', '12');
+        $access = AuthItem::AuthitemCheck('3', '12');
 
         if (yii::$app->user->can($access)) {
         
@@ -207,7 +207,7 @@ class CityController extends Controller
             Location::deleteAll(['city_id' => $city_id]);
 
             //delete all vendor location - city_id 
-            Vendorlocation::deleteAll(['city_id' => $city_id]);
+            VendorLocation::deleteAll(['city_id' => $city_id]);
 
             Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
             return $this->redirect(['index']);

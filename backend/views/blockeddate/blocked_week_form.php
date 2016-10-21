@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Blockeddate */
+/* @var $model common\models\BlockedDate */
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = 'Manage weekly off';

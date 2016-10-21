@@ -30,6 +30,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         		$errors = CustomerCart::validate_item([
         			'item_id' => $item['item_id'],
         			'delivery_date' => $item['cart_delivery_date'],
+        			'timeslot_end_time' => $item['timeslot_end_time'],
         			'area_id' => $item['area_id'],
         			'quantity' => $item['cart_quantity']
         		], true);
@@ -59,18 +60,29 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-	        		<td aligh="center" class="text-center"><?= Yii::t('frontend', 'Quantity') ?></th>
-	        		<td align="right"><?= Yii::t('frontend', 'Unit Price') ?></th>
-	        		<td align="right"><?= Yii::t('frontend', 'Total') ?></th>
+	        		<td aligh="center" class="text-center">
+	        			<span class="visible-md visible-lg">
+	        				<?= Yii::t('frontend', 'Quantity') ?>
+	        			</span>
+	        			<span class="visible-xs visible-sm">
+	        				<?= Yii::t('frontend', 'Qty') ?>
+	        			</span>
+	        		</th>
+	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
+	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
 	        </thead>
 	        <tbody>
 	        	<?php
+	        	
 	        	$sub_total = $delivery_charge = 0;
+	        	
 	        	foreach ($items as $item) {
+
 				$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
 				$row_total = $item['item_price_per_unit'] * $item['cart_quantity'];
     			$sub_total += $row_total;
+	        	
 	        	?>
 	        	<tr>
 	        		<td align="center">
@@ -100,6 +112,10 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        					echo $item['item_name_ar']; 
 	        				} ?>
 	        			</a>
+
+	        			<div class="visible-xs visible-sm">	        				
+	        				x <?= $item['cart_quantity'] ?> = <?= CFormatter::format($row_total); ?>
+	        			</div>
 	        		</td>
 					<?php
 					$color = '';
@@ -119,14 +135,29 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		<td class="position-relative " style="background-color:<?=$color?> ">
 	        			<?php
 
-
 	        			if(isset($delivery_area->location)) {
+
 							$delivery_charge += $delivery_area->delivery_price;
+
 	        				?>
+	        					<?php if(Yii::$app->language == 'en') { ?>
+		            				<?= $delivery_area->location->location; ?> <br />
+		            				<?= $delivery_area->location->city->city_name; ?> <br />
+		                        <?php } else { ?>
+		                            <?= $delivery_area->location->location_ar; ?> <br />
+		                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
+		                        <?php } ?>
+
 	        					<?= $item['cart_delivery_date'] ?><br />
-								<?= $item['timeslot_start_time'].' - '.$item['timeslot_end_time'] ?>
-								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>">&nbsp;</i>
-							<br/><?=$msg?>
+								
+								<?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
+		    					<?=	date('h:m A', strtotime($item['timeslot_end_time'])); ?>
+
+								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>"></i>
+							<br/>
+
+							<?= $msg; ?>
+
 	        			<?php } else { ?>
 	        				<span class="error">
 	        					<?= Yii::t('frontend', 'We cannot delivery this item!'); ?>
@@ -134,18 +165,17 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			<?php } ?>		        			
 	        		</td>
 	        		<td align="center">
-		        		<div class="input-group btn-block" style="max-width: 140px;">
+		        		<div class="input-group btn-block" style="max-width: 150px;">
 		                    <input type="text" name="quantity[<?= $item['cart_id'] ?>]" value="<?= $item['cart_quantity'] ?>" size="1" class="form-control">
 		                    <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Update"><i class="glyphicon glyphicon-refresh"></i></button>
 		                    <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="glyphicon glyphicon-trash"></i></button>
 	                    </div>
                     </td>
-	        		<td align="right">
+	        		<td align="right" class="visible-md visible-lg">
 	        			<?= CFormatter::format($item['item_price_per_unit'])  ?>
 	        		</td>
-	        		<td align="right">
+	        		<td align="right" class="visible-md visible-lg">
 	        			<?= CFormatter::format($row_total)  ?>
-	        			<?= Yii::$app->params['Currency']; ?>
 	        		</td>
 	        	</tr>
 	        	<?php } ?>
@@ -173,13 +203,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        </div>
         </div>
 
-		<a href="<?= Url::to(['cart/confirm']) ?>" class="btn btn-primary pull-right btn-checkout">
-			<?= Yii::t('frontend', 'Proceed to Checkout') ?>
-		</a>
-
-<!--        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">-->
-<!--        	--><?//= Yii::t('frontend', 'Proceed to Checkout') ?>
-<!--        </button>-->
+        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">
+        	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
+        </button>
 
         <a href="<?= Url::to(['shop/index']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
@@ -206,11 +232,6 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 </section>
 
 <?php
-
-$this->registerCss("
-.position-relative {position:relative;}
-.fa-edit{position: absolute;right: 33px;top: 23px;cursor: pointer;}
-");
 
 $this->registerJs("
     var vendor_id = '';

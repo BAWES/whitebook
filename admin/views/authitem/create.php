@@ -4,9 +4,9 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Authitem */
+/* @var $model common\models\AuthItem */
 
-$this->title = 'Create Authitem';
+$this->title = 'Create AuthItem';
 $this->params['breadcrumbs'][] = ['label' => 'Authitems', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

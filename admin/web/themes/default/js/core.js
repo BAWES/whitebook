@@ -83,6 +83,9 @@ $(document).ready(function () {
     });
 
     $('#user-options').click(function () {
+
+        $(this).parent().toggleClass('open');
+
         $('#my-task-list').popover('hide');
     });
     //*********************************** BEGIN CHAT POPUP*****************************
@@ -98,7 +101,7 @@ $(document).ready(function () {
 //            name: 'sidr',
 //            side: 'right',
 //            complete: function () {}
-//        });        
+//        });
 //    }
     $(".simple-chat-popup").click(function () {
         $(this).addClass('hide');
@@ -117,7 +120,7 @@ $(document).ready(function () {
         $('.simple-chat-popup').addClass('animated fadeOut');
     }, 8000);
 
-    //*********************************** END CHAT POPUP*****************************	
+    //*********************************** END CHAT POPUP*****************************
 
     //**********************************BEGIN MAIN MENU********************************
     jQuery('.page-sidebar li > a').on('click', function (e) {
@@ -204,7 +207,7 @@ $(document).ready(function () {
     //***********************************BEGIN Fixed Menu*****************************
     function initMainMenu() {
 
-        
+
     }
     initExtendedLayoutMenuScroll();
     function initExtendedLayoutMenuScroll(){
@@ -223,13 +226,13 @@ $(document).ready(function () {
         });
      }
     //***********************************END Horinzontal Menu*****************************
-    //***********************************BEGIN Lazyload images*****************************	
+    //***********************************BEGIN Lazyload images*****************************
     if ($.fn.lazyload) {
         $("img.lazy").lazyload({
             effect: "fadeIn"
         });
     }
-    //***********************************BEGIN Grids*****************************		
+    //***********************************BEGIN Grids*****************************
     $('.grid .tools a.remove').on('click', function () {
         var removable = jQuery(this).parents(".grid");
         if (removable.next().hasClass('grid') || removable.prev().hasClass('grid')) {
@@ -261,7 +264,7 @@ $(document).ready(function () {
     $('.user-info .collapse').on('click', function () {
         jQuery(this).parents(".user-info ").stop().slideToggle(400, "swing");
     });
-    //***********************************END Grids*****************************				
+    //***********************************END Grids*****************************
     var handleSidenarAndContentHeight = function () {
         var content = $('.page-content');
         var sidebar = $('.page-sidebar');
@@ -284,7 +287,7 @@ $(document).ready(function () {
         // $(e.target).prev('.accordion-heading').find('.accordion-toggle').removeClass('collapsed');
     });
 
-    //***********************************BEGIN Layout Readjust *****************************		
+    //***********************************BEGIN Layout Readjust *****************************
 
     $(window).setBreakpoints({
         distinct: true,
@@ -294,7 +297,7 @@ $(document).ready(function () {
         768,
         1024]
     });
-    //Break point entry 
+    //Break point entry
     $(window).bind('enterBreakpoint320', function () {
         $('#main-menu-toggle-wrapper').show();
         $('#portrait-chat-toggler').show();
@@ -328,8 +331,8 @@ $(document).ready(function () {
         }
 
     });
-    
-    
+
+
     $(window).bind('enterBreakpoint1024', function () {
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             var elem = jQuery('.page-sidebar ul');
@@ -363,9 +366,9 @@ $(document).ready(function () {
         closeAndRestSider();
     });
 
-    //***********************************END Layout Readjust *****************************	
+    //***********************************END Layout Readjust *****************************
 
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
     function closeAndRestSider() {
         if ($('#main-menu').attr('data-inner-menu') == '1') {
             $('#main-menu').addClass("mini");
@@ -387,9 +390,9 @@ $(document).ready(function () {
     function rebuildSider() {
 
     }
-    //***********************************END Function calls *****************************	
+    //***********************************END Function calls *****************************
 
-    //***********************************BEGIN Main Menu Toggle *****************************	
+    //***********************************BEGIN Main Menu Toggle *****************************
     $('#layout-condensed-toggle').click(function () {
         if ($('#main-menu').attr('data-inner-menu') == '1') {
             //Do nothing
@@ -422,9 +425,9 @@ $(document).ready(function () {
             $('.bar').slideToggle(200, "linear");
         }
     });
-    //***********************************END Main Menu Toggle *****************************	
-    
-    //***********************************BEGIN Slimscroller *****************************		
+    //***********************************END Main Menu Toggle *****************************
+
+    //***********************************BEGIN Slimscroller *****************************
     $('.scroller').each(function () {
         var h = $(this).attr('data-height');
         $(this).scrollbar({
@@ -437,36 +440,36 @@ $(document).ready(function () {
                 $(this).css('max-height',h);
         }
     });
-    //***********************************END Slimscroller *****************************	
+    //***********************************END Slimscroller *****************************
 
-    //***********************************BEGIN dropdow menu *****************************		
+    //***********************************BEGIN dropdow menu *****************************
     $('.dropdown-toggle').click(function () {
         $("img").trigger("unveil");
     });
-    //***********************************END dropdow menu *****************************	
+    //***********************************END dropdow menu *****************************
 
-    //***********************************BEGIN Global sparkline chart  *****************************	   
+    //***********************************BEGIN Global sparkline chart  *****************************
     if ($.fn.sparkline) {
         $('.sparklines').sparkline('html', {
             enableTagOptions: true
         });
     }
-    //***********************************END Global sparkline chart  *****************************	
+    //***********************************END Global sparkline chart  *****************************
 
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
     $('table th .checkall').on('click', function () {
         if ($(this).is(':checked')) {
             $(this).closest('table').find(':checkbox').attr('checked', true);
             $(this).closest('table').find('tr').addClass('row_selected');
-            //$(this).parent().parent().parent().toggleClass('row_selected');	
+            //$(this).parent().parent().parent().toggleClass('row_selected');
         } else {
             $(this).closest('table').find(':checkbox').attr('checked', false);
             $(this).closest('table').find('tr').removeClass('row_selected');
         }
     });
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
 
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
     $('.animate-number').each(function () {
         $(this).animateNumbers($(this).attr("data-value"), true, parseInt($(this).attr("data-animation-duration"), 10));
     });
@@ -474,9 +477,9 @@ $(document).ready(function () {
         $(this).css('width', $(this).attr("data-percentage"));
 
     });
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
 
-    //***********************************BEGIN Tiles Controller Options *****************************		
+    //***********************************BEGIN Tiles Controller Options *****************************
 
 
     $('.widget-item > .controller .reload').click(function () {
@@ -523,9 +526,9 @@ $(document).ready(function () {
         forcePlaceholderSize: true,
         tolerance: 'pointer'
     });
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
 
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
 
     $(window).resize(function () {
         calculateHeight();
@@ -538,7 +541,7 @@ $(document).ready(function () {
             $('.scrollup').fadeOut();
         }
     });
-    //***********************************BEGIN Function calls *****************************		
+    //***********************************BEGIN Function calls *****************************
     $('.scrollup').click(function () {
         $("html, body").animate({
             scrollTop: 0
@@ -552,7 +555,7 @@ $(window).resize(function () {
 
 /* Begin processing image */
 $('.btn-primary,.btn-success').bind('click',function() {
-	//alert($('.has-error').length); alert($('.has-success').length); alert($('.required').length); 
+	//alert($('.has-error').length); alert($('.has-success').length); alert($('.required').length);
     if(($('.has-error').length == 0) && ($('.has-success').length >= $('.required').length)){
     //if(($('.has-error').length == 0)){
 		$('#fade').remove();
@@ -560,7 +563,7 @@ $('.btn-primary,.btn-success').bind('click',function() {
 		$('.processing_image').show();
 		return true;
 	}
-   
+
 });
 
 
@@ -571,7 +574,7 @@ $('.btn-primary,.btn-success').bind('click',function() {
 function calculateHeight() {
     var contentHeight = parseInt($('.page-content').height(), 10);
 }
-    
+
 function toggleMainMenu(){
     var timer;
     if($('body').hasClass('open-menu-left')){
@@ -579,7 +582,7 @@ function toggleMainMenu(){
         timer= setTimeout(function(){
             $('.page-sidebar').removeClass('visible');
         }, 300);
-        
+
     }
     else{
         clearTimeout(timer);
@@ -587,7 +590,7 @@ function toggleMainMenu(){
         setTimeout(function(){
              $('body').addClass('open-menu-left');
         }, 50);
-       
+
     }
 }
 function toggleChat(){
@@ -597,13 +600,13 @@ function toggleChat(){
             timer= setTimeout(function(){
                 $('.chat-window-wrapper').removeClass('visible');
             }, 300);
-           
+
         }
-        else{ 
+        else{
             clearTimeout(timer);
             $('.chat-window-wrapper').addClass('visible');
             $('body').addClass('open-menu-right');
-        } 
+        }
 }
 
 $('body.open-menu-left .page-content').on('touchstart', function (e) {
@@ -650,7 +653,7 @@ $('body.open-menu-left .page-content').on('touchstart', function (e) {
         $(this).removeClass('hide-top-content-header');
         if(!$('body').hasClass('extended-layout'))
         $(this).find('#main-menu').removeClass('mini');
-    };    
+    };
 
 })(jQuery);
 
@@ -675,53 +678,53 @@ function unblockUI(el) {
     $(el).unblock();
 }
 // include below function manually for select all for access controll by murugan
-function checkall(tis){ 
+function checkall(tis){
 //	$('input:checkbox .checkbox_all').attr('checked',tis);
-	
+
 	$('.checkbox_all').each(function() { //loop through each checkbox
-		this.checked = tis;  //select all checkboxes with class "checkbox1"  
-		             
+		this.checked = tis;  //select all checkboxes with class "checkbox1"
+
 	});
-       
+
 }
 
 
-function create1(tis){ 
+function create1(tis){
 //	$('input:checkbox .checkbox_all').attr('checked',tis);
-	
+
 	$('.create').each(function() { //loop through each checkbox
-		this.checked = tis;  //select all checkboxes with class "checkbox1"  
-		             
+		this.checked = tis;  //select all checkboxes with class "checkbox1"
+
 	});
-       
+
 }
 
-function update1(tis){ 
+function update1(tis){
 //	$('input:checkbox .checkbox_all').attr('checked',tis);
-	
+
 	$('.update').each(function() { //loop through each checkbox
-		this.checked = tis;  //select all checkboxes with class "checkbox1"  
-		             
+		this.checked = tis;  //select all checkboxes with class "checkbox1"
+
 	});
-       
+
 }
 
-function manage1(tis){ 
+function manage1(tis){
 //	$('input:checkbox .checkbox_all').attr('checked',tis);
-	
+
 	$('.manage').each(function() { //loop through each checkbox
-		this.checked = tis;  //select all checkboxes with class "checkbox1"  
-		             
+		this.checked = tis;  //select all checkboxes with class "checkbox1"
+
 	});
-       
+
 }
-function delete1(tis){ 
+function delete1(tis){
 //	$('input:checkbox .checkbox_all').attr('checked',tis);
-	
+
 	$('.delete').each(function() { //loop through each checkbox
-		this.checked = tis;  //select all checkboxes with class "checkbox1"  
-		             
+		this.checked = tis;  //select all checkboxes with class "checkbox1"
+
 	});
-       
+
 }
 

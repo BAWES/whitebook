@@ -6,10 +6,10 @@ use common\models\Country;
 use common\models\City;
 use common\models\Location;
 use common\models\Area;
-use common\models\Addresstype;
+use common\models\AddressType;
 use yii\helpers\Html;
-use common\models\Vendoritempricing;
-use common\models\Itemtype;
+use common\models\VendorItemPricing;
+use common\models\ItemType;
 use common\models\Category;
 use yii\widgets\Breadcrumbs;
 
@@ -74,7 +74,7 @@ $this->title = 'Whitebook - Checkout';
 
                                 <label class="label_radio delivery_details" for="radio-<?= $key['address_id']; ?>" id="<?= $key['address_id']; ?>"><input class="dvy_otn" name="delivery_option" id="radio-<?= $key['address_id']; ?>" value="<?= $key['address_id']; ?>" type="radio">
                                     <span>Delivery <?= $key['address_id']; ?></span></label>
-                                <tr><td><?= Addresstype::getAddresstype($key['address_type_id']) ?></td></tr>
+                                <tr><td><?= AddressType::getAddresstype($key['address_type_id']) ?></td></tr>
                                 <tr><td><?= Location::getlocation($key['area_id']) ?></td></tr>
                                 <tr><td><?= City::getCity($key['city_id']) ?></td></tr>
                                 <tr><td><?= Country::getCountry($key['country_id']) ?></td></tr>

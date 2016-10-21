@@ -7,7 +7,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use admin\models\Addresstype;
+use admin\models\AddressType;
 use admin\models\AddressQuestion;
 use admin\models\AddressQuestionSearch;
 use common\models\CustomerAddressResponse;
@@ -150,7 +150,7 @@ class AddressquestionController extends Controller
         
         } else {
             
-            $addresstype = Addresstype::loadAddresstype();
+            $addresstype = AddressType::loadAddresstype();
 
             return $this->render('create', [
                 'model' => $model, 
@@ -170,7 +170,7 @@ class AddressquestionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $addresstype = Addresstype::loadAddress();
+        $addresstype = AddressType::loadAddress();
         $addressquestion = AddressQuestion::loadAddressquestion($model->address_type_id);
         $data = Yii::$app->request->post('AddressQuestion');
 

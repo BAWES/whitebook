@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Blockeddate */
+/* @var $model common\models\BlockedDate */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -15,17 +15,17 @@ use yii\widgets\ActiveForm;
 	<div class="form-group">
 <?php 
 
-$b = explode(',',$block);
+    $b = explode(',',$block);
 
-$k = array();
+    $k = array();
 
-foreach ($b as $b1){
-  if($b1==7){
-    $k[]='0';
-  } else {
-    $k[]=$b1;
-  }
-}
+    foreach ($b as $b1){
+      if($b1==7){
+        $k[]='0';
+      } else {
+        $k[]=$b1;
+      }
+    }
 
 if(!$model->isNewRecord){ ?>
    <?= $form->field($model, 'block_date',['template' => "{label}<div class='controls'><div class='input-group col-md-12'>{input}</div></div>{hint}{error}"])->textInput(['maxlenght' => 255, 'value' => date( 'd-m-Y', strtotime( $model->block_date ) )]) ?>

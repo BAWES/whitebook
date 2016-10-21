@@ -7,8 +7,8 @@ use yii\helpers\ArrayHelper;
 use frontend\models\Users;
 use frontend\models\Website;
 use common\models\Category;
-use common\models\Vendoritem;
-use common\models\Vendoritemthemes;
+use common\models\VendorItem;
+use common\models\VendorItemThemes;
 use common\models\CategoryPath;
 use frontend\models\Themes;
 use frontend\models\Vendor;
@@ -157,7 +157,7 @@ class PlanController extends BaseController
 
         if (!empty($items)) {
             $item_ids = ArrayHelper::map($items, 'item_id', 'item_id');
-            $themes = Vendoritemthemes::find()
+            $themes = VendorItemThemes::find()
                 ->select(['theme_id'])
                 ->with('themeDetail')
                 ->where("trash='default' and item_id IN(".implode(',', array_keys($item_ids)).")")
@@ -206,7 +206,7 @@ class PlanController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $model = Vendoritem::find()->where('item_id='.$data['item_id'])->asArray()->all();
+            $model = VendorItem::find()->where('item_id='.$data['item_id'])->asArray()->all();
             $this->renderPartial('addevent', array('model' => $model));
         }
     }

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use common\models\Accesscontroller;
+use common\models\AccessController;
 use common\models\Role;
 /* @var $this yii\web\View */
 /* @var $model common\models\Accesscontrol */
@@ -29,12 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'admin_id' => 
             [
                 'label'  => 'Admin Name',
-                'value'  => Accesscontroller::getAdminName($model->admin_id),
+                'value'  => AccessController::getAdminName($model->admin_id),
             ],
            'attributes' => 
             [
                 'label'  => 'Pages',
-                'value'  => Accesscontroller::itemcontroller($model->controller),
+                'value'  => AccessController::itemcontroller($model->controller),
             ],
             'auth_item',
         ],

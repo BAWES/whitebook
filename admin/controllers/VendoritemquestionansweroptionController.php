@@ -3,16 +3,16 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Vendoritemquestionansweroption;
+use common\models\VendorItemQuestionAnswerOption;
 use common\models\VendoritemquestionansweroptionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\Vendoritemquestion;
+use common\models\VendorItemQuestion;
 use yii\helpers\ArrayHelper;
 
 /**
- * VendoritemquestionansweroptionController implements the CRUD actions for Vendoritemquestionansweroption model.
+ * VendoritemquestionansweroptionController implements the CRUD actions for VendorItemQuestionAnswerOption model.
  */
 class VendoritemquestionansweroptionController extends Controller
 {
@@ -39,7 +39,7 @@ class VendoritemquestionansweroptionController extends Controller
     }
 
     /**
-     * Lists all Vendoritemquestionansweroption models.
+     * Lists all VendorItemQuestionAnswerOption models.
      *
      * @return mixed
      */
@@ -55,7 +55,7 @@ class VendoritemquestionansweroptionController extends Controller
     }
 
     /**
-     * Displays a single Vendoritemquestionansweroption model.
+     * Displays a single VendorItemQuestionAnswerOption model.
      *
      * @param string $id
      *
@@ -69,15 +69,15 @@ class VendoritemquestionansweroptionController extends Controller
     }
 
     /**
-     * Creates a new Vendoritemquestionansweroption model.
+     * Creates a new VendorItemQuestionAnswerOption model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Vendoritemquestionansweroption();
-        $question = Vendoritemquestion::find()->select(['question_id', 'question_text'])->all();
+        $model = new VendorItemQuestionAnswerOption();
+        $question = VendorItemQuestion::find()->select(['question_id', 'question_text'])->all();
         $questions = ArrayHelper::map($question, 'question_id', 'question_text');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -90,7 +90,7 @@ class VendoritemquestionansweroptionController extends Controller
     }
 
     /**
-     * Updates an existing Vendoritemquestionansweroption model.
+     * Updates an existing VendorItemQuestionAnswerOption model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -100,7 +100,7 @@ class VendoritemquestionansweroptionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $question = Vendoritemquestion::find()->select(['question_id', 'question_text'])->all();
+        $question = VendorItemQuestion::find()->select(['question_id', 'question_text'])->all();
         $questions = ArrayHelper::map($question, 'question_id', 'question_text');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -113,7 +113,7 @@ class VendoritemquestionansweroptionController extends Controller
     }
 
     /**
-     * Deletes an existing Vendoritemquestionansweroption model.
+     * Deletes an existing VendorItemQuestionAnswerOption model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param string $id
@@ -128,18 +128,18 @@ class VendoritemquestionansweroptionController extends Controller
     }
 
     /**
-     * Finds the Vendoritemquestionansweroption model based on its primary key value.
+     * Finds the VendorItemQuestionAnswerOption model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Vendoritemquestionansweroption the loaded model
+     * @return VendorItemQuestionAnswerOption the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Vendoritemquestionansweroption::findOne($id)) !== null) {
+        if (($model = VendorItemQuestionAnswerOption::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -152,7 +152,7 @@ class VendoritemquestionansweroptionController extends Controller
             $data = Yii::$app->request->post();
         }
         if ($data['option'] != '') {
-            $command = Vendoritemquestionansweroption::deleteAll('answer_id='.$data['option']);
+            $command = VendorItemQuestionAnswerOption::deleteAll('answer_id='.$data['option']);
             if ($command) {
                 echo 'Option deleted successfully';
                 die;

@@ -4,12 +4,9 @@ namespace common\models;
 
 use Yii;
 use yii\db\Expression;
-use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use common\models\Vendorlocation;
-use common\models\Vendoritem;
-use common\models\Blockeddate;
+use common\models\VendorItem;
 
 /**
  * This is the model class for table "whitebook_customer_cart".
@@ -98,19 +95,19 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public function getItem()
     {
-        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
 
     public function getTimeslot()
     {
-        return $this->hasOne(Deliverytimeslot::className(), ['timeslot_id' => 'timeslot_id']);
+        return $this->hasOne(DeliveryTimeSlot::className(), ['timeslot_id' => 'timeslot_id']);
     }
 
     public function validate_item($data, $valid_for_cart_item = false) {
 
         $errors = [];
 
-        $item = Vendoritem::find()->where([
+        $item = VendorItem::find()->where([
             'item_id' => $data['item_id'], 
             'item_for_sale' => 'Yes'
         ])->one();
@@ -196,7 +193,19 @@ class CustomerCart extends \yii\db\ActiveRecord
                 ])
             ];
         }
+        
+        // to check with old delivery date
+        if (strtotime($data['delivery_date']) < time()) { 
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past delivery date');     
+        }
 
+        # check for current date time slot
+        if ((strtotime($data['delivery_date']) == strtotime(date('Y-m-d'))) &&
+            (strtotime($data['timeslot_end_time']) < strtotime(date('H:i:s')))) {
+                
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past time slot date');
+        }
+        
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
 
@@ -261,27 +270,23 @@ class CustomerCart extends \yii\db\ActiveRecord
             return $errors;
 
         //current date should not in blocked date 
-        $block_date = Blockeddate::findOne([
+        $block_date = BlockedDate::findOne([
             'vendor_id' => $vendor_id,
             'block_date' => date('Y-m-d', strtotime($data['delivery_date']))
         ]);
         
         if($block_date) {
-            $errors['cart_delivery_date'] = [
-                Yii::t('frontend', 'Item is not available on selected date')
-            ];    
+            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');    
         }
 
         //day should not in week off 
         $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days); 
         $day = date('N', strtotime($data['delivery_date']));//7-sunday, 1-monday
 
-        if(in_array($day, $blocked_days)) {
-            $errors['cart_delivery_date'] = [
-                Yii::t('frontend', 'Item is not available on selected date')
-            ];             
+        if(!$block_date && in_array($day, $blocked_days)) {
+            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');             
         }
-        
+
         return $errors;       
     }
 
@@ -340,7 +345,7 @@ class CustomerCart extends \yii\db\ActiveRecord
     */
     public static function geLocation($area_id, $vendor_id){
         
-        $result = Vendorlocation::find()
+        $result = VendorLocation::find()
             ->joinWith('location')
             ->where([
                 '{{%location}}.status' => 'Active',
@@ -357,7 +362,7 @@ class CustomerCart extends \yii\db\ActiveRecord
     */
     public static function checkLocation($area_id, $vendor_id){
         
-        $result = Vendorlocation::find()
+        $result = VendorLocation::find()
             ->joinWith('location')
             ->where([
                 '{{%location}}.status' => 'Active',

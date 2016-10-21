@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Admin;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\Cms;
 use admin\models\CmsSearch;
 use yii\web\Controller;
@@ -60,7 +60,7 @@ class CmsController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '27');
+        $access = AuthItem::AuthitemCheck('4', '27');
         
         if (yii::$app->user->can($access)) {
 
@@ -103,7 +103,7 @@ class CmsController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '27');
+        $access = AuthItem::AuthitemCheck('1', '27');
         
         if (yii::$app->user->can($access)) {
         
@@ -137,7 +137,7 @@ class CmsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '27');
+        $access = AuthItem::AuthitemCheck('2', '27');
 
         if (yii::$app->user->can($access)) {
             
@@ -173,7 +173,7 @@ class CmsController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '27');
+        $access = AuthItem::AuthitemCheck('3', '27');
         
         if (yii::$app->user->can($access)) {
         

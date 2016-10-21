@@ -11,33 +11,33 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\UploadHandler;
 use yii\helpers\Html;
-use admin\models\Vendoritem;
-use common\models\Vendoritemquestion;
-use admin\models\Vendoritemquestionansweroption;
-use admin\models\Vendoritemquestionguide;
-use common\models\Vendoritemthemes;
-use common\models\Featuregroupitem;
-use admin\models\Featuregroup;
-use admin\models\Authitem;
+use admin\models\VendorItem;
+use common\models\VendorItemQuestion;
+use admin\models\VendorItemQuestionAnswerOption;
+use admin\models\VendorItemQuestionGuide;
+use common\models\VendorItemThemes;
+use common\models\FeatureGroupItem;
+use admin\models\FeatureGroup;
+use admin\models\AuthItem;
 use admin\models\Vendor;
 use admin\models\Themes;
 use admin\models\Image;
 use admin\models\Category;
-use admin\models\Priorityitem;
+use admin\models\PriorityItem;
 use common\models\SubCategory;
 use common\models\ChildCategory;
-use common\models\VendoritemSearch;
-use common\models\Itemtype;
-use common\models\Vendoritempricing;
+use common\models\VendorItemSearch;
+use common\models\ItemType;
+use common\models\VendorItemPricing;
 use common\models\Prioritylog;
 use common\models\VendorItemToCategory;
 use common\models\CategoryPath;
 use common\models\VendorItemCapacityException;
 use common\models\CustomerCart;
-use common\models\Eventitemlink;
+use common\models\EventItemlink;
 
 /**
-* VendoritemController implements the CRUD actions for Vendoritem model.
+* VendoritemController implements the CRUD actions for VendorItem model.
 */
 class VendoritemController extends Controller
 {
@@ -79,20 +79,20 @@ class VendoritemController extends Controller
     }
 
     /**
-    * Lists all Vendoritem models.
+    * Lists all VendorItem models.
     *
     * @return mixed
     */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '23');
+        $access = AuthItem::AuthitemCheck('4', '23');
 
         if (!yii::$app->user->can($access)) {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
             
-        $searchModel = new VendoritemSearch();
+        $searchModel = new VendorItemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -102,7 +102,7 @@ class VendoritemController extends Controller
     }
 
     /**
-    * Displays a single Vendoritem model.
+    * Displays a single VendorItem model.
     *
     * @param string $id
     *
@@ -110,20 +110,20 @@ class VendoritemController extends Controller
     */
     public function actionView($id)
     {
-        $access = Authitem::AuthitemviewCheck('view', '23');
+        $access = AuthItem::AuthitemviewCheck('view', '23');
         
         if (!yii::$app->user->can($access)) {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');            
             return $this->redirect(['site/index']);
         }
 
-        $dataProvider1=  Priorityitem::find()
+        $dataProvider1=  PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
             ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
             ->addParams([':item_id' => $id])
             ->all();
 
-        $model_question = Vendoritemquestion::find()
+        $model_question = VendorItemQuestion::find()
             ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
             ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
             ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
@@ -150,41 +150,41 @@ class VendoritemController extends Controller
     }
 
     /**
-    * Creates a new Vendoritem model.
+    * Creates a new VendorItem model.
     * If creation is successful, the browser will be redirected to the 'view' page.
     *
     * @return mixed
     */
     public function actionCreate($vid = '')
     {
-        $access = Authitem::AuthitemCheck('1', '23');
+        $access = AuthItem::AuthitemCheck('1', '23');
 
         if (!yii::$app->user->can($access)) {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
             return $this->redirect(['site/index']);
         }
 
-        $model = new Vendoritem();
-        $model_question = new Vendoritemquestion();
+        $model = new VendorItem();
+        $model_question = new VendorItemQuestion();
         $model1 = new Image();
         $themelist = Themes::loadthemename();
 
-        $grouplist = Featuregroup::loadfeaturegroup();
+        $grouplist = FeatureGroup::loadfeaturegroup();
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
-        $itemtype = Itemtype::loaditemtype();
+        $itemtype = ItemType::loaditemtype();
         $vendorname = Vendor::loadvendorname();
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $model->item_for_sale = (Yii::$app->request->post()['Vendoritem']['item_for_sale']) ? 'Yes' : 'No';
+            $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale']) ? 'Yes' : 'No';
 
             $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_vendor_item` where trash = 'Default'")->asArray()->all();
 
             $sort = ($max_sort[0]['sort'] + 1);
 
             $model->sort = $sort;
-            $model->slug = Yii::$app->request->post()['Vendoritem']['item_name'];
+            $model->slug = Yii::$app->request->post()['VendorItem']['item_name'];
             $c_slug1 = strtolower($model->slug);
             $c_slug2 = str_replace(' ', '-', $c_slug1);
             //Make alphanumeric (removes all other characters)
@@ -193,14 +193,14 @@ class VendoritemController extends Controller
             $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
             $model->slug = $c_slug4;
 
-            $chk_item_exist = Vendoritem::find()
+            $chk_item_exist = VendorItem::find()
                 ->where(['trash'=>'default'])
                 ->andWhere(['LIKE','slug',$c_slug4])
                 ->one();
 
             if (!empty($chk_item_exist)) {
 
-                $vendor_item = Yii::$app->request->post('Vendoritem');
+                $vendor_item = Yii::$app->request->post('VendorItem');
 
                 $tbl_vendor = Vendor::find()
                     ->select('vendor_name')
@@ -230,7 +230,7 @@ class VendoritemController extends Controller
                 }
 
                 //BEGIN Manage item pricing table
-                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
+                $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
 
                 if ($vendoritem_item_price['from']) {
 
@@ -239,7 +239,7 @@ class VendoritemController extends Controller
                     $price = $vendoritem_item_price['price'];
 
                     for ($opt = 0;$opt < count($from);++$opt) {
-                        $vendor_item_pricing = new Vendoritempricing();
+                        $vendor_item_pricing = new VendorItemPricing();
                         $vendor_item_pricing->item_id = $itemid;
                         $vendor_item_pricing->range_from = $from[$opt];
                         $vendor_item_pricing->range_to = $to[$opt];
@@ -251,11 +251,11 @@ class VendoritemController extends Controller
 
                 /* Themes table Begin*/
 
-                $vendor_item = Yii::$app->request->post('Vendoritem');
+                $vendor_item = Yii::$app->request->post('VendorItem');
 
-                if (isset($vendor_item['themes']) && $_POST['Vendoritem']['themes'] != '' && count($vendor_item['themes'])>0 ) {
+                if (isset($vendor_item['themes']) && $_POST['VendorItem']['themes'] != '' && count($vendor_item['themes'])>0 ) {
                     foreach($vendor_item['themes'] as $value) {
-                        $themeModel = new Vendoritemthemes();
+                        $themeModel = new VendorItemThemes();
                         $themeModel->item_id = $itemid;
                         $themeModel->theme_id = $value;
                         $themeModel->save();
@@ -265,9 +265,9 @@ class VendoritemController extends Controller
 
                 /* Groups table Begin*/
 
-                if (isset($vendor_item['groups']) && $_POST['Vendoritem']['groups'] != '' && count($vendor_item['groups'])>0 ) {
+                if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups'])>0 ) {
                     foreach ($vendor_item['groups'] as $value) {
-                        $groupModel = new Featuregroupitem();
+                        $groupModel = new FeatureGroupItem();
                         $groupModel->item_id = $itemid;
                         $groupModel->group_id = $value;
                         $groupModel->vendor_id = $vendor_item['vendor_id'];
@@ -302,7 +302,7 @@ class VendoritemController extends Controller
                             }
 
                             //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADSALESGUIDE . $filename);
+                            $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADSALESGUIDE . $filename);
 
                             if($awsResult){
                                 $model->guide_image = $filename;
@@ -343,7 +343,7 @@ class VendoritemController extends Controller
 
                                 //Overwrite old filename for S3 uploading
                                 $files->tempName = $newTmpName2;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_1000 . $filename);
+                                $awsResult1 = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_1000 . $filename);
 
                                 /* Begin Product image resolution 530 */
                                 $newTmpName1 = $files->tempName . "." . $files->extension;
@@ -353,7 +353,7 @@ class VendoritemController extends Controller
 
                                 //Overwrite old filename for S3 uploading
                                 $files->tempName = $newTmpName1;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_530 . $filename);
+                                $awsResult1 = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_530 . $filename);
 
                                 /* Begin Product image resolution 210 */
                                 $newTmpName = $files->tempName . "." . $files->extension;
@@ -365,7 +365,7 @@ class VendoritemController extends Controller
                                 $files->tempName = $newTmpName;
 
                                 //Save to S3
-                                $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename);
+                                $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_210 . $filename);
                             }
 
                             if($awsResult){
@@ -419,7 +419,7 @@ class VendoritemController extends Controller
     }
 
     /**
-    * Updates an existing Vendoritem model.
+    * Updates an existing VendorItem model.
     * If update is successful, the browser will be redirected to the 'view' page.
     *
     * @param string $id
@@ -428,7 +428,7 @@ class VendoritemController extends Controller
     */
     public function actionUpdate($id, $vid = false)
     {
-        $access = Authitem::AuthitemCheck('2', '23');
+        $access = AuthItem::AuthitemCheck('2', '23');
 
         if (!yii::$app->user->can($access)) {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -440,7 +440,7 @@ class VendoritemController extends Controller
         $model->themes = \yii\helpers\ArrayHelper::map($model->vendorItemThemes, 'theme_id', 'theme_id');
         $model->groups = \yii\helpers\ArrayHelper::map($model->featureGroupItems, 'group_id', 'group_id');
 
-        $model_question = Vendoritemquestion::find()
+        $model_question = VendorItemQuestion::find()
             ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
             ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
             ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
@@ -450,7 +450,7 @@ class VendoritemController extends Controller
 
         $categoryname = Category::vendorcategory($model->vendor_id);
 
-        $grouplist = Featuregroup::loadfeaturegroup();
+        $grouplist = FeatureGroup::loadfeaturegroup();
 
         // Values for priority log table dont delete...
         $vendorid = $model->vendor_id;
@@ -476,7 +476,7 @@ class VendoritemController extends Controller
                 $vic->save();
             }
 
-            $model->slug = Yii::$app->request->post()['Vendoritem']['item_name'];
+            $model->slug = Yii::$app->request->post()['VendorItem']['item_name'];
 
             $c_slug1 = strtolower($model->slug);
             $c_slug2 = str_replace(' ', '-', $c_slug1);
@@ -484,14 +484,14 @@ class VendoritemController extends Controller
             $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
             $model->slug = $c_slug4;
 
-            $chk_item_exist = Vendoritem::find()
+            $chk_item_exist = VendorItem::find()
                 ->where(['trash' => 'default'])
                 ->andWhere(['LIKE', 'slug', $c_slug4])
                 ->one();
 
             if (!empty($chk_item_exist)) {
 
-                $vendoritem = Yii::$app->request->post('Vendoritem');
+                $vendoritem = Yii::$app->request->post('VendorItem');
 
                 $tbl_vendor = Vendor::find()
                     ->select('vendor_name')
@@ -502,8 +502,8 @@ class VendoritemController extends Controller
                 $model->slug = $c_slug4 . '-' . $vendorname;
             }
 
-            $model->item_for_sale = (Yii::$app->request->post()['Vendoritem']['item_for_sale']) ? 'Yes' : 'No';
-            $model->item_status = (Yii::$app->request->post()['Vendoritem']['item_status'] == 1) ? 'Active' : 'Deactive';
+            $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale']) ? 'Yes' : 'No';
+            $model->item_status = (Yii::$app->request->post()['VendorItem']['item_status'] == 1) ? 'Active' : 'Deactive';
 
             if ($model->save()) {
                 /* Begin Upload guide image table  */
@@ -531,7 +531,7 @@ class VendoritemController extends Controller
                             }
 
                             //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADSALESGUIDE . $filename);
+                            $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADSALESGUIDE . $filename);
                             if ($awsResult) {
                                 $model->guide_image = $filename;
                             }
@@ -568,7 +568,7 @@ class VendoritemController extends Controller
 
 
                                 $files->tempName = $newTmpName2;
-                                Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_1000 . $filename); //Overwrite old filename for S3 uploading
+                                Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_1000 . $filename); //Overwrite old filename for S3 uploading
 
                                 $newTmpName1 = $files->tempName . "." . $files->extension;
                                 $image_530 = $imagine->open($files->tempName);
@@ -577,7 +577,7 @@ class VendoritemController extends Controller
 
 
                                 $files->tempName = $newTmpName1;
-                                Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_530 . $filename); //Overwrite old filename for S3 uploading
+                                Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_530 . $filename); //Overwrite old filename for S3 uploading
 
 
                                 $newTmpName = $files->tempName . "." . $files->extension;
@@ -588,7 +588,7 @@ class VendoritemController extends Controller
 
                                 $files->tempName = $newTmpName; //Overwrite old filename for S3 uploading
 
-                                $awsResult = Yii::$app->resourceManager->save($files, Vendoritem::UPLOADFOLDER_210 . $filename); //Save to S3
+                                $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_210 . $filename); //Save to S3
                             }
 
                             if ($awsResult) {
@@ -608,7 +608,7 @@ class VendoritemController extends Controller
 
                 /* Delete item price table records if its available any price for item type rental or service */
                 if ($model->type_id == 2) {
-                    Vendoritempricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
+                    VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
                 }
 
                 if ($model->priority != $priorityvalue) {
@@ -634,18 +634,18 @@ class VendoritemController extends Controller
                 $save = 'update';
 
                 //BEGIN Manage item pricing table
-                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
+                $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
 
                 if ($vendoritem_item_price['from'] != '') {
 
-                    Vendoritempricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
+                    VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
 
                     $from = $vendoritem_item_price['from'];
                     $to = $vendoritem_item_price['to'];
                     $price = $vendoritem_item_price['price'];
 
                     for ($opt = 0; $opt < count($from); ++$opt) {
-                        $vendor_item_pricing = new Vendoritempricing();
+                        $vendor_item_pricing = new VendorItemPricing();
                         $vendor_item_pricing->item_id = $itemid;
                         $vendor_item_pricing->range_from = $from[$opt];
                         $vendor_item_pricing->range_to = $to[$opt];
@@ -656,11 +656,11 @@ class VendoritemController extends Controller
                 //END Manage item pricing table
 
                 /* Themes table Begin*/
-                $vendor_item = Yii::$app->request->post('Vendoritem');
-                Vendoritemthemes::deleteAll(['item_id' => $id]); # to clear old values
-                if (isset($vendor_item['themes']) && count($vendor_item['themes']) > 0 && $_POST['Vendoritem']['themes'] != '') {
+                $vendor_item = Yii::$app->request->post('VendorItem');
+                VendorItemThemes::deleteAll(['item_id' => $id]); # to clear old values
+                if (isset($vendor_item['themes']) && count($vendor_item['themes']) > 0 && $_POST['VendorItem']['themes'] != '') {
                     foreach ($vendor_item['themes'] as $values) {
-                        $themesModel = new Vendoritemthemes();
+                        $themesModel = new VendorItemThemes();
                         $themesModel->item_id = $id;
                         $themesModel->theme_id = $values;
                         $themesModel->save();
@@ -669,10 +669,10 @@ class VendoritemController extends Controller
 
 
                 /* Groups table Begin*/
-                if (isset($vendor_item['groups']) && $_POST['Vendoritem']['groups'] != '' && count($vendor_item['groups']) > 0) {
-                    Featuregroupitem::deleteAll(['item_id' => $id]); # to clear old values
+                if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups']) > 0) {
+                    FeatureGroupItem::deleteAll(['item_id' => $id]); # to clear old values
                     foreach ($vendor_item['groups'] as $value) {
-                        $groupModel = new Featuregroupitem();
+                        $groupModel = new FeatureGroupItem();
                         $groupModel->item_id = $itemid;
                         $groupModel->group_id = $value;
                         $groupModel->vendor_id = $model->vendor_id;
@@ -681,14 +681,14 @@ class VendoritemController extends Controller
                 }
                 /* Groups table End */
 
-                $vendor_item_question = Yii::$app->request->post('Vendoritemquestion');
+                $vendor_item_question = Yii::$app->request->post('VendorItemQuestion');
 
                 if ($vendor_item_question) {
 
                     foreach ($vendor_item_question as $questons) {
                         if ((isset($questons['question_text'][0]) && isset($questons['question_answer_type'][0])) && ($questons['question_text'][0] && $questons['question_answer_type'][0])) {
                             if (isset($questons['update'][0])) {
-                                $model_question = Vendoritemquestion::findOne($questons['update'][0]);
+                                $model_question = VendorItemQuestion::findOne($questons['update'][0]);
                                 $model_question->item_id = $itemid;
                                 $model_question->question_text = $questons['question_text'][0];
                                 $model_question->question_answer_type = $questons['question_answer_type'][0];
@@ -703,7 +703,7 @@ class VendoritemController extends Controller
                                 }
                                 $model_question->update();
                             } else {
-                                $model_question = new Vendoritemquestion();
+                                $model_question = new VendorItemQuestion();
                                 $model_question->item_id = $itemid;
                                 $model_question->question_text = $questons['question_text'][0];
                                 $model_question->question_answer_type = $questons['question_answer_type'][0];
@@ -747,13 +747,13 @@ class VendoritemController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'itemType' => Itemtype::findAll(['trash' => 'Default']),
+            'itemType' => ItemType::findAll(['trash' => 'Default']),
             'categoryname' => $categoryname,
             'images' => Image::findAll(['item_id' => $id, 'module_type' => 'vendor_item']),
             'model_question' => $model_question,
             'themes' => Themes::findAll(['theme_status' => 'Active', 'trash' => 'Default']),
             'grouplist' => $grouplist,
-            'itemPricing' => Vendoritempricing::findAll(['item_id' => $item_id]),
+            'itemPricing' => VendorItemPricing::findAll(['item_id' => $item_id]),
             'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
             'vendor_item_to_category' => $vendor_item_to_category,
             'categories' => $categories
@@ -761,7 +761,7 @@ class VendoritemController extends Controller
     }
 
     /**
-    * Deletes an existing Vendoritem model.
+    * Deletes an existing VendorItem model.
     * If deletion is successful, the browser will be redirected to the 'index' page.
     *
     * @param string $id
@@ -770,7 +770,7 @@ class VendoritemController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '23');
+        $access = AuthItem::AuthitemCheck('3', '23');
 
         if (yii::$app->user->can($access)) {
         
@@ -778,13 +778,13 @@ class VendoritemController extends Controller
 
             VendorItemCapacityException::deleteAll(['item_id' => $id]);
             Image::deleteAll(['item_id' => $id]);
-            Vendoritempricing::deleteAll(['item_id' => $id]);
-            Vendoritemthemes::deleteAll(['item_id' => $id]);
+            VendorItemPricing::deleteAll(['item_id' => $id]);
+            VendorItemThemes::deleteAll(['item_id' => $id]);
             VendorItemToCategory::deleteAll(['item_id' => $id]);
             CustomerCart::deleteAll(['item_id' => $id]);
-            Priorityitem::deleteAll(['item_id' => $id]);
-            Eventitemlink::deleteAll(['item_id' => $id]);
-            Featuregroupitem::deleteAll(['item_id' => $id]);
+            PriorityItem::deleteAll(['item_id' => $id]);
+            EventItemlink::deleteAll(['item_id' => $id]);
+            FeatureGroupItem::deleteAll(['item_id' => $id]);
 
             Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
             return $this->redirect(['index']);
@@ -801,18 +801,18 @@ class VendoritemController extends Controller
     }
 
     /**
-    * Finds the Vendoritem model based on its primary key value.
+    * Finds the VendorItem model based on its primary key value.
     * If the model is not found, a 404 HTTP exception will be thrown.
     *
     * @param string $id
     *
-    * @return Vendoritem the loaded model
+    * @return VendorItem the loaded model
     *
     * @throws NotFoundHttpException if the model cannot be found
     */
     protected function findModel($id)
     {
-        if (($model = Vendoritem::findOne($id)) !== null) {
+        if (($model = VendorItem::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -825,7 +825,7 @@ class VendoritemController extends Controller
             $data = Yii::$app->request->post();
         }
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        $vendor_item_update = Vendoritem::findOne($data['id']);
+        $vendor_item_update = VendorItem::findOne($data['id']);
         $vendor_item_update->item_status = $status;
         $vendor_item_update->update();
         if ($status == 'Active') {
@@ -842,7 +842,7 @@ class VendoritemController extends Controller
             $data = Yii::$app->request->post();
         }
 
-        $command = Vendoritem::updateAll(['item_approved' => $data['item_approved']],['item_id' =>$data['keylist']]);
+        $command = VendorItem::updateAll(['item_approved' => $data['item_approved']],['item_id' =>$data['keylist']]);
 
         if ($command) {
             Yii::$app->session->setFlash('success', 'Vendor item approve status changed to "'.$data['item_approved'].'" successfully!');
@@ -860,21 +860,21 @@ class VendoritemController extends Controller
 
         //$ids = implode('","', $data['keylist']);
         if ($data['status'] == 'Delete') {
-            $command = Vendoritem::deleteAll(['item_id'=>$data['keylist']]);
+            $command = VendorItem::deleteAll(['item_id'=>$data['keylist']]);
             if ($command) {
                 Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
             } else {
                 Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } elseif ($data['status'] == 'Reject') {
-            $command = Vendoritem::updateAll(['item_approved' => "rejected"],['item_id' =>$data['keylist']]);
+            $command = VendorItem::updateAll(['item_approved' => "rejected"],['item_id' =>$data['keylist']]);
             if($command) {
                 Yii::$app->session->setFlash('success', 'Vendor item rejected successfully!');
             } else {
                 Yii::$app->session->setFlash('danger', 'Something went wrong');
             }
         } else {
-            $command = Vendoritem::updateAll(['item_status' => $data['status']],['item_id' =>$data['keylist']]);
+            $command = VendorItem::updateAll(['item_status' => $data['status']],['item_id' =>$data['keylist']]);
             if ($command) {
                 Yii::$app->session->setFlash('success', 'Vendor item status updated!');
             } else {
@@ -898,7 +898,7 @@ class VendoritemController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
-        $command = Vendoritemquestion::deleteAll('question_id='.$data['question_id']);
+        $command = VendorItemQuestion::deleteAll('question_id='.$data['question_id']);
         if ($command) {
             echo 'Question and answers deleted successfully';
         }
@@ -911,7 +911,7 @@ class VendoritemController extends Controller
         $sort = $request->post('sort_val');
         $item_id = $request->post('item_id');
 
-        $command = Vendoritem::findOne($item_id);
+        $command = VendorItem::findOne($item_id);
         $command->sort = $sort;
         $command->update();
 
@@ -932,14 +932,14 @@ class VendoritemController extends Controller
             $q_id = array();
             if (isset($data['serial_div']) && $data['serial_div'] != '') {
             if ($data['serial_div'][0]['value'] != '') {
-                $exist = Vendoritemquestion::findOne($data['serial_div'][0]['value']);
+                $exist = VendorItemQuestion::findOne($data['serial_div'][0]['value']);
                 if (!empty($exist)) {
-                    $command = Vendoritemquestion::findOne($data['serial_div'][0]['value']);
+                    $command = VendorItemQuestion::findOne($data['serial_div'][0]['value']);
                     $command->question_text = $data['serial_div'][1]['value'];
                     $command->update();
                     $q_id[] = $data['serial_div'][0]['value'];
                 } else {
-                    $model_question = new Vendoritemquestion();
+                    $model_question = new VendorItemQuestion();
                     $model_question->item_id = $data['item_id'];
                     $model_question->parent_question_id = 0;
                     $model_question->question_text = $data['serial_div'][1]['value'];
@@ -954,7 +954,7 @@ class VendoritemController extends Controller
         // If attribute is text
                     if ($data['serial_div'][2]['value'] == 'text') {
                         if (count($data['serial_div']) == 4) {
-                            $model_answer_option = new Vendoritemquestionansweroption();
+                            $model_answer_option = new VendorItemQuestionAnswerOption();
                             if (isset($data['serial_div'][3]['value']) && $data['serial_div'][3]['value'] != '') {
                                 $model_answer_option->answer_price_added = $data['serial_div'][3]['value'];
                             } else {
@@ -962,7 +962,7 @@ class VendoritemController extends Controller
                             }
                         } else {
                             $ques_id = $data['serial_div'][3]['value'];
-                            $model_answer_option = Vendoritemquestionansweroption::findOne($ques_id);
+                            $model_answer_option = VendorItemQuestionAnswerOption::findOne($ques_id);
                             if (isset($data['serial_div'][4]['value']) && $data['serial_div'][4]['value'] != '') {
                                 $model_answer_option->answer_price_added = $data['serial_div'][4]['value'];
                             } else {
@@ -980,9 +980,9 @@ class VendoritemController extends Controller
                         foreach ($qa_values as $key => $value) {
                             if ($value[2]['value'] != '') {
                                 $ques_id = $value[2]['value'];
-                                $model_answer_option = Vendoritemquestionansweroption::findOne($ques_id);
+                                $model_answer_option = VendorItemQuestionAnswerOption::findOne($ques_id);
                             } else {
-                                $model_answer_option = new Vendoritemquestionansweroption();
+                                $model_answer_option = new VendorItemQuestionAnswerOption();
                             }
                             $model_answer_option->question_id = $q_id[0];
                             $model_answer_option->answer_text = $value[0]['value'];
@@ -1037,7 +1037,7 @@ class VendoritemController extends Controller
             $last_id = Yii::$app->db->getLastInsertID();
 
             // guide image table
-            $question_tbl = new Vendoritemquestionguide;
+            $question_tbl = new VendorItemQuestionGuide;
             $question_tbl->question_id = $question_id;
             $question_tbl->guide_image_id = $last_id;
             $question_tbl->save();
@@ -1049,12 +1049,12 @@ class VendoritemController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $question = Vendoritemquestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+            $question = VendorItemQuestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
 
             if ($question[0]['question_answer_type'] == 'image') {
-                $answers = Vendoritemquestionguide::find()->where(['question_id' => $data['q_id']])->asArray()->all();
+                $answers = VendorItemQuestionGuide::find()->where(['question_id' => $data['q_id']])->asArray()->all();
             } else {
-                $answers = Vendoritemquestionansweroption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+                $answers = VendorItemQuestionAnswerOption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
             }
 
             return $this->renderPartial('questionanswer', ['question' => $question, 'answers' => $answers]);
@@ -1065,12 +1065,12 @@ class VendoritemController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $question = Vendoritemquestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+            $question = VendorItemQuestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
 
             if ($question[0]['question_answer_type'] == 'image') {
-                $answers = Vendoritemquestionguide::find()->where(['question_id' => $data['q_id']])->asArray()->all();
+                $answers = VendorItemQuestionGuide::find()->where(['question_id' => $data['q_id']])->asArray()->all();
             } else {
-                $answers = Vendoritemquestionansweroption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+                $answers = VendorItemQuestionAnswerOption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
             }
             return $this->renderPartial('viewquestionanswer', ['question' => $question, 'answers' => $answers]);
             die; /* ALL DIE STATEMENT IMPORTANT FOR VENDOR PANEL*/
@@ -1081,8 +1081,8 @@ class VendoritemController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $question = Vendoritemquestion::find()->where('answer_id = "'.$data['q_id'].'"')->asArray()->all();
-            $answers = Vendoritemquestionansweroption::find()->where(['question_id' => $question[0]['question_id']])->asArray()->all();
+            $question = VendorItemQuestion::find()->where('answer_id = "'.$data['q_id'].'"')->asArray()->all();
+            $answers = VendorItemQuestionAnswerOption::find()->where(['question_id' => $question[0]['question_id']])->asArray()->all();
             return $this->renderPartial('questionanswer', ['question' => $question, 'answers' => $answers]);
         }
     }
@@ -1139,14 +1139,14 @@ class VendoritemController extends Controller
     {
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
-        $model = new Vendoritem();
+        $model = new VendorItem();
         $model1 = new Image();
 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
 
             if (isset($data['question_id']) &&  $data['question_id'] != '') {
-                $guideimageval = Vendoritemquestionguide::find()->select('guide_image_id')->where('question_id = :id', [':id' => $data['question_id']])->all();
+                $guideimageval = VendorItemQuestionGuide::find()->select('guide_image_id')->where('question_id = :id', [':id' => $data['question_id']])->all();
 
                 if (!empty($guideimageval)) {
                     foreach ($guideimageval as $key => $value) {
@@ -1175,7 +1175,7 @@ class VendoritemController extends Controller
                 $image_tbl->save();
 
                 $last_id = Yii::$app->db->getLastInsertID();
-                $quide_tbl = new Vendoritemquestionguide;
+                $quide_tbl = new VendorItemQuestionGuide;
                 $quide_tbl->question_id = $id;
                 $quide_tbl->guide_image_id = $last_id;;
                 $quide_tbl->save();
@@ -1219,7 +1219,7 @@ class VendoritemController extends Controller
                 $imageData = Image::findOne(['image_id'=>$data['key']]);
             
                 if ($imageData){
-                    Vendoritem::deleteFiles($imageData->image_path);
+                    VendorItem::deleteFiles($imageData->image_path);
                     echo $imageData->delete();
                 }
             }
@@ -1251,14 +1251,14 @@ class VendoritemController extends Controller
 
         if ($data['item_id'] == 0) {
             
-            $itemname = Vendoritem::find()->select('item_name')
+            $itemname = VendorItem::find()->select('item_name')
                 ->where(['item_name' => $data['item']])
                 ->andwhere(['trash' => 'Default'])
                 ->all();
 
         } else {
             
-            $itemname = Vendoritem::find()
+            $itemname = VendorItem::find()
                 ->select('item_name')
                 ->where([
                     'item_name' => $data['item'],

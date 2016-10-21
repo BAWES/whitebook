@@ -4,6 +4,7 @@ use common\models\Order;
 use common\models\Vendor;
 use common\models\OrderStatus;
 use common\models\SuborderItemPurchase;
+use common\components\CFormatter;
 
 $this->title = Yii::t('frontend', 'View Order | Whitebook'); 
 
@@ -101,31 +102,35 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
         					echo $item->vendoritem->item_name_ar; 
         				} ?>
 		        	</th>
-		    		<td align="left"><?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?></th>
+		    		<td align="left">
+		    			<?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
+
+		    			<br />
+
+		    			<?= date('h:m A', strtotime($item->timeslot->timeslot_start_time)) ?> - 
+		    			<?=	date('h:m A', strtotime($item->timeslot->timeslot_end_time)); ?>
+		    		</th>
 		    		<td aligh="left"><?= $item->purchase_delivery_address ?></th>
 		    		<td aligh="left"><?= $item->purchase_quantity ?></th>
-		    		<td align="right"><?= Yii::$app->params['Currency']; ?> <?= $item->purchase_price_per_unit ?></th>
-		    		<td align="right"><?= Yii::$app->params['Currency']; ?> <?= $item->purchase_total_price ?></th>	
+		    		<td align="right"><?= CFormatter::format($item->purchase_price_per_unit) ?></th>
+		    		<td align="right"><?= CFormatter::format($item->purchase_total_price) ?></th>	
 				</tr>
 				<?php } ?>
 				<tr>
 					<td align="right" colspan="5">Sub Total</td>
 					<td align="right">
-						<?= Yii::$app->params['Currency']; ?>
-						<?= $row->suborder_total_without_delivery ?>
+						<?= CFormatter::format($row->suborder_total_without_delivery) ?>
 					</td>
 				</tr>
 				<tr>
 					<td align="right" colspan="5">Delivery Charge</td>
 					<td align="right">
-						<?= Yii::$app->params['Currency']; ?>
-						<?= $row->suborder_delivery_charge ?></td>
+						<?= CFormatter::format($row->suborder_delivery_charge) ?></td>
 				</tr>
 				<tr>
 					<td align="right" colspan="5">Total</td>
 					<td align="right">
-						<?= Yii::$app->params['Currency']; ?>
-						<?= $row->suborder_total_with_delivery ?>
+						<?= CFormatter::format($row->suborder_total_with_delivery) ?>
 					</td>
 				</tr>
 			</tbody>
