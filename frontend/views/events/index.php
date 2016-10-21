@@ -6,7 +6,6 @@ use common\models\Image;
 use common\components\CFormatter;
 
 $this->title = 'Events/Wishlist | Whitebook';
-
 ?>
 
 <section id="inner_pages_white_back">
@@ -23,17 +22,16 @@ $this->title = 'Events/Wishlist | Whitebook';
 			<div class="event_detials_common tab_section_event">
 				<div class="tab_sections">
 					<div id="exTab2">
-						<ul class="nav nav-tabs">
+						<ul class="nav nav-tabs" role="tablist">
 							<li class="col-md-6 col-xs-6 padding0 first-event-tab <?= $events ?> ">
-								<a data-toggle="tab" href="#1" aria-expanded="false"><?=Yii::t('frontend','EVENTS');?></a>
+								<a role="tab" data-toggle="tab" href="#events" aria-expanded="false"><?=Yii::t('frontend','EVENTS');?></a>
 							</li>
 							<li class="col-md-6 col-xs-6 padding0 second-event-tab <?= $thingsilike ?> ">
-								<a data-toggle="tab" href="#2" aria-expanded="true"><span class="heart-icon"><?=Yii::t('frontend','THINGS I LIKE');?></span></a>
+								<a role="tab" data-toggle="tab" href="#wishlist" aria-expanded="true"><span class="heart-icon"><?=Yii::t('frontend','THINGS I LIKE');?></span></a>
 							</li>
 						</ul>
-
 						<div class="tab-content">
-							<div id="1" class="tab-pane <?php if($slug=='events'){echo 'active';}?>">
+							<div role="tabpanel" id="events" class="tab-pane <?= ($slug=='events') ? 'active' : '';?>">
 								<div class="cat_events_items">
 									<div class="select_category_sec">
 										<div class="select_boxes">
@@ -70,8 +68,7 @@ $this->title = 'Events/Wishlist | Whitebook';
 									</ul>
 								</div>
 							</div>
-
-							<div id="2" class="tab-pane second_event <?php if($slug=='thingsilike'){echo 'active';}?>">
+							<div role="tabpanel" id="wishlist" class="tab-pane second_event <?=($slug=='thingsilike')?'active':'';?>">
 								<a class="filter-link" id="filter-toggle" style="display:none;">Filter</a>
 								<div id="search_data" style="padding: 10px;">
 									<div class="events_listing_inner">
@@ -109,7 +106,6 @@ $this->title = 'Events/Wishlist | Whitebook';
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -417,4 +413,9 @@ foreach($customer_wishlist as $f) {  ?>
 	jQuery('.events_listing ul li:nth-child(5n)').addClass("margin-rightnone");
 	jQuery('.thing_items li:nth-child(8n)').addClass("margin-rightnone");
 
+
+	$('#myTabs a').click(function (e) {
+		e.preventDefault()
+		$(this).tab('show')
+	})
 </script>
