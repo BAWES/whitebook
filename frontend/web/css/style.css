@@ -1446,6 +1446,7 @@ a.thing_cont:hover {
     float: left;
     border-radius: 0;
     height: 34px;
+    width: 50px;
     background: black;
     border-color: black;
 }
@@ -1456,7 +1457,7 @@ a.thing_cont:hover {
 }
 .cart-table .btn-danger{
     float: left;
-    width: 45px;
+    width: 50px;
     padding: 9px;
 }
 
@@ -1677,4 +1678,18 @@ a.thing_cont:hover {
     margin-top: 10px;
     background: black;
     color: white;
+}
+
+.position-relative {position:relative;}
+.cart-table .fa-edit{position: absolute;right: 33px;top: 23px;cursor: pointer;}
+
+@media (max-width: 767px) {
+    .cart-table .fa-edit {
+        position: relative;
+        background: black;
+        color: white;
+        padding: 5px;
+        top: auto;
+        right: auto;
+    }
 }
