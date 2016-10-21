@@ -128,6 +128,14 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 							$delivery_charge += $delivery_area->delivery_price;
 
 	        				?>
+	        					<?php if(Yii::$app->language == 'en') { ?>
+		            				<?= $delivery_area->location->location; ?> <br />
+		            				<?= $delivery_area->location->city->city_name; ?> <br />
+		                        <?php } else { ?>
+		                            <?= $delivery_area->location->location_ar; ?> <br />
+		                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
+		                        <?php } ?>
+
 	        					<?= $item['cart_delivery_date'] ?><br />
 								
 								<?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
