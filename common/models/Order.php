@@ -271,12 +271,10 @@ class Order extends \yii\db\ActiveRecord
     }
 
     public function subOrderItems($suborder_id) {
-        $items = SuborderItemPurchase::find()
-                ->with('vendoritem')
-                ->where(['suborder_id' => $suborder_id])
-                ->all();
-
-        return $items;        
+        return SuborderItemPurchase::find()
+            ->with('vendoritem')
+            ->where(['suborder_id' => $suborder_id])
+            ->all();
     }
         
     public function getCustomer() {
