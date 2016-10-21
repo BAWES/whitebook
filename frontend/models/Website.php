@@ -5,10 +5,10 @@ namespace frontend\models;
 use common\models\User;
 use common\models\Siteinfo;
 use common\models\Socialinfo;
-use admin\models\Adverthome;
+use admin\models\AdvertHome;
 use common\models\Slide;
 use common\models\Events;
-use admin\models\Eventtype;
+use admin\models\EventType;
 use yii\base\Model;
 use Yii;
 use yii\db\Query;
@@ -28,7 +28,7 @@ class Website extends Model {
     }
 
     public static function get_home_ads() {
-        return $ads = Adverthome::find()->select('advert_code')->where(['trash'=>'Default'])->limit(1)->asArray()->one();
+        return $ads = AdvertHome::find()->select('advert_code')->where(['trash'=>'Default'])->limit(1)->asArray()->one();
     }
 
     public static function get_banner_details() {
@@ -113,7 +113,7 @@ class Website extends Model {
     }
 
     public static function get_event_types() {
-        return Eventtype::find()
+        return EventType::find()
             ->select('type_name, type_id')
             ->asArray()
             ->all();

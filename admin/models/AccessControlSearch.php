@@ -5,27 +5,27 @@ namespace admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use admin\models\FeatureGroup;
+use admin\models\AccessController;
 
 /**
- * FeaturegroupSearch represents the model behind the search form about `common\models\FeatureGroup`.
- */
-class FeaturegroupSearch extends FeatureGroup
+* AccessControlSearch represents the model behind the search form about `common\models\Accesscontrol`.
+*/
+class AccessControlSearch extends AccessController
 {
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function rules()
     {
         return [
-            [['group_id', 'created_by', 'modified_by'], 'integer'],
-            [['group_name','group_name_ar'], 'safe'],
+            [['access_id', 'role_id', 'admin_id', 'created_by', 'modified_by'], 'integer'],
+            //  [['created_datetime', 'modified_datetime'], 'safe'],
         ];
     }
 
     /**
-     * @inheritdoc
-     */
+    * @inheritdoc
+    */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -33,22 +33,21 @@ class FeaturegroupSearch extends FeatureGroup
     }
 
     /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
+    * Creates data provider instance with search query applied
+    *
+    * @param array $params
+    *
+    * @return ActiveDataProvider
+    */
     public function search($params)
     {
-        $query = FeatureGroup::find()
-        ->where(['!=', 'trash', 'Deleted'])
-		->orderBy('group_id');
-		
-
+        $query = AccessController::find()
+            ->where(['=', 'default', '0'])
+            ->groupBy('admin_id');
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['group_id'=>SORT_DESC]]
+            'sort'=> ['defaultOrder' => ['access_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -60,15 +59,14 @@ class FeaturegroupSearch extends FeatureGroup
         }
 
         $query->andFilterWhere([
-            'group_id' => $this->group_id,
+            'access_id' => $this->access_id,
+            'role_id' => $this->role_id,
+            'admin_id' => $this->admin_id,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,
             'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
         ]);
-
-        $query->andFilterWhere(['like', 'group_name', $this->group_name])
-            ->andFilterWhere(['like', 'trash', $this->trash]);
 
         return $dataProvider;
     }

@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Contacts;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\ContactsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -59,7 +59,7 @@ class ContactsController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '6');
+        $access = AuthItem::AuthitemCheck('4', '6');
         
         if (yii::$app->user->can($access)) {
 
@@ -100,7 +100,7 @@ class ContactsController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '6');
+        $access = AuthItem::AuthitemCheck('1', '6');
         
         if (yii::$app->user->can($access)) {
             
@@ -136,7 +136,7 @@ class ContactsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '6');
+        $access = AuthItem::AuthitemCheck('2', '6');
         
         if (yii::$app->user->can($access)) {
         
@@ -171,7 +171,7 @@ class ContactsController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '6');
+        $access = AuthItem::AuthitemCheck('3', '6');
         
         if (yii::$app->user->can($access)) {
             

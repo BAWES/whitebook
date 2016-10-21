@@ -8,7 +8,7 @@ use admin\models\SlideSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 
@@ -61,7 +61,7 @@ class SlideController extends Controller
     */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('1', '32');
+        $access = AuthItem::AuthitemCheck('1', '32');
         if (yii::$app->user->can($access)) {
             $searchModel = new SlideSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -113,7 +113,7 @@ class SlideController extends Controller
 
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '1');
+        $access = AuthItem::AuthitemCheck('1', '1');
         if (yii::$app->user->can($access)) {
             $model = new Slide();
             $model->scenario = "create";
@@ -162,7 +162,7 @@ class SlideController extends Controller
     */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '32');
+        $access = AuthItem::AuthitemCheck('2', '32');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
 
@@ -257,7 +257,7 @@ class SlideController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('1', '32');
+        $access = AuthItem::AuthitemCheck('1', '32');
         if (yii::$app->user->can($access)) {
 
             $this->findModel($id)->delete();

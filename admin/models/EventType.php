@@ -22,7 +22,7 @@ use yii\db\Expression;
 *
 * @property VendorItem[] $vendorItems
 */
-class Eventtype extends \yii\db\ActiveRecord
+class EventType extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -68,7 +68,7 @@ class Eventtype extends \yii\db\ActiveRecord
     {
         if(!empty($this->type_name) )
         {
-            $modelq = Eventtype::find()
+            $modelq = EventType::find()
                 ->where(['type_name'=>$this->type_name])
                 ->one();
                 

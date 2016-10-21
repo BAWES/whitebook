@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Socialinfo;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -59,7 +59,7 @@ class SocialinfoController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '7');
+        $access = AuthItem::AuthitemCheck('4', '7');
         if (yii::$app->user->can($access)) {
             $model = Socialinfo::find()->all();
             foreach ($model as $key => $val) {
@@ -108,7 +108,7 @@ class SocialinfoController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '7');
+        $access = AuthItem::AuthitemCheck('1', '7');
         if (yii::$app->user->can($access)) {
             $model = new Socialinfo();
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -138,7 +138,7 @@ class SocialinfoController extends Controller
      */
     public function actionUpdate($store_social_id)
     {
-        $access = Authitem::AuthitemCheck('2', '7');
+        $access = AuthItem::AuthitemCheck('2', '7');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($store_social_id);
 
@@ -169,7 +169,7 @@ class SocialinfoController extends Controller
      */
     public function actionDelete($store_social_id, $store_id)
     {
-        $access = Authitem::AuthitemCheck('3', '7');
+        $access = AuthItem::AuthitemCheck('3', '7');
         if (yii::$app->user->can($access)) {
             $this->findModel($store_social_id, $store_id)->delete();
 

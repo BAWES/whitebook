@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Faq;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\FaqSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -60,7 +60,7 @@ class FaqController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '15');
+        $access = AuthItem::AuthitemCheck('4', '15');
         
         if (yii::$app->user->can($access)) {
             $searchModel = new FaqSearch();
@@ -99,7 +99,7 @@ class FaqController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '15');
+        $access = AuthItem::AuthitemCheck('1', '15');
         if (yii::$app->user->can($access)) {
             $model = new Faq();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -146,7 +146,7 @@ class FaqController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '15');
+        $access = AuthItem::AuthitemCheck('2', '15');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -185,7 +185,7 @@ class FaqController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '15');
+        $access = AuthItem::AuthitemCheck('3', '15');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             $model->trash = 'Deleted';

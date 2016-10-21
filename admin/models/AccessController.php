@@ -5,7 +5,7 @@ namespace admin\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use admin\models\Usercontroller;
+use admin\models\UserController;
 use admin\models\Admin;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
@@ -25,7 +25,7 @@ use yii\behaviors\TimestampBehavior;
 * @property Admin $admin
 * @property Role $role
 */
-class Accesscontroller extends \yii\db\ActiveRecord
+class AccessController extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -92,7 +92,7 @@ class Accesscontroller extends \yii\db\ActiveRecord
     /**
     * @return \yii\db\ActiveQuery
     */
-    public static function getAdmin()
+    public function getAdmin()
     {
         return $this->hasOne(Admin::className(), ['id' => 'admin_id']);
     }
@@ -108,7 +108,7 @@ class Accesscontroller extends \yii\db\ActiveRecord
 
     public static function getControllerName($id)
     {
-        return Usercontroller::find()
+        return UserController::find()
             ->select ('controller')
             ->where(['=', 'id', $id])
             ->one()
@@ -123,7 +123,7 @@ class Accesscontroller extends \yii\db\ActiveRecord
         
         foreach ($k as $f)
         {
-            $controller= Usercontroller::find()
+            $controller= UserController::find()
                 ->select ('controller')
                 ->where(['=', 'id', $f])
                 ->one();

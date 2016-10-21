@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use common\models\Siteinfo;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use yii\web\Controller;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
@@ -61,7 +61,7 @@ class SiteinfoController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '10');
+        $access = AuthItem::AuthitemCheck('4', '10');
         if (yii::$app->user->can($access)) {
             $model = Siteinfo::find()->all();
 
@@ -103,7 +103,7 @@ class SiteinfoController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '10');
+        $access = AuthItem::AuthitemCheck('1', '10');
         if (yii::$app->user->can($access)) {
             $model = new Siteinfo();
             $base = Yii::$app->basePath;
@@ -155,7 +155,7 @@ class SiteinfoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '10');
+        $access = AuthItem::AuthitemCheck('2', '10');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             $model->scenario = 'update';
@@ -189,7 +189,7 @@ class SiteinfoController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '10');
+        $access = AuthItem::AuthitemCheck('3', '10');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
 

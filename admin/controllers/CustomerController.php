@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use arturoliveira\ExcelView;
 use admin\models\Customer;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\AddressType;
 use admin\models\AddressQuestion;
 use admin\models\CustomerSearch;
@@ -73,7 +73,7 @@ class CustomerController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '26');
+        $access = AuthItem::AuthitemCheck('4', '26');
         
         if (yii::$app->user->can($access)) {
             
@@ -98,7 +98,7 @@ class CustomerController extends Controller
 
     public function actionAddress_delete()
     {
-        $access = Authitem::AuthitemCheck('4', '26');
+        $access = AuthItem::AuthitemCheck('4', '26');
         
         if (yii::$app->user->can($access)) {
           
@@ -135,7 +135,7 @@ class CustomerController extends Controller
      */
     public function actionAddress($id)
     {
-        $access = Authitem::AuthitemCheck('2', '26');
+        $access = AuthItem::AuthitemCheck('2', '26');
 
         if (!yii::$app->user->can($access)) {
             
@@ -232,7 +232,7 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '26');
+        $access = AuthItem::AuthitemCheck('1', '26');
 
         if (yii::$app->user->can($access)) {
             $model = new Customer();
@@ -276,7 +276,7 @@ class CustomerController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '26');
+        $access = AuthItem::AuthitemCheck('2', '26');
 
         if (yii::$app->user->can($access)) {
 
@@ -323,7 +323,7 @@ class CustomerController extends Controller
        */
       public function actionDelete($id)
       {
-          $access = Authitem::AuthitemCheck('3', '26');
+          $access = AuthItem::AuthitemCheck('3', '26');
           if (yii::$app->user->can($access)) {
               
               $model = $this->findModel($id);
@@ -425,7 +425,7 @@ class CustomerController extends Controller
 
     public function actionNewsletter()
     {
-        $access = Authitem::AuthitemCheck('1', '26');
+        $access = AuthItem::AuthitemCheck('1', '26');
         if (yii::$app->user->can($access)) {
             $model = new Customer();
             $customer_email = Customer::find()

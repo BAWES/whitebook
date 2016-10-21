@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use common\models\Category;
-use common\models\Itemtype;
+use common\models\ItemType;
 use common\models\Themes;
 use common\models\FeatureGroup;
 
@@ -17,7 +17,7 @@ $category_options = ArrayHelper::map(
     );
 
 $type_options = ArrayHelper::map(
-        Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 
+        ItemType::find()->where(['!=','trash','Deleted'])->asArray()->all(),
         'type_id',
         'type_name'
     );

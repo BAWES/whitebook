@@ -200,7 +200,7 @@ class VendorItem extends \yii\db\ActiveRecord
     */
     public function getType()
     {
-        return $this->hasOne(Itemtype::className(), ['type_id' => 'type_id']);
+        return $this->hasOne(ItemType::className(), ['type_id' => 'type_id']);
     }
 
     /**
@@ -320,7 +320,7 @@ class VendorItem extends \yii\db\ActiveRecord
 
         public static function getItemType($id)
         {
-            $model = Itemtype::find()->where(['type_id'=>$id])->one();
+            $model = ItemType::find()->where(['type_id'=>$id])->one();
             return $model->type_name;
         }
 

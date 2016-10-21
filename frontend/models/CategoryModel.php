@@ -81,7 +81,7 @@ class CategoryModel extends Model
 
     public function get_event_types()
     {
-		$events = \common\models\Eventtype::find()
+		$events = \common\models\EventType::find()
 			->select(['type_name','type_id'])
 			->asArray()
 			->all();

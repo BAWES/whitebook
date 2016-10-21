@@ -7,7 +7,7 @@ use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\AccesscontrolSearch */
+/* @var $searchModel common\models\AccessControlSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Access controls';

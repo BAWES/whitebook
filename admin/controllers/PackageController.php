@@ -7,7 +7,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\Package;
 use admin\models\PackageSearch;
 use common\models\VendorPackages;
@@ -60,7 +60,7 @@ class PackageController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '16');
+        $access = AuthItem::AuthitemCheck('4', '16');
         if (yii::$app->user->can($access)) {
             $searchModel = new PackageSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -98,7 +98,7 @@ class PackageController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '16');
+        $access = AuthItem::AuthitemCheck('1', '16');
         if (yii::$app->user->can($access)) {
             $model = new Package();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -130,7 +130,7 @@ class PackageController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '16');
+        $access = AuthItem::AuthitemCheck('2', '16');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -158,7 +158,7 @@ class PackageController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '16');
+        $access = AuthItem::AuthitemCheck('3', '16');
         
         if (yii::$app->user->can($access)) {
             

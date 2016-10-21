@@ -4,13 +4,19 @@ namespace admin\models;
 
 use Yii;
 use yii\base\Model;
+use admin\models\AddressType;
+use admin\models\AddressTypeSearch;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\db\Query;
+use yii\base;
 use yii\data\ActiveDataProvider;
-use common\models\Itemtype;
 
 /**
- * ItemtypeSearch represents the model behind the search form about `common\models\Itemtype`.
+ * AddressTypeSearch represents the model behind the search form about `common\models\AddressType`.
  */
-class ItemtypeSearch extends Itemtype
+class AddressTypeSearch extends AddressType
 {
     /**
      * @inheritdoc
@@ -18,8 +24,7 @@ class ItemtypeSearch extends Itemtype
     public function rules()
     {
         return [
-            [['type_id', 'created_by', 'modified_by'], 'integer'],
-            [['type_name', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
+            [['type_name'], 'safe'],
         ];
     }
 
@@ -41,32 +46,22 @@ class ItemtypeSearch extends Itemtype
      */
     public function search($params)
     {
-        $query = Itemtype::find();
+		$query = AddressType::find()
+        ->where(['!=', 'trash', 'Deleted'])
+		->orderBy('type_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'sort'=> ['defaultOrder' => ['type_id'=>SORT_DESC]]
         ]);
-
         $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails
-            // $query->where('0=1');
+             $query->where('trash'!="Deleted");
             return $dataProvider;
         }
-
-        $query->andFilterWhere([
-            'type_id' => $this->type_id,
-            'created_by' => $this->created_by,
-            'modified_by' => $this->modified_by,
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
-        ]);
-
-        $query->andFilterWhere(['like', 'type_name', $this->type_name])
-            ->andFilterWhere(['like', 'trash', $this->trash]);
-
-        return $dataProvider;
+         $query->andFilterWhere(['like', 'type_name', $this->type_name]);
+            return $dataProvider;
     }
 }

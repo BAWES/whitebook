@@ -5,7 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\BlockedDate;
 use backend\models\Vendor;
-use backend\models\BlockeddateSearch;
+use backend\models\BlockedDateSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -37,7 +37,7 @@ class BlockeddateController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new BlockeddateSearch();
+        $searchModel = new BlockedDateSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

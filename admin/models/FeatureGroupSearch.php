@@ -4,19 +4,13 @@ namespace admin\models;
 
 use Yii;
 use yii\base\Model;
-use admin\models\AddressType;
-use admin\models\AddresstypeSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\db\Query;
-use yii\base;
 use yii\data\ActiveDataProvider;
+use admin\models\FeatureGroup;
 
 /**
- * AddresstypeSearch represents the model behind the search form about `common\models\AddressType`.
+ * FeatureGroupSearch represents the model behind the search form about `common\models\FeatureGroup`.
  */
-class AddresstypeSearch extends AddressType
+class FeatureGroupSearch extends FeatureGroup
 {
     /**
      * @inheritdoc
@@ -24,7 +18,8 @@ class AddresstypeSearch extends AddressType
     public function rules()
     {
         return [
-            [['type_name'], 'safe'],
+            [['group_id', 'created_by', 'modified_by'], 'integer'],
+            [['group_name','group_name_ar'], 'safe'],
         ];
     }
 
@@ -46,22 +41,35 @@ class AddresstypeSearch extends AddressType
      */
     public function search($params)
     {
-		$query = AddressType::find()
+        $query = FeatureGroup::find()
         ->where(['!=', 'trash', 'Deleted'])
-		->orderBy('type_id');
+		->orderBy('group_id');
+		
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['type_id'=>SORT_DESC]]
+			'sort'=> ['defaultOrder' => ['group_id'=>SORT_DESC]]
         ]);
+
         $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails
-             $query->where('trash'!="Deleted");
+            // $query->where('0=1');
             return $dataProvider;
         }
-         $query->andFilterWhere(['like', 'type_name', $this->type_name]);
-            return $dataProvider;
+
+        $query->andFilterWhere([
+            'group_id' => $this->group_id,
+            'created_by' => $this->created_by,
+            'modified_by' => $this->modified_by,
+            'created_datetime' => $this->created_datetime,
+            'modified_datetime' => $this->modified_datetime,
+        ]);
+
+        $query->andFilterWhere(['like', 'group_name', $this->group_name])
+            ->andFilterWhere(['like', 'trash', $this->trash]);
+
+        return $dataProvider;
     }
 }

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Itemtype */
+/* @var $model common\models\ItemType */
 
 $this->title = 'Create event type';
 $this->params['breadcrumbs'][] = ['label' => 'Eventtypes', 'url' => ['index']];

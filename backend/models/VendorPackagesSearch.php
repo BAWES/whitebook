@@ -9,9 +9,9 @@ use common\models\VendorPackages;
 use common\models\Package;
 
 /**
- * VendorpackagesSearch represents the model behind the search form about `common\models\VendorPackages`.
+ * VendorPackagesSearch represents the model behind the search form about `common\models\VendorPackages`.
  */
-class VendorpackagesSearch extends VendorPackages
+class VendorPackagesSearch extends VendorPackages
 {
     /**
      * @inheritdoc

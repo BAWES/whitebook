@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
  * @property Admin $admin
  * @property Role $role
  */
-class Usercontroller extends \yii\db\ActiveRecord
+class UserController extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -54,7 +54,7 @@ class Usercontroller extends \yii\db\ActiveRecord
 			$command = \Yii::$app->DB->createCommand('SELECT * FROM whitebook_controller where id NOT IN( select controller FROM whitebook_access_control where admin_id = '.$admin_id.' and role_id = '.$role_id.' )');
 			$controller=$command->queryall();
 		}else{
-			$controller = Usercontroller::find()->all();
+			$controller = UserController::find()->all();
 		}
 		     
         $controller=ArrayHelper::map($controller,'id','controller');

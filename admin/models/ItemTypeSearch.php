@@ -5,27 +5,27 @@ namespace admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use admin\models\Accesscontroller;
+use common\models\ItemType;
 
 /**
-* AccesscontrolSearch represents the model behind the search form about `common\models\Accesscontrol`.
-*/
-class AccesscontrolSearch extends Accesscontroller
+ * ItemTypeSearch represents the model behind the search form about `common\models\ItemType`.
+ */
+class ItemTypeSearch extends ItemType
 {
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            [['access_id', 'role_id', 'admin_id', 'created_by', 'modified_by'], 'integer'],
-            //  [['created_datetime', 'modified_datetime'], 'safe'],
+            [['type_id', 'created_by', 'modified_by'], 'integer'],
+            [['type_name', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
 
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -33,21 +33,19 @@ class AccesscontrolSearch extends Accesscontroller
     }
 
     /**
-    * Creates data provider instance with search query applied
-    *
-    * @param array $params
-    *
-    * @return ActiveDataProvider
-    */
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
     public function search($params)
     {
-        $query = Accesscontroller::find()
-            ->where(['=', 'default', '0'])
-            ->groupBy('admin_id');
-        
+        $query = ItemType::find();
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['access_id'=>SORT_DESC]]
+			'sort'=> ['defaultOrder' => ['type_id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -59,14 +57,15 @@ class AccesscontrolSearch extends Accesscontroller
         }
 
         $query->andFilterWhere([
-            'access_id' => $this->access_id,
-            'role_id' => $this->role_id,
-            'admin_id' => $this->admin_id,
+            'type_id' => $this->type_id,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,
             'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
         ]);
+
+        $query->andFilterWhere(['like', 'type_name', $this->type_name])
+            ->andFilterWhere(['like', 'trash', $this->trash]);
 
         return $dataProvider;
     }

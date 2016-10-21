@@ -22,7 +22,7 @@ use yii\db\Expression;
 *
 * @property VendorItem[] $vendorItems
 */
-class Itemtype extends \yii\db\ActiveRecord
+class ItemType extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -96,7 +96,7 @@ class Itemtype extends \yii\db\ActiveRecord
     public  function typenamevalidation($attribute_name)
     {
         if(!empty($this->type_name) ){
-            $modelq = Itemtype::find()
+            $modelq = ItemType::find()
             ->where(['type_name' => $this->type_name])
             ->andWhere(['!=', 'type_id', $this->type_id])
             ->one();            
@@ -108,7 +108,7 @@ class Itemtype extends \yii\db\ActiveRecord
 
     public static function loaditemtype()
     {
-        $itemtype= Itemtype::find()
+        $itemtype= ItemType::find()
         ->where(['!=', 'trash', 'Deleted'])
         ->all();
         $itemtype=ArrayHelper::map($itemtype,'type_id','type_name');
@@ -127,7 +127,7 @@ class Itemtype extends \yii\db\ActiveRecord
     //Item type name should in vendor view tab
     public static function itemtypename($id)
     {
-        $itemtype= Itemtype::find()
+        $itemtype= ItemType::find()
         ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['=', 'type_id', $id])
         ->one();
@@ -137,7 +137,7 @@ class Itemtype extends \yii\db\ActiveRecord
 
     public static function itemtypename_ar($id)
     {
-        $itemtype= Itemtype::find()
+        $itemtype= ItemType::find()
         ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['=', 'type_id', $id])
         ->one();

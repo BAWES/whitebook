@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\VendorpackagesSearch */
+/* @var $searchModel common\models\VendorPackagesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'My package';

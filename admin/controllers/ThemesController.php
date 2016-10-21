@@ -9,7 +9,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use admin\models\Themes;
 use admin\models\ThemesSearch;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use common\models\VendorItemThemes;
 
 /**
@@ -60,7 +60,7 @@ class ThemesController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '20');
+        $access = AuthItem::AuthitemCheck('4', '20');
         if (yii::$app->user->can($access)) {
             $searchModel = new ThemesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -98,7 +98,7 @@ class ThemesController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '20');
+        $access = AuthItem::AuthitemCheck('1', '20');
         if (yii::$app->user->can($access)) {
             $model = new Themes();
             $model->scenario = 'insert';
@@ -130,7 +130,7 @@ class ThemesController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '20');
+        $access = AuthItem::AuthitemCheck('2', '20');
 
         if (yii::$app->user->can($access)) {
 
@@ -166,7 +166,7 @@ class ThemesController extends Controller
           */
          public function actionDelete($id)
          {
-             $access = Authitem::AuthitemCheck('3', '20');
+             $access = AuthItem::AuthitemCheck('3', '20');
              if (yii::$app->user->can($access)) {
                  
                 $model = $this->findModel($id);
