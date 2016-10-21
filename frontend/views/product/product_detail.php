@@ -1,13 +1,14 @@
 <?php
+
+use yii\web\view;
 use yii\helpers\Url;
-use frontend\models\Vendor;
 use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
+use frontend\models\Category;
+use frontend\models\Vendor;
+use common\components\CFormatter;
 use common\models\VendorItemPricing;
 use common\models\ItemType;
-use frontend\models\Category;
-use yii\widgets\Breadcrumbs;
-use yii\web\view;
-use common\components\CFormatter;
 
 $vendor_det = $model->vendor;
 
