@@ -30,6 +30,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         		$errors = CustomerCart::validate_item([
         			'item_id' => $item['item_id'],
         			'delivery_date' => $item['cart_delivery_date'],
+        			'timeslot_end_time' => $item['timeslot_end_time'],
         			'area_id' => $item['area_id'],
         			'quantity' => $item['cart_quantity']
         		], true);

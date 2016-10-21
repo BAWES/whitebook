@@ -193,7 +193,19 @@ class CustomerCart extends \yii\db\ActiveRecord
                 ])
             ];
         }
+        
+        // to check with old delivery date
+        if (strtotime($data['delivery_date']) < time()) { 
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past delivery date');     
+        }
 
+        # check for current date time slot
+        if ((strtotime($data['delivery_date']) == strtotime(date('Y-m-d'))) &&
+            (strtotime($data['timeslot_end_time']) < strtotime(date('H:i:s')))) {
+                
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past time slot date');
+        }
+        
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
 
@@ -264,21 +276,17 @@ class CustomerCart extends \yii\db\ActiveRecord
         ]);
         
         if($block_date) {
-            $errors['cart_delivery_date'] = [
-                Yii::t('frontend', 'Item is not available on selected date')
-            ];    
+            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');    
         }
 
         //day should not in week off 
         $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days); 
         $day = date('N', strtotime($data['delivery_date']));//7-sunday, 1-monday
 
-        if(in_array($day, $blocked_days)) {
-            $errors['cart_delivery_date'] = [
-                Yii::t('frontend', 'Item is not available on selected date')
-            ];             
+        if(!$block_date && in_array($day, $blocked_days)) {
+            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');             
         }
-        
+
         return $errors;       
     }
 
