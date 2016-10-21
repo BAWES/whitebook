@@ -7,9 +7,9 @@ use Yii;
 use common\models\Vendor;
 use admin\models\FeatureGroup;
 use common\models\BlockedDate;
-use admin\models\FeaturegroupSearch;
+use admin\models\FeatureGroupSearch;
 use yii\web\Controller;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -62,11 +62,11 @@ class FeaturegroupController extends Controller
      */
     public function actionIndex()
     {   
-        $access = Authitem::AuthitemCheck('4', '17');
+        $access = AuthItem::AuthitemCheck('4', '17');
         
         if (yii::$app->user->can($access)) {
             
-            $searchModel = new FeaturegroupSearch();
+            $searchModel = new FeatureGroupSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
@@ -104,7 +104,7 @@ class FeaturegroupController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '17');
+        $access = AuthItem::AuthitemCheck('1', '17');
         if (yii::$app->user->can($access)) {
             $model = new FeatureGroup();
 
@@ -136,7 +136,7 @@ class FeaturegroupController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '17');
+        $access = AuthItem::AuthitemCheck('2', '17');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
 
@@ -168,7 +168,7 @@ class FeaturegroupController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '17');
+        $access = AuthItem::AuthitemCheck('3', '17');
         
         if (yii::$app->user->can($access)) {
             

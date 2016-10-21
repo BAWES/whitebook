@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Adverthome */
+/* @var $model common\models\AdvertHome */
 
 $this->title = 'Home ads';
 $this->params['breadcrumbs'][] = ['label' => 'Home ads', 'url' => ['index']];

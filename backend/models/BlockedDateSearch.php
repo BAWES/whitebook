@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use backend\models\BlockedDate;
 
 /**
- * BlockeddateSearch represents the model behind the search form about `common\models\BlockedDate`.
+ * BlockedDateSearch represents the model behind the search form about `common\models\BlockedDate`.
  */
-class BlockeddateSearch extends BlockedDate
+class BlockedDateSearch extends BlockedDate
 {
     /**
      * @inheritdoc

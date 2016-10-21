@@ -3,9 +3,9 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Adverthome;
+use admin\models\AdvertHome;
 use admin\models\Admin;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * AdverthomeController implements the CRUD actions for Adverthome model.
+ * AdverthomeController implements the CRUD actions for AdvertHome model.
  */
 class AdverthomeController extends Controller
 {
@@ -55,16 +55,16 @@ class AdverthomeController extends Controller
     }
 
     /**
-     * Lists all Adverthome models.
+     * Lists all AdvertHome models.
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('2', '24');
+        $access = AuthItem::AuthitemCheck('2', '24');
         if (yii::$app->user->can($access)) {
 
-            $model = Adverthome::find()->all();
+            $model = AdvertHome::find()->all();
 
             foreach ($model as $key => $val) {
                 $first_id = $val['advert_id'];
@@ -83,7 +83,7 @@ class AdverthomeController extends Controller
     }
 
     /**
-     * Displays a single Adverthome model.
+     * Displays a single AdvertHome model.
      *
      * @param string $id
      *
@@ -97,16 +97,16 @@ class AdverthomeController extends Controller
     }
 
     /**
-     * Creates a new Adverthome model.
+     * Creates a new AdvertHome model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '25');
+        $access = AuthItem::AuthitemCheck('1', '25');
         if (yii::$app->user->can($access)) {
-            $model = new Adverthome();
+            $model = new AdvertHome();
             if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
                 $model->save();
                 Yii::$app->session->setFlash('success', 'Home advertisement script created successfully!');
@@ -125,7 +125,7 @@ class AdverthomeController extends Controller
     }
 
     /**
-     * Updates an existing Adverthome model.
+     * Updates an existing AdvertHome model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -134,7 +134,7 @@ class AdverthomeController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '25');
+        $access = AuthItem::AuthitemCheck('2', '25');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             $imagedata = Image::find()->where('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
@@ -158,7 +158,7 @@ class AdverthomeController extends Controller
     }
 
     /**
-     * Deletes an existing Adverthome model.
+     * Deletes an existing AdvertHome model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param string $id
@@ -167,7 +167,7 @@ class AdverthomeController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '25');
+        $access = AuthItem::AuthitemCheck('3', '25');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
             $user = Image::deleteAll('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads']);
@@ -182,18 +182,18 @@ class AdverthomeController extends Controller
     }
 
     /**
-     * Finds the Adverthome model based on its primary key value.
+     * Finds the AdvertHome model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Adverthome the loaded model
+     * @return AdvertHome the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Adverthome::findOne($id)) !== null) {
+        if (($model = AdvertHome::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

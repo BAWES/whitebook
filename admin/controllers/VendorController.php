@@ -13,7 +13,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use admin\models\Vendor;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\Category;
 use admin\models\VendorSearch;
 use admin\models\Package;
@@ -75,7 +75,7 @@ class VendorController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '22');
+        $access = AuthItem::AuthitemCheck('4', '22');
         if (yii::$app->user->can($access)) {
             $searchModel = new VendorSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -174,7 +174,7 @@ class VendorController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '22');
+        $access = AuthItem::AuthitemCheck('1', '22');
 
         $package = Package::loadpackage();
 
@@ -361,7 +361,7 @@ class VendorController extends Controller
     {
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
-        $access = Authitem::AuthitemCheck('2', '22');
+        $access = AuthItem::AuthitemCheck('2', '22');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             $model->scenario = 'vendorUpdate';
@@ -537,7 +537,7 @@ class VendorController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '22');
+        $access = AuthItem::AuthitemCheck('3', '22');
         
         if (!yii::$app->user->can($access)) {            
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');

@@ -9,7 +9,7 @@ use common\models\Area;
 use common\models\AddressType;
 use yii\helpers\Html;
 use common\models\VendorItemPricing;
-use common\models\Itemtype;
+use common\models\ItemType;
 use common\models\Category;
 use yii\widgets\Breadcrumbs;
 

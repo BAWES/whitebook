@@ -3,14 +3,14 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Authitem;
+use common\models\AuthItem;
 use common\models\AuthitemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AuthitemController implements the CRUD actions for Authitem model.
+ * AuthitemController implements the CRUD actions for AuthItem model.
  */
 class AuthitemController extends Controller
 {
@@ -37,7 +37,7 @@ class AuthitemController extends Controller
     }
 
     /**
-     * Lists all Authitem models.
+     * Lists all AuthItem models.
      *
      * @return mixed
      */
@@ -53,7 +53,7 @@ class AuthitemController extends Controller
     }
 
     /**
-     * Displays a single Authitem model.
+     * Displays a single AuthItem model.
      *
      * @param string $id
      *
@@ -67,14 +67,14 @@ class AuthitemController extends Controller
     }
 
     /**
-     * Creates a new Authitem model.
+     * Creates a new AuthItem model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Authitem();
+        $model = new AuthItem();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->name]);
@@ -86,7 +86,7 @@ class AuthitemController extends Controller
     }
 
     /**
-     * Updates an existing Authitem model.
+     * Updates an existing AuthItem model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -107,7 +107,7 @@ class AuthitemController extends Controller
     }
 
     /**
-     * Deletes an existing Authitem model.
+     * Deletes an existing AuthItem model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param string $id
@@ -122,18 +122,18 @@ class AuthitemController extends Controller
     }
 
     /**
-     * Finds the Authitem model based on its primary key value.
+     * Finds the AuthItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Authitem the loaded model
+     * @return AuthItem the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Authitem::findOne($id)) !== null) {
+        if (($model = AuthItem::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

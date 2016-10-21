@@ -3,7 +3,7 @@
 namespace admin\models;
 
 use Yii;
-use admin\models\Authassignment;
+use admin\models\AuthAssignment;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
@@ -28,7 +28,7 @@ use yii\helpers\ArrayHelper;
 * @property AuthRule $ruleName
 * @property AuthItemChild[] $authItemChildren
 */
-class Authitem extends \yii\db\ActiveRecord
+class AuthItem extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -84,9 +84,9 @@ class Authitem extends \yii\db\ActiveRecord
         return $this->hasOne(AuthRule::className(), ['name' => 'rule_name']);
     }
 
-    public static function Authitem()
+    public static function AuthItem()
     {
-        $authitem = Authitem::find()->all();
+        $authitem = AuthItem::find()->all();
         $authitem=ArrayHelper::map($authitem,'name','name');
         return $authitem;
     }
@@ -100,7 +100,7 @@ class Authitem extends \yii\db\ActiveRecord
 
     public static function AuthitemCheck($type,$controllerid)
     {
-        $item= Authitem::find()
+        $item= AuthItem::find()
             ->select(['name'])
             ->where(['id' => $type])
             ->one();
@@ -109,7 +109,7 @@ class Authitem extends \yii\db\ActiveRecord
         
         $id=Admin::getAdmin('id');
 
-        $final1=Authassignment::find()
+        $final1=AuthAssignment::find()
             ->select(['item_name'])
             ->where(['item_name' => $itemname])
             ->andwhere(['user_id' => $id])
@@ -122,7 +122,7 @@ class Authitem extends \yii\db\ActiveRecord
     public static function AuthitemviewCheck($itemname,$controllerid)
     {
         $id=Admin::getAdmin('id');
-        $final1=Authassignment::find()
+        $final1=AuthAssignment::find()
             ->select(['item_name'])
             ->where(['item_name' => $itemname])
             ->andwhere(['user_id' => $id])

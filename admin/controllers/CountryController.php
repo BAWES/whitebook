@@ -6,7 +6,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\CountrySearch;
 use common\models\Country;
 use common\models\City;
@@ -63,7 +63,7 @@ class CountryController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '11');
+        $access = AuthItem::AuthitemCheck('4', '11');
         
         if (yii::$app->user->can($access)) {
             
@@ -104,7 +104,7 @@ class CountryController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '11');
+        $access = AuthItem::AuthitemCheck('1', '11');
 
         if (yii::$app->user->can($access)) {
         
@@ -139,7 +139,7 @@ class CountryController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '11');
+        $access = AuthItem::AuthitemCheck('2', '11');
         
         if (yii::$app->user->can($access)) {
         
@@ -175,7 +175,7 @@ class CountryController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '11');
+        $access = AuthItem::AuthitemCheck('3', '11');
 
         if (yii::$app->user->can($access)) {
         

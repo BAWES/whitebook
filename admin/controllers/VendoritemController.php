@@ -18,7 +18,7 @@ use admin\models\VendorItemQuestionGuide;
 use common\models\VendorItemThemes;
 use common\models\FeatureGroupItem;
 use admin\models\FeatureGroup;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\Vendor;
 use admin\models\Themes;
 use admin\models\Image;
@@ -27,7 +27,7 @@ use admin\models\PriorityItem;
 use common\models\SubCategory;
 use common\models\ChildCategory;
 use common\models\VendorItemSearch;
-use common\models\Itemtype;
+use common\models\ItemType;
 use common\models\VendorItemPricing;
 use common\models\Prioritylog;
 use common\models\VendorItemToCategory;
@@ -85,7 +85,7 @@ class VendoritemController extends Controller
     */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '23');
+        $access = AuthItem::AuthitemCheck('4', '23');
 
         if (!yii::$app->user->can($access)) {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -110,7 +110,7 @@ class VendoritemController extends Controller
     */
     public function actionView($id)
     {
-        $access = Authitem::AuthitemviewCheck('view', '23');
+        $access = AuthItem::AuthitemviewCheck('view', '23');
         
         if (!yii::$app->user->can($access)) {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');            
@@ -157,7 +157,7 @@ class VendoritemController extends Controller
     */
     public function actionCreate($vid = '')
     {
-        $access = Authitem::AuthitemCheck('1', '23');
+        $access = AuthItem::AuthitemCheck('1', '23');
 
         if (!yii::$app->user->can($access)) {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -172,7 +172,7 @@ class VendoritemController extends Controller
         $grouplist = FeatureGroup::loadfeaturegroup();
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
-        $itemtype = Itemtype::loaditemtype();
+        $itemtype = ItemType::loaditemtype();
         $vendorname = Vendor::loadvendorname();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -428,7 +428,7 @@ class VendoritemController extends Controller
     */
     public function actionUpdate($id, $vid = false)
     {
-        $access = Authitem::AuthitemCheck('2', '23');
+        $access = AuthItem::AuthitemCheck('2', '23');
 
         if (!yii::$app->user->can($access)) {
             Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
@@ -747,7 +747,7 @@ class VendoritemController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'itemType' => Itemtype::findAll(['trash' => 'Default']),
+            'itemType' => ItemType::findAll(['trash' => 'Default']),
             'categoryname' => $categoryname,
             'images' => Image::findAll(['item_id' => $id, 'module_type' => 'vendor_item']),
             'model_question' => $model_question,
@@ -770,7 +770,7 @@ class VendoritemController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '23');
+        $access = AuthItem::AuthitemCheck('3', '23');
 
         if (yii::$app->user->can($access)) {
         

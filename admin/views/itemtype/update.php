@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Itemtype */
+/* @var $model common\models\ItemType */
 
 $this->title = 'Update item type: ' . ' ' . $model->type_name;
 $this->params['breadcrumbs'][] = ['label' => 'Itemtypes', 'url' => ['index']];

@@ -19,7 +19,7 @@ use yii\db\Expression;
 * @property string $modified_date
 * @property string $trash
 */
-class Adverthome extends \yii\db\ActiveRecord
+class AdvertHome extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc

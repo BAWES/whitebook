@@ -3,7 +3,7 @@ use yii\helpers\Url;
 use frontend\models\Vendor;
 use yii\helpers\Html;
 use common\models\VendorItemPricing;
-use common\models\Itemtype;
+use common\models\ItemType;
 use frontend\models\Category;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
@@ -225,7 +225,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                             <?= Yii::t('frontend', 'Product type') ?>:
                                                             <?= Yii::t(
                                                                     'frontend',
-                                                                    Itemtype::itemtypename($model['type_id'])
+                                                                    ItemType::itemtypename($model['type_id'])
                                                                 );
                                                             ?>
                                                         )

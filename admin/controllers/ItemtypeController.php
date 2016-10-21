@@ -3,16 +3,16 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Itemtype;
-use admin\models\Authitem;
-use admin\models\ItemtypeSearch;
+use common\models\ItemType;
+use admin\models\AuthItem;
+use admin\models\ItemTypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * ItemtypeController implements the CRUD actions for Itemtype model.
+ * ItemtypeController implements the CRUD actions for ItemType model.
  */
 class ItemtypeController extends Controller
 {
@@ -54,15 +54,15 @@ class ItemtypeController extends Controller
     }
 
     /**
-     * Lists all Itemtype models.
+     * Lists all ItemType models.
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '21');
+        $access = AuthItem::AuthitemCheck('4', '21');
         if (yii::$app->user->can($access)) {
-            $searchModel = new ItemtypeSearch();
+            $searchModel = new ItemTypeSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             return $this->render('index',[
             'searchModel' => $searchModel,
@@ -75,7 +75,7 @@ class ItemtypeController extends Controller
     }
 
     /**
-     * Displays a single Itemtype model.
+     * Displays a single ItemType model.
      *
      * @param string $id
      *
@@ -89,16 +89,16 @@ class ItemtypeController extends Controller
     }
 
     /**
-     * Creates a new Itemtype model.
+     * Creates a new ItemType model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '21');
+        $access = AuthItem::AuthitemCheck('1', '21');
         if (yii::$app->user->can($access)) {
-            $model = new Itemtype();
+            $model = new ItemType();
             $model->scenario = 'insert';
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['index']);
@@ -115,7 +115,7 @@ class ItemtypeController extends Controller
     }
 
     /**
-     * Updates an existing Itemtype model.
+     * Updates an existing ItemType model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -124,7 +124,7 @@ class ItemtypeController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '21');
+        $access = AuthItem::AuthitemCheck('2', '21');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -142,7 +142,7 @@ class ItemtypeController extends Controller
     }
 
     /**
-     * Deletes an existing Itemtype model.
+     * Deletes an existing ItemType model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param string $id
@@ -151,7 +151,7 @@ class ItemtypeController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '21');
+        $access = AuthItem::AuthitemCheck('3', '21');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
             Yii::$app->session->setFlash('success', 'Item type deleted successfully!');
@@ -165,18 +165,18 @@ class ItemtypeController extends Controller
     }
 
     /**
-     * Finds the Itemtype model based on its primary key value.
+     * Finds the ItemType model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Itemtype the loaded model
+     * @return ItemType the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Itemtype::findOne($id)) !== null) {
+        if (($model = ItemType::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -13,8 +13,8 @@ use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use admin\models\AddressType;
 use admin\models\Admin;
-use admin\models\Authitem;
-use admin\models\AddresstypeSearch;
+use admin\models\AuthItem;
+use admin\models\AddressTypeSearch;
 
 /**
  * AddresstypeController implements the CRUD actions for Addresstype model.
@@ -65,11 +65,11 @@ class AddresstypeController extends Controller
      */
     public function actionIndex()
     {		
-        $access = Authitem::AuthitemCheck('4', '14');
+        $access = AuthItem::AuthitemCheck('4', '14');
 
         if (yii::$app->user->can($access)) {
 
-            $searchModel = new AddresstypeSearch();
+            $searchModel = new AddressTypeSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
@@ -106,7 +106,7 @@ class AddresstypeController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '14');
+        $access = AuthItem::AuthitemCheck('1', '14');
 
         if (yii::$app->user->can($access)) {
             $model = new AddressType();
@@ -142,7 +142,7 @@ class AddresstypeController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '14');
+        $access = AuthItem::AuthitemCheck('2', '14');
         
         if (yii::$app->user->can($access)) {
         
@@ -176,7 +176,7 @@ class AddresstypeController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '14');
+        $access = AuthItem::AuthitemCheck('3', '14');
 
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);

@@ -3,14 +3,14 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Authrule;
+use common\models\AuthRule;
 use common\models\AuthruleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AuthruleController implements the CRUD actions for Authrule model.
+ * AuthruleController implements the CRUD actions for AuthRule model.
  */
 class AuthruleController extends Controller
 {
@@ -37,7 +37,7 @@ class AuthruleController extends Controller
     }
 
     /**
-     * Lists all Authrule models.
+     * Lists all AuthRule models.
      *
      * @return mixed
      */
@@ -53,7 +53,7 @@ class AuthruleController extends Controller
     }
 
     /**
-     * Displays a single Authrule model.
+     * Displays a single AuthRule model.
      *
      * @param string $id
      *
@@ -67,14 +67,14 @@ class AuthruleController extends Controller
     }
 
     /**
-     * Creates a new Authrule model.
+     * Creates a new AuthRule model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Authrule();
+        $model = new AuthRule();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->name]);
@@ -86,7 +86,7 @@ class AuthruleController extends Controller
     }
 
     /**
-     * Updates an existing Authrule model.
+     * Updates an existing AuthRule model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -107,7 +107,7 @@ class AuthruleController extends Controller
     }
 
     /**
-     * Deletes an existing Authrule model.
+     * Deletes an existing AuthRule model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param string $id
@@ -122,18 +122,18 @@ class AuthruleController extends Controller
     }
 
     /**
-     * Finds the Authrule model based on its primary key value.
+     * Finds the AuthRule model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Authrule the loaded model
+     * @return AuthRule the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Authrule::findOne($id)) !== null) {
+        if (($model = AuthRule::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

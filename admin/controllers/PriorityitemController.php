@@ -9,7 +9,7 @@ use admin\models\VendorItem;
 use admin\models\Vendor;
 use admin\models\Category;
 use common\models\ChildCategory;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use common\models\SubCategory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -79,7 +79,7 @@ class PriorityitemController extends Controller
         }
         /* END Priority created date filter */
 
-        $access = Authitem::AuthitemCheck('4', '19');
+        $access = AuthItem::AuthitemCheck('4', '19');
         if (yii::$app->user->can($access)) {
             $searchModel = new PriorityitemSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -117,7 +117,7 @@ class PriorityitemController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '19');
+        $access = AuthItem::AuthitemCheck('1', '19');
         
         if (yii::$app->user->can($access)) {
 
@@ -176,7 +176,7 @@ class PriorityitemController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '19');
+        $access = AuthItem::AuthitemCheck('2', '19');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
 
@@ -225,7 +225,7 @@ class PriorityitemController extends Controller
           */
          public function actionDelete($id)
          {
-             $access = Authitem::AuthitemCheck('3', '19');
+             $access = AuthItem::AuthitemCheck('3', '19');
              if (yii::$app->user->can($access)) {
 				 $command=PriorityItem::updateAll(['trash' => 'Deleted'],'priority_id= '.$id);
                  Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');

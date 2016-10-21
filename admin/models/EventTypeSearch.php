@@ -5,12 +5,12 @@ namespace admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use admin\models\Eventtype;
+use admin\models\EventType;
 
 /**
- * ItemtypeSearch represents the model behind the search form about `common\models\Itemtype`.
+ * ItemTypeSearch represents the model behind the search form about `common\models\ItemType`.
  */
-class EventtypeSearch extends Eventtype
+class EventTypeSearch extends EventType
 {
     /**
      * @inheritdoc
@@ -41,7 +41,7 @@ class EventtypeSearch extends Eventtype
      */
     public function search($params)
     {
-        $query = Eventtype::find();
+        $query = EventType::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

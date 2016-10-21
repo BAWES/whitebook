@@ -5,7 +5,7 @@ namespace admin\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use common\models\VendorItemSearch;
 
 /**
@@ -30,7 +30,7 @@ class VendorItemPendingController extends Controller
     */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '23');
+        $access = AuthItem::AuthitemCheck('4', '23');
         
         if (yii::$app->user->can($access)) {
 

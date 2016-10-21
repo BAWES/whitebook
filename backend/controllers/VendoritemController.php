@@ -21,7 +21,7 @@ use common\models\Image;
 use common\models\Category;
 use common\models\SubCategory;
 use common\models\VendorItemSearch;
-use common\models\Itemtype;
+use common\models\ItemType;
 use common\models\Themes;
 use common\models\FeatureGroup;
 use common\models\FeatureGroupItem;
@@ -104,7 +104,7 @@ class VendoritemController extends Controller
             ->Where(['item_id' => $id])
             ->all();
 
-        $item_type = Itemtype::itemtypename($model->type_id);
+        $item_type = ItemType::itemtypename($model->type_id);
 
         $price_values= VendorItemPricing::loadpricevalues($model->item_id);
 
@@ -133,7 +133,7 @@ class VendoritemController extends Controller
 
         $base = Yii::$app->basePath;
         $len = rand(1,1000);
-        $itemtype = Itemtype::loaditemtype();
+        $itemtype = ItemType::loaditemtype();
         $vendorname = Vendor::loadvendorname();
         
         if($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -357,7 +357,7 @@ class VendoritemController extends Controller
             ->asArray()
             ->all();
 
-        $itemtype = Itemtype::loaditemtype();
+        $itemtype = ItemType::loaditemtype();
         $vendorname = Vendor::loadvendorname();
         $categoryname = Category::vendorcategory(Yii::$app->user->getId());
         

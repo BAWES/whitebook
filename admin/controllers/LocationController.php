@@ -8,7 +8,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\LocationSearch;
 use common\models\Country;
 use common\models\Location;
@@ -66,7 +66,7 @@ class LocationController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('3', '13');
+        $access = AuthItem::AuthitemCheck('3', '13');
         if (yii::$app->user->can($access)) {
             $searchModel = new LocationSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -104,7 +104,7 @@ class LocationController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '13');
+        $access = AuthItem::AuthitemCheck('1', '13');
         if (yii::$app->user->can($access)) {
             $model = new Location();
 
@@ -137,7 +137,7 @@ class LocationController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '13');
+        $access = AuthItem::AuthitemCheck('2', '13');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -171,7 +171,7 @@ class LocationController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '13');
+        $access = AuthItem::AuthitemCheck('3', '13');
         
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();

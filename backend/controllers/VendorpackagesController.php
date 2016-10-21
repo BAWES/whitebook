@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\VendorPackages;
-use backend\models\VendorpackagesSearch;
+use backend\models\VendorPackagesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -42,7 +42,7 @@ class VendorpackagesController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new VendorpackagesSearch();
+        $searchModel = new VendorPackagesSearch();
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

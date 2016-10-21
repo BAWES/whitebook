@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use admin\models\Admin;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\AdminSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -59,7 +59,7 @@ class AdminController extends Controller
     */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '9');
+        $access = AuthItem::AuthitemCheck('4', '9');
         if (yii::$app->user->can($access)) {
             $searchModel = new AdminSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -97,7 +97,7 @@ class AdminController extends Controller
     */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '9');
+        $access = AuthItem::AuthitemCheck('1', '9');
         if (yii::$app->user->can($access)) {
             $model = new Admin();
             $role = Admin::roles();
@@ -130,7 +130,7 @@ class AdminController extends Controller
     */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '9');
+        $access = AuthItem::AuthitemCheck('2', '9');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             $role = Admin::roles();
@@ -160,7 +160,7 @@ class AdminController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '9');
+        $access = AuthItem::AuthitemCheck('3', '9');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
             Yii::$app->session->setFlash('success', 'Admin user deleted successfully!');

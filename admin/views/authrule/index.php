@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
        <div class="span12">
          <div class="grid simple ">
 		<div class="tools">
-        <?= Html::a('Create Authrule', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create AuthRule', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

@@ -4,9 +4,9 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Authassignment */
+/* @var $model common\models\AuthAssignment */
 
-$this->title = 'Create Authassignment';
+$this->title = 'Create AuthAssignment';
 $this->params['breadcrumbs'][] = ['label' => 'Authassignments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
