@@ -65,7 +65,7 @@ use yii\helpers\Url;
 				<ul class="nav quick-section pull-right">
 					<!-- BEGIN SETTINGS -->
 					<li class="quicklinks">
-						<a data-toggle="dropdown" class="dropdown-toggle pull-right" href="#" id="user-options">
+						<a data-toggle="" class=" pull-right" href="#" id="user-options">
 							<div class="iconset top-settings-dark"></div>
 						</a>
 						<ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
