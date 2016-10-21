@@ -253,7 +253,7 @@ class SiteController extends BaseController
 
         $data = Yii::$app->request->post();
 
-        $themes = \common\models\Vendoritemthemes::find()
+        $themes = \common\models\VendorItemThemes::find()
             ->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
             ->Where(['vendor_id'=>$data['v_id']])
             ->asArray()

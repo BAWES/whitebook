@@ -4,7 +4,7 @@ use common\models\VendorItem;
 use common\models\Itemtype;
 use admin\models\Category;
 use common\models\Package;
-use common\models\Vendorpackages;
+use common\models\VendorPackages;
 use common\models\DeliveryTimeSlot;
 use common\models\DeliverytimeslotSearch;
 use yii\helpers\Html;
@@ -421,7 +421,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/boots
 			
       $('#option').show();
 			
-      $(this).after('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" name="Addss" value="Add Selection"></div>');
+      $(this).after('<div class="selection"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" name="Addss" value="Add Selection"></div>');
 
 		} else if(type =='image' ||  type =='text') {
 
@@ -433,7 +433,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/boots
 			
       $('#option').show();
 
-			$(this).after('<div class="price_val"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
+			$(this).after('<div class="price_val"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
 		}
 
   	// Add selection for questions //
@@ -445,7 +445,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/boots
 			
       var j = $(this).attr('id').replace(/add_question/, '');
 			
-      $(this).before('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');	
+      $(this).before('<div class="selection"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
       
       p++;
 

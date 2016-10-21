@@ -3,15 +3,15 @@
 namespace common\models;
 
 /**
- * This is the ActiveQuery class for [[Vendoritempricing]].
+ * This is the ActiveQuery class for [[VendorItemPricing]].
  *
- * @see Vendoritempricing
+ * @see VendorItemPricing
  */
-class Vendoritempricingquery extends \yii\db\ActiveQuery
+class VendorItemPricingQuery extends \yii\db\ActiveQuery
 {
     /**
      * @inheritdoc
-     * @return Vendoritempricing[]|array
+     * @return VendorItemPricing[]|array
      */
     public function all($db = null)
     {
@@ -20,7 +20,7 @@ class Vendoritempricingquery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Vendoritempricing|array|null
+     * @return VendorItemPricing|array|null
      */
     public function one($db = null)
     {

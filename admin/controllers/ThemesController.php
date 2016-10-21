@@ -10,7 +10,7 @@ use yii\filters\AccessControl;
 use admin\models\Themes;
 use admin\models\ThemesSearch;
 use admin\models\Authitem;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 
 /**
  * ThemesController implements the CRUD actions for Themes model.
@@ -175,7 +175,7 @@ class ThemesController extends Controller
                 $model->save();
 
                 //delete vendor item theme 
-                Vendoritemthemes::deleteAll(['theme_id' => $id]);
+                VendorItemThemes::deleteAll(['theme_id' => $id]);
 
                 Yii::$app->session->setFlash('success', 'Theme deleted successfully!');
 

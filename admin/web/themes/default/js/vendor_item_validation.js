@@ -80,7 +80,7 @@ $(document).delegate(".vendoritemquestion-question_answer_type", 'change', funct
 
 		var que_id = $('input#ans_id').val();
 		$('#option').show();
-		$(this).after('<div class="selection"><input type="text" class="form-control question temp_qa" name="'+level_text+'" placeholder="Answer" id="question" style="width:40%;float:left;"><input type="text" class="form-control temp_qa" name="'+level_price+'" placeholder="Price (Optional)" id="price" style="width:35%;float:left;"><input type="hidden" name="Vendoritemquestion[0][hidden][0][]" class="form-control answer" style="width:5%;float:left;"><input type="hidden" id="subquestion" value="Add" class="add-sub-question temp_qa" data-name="'+level_text+'" onclick="addsubquestions(this)"><input type="button" id="viewquestion" value="View" class="add-sub-question temp_qa" data-name="'+level_text+'" onclick="viewsubquestions(this)"></div><input type="button" class="add_question" id="add_question'+j1+'" data-name="'+level_text+'" data-parent ="'+parent+'" value="Add Selection"> <input type="button" class="save" name="save" value="Save" onclick="savequestion(\''+type+'\','+parent_id+',this)"><input type="button" value="Guide Image" id="" class="saves" data-toggle="modal" data-target="#myModal" onclick="checkupload(this)"><div class="question_success">Successfully added</div>');
+		$(this).after('<div class="selection"><input type="text" class="form-control question temp_qa" name="'+level_text+'" placeholder="Answer" id="question" style="width:40%;float:left;"><input type="text" class="form-control temp_qa" name="'+level_price+'" placeholder="Price (Optional)" id="price" style="width:35%;float:left;"><input type="hidden" name="VendorItemQuestion[0][hidden][0][]" class="form-control answer" style="width:5%;float:left;"><input type="hidden" id="subquestion" value="Add" class="add-sub-question temp_qa" data-name="'+level_text+'" onclick="addsubquestions(this)"><input type="button" id="viewquestion" value="View" class="add-sub-question temp_qa" data-name="'+level_text+'" onclick="viewsubquestions(this)"></div><input type="button" class="add_question" id="add_question'+j1+'" data-name="'+level_text+'" data-parent ="'+parent+'" value="Add Selection"> <input type="button" class="save" name="save" value="Save" onclick="savequestion(\''+type+'\','+parent_id+',this)"><input type="button" value="Guide Image" id="" class="saves" data-toggle="modal" data-target="#myModal" onclick="checkupload(this)"><div class="question_success">Successfully added</div>');
 		// remove current div add button
 		$(this).parent().parent().find('input#subquestion').hide();	//hide before add
 		$(this).parent().parent().find('input#viewquestion').hide(); //hide before add
@@ -95,7 +95,7 @@ $(document).delegate(".vendoritemquestion-question_answer_type", 'change', funct
 		var j1 = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
 		$('#option').show();
 
-		$(this).after('<div class="image_val"><input type="file" class="form-control upimage"  multiple="true" name="Vendoritemquestion['+j1+'][image][]" placeholder="Image (Optional)" id="guide_image" style="width:40%;"><input type="button" class="savebutton" name="save" value="Save" onclick="savequestion(\''+type+'\','+parent_id+',this)"><input type="button" value="Guide Image" id="" class="saves" data-toggle="modal" data-target="#myModal" onclick="checkupload(this)"><div class="question_success">Successfully added</div></div>');
+		$(this).after('<div class="image_val"><input type="file" class="form-control upimage"  multiple="true" name="VendorItemQuestion['+j1+'][image][]" placeholder="Image (Optional)" id="guide_image" style="width:40%;"><input type="button" class="savebutton" name="save" value="Save" onclick="savequestion(\''+type+'\','+parent_id+',this)"><input type="button" value="Guide Image" id="" class="saves" data-toggle="modal" data-target="#myModal" onclick="checkupload(this)"><div class="question_success">Successfully added</div></div>');
 		$(this).parent().find('input.saves').hide(); //hide before add
 	}
 
@@ -108,7 +108,7 @@ $(document).delegate(".vendoritemquestion-question_answer_type", 'change', funct
 		var j1 = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
 		$('#option').show();
 
-		$(this).after('<div class="price_val"><input type="text" class="form-control" name="Vendoritemquestion['+j1+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;"><input type="button" class="savebutton" name="save" value="Save" onclick="savequestion(\''+type+'\','+parent_id+',this)"><input type="button" value="Guide Image" id="" class="saves" data-toggle="modal" data-target="#myModal" onclick="checkupload(this)"><div class="question_success">Successfully added</div></div>');
+		$(this).after('<div class="price_val"><input type="text" class="form-control" name="VendorItemQuestion['+j1+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;"><input type="button" class="savebutton" name="save" value="Save" onclick="savequestion(\''+type+'\','+parent_id+',this)"><input type="button" value="Guide Image" id="" class="saves" data-toggle="modal" data-target="#myModal" onclick="checkupload(this)"><div class="question_success">Successfully added</div></div>');
 		$(this).parent().find('input.saves').hide(); //hide before add
 	}
 	// Add selection for questions //
@@ -131,7 +131,7 @@ $(document).delegate('.add_question', 'click',function(){
 	$html  = '<div class="selection">';
 	$html += '<input type="text" class="form-control question" name="'+ques_txt+'" placeholder="Answer" id="question" style="width:40%;float:left;">';
 	$html += '<input type="text" class="form-control"  placeholder="Price (Optional)" name="'+ques_ans+'" id="price" style="width:40%;float:left;">';
-	$html += '<input type="hidden" class="form-control answer" name="Vendoritemquestion[0][hidden][0][]" style="width:5%;float:left;">';
+	$html += '<input type="hidden" class="form-control answer" name="VendorItemQuestion[0][hidden][0][]" style="width:5%;float:left;">';
 	$html += '<img src="'+appImageUrl+'remove.png" class="selection_delete" onclick="deletequestionselection(this)" />';
 	$html += '<input type="hidden" id="subquestion" value="Add" class="add-sub-question temp_qa" data-name="'+ques_txt+'" onclick="addsubquestions(this)">';
 	$html += '<input type="button" id="viewquestion" value="View" class="add-sub-question temp_qa" data-name="'+ques_txt+'" onclick="viewsubquestions(this)">';
@@ -334,7 +334,7 @@ var j = count_q;
 
 function addAddress(tis)
 {
-	$(tis).before('<div class="form-group" id="delete_'+j+'"> <div id="question-section_'+j+'" class="question-section"><input type="hidden" id="parentid_0" value="0" class="form-control" name="parent_id" placeholder="Parent Question ">Question <input type="text" id="question_text_'+j+'" class="form-control" name="Vendoritemquestion['+j+'][question_text][] style="margin:10px 0px;"> Question Type	<div class="append_address"><select id="vendoritemquestion-question_answer_type'+j+'" class="form-control vendoritemquestion-question_answer_type" name="Vendoritemquestion['+j+'][question_answer_type][]" parent_id="'+j+'" style="margin: 10px 0px;"><option value="">Choose type</option><option value="text">Text</option><option value="image">Image</option><option value="selection">Selection</option></select></div><input type="button" style="float:right; margin:0px 5px 5px 0px;" class="delete_'+j+'" onclick=deleteAddress("delete_'+j+'") value=Delete><input type="hidden" style="float:right; margin:0px 5px 5px 0px;" class="hide_'+j+'" onclick=hideQuestion("hide_'+j+'",this) value=Hide></div></div>');	j++;
+	$(tis).before('<div class="form-group" id="delete_'+j+'"> <div id="question-section_'+j+'" class="question-section"><input type="hidden" id="parentid_0" value="0" class="form-control" name="parent_id" placeholder="Parent Question ">Question <input type="text" id="question_text_'+j+'" class="form-control" name="VendorItemQuestion['+j+'][question_text][] style="margin:10px 0px;"> Question Type	<div class="append_address"><select id="vendoritemquestion-question_answer_type'+j+'" class="form-control vendoritemquestion-question_answer_type" name="VendorItemQuestion['+j+'][question_answer_type][]" parent_id="'+j+'" style="margin: 10px 0px;"><option value="">Choose type</option><option value="text">Text</option><option value="image">Image</option><option value="selection">Selection</option></select></div><input type="button" style="float:right; margin:0px 5px 5px 0px;" class="delete_'+j+'" onclick=deleteAddress("delete_'+j+'") value=Delete><input type="hidden" style="float:right; margin:0px 5px 5px 0px;" class="hide_'+j+'" onclick=hideQuestion("hide_'+j+'",this) value=Hide></div></div>');	j++;
 }
 
 // single question view

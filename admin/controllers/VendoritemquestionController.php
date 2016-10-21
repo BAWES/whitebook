@@ -3,7 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Vendoritemquestion;
+use common\models\VendorItemQuestion;
 use common\models\VendoritemquestionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -14,7 +14,7 @@ use common\models\Vendor;
 use common\models\VendorItem;
 
 /**
- * VendoritemquestionController implements the CRUD actions for Vendoritemquestion model.
+ * VendoritemquestionController implements the CRUD actions for VendorItemQuestion model.
  */
 class VendoritemquestionController extends Controller
 {
@@ -41,7 +41,7 @@ class VendoritemquestionController extends Controller
     }
 
     /**
-     * Lists all Vendoritemquestion models.
+     * Lists all VendorItemQuestion models.
      *
      * @return mixed
      */
@@ -57,7 +57,7 @@ class VendoritemquestionController extends Controller
     }
 
     /**
-     * Displays a single Vendoritemquestion model.
+     * Displays a single VendorItemQuestion model.
      *
      * @param string $id
      *
@@ -71,14 +71,14 @@ class VendoritemquestionController extends Controller
     }
 
     /**
-     * Creates a new Vendoritemquestion model.
+     * Creates a new VendorItemQuestion model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Vendoritemquestion();
+        $model = new VendorItemQuestion();
         $category = Category::loadcategoryname();
         $subcategory = Subcategory::loadsubcategoryname();
         $vendorname = Vendor::loadvendorname();
@@ -99,7 +99,7 @@ class VendoritemquestionController extends Controller
     }
 
     /**
-     * Updates an existing Vendoritemquestion model.
+     * Updates an existing VendorItemQuestion model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param string $id
@@ -129,7 +129,7 @@ class VendoritemquestionController extends Controller
     }
 
     /**
-     * Deletes an existing Vendoritemquestion model.
+     * Deletes an existing VendorItemQuestion model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param string $id
@@ -144,18 +144,18 @@ class VendoritemquestionController extends Controller
     }
 
     /**
-     * Finds the Vendoritemquestion model based on its primary key value.
+     * Finds the VendorItemQuestion model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
      *
-     * @return Vendoritemquestion the loaded model
+     * @return VendorItemQuestion the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Vendoritemquestion::findOne($id)) !== null) {
+        if (($model = VendorItemQuestion::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

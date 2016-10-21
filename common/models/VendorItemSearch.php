@@ -10,9 +10,9 @@ use common\models\Vendor;
 use yii\db\Expression;
 
 /**
- * VendoritemSearch represents the model behind the search form about `common\models\VendorItem`.
+ * VendorItemSearch represents the model behind the search form about `common\models\VendorItem`.
  */
-class VendoritemSearch extends VendorItem
+class VendorItemSearch extends VendorItem
 {
     public $vendor_name, $theme_id, $group_id;
     /**
@@ -70,11 +70,11 @@ class VendoritemSearch extends VendorItem
 			],
         ]);     
      
-        if(!empty($params['VendoritemSearch']['group_id'])) {
+        if(!empty($params['VendorItemSearch']['group_id'])) {
             $query->joinWith(['featureGroupItems']);     
         }
 
-        if(!empty($params['VendoritemSearch']['theme_id'])) {
+        if(!empty($params['VendorItemSearch']['theme_id'])) {
             $query->joinWith(['vendorItemThemes']);     
         }
 
@@ -103,17 +103,17 @@ class VendoritemSearch extends VendorItem
             'modified_datetime' => $this->modified_datetime,
         ]);
 
-        if(!empty($params['VendoritemSearch']['theme_id'])) {
+        if(!empty($params['VendorItemSearch']['theme_id'])) {
             $query->andFilterWhere([
                 '{{%vendor_item_theme}}.trash' => 'Default',
-                '{{%vendor_item_theme}}.theme_id' =>  $params['VendoritemSearch']['theme_id']
+                '{{%vendor_item_theme}}.theme_id' =>  $params['VendorItemSearch']['theme_id']
             ]);
         }
 
-        if(!empty($params['VendoritemSearch']['group_id'])) {
+        if(!empty($params['VendorItemSearch']['group_id'])) {
             $query->andFilterWhere([
                 '{{%feature_group_item}}.trash' => 'Default',
-                '{{%feature_group_item}}.group_id' =>  $params['VendoritemSearch']['group_id']
+                '{{%feature_group_item}}.group_id' =>  $params['VendorItemSearch']['group_id']
             ]);
         }
 

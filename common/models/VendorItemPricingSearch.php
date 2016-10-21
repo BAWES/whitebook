@@ -1,17 +1,16 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\VendorPackages;
-use common\models\Package;
+use common\models\VendorItemPricing;
 
 /**
- * VendorpackagesSearch represents the model behind the search form about `common\models\VendorPackages`.
+ * VendorItemPricingSearch represents the model behind the search form about `common\models\VendorItemPricing`.
  */
-class VendorpackagesSearch extends VendorPackages
+class VendorItemPricingSearch extends VendorItemPricing
 {
     /**
      * @inheritdoc
@@ -19,9 +18,8 @@ class VendorpackagesSearch extends VendorPackages
     public function rules()
     {
         return [
-            [['id', 'vendor_id', 'package_id', 'created_by', 'modified_by'], 'integer'],
-            [['package_price'], 'number'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
+            [['pricing_id', 'item_id', 'range_from', 'range_to', 'pricing_quantity_ordered', 'pricing_price_per_unit', 'created_by', 'modified_by'], 'integer'],
+            [['created_datetime', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
 
@@ -42,10 +40,8 @@ class VendorpackagesSearch extends VendorPackages
      * @return ActiveDataProvider
      */
     public function search($params)
-    {        
-        $query = VendorPackages::find()
-            ->where(['vendor_id' => Yii::$app->user->getID(), 'trash' => 'Default'])    
-            ->orderBy(['created_datetime' => SORT_DESC]);
+    {
+        $query = VendorItemPricing::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -60,15 +56,19 @@ class VendorpackagesSearch extends VendorPackages
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'vendor_id' => $this->vendor_id,
-            'package_id' => $this->package_id,
-            'package_price' => $this->package_price,
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
+            'pricing_id' => $this->pricing_id,
+            'item_id' => $this->item_id,
+            'range_from' => $this->range_from,
+            'range_to' => $this->range_to,
+            'pricing_quantity_ordered' => $this->pricing_quantity_ordered,
+            'pricing_price_per_unit' => $this->pricing_price_per_unit,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,
+            'created_datetime' => $this->created_datetime,
+            'modified_datetime' => $this->modified_datetime,
         ]);
+
+        $query->andFilterWhere(['like', 'trash', $this->trash]);
 
         return $dataProvider;
     }

@@ -3,7 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\VendorItem;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 use frontend\models\Vendor;
 use frontend\models\Category;
 use frontend\models\Themes;
@@ -84,7 +84,7 @@ class ThemesController extends BaseController
 
         $theme = Themes::findOne(['slug' => $themes, 'trash' => 'Default']);
 
-        $theme_result  = Vendoritemthemes::find()->select('item_id')
+        $theme_result  = VendorItemThemes::find()->select('item_id')
             ->where(['trash' => "Default"])
             ->andWhere(['theme_id' => $theme->theme_id])
             ->asArray()

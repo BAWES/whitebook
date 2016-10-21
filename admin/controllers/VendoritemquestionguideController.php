@@ -3,8 +3,8 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Vendoritemquestionguide;
-use common\models\Vendoritemquestion;
+use common\models\VendorItemQuestionGuide;
+use common\models\VendorItemQuestion;
 use common\models\VendoritemquestionguideSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -13,7 +13,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use common\models\Image;
 /**
- * VendoritemquestionguideController implements the CRUD actions for Vendoritemquestionguide model.
+ * VendoritemquestionguideController implements the CRUD actions for VendorItemQuestionGuide model.
  */
 class VendoritemquestionguideController extends Controller
 {
@@ -41,7 +41,7 @@ class VendoritemquestionguideController extends Controller
     }
 
     /**
-     * Lists all Vendoritemquestionguide models.
+     * Lists all VendorItemQuestionGuide models.
      * @return mixed
      */
     public function actionIndex()
@@ -56,7 +56,7 @@ class VendoritemquestionguideController extends Controller
     }
 
     /**
-     * Displays a single Vendoritemquestionguide model.
+     * Displays a single VendorItemQuestionGuide model.
      * @param string $id
      * @return mixed
      */
@@ -68,17 +68,17 @@ class VendoritemquestionguideController extends Controller
     }
 
     /**
-     * Creates a new Vendoritemquestionguide model.
+     * Creates a new VendorItemQuestionGuide model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Vendoritemquestionguide();
+        $model = new VendorItemQuestionGuide();
         $model1 = new Image();
         $base = Yii::$app->basePath;
 		$len = rand(1,1000);
-        $question = Vendoritemquestion::find()->select(['question_id','question_text'])->all();    
+        $question = VendorItemQuestion::find()->select(['question_id','question_text'])->all();
         $questions = ArrayHelper::map($question,'question_id','question_text');   
         $model->question_id = 0;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -106,7 +106,7 @@ class VendoritemquestionguideController extends Controller
     }
 
     /**
-     * Updates an existing Vendoritemquestionguide model.
+     * Updates an existing VendorItemQuestionGuide model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -125,7 +125,7 @@ class VendoritemquestionguideController extends Controller
     }
 
     /**
-     * Deletes an existing Vendoritemquestionguide model.
+     * Deletes an existing VendorItemQuestionGuide model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -138,15 +138,15 @@ class VendoritemquestionguideController extends Controller
     }
 
     /**
-     * Finds the Vendoritemquestionguide model based on its primary key value.
+     * Finds the VendorItemQuestionGuide model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return Vendoritemquestionguide the loaded model
+     * @return VendorItemQuestionGuide the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Vendoritemquestionguide::findOne($id)) !== null) {
+        if (($model = VendorItemQuestionGuide::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

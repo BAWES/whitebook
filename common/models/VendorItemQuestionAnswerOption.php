@@ -25,7 +25,7 @@ use yii\db\Expression;
 * @property string $modified_datetime
 * @property string $trash
 */
-class Vendoritemquestionansweroption extends \yii\db\ActiveRecord
+class VendorItemQuestionAnswerOption extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc

@@ -3,14 +3,14 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use admin\models\VendorItem;
-use common\models\Vendoritemthemes;
-use common\models\Vendoritempricing;
+use common\models\VendorItemThemes;
+use common\models\VendorItemPricing;
 use common\models\FeatureGroupItem;
 
 
 use common\models\Image;
-use common\models\Vendoritemquestion;
-use common\models\Vendoritemquestionguide;
+use common\models\VendorItemQuestion;
+use common\models\VendorItemQuestionGuide;
 
 $arr_categories = [];
 
@@ -132,7 +132,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                           'item_price_per_unit',
                     ],
                   ]);
-                  Vendoritempricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit);
+                  VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit);
                   ?>
             </div>
         </div>

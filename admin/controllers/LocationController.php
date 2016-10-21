@@ -15,7 +15,7 @@ use common\models\Location;
 use common\models\City;
 use common\models\CustomerAddress;
 use common\models\CustomerCart;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 
 /**
  * LocationController implements the CRUD actions for Location model.
@@ -179,7 +179,7 @@ class LocationController extends Controller
             //remove customer address 
             CustomerAddress::deleteAll(['area_id' => $id]);
             CustomerCart::deleteAll(['area_id' => $id]);
-            Vendorlocation::deleteAll(['area_id' => $id]);
+            VendorLocation::deleteAll(['area_id' => $id]);
 
             return $this->redirect(['index']);
         } else {

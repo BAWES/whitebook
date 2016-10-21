@@ -12,7 +12,7 @@ use frontend\models\Users;
 use common\models\FeatureGroupItem;
 use common\models\DeliveryTimeSlot;
 use common\models\Events;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 use common\models\Image;
 
 /**
@@ -50,7 +50,7 @@ class ProductController extends BaseController
             //$baselink = Yii::getAlias("@s3/vendor_item_images_530/") . 'no_image.jpg';
         }
 
-        $vendr_area = Vendorlocation::find()
+        $vendr_area = VendorLocation::find()
             ->select(['{{%vendor_location}}.area_id','{{%location}}.*'])
             ->leftJoin('{{%location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
             ->where(['{{%location}}.trash' => 'Default'])

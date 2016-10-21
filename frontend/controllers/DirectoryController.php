@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 
 use Yii;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 use frontend\models\Vendor;
 use frontend\models\Category;
 use frontend\models\Themes;
@@ -195,7 +195,7 @@ class DirectoryController extends BaseController
 
         $item_ids = ArrayHelper::map($vendor_items, 'item_id', 'item_id');
 
-        $themes = \common\models\Vendoritemthemes::find()
+        $themes = \common\models\VendorItemThemes::find()
             ->select(['wt.theme_id','wt.slug','wt.theme_name'])
             ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
             ->Where([

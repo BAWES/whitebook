@@ -16,7 +16,7 @@ use common\models\City;
 use common\models\CustomerAddress;
 use common\models\CustomerCart;
 use common\models\Location;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 
 /**
 * CityController implements the CRUD actions for City model.
@@ -207,7 +207,7 @@ class CityController extends Controller
             Location::deleteAll(['city_id' => $city_id]);
 
             //delete all vendor location - city_id 
-            Vendorlocation::deleteAll(['city_id' => $city_id]);
+            VendorLocation::deleteAll(['city_id' => $city_id]);
 
             Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
             return $this->redirect(['index']);

@@ -283,7 +283,7 @@ class VendorItem extends \yii\db\ActiveRecord
     */
     public function getVendorItemThemes()
     {
-        return $this->hasMany(Vendoritemthemes::className(), ['item_id' => 'item_id']);
+        return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
     }
 
     /**
@@ -293,7 +293,7 @@ class VendorItem extends \yii\db\ActiveRecord
 //    public function getThemes()
 //    {
 //        //return $this->hasMany(Theme::className(), ['theme_id' => 'theme_id'])->viaTable('whitebook_vendor_item_theme', ['item_id' => 'item_id']);
-//        return $this->hasMany(Vendoritemthemes::className(), ['item_id' => 'item_id']);
+//        return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
 //    }
 
     public static function vendoritemcount($vid='')
