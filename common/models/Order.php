@@ -220,25 +220,6 @@ class Order extends \yii\db\ActiveRecord
 
     }//END place_order
 
-    public function confirmOrder(){
-
-        $items = CustomerCart::items();
-
-        foreach ($items as $item) {
-            if (strtotime($item['cart_delivery_date']) < strtotime(date('Y-m-d'))) { # to check with old delivery date
-                return Yii::t('frontend','Error : Cart item `'.$item['item']['item_name'].'` with past delivery date');
-            }
-
-            # check for current date time slot
-            if (
-                (strtotime($item['cart_delivery_date']) == strtotime(date('Y-m-d'))) &&
-                (strtotime($item['timeslot_end_time']) < strtotime(date('H:i:s')))
-            ) {
-                return Yii::t('frontend','Error : Cart item `'.$item['item']['item_name'].'` with past time slot date');
-            }
-        }
-    }
-
     private function getPurchaseDeliveryAddress($address_id) {
 
         $address_model = CustomerAddress::findOne($address_id);

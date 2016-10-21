@@ -44,13 +44,6 @@ class TapController extends Controller
             $this->redirect(['checkout/index']);
         }
 
-        if (Order::confirmOrder()) // Confirming order before payment
-        {
-            $msg = Order::confirmOrder();
-            Yii::$app->session->setFlash('danger',$msg);
-            return $this->redirect(Yii::$app->request->referrer);
-        }
-
         //place order with 0 - missing order
         $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['fees'], $gateway['order_status_id']);
 

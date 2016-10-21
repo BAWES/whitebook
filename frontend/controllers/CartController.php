@@ -99,22 +99,6 @@ class CartController extends BaseController
         }
     }
 
-    //list all products
-    public function actionConfirm()
-    {
-        $items = CustomerCart::items();
-        
-        if (Order::confirmOrder()) // Confirming order before payment
-        {
-            $msg = Order::confirmOrder();
-            Yii::$app->session->setFlash('danger',$msg);
-            return $this->redirect(Yii::$app->request->referrer);
-        }
-
-        //redirect to checkout after cart validation 
-        return $this->redirect(['checkout/index']);
-    }
-
     /*  
      *  Add product to cart  
      ----------------------------

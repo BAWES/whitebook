@@ -30,6 +30,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         		$errors = CustomerCart::validate_item([
         			'item_id' => $item['item_id'],
         			'delivery_date' => $item['cart_delivery_date'],
+        			'timeslot_end_time' => $item['timeslot_end_time'],
         			'area_id' => $item['area_id'],
         			'quantity' => $item['cart_quantity']
         		], true);
@@ -202,13 +203,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        </div>
         </div>
 
-		<a href="<?= Url::to(['cart/confirm']) ?>" class="btn btn-primary pull-right btn-checkout">
-			<?= Yii::t('frontend', 'Proceed to Checkout') ?>
-		</a>
-
-<!--        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">-->
-<!--        	--><?//= Yii::t('frontend', 'Proceed to Checkout') ?>
-<!--        </button>-->
+        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">
+        	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
+        </button>
 
         <a href="<?= Url::to(['shop/index']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
