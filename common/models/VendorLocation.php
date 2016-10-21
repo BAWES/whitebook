@@ -22,7 +22,7 @@ use common\models\Vendor;
 * @property string $created_datetime
 * @property string $modified_datetime
 */
-class Vendorlocation extends \yii\db\ActiveRecord
+class VendorLocation extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc

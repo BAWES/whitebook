@@ -21,21 +21,21 @@ use admin\models\VendorPackagesSearch;
 use common\models\Prioritylog;
 use common\models\PrioritylogSearch;
 use common\models\Siteinfo;
-use common\models\Vendorpackages;
+use common\models\VendorPackages;
 use common\models\VendorItemCapacityException;
 use common\models\VendorItemCapacityExceptionSearch;
-use common\models\VendoritemSearch;
+use common\models\VendorItemSearch;
 use common\models\VendorOrderAlertEmails;
 use common\models\Suborder;
 use common\models\Image;
 use common\models\Vendoritempricing;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 use common\models\VendorItemToCategory;
 use common\models\CustomerCart;
 use common\models\Priorityitem;
 use common\models\EventItemlink;
 use common\models\Featuregroupitem;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 use common\models\VendorItem;
 use common\models\VendorCategory;
 use common\models\BlockedDate;
@@ -95,7 +95,7 @@ class VendorController extends Controller
     {
         $request = Yii::$app->request;
 
-        $searchModel = new VendoritemSearch();
+        $searchModel = new VendorItemSearch();
         $dataProvider = $searchModel->searchviewVendor(Yii::$app->request->queryParams, $request->get('id'));
 
         $searchModel1 = new PrioritylogSearch();
@@ -128,7 +128,7 @@ class VendorController extends Controller
 
     public function actionVendoritemview($id)
     {
-        $searchModel = new VendoritemSearch();
+        $searchModel = new VendorItemSearch();
 
         $dataProvider = $searchModel->searchVendor(
             Yii::$app->request->queryParams,
@@ -270,7 +270,7 @@ class VendorController extends Controller
                 if ($model->save(false)) {
 
                     //remove old packages
-                    Vendorpackages::deleteAll(['vendor_id' => $model->vendor_id]);
+                    VendorPackages::deleteAll(['vendor_id' => $model->vendor_id]);
 
                     //save packages 
                     $vendor_packages = Yii::$app->request->post('vendor_packages');
@@ -284,7 +284,7 @@ class VendorController extends Controller
                                 continue;
                             }
 
-                            $vp = new Vendorpackages;
+                            $vp = new VendorPackages;
                             $vp->vendor_id = $model->vendor_id;
                             $vp->package_id = $value['package_id'];
                             $vp->package_price = $package->package_pricing;
@@ -498,7 +498,7 @@ class VendorController extends Controller
                     ->where(['vendor_id' => $id])
                     ->all();
 
-                $vendor_packages = Vendorpackages::findAll(['vendor_id' => $model->vendor_id]);
+                $vendor_packages = VendorPackages::findAll(['vendor_id' => $model->vendor_id]);
 
                 $packages = Package::findAll([
                     'package_status' => 'Active',
@@ -564,7 +564,7 @@ class VendorController extends Controller
         VendorItemCapacityException::deleteAll($sub_query);
         Image::deleteAll($sub_query);
         Vendoritempricing::deleteAll($sub_query);
-        Vendoritemthemes::deleteAll($sub_query);
+        VendorItemThemes::deleteAll($sub_query);
         VendorItemToCategory::deleteAll($sub_query);
         CustomerCart::deleteAll($sub_query);
         Priorityitem::deleteAll($sub_query);
@@ -575,9 +575,9 @@ class VendorController extends Controller
         VendorCategory::deleteAll(['vendor_id' => $id]);
         BlockedDate::deleteAll(['vendor_id' => $id]);
         DeliveryTimeSlot::deleteAll(['vendor_id' => $id]);
-        Vendorlocation::deleteAll(['vendor_id' => $id]);
+        VendorLocation::deleteAll(['vendor_id' => $id]);
         VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
-        Vendorpackages::deleteAll(['vendor_id' => $id]);
+        VendorPackages::deleteAll(['vendor_id' => $id]);
         VendorItem::deleteAll(['vendor_id' => $id]);
 
         Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
@@ -678,7 +678,7 @@ class VendorController extends Controller
         }
 
         //check if other package available in selected date
-        $package_exists = Vendorpackages::find()
+        $package_exists = VendorPackages::find()
             ->where(['vendor_id' => $data['vid']])
             ->andWhere(['between', 'package_start_date', $data['start_date'], $data['end_date']])
             ->andWhere(['between', 'package_end_date', $data['start_date'], $data['end_date']])
@@ -697,7 +697,7 @@ class VendorController extends Controller
             $package_pricing = Package::loadpackageprice($data['id']);
             $package_name = Package::PackageData($data['id']);
 
-            $vendor_pack = new Vendorpackages();
+            $vendor_pack = new VendorPackages();
             $vendor_pack->vendor_id = $data['vid'];
             $vendor_pack->package_id = $data['id'];
             $vendor_pack->package_price = $package_pricing;
@@ -738,7 +738,7 @@ class VendorController extends Controller
 
         $package_pricing = Package::loadpackageprice($data['id']);
         $package_name = Package::PackageData($data['id']);
-                $datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
+                $datetime = VendorPackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
           ->where(['vendor_id' => $data['id']])
           ->andwhere(['!=','id',$packedit])
           ->asArray()
@@ -773,7 +773,7 @@ class VendorController extends Controller
             $user_start_date = ($data['start_date']);
             $user_start_date = ($data['start_date']);
 
-            $command=Vendorpackages::updateAll(['package_id' => $data['id'],'package_start_date' => $start1,'package_end_date' => $end1],'id= '.$packedit);
+            $command=VendorPackages::updateAll(['package_id' => $data['id'],'package_start_date' => $start1,'package_end_date' => $end1],'id= '.$packedit);
 
 
             $url = Url::to('/package/packagedelete?id='.$packedit);
@@ -792,7 +792,7 @@ class VendorController extends Controller
         }
         if ($data['id']):
 
-        $datetime = Vendorpackages::find()->select(['package_start_date','package_end_date'])
+        $datetime = VendorPackages::find()->select(['package_start_date','package_end_date'])
           ->where(['vendor_id' => $data['id']])
           ->asArray()
           ->all();
@@ -822,7 +822,7 @@ class VendorController extends Controller
         }
         if ($data['packid']):
 
-        $packdate = Vendorpackages::find()->select(['package_id','package_start_date','package_end_date'])
+        $packdate = VendorPackages::find()->select(['package_id','package_start_date','package_end_date'])
           ->where(['vendor_id' => $data['vid']])
           ->andwhere(['id' =>$data['packid']])
           ->asArray()->all();
@@ -834,7 +834,7 @@ class VendorController extends Controller
             return '2';
             die;
         }
-        $datetime = Vendorpackages::find()->select(['package_id','package_start_date','package_end_date'])
+        $datetime = VendorPackages::find()->select(['package_id','package_start_date','package_end_date'])
           ->where(['vendor_id' => $data['vid']])
           ->andwhere(['id' =>$data['packid']])
           ->asArray()->all();

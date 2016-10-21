@@ -3,7 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
-use common\models\Vendoritempricing;
+use common\models\VendorItemPricing;
 use common\models\Location;
 use common\components\CFormatter;
 
@@ -417,7 +417,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                         </div>
                                         <?php } ?>
 
-                                        <?php if (Vendoritempricing::checkprice(
+                                        <?php if (VendorItemPricing::checkprice(
                                                     $model->item_id, 
                                                     $model->type_id, 
                                                     $model->item_price_per_unit
@@ -434,7 +434,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                             </div>
                                             <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
                                                 <div class="panel-body">
-                                                    <p><?= Vendoritempricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
+                                                    <p><?= VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
                                                     <h1 class="space_height"></h1>
                                                 </div>
                                             </div>

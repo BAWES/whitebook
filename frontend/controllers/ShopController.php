@@ -13,9 +13,9 @@ use frontend\models\VendorItem;
 use frontend\models\Themes;
 use frontend\models\Vendor;
 use common\models\Category;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 use common\models\Location;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 use common\models\CategoryPath;
 use common\models\CustomerAddress;
 
@@ -182,7 +182,7 @@ class ShopController extends BaseController
 
         if (!empty($items)) {
             $item_ids = ArrayHelper::map($items, 'item_id', 'item_id');
-            $themes = Vendoritemthemes::find()
+            $themes = VendorItemThemes::find()
                 ->select(['theme_id'])
                 ->with('themeDetail')
                 ->where("trash='default' and item_id IN(".implode(',', array_keys($item_ids)).")")
@@ -296,7 +296,7 @@ class ShopController extends BaseController
             ]);
 
         } else {
-                $vendor_area = Vendorlocation::findAll(['vendor_id' => $model->vendor_id]);
+                $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
                 $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
                 $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
 

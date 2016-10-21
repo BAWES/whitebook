@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
-use common\models\Vendoritemquestion;
+use common\models\VendorItemQuestion;
 use kartik\file\FileInput;
 //use dosamigos\fileupload\FileUploadUI;
 

@@ -337,7 +337,7 @@ class CustomerCart extends \yii\db\ActiveRecord
     */
     public static function geLocation($area_id, $vendor_id){
         
-        $result = Vendorlocation::find()
+        $result = VendorLocation::find()
             ->joinWith('location')
             ->where([
                 '{{%location}}.status' => 'Active',
@@ -354,7 +354,7 @@ class CustomerCart extends \yii\db\ActiveRecord
     */
     public static function checkLocation($area_id, $vendor_id){
         
-        $result = Vendorlocation::find()
+        $result = VendorLocation::find()
             ->joinWith('location')
             ->where([
                 '{{%location}}.status' => 'Active',

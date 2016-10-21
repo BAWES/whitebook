@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use frontend\models\Vendor;
 use yii\helpers\Html;
-use common\models\Vendoritempricing;
+use common\models\VendorItemPricing;
 use common\models\Itemtype;
 use frontend\models\Category;
 use yii\widgets\Breadcrumbs;
@@ -354,7 +354,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                         </div>
                                         <?php } ?>
 
-                                        <?php if (Vendoritempricing::checkprice(
+                                        <?php if (VendorItemPricing::checkprice(
                                                     $model->item_id,
                                                     $model->type_id,
                                                     $model->item_price_per_unit
@@ -371,7 +371,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                             </div>
                                             <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
                                                 <div class="panel-body">
-                                                    <p><?= Vendoritempricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
+                                                    <p><?= VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
                                                     <h1 class="space_height"></h1>
                                                 </div>
                                             </div>

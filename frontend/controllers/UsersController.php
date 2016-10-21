@@ -30,7 +30,7 @@ use frontend\models\Customer;
 use frontend\models\Themes;
 use frontend\models\VendorItem;
 use common\models\VendorItemToCategory;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 
 /**
 * Site controller.
@@ -533,7 +533,7 @@ class UsersController extends BaseController
 //            ->asArray()
 //            ->all();
 //
-//        $themelist =  Vendoritemthemes::find()
+//        $themelist =  VendorItemThemes::find()
 //            ->select('{{%theme}}.theme_id, {{%theme}}.theme_name, {{%theme}}.theme_name_ar')
 //            ->joinWith('themeDetail')
 //            ->where(['trash' => 'default'])

@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 
-/* @var $searchModel common\models\VendoritemSearch */
+/* @var $searchModel common\models\VendorItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Manage items';
 $this->params['breadcrumbs'][] = $this->title;

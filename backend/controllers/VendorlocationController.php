@@ -7,11 +7,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 use common\models\Location;
 use common\models\Country;
 use common\models\City;
-use backend\models\VendorlocationSearch;
+use backend\models\VendorLocationSearch;
 
 /**
  * VendorlocationController implements the CRUD actions for vendorlocation model.
@@ -41,7 +41,7 @@ class VendorlocationController extends Controller
     
     public function actionIndex()
     {
-        $searchModel = new VendorlocationSearch();
+        $searchModel = new VendorLocationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -57,7 +57,7 @@ class VendorlocationController extends Controller
         if (Yii::$app->request->isPost) {
 
             //remove all old values 
-            Vendorlocation::deleteAll(['vendor_id' => $vendor_id]);
+            VendorLocation::deleteAll(['vendor_id' => $vendor_id]);
 
             $selected = Yii::$app->request->post('selected');
             $area = Yii::$app->request->post('area');
@@ -71,7 +71,7 @@ class VendorlocationController extends Controller
                 $location = Location::findOne($area_id);
 
                 //add vendor location 
-                $vl = new Vendorlocation;
+                $vl = new VendorLocation;
                 $vl->vendor_id = $vendor_id;
                 $vl->city_id = $location->city_id;
                 $vl->area_id = $area_id;
@@ -90,7 +90,7 @@ class VendorlocationController extends Controller
     }
 
     /**
-     * Creates a new Vendorlocation model.
+     * Creates a new VendorLocation model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -98,7 +98,7 @@ class VendorlocationController extends Controller
     {
         $vendor_id = Yii::$app->user->getId();
 
-        $model = new Vendorlocation();
+        $model = new VendorLocation();
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -109,7 +109,7 @@ class VendorlocationController extends Controller
             $model->vendor_id = Yii::$app->user->getId();
 
             //check if already exists 
-            $exists = Vendorlocation::findOne(['vendor_id' => $vendor_id, 'area_id' => $model->area_id]);
+            $exists = VendorLocation::findOne(['vendor_id' => $vendor_id, 'area_id' => $model->area_id]);
 
             if($exists) {
                 Yii::$app->session->setFlash('danger', 'Warning: Please select other area, Area already added!');
@@ -127,7 +127,7 @@ class VendorlocationController extends Controller
     }
 
     /**
-     * Updates an existing Vendorlocation model.
+     * Updates an existing VendorLocation model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -146,7 +146,7 @@ class VendorlocationController extends Controller
             $model->city_id = $location->city_id;
 
             //check if already exists 
-            $exists = Vendorlocation::find()
+            $exists = VendorLocation::find()
                 ->where(['vendor_id' => $vendor_id, 'area_id' => $model->area_id])
                 ->andWhere(['!=', 'id', $id])
                 ->count();

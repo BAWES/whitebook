@@ -6,7 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use admin\models\Authitem;
-use common\models\VendoritemSearch;
+use common\models\VendorItemSearch;
 
 /**
 * VendorItemPendingController implements the CRUD actions for Vendoritem model.
@@ -34,7 +34,7 @@ class VendorItemPendingController extends Controller
         
         if (yii::$app->user->can($access)) {
 
-            $searchModel = new VendoritemSearch();
+            $searchModel = new VendorItemSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 'Pending');
 
             return $this->render('index', [

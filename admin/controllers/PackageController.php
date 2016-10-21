@@ -10,7 +10,7 @@ use yii\filters\AccessControl;
 use admin\models\Authitem;
 use admin\models\Package;
 use admin\models\PackageSearch;
-use common\models\Vendorpackages;
+use common\models\VendorPackages;
 
 /**
  * PackageController implements the CRUD actions for Package model.
@@ -168,7 +168,7 @@ class PackageController extends Controller
             $model->save();
 
             //remove from vendor package 
-            Vendorpackages::deleteAll(['package_id' => $id]);
+            VendorPackages::deleteAll(['package_id' => $id]);
 
             Yii::$app->session->setFlash('success', 'Package deleted successfully!');
 
@@ -182,7 +182,7 @@ class PackageController extends Controller
     public function actionPackagedelete()
     {
         if (Yii::$app->request->isAjax) {
-            $data = Vendorpackages::findOne(Yii::$app->request->post('packid'));
+            $data = VendorPackages::findOne(Yii::$app->request->post('packid'));
             return $data->delete();
         }
     }

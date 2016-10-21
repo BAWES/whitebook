@@ -5,12 +5,12 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Vendoritempricing;
+use common\models\VendorLocation;
 
 /**
- * VendoritempricingSearch represents the model behind the search form about `common\models\Vendoritempricing`.
+ * VendorLocationSearch represents the model behind the search form about `common\models\VendorLocation`.
  */
-class VendoritempricingSearch extends Vendoritempricing
+class VendorLocationSearch extends VendorLocation
 {
     /**
      * @inheritdoc
@@ -18,8 +18,9 @@ class VendoritempricingSearch extends Vendoritempricing
     public function rules()
     {
         return [
-            [['pricing_id', 'item_id', 'range_from', 'range_to', 'pricing_quantity_ordered', 'pricing_price_per_unit', 'created_by', 'modified_by'], 'integer'],
-            [['created_datetime', 'modified_datetime', 'trash'], 'safe'],
+            [['id', 'vendor_id', 'created_by', 'modified_by'], 'integer'],
+            [['city_id', 'area_id', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['delivery_price'], 'number'],
         ];
     }
 
@@ -41,7 +42,9 @@ class VendoritempricingSearch extends Vendoritempricing
      */
     public function search($params)
     {
-        $query = Vendoritempricing::find();
+        $query = VendorLocation::find();
+
+        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -55,20 +58,19 @@ class VendoritempricingSearch extends Vendoritempricing
             return $dataProvider;
         }
 
+        // grid filtering conditions
         $query->andFilterWhere([
-            'pricing_id' => $this->pricing_id,
-            'item_id' => $this->item_id,
-            'range_from' => $this->range_from,
-            'range_to' => $this->range_to,
-            'pricing_quantity_ordered' => $this->pricing_quantity_ordered,
-            'pricing_price_per_unit' => $this->pricing_price_per_unit,
-            'created_by' => $this->created_by,
-            'modified_by' => $this->modified_by,
+            'id' => $this->id,
+            'vendor_id' => $this->vendor_id,
+            'delivery_price' => $this->delivery_price,
             'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
+            'created_by' => $this->created_by,
+            'modified_by' => $this->modified_by,
         ]);
 
-        $query->andFilterWhere(['like', 'trash', $this->trash]);
+        $query->andFilterWhere(['like', 'city_id', $this->city_id])
+            ->andFilterWhere(['like', 'area_id', $this->area_id]);
 
         return $dataProvider;
     }

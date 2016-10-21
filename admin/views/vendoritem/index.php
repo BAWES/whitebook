@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Vendor;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\VendoritemSearch */
+/* @var $searchModel common\models\VendorItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Vendor items';
 $this->params['breadcrumbs'][] = $this->title;

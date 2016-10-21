@@ -54,7 +54,7 @@ use frontend\models\Themes as ItemTheme;
 * @property VendorItemTheme[] $vendorItemThemes
 * @property Theme[] $themes
 */
-class Vendoritemthemes extends \yii\db\ActiveRecord
+class VendorItemThemes extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc

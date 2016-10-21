@@ -13,7 +13,7 @@ use common\models\City;
 use common\models\CustomerAddress;
 use common\models\CustomerCart;
 use common\models\Location;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 
 /**
  * CountryController implements the CRUD actions for Country model.
@@ -199,7 +199,7 @@ class CountryController extends Controller
                     where city_id = "'.$value->city_id.'")');
 
                 //delete all vendor location - city_id 
-                Vendorlocation::deleteAll(['city_id' => $value->city_id]);                
+                VendorLocation::deleteAll(['city_id' => $value->city_id]);
             }
 
             Yii::$app->session->setFlash('success', 'Country deleted successfully!');

@@ -8,47 +8,29 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+
 /**
-* This is the model class for table "{{%vendor_item_question}}".
+* This is the model class for table "{{%vendor_item_question_guide}}".
 *
+* @property string $guide_id
 * @property string $question_id
-* @property string $item_id
-* @property string $answer_id
-* @property string $question_text
-* @property string $question_answer_type
-* @property integer $question_max_characters
-* @property integer $question_sort_order
-* @property string $question_archived
+* @property string $guide_image_id
+* @property string $guide_caption
 * @property integer $created_by
 * @property integer $modified_by
 * @property string $created_datetime
 * @property string $modified_datetime
 * @property string $trash
 */
-class Vendoritemquestion extends \yii\db\ActiveRecord
+class VendorItemQuestionGuide extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
     */
     public static function tableName()
     {
-        return '{{%vendor_item_question}}';
+        return '{{%vendor_item_question_guide}}';
     }
-
-    /**
-    * @inheritdoc
-    */
-    public function rules()
-    {
-        return [
-            [['question_text','question_answer_type',], 'required'],
-            [['question_max_characters','question_sort_order', 'created_by', 'modified_by'], 'integer'],
-            [['question_answer_type','guide_caption', 'trash'], 'string'],
-            [['answer_id','guide_caption','item_id','question_answer_type','question_max_characters', 'question_sort_order','created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'safe'],
-            [['question_text'], 'string', 'max' => 256]
-        ];
-    }
-
 
     public function behaviors()
     {
@@ -66,24 +48,43 @@ class Vendoritemquestion extends \yii\db\ActiveRecord
             ],
         ];
     }
+
+    /**
+    * @inheritdoc
+    */
+    public function rules()
+    {
+        return [
+            [['question_id'], 'required'],
+            [['question_id', 'created_by', 'modified_by'], 'integer'],
+            [['guide_caption', 'trash'], 'string'],
+            [['created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'safe']
+        ];
+    }
+
     /**
     * @inheritdoc
     */
     public function attributeLabels()
     {
         return [
+            'guide_id' => 'Guide ',
             'question_id' => 'Question',
-            'item_id' => 'Item ',
-            'question_text' => 'Question Text',
-            'question_answer_type' => 'Question Type',
-            'question_max_characters' => 'Answer Max Characters',
-            'question_sort_order' => 'Question Sort Order',
+            'guide_image_id' => 'Guide Image',
+            'guide_caption' => 'Guide Caption',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
             'modified_datetime' => 'Modified Datetime',
             'trash' => 'Trash',
-
         ];
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getQuestion()
+    {
+        return $this->hasOne(VendorItemQuestion::className(), ['question_id' => 'question_id']);
     }
 }

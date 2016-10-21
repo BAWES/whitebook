@@ -24,7 +24,7 @@ use yii\db\Expression;
 * @property string $modified_datetime
 * @property string $trash
 */
-class Vendoritempricing extends \yii\db\ActiveRecord
+class VendorItemPricing extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -86,23 +86,23 @@ class Vendoritempricing extends \yii\db\ActiveRecord
 
     /**
     * @inheritdoc
-    * @return Vendoritempricingquery the active query used by this AR class.
+    * @return VendorItemPricingQuery the active query used by this AR class.
     */
     public static function find()
     {
-        return new Vendoritempricingquery(get_called_class());
+        return new VendorItemPricingQuery(get_called_class());
     }
 
     public static function loadpricevalues($item_id)
     {
-        $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
+        $model = VendorItemPricing::find()->where(['item_id'=>$item_id])->all();
         return $model;
     }
 
     // this function is used in frontend and backend ...
     public static function loadviewprice($item_id,$type_id,$item_price_per_unit)
     {
-        $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
+        $model = VendorItemPricing::find()->where(['item_id'=>$item_id])->all();
         if(empty($model))
         {echo 'No price chart data!';}
         else
@@ -121,7 +121,7 @@ class Vendoritempricing extends \yii\db\ActiveRecord
     // This function is used in frontend
     public static function checkprice($item_id,$type_id,$item_price_per_unit)
     {
-        $model = Vendoritempricing::find()->where(['item_id'=>$item_id])->all();
+        $model = VendorItemPricing::find()->where(['item_id'=>$item_id])->all();
         if(empty($model))
         {return 0; }
         else

@@ -22,7 +22,7 @@ use common\models\Vendor;
 * @property integer $created_by
 * @property integer $modified_by
 */
-class Vendorpackages extends \yii\db\ActiveRecord
+class VendorPackages extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -103,7 +103,7 @@ class Vendorpackages extends \yii\db\ActiveRecord
     */
     public static function getReportQuery($data = array())
     {    
-        $query = Vendorpackages::find()
+        $query = VendorPackages::find()
           ->select('
               MIN(created_datetime) AS date_start, 
               MAX(created_datetime) AS date_end, 

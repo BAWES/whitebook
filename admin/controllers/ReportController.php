@@ -5,7 +5,7 @@ namespace admin\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\data\Pagination;
-use common\models\Vendorpackages;
+use common\models\VendorPackages;
 use common\models\Suborder;
 use admin\models\Package;
 use admin\models\Vendor;
@@ -79,7 +79,7 @@ class ReportController extends Controller
     	];
     	
     	//result query 	
-    	$query = Vendorpackages::getReportQuery([
+    	$query = VendorPackages::getReportQuery([
     			'date_start' => $date_start,
 		    	'date_end' => $date_end,
 		    	'group_by' => $group_by,

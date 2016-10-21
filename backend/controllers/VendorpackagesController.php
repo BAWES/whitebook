@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Vendorpackages;
+use common\models\VendorPackages;
 use backend\models\VendorpackagesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * VendorpackagesController implements the CRUD actions for Vendorpackages model.
+ * VendorpackagesController implements the CRUD actions for VendorPackages model.
  */
 class VendorpackagesController extends Controller
 {
@@ -37,7 +37,7 @@ class VendorpackagesController extends Controller
     }
 
     /**
-     * Lists all Vendorpackages models.
+     * Lists all VendorPackages models.
      * @return mixed
      */
     public function actionIndex()

@@ -12,22 +12,22 @@ use yii\filters\AccessControl;
 use yii\db\Expression;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use common\models\Vendoritemthemes;
-use common\models\Vendoritemquestion;
-use common\models\Vendoritemquestionansweroption;
-use common\models\Vendoritemquestionguide;
+use common\models\VendorItemThemes;
+use common\models\VendorItemQuestion;
+use common\models\VendorItemQuestionAnswerOption;
+use common\models\VendorItemQuestionGuide;
 use common\models\Vendor;
 use common\models\Image;
 use common\models\Category;
 use common\models\SubCategory;
-use common\models\VendoritemSearch;
+use common\models\VendorItemSearch;
 use common\models\Itemtype;
 use common\models\Themes;
 use common\models\FeatureGroup;
 use common\models\FeatureGroupItem;
 use common\models\PriorityItem;
 use common\models\ChildCategory;
-use common\models\Vendoritempricing;
+use common\models\VendorItemPricing;
 use common\models\VendorItemToCategory;
 use common\models\CategoryPath;
 use common\models\VendorItemCapacityException;
@@ -68,7 +68,7 @@ class VendoritemController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new VendoritemSearch();
+        $searchModel = new VendorItemSearch();
 
         $dataProvider = $searchModel->searchVendor(Yii::$app->request->queryParams);
 
@@ -89,7 +89,7 @@ class VendoritemController extends Controller
             ->select(['priority_level','priority_start_date','priority_end_date'])
             ->where(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
 
-        $model_question = Vendoritemquestion::find()
+        $model_question = VendorItemQuestion::find()
             ->where(['item_id'=>$id,'answer_id'=>null,'question_answer_type'=>'selection'])
             ->orwhere(['item_id'=>$id,'question_answer_type'=>'text','answer_id'=>null])
             ->orwhere(['item_id'=>$id,'question_answer_type'=>'image','answer_id'=>null])
@@ -106,7 +106,7 @@ class VendoritemController extends Controller
 
         $item_type = Itemtype::itemtypename($model->type_id);
 
-        $price_values= Vendoritempricing::loadpricevalues($model->item_id);
+        $price_values= VendorItemPricing::loadpricevalues($model->item_id);
 
         return $this->render('view', [
             'model' => $model,
@@ -184,7 +184,7 @@ class VendoritemController extends Controller
                 if(!empty($vendoritem_item_price['from'])) {
 
                     for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
-                        $vendor_item_pricing = new Vendoritempricing();
+                        $vendor_item_pricing = new VendorItemPricing();
                         $vendor_item_pricing->item_id =  $itemid;
                         $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
                         $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
@@ -350,7 +350,7 @@ class VendoritemController extends Controller
          $item_id=$model->item_id;
 
         /* question and answer */
-        $model_question = Vendoritemquestion::find()
+        $model_question = VendorItemQuestion::find()
             ->where(['item_id' => $id,'answer_id' => Null,'question_answer_type' => 'selection'])
             ->orwhere(['item_id' => $id,'question_answer_type' =>'text', 'answer_id' => Null])
             ->orwhere(['item_id' => $id,'question_answer_type' =>'image', 'answer_id' => Null])
@@ -361,7 +361,7 @@ class VendoritemController extends Controller
         $vendorname = Vendor::loadvendorname();
         $categoryname = Category::vendorcategory(Yii::$app->user->getId());
         
-        $loadpricevalues = Vendoritempricing::loadpricevalues($item_id);
+        $loadpricevalues = VendorItemPricing::loadpricevalues($item_id);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
@@ -449,7 +449,7 @@ class VendoritemController extends Controller
 
                 /* Delete item price table records if its available any price for item type rental or service */
                 if($model->type_id == 2) {
-                    Vendoritempricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
+                    VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
                 }
 
                 /* Begin Upload guide image table  */
@@ -527,10 +527,10 @@ class VendoritemController extends Controller
 
             if(!empty($vendoritem_item_price['from'])) {
 
-                Vendoritempricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
+                VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
 
                 for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
-                    $vendor_item_pricing = new Vendoritempricing();
+                    $vendor_item_pricing = new VendorItemPricing();
                     $vendor_item_pricing->item_id =  $itemid;
                     $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
                     $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
@@ -587,8 +587,8 @@ class VendoritemController extends Controller
 
         VendorItemCapacityException::deleteAll(['item_id' => $id]);
         Image::deleteAll(['item_id' => $id]);
-        Vendoritempricing::deleteAll(['item_id' => $id]);
-        Vendoritemthemes::deleteAll(['item_id' => $id]);
+        VendorItemPricing::deleteAll(['item_id' => $id]);
+        VendorItemThemes::deleteAll(['item_id' => $id]);
         VendorItemToCategory::deleteAll(['item_id' => $id]);
         CustomerCart::deleteAll(['item_id' => $id]);
         PriorityItem::deleteAll(['item_id' => $id]);
@@ -787,12 +787,12 @@ class VendoritemController extends Controller
 
         $data = Yii::$app->request->post();
 
-        $question = Vendoritemquestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+        $question = VendorItemQuestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
 
         if($question[0]['question_answer_type']=='image') {
-            $answers = Vendoritemquestionguide::find()->where(['question_id' =>$data['q_id']])->asArray()->all();
+            $answers = VendorItemQuestionGuide::find()->where(['question_id' =>$data['q_id']])->asArray()->all();
         } else {
-            $answers = Vendoritemquestionansweroption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+            $answers = VendorItemQuestionAnswerOption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
         }
 
         return $this->renderPartial('questionanswer',
@@ -812,12 +812,12 @@ class VendoritemController extends Controller
 
         $data = Yii::$app->request->post();
 
-        $question = Vendoritemquestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+        $question = VendorItemQuestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
 
         if($question[0]['question_answer_type']=='image'){
-            $answers = Vendoritemquestionguide::find()->where(['question_id' =>$data['q_id']])->asArray()->all();
+            $answers = VendorItemQuestionGuide::find()->where(['question_id' =>$data['q_id']])->asArray()->all();
         } else {
-            $answers = Vendoritemquestionansweroption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
+            $answers = VendorItemQuestionAnswerOption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
         }
 
         return $this->renderPartial(
@@ -902,9 +902,9 @@ class VendoritemController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $question = Vendoritemquestion::find()->where('answer_id = "'.$data['q_id'].'"')->asArray()->all();
+            $question = VendorItemQuestion::find()->where('answer_id = "'.$data['q_id'].'"')->asArray()->all();
 
-            $answers = Vendoritemquestionansweroption::find()
+            $answers = VendorItemQuestionAnswerOption::find()
             ->where(['question_id' => $question[0]['question_id']])
             ->asArray()
             ->all();
