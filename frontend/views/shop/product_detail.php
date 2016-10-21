@@ -262,14 +262,14 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                 <div class="col-md-3 padding-top-12" style="float: left;">
                                     <label><?= Yii::t('frontend', 'Quantity');?></label>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 clearfix">
                                     <div class="form-group qty">
                                         <a href="#" class="btn-stepper" data-case="0">-</a>
                                         <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>"/>
                                         <a href="#" class="btn-stepper" data-case="1">+</a>
                                     </div>
                                 </div>
-                                <div class="col-lg-5">
+                                <div class="col-lg-5 clearfix">
                                     <div class="button-signin">
                                         <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit">
                                             <?= Yii::t('frontend', 'Buy') ?>
@@ -601,7 +601,7 @@ $this->registerCss("
 .padding-top-12{padding-top: 12px;}
 .btn-stepper {width: 31%;color: white;background-color: #000;display: inline-block;text-align: center;height: 100%;float: left;line-height: 43px;font-size: 25px;font-style: normal;font-weight: bold;}
 .form-group input[name=quantity] {float: left;width: 38%;line-height: 38px;height: 100%!important;text-align: center;margin: 0;border-top: 1px solid #e6e6e6;box-shadow: none;border-bottom: 1px solid #e6e6e6;}
-.qty {width: 91%;display: block;float: left;height: 45px;margin-right: 8px;overflow: hidden;}
+.qty {width: 91%;display: block;height: 45px;margin-right: 8px;overflow: hidden;}
 .product_detail_section .panel-body p{text-align:justify;}
 .font-27{font-size:27px!important;}
 .margin-bottom-14{margin-bottom:14px!important;}
