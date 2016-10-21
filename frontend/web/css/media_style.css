@@ -1332,4 +1332,35 @@ div#mobile_search_fail {
   position: relative;
 }
 
-/* Home slider */
+@media (max-width: 767px) {
+    .cart-table .fa-edit {
+        position: relative;
+        background: black;
+        color: white;
+        padding: 5px;
+        top: auto;
+        right: auto;
+    }
+    .checkout-wizard > .checkout-step > .progress {
+        margin: -21px 0;
+    }
+    .checkout-wizard > .checkout-step:nth-child(1) > .progress {
+        left: 57%;
+        width: 115%;
+    }
+    .checkout-wizard > .checkout-step:nth-child(2) > .progress {
+        left: 56%;
+        width: 115%;
+    }
+    .glyphicon-stack{
+        padding: 9px 0 0 0;
+    }   
+    .address_block, .address_insert_block{
+        width: 47%;
+    }
+}
+@media (max-width: 350px) {
+	.address_block, .address_insert_block{
+        width: 100%;
+    }
+}

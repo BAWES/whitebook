@@ -1558,9 +1558,9 @@ a.thing_cont:hover {
     float: left;
     border: 1px solid #ccc;
     padding: 5px;
-    margin: 5px;
+    margin: 5px 0 5px 5px;
     cursor: pointer;
-    width: 130px;
+    width: 200px;
     height: 130px;
 }
 .active.address_block {
@@ -1682,14 +1682,3 @@ a.thing_cont:hover {
 
 .position-relative {position:relative;}
 .cart-table .fa-edit{position: absolute;right: 33px;top: 23px;cursor: pointer;}
-
-@media (max-width: 767px) {
-    .cart-table .fa-edit {
-        position: relative;
-        background: black;
-        color: white;
-        padding: 5px;
-        top: auto;
-        right: auto;
-    }
-}
