@@ -9,9 +9,6 @@ use common\components\CFormatter;
 
 ?>
 
-<br />
-<br />
-
 <h3>
 	<?= Yii::t('frontend', 'Payment method selected : <strong>{payment_method}</strong>', [
 		'payment_method' => $payment_method

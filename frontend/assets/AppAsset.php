@@ -18,10 +18,10 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/style.css?v=1.2',
+        'css/style.css?v=1.3',
         'fonts/flaticon/flaticon.css',
         'css/demo.css',
-        'css/media_style.css',
+        'css/media_style.css?v=1.1',
         'css/owl.carousel.css',
         'css/ma5-mobile-menu.css',
         'css/bootstrap-select.min.css',
