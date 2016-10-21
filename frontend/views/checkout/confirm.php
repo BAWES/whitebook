@@ -102,7 +102,8 @@ use common\components\CFormatter;
 
         				<?= $item['cart_delivery_date'] ?> <br />
         			
-        				<?= $item['timeslot_start_time'].' - '.$item['timeslot_end_time'] ?>
+                        <?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
+                        <?= date('h:m A', strtotime($item['timeslot_end_time'])); ?>
 
         			<?php } else { ?>
         				<span class="error">

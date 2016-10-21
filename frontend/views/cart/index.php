@@ -66,11 +66,15 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        </thead>
 	        <tbody>
 	        	<?php
+	        	
 	        	$sub_total = $delivery_charge = 0;
+	        	
 	        	foreach ($items as $item) {
+
 				$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
 				$row_total = $item['item_price_per_unit'] * $item['cart_quantity'];
     			$sub_total += $row_total;
+	        	
 	        	?>
 	        	<tr>
 	        		<td align="center">
@@ -119,14 +123,21 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		<td class="position-relative " style="background-color:<?=$color?> ">
 	        			<?php
 
-
 	        			if(isset($delivery_area->location)) {
+
 							$delivery_charge += $delivery_area->delivery_price;
+
 	        				?>
 	        					<?= $item['cart_delivery_date'] ?><br />
-								<?= $item['timeslot_start_time'].' - '.$item['timeslot_end_time'] ?>
-								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>">&nbsp;</i>
-							<br/><?=$msg?>
+								
+								<?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
+		    					<?=	date('h:m A', strtotime($item['timeslot_end_time'])); ?>
+
+								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>"></i>
+							<br/>
+
+							<?= $msg; ?>
+
 	        			<?php } else { ?>
 	        				<span class="error">
 	        					<?= Yii::t('frontend', 'We cannot delivery this item!'); ?>
