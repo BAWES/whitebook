@@ -70,7 +70,7 @@ $model = new Website();
 <?php } ?>
 
 <!-- Events slider end -->
-<!--
+<!-- hide temporary
 <div class="plan_sections">
 <ul>
     <li>
