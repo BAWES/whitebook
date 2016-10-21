@@ -44,7 +44,7 @@ $model = new Website();
     <br />
     <div id="event_slider_wrapper">
         <div class="container paddng0">
-        <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+        <?=$this->render('/product/events_slider.php'); ?>
         </div>
     </div>
     <br />
@@ -70,7 +70,7 @@ $model = new Website();
 <?php } ?>
 
 <!-- Events slider end -->
-
+<!--
 <div class="plan_sections">
 <ul>
     <li>
@@ -104,7 +104,7 @@ $model = new Website();
         </div>
     </li>
 </ul>
-</div>
+</div>-->
 
 <!-- BEGIN FEATURE GROUP ITEM-->
 <?php
