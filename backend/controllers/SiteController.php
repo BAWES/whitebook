@@ -13,7 +13,7 @@ use common\models\Category;
 use common\models\VendorCategory;
 use common\models\Siteinfo;
 use common\models\VendorOrderAlertEmails;
-use common\models\SubOrder;
+use common\models\Suborder;
 use backend\models\Vendor;
 use backend\models\VendorItem;
 use backend\models\VendorLogin;
@@ -64,11 +64,11 @@ class SiteController extends Controller
         $dateitemcnt = VendorItem::vendoritemdatecount($vendor_id);
         $packageenddate = Vendor::getVendor_packagedate($vendor_id);
 
-        $commission_total = SubOrder::find()
+        $commission_total = Suborder::find()
             ->where(['vendor_id' => $vendor_id])
             ->sum('suborder_commission_total');
 
-        $earning_total = SubOrder::find()
+        $earning_total = Suborder::find()
             ->where(['vendor_id' => $vendor_id])
             ->sum('suborder_vendor_total');
 
