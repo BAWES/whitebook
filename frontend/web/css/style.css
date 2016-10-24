@@ -1682,3 +1682,38 @@ a.thing_cont:hover {
 
 .position-relative {position:relative;}
 .cart-table .fa-edit{position: absolute;right: 33px;top: 23px;cursor: pointer;}
+
+.mobile-menu #search_form {
+    clear: both;
+    margin: 0;
+    display: none;
+}
+.mobile-menu .left_slider {
+    position: relative;
+}
+.mobile-menu .left_slider input {
+    width: 100%;
+    background: #eee;
+    border: none;
+    padding: 10px 5px;
+}
+.mobile-menu.open-search-menu #search_form {
+    display: block;
+}
+.mobile-menu.open-search-menu .search_header {
+    visibility: hidden;
+}
+.mobile-menu #search_form .btn-primary {
+    position: absolute;
+    right: 50px;
+    top: 7px;
+    background: black;
+    border-color: black;
+}
+
+.mobile-menu #search_form .btn-default {
+    position: absolute;
+    right: 5px;
+    top: 7px;
+}
+    

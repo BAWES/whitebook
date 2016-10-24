@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use yii\data\ArrayDataProvider;
 use common\models\VendorItem;
 use frontend\models\Vendor;
@@ -177,9 +178,13 @@ class SearchController extends BaseController
 
             $item_details = VendorItem::find()
                 ->select(['item_name','slug'])
-                ->where(['like', 'item_name',$request->post('search')])
-                ->andwhere(['whitebook_vendor_item.trash' =>'Default','item_for_sale' =>'Yes','item_status'=>'Active'])
-                ->distinct()
+                ->where(['like', 'item_name', $request->post('search')])
+                ->andWhere([
+                    '{{%vendor_item}}.trash' => 'Default',
+                    '{{%vendor_item}}.item_approved' => 'Yes',
+                    '{{%vendor_item}}.item_status' => 'Active'
+                ])
+                ->limit(10)
                 ->asArray()
                 ->all();
 
@@ -187,7 +192,7 @@ class SearchController extends BaseController
             if (!empty($item_details)) {
                 foreach ($item_details as $i) {
                     if (!empty($i['item_name'])) {
-                        $k = $k.'<li><a href='.\yii\helpers\Url::to(['/search/','slug'=>$i['slug']]).'>'.$i['item_name'].'</a></li>';
+                        $k = $k.'<li><a href='.Url::to(['search/index', 'search' => $i['slug']]).'>'.$i['item_name'].'</a></li>';
                     }
                 }
                 return '<ul>'.$k.'</ul>';
