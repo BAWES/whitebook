@@ -249,7 +249,8 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 							<?php foreach ($vendor_order_alert_emails as $key => $value) { ?>
 							<tr>
 								<td>
-									<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />									
+									<input value="<?= $value->email_address ?>" name="vendor_order_alert_emails[]" class="form-control" />
+									<span class="error"></span>
 								</td>
 								<td>
 									<button class="btn btn-danger" type="button">
@@ -270,7 +271,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 
 					<div class="form-group">
 						<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-						<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
+						<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success submit_btn' : 'btn btn-primary submit_btn','style'=>'float:right;']) ?>
 					</div>
 				</div>
 			</div>
@@ -282,3 +283,25 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js');
 $this->registerJsFile('@web/themes/default/js/profile.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJs('
+$(".submit_btn").click(function(){
+var filter = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+var error = false;
+	if(($(".table-email-list input").length)>0) {
+		$(".table-email-list input").each(function(i,data) {
+		$(this).next().empty();
+			if (!filter.test($(this).val())) {
+				$(this).next().html("Invalid Email address");
+				error = true;
+			}
+		})
+	};
+	if (error) {
+		return false;
+	} else {
+		return true;
+	}
+
+});
+
+',\yii\web\View::POS_READY);

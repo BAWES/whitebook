@@ -28,6 +28,7 @@ class VendorOrderAlertEmails extends \yii\db\ActiveRecord
     {
         return [
             [['vendor_id'], 'integer'],
+            [['email_address'], 'email'],
             [['email_address'], 'string', 'max' => 100],
         ];
     }
