@@ -108,8 +108,6 @@ class Country extends \yii\db\ActiveRecord
     // Status Image title
     public function statusTitle($status)
     {
-        if($status == 'Active')
-        return 'Activate';
-        return 'Deactivate';
+        return ($status == 'Active') ? 'Activate' : 'Deactivate';
     }
 }
