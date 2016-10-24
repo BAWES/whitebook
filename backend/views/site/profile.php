@@ -1,13 +1,11 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Alert;
 use dosamigos\ckeditor\CKEditor;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\Users */
-/* @var $form yii\widgets\ActiveForm */
 $this->title = 'My Profile';
 $this->params['breadcrumbs'][] = $this->title;
 

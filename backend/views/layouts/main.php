@@ -52,7 +52,7 @@ $this->beginPage();
 				<ul class="breadcrumb">
 					<?=
 					Breadcrumbs::widget([
-						'homeLink' => [ 'label' => 'Dashboard','url' =>['default/index'],],
+						'homeLink' => [ 'label' => 'Dashboard','url' => ['site/index']],
 						'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
 						'activeItemTemplate'=>'<li class=\"active\"><b>{link}</b></li>'
 					])
