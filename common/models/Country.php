@@ -59,6 +59,7 @@ class Country extends \yii\db\ActiveRecord
     {
         return [
             [['country_name', 'iso_country_code', 'currency_code', 'currency_symbol'], 'required'],
+            [['country_name'], 'unique'],
             [['default'], 'integer'],
             [['country_name'], 'string', 'max' => 100],
             [['iso_country_code', 'currency_code', 'currency_symbol'], 'string', 'max' => 10]
