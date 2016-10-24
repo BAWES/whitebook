@@ -30,11 +30,10 @@ class AddressType extends \common\models\AddressType
 
     public static function loadAddresstype()
     {
-
         $addresstype = AddressType::find()
             ->where([
-                'p2.status'=> 'Active',
-                'p2.trash'=> 'Default'
+                'status'=> 'Active',
+                'trash'=> 'Default'
             ])
             ->all();
 

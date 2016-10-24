@@ -131,19 +131,8 @@ class AddressquestionController extends Controller
     {
         $model = new AddressQuestion();
         
-        $data = Yii::$app->request->post('AddressQuestion');
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             
-            for ($i = 0; $i < count($data['question']); $i++) { 
-               
-                $models = new AddressQuestion();
-                $models->address_type_id = $model->address_type_id;
-                $models->question = $data['question'][$i];
-                $models->question_ar = $data['question_ar'][$i];
-                $models->save();
-            }
-
             Yii::$app->session->setFlash('success', 'Address Question created successfully!');
 
             return $this->redirect(['index']);
@@ -170,44 +159,20 @@ class AddressquestionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $addresstype = AddressType::loadAddress();
-        $addressquestion = AddressQuestion::loadAddressquestion($model->address_type_id);
-        $data = Yii::$app->request->post('AddressQuestion');
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             
-            //update all old questions
-            for($i = 0; $i < count($addressquestion); $i++) {
-                
-                Addressquestion::updateAll([
-                        'question' => $data['question'][$i],
-                        'question_ar' => $data['question_ar'][$i],
-                        'address_type_id' => $model->address_type_id
-                    ],
-                    'ques_id= '.$addressquestion[$i]['ques_id']
-                );
-            }
-
-            //add all newquestions
-            for ($i = count($addressquestion) - 1; $i < count($data['question']); $i++) { 
-               
-                $models = new AddressQuestion();
-                $models->address_type_id = $model->address_type_id;
-                $models->question = $data['question'][$i];
-                $models->question_ar = $data['question_ar'][$i];
-                $models->save();
-            }
-
             Yii::$app->session->setFlash('success', 'Address Question updated successfully!');
             
             return $this->redirect(['index']);
 
         } else {
 
+            $addresstype = AddressType::loadAddress();
+
             return $this->render('update', [
                 'model' => $model, 
                 'addresstype' => $addresstype, 
-                'addressquestion' => $addressquestion,
             ]);
         }
     }
