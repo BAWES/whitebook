@@ -166,7 +166,10 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 
 					<div class="form-group" style="clear:both;"><?= $form->field($model, 'vendor_contact_address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
 					<div class="form-group" style="clear:both;"><?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
-					<div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div>
+					<div class="clearfix">
+						<div class="col-md-6"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success submit_btn' : 'btn btn-primary submit_btn','style'=>'float:right;']) ?></div>
+						<div class="col-md-6"><div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div></div>
+					</div>
 				</div>
 
 				<!--End First Tab -->
@@ -194,9 +197,11 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 					<?= $form->field($model, 'vendor_bank_branch'); ?>
 
 					<?= $form->field($model, 'vendor_account_no'); ?>
-
-					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+					<div class="clearfix">
+						<div class="col-md-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+						<div class="col-md-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success submit_btn' : 'btn btn-primary submit_btn']) ?></div>
+						<div class="col-md-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
+					</div>
 				</div>
 				<!--End Third Tab -->
 
@@ -211,8 +216,11 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 
 					<?= $form->field($model, 'vendor_website')->textInput(['maxlength' => 100]); ?>
 
-					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+					<div class="clearfix">
+					<div class="col-md-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+					<div class="col-md-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success submit_btn' : 'btn btn-primary submit_btn']) ?></div>
+					<div class="col-md-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
+					</div>
 				</div>
 
 				<div class="tab-pane" id="4">
@@ -227,9 +235,10 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 					
 					<?= $form->field($model, 'vendor_skype')->textInput(['maxlength' => 100]); ?>
 
-					<div class="form-group">
-						<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-						<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+					<div class="form-group clearfix">
+						<div class="col-md-4" ><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+						<div class="col-md-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success submit_btn' : 'btn btn-primary submit_btn']) ?></div>
+						<div class="col-md-4" ><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 					</div>
 				</div>
 
