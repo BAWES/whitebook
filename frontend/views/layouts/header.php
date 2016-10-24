@@ -21,31 +21,23 @@ $action = Yii::$app->controller->action->id;
                         </span>
                     </a>
                 </div>
-                <!--div class="col-xs-4 responsive-hid"></div-->
                 <div class="logo_header col-xs-10 text-center padding-right0">
                     <a href="<?= Url::toRoute('site/index', true); ?>" title="THEWHITEBOOK">
                         <?= Html::img('@web/images/mobile_logo.svg', ['alt' => 'Whitebook']); ?>
                     </a>
-                    <div class="search_header col-xs-3">
-                        <div class="input-group">
-                            <div id="navigation-bar">
-                                <form id="search_form" method="get" action="<?=Url::toRoute(['/search/index'],true); ?>">
-                                    <div id="input1" class="left_slider">
-                                        <input type="text" name="search" id="search-terms2" onkeyup="show_close()" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>" class="search-box" autocomplete="off">
-                                        <button class="js-search-cancel"> <?= Yii::t("frontend", "Cancel") ?></button>
-                                        <button id="search-close" class="search-clear icon-search_clear" type="reset" ><?= Yii::t("frontend", "Clear") ?></button>
-                                    </div>
-                                    <div id="label1">
-                                        <div id="search-labl" class="search_for"></div>
-                                        <div id="search_list2"></div>
-                                        <label for="search-terms" id="search-label" class="search-lbl-mobile"></label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div><!-- /input-group -->
+                    <div class="search_header col-xs-3 ses_act">
+                        <div id="label1">
+                            <label for="search-terms" id="search-label" class="search-lbl-mobile"></label>
+                        </div>
                     </div>
-
                 </div>
+                <form id="search_form" method="get" action="<?= Url::to(['search/index']); ?>">
+                    <div id="input1" class="left_slider">
+                        <input type="text" name="search" id="search-terms2" class="search-box" placeholder="Search here" autocomplete="off" />
+                        <button class="btn btn-primary"><i class="fa fa-arrow-right"></i></button>
+                        <button type="button" class="btn btn-default btn-close"><i class="fa fa-close"></i></button>
+                    </div>                    
+                </form><!-- END #search_form -->
                 <div id="mobile_search_list" class="mobile-search-term"></div>
                 <div id="mobile_search_fail"></div>
                 <div id="desktop_search_fail"></div>

@@ -1420,11 +1420,10 @@ jQuery('.search-lbl-mobile').click(function()
     if(jQuery('.mobile-menu').hasClass('open-search-menu'))
     {
         jQuery("#mobile-sid").removeClass('open-search-menu');
-
     } else {
         jQuery("#mobile-sid").addClass('open-search-menu');
+        $('.mobile-menu #search_form #search-terms2').focus();
     }
-    //(jQuery('.mobile-menu').hasClass('open-search-menu'))?jQuery(this).removeClass('open-search-menu'):jQuery(this).addClass('open-search-menu');
 });
 
 jQuery('#search-close').click(function(){

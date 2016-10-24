@@ -491,9 +491,12 @@ a.deliver-detail.accor-link-min{background:url("../images/delivery-minus.png") n
 .select_items_select.mobile-view .date-time input#dp2{box-shadow:none;border:1px solid #e6e6e6;display: inline-block;padding:0 0 0 15px;}
 .select_items_select.mobile-view .date-time span.caret {position: absolute;right: 14px;top: 46%;color: #808080;}
 .col-md-3.padding-right0.padding-right8{width:100%;padding:0;}
-.mobile-menu .search_header{float:right;}
 
-/*responsive view search css 19-10-2015*/
+.mobile-menu .search_header{
+	padding: 11px 11px 0 0;
+	float: right;
+}
+
 .left_slider.focus .js-search-cancel, .left_slider.focus{display: inline-block;}
 
 .left_slider.focus .js-search-cancel {margin:7px 7px 0 0;background: #000 none repeat scroll 0 0; border: 1px solid #000; border-radius: 3px;  color: #fff; cursor: pointer;float: right;font-family: "OpenSansRegular";font-size: 13px; letter-spacing: 1px; line-height: 15px; padding: 10px 15px; text-align: center; text-transform: uppercase;}
@@ -834,7 +837,6 @@ header{ z-index:18;}
 .mobile-search-term#mobile_search_list{z-index:111;position:relative;width:100%;clear:both;font-size:20px;border-right: 2px solid #000;border-left: 2px solid #000;}
 .mobile-search-term#mobile_search_list ul{width:100%;top:0;right:0;}
 .mobile-search-term#mobile_search_list ul li {width: 100%;display: inline-block;list-style-type: none; padding: 5px 11px; border-bottom: 1px solid #ccc;text-align: left;}
-.mobile-menu.open-search-menu{position: fixed;display: inline-block; overflow-y: scroll;height: 100%;z-index: 1;left:0;}
 
 @media only screen and (max-width: 767px){
 .modal-dialog .modal-content.row{margin:0;}
