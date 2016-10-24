@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'question')->textarea(['rows' => 6]); ?>
 
-    <?= $form->field($model, 'question_ar'])->textarea(['rows' => 6]); ?>
+    <?= $form->field($model, 'question_ar')->textarea(['rows' => 6]); ?>
 
 	<?= $form->field($model, 'answer')->textarea(['rows' => 6]); ?>
 

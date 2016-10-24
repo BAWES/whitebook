@@ -8406,3 +8406,37 @@ label.control-label > span.required { color:red;}
   .vendor-admin-new .delivery_days .sun, .vendor-admin-new .mon,.vendor-admin-new .tue,.vendor-admin-new .wed,.vendor-admin-new .thu,.vendor-admin-new .fri,.vendor-admin-new .sat{width:135px;}
   .vendor-admin-new {width: 100%; display: inline-block;}
   .vendor-admin-new .delivery_days{padding: 12px 0 0 3px;}
+
+.stats {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+.stats>li {
+    float: left;
+    padding: 20px;
+    margin-right: 15px;
+}
+ul>li.blue {
+    background: #368ee0;
+}
+.stats>li .details {
+    margin-left: 50px;
+}
+.stats>li i {
+    font-size: 30px;
+    color: #fff;
+    float: left;
+    margin: 5px 0;
+}
+.stats>li .details span.big {
+    font-size: 18px;
+}
+.stats>li .details span {
+    color: #fff;
+    display: block;
+    font-size: 13px;
+}
+ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{background:#393}ul>li.lime{background:#8cbf26}ul>li.teal{background:#00aba9}ul>li.purple{background:#ff0097}ul>li.brown{background:#a05000}ul>li.pink{background:#e671b8}ul>li.magenta{background:#a200ff}ul>li.grey{background:#333}ul>li.darkblue{background:#204e81}ul>li.lightred{background:#e63a3a}ul>li.lightgrey{background:#666}ul>li.satblue{background:#2c5e7b}ul>li.satgreen{background:#56af45}
+

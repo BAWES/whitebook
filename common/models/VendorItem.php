@@ -286,27 +286,16 @@ class VendorItem extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
     }
 
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-
-//    public function getThemes()
-//    {
-//        //return $this->hasMany(Theme::className(), ['theme_id' => 'theme_id'])->viaTable('whitebook_vendor_item_theme', ['item_id' => 'item_id']);
-//        return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
-//    }
-
-    public static function vendoritemcount($vid='')
+    public static function vendoritemcount($vid = '')
     {
-        if(!isset($vid) && $vid =='') {
-            $vid=Vendor::getVendor('vendor_id');
+        if(!$vid) {
+            $vid = Vendor::getVendor('vendor_id');
         }
-        return $s = VendorItem::find()
-        ->where(['trash' => 'Default'])
-        ->where(['vendor_id' => $vid])
-        ->count();
-    }
 
+        return VendorItem::find()
+            ->where(['trash' => 'Default', 'vendor_id' => $vid])
+            ->count();
+    }
 
     public static function getCategoryName($id)
     {

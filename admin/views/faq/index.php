@@ -23,14 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'question',
 				'format' => 'raw',
 				'value' => function ($model) {                      
-						return substr($model->question, 0, 35);
+						return stripcslashes(substr($model->question, 0, 35));
 					},
 				],
    			[
 				'attribute' => 'answer',
 				'format' => 'raw',
 				'value' => function ($model) {                      
-						return substr($model->answer, 0, 35);
+						return stripcslashes(substr($model->answer, 0, 35));
 				},
 			],
 			'group_name',
