@@ -3,13 +3,11 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\LocationSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use yii\web\View;
 
 $this->title = 'Area';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="row-fluid">
    <div class="span12">
@@ -69,6 +67,7 @@ $this->registerJs("
             }
         });
     }
-");
+
+", View::POS_HEAD);
 
 	
