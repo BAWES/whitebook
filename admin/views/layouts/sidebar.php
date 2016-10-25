@@ -10,14 +10,17 @@ $item_pending_count = VendorItem::item_pending_count();
 	<!-- BEGIN MENU -->
 	<div class="page-sidebar" id="main-menu">
 		  <div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">
+
 		<!-- BEGIN MINI-PROFILE -->
+		<?php if(!Yii::$app->user->isGuest) { ?>
 		<div class="user-info-wrapper">
 			<div class="user-info">
 				<div class="greeting">Welcome, <?php echo Yii::$app->user->identity->admin_name; ?>! </div>
 				<div class="username"> <span class="semi-bold"> </span></div>
 			</div>
 		</div>
-		<!-- END MINI-PROFILE -->
+		<?php } ?>
+
 		<!-- BEGIN SIDEBAR MENU -->
 		<?php $controller = get_class($this->context);
 		$action = $this->context->action->id;
