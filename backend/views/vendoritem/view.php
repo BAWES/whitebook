@@ -1,8 +1,6 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\widgets\DetailView;
-use common\models\Vendoritem;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Vendoritem */

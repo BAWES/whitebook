@@ -6,9 +6,9 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * PriorityitemSearch represents the model behind the search form about `common\models\Priorityitem`.
+ * PriorityitemSearch represents the model behind the search form about `common\models\PriorityItem`.
  */
-class PriorityitemSearch extends Priorityitem
+class PriorityitemSearch extends PriorityItem
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ class PriorityitemSearch extends Priorityitem
      */
     public function search($params)
     {
-        $query = Priorityitem::find()
+        $query = PriorityItem::find()
         ->where(['!=', 'trash', 'Deleted'])
         ->orderBy('priority_id');
 

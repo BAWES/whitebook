@@ -3,10 +3,13 @@
 namespace common\models;
 
 use Yii;
-use common\models\Vendoritem;
+use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+use common\models\Location;
+use common\models\VendorItem;
+use common\models\DeliveryTimeSlot;
+use common\models\CustomerAddress;
 
 /**
  * This is the model class for table "whitebook_suborder_item_purchase".
@@ -98,6 +101,26 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
     
     public function getVendoritem()
     {
-        return $this->hasOne(Vendoritem::className(), ['item_id' => 'item_id']);
-    } 
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
+    }
+
+    public function getTimeslot()
+    {
+        return $this->hasOne(DeliveryTimeSlot::className(), ['timeslot_id' => 'timeslot_id']);
+    }
+
+    public function getItem()
+    {
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
+    }
+
+    public function getLocation()
+    {
+        return $this->hasOne(Location::className(), ['id' => 'area_id']);
+    }
+
+    public function getAddress()
+    {
+        return $this->hasOne(CustomerAddress::className(), ['address_id' => 'address_id']);
+    }
 }

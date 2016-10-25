@@ -186,6 +186,7 @@ $('.btn-add-address').click(function(){
 	$html  = '<tr>';
 	$html += '	<td>';
 	$html += '		<input value="" name="vendor_order_alert_emails[]" class="form-control" />';
+	$html += '		<span class="error"></span>';
 	$html += '	</td>';
 	$html += '	<td>';
 	$html += '		<button class="btn btn-danger" type="button">';

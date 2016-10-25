@@ -3,7 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\Role;
 use admin\models\RoleSearch;
 use yii\web\Controller;
@@ -60,7 +60,7 @@ class RoleController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '10');
+        $access = AuthItem::AuthitemCheck('4', '10');
         if (yii::$app->user->can($access)) {
             $searchModel = new RoleSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -98,7 +98,7 @@ class RoleController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '10');
+        $access = AuthItem::AuthitemCheck('1', '10');
         if (yii::$app->user->can($access)) {
             $model = new Role();
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -127,7 +127,7 @@ class RoleController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '10');
+        $access = AuthItem::AuthitemCheck('2', '10');
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -156,7 +156,7 @@ class RoleController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '10');
+        $access = AuthItem::AuthitemCheck('3', '10');
         if (yii::$app->user->can($access)) {
             $this->findModel($id)->delete();
             Yii::$app->session->setFlash('success', 'User role deleted successfully!');

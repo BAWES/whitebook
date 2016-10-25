@@ -4,14 +4,14 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Cms;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\Siteinfo;
 use common\models\Events;
 use common\models\City;
 use common\models\Location;
 use common\models\Faq;
 use frontend\models\Themes;
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 use frontend\models\Website;
 use common\models\Smtp;
 use frontend\models\Contacts;
@@ -36,7 +36,7 @@ class SiteController extends BaseController
     public function actionIndex()
     {     
         $website_model = new Website();
-        $featuremodel = new Featuregroupitem();
+        $featuremodel = new FeatureGroupItem();
         $product_list = $featuremodel->get_featured_product_id();
         
         $banner = $website_model->get_banner_details();
@@ -44,7 +44,7 @@ class SiteController extends BaseController
         $featured_product = array();
         
         if (!Yii::$app->user->isGuest) {
-            $featured_product = Vendoritem::get_featured_product();
+            $featured_product = VendorItem::get_featured_product();
         }
         
         return $this->render('index', [
@@ -63,7 +63,7 @@ class SiteController extends BaseController
         Yii::$app->session->set('reset_password_mail', '');
 
         $website_model = new Website();
-        $featuremodel = new Featuregroupitem();
+        $featuremodel = new FeatureGroupItem();
         $product_list = $featuremodel->get_featured_product_id();
         
         $banner = $website_model->get_banner_details();
@@ -71,7 +71,7 @@ class SiteController extends BaseController
         $featured_product = array();
         
         if (!Yii::$app->user->isGuest) {
-            $featured_product = Vendoritem::get_featured_product();
+            $featured_product = VendorItem::get_featured_product();
         }
 
         $ads = $website_model->get_home_ads();
@@ -228,7 +228,7 @@ class SiteController extends BaseController
 
         $data = Yii::$app->request->post();
         
-        $loadvendorid = \common\models\Vendoritem::find()
+        $loadvendorid = \common\models\VendorItem::find()
             ->select(['vendor_id'])
             ->Where(['category_id'=>$data['cat_id']])
             ->asArray()
@@ -253,7 +253,7 @@ class SiteController extends BaseController
 
         $data = Yii::$app->request->post();
 
-        $themes = \common\models\Vendoritemthemes::find()
+        $themes = \common\models\VendorItemThemes::find()
             ->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
             ->Where(['vendor_id'=>$data['v_id']])
             ->asArray()

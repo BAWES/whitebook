@@ -4,7 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\sortable\Sortable;
 use admin\models\Vendor;
-use common\models\Vendoritemquestion;
+use common\models\VendorItemQuestion;
 
 use yii\web\view;
 use kartik\file\FileInput;
@@ -345,7 +345,7 @@ function cmp($a, $b)
 		<div class="tab-pane" id="7">
 			<div class="questionanswer" >
 			<?php
-				 $exist_question = Vendoritemquestion::find()->where( [ 'item_id' => $model->item_id ] )->count();
+				 $exist_question = VendorItemQuestion::find()->where( [ 'item_id' => $model->item_id ] )->count();
 
 				if($exist_question >= 1) {
 				$count_q=(count($model_question)); // for initial count questions used in javascript;
@@ -366,9 +366,9 @@ function cmp($a, $b)
 			<div class="form-group">
 				<div id="question-section" class="question-section">
 					<input type="hidden" name="parent_id" id="adds" value="0" class="form-control temp_qa">
-					Question <input type="text" id="question_text_0" class="form-control temp_qa" name="Vendoritemquestion[0][question_text][]" style="margin:10px 0px;"> Question Type
+					Question <input type="text" id="question_text_0" class="form-control temp_qa" name="VendorItemQuestion[0][question_text][]" style="margin:10px 0px;"> Question Type
 					<div class="append_address">
-						<select id="vendoritemquestion-question_answer_type0" class="form-control vendoritemquestion-question_answer_type temp_qa" name="Vendoritemquestion[0][question_answer_type][]" parent_id="0" style="margin:10px 0px;">
+						<select id="vendoritemquestion-question_answer_type0" class="form-control vendoritemquestion-question_answer_type temp_qa" name="VendorItemQuestion[0][question_answer_type][]" parent_id="0" style="margin:10px 0px;">
 						<option value="">Choose type</option>
 						<option value="text">Text</option>
 						<option value="image">Image</option>

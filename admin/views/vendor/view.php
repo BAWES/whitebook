@@ -1,11 +1,11 @@
 <?php
 use yii\helpers\Url;
-use common\models\Vendoritem;
-use common\models\Itemtype;
+use common\models\VendorItem;
+use common\models\ItemType;
 use admin\models\Category;
 use common\models\Package;
-use common\models\Vendorpackages;
-use common\models\Deliverytimeslot;
+use common\models\VendorPackages;
+use common\models\DeliveryTimeSlot;
 use common\models\DeliverytimeslotSearch;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -175,8 +175,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         <?php foreach ($dataProvider->query as $log) { ?>
         <tr>
-            <td><?= Itemtype::itemtypename($log['type_id']); ?></td>
-            <td><?= Vendoritem::vendoritemname($log['item_id']); ?></td>
+            <td><?= ItemType::itemtypename($log['type_id']); ?></td>
+            <td><?= VendorItem::vendoritemname($log['item_id']); ?></td>
             <td><?= Category::viewcategoryname($log['category_id']); ?></td>
             <td><?= ($log['item_status']); ?></td>
             <td><?= ($log['priority']); ?></td>
@@ -198,7 +198,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?php
     $timeslot_val = array();
-    $delivery_data = Deliverytimeslot::vendor_delivery_details($model->vendor_id);
+    $delivery_data = DeliveryTimeSlot::vendor_delivery_details($model->vendor_id);
     if ($delivery_data>0) { ?>
 
 	<div class="vendor-admin-new">
@@ -214,7 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="sun">
         <ul>
             <?php
-            $sun = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Sunday');
+            $sun = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Sunday');
             foreach ($sun as $key => $value) {
             $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
             $start = date('g:ia', strtotime($value['timeslot_start_time']));
@@ -229,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="mon">
             <ul>
-                <?php  $mon = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Monday');
+                <?php  $mon = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Monday');
                 foreach ($mon as $key => $value) {
                 $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
                 $start = date('g:ia', strtotime($value['timeslot_start_time']));
@@ -244,7 +244,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="tue">
             <ul>
-                <?php  $tue = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Tuesday');
+                <?php  $tue = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Tuesday');
 
                 foreach ($tue as $key => $value) {
                 $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
@@ -260,7 +260,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="wed">
             <ul>
-                <?php  $wed = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Wednesday');
+                <?php  $wed = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Wednesday');
                 foreach ($wed as $key => $value) {
                 $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
                 $start = date('g:ia', strtotime($value['timeslot_start_time']));
@@ -275,7 +275,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="thu">
             <ul>
-                <?php  $thu = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Thursday');
+                <?php  $thu = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Thursday');
                 foreach ($thu as $key => $value) {
                 $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
                 $start = date('g:ia', strtotime($value['timeslot_start_time']));
@@ -290,7 +290,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="fri">
             <ul>
-                <?php  $fri = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Friday');
+                <?php  $fri = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Friday');
                 foreach ($fri as $key => $value) {
                 $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
                 $start = date('g:ia', strtotime($value['timeslot_start_time']));
@@ -305,7 +305,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="sat">
             <ul>
-                <?php  $sat = Deliverytimeslot::vendor_deliverytimeslot($model->vendor_id,'Saturday');
+                <?php  $sat = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Saturday');
                 foreach ($sat as $key => $value) {
                 $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
                 $start = date('g:ia', strtotime($value['timeslot_start_time']));
@@ -421,7 +421,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/boots
 			
       $('#option').show();
 			
-      $(this).after('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" name="Addss" value="Add Selection"></div>');
+      $(this).after('<div class="selection"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id="add_question'+j+'" name="Addss" value="Add Selection"></div>');
 
 		} else if(type =='image' ||  type =='text') {
 
@@ -433,7 +433,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/boots
 			
       $('#option').show();
 
-			$(this).after('<div class="price_val"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
+			$(this).after('<div class="price_val"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
 		}
 
   	// Add selection for questions //
@@ -445,7 +445,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/boots
 			
       var j = $(this).attr('id').replace(/add_question/, '');
 			
-      $(this).before('<div class="selection"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="Vendoritemquestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');	
+      $(this).before('<div class="selection"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
       
       p++;
 

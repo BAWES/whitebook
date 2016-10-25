@@ -2,7 +2,7 @@
 namespace frontend\models;
 
 use Yii;
-use common\models\Blockeddate;
+use common\models\BlockedDate;
 use common\models\VendorCategory;
 
 class Vendor extends \common\models\Vendor

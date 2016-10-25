@@ -5,10 +5,10 @@ use common\models\Country;
 use common\models\City;
 use common\models\Location;
 use common\models\Area;
-use common\models\Addresstype;
+use common\models\AddressType;
 use yii\helpers\Html;
-use common\models\Vendoritempricing;
-use common\models\Itemtype;
+use common\models\VendorItemPricing;
+use common\models\ItemType;
 use common\models\Category;
 use yii\widgets\Breadcrumbs;
 
@@ -53,7 +53,7 @@ $this->title='Whitebook - Checkout';
     	<tr><td><?php if(!empty($customer_details['country'])){echo Country::getCountry($customer_details['country']);}?></td></tr>
     	<tr><td><?php if(!empty($customer_details['phone'])){echo $customer_details['phone'];}?></td></tr>
 
-    	<tr><td><?php if(!empty($customer_details['address_type_id'])){echo Addresstype::getAddresstype($customer_details['address_type_id']);}?></td></tr>
+    	<tr><td><?php if(!empty($customer_details['address_type_id'])){echo AddressType::getAddresstype($customer_details['address_type_id']);}?></td></tr>
     	<tr><td><?php if(!empty($customer_details['address_data'])){echo ($customer_details['address_data']);}?></td></tr>
     	<tr><td><?php if(!empty($customer_details['area_id'])){echo Location::getlocation($customer_details['area_id']);}?></td></tr>
     	<tr><td><?php if(!empty($customer_details['city_id'])){echo City::getCity($customer_details['city_id']);}?></td></tr>

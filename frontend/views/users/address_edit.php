@@ -6,7 +6,7 @@ use yii\base;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 use common\models\Location;
-use frontend\models\Addresstype;
+use frontend\models\AddressType;
 
 $this->title ='Address Book | Whitebook';
 

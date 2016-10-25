@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Migration;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 
 class m160928_105044_category_refactor extends Migration
 {
@@ -14,7 +14,7 @@ class m160928_105044_category_refactor extends Migration
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 
         //fill table 
-        $items = Vendoritem::find()->all();
+        $items = VendorItem::find()->all();
 
         foreach ($items as $key => $value) {
             Yii::$app->db->createCommand()->batchInsert(

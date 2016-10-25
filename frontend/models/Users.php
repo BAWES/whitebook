@@ -133,19 +133,19 @@ class Users extends Model
 
     public function update_wishlist($item_id, $customer_id)
     {
-
         $user_fav = Wishlist::find()->select(['wish_status'])
 				->where(['customer_id'=>$customer_id])
 				->andWhere(['item_id'=>$item_id])
 				->count();
+
         if ($user_fav > 0) {
 			$command = Wishlist::deleteAll(['item_id'=>$item_id,'customer_id'=>$customer_id]);
             return -1;
         } else {
-			$wish_modal= new Wishlist;
-			$wish_modal->item_id=$item_id;
-			$wish_modal->customer_id=$customer_id;
-			$wish_modal->wish_status=1;
+			$wish_modal = new Wishlist;
+			$wish_modal->item_id = $item_id;
+			$wish_modal->customer_id = $customer_id;
+			$wish_modal->wish_status = 1;
 			$wish_modal->save();
             return 1;
         }
@@ -358,22 +358,22 @@ class Users extends Model
     public static function loadCustomerWishlist($customer_id)
     {
 		$today = date('Y-m-d H:i:s');
-        $data=Wishlist::find()
-        ->select(['{{%vendor}}.vendor_name',
+        
+        $data = Wishlist::find()
+            ->select(['{{%vendor}}.vendor_name',
                     '{{%vendor_item}}.slug',
                     '{{%vendor_item}}.item_id',
                     '{{%vendor_item}}.item_name',
                     '{{%vendor_item}}.item_price_per_unit'])
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-            ->where(['{{%wishlist}}.customer_id'=>$customer_id])
-			->andwhere(['{{%vendor_item}}.item_for_sale'=>'Yes'])
+            ->where(['{{%wishlist}}.customer_id' => $customer_id])
 			->andWhere(['{{%vendor_item}}.item_status'=>'Active'])
 			->andWhere(['{{%vendor_item}}.trash'=>'Default'])
-			->andWhere(['{{%vendor_item}}.type_id'=>'2'])
 			->andWhere(['{{%wishlist}}.wish_status'=>'1'])
 			->asArray()
 			->all();
+
         return $data;
     }
 
@@ -443,7 +443,7 @@ class Users extends Model
     public function insert_item_to_event($item_id, $event_id)
     {
         $customer_id = Yii::$app->user->identity->customer_id;
-        $check = Eventitemlink::find()->select('link_id')
+        $check = EventItemlink::find()->select('link_id')
                         ->where(['event_id'=>$event_id])
                         ->andWhere(['item_id'=>$item_id])
                         ->count();
@@ -451,7 +451,7 @@ class Users extends Model
             return Events::EVENT_ALREADY_EXIST;
         } else {
             $event_date = date('Y-m-d H:i:s');
-            $command = new Eventitemlink();
+            $command = new EventItemlink();
             $command->event_id = $event_id;
             $command->item_id = $item_id;
             $command->link_datetime = $event_date;

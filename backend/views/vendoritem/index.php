@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 
-/* @var $searchModel common\models\VendoritemSearch */
+/* @var $searchModel common\models\VendorItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Manage items';
 $this->params['breadcrumbs'][] = $this->title;
@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value'=>function($data){
 					return $data->getItemType($data->type_id);
 				},
-				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),
+				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\ItemType::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),
 			],
 			[
 				'attribute'=>'item_status',
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					$status = ($data->item_status == 'Active') ? 'active' : 'deactive';
 					return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status', 'class'=>'status '.$status]);
 				},
-				'filter' =>  \admin\models\Vendoritem::Activestatus(),
+				'filter' =>  \admin\models\VendorItem::Activestatus(),
 			],
 			[
 				'attribute'=>'sort',

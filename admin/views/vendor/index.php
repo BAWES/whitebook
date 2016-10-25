@@ -6,7 +6,7 @@ use yii\bootstrap\Alert;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-use admin\models\Vendoritem;
+use admin\models\VendorItem;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\VendorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                  'label'=>'items added',
                  'format'=>'raw',
                  'value'=>function ($model) {                      
-                            return Vendoritem::vendoritemcount($model->vendor_id);
+                            return VendorItem::vendoritemcount($model->vendor_id);
                         },         
              ],
              [
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [            
                     'link' => function ($url, $model) {
 
-                        $url = Url::to(['vendoritem/index', 'VendoritemSearch[vendor_name]' => $model->vendor_name]); 
+                        $url = Url::to(['vendoritem/index', 'VendorItemSearch[vendor_name]' => $model->vendor_name]);
 
                         return  Html::a('<span class="fa fa-bars"></span>', $url, [
                                 'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",

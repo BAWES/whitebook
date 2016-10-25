@@ -44,13 +44,13 @@ use yii\bootstrap\ActiveField;
 					<?php if($model->isNewRecord){ ?>
 					<?php  foreach($controller as $key => $value){	?>
         			<tr>
-        				<td><input type="checkbox" id="ctrl" name="Accesscontroller[controller][<?php echo $value;?>][controller_id]" class="checkbox_all" value="<?php echo $key; ?>">&nbsp;<?php echo $value;?></td>
-        				<td><input type="checkbox" id="create" name="Accesscontroller[controller][<?php echo $value;?>][create]" class="create"value="Create" ></td>
-        				<td><input type="checkbox" id="update" name="Accesscontroller[controller][<?php echo $value;?>][update]"  class="update" value="Update"></td>
-        				<td><input type="checkbox" id="delete" name="Accesscontroller[controller][<?php echo $value;?>][delete]" class="delete" value="Delete"></td>
-        				<td><input type="checkbox" id="manage" name="Accesscontroller[controller][<?php echo $value;?>][manage]" class="manage" value="Manage"></td>
+        				<td><input type="checkbox" id="ctrl" name="AccessController[controller][<?php echo $value;?>][controller_id]" class="checkbox_all" value="<?php echo $key; ?>">&nbsp;<?php echo $value;?></td>
+        				<td><input type="checkbox" id="create" name="AccessController[controller][<?php echo $value;?>][create]" class="create"value="Create" ></td>
+        				<td><input type="checkbox" id="update" name="AccessController[controller][<?php echo $value;?>][update]"  class="update" value="Update"></td>
+        				<td><input type="checkbox" id="delete" name="AccessController[controller][<?php echo $value;?>][delete]" class="delete" value="Delete"></td>
+        				<td><input type="checkbox" id="manage" name="AccessController[controller][<?php echo $value;?>][manage]" class="manage" value="Manage"></td>
         				<?php if($key=='23'){?>
-        				<td><input type="checkbox" id="view" name="Accesscontroller[controller][<?php echo $value;?>][view]" class="view" value="View"></td>
+        				<td><input type="checkbox" id="view" name="AccessController[controller][<?php echo $value;?>][view]" class="view" value="View"></td>
         				<?php } else {  ?>
         				<td>N/A</td>
         				<?php }?>
@@ -58,30 +58,30 @@ use yii\bootstrap\ActiveField;
         			<?php } } else {
         			foreach($accesslist as $al){	?>
 				    <tr>
-        				<td><input type="checkbox" id="ctrl" name="Accesscontroller[controller][<?php echo $al['controller'];?>][controller_id]" class="checkbox_all" value="<?php echo $al['id'];?>" <?php if(($al['id'])){echo 'checked';}?>>&nbsp;<?php echo $al['controller'];?></td>
-						<td><input type="checkbox" id="create" name="Accesscontroller[controller][<?php echo $al['controller'];?>][create]" class="create"value="Create" <?php if($al['create']){echo 'checked';}?>></td>
-						<td><input type="checkbox" id="update" name="Accesscontroller[controller][<?php echo $al['controller'];?>][update]"  class="update"value="Update" <?php if($al['update']){echo 'checked';}?>></td>
-						<td><input type="checkbox" id="delete" name="Accesscontroller[controller][<?php echo $al['controller'];?>][delete]" class="delete" value="Delete" <?php if($al['delete']){echo 'checked';}?>></td>
-						<td><input type="checkbox"  id="manage" name="Accesscontroller[controller][<?php echo $al['controller'];?>][manage]" class="manage" value="Manage" <?php if($al['manage']){echo 'checked';}?>> </td>
+        				<td><input type="checkbox" id="ctrl" name="AccessController[controller][<?php echo $al['controller'];?>][controller_id]" class="checkbox_all" value="<?php echo $al['id'];?>" <?php if(($al['id'])){echo 'checked';}?>>&nbsp;<?php echo $al['controller'];?></td>
+						<td><input type="checkbox" id="create" name="AccessController[controller][<?php echo $al['controller'];?>][create]" class="create"value="Create" <?php if($al['create']){echo 'checked';}?>></td>
+						<td><input type="checkbox" id="update" name="AccessController[controller][<?php echo $al['controller'];?>][update]"  class="update"value="Update" <?php if($al['update']){echo 'checked';}?>></td>
+						<td><input type="checkbox" id="delete" name="AccessController[controller][<?php echo $al['controller'];?>][delete]" class="delete" value="Delete" <?php if($al['delete']){echo 'checked';}?>></td>
+						<td><input type="checkbox"  id="manage" name="AccessController[controller][<?php echo $al['controller'];?>][manage]" class="manage" value="Manage" <?php if($al['manage']){echo 'checked';}?>> </td>
 						<?php if($al['view']){ ?>
-        				<td><input type="checkbox" id="view" name="Accesscontroller[controller][<?php echo $al['controller'];?>][view]" class="view" value="View"  <?php if($al['view']){echo 'checked';}?>></td>
+        				<td><input type="checkbox" id="view" name="AccessController[controller][<?php echo $al['controller'];?>][view]" class="view" value="View"  <?php if($al['view']){echo 'checked';}?>></td>
         				<?php }else if(!($al['id']=='23')){  ?>
         				<td>N/A</td>
         				<?php }?>
         				<?php if(($al['id']=='23')&&(!($al['view']))){?>
-        				<td><input type="checkbox" id="view" name="Accesscontroller[controller][<?php echo $al['controller'];?>][view]" class="view" value="View"></td>
+        				<td><input type="checkbox" id="view" name="AccessController[controller][<?php echo $al['controller'];?>][view]" class="view" value="View"></td>
         				<?php }?>
 					</tr>
 				    <?php } ?>
         			<?php  foreach($controller as $key => $value){	?>
         			<tr>
-        				<td><input type="checkbox"  id="ctrl" name="Accesscontroller[controller][<?php echo $value;?>][controller_id]" class="checkbox_all" value="<?php echo $key; ?>">&nbsp;<?php echo $value;?></td>
-        				<td><input type="checkbox"  id="create"name="Accesscontroller[controller][<?php echo $value;?>][create]" class="create"value="Create" ></td>
-        				<td><input type="checkbox" id="update" name="Accesscontroller[controller][<?php echo $value;?>][update]"  class="update" value="Update"></td>
-        				<td><input type="checkbox" id="delete" name="Accesscontroller[controller][<?php echo $value;?>][delete]" class="delete" value="Delete"></td>
-        				<td><input type="checkbox"  id="manage" name="Accesscontroller[controller][<?php echo $value;?>][manage]" class="manage" value="Manage"></td>
+        				<td><input type="checkbox"  id="ctrl" name="AccessController[controller][<?php echo $value;?>][controller_id]" class="checkbox_all" value="<?php echo $key; ?>">&nbsp;<?php echo $value;?></td>
+        				<td><input type="checkbox"  id="create"name="AccessController[controller][<?php echo $value;?>][create]" class="create"value="Create" ></td>
+        				<td><input type="checkbox" id="update" name="AccessController[controller][<?php echo $value;?>][update]"  class="update" value="Update"></td>
+        				<td><input type="checkbox" id="delete" name="AccessController[controller][<?php echo $value;?>][delete]" class="delete" value="Delete"></td>
+        				<td><input type="checkbox"  id="manage" name="AccessController[controller][<?php echo $value;?>][manage]" class="manage" value="Manage"></td>
         				<?php if($key=='23'){?>
-        				<td><input type="checkbox" id="view" name="Accesscontroller[controller][<?php echo $value;?>][view]" class="view" value="View"></td>
+        				<td><input type="checkbox" id="view" name="AccessController[controller][<?php echo $value;?>][view]" class="view" value="View"></td>
         				<?php }else {  ?>
         				<td>N/A</td>
         				<?php }?>

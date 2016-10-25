@@ -16,11 +16,11 @@ use common\models\CategoryPath;
 use common\models\VendorItemToCategory;
 use admin\models\Image;
 use admin\models\Admin;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use admin\models\Category;
 use admin\models\Vendor;
 use admin\models\CategorySearch;
-use admin\models\Vendoritem;
+use admin\models\VendorItem;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -74,7 +74,7 @@ class CategoryController extends Controller
      */
     public function actionIndex()
     {
-        $access = Authitem::AuthitemCheck('4', '3');
+        $access = AuthItem::AuthitemCheck('4', '3');
         
         if (yii::$app->user->can($access)) {
             $searchModel = new CategorySearch();
@@ -94,7 +94,7 @@ class CategoryController extends Controller
 
     public function actionManage_subcategory()
     {
-        $access = Authitem::AuthitemCheck('4', '3');
+        $access = AuthItem::AuthitemCheck('4', '3');
 
         if (yii::$app->user->can($access)) {
         
@@ -115,7 +115,7 @@ class CategoryController extends Controller
 
     public function actionChild_category_index()
     {
-        $access = Authitem::AuthitemCheck('4', '3');
+        $access = AuthItem::AuthitemCheck('4', '3');
 
         if (yii::$app->user->can($access)) {
             
@@ -197,7 +197,7 @@ class CategoryController extends Controller
      */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '3');
+        $access = AuthItem::AuthitemCheck('1', '3');
         
         if (yii::$app->user->can($access)) {
             
@@ -272,7 +272,7 @@ class CategoryController extends Controller
 
     public function actionCreate_subcategory()
     {
-        $access = Authitem::AuthitemCheck('1', '3');
+        $access = AuthItem::AuthitemCheck('1', '3');
 
         if (yii::$app->user->can($access)) {
         
@@ -356,7 +356,7 @@ class CategoryController extends Controller
 
     public function actionChild_category_create()
     {
-        $access = Authitem::AuthitemCheck('1', '3');
+        $access = AuthItem::AuthitemCheck('1', '3');
     
         if (yii::$app->user->can($access)) {
     
@@ -449,7 +449,7 @@ class CategoryController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '3');
+        $access = AuthItem::AuthitemCheck('2', '3');
         
         if (yii::$app->user->can($access)) {
             
@@ -509,7 +509,7 @@ class CategoryController extends Controller
     public function actionSubcategory_update($id)
     {
 
-        $access = Authitem::AuthitemCheck('2', '3');
+        $access = AuthItem::AuthitemCheck('2', '3');
 
         if (yii::$app->user->can($access)) {
             $model = $this->findsubModel($id);
@@ -580,7 +580,7 @@ class CategoryController extends Controller
 
     public function actionChild_category_update($id)
     {
-        $access = Authitem::AuthitemCheck('2', '3');
+        $access = AuthItem::AuthitemCheck('2', '3');
 
         if (yii::$app->user->can($access)) {
         
@@ -682,7 +682,7 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '3');
+        $access = AuthItem::AuthitemCheck('3', '3');
         
         if (yii::$app->user->can($access)) {
 
@@ -733,7 +733,7 @@ class CategoryController extends Controller
 
     public function actionCategory_delete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '3');
+        $access = AuthItem::AuthitemCheck('3', '3');
 
         if (yii::$app->user->can($access)) {
             
@@ -756,7 +756,7 @@ class CategoryController extends Controller
 
     public function actionSubcategory_delete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '3');
+        $access = AuthItem::AuthitemCheck('3', '3');
         
         if (yii::$app->user->can($access)) {
 
@@ -804,7 +804,7 @@ class CategoryController extends Controller
 
     public function actionChildcategory_delete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '3');
+        $access = AuthItem::AuthitemCheck('3', '3');
 
         if (yii::$app->user->can($access)) {
             
@@ -816,7 +816,7 @@ class CategoryController extends Controller
             }
 
             $vendor_item = VendorItemToCategory::find()
-                ->where(['category' => $id])
+                ->where(['category_id' => $id])
                 ->count();
             
             if (!empty($vendor_item)) {                

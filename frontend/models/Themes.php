@@ -2,7 +2,7 @@
 
 namespace frontend\models;
 use Yii;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 
 /**
  * This is the model class for table "whitebook_theme".
@@ -42,7 +42,7 @@ class Themes extends \common\models\Themes
     }
     $id = implode("','", $k);
     $val = "'".$id."'";
-    return $theme =  Vendoritemthemes::find()
+    return $theme =  VendorItemThemes::find()
         ->select(['theme_id'])
         ->where('trash="default" and item_id IN('.$val.')')
          ->asArray()

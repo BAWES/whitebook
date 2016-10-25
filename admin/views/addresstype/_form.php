@@ -32,19 +32,19 @@ use yii\widgets\ActiveForm;
 if($model->isNewRecord){ 
 	
 	$this->registerJs("
-		$('#addresstype-status').prop('checked', true);
+		$('#AddressType-status').prop('checked', true);
 	");
 
 } elseif ($model->status=='Active'){ 
 			
 	$this->registerJs("
-		$('#addresstype-status').prop('checked', true);	
+		$('#AddressType-status').prop('checked', true);
 	");
 
 } else { 
 	
 	$this->registerJs("	
-		$('#addresstype-status').prop('checked', false);		
+		$('#AddressType-status').prop('checked', false);
 	");
 } 
 

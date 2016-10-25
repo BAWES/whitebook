@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use common\models\Vendoritemquestion;
+use common\models\VendorItemQuestion;
 use yii\web\View;
 
 /* @var $model common\models\Vendoritem */

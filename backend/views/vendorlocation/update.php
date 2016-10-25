@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Vendorlocation */
+/* @var $model common\models\VendorLocation */
 
 $this->title = 'Update Delivery Area';
 $this->params['breadcrumbs'][] = ['label' => 'Manage Area', 'url' => ['index']];

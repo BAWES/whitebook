@@ -4,13 +4,13 @@ namespace admin\controllers;
 
 use Yii;
 use yii\db\Query;
-use admin\models\Usercontroller;
-use admin\models\Accesscontroller;
-use admin\models\Authassignment;
+use admin\models\UserController;
+use admin\models\AccessController;
+use admin\models\AuthAssignment;
 use admin\models\Admin;
-use admin\models\AccesscontrolSearch;
+use admin\models\AccessControlSearch;
 use yii\web\Controller;
-use admin\models\Authitem;
+use admin\models\AuthItem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -63,10 +63,10 @@ class AccesscontrolController extends Controller
     */
     public function actionIndex()
     {
-	   $access = Authitem::AuthitemCheck('4', '29');
+	   $access = AuthItem::AuthitemCheck('4', '29');
 
         if (yii::$app->user->can($access)) {
-            $searchModel = new AccesscontrolSearch();
+            $searchModel = new AccessControlSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
             return $this->render('index', [
@@ -103,14 +103,14 @@ class AccesscontrolController extends Controller
     */
     public function actionCreate()
     {
-        $access = Authitem::AuthitemCheck('1', '29');
+        $access = AuthItem::AuthitemCheck('1', '29');
         $request = Yii::$app->request;
 
         if (yii::$app->user->can($access)) {
-            $model = new Accesscontroller();
-            $controller = Usercontroller::loadcontroller();
+            $model = new AccessController();
+            $controller = UserController::loadcontroller();
             $admin = Admin::admin();
-            $authitem = Authitem::Authitem();
+            $authitem = AuthItem::AuthItem();
 
             if ($request->isPost) {
 
@@ -118,15 +118,15 @@ class AccesscontrolController extends Controller
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
-                $command = Accesscontroller::deleteAll(['admin_id' => $adminid]);
-                $command1 = Authassignment::deleteAll(['user_id' => $adminid]);
+                $command = AccessController::deleteAll(['admin_id' => $adminid]);
+                $command1 = AuthAssignment::deleteAll(['user_id' => $adminid]);
                 $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
                 $p = 1;
 
                 foreach ($model->controller as $key => $val) {
                     if (count($val) > 1) {
                         $controller_id = $create = $update = $view = $delete = $manage = '';
-                        $auth_assign = new Authassignment;
+                        $auth_assign = new AuthAssignment;
                         foreach ($val as $k => $v) {
 							$timenow = date('Y-m-d h:i:sa');
                             switch ($k)
@@ -184,7 +184,7 @@ class AccesscontrolController extends Controller
                         $timenow = date('Y-m-d h:i:sa');
                         $userid = Admin::getAdmin('id');
                         if ($controller_id != '') {
-    						$access_ctrl=new Accesscontroller;
+    						$access_ctrl=new AccessController;
                             $access_ctrl->role_id = $roleid;
     						$access_ctrl->admin_id = $adminid;
     						$access_ctrl->controller = $controller_id;
@@ -218,7 +218,7 @@ class AccesscontrolController extends Controller
     }
 
     /**
-    * Updates an existing Accesscontroller model.
+    * Updates an existing AccessController model.
     * If update is successful, the browser will be redirected to the 'view' page.
     *
     * @param int $id
@@ -227,13 +227,13 @@ class AccesscontrolController extends Controller
     */
     public function actionUpdate($id)
     {
-        $access = Authitem::AuthitemCheck('2', '29');
+        $access = AuthItem::AuthitemCheck('2', '29');
         
         if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
-            $controller = Usercontroller::loadcontroller($model->admin_id, $model->role_id);
+            $controller = UserController::loadcontroller($model->admin_id, $model->role_id);
             $admin = Admin::adminupdate();
-            $authitem = Authitem::Authitem();
+            $authitem = AuthItem::AuthItem();
             $admin_id = $model->admin_id;
             $accesslist = \Yii::$app->DB->createCommand("SELECT whitebook_controller.controller,whitebook_controller.id,`create`,`update`,`delete`,`manage`,`view` FROM whitebook_access_control LEFT JOIN whitebook_controller ON whitebook_controller.id = whitebook_access_control.controller WHERE admin_id = $admin_id AND role_id =$model->role_id ORDER BY whitebook_access_control.controller ASC")->queryall();
             $model->admin_id = $model->admin_id.'_'.$model->role_id;
@@ -244,14 +244,14 @@ class AccesscontrolController extends Controller
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
-                $command =Accesscontroller::deleteAll(['admin_id' => $admin_id,'role_id' => $model->role_id]);
-                $command =Authassignment::deleteAll(['user_id' => $admin_id]);
+                $command =AccessController::deleteAll(['admin_id' => $admin_id,'role_id' => $model->role_id]);
+                $command =AuthAssignment::deleteAll(['user_id' => $admin_id]);
                 $model->load(Yii::$app->request->post());
                 $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
                 foreach ($model->controller as $key => $val) {
                     if (count($val) > 1 && isset($val['controller_id'])) {
                         $controller_id = $create = $update = $delete = $view = $manage = '';
-                        $auth_assign = new Authassignment;
+                        $auth_assign = new AuthAssignment;
                         foreach ($val as $k => $v) {
                             switch ($k) {
                                 case 'controller_id':
@@ -299,7 +299,7 @@ class AccesscontrolController extends Controller
                         }
                         $timenow = date('Y-m-d h:i:sa');
                         $userid = Admin::getAdmin('id');
-                        $access_ctrl=new Accesscontroller();
+                        $access_ctrl=new AccessController();
                         $access_ctrl->role_id = $roleid;
 						$access_ctrl->admin_id = $adminid;
 						$access_ctrl->controller = $controller_id;
@@ -333,7 +333,7 @@ class AccesscontrolController extends Controller
     }
 
     /**
-    * Deletes an existing Accesscontroller model.
+    * Deletes an existing AccessController model.
     * If deletion is successful, the browser will be redirected to the 'index' page.
     *
     * @param int $id
@@ -342,14 +342,14 @@ class AccesscontrolController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = Authitem::AuthitemCheck('3', '29');
+        $access = AuthItem::AuthitemCheck('3', '29');
 
         if (yii::$app->user->can($access)) {
-            $admin_id = Accesscontroller::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
+            $admin_id = AccessController::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
             $admin_id = $admin_id['admin_id'];
 
-            $command =Accesscontroller::deleteAll(['admin_id' => $admin_id]);
-            $command =Authassignment::deleteAll(['user_id' => $admin_id]);
+            $command =AccessController::deleteAll(['admin_id' => $admin_id]);
+            $command =AuthAssignment::deleteAll(['user_id' => $admin_id]);
 
             Yii::$app->session->setFlash('success', 'Access controller deleted successfully!');
 
@@ -363,18 +363,18 @@ class AccesscontrolController extends Controller
     }
 
     /**
-    * Finds the Accesscontroller model based on its primary key value.
+    * Finds the AccessController model based on its primary key value.
     * If the model is not found, a 404 HTTP exception will be thrown.
     *
     * @param int $id
     *
-    * @return Accesscontroller the loaded model
+    * @return AccessController the loaded model
     *
     * @throws NotFoundHttpException if the model cannot be found
     */
     protected function findModel($id)
     {
-        if (($model = Accesscontroller::findOne($id)) !== null) {
+        if (($model = AccessController::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -418,7 +418,7 @@ class AccesscontrolController extends Controller
 
         $admin_id = $data['admin_id'];
         
-        $control_id = Authassignment::find()
+        $control_id = AuthAssignment::find()
             ->select('controller_id')
             ->where(['user_id' => $admin_id])
             ->groupBy(['controller_id'])
@@ -441,7 +441,7 @@ class AccesscontrolController extends Controller
         
         echo '<input type="checkbox" onclick="checkall(this.checked);">Select all';
         foreach ($role as $key => $val) {
-            echo '<label><input type="checkbox" name="Accesscontroller[controller][]" value="'.$val['id'].'" class="checkbox_all">'.$val['controller'].'</label><br>';
+            echo '<label><input type="checkbox" name="AccessController[controller][]" value="'.$val['id'].'" class="checkbox_all">'.$val['controller'].'</label><br>';
         }
     }
 

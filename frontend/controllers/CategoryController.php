@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use frontend\models\Category_model;
+use frontend\models\CategoryModel;
 
 /**
  * Category controller.
@@ -16,7 +16,7 @@ class CategoryController extends BaseController
     public function init()
     {
         parent::init();
-        $this->category_model = new Category_model();
+        $this->category_model = new CategoryModel();
     }
 
     public function actionCategory_products()

@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>function($data){
                     return $data->getItemType($data->type_id);
                     },
-                'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\Itemtype::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),                                                             
+                'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\ItemType::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),
             ],          
                          [
              'label'=>'Status',
@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'value'=>function($data) {
                 return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status']);
                 },
-             'filter' => \admin\models\Vendoritem::Activestatus(),
+             'filter' => \admin\models\VendorItem::Activestatus(),
             ],
             [
                 'attribute'=>'sort',

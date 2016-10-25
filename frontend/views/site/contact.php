@@ -148,7 +148,7 @@ $this->registerJs("
         {
             var csrfToken = jQuery('meta[name=\"csrf-token\"]').attr('content');
 
-            $('#send').html('Sending...');
+            $('#send').html('Sending...').attr('disabled','disabled');
 
             jQuery.ajax({
                 type: 'POST',
@@ -168,8 +168,7 @@ $this->registerJs("
                             location.reload()
                         }, 2000)
                     }
-
-                    $('#send').html('".Yii::t('frontend', 'Send Email')."');
+                    $('#send').html('".Yii::t('frontend', 'Send Email')."').removeAttr('disabled');
                 }
             });
 

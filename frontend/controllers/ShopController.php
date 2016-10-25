@@ -9,15 +9,16 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use frontend\models\Users;
 use frontend\models\Website;
-use frontend\models\Vendoritem;
+use frontend\models\VendorItem;
 use frontend\models\Themes;
 use frontend\models\Vendor;
 use common\models\Category;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 use common\models\Location;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 use common\models\CategoryPath;
 use common\models\CustomerAddress;
+use yii\helpers\VarDumper;
 
 /**
  * Category controller.
@@ -46,7 +47,7 @@ class ShopController extends BaseController
         $model = new Website();
         $imageData = '';
         $data = Yii::$app->request->get();
-
+        $themes = [];
         $Category = Category::findOne(['slug' => $slug]);
 
         if (empty($Category)) {
@@ -181,8 +182,9 @@ class ShopController extends BaseController
         $get_unique_themes = array();
 
         if (!empty($items)) {
+
             $item_ids = ArrayHelper::map($items, 'item_id', 'item_id');
-            $themes = Vendoritemthemes::find()
+            $themes = VendorItemThemes::find()
                 ->select(['theme_id'])
                 ->with('themeDetail')
                 ->where("trash='default' and item_id IN(".implode(',', array_keys($item_ids)).")")
@@ -236,7 +238,7 @@ class ShopController extends BaseController
     public function actionProduct($slug)
     {
 
-        $model = Vendoritem::findOne(['slug' => $slug]);
+        $model = VendorItem::findOne(['slug' => $slug]);
 
         if (empty($model)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
@@ -290,13 +292,13 @@ class ShopController extends BaseController
             return $this->render('product_detail', [
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
-                'similiar_item' => Vendoritem::more_from_vendor($model),
+                'similiar_item' => VendorItem::more_from_vendor($model),
                 'vendor_area' => [],
                 'my_addresses' => []
             ]);
 
         } else {
-                $vendor_area = Vendorlocation::findAll(['vendor_id' => $model->vendor_id]);
+                $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
                 $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
                 $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
 
@@ -335,7 +337,7 @@ class ShopController extends BaseController
 
             return $this->render('product_detail', [
                 'model' => $model,
-                'similiar_item' => Vendoritem::more_from_vendor($model),
+                'similiar_item' => VendorItem::more_from_vendor($model),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
                 'vendor_area' => $vendor_area_list,
@@ -385,9 +387,9 @@ class ShopController extends BaseController
             } else {
                 $selectedDate = $_POST['delivery_date'];
             }
-            $item = Vendoritem::findOne($_POST['item_id']);
+            $item = VendorItem::findOne($_POST['item_id']);
             if ($item) {
-                $exist = \common\models\Blockeddate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
+                $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
                 $date = date('d-m-Y', strtotime($selectedDate));
                 if ($exist) {
                     echo "<i class='fa fa-warning' style='color: Red; font-size: 19px;' aria-hidden='true'></i> Item Not Available for on this date '$date' for this location '$AreaName' ";

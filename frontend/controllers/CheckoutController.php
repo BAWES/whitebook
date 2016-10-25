@@ -12,7 +12,7 @@ use common\models\CustomerAddressResponse;
 use common\models\Country;
 use common\models\Location;
 use common\models\PaymentGateway;
-use frontend\models\Addresstype;
+use frontend\models\AddressType;
 
 
 /**
@@ -34,6 +34,7 @@ class CheckoutController extends BaseController
     		$errors = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],
+                'timeslot_end_time' => $item['timeslot_end_time'],
     			'area_id' => $item['area_id'],
     			'quantity' => $item['cart_quantity']
     		], true);
@@ -55,6 +56,7 @@ class CheckoutController extends BaseController
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],
+                'timeslot_end_time' => $item['timeslot_end_time'],
     			'area_id' => $item['area_id'],
     			'quantity' => $item['cart_quantity']
     		], true);
@@ -65,7 +67,7 @@ class CheckoutController extends BaseController
 		}
 
 		$customer_address_modal = new CustomerAddress();
-        $addresstype = Addresstype::loadAddresstype();
+        $addresstype = AddressType::loadAddresstype();
         $country = Country::loadcountry();
 
         return $this->renderPartial('address', [
@@ -147,6 +149,7 @@ class CheckoutController extends BaseController
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],
+                'timeslot_end_time' => $item['timeslot_end_time'],
     			'area_id' => $item['area_id'],
     			'quantity' => $item['cart_quantity']
     		], true);
@@ -195,6 +198,7 @@ class CheckoutController extends BaseController
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],
+                'timeslot_end_time' => $item['timeslot_end_time'],
     			'area_id' => $item['area_id'],
     			'quantity' => $item['cart_quantity']
     		], true);

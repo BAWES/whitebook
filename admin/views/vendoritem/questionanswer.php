@@ -2,8 +2,8 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use common\models\Image;
-use common\models\Vendoritemquestion;
-use common\models\Vendoritemquestionguide;
+use common\models\VendorItemQuestion;
+use common\models\VendorItemQuestionGuide;
 	  $count_q=(count($question)); // for initial count questions used in javascript
 
 	 $t=0;	 
@@ -14,13 +14,13 @@ use common\models\Vendoritemquestionguide;
 	 	
 	?>
 	  <div class="question-section" id="question-section_<?= $question_records['question_id'];?>"> 
-	  <input type="hidden" name="Vendoritemquestion[<?= $t;?>][update][]" value="<?= $question_records['question_id']; ?>">
-		Question <input type="text" id="question_text_<?= $t; ?>" class="form-control" name="Vendoritemquestion[<?= $t;?>][question_text][]" style="margin:10px 0px;" value="<?= $question_records['question_text']; ?>">
+	  <input type="hidden" name="VendorItemQuestion[<?= $t;?>][update][]" value="<?= $question_records['question_id']; ?>">
+		Question <input type="text" id="question_text_<?= $t; ?>" class="form-control" name="VendorItemQuestion[<?= $t;?>][question_text][]" style="margin:10px 0px;" value="<?= $question_records['question_text']; ?>">
 		
 		 Question Type
 		
 		  <div class="append_address">
-	    	<select id="vendoritemquestion-question_answer_type<?= $t; ?>" class="form-control vendoritemquestion-question_answer_type" name="Vendoritemquestion[<?= $t;?>][question_answer_type][]" style="margin: 10px 0px;">			
+	    	<select id="vendoritemquestion-question_answer_type<?= $t; ?>" class="form-control vendoritemquestion-question_answer_type" name="VendorItemQuestion[<?= $t;?>][question_answer_type][]" style="margin: 10px 0px;">
 			<option value="">Choose type</option>
 			<option value="text" value="<?= $question_records['question_answer_type'] == 'text' ? '"selected=selected"' : '';?>">Text</option>
 			<option value="image" value="<?= $question_records['question_answer_type'] == 'image' ? '"selected=selected"' : '';?>">Image</option>
@@ -38,20 +38,20 @@ use common\models\Vendoritemquestionguide;
 					foreach($answers as $values){ 
 					?>	 			
 				<div class="selection">			
-				<input type="text" class="form-control" name="Vendoritemquestion[<?= $t;?>][text][]" placeholder="Question" id="question" value="<?= $values['answer_text']; ?>"  style="width:40%;float:left;" >
+				<input type="text" class="form-control" name="VendorItemQuestion[<?= $t;?>][text][]" placeholder="Question" id="question" value="<?= $values['answer_text']; ?>"  style="width:40%;float:left;" >
 
 				
-				<input type="text" class="form-control" name="Vendoritemquestion[<?= $t;?>][price][]" placeholder="Price(Optional)" id="price" value="<?= $values['answer_price_added'] ?>" style="width:40%;float:left;">
+				<input type="text" class="form-control" name="VendorItemQuestion[<?= $t;?>][price][]" placeholder="Price(Optional)" id="price" value="<?= $values['answer_price_added'] ?>" style="width:40%;float:left;">
 				<!-- hidden field -->
 				<?php if($j!=0) { ?>
 				<img src="<?php echo Yii::$app->params['appImageUrl'].'remove.png'; ?>" id="<?= $values['answer_id']; ?>" class="selection_delete" onclick="deletequestionselection(this)">
 				<?php }		?>
-				<input type="hidden" value="<?= $values['answer_id']; ?>" name="Vendoritemquestion[<?= $t;?>][hidden][]" style="width:5%;float:left;" class="form-control answer">
+				<input type="hidden" value="<?= $values['answer_id']; ?>" name="VendorItemQuestion[<?= $t;?>][hidden][]" style="width:5%;float:left;" class="form-control answer">
 				
 				<!-- BEGIN if answer exists displaying view button else add button -->
 				</div>		
 				<?php $j++; } ?>	
-				<input type="button" class="add_question" id="add_question" data-name="Vendoritemquestion[0][text][0][]" data-parent value="Add Selection"> 
+				<input type="button" class="add_question" id="add_question" data-name="VendorItemQuestion[0][text][0][]" data-parent value="Add Selection">
 				<input type="button" class="save" name="save" value="Save" onclick="savequestion('selection','<?= $question_records['question_id']; ?>',this)">
 				<input type="button" id="<?= $question_records['question_id'];?>" class="saves" data-toggle="modal" data-target="#myModal" value="Guide image"  onclick="checkupload(this)">
 				<div class="question_success">Successfully added</div>
@@ -63,8 +63,8 @@ use common\models\Vendoritemquestionguide;
 
 				<div class="price_val">
 				<!-- hidden field -->
-				<input type="hidden" name="Vendoritemquestion[0][hidden][]" value="<?= $values['answer_id']; ?>" style="width:5%;float:left;" class="form-control answer">
-				<input type="text" style="width:40%;" id="price" placeholder="Price (Optional)" name="Vendoritemquestion[0][price][]" value="<?= $values['answer_price_added'] ?>" class="form-control">
+				<input type="hidden" name="VendorItemQuestion[0][hidden][]" value="<?= $values['answer_id']; ?>" style="width:5%;float:left;" class="form-control answer">
+				<input type="text" style="width:40%;" id="price" placeholder="Price (Optional)" name="VendorItemQuestion[0][price][]" value="<?= $values['answer_price_added'] ?>" class="form-control">
 				<input type="button" onclick="savequestion('text',0,this)" value="Save" name="save" class="savebutton">				
 				<input type="button" id="<?= $question_records['question_id'];?>" class="saves" data-toggle="modal" data-target="#myModal" value="Guide image"  onclick="checkupload(this)">
 				<div class="question_success">Successfully added</div>

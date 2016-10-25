@@ -21,31 +21,23 @@ $action = Yii::$app->controller->action->id;
                         </span>
                     </a>
                 </div>
-                <!--div class="col-xs-4 responsive-hid"></div-->
                 <div class="logo_header col-xs-10 text-center padding-right0">
                     <a href="<?= Url::toRoute('site/index', true); ?>" title="THEWHITEBOOK">
                         <?= Html::img('@web/images/mobile_logo.svg', ['alt' => 'Whitebook']); ?>
                     </a>
-                    <div class="search_header col-xs-3">
-                        <div class="input-group">
-                            <div id="navigation-bar">
-                                <form id="search_form" method="get" action="<?=Url::toRoute(['/search/index'],true); ?>">
-                                    <div id="input1" class="left_slider">
-                                        <input type="text" name="search" id="search-terms2" onkeyup="show_close()" placeholder="<?= Yii::t("frontend", "SEARCH FOR...") ?>" class="search-box" autocomplete="off">
-                                        <button class="js-search-cancel"> <?= Yii::t("frontend", "Cancel") ?></button>
-                                        <button id="search-close" class="search-clear icon-search_clear" type="reset" ><?= Yii::t("frontend", "Clear") ?></button>
-                                    </div>
-                                    <div id="label1">
-                                        <div id="search-labl" class="search_for"></div>
-                                        <div id="search_list2"></div>
-                                        <label for="search-terms" id="search-label" class="search-lbl-mobile"></label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div><!-- /input-group -->
+                    <div class="search_header col-xs-3 ses_act">
+                        <div id="label1">
+                            <label for="search-terms" id="search-label" class="search-lbl-mobile"></label>
+                        </div>
                     </div>
-
                 </div>
+                <form id="search_form" method="get" action="<?= Url::to(['search/index']); ?>">
+                    <div id="input1" class="left_slider">
+                        <input type="text" name="search" id="search-terms2" class="search-box" placeholder="Search here" autocomplete="off" />
+                        <button class="btn btn-primary"><i class="fa fa-arrow-right"></i></button>
+                        <button type="button" class="btn btn-default btn-close"><i class="fa fa-close"></i></button>
+                    </div>                    
+                </form><!-- END #search_form -->
                 <div id="mobile_search_list" class="mobile-search-term"></div>
                 <div id="mobile_search_fail"></div>
                 <div id="desktop_search_fail"></div>
@@ -547,13 +539,17 @@ $action = Yii::$app->controller->action->id;
             <li class="ma5-li-3"><a href="<?= Url::toRoute('/directory/index', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
 
 
-            <div class="logout_part" style="border:none;">
-<?php if (Yii::$app->user->isGuest) { ?>
-                    <li class="<?php if ($action == "about-us") {
-        echo "active";
-    } ?>"><a href="<?= Url::toRoute('/about-us', true); ?>" title="<?php echo Yii::t('frontend', 'About Us'); ?>"><?php echo Yii::t('frontend', 'About Us'); ?></a></li>
-                    <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a></li>
-<?php } else { ?>
+        <div class="logout_part" style="border:none;">
+            <li class="<?php if ($action == "contact-us") { echo "active"; } ?>">
+                <a href="<?= Url::toRoute('/contact-us', true); ?>" title="<?php echo Yii::t('frontend', 'About and Contact'); ?>"><?php echo Yii::t('frontend', 'About and Contact'); ?></a>
+            </li>
+                    
+
+        <?php if (Yii::$app->user->isGuest) { ?>
+            <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a>
+            </li>
+
+        <?php } else { ?>
         
         <li>
             <a href="<?php echo Url::to(['cart/index']); ?>">

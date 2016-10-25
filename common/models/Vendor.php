@@ -392,7 +392,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         // $check_vendor variable for frontend filter IMPORATNT
         $today=date('Y-m-d');
 
-        $datetime = Vendorpackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date','vendor_id'])
+        $datetime = VendorPackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date','vendor_id'])
         ->where(['vendor_id' => $id])
         ->asArray()
         ->all();

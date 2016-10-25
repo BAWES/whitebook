@@ -3,12 +3,12 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Eventinvitees;
-use frontend\models\EventinviteesSearch;
+use frontend\models\EventInvitees;
+use frontend\models\EventInviteesSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Users;
-use frontend\models\Vendoritem;
+use frontend\models\VendorItem;
 use common\models\Events;
 
 use yii\db\Query;
@@ -22,22 +22,22 @@ use common\models\Location;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use common\models\Siteinfo;
-use common\models\Featuregroupitem;
+use common\models\FeatureGroupItem;
 use common\models\LoginForm;
 use common\models\Vendor;
 use common\models\City;
 use frontend\models\Website;
-use frontend\models\Eventitemlink;
+use frontend\models\EventItemlink;
 use frontend\models\Wishlist;
-use frontend\models\Addresstype;
+use frontend\models\AddressType;
 use frontend\models\AddressQuestion;
 use frontend\models\Customer;
 use frontend\models\Themes;
 use common\models\VendorItemToCategory;
-use common\models\Vendoritemthemes;
+use common\models\VendorItemThemes;
 
 /**
- * EventinviteesController implements the CRUD actions for Eventinvitees model.
+ * EventinviteesController implements the CRUD actions for EventInvitees model.
  */
 class EventsController extends BaseController
 {
@@ -54,7 +54,7 @@ class EventsController extends BaseController
     }
 
     /**
-     * Lists all Eventinvitees models.
+     * Lists all EventInvitees models.
      *
      * @return mixed
      */
@@ -112,14 +112,14 @@ class EventsController extends BaseController
             ->asArray()
             ->all();
 
-        $vendorlist = Vendoritem::find()
+        $vendorlist = VendorItem::find()
             ->select('{{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.vendor_id')
             ->joinWith('vendor')
             ->where(['IN', '{{%vendor_item}}.item_id', $arr_item_id])
             ->asArray()
             ->all();
 
-        $themelist =  Vendoritemthemes::find()
+        $themelist =  VendorItemThemes::find()
             ->select('{{%theme}}.theme_id, {{%theme}}.theme_name, {{%theme}}.theme_name_ar')
             ->joinWith('themeDetail')
             ->where(['trash' => 'default'])
@@ -151,7 +151,7 @@ class EventsController extends BaseController
             'categorylist' => $categorylist,
             'vendorlist' => $vendorlist,
             'themelist' => $themelist,
-            'slug' => 'events',
+            'slug' => (isset($_REQUEST['slug'])) ? $_REQUEST['slug'] : 'events',
             'events' => $events,
             'thingsilike' => $thingsilike,
         ]);
@@ -172,7 +172,7 @@ class EventsController extends BaseController
 
         $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
-        $eventitem_details = Eventitemlink::find()->select(['{{%event_item_link}}.item_id'])
+        $eventitem_details = EventItemlink::find()->select(['{{%event_item_link}}.item_id'])
             ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
             ->Where(['{{%vendor_item}}.item_status'=>'Active',
                 '{{%vendor_item}}.trash'=>'Default',
@@ -182,7 +182,7 @@ class EventsController extends BaseController
             ->asArray()
             ->all();
 
-        $searchModel = new EventinviteesSearch();
+        $searchModel = new EventInviteesSearch();
 
         $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $event_details->event_id);
 
@@ -210,7 +210,7 @@ class EventsController extends BaseController
             $data = Yii::$app->request->post();
 
             if ($data['action'] == 'new') {
-                $exist = Eventinvitees::find()
+                $exist = EventInvitees::find()
                     ->select('invitees_id')
                     ->where([
                         'event_id' => $data['event_id'],
@@ -221,7 +221,7 @@ class EventsController extends BaseController
                 // Check count
                 if ($exist == 0) {
 
-                    $event_invite = new Eventinvitees;
+                    $event_invite = new EventInvitees;
                     $event_invite->name = $data['name'];
                     $event_invite->email = $data['email'];
                     $event_invite->event_id = $data['event_id'];
@@ -234,7 +234,7 @@ class EventsController extends BaseController
                     echo 2;
                 }
             } else {
-                $user = Eventinvitees::findOne($data['invitees_id']);
+                $user = EventInvitees::findOne($data['invitees_id']);
                 $user->name = $data['name'];
                 $user->email = $data['email'];
                 $user->phone_number = $data['phone_number'];
@@ -245,7 +245,7 @@ class EventsController extends BaseController
 
     public function actionDeleteInvitee($id)
     {
-        Eventinvitees::findOne($id)->delete();
+        EventInvitees::findOne($id)->delete();
         Yii::$app->session->setFlash('success','Invitee Deleted Successfully');
         return $this->redirect(['events/detail','slug'=>$_REQUEST['slug']]);
     }
@@ -254,7 +254,7 @@ class EventsController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            $event_invite = Eventinvitees::find()->where(['invitees_id'=>$data['id']])->asArray()->one();
+            $event_invite = EventInvitees::find()->where(['invitees_id'=>$data['id']])->asArray()->one();
             return json_encode($event_invite);
         }
     }
@@ -265,7 +265,7 @@ class EventsController extends BaseController
             Yii::$app->session->set('show_login_modal', 1);//to display login modal
             return $this->goHome();
         }
-        $searchModel = new EventinviteesSearch();
+        $searchModel = new EventInviteesSearch();
         $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $id);
 
         ExcelView::widget([

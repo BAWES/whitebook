@@ -189,26 +189,4 @@ if(labelE4){
             	}); 
 }(window));
 
-/*search onclick after animation start*/
-// jQuery('#search-label1,#search-labl,#search-label,.has-js').each(function(index) {	
-// jQuery(this).click( function() {
-// if(!jQuery("#search-terms3").hasClass("animate-search"))
-// {
-// jQuery("#search-terms3").toggleClass("animate-search").delay(100).animate({"padding" : "5px" , "border":"none"}, '300');
-// jQuery("#search-terms3").addClass("animate-search")
-// }
 
-// else
-// {
-// jQuery("#search-terms3").removeClass("animate-search")
-// jQuery("#search-terms3").css({"padding": "5px"});
-// }
-// });
-// });
-/*search onclick after animation end*/
-
-
-    
-
-
-        

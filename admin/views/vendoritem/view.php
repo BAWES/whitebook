@@ -2,15 +2,15 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use admin\models\Vendoritem;
-use common\models\Vendoritemthemes;
-use common\models\Vendoritempricing;
-use common\models\Featuregroupitem;
+use admin\models\VendorItem;
+use common\models\VendorItemThemes;
+use common\models\VendorItemPricing;
+use common\models\FeatureGroupItem;
 
 
 use common\models\Image;
-use common\models\Vendoritemquestion;
-use common\models\Vendoritemquestionguide;
+use common\models\VendorItemQuestion;
+use common\models\VendorItemQuestionGuide;
 
 $arr_categories = [];
 
@@ -54,11 +54,11 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         //'item_id',
                         [
                             'label'=>'Vendor Type',
-                            'value'  => Vendoritem::getItemType($model->type_id),
+                            'value'  => VendorItem::getItemType($model->type_id),
                         ],
                         [
                             'label'=>'Vendor',
-                            'value'  => Vendoritem::getVendorName($model->vendor_id),
+                            'value'  => VendorItem::getVendorName($model->vendor_id),
                         ],
                         [
                             'label'=>'Categories',
@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         ],
                         [
                             'label'=>'Group',
-                            'value'  => Featuregroupitem::groupList($model),
+                            'value'  => FeatureGroupItem::groupList($model),
                         ],
                         [
                             'attribute'=>'created_datetime',
@@ -132,7 +132,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                           'item_price_per_unit',
                     ],
                   ]);
-                  Vendoritempricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit);
+                  VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit);
                   ?>
             </div>
         </div>

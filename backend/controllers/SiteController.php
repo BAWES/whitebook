@@ -2,21 +2,22 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\db\Query;
+use yii\helpers\Security;
+use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\Session;
+use yii\filters\AccessControl;
 use common\models\Package;
 use common\models\Category;
 use common\models\VendorCategory;
 use common\models\Siteinfo;
 use common\models\VendorOrderAlertEmails;
+use common\models\Suborder;
 use backend\models\Vendor;
-use backend\models\Vendoritem;
+use backend\models\VendorItem;
 use backend\models\VendorLogin;
 use backend\models\VendorPassword;
-use yii\db\Query;
-use yii\filters\AccessControl;
-use yii\helpers\Security;
-use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -57,16 +58,27 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $vendor_id = Yii::$app->user->getId();
-        $vendoritemcnt = Vendoritem::vendoritemcount();
-        $monthitemcnt = Vendoritem::vendoritemmonthcount();
-        $dateitemcnt = Vendoritem::vendoritemdatecount();
+
+        $vendoritemcnt = VendorItem::vendoritemcount($vendor_id);
+        $monthitemcnt = VendorItem::vendoritemmonthcount($vendor_id);
+        $dateitemcnt = VendorItem::vendoritemdatecount($vendor_id);
         $packageenddate = Vendor::getVendor_packagedate($vendor_id);
+
+        $commission_total = Suborder::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->sum('suborder_commission_total');
+
+        $earning_total = Suborder::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->sum('suborder_vendor_total');
 
         return $this->render('index', [
             'vendoritemcnt' => $vendoritemcnt,
             'monthitemcnt' => $monthitemcnt,
             'dateitemcnt' => $dateitemcnt,
-            'packageenddate' => $packageenddate
+            'packageenddate' => $packageenddate,
+            'commission_total' => number_format($commission_total, 3).' KD',
+            'earning_total' => number_format($earning_total, 3).' KD'
         ]);
     }
 
@@ -146,9 +158,9 @@ class SiteController extends Controller
         $model = new VendorPassword;
         $model->scenario = 'change';
 
-        $vendoritemcnt = Vendoritem::vendoritemcount();
-        $monthitemcnt = Vendoritem::vendoritemmonthcount();
-        $dateitemcnt = Vendoritem::vendoritemdatecount();
+        $vendoritemcnt = VendorItem::vendoritemcount();
+        $monthitemcnt = VendorItem::vendoritemmonthcount();
+        $dateitemcnt = VendorItem::vendoritemdatecount();
         $packageenddate = Vendor::getVendor_packagedate(Yii::$app->user->identity->id);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {

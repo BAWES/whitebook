@@ -2,7 +2,7 @@
 namespace backend\models;
 
 use Yii;
-use common\models\Vendorpackages;
+use common\models\VendorPackages;
 
 class Vendor extends \common\models\Vendor
 {
@@ -47,7 +47,7 @@ class Vendor extends \common\models\Vendor
 
   public static function getVendor_packagedate($id)
   {
-        $datetime = Vendorpackages::find()
+        $datetime = VendorPackages::find()
           ->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
           ->where(['vendor_id' => $id])
           ->asArray()

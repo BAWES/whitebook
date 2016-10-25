@@ -8,11 +8,11 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Response;
 use frontend\models\Vendor;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use common\models\City;
 use common\models\Location;
 use common\models\CustomerCart;
-use common\models\Deliverytimeslot;
+use common\models\DeliveryTimeSlot;
 use common\models\Order;
 
 class CartController extends BaseController
@@ -97,23 +97,6 @@ class CartController extends BaseController
                 ];
             }
         }
-    }
-
-    //list all products
-    public function actionConfirm()
-    {
-        $items = CustomerCart::items();
-        
-        if (Order::confirmOrder()) // Confirming order before payment
-        {
-            $msg = Order::confirmOrder();
-            Yii::$app->session->setFlash('danger',$msg);
-            return $this->redirect(Yii::$app->request->referrer);
-        }
-
-        return $this->render('confirm', [
-            'items' => $items
-        ]);
     }
 
     /*  
@@ -201,7 +184,7 @@ class CartController extends BaseController
             
             if($cart->save()) {
                 
-                $item = Vendoritem::findOne($data['item_id']);
+                $item = VendorItem::findOne($data['item_id']);
 
                 Yii::$app->getSession()->setFlash('success', Yii::t(
                     'frontend', 
@@ -245,7 +228,7 @@ class CartController extends BaseController
 
         $data = Yii::$app->request->post();
 
-        $item = Vendoritem::find()->where([
+        $item = VendorItem::find()->where([
             'item_id' => $data['item_id'],
             'item_for_sale' => 'Yes'
         ])->one();
@@ -317,7 +300,7 @@ class CartController extends BaseController
         //-------------- END Item Capacity -----------------//
 
         //current date should not in blocked date
-        $block_date = \common\models\Blockeddate::findOne([
+        $block_date = \common\models\BlockedDate::findOne([
             'vendor_id' => $vendor_id,
             'block_date' => date('Y-m-d', strtotime($data['delivery_date']))
         ]);
@@ -377,7 +360,7 @@ class CartController extends BaseController
             $string = $data['sel_date'];
             $timestamp = strtotime($string);
 
-            $vendor_timeslot = Deliverytimeslot::find()
+            $vendor_timeslot = DeliveryTimeSlot::find()
             ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
             ->where(['vendor_id' => $data['vendor_id']])
             ->andwhere(['timeslot_day' => date("l", $timestamp)])

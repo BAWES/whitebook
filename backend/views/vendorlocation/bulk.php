@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\models\City;
 use common\models\Location;
-use common\models\Vendorlocation;
+use common\models\VendorLocation;
 
 $this->title = 'Bulk edit Delivery Area';
 $this->params['breadcrumbs'][] = ['label' => 'Manage Area', 'url' => ['index']];
@@ -61,7 +61,7 @@ $cities = City::find()
 					<tr>
 						<?php  
 
-						$vl = Vendorlocation::find()
+						$vl = VendorLocation::find()
 							->where(['vendor_id' => $vendor_id, 'area_id' => $location->id])
 							->one();
 

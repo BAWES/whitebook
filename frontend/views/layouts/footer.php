@@ -380,7 +380,7 @@ use frontend\models\Users;
             <div class="col-md-7 padding_left0">
                 <ul class="treams_of_ser margin_top">
                     <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "About and Contact") ?></a></li>
-                    <li><a href="<?= Url::toRoute('site/directory',true); ?>"> <?= Yii::t("frontend", "Directory") ?></a></li>
+                    <li><a href="<?= Url::toRoute('/directory/index', true); ?>"> <?= Yii::t("frontend", "Directory") ?></a></li>
                 </ul>
                 <ul class="treams_of_ser">
                     <li> &COPY;2015 - The White Book </li>

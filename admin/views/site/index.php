@@ -2,7 +2,7 @@
 /* @var $this yii\web\View */
 use yii\web\JsExpression;
 use common\models\Customer;
-use common\models\Vendoritem;
+use common\models\VendorItem;
 use yii\helpers\Url;
 use miloschuman\highcharts\SeriesDataHelper;
 use yii\bootstrap\Alert;
@@ -311,7 +311,7 @@ $this->title = 'Dashboard';
 									<?php
 									for ($x = 1; $x <=12; $x++) {
 										$year=date('Y');
-										$active[]=  Vendoritem::find()
+										$active[]=  VendorItem::find()
 										->select(['created_datetime'])
 										->where(['YEAR(created_datetime)' => $year])
 										->andwhere(['MONTH(created_datetime)' => $x])
@@ -321,7 +321,7 @@ $this->title = 'Dashboard';
 									$active=array_map('intVal', $active);
 									for ($x = 1; $x <=12; $x++) {
 										$year=date('Y');
-										$deactive[]=  Vendoritem::find()
+										$deactive[]=  VendorItem::find()
 										->select(['created_datetime'])
 										->where(['YEAR(created_datetime)' => $year])
 										->andwhere(['MONTH(created_datetime)' => $x])
