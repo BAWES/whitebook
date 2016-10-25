@@ -124,10 +124,7 @@ class CityController extends Controller
             
             } else {
 
-                $countries = Country::find()
-                    ->where(['trash'=>'Default','country_status'=>'Active'])
-                    ->orderBy('country_name')
-                    ->all();
+                $countries = Country::loadcountry();
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
                 return $this->render('create', [
@@ -167,10 +164,7 @@ class CityController extends Controller
             
             } else {
 
-                $countries = Country::find()
-                    ->where(['trash'=>'Default','country_status'=>'Active'])
-                    ->orderBy('country_name')
-                    ->all();
+                $countries = Country::loadcountry();
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
                 return $this->render('update', [
