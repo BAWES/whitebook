@@ -28,6 +28,36 @@ class AddressType extends \common\models\AddressType
         return parent::behaviors();
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['type_name'],'unique'],
+            [['type_name'], 'required'],
+            [['created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'trash','status'], 'safe'],
+            [['type_name'], 'string', 'max' => 128]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'type_id' => 'Type ID',
+            'type_name' => 'Address Type',
+            'status' => 'Status',
+            'created_by' => 'Created By',
+            'modified_by' => 'Modified By',
+            'created_datetime' => 'Created Date',
+            'modified_datetime' => 'Modified Date',
+            'trash' => 'Trash',
+        ];
+    }
+
     public static function loadAddresstype()
     {
         $addresstype = AddressType::find()

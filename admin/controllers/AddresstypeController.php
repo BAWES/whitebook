@@ -110,10 +110,9 @@ class AddresstypeController extends Controller
 
         if (yii::$app->user->can($access)) {
             $model = new AddressType();
-
+            $model->status = 'Active';
             if($model->load(Yii::$app->request->post()) && $model->validate())
             {            
-                $model->status = (Yii::$app->request->post()['AddressType']['status']) ? 'Active' : 'Deactive';
                 $model->save();
                 
                 Yii::$app->session->setFlash('success', 'Address Type created successfully!');
@@ -150,7 +149,6 @@ class AddresstypeController extends Controller
         
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
         
-                $model->status = (Yii::$app->request->post()['AddressType']['status']) ? 'Active' : 'Deactive';
                 $model->save();
                 
                 Yii::$app->session->setFlash('success', 'Address Type Updated successfully!');
