@@ -41,7 +41,7 @@ class City extends \yii\db\ActiveRecord
         return [
             [['country_id', 'city_name'], 'required'],
             [['country_id'], 'integer'],
-            [['city_name', 'city_name_ar'], 'string', 'max' => 100]
+            [['city_name', 'city_name_ar','status'], 'string', 'max' => 100]
         ];
     }
 
@@ -93,7 +93,7 @@ class City extends \yii\db\ActiveRecord
     /**
     * @return \yii\db\ActiveQuery
     */
-    public static function getCountry()
+    public function getCountry()
     {
         return $this->hasOne(Country::className(), ['country_id' => 'country_id']);
     }

@@ -115,7 +115,8 @@ class CityController extends Controller
         if (yii::$app->user->can($access)) {
             
             $model = new City();
-            
+            $model->status = 'Active';
+
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 
                 Yii::$app->session->setFlash('success', 'Governorate info created successfully!');
@@ -123,7 +124,10 @@ class CityController extends Controller
             
             } else {
 
-                $countries = Country::find()->all();
+                $countries = Country::find()
+                    ->where(['trash'=>'Default','country_status'=>'Active'])
+                    ->orderBy('country_name')
+                    ->all();
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
                 return $this->render('create', [
@@ -163,7 +167,10 @@ class CityController extends Controller
             
             } else {
 
-                $countries = Country::find()->all();
+                $countries = Country::find()
+                    ->where(['trash'=>'Default','country_status'=>'Active'])
+                    ->orderBy('country_name')
+                    ->all();
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
                 return $this->render('update', [

@@ -34,7 +34,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 				<li><a href="#2" data-toggle="tab" class="onevalid1">Main Info</a></li>
 				<li><a href="#3" data-toggle="tab" class="twovalid2">Additional Info</a></li>
 				<li><a href="#4" data-toggle="tab" class="twovalid2">Social Info</a></li>
-				<li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
+				<li><a href="#5" data-toggle="tab" class="emails twovalid2">Email addresses</a></li>
 			</ul>
 			<div class="tab-content">
 				<!-- Begin First Tab -->
@@ -306,7 +306,9 @@ var error = false;
 		})
 	};
 	if (error) {
+		$(\'.nav-tabs a[href="#5"]\').tab(\'show\') // Select tab by name
 		return false;
+
 	} else {
 		return true;
 	}
