@@ -21,7 +21,7 @@ class AppAsset extends AssetBundle
         'css/style.css?v=1.4',
         'fonts/flaticon/flaticon.css',
         'css/demo.css',
-        'css/media_style.css?v=1.2',
+        'css/media_style.css?v=1.3',
         'css/owl.carousel.css',
         'css/ma5-mobile-menu.css',
         'css/bootstrap-select.min.css',
