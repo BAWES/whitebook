@@ -1360,6 +1360,9 @@ div#mobile_search_fail {
     .address_block, .address_insert_block{
         width: 47%;
     }
+    .contact_information .paddingleft0 {
+    	padding-left: 15px !important;
+    }
 }
 @media (max-width: 350px) {
 	.address_block, .address_insert_block{
