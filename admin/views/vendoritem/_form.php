@@ -124,6 +124,7 @@ if($model->isNewRecord){
 
 			<div class="form-group" style="height: 10px;">
 				<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
+				<?= Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
 			</div>
 		</div>
 		<!--End First Tab -->
