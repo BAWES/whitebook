@@ -113,7 +113,12 @@ class LocationController extends Controller
 
                 return $this->redirect(['index']);
             } else {
-                $countries = Country::find()->all();
+
+                $countries = Country::find()
+                    ->where(['trash'=>'Default','country_status'=>'Active'])
+                    ->orderBy('country_name')
+                    ->all();
+
                 $country = ArrayHelper::map($countries, 'country_id', 'country_name');
 
                 return $this->render('create', [
@@ -145,8 +150,7 @@ class LocationController extends Controller
 
                 return $this->redirect(['index']);
             } else {
-                $countries = Country::find()->all();
-                $country = ArrayHelper::map($countries, 'country_id', 'country_name');
+                $country = Country::loadcountry();
                 $cities = City::find()->all();
                 $city = ArrayHelper::map($cities, 'city_id', 'city_name');
 

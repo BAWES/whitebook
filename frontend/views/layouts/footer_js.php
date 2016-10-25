@@ -94,4 +94,4 @@ Yii::$app->session->set('show_login_modal', 0);
 //$this->registerJsFile('@web/js/jquery.touchSwipe.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 //$this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile('@web/js/footer.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('https://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

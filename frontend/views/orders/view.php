@@ -87,9 +87,9 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 					<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
 		    		<td align="left"><?= Yii::t('frontend', 'Delivery Datetime') ?></th>
 		    		<td align="left"><?= Yii::t('frontend', 'Delivery Address') ?></th>
-		    		<td aligh="left"><?= Yii::t('frontend', 'Quantity') ?></th>
-		    		<td align="right"><?= Yii::t('frontend', 'Unit Price') ?></th>
-		    		<td align="right"><?= Yii::t('frontend', 'Total') ?></th>	
+		    		<td aligh="left" class="hidden-xs hidden-sm"><?= Yii::t('frontend', 'Quantity') ?></th>
+		    		<td align="right" class="hidden-xs hidden-sm"><?= Yii::t('frontend', 'Unit Price') ?></th>
+		    		<td align="right" class="hidden-xs hidden-sm"><?= Yii::t('frontend', 'Total') ?></th>	
 				</tr>
 			</thead>	
 			<tbody>
@@ -101,6 +101,11 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
         				} else {
         					echo $item->vendoritem->item_name_ar; 
         				} ?>
+
+        				<div class="visible-xs visible-sm">
+        					x <?= $item->purchase_quantity ?> = <?= CFormatter::format($item->purchase_total_price) ?>
+        				</div>
+
 		        	</th>
 		    		<td align="left">
 		    			<?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
@@ -111,23 +116,44 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 		    			<?=	date('h:m A', strtotime($item->timeslot->timeslot_end_time)); ?>
 		    		</th>
 		    		<td aligh="left"><?= $item->purchase_delivery_address ?></th>
-		    		<td aligh="left"><?= $item->purchase_quantity ?></th>
-		    		<td align="right"><?= CFormatter::format($item->purchase_price_per_unit) ?></th>
-		    		<td align="right"><?= CFormatter::format($item->purchase_total_price) ?></th>	
+		    		<td aligh="left" class="hidden-xs hidden-sm"><?= $item->purchase_quantity ?></th>
+		    		<td align="right" class="hidden-xs hidden-sm"><?= CFormatter::format($item->purchase_price_per_unit) ?></th>
+		    		<td align="right" class="hidden-xs hidden-sm"><?= CFormatter::format($item->purchase_total_price) ?></th>	
 				</tr>
 				<?php } ?>
-				<tr>
+
+				<!-- for small device -->
+				<tr class="visible-xs visible-sm">
+					<td align="right" colspan="2">Sub Total</td>
+					<td align="right">
+						<?= CFormatter::format($row->suborder_total_without_delivery) ?>
+					</td>
+				</tr>
+				<tr class="visible-xs visible-sm">
+					<td align="right" colspan="2">Delivery Charge</td>
+					<td align="right">
+						<?= CFormatter::format($row->suborder_delivery_charge) ?></td>
+				</tr>
+				<tr class="visible-xs visible-sm">
+					<td align="right" colspan="2">Total</td>
+					<td align="right">
+						<?= CFormatter::format($row->suborder_total_with_delivery) ?>
+					</td>
+				</tr>
+
+				<!-- for desktop -->
+				<tr class="hidden-xs hidden-sm">
 					<td align="right" colspan="5">Sub Total</td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_without_delivery) ?>
 					</td>
 				</tr>
-				<tr>
+				<tr class="hidden-xs hidden-sm">
 					<td align="right" colspan="5">Delivery Charge</td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_delivery_charge) ?></td>
 				</tr>
-				<tr>
+				<tr class="hidden-xs hidden-sm">
 					<td align="right" colspan="5">Total</td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_with_delivery) ?>

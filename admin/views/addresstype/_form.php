@@ -14,9 +14,9 @@ use yii\widgets\ActiveForm;
 
 	<?= $form->field($model, 'type_name')->textInput(['maxlength' => 128]); ?>
 
-	<?= $form->field($model, 'status')->checkbox(['label'=>'Address type status','Active' => 'Active']) ?>
-	
-    <div class="form-group">
+    <?= $form->field($model, 'status')->radioList(['Active'=>'Enable','Deactive'=>'Disable'],['class'=>'clearfix']); ?>
+
+    <div class="form-group clearfix">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
     </div>
@@ -46,5 +46,13 @@ if($model->isNewRecord){
 	$this->registerJs("	
 		$('#AddressType-status').prop('checked', false);
 	");
-} 
+}
+
+$this->registerCss("
+#addresstype-status label{
+    float: left;
+    margin-right: 17px;
+}
+
+");
 

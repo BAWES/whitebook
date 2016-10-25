@@ -113,7 +113,14 @@ use common\models\Siteinfo;
 	                <td aligh="left" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;">
 	                	<?= $item->purchase_delivery_address ?>
 	                	<br />
-	                	<?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?><
+	                	
+	                	<?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
+
+	                	<br />
+
+		    			<?= date('h:m A', strtotime($item->timeslot->timeslot_start_time)) ?> - 
+		    			<?=	date('h:m A', strtotime($item->timeslot->timeslot_end_time)); ?>
+
 	                </th>
 	                <td align="right" style="border-bottom: 1px solid #DDDDDD;">
 	                	<?= $item->purchase_total_price ?> KWD</th>   

@@ -22,7 +22,7 @@ class AddressquestionController extends Controller
         parent::init();
 
         if (Yii::$app->user->isGuest) { 
-            $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
+            $url = Yii::$app->urlManager->createUrl(['site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
     }

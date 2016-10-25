@@ -98,9 +98,6 @@ class VendorController extends Controller
         $searchModel = new VendorItemSearch();
         $dataProvider = $searchModel->searchviewVendor(Yii::$app->request->queryParams, $request->get('id'));
 
-        $searchModel1 = new PrioritylogSearch();
-        $dataProvider1 = $searchModel1->vendorviewsearch(Yii::$app->request->queryParams, $id);
-
         $vendorPackage = VendorPackagesSearch::find()
             ->where(['!=', 'trash', 'Deleted'])
             ->andwhere(['vendor_id' => $id])
@@ -119,7 +116,6 @@ class VendorController extends Controller
             'searchModel' => $searchModel,
             'searchModel3' => $searchModel3,
             'dataProvider' => $dataProvider,
-            'dataProvider1' => $dataProvider1,
             'dataProvider3' => $dataProvider3,
             'vendorPackage' => $vendorPackage,
             'vendor_order_alert_emails' => $vendor_order_alert_emails

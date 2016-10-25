@@ -10,6 +10,7 @@ use yii\helpers\Url;
 
 AppAsset::register($this);
 $this->beginPage();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,7 +62,8 @@ $this->beginPage();
                     ])
                     ?>
                 </ul>
-                <div class="page-title"> <i class="icon-custom-left"></i>
+                <div class="page-title">
+                    <?=Html::a('<i class="icon-custom-left"></i>',Yii::$app->request->referrer)?>
                     <h3><span class="semi-bold"><?= Html::encode($this->title) ?></span></h3>
                 </div>
                 <div class="row">
