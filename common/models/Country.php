@@ -87,8 +87,9 @@ class Country extends \yii\db\ActiveRecord
         $country = Country::find()
             ->where(['!=', 'country_status', 'Deactive'])
             ->andWhere(['!=', 'trash', 'Deleted'])
+            ->orderBy('country_name')
             ->all();
-        
+
         if(Yii::$app->language == 'en') {
             $country = ArrayHelper::map($country, 'country_id', 'country_name');
         } else {
