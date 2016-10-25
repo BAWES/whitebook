@@ -175,6 +175,7 @@ use yii\widgets\ActiveForm;
 
 				<div class="form-group" style="height: 10px;">
 					<input type="button" class="btn btn-info btnNext" value="Next" />
+					<?= Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
 				</div>
 			</div>
 			<!--End First Tab -->
