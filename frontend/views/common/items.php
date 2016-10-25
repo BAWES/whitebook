@@ -9,7 +9,7 @@ if(!empty($items->getModels()))  {
     foreach ($items->getModels() as $key => $value) {
         $item_url = ($value['item_for_sale'] == 'Yes') ? Url::to(["shop/product", 'slug' => $value['slug']]) : Url::to(["product/product", 'slug' => $value['slug']]);
         ?>
-        <div class="col-lg-3">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
             <div class="events_items">
                 <div class="events_images text-center">
                     <div class="hover_events">
