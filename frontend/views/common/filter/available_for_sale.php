@@ -23,7 +23,7 @@
 						<li>
 							<label class="label_check" for="checkbox-available-for-sale">
 								<input name="for_sale" data-element="input" class="items"
-									   id="for_sale"
+									   id="checkbox-available-for-sale"
 										value="Yes"
 									   type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >Available For Sale
 							</label>
