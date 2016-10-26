@@ -928,53 +928,17 @@ function forgot_password()
             }
         });
 
-    }else {
-        //if(reg_email!='')
+    } else {
         jQuery('#forgot_loader').hide();
         jQuery('#forgot_result').addClass('alert-success alert fade in');
         jQuery('#forgot_result').html(reg_email_id+'<a id="boxclose" class="boxclose" onclick="ForgotFunction();"></a>').animate({ color: "red" }).show();
-
-        //jQuery("#forgerErrorMsg").show();
-        //jQuery("#forgerErrorMsg").html('Enter registered mail id');
     }
 }
 
-//jQuery('#search_input_header').keydown(function(e) {
-//
-//    jQuery("#search_list_fail1").html('');
-//
-//    if (e.keyCode == 13) {
-//
-//        var search1=jQuery("#search_input_header").val();
-//        var search2 = search1.replace(' ', '-');
-//
-//        var url = search_result_url;
-//        var path = url.concat(search2);
-//
-//        if(search2) {
-//            window.location.href = path;
-//        } else {
-//            window.location.href = url + 'all';
-//        }
-//    }
-//});
-
-//jQuery('#sear_button_submit').click(function(e) {
-//    jQuery("#search_list_fail1").html('');
-//
-//    var search1=jQuery("#search_input_header").val();
-//    if(search1!=''){
-//        var search2 = search1.replace(' ', '-');
-//
-//        var url = search_result_url;
-//        var path = url.concat(search2);
-//
-//        window.location.href=path;
-//    }
-//});
-
 jQuery('#search-terms1').keydown(function(e) {
+    
     jQuery("#search_list_fail1").html('');
+    
     if (e.keyCode == 13)
     {
         var search1=jQuery("#search-terms1").val();
@@ -986,7 +950,9 @@ jQuery('#search-terms1').keydown(function(e) {
 });
 
 jQuery('#search-terms2').keydown(function(e) {
+    
     jQuery("#search_list_fail1").html('');
+
     if (e.keyCode == 13)
     {
         var url1 = home_url;
@@ -998,15 +964,6 @@ jQuery('#search-terms2').keydown(function(e) {
         window.location.replace(path);
     }
 });
-
-//jQuery("#search_input_header").keyup(function(e){
-//    if(e.keyCode == 8)
-//    {
-//        jQuery("#search_list_fail1").html('');
-//        var search = jQuery("#search_input_header").val();
-//        search_data(search);
-//    }
-//});
 
 jQuery("#search-terms1").on('keyup',function () {
     jQuery("#search_list_fail1").html('');
@@ -1093,7 +1050,6 @@ jQuery("#search-terms2").on('keyup',function () {
 
 jQuery("#search_input_header").on('keyup',function () {
     var search=jQuery("#search_input_header").val();
-    // if(search.length>1){//}
     search_data(search);
 });
 

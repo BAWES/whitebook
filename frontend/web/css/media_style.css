@@ -89,7 +89,7 @@
 	.normal_tables .events_inner_listing_new .events_listing ul li {margin: 0 26px 28px 0 !important;}
 	#exTab2 .events_listing ul li:nth-child(3n){margin-right:0 !important;}
 	.events_items{width:215px;}
-	.events_images img {width: 100%;max-width:100%;}
+	.events_images .item-img {width: 100%;max-width:100%;}
 	.vender_profile_new .col-md-6.padding0 img{max-width:100%;}
 	.col-md-6.paddingcommon {padding: 0 0 0 15px;}
 

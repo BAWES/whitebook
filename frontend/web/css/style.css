@@ -414,8 +414,8 @@ textarea .form-group{ min-height: 126px;}
 .breadcrumb > li + li::before {    background: url("../images/bread.png") no-repeat scroll center center hsla(0, 0%, 0%, 0);    content: " ";    padding: 0 4px;}
 .breadcrumb a:hover{ color:#ebc000;; text-decoration: none;}
 .breadcrumb > .active{color:#999 !important;}
-.filter_content{ float: left; border: 1px solid #f3f3f3; border-bottom: none; }
-.listing_right{ float: left; /*width: 862px; */ min-height: 500px;}
+.filter_content{ float: left; width: 100%; border: 1px solid #f3f3f3; border-bottom: none; }
+.listing_right{ float: left; width: 100%; min-height: 500px;}
 .banner_section_plan{ display: inline-block; width: 100%; margin-bottom: 30px;}
 .add_more_commons .lode_more_buttons{ margin-top: 48px;}
 .add_more_commons .lode_more_buttons{ margin-bottom: 30px;}
