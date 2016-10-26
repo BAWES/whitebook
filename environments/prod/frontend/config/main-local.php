@@ -48,8 +48,10 @@ return [
                   'experience' => 'site/experience',
                   'directory' => 'site/directory',
                   'contact-us' => 'site/contact',
+                  
                   // particular products detail page
-                  'product/<slug:[A-Za-z0-9\_-]+>' => 'product/product/',
+                  //'product/<slug:[A-Za-z0-9\_-]+>' => 'product/product/',
+
                   // BEGIN define  page name
                   'load_more_wishlist' => 'users/load_more_wishlist',
                   'pro-eventdetails' => 'product/eventdetails',
