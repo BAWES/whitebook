@@ -62,8 +62,8 @@ class SearchController extends BaseController
             ]);
 
         //vendor filter
-        if (isset($data['vendor'])  && $data['vendor'] != '') {
-            $items_query->andWhere(['in', '{{%vendor}}.slug', explode($explode, $data['vendor'])]);
+        if (isset($data['vendor'])  && $data['vendor']) {
+            $items_query->andWhere(['in', '{{%vendor}}.slug', $data['vendor']]);
         }
 
         //price filter
