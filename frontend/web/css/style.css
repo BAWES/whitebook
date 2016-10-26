@@ -1720,3 +1720,17 @@ a.thing_cont:hover {
 .banner_section_plan img {
     width: 100%;
 }
+
+.events_images {
+    position: relative;
+}
+img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
+    width: 30px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: #ccc;
+    border-radius: 100%;
+    padding: 1px;
+    margin: 5px;
+}
