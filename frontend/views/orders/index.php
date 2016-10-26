@@ -27,7 +27,9 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
 		        	<tr>
 		        		<td align="center"><?= Yii::t('frontend', 'Order ID') ?></td>
 		        		<td align="left"><?= Yii::t('frontend', 'Date Added') ?></td>
-		        		<td align="right"><?= Yii::t('frontend', 'No. of Products') ?></td>
+		        		<td align="right" class="hidden-xs hidden-sm">
+		        			<?= Yii::t('frontend', 'No. of Products') ?>
+		        		</td>
 		        		<td align="right"><?= Yii::t('frontend', 'Total') ?></td>
 		        		<td></td>
 		        	</tr>
@@ -37,7 +39,7 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
 				    <tr>
 				    	<td align="center"><?= $order->order_id ?></td>
 		        		<td align="left"><?= date('d/m/Y', strtotime($order->created_datetime)) ?></td>
-		        		<td align="right"><?= Order::itemCount($order->order_id) ?></td>
+		        		<td align="right" class="hidden-xs hidden-sm"><?= Order::itemCount($order->order_id) ?></td>
 		        		<td align="right"><?= CFormatter::format($order->order_total_with_delivery) ?></td>
 		        		<td width="50px">
 		        			<a href="<?= Url::to(['orders/view', 'order_id' => $order->order_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Order') ?>">

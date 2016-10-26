@@ -281,7 +281,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                         <address>
                                                             <div class="clearfix">
                                                                 <?php if (trim($model->vendor->vendor_public_email) || trim($model->vendor->vendor_public_phone)) { ?>
-                                                                    <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
+                                                                    <div class="col-md-6 col-sm-6 col-xs-12 cont_ifo_left paddingleft0">
                                                                         <?php if (trim($model->vendor->vendor_public_email)) { ?>
                                                                             <h3>
                                                                                 <a href="mailto:<?=$model->vendor->vendor_public_email; ?>" title="<?=$model->vendor->vendor_public_email; ?>"><?=$model->vendor->vendor_public_email; ?>&nbsp;</a>
@@ -297,7 +297,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                                     </div>
                                                                 <?php } ?>
                                                                 <?php if (trim($model->vendor->vendor_website) || trim($model->vendor->vendor_working_hours)) { ?>
-                                                                    <div class="col-md-6 col-xs-6 paddingright0 paddingleft0 cont_ifo_right">
+                                                                    <div class="col-md-6 col-sm-6 col-xs-12 paddingright0 paddingleft0 cont_ifo_right">
                                                                         <?php if (trim($model->vendor->vendor_website)) { ?>
                                                                             <span class="links_left">
                                                                             <?php
@@ -335,7 +335,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                                 <?php } ?>
                                                             </div>
                                                             <?php if (trim($model->vendor->vendor_contact_address)) { ?>
-                                                                <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
+                                                                <div class="col-md-6 col-sm-6 col-xs-12 paddingleft0 address_ifo_left border-top">
                                                                     <h5 class="margin-top-13">
                                                                         <?php
                                                                         if (Yii::$app->language == "en")  {
