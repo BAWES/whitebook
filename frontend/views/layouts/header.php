@@ -83,7 +83,7 @@ $action = Yii::$app->controller->action->id;
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
                             <li class="dropdown mega-dropdown">
-                                <?= Html::a(Yii::t('frontend', 'Products'), ['product/categories'], ['title' => Yii::t('frontend', 'Product')]); ?>
+                                <?= Html::a(Yii::t('frontend', 'Browse'), ['product/categories'], ['title' => Yii::t('frontend', 'Product')]); ?>
                                 <div class="dropdown-menu mega-dropdown-menu category_listing_nav plan_menu">
                                     <ul class="nav-list list-inline">
                                         <li>
