@@ -18,7 +18,6 @@ use common\models\Location;
 use common\models\VendorLocation;
 use common\models\CategoryPath;
 use common\models\CustomerAddress;
-use yii\helpers\VarDumper;
 
 /**
  * Category controller.

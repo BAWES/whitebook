@@ -69,7 +69,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                             ?>
                                             <option
                                                 data-icon="<?= $category['icon'] ?>"
-                                                value="<?= Url::toRoute(['shop/products', 'slug'=> $category['slug']]) ?>"
+                                                value="<?= Url::toRoute(['product/detail', 'slug'=> $category['slug']]) ?>"
                                                 name="category" <?= $selected ?>>
                                                 <?= $category_name ?>
                                             </option>

@@ -8,7 +8,7 @@ if(!empty($items->getModels()))  {
     $result = \yii\helpers\ArrayHelper::getColumn($customer_events_list,'item_id');
     foreach ($items->getModels() as $key => $value) {
 
-        $item_url = ($value['item_for_sale'] == 'Yes') ? Url::to(["shop/product", 'slug' => $value['slug']]) : Url::to(["product/product", 'slug' => $value['slug']]);
+        $item_url = Url::to(["product/detail", 'slug' => $value['slug']]);
 
         ?>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
@@ -33,7 +33,6 @@ if(!empty($items->getModels()))  {
                             </div>
                             <?php } ?>
                         </div>
-
                         <a href="<?= $item_url ?>">
                             <?php
                             $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';

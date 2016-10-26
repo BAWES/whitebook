@@ -231,70 +231,113 @@ class ProductController extends BaseController
         ]);
     }
 
-
-    /**
-    *
-    */
-    public function actionProduct($slug)
+    public function actionDetail($slug)
     {
-        $model = VendorItem::findOne(['slug'=>$slug,'item_status'=>'Active','item_approved'=>'Yes','trash' => 'Default']);
 
+        $model = VendorItem::findOne(['slug' => $slug]);
 
-        $similarProductModel = VendorItem::more_from_vendor($model);
+        if (empty($model)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-        $baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
+        if (
+            $model->item_approved == 'Yes' &&
+            $model->trash == 'Default' &&
+            $model->item_status == 'Active' &&
+            $model->type_id == '2' &&
+            $model->item_for_sale == 'Yes' &&
+            $model->item_amount_in_stock > 0
+        ) {
+            $AvailableStock = true;
+        } else {
+            $AvailableStock = false;
+        }
+
+        $output = \common\models\Image::find()->select(['image_path'])
+            ->where(['item_id' => $model['item_id']])
+            ->orderby(['vendorimage_sort_order' => SORT_ASC])
+            ->asArray()
+            ->one();
 
         if (!empty($model->images[0])) {
             $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $model->images[0]['image_path'];
+        } else {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+            //$baselink = Yii::getAlias("@s3/vendor_item_images_530/") . 'no_image.jpg';
         }
 
-        $vendr_area = VendorLocation::find()
-            ->select(['{{%vendor_location}}.area_id','{{%location}}.*'])
-            ->leftJoin('{{%location}}', '{{%vendor_location}}.area_id = {{%location}}.id')
-            ->where(['{{%location}}.trash' => 'Default'])
-            ->asArray()
-            ->all();
+        /* BEGIN DELIVERY AREAS --VENDOR */
 
-        $title = Yii::$app->name. ' - '.ucfirst($model->vendor->vendor_name);
-        
-        $url = Url::toRoute(["product/product", 'slug' => $model->slug], true);
-
-        $summary = Yii::$app->name.' - '.ucfirst($model['item_name']).' from '.ucfirst($model->vendor->vendor_name);
-
-        $image = $baselink;
-
-        \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => $title]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => Yii::$app->name.' - ' . ucfirst($model->vendor->vendor_name)]);
         \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => Url::toRoute(["shop/product", 'slug' => $model->slug], true)]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => $summary]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:site_name', 'content' => Yii::$app->name.' - ' . ucfirst($model->item_name) .' from '. ucfirst($model->vendor->vendor_name)]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($model->item_description))]);
         \Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
 
         \Yii::$app->view->registerMetaTag([
-            'property' => 'og:description', 
+            'property' => 'og:description',
             'content' => trim(strip_tags($model->item_description))
         ]);
 
         if (Yii::$app->user->isGuest) {
 
-            return $this->render('product_detail', [
+            return $this->render('detail', [
+                'AvailableStock' => $AvailableStock,
                 'model' => $model,
-                'similiar_item' => $similarProductModel,
-                'vendor_area' => $vendr_area
+                'similiar_item' => VendorItem::more_from_vendor($model),
+                'vendor_area' => [],
+                'my_addresses' => []
             ]);
+
         } else {
+            $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
+            $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
+            $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
+
+            $customer_id = Yii::$app->user->getId();
+
+            $my_addresses =  \common\models\CustomerAddress::find()
+                ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
+                ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
+                ->where(['{{%customer_address}}.trash'=>'Default'])
+                ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+                ->andwhere(['{{%location}}.id' => $area_ids])
+                ->groupby(['{{%location}}.id'])
+                ->asArray()
+                ->all();
+
+
+            $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
+
+            if (count($myaddress_area_list)>0) {
+
+                // add prefix to address id ex: address_14,address_15
+                $myNewArray = array_combine(
+                    array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
+                    $myaddress_area_list
+                );
+
+                $combined_myaddress = array(
+                    Yii::t('frontend', 'My Addresses') => $myNewArray
+                );
+
+                $vendor_area_list = $combined_myaddress + $vendor_area_list;
+            }
 
             $user = new Users();
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
-            return $this->render('product_detail', [
+
+            return $this->render('detail', [
                 'model' => $model,
-                'similiar_item' => $similarProductModel,
+                'similiar_item' => VendorItem::more_from_vendor($model),
+                'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
-                'vendor_area' => $vendr_area
+                'vendor_area' => $vendor_area_list,
+                'my_addresses' => $my_addresses,
             ]);
         }
     }
