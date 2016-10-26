@@ -14,55 +14,55 @@ use yii\widgets\ActiveForm;
         <div class="plan_catg">
         <ul>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'venues']); ?>" class="venue_lnk">
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'venues']); ?>" class="venue_lnk">
                         <span class="venue"></span>
                         <span class="responsi_common"><?= Yii::t("frontend", "Venues") ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'invitations']); ?>" class="invitations_lnk">
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'invitations']); ?>" class="invitations_lnk">
                         <span class="invitations "></span>
                         <?= Yii::t("frontend", "Invitations") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'food-beverage']); ?>">
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'food-beverage']); ?>">
                         <span class="food1"></span>
                         <?= Yii::t("frontend", "Food & Beverage") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'decor']); ?>" >
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'decor']); ?>" >
                         <span class="decor1"></span>
                         <?= Yii::t("frontend", "Decor") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'supplies']); ?>">
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'supplies']); ?>">
                         <span class="supplies1"></span>
                         <?= Yii::t("frontend", "Supplies") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'entertainment']); ?>" class="entertainment_lnk">
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'entertainment']); ?>" class="entertainment_lnk">
                         <span class="entertainment  "></span>
                         <?= Yii::t("frontend", "Entertainment") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'services']); ?>" class="services_lnk">
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'services']); ?>" class="services_lnk">
                         <span class="services  "></span>
                         <?= Yii::t("frontend", "Services") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'others']); ?>" class="others_lnk">
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'others']); ?>" class="others_lnk">
                         <span class="other1"></span>
                         <?= Yii::t("frontend", "Others") ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(["product/list", 'slug' => 'gift-favors']); ?>">
+                    <a href="<?= Url::to(["browse/list", 'slug' => 'gift-favors']); ?>">
                         <span class="say1"></span>
                         <?= Yii::t("frontend", "Gift Favors") ?>
                     </a>
@@ -156,7 +156,7 @@ if (!Yii::$app->user->isGuest) {
             {
                 jQuery.ajax({
                     type:'POST',
-                    url:'" . yii\helpers\Url::to(['shop/location-date-selection']) . "',
+                    url:'" . yii\helpers\Url::to(['browse/location-date-selection']) . "',
                     data:jQuery('#shop-date-location-hook').serialize(),
                     success:function(data){
 

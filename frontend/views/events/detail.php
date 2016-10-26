@@ -163,7 +163,7 @@ if(!empty($items))
             
             </div><!-- END .hover_events -->
             
-            <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),Url::toRoute(['/product/product/','slug'=>$value['slug']])) ?>
+            <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),Url::toRoute(['/browse/detail/','slug'=>$value['slug']])) ?>
         </div><!-- END .events_images -->
 
         <div class="events_descrip">

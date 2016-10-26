@@ -21,7 +21,7 @@ use common\models\CustomerAddress;
 /**
 * Site controller.
 */
-class ProductController extends BaseController
+class BrowseController extends BaseController
 {
     /**
     * {@inheritdoc}
@@ -275,7 +275,7 @@ class ProductController extends BaseController
 
         \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => Yii::$app->name.' - ' . ucfirst($model->vendor->vendor_name)]);
         \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
-        \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => Url::toRoute(["shop/product", 'slug' => $model->slug], true)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => Url::toRoute(["browse/detail", 'slug' => $model->slug], true)]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:width', 'content' => '200']);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image:height', 'content' => '200']);

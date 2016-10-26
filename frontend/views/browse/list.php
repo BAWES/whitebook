@@ -9,7 +9,7 @@ use yii\web\view;
 
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
 
-    $this->params['breadcrumbs'][] = ['label' => ucfirst($Category->category_name), 'url' => Url::to(["shop/products", 'slug' => $slug])];
+    $this->params['breadcrumbs'][] = ['label' => ucfirst($Category->category_name), 'url' => Url::to(["browse/categories", 'slug' => $slug])];
     $get = Yii::$app->request->get();
 
 $session = Yii::$app->session;
@@ -46,7 +46,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
 
                 <div class="col-md-3 paddingleft0 hidden-xs hidden-sm" id="left_side_cate">
 
-                    <?= $this->render('@frontend/views/product/_filter.php', [
+                    <?= $this->render('@frontend/views/browse/_filter.php', [
                             'deliver_date' => $deliver_date,
                             'deliver_location' => $deliver_location,
                             'themes' => $themes,
@@ -83,7 +83,7 @@ $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-var load_items = '".Url::to(['product/list'])."';
+var load_items = '".Url::to(['browse/list'])."';
 var product_slug = '".$get['slug']."';
 ", View::POS_BEGIN);
 

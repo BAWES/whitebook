@@ -471,7 +471,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                 $summary = Yii::$app->name.' '. ucfirst($item_name).' from '.ucfirst($vendor_name);
 
                                 $image = isset($baselink) ? $baselink : '';
-                                $url = Url::toRoute(['shop/product','slug'=>$model->slug],true);
+                                $url = Url::toRoute(['browse/detail','slug'=>$model->slug],true);
                                 $mailbody = "Check out ".ucfirst($item_name)." on ".Yii::$app->name." ".$url;
                                 ?>
                                 <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
@@ -525,7 +525,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                 <div class="item">
                                     <div class="fetu_product_list">
                                         <?php if ($s['slug'] != '') { ?>
-                                            <a href="<?= Url::to(["product/product", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
+                                            <a href="<?= Url::to(["browse/detail", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
 
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
 
@@ -562,7 +562,7 @@ $this->registerJs("
     var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
     var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
-    var availablity = '".Url::toRoute('shop/product-available')."';
+    var availablity = '".Url::toRoute('browse/product-available')."';
     var product_availability = '".Url::toRoute('cart/validation-product-available')."';
 ", View::POS_HEAD);
 

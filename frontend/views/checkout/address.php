@@ -74,7 +74,7 @@ use common\models\CustomerCart;
 </div>
 
 <div class="btn-set">
-        <a href="<?= Url::to(['shop/index']); ?>" class="btn btn-primary btn-checkout pull-left" style="margin-left: 0;">
+        <a href="<?= Url::to(['browse/index']); ?>" class="btn btn-primary btn-checkout pull-left" style="margin-left: 0;">
                 <?= Yii::t('frontend', 'Back to shopping') ?>
         </a>
 

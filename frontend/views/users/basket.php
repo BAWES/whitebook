@@ -20,7 +20,7 @@ $this->title = 'Whitebook - Checkout';
 <section id="inner_pages_white_back" class="product_details_com">
     <div class="container paddng0">
         <!-- Events slider start -->
-<?php require(__DIR__ . '/../product/events_slider.php'); ?>
+<?php require(__DIR__ . '/../browse/events_slider.php'); ?>
         <!-- Events slider end -->
         <div class="breadcrumb_common">
             <div class="bs-example">

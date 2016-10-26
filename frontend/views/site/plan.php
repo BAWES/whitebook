@@ -6,7 +6,7 @@
 <section id="inner_pages_white_back">
     <div class="container paddng0">
         <!-- Directory slider start -->
-        <?php require(__DIR__ . '/../product/directory_slider.php'); ?>
+        <?php require(__DIR__ . '/../browse/directory_slider.php'); ?>
         <!-- Directory slider end -->
         <div class="breadcrumb_common">
             <div class="bs-example">
