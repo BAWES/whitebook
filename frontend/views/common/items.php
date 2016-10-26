@@ -7,7 +7,9 @@ use common\components\CFormatter;
 if(!empty($items->getModels()))  {
     $result = \yii\helpers\ArrayHelper::getColumn($customer_events_list,'item_id');
     foreach ($items->getModels() as $key => $value) {
+
         $item_url = ($value['item_for_sale'] == 'Yes') ? Url::to(["shop/product", 'slug' => $value['slug']]) : Url::to(["product/product", 'slug' => $value['slug']]);
+
         ?>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
             <div class="events_items">
@@ -38,6 +40,11 @@ if(!empty($items->getModels()))  {
                             echo Html::img($path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
                             ?>
                         </a>
+
+                        <?php if($value['item_for_sale'] == 'Yes') { ?>
+                            <img class="sale_ribbon" src="<?= Url::to('@web/images/product_sale_ribbon.png') ?>" />
+                        <?php } ?>
+
                     </div>
                     <div class="events_descrip">
 
