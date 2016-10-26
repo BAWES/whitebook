@@ -68,7 +68,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                 ?>
             </div>
         </div>
-        <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
+        <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
         <div class="col-md-12 filter-bar" style="display: none;">
             <div class="col-md-3 padding-right-0">
@@ -245,17 +245,20 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                         <!-- Add to Event End here -->
                                         <div class="buy_events">
                                         <?php
-                                        if (Yii::$app->user->isGuest) {
-                                            echo Html::a(Yii::t('frontend', 'Buy'),'#',['onclick'=>"show_login_modal('-2')",'class'=>'buy_item','data-target'=>'#myModal','data-toggle'=>"modal"]);
-                                        } else if (!$AvailableStock) {
-                                            echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
-                                        } ?>
+                                        if ($model->item_for_sale == 'Yes') {
+                                            if (Yii::$app->user->isGuest) {
+                                                echo Html::a(Yii::t('frontend', 'Buy'),'#',['onclick'=>"show_login_modal('-2')",'class'=>'buy_item','data-target'=>'#myModal','data-toggle'=>"modal"]);
+                                            } else if (!$AvailableStock) {
+                                                echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
+                                            }
+                                        }
+                                        ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <?php if (!Yii::$app->user->isGuest && $AvailableStock) { ?>
+                            <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
                             <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
                             <div class="row margin-top-20">

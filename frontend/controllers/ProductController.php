@@ -285,7 +285,7 @@ class ProductController extends BaseController
 
         if (Yii::$app->user->isGuest) {
 
-            return $this->render('product_detail', [
+            return $this->render('detail', [
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
                 'similiar_item' => VendorItem::more_from_vendor($model),
