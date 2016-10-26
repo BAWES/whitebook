@@ -98,7 +98,7 @@ $get = Yii::$app->request->get();
 <?php $this->registerJs("
 	var theme =  '".$theme->slug."';
 	var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-	var load_more_items = '".Url::to(['shop/load-more-items'])."';
+	var load_more_items = '".Url::to(['browse/load-more-items'])."';
 	var load_items = '".Url::to(['themes/detail'])."';
 	var product_slug = '".$get['slug']."';
 	", \yii\web\View::POS_BEGIN);

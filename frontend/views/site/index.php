@@ -181,7 +181,7 @@ if (!empty($feature_group_sql_result)) {
                                 $imglink = Yii::getAlias("@web/images/no_image.jpg");
                             }
 
-                                $item_url = Url::to(['product/detail',
+                                $item_url = Url::to(['browse/detail',
                                     'slug' => $product_val["slug"]
                                 ]);
 

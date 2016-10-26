@@ -8,7 +8,7 @@ if(!empty($items->getModels()))  {
     $result = \yii\helpers\ArrayHelper::getColumn($customer_events_list,'item_id');
     foreach ($items->getModels() as $key => $value) {
 
-        $item_url = Url::to(["product/detail", 'slug' => $value['slug']]);
+        $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
 
         ?>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">

@@ -29,7 +29,7 @@ use yii\helpers\Url;
                         ?>
                         <option
                             data-icon="<?= $category['icon'] ?>"
-                            value="<?= Url::toRoute(['product/detail', 'slug'=> $category['slug']]) ?>"
+                            value="<?= Url::toRoute(['browse/detail', 'slug'=> $category['slug']]) ?>"
                             name="category" <?= $selected ?>>
                             <?= $category_name ?>
                         </option>

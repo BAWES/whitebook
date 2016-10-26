@@ -76,7 +76,7 @@ class CartController extends BaseController
                             'frontend',
                             'Success: Product <a href="{product_link}">{product_name}</a> added to cart!',
                             [
-                                'product_link' => Url::to(['shop/product', 'slug' => $cart->item->slug]),
+                                'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
                                 'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
                             ]
                         ));
@@ -190,7 +190,7 @@ class CartController extends BaseController
                     'frontend', 
                     'Success: Product <a href="{product_link}">{product_name}</a> added to cart!', 
                     [
-                        'product_link' => Url::to(['shop/product', 'slug' => $item->slug]),
+                        'product_link' => Url::to(['browse/detail', 'slug' => $item->slug]),
                         'product_name' => Yii::$app->language == 'en'? $item->item_name : $item->item_name_ar
                     ]
                 ));

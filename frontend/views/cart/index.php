@@ -105,7 +105,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
                         ?>
 	        		</td>
 	        		<td>
-	        			<a href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
+	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
 	        				<?php if(Yii::$app->language == 'en') {
 	        					echo $item['item_name'];
 	        				} else {
@@ -207,7 +207,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
         </button>
 
-        <a href="<?= Url::to(['shop/index']) ?>" class="btn btn-primary pull-right btn-checkout">
+        <a href="<?= Url::to(['browse/index']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
         </a>
 
@@ -240,7 +240,7 @@ $this->registerJs("
     var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
     var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
-    var availablity = '".Url::toRoute('shop/product-available')."';
+    var availablity = '".Url::toRoute('browse/product-available')."';
     var product_availability = '".Url::toRoute('cart/validation-product-available')."';
     var update_cart_url = '".Url::toRoute('cart/update-cart-item')."';
 ", View::POS_HEAD);

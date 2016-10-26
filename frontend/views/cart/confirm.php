@@ -101,7 +101,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
                         ?>
 	        		</td>
 	        		<td>
-	        			<a href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
+	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
 	        				<?php if(Yii::$app->language == 'en') {
 	        					echo $item['item_name'];
 	        				} else {
