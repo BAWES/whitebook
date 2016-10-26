@@ -181,19 +181,9 @@ if (!empty($feature_group_sql_result)) {
                                 $imglink = Yii::getAlias("@web/images/no_image.jpg");
                             }
 
-                            if($product_val['item_for_sale'] == 'Yes'){
-
-                                $item_url = Url::to(['shop/product',
+                                $item_url = Url::to(['product/detail',
                                     'slug' => $product_val["slug"]
                                 ]);
-
-                            } else {
-
-                                $item_url = Url::to(['product/product',
-                                    'slug' => $product_val["slug"]
-                                ]);
-
-                            }
 
                             ?>
                             <div class="item">
