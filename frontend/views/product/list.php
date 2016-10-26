@@ -97,9 +97,11 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                         <div id="accordion" class="panel-group">
                                             <?=$this->render('@frontend/views/common/filter/date.php',['deliver_date'=>$deliver_date]);  ?>
                                             <?=$this->render('@frontend/views/common/filter/locations.php',['deliver_location'=>$deliver_location]);  ?>
+                                            <?=$this->render('@frontend/views/common/filter/available_for_sale.php'); ?>
                                             <?=$this->render('@frontend/views/common/filter/price.php');  ?>
                                             <?=$this->render('@frontend/views/common/filter/theme.php',['themes'=>$themes]); ?>
                                             <?=$this->render('@frontend/views/common/filter/vendor.php',['vendor'=>$vendor]); ?>
+
                                         </div>
                                     </div>
                                 </nav>
