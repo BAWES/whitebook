@@ -1811,6 +1811,7 @@ function filter(){
         theme_name = '',
         price_val = '',
         vendor_name = '',
+        for_sale = '',
         url_path = '',
         url = window.location.href;
 
@@ -1830,6 +1831,12 @@ function filter(){
         }).get();
     }
 
+    if ((jQuery('input[name=for_sale]').length)>0) {
+        var for_sale = jQuery('input[name=for_sale]:checked').map(function () {
+            return this.value;
+        }).get();
+    }
+    
     if ((jQuery('input[name=vendor]').length)>0) {
         var vendor_name = jQuery('input[name=vendor]:checked').map(function () {
             return this.value;
@@ -1869,6 +1876,11 @@ function filter(){
     if (slug != '') {
         url_path += '&slug='+slug;
         ajax_data.slug = slug;
+    }
+
+    if (for_sale != '') {
+        url_path += '&for_sale='+for_sale;
+        ajax_data.for_sale = for_sale;
     }
 
     if (search != '') {

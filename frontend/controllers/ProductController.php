@@ -108,7 +108,12 @@ class ProductController extends BaseController
                 '{{%vendor_item}}.item_status' => 'Active',
             ]);
 
+        if (isset($data['for_sale']) && $data['for_sale'] != '') {
+            $item_query->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
+        }
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
+
+
 
         //price filter
         if (isset($data['price']) && $data['price'] != '') {
