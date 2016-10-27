@@ -12,7 +12,7 @@ $this->title = $title . ' | Whitebook';
             <div class="title_main">
                 <h1><?= $title ?></h1>
             </div>
-            <div class="about_content_sec" style="font-family: 'OpenSansRegular' !important">
+            <div class="about_content_sec" style="margin-bottom: 30px;font-family: 'OpenSansRegular' !important">
                 <?= $content ?>
             </div>
         </div>
