@@ -29,7 +29,7 @@
 		$fourth_menu = ['featuregroup','eventtype','themes','itemtype','priorityitem'];
 		$fifth_menu = ['package','vendor','vendoritem','prioritylog'];
 		$seventh_menu = ['categoryads','adverthome'];
-		$eighth_menu = ['customer'];
+		$eighth_menu = ['customer','events'];
 		$nineth_menu = ['report'];
 		?>
 		 <p class="menu-title">NAVIGATION</p>
@@ -137,7 +137,7 @@
 			  	</a>
 				<ul class="sub-menu">
 					<li class="<?=($cntrl == 'customer')  ? "active" : "noactive"; ?>"><?= Html::a('Customer', ['customer/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'customer')  ? "active" : "noactive"; ?>"><?= Html::a('Customer Events', ['events/index'], ['class'=>'link-title']) ?></li>
+					<li class="<?=($cntrl == 'events')  ? "active" : "noactive"; ?>"><?= Html::a('Customer Events', ['events/index'], ['class'=>'link-title']) ?></li>
 				</ul>
 			</li>
 
