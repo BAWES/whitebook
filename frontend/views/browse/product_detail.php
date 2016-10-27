@@ -406,7 +406,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                 $summary = Yii::$app->name.' '. ucfirst($item_name).' from '.ucfirst($vendor_name);
 
                                 $image = isset($baselink) ? $baselink : '';
-                                $url = Url::toRoute(['shop/product','slug'=>$model->slug],true);
+                                $url = Url::toRoute(['browse/detail','slug'=>$model->slug],true);
                                 $mailbody = "Check out ".ucfirst($item_name)." on ".Yii::$app->name." ".$url;
                                 ?>
                                 <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
@@ -462,7 +462,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                 <div class="item">
                                     <div class="fetu_product_list">
                                         <?php if ($s['slug'] != '') { ?>
-                                            <a href="<?= Url::to(["product/product", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
+                                            <a href="<?= Url::to(["browse/detail", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
 
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
 

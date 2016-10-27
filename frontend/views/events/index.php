@@ -88,10 +88,10 @@ $this->title = 'Events/Wishlist | Whitebook';
 															</div>
 															<?php $image = Image::find()->select('image_path')->where(['item_id'=>$value['item_id'],'module_type'=>'vendor_item', 'trash'=>'Default'])->asArray()->one(); ?>
 															<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$image['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),
-															Url::toRoute(['/product/product/','slug'=>$value['slug']])); ?>
+															Url::toRoute(['/browse/detail/','slug'=>$value['slug']])); ?>
 														</div>
 														<div class="events_descrip">
-															<?= Html::a($value['vendor_name'], Url::toRoute(['/product/product/','slug'=>$value['slug']]));?>
+															<?= Html::a($value['vendor_name'], Url::toRoute(['/browse/detail/','slug'=>$value['slug']]));?>
 															<h3><?= $value['item_name']; ?></h3>
 															<p><?= CFormatter::format($value['item_price_per_unit'])?></p>
 														</div>

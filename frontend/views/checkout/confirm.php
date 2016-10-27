@@ -77,7 +77,7 @@ use common\components\CFormatter;
                     ?>
         		</td>
         		<td>
-        			<a target="_blank" href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
+        			<a target="_blank" href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
         				<?php if(Yii::$app->language == 'en') {
         					echo $item['item_name'];
         				} else {
