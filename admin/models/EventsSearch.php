@@ -17,8 +17,8 @@ class EventsSearch extends Events
     public function rules()
     {
         return [
-            [['event_id','customer_id', 'created_by', 'modified_by'], 'integer'],
-            [['event_name', 'event_type', 'slug','created_datetime','modified_datetime','event_date'], 'safe'],
+            [['event_id','created_by', 'modified_by'], 'integer'],
+            [['event_name', 'event_type', 'slug','created_datetime','modified_datetime','event_date','customer_id'], 'safe'],
         ];
     }
 
@@ -57,7 +57,6 @@ class EventsSearch extends Events
 
         $query->andFilterWhere([
             'event_id' => $this->event_id,
-            'customer_id' => $this->customer_id,
             'event_date' => $this->event_date,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,
@@ -68,6 +67,13 @@ class EventsSearch extends Events
         $query->andFilterWhere(['like', 'event_name', $this->event_name])
             ->andFilterWhere(['like', 'event_type', $this->event_type])
             ->andFilterWhere(['like', 'slug', $this->slug]);
+
+         $query->joinWith(['customer' => function ($q) {
+                 $q->andWhere('{{%customer}}.customer_name LIKE "%' . $this->customer_id . '%" ' .
+                     'OR {{%customer}}.customer_last_name LIKE "%' . $this->customer_id . '%" '.
+                     'OR CONCAT({{%customer}}.customer_name, " ", {{%customer}}.customer_last_name) LIKE "%' . $this->customer_id . '%"');
+         }]);
+
 
         return $dataProvider;
     }
