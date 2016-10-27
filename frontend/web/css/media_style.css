@@ -660,6 +660,11 @@
 }
 
 @media only screen and (max-width: 991px) {
+	
+	.listing_right .hover_events {
+		display: block !important; 
+	}
+
 	.events_content_part .margin-rightnone{margin: 9px 18px 9px 0!important;}
 	.thinl_like_sectons .thing_items li {margin: 9px 18px 9px 0;}
 	.thinl_like_sectons .thing_items li:nth-child(5n){margin-right:0;}
