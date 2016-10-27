@@ -7,27 +7,15 @@ use admin\models\EventsSearch;
 use common\models\EventItemlink;
 use frontend\models\EventInvitees;
 use Yii;
-use yii\base\Model;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
-use arturoliveira\ExcelView;
 use admin\models\Customer;
 use admin\models\AuthItem;
-use admin\models\AddressType;
-use admin\models\AddressQuestion;
-use admin\models\CustomerSearch;
-use common\models\City;
-use common\models\Country;
-use common\models\Location;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
-use common\models\CustomerCart;
-use common\models\Order;
-use common\models\Suborder;
-use common\models\SuborderItemPurchase;
+use yii\data\ArrayDataProvider;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -123,8 +111,26 @@ class EventsController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $providerItems = new ArrayDataProvider([
+            'allModels' => $model->items,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        $providerInvitees = new ArrayDataProvider([
+            'allModels' => $model->invitees,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id)
+            'model' => $this->findModel($id),
+            'providerItems' => $providerItems,
+            'providerInvitees' => $providerInvitees
         ]);
     }
 

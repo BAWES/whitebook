@@ -3,6 +3,8 @@
 namespace admin\models;
 
 use common\models\Customer;
+use common\models\EventItemlink;
+use frontend\models\EventInvitees;
 use Yii;
 /**
 * This is the model class for table "{{%events}}".
@@ -19,7 +21,16 @@ class Events extends \common\models\Events
     public function getCustomer(){
 
         return $this->hasOne(Customer::className(),['customer_id'=>'customer_id']);
+    }
 
+    public function getItems(){
+
+        return $this->hasMany(EventItemlink::className(),['event_id'=>'event_id']);
+    }
+
+    public function getInvitees(){
+
+        return $this->hasMany(EventInvitees::className(),['event_id'=>'event_id']);
     }
 
 

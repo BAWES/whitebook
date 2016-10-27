@@ -70,4 +70,8 @@ class EventItemlink extends \yii\db\ActiveRecord
             'link_datetime' => 'Link Date time',
         ];
     }
+
+    public function getItemDetail(){
+        return $this->hasOne(VendorItem::className(),['item_id'=>'item_id']);
+    }
 }
