@@ -1672,6 +1672,7 @@ a.thing_cont:hover {
     bottom: 40px;
     z-index: 11;
     border: 1px solid white;
+    cursor: pointer;
 }
 .btn-close-filter{
     width: 100%;
