@@ -15,7 +15,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii\filters\AccessControl;
+use admin\models\AccessControlList;
 
 /**
  * PriorityitemController implements the CRUD actions for PriorityItem model.
@@ -32,32 +32,29 @@ class PriorityitemController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-                    'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'bloack', 'status', 'loadcategory', 'loaditems', 'loadsubcategory', 'loadchildcategory', 'checkitem', 'loaddatetime', 'checkprioritydate', 'blockpriority'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'delete' => ['post'],
+                  //  'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all PriorityItem models.

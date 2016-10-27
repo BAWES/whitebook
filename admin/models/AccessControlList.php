@@ -25,7 +25,7 @@ use yii\behaviors\TimestampBehavior;
 * @property Admin $admin
 * @property Role $role
 */
-class AccessController extends \yii\db\ActiveRecord
+class AccessControlList extends \yii\db\ActiveRecord
 {
     /**
     * @inheritdoc
@@ -65,9 +65,8 @@ class AccessController extends \yii\db\ActiveRecord
     {
         return [
             // [['create','update','delete','manage','view'], 'required'],
-            [['admin_id','controller',], 'required'],
+            [['controller','method'], 'required'],
             [['role_id'], 'integer'],
-            [['admin_id'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe'],
         ];
     }
@@ -81,12 +80,35 @@ class AccessController extends \yii\db\ActiveRecord
             'access_id' => 'Access User',
             'role_id' => 'Roles',
             'controller' => 'Controller',
-            'admin_id' => 'User',
+            'Method' => 'Method',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
             'modified_datetime' => 'Modified Datetime',
         ];
+    }
+
+    //check db if current controller/method assigned to user role         
+    public function can() {
+
+        $user_id = Yii::$app->user->getId();
+
+        //for first user 
+        if($user_id == 1) {
+            return true;
+        }
+
+        $user = Admin::findOne($user_id);
+
+        if(!$user) {
+            return false;
+        }
+
+        return AccessControlList::find()->where([
+                'role_id' => $user->role_id,
+                'controller' => Yii::$app->controller->id,
+                'method' => Yii::$app->controller->action->id
+            ])->count();
     }
 
     /**

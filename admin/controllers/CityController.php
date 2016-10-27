@@ -9,7 +9,6 @@ use admin\models\AuthItem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use common\models\Country;
 use common\models\City;
@@ -17,6 +16,8 @@ use common\models\CustomerAddress;
 use common\models\CustomerCart;
 use common\models\Location;
 use common\models\VendorLocation;
+use admin\models\AccessControlList;
+
 
 /**
 * CityController implements the CRUD actions for City model.
@@ -37,32 +38,26 @@ class CityController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'delete' => ['post'],
+                //   'delete' => ['POST'],
                 ],
             ],
-
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => \yii\filters\AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => [],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'allow' => AccessControlList::can()
                     ],
                 ],
-            ],
-
+            ],            
         ];
     }
 

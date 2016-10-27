@@ -12,6 +12,7 @@ use common\models\Category;
 use common\models\SubCategory;
 use common\models\Vendor;
 use common\models\VendorItem;
+use admin\models\AccessControlList;
 
 /**
  * VendoritemquestionController implements the CRUD actions for VendorItemQuestion model.
@@ -28,17 +29,29 @@ class VendoritemquestionController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                //    'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all VendorItemQuestion models.

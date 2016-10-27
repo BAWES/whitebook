@@ -8,7 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use admin\models\AccessControlList;
 use yii\helpers\UploadHandler;
 use yii\helpers\Html;
 use admin\models\VendorItem;
@@ -51,32 +51,29 @@ class VendoritemController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-        'verbs' => [
-            'class' => VerbFilter::className(),
-            'actions' => [
-                //'delete' => ['post'],
-            ],
-        ],
-        'access' => [
-            'class' => AccessControl::className(),
-            'rules' => [
-                [
-                    'actions' => [],
-                    'allow' => true,
-                    'roles' => ['?'],
-                ],
-                [
-                    'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'check', 'itemactive', 'status', 'approve', 'removequestion', 'sort_vendor_item', 'addquestion', 'renderquestion', 'renderanswer', 'guideimage', 'viewrenderquestion', 'itemgallery', 'uploadhandler', 'uploadhandler1', 'galleryupload', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck'],
-                    'allow' => true,
-                    'roles' => ['@'],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                //    'delete' => ['POST'],
                 ],
             ],
-        ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
     * Lists all VendorItem models.
