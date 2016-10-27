@@ -272,7 +272,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                         <a href="#" class="btn-stepper" data-case="1">+</a>
                                     </div>
                                 </div>
-                                <div class="col-lg-5 clearfix">
+                                <div class="col-lg-5 ">
                                     <div class="button-signin">
                                         <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit">
                                             <?= Yii::t('frontend', 'Buy') ?>
