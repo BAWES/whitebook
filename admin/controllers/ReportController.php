@@ -9,9 +9,26 @@ use common\models\VendorPackages;
 use common\models\Suborder;
 use admin\models\Package;
 use admin\models\Vendor;
+use admin\models\AccessControlList;
 
 class ReportController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
+        ];
+    }
 
 	public function actionCommission()
     {

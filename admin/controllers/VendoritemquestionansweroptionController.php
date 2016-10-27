@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\VendorItemQuestion;
 use yii\helpers\ArrayHelper;
+use admin\models\AccessControlList;
 
 /**
  * VendoritemquestionansweroptionController implements the CRUD actions for VendorItemQuestionAnswerOption model.
@@ -25,18 +26,29 @@ class VendoritemquestionansweroptionController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                //    'delete' => ['POST'],
                 ],
-
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all VendorItemQuestionAnswerOption models.

@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use admin\models\AccessControlList;
 use yii\helpers\ArrayHelper;
 use common\models\AddressQuestion;
 use common\models\CustomerAddress;
@@ -30,31 +30,26 @@ class AddresstypeController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'delete' => ['post'],
+                //   'delete' => ['POST'],
                 ],
             ],
-             'access' => [
-               'class' => AccessControl::className(),
-               'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-           ],
-
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
 

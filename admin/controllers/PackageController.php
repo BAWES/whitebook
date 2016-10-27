@@ -6,11 +6,11 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use admin\models\AuthItem;
 use admin\models\Package;
 use admin\models\PackageSearch;
 use common\models\VendorPackages;
+use admin\models\AccessControlList;
 
 /**
  * PackageController implements the CRUD actions for Package model.
@@ -26,32 +26,29 @@ class PackageController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'delete' => ['post'],
+                //    'delete' => ['POST'],
                 ],
             ],
-           'access' => [
-               'class' => AccessControl::className(),
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
                 'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'packagedelete', 'packageupdate'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-           ],
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all Package models.

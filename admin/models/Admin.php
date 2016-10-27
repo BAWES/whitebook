@@ -11,7 +11,7 @@ use admin\models\Role;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Security;
 use yii\helpers\ArrayHelper;
-use admin\models\AccessController;
+use admin\models\AccessControl;
 use yii\behaviors\SluggableBehavior;
 use yii\db\Expression;
 
@@ -247,7 +247,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 
 	public static function Admin()
     {
-		$accessdata = AccessController::find()
+		$accessdata = AccessControl::find()
 		->select(['admin_id'])
 		->groupBy('admin_id')
 		->asArray()

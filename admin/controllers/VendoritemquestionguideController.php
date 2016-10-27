@@ -12,6 +12,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use common\models\Image;
+use admin\models\AccessControlList;
+
 /**
  * VendoritemquestionguideController implements the CRUD actions for VendorItemQuestionGuide model.
  */
@@ -28,17 +30,29 @@ class VendoritemquestionguideController extends Controller
        
     }
     
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                 //   'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all VendorItemQuestionGuide models.

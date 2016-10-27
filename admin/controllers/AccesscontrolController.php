@@ -5,15 +5,15 @@ namespace admin\controllers;
 use Yii;
 use yii\db\Query;
 use admin\models\UserController;
-use admin\models\AccessController;
+use admin\models\AccessControlList;
 use admin\models\AuthAssignment;
 use admin\models\Admin;
-use admin\models\AccessControlSearch;
+use admin\models\AccessControlListSearch;
 use yii\web\Controller;
 use admin\models\AuthItem;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use yii\filters\AccessController;
 
 /**
 * AccesscontrolController implements the CRUD actions for Accesscontrol model.
@@ -30,31 +30,6 @@ class AccesscontrolController extends Controller
         }
     }
 
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                ],
-            ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => [],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'authitem', 'loadcontroller', 'loadadmin'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-        ];
-    }
 
     /**
     * Lists all Accesscontrol models.
@@ -107,7 +82,7 @@ class AccesscontrolController extends Controller
         $request = Yii::$app->request;
 
         if (yii::$app->user->can($access)) {
-            $model = new AccessController();
+            $model = new AccessControl();
             $controller = UserController::loadcontroller();
             $admin = Admin::admin();
             $authitem = AuthItem::AuthItem();
@@ -118,7 +93,7 @@ class AccesscontrolController extends Controller
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
-                $command = AccessController::deleteAll(['admin_id' => $adminid]);
+                $command = AccessControl::deleteAll(['admin_id' => $adminid]);
                 $command1 = AuthAssignment::deleteAll(['user_id' => $adminid]);
                 $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
                 $p = 1;
@@ -184,7 +159,7 @@ class AccesscontrolController extends Controller
                         $timenow = date('Y-m-d h:i:sa');
                         $userid = Admin::getAdmin('id');
                         if ($controller_id != '') {
-    						$access_ctrl=new AccessController;
+    						$access_ctrl=new AccessControl;
                             $access_ctrl->role_id = $roleid;
     						$access_ctrl->admin_id = $adminid;
     						$access_ctrl->controller = $controller_id;
@@ -218,7 +193,7 @@ class AccesscontrolController extends Controller
     }
 
     /**
-    * Updates an existing AccessController model.
+    * Updates an existing AccessControl model.
     * If update is successful, the browser will be redirected to the 'view' page.
     *
     * @param int $id
@@ -244,7 +219,7 @@ class AccesscontrolController extends Controller
                 $id = explode('_', $model->admin_id);
                 $adminid = $id[0];
                 $roleid = $id[1];
-                $command =AccessController::deleteAll(['admin_id' => $admin_id,'role_id' => $model->role_id]);
+                $command =AccessControl::deleteAll(['admin_id' => $admin_id,'role_id' => $model->role_id]);
                 $command =AuthAssignment::deleteAll(['user_id' => $admin_id]);
                 $model->load(Yii::$app->request->post());
                 $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
@@ -299,7 +274,7 @@ class AccesscontrolController extends Controller
                         }
                         $timenow = date('Y-m-d h:i:sa');
                         $userid = Admin::getAdmin('id');
-                        $access_ctrl=new AccessController();
+                        $access_ctrl=new AccessControl();
                         $access_ctrl->role_id = $roleid;
 						$access_ctrl->admin_id = $adminid;
 						$access_ctrl->controller = $controller_id;
@@ -333,7 +308,7 @@ class AccesscontrolController extends Controller
     }
 
     /**
-    * Deletes an existing AccessController model.
+    * Deletes an existing AccessControl model.
     * If deletion is successful, the browser will be redirected to the 'index' page.
     *
     * @param int $id
@@ -345,10 +320,10 @@ class AccesscontrolController extends Controller
         $access = AuthItem::AuthitemCheck('3', '29');
 
         if (yii::$app->user->can($access)) {
-            $admin_id = AccessController::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
+            $admin_id = AccessControl::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
             $admin_id = $admin_id['admin_id'];
 
-            $command =AccessController::deleteAll(['admin_id' => $admin_id]);
+            $command =AccessControl::deleteAll(['admin_id' => $admin_id]);
             $command =AuthAssignment::deleteAll(['user_id' => $admin_id]);
 
             Yii::$app->session->setFlash('success', 'Access controller deleted successfully!');
@@ -363,18 +338,18 @@ class AccesscontrolController extends Controller
     }
 
     /**
-    * Finds the AccessController model based on its primary key value.
+    * Finds the AccessControl model based on its primary key value.
     * If the model is not found, a 404 HTTP exception will be thrown.
     *
     * @param int $id
     *
-    * @return AccessController the loaded model
+    * @return AccessControl the loaded model
     *
     * @throws NotFoundHttpException if the model cannot be found
     */
     protected function findModel($id)
     {
-        if (($model = AccessController::findOne($id)) !== null) {
+        if (($model = AccessControl::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -441,7 +416,7 @@ class AccesscontrolController extends Controller
         
         echo '<input type="checkbox" onclick="checkall(this.checked);">Select all';
         foreach ($role as $key => $val) {
-            echo '<label><input type="checkbox" name="AccessController[controller][]" value="'.$val['id'].'" class="checkbox_all">'.$val['controller'].'</label><br>';
+            echo '<label><input type="checkbox" name="AccessControl[controller][]" value="'.$val['id'].'" class="checkbox_all">'.$val['controller'].'</label><br>';
         }
     }
 

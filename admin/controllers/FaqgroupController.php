@@ -8,6 +8,7 @@ use admin\models\FaqGroupSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use admin\models\AccessControlList;
 
 /**
  * FaqGroupController implements the CRUD actions for FaqGroup model.
@@ -23,9 +24,17 @@ class FaqgroupController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                //   'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
 

@@ -9,6 +9,7 @@ use common\models\OrderStatus;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use admin\models\AccessControlList;
 
 /**
  * PaymentGatewayController implements the CRUD actions for PaymentGateway model.
@@ -24,11 +25,20 @@ class PaymentGatewayController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                //    'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all PaymentGateway models.

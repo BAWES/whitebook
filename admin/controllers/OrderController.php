@@ -8,9 +8,10 @@ use common\models\OrderStatus;
 use common\models\Suborder;
 use common\models\OrderSearch;
 use common\models\SuborderItemPurchase;
+use admin\models\AccessControlList;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use kartik\mpdf\Pdf;
 
 /**
@@ -27,11 +28,20 @@ class OrderController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                 //   'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all Order models.

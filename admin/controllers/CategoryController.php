@@ -7,7 +7,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use common\models\Customer;
 use common\models\ChildCategory;
@@ -21,6 +20,7 @@ use admin\models\Category;
 use admin\models\Vendor;
 use admin\models\CategorySearch;
 use admin\models\VendorItem;
+use admin\models\AccessControlList;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -37,33 +37,26 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                    ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'category_delete', 'index',
-                       'loadcategory', 'manage_subcategory', 'create_subcategory', 'subcategory_block',
-                       'subcategory_delete', 'subcategory_update', 'vendorcategory', 'sort_sub_category', 'sort_category',
-                       'child_category_index', 'child_category_create', 'loadsubcategory', 'child_category_update', 'childcategory_delete', ],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                   // 'delete' => ['post'],
+                //   'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
 
