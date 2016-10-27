@@ -23,10 +23,6 @@
 
 		$cntrl = Yii::$app->controller->id;
 		$action = Yii::$app->controller->action->id;
-		$controller = get_class($this->context);
-		$action = $this->context->action->id;
-		$menu = explode('\\',$controller);
-		$menu_act = $menu[2];
 		$first_menu = ['siteinfo','contacts','socialinfo', 'slide','role','admin','accesscontrol','faq','faqgroup','adverthome', 'order-status', 'payment-gateway'];
 		$second_menu = ['country','city','location','addresstype','addressquestion'];
 		$third_menu = ['category'];
@@ -137,10 +133,11 @@
 				<a href="javascript:;">
 					<i class="glyphicon glyphicon-user"></i>
 					<span class="title">Manage Customer</span>
-					<span class="<?=(in_array($menu_act,$eighth_menu)) ? "arrow open" : "arrow";?>"></span>
+					<span class="<?=(in_array($cntrl,$eighth_menu)) ? "arrow open" : "arrow";?>"></span>
 			  	</a>
 				<ul class="sub-menu">
 					<li class="<?=($cntrl == 'customer')  ? "active" : "noactive"; ?>"><?= Html::a('Customer', ['customer/index'], ['class'=>'link-title']) ?></li>
+					<li class="<?=($cntrl == 'customer')  ? "active" : "noactive"; ?>"><?= Html::a('Customer Events', ['events/index'], ['class'=>'link-title']) ?></li>
 				</ul>
 			</li>
 
