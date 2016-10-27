@@ -35,7 +35,7 @@ use yii\widgets\ActiveForm;
                             if(isset($role_access_list[$key]) && in_array($method, $role_access_list[$key])) {
                                 $checked = 'checked';
                             } else {
-                                $checked = 'checked';
+                                $checked = '';
                             }
 
                          ?>
