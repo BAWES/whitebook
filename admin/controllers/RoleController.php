@@ -57,21 +57,13 @@ class RoleController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '10');
-        
-        if (yii::$app->user->can($access)) {
-            $searchModel = new RoleSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new RoleSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -202,21 +194,14 @@ class RoleController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '10');
-        if (yii::$app->user->can($access)) {
-            $this->findModel($id)->delete();
+        $this->findModel($id)->delete();
 
-            //delete all access control 
-            AccessControlList::deleteAll(['role_id' => $id]);
+        //delete all access control
+        AccessControlList::deleteAll(['role_id' => $id]);
 
-            Yii::$app->session->setFlash('success', 'User role deleted successfully!');
+        Yii::$app->session->setFlash('success', 'User role deleted successfully!');
 
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**

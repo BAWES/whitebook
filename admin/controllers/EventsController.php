@@ -65,40 +65,24 @@ class EventsController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '26');
-        
-        if (yii::$app->user->can($access)) {
-            
-            $searchModel = new EventsSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new EventsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            $count = $dataProvider->getTotalCount();
+        $count = $dataProvider->getTotalCount();
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'count' => $count,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'count' => $count,
+        ]);
     }
 
     public function actionAddress_delete()
     {
-        $access = AuthItem::AuthitemCheck('4', '26');
-        
-        if (yii::$app->user->can($access)) {
-          
-          $address_id = yii::$app->request->post('address_id');
+        $address_id = yii::$app->request->post('address_id');
 
-          CustomerAddressResponse::deleteAll('address_id = ' . $address_id);
-          CustomerAddress::deleteAll('address_id = ' . $address_id);
-        }
+        CustomerAddressResponse::deleteAll('address_id = ' . $address_id);
+        CustomerAddress::deleteAll('address_id = ' . $address_id);
     }
 
 
@@ -144,22 +128,16 @@ class EventsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '26');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            if ($model->load(Yii::$app->request->post())) {
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Event detail updated successfully!');
-                Yii::info('[Event Updated] Admin updated Event '.$model->event_name.' information', __METHOD__);
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('update', [
-                  'model' => $model
-                ]);
-            }
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Event detail updated successfully!');
+            Yii::info('[Event Updated] Admin updated Event '.$model->event_name.' information', __METHOD__);
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+            return $this->render('update', [
+              'model' => $model
+            ]);
         }
     }
 
@@ -174,22 +152,13 @@ class EventsController extends Controller
        */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '26');
-        if (yii::$app->user->can($access)) {
+        //Event Item Link
+        EventItemlink::deleteAll(['event_id' => $id]);
+        EventInvitees::deleteAll(['event_id' => $id]);
 
-            //Event Item Link
-            EventItemlink::deleteAll(['event_id' => $id]);
-            EventInvitees::deleteAll(['event_id' => $id]);
-
-            if ($this->findModel($id)->delete()) {
-                Yii::$app->session->setFlash('success', 'Event deleted successfully!');
-                return $this->redirect(['index']);
-            }
-
-        } else {
-
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+        if ($this->findModel($id)->delete()) {
+            Yii::$app->session->setFlash('success', 'Event deleted successfully!');
+            return $this->redirect(['index']);
         }
     }
 

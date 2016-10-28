@@ -70,41 +70,26 @@ class CustomerController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '26');
-        
-        if (yii::$app->user->can($access)) {
-            
-            $searchModel = new CustomerSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new CustomerSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            $count = $dataProvider->getTotalCount();
+        $count = $dataProvider->getTotalCount();
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'count' => $count,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'count' => $count,
+        ]);
     }
 
     public function actionAddress_delete()
     {
-        $access = AuthItem::AuthitemCheck('4', '26');
-        
-        if (yii::$app->user->can($access)) {
-          
-          $address_id = yii::$app->request->post('address_id');
+        $address_id = yii::$app->request->post('address_id');
 
-          CustomerAddressResponse::deleteAll('address_id = ' . $address_id);
-          CustomerAddress::deleteAll('address_id = ' . $address_id);
-        }
+        CustomerAddressResponse::deleteAll('address_id = ' . $address_id);
+        CustomerAddress::deleteAll('address_id = ' . $address_id);
     }
+
 
 
     /**
@@ -132,15 +117,6 @@ class CustomerController extends Controller
      */
     public function actionAddress($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '26');
-
-        if (!yii::$app->user->can($access)) {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            
-            return $this->redirect(['site/index']);
-        }
-
         if(Yii::$app->request->isPost) {
 
           $customer_address = new CustomerAddress();
@@ -229,37 +205,28 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '26');
+        $model = new Customer();
+        $model->scenario = 'createAdmin';
 
-        if (yii::$app->user->can($access)) {
-            $model = new Customer();
-            $model->scenario = 'createAdmin';
-            
-            if ($model->load(Yii::$app->request->post())) {
-                
-                $model->customer_dateofbirth=Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
+        if ($model->load(Yii::$app->request->post())) {
 
-                $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
+            $model->customer_dateofbirth=Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
 
-                if ($model->save(false)) {
-                    
-                    Yii::info('[Customer Created] Admin created customer '.$model->customer_name, __METHOD__);
-                }
+            $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
 
-                Yii::$app->session->setFlash('success', 'Customer detail added successfully!');
+            if ($model->save(false)) {
 
-                return $this->redirect(['index']);
-            } else {
-                
-                return $this->render('create', [
-                    'model' => $model, 
-                ]);
+                Yii::info('[Customer Created] Admin created customer '.$model->customer_name, __METHOD__);
             }
 
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('success', 'Customer detail added successfully!');
 
-            return $this->redirect(['site/index']);
+            return $this->redirect(['index']);
+        } else {
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
     }
 
@@ -273,39 +240,30 @@ class CustomerController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '26');
 
-        if (yii::$app->user->can($access)) {
+        $model = $this->findModel($id);
+        $model->scenario = 'createAdmin';
 
-            $model = $this->findModel($id);
-            $model->scenario = 'createAdmin';
-           
-            if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
 
-                $model->customer_dateofbirth = Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
-               
-                $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
-               
-                $model->save();
-               
-                Yii::$app->session->setFlash('success', 'Customer detail updated successfully!');
+            $model->customer_dateofbirth = Yii::$app->formatter->asDate($model->customer_dateofbirth, 'php:Y-m-d');
 
-                Yii::info('[Customer Updated] Admin updated customer '.$model->customer_name.' information', __METHOD__);
+            $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
 
-                return $this->redirect(['index']);
+            $model->save();
 
-            } else {
-                               
-                return $this->render('update', [
-                  'model' => $model
-                ]);
+            Yii::$app->session->setFlash('success', 'Customer detail updated successfully!');
 
-            }
+            Yii::info('[Customer Updated] Admin updated customer '.$model->customer_name.' information', __METHOD__);
+
+            return $this->redirect(['index']);
+
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            return $this->render('update', [
+              'model' => $model
+            ]);
+
         }
     }
 
@@ -318,50 +276,40 @@ class CustomerController extends Controller
        *
        * @return mixed
        */
-      public function actionDelete($id)
-      {
-          $access = AuthItem::AuthitemCheck('3', '26');
-          if (yii::$app->user->can($access)) {
-              
-              $model = $this->findModel($id);
-              
-              if ($this->findModel($id)->delete()) {
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
 
-                  //address
-                  CustomerAddressResponse::deleteAll('address_id IN 
-                    (select address_id from {{%customer_address}} where customer_id="'.$id.'")');
+        if ($this->findModel($id)->delete()) {
 
-                  CustomerAddress::deleteAll(['customer_id' => $id]);
-                  
-                  //cart
-                  CustomerCart::deleteAll(['customer_id' => $id]);
-                  
-                  //orders
-                  $orders = Order::findAll(['customer_id' => $id]);
+            //address
+            CustomerAddressResponse::deleteAll('address_id IN
+            (select address_id from {{%customer_address}} where customer_id="'.$id.'")');
 
-                  foreach ($orders as $key => $value) {
+            CustomerAddress::deleteAll(['customer_id' => $id]);
 
-                    Order::updateAll(['trash' => 'Deleted'], 'order_id = ' . $value->order_id);
+            //cart
+            CustomerCart::deleteAll(['customer_id' => $id]);
 
-                    //delete suborder 
-                    Suborder::updateAll(['trash' => 'Deleted'], 'order_id = ' . $value->order_id);
+            //orders
+            $orders = Order::findAll(['customer_id' => $id]);
 
-                    //delete items 
-                    SuborderItemPurchase::updateAll(['trash' => 'Deleted'], 'suborder_id IN (select suborder_id from whitebook_suborder WHERE order_id="'.$value->order_id.'")');
-                  }
-                  
-                  Yii::$app->session->setFlash('success', 'Customer deleted successfully!');
+            foreach ($orders as $key => $value) {
 
-                  return $this->redirect(['index']);
-              }
+            Order::updateAll(['trash' => 'Deleted'], 'order_id = ' . $value->order_id);
 
-          } else {
-              
-              Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            //delete suborder
+            Suborder::updateAll(['trash' => 'Deleted'], 'order_id = ' . $value->order_id);
 
-              return $this->redirect(['site/index']);
-          }
-      }
+            //delete items
+            SuborderItemPurchase::updateAll(['trash' => 'Deleted'], 'suborder_id IN (select suborder_id from whitebook_suborder WHERE order_id="'.$value->order_id.'")');
+            }
+
+            Yii::$app->session->setFlash('success', 'Customer deleted successfully!');
+
+            return $this->redirect(['index']);
+        }
+    }
 
     /**
      * Finds the Customer model based on its primary key value.
@@ -422,45 +370,38 @@ class CustomerController extends Controller
 
     public function actionNewsletter()
     {
-        $access = AuthItem::AuthitemCheck('1', '26');
-        if (yii::$app->user->can($access)) {
-            $model = new Customer();
-            $customer_email = Customer::find()
-            ->select(['customer_email'])
-            ->where(['customer_status' => 'Active'])
-            ->andwhere(['trash' => 'default'])
-            ->all();
-            $customer_email = ArrayHelper::map($customer_email, 'customer_email', 'customer_email');
-            $model1 = new CustomerAddress();
-            $model->scenario = 'newsletter';
-            if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-                $k = array();
-                $k = $model->newsmail;
-                foreach ($k as $mail) {
-                    if ($model->content) {
-                        Yii::$app->mailer->compose([
-                                "html" => "admin/newsletter"
-                                    ], [
-                                "message"=>$message
-                            ])
-                            ->setFrom(Yii::$app->params['supportEmail'])
-                            ->setTo($mail)
-                            ->setSubject('Newsletter from Whitebook')
-                            ->send();
-                    }
+        $model = new Customer();
+        $customer_email = Customer::find()
+        ->select(['customer_email'])
+        ->where(['customer_status' => 'Active'])
+        ->andwhere(['trash' => 'default'])
+        ->all();
+        $customer_email = ArrayHelper::map($customer_email, 'customer_email', 'customer_email');
+        $model1 = new CustomerAddress();
+        $model->scenario = 'newsletter';
+        if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
+            $k = array();
+            $k = $model->newsmail;
+            foreach ($k as $mail) {
+                if ($model->content) {
+                    Yii::$app->mailer->compose([
+                            "html" => "admin/newsletter"
+                                ], [
+                            "message"=>$message
+                        ])
+                        ->setFrom(Yii::$app->params['supportEmail'])
+                        ->setTo($mail)
+                        ->setSubject('Newsletter from Whitebook')
+                        ->send();
                 }
-
-                return $this->redirect(['index']);
-            } else {
-              return $this->render('news', [
-                'model' => $model, 
-                'customer_email' => $customer_email
-              ]);
             }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            return $this->redirect(['index']);
+        } else {
+          return $this->render('news', [
+            'model' => $model,
+            'customer_email' => $customer_email
+          ]);
         }
     }
 }

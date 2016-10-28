@@ -56,20 +56,13 @@ class AdminController extends Controller
     */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '9');
-        if (yii::$app->user->can($access)) {
-            $searchModel = new AdminSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new AdminSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -94,26 +87,19 @@ class AdminController extends Controller
     */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '9');
-        if (yii::$app->user->can($access)) {
-            $model = new Admin();
-            $role = Admin::roles();
+        $model = new Admin();
+        $role = Admin::roles();
 
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->admin_password = Yii::$app->getSecurity()->generatePasswordHash($model->admin_password);
-                $model->save();
-                Yii::$app->session->setFlash('success', 'New admin user created successfully!');
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->admin_password = Yii::$app->getSecurity()->generatePasswordHash($model->admin_password);
+            $model->save();
+            Yii::$app->session->setFlash('success', 'New admin user created successfully!');
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('create', [
-                    'model' => $model, 'role' => $role,
-                ]);
-            }
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->render('create', [
+                'model' => $model, 'role' => $role,
+            ]);
         }
     }
 
@@ -127,23 +113,16 @@ class AdminController extends Controller
     */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '9');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $role = Admin::roles();
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'New admin user updated successfully!');
+        $model = $this->findModel($id);
+        $role = Admin::roles();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'New admin user updated successfully!');
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('update', [
-                    'model' => $model, 'role' => $role,
-                ]);
-            }
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->render('update', [
+                'model' => $model, 'role' => $role,
+            ]);
         }
     }
 
@@ -157,17 +136,10 @@ class AdminController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '9');
-        if (yii::$app->user->can($access)) {
-            $this->findModel($id)->delete();
-            Yii::$app->session->setFlash('success', 'Admin user deleted successfully!');
+        $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('success', 'Admin user deleted successfully!');
 
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**

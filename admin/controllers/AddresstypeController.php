@@ -59,24 +59,14 @@ class AddresstypeController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {		
-        $access = AuthItem::AuthitemCheck('4', '14');
+    {
+        $searchModel = new AddressTypeSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if (yii::$app->user->can($access)) {
-
-            $searchModel = new AddressTypeSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -101,28 +91,19 @@ class AddresstypeController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '14');
+        $model = new AddressType();
+        $model->status = 'Active';
+        if($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            $model->save();
 
-        if (yii::$app->user->can($access)) {
-            $model = new AddressType();
-            $model->status = 'Active';
-            if($model->load(Yii::$app->request->post()) && $model->validate())
-            {            
-                $model->save();
-                
-                Yii::$app->session->setFlash('success', 'Address Type created successfully!');
-                return $this->redirect(['index']);
-            
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
+            Yii::$app->session->setFlash('success', 'Address Type created successfully!');
+            return $this->redirect(['index']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
     }
 
@@ -136,26 +117,21 @@ class AddresstypeController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '14');
-        
-        if (yii::$app->user->can($access)) {
-        
-            $model = $this->findModel($id);
-        
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        
-                $model->save();
-                
-                Yii::$app->session->setFlash('success', 'Address Type Updated successfully!');
-                return $this->redirect(['index']);
+        $model = $this->findModel($id);
 
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-                return $this->redirect(['site/index']);
-            }
+            $model->save();
+
+            Yii::$app->session->setFlash('success', 'Address Type Updated successfully!');
+            return $this->redirect(['index']);
+
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+
+            return $this->redirect(['site/index']);
         }
     }
 
@@ -169,36 +145,28 @@ class AddresstypeController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '14');
+        $model = $this->findModel($id);
+        $model->trash = 'Deleted';
+        $model->load(Yii::$app->request->post());
+        $model->save();
 
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $model->trash = 'Deleted';
-            $model->load(Yii::$app->request->post());
-            $model->save();  
-            
-            //delete all question for this type 
-            AddressQuestion::deleteAll(['address_type_id' => $id]);
+        //delete all question for this type
+        AddressQuestion::deleteAll(['address_type_id' => $id]);
 
-            //delete all address question response for this type 
-            $addresses = CustomerAddress::findAll(['address_type_id' => $id]);
+        //delete all address question response for this type
+        $addresses = CustomerAddress::findAll(['address_type_id' => $id]);
 
-            foreach ($addresses as $key => $value) {
-                CustomerAddressResponse::deleteAll(['address_id' => $value->address_id]);
-            }
-            
-            //delete all address for this type 
-            CustomerAddress::deleteAll(['address_type_id' => $id]);
-
-            Yii::$app->session->setFlash('success', 'Address Type Deleted successfully!');
-
-            return $this->redirect(['index']);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+        foreach ($addresses as $key => $value) {
+            CustomerAddressResponse::deleteAll(['address_id' => $value->address_id]);
         }
+
+        //delete all address for this type
+        CustomerAddress::deleteAll(['address_type_id' => $id]);
+
+        Yii::$app->session->setFlash('success', 'Address Type Deleted successfully!');
+
+        return $this->redirect(['index']);
+
     }
 
     /**

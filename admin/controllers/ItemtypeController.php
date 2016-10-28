@@ -57,18 +57,12 @@ class ItemtypeController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '21');
-        if (yii::$app->user->can($access)) {
-            $searchModel = new ItemTypeSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            return $this->render('index',[
+        $searchModel = new ItemTypeSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('index',[
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+         ]);
     }
 
     /**
@@ -93,21 +87,14 @@ class ItemtypeController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '21');
-        if (yii::$app->user->can($access)) {
-            $model = new ItemType();
-            $model->scenario = 'insert';
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('create', [
+        $model = new ItemType();
+        $model->scenario = 'insert';
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('create', [
                 'model' => $model,
             ]);
-            }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
         }
     }
 
@@ -121,20 +108,13 @@ class ItemtypeController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '21');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('update', [
-                'model' => $model,
-            ]);
-            }
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->render('update', [
+            'model' => $model,
+        ]);
         }
     }
 
@@ -148,17 +128,10 @@ class ItemtypeController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '21');
-        if (yii::$app->user->can($access)) {
-            $this->findModel($id)->delete();
-            Yii::$app->session->setFlash('success', 'Item type deleted successfully!');
+        $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('success', 'Item type deleted successfully!');
 
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**

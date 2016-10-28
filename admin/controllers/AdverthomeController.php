@@ -57,24 +57,15 @@ class AdverthomeController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('2', '24');
-        if (yii::$app->user->can($access)) {
+        $model = AdvertHome::find()->all();
 
-            $model = AdvertHome::find()->all();
-
-            foreach ($model as $key => $val) {
-                $first_id = $val['advert_id'];
-            }
-            if (count($model) == 1) {
-                $this->redirect(['adverthome/update','id'=>$first_id]);
-            } else {
-                $this->redirect(['adverthome/create']);
-            }
-
+        foreach ($model as $key => $val) {
+            $first_id = $val['advert_id'];
+        }
+        if (count($model) == 1) {
+            $this->redirect(['adverthome/update','id'=>$first_id]);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            $this->redirect(['adverthome/create']);
         }
     }
 
@@ -100,23 +91,16 @@ class AdverthomeController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '25');
-        if (yii::$app->user->can($access)) {
-            $model = new AdvertHome();
-            if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Home advertisement script created successfully!');
+        $model = new AdvertHome();
+        if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Home advertisement script created successfully!');
 
-                return $this->redirect(['view', 'id' => $model->advert_id]);
-            } else {
-                return $this->render('create', [
-                'model' => $model,
-            ]);
-            }
+            return $this->redirect(['view', 'id' => $model->advert_id]);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->render('create', [
+            'model' => $model,
+        ]);
         }
     }
 
@@ -130,26 +114,18 @@ class AdverthomeController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '25');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $imagedata = Image::find()->where('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
-      //  echo '<pre>';print_r ($imagedata);die;
-        $model1 = new Image();
-            if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Advertisement details updated successfully!');
+        $model = $this->findModel($id);
+        $imagedata = Image::find()->where('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
+          $model1 = new Image();
+        if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Advertisement details updated successfully!');
 
-                return $this->redirect(['update', 'id' => $model->advert_id]);
-            } else {
-                return $this->render('update', [
-                'model' => $model, 'imagedata' => $imagedata,
-            ]);
-            }
+            return $this->redirect(['update', 'id' => $model->advert_id]);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->render('update', [
+            'model' => $model, 'imagedata' => $imagedata,
+        ]);
         }
     }
 
@@ -163,18 +139,11 @@ class AdverthomeController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '25');
-        if (yii::$app->user->can($access)) {
-            $this->findModel($id)->delete();
-            $user = Image::deleteAll('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads']);
-            Yii::$app->session->setFlash('success', 'Home ads deleted successfully!');
+        $this->findModel($id)->delete();
+        $user = Image::deleteAll('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads']);
+        Yii::$app->session->setFlash('success', 'Home ads deleted successfully!');
 
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**

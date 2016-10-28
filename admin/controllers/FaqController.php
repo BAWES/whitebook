@@ -56,21 +56,13 @@ class FaqController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '15');
-        
-        if (yii::$app->user->can($access)) {
-            $searchModel = new FaqSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new FaqSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -95,40 +87,33 @@ class FaqController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '15');
-        if (yii::$app->user->can($access)) {
-            $model = new Faq();
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-				
-				$max_sort = Faq::find()
-                ->select('max(sort) as sort')
-				->where(['trash' => 'default'])
-				->one();
-                $sort = ($max_sort['sort'] + 1);
-                $model->sort = $sort;
-                $model->save();
-                Yii::$app->session->setFlash('success', 'FAQ Created successfully!');
+        $model = new Faq();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-                return $this->redirect(['index']);
-            } else {
-                
-                $faq_group_drdwn = array();
+            $max_sort = Faq::find()
+            ->select('max(sort) as sort')
+            ->where(['trash' => 'default'])
+            ->one();
+            $sort = ($max_sort['sort'] + 1);
+            $model->sort = $sort;
+            $model->save();
+            Yii::$app->session->setFlash('success', 'FAQ Created successfully!');
 
-                $query = FaqGroup::find()->all();
-
-                foreach ($query as $row) {
-                    $faq_group_drdwn[$row->faq_group_id] = $row['group_name'];
-                }
-
-                return $this->render('create', [
-                    'model' => $model,
-                    'faq_group_drdwn' => $faq_group_drdwn
-                ]);
-            }
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            $faq_group_drdwn = array();
+
+            $query = FaqGroup::find()->all();
+
+            foreach ($query as $row) {
+                $faq_group_drdwn[$row->faq_group_id] = $row['group_name'];
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+                'faq_group_drdwn' => $faq_group_drdwn
+            ]);
         }
     }
 
@@ -142,32 +127,25 @@ class FaqController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '15');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'FAQ Updated successfully!');
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'FAQ Updated successfully!');
 
-                return $this->redirect(['index']);
-            } else {
-
-                $faq_group_drdwn = array();
-
-                $query = FaqGroup::find()->all();
-
-                foreach ($query as $row) {
-                    $faq_group_drdwn[$row->faq_group_id] = $row['group_name'];
-                }
-
-                return $this->render('update', [
-                    'model' => $model,
-                    'faq_group_drdwn' => $faq_group_drdwn
-                ]);
-            }
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            $faq_group_drdwn = array();
+
+            $query = FaqGroup::find()->all();
+
+            foreach ($query as $row) {
+                $faq_group_drdwn[$row->faq_group_id] = $row['group_name'];
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+                'faq_group_drdwn' => $faq_group_drdwn
+            ]);
         }
     }
 
@@ -181,21 +159,14 @@ class FaqController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '15');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $model->trash = 'Deleted';
-            $model->load(Yii::$app->request->post());
-            $model->save();
+        $model = $this->findModel($id);
+        $model->trash = 'Deleted';
+        $model->load(Yii::$app->request->post());
+        $model->save();
 
-            Yii::$app->session->setFlash('success', 'FAQ Deleted successfully!');
+        Yii::$app->session->setFlash('success', 'FAQ Deleted successfully!');
 
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     public function actionSort_faq()

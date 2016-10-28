@@ -82,13 +82,6 @@ class VendoritemController extends Controller
     */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '23');
-
-        if (!yii::$app->user->can($access)) {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
-            
         $searchModel = new VendorItemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -107,13 +100,6 @@ class VendoritemController extends Controller
     */
     public function actionView($id)
     {
-        $access = AuthItem::AuthitemviewCheck('view', '23');
-        
-        if (!yii::$app->user->can($access)) {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');            
-            return $this->redirect(['site/index']);
-        }
-
         $dataProvider1=  PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
             ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
@@ -154,13 +140,6 @@ class VendoritemController extends Controller
     */
     public function actionCreate($vid = '')
     {
-        $access = AuthItem::AuthitemCheck('1', '23');
-
-        if (!yii::$app->user->can($access)) {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
-
         $model = new VendorItem();
         $model_question = new VendorItemQuestion();
         $model1 = new Image();
@@ -425,13 +404,6 @@ class VendoritemController extends Controller
     */
     public function actionUpdate($id, $vid = false)
     {
-        $access = AuthItem::AuthitemCheck('2', '23');
-
-        if (!yii::$app->user->can($access)) {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
-
         $model = $this->findModel($id);
 
         $model->themes = \yii\helpers\ArrayHelper::map($model->vendorItemThemes, 'theme_id', 'theme_id');
@@ -767,28 +739,20 @@ class VendoritemController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '23');
+        $this->findModel($id)->delete();
 
-        if (yii::$app->user->can($access)) {
-        
-            $this->findModel($id)->delete();
+        VendorItemCapacityException::deleteAll(['item_id' => $id]);
+        Image::deleteAll(['item_id' => $id]);
+        VendorItemPricing::deleteAll(['item_id' => $id]);
+        VendorItemThemes::deleteAll(['item_id' => $id]);
+        VendorItemToCategory::deleteAll(['item_id' => $id]);
+        CustomerCart::deleteAll(['item_id' => $id]);
+        PriorityItem::deleteAll(['item_id' => $id]);
+        EventItemlink::deleteAll(['item_id' => $id]);
+        FeatureGroupItem::deleteAll(['item_id' => $id]);
 
-            VendorItemCapacityException::deleteAll(['item_id' => $id]);
-            Image::deleteAll(['item_id' => $id]);
-            VendorItemPricing::deleteAll(['item_id' => $id]);
-            VendorItemThemes::deleteAll(['item_id' => $id]);
-            VendorItemToCategory::deleteAll(['item_id' => $id]);
-            CustomerCart::deleteAll(['item_id' => $id]);
-            PriorityItem::deleteAll(['item_id' => $id]);
-            EventItemlink::deleteAll(['item_id' => $id]);
-            FeatureGroupItem::deleteAll(['item_id' => $id]);
-
-            Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
+        return $this->redirect(['index']);
     }
 
     public function actionCheck($image_id)
