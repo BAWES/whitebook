@@ -13,7 +13,7 @@ use yii\filters\AccessControl;
 /**
  * VendorpackagesController implements the CRUD actions for VendorPackages model.
  */
-class VendorpackagesController extends Controller
+class VendorPackagesController extends Controller
 {
     public function behaviors()
     {
