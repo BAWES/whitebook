@@ -8,10 +8,9 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="blockeddate-form">
+<div class="blocked-date-form">
 	<div class="col-md-8 col-sm-8 col-xs-8">
     <?php $form = ActiveForm::begin(); ?>
-    <div class="form-group">
 	<div class="form-group">
 <?php 
 
@@ -39,7 +38,6 @@ if(!$model->isNewRecord){ ?>
     <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
 </div>
-</div>
 
 <?php ActiveForm::end(); ?>
 
@@ -52,7 +50,7 @@ $this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/dat
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJs("
-  $('#blockeddate-block_date').datepicker({ 
+  $('#blockeddate-block_date').datepicker({
     daysOfWeekDisabled: ".json_encode($k).",
     format: 'dd-mm-yyyy',
     autoclose:true, 

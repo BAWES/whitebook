@@ -26,13 +26,15 @@ if(!$model->isNewRecord) {
 
     date("a", strtotime($model->timeslot_end_time))=='pm'?$model->end_med='PM':$model->end_med='AM';
 
-} ?>
+}
+
+echo $form->errorSummary($model);
+?>
 
 <div id="result"></div>
 
     <div class="form-group">
-     <?= $form->field($model, 'timeslot_day',['template' => "{label}<div class='controls'>{input}</div>
-    {hint}{error}"])->dropDownList($days, ['prompt'=>'Select...']); ?>
+        <?= $form->field($model, 'timeslot_day')->dropDownList($days, ['prompt'=>'Select...']); ?>
     </div>
 
     <div class="form-group">
@@ -94,12 +96,12 @@ if(!$model->isNewRecord) {
 
 if ($model->isNewRecord) {
     $this->registerJs("
-        var check_time_url = '".Url::to(['/deliverytimeslot/checktime'])."';
+        var check_time_url = '".Url::to(['/delivery-time-slot/checktime'])."';
         var update_value = '0';
     ", View::POS_HEAD);
 } else {
     $this->registerJs("
-        var check_time_url = '".Url::to(['/deliverytimeslot/checktime'])."';
+        var check_time_url = '".Url::to(['/delivery-time-slot/checktime'])."';
         var update_value = '".$model->timeslot_id."';
     ", View::POS_HEAD);
 }

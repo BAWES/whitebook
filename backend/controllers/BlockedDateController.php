@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * BlockeddateController implements the CRUD actions for Blockeddate model.
  */
-class BlockeddateController extends Controller
+class BlockedDateController extends Controller
 {
     public function behaviors()
     {
