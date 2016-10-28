@@ -142,8 +142,8 @@ class SiteinfoController extends Controller
         $model->scenario = 'update';
         $base = Yii::$app->basePath;
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->save();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
             Yii::$app->session->setFlash('success', 'Application info updated successfully!');
             Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' updated site information.', __METHOD__);
 
