@@ -58,23 +58,16 @@ class SiteinfoController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '10');
-        if (yii::$app->user->can($access)) {
-            $model = Siteinfo::find()->all();
+        $model = Siteinfo::find()->all();
 
-            foreach ($model as $key => $val) {
-             $first_id = $val['id'];
-            }
+        foreach ($model as $key => $val) {
+         $first_id = $val['id'];
+        }
 
-            if (count($model) == 1) {
-                $this->redirect(['update', 'id' => $first_id]);
-            } else {
-                $this->redirect('create');
-            }
+        if (count($model) == 1) {
+            $this->redirect(['update', 'id' => $first_id]);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['index']);
+            $this->redirect('create');
         }
     }
 
@@ -100,45 +93,38 @@ class SiteinfoController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '10');
-        if (yii::$app->user->can($access)) {
-            $model = new Siteinfo();
-            $base = Yii::$app->basePath;
+        $model = new Siteinfo();
+        $base = Yii::$app->basePath;
 
-            if ($model->load(Yii::$app->request->post())) {
-                $site_logo = UploadedFile::getInstance($model, 'site_logo');
-                $site_favicon = UploadedFile::getInstance($model, 'site_favicon');
+        if ($model->load(Yii::$app->request->post())) {
+            $site_logo = UploadedFile::getInstance($model, 'site_logo');
+            $site_favicon = UploadedFile::getInstance($model, 'site_favicon');
 
-                if (!empty($site_logo)) {
-                    // check if uploaded file is set or not
+            if (!empty($site_logo)) {
+                // check if uploaded file is set or not
 
-                 $len = rand(1, 1000);
-                    $site_logo->saveAs($base.'/web/uploads/app_img/'.$site_logo->baseName.'_'.$len.'.'.$site_logo->extension);
-                    $model->site_logo = $site_logo->baseName.'_'.$len.'.'.$site_logo->extension;
-                }
+             $len = rand(1, 1000);
+                $site_logo->saveAs($base.'/web/uploads/app_img/'.$site_logo->baseName.'_'.$len.'.'.$site_logo->extension);
+                $model->site_logo = $site_logo->baseName.'_'.$len.'.'.$site_logo->extension;
+            }
 
-                if (!empty($site_favicon)) {
-                    // check if uploaded file is set or not
+            if (!empty($site_favicon)) {
+                // check if uploaded file is set or not
 
-                 $len = rand(1, 1000);
-                    $site_favicon->saveAs($base.'/web/uploads/app_img/'.$site_favicon->baseName.'_'.$len.'.'.$site_favicon->extension);
-                    $model->site_favicon = $site_favicon->baseName.'_'.$len.'.'.$site_favicon->extension;
-                }
+             $len = rand(1, 1000);
+                $site_favicon->saveAs($base.'/web/uploads/app_img/'.$site_favicon->baseName.'_'.$len.'.'.$site_favicon->extension);
+                $model->site_favicon = $site_favicon->baseName.'_'.$len.'.'.$site_favicon->extension;
+            }
 
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Application info created successfully!');
-                Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' created site information.', __METHOD__);
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Application info created successfully!');
+            Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' created site information.', __METHOD__);
 
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
                 'model' => $model,
             ]);
-            }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
         }
     }
 
@@ -152,28 +138,21 @@ class SiteinfoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '10');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $model->scenario = 'update';
-            $base = Yii::$app->basePath;
+        $model = $this->findModel($id);
+        $model->scenario = 'update';
+        $base = Yii::$app->basePath;
 
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Application info updated successfully!');
-                Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' updated site information.', __METHOD__);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Application info updated successfully!');
+            Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' updated site information.', __METHOD__);
 
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-
-            return $this->render('update', [
-                    'model' => $model,
-                ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -186,16 +165,8 @@ class SiteinfoController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '10');
-        if (yii::$app->user->can($access)) {
-            $this->findModel($id)->delete();
-
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        $this->findModel($id)->delete();
+        return $this->redirect(['index']);
     }
 
     /**

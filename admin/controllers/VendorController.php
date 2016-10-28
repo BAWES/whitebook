@@ -77,20 +77,13 @@ class VendorController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '22');
-        if (yii::$app->user->can($access)) {
-            $searchModel = new VendorSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new VendorSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
     }
 
     public function actionView($id)
@@ -172,174 +165,164 @@ class VendorController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '22');
-
         $package = Package::loadpackage();
+        $model = new Vendor();
+        $model->scenario = 'register';
+        $model_siteinfo = Siteinfo::find()->all();
+        foreach ($model_siteinfo as $key => $val) {
+            $first_id = $val['commision'];
+        }
 
-        if (yii::$app->user->can($access)) {
-            $model = new Vendor();
-            $model->scenario = 'register';
-            $model_siteinfo = Siteinfo::find()->all();
-            foreach ($model_siteinfo as $key => $val) {
-                $first_id = $val['commision'];
+        if (count($model_siteinfo) == 1) {
+            $model->commision = $first_id;
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+            if(is_array($vendor_day_off)) {
+                $model->day_off = implode(',', $vendor_day_off);
+            }else{
+                $model->day_off = '';
             }
 
-            if (count($model_siteinfo) == 1) {
-                $model->commision = $first_id;
+            $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
+            $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
+
+            $vendor = Yii::$app->request->post('Vendor');
+            $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
+            $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
+
+            $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
+            $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
+            $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
+
+            $model->vendor_public_email= $vendor['vendor_public_email'];
+            $model->vendor_public_phone= $vendor['vendor_public_phone'];
+
+            $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
+            $model->approve_status = 'Yes';
+            $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
+
+            //add categories
+            if(!$vendor['category_id']) {
+                $vendor['category_id'] = [];
             }
 
-            if ($model->load(Yii::$app->request->post())) {
+            foreach ($vendor['category_id'] as $key => $value) {
+               $vc = new VendorCategory;
+               $vc->vendor_id = $model->vendor_id;
+               $vc->category_id = $value;
+               $vc->save();
+            }
 
-                $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+            $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
+            $model->slug = str_replace(' ', '-', $model->slug);
 
-                if(is_array($vendor_day_off)) {
-                    $model->day_off = implode(',', $vendor_day_off);    
-                }else{
-                    $model->day_off = '';
-                }
-                
-                $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
-                $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
+            $vendor_password = Yii::$app->getSecurity()->generatePasswordHash($vendor['vendor_password']);
 
-                $vendor = Yii::$app->request->post('Vendor');
-                $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
-                $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
+            $file = UploadedFile::getInstances($model, 'vendor_logo_path');
 
-                $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
-                $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
-                $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
+            if ($file) {
+                foreach ($file as $files) {
+                    if($files instanceof yii\web\UploadedFile){
+                        $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
-                $model->vendor_public_email= $vendor['vendor_public_email'];
-                $model->vendor_public_phone= $vendor['vendor_public_phone'];
+                        //Resize file using imagine
+                        $resize = true;
 
-                $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
-                $model->approve_status = 'Yes';
-                $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
+                        if($resize){
+                            $newTmpName = $files->tempName . "." . $files->extension;
 
-                //add categories 
-                if(!$vendor['category_id']) {
-                    $vendor['category_id'] = [];
-                }
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image = $imagine->open($files->tempName);
+                            $image->resize($image->getSize()->widen(250));
+                            $image->save($newTmpName);
 
-                foreach ($vendor['category_id'] as $key => $value) {
-                   $vc = new VendorCategory;
-                   $vc->vendor_id = $model->vendor_id;
-                   $vc->category_id = $value;
-                   $vc->save();
-                }
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName;
+                        }
 
-                $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
-                $model->slug = str_replace(' ', '-', $model->slug);
+                        //Save to S3
+                        $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
 
-                $vendor_password = Yii::$app->getSecurity()->generatePasswordHash($vendor['vendor_password']);
-
-                $file = UploadedFile::getInstances($model, 'vendor_logo_path');
-
-                if ($file) {
-                    foreach ($file as $files) {
-                        if($files instanceof yii\web\UploadedFile){
-                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
-
-                            //Resize file using imagine
-                            $resize = true;
-
-                            if($resize){
-                                $newTmpName = $files->tempName . "." . $files->extension;
-
-                                $imagine = new \Imagine\Gd\Imagine();
-                                $image = $imagine->open($files->tempName);
-                                $image->resize($image->getSize()->widen(250));
-                                $image->save($newTmpName);
-
-                                //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName;
-                            }
-
-                            //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
-
-                            if($awsResult){
-                                $model->vendor_logo_path = $filename;
-                            }
+                        if($awsResult){
+                            $model->vendor_logo_path = $filename;
                         }
                     }
                 }
-
-                if ($model->save(false)) {
-
-                    //remove old packages
-                    VendorPackages::deleteAll(['vendor_id' => $model->vendor_id]);
-
-                    //save packages 
-                    $vendor_packages = Yii::$app->request->post('vendor_packages');
-
-                    if($vendor_packages) {
-                        foreach ($vendor_packages as $key => $value) {
-
-                            $package = Package::findOne($value['package_id']);
-
-                            if(!$package) {
-                                continue;
-                            }
-
-                            $vp = new VendorPackages;
-                            $vp->vendor_id = $model->vendor_id;
-                            $vp->package_id = $value['package_id'];
-                            $vp->package_price = $package->package_pricing;
-                            $vp->package_start_date = date('Y-m-d', strtotime($value['package_start_date']));
-                            $vp->package_end_date = date('Y-m-d', strtotime($value['package_end_date']));
-                            $vp->trash = 'Default';
-                            $vp->save();
-                        }
-                    }
-
-                    //remove old alert emails 
-                    VendorOrderAlertEmails::deleteAll(['vendor_id' => $model->vendor_id]);
-
-                    //save vendor order alert email 
-                    $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
-
-                    if($vendor_order_alert_emails) {
-                        foreach ($vendor_order_alert_emails as $key => $value) {
-                            $email = new VendorOrderAlertEmails;
-                            $email->vendor_id = $model->vendor_id;
-                            $email->email_address = $value;
-                            $email->save();
-                        }
-                    }
-
-                    //Add to log
-                    Yii::info('[New Vendor] '. Yii::$app->user->identity->admin_name .' created new vendor '.$model['vendor_name'], __METHOD__);
-
-                    //Send Email
-                    Yii::$app->mailer->compose([
-                        "html" => "vendor/package-subscribe"
-                            ],[
-                        "user" => $model->vendor_name,
-                        "vendorEmail" => $model->vendor_contact_email,
-                        "vendorPassword" => $vendor['vendor_password'],
-                    ])
-                    ->setFrom(Yii::$app->params['supportEmail'])
-                    ->setTo($model->vendor_contact_email)
-                    ->setSubject('Welcome '.$model['vendor_name'])
-                    ->send();
-                }
-                $command=Vendor::updateAll(['vendor_password' => $vendor_password],'vendor_id= '.$model->id);
-                Yii::$app->session->setFlash('success', 'Vendor created successfully!');
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-
-                return $this->render('create', [
-                    'packages' => $package,
-                    'model' => $model
-                ]);
             }
+
+            if ($model->save(false)) {
+
+                //remove old packages
+                VendorPackages::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                //save packages
+                $vendor_packages = Yii::$app->request->post('vendor_packages');
+
+                if($vendor_packages) {
+                    foreach ($vendor_packages as $key => $value) {
+
+                        $package = Package::findOne($value['package_id']);
+
+                        if(!$package) {
+                            continue;
+                        }
+
+                        $vp = new VendorPackages;
+                        $vp->vendor_id = $model->vendor_id;
+                        $vp->package_id = $value['package_id'];
+                        $vp->package_price = $package->package_pricing;
+                        $vp->package_start_date = date('Y-m-d', strtotime($value['package_start_date']));
+                        $vp->package_end_date = date('Y-m-d', strtotime($value['package_end_date']));
+                        $vp->trash = 'Default';
+                        $vp->save();
+                    }
+                }
+
+                //remove old alert emails
+                VendorOrderAlertEmails::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                //save vendor order alert email
+                $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+                if($vendor_order_alert_emails) {
+                    foreach ($vendor_order_alert_emails as $key => $value) {
+                        $email = new VendorOrderAlertEmails;
+                        $email->vendor_id = $model->vendor_id;
+                        $email->email_address = $value;
+                        $email->save();
+                    }
+                }
+
+                //Add to log
+                Yii::info('[New Vendor] '. Yii::$app->user->identity->admin_name .' created new vendor '.$model['vendor_name'], __METHOD__);
+
+                //Send Email
+                Yii::$app->mailer->compose([
+                    "html" => "vendor/package-subscribe"
+                        ],[
+                    "user" => $model->vendor_name,
+                    "vendorEmail" => $model->vendor_contact_email,
+                    "vendorPassword" => $vendor['vendor_password'],
+                ])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($model->vendor_contact_email)
+                ->setSubject('Welcome '.$model['vendor_name'])
+                ->send();
+            }
+            $command=Vendor::updateAll(['vendor_password' => $vendor_password],'vendor_id= '.$model->id);
+            Yii::$app->session->setFlash('success', 'Vendor created successfully!');
+
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            return $this->render('create', [
+                'packages' => $package,
+                'model' => $model
+            ]);
         }
     }
 
@@ -359,169 +342,160 @@ class VendorController extends Controller
     {
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
-        $access = AuthItem::AuthitemCheck('2', '22');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $model->scenario = 'vendorUpdate';
-            // List all packages
-            $package = Package::loadpackage();
+        $model = $this->findModel($id);
+        $model->scenario = 'vendorUpdate';
+        // List all packages
+        $package = Package::loadpackage();
 
-            //Current package
-            $packname = Package::findOne($model->package_id);
-            $present_package = $packname['package_name'];
+        //Current package
+        $packname = Package::findOne($model->package_id);
+        $present_package = $packname['package_name'];
 
-            // Current logo
-            $exist_logo_image = $model->vendor_logo_path;
+        // Current logo
+        $exist_logo_image = $model->vendor_logo_path;
 
-            // Current Phone numbers
-            $vendor_contact_number = explode(',', $model['vendor_contact_number']);
+        // Current Phone numbers
+        $vendor_contact_number = explode(',', $model['vendor_contact_number']);
 
-            if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
 
-                $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+            $vendor_day_off = Yii::$app->request->post('vendor_day_off');
 
-                if(is_array($vendor_day_off)) {
-                    $model->day_off = implode(',', $vendor_day_off);    
-                }else{
-                    $model->day_off = '';
+            if(is_array($vendor_day_off)) {
+                $model->day_off = implode(',', $vendor_day_off);
+            }else{
+                $model->day_off = '';
+            }
+
+            $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
+            $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
+
+            $vendor = Yii::$app->request->post('Vendor');
+            $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
+            $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
+
+            $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
+            $model->slug = str_replace(' ', '-', $model->slug);
+            $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
+            $model->approve_status = 'Yes';
+            $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
+
+            //remove old categories
+            VendorCategory::deleteAll(['vendor_id' => $model->vendor_id]);
+
+            //add categories
+            if(!$vendor['category_id']) {
+                $vendor['category_id'] = [];
+            }
+
+            foreach ($vendor['category_id'] as $key => $value) {
+               $vc = new VendorCategory;
+               $vc->vendor_id = $model->vendor_id;
+               $vc->category_id = $value;
+               $vc->save();
+            }
+
+            //remove old alert emails
+            VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
+
+            //save vendor order alert email
+            $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+            if($vendor_order_alert_emails) {
+                foreach ($vendor_order_alert_emails as $key => $value) {
+                    $email = new VendorOrderAlertEmails;
+                    $email->vendor_id = $id;
+                    $email->email_address = $value;
+                    $email->save();
                 }
-                
-                $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
-                $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
+            }
 
-                $vendor = Yii::$app->request->post('Vendor');
-                $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
-                $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
+            $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
+            $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
+            $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
 
-                $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
-                $model->slug = str_replace(' ', '-', $model->slug);
-                $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
-                $model->approve_status = 'Yes';
-                $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
+            $model->vendor_public_email= $vendor['vendor_public_email'];
+            $model->vendor_public_phone= $vendor['vendor_public_phone'];
 
-                //remove old categories 
-                VendorCategory::deleteAll(['vendor_id' => $model->vendor_id]);
+            $file = UploadedFile::getInstances($model, 'vendor_logo_path');
 
-                //add categories 
-                if(!$vendor['category_id']) {
-                    $vendor['category_id'] = [];
-                }
+            if (!empty($file)) {
+                foreach ($file as $files) {
+                    if($files instanceof yii\web\UploadedFile){
+                        $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
-                foreach ($vendor['category_id'] as $key => $value) {
-                   $vc = new VendorCategory;
-                   $vc->vendor_id = $model->vendor_id;
-                   $vc->category_id = $value;
-                   $vc->save();
-                }
-                
-                //remove old alert emails 
-                VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
+                        //Resize file using imagine
+                        $resize = true;
 
-                //save vendor order alert email 
-                $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+                        if($resize){
+                            $newTmpName = $files->tempName . "." . $files->extension;
 
-                if($vendor_order_alert_emails) {
-                    foreach ($vendor_order_alert_emails as $key => $value) {
-                        $email = new VendorOrderAlertEmails;
-                        $email->vendor_id = $id;
-                        $email->email_address = $value;
-                        $email->save();
-                    }
-                }
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image = $imagine->open($files->tempName);
+                            $image->resize($image->getSize()->widen(250));
+                            $image->save($newTmpName);
 
-                $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
-                $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
-                $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName;
+                        }
 
-                $model->vendor_public_email= $vendor['vendor_public_email'];
-                $model->vendor_public_phone= $vendor['vendor_public_phone'];
+                        //Save to S3
+                        $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
 
-                $file = UploadedFile::getInstances($model, 'vendor_logo_path');
-
-                if (!empty($file)) {
-                    foreach ($file as $files) {
-                        if($files instanceof yii\web\UploadedFile){
-                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
-
-                            //Resize file using imagine
-                            $resize = true;
-
-                            if($resize){
-                                $newTmpName = $files->tempName . "." . $files->extension;
-
-                                $imagine = new \Imagine\Gd\Imagine();
-                                $image = $imagine->open($files->tempName);
-                                $image->resize($image->getSize()->widen(250));
-                                $image->save($newTmpName);
-
-                                //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName;
-                            }
-
-                            //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
-
-                            if($awsResult){
-                                $model->vendor_logo_path = $filename;
-                                Yii::$app->resourceManager->delete("vendor_logo/" . $exist_logo_image);
-                            }
+                        if($awsResult){
+                            $model->vendor_logo_path = $filename;
+                            Yii::$app->resourceManager->delete("vendor_logo/" . $exist_logo_image);
                         }
                     }
-                } else {
-                    $model->vendor_logo_path = $exist_logo_image;
                 }
-
-                if($model->save(false)) {
-                    Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
-                    return $this->redirect(['index']);
-                }
-
             } else {
-
-                $day_off = explode(',', $model->day_off);
-
-                if (($model->commision) > 1) {
-                } else {
-                    $model_siteinfo = Siteinfo::find()->all();
-                    foreach ($model_siteinfo as $key => $val) {
-                        $first_id = $val['commision'];
-                    }
-                    if (count($model_siteinfo) == 1) {
-                        $model->commision = $first_id;
-                    }
-                }
-
-                //get vendor order notification email address 
-                $vendor_order_alert_emails = VendorOrderAlertEmails::find()
-                    ->where(['vendor_id' => $id])
-                    ->all();
-
-                $vendor_packages = VendorPackages::findAll(['vendor_id' => $model->vendor_id]);
-
-                $packages = Package::findAll([
-                    'package_status' => 'Active',
-                    'trash' => 'Default'
-                ]);
-
-                $vendor_category = VendorCategory::findAll(['vendor_id' => $model->vendor_id]);
-
-                $model->category_id = ArrayHelper::map($vendor_category, 'category_id', 'category_id');
-
-                return $this->render('update', [
-                    'model' => $model, 
-                    'vendor_contact_number' => $vendor_contact_number, 
-                    'vendor_order_alert_emails' => $vendor_order_alert_emails,
-                    'day_off' => $day_off,
-                    'vendor_packages' => $vendor_packages,
-                    'packages' => $packages
-                ]);
+                $model->vendor_logo_path = $exist_logo_image;
             }
-        
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            if($model->save(false)) {
+                Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+                return $this->redirect(['index']);
+            }
+
+        } else {
+
+            $day_off = explode(',', $model->day_off);
+
+            if (($model->commision) > 1) {
+            } else {
+                $model_siteinfo = Siteinfo::find()->all();
+                foreach ($model_siteinfo as $key => $val) {
+                    $first_id = $val['commision'];
+                }
+                if (count($model_siteinfo) == 1) {
+                    $model->commision = $first_id;
+                }
+            }
+
+            //get vendor order notification email address
+            $vendor_order_alert_emails = VendorOrderAlertEmails::find()
+                ->where(['vendor_id' => $id])
+                ->all();
+
+            $vendor_packages = VendorPackages::findAll(['vendor_id' => $model->vendor_id]);
+
+            $packages = Package::findAll([
+                'package_status' => 'Active',
+                'trash' => 'Default'
+            ]);
+
+            $vendor_category = VendorCategory::findAll(['vendor_id' => $model->vendor_id]);
+
+            $model->category_id = ArrayHelper::map($vendor_category, 'category_id', 'category_id');
+
+            return $this->render('update', [
+                'model' => $model,
+                'vendor_contact_number' => $vendor_contact_number,
+                'vendor_order_alert_emails' => $vendor_order_alert_emails,
+                'day_off' => $day_off,
+                'vendor_packages' => $vendor_packages,
+                'packages' => $packages
+            ]);
         }
     }
 
@@ -535,13 +509,6 @@ class VendorController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '22');
-        
-        if (!yii::$app->user->can($access)) {            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
-
         //Shouldn't be able to delete a vendor who has orders
         $count = Suborder::find()
             ->joinWith('order')

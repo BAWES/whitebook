@@ -56,30 +56,23 @@ class SocialinfoController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '7');
-        if (yii::$app->user->can($access)) {
-            $model = Socialinfo::find()->all();
-            foreach ($model as $key => $val) {
-                $id = $val['store_social_id'];
-            }
-            if (count($model) == 1) {
-                return $this->redirect(['socialinfo/update/', 'store_social_id' => $id]);
-            } else {
-                $this->redirect('socialinfo/create');
-            }
+        $model = Socialinfo::find()->all();
+        foreach ($model as $key => $val) {
+            $id = $val['store_social_id'];
+        }
+        if (count($model) == 1) {
+            return $this->redirect(['socialinfo/update/', 'store_social_id' => $id]);
+        } else {
+            $this->redirect('socialinfo/create');
+        }
 
-            $searchModel = new SocialinfoSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new SocialinfoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
     }
 
     /**
@@ -105,22 +98,15 @@ class SocialinfoController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '7');
-        if (yii::$app->user->can($access)) {
-            $model = new Socialinfo();
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'Social info created successfully!');
+        $model = new Socialinfo();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Social info created successfully!');
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('create', [
-                'model' => $model,
-            ]);
-            }
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->render('create', [
+            'model' => $model,
+        ]);
         }
     }
 
@@ -135,23 +121,16 @@ class SocialinfoController extends Controller
      */
     public function actionUpdate($store_social_id)
     {
-        $access = AuthItem::AuthitemCheck('2', '7');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($store_social_id);
+        $model = $this->findModel($store_social_id);
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'Social info updated successfully!');
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Social info updated successfully!');
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('update', [
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('update', [
                 'model' => $model,
             ]);
-            }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
         }
     }
 
@@ -166,16 +145,8 @@ class SocialinfoController extends Controller
      */
     public function actionDelete($store_social_id, $store_id)
     {
-        $access = AuthItem::AuthitemCheck('3', '7');
-        if (yii::$app->user->can($access)) {
-            $this->findModel($store_social_id, $store_id)->delete();
-
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        $this->findModel($store_social_id, $store_id)->delete();
+        return $this->redirect(['index']);
     }
 
     /**

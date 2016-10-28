@@ -56,25 +56,15 @@ class CmsController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '27');
-        
-        if (yii::$app->user->can($access)) {
+        $model = new Cms();
+        $searchModel = new CmsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            $model = new Cms();
-            $searchModel = new CmsSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'model' => $model,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+        ]);
     }
 
     /**

@@ -67,64 +67,35 @@ class CategoryController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '3');
-        
-        if (yii::$app->user->can($access)) {
-            $searchModel = new CategorySearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new CategorySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionManage_subcategory()
     {
-        $access = AuthItem::AuthitemCheck('4', '3');
+        $searchModel = new CategorySearch();
+        $dataProvider = $searchModel->subcategory_search(Yii::$app->request->queryParams);
 
-        if (yii::$app->user->can($access)) {
-        
-            $searchModel = new CategorySearch();
-            $dataProvider = $searchModel->subcategory_search(Yii::$app->request->queryParams);
-
-            return $this->render('subcategory_index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('subcategory_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionChild_category_index()
     {
-        $access = AuthItem::AuthitemCheck('4', '3');
+        $searchModel = new CategorySearch();
+        $dataProvider = $searchModel->childcategory_search(Yii::$app->request->queryParams);
 
-        if (yii::$app->user->can($access)) {
-            
-            $searchModel = new CategorySearch();
-            $dataProvider = $searchModel->childcategory_search(Yii::$app->request->queryParams);
-
-            return $this->render('child_category_index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-
-        } else {
-
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('child_category_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

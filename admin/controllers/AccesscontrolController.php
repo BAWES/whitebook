@@ -38,22 +38,14 @@ class AccesscontrolController extends Controller
     */
     public function actionIndex()
     {
-	   $access = AuthItem::AuthitemCheck('4', '29');
+        $searchModel = new AccessControlSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if (yii::$app->user->can($access)) {
-            $searchModel = new AccessControlSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-        
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+
     }
 
     /**
@@ -78,117 +70,108 @@ class AccesscontrolController extends Controller
     */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '29');
         $request = Yii::$app->request;
+        $model = new AccessControl();
+        $controller = UserController::loadcontroller();
+        $admin = Admin::admin();
+        $authitem = AuthItem::AuthItem();
 
-        if (yii::$app->user->can($access)) {
-            $model = new AccessControl();
-            $controller = UserController::loadcontroller();
-            $admin = Admin::admin();
-            $authitem = AuthItem::AuthItem();
+        if ($request->isPost) {
 
-            if ($request->isPost) {
+            $model->load(Yii::$app->request->post());
+            $id = explode('_', $model->admin_id);
+            $adminid = $id[0];
+            $roleid = $id[1];
+            $command = AccessControl::deleteAll(['admin_id' => $adminid]);
+            $command1 = AuthAssignment::deleteAll(['user_id' => $adminid]);
+            $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
+            $p = 1;
 
-                $model->load(Yii::$app->request->post());
-                $id = explode('_', $model->admin_id);
-                $adminid = $id[0];
-                $roleid = $id[1];
-                $command = AccessControl::deleteAll(['admin_id' => $adminid]);
-                $command1 = AuthAssignment::deleteAll(['user_id' => $adminid]);
-                $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
-                $p = 1;
-
-                foreach ($model->controller as $key => $val) {
-                    if (count($val) > 1) {
-                        $controller_id = $create = $update = $view = $delete = $manage = '';
-                        $auth_assign = new AuthAssignment;
-                        foreach ($val as $k => $v) {
-							$timenow = date('Y-m-d h:i:sa');
-                            switch ($k)
-                            {
-                                case 'controller_id':
-                                    $controller_id = $v;
-                                    break;
-                                case 'create':
-                                    $create = $v;
-                                    if ($controller_id != '') {
-    									$auth_assign->item_name = $create;
-    									$auth_assign->user_id = $adminid;
-    									$auth_assign->controller_id = $controller_id;
-    									$auth_assign->save();
-                                    }
-                                    break;
-                                case 'update':
-                                    $update = $v;
-                                    if ($controller_id != '') {
-                                        $auth_assign->item_name = $v;
-        								$auth_assign->user_id = $adminid;
-        								$auth_assign->controller_id = $controller_id;
-        								$auth_assign->save();
-                                    }
-                                    break;
-                                case 'delete':
-                                    $delete = $v;
-                                    if ($controller_id != '') {
-                                        $auth_assign->item_name = $v;
-        								$auth_assign->user_id = $adminid;
-        								$auth_assign->controller_id = $controller_id;
-        								$auth_assign->save();
-                                    }
-                                    break;
-                                case 'manage':
-                                    $manage = $v;
-                                    if ($controller_id != '') {
-                                        $auth_assign->item_name = $v;
-        								$auth_assign->user_id = $adminid;
-        								$auth_assign->controller_id = $controller_id;
-        								$auth_assign->save();
-                                    }
-                                    break;
-                                case 'view':
-                                    $view = $v;
-                                    if ($controller_id != '') {
-                                    $auth_assign->item_name = $v;
-    								$auth_assign->user_id = $adminid;
-    								$auth_assign->controller_id = $controller_id;
-    								$auth_assign->save();
-                                    }
-                                    break;
-                            }
-                        }
+            foreach ($model->controller as $key => $val) {
+                if (count($val) > 1) {
+                    $controller_id = $create = $update = $view = $delete = $manage = '';
+                    $auth_assign = new AuthAssignment;
+                    foreach ($val as $k => $v) {
                         $timenow = date('Y-m-d h:i:sa');
-                        $userid = Admin::getAdmin('id');
-                        if ($controller_id != '') {
-    						$access_ctrl=new AccessControl;
-                            $access_ctrl->role_id = $roleid;
-    						$access_ctrl->admin_id = $adminid;
-    						$access_ctrl->controller = $controller_id;
-                            $access_ctrl->create = $create;
-                             $access_ctrl->update = $update;
-    						 $access_ctrl->delete = $delete;
-    						 $access_ctrl->manage = $manage;
-                             $access_ctrl->view = $view;
-    						 $access_ctrl->created_by = $userid;
-    						 $access_ctrl->created_datetime = $timenow;
-    						$access_ctrl->validate();
-    						$access_ctrl->save();
+                        switch ($k)
+                        {
+                            case 'controller_id':
+                                $controller_id = $v;
+                                break;
+                            case 'create':
+                                $create = $v;
+                                if ($controller_id != '') {
+                                    $auth_assign->item_name = $create;
+                                    $auth_assign->user_id = $adminid;
+                                    $auth_assign->controller_id = $controller_id;
+                                    $auth_assign->save();
+                                }
+                                break;
+                            case 'update':
+                                $update = $v;
+                                if ($controller_id != '') {
+                                    $auth_assign->item_name = $v;
+                                    $auth_assign->user_id = $adminid;
+                                    $auth_assign->controller_id = $controller_id;
+                                    $auth_assign->save();
+                                }
+                                break;
+                            case 'delete':
+                                $delete = $v;
+                                if ($controller_id != '') {
+                                    $auth_assign->item_name = $v;
+                                    $auth_assign->user_id = $adminid;
+                                    $auth_assign->controller_id = $controller_id;
+                                    $auth_assign->save();
+                                }
+                                break;
+                            case 'manage':
+                                $manage = $v;
+                                if ($controller_id != '') {
+                                    $auth_assign->item_name = $v;
+                                    $auth_assign->user_id = $adminid;
+                                    $auth_assign->controller_id = $controller_id;
+                                    $auth_assign->save();
+                                }
+                                break;
+                            case 'view':
+                                $view = $v;
+                                if ($controller_id != '') {
+                                $auth_assign->item_name = $v;
+                                $auth_assign->user_id = $adminid;
+                                $auth_assign->controller_id = $controller_id;
+                                $auth_assign->save();
+                                }
+                                break;
                         }
                     }
+                    $timenow = date('Y-m-d h:i:sa');
+                    $userid = Admin::getAdmin('id');
+                    if ($controller_id != '') {
+                        $access_ctrl=new AccessControl;
+                        $access_ctrl->role_id = $roleid;
+                        $access_ctrl->admin_id = $adminid;
+                        $access_ctrl->controller = $controller_id;
+                        $access_ctrl->create = $create;
+                         $access_ctrl->update = $update;
+                         $access_ctrl->delete = $delete;
+                         $access_ctrl->manage = $manage;
+                         $access_ctrl->view = $view;
+                         $access_ctrl->created_by = $userid;
+                         $access_ctrl->created_datetime = $timenow;
+                        $access_ctrl->validate();
+                        $access_ctrl->save();
+                    }
                 }
-                
-                Yii::$app->session->setFlash('success', 'Access controller created successfully!');
-                return $this->redirect(['index']);
-
-            } else {
-                return $this->render('create', [
-                    'model' => $model, 'admin' => $admin, 'authitem' => $authitem, 'controller' => $controller,
-                ]);
             }
 
-        } else {
+            Yii::$app->session->setFlash('success', 'Access controller created successfully!');
+            return $this->redirect(['index']);
 
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+        } else {
+            return $this->render('create', [
+                'model' => $model, 'admin' => $admin, 'authitem' => $authitem, 'controller' => $controller,
+            ]);
         }
     }
 
@@ -202,108 +185,98 @@ class AccesscontrolController extends Controller
     */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '29');
-        
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $controller = UserController::loadcontroller($model->admin_id, $model->role_id);
-            $admin = Admin::adminupdate();
-            $authitem = AuthItem::AuthItem();
-            $admin_id = $model->admin_id;
-            $accesslist = \Yii::$app->DB->createCommand("SELECT whitebook_controller.controller,whitebook_controller.id,`create`,`update`,`delete`,`manage`,`view` FROM whitebook_access_control LEFT JOIN whitebook_controller ON whitebook_controller.id = whitebook_access_control.controller WHERE admin_id = $admin_id AND role_id =$model->role_id ORDER BY whitebook_access_control.controller ASC")->queryall();
-            $model->admin_id = $model->admin_id.'_'.$model->role_id;
-            
-            if (Yii::$app->request->isPost) {
-                
-				$model->load(Yii::$app->request->post());
-                $id = explode('_', $model->admin_id);
-                $adminid = $id[0];
-                $roleid = $id[1];
-                $command =AccessControl::deleteAll(['admin_id' => $admin_id,'role_id' => $model->role_id]);
-                $command =AuthAssignment::deleteAll(['user_id' => $admin_id]);
-                $model->load(Yii::$app->request->post());
-                $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
-                foreach ($model->controller as $key => $val) {
-                    if (count($val) > 1 && isset($val['controller_id'])) {
-                        $controller_id = $create = $update = $delete = $view = $manage = '';
-                        $auth_assign = new AuthAssignment;
-                        foreach ($val as $k => $v) {
-                            switch ($k) {
-                                case 'controller_id':
-                                $controller_id = $v;
-                                break;
+        $model = $this->findModel($id);
+        $controller = UserController::loadcontroller($model->admin_id, $model->role_id);
+        $admin = Admin::adminupdate();
+        $authitem = AuthItem::AuthItem();
+        $admin_id = $model->admin_id;
+        $accesslist = \Yii::$app->DB->createCommand("SELECT whitebook_controller.controller,whitebook_controller.id,`create`,`update`,`delete`,`manage`,`view` FROM whitebook_access_control LEFT JOIN whitebook_controller ON whitebook_controller.id = whitebook_access_control.controller WHERE admin_id = $admin_id AND role_id =$model->role_id ORDER BY whitebook_access_control.controller ASC")->queryall();
+        $model->admin_id = $model->admin_id.'_'.$model->role_id;
 
-                                case 'create':
-									$create = $v;
-									$auth_assign->item_name = $create;
-									$auth_assign->user_id = $adminid;
-									$auth_assign->controller_id = $controller_id;
-									$auth_assign->save();
+        if (Yii::$app->request->isPost) {
 
-                                break;
-                                case 'update':
-                                $update = $v;
-                                $auth_assign->item_name = $v;
-								$auth_assign->user_id = $adminid;
-								$auth_assign->controller_id = $controller_id;
-								$auth_assign->save();
-                                break;
-                                case 'delete':
-                                $delete = $v;
-                                $auth_assign->item_name = $v;
-								$auth_assign->user_id = $adminid;
-								$auth_assign->controller_id = $controller_id;
-								$auth_assign->save();
+            $model->load(Yii::$app->request->post());
+            $id = explode('_', $model->admin_id);
+            $adminid = $id[0];
+            $roleid = $id[1];
+            $command =AccessControl::deleteAll(['admin_id' => $admin_id,'role_id' => $model->role_id]);
+            $command =AuthAssignment::deleteAll(['user_id' => $admin_id]);
+            $model->load(Yii::$app->request->post());
+            $ar = array('controller_id', 'create', 'update', 'delete', 'manage', 'view');
+            foreach ($model->controller as $key => $val) {
+                if (count($val) > 1 && isset($val['controller_id'])) {
+                    $controller_id = $create = $update = $delete = $view = $manage = '';
+                    $auth_assign = new AuthAssignment;
+                    foreach ($val as $k => $v) {
+                        switch ($k) {
+                            case 'controller_id':
+                            $controller_id = $v;
+                            break;
 
-                                break;
-                                case 'manage':
-                                $manage = $v;
-								$auth_assign->item_name = $v;
-								$auth_assign->user_id = $adminid;
-								$auth_assign->controller_id = $controller_id;
-								$auth_assign->save();
-                                break;
-                                case 'view':
-                                $view = $v;
-								$auth_assign->item_name = $v;
-								$auth_assign->user_id = $adminid;
-								$auth_assign->controller_id = $controller_id;
-								$auth_assign->save();
-                                break;
-                            }
+                            case 'create':
+                                $create = $v;
+                                $auth_assign->item_name = $create;
+                                $auth_assign->user_id = $adminid;
+                                $auth_assign->controller_id = $controller_id;
+                                $auth_assign->save();
+
+                            break;
+                            case 'update':
+                            $update = $v;
+                            $auth_assign->item_name = $v;
+                            $auth_assign->user_id = $adminid;
+                            $auth_assign->controller_id = $controller_id;
+                            $auth_assign->save();
+                            break;
+                            case 'delete':
+                            $delete = $v;
+                            $auth_assign->item_name = $v;
+                            $auth_assign->user_id = $adminid;
+                            $auth_assign->controller_id = $controller_id;
+                            $auth_assign->save();
+
+                            break;
+                            case 'manage':
+                            $manage = $v;
+                            $auth_assign->item_name = $v;
+                            $auth_assign->user_id = $adminid;
+                            $auth_assign->controller_id = $controller_id;
+                            $auth_assign->save();
+                            break;
+                            case 'view':
+                            $view = $v;
+                            $auth_assign->item_name = $v;
+                            $auth_assign->user_id = $adminid;
+                            $auth_assign->controller_id = $controller_id;
+                            $auth_assign->save();
+                            break;
                         }
-                        $timenow = date('Y-m-d h:i:sa');
-                        $userid = Admin::getAdmin('id');
-                        $access_ctrl=new AccessControl();
-                        $access_ctrl->role_id = $roleid;
-						$access_ctrl->admin_id = $adminid;
-						$access_ctrl->controller = $controller_id;
-                        $access_ctrl->create = $create;
-                        $access_ctrl->update = $update;
-						$access_ctrl->delete = $delete;
-						$access_ctrl->manage = $manage;
-                        $access_ctrl->view = $view;
-						$access_ctrl->created_by = $userid;
-						$access_ctrl->created_datetime = $timenow;
-						$access_ctrl->save();
                     }
+                    $timenow = date('Y-m-d h:i:sa');
+                    $userid = Admin::getAdmin('id');
+                    $access_ctrl=new AccessControl();
+                    $access_ctrl->role_id = $roleid;
+                    $access_ctrl->admin_id = $adminid;
+                    $access_ctrl->controller = $controller_id;
+                    $access_ctrl->create = $create;
+                    $access_ctrl->update = $update;
+                    $access_ctrl->delete = $delete;
+                    $access_ctrl->manage = $manage;
+                    $access_ctrl->view = $view;
+                    $access_ctrl->created_by = $userid;
+                    $access_ctrl->created_datetime = $timenow;
+                    $access_ctrl->save();
                 }
-                
-                Yii::$app->session->setFlash('success', 'Access controller Updated successfully!');
-                return $this->redirect(['index']);
-
-            } else {
-                
-                return $this->render('update', [
-                    'model' => $model, 'admin' => $admin, 'authitem' => $authitem, 'controller' => $controller, 'accesslist' => $accesslist,
-                ]);
             }
 
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            Yii::$app->session->setFlash('success', 'Access controller Updated successfully!');
+            return $this->redirect(['index']);
 
-            return $this->redirect(['site/index']);
+        } else {
+
+            return $this->render('update', [
+                'model' => $model, 'admin' => $admin, 'authitem' => $authitem, 'controller' => $controller, 'accesslist' => $accesslist,
+            ]);
         }
     }
 
@@ -317,24 +290,15 @@ class AccesscontrolController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '29');
+        $admin_id = AccessControl::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
+        $admin_id = $admin_id['admin_id'];
 
-        if (yii::$app->user->can($access)) {
-            $admin_id = AccessControl::find()->select('admin_id,controller')->where(['access_id' => $id])->one();
-            $admin_id = $admin_id['admin_id'];
+        $command =AccessControl::deleteAll(['admin_id' => $admin_id]);
+        $command =AuthAssignment::deleteAll(['user_id' => $admin_id]);
 
-            $command =AccessControl::deleteAll(['admin_id' => $admin_id]);
-            $command =AuthAssignment::deleteAll(['user_id' => $admin_id]);
+        Yii::$app->session->setFlash('success', 'Access controller deleted successfully!');
 
-            Yii::$app->session->setFlash('success', 'Access controller deleted successfully!');
-
-            return $this->redirect(['index']);
-
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**

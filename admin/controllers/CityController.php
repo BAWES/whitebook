@@ -63,23 +63,13 @@ class CityController extends Controller
 
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '12');
+       $searchModel = new CitySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if (yii::$app->user->can($access)) {
-        
-            $searchModel = new CitySearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -105,33 +95,24 @@ class CityController extends Controller
     */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '12');
-        
-        if (yii::$app->user->can($access)) {
-            
-            $model = new City();
-            $model->status = 'Active';
+        $model = new City();
+        $model->status = 'Active';
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'Governorate info created successfully!');
-                return $this->redirect(['index']);
-            
-            } else {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-                $countries = Country::loadcountry();
-                $country = ArrayHelper::map($countries, 'country_id', 'country_name');
+            Yii::$app->session->setFlash('success', 'Governorate info created successfully!');
+            return $this->redirect(['index']);
 
-                return $this->render('create', [
-                    'model' => $model, 'country' => $country,
-                ]);
-            }
-        
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+
+            $countries = Country::loadcountry();
+            $country = ArrayHelper::map($countries, 'country_id', 'country_name');
+
+            return $this->render('create', [
+                'model' => $model, 'country' => $country,
+            ]);
         }
+
     }
 
     /**
@@ -145,34 +126,24 @@ class CityController extends Controller
     */
     public function actionUpdate($city_id, $country_id)
     {
-        $access = AuthItem::AuthitemCheck('2', '12');
-        
-        if (yii::$app->user->can($access)) {
             
-            $model = $this->findModel($city_id, $country_id);
-            
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'Governorate info updated successfully!');
+        $model = $this->findModel($city_id, $country_id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-                return $this->redirect(['index']);
-            
-            } else {
-
-                $countries = Country::loadcountry();
-                $country = ArrayHelper::map($countries, 'country_id', 'country_name');
-
-                return $this->render('update', [
-                    'model' => $model, 
-                    'country' => $country,
-                ]);
-            }
+            Yii::$app->session->setFlash('success', 'Governorate info updated successfully!');
+            return $this->redirect(['index']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+
+            $countries = Country::loadcountry();
+            $country = ArrayHelper::map($countries, 'country_id', 'country_name');
+
+            return $this->render('update', [
+                'model' => $model,
+                'country' => $country,
+            ]);
         }
+
     }
 
     /**
@@ -186,33 +157,24 @@ class CityController extends Controller
     */
     public function actionDelete($city_id, $country_id)
     {
-        $access = AuthItem::AuthitemCheck('3', '12');
+        $this->findModel($city_id, $country_id)->delete();
 
-        if (yii::$app->user->can($access)) {
-        
-            $this->findModel($city_id, $country_id)->delete();
+        //delete all customer address
+        CustomerAddress::deleteAll(['city_id' => $city_id]);
 
-            //delete all customer address 
-            CustomerAddress::deleteAll(['city_id' => $city_id]);
+        //delete customer cart - area_id
+        CustomerCart::deleteAll('area_id in (select area_id from {{%location}}
+            where city_id = "'.$city_id.'")');
 
-            //delete customer cart - area_id 
-            CustomerCart::deleteAll('area_id in (select area_id from {{%location}} 
-                where city_id = "'.$city_id.'")');
+        //delete all location - city_id
+        Location::deleteAll(['city_id' => $city_id]);
 
-            //delete all location - city_id 
-            Location::deleteAll(['city_id' => $city_id]);
+        //delete all vendor location - city_id
+        VendorLocation::deleteAll(['city_id' => $city_id]);
 
-            //delete all vendor location - city_id 
-            VendorLocation::deleteAll(['city_id' => $city_id]);
+        Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
+        return $this->redirect(['index']);
 
-            Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
-            return $this->redirect(['index']);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
     }
 
     /**

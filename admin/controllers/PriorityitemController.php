@@ -76,20 +76,13 @@ class PriorityitemController extends Controller
         }
         /* END Priority created date filter */
 
-        $access = AuthItem::AuthitemCheck('4', '19');
-        if (yii::$app->user->can($access)) {
             $searchModel = new PriorityitemSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
     }
 
     /**
@@ -114,52 +107,40 @@ class PriorityitemController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '19');
-        
-        if (yii::$app->user->can($access)) {
+        $model = new PriorityItem();
+        $category = Category::loadcategoryname();
+        $subcategory = Subcategory::loadsubcategoryname();
+        $childcategory = ChildCategory::loadchild();
 
-            $model = new PriorityItem();
-            $category = Category::loadcategoryname();
-            $subcategory = Subcategory::loadsubcategoryname();
-            $childcategory = ChildCategory::loadchild();
-            
-            $priority = VendorItem::find()->select(['item_id','item_name'])
-              ->where(['item_status' => 'Active'])
-              ->andwhere(['!=', 'trash', 'Deleted'])
-  			      ->all();
+        $priority = VendorItem::find()->select(['item_id','item_name'])
+          ->where(['item_status' => 'Active'])
+          ->andwhere(['!=', 'trash', 'Deleted'])
+              ->all();
 
-            $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
-            
-            if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-  				    
-              $model->priority_start_date = Yii::$app->formatter->asDate(
-                $model->priority_start_date, 'php:Y-m-d');
-        			
-              $model->priority_end_date = Yii::$app->formatter->asDate(
-                $model->priority_end_date, 'php:Y-m-d');
-                
-              $model->save();
-              
-              Yii::$app->session->setFlash('success', 'Priority item added successfully!');
+        $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
 
-              return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
 
-            } else {
-              
-              return $this->render('create', [
-                'model' => $model, 
-                'priorityitem' => $priorityitem, 
-                'category' => $category, 
-                'subcategory' => $subcategory, 
-                'childcategory' => $childcategory,
-              ]);
-            }
+          $model->priority_start_date = Yii::$app->formatter->asDate(
+            $model->priority_start_date, 'php:Y-m-d');
+
+          $model->priority_end_date = Yii::$app->formatter->asDate(
+            $model->priority_end_date, 'php:Y-m-d');
+
+          $model->save();
+
+          Yii::$app->session->setFlash('success', 'Priority item added successfully!');
+
+          return $this->redirect(['index']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->render('create', [
+                'model' => $model,
+                'priorityitem' => $priorityitem,
+                'category' => $category,
+                'subcategory' => $subcategory,
+                'childcategory' => $childcategory,
+            ]);
         }
     }
 
@@ -173,65 +154,52 @@ class PriorityitemController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '19');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
+        $model = $this->findModel($id);
 
-            $vendorname = Vendor::loadvendorname();
-            $category = Category::loadcategoryname();
-            $subcategory = Subcategory::loadsubcategoryname();
-            $childcategory = ChildCategory::loadchild();
-            $vendorpriorityitem = VendorItem::vendorpriorityitemitem($model->item_id);
-            
-            $priority = VendorItem::find()->select(['item_id','item_name'])
-            ->where(['item_status' => 'Active'])
-            ->andwhere(['item_for_sale' => 'yes'])
-            ->andwhere(['!=', 'trash', 'Deleted'])
-            ->all();
-            $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
-            if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
-				
-				$model->priority_start_date = Yii::$app->formatter->asDate($model->priority_start_date, 'php:Y-m-d');
-      			$model->priority_end_date = Yii::$app->formatter->asDate($model->priority_end_date, 'php:Y-m-d');
-      			
-      			
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Priority item updated successfully!');
+        $vendorname = Vendor::loadvendorname();
+        $category = Category::loadcategoryname();
+        $subcategory = Subcategory::loadsubcategoryname();
+        $childcategory = ChildCategory::loadchild();
+        $vendorpriorityitem = VendorItem::vendorpriorityitemitem($model->item_id);
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('update', [
+        $priority = VendorItem::find()->select(['item_id','item_name'])
+        ->where(['item_status' => 'Active'])
+        ->andwhere(['item_for_sale' => 'yes'])
+        ->andwhere(['!=', 'trash', 'Deleted'])
+        ->all();
+        $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
+        if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
+
+            $model->priority_start_date = Yii::$app->formatter->asDate($model->priority_start_date, 'php:Y-m-d');
+            $model->priority_end_date = Yii::$app->formatter->asDate($model->priority_end_date, 'php:Y-m-d');
+
+
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Priority item updated successfully!');
+
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('update', [
                  'model' => $model, 'category' => $category,
                  'subcategory' => $subcategory, 'priorityitem' => $priorityitem, 'childcategory' => $childcategory,
             ]);
-            }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
         }
     }
 
-         /**
-          * Deletes an existing PriorityItem model.
-          * If deletion is successful, the browser will be redirected to the 'index' page.
-          *
-          * @param string $id
-          *
-          * @return mixed
-          */
-         public function actionDelete($id)
-         {
-             $access = AuthItem::AuthitemCheck('3', '19');
-             if (yii::$app->user->can($access)) {
-				 $command=PriorityItem::updateAll(['trash' => 'Deleted'],'priority_id= '.$id);
-                 Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');
-                 return $this->redirect(['index']);
-             } else {
-                 Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-                 return $this->redirect(['site/index']);
-             }
-         }
+     /**
+      * Deletes an existing PriorityItem model.
+      * If deletion is successful, the browser will be redirected to the 'index' page.
+      *
+      * @param string $id
+      *
+      * @return mixed
+      */
+     public function actionDelete($id)
+     {
+         $command=PriorityItem::updateAll(['trash' => 'Deleted'],'priority_id= '.$id);
+         Yii::$app->session->setFlash('success', 'Priority item deleted successfully!');
+         return $this->redirect(['index']);
+     }
 
     /**
      * Finds the PriorityItem model based on its primary key value.

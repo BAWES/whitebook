@@ -60,23 +60,13 @@ class CountryController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '11');
-        
-        if (yii::$app->user->can($access)) {
-            
-            $searchModel = new CountrySearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-        
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        $searchModel = new CountrySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -101,28 +91,16 @@ class CountryController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '11');
+        $model = new Country();
 
-        if (yii::$app->user->can($access)) {
-        
-            $model = new Country();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'Country info created successfully!');
-
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
-
+            Yii::$app->session->setFlash('success', 'Country info created successfully!');
+            return $this->redirect(['index']);
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
     }
 
@@ -136,29 +114,18 @@ class CountryController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '11');
-        
-        if (yii::$app->user->can($access)) {
-        
-            $model = $this->findModel($id);
+        $model = $this->findModel($id);
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'Country info updated successfully!');
-                return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            } else {
-
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+            Yii::$app->session->setFlash('success', 'Country info updated successfully!');
+            return $this->redirect(['index']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
     }
 
@@ -172,43 +139,32 @@ class CountryController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '11');
+        $this->findModel($id)->delete();
 
-        if (yii::$app->user->can($access)) {
-        
-            $this->findModel($id)->delete();
+        $cities = City::findAll(['country_id' => $id]);
 
-            $cities = City::findAll(['country_id' => $id]);
+        //delete all customer address
+        CustomerAddress::deleteAll(['country_id' => $id]);
 
-            //delete all customer address 
-            CustomerAddress::deleteAll(['country_id' => $id]);
+        //delete all cities
+        City::deleteAll(['country_id' => $id]);
 
-            //delete all cities 
-            City::deleteAll(['country_id' => $id]);
+        //delete all location
+        Location::deleteAll(['country_id' => $id]);
 
-            //delete all location 
-            Location::deleteAll(['country_id' => $id]);
+        foreach ($cities as $key => $value) {
 
-            foreach ($cities as $key => $value) {
-                
-                //delete customer cart - area_id 
-                CustomerCart::deleteAll('area_id in (select area_id from {{%location}} 
-                    where city_id = "'.$value->city_id.'")');
+            //delete customer cart - area_id
+            CustomerCart::deleteAll('area_id in (select area_id from {{%location}}
+                where city_id = "'.$value->city_id.'")');
 
-                //delete all vendor location - city_id 
-                VendorLocation::deleteAll(['city_id' => $value->city_id]);
-            }
-
-            Yii::$app->session->setFlash('success', 'Country deleted successfully!');
-
-            return $this->redirect(['index']);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            //delete all vendor location - city_id
+            VendorLocation::deleteAll(['city_id' => $value->city_id]);
         }
+
+        Yii::$app->session->setFlash('success', 'Country deleted successfully!');
+
+        return $this->redirect(['index']);
     }
 
     /**
