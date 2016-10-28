@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<tr>
 				<th>Item Name</th>
 				<th>Date Time</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>

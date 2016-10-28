@@ -36,7 +36,7 @@ if(!empty($items->getModels()))  {
                         <a href="<?= $item_url ?>">
                             <?php
                             $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
-                            echo Html::img($path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
+                            echo Html::img($path,['class'=>'item-img']);
                             ?>
                         </a>
 
@@ -81,3 +81,14 @@ $this->registerCss("
         ]);
         ?>
     </div>
+
+<?php
+
+$this->registerCss("
+img.item-img{
+    width: 100%;
+    height: 208px;
+}
+");
+
+?>
