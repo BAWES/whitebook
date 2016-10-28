@@ -85,7 +85,7 @@ echo $form->errorSummary($model);
         <?= $form->field($model, 'timeslot_end_time')->textInput(['value'=>'']) ?>
     </div>
 
-	<div class="col-sm-offset-2 col-sm-10">
+	<div class="col-sm-10">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?=  Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
     </div>
