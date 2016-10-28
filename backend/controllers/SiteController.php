@@ -119,8 +119,7 @@ class SiteController extends Controller
                 if($package){
 
                     Yii::info('[Vendor Login - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' has logged in to manage their items', __METHOD__);
-
-                    return $this->redirect(['site/index']);
+                    return $this->goBack(['site/index']);
 
                 } else {
 

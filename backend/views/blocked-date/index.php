@@ -71,7 +71,7 @@ $('#dp5').datepicker({
 });
 
 /* $('#dp5').on('changeDate', function(ev){
-    var path = '".Url::toRoute(['blockeddate/block'])."';
+    var path = '".Url::toRoute(['blocked-date/block'])."';
     $.ajax({
       type: 'POST',
       url: path, //url to be called

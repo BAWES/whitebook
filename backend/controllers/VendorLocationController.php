@@ -16,7 +16,7 @@ use backend\models\VendorLocationSearch;
 /**
  * VendorlocationController implements the CRUD actions for vendorlocation model.
  */
-class VendorlocationController extends Controller
+class VendorLocationController extends Controller
 {
     public function behaviors()
     {

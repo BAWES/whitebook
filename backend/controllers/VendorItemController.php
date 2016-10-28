@@ -39,7 +39,7 @@ use backend\models\VendorItem;
 /**
  * VendoritemController implements the CRUD actions for Vendoritem model.
  */
-class VendoritemController extends Controller
+class VendorItemController extends Controller
 {
     public function behaviors()
     {

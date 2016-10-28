@@ -14,7 +14,7 @@ use yii\filters\AccessControl;
 /**
  * DeliverytimeslotController implements the CRUD actions for DeliveryTimeSlot model.
  */
-class DeliverytimeslotController extends Controller
+class DeliveryTimeSlotController extends Controller
 {
     public function behaviors()
     {
