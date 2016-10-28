@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use admin\models\UserController;
 use admin\models\Admin;
+use common\models\Siteinfo;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -93,15 +94,17 @@ class AccessControlList extends \yii\db\ActiveRecord
 
         $user_id = Yii::$app->user->getId();
 
-        //for first user 
-        if($user_id == 1) {
-            return true;
-        }
-
         $user = Admin::findOne($user_id);
 
         if(!$user) {
             return false;
+        }
+
+        //for super admin 
+        $super_admin_role_id = Siteinfo::findOne(1)->super_admin_role_id;
+
+        if($user->role_id == $super_admin_role_id) {
+            return true;
         }
 
         return AccessControlList::find()->where([

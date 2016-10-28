@@ -152,28 +152,21 @@ class SiteinfoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '10');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            $model->scenario = 'update';
-            $base = Yii::$app->basePath;
+        $model = $this->findModel($id);
+        $model->scenario = 'update';
+        $base = Yii::$app->basePath;
 
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Application info updated successfully!');
-                Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' updated site information.', __METHOD__);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+           
+            Yii::$app->session->setFlash('success', 'Application info updated successfully!');
+            Yii::info('[Site] '. Yii::$app->user->identity->admin_name .' updated site information.', __METHOD__);
 
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-
-            return $this->render('update', [
-                    'model' => $model,
-                ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**

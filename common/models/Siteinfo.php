@@ -24,14 +24,14 @@ class Siteinfo extends \yii\db\ActiveRecord
     {
         return [
             [['home_slider_alias'], 'required'],
-            [['home_slider_alias'],'required', 'on' => 'update']
+            [['home_slider_alias', 'super_admin_role_id'],'required', 'on' => 'update']
         ];
     }
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['update'] = ['home_slider_alias'];//Scenario Values Only Accepted
+        $scenarios['update'] = ['home_slider_alias', 'super_admin_role_id'];//Scenario Values Only Accepted
         return $scenarios;
     }
 
@@ -82,6 +82,7 @@ class Siteinfo extends \yii\db\ActiveRecord
     public static function siteinformation()
     {
         $model = Siteinfo::find()->all();
+
         foreach($model as $key=>$val)
         {
             return $val;
