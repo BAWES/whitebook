@@ -191,7 +191,7 @@ if (!empty($feature_group_sql_result)) {
 
                                     <a href="<?= $item_url ?>" class='index_redirect' data-hr='<?= $item_url; ?>'>
 
-                                        <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
+                                        <?= Html::img($imglink); ?>
 
                                         <div class="deals_listing_cont">
 
@@ -202,7 +202,6 @@ if (!empty($feature_group_sql_result)) {
                                                 <?php echo $product_val['vendor_name_ar']; ?>
                                                 <h3><?php echo $product_val['item_name_ar']; ?></h3>
                                             <?php } ?>
-
                                             <p>
                                                 <?= CFormatter::format($product_val['item_price_per_unit']) ?>
                                             </p>
@@ -308,7 +307,15 @@ $this->registerJs("
 
 ", View::POS_READY);
 
+$this->registerCss("
+.fetu_product_list .index_redirect img {
+    width: 100%;
+    height: 219px;
+}
+");
+
 ?>
+
 
 <!-- Hide BG FOR EVENT SLIDER
  VIDEO PLAY HOME END -->
