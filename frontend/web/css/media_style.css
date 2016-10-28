@@ -680,7 +680,7 @@
 	.product_details_com .paddng0{ padding:0px;margin:0;width:100%;}
 	.slider{ display:none;}
 	.product_detials_common.normal_tables .paddig0{ padding:0px;}
-	.responsive_slider_detials .item img{ width:100% !important;padding:0 5px;max-height:400px !important;}
+	.responsive_slider_detials .item img{padding:0 5px;max-height:400px !important;}
 	.responsive_slider_detials .carousel-indicators{ display: block;}
 	.responsive_slider_detials .carousel-indicators li{ background:#666; border-color:#666;}
 	.responsive_slider_detials .carousel-indicators .active{ background:#000!important;}

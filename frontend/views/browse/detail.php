@@ -113,7 +113,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
                 <div class="product_detials_common normal_tables">
-                    <div class="col-md-6 paddig0 resp_hide">
+                    <div class="col-md-6 paddig0 resp_hide mobile_mode">
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
                             <label>
@@ -134,9 +134,9 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                 if (count($model->images) > 0) {
                                     foreach ($model->images as $image) {
                                         if ($image->image_path) {
-                                            echo '<div class="item">'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image','style'=>"width:530px !important;"]).'</div>';
+                                            echo '<div class="item">'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']).'</div>';
                                         } else {
-                                            echo '<div class="item">'.Html::img(Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg',['alt'=>'item detail image','style'=>"width:530px !important;"]).'</div>';
+                                            echo '<div class="item">'.Html::img(Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg',['alt'=>'item detail image']).'</div>';
                                         }
                                     }
                                 }
@@ -148,7 +148,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                         <!-- Indicators responsive slider end -->
                     </div>
 
-                    <div id="main" role="main" class="col-md-6 padding-right0 product-left-width">
+                    <div id="main" role="main" class="col-md-6 padding-left-0 normal_mode">
                         <div class="slider">
                             <div id="slider" class="flexslider display_none">
                                 <ul class="slides">
@@ -156,9 +156,9 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     if (count($model->images) > 0) {
                                         foreach ($model->images as $image) {
                                             if ($image->image_path) {
-                                                echo '<li>'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image','style'=>"width:530px !important;"]).'</li>';
+                                                echo '<li>'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']).'</li>';
                                             } else {
-                                                echo '<li>'.Html::img(Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg',['alt'=>'item detail image','style'=>"width:530px !important;"]).'</li>';
+                                                echo '<li>'.Html::img(Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg',['alt'=>'item detail image']).'</li>';
                                             }
                                         }
                                     }
@@ -185,7 +185,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="col-md-6 product-right-width paddng0">
+                    <div class="col-md-6 padding-left-0 padding-right-0 ">
                         <div class="right_descr_product">
                             <div class="product_name">
                                 <div class="left_descrip desktop-view margin-bottom-14">
@@ -613,6 +613,10 @@ button.dropdown-toggle{background: #fff;color: #000;border-radius: 0px;height: 4
 .color-808080{color: #808080!important;}
 .height-2{height:2px!important;}
 .margin-4{margin: 4px 0 0px;}
+.product-right-width{width:607px;float:none;padding:0;}
+.resp_hide{text-align:center;}
+.normal_mode ul.slides li img{width:100%!important;}
+.mobile_mode .responsive_slider_detials ul.slides li img{width:auto!important;}
 ");
 
 $this->registerJsFile('@web/js/product_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
