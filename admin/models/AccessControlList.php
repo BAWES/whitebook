@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use admin\models\UserController;
 use admin\models\Admin;
+use admin\models\Role;
 use common\models\Siteinfo;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
@@ -100,8 +101,15 @@ class AccessControlList extends \yii\db\ActiveRecord
             $method_id = Yii::$app->controller->action->id;
         }
 
-        $user_id = Yii::$app->user->getId();
+        //controller, method should listed in access list 
+        $access_list = Role::actionList();
 
+        if(empty($access_list[$controller_id]) || !in_array($method_id, $access_list[$controller_id])) {
+            return false;
+        }
+
+        $user_id = Yii::$app->user->getId();
+        
         $user = Admin::findOne($user_id);
 
         if(!$user) {
@@ -112,7 +120,7 @@ class AccessControlList extends \yii\db\ActiveRecord
         $super_admin_role_id = Siteinfo::findOne(1)->super_admin_role_id;
 
         if($user->role_id == $super_admin_role_id) {
-           // return true;
+            return true;
         }
 
         return AccessControlList::find()->where([
