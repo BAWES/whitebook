@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use admin\models\UserController;
 use admin\models\Admin;
+use admin\models\Role;
 use common\models\Siteinfo;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
@@ -90,10 +91,25 @@ class AccessControlList extends \yii\db\ActiveRecord
     }
 
     //check db if current controller/method assigned to user role         
-    public function can() {
+    public function can($controller_id = null, $method_id = null) 
+    {
+        if (!$controller_id) {
+            $controller_id = Yii::$app->controller->id; 
+        }
+        
+        if(!$method_id) {
+            $method_id = Yii::$app->controller->action->id;
+        }
+
+        //controller, method should listed in access list 
+        $access_list = Role::actionList();
+
+        if(empty($access_list[$controller_id]) || !in_array($method_id, $access_list[$controller_id])) {
+            return false;
+        }
 
         $user_id = Yii::$app->user->getId();
-
+        
         $user = Admin::findOne($user_id);
 
         if(!$user) {
@@ -109,8 +125,8 @@ class AccessControlList extends \yii\db\ActiveRecord
 
         return AccessControlList::find()->where([
                 'role_id' => $user->role_id,
-                'controller' => Yii::$app->controller->id,
-                'method' => Yii::$app->controller->action->id
+                'controller' => $controller_id,
+                'method' => $method_id
             ])->count();
     }
 

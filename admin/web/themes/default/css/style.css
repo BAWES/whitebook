@@ -578,6 +578,9 @@ body.modal-open .chat-window-wrapper {
   background-color: #22262e;
   padding: 8px 0px 10px 0px;
 }
+.page-sidebar .page-sidebar-wrapper > ul > li.open > ul.sub-menu {
+  display: block;
+}
 .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li {
   background: none;
   margin: 0px;

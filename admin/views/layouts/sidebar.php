@@ -1,174 +1,211 @@
 <?php
-	use yii\helpers\Html;
-	use admin\models\VendorItem;
-	$item_pending_count = VendorItem::item_pending_count();
+
+use yii\helpers\Html;
+use yii\widgets\Menu;
+use admin\models\VendorItem;
+use admin\models\AccessControlList;
+
+$item_pending_count = VendorItem::item_pending_count();
+
 ?>
-<!-- BEGIN SIDEBAR -->
-	<!-- BEGIN MENU -->
-	<div class="page-sidebar" id="main-menu">
-		  <div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">
+<div class="page-sidebar" id="main-menu">
+	  <div class="page-sidebar-wrapper scrollbar-dynamic" id="main-menu-wrapper">
 
-		<!-- BEGIN MINI-PROFILE -->
-		<?php if(!Yii::$app->user->isGuest) { ?>
-		<div class="user-info-wrapper">
-			<div class="user-info">
-				<div class="greeting">Welcome, <?php echo Yii::$app->user->identity->admin_name; ?>! </div>
-				<div class="username"> <span class="semi-bold"> </span></div>
-			</div>
+	<!-- BEGIN MINI-PROFILE -->
+	<?php if(!Yii::$app->user->isGuest) { ?>
+	<div class="user-info-wrapper">
+		<div class="user-info">
+			<div class="greeting">Welcome, <?php echo Yii::$app->user->identity->admin_name; ?>! </div>
+			<div class="username"> <span class="semi-bold"> </span></div>
 		</div>
-		<?php } ?>
-
-		<!-- BEGIN SIDEBAR MENU -->
-		<?php
-
-		$cntrl = Yii::$app->controller->id;
-		$action = Yii::$app->controller->action->id;
-		$first_menu = ['siteinfo','contacts','socialinfo', 'slide','role','admin','accesscontrol','faq','faqgroup','adverthome', 'order-status', 'payment-gateway'];
-		$second_menu = ['country','city','location','addresstype','addressquestion'];
-		$third_menu = ['category'];
-		$fourth_menu = ['featuregroup','eventtype','themes','itemtype','priorityitem'];
-		$fifth_menu = ['package','vendor','vendoritem','prioritylog'];
-		$seventh_menu = ['categoryads','adverthome'];
-		$eighth_menu = ['customer','events'];
-		$nineth_menu = ['report'];
-		?>
-		 <p class="menu-title">NAVIGATION</p>
-		<ul>
-			<li class="<?=($cntrl == 'site') ? "active" : "noactive"; ?>"><?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?></li>
-			<li class="<?=($cntrl == 'vendor-item-pending')  ? "active" : "noactive"; ?>"><?= Html::a('<i class="glyphicon glyphicon-send"></i><span class="title">Item Pending</span><span class="item_pending_count">'.$item_pending_count.'</span>', ['vendor-item-pending/index'], ['class'=>'link-title']) ?></li>
-			<li class="<?=($cntrl == 'order')  ? "active" : "noactive"; ?>"><?= Html::a('<i class="icon-custom-extra"></i><span class="title">Order</span>', ['order/index'], ['class'=>'link-title']) ?></li>
-
-			<li class="<?=(in_array($cntrl,$first_menu)) ? "open" : "noactive"?>">
-				<a href="javascript:;">
-					<i class="fa fa-university"></i>
-					<span class="title">General Settings</span>
-					<span class="<?=(in_array($cntrl,$first_menu))? "arrow open" : "arrow"?>"></span>
-				</a>
-				<ul class="sub-menu">
-					<li class="<?=($cntrl == 'siteinfo')  ? "active" : "noactive"; ?>"><?= Html::a('Site Info', ['siteinfo/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'contacts')  ? "active" : "noactive"; ?>"><?= Html::a('Contact Enquiries', ['contacts/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'socialinfo')  ? "active" : "noactive"; ?>"><?= Html::a('Social media', ['socialinfo/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'slide')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Banner Slides ', ['slide/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'admin')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Admin', ['admin/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'role')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Role ', ['role/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'accesscontrol')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Access control ', ['accesscontrol/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'faqgroup')  ? "active" : "noactive"; ?>"><?= Html::a('Manage FAQ Group', ['faqgroup/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'faq')  ? "active" : "noactive"; ?>"><?= Html::a('Manage FAQ', ['faq/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'adverthome')  ? "active" : "noactive"; ?>"><?= Html::a('Home Ads', ['adverthome/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'order-status')  ? "active" : "noactive"; ?>"><?= Html::a('Order Status', ['order-status/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'payment-gateway')  ? "active" : "noactive"; ?>"><?= Html::a('Payment Gateway', ['payment-gateway/index'], ['class'=>'link-title']) ?></li>
-				</ul>
-			</li>
-
-
-			<!-- Manage Address Start-->
-			<li class="<?=(in_array($cntrl,$second_menu))?"open" : "noactive"?>">
-				<a href="javascript:;">
-					<i class="fa fa-anchor"></i>
-					<span class="title">Manage Address</span>
-					<span class="<?=(in_array($cntrl,$second_menu))? "arrow open" : "arrow"?>"></span>
-				</a>
-				<ul class="sub-menu">
-					<li class="<?=($cntrl == 'country')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Country', ['country/index']) ?></li>
-					<li class="<?=($cntrl == 'ciy')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Governorate', ['city/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'location')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Area', ['location/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'addresstype')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Address Type', ['addresstype/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'addressquestion')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Address Question', ['addressquestion/index'], ['class'=>'link-title']) ?></li>
-				</ul>
-			</li>
-
-			<!-- Manage Address End-->
-			<!-- Manage Category Start-->
-			<li class="<?=(in_array($cntrl,$third_menu)) ?"open" : "noactive"?>">
-				<a href="javascript:;">
-					<i class="fa fa-bell"></i>
-					<span class="title">Manage Category</span>
-					<span class="<?=(in_array($cntrl,$third_menu)) ? "arrow open" : "arrow" ?>"></span>
-				  </a>
-					<ul class="sub-menu">
-					 <li class="<?=(in_array($cntrl,$third_menu) && $action == 'index') ? "active" : "noactive"?>">
-						<?= Html::a('Level I', ['category/index'], ['class'=>'link-title']) ?>
-					 </li>
-					 <li class="<?=(in_array($cntrl,$third_menu) && $action == 'manage_subcategory') ? "active" : "noactive"?>">
-						<?= Html::a('Level II', ['category/manage_subcategory'], ['class'=>'link-title']) ?>
-					 </li>
-					 <li class="<?=(in_array($cntrl,$third_menu) && $action == 'child_category_index')  ? "active" : "noactive"?>">
-						<?= Html::a('Level III', ['category/child_category_index'], ['class'=>'link-title']) ?>
-					 </li>
-				</ul>
-			</li>
-			<!-- Manage Category End-->
-
-
-			<li class="<?=(in_array($cntrl,$fifth_menu))? "open" : "noactive" ?>">
-				<a href="javascript:;">
-					<i class="fa fa-arrows"></i>
-					<span class="title">Manage Vendor</span>
-					<span class="<?=(in_array($cntrl,$fifth_menu)) ? "arrow open" : "arrow"; ?>"></span>
-				</a>
-				<ul class="sub-menu">
-					<li class="<?=($cntrl == 'package')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Package', ['package/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'vendor')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Vendor', ['vendor/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'vendoritem')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Vendor Item', ['vendoritem/index'], ['class'=>'link-title']) ?></li>
-				</ul>
-			</li>
-
-			<!-- Manage Category Start-->
-			<li class="<?=(in_array($cntrl,$fourth_menu)) ? "open" : "noactive";?>">
-				<a href="javascript:;">
-					<i class="fa fa-certificate"></i>
-					<span class="title">Manage Item</span>
-					<span class="<?=(in_array($cntrl,$fourth_menu)) ? "arrow open" : "arrow";?>"></span>
-				  </a>
-				<ul class="sub-menu">
-					<li class="<?=($cntrl == 'featuregroup')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Group', ['featuregroup/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'themes')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Themes Days', ['themes/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'itemtype')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Item Type', ['itemtype/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'priorityitem')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Priority Item', ['priorityitem/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'eventtype')  ? "active" : "noactive"; ?>"><?= Html::a('Manage Event Type', ['eventtype/index'], ['class'=>'link-title']) ?></li>
-				</ul>
-			</li>
-
-			<li class="<?=(in_array($cntrl,$eighth_menu)) ? "open" : "noactive";?>">
-				<a href="javascript:;">
-					<i class="glyphicon glyphicon-user"></i>
-					<span class="title">Manage Customer</span>
-					<span class="<?=(in_array($cntrl,$eighth_menu)) ? "arrow open" : "arrow";?>"></span>
-			  	</a>
-				<ul class="sub-menu">
-					<li class="<?=($cntrl == 'customer')  ? "active" : "noactive"; ?>"><?= Html::a('Customer', ['customer/index'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'events')  ? "active" : "noactive"; ?>"><?= Html::a('Customer Events', ['events/index'], ['class'=>'link-title']) ?></li>
-				</ul>
-			</li>
-
-			<li class="<?=(in_array($cntrl, $nineth_menu)) ? "open" : "noactive"; ?>">
-				<a href="javascript:;">
-					<i class="fa fa-bullseye"></i>
-					<span class="title">Reports</span>
-					<span class="<?=(in_array($cntrl,$nineth_menu)) ? "arrow open" : "arrow";?>"></span>
-				</a>
-				<ul class="sub-menu">
-					<li class="<?=($cntrl == 'report')  ? "active" : "noactive"; ?>"><?= Html::a('Vendor packages', ['report/package'], ['class'=>'link-title']) ?></li>
-					<li class="<?=($cntrl == 'report' && $action == 'commission')  ? "active" : "noactive"; ?>"><?= Html::a('Vendor commission', ['report/commission'], ['class'=>'link-title']) ?></li>
-				</ul>
-			</li>
-			<li class="<?=($cntrl == 'cms')  ? "active" : "noactive"; ?>"><?= Html::a('<i class="fa fa-tasks"></i><span class="title">Static Pages</span>', ['cms/index'], ['class'=>'link-title']) ?></li>
-		</ul>
-		<div class="clearfix"></div>
-		<!-- END SIDEBAR WIDGETS -->
 	</div>
-	</div>
-	<!-- BEGIN SCROLL UP HOVER -->
-	<a href="#" class="scrollup">Scroll</a>
+	<?php } ?>
 
-	<?php 
+	<p class="menu-title">NAVIGATION</p>
 
-	$this->registerJs("
-		$(document).ready(function () {
-	        $('.header .nav li').removeClass('active');//this will remove the active class from
-	   		//previously active menu item
-	        $('.open').addClass('active');
-	    });
-	");
+	<?php
+
+	$acc_report_comm = AccessControlList::can('report', 'commission');
+	$acc_report_package = AccessControlList::can('report', 'package');
+
+	$acc_siteinfo = AccessControlList::can('siteinfo', 'index');
+	$acc_contact = AccessControlList::can('contacts', 'index');
+	$acc_social = AccessControlList::can('socialinfo', 'index');
+	$acc_slide = AccessControlList::can('slide', 'index');
+	$acc_admin = AccessControlList::can('admin', 'index');
+	$acc_role = AccessControlList::can('role', 'index');
+	$acc_faqgroup = AccessControlList::can('faqgroup', 'index');
+	$acc_faq = AccessControlList::can('faq', 'index');
+	$acc_adverthome = AccessControlList::can('adverthome', 'index');
+	$acc_order_status = AccessControlList::can('order-status', 'index');
+	$acc_pg = AccessControlList::can('payment-gateway', 'index');
+
+	$acc_country = AccessControlList::can('country', 'index');
+	$acc_governorate = AccessControlList::can('city', 'index');
+	$acc_location = AccessControlList::can('location', 'index');
+	$acc_addresstype = AccessControlList::can('addresstype', 'index');
+	$acc_addressquestion = AccessControlList::can('addressquestion', 'index'); 
+
+	$acc_category = AccessControlList::can('category', 'index');
+	$acc_manage_subcategory = AccessControlList::can('category', 'manage_subcategory'); 
+	$acc_child_category_index = AccessControlList::can('category', 'child_category_index');
+
+	$acc_package =  AccessControlList::can('package', 'index');
+	$acc_vendor = 	AccessControlList::can('vendor', 'index');
+	$acc_vendoritem = AccessControlList::can('vendoritem', 'index');
+
+	$acc_featuregroup = AccessControlList::can('featuregroup', 'index');
+	$acc_themes = AccessControlList::can('themes', 'index');
+	$acc_itemtype = AccessControlList::can('itemtype', 'index');
+	$acc_priorityitem = AccessControlList::can('priorityitem', 'index');
+	$acc_eventtype = AccessControlList::can('eventtype', 'index');
+
+	$acc_customer = AccessControlList::can('customer', 'index');
+	$acc_events = AccessControlList::can('events', 'index');
+
+	echo Menu::widget([
+	    'items' => [
+	        [	
+	        	'label' => '<i class="icon-custom-home"></i><span class="title">Dashboard</span>', 
+	        	'url' => ['site/index']
+	        ],
+	        [	
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Item Pending</span><span class="item_pending_count">'.$item_pending_count.'</span>', 
+	        	'url' => ['vendor-item-pending/index'],
+	        	'visible' => AccessControlList::can('vendor-item-pending', 'index')
+	        ],
+	        [	
+	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Order</span>', 
+	        	'url' => ['order/index'],
+	        	'visible' => AccessControlList::can('order', 'index')
+	        ],
+	        [
+	        	'label' => '<i class="fa fa-university"></i><span class="title">General Settings</span>',
+				'options' => ['class'=>'dropdown'],
+				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
+				'visible' => ($acc_siteinfo || $acc_contact || $acc_social || $acc_slide || $acc_admin || $acc_role ||
+					$acc_faqgroup || $acc_faq || $acc_adverthome || $acc_order_status || $acc_pg) ? true : false,
+				'items' => [
+					['label' => 'Site Info', 'url' => ['siteinfo/index'], 'visible' => $acc_siteinfo],
+					['label' => 'Contact Enquiries', 'url' => ['contacts/index'], 'visible' => $acc_contact],
+					['label' => 'Social media', 'url' => ['socialinfo/index'], 'visible' => $acc_social],
+					['label' => 'Manage Banner Slides', 'url' => ['slide/index'], 'visible' => $acc_slide],
+					['label' => 'Manage Admin', 'url' => ['admin/index'], 'visible' => $acc_admin],
+					['label' => 'Manage Role ', 'url' => ['role/index'], 'visible' => $acc_role],
+					['label' => 'Manage FAQ Group', 'url' => ['faqgroup/index'], 'visible' => $acc_faqgroup],
+					['label' => 'Manage FAQ', 'url' => ['faq/index'], 'visible' => $acc_faq],
+					['label' => 'Home Ads', 'url' => ['adverthome/index'], 'visible' => $acc_adverthome],
+					['label' => 'Order Status', 'url' => ['order-status/index'], 'visible' => $acc_order_status],
+					['label' => 'Payment Gateway', 'url' => ['payment-gateway/index'], 'visible' => $acc_pg]
+				]
+			],
+	        [
+	        	'label' => '<i class="fa fa-anchor"></i><span class="title">Manage Address</span>',
+				'options'=>['class'=>'dropdown'],
+				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
+				'visible' => ($acc_country || $acc_governorate || $acc_location || $acc_addresstype || $acc_addressquestion) ? true : false,
+				'items' => [
+					['label' => 'Manage Country', 'url' => ['country/index'], 'visible' => $acc_country],
+					['label' => 'Manage Governorate', 'url' => ['city/index'], 'visible' => $acc_governorate],
+					['label' => 'Manage Area', 'url' => ['location/index'], 'visible' => $acc_location],
+					['label' => 'Manage Address Type', 'url' => ['addresstype/index'], 'visible' => $acc_addresstype],
+					['label' => 'Manage Address Question', 'url' => ['addressquestion/index'], 'visible' => $acc_addressquestion]
+				]
+			],
+			[
+	        	'label' => '<i class="fa fa-bell"></i><span class="title">Manage Category</span>',
+				'options'=> ['class'=>'dropdown'],
+				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
+				'visible' => ($acc_category || $acc_manage_subcategory || $acc_child_category_index) ? true : false,
+				'items' => [					
+					['label' => 'Level I', 'url' => ['category/index'], 'visible' => $acc_category],
+					['label' => 'Level II', 'url' => ['category/manage_subcategory'], 'visible' => $acc_manage_subcategory],
+					['label' => 'Level III', 'url' => ['category/child_category_index'], 'visible' => $acc_child_category_index],
+				]
+			],
+			[
+	        	'label' => '<i class="fa fa-arrows"></i><span class="title">Manage Vendor</span>',
+				'options'=>['class'=>'dropdown'],
+				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
+				'visible' => ($acc_package || $acc_vendor || $acc_vendoritem) ? true : false,
+				'items' => [
+					['label' => 'Manage Package', 'url' => ['package/index'], 'visible' => $acc_package],
+					['label' => 'Manage Vendor', 'url' => ['vendor/index'], 'visible' => $acc_vendor],
+					['label' => 'Manage Vendor Item', 'url' => ['vendoritem/index'], 'visible' => $acc_vendoritem],
+				]
+			],
+			[
+	        	'label' => '<i class="fa fa-certificate"></i><span class="title">Manage Item</span>',
+				'options'=>['class'=>'dropdown'],
+				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
+				'visible' => ($acc_featuregroup || $acc_themes || $acc_itemtype || $acc_priorityitem || $acc_eventtype) ? true:false, 
+				'items' => [				
+					['label' => 'Manage Group', 'url' => ['featuregroup/index'], 'visible' => $acc_featuregroup],
+					['label' => 'Manage Themes Days', 'url' => ['themes/index'], 'visible' => $acc_themes],
+					['label' => 'Manage Item Type', 'url' => ['itemtype/index'], 'visible' => $acc_itemtype],
+					['label' => 'Manage Priority Item', 'url' => ['priorityitem/index'], 'visible' => $acc_priorityitem],
+					['label' => 'Manage Event Type', 'url' => ['eventtype/index'], 'visible' => $acc_eventtype],
+				]
+			],
+			[
+	        	'label' => '<i class="glyphicon glyphicon-user"></i><span class="title">Manage Customer</span>',
+				'options'=>['class'=>'dropdown'],
+				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
+				'visible' => ($acc_customer || $acc_events)? true: false,
+				'items' => [
+					['label' => 'Customer', 'url' => ['customer/index'], 'visible' => $acc_customer],
+					['label' => 'Customer Events', 'url' => ['events/index'], 'visible' => $acc_events],
+				]
+			],
+			[
+	        	'label' => '<i class="fa fa-bullseye"></i><span class="title">Reports</span>',
+				'options'=>['class'=>'dropdown'],
+				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
+				'visible' => ($acc_report_package || $acc_report_comm) ? true : false,
+				'items' => [
+					[
+						'label' => 'Vendor packages', 
+						'url' => ['report/package'],
+						'visible' => $acc_report_package
+					],
+					[
+						'label' => 'Vendor commission', 
+						'url' => ['report/commission'],
+						'visible' => $acc_report_comm
+					]
+				]
+			],
+			[	
+	        	'label' => '<i class="fa fa-tasks"></i><span class="title">Static Pages</span>', 
+	        	'url' => ['cms/index'],
+	        	'visible' => AccessControlList::can('cms/index')
+	        ],
+	    ],
+	    'encodeLabels' => false,
+		'submenuTemplate' => "\n<ul class='sub-menu' role='menu'>\n{items}\n</ul>\n",
+	]);
+
+	?>	 
 	
+	<div class="clearfix"></div>
 	
+</div>
+</div>
+
+<!-- SCROLL UP HOVER -->
+<a href="#" class="scrollup">Scroll</a>
+
+<?php 
+
+$this->registerJs("
+
+	//chcek if sub-menu item open menu 
+	$(document).ready(function () {
+
+		var dropdown = $('.page-sidebar-wrapper .active').parents('.dropdown');
+
+		if(dropdown.length > 0) {
+			dropdown.addClass('open');
+		}
+    });
+");
