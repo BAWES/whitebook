@@ -71,10 +71,12 @@ class DeliveryTimeSlotController extends Controller
         $day = array('Sunday'=>'Sunday','Monday'=>'Monday','Tuesday'=>'Tuesday','Wednesday'=>'Wednesday','Thursday'=>'Thursday','Friday'=>'Friday','Saturday'=>'Saturday');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $start = date("H:i", strtotime($model->timeslot_start_time));
-            $end = date("H:i", strtotime($model->timeslot_end_time));
-            $model->timeslot_start_time=$start;
-            $model->timeslot_end_time=$end;
+
+            $model->timeslot_start_time = $model->start_hr .':'.$model->start_min.' '.$model->start_med;
+            $model->timeslot_end_time = $model->end_hr .':'.$model->end_min.' '.$model->end_med;
+            $model->timeslot_start_time = date("H:i", strtotime($model->timeslot_start_time));
+            $model->timeslot_end_time = date("H:i", strtotime($model->timeslot_end_time));
+
             $model->save();
             
             Yii::$app->session->setFlash('success', "Delivery time slot created successfully!");
@@ -101,11 +103,11 @@ class DeliveryTimeSlotController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $start  = date("H:i", strtotime($model->timeslot_start_time));
-            $end  = date("H:i", strtotime($model->timeslot_end_time));
+            $model->timeslot_start_time = $model->start_hr .':'.$model->start_min.' '.$model->start_med;
+            $model->timeslot_end_time = $model->end_hr .':'.$model->end_min.' '.$model->end_med;
+            $model->timeslot_start_time = date("H:i", strtotime($model->timeslot_start_time));
+            $model->timeslot_end_time = date("H:i", strtotime($model->timeslot_end_time));
 
-            $model->timeslot_start_time = $start;
-            $model->timeslot_end_time = $end;
             $model->save();
             
             Yii::$app->session->setFlash('success', "Delivery time slot updated successfully!");
