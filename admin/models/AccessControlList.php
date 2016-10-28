@@ -90,7 +90,15 @@ class AccessControlList extends \yii\db\ActiveRecord
     }
 
     //check db if current controller/method assigned to user role         
-    public function can() {
+    public function can($controller_id = null, $method_id = null) 
+    {
+        if (!$controller_id) {
+            $controller_id = Yii::$app->controller->id; 
+        }
+        
+        if(!$method_id) {
+            $method_id = Yii::$app->controller->action->id;
+        }
 
         $user_id = Yii::$app->user->getId();
 
@@ -104,13 +112,13 @@ class AccessControlList extends \yii\db\ActiveRecord
         $super_admin_role_id = Siteinfo::findOne(1)->super_admin_role_id;
 
         if($user->role_id == $super_admin_role_id) {
-            return true;
+           // return true;
         }
 
         return AccessControlList::find()->where([
                 'role_id' => $user->role_id,
-                'controller' => Yii::$app->controller->id,
-                'method' => Yii::$app->controller->action->id
+                'controller' => $controller_id,
+                'method' => $method_id
             ])->count();
     }
 
