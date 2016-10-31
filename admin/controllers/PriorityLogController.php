@@ -2,30 +2,21 @@
 
 namespace admin\controllers;
 
+//namespace app\modules\admin\controllers;
+
 use Yii;
-use common\models\Admin;
-use admin\models\AuthItem;
-use admin\models\Cms;
-use admin\models\CmsSearch;
+use common\models\Prioritylog;
+use common\models\PrioritylogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use admin\models\AccessControlList;
 
 /**
- * CmsController implements the CRUD actions for Cms model.
+ * PrioritylogController implements the CRUD actions for Prioritylog model.
  */
-class CmsController extends Controller
+class PriorityLogController extends Controller
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->user->isGuest) { 
-            $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
-            Yii::$app->getResponse()->redirect($url);
-        }
-    }
-
     /**
      * @inheritdoc
      */
@@ -35,7 +26,7 @@ class CmsController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                //   'delete' => ['POST'],
+                //    'delete' => ['POST'],
                 ],
             ],
             'access' => [
@@ -49,26 +40,25 @@ class CmsController extends Controller
         ];
     }
 
+
     /**
-     * Lists all Cms models.
+     * Lists all Prioritylog models.
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        $model = new Cms();
-        $searchModel = new CmsSearch();
+        $searchModel = new PrioritylogSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model' => $model,
         ]);
     }
 
     /**
-     * Displays a single Cms model.
+     * Displays a single Prioritylog model.
      *
      * @param int $id
      *
@@ -82,20 +72,17 @@ class CmsController extends Controller
     }
 
     /**
-     * Creates a new Cms model.
+     * Creates a new Prioritylog model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Cms();
+        $model = new Prioritylog();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'New static page created successfully!');
-            return $this->redirect(['index']);
-
+            return $this->redirect(['view', 'id' => $model->log_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -104,7 +91,7 @@ class CmsController extends Controller
     }
 
     /**
-     * Updates an existing Cms model.
+     * Updates an existing Prioritylog model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param int $id
@@ -116,13 +103,8 @@ class CmsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'Static page updated successfully!');
-
-            return $this->redirect(['index']);
-
+            return $this->redirect(['view', 'id' => $model->log_id]);
         } else {
-
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -130,7 +112,7 @@ class CmsController extends Controller
     }
 
     /**
-     * Deletes an existing Cms model.
+     * Deletes an existing Prioritylog model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param int $id
@@ -141,46 +123,25 @@ class CmsController extends Controller
     {
         $this->findModel($id)->delete();
 
-        Yii::$app->session->setFlash('success', 'Static page deleted successfully!');
-
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Cms model based on its primary key value.
+     * Finds the Prioritylog model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param int $id
      *
-     * @return Cms the loaded model
+     * @return Prioritylog the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Cms::findOne($id)) !== null) {
+        if (($model = Prioritylog::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
-    public function actionBlock()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-    
-        $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        
-        $command = Cms::updateAll(['page_status' => $status],'page_id= '.$data['id']);
-
-        if ($status == 'Active') {
-            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-        } else {
-            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 }

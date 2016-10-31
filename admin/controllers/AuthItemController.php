@@ -3,74 +3,59 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Admin;
-use admin\models\AuthItem;
-use admin\models\Cms;
-use admin\models\CmsSearch;
+use common\models\AuthItem;
+use common\models\AuthitemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use admin\models\AccessControlList;
 
 /**
- * CmsController implements the CRUD actions for Cms model.
+ * AuthitemController implements the CRUD actions for AuthItem model.
  */
-class CmsController extends Controller
+class AuthItemController extends Controller
 {
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { 
+        if (Yii::$app->user->isGuest) { // chekck the admin logged in
+            //$this->redirect('login');
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                //   'delete' => ['POST'],
+                    'delete' => ['post'],
                 ],
             ],
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => AccessControlList::can()
-                    ],
-                ],
-            ],            
         ];
     }
 
     /**
-     * Lists all Cms models.
+     * Lists all AuthItem models.
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        $model = new Cms();
-        $searchModel = new CmsSearch();
+        $searchModel = new AuthitemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model' => $model,
         ]);
     }
 
     /**
-     * Displays a single Cms model.
+     * Displays a single AuthItem model.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
@@ -82,20 +67,17 @@ class CmsController extends Controller
     }
 
     /**
-     * Creates a new Cms model.
+     * Creates a new AuthItem model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Cms();
+        $model = new AuthItem();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'New static page created successfully!');
-            return $this->redirect(['index']);
-
+            return $this->redirect(['view', 'id' => $model->name]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -104,10 +86,10 @@ class CmsController extends Controller
     }
 
     /**
-     * Updates an existing Cms model.
+     * Updates an existing AuthItem model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
@@ -116,13 +98,8 @@ class CmsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'Static page updated successfully!');
-
-            return $this->redirect(['index']);
-
+            return $this->redirect(['view', 'id' => $model->name]);
         } else {
-
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -130,10 +107,10 @@ class CmsController extends Controller
     }
 
     /**
-     * Deletes an existing Cms model.
+     * Deletes an existing AuthItem model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
@@ -141,46 +118,25 @@ class CmsController extends Controller
     {
         $this->findModel($id)->delete();
 
-        Yii::$app->session->setFlash('success', 'Static page deleted successfully!');
-
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Cms model based on its primary key value.
+     * Finds the AuthItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param int $id
+     * @param string $id
      *
-     * @return Cms the loaded model
+     * @return AuthItem the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Cms::findOne($id)) !== null) {
+        if (($model = AuthItem::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
-    public function actionBlock()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-    
-        $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        
-        $command = Cms::updateAll(['page_status' => $status],'page_id= '.$data['id']);
-
-        if ($status == 'Active') {
-            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-        } else {
-            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 }

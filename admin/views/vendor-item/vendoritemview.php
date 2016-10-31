@@ -20,15 +20,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if($model->vendor_status == 'Active'){ ?>
     <p>
         <?= Html::a('Create vendor item', 
-                ['vendoritem/create?vid='.$request->get('id')], 
+                ['vendoritem/create?id='.$request->get('id')], 
                 ['class' => 'btn btn-success']
             );
-         ?>       
+        ?>       
     </p>
     <?php } ?>
-    
     <?php Pjax::begin(['enablePushState' => false]); ?>
-    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -41,9 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'Category Name',           
                 'value'=>function($data){
                     return $data->getCategoryName($data->category_id);
-                },  
+                    },  
                 'filter' => Html::activeDropDownList($searchModel, 'category_id', ArrayHelper::map(common\models\Category::find()->where(['category_allow_sale'=>'Yes','parent_category_id'=>null,'trash' =>'Default'])->orderBy('category_name')->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),                      
             ],
+           
+            
             [
                 'attribute'=>'type_id',
                 'label'=>'Item Type',           
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],          
             [
                 'attribute'=>'created_datetime',
-                'format' => ['date', Yii::$app->params['dateFormat']],
+                'format' => ['date', DATE],
                 'label'=>'created date',            
             ],  
             ['class' => 'yii\grid\ActionColumn',
@@ -84,19 +84,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => ' {update} {delete}{link}',
             'buttons' => [
             'update' => function ($url, $model,$request) {
-                $url = Url::to(['/vendor-item/update?id='.$model['item_id'].'&vid='.$request->get('id')]);
+                $url = Url::to('/vendor-item/update?id='.$model['item_id'].'&vid='.$request->get('id'));
                  return  Html::a('<span class="fa fa-pencil "></span>', $url, [
                             'title' => Yii::t('app', 'Gallery'),
                 ]);
             },
             'link' => function ($url, $model) {
-                $url = Url::to(['/vendor-item/vendoritemgallery?id='.$model['item_id']]);
+                $url = Url::to('/vendor-item/vendoritemgallery?id='.$model['item_id']);
                  return  Html::a('<span class="fa fa-picture-o "></span>', $url, [
                             'title' => Yii::t('app', 'Gallery'),
                 ]);
             },
             'delete' => function ($url, $model) {
-                $url = Url::to(['/vendor-item/delete?id='.$model['item_id']]);
+                $url = Url::to('/vendor-item/delete?id='.$model['item_id']);
                  return  Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
                             'title' => Yii::t('app', 'Gallery'),
                 ]);
@@ -110,13 +110,11 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 </div>
 
-
 <script type="text/javascript">
     var csrfToken = $('meta[name="csrf-token"]').attr("content");       
     var txt;
-    
-    /* Change status for respective vendor items */    
-        function Status(status){
+    /* Change status for respective vendor items */
+       function Status(status){
                         
         var keys = $('#items').yiiGridView('getSelectedRows');      
         var pathUrl = "<?php echo Url::to(['/vendor-item/status']); ?>";

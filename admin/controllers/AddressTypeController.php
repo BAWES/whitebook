@@ -3,24 +3,28 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Admin;
-use admin\models\AuthItem;
-use admin\models\Cms;
-use admin\models\CmsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use admin\models\AccessControlList;
+use yii\helpers\ArrayHelper;
+use common\models\AddressQuestion;
+use common\models\CustomerAddress;
+use common\models\CustomerAddressResponse;
+use admin\models\AddressType;
+use admin\models\Admin;
+use admin\models\AuthItem;
+use admin\models\AddressTypeSearch;
 
 /**
- * CmsController implements the CRUD actions for Cms model.
+ * AddresstypeController implements the CRUD actions for Addresstype model.
  */
-class CmsController extends Controller
+class AddressTypeController extends Controller
 {
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { 
+        if (Yii::$app->user->isGuest) { // chekck the admin logged in
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -50,27 +54,25 @@ class CmsController extends Controller
     }
 
     /**
-     * Lists all Cms models.
+     * Lists all Addresstype models.
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        $model = new Cms();
-        $searchModel = new CmsSearch();
+        $searchModel = new AddressTypeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model' => $model,
         ]);
     }
 
     /**
-     * Displays a single Cms model.
+     * Displays a single AddressType model.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
@@ -82,18 +84,20 @@ class CmsController extends Controller
     }
 
     /**
-     * Creates a new Cms model.
+     * Creates a new AddressType model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Cms();
+        $model = new AddressType();
+        $model->status = 'Active';
+        if($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            $model->save();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'New static page created successfully!');
+            Yii::$app->session->setFlash('success', 'Address Type created successfully!');
             return $this->redirect(['index']);
 
         } else {
@@ -104,10 +108,10 @@ class CmsController extends Controller
     }
 
     /**
-     * Updates an existing Cms model.
+     * Updates an existing AddressType model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
@@ -115,50 +119,69 @@ class CmsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            Yii::$app->session->setFlash('success', 'Static page updated successfully!');
+            $model->save();
 
+            Yii::$app->session->setFlash('success', 'Address Type Updated successfully!');
             return $this->redirect(['index']);
 
         } else {
-
             return $this->render('update', [
                 'model' => $model,
             ]);
+
+            return $this->redirect(['site/index']);
         }
     }
 
     /**
-     * Deletes an existing Cms model.
+     * Deletes an existing AddressType model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->trash = 'Deleted';
+        $model->load(Yii::$app->request->post());
+        $model->save();
 
-        Yii::$app->session->setFlash('success', 'Static page deleted successfully!');
+        //delete all question for this type
+        AddressQuestion::deleteAll(['address_type_id' => $id]);
+
+        //delete all address question response for this type
+        $addresses = CustomerAddress::findAll(['address_type_id' => $id]);
+
+        foreach ($addresses as $key => $value) {
+            CustomerAddressResponse::deleteAll(['address_id' => $value->address_id]);
+        }
+
+        //delete all address for this type
+        CustomerAddress::deleteAll(['address_type_id' => $id]);
+
+        Yii::$app->session->setFlash('success', 'Address Type Deleted successfully!');
 
         return $this->redirect(['index']);
+
     }
 
     /**
-     * Finds the Cms model based on its primary key value.
+     * Finds the AddressType model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param int $id
+     * @param string $id
      *
-     * @return Cms the loaded model
+     * @return AddressType the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Cms::findOne($id)) !== null) {
+        if (($model = AddressType::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -172,11 +195,11 @@ class CmsController extends Controller
         }
 
         $data = Yii::$app->request->post();
-    
+        
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
         
-        $command = Cms::updateAll(['page_status' => $status],'page_id= '.$data['id']);
-
+        $command = AddressType::updateAll(['status' => $status], 'type_id= '.$data['cid']);
+        
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {

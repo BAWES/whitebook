@@ -3,29 +3,18 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Admin;
-use admin\models\AuthItem;
-use admin\models\Cms;
-use admin\models\CmsSearch;
+use admin\models\FaqGroup;
+use admin\models\FaqGroupSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use admin\models\AccessControlList;
 
 /**
- * CmsController implements the CRUD actions for Cms model.
+ * FaqGroupController implements the CRUD actions for FaqGroup model.
  */
-class CmsController extends Controller
+class FaqGroupController extends Controller
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->user->isGuest) { 
-            $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
-            Yii::$app->getResponse()->redirect($url);
-        }
-    }
-
     /**
      * @inheritdoc
      */
@@ -50,28 +39,23 @@ class CmsController extends Controller
     }
 
     /**
-     * Lists all Cms models.
-     *
+     * Lists all FaqGroup models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $model = new Cms();
-        $searchModel = new CmsSearch();
+        $searchModel = new FaqGroupSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model' => $model,
         ]);
     }
 
     /**
-     * Displays a single Cms model.
-     *
-     * @param int $id
-     *
+     * Displays a single FaqGroup model.
+     * @param integer $id
      * @return mixed
      */
     public function actionView($id)
@@ -82,20 +66,16 @@ class CmsController extends Controller
     }
 
     /**
-     * Creates a new Cms model.
+     * Creates a new FaqGroup model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Cms();
+        $model = new FaqGroup();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'New static page created successfully!');
             return $this->redirect(['index']);
-
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -104,11 +84,9 @@ class CmsController extends Controller
     }
 
     /**
-     * Updates an existing Cms model.
+     * Updates an existing FaqGroup model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param int $id
-     *
+     * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -116,13 +94,8 @@ class CmsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'Static page updated successfully!');
-
             return $this->redirect(['index']);
-
         } else {
-
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -130,57 +103,51 @@ class CmsController extends Controller
     }
 
     /**
-     * Deletes an existing Cms model.
+     * Deletes an existing FaqGroup model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param int $id
-     *
+     * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
-        Yii::$app->session->setFlash('success', 'Static page deleted successfully!');
-
         return $this->redirect(['index']);
     }
 
+    
+    public function actionSort_faq_group()
+    {
+        $request = Yii::$app->request;
+
+        $sort = $request->post('sort_val');
+        $faq_group_id = $request->post('faq_group_id');
+
+        $command = FaqGroup::updateAll(['sort_order' => $sort], 'faq_group_id= '.$faq_group_id);
+
+        if ($command) {
+            Yii::$app->session->setFlash('success', 'FAQ Group sort order updated successfully!');
+            echo 1;
+            exit;
+        } else {
+            echo 0;
+            exit;
+        }
+    }
+
     /**
-     * Finds the Cms model based on its primary key value.
+     * Finds the FaqGroup model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param int $id
-     *
-     * @return Cms the loaded model
-     *
+     * @param integer $id
+     * @return FaqGroup the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Cms::findOne($id)) !== null) {
+        if (($model = FaqGroup::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
-    public function actionBlock()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-    
-        $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        
-        $command = Cms::updateAll(['page_status' => $status],'page_id= '.$data['id']);
-
-        if ($status == 'Active') {
-            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-        } else {
-            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 }
