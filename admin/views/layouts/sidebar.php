@@ -63,7 +63,7 @@ $item_pending_count = VendorItem::item_pending_count();
 	$acc_customer = AccessControlList::can('customer', 'index');
 	$acc_events = AccessControlList::can('events', 'index');
 
-	echo Menu::widget([
+	echo \common\widgets\MenuExtended::widget([
 	    'items' => [
 	        [	
 	        	'label' => '<i class="icon-custom-home"></i><span class="title">Dashboard</span>', 
@@ -72,12 +72,10 @@ $item_pending_count = VendorItem::item_pending_count();
 	        [	
 	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Item Pending</span><span class="item_pending_count">'.$item_pending_count.'</span>', 
 	        	'url' => ['vendor-item-pending/index'],
-	        	'visible' => AccessControlList::can('vendor-item-pending', 'index')
 	        ],
 	        [	
 	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Order</span>', 
 	        	'url' => ['order/index'],
-	        	'visible' => AccessControlList::can('order', 'index')
 	        ],
 	        [
 	        	'label' => '<i class="fa fa-university"></i><span class="title">General Settings</span>',
@@ -86,17 +84,17 @@ $item_pending_count = VendorItem::item_pending_count();
 				'visible' => ($acc_siteinfo || $acc_contact || $acc_social || $acc_slide || $acc_admin || $acc_role ||
 					$acc_faqgroup || $acc_faq || $acc_adverthome || $acc_order_status || $acc_pg) ? true : false,
 				'items' => [
-					['label' => 'Site Info', 'url' => ['site-info/index'], 'visible' => $acc_siteinfo],
-					['label' => 'Contact Enquiries', 'url' => ['contacts/index'], 'visible' => $acc_contact],
-					['label' => 'Social media', 'url' => ['social-info/index'], 'visible' => $acc_social],
-					['label' => 'Manage Banner Slides', 'url' => ['slide/index'], 'visible' => $acc_slide],
-					['label' => 'Manage Admin', 'url' => ['admin/index'], 'visible' => $acc_admin],
-					['label' => 'Manage Role ', 'url' => ['role/index'], 'visible' => $acc_role],
-					['label' => 'Manage FAQ Group', 'url' => ['faq-group/index'], 'visible' => $acc_faqgroup],
-					['label' => 'Manage FAQ', 'url' => ['faq/index'], 'visible' => $acc_faq],
-					['label' => 'Home Ads', 'url' => ['advert-home/index'], 'visible' => $acc_adverthome],
-					['label' => 'Order Status', 'url' => ['order-status/index'], 'visible' => $acc_order_status],
-					['label' => 'Payment Gateway', 'url' => ['payment-gateway/index'], 'visible' => $acc_pg]
+					['label' => 'Site Info', 'url' => ['site-info/index']],
+					['label' => 'Contact Enquiries', 'url' => ['contacts/index']],
+					['label' => 'Social media', 'url' => ['social-info/index']],
+					['label' => 'Manage Banner Slides', 'url' => ['slide/index']],
+					['label' => 'Manage Admin', 'url' => ['admin/index']],
+					['label' => 'Manage Role ', 'url' => ['role/index']],
+					['label' => 'Manage FAQ Group', 'url' => ['faq-group/index']],
+					['label' => 'Manage FAQ', 'url' => ['faq/index']],
+					['label' => 'Home Ads', 'url' => ['advert-home/index']],
+					['label' => 'Order Status', 'url' => ['order-status/index']],
+					['label' => 'Payment Gateway', 'url' => ['payment-gateway/index']]
 				]
 			],
 	        [
@@ -105,11 +103,11 @@ $item_pending_count = VendorItem::item_pending_count();
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'visible' => ($acc_country || $acc_governorate || $acc_location || $acc_addresstype || $acc_addressquestion) ? true : false,
 				'items' => [
-					['label' => 'Manage Country', 'url' => ['country/index'], 'visible' => $acc_country],
-					['label' => 'Manage Governorate', 'url' => ['city/index'], 'visible' => $acc_governorate],
-					['label' => 'Manage Area', 'url' => ['location/index'], 'visible' => $acc_location],
-					['label' => 'Manage Address Type', 'url' => ['address-type/index'], 'visible' => $acc_addresstype],
-					['label' => 'Manage Address Question', 'url' => ['address-question/index'], 'visible' => $acc_addressquestion]
+					['label' => 'Manage Country', 'url' => ['country/index']],
+					['label' => 'Manage Governorate', 'url' => ['city/index']],
+					['label' => 'Manage Area', 'url' => ['location/index']],
+					['label' => 'Manage Address Type', 'url' => ['address-type/index']],
+					['label' => 'Manage Address Question', 'url' => ['address-question/index']]
 				]
 			],
 			[
@@ -118,9 +116,9 @@ $item_pending_count = VendorItem::item_pending_count();
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'visible' => ($acc_category || $acc_manage_subcategory || $acc_child_category_index) ? true : false,
 				'items' => [					
-					['label' => 'Level I', 'url' => ['category/index'], 'visible' => $acc_category],
-					['label' => 'Level II', 'url' => ['category/manage_subcategory'], 'visible' => $acc_manage_subcategory],
-					['label' => 'Level III', 'url' => ['category/child_category_index'], 'visible' => $acc_child_category_index],
+					['label' => 'Level I', 'url' => ['category/index']],
+					['label' => 'Level II', 'url' => ['category/manage_subcategory']],
+					['label' => 'Level III', 'url' => ['category/child_category_index']],
 				]
 			],
 			[
@@ -129,9 +127,9 @@ $item_pending_count = VendorItem::item_pending_count();
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'visible' => ($acc_package || $acc_vendor || $acc_vendoritem) ? true : false,
 				'items' => [
-					['label' => 'Manage Package', 'url' => ['package/index'], 'visible' => $acc_package],
-					['label' => 'Manage Vendor', 'url' => ['vendor/index'], 'visible' => $acc_vendor],
-					['label' => 'Manage Vendor Item', 'url' => ['vendor-item/index'], 'visible' => $acc_vendoritem],
+					['label' => 'Manage Package', 'url' => ['package/index']],
+					['label' => 'Manage Vendor', 'url' => ['vendor/index']],
+					['label' => 'Manage Vendor Item', 'url' => ['vendor-item/index']],
 				]
 			],
 			[
@@ -140,11 +138,11 @@ $item_pending_count = VendorItem::item_pending_count();
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'visible' => ($acc_featuregroup || $acc_themes || $acc_itemtype || $acc_priorityitem || $acc_eventtype) ? true:false, 
 				'items' => [				
-					['label' => 'Manage Group', 'url' => ['feature-group/index'], 'visible' => $acc_featuregroup],
-					['label' => 'Manage Themes Days', 'url' => ['themes/index'], 'visible' => $acc_themes],
-					['label' => 'Manage Item Type', 'url' => ['item-type/index'], 'visible' => $acc_itemtype],
-					['label' => 'Manage Priority Item', 'url' => ['priority-item/index'], 'visible' => $acc_priorityitem],
-					['label' => 'Manage Event Type', 'url' => ['event-type/index'], 'visible' => $acc_eventtype],
+					['label' => 'Manage Group', 'url' => ['feature-group/index']],
+					['label' => 'Manage Themes Days', 'url' => ['themes/index']],
+					['label' => 'Manage Item Type', 'url' => ['item-type/index']],
+					['label' => 'Manage Priority Item', 'url' => ['priority-item/index']],
+					['label' => 'Manage Event Type', 'url' => ['event-type/index']],
 				]
 			],
 			[
@@ -153,8 +151,8 @@ $item_pending_count = VendorItem::item_pending_count();
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'visible' => ($acc_customer || $acc_events)? true: false,
 				'items' => [
-					['label' => 'Customer', 'url' => ['customer/index'], 'visible' => $acc_customer],
-					['label' => 'Customer Events', 'url' => ['events/index'], 'visible' => $acc_events],
+					['label' => 'Customer', 'url' => ['customer/index']],
+					['label' => 'Customer Events', 'url' => ['events/index']],
 				]
 			],
 			[
