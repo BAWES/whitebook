@@ -107,6 +107,7 @@ class Role extends \yii\db\ActiveRecord
             'contacts' => ['index', 'view', 'create', 'update', 'delete', 'block'],
             'country' => ['index', 'view', 'create', 'update', 'delete', 'block'],
             'customer' => ['index', 'view', 'create', 'update', 'delete', 'block', 'questions', 'export', 'newsletter', 'address_delete', 'address'],
+            'events' => ['create','update', 'index', 'view', 'delete'],
             'event-type' => ['index', 'view', 'create', 'update', 'delete'],
             'faq' => ['index', 'view', 'create', 'update', 'delete', 'block', 'sort_faq'],
             'faq-group' => ['index', 'view', 'create', 'update', 'delete', 'sort_faq_group'],
