@@ -8,14 +8,20 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="col-md-8 col-sm-8 col-xs-8">	
+<div class="col-md-12 col-sm-12 col-xs-12">
 
     <?php $form = ActiveForm::begin(); ?>
     
 	<?= $form->field($model, 'role_name')->textInput(['maxlength' => 128]) ?>   
 	
     <div class="form-group">
-        <label>Access list</label>
+        <div class="clearfix">
+            <div class="col-md-6"><label>Access list</label></div>
+            <div class="col-md-6 text-right">
+                <input type="radio" name="check_all" class="check_all" value="1"> Check All |
+                <input type="radio" name="check_all" class="check_all" value="0"> UnCheck All
+            </div>
+        </div>
         <table class="table-bordered table-striped table-condensed">
             <thead>
                 <tr>
@@ -41,7 +47,7 @@ use yii\widgets\ActiveForm;
                          ?>
                         <div class="checkbox-inline">
                             <label>
-                                <input type="checkbox" name="access_control[<?= $key ?>][]" value="<?= $method ?>" <?= $checked ?> />
+                                <input type="checkbox" class="check_box" name="access_control[<?= $key ?>][]" value="<?= $method ?>" <?= $checked ?> />
                                 <?= $method ?>
                             </label>
                         </div>
@@ -52,6 +58,7 @@ use yii\widgets\ActiveForm;
                 
             </tbody>
         </table>
+
     </div>
 
     <br />
@@ -62,5 +69,17 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>
+
+<?php $this->registerJs("
+    $('.check_all').click(function(){
+
+        if ($(this).val() == 1) {
+            $(\".check_box\").prop('checked', 'checked');
+            console.log(1);
+        } else if ($(this).val() == 0) {
+            $(\".check_box\").prop('checked', '');
+            console.log(0);
+        }
+    });
+",\yii\web\View::POS_READY);
