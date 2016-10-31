@@ -183,7 +183,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><?= ($log['item_approved']); ?></td>
             <td>
                 <?php
-                $url = Url::to(['vendoritem/view', 'id' => $log['item_id']]);
+                $url = Url::to(['vendor-item/view', 'id' => $log['item_id']]);
                 echo Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View')]);
                 ?>
             </td>

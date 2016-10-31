@@ -3,29 +3,29 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Admin;
+use common\models\Socialinfo;
 use admin\models\AuthItem;
-use admin\models\Cms;
-use admin\models\CmsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use admin\models\AccessControlList;
 
 /**
- * CmsController implements the CRUD actions for Cms model.
+ * SocialinfoController implements the CRUD actions for Socialinfo model.
  */
-class CmsController extends Controller
+class SocialInfoController extends Controller
 {
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { 
+        if (Yii::$app->user->isGuest) { // chekck the admin logged in
+            //$this->redirect('login');
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
     }
 
+   
     /**
      * @inheritdoc
      */
@@ -35,7 +35,7 @@ class CmsController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                //   'delete' => ['POST'],
+                //    'delete' => ['POST'],
                 ],
             ],
             'access' => [
@@ -50,79 +50,84 @@ class CmsController extends Controller
     }
 
     /**
-     * Lists all Cms models.
+     * Lists all Socialinfo models.
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        $model = new Cms();
-        $searchModel = new CmsSearch();
+        $model = Socialinfo::find()->all();
+        foreach ($model as $key => $val) {
+            $id = $val['store_social_id'];
+        }
+        if (count($model) == 1) {
+            return $this->redirect(['socialinfo/update/', 'store_social_id' => $id]);
+        } else {
+            $this->redirect('socialinfo/create');
+        }
+
+        $searchModel = new SocialinfoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model' => $model,
         ]);
     }
 
     /**
-     * Displays a single Cms model.
+     * Displays a single Socialinfo model.
      *
-     * @param int $id
+     * @param int $store_social_id
+     * @param int $store_id
      *
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($store_social_id, $store_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($store_social_id, $store_id),
         ]);
     }
 
     /**
-     * Creates a new Cms model.
+     * Creates a new Socialinfo model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Cms();
-
+        $model = new Socialinfo();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Social info created successfully!');
 
-            Yii::$app->session->setFlash('success', 'New static page created successfully!');
             return $this->redirect(['index']);
-
         } else {
             return $this->render('create', [
-                'model' => $model,
-            ]);
+            'model' => $model,
+        ]);
         }
     }
 
     /**
-     * Updates an existing Cms model.
+     * Updates an existing Socialinfo model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
-     * @param int $id
+     * @param int $store_social_id
+     * @param int $store_id
      *
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($store_social_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($store_social_id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'Static page updated successfully!');
+            Yii::$app->session->setFlash('success', 'Social info updated successfully!');
 
             return $this->redirect(['index']);
-
         } else {
-
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -130,57 +135,37 @@ class CmsController extends Controller
     }
 
     /**
-     * Deletes an existing Cms model.
+     * Deletes an existing Socialinfo model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
-     * @param int $id
+     * @param int $store_social_id
+     * @param int $store_id
      *
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($store_social_id, $store_id)
     {
-        $this->findModel($id)->delete();
-
-        Yii::$app->session->setFlash('success', 'Static page deleted successfully!');
-
+        $this->findModel($store_social_id, $store_id)->delete();
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Cms model based on its primary key value.
+     * Finds the Socialinfo model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param int $id
+     * @param int $store_social_id
+     * @param int $store_id
      *
-     * @return Cms the loaded model
+     * @return Socialinfo the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($store_social_id)
     {
-        if (($model = Cms::findOne($id)) !== null) {
+        if (($model = Socialinfo::findOne(['store_social_id' => $store_social_id])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
-    public function actionBlock()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-    
-        $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        
-        $command = Cms::updateAll(['page_status' => $status],'page_id= '.$data['id']);
-
-        if ($status == 'Active') {
-            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-        } else {
-            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 }

@@ -3,24 +3,25 @@
 namespace admin\controllers;
 
 use Yii;
-use common\models\Admin;
+use admin\models\AdvertHome;
+use admin\models\Admin;
 use admin\models\AuthItem;
-use admin\models\Cms;
-use admin\models\CmsSearch;
+use admin\models\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use admin\models\AccessControlList;
 
 /**
- * CmsController implements the CRUD actions for Cms model.
+ * AdverthomeController implements the CRUD actions for AdvertHome model.
  */
-class CmsController extends Controller
+class AdvertHomeController extends Controller
 {
     public function init()
     {
         parent::init();
-        if (Yii::$app->user->isGuest) { 
+        if (Yii::$app->user->isGuest) { // chekck the admin logged in
+            //$this->redirect('login');
             $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
             Yii::$app->getResponse()->redirect($url);
         }
@@ -50,27 +51,28 @@ class CmsController extends Controller
     }
 
     /**
-     * Lists all Cms models.
+     * Lists all AdvertHome models.
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        $model = new Cms();
-        $searchModel = new CmsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model = AdvertHome::find()->all();
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ]);
+        foreach ($model as $key => $val) {
+            $first_id = $val['advert_id'];
+        }
+        if (count($model) == 1) {
+            $this->redirect(['advert-home/update','id'=>$first_id]);
+        } else {
+            $this->redirect(['advert-home/create']);
+        }
     }
 
     /**
-     * Displays a single Cms model.
+     * Displays a single AdvertHome model.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
@@ -82,105 +84,84 @@ class CmsController extends Controller
     }
 
     /**
-     * Creates a new Cms model.
+     * Creates a new AdvertHome model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Cms();
+        $model = new AdvertHome();
+        if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Home advertisement script created successfully!');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'New static page created successfully!');
-            return $this->redirect(['index']);
-
+            return $this->redirect(['view', 'id' => $model->advert_id]);
         } else {
             return $this->render('create', [
-                'model' => $model,
-            ]);
+            'model' => $model,
+        ]);
         }
     }
 
     /**
-     * Updates an existing Cms model.
+     * Updates an existing AdvertHome model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $imagedata = Image::find()->where('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
+          $model1 = new Image();
+        if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Advertisement details updated successfully!');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            Yii::$app->session->setFlash('success', 'Static page updated successfully!');
-
-            return $this->redirect(['index']);
-
+            return $this->redirect(['update', 'id' => $model->advert_id]);
         } else {
-
             return $this->render('update', [
-                'model' => $model,
-            ]);
+            'model' => $model, 'imagedata' => $imagedata,
+        ]);
         }
     }
 
     /**
-     * Deletes an existing Cms model.
+     * Deletes an existing AdvertHome model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        Yii::$app->session->setFlash('success', 'Static page deleted successfully!');
+        $user = Image::deleteAll('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads']);
+        Yii::$app->session->setFlash('success', 'Home ads deleted successfully!');
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Cms model based on its primary key value.
+     * Finds the AdvertHome model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param int $id
+     * @param string $id
      *
-     * @return Cms the loaded model
+     * @return AdvertHome the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Cms::findOne($id)) !== null) {
+        if (($model = AdvertHome::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
-    public function actionBlock()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-    
-        $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-        
-        $command = Cms::updateAll(['page_status' => $status],'page_id= '.$data['id']);
-
-        if ($status == 'Active') {
-            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-        } else {
-            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
     }
 }

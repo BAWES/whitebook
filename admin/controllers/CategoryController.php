@@ -161,10 +161,6 @@ class CategoryController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '3');
-        
-        if (yii::$app->user->can($access)) {
-            
             $model = new Category();
             $model->scenario = 'register';
             
@@ -226,24 +222,11 @@ class CategoryController extends Controller
                     'model' => $model,
                 ]);
             }
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
     }
 
     public function actionCreate_subcategory()
     {
-        $access = AuthItem::AuthitemCheck('1', '3');
-
-        if (yii::$app->user->can($access)) {
-        
             $model = new SubCategory();
-        
-            //print_r($_POST);
-            //die();
 
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 
@@ -310,20 +293,10 @@ class CategoryController extends Controller
                     'subcategory' => $subcategory
                 ]);
             }
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
         }
-    }
 
     public function actionChild_category_create()
     {
-        $access = AuthItem::AuthitemCheck('1', '3');
-    
-        if (yii::$app->user->can($access)) {
-    
             $model = new ChildCategory();
     
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -395,12 +368,6 @@ class CategoryController extends Controller
                     'category' => $category
                 ]);
             }
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
     }
 
     /**
@@ -413,10 +380,6 @@ class CategoryController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '3');
-        
-        if (yii::$app->user->can($access)) {
-            
             $model = $this->findModel($id);
             
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -462,20 +425,10 @@ class CategoryController extends Controller
                     'model' => $model,
                 ]);
             }
-
-        } else {
-    
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
     }
 
     public function actionSubcategory_update($id)
     {
-
-        $access = AuthItem::AuthitemCheck('2', '3');
-
-        if (yii::$app->user->can($access)) {
             $model = $this->findsubModel($id);
             $userid = Yii::$app->user->getId();
             $model1 = new Image();
@@ -534,105 +487,89 @@ class CategoryController extends Controller
                     'id' => $id
                 ]);
             }
-
-        } else {
-
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
     }
 
     public function actionChild_category_update($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '3');
+        $model = $this->findChildModel($id);
+        $userid = Yii::$app->user->getId();
+        $model1 = new Image();
 
-        if (yii::$app->user->can($access)) {
-        
-            $model = $this->findChildModel($id);
-            $userid = Yii::$app->user->getId();
-            $model1 = new Image();
+        if ($model->load(Yii::$app->request->post())) {
 
-            if ($model->load(Yii::$app->request->post())) {
+            $string = str_replace(' ', '-', Yii::$app->request->post()['ChildCategory']['category_name']); // Replaces all spaces with hyphens.
+            $model->slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+            $model->category_allow_sale = (Yii::$app->request->post()['ChildCategory']['category_allow_sale']) ? 'yes' : 'no';
+            $model->parent_category_id = Yii::$app->request->post()['ChildCategory']['subcategory_id'];
+            $model->category_level = Category::THIRD_LEVEL;
+            $model->category_name;
+            $model->save(false);
 
-                $string = str_replace(' ', '-', Yii::$app->request->post()['ChildCategory']['category_name']); // Replaces all spaces with hyphens.
-                $model->slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-                $model->category_allow_sale = (Yii::$app->request->post()['ChildCategory']['category_allow_sale']) ? 'yes' : 'no';
-                $model->parent_category_id = Yii::$app->request->post()['ChildCategory']['subcategory_id'];
-                $model->category_level = Category::THIRD_LEVEL;
-                $model->category_name;
-                $model->save(false);
+            // MySQL Hierarchical Data Closure Table Pattern for category
+            CategoryPath::deleteAll(['category_id' => $model->category_id]);
 
-                // MySQL Hierarchical Data Closure Table Pattern for category 
-                CategoryPath::deleteAll(['category_id' => $model->category_id]);
+            $level = 0;
 
-                $level = 0;
+            $paths = CategoryPath::find()
+                    ->where(['category_id' => $model->parent_category_id])
+                    ->orderBy('level ASC')
+                    ->all();
 
-                $paths = CategoryPath::find()
-                        ->where(['category_id' => $model->parent_category_id])
-                        ->orderBy('level ASC')
-                        ->all();
-
-                foreach ($paths as $path) {
-
-                    $cp = new CategoryPath();
-                    $cp->category_id = $model->category_id;
-                    $cp->level = $level;
-                    $cp->path_id = $path->path_id;
-                    $cp->save();
-
-                    $level++;
-                }
+            foreach ($paths as $path) {
 
                 $cp = new CategoryPath();
                 $cp->category_id = $model->category_id;
-                $cp->path_id = $model->category_id;
                 $cp->level = $level;
+                $cp->path_id = $path->path_id;
                 $cp->save();
 
-
-                Yii::$app->session->setFlash('success', 'Child category updated successfully!');
-                Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
-
-                return $this->redirect(['child_category_index']);
-
-            } else {
-                
-                $parentcategory = Category::find()
-                    ->where(['parent_category_id' => null])
-                    ->andwhere(['trash' => 'default'])
-                    ->andwhere(['category_allow_sale' => 'yes'])
-                    ->andwhere(['category_level' => Category::FIRST_LEVEL])
-                    ->all();
-
-                $subcategory = Category::find()
-                    ->where(['category_id' => $model->parent_category_id])
-                    ->andwhere(['trash' => 'default'])
-                    ->andwhere(['category_allow_sale' => 'yes'])
-                    ->andwhere(['category_level' => Category::SECOND_LEVEL])
-                    ->all();
-
-                $parentid = $subcategory[0]['parent_category_id'];
-                
-                $subcategory = ArrayHelper::map($subcategory, 'category_id', 'category_name');
-            
-                $subcategory_id = $model->parent_category_id;
-                $parentcategory = ArrayHelper::map($parentcategory, 'category_id', 'category_name');
-
-                return $this->render('child_category_update', [
-                    'model' => $model, 
-                    'parentcategory' => $parentcategory, 
-                    'userid' => $userid, 
-                    'parentid' => $parentid, 
-                    'subcategory_id' => $subcategory_id,
-                    'id' => $id, 
-                    'subcategory' => $subcategory
-                ]);
+                $level++;
             }
 
+            $cp = new CategoryPath();
+            $cp->category_id = $model->category_id;
+            $cp->path_id = $model->category_id;
+            $cp->level = $level;
+            $cp->save();
+
+
+            Yii::$app->session->setFlash('success', 'Child category updated successfully!');
+            Yii::info('[Subcategory Updated] Admin updated sub category '.$model->category_name, __METHOD__);
+
+            return $this->redirect(['child_category_index']);
+
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+
+            $parentcategory = Category::find()
+                ->where(['parent_category_id' => null])
+                ->andwhere(['trash' => 'default'])
+                ->andwhere(['category_allow_sale' => 'yes'])
+                ->andwhere(['category_level' => Category::FIRST_LEVEL])
+                ->all();
+
+            $subcategory = Category::find()
+                ->where(['category_id' => $model->parent_category_id])
+                ->andwhere(['trash' => 'default'])
+                ->andwhere(['category_allow_sale' => 'yes'])
+                ->andwhere(['category_level' => Category::SECOND_LEVEL])
+                ->all();
+
+            $parentid = $subcategory[0]['parent_category_id'];
+
+            $subcategory = ArrayHelper::map($subcategory, 'category_id', 'category_name');
+
+            $subcategory_id = $model->parent_category_id;
+            $parentcategory = ArrayHelper::map($parentcategory, 'category_id', 'category_name');
+
+            return $this->render('child_category_update', [
+                'model' => $model,
+                'parentcategory' => $parentcategory,
+                'userid' => $userid,
+                'parentid' => $parentid,
+                'subcategory_id' => $subcategory_id,
+                'id' => $id,
+                'subcategory' => $subcategory
+            ]);
         }
     }
 
@@ -646,168 +583,127 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '3');
-        
-        if (yii::$app->user->can($access)) {
+        $model = $this->findModel($id);
 
-            //check category exists 
-            $model = $this->findModel($id);
+        if(!$model) {
+            Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
 
-            if(!$model) {
-                Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
-
-                return $this->redirect(['index']);
-            }   
-
-            //check assing to items 
-            $vendor_item = VendorItemToCategory::find()->where(['category_id' => $id])->count();
-        
-            if ($vendor_item) {
-
-                Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
-
-                return $this->redirect(['index']);
-            }
-
-            //update all child and self
-            $affected = Category::updateAll(
-                ['trash' => 'Deleted'], 
-                '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
-            );
-
-            if ($affected) {
-
-                Yii::$app->session->setFlash('success', 'Category deleted successfully!');
-
-                return $this->redirect(['index']);
-
-            } else {
-                
-                Yii::$app->session->setFlash('success', 'Category delete failed!');
-                
-                return $this->redirect(['index']);
-            }
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+            return $this->redirect(['index']);
         }
-    }
 
-    public function actionCategory_delete($id)
-    {
-        $access = AuthItem::AuthitemCheck('3', '3');
+        //check assing to items
+        $vendor_item = VendorItemToCategory::find()->where(['category_id' => $id])->count();
 
-        if (yii::$app->user->can($access)) {
-            
-            //update all child and self
-            Category::updateAll(
-                ['trash' => 'Deleted'], 
-                '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
-            );
+        if ($vendor_item) {
 
-            Yii::$app->session->setFlash('success', 'Subcategory deleted successfully!');
+            Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
+
+            return $this->redirect(['index']);
+        }
+
+        //update all child and self
+        $affected = Category::updateAll(
+            ['trash' => 'Deleted'],
+            '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
+        );
+
+        if ($affected) {
+
+            Yii::$app->session->setFlash('success', 'Category deleted successfully!');
 
             return $this->redirect(['index']);
 
         } else {
 
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+            Yii::$app->session->setFlash('success', 'Category delete failed!');
+
+            return $this->redirect(['index']);
         }
+    }
+
+    public function actionCategory_delete($id)
+    {
+        Category::updateAll(
+            ['trash' => 'Deleted'],
+            '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
+        );
+
+        Yii::$app->session->setFlash('success', 'Subcategory deleted successfully!');
+
+        return $this->redirect(['index']);
     }
 
     public function actionSubcategory_delete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '3');
-        
-        if (yii::$app->user->can($access)) {
+        //check if category exists
+        $model = $this->findModel($id);
 
-            //check if category exists             
-            $model = $this->findModel($id);
+        if(!$model) {
+            Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
+            return $this->redirect(['manage_subcategory']);
+        }
 
-            if(!$model) {
-                Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
-                return $this->redirect(['manage_subcategory']);
-            }
+        //check if assigned to items
+        $vendor_item = VendorItemToCategory::find()
+            ->where(['category_id' => $id])
+            ->count();
 
-            //check if assigned to items 
-            $vendor_item = VendorItemToCategory::find()
-                ->where(['category_id' => $id])
-                ->count();
-            
-            if (!empty($vendor_item)) {
-                Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
-                return $this->redirect(['manage_subcategory']);
-            }
+        if (!empty($vendor_item)) {
+            Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
+            return $this->redirect(['manage_subcategory']);
+        }
 
-            //update all child and self
-            $affected = Category::updateAll(
-                ['trash' => 'Deleted'], 
-                '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
-            );
+        //update all child and self
+        $affected = Category::updateAll(
+            ['trash' => 'Deleted'],
+            '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
+        );
 
-            if ($affected) {
-                
-                Yii::$app->session->setFlash('success', 'Subcategory deleted successfully!');
-                return $this->redirect(['manage_subcategory']);
+        if ($affected) {
 
-            } else {
-                
-                Yii::$app->session->setFlash('success', 'Subcategory delete failed!');
-                return $this->redirect(['manage_subcategory']);
-            }
+            Yii::$app->session->setFlash('success', 'Subcategory deleted successfully!');
+            return $this->redirect(['manage_subcategory']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/manage_subcategory']);
+
+            Yii::$app->session->setFlash('success', 'Subcategory delete failed!');
+            return $this->redirect(['manage_subcategory']);
         }
     }
 
     public function actionChildcategory_delete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '3');
 
-        if (yii::$app->user->can($access)) {
-            
-            $model = $this->findModel($id);
+        $model = $this->findModel($id);
 
-            if(!$model) {
-                Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
-                return $this->redirect(['child_category_index']);            
-            }
+        if(!$model) {
+            Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
+            return $this->redirect(['child_category_index']);
+        }
 
-            $vendor_item = VendorItemToCategory::find()
-                ->where(['category_id' => $id])
-                ->count();
-            
-            if (!empty($vendor_item)) {                
-                Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
-                return $this->redirect(['child_category_index']);
-            }
+        $vendor_item = VendorItemToCategory::find()
+            ->where(['category_id' => $id])
+            ->count();
 
-            $affected = Category::updateAll(
-                ['trash' => 'Deleted'], 
-                '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
-            );
+        if (!empty($vendor_item)) {
+            Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
+            return $this->redirect(['child_category_index']);
+        }
 
-            if ($affected) {
+        $affected = Category::updateAll(
+            ['trash' => 'Deleted'],
+            '{{%category}}.category_id IN (select category_id from {{%category_path}} where path_id = "'.$id.'")'
+        );
 
-                Yii::$app->session->setFlash('success', 'Child category deleted successfully!');
-                return $this->redirect(['child_category_index']);
+        if ($affected) {
 
-            } else {
-            
-                Yii::$app->session->setFlash('success', 'Child category delete failed!');
-                return $this->redirect(['child_category_index']);
-            }
+            Yii::$app->session->setFlash('success', 'Child category deleted successfully!');
+            return $this->redirect(['child_category_index']);
 
         } else {
 
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/child_category_index']);
+            Yii::$app->session->setFlash('success', 'Child category delete failed!');
+            return $this->redirect(['child_category_index']);
         }
     }
 
