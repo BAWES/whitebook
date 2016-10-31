@@ -96,6 +96,7 @@ class Role extends \yii\db\ActiveRecord
     public function actionList() {
         
         return [
+	        'site' => ['index'],
             'address-type' => ['index', 'view', 'create', 'update', 'delete', 'block'],
             'address-question' => ['index', 'view', 'create', 'update', 'delete', 'block', 'sort_addressquestion'],
             'admin' => ['index', 'view', 'create', 'update', 'delete', 'galleryitem'],

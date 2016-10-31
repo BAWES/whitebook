@@ -61,9 +61,9 @@ class SocialInfoController extends Controller
             $id = $val['store_social_id'];
         }
         if (count($model) == 1) {
-            return $this->redirect(['socialinfo/update/', 'store_social_id' => $id]);
+            return $this->redirect(['social-info/update/', 'store_social_id' => $id]);
         } else {
-            $this->redirect('socialinfo/create');
+            $this->redirect('social-info/create');
         }
 
         $searchModel = new SocialinfoSearch();
