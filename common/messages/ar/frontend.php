@@ -17,6 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Select time slot!' => 'اختر فتحة الوقت!',
+    'Time slot not valid!' => 'فتحة الوقت غير صحيح!',
+    'Select Delivery date!' => 'حدد تاريخ التسليم!',
     'Browse' => 'تصفح',
     'Select Event' => 'حدد الحدث',
     'Sunday' => 'الأحد',
