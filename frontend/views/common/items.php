@@ -11,8 +11,8 @@ if(!empty($items->getModels()))  {
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
 
         ?>
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301" >
-            <div class="events_items">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301"  style="    padding-left: 3px;padding-right: 3px;">
+            <div class="events_items" style="width: 100%">
                 <div class="events_images text-center">
                     <div class="hover_events">
                         <div class="pluse_cont">
