@@ -320,8 +320,10 @@ if ($event_status > 0) {
 
                                             if ($data['slug'] == $category['slug']) {
                                                 $selected = 'selected="selected"';
+                                                $attributes = 'data-hidden="true"';
                                             } else {
                                                 $selected = '';
+                                                $attributes = '';
                                             }
 
                                             if(Yii::$app->language == "en"){
@@ -332,8 +334,8 @@ if ($event_status > 0) {
                                             ?>
                                             <option
                                                 data-icon="<?= $category['icon'] ?>"
-                                                value="<?=yii\helpers\Url::toRoute(['directory/profile','slug' => $category['slug'],'vendor'=>$data['vendor']]); ?>"
-                                                name="category" <?= $selected ?>>
+                                                value="<?=yii\helpers\Url::toRoute(['directory/profile','slug' => $category['slug'], 'vendor' => $data['vendor']]); ?>"
+                                                name="category" <?= $selected .' '. $attributes ?>>
                                                 <?= $category_name ?>
                                             </option>
                                         <?php } ?>

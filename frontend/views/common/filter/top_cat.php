@@ -20,7 +20,9 @@ $get = Yii::$app->request->get();
 
                 if ($get['slug'] == $category['slug']) {
                     $selected = 'selected="selected"';
+                    $data = 'data-hidden="true"';
                 } else {
+                    $data = '';
                     $selected = '';
                 }
 
@@ -40,7 +42,8 @@ $get = Yii::$app->request->get();
                     }
 
                     ?>"
-                    name="category" <?= $selected ?>>
+                    name="category" 
+                    <?= $data . ' ' .$selected ?>>
                     <?= $category_name ?>
                 </option>
             <?php } ?>
