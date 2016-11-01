@@ -35,7 +35,7 @@ if(!empty($items->getModels()))  {
                         </div>
                         <a href="<?= $item_url ?>">
                             <?php
-                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
+                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=208&h=208';
                             echo Html::img($path,['class'=>'item-img']);
                             ?>
                         </a>
@@ -67,7 +67,7 @@ if(!empty($items->getModels()))  {
 
 $this->registerCss("
 .no-record-found {padding: 12px 0 36px 0px;text-align: center;}
-.col-lg-3{margin-bottom: 28px;}
+.col-lg-3 {min-height: 301px;}
 ")
 ?>
             <div id="planloader">
@@ -87,7 +87,6 @@ $this->registerCss("
 $this->registerCss("
 img.item-img{
     width: 100%;
-    height: 208px;
 }
 ");
 
