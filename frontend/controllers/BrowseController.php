@@ -56,8 +56,9 @@ class BrowseController extends BaseController
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
         } else {
-            $Category = 'all';
+            $Category = '';
         }
+        
         \Yii::$app->view->title = (isset($Category->category_meta_title)) ? $Category->category_meta_title : (isset($Category->category_name)) ? Yii::$app->params['SITE_NAME'] . ' | ' . $Category->category_name : Yii::$app->params['SITE_NAME'] .' | All Products';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => (isset($Category->category_meta_description)) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => (isset($Category->category_meta_keywords)) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
@@ -306,6 +307,7 @@ class BrowseController extends BaseController
             ]);
 
         } else {
+
             $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
             $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
             $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
