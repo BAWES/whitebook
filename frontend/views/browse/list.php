@@ -9,8 +9,9 @@ use yii\web\view;
 
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
 
-    $this->params['breadcrumbs'][] = ['label' => ucfirst($Category->category_name), 'url' => Url::to(["browse/categories", 'slug' => $slug])];
-    $get = Yii::$app->request->get();
+$CName = (isset($Category->category_name)) ? $Category->category_name  : 'all';
+$this->params['breadcrumbs'][] = ['label' => ucfirst($CName), 'url' => Url::to(["browse/list", 'slug' => 'all'])];
+$get = Yii::$app->request->get();
 
 $session = Yii::$app->session;
 echo $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;

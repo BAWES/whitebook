@@ -42,20 +42,25 @@ class BrowseController extends BaseController
 
     public function actionList($slug)
     {
+        $slug = strtolower($slug);
         $session = Yii::$app->session;
         $condition = '';
         $model = new Website();
         $data = Yii::$app->request->get();
         $themes = [];
-        $Category = Category::findOne(['slug' => $slug]);
 
-        if (empty($Category)) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        if ($slug != 'all') {
+            $Category = Category::findOne(['slug' => $slug]);
+
+            if (empty($Category)) {
+                throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+            }
+        } else {
+            $Category = 'all';
         }
-
-        \Yii::$app->view->title = ($Category->category_meta_title) ? $Category->category_meta_title : Yii::$app->params['SITE_NAME'].' | '.$Category->category_name;
-        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => ($Category->category_meta_description) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
-        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => ($Category->category_meta_keywords) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
+        \Yii::$app->view->title = (isset($Category->category_meta_title)) ? $Category->category_meta_title : (isset($Category->category_name)) ? Yii::$app->params['SITE_NAME'] . ' | ' . $Category->category_name : Yii::$app->params['SITE_NAME'] .' | All Products';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => (isset($Category->category_meta_description)) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => (isset($Category->category_meta_keywords)) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
 
         if ((isset($data['location']) && $data['location'] != '')) {
             $session->set('deliver-location', $data['location']);
@@ -70,7 +75,6 @@ class BrowseController extends BaseController
         }else{
             $block_date = '';
         }
-
 
         if (isset($data['vendor']) && $data['vendor'] != '') {
             $arr_vendor_slugs = $data['vendor'];
@@ -136,14 +140,17 @@ class BrowseController extends BaseController
         }//if themes
 
         //category filter
-        $cats = $Category->slug;
-        $categories = [];
-        if (isset($data['category']) && count($data['category'])>0) {
-            $categories = array_merge($categories,$data['category']);
-            $cats = implode("','",$categories);
+        if ($slug != 'all') {
+            $cats = $Category->slug;
+            $categories = [];
+
+            if (isset($data['category']) && count($data['category']) > 0) {
+                $categories = array_merge($categories, $data['category']);
+                $cats = implode("','", $categories);
+            }
+            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
+            $item_query->andWhere($q);
         }
-        $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
-        $item_query->andWhere($q);
 
         if ($session->has('deliver-location')) {
 

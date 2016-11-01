@@ -11,11 +11,17 @@ use yii\helpers\Url;
             <div class="listing_sub_cat1">
                 <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
                 <select class="selectpicker" id="main-category">
+                    <option
+                        data-icon="venues-category"
+                        value="<?= Url::toRoute(['browse/list', 'slug'=> 'all']) ?>"
+                        name="category" >
+                        All
+                    </option>
                     <?php
 
                     foreach ($TopCategories as $category) {
 
-                        if ($Category->category_id == $category['category_id']) {
+                        if ((isset($Category->category_id))  && $Category->category_id == $category['category_id']) {
                             $selected = 'selected="selected"';
                         } else {
                             $selected = '';
