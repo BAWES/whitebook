@@ -15,21 +15,32 @@ use frontend\models\Category;
                     
                     <?php
 
-                    if(Yii::$app->language == "en"){
-                        $category_name = $Category['category_name'];
-                    }else{
-                        $category_name = $Category['category_name_ar'];
-                    }
+                    if(!empty($Category)) {
 
-                    ?>
-                    <option
-                        data-hidden="true"
-                        data-icon="<?= $Category['icon'] ?>"
-                        value="<?= Url::toRoute(['browse/list', 'slug'=> $Category['slug']]) ?>"
-                        name="category"><?= $category_name ?>
-                    </option>
-                    
+                        if(Yii::$app->language == "en"){
+                            $category_name = $Category['category_name'];
+                        }else{
+                            $category_name = $Category['category_name_ar'];
+                        }
+
+                        ?>
+                        <option
+                            data-hidden="true"
+                            data-icon="<?= $Category['icon'] ?>"
+                            value="<?= Url::toRoute(['browse/list', 'slug'=> $Category['slug']]) ?>"
+                            name="category"><?= $category_name ?>
+                        </option>                        
                     <?php
+                    }//if category selected ?>
+
+                    <option
+                       data-icon="venues-category"
+                       value="<?= Url::toRoute(['browse/list', 'slug'=> 'all']) ?>"
+                       name="category" >
+                       All
+                   </option>
+
+                    <?php 
 
                     foreach ($TopCategories as $category) {
 

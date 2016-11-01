@@ -10,12 +10,15 @@ use yii\web\view;
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
 
 $CName = (isset($Category->category_name)) ? $Category->category_name  : 'all';
+
 $this->params['breadcrumbs'][] = ['label' => ucfirst($CName), 'url' => Url::to(["browse/list", 'slug' => 'all'])];
+
 $get = Yii::$app->request->get();
 
 $session = Yii::$app->session;
-echo $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+
 ?>
     <!-- coniner start -->
     <section id="inner_pages_white_back">
