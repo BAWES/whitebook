@@ -11,7 +11,7 @@ if(!empty($items->getModels()))  {
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
 
         ?>
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301" >
             <div class="events_items">
                 <div class="events_images text-center">
                     <div class="hover_events">
@@ -67,7 +67,7 @@ if(!empty($items->getModels()))  {
 
 $this->registerCss("
 .no-record-found {padding: 12px 0 36px 0px;text-align: center;}
-.col-lg-3 {min-height: 301px;}
+.min-height-301 {min-height: 301px;}
 ")
 ?>
             <div id="planloader">
