@@ -1,10 +1,13 @@
 <?php
+
 $top_categories = \common\models\Category::find()
     ->where(['category_level' => 0, 'trash' => 'Default'])
     ->orderBy('sort')
     ->asArray()
     ->all();
+
 $get = Yii::$app->request->get();
+
 ?>
 
 <div class="responsive-category-top">

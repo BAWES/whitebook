@@ -1,6 +1,7 @@
 <?php 
 
 use yii\helpers\Url;
+use frontend\models\Category;
 
 ?>
 
@@ -10,22 +11,29 @@ use yii\helpers\Url;
         <div class=""><!-- responsive-category-top -->
             <div class="listing_sub_cat1">
                 <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-                <select class="selectpicker" id="main-category">
+                <select class="selectpicker" id="main-category"> 
+                    <?php
+
+                    if(Yii::$app->language == "en"){
+                        $category_name = $Category['category_name'];
+                    }else{
+                        $category_name = $Category['category_name_ar'];
+                    }
+
+                    ?>
                     <option
-                        data-icon="venues-category"
-                        value="<?= Url::toRoute(['browse/list', 'slug'=> 'all']) ?>"
-                        name="category" >
-                        All
+                        data-icon="<?= $Category['icon'] ?>"
+                        value="<?= Url::toRoute(['browse/list', 'slug'=> $Category['slug']]) ?>"
+                        name="category"><?= $category_name ?>
                     </option>
+                    
                     <?php
 
                     foreach ($TopCategories as $category) {
 
                         if ((isset($Category->category_id))  && $Category->category_id == $category['category_id']) {
-                            $selected = 'selected="selected"';
-                        } else {
-                            $selected = '';
-                        }
+                            continue;
+                        } 
 
                         if(Yii::$app->language == "en"){
                             $category_name = $category['category_name'];
@@ -36,7 +44,7 @@ use yii\helpers\Url;
                         <option
                             data-icon="<?= $category['icon'] ?>"
                             value="<?= Url::toRoute(['browse/list', 'slug'=> $category['slug']]) ?>"
-                            name="category" <?= $selected ?>>
+                            name="category">
                             <?= $category_name ?>
                         </option>
                     <?php } ?>
