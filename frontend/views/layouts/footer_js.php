@@ -49,8 +49,8 @@ $this->registerJs("
     var add_event_url = '".Url::toRoute('/users/add_event')."';
     var successfully_added_to = '".Yii::t('frontend',' successfully added to ')."';
     var category = '".Yii::t('frontend','Category')."';
-    var eventinvitees_url = '".Url::toRoute(['eventinvitees/index'])."';
-    var eventinvitees_add_event_url = '".Url::toRoute(['/eventinvitees/addevent'])."';
+    var eventinvitees_url = '".Url::toRoute(['event-invitees/index'])."';
+    var eventinvitees_add_event_url = '".Url::toRoute(['/event-invitees/addevent'])."';
     var login_success_msg = '".Yii::t('frontend','You are now logged in')."';
     var session_default = '".Yii::$app->session->get('default')."';
     var session_favourite_status = '".Yii::$app->session->get('favourite_status')."';

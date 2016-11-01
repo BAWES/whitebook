@@ -12,9 +12,9 @@ use frontend\models\VendorItem;
 use common\models\Events;
 
 /**
- * EventinviteesController implements the CRUD actions for EventInvitees model.
+ * EventInviteesController implements the CRUD actions for EventInvitees model.
  */
-class EventinviteesController extends BaseController
+class EventInviteesController extends BaseController
 {
     public function behaviors()
     {
