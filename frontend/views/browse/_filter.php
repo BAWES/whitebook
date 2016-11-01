@@ -55,14 +55,6 @@ use yii\helpers\Url;
             <nav class="row-offcanvas row-offcanvas-left">
                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                     <div id="accordion" class="panel-group">
-
-                        <?= $this->render('@frontend/views/common/filter/date.php', [
-                            'deliver_date' => $deliver_date
-                        ]); ?>
-
-                        <?= $this->render('@frontend/views/common/filter/locations.php', [
-                            'deliver_location' => $deliver_location
-                        ]);  ?>
                         
                         <?= $this->render('@frontend/views/common/filter/available_for_sale.php'); ?>
                         

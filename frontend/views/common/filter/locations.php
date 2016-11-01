@@ -29,9 +29,9 @@ if($customer_id) {
 }
 ?>
 
-<div class="panel panel-default" >
-    <div class="panel-heading">
-        <div class="clear_left"><p><?= Yii::t('frontend', 'Delivery Area');?><a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
+<div class="panel panel-default" id="top_panel_location">
+    <div class="panel-heading clearfix" id="top_panel_heading">
+        <div class=""><p><?= Yii::t('frontend', 'Delivery Area');?><a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
     </div>
     <div id="delivery-area" class="panel-collapse" aria-expanded="false" style="display: none;">
         <div class="">
@@ -98,3 +98,17 @@ if($customer_id) {
 </div>
 
 <?php $this->registerJS("$('#delivery-area').fadeIn(1000);",\yii\web\View::POS_READY) ?>
+
+<?php
+
+$this->registerCss("
+    #top_panel_location {
+        border-bottom: none;
+        border-top: none;
+        border: none;
+        border-radius: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    #top_panel_heading {border: none;box-shadow: none;}
+"); ?>

@@ -38,7 +38,19 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
             </div>
             <div class="plan_venues" id="wrapper">
                 <div class="overlay"></div>
-                <div class="overlay_filter"></div>
+                <div class="overlay_filter clearfix">
+                    <div class="col-lg-3" style="padding-left:0px;height: auto!important;">
+                        <?= $this->render('@frontend/views/common/filter/date.php', [
+                            'deliver_date' => $deliver_date
+                        ]); ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?= $this->render('@frontend/views/common/filter/locations.php', [
+                            'deliver_location' => $deliver_location
+                        ]);  ?>
+                    </div>
+
+                </div>
 
                 <span class="filter_butt visible-xs visible-sm">
                     <i class="fa fa-filter"></i>
