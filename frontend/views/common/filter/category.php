@@ -60,7 +60,7 @@ $get = Yii::$app->request->get();
 		<div id="sub_categories">
 			<div class="panel-body" style="background-color: #f8f8f8">
 				<div class="table clearfix">
-					<ul class="list-group test_scroll">
+					<ul class="list-group test_scrolls" style="height:170px;overflow: scroll">
 						<?php
 						$val = [];
 						if (isset($get['category']) && $get['category'] != "") {
