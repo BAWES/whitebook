@@ -23,8 +23,7 @@ $item_pending_count = VendorItem::item_pending_count();
 
 	<p class="menu-title">NAVIGATION</p>
 
-	<?php
-	echo \common\widgets\MenuExtended::widget([
+	<?=\admin\widgets\MenuExtended::widget([
 	    'items' => [
 	        [	
 	        	'label' => '<i class="icon-custom-home"></i><span class="title">Dashboard</span>', 

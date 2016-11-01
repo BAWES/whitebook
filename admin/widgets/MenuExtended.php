@@ -6,7 +6,7 @@
  * Time: 1:05 PM
  */
 
-namespace common\widgets;
+namespace admin\widgets;
 use Yii;
 use admin\models\AccessControlList;
 
