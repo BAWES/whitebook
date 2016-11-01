@@ -11,7 +11,8 @@ use frontend\models\Category;
         <div class=""><!-- responsive-category-top -->
             <div class="listing_sub_cat1">
                 <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-                <select class="selectpicker" id="main-category"> 
+                <select class="selectpicker" id="main-category" placeholder="test"> 
+                    
                     <?php
 
                     if(Yii::$app->language == "en"){
@@ -22,6 +23,7 @@ use frontend\models\Category;
 
                     ?>
                     <option
+                        data-hidden="true"
                         data-icon="<?= $Category['icon'] ?>"
                         value="<?= Url::toRoute(['browse/list', 'slug'=> $Category['slug']]) ?>"
                         name="category"><?= $category_name ?>
