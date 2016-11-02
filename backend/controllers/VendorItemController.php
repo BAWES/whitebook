@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\VarDumper;
 use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -583,8 +584,8 @@ class VendorItemController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->deleteAllFiles();
         VendorItemCapacityException::deleteAll(['item_id' => $id]);
         Image::deleteAll(['item_id' => $id]);
         VendorItemPricing::deleteAll(['item_id' => $id]);
@@ -594,7 +595,7 @@ class VendorItemController extends Controller
         PriorityItem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
-
+        $model->delete();
         Yii::$app->session->setFlash('success', "Item deleted successfully!");
 
         return $this->redirect(['index']);
