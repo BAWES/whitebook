@@ -296,73 +296,20 @@ class VendorItemController extends Controller
                     }//foreach images 
                 }//if images 
 
-                /* Begin Upload product image table  */
-                $product_file = UploadedFile::getInstances($model, 'image_path');
+                //add new images
+                $images = Yii::$app->request->post('images');
 
-                if($product_file){
-                    $i = 0;
-                    foreach ($product_file as $files) {
-                        if($files instanceof yii\web\UploadedFile){
-                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
-
-                            //Resize file using imagine
-                            $resize = true;
-
-                            if($resize){
-
-                                /* Begin Product image resolution 1000 */
-                                $newTmpName2 = $files->tempName . "." . $files->extension;
-                                $imagine = new \Imagine\Gd\Imagine();
-                                $image_1000 = $imagine->open($files->tempName);
-                                $image_1000->resize($image_1000->getSize()->widen(1000));
-                                $image_1000->save($newTmpName2);
-
-                                //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName2;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_1000 . $filename);
-
-                                /* Begin Product image resolution 530 */
-                                $newTmpName1 = $files->tempName . "." . $files->extension;
-                                $image_530 = $imagine->open($files->tempName);
-                                $image_530->resize($image_530->getSize()->widen(530));
-                                $image_530->save($newTmpName1);
-
-                                //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName1;
-                                $awsResult1 = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_530 . $filename);
-
-                                /* Begin Product image resolution 210 */
-                                $newTmpName = $files->tempName . "." . $files->extension;
-                                $image = $imagine->open($files->tempName);
-                                $image->resize($image->getSize()->widen(210));
-                                $image->save($newTmpName);
-
-                                //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName;
-
-                                //Save to S3
-                                $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_210 . $filename);
-                            }
-
-                            if($awsResult){
-                                $model->image_path = $filename;
-                            }
-                        }//if files
-
-                        $image_tbl = new Image();
-                        $image_tbl->image_path = $filename;
-                        $image_tbl->item_id = $model->item_id;
-                        $image_tbl->image_user_id = Yii::$app->user->getId();
-                        $image_tbl->module_type = 'vendor_item';
-                        $image_tbl->image_user_type = 'admin';
-                        $image_tbl->vendorimage_sort_order = $i;
-                        $image_tbl->save();
-                        ++$i;
-                    }//foreach product files
-                }//if product files
-
-                /*  Upload image table End */
-
+                foreach ($images as $key => $value) {
+                    $image = new Image();
+                    $image->image_path = $value;
+                    $image->item_id = $model->item_id;
+                    $image->image_user_id = Yii::$app->user->getId();
+                    $image->module_type = 'vendor_item';
+                    $image->image_user_type = 'admin';
+                    $image->vendorimage_sort_order = 0;
+                    $image->save();
+                }
+                
                 Yii::$app->session->setFlash('success', 'Vendor item added successfully!');
                 Yii::info('[New Item Created by '. Yii::$app->user->identity->admin_name .'] New Item added: '.addslashes($model->item_name), __METHOD__);
 
@@ -517,62 +464,21 @@ class VendorItemController extends Controller
                     }
                 }
 
-                /* Begin Upload guide image table  */
-                $product_file = UploadedFile::getInstances($model, 'image_path');
-                if (count($product_file) > 0) {
-                    foreach ($product_file as $files) {
-                        if ($files instanceof yii\web\UploadedFile) {
-                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+                //remove old images
+                Image::deleteAll(['item_id' => $id]);
 
+                //add new images
+                $images = Yii::$app->request->post('images');
 
-                            $resize = true; //Resize file using imagine
-
-                            if ($resize) {
-
-                                $newTmpName2 = $files->tempName . "." . $files->extension;
-                                $imagine = new \Imagine\Gd\Imagine();
-                                $image_1000 = $imagine->open($files->tempName);
-                                $image_1000->resize($image_1000->getSize()->widen(1000));
-                                $image_1000->save($newTmpName2); /* Begin Product image resolution 1000 */
-
-
-                                $files->tempName = $newTmpName2;
-                                Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_1000 . $filename); //Overwrite old filename for S3 uploading
-
-                                $newTmpName1 = $files->tempName . "." . $files->extension;
-                                $image_530 = $imagine->open($files->tempName);
-                                $image_530->resize($image_530->getSize()->widen(530));
-                                $image_530->save($newTmpName1); /* Begin Product image resolution 530 */
-
-
-                                $files->tempName = $newTmpName1;
-                                Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_530 . $filename); //Overwrite old filename for S3 uploading
-
-
-                                $newTmpName = $files->tempName . "." . $files->extension;
-                                $image = $imagine->open($files->tempName);
-                                $image->resize($image->getSize()->widen(210));
-                                $image->save($newTmpName);  /* Begin Product image resolution 210 */
-
-
-                                $files->tempName = $newTmpName; //Overwrite old filename for S3 uploading
-
-                                $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADFOLDER_210 . $filename); //Save to S3
-                            }
-
-                            if ($awsResult) {
-                                $model->image_path = $filename;
-                            }
-                        }
-                        $image_tbl = new Image;
-                        $image_tbl->image_path = $filename;
-                        $image_tbl->item_id = $id;
-                        $image_tbl->image_user_id = Yii::$app->user->getId();
-                        $image_tbl->module_type = 'vendor_item';
-                        $image_tbl->image_user_type = 'admin';
-                        $image_tbl->vendorimage_sort_order = 0;
-                        $image_tbl->save();
-                    }
+                foreach ($images as $key => $value) {
+                    $image = new Image();
+                    $image->image_path = $value;
+                    $image->item_id = $id;
+                    $image->image_user_id = Yii::$app->user->getId();
+                    $image->module_type = 'vendor_item';
+                    $image->image_user_type = 'admin';
+                    $image->vendorimage_sort_order = 0;
+                    $image->save();
                 }
 
                 /* Delete item price table records if its available any price for item type rental or service */
@@ -1238,5 +1144,81 @@ class VendorItemController extends Controller
         }
 
         echo count($itemname);
+    }
+
+    /**
+     * upload croped image 
+     * @param base64 image data 
+     * @return json containing image url and image name 
+     */
+    public function actionUploadCroppedImage() {
+
+        // Set max execution time 3 minutes.
+        set_time_limit(3 * 60); 
+
+        $temp_folder = Yii::getAlias('@temp_folder').'/'; 
+
+        $image_name = Yii::$app->security->generateRandomString();
+        $image_extension = '.png';
+        $content_type = 'image/png';
+
+        $base64string = str_replace('data:image/png;base64,', '', Yii::$app->request->post('image'));
+
+        //save to temp folder 
+        file_put_contents($temp_folder . $image_name . $image_extension, base64_decode($base64string));
+
+        $imagine = new \Imagine\Gd\Imagine();
+
+        //resize to 530 x 530 
+        $image_530 = $imagine->open($temp_folder . $image_name . $image_extension);
+        $image_530->resize($image_530->getSize()->widen(530));
+        $image_530->save($temp_folder . $image_name . '_530' . $image_extension); 
+
+        //save to s3
+        $awsResult = Yii::$app->resourceManager->save(
+            null, //file upload object  
+            VendorItem::UPLOADFOLDER_530 . $image_name . $image_extension, // name
+            [], //options 
+            $temp_folder . $image_name . '_530' . $image_extension, // source file
+            $content_type
+        ); 
+
+        if (!$awsResult) {
+            return [
+                'error' => 'File not uploaded successfully!'
+            ];    
+        }
+
+        //resize to 210 x 210 
+        $image_210 = $imagine->open($temp_folder . $image_name . $image_extension);
+        $image_210->resize($image_210->getSize()->widen(210));
+        $image_210->save($temp_folder . $image_name . '_210' . $image_extension);
+
+        //save to s3
+        $awsResult = Yii::$app->resourceManager->save(
+            null, //file upload object  
+            VendorItem::UPLOADFOLDER_210 . $image_name . $image_extension, // name
+            [], //options 
+            $temp_folder . $image_name . '_210' . $image_extension, // source file
+            $content_type
+        ); 
+        
+        if (!$awsResult) {
+            return [
+                'error' => 'File not uploaded successfully!'
+            ];    
+        }
+
+        //delete temp file 530 & 210 /7 original 
+        unlink($temp_folder . $image_name . '_530' . $image_extension);
+        unlink($temp_folder . $image_name . '_210' . $image_extension);
+        unlink($temp_folder . $image_name . $image_extension);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        return [
+            'image_url' => Yii::getAlias("@s3/vendor_item_images_210/") . $image_name . $image_extension,
+            'image' => $image_name . $image_extension
+        ];
     }
 }

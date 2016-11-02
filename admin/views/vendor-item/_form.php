@@ -246,28 +246,46 @@ if($model->isNewRecord){
 		<!--End fourth Tab -->
 
 		<div class="tab-pane" id="5">
-			<div class="file-block" style="color:red;display: none;"> Please upload aleast a file</div>
-			<div class="form-group">
-			<?php
-			// Usage with ActiveForm and model
-			echo $form->field($model, 'image_path[]')->widget(FileInput::classname(), [
-				'options' => [
-					'accept' => 'image/*',
-					'multiple' => true,
+			<div class="file-block" style="color:red;"> Please upload aleast a file</div>
+			<div class="row">
+				<div class="col-lg-7">
+					
+					<p>Select, crop and upload image.</p>
 
-				],
-				'pluginOptions'=>[
-					'browseClass' => 'btn btn-primary btn-block',
-					'browseIcon' => ' ',
-					'browseLabel' => 'Select Photo',
-					'showUpload'=>false,
-					'showRemove'=>false,
-					'overwriteInitial'=> false,
-					//'uploadUrl' => '/dummy/dummy',
-				]
-			]);
-			?>
+					<div class="image-editor">
+				        <input type="file" class="cropit-image-input">
+				        <div class="cropit-preview"></div>
+				        <div class="image-size-label">
+				          Resize image
+				        </div>
+				        <input type="range" class="cropit-image-zoom-input">
+				        <button type="button" class="btn btn-primary btn-crop-upload">Upload</button>
+				    </div>
+				</div>
+				<div class="col-lg-5">
+					<p>Uploaded image list</p>
+					<table class="table table-bordered table-item-image">
+						<?php foreach ($model->images as $key => $value) { ?>
+						<tr>
+							<td>
+								<div class="vendor_image_preview">
+									<img src="<?= Yii::getAlias("@s3/vendor_item_images_210/").$value->image_path ?>" />
+								</div>
+								<input type="hidden" name="images[]" value="<?= $value->image_path ?>" />
+							</td>
+							<td>
+								<button class="btn btn-danger btn-delete-image">
+									<i class="fa fa-trash"></i>
+								</button>
+							</td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
 			</div>
+
+			<hr />
+
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 		</div>
@@ -404,22 +422,23 @@ if(!empty($guideimagedata)) {
 echo Html::hiddenInput('count_q',$count_q,['id'=>$count_q]);
 echo Html::hiddenInput('appImageUrl',Yii::getAlias('appImageUrl'),['id'=>'appImageUrl']);
 echo Html::hiddenInput('image_order_url',Url::to(['/image/imageorder']),['id'=>'image_order_url']);
-echo Html::hiddenInput('deletequestionoptions_url',Url::to(['/vendoritemquestionansweroption/deletequestionoptions']),['id'=>'deletequestionoptions_url']);
-echo Html::hiddenInput('salesguideimage_url',Url::to(['/vendoritem/salesguideimage']),['id'=>'salesguideimage_url']);
+echo Html::hiddenInput('deletequestionoptions_url',Url::to(['/vendor-item-question-answer-option/deletequestionoptions']),['id'=>'deletequestionoptions_url']);
+echo Html::hiddenInput('salesguideimage_url',Url::to(['/vendor-item/salesguideimage']),['id'=>'salesguideimage_url']);
 echo Html::hiddenInput('request_create',$request->get('create'), ['id'=>'request_create']);
 echo Html::hiddenInput('isNewRecord',$isNewRecord, ['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_for_sale',$model->item_for_sale, ['id'=>'item_for_sale']);
 echo Html::hiddenInput('item_status',$model->item_status, ['id'=>'item_status']);
 echo Html::hiddenInput('item_id',$item_id, ['id'=>'item_id']);
-echo Html::hiddenInput('item_name_check',Url::to(['/vendoritem/itemnamecheck']), ['id'=>'item_name_check']);;
-echo Html::hiddenInput('add_question_url',Url::to(['/vendoritem/addquestion']), ['id'=>'add_question_url']);
-echo Html::hiddenInput('guideimage_url',Url::to(['/vendoritem/guideimage']), ['id'=>'guideimage_url']);
+echo Html::hiddenInput('item_name_check',Url::to(['/vendor-item/itemnamecheck']), ['id'=>'item_name_check']);;
+echo Html::hiddenInput('add_question_url',Url::to(['/vendor-item/addquestion']), ['id'=>'add_question_url']);
+echo Html::hiddenInput('guideimage_url',Url::to(['/vendor-item/guideimage']), ['id'=>'guideimage_url']);
 echo Html::hiddenInput('exist_question',$exist_question, ['id'=>'exist_question']);
-echo Html::hiddenInput('removequestion_url',Url::to(['/vendoritem/removequestion']), ['id'=>'removequestion_url']);
+echo Html::hiddenInput('removequestion_url',Url::to(['/vendor-item/removequestion']), ['id'=>'removequestion_url']);
 echo Html::hiddenInput('vendorcategory_url',Url::to(['/category/vendorcategory']), ['id'=>'vendorcategory_url']);
-echo Html::hiddenInput('loadsubcategory_url',Url::to(['/priorityitem/loadsubcategory']), ['id'=>'loadsubcategory_url']);
-echo Html::hiddenInput('loadchildcategory_url',Url::to(['/priorityitem/loadchildcategory']), ['id'=>'loadchildcategory_url']);
-echo Html::hiddenInput('renderquestion_url',Url::to(['/vendoritem/renderquestion']), ['id'=>'renderquestion_url']);
+echo Html::hiddenInput('loadsubcategory_url',Url::to(['/priority-item/loadsubcategory']), ['id'=>'loadsubcategory_url']);
+echo Html::hiddenInput('loadchildcategory_url',Url::to(['/priority-item/loadchildcategory']), ['id'=>'loadchildcategory_url']);
+echo Html::hiddenInput('renderquestion_url',Url::to(['/vendor-item/renderquestion']), ['id'=>'renderquestion_url']);
+echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
 
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
