@@ -302,9 +302,9 @@ $action = Yii::$app->controller->action->id;
                                             <div class="error" id="type_error"></div>
                                         </div>
                                     </div>
-                                    <div id="eventresult" style="color:red"></div>
-                                    <div class="eventErrorMsg error" style="color:red;margin-bottom: 10px;"></div>
-                                    <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>" title="Loader"></div>
+                                    <div id="eventresult"></div>
+                                    <div class="eventErrorMsg error"></div>
+                                    <div class="event_loader"><img src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>" title="Loader"></div>
                                     <div class="buttons">
                                         <div class="creat_evn_sig">
                                             <button type="button" id="create_event_button" name="create_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'Create Event'); ?>"><?php echo Yii::t('frontend', 'Create Event'); ?></button>
@@ -344,7 +344,7 @@ $action = Yii::$app->controller->action->id;
                             <span class="ma5-btn-leave">
 
                             </span>
-                            <a style="color:#000;" class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Back'); ?></a>
+                            <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Back'); ?></a>
                         </div></li>
                     <li class="ma5-li-1-1">
                         <a title="<?php echo Yii::t('frontend', 'Venues'); ?>" href="<?= Url::toRoute(['browse/list','slug'=>'venues'], true); ?>">
@@ -519,7 +519,7 @@ $action = Yii::$app->controller->action->id;
 
 </script>
 
-<style>
+<?php $this->registerCss("
     .cart-dropdown {
         border: 1px solid #999;
         overflow: hidden;
@@ -598,4 +598,9 @@ $action = Yii::$app->controller->action->id;
     .cart-button button{height:35px;background:#000;color:#fff;}
     .cart-button button:hover{background:#333;color:#fff;}
     .plan_venues {  margin-bottom: 30px;  }
-</style>
+    #eventresult{color:red;}
+    .eventErrorMsg{color:red;margin-bottom: 10px;}
+    .event_loader{display:none;text-align:center;margin-bottom: 10px;}
+    .ma5-path-to-active{color:#000;}
+
+") ?>

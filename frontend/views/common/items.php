@@ -11,8 +11,8 @@ if(!empty($items->getModels()))  {
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
 
         ?>
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301"  style="    padding-left: 3px;padding-right: 3px;">
-            <div class="events_items" style="width: 100%">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301">
+            <div class="events_items width-100-percent">
                 <div class="events_images text-center">
                     <div class="hover_events">
                         <div class="pluse_cont">
@@ -65,13 +65,9 @@ if(!empty($items->getModels()))  {
     echo '<div class="no-record-found">'.Yii::t('frontend', "No records found").'</div>';
 }
 
-$this->registerCss("
-.no-record-found {padding: 12px 0 36px 0px;text-align: center;}
-.min-height-301 {min-height: 301px;}
-")
 ?>
             <div id="planloader">
-                <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
+                <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" class="margin-top-15">
             </div>
         </div>
     <div class="add_more_commons text-center">
@@ -85,9 +81,11 @@ $this->registerCss("
 <?php
 
 $this->registerCss("
-img.item-img{
-    width: 100%;
-}
+.no-record-found {padding: 12px 0 36px 0px;text-align: center;}
+.min-height-301 {min-height: 301px;padding-left: 3px;padding-right: 3px;}
+img.item-img{width: 100%;}
+.width-100-percent{width: 100%;}
+.margin-top-15{margin-top: 15%;}
 ");
 
 ?>

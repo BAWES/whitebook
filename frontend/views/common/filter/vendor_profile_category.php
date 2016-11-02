@@ -23,7 +23,7 @@ if (count($category_list) > 3) {
 <div class="responsive-category-top">
     <div class="listing_sub_cat1">
         <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-        <select class="selectpicker" style="display: none;" id="main-category">
+        <select class="selectpicker " id="main-category">
             <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute(['site/vendor_profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>">All</option>
             <?php
             foreach($category_list as $category) {

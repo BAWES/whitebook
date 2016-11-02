@@ -21,11 +21,6 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
 
 ?>
 
-<style>
-    @media screen and (max-width: 1195px) {
-        .mid-space {display: none;}
-    }
-</style>
     <!-- coniner start -->
     <section id="inner_pages_white_back">
         <div id="event_slider_wrapper">
@@ -49,15 +44,15 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
             <div class="plan_venues" id="wrapper">
                 <div class="overlay"></div>
                 <div class="overlay_filter clearfix">
-                    <div class="col-lg-3" style="padding-left:0px;height: auto!important;">
+                    <div class="col-lg-3 padding-left-0">
                         <?= $this->render('@frontend/views/common/filter/date.php', [
                             'deliver_date' => $deliver_date
                         ]); ?>
                     </div>
-                    <div class="mid-space" style="float:left;width: 1.5%;">
+                    <div class="mid-space">
                         &nbsp;
                     </div>
-                    <div class="col-lg-3" style="padding-left:0px;height: auto!important;">
+                    <div class="col-lg-3 padding-left-0">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
                         ]);  ?>
@@ -119,3 +114,11 @@ jQuery(document).delegate('a#filter-clear-date', 'click', function(){
     filter();
 })
 ", View::POS_END);
+
+$this->registerCss("
+@media screen and (max-width: 1195px) {
+    .mid-space {display: none;}
+}
+.padding-left-0{padding-left:0px;height: auto!important;}
+.mid-space{float:left;width: 1.5%;}
+");

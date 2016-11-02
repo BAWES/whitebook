@@ -13,7 +13,7 @@ use common\models\CustomerCart;
                         <?= Yii::t('frontend', 'Select delivery address for each items') ?>                        
                 </h4>
         </div>
-        <div class="panel-body" style="padding: 0px">
+        <div class="panel-body padding-0">
 
         <br />
 
@@ -74,7 +74,7 @@ use common\models\CustomerCart;
 </div>
 
 <div class="btn-set">
-        <a href="<?= Url::to(['browse/index']); ?>" class="btn btn-primary btn-checkout pull-left" style="margin-left: 0;">
+        <a href="<?= Url::to(['browse/index']); ?>" class="btn btn-primary btn-checkout pull-left margin-left-0">
                 <?= Yii::t('frontend', 'Back to shopping') ?>
         </a>
 
@@ -93,13 +93,13 @@ use common\models\CustomerCart;
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <div class="modal-header" style="padding-bottom:0; margin-bottom: 0;">
+        <div class="modal-header margin-padding-0">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
         </div>
-        <div class="modal-body" style="background: white; margin-top: 0;">
+        <div class="modal-body body-update">
 
                 <?= $form->field($customer_address_modal, 'address_name'); ?>
                 
@@ -134,7 +134,11 @@ use common\models\CustomerCart;
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
-
-    
+<?php
+$this->registerCss("
+    .margin-left-0{margin-left: 0;}
+    .padding-0{padding:0px!important;}
+    .margin-padding-0{padding-bottom:0; margin-bottom: 0;}
+    .body-update{background: white; margin-top: 0;}
+");
+?>

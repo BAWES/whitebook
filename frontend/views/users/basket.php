@@ -52,8 +52,8 @@ $this->title = 'Whitebook - Checkout';
                             }
                         }
                         ?>
-                        <tr><td colspan="8" style="border:5px; text-align:right">Total</td><td><?= number_format($total, 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></td></tr>
-                        <tr><td colspan="9" style="border:5px; text-align:right"><div id="quantity_error"></div><a href="#" onclick="validateDeliveryArea();" id="check_out">Check out</a></td></tr>
+                        <tr><td colspan="8" class="td-update">Total</td><td><?= number_format($total, 2) . " " . Yii::$app->params['CURRENCY_CODE']; ?></td></tr>
+                        <tr><td colspan="9" class="td-update"><div id="quantity_error"></div><a href="#" onclick="validateDeliveryArea();" id="check_out">Check out</a></td></tr>
                     </table>
 
                     <table>
@@ -209,3 +209,9 @@ function calculate_total1($quantity, $price) {
     }
 
 </script>
+
+<?php
+$this->registerCss("
+.td-update{border:5px; text-align:right;}
+");
+?>

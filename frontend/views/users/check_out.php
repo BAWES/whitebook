@@ -17,7 +17,7 @@ $this->title = 'Delivery Address | Whitebook';
                 <div class="accont_informations">
                     <div class="accont_info">
                         <div class="account_title">
-                            <div id="acc_status" style="color:green;margin-bottom: 10px;"></div>
+                            <div id="acc_status"></div>
                             <h4><?php echo Yii::t('frontend', 'Address Info'); ?></h4>
                         </div>
                         <div class="account_form">
@@ -113,7 +113,7 @@ foreach ($area as $key => $val) {
                                     </div>
                                 </form>
                             </div>
-                            <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
+                            <div id="login_loader" style="display: none;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
                             <div class="save_address">
 
 
@@ -197,7 +197,7 @@ foreach ($area as $key => $val) {
                     {
                         jQuery('#login_loader').hide();
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Delivery informastion added successfully!</span>');
+                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" >Delivery informastion added successfully!</span>');
                         window.setTimeout(function () {
                             window.location.replace("<?php echo Yii::$app->homeUrl . '/basket'; ?>")
                         }, 2000)
@@ -288,3 +288,10 @@ foreach ($area as $key => $val) {
 
     });
 </script>
+
+
+<?php $this->registerCss("
+#acc_status{color:green;margin-bottom: 10px;}
+#login_loader{text-align:center;margin-bottom: 10px;}
+.msg-success{margin-top: 5px; width: 320px; float: left; text-align: left;}
+");

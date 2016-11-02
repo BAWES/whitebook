@@ -62,8 +62,8 @@ $this->beginPage()
     </head>
     <body class="has-js">
         <!-- <div class="fullpage" style="width:100%;height:100%"></div> -->
-        <div id="loader2" style="display:none;text-align: center; position: fixed; width: 100%;height: 100%;z-index: 1;opacity: 0.6;background: #fff;">
-        <img style="position:absolute;top:50%;" src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>"
+        <div id="loader2" style="display:none ;">
+        <img src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>"
          title="Loader"></div>
         <!-- Header Section Start -->
         <?php
@@ -81,6 +81,11 @@ $this->beginPage()
 <?php $this->endContent(); ?>
 <?php $this->registerJs('$(".alert").animate({opacity: 1.0}, 3000).fadeOut("slow");',yii\web\View::POS_READY); ?>
 <?php $this->endBody() ?>
+        <?php $this->registerCss("
+        .loader2{display:none;text-align: center; position: fixed; width: 100%;height: 100%;z-index: 1;opacity: 0.6;background: #fff;}
+        .loader2 img {position:absolute;top:50%;}
+
+        ");?>
         <!-- Footer Section End -->
     </body>
 </html>

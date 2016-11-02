@@ -12,7 +12,7 @@ $this->title = $title . ' | Whitebook';
             <div class="title_main">
                 <h1><?= $title ?></h1>
             </div>
-            <div class="about_content_sec" style="margin-bottom: 30px;font-family: 'OpenSansRegular' !important">
+            <div class="about_content_sec">
                 <?= $content ?>
             </div>
         </div>
@@ -33,4 +33,10 @@ $this->title = $title . ' | Whitebook';
 // mobile hover menu end
 
 </script>
+
+<?php
+$this->registerCss("
+.about_content_sec{margin-bottom: 30px;font-family: 'OpenSansRegular' !important}
+");
+?>
 <!--end footer sticky-->

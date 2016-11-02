@@ -65,7 +65,7 @@ $this->title = 'Whitebook - ' . $item_name;
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
                             <label>
-                                <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["directory/profile",'slug'=>'all','vendor' => $vendor_det['slug']]) ?>"  style="color: #999999">
+                                <a class="color-999999" title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["directory/profile",'slug'=>'all','vendor' => $vendor_det['slug']]) ?>" >
                                     <?= $vendor_name; ?>
                                 </a>
                             </label>
@@ -87,7 +87,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                             $baselink = $imgPath . $img->image_path;
                                         }
                                         ?>
-                                        <div class="item"><img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px;"></div>
+                                        <div class="item"><img src="<?php echo $baselink; ?>" alt="item detail image" class="width-530-px"></div>
                                     <?php }
                                 }
                                     ?>
@@ -111,7 +111,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                     $baselink = $imgPath . $img['image_path'];
                                                 }
                                                 ?>
-                                                <li><img src="<?php echo $baselink; ?>" alt="item detail image" style="width:530px !important;"></li>
+                                                <li><img src="<?php echo $baselink; ?>" alt="item detail image" class="width-530-px"></li>
                                             <?php }
                                     } ?>
                                 </ul>
@@ -146,7 +146,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                     <h2><?= $item_name; ?></h2>
                                     
                                     <label>
-                                        <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["directory/profile",'slug'=>'all','vendor' => $vendor_det['slug']]) ?>"  style="color: #999999">
+                                        <a title="<?= $vendor_det['vendor_name']; ?>" href="<?= Url::to(["directory/profile",'slug'=>'all','vendor' => $vendor_det['slug']]) ?>"  class="color-999999">
                                             <?= $vendor_name; ?>
                                         </a>
                                     </label>
@@ -196,7 +196,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                             </a>
                                         <?php } ?>
 
-                                        <div id="loading_img" style='display:none'>
+                                        <div id="loading_img hide">
                                             <?php $giflink = Url::to("@web/images/ajax-loader.gif"); ?>
                                             <img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />
                                         </div>
@@ -289,7 +289,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                                             <span class="border-bottom"></span>
                                                                         <?php } ?>
                                                                         <?php if (trim($model->vendor->vendor_public_phone)) { ?>
-                                                                            <h4 style="margin-top: 13px;">
+                                                                            <h4 class="margin-top-13">
                                                                                 <a class="color-808080" href="tel:<?=$model->vendor->vendor_public_phone; ?>"><?=$model->vendor->vendor_public_phone; ?></a>&nbsp;
                                                                             </h4>
                                                                             <span class="border-bottom border-bottom-none"></span>
@@ -415,7 +415,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                     <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$summary?>&url=<?=$url; ?>" ><span class="flaticon-twitter13"></span></a></li>
                                     <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
                                     <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
-                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
+                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
                                     <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>" title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
                                     <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                 </ul>
@@ -505,6 +505,11 @@ $this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\Jquer
 
 $this->registerCss("
 .color-808080{color: #808080!important;}
+.color-999999{color: #999999!important;}
+.margin-top-13{margin-top: 13px!important;}
+.width-530-px{width:530px !important;}
+.fa-whatsapp{font-size: 169%;margin-top: 2px;}
 .height-2{height:2px!important;}
 .margin-4{margin: 4px 0 0px;}
+
 ");

@@ -33,7 +33,7 @@ GridView::widget([
                 },
                         'update' => function ($url, $model) {
                     $url = '';
-                    return Html::a('<a href="javascript:void(0)"  onclick="updateinvitee(' . $model->invitees_id . ')"><span class="glyphicon glyphicon-pencil" style="margin-left:10px;"></span></a>', $url, [
+                    return Html::a('<a href="javascript:void(0)"  onclick="updateinvitee(' . $model->invitees_id . ')"><span class="glyphicon glyphicon-pencil"></span></a>', $url, [
                                 'title' => Yii::t('app', 'Gallery'),
                                     //'class'=>'btn btn-primary btn-xs',
                     ]);
@@ -43,3 +43,10 @@ GridView::widget([
         ]);
 ?>
         <?php \yii\widgets\Pjax::end(); ?>
+
+<?php
+
+$this->registerCss("
+    .glyphicon-pencil{margin-left:10px;}
+");
+?>

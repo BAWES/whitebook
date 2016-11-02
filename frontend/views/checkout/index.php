@@ -1,11 +1,7 @@
 <?php 
 
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\view;
-use common\models\Image;
-use common\models\CustomerCart;
-
 $this->title = Yii::t('frontend', 'Checkout | Whitebook'); 
 
 ?>
