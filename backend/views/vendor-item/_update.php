@@ -246,51 +246,45 @@ function cmp($a, $b)
 			<!--End Third Tab -->
 
 			<div class="tab-pane" id="4">
-				<div class="form-group">
-					<div class="file-block" style="color:red;display: none;"> Please upload aleast one file</div>
-					<?php
+				<div class="file-block" style="color:red; display: none;"> Please upload aleast a file</div>
+				<div class="row">
+					<div class="col-lg-7">
+						
+						<p>Select, crop and upload image.</p>
 
-					$order = [];
-					$initialPreview = [];
-					$initialPreviewConfig = [];
-					
-					if(!empty($images)) {
-						$i=0;
-						foreach ($images as $value) {
-							$order[] = ['image_id'=>$value->image_id,'vendorimage_sort_order'=>$value->vendorimage_sort_order,'image_path'=>$value->image_path];
-							usort($order, "cmp");
-
-						}
-						foreach ($order as $value) {
-							$key = $value['image_id'];
-							$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value['image_path'], [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value['image_id'],'title'=>'']);
-							$url = Url::to(["/vendor-item/delete-item-image", "id" => $key]);
-							$initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
-							$i++;
-						}
-					}
-
-					// Usage with ActiveForm and model
-					echo $form->field($model, 'image_path[]')->widget(FileInput::classname(), [
-						'options' => [
-							'accept' => 'image/*',
-							'multiple' => true,
-
-						],
-                        'pluginOptions'=>[
-							'browseClass' => 'btn btn-primary btn-block',
-							'browseIcon' => ' ',
-							'browseLabel' => 'Select Photo',
-                            'showUpload'=>false,
-                            'showRemove'=>false,
-                            'overwriteInitial'=> false,
-							'initialPreview' => $initialPreview,
-							'initialPreviewConfig' => $initialPreviewConfig,
-                            //'uploadUrl' => '/dummy/dummy',
-                        ]
-					]);
-					?>
+						<div class="image-editor">
+					        <input type="file" class="cropit-image-input">
+					        <div class="cropit-preview"></div>
+					        <div class="image-size-label">
+					          Resize image
+					        </div>
+					        <input type="range" class="cropit-image-zoom-input">
+					        <button type="button" class="btn btn-primary btn-crop-upload">Upload</button>
+					    </div>
+					</div>
+					<div class="col-lg-5">
+						<p>Uploaded image list</p>
+						<table class="table table-bordered table-item-image">
+							<?php foreach ($model->images as $key => $value) { ?>
+							<tr>
+								<td>
+									<div class="vendor_image_preview">
+										<img src="<?= Yii::getAlias("@s3/vendor_item_images_210/").$value->image_path ?>" />
+									</div>
+									<input type="hidden" name="images[]" value="<?= $value->image_path ?>" />
+								</td>
+								<td>
+									<button class="btn btn-danger btn-delete-image">
+										<i class="fa fa-trash"></i>
+									</button>
+								</td>
+							</tr>
+							<?php } ?>
+						</table>
+					</div>
 				</div>
+
+				<hr />
 
 				<div class="form-group">
 					<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete','style'=>'float:right;']) ?>
@@ -326,6 +320,7 @@ echo Html::hiddenInput('remove_question_url',Url::to(['vendoritem/removequestion
 echo Html::hiddenInput('render_question_url',Url::to(['vendoritem/renderquestion']),['id'=>'render_question_url']);
 echo Html::hiddenInput('item_name_check_url',Url::to(['/vendoritem/itemnamecheck']),['id'=>'item_name_check_url']);
 echo Html::hiddenInput('image_order_url',Url::to(['/site/imageorder']),['id'=>'image_order_url']);
+echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
 
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
@@ -333,4 +328,6 @@ $this->registerJsFile('@web/themes/default/plugins/bootstrap-fileinput/fileinput
 
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);

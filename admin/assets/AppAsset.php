@@ -36,8 +36,7 @@ class AppAsset extends AssetBundle
         'plugins/jquery-unveil/jquery.unveil.min.js',
         'plugins/jquery-scrollbar/jquery.scrollbar.min.js',
         'plugins/jquery-numberAnimate/jquery.animateNumbers.js',
-        'js/core.js',
-        'js/jquery.cropit.js'
+        'js/core.js'        
     ];
 
     public $jsOptions = ['position' => \yii\web\View::POS_HEAD];

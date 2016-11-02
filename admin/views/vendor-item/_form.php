@@ -246,7 +246,7 @@ if($model->isNewRecord){
 		<!--End fourth Tab -->
 
 		<div class="tab-pane" id="5">
-			<div class="file-block" style="color:red;"> Please upload aleast a file</div>
+			<div class="file-block" style="color:red; display: none;"> Please upload aleast a file</div>
 			<div class="row">
 				<div class="col-lg-7">
 					
@@ -452,6 +452,8 @@ $this->registerJsFile("@web/themes/default/plugins/jquery-superbox/js/superbox.j
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.2", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
