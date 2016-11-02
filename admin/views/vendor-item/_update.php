@@ -275,51 +275,51 @@ function cmp($a, $b)
 		<!--End fourth Tab -->
 
 		<div class="tab-pane clearfix" id="5">
-			<div class="file-block" style="color:red;display: none;"> Please upload aleast a file</div>
-            <?php
-			$imageInitialPreview = [];
-            $imageInitialPreviewConfig = [];
-			if(!empty($images)) {
+			<div class="file-block" style="color:red;"> Please upload aleast a file</div>
+			<div class="row">
+				<div class="col-lg-7">
+					
+					<p>Select, crop and upload image.</p>
 
-                $i=0;
-				foreach ($images as $value) {
-					$order[] = ['image_id'=>$value->image_id,'vendorimage_sort_order'=>$value->vendorimage_sort_order,'image_path'=>$value->image_path];
-					usort($order, "cmp");
+					<div class="image-editor">
+				        <input type="file" class="cropit-image-input">
+				        <div class="cropit-preview"></div>
+				        <div class="image-size-label">
+				          Resize image
+				        </div>
+				        <input type="range" class="cropit-image-zoom-input">
+				        <button type="button" class="btn btn-primary btn-crop-upload">Upload</button>
+				    </div>
+				</div>
+				<div class="col-lg-5">
+					<p>Uploaded image list</p>
+					<table class="table table-bordered table-item-image">
+						<?php foreach ($model->images as $key => $value) { ?>
+						<tr>
+							<td>
+								<div class="vendor_image_preview">
+									<img src="<?= Yii::getAlias("@s3/vendor_item_images_210/").$value->image_path ?>" />
+								</div>
+								<input type="hidden" name="images[]" value="<?= $value->image_path ?>" />
+							</td>
+							<td>
+								<button class="btn btn-danger btn-delete-image">
+									<i class="fa fa-trash"></i>
+								</button>
+							</td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
+			</div>
 
-				}
-				foreach ($order as $value) {
-					$key = $value['image_id'];
-					$imageInitialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value['image_path'], [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value['image_id'],'title'=>'']);
-					$url = Url::to(["/vendor-item/deleteitemimage", "id" => $key]);
-					$imageInitialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
-					$i++;
-				}
-            }
+			<hr />
 
-            // Usage with ActiveForm and model
-            echo $form->field($model, 'image_path[]')->widget(FileInput::classname(), [
-                'options' => [
-                    'accept' => 'image/*',
-                    'multiple' => true,
-
-                ],
-                'pluginOptions'=>[
-                    'browseClass' => 'btn btn-primary btn-block',
-                    'browseIcon' => ' ',
-                    'browseLabel' => 'Select Photo',
-                    'showUpload'=>false,
-                    'showRemove'=>false,
-                    'overwriteInitial'=> false,
-                    'initialPreview' => $imageInitialPreview,
-                    'initialPreviewConfig' => $imageInitialPreviewConfig,
-                    ///'uploadUrl' => '/dummy/dummy',
-                ]
-            ]);
-            ?>
-
-			<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
-			<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
-			<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
+			<div class="row">
+				<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+				<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+				<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
+			</div>
 		</div>
 		<!--End fifth Tab -->
 
@@ -425,6 +425,7 @@ echo Html::hiddenInput('vendorcategory_url',Url::to(['/category/vendorcategory']
 echo Html::hiddenInput('loadsubcategory_url',Url::to(['/priority-item/loadsubcategory']), ['id'=>'loadsubcategory_url']);
 echo Html::hiddenInput('loadchildcategory_url',Url::to(['/priority-item/loadchildcategory']), ['id'=>'loadchildcategory_url']);
 echo Html::hiddenInput('renderquestion_url',Url::to(['/vendor-item/renderquestion']), ['id'=>'renderquestion_url']);
+echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
 
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");

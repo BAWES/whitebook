@@ -8425,3 +8425,31 @@ a.delivery_href:hover{
   padding: 0 5px;
   margin-left: 10px;
 }
+
+.cropit-preview {
+  background-color: #f8f8f8;
+  background-size: cover;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 7px;
+  width: 530px;
+  height: 530px;
+  overflow: hidden;
+}
+
+.cropit-preview-image-container {
+  cursor: move;
+}
+
+.image-size-label {
+  margin-top: 10px;
+}
+
+.cropit-image-zoom-input{
+  margin-bottom: 10px;
+}
+
+.vendor_image_preview img {
+  width: 100px;
+  height: 100px;
+}

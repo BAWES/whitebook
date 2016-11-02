@@ -834,17 +834,17 @@ $("#validfour4").click(function() {
 
 $("#validfive5").click(function() {
 	
-	if($(".file-preview-thumbnails img").length <= 0)
+	if($(".table-item-image img").length <= 0)
 	{
-	   $('.file-block').show();
-	   $('.kv-fileinput-caption').css({'border':'1px solid red'});
-	  return false;
-	} else if($(".file-preview-thumbnails img").length >= 1) {
-	   $('.file-block').hide();
-	   $('.kv-fileinput-caption').css({'border':'1px solid #ccc'});
-	   return true;
+		$('.file-block').show();
+		return false;
 	}
-	
+	else if($(".table-item-image img").length >= 1)
+ 	{
+ 		$('.file-block').hide();
+ 		return true;
+ 	}
+ 	
 	if($("#vendoritem-vendor_id").val()=='')
 	{
 			$(".field-vendoritem-vendor_id").addClass('has-error');
@@ -917,12 +917,12 @@ $("#validfive5").click(function() {
 
 $("#validsix6").click(function() {
 
-	if($(".file-preview-thumbnails img").length <= 0)
+	if($(".table-item-image img").length <= 0)
 	{
 		$('.file-block').show();
 		return false;
 	}
-	else if($(".file-preview-thumbnails img").length >= 1)
+	else if($(".table-item-image img").length >= 1)
  	{
  		$('.file-block').hide();
  		return true;
@@ -1173,4 +1173,50 @@ $('.btn-add-category').click(function(){
 
 $(document).delegate('.table-category-list .btn-danger','click', function(){
 	$(this).parent().parent().remove();
+});
+
+/** 
+ * Image crop and upload 
+ */
+ $(function() {
+ 	
+    $('.image-editor').cropit({ imageBackground: true });
+
+    $('.btn-crop-upload').click(function(){
+
+    	$(this).attr('disabled', 'disabled');
+    	$(this).html('Uploading...');
+
+    	var imageData = $('.image-editor').cropit('export');
+
+    	var croped_image_upload_url = $('#croped_image_upload_url').val();
+
+    	//upload image 
+    	$.post(croped_image_upload_url, { image : imageData }, function(json) {
+
+    		var html = '<tr>';
+			html +=	'<td>';
+			html +=	'		<div class="vendor_image_preview">';
+			html +=	'			<img src="' + json.image_url + '" />';
+			html +=	'		</div>';
+			html +=	'		<input type="hidden" name="images[]" value="' + json.image + '" />';
+			html +=	'	</td>';
+			html +=	'	<td>';
+			html +=	'		<button class="btn btn-danger btn-delete-image">';
+			html +=	'			<i class="fa fa-trash"></i>';
+			html +=	'		</button>';
+			html +=	'	</td>';
+			html +=	'</tr>';
+
+    		$('.table-item-image').append(html);
+
+    		$('.btn-crop-upload').html('Upload');
+    		$('.btn-crop-upload').removeAttr('disabled');
+    	});
+    });
+
+    //delete image from item image table 
+    $(document).delegate('.table-item-image .btn-delete-image', 'click', function() {
+    	$(this).parents('tr').remove();
+    });
 });
