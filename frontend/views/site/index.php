@@ -376,6 +376,7 @@ $this->registerCss("
 .location-div{padding-right: 0px; margin-bottom: 13px;}
 #delivery_date{height: 45px;color: #000! important;}
 .btn-submit{padding: 12px;}
+#top_header {z-index: 9999;}
 ");
 
 ?>
