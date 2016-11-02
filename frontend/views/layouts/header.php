@@ -602,5 +602,6 @@ $action = Yii::$app->controller->action->id;
     .eventErrorMsg{color:red;margin-bottom: 10px;}
     .event_loader{display:none;text-align:center;margin-bottom: 10px;}
     .ma5-path-to-active{color:#000;}
+    .ma5-mobile-menu-container{z-index:9999;}
 
 ") ?>
