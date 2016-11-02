@@ -381,14 +381,20 @@ class VendorItem extends \yii\db\ActiveRecord
             Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $image_key);
             Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $image_key);
             Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $image_key);
+            return true;
+        }
+
+        public function deleteAllFiles() {
+            if (isset($this->images) && count($this->images)>0) {
+                foreach ($this->images as $img) {
+                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $img->image_path);
+                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $img->image_path);
+                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $img->image_path);
+                }
+            }
         }
 
         public static function get_featured_product() {
-          return $feature = \frontend\models\VendorItem::find()
-                      ->select(['{{%vendor_item}}.*'])
-                      ->where(['item_status' => 'Active'])
-                      ->with('vendor')
-                      ->asArray()
-                      ->all();
-            }
+            return $feature = \frontend\models\VendorItem::find()->select(['{{%vendor_item}}.*'])->where(['item_status' => 'Active'])->with('vendor')->asArray()->all();
+        }
 }

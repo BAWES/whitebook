@@ -264,7 +264,7 @@ function cmp($a, $b)
 						foreach ($order as $value) {
 							$key = $value['image_id'];
 							$initialPreview[] = Html::img(Yii::getAlias('@vendor_item_images_210/').$value['image_path'], [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value['image_id'],'title'=>'']);
-							$url = Url::to(["/vendoritem/delete-item-image", "id" => $key]);
+							$url = Url::to(["/vendor-item/delete-item-image", "id" => $key]);
 							$initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
 							$i++;
 						}

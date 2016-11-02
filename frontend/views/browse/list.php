@@ -20,6 +20,12 @@ $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliv
 $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 
 ?>
+
+<style>
+    @media screen and (max-width: 1195px) {
+        .mid-space {display: none;}
+    }
+</style>
     <!-- coniner start -->
     <section id="inner_pages_white_back">
         <div id="event_slider_wrapper">
@@ -48,7 +54,10 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             'deliver_date' => $deliver_date
                         ]); ?>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="mid-space" style="float:left;width: 1.5%;">
+                        &nbsp;
+                    </div>
+                    <div class="col-lg-3" style="padding-left:0px;height: auto!important;">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
                         ]);  ?>
