@@ -35,7 +35,7 @@ use frontend\models\Website;
                                     <label for="event_date" class="error_validate"></label>
                                 </div>
                                 <div class="form-group new_popup_common">
-                                    <div class="bs-docs-example"><select class="selectpicker required trigger" name="event_typee" data="" style="btn-primary" id="edit_event_type" >
+                                    <div class="bs-docs-example"><select class="selectpicker required trigger" name="event_typee" data="" id="edit_event_type" >
                                             <option value="">Select event type</option>
                                             <?php
                                             $event_type = Website::get_event_types();
@@ -52,9 +52,9 @@ use frontend\models\Website;
                                         <div class="error" id="type_error"></div>
                                     </div>
                                 </div>
-                                <div id="eventresult" style="color:red"></div>
-                                <div class="eventErrorMsg error" style="color:red;margin-bottom: 10px;"></div>
-                                <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo yii\helpers\Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
+                                <div id="eventresult"></div>
+                                <div class="eventErrorMsg error"></div>
+                                <div class="event_loader" style="display:none;"><img src="<?php echo yii\helpers\Url::to("@web/images/ajax-loader.gif"); ?>" title="Loader"></div>
                                 <div class="buttons">
                                     <div class="creat_evn_sig">
                                         <button type="button" id="update_event_button" name="update_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'Update Event'); ?>"><?php echo Yii::t('frontend', 'Update Event'); ?></button>
@@ -79,3 +79,11 @@ use frontend\models\Website;
         autoclose: true,
     });
 </script>
+
+<?php
+
+$this->registerCss("
+#eventresult{color:red;}
+.eventErrorMsg{color:red;margin-bottom: 10px;}
+.event_loader{display:none;text-align:center;margin-bottom: 10px;}
+");

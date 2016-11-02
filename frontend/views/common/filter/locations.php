@@ -33,7 +33,7 @@ if($customer_id) {
     <div class="panel-heading clearfix" id="top_panel_heading">
         <div class=""><p><?= Yii::t('frontend', 'Delivery Area');?><a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a></p></div>
     </div>
-    <div id="delivery-area" class="panel-collapse" aria-expanded="false" style="display: none;">
+    <div id="delivery-area" class="panel-collapse " aria-expanded="false">
         <div class="">
             <div class="form-group">
                 <select id="delivery_area_filter" class="selectpicker" data-live-search="true" data-size="10">

@@ -21,7 +21,7 @@ $this->title ='Account Setting | Whitebook';
 				<div class="accont_informations">
 					<div class="accont_info">
 						<div class="account_title">
-							<div id="acc_status" style="color:green;margin-bottom: 10px;"></div>
+							<div id="acc_status"></div>
 							<h4><?= Yii::t('frontend','Account Info'); ?></h4>
 						</div>
 						<div class="account_form">
@@ -60,7 +60,7 @@ $this->title ='Account Setting | Whitebook';
 
 							<?php ActiveForm::end(); ?>
 
-							<div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
+							<div id="login_loader" style="display:none;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 
 						</div>
 					</div>
@@ -82,5 +82,10 @@ $this->registerJs("
 	});
 
 ", View::POS_READY);
+
+$this->registerCss("
+	#acc_status{color:green;margin-bottom: 10px;}
+	#login_loader{text-align:center;margin-bottom: 10px;}
+");
 
 

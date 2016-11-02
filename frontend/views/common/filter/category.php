@@ -20,25 +20,7 @@ $col = 1;
 	}
 $get = Yii::$app->request->get();
 	?>
-<style>
-	li.subcat {
-		margin-left:30px!important;
-	}
-	.subcat {
-		padding-top: 0px!important;
-		padding-bottom: 0px!important;
-		height:28px!important;
-	}
-	ul.list-group .list-group li {
-		background: #f8f8f8;
-		height: auto;
-		line-height: normal;
-		padding: 0px 0;
-		margin-bottom: 1px;
-		margin-right: 1px;
-		clear: both;
-	}
-</style>
+
 <?php if ($subcategory) { ?>
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -58,9 +40,9 @@ $get = Yii::$app->request->get();
 <!--			</div>-->
 		</div>
 		<div id="sub_categories">
-			<div class="panel-body" style="background-color: #f8f8f8">
+			<div class="panel-body b-g-f8f8f8">
 				<div class="table clearfix">
-					<ul class="list-group test_scrolls" style="height:170px;overflow: scroll">
+					<ul class="list-group test_scrolls css-updated">
 						<?php
 						$val = [];
 						if (isset($get['category']) && $get['category'] != "") {
@@ -126,4 +108,28 @@ $get = Yii::$app->request->get();
 		</div>
 	</div>
 	<?php $col++;
-}?>
+}
+
+$this->registerCss("
+li.subcat {
+		margin-left:30px!important;
+	}
+	.subcat {
+		padding-top: 0px!important;
+		padding-bottom: 0px!important;
+		height:28px!important;
+	}
+	ul.list-group .list-group li {
+		background: #f8f8f8;
+		height: auto;
+		line-height: normal;
+		padding: 0px 0;
+		margin-bottom: 1px;
+		margin-right: 1px;
+		clear: both;
+	}
+	.b-g-f8f8f8{background-color: #f8f8f8;}
+	.css-updated{height:170px;overflow: scroll;}
+")
+?>
+

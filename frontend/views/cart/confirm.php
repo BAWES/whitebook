@@ -137,7 +137,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			<?php } ?>		        			
 	        		</td>
 	        		<td align="center">
-		        		<div class="input-group btn-block" style="max-width: 140px;">
+		        		<div class="input-group btn-block max-width-140">
 		                    <input type="text" name="quantity[<?= $item['cart_id'] ?>]" value="<?= $item['cart_quantity'] ?>" size="1" class="form-control">
 		                    <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Update"><i class="glyphicon glyphicon-refresh"></i></button>
 		                    <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="glyphicon glyphicon-trash"></i></button>
@@ -215,4 +215,8 @@ $this->registerJs("
 		jQuery(this).parent().find('input').val(0);
 		jQuery('#cart-form').submit();
 	});
-", View::POS_READY);	 
+", View::POS_READY);
+
+$this->registerCss("
+.max-width-140{max-width: 140px;}
+");

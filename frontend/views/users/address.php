@@ -128,13 +128,13 @@ $this->title ='Address Book | Whitebook';
 <div class="modal fade" id="modal_create_address">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header" style="padding-bottom:0; margin-bottom: 0;">
+      <div class="modal-header header-updated">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
       </div>
-      <div class="modal-body" style="background: white; margin-top: 0;">
+      <div class="modal-body body-updated" >
 
 			<?= $form->field($customer_address_modal, 'address_name'); ?>
 
@@ -242,5 +242,10 @@ $this->registerJs("
     });
 
 ", View::POS_READY);
+
+$this->registerCss("
+.header-updated{padding-bottom:0; margin-bottom: 0;}
+.body-updated{background: white; margin-top: 0;}
+");
 
     

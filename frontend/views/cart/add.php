@@ -73,7 +73,7 @@ use common\models\Location;
                         
                         <div class="form-group">
                             <label><?= Yii::t('frontend', 'Delivery date');?></label>
-                            <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" style="position: relative;"  id="delivery_date_wrapper">
+                            <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date poistion-relative"  id="delivery_date_wrapper">
                                 <input readonly="true" name="delivery_date" id="delivery_date" class="form-control required"  placeholder="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>" style="height: 40px;">
                                 <span class="add-on position_product_option"> <i class="flaticon-calendar189"></i></span>
                             </div>
@@ -102,3 +102,8 @@ use common\models\Location;
         </div>
     </div>
 </div>
+<?php
+
+$this->registerCss("
+    .poistion-relative{position: relative;}
+");

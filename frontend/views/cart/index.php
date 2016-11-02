@@ -165,7 +165,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			<?php } ?>		        			
 	        		</td>
 	        		<td align="center">
-		        		<div class="input-group btn-block" style="max-width: 150px;">
+		        		<div class="input-group btn-block max-width-150-px">
 		                    <input type="text" name="quantity[<?= $item['cart_id'] ?>]" value="<?= $item['cart_quantity'] ?>" size="1" class="form-control">
 		                    <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Update"><i class="glyphicon glyphicon-refresh"></i></button>
 		                    <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="glyphicon glyphicon-trash"></i></button>
@@ -313,3 +313,17 @@ $this->registerJs("
 		</div>
 	</div>
 </div>
+<?php
+
+$this->registerCss("
+.max-width-150-px{max-width: 150px;}
+.fa-calendar{
+position: absolute;
+right: 9px;
+top: 10px;
+}
+.position-relative {position:relative;}
+.fa-calendar{position: absolute;top: 9px;right: 7px;font-size: 17px;}
+div.datepicker{  top: 157px!important;  border: 1px solid #f2f2f2;}
+.dropdown-toggle{    background: none;  color: #000;  border: 1px solid #ccc;}
+");

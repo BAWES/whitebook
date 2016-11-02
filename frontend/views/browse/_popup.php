@@ -85,9 +85,9 @@ $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Acti
                                             <div class="error" id="type_error"></div>
                                         </div>
                                     </div>
-                                    <div id="eventresult" style="color:red"></div>
-                                    <div class="eventErrorMsg error" style="color:red;margin-bottom: 10px;"></div>
-                                    <div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo \yii\helpers\Url::to('@web/images/ajax-loader.gif', true); ?>" title="Loader"></div>
+                                    <div id="eventresult" class="color-red" ></div>
+                                    <div class="eventErrorMsg error"></div>
+                                    <div class="event_loader"><img src="<?php echo \yii\helpers\Url::to('@web/images/ajax-loader.gif', true); ?>" title="Loader"></div>
                                     <div class="buttons">
                                         <div class="creat_evn_sig">
                                             <button type="button" id="select_date_button" name="select_date_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'Submit'); ?>"><?php echo Yii::t('frontend', 'Submit'); ?></button>
@@ -105,3 +105,11 @@ $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Acti
         </div>
     </div>
 </div>
+
+<?php
+$this->regsiterCss("
+.color-red{color:red!important;}
+.eventErrorMsg{color:red;margin-bottom: 10px;}
+.event_loader{display:none;text-align:center;margin-bottom: 10px;}
+");
+?>

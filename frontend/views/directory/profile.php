@@ -158,7 +158,7 @@ if ($event_status > 0) {
                                                                         <span class="border-bottom"></span>
                                                                     <?php } ?>
                                                                     <?php if (trim($vendor_detail['vendor_public_phone'])) { ?>
-                                                                        <h4 style="margin-top: 13px;">
+                                                                        <h4 class="margin-top-13">
                                                                             <a class="color-808080" href="tel:<?=$vendor_detail['vendor_public_phone']; ?>"><?=$vendor_detail['vendor_public_phone']; ?></a>&nbsp;
                                                                         </h4>
                                                                         <span class="border-bottom border-bottom-none"></span>
@@ -271,7 +271,7 @@ if ($event_status > 0) {
                                                     <?php if ($vendor_detail['vendor_instagram']) { ?>
                                                         <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-instagram7"></span></a></li>
                                                     <?php } ?>
-                                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
+                                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
                                                     <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                                 </ul>
                                             </div>
@@ -398,10 +398,11 @@ var vendor_profile = '".$get['vendor']."';
 
 $this->registerCss("
 .color-808080{color: #808080!important;}
-
+.fa-whatsapp{font-size: 169%;margin-top: 2px;}
 .slider-container{
     clear: both;
     padding-top: 9px;
     width: 200px;
 }
+.margin-top-13{margin-top: 13px;}
 ")?>

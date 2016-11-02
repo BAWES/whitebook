@@ -13,7 +13,7 @@ $get = Yii::$app->request->get();
 <div class="responsive-category-top">
     <div class="listing_sub_cat1">
         <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-        <select class="selectpicker" style="display: none;" id="main-category">
+        <select class="selectpicker" id="main-category">
             <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute([$path, 'slug' => 'all','themes'=>$theme]); ?>">All</option>
             <?php
             foreach($top_categories as $category) {

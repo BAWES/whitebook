@@ -70,10 +70,10 @@ $this->title = 'Events/Wishlist | Whitebook';
 							</div>
 							<div role="tabpanel" id="wishlist" class="tab-pane second_event <?=($slug=='thingsilike')?'active':'';?>">
 								<a class="filter-link" id="filter-toggle" style="display:none;">Filter</a>
-								<div id="search_data" style="padding: 10px;">
+								<div id="search_data">
 									<div class="events_listing_inner">
 										<div class="events_listing new-event">
-											<div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
+											<div id="loader1" ><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 											<ul id="wishlist">
 											<?php
 											$wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
@@ -87,7 +87,7 @@ $this->title = 'Events/Wishlist | Whitebook';
 																<div class="delet_icons"><a href="javascript:;" title=""   onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"></a></div>
 															</div>
 															<?php $image = Image::find()->select('image_path')->where(['item_id'=>$value['item_id'],'module_type'=>'vendor_item', 'trash'=>'Default'])->asArray()->one(); ?>
-															<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$image['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),
+															<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$image['image_path'],['class'=>'item-img']),
 															Url::toRoute(['/browse/detail/','slug'=>$value['slug']])); ?>
 														</div>
 														<div class="events_descrip">
@@ -148,8 +148,8 @@ $this->title = 'Events/Wishlist | Whitebook';
 </select>
 </div>
 </div>
-<div class="eventErrorMsg" style="color:red;margin-bottom: 10px;"></div>
-<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
+<div class="eventErrorMsg" ></div>
+<div class="event_loader"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
 <button type="button" onclick="submit_create_event_form('create_event')" class="btn btn-default" title="<?php echo Yii::t('frontend','Create Event');?>"><?php echo Yii::t('frontend','Create Event');?></button>
@@ -215,8 +215,8 @@ foreach($customer_wishlist as $f) {  ?>
 </select>
 </div>
 </div>
-<div class="eventErrorMsg" style="color:red;margin-bottom: 10px;"></div>
-<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
+<div class="eventErrorMsg" ></div>
+<div class="event_loader"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
 <button type="button" class="btn btn-default" title="<?php echo Yii::t('frontend','Add Now');?>" onclick="submit_add_event(<?php echo $f['item_id'];?>)"><?php echo Yii::t('frontend','Add Now');?></button>
@@ -251,8 +251,8 @@ foreach($customer_wishlist as $f) {  ?>
 </select>
 </div>
 </div>
-<div class="eventErrorMsg" style="color:red;margin-bottom: 10px;"></div>
-<div class="event_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
+<div class="eventErrorMsg" ></div>
+<div class="event_loader" ><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 <div class="buttons">
 <div class="creat_evn_sig">
 <button type="button" onclick="submit_create_new_event_form(<?php echo $f['item_id'];?>)" class="btn btn-default" title="<?php echo Yii::t('frontend','Create New Event');?>"><?php echo Yii::t('frontend','Create Event');?></button>
@@ -358,7 +358,7 @@ foreach($customer_wishlist as $f) {  ?>
 					jQuery("#loader1").hide();
 					jQuery('ul#user_event_list').html(data);
 					jQuery('#login_success').modal('show');
-					jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">Event remove from your event list</span>');
+					jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success">Event remove from your event list</span>');
 					window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
 					//jQuery('#add_to_event_success'+x).html('Item add to your event list');
 				}
@@ -419,3 +419,14 @@ foreach($customer_wishlist as $f) {  ?>
 		$(this).tab('show')
 	})
 </script>
+
+<?php
+$this->regsiterCss("
+.search_data{padding: 10px;}
+.loader1{display:none;text-align:center;margin-bottom: 10px;}
+.item-img{width:210px; height:208px;}
+.eventErrorMsg{color:red;margin-bottom: 10px;}
+.event_loader{display:none;text-align:center;margin-bottom: 10px;}
+.msg-success{margin-top: 5px; width: 320px; float: left; text-align: left;}
+");
+?>
