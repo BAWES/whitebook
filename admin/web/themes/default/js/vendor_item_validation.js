@@ -995,18 +995,7 @@ $("#validsix6").click(function() {
 	  	}
 	}
 
-  	if($(".file-preview-thumbnails > img").length <= 0) {
-
-		$('.file-block').show();
-		return false;
-
- 	} else if($(".file-preview-thumbnails > img").length >= 1) {
-
- 		$('.file-block').hide();
- 	
- 	} else {
- 		return true;
- 	}
+  	return true;
 });
 
 $(document).ready(function () {
