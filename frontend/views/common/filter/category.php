@@ -129,7 +129,7 @@ li.subcat {
 		clear: both;
 	}
 	.b-g-f8f8f8{background-color: #f8f8f8;}
-	.css-updated{height:170px;overflow: scroll;}
+	.css-updated{height:170px;overflow-y: scroll;}
 ")
 ?>
 
