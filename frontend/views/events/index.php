@@ -421,7 +421,7 @@ foreach($customer_wishlist as $f) {  ?>
 </script>
 
 <?php
-$this->regsiterCss("
+$this->registerCss("
 .search_data{padding: 10px;}
 .loader1{display:none;text-align:center;margin-bottom: 10px;}
 .item-img{width:210px; height:208px;}
