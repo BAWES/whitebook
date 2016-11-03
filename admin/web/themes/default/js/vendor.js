@@ -1,5 +1,6 @@
 
 var csrfToken = $('meta[name="csrf-token"]').attr("content");
+
 var c1 = true;
   
 $package_count = 0;
@@ -230,6 +231,10 @@ $(document).ready(function(){
 
 });//on doc ready 
 
+$(".zerovalid0" ).click(function() {
+	return validate_step0();
+});
+
 $(".onevalid1" ).click(function() {
 	return validate_step1();
 });
@@ -238,107 +243,138 @@ $( ".twovalid2" ).click(function() {
 	return validate_step2();
 });//validation of second step 
 
+//------------------------- validation step : 0 -----------------------------//
+
+function validate_step0() {
+
+	//old record
+	if(!is_new_record) {
+		return true;
+	}
+
+	var imageData = $('.image-editor').cropit('export');
+
+	if(typeof imageData != 'undefined' && imageData.length > 0)
+	{
+		$('input[name="image"]').val(imageData);
+		return true;
+  	}
+
+  	console.log('Vendor logo not selected!');
+
+  	return false;
+}
+	
 //------------------------- validation step : 1 -----------------------------//
 
 function validate_step1() {
 
-	if($('#test').val()==1) {
+	c1 = true;
+
+	if($('#test').val() == 1) {
+		console.log('test value!');
 		return false;
 	}
 
-	if($('#test1').val()==1)
+	if($('#test1').val() == 1)
 	{
+		console.log('test1 value!');
 		return false;
 	}
 
-	if(is_new_record && $("#vendor-vendor_logo_path").val()=='')
-	{
-			$(".field-vendor-vendor_logo_path").addClass('has-error');
-			$(".field-vendor-vendor_logo_path").find('.help-block').html('Please upload a file.');
-			c1=false;
-  	}
+	$vendor_name_length = $("#vendor-vendor_name").val().length;
 
-  	if($("#vendor-vendor_name").val()=='')
+	if($("#vendor-vendor_name").val()=='')
 	{
-			$(".field-vendor-vendor_name").addClass('has-error');
-			$(".field-vendor-vendor_name").find('.help-block').html('Vendor name cannot be blank.');
-			c1=false;
-  	}
+		console.log('vendor name!');
+
+		$(".field-vendor-vendor_name").addClass('has-error');
+		$(".field-vendor-vendor_name").find('.help-block').html('Vendor name cannot be blank.');
+		
+		c1 = false;
+
+  	} else if($vendor_name_length < 3) {
+
+  		console.log('vendor name length!');
+
+		$(".field-vendor-vendor_name").addClass('has-error');
+		$(".field-vendor-vendor_name").find('.help-block').html('Item name minimum 4 letters.');
+		
+		c1 = false;
+	}
   	
   	if($("#vendor-vendor_contact_email").val()=='')
 	{
-			$(".field-vendor-vendor_contact_email").addClass('has-error');
-			$(".field-vendor-vendor_contact_email").find('.help-block').html('Email cannot be blank.');
-			c1=false;
+		console.log('vendor contact email!');
+		$(".field-vendor-vendor_contact_email").addClass('has-error');
+		$(".field-vendor-vendor_contact_email").find('.help-block').html('Email cannot be blank.');
+		c1 = false;
   	}
   	
   	if(is_new_record && $("#vendor-vendor_password").val()!='')
 	{
-			var pass=$("#vendor-vendor_password").val();
-			if(pass.length<6)
-			{$(".field-vendor-vendor_password").addClass('has-error');
+		var pass = $("#vendor-vendor_password").val();
+
+		if(pass.length < 6)
+		{
+			console.log('password length!');
+			$(".field-vendor-vendor_password").addClass('has-error');
 			$(".field-vendor-vendor_password").find('.help-block').html('Password should contain minimum 6 Letter.');
-			c1=false;}
+			c1 = false;
+		}
   	}
   	
   	if(is_new_record && $("#vendor-confirm_password").val()=='')
 	{
-			$(".field-vendor-confirm_password").addClass('has-error');
-			$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
-			c1 = false;
-  	
-  	} else if(is_new_record && $("#vendor-confirm_password").val()!=$("#vendor-vendor_password").val()) {
+		console.log('confirm password require!');
 
-			$(".field-vendor-confirm_password").addClass('has-error');
-			$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
-			c1 = false;
+		$(".field-vendor-confirm_password").addClass('has-error');
+		$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
+		c1 = false;
+  	
+  	} else if(is_new_record && $("#vendor-confirm_password").val() != $("#vendor-vendor_password").val()) {
+
+  		console.log('password and confirm password not matching!');
+
+		$(".field-vendor-confirm_password").addClass('has-error');
+		$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
+		c1 = false;
   	}
   	
     if($("#vendor-vendor_contact_name").val()=='')
 	{
-			$(".field-vendor-vendor_contact_name").addClass('has-error');
-			$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
-			c1 = false;
+		console.log('vendor contact name!');
+
+		$(".field-vendor-vendor_contact_name").addClass('has-error');
+		$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
+		c1 = false;
   	}
 
     if($("#vendor-vendor_contact_number").val()=='')
 	{
-			$(".field-vendor-vendor_contact_number").addClass('has-error');
-			$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
-			c1 = false;
+		console.log('vendor contact no require!');
+
+		$(".field-vendor-vendor_contact_number").addClass('has-error');
+		$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
+		c1 = false;
   	}
 
-	if(c1 == false)
+  	if(c1 == false)
 	{
-		c1='';
 		return false;
-	}
-
-	var item_len = $("#vendor-vendor_name").val().length;
-    
-    if($("#vendor-vendor_name").val()=='')
-	{
-	 	$(".field-vendor-vendor_name").addClass('has-error');
-		$(".field-vendor-vendor_name").find('.help-block').html('Item name cannot be blank.');
-		c1 = false;
-	
-	} else if(item_len < 3) {
-
-		$(".field-vendor-vendor_name").addClass('has-error');
-		$(".field-vendor-vendor_name").find('.help-block').html('Item name minimum 4 letters.');
-		c1 = false;
-	}
-
-	if(!c1) {
-		return c1;
 	}
 
 	if($("#vendor-vendor_contact_email").val()!='')
 	{
-		return validateEmailAjax();
+		c1 = validateEmailAjax();
   	}
 
-  	return true;
+	if(c1 == false)
+	{
+		return false;
+	}
+
+  	return validate_step0();
 }
 
 //------------------------- validation step : 2 -----------------------------//
@@ -364,7 +400,13 @@ function validate_step2() {
 
 function validateEmailAjax() {
 
-	if(validateEmail($("#vendor-vendor_contact_email").val()) == true && is_new_record){
+	if(!validateEmail($("#vendor-vendor_contact_email").val())) {
+		console.log('contact email not valid!');
+		c1 = false;
+		return false;
+	}
+
+	if(is_new_record){
 			
 		$(".field-vendor-vendor_contact_email").removeClass('has-success');
 		$(".field-vendor-vendor_contact_email").addClass('has-error');
@@ -402,10 +444,9 @@ function validateEmailAjax() {
 			 }
 		});
 
-	} else {
-		c1 = false;
-		return false;
-	}
+	} 
+
+	return true;
 }
 
 var j = $('input[name="Vendor[vendor_contact_number][]"]').length;
@@ -436,3 +477,5 @@ function addPhone(current)
 
     j++;
 }
+
+$('.image-editor').cropit();

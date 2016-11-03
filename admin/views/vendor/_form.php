@@ -18,7 +18,10 @@ use yii\widgets\ActiveForm;
 		<div class="tabbable">
 		  <ul class="nav nav-tabs">
 		    <li class="active">
-		      <a href="#1" data-toggle="tab">Basic Info </a>
+		      <a href="#0" data-toggle="tab">Vendor Logo </a>
+		    </li>
+		    <li>
+		      <a href="#1" data-toggle="tab" class="zerovalid0">Basic Info </a>
 		    </li>
 		    <li>
 		      <a href="#2" data-toggle="tab" class="onevalid1">Main Info</a>
@@ -36,28 +39,42 @@ use yii\widgets\ActiveForm;
 		  </ul>
 		  <div class="tab-content">
 
-		    <div class="tab-pane" id="1" >
+		  	<div class="tab-pane" id="0">		  		
+		    	<label class="control-label">Vendor logo</label>
 		    	
-		    	<?php  
+	    		<div class="image-editor">
+			        <input type="file" class="cropit-image-input">
+			        <p style="color: red;">
+			    		Minimum image dimension : 565px x 565px
+			    	</p>
+			        <div class="cropit-preview" style="width: 565px; height: 565px;">
+			        	<?php 
 
-		    	$logo = '';
+			        	if($model->vendor_logo_path) {
+				        	$src = Yii::getAlias('@vendor_logo') . '/' . $model->vendor_logo_path;
+				        }else{
+				        	$src = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=Drag%20and%20Drop%20Image%20Here
+				        	&w=565&h=565';
+				        } ?>
 
-		    	if(!$model->isNewRecord) { 
-					if($model->vendor_logo_path) {
-						$logo = Html::img(Yii::getAlias('@vendor_logo/').$model->vendor_logo_path, [
-								'class'=>'', 
-								'width'=>'125px',
-								'height'=>'125px', 
-								'alt'=>'Logo', 
-								'style'=>'margin-right: 10px;'
-							]).'<br />';
-					} 
-				} ?>
+			        	<img class="cropit-preview-image" alt="" src="<?= $src ?>" style="transform-origin: left top 0px; will-change: transform;" />
+			        </div>
+			        <div class="image-size-label">
+			          Resize image
+			        </div>
+			        <input type="range" class="cropit-image-zoom-input" style="width: 565px;">
+			        <input type="hidden" name="image" />
+			    </div>
 
-				<?= $form->field($model, 'vendor_logo_path',['options' => ['class' => 'form-group vendor_logo']])
-						->label('Vendor logo'.Html::tag('span', '*',['class'=>'required']) . $logo)
-						->fileInput()
-						->hint('Logo Size 150 * 250') ?>
+			    <div class="clearfix"></div>
+
+			    <div class="form-group" style="height: 10px;">
+					<input type="button" class="btn btn-info btnNext" value="Next" />
+					<?= Html::a('Back', ['index'], ['class' => 'btn btn-default']) ?>
+				</div>
+		  	</div>
+
+		    <div class="tab-pane" id="1" >
 
 		    	<?= $form->field($model, 'vendor_name')
 		    			->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>
@@ -380,6 +397,8 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/js/vendor.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
