@@ -86,6 +86,12 @@ $this->registerCss("
 img.item-img{width: 100%;}
 .width-100-percent{width: 100%;}
 .margin-top-15{margin-top: 15%;}
+
+@media only screen and (max-width: 320px) {
+.events_images img {
+    width: 16%;
+}
+}
 ");
 
 ?>
