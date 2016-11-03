@@ -212,7 +212,8 @@ jQuery(function() {
             autoclose:true,
             container: '#update-cart-modal modal-body'
         }).on("changeDate", function(e) {
-            $('.error.cart_delivery_date').html('');
+            $('.error.cart_delivery_date,.cart_quantity').html('');
+            $('#quantity').val(' ');
             productAvailabilityCart(jQuery(this).val());
         });
     });
