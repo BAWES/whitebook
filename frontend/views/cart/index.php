@@ -281,9 +281,9 @@ $this->registerJs("
 				</h4>
 			</div>
 			<div class="modal-body">
-				<form class="form col-md-12 center-block" id="loginForm" name="update-cart" method="POST">
+				<form class="form col-md-12 center-block" id="update-cart" name="update-cart" method="POST">
 
-					<input type="hidden" id="_csrf" name="_csrf" value="QVc1WjZPZ1d0Gw0xeDoBODRjd2lUNwIxBBNvCF97LWENFgQ8fCseYQ==" />
+					<input type="hidden" id="_csrf" name="_csrf" value="<?=Yii::$app->request->csrfToken?>" />
 
 					<div class="col-md-2 padding-left-0">
 						<div class="form-group">

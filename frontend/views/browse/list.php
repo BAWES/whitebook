@@ -57,7 +57,38 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             'deliver_location' => $deliver_location
                         ]);  ?>
                     </div>
+                    <div class="mid-space">
+                        &nbsp;
+                    </div>
+                    <div class="col-lg-3 padding-left-0">
+                        <div class="panel panel-default" id="top_panel_location">
+                            <div class="panel-heading clearfix" id="top_panel_heading">
+                                <div class=""><p>Product Type</p></div>
+                            </div>
+                            <div id="delivery-area" class="panel-collapse " aria-expanded="false">
+                                <div class="">
+                                    <div class="form-group">
+                                        <?php
+                                        $checked1 = '';
+                                        if (isset($get['for_sale'])) {
+                                            $checked1 = 'checked=checked';
+                                        }
+                                        ?>
+                                        <label class="label_check" for="checkbox-available-for-sale">
+                                            <input name="for_sale" data-element="input" class="items"
+                                                   id="checkbox-available-for-sale"
+                                                   value="sale"
+                                                   type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
+                                                    <span>Available For Sale</span>
+                                            </label>
+                                        </div>
+                                    </div>
 
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
                 <span class="filter_butt visible-xs visible-sm">
@@ -121,4 +152,9 @@ $this->registerCss("
 }
 .padding-left-0{padding-left:0px;height: auto!important;}
 .mid-space{float:left;width: 1.5%;}
+.label_check span{font-weight:normal;}
+.label_check {
+    margin-top: 10px!important;
+    line-height: .9;
+    }
 ");

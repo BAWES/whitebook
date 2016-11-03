@@ -83,8 +83,6 @@ use frontend\models\Category;
                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                     <div id="accordion" class="panel-group">
                         
-                        <?= $this->render('@frontend/views/common/filter/available_for_sale.php'); ?>
-                        
                         <?= $this->render('@frontend/views/common/filter/price.php');  ?>
                         
                         <?= $this->render('@frontend/views/common/filter/theme.php', ['themes' => $themes]); ?>

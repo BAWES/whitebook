@@ -263,11 +263,11 @@ class CartController extends BaseController
             }
         }
 
-        //validate to add product to cart
-        if ($data['quantity'] > ($item->item_amount_in_stock)) {
-
-            return Yii::t('frontend', 'Item is not available on selected date');
-        }
+//        //validate to add product to cart
+//        if ($data['quantity'] > ($item->item_amount_in_stock)) {
+//
+//            return Yii::t('frontend', 'Item is not available on selected date');
+//        }
 
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
@@ -293,7 +293,7 @@ class CartController extends BaseController
             $purchased = 0;
         }
 
-        if(($data['quantity'] + $purchased) > $capacity) {
+        if(($purchased) > $capacity) {
             return Yii::t('frontend', 'Item is not available on selected date');
         }
 
