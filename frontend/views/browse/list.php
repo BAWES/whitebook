@@ -57,7 +57,10 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             'deliver_location' => $deliver_location
                         ]);  ?>
                     </div>
-                    <div class="col-lg-3 ">
+                    <div class="mid-space">
+                        &nbsp;
+                    </div>
+                    <div class="col-lg-3 padding-left-0">
                         <div class="panel panel-default" id="top_panel_location">
                             <div class="panel-heading clearfix" id="top_panel_heading">
                                 <div class=""><p>Product Type</p></div>
