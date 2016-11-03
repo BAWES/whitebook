@@ -20,7 +20,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/style.css?v=1.8',
         'fonts/flaticon/flaticon.css',
-        'css/demo.css',
+        'css/demo.css?v=1.1',
         'css/media_style.css?v=1.4',
         'css/owl.carousel.css',
         'css/ma5-mobile-menu.css',
