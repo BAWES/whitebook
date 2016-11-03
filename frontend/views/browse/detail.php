@@ -70,7 +70,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
         </div>
         <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
-        <div class="col-md-12 filter-bar" style="display: none;">
+        <div class="col-md-12 filter-bar ">
             <div class="col-md-3 padding-right-0">
                 <div class="form-group margin-left-0">
                     <label><?=Yii::t('frontend', 'Area'); ?></label>
@@ -100,7 +100,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                     <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date');?></div>
                 </div>
             </div>
-            <div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">
+            <div class="col-md-2 padding-left-0 timeslot_id_select">
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
                     <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
@@ -117,7 +117,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
                             <label>
-                                <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" style="color: #999999">
+                                <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" class="color-999999">
                                     <?= $vendor_name; ?>
                                 </a>
                             </label>
@@ -192,7 +192,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     <h2><?= $item_name; ?></h2>
                                     
                                     <label>
-                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" style="color: #999999">
+                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-999999">
                                         <?= $vendor_name; ?>
                                     </a>
                                     </label>
@@ -238,7 +238,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                             </a>
                                         <?php } ?>
 
-                                        <div id="loading_img" style='display:none'>
+                                        <div id="loading_img" class="hide">
                                             <?php $giflink = Url::to("@web/images/ajax-loader.gif"); ?>
                                             <img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />
                                         </div>
@@ -262,7 +262,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                             <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
                             <div class="row margin-top-20">
-                                <div class="col-md-3 padding-top-12" style="float: left;">
+                                <div class="col-md-3 padding-top-12 pull-left">
                                     <label><?= Yii::t('frontend', 'Quantity');?></label>
                                 </div>
                                 <div class="col-md-4 clearfix">
@@ -280,7 +280,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     </div>
                                 </div>
                                 <span class=" col-lg-12 error cart_quantity"></span>
-                                <span style="display: none;margin-top: 18px;" id="available"></span>
+                                <span id="available"></span>
                             </div><!-- END .row -->
                         </form>
                         <?php } ?>
@@ -354,7 +354,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                                             <span class="border-bottom"></span>
                                                                         <?php } ?>
                                                                         <?php if (trim($model->vendor->vendor_public_phone)) { ?>
-                                                                            <h4 style="margin-top: 13px;">
+                                                                            <h4 class="margin-top-13" >
                                                                                 <a class="color-808080" href="tel:<?=$model->vendor->vendor_public_phone; ?>"><?=$model->vendor->vendor_public_phone; ?></a>&nbsp;
                                                                             </h4>
                                                                             <span class="border-bottom border-bottom-none"></span>
@@ -480,7 +480,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$summary?>&url=<?=$url; ?>" ><span class="flaticon-twitter13"></span></a></li>
                                     <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
                                     <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
-                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
+                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
                                     <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>" title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
                                     <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                 </ul>
@@ -617,6 +617,10 @@ button.dropdown-toggle{background: #fff;color: #000;border-radius: 0px;height: 4
 .resp_hide{text-align:center;}
 .normal_mode ul.slides li img{width:100%!important;}
 .mobile_mode .responsive_slider_detials ul.slides li img{width:auto!important;}
+.color-999999{color: #999999!important;}
+#available{display: none;margin-top: 18px;}
+.margin-top-13{margin-top: 13px!important;}
+.fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
 $this->registerJsFile('@web/js/product_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);

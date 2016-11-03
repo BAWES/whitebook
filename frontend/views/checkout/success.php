@@ -1,24 +1,14 @@
-<?php 
-
-use yii\helpers\Url;
-
-$this->title = Yii::t('frontend', 'Success | Whitebook'); 
-
+<?php
+	$this->title = Yii::t('frontend', 'Success | Whitebook');
 ?>
-
 <section id="inner_pages_white_back">
     <div class="container paddng0">
-       
         <div class="title_main">
 			<h1><?= Yii::t('frontend', 'Success'); ?></h1>
 		</div>
-
 		<center>
-
 			<h2><?= Yii::t('frontend', 'Congratulation! Your Order Placed Successfully!') ?></h2>
-			
 			<br />
-
 			<p><?= Yii::t(
 					'frontend', 
 					'Your order ID is #{id}. You can track and view detail of your order in <a href="{order_page}">My Orders</a>. Thank You, for shopping with us.',
@@ -29,10 +19,8 @@ $this->title = Yii::t('frontend', 'Success | Whitebook');
 				); ?></p>
 
 		</center>
-		
 		<br />
 		<br />
 		<br />
-
 	</div>
 </section>

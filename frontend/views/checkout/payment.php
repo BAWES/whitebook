@@ -30,7 +30,7 @@ use yii\helpers\Url;
 </div>
 
 <div class="btn-set">
-        <button onclick="address();" class="btn btn-primary btn-checkout pull-left" style="margin-left: 0;">
+        <button onclick="address();" class="btn btn-primary btn-checkout pull-left margin-left-0">
                 <?= Yii::t('frontend', 'Back') ?>
         </button>
 
@@ -42,3 +42,9 @@ use yii\helpers\Url;
 <br />
 <br />
 <br />
+<?php
+
+$this->registerCss("
+    .margin-left-0{margin-left: 0;}
+");
+?>

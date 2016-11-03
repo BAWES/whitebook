@@ -163,12 +163,12 @@ if(!empty($items))
             
             </div><!-- END .hover_events -->
             
-            <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;']),Url::toRoute(['/browse/detail/','slug'=>$value['slug']])) ?>
+            <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img']),Url::toRoute(['/browse/detail/','slug'=>$value['slug']])) ?>
         </div><!-- END .events_images -->
 
         <div class="events_descrip">
 
-            <?= Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])) ?>
+            <?= Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img'])) ?>
             
             <h3><?= $value['item_name']  ?></h3>
 
@@ -202,7 +202,7 @@ if(!empty($items))
 <div class="invates_common" id="invitee">
 <h4><?= Yii::t('frontend','Invitees');?></h4>
 <p><?= Yii::t('frontend','Invite your friends, relatives for this event'); ?></p>
-<div class="invite_error" style="color:red;display:none;">
+<div class="invite_error color-red" style="display:none;">
     <?= Yii::t('frontend','Email already exist with this event.'); ?>    
 </div>
 <div class="add_detials_form">
@@ -301,7 +301,7 @@ if(!empty($items))
                         },
                         'update' => function ($url, $model) {
                             $url = '';
-                            return  Html::a('<a href="javascript:void(0)"  onclick="inviteeDetail('.$model->invitees_id.')"><span class="glyphicon glyphicon-pencil" style="margin-left:10px;"></span></a>', $url, [
+                            return  Html::a('<a href="javascript:void(0)"  onclick="inviteeDetail('.$model->invitees_id.')"><span class="glyphicon glyphicon-pencil margin-left-10" ></span></a>', $url, [
                             'title' => Yii::t('app', 'Gallery'),
                             ]);
                         },
@@ -328,6 +328,12 @@ if(!empty($items))
 
 
 <?php
+$this->registerCss("
+.item-img{width:210px; height:208px;}
+.margin-left-10{margin-left:10px;}
+.msg-success{margin-top: 5px; width: 320px; float: left; text-align: left;}
+.color-red{color:red;}
+");
 
 $this->registerJs("
     var event_id = '".$event_details->event_id."';
@@ -344,7 +350,7 @@ $this->registerJs("
     {
         jQuery.ajax({
             type:'POST',
-            url: '".Yii::t('frontend', Url::toRoute('/product/eventdetails'))."',
+            url: '".Yii::t('frontend', Url::toRoute('/events/event-details'))."',
             data:{
                 'event_id':event_id
             },
@@ -402,12 +408,12 @@ $this->registerJs("
                         jQuery('#'+tis).parents('.panel-default').find('span#item_count').html(data);
                         jQuery('#'+tis).parents('li').remove();
                         jQuery('#login_success').modal('show');
-                        jQuery('#login_success #success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\" style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">Success! Item removed from the '+category_name+'.</span>');
+                        jQuery('#login_success #success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\" >Success! Item removed from the '+category_name+'.</span>');
                         window.setTimeout(function() {jQuery('#login_success').modal('hide');},2000);
                     }
                     else{
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\" style=\"margin-top: 5px; width: 320px; float: left; text-align: left;\">Error! Something went wrong.</span>');
+                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\">Error! Something went wrong.</span>');
                         window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
                     }
                 }

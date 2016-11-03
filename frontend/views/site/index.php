@@ -19,18 +19,7 @@ $model = new Website();
 ?>
 <!-- content main start -->
 
-<style>
-    .bootstrap-select .dropdown-toggle {
-        padding: 12px 12px;
-    }
-    .datepicker{
-        border: 2px solid rgb(242, 242, 242);
-    }
-    .datepicker table {
-        font-size: 12px;
-    }
-</style>
-<div id="home_slider" style="position: relative;">
+<div id="home_slider" class="position-relative">
     <?php
         if(Yii::$app->language == 'en'){
             $url = 'https://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias;
@@ -81,8 +70,8 @@ $model = new Website();
                     </div>
                     <div class="col-lg-3 col-sm-3 col-md-3 date-div">
                         <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
-                        <input value="<?=$date?>" style="color:#000! important;" type="text" name="date" id="delivery_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
-                        <span style="top: 6px;" class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
+                        <input value="<?=$date?>" type="text" name="date" id="delivery_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
+                        <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                         </div>
                     </div>
                     <div class="col-lg-2 col-sm-2 col-md-2">
@@ -377,11 +366,19 @@ $this->registerCss("
 #delivery_date{height: 45px;color: #000! important;}
 .btn-submit{padding: 12px;}
 #top_header {z-index: 9999;}
-");
-
-?>
-
-
+.bootstrap-select .dropdown-toggle {
+    padding: 12px 12px;
+}
+.datepicker{
+    border: 2px solid rgb(242, 242, 242);
+}
+.datepicker table {
+    font-size: 12px;
+}
+.position-relative{position: relative;}
+.position_news{top: 6px;}
+#delivery_date{color:#000! important;}
+");?>
 <!-- Hide BG FOR EVENT SLIDER
  VIDEO PLAY HOME END -->
 

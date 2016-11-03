@@ -2,21 +2,16 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\view;
 use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
-
 ?>
-
 <h3>
 	<?= Yii::t('frontend', 'Payment method selected : <strong>{payment_method}</strong>', [
 		'payment_method' => $payment_method
 	]) ?>	
 </h3>
-
 <hr />
-
 <?php if($items) { ?>
 
 <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">	
@@ -158,28 +153,29 @@ use common\components\CFormatter;
 </div>
         
 <div class="btn-set">
-        <button onclick="payment();" class="btn btn-primary btn-checkout pull-left" style="margin-left: 0;">
+        <button onclick="payment();" class="btn btn-primary btn-checkout pull-left margin-left-0">
                 <?= Yii::t('frontend', 'Back') ?>
         </button>
-
         <a href="<?= $pg_link ?>" class="btn btn-primary btn-checkout pull-right">
-                <?= Yii::t('frontend', 'Confirm Order') ?>
+            <?= Yii::t('frontend', 'Confirm Order') ?>
         </a>
 </div>
-
 <br />
 <br />
 <br />
-
 <?php } else { ?>
-	
 	<p class="text-center">
 		<?= Yii::t('frontend', 'Your cart is empty!') ?>
 	</p>
-
 	<br />
 	<br />
 	<br />
 	<br />
-
 <?php } ?>
+
+<?php
+
+$this->registerCss("
+    .margin-left-0{margin-left: 0;}
+");
+?>
