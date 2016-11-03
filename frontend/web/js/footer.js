@@ -755,7 +755,9 @@ jQuery(document).on('click',"#update_event_button",function()
                     jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+update_msg+'</span>');
                     setTimeout(function() {$('#login_success').modal('hide');}, 2000);
                     //jQuery('#EventModal').modal('hide');
-                    setTimeout(function(){locat(data)},2000);
+                    setTimeout(function(){
+                        window.location = event_details + '?slug='+data;
+                    },2000);
                 }
             },
             error:function(data)

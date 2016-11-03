@@ -313,18 +313,17 @@ class EventsController extends BaseController
         $request = Yii::$app->request;
 
         if ($request->post('event_name') && $request->post('event_type') && $request->post('event_date')) {
-            $model = new Users();
-            $event_name = $request->post('event_name');
-            $event_type = $request->post('event_type');
-            $event_date = $request->post('event_date');
-            $event_id = $request->post('event_id');
-            $customer_id = Yii::$app->user->identity->customer_id;
-            $add_event = $model->update_event($event_name, $event_type, $event_date, $event_id);
+            $model = Events::findOne($request->post('event_id'));
+            if ($model) {
+                $model->event_name = $request->post('event_name');
+                $model->event_date = date('Y-m-d', strtotime($request->post('event_date')));
+                $model->event_type = $request->post('event_type');
 
-            if ($add_event ==  Events::EVENT_ALREADY_EXIST) {
-                return  Events::EVENT_ALREADY_EXIST;
-            } else {
-                return $add_event;
+                $string = str_replace(' ', '-', $request->post('event_name')); // Replaces all spaces with hyphens.
+                $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+                $model->slug = $slug.'-'.time();
+                $model->save();
+                return $model->slug;
             }
         }
     }
@@ -332,7 +331,7 @@ class EventsController extends BaseController
     /**
      * Insert items to events
      */
-    public function actionAddEvent()
+    public function actionAddEventItem()
     {
         if (Yii::$app->request->isAjax) {
             $request = Yii::$app->request;
@@ -396,7 +395,7 @@ class EventsController extends BaseController
                 $event_date1 = date('Y-m-d', strtotime($event_date));
                 $string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
                 $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-
+                $slug = $slug.'-'.time();
                 $check = Events::find()
                     ->select('event_id')
                     ->where(['customer_id' => $customer_id, 'event_name' => $event_name])

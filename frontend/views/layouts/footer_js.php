@@ -21,7 +21,7 @@ $this->registerJs("
     var update_event = '".Url::toRoute('/events/update-event')."';
     var event_exists = '".Yii::t('frontend','Same event name already exists')."';
     var update_msg = '".Yii::t('frontend','Event updated successfully')."';
-    var event_details = '".Yii::$app->homeUrl."/event-details/';
+    var event_details = '".Url::toRoute('/events/detail')."';
     var forgot_password_url = '".Url::toRoute('users/forget_password')."';
     var receive_email = '".Yii::t("frontend","You will now receive an email to reset your password by email")."';
     var contact_admin = '".Yii::t("frontend","Email not found")."';
@@ -46,7 +46,7 @@ $this->registerJs("
     var_added_to = '".Yii::t("frontend","added to")."';
 
     var isGuest = '".Yii::$app->user->isGuest."';
-    var add_event_url = '".Url::toRoute('/users/add_event')."';
+    var add_event_url = '".Url::toRoute('/events/add-event-item')."';
     var successfully_added_to = '".Yii::t('frontend',' successfully added to ')."';
     var category = '".Yii::t('frontend','Category')."';
     var eventinvitees_url = '".Url::toRoute(['event-invitees/index'])."';
