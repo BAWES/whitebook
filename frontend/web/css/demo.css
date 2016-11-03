@@ -10,7 +10,14 @@
 .flexslider a:active,
 .flex-container a:focus,
 .flexslider a:focus  {outline: none;}
-.slides,.flex-control-nav,.flex-direction-nav {margin: 0; padding: 0; list-style: none;} 
+.slides, .flex-control-nav, .flex-direction-nav {
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    max-width: 530px;
+    text-align: center;
+}
+
 a{ outline: none!important;}
 /* FlexSlider Necessary Styles
 *********************************/ 

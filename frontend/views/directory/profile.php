@@ -1,15 +1,15 @@
 <?php
-use frontend\models\Category;
-use common\models\ChildCategory;
-use common\models\SubCategory;
-use frontend\models\Vendor;
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
-
+use frontend\models\Category;
+use frontend\models\Vendor;
+use common\models\ChildCategory;
+use common\models\SubCategory;
+use common\models\VendorCategory;
 
 $vendor_details = $vendor_detail;
-
 
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
 
@@ -17,10 +17,12 @@ $vendor_details = $vendor_detail;
 \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 
-$baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
+$baselink = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=565&h=565';
+
 if(isset($vendor_details['vendor_logo_path'])) {
     $baselink = Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path'];
 }
+
 $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details->slug], true);
 \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
 \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
@@ -32,7 +34,6 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
 \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($vendor_details->short_description))]);
 
 \Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
-
 
 $event_status = Yii::$app->session->get('event_status');
 
@@ -80,9 +81,7 @@ if ($event_status > 0) {
                 <div class="product_detials_vender aother_dates">
                     <div class="col-md-6 padding0">
                         <a href="#" title="">
-                            <?php if(isset($vendor_detail['vendor_logo_path'])) {
-                                echo Html::img(Yii::getAlias('@vendor_logo/').$vendor_detail['vendor_logo_path'], ['class'=>'','width'=>'565','alt'=>'Logo']);
-                            } ?>
+                            <?= Html::img($baselink, ['class'=>'','width'=>'565','alt'=>'Logo']); ?>
                         </a>
                     </div>
                     <div class="col-md-6 paddingcommon">
@@ -290,8 +289,8 @@ if ($event_status > 0) {
                         <div class="filter_section">
                             <?php
 
-                            use common\models\VendorCategory;
                             $data = Yii::$app->request->get();
+
                             $category_list = VendorCategory::find()
                                 ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.slug','{{%category}}.icon'])
                                 ->leftJoin('{{%category}}','{{%category}}.category_id = {{%vendor_category}}.category_id')
@@ -308,7 +307,6 @@ if ($event_status > 0) {
                             } else {
                                 $class = "";
                             } ?>
-
 
                             <div class="responsive-category-top">
                                 <div class="listing_sub_cat1">
