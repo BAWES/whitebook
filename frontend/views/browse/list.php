@@ -150,4 +150,8 @@ $this->registerCss("
 .padding-left-0{padding-left:0px;height: auto!important;}
 .mid-space{float:left;width: 1.5%;}
 .label_check span{font-weight:normal;}
+.label_check {
+    margin-top: 10px!important;
+    line-height: .9;
+    }
 ");
