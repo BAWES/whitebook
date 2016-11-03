@@ -1156,7 +1156,7 @@ class VendorItemController extends Controller
         // Set max execution time 3 minutes.
         set_time_limit(3 * 60); 
 
-        $temp_folder = Yii::getAlias('@temp_folder').'/'; 
+        $temp_folder = sys_get_temp_dir().'/'; 
 
         $image_name = Yii::$app->security->generateRandomString();
         $image_extension = '.png';
