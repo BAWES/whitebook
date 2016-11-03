@@ -328,7 +328,7 @@ if(!empty($items))
 
 
 <?php
-$this->regsiterCss("
+$this->registerCss("
 .item-img{width:210px; height:208px;}
 .margin-left-10{margin-left:10px;}
 .msg-success{margin-top: 5px; width: 320px; float: left; text-align: left;}
@@ -350,7 +350,7 @@ $this->registerJs("
     {
         jQuery.ajax({
             type:'POST',
-            url: '".Yii::t('frontend', Url::toRoute('/product/eventdetails'))."',
+            url: '".Yii::t('frontend', Url::toRoute('/events/event-details'))."',
             data:{
                 'event_id':event_id
             },
