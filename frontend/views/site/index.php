@@ -313,9 +313,9 @@ $this->registerCss("
 .fetu_product_list .index_redirect img {width: 100%;height: 219px;}
 .color-white{color:#fff;}
 .left-offset-25{float: left;width: 15%;}
-.left-div{width:100%;position:absolute;bottom: 1px;padding:19px;    z-index: 999;}
+.left-div{width:100%;position:absolute;bottom: 1px;padding:13px;    z-index: 999;}
 .date-div{padding-right: 0px; margin-bottom: 13px;}
-.black-overlay{width:100%;background-color: #000;position:absolute;bottom: 1px;padding: 55px;opacity: .4}
+.black-overlay{width:100%;background-color: #000;position:absolute;bottom: 1px;padding: 42px;opacity: 0.69}
 .location-div{padding-right: 0px; margin-bottom: 13px;}
 #delivery_date{height: 45px;color: #000! important;}
 .btn-submit{padding: 12px;}
@@ -349,6 +349,27 @@ $this->registerCss("
 .or_mobile{text-align:center;color:#fff;padding:13px 0;width:35px;}
 .add-on.position_news{top:7px;}
 }
+.mobile-view-form-popup{
+    background: #fff none repeat scroll 0 0;
+    height: 100%;
+    left: 1px;
+    position: fixed;
+    text-align: center;
+    top: 120px;
+    width: 100%;
+}
+.mobile-view-form-popup h4 a{
+    float: right;
+    margin-right: 15px;
+    color:#000;
+}
+.mobile-view-form-popup h4{
+ background: #f2f2f2 none repeat scroll 0 0;
+    margin: 0 0 10px;
+    padding: 9px;
+}
+.margin-top-15{margin-top:15px;}
+
 
 ");?>
 <!-- Hide BG FOR EVENT SLIDER

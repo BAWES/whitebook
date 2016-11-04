@@ -2044,3 +2044,7 @@ function inviteeDetail(invitee_id)
 
 /* =========================== Event Actions ===================================*/
 
+
+jQuery('#open-filter,#close-search-div').click(function(){
+    $(".mobile-view-form-popup").slideToggle();
+});
