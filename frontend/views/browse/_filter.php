@@ -34,7 +34,7 @@ use frontend\models\Category;
                     }//if category selected ?>
 
                     <option
-                       data-icon="venues-category"
+                       data-icon=""
                        value="<?= Url::toRoute(['browse/list', 'slug'=> 'all']) ?>"
                        name="category" >
                        All
