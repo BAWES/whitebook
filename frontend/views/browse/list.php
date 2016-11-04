@@ -79,7 +79,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                                    id="checkbox-available-for-sale"
                                                    value="sale"
                                                    type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
-                                                    <span>Sale</span>
+                                                    <span>Available For Sale</span>
                                             </label>
                                         </div>
                                     </div>
@@ -159,8 +159,6 @@ $this->registerCss("
     }
     .margin-0{margin:0px!important;}
     #available-for-sale{
-        background: #000;
-        color: #fff;
         padding: 15px 13px;
     }
 ");
