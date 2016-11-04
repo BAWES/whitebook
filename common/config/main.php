@@ -45,11 +45,6 @@ return [
         ],
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
-            'enableStrictParsing' => true,
-            'normalizer' => [
-                'class' => 'yii\web\UrlNormalizer',
-                'action' => 301, // permanent redirect 
-            ],
         ],
         'formatter' => [
             'currencyCode' => 'KWD',
