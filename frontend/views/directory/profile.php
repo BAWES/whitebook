@@ -287,7 +287,7 @@ if ($event_status > 0) {
                 <div class="col-md-3 paddingleft0">
 
                     <div class="filter_content">
-                        <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
+
                         <div class="filter_title">
                             <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by'); ?></span>
                         </div>
@@ -354,6 +354,7 @@ if ($event_status > 0) {
                                             <?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]);?>
                                         </div>
                                 </nav>
+                                <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
                                 <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
                                     <img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg"); ?>" alt="click here">
                                 </div>

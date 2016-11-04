@@ -163,7 +163,7 @@ $this->registerJs("
                     if (data == 1)
                     {
                         jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class='success-msg'>".Yii::t('frontend', 'Thank! We will be in touch soon!')."</span>');
+                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class='success-msg'>".Yii::t('frontend', "Thanks, we'll be in touch soon")."</span>');
                         window.setTimeout(function () {
                             location.reload()
                         }, 2000)
