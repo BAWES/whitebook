@@ -33,16 +33,19 @@ if(!empty($items->getModels()))  {
                             </div>
                             <?php } ?>
                         </div>
-                        <a href="<?= $item_url ?>">
+                        <a href="<?= $item_url ?>" class="position-relative">
                             <?php
                             $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=208&h=208';
                             echo Html::img($path,['class'=>'item-img']);
                             ?>
+                            <?php if($value['item_for_sale'] == 'Yes') { ?>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                                <span class="buy-text">Buy</span>
+                                <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
+                            <?php } ?>
                         </a>
 
-                        <?php if($value['item_for_sale'] == 'Yes') { ?>
-                            <img class="sale_ribbon" src="<?= Url::to('@web/images/product_sale_ribbon.png') ?>" />
-                        <?php } ?>
+
 
                     </div>
                     <div class="events_descrip">
@@ -91,6 +94,21 @@ img.item-img{width: 100%;}
 .events_images img {
     width: 16%;
 }
+}
+.events_images .buy-text{
+    position: absolute;
+    left: 12px;
+    top: 85px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+}
+.events_images i{
+    position: absolute;
+    top: 75px;
+    left: 7px;
+    font-size: 39px;
+    color: #000;
 }
 ");
 
