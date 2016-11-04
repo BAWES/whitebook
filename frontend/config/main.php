@@ -51,6 +51,7 @@ return [
 
             // Url Rules for Frontend
             'rules' => [
+                  '' => 'site/index',
                   'edit-profile' => 'users/edit_profile',
                   'create-event' => 'users/create_event',
                   'event-slider' => 'product/event_slider',
@@ -78,9 +79,7 @@ return [
                   'remove-from-wishlist' => 'users/remove_from_wishlist',
                   'wishlist' => 'users/wishlist',
                   'load_more' => 'users/load_more_events',
-                  'product/addevent'=>'product/addevent',
                   // BEGIN define  page name
-                  'site/home' => 'site/index/',
                   'activate' => 'site/activate/',
                   'plan' => 'plan/plans/',
                   'shop' => '/site/shop/',
