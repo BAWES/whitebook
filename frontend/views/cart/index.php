@@ -207,7 +207,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
         </button>
 
-        <a href="<?= Url::to(['browse/index']) ?>" class="btn btn-primary pull-right btn-checkout">
+        <a href="<?= Url::to(['browse/list', 'slug' => 'all']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
         </a>
 
