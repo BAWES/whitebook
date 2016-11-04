@@ -285,7 +285,12 @@ if ($event_status > 0) {
 
             <div class="plan_venues total_continer" id="plan_vanues">
                 <div class="col-md-3 paddingleft0">
+
                     <div class="filter_content">
+                        <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
+                        <div class="filter_title">
+                            <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by'); ?></span>
+                        </div>
                         <div class="filter_section">
                             <?php
 
@@ -312,7 +317,7 @@ if ($event_status > 0) {
                                 <div class="listing_sub_cat1">
                                     <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
                                     <select class="selectpicker" style="display: none;" id="main-category">
-                                        <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute(['directory/profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>">All</option>
+                                        <option data-icon="" value="<?=yii\helpers\Url::toRoute(['directory/profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>">All</option>
                                         <?php
                                         foreach($category_list as $category) {
 
@@ -349,10 +354,6 @@ if ($event_status > 0) {
                                             <?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]);?>
                                         </div>
                                 </nav>
-                                <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
-                                <div class="filter_title">
-                                    <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by'); ?></span>
-                                </div>
                                 <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
                                     <img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg"); ?>" alt="click here">
                                 </div>
