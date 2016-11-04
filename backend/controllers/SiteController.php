@@ -309,39 +309,31 @@ class SiteController extends Controller
                 }
             }
 
-            $file = UploadedFile::getInstances($model, 'vendor_logo_path');
+            if(Yii::$app->request->post('image')) {
 
-            if ($file) {
-                foreach ($file as $files) {
-                    if ($files instanceof yii\web\UploadedFile) {
-                        $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+                $temp_folder = sys_get_temp_dir().'/'; 
 
-                        //Resize file using imagine
-                        $resize = true;
+                $image_name = Yii::$app->security->generateRandomString();
+                $image_extension = '.png';
+                $content_type = 'image/png';
 
-                        if ($resize) {
-                            $newTmpName = $files->tempName . "." . $files->extension;
+                $base64string = str_replace('data:image/png;base64,', '', Yii::$app->request->post('image'));
 
-                            $imagine = new \Imagine\Gd\Imagine();
-                            $image = $imagine->open($files->tempName);
-                            $image->resize($image->getSize()->widen(250));
-                            $image->save($newTmpName);
+                //save to temp folder 
+                file_put_contents($temp_folder . $image_name . $image_extension, base64_decode($base64string));
 
-                            //Overwrite old filename for S3 uploading
-                            $files->tempName = $newTmpName;
-                        }
+                //save to s3
+                $awsResult = Yii::$app->resourceManager->save(
+                    null, //file upload object  
+                    Vendor::UPLOADFOLDER . $image_name . $image_extension, // name
+                    [], //options 
+                    $temp_folder . $image_name . $image_extension, // source file
+                    $content_type
+                );
 
-                        //Save to S3
-                        $awsResult = Yii::$app->resourceManager->save($files, Vendor::UPLOADFOLDER . $filename);
-                        if ($awsResult) {
-                            $model->vendor_logo_path = $filename;
-                        }
-                    }
-                }
-            } else {
-                $model->vendor_logo_path = $exist_logo_image;
-            }
-
+                $model->vendor_logo_path = $image_name . $image_extension;             
+            }          
+            
             if($model->save()) {
 
                 $v_name = $model['vendor_name'];

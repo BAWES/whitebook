@@ -26,40 +26,57 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 	.margin-left-2{margin-left: 2px}
 </style>
 <div class="col-md-12 col-sm-12 col-xs-12">
-    <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data']]); ?>
 		<div class="loadingmessage" style="display: none;"><p><?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?></p></div>
 		<div class="tabbable">
 			<ul class="nav nav-tabs">
-				<li class="active"><a href="#1" data-toggle="tab">Basic Info </a></li>
+				<li class="active">
+			      <a href="#0" data-toggle="tab">Vendor Logo </a>
+			    </li>
+				<li><a href="#1" data-toggle="tab">Basic Info </a></li>
 				<li><a href="#2" data-toggle="tab" class="onevalid1">Main Info</a></li>
 				<li><a href="#3" data-toggle="tab" class="twovalid2">Additional Info</a></li>
 				<li><a href="#4" data-toggle="tab" class="twovalid2">Social Info</a></li>
 				<li><a href="#5" data-toggle="tab" class="emails twovalid2">Email addresses</a></li>
 			</ul>
 			<div class="tab-content">
+
+			  	<div class="tab-pane" id="0">		  		
+			    	<label class="control-label">Vendor logo</label>			    	
+		    		<div class="image-editor">
+				        <input type="file" class="cropit-image-input">
+				        <p style="color: red;">
+				    		Minimum image dimension : 565px x 565px
+				    	</p>
+				        <div class="cropit-preview" style="width: 565px; height: 565px;">
+				        	<?php 
+
+				        	if($model->vendor_logo_path) {
+					        	$src = Yii::getAlias('@vendor_logo') . '/' . $model->vendor_logo_path;
+					        }else{
+					        	$src = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=Drag%20and%20Drop%20Image%20Here
+					        	&w=565&h=565';
+					        } ?>
+
+				        	<img class="cropit-preview-image" alt="" src="<?= $src ?>" style="transform-origin: left top 0px; will-change: transform;" />
+				        </div>
+				        <div class="image-size-label">
+				          Resize image
+				        </div>
+				        <input type="range" class="cropit-image-zoom-input" style="width: 565px;">
+				        <input type="hidden" name="image" />
+				    </div>
+
+				    <div class="clearfix"></div>
+
+				    <div class="form-group" style="height: 10px;">
+						<input type="button" class="btn btn-info btnNext" value="Next" />
+						<?= Html::a('Back', ['index'], ['class' => 'btn btn-default']) ?>
+					</div>
+			  	</div>
+
 				<!-- Begin First Tab -->
 				<div class="tab-pane" id="1">
-
-					<?php 
-
-					$lbl = 'Vendor logo'.Html::tag('span', '*',['class'=>'required']);
-
-					if(isset($model->vendor_logo_path)) {						
-						$lbl .= '<br />';
-						$lbl .= Html::img(Yii::getAlias('@vendor_logo/').$model->vendor_logo_path, [
-									'class' => '',
-									'width' => '125px',
-									'height' => '125px',
-									'alt' => 'Logo',
-									'style' => 'margin-top: 10px;'
-								]);
-					} ?>
-											
-					<?= $form->field($model, 'vendor_logo_path')
-							->label($lbl)
-							->fileInput(['class' => 'form-group vendor_logo'])
-							->hint('Logo Size 150 * 250'); ?>
-
 
 				    <?= $form->field($model, 'vendor_name')
 				    		->textInput(['maxlength' => 100]); ?>
@@ -291,28 +308,32 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 <?php
 
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js');
-$this->registerJsFile('@web/themes/default/js/profile.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/profile.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
 $this->registerJs('
-$(".submit_btn").click(function(){
-var filter = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
-var error = false;
-	if(($(".table-email-list input").length)>0) {
-		$(".table-email-list input").each(function(i,data) {
-		$(this).next().empty();
-			if (!filter.test($(this).val())) {
-				$(this).next().html("Invalid Email address");
-				error = true;
-			}
-		})
-	};
-	if (error) {
-		$(\'.nav-tabs a[href="#5"]\').tab(\'show\') // Select tab by name
-		return false;
 
-	} else {
-		return true;
-	}
-
-});
+	$(".submit_btn").click(function(){
+		
+		var filter = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+		var error = false;
+		
+		if(($(".table-email-list input").length)>0) {
+			$(".table-email-list input").each(function(i,data) {
+			$(this).next().empty();
+				if (!filter.test($(this).val())) {
+					$(this).next().html("Invalid Email address");
+					error = true;
+				}
+			})
+		}
+		
+		if (error) {
+			$(\'.nav-tabs a[href="#5"]\').tab(\'show\') // Select tab by name
+			return false;
+		} else {
+			return true;
+		}
+	});
 
 ',\yii\web\View::POS_READY);

@@ -106,7 +106,7 @@ $('.onevalid1').click(function() {
 
 $('.twovalid2').click(function() {
 
-		if($('#vendor-vendor_name').val()=='')
+	if($('#vendor-vendor_name').val()=='')
 	{
 		$('.field-vendor-vendor_name').addClass('has-error');
 		$('.field-vendor-vendor_name').find('.help-block').html('Vendor name cannot be blank.');
@@ -139,9 +139,10 @@ $('.twovalid2').click(function() {
 		$('.field-vendor-vendor_contact_address').addClass('has-error');
 		$('.field-vendor-vendor_contact_address').find('.help-block').html('Contact address cannot be blank.');
 		return false;
-		} else {
-			return true;
-		}
+	} else {
+		return true;
+	}
+
 });//twovalid2 click 
 
 var j= ".($count_vendor + 1).";
@@ -201,3 +202,14 @@ $('.btn-add-address').click(function(){
 $(document).delegate('.table-email-list .btn-danger','click', function(){
 	$(this).parent().parent().remove();
 });
+
+$('form').submit(function(){
+	var imageData = $('.image-editor').cropit('export');
+
+	if(typeof imageData != 'undefined' && imageData.length > 0)
+	{
+		$('input[name="image"]').val(imageData);
+	}
+});
+	
+$('.image-editor').cropit();
