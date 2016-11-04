@@ -60,26 +60,26 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <div class="mid-space">
                         &nbsp;
                     </div>
-                    <div class="col-lg-3 padding-left-0">
+                    <div class="col-lg-2 padding-left-0">
                         <div class="panel panel-default" id="top_panel_location">
                             <div class="panel-heading clearfix" id="top_panel_heading">
                                 <div class=""><p>Product Type</p></div>
                             </div>
-                            <div id="delivery-area" class="panel-collapse " aria-expanded="false">
+                            <div id="available-for-sale" class="panel-collapse " aria-expanded="false">
                                 <div class="">
-                                    <div class="form-group">
+                                    <div class="form-group margin-0">
                                         <?php
                                         $checked1 = '';
                                         if (isset($get['for_sale'])) {
                                             $checked1 = 'checked=checked';
                                         }
                                         ?>
-                                        <label class="label_check" for="checkbox-available-for-sale">
+                                        <label class="label_check margin-0" for="checkbox-available-for-sale">
                                             <input name="for_sale" data-element="input" class="items"
                                                    id="checkbox-available-for-sale"
                                                    value="sale"
                                                    type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
-                                                    <span>Available For Sale</span>
+                                                    <span>Sale</span>
                                             </label>
                                         </div>
                                     </div>
@@ -156,5 +156,11 @@ $this->registerCss("
 .label_check {
     margin-top: 10px!important;
     line-height: .9;
+    }
+    .margin-0{margin:0px!important;}
+    #available-for-sale{
+        background: #000;
+        color: #fff;
+        padding: 15px 13px;
     }
 ");
