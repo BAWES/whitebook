@@ -183,7 +183,7 @@ if(!empty($items))
 </ul>
 <div class="events_brows_buttons_common">
     <div class="margin_0_auto">
-        <a href="<?= Url::toRoute(['/plan/products/','slug'=>$value1['slug']]);?>" class="btn btn-danger">
+        <a href="<?= Url::toRoute(['/browse/list/','slug'=>$value1['slug']]);?>" class="btn btn-danger">
             <?= Yii::t('frontend','Browse the Category');?>
         </a>
     </div>
