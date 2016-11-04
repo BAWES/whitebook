@@ -36,20 +36,19 @@ if(!Yii::$app->user->isGuest) {
 							</p>
 						</div>
 					</div>
-					<div class="col-md-8">
-						<div class="inner_slider_event">
-
-							<div id="demo">
-								<div id="owl-demo" class="owl-carousel">
-									<div class="item border-none-class">
-										<?php if(!empty($customer_events)) {?>
-											<a href="<?= Url::toRoute(['/events/index','slug'=>'thingsilike']); ?>" class="thing_cont" title="Things I like"><span class="heart_fave" id="heart_fave"><?= count($wishlist); ?></span>
-												<?php echo Yii::t('frontend','Things I like'); ?>
-												</a>
-												<?php } else {?>
-													<a href="javascript:" role="button" class="btn btn-default first-event-btn" data-toggle="modal" data-target="#EventModal" title="Create Your First Event">
-														<?= Yii::t('frontend','Create Your First Event'); ?>
-													</a>
+								<div class="col-md-8">
+									<div class="inner_slider_event">
+										<div id="demo">
+											<div id="owl-demo" class="owl-carousel">
+												<div class="item border-none-class">
+													<?php if(!empty($customer_events)) {?>
+														<a href="<?= Url::toRoute(['/events/index','slug'=>'thingsilike']); ?>" class="thing_cont" title="Things I like"><span class="heart_fave" id="heart_fave"><?= count($wishlist); ?></span>
+															<?php echo Yii::t('frontend','Things I like'); ?>
+														</a>
+													<?php } else {?>
+														<a href="javascript:" role="button" class="btn btn-default first-event-btn" data-toggle="modal" data-target="#EventModal" title="Create Your First Event">
+															<?= Yii::t('frontend','Create Your First Event'); ?>
+														</a>
 													<?php } ?>
 												</div>
 												<?php
@@ -67,7 +66,7 @@ if(!Yii::$app->user->isGuest) {
 											</div>
 										</div>
 									</div>
-									</div>
+								</div>
 								</div>
 								<!-- END load user events -->
 								<?php } }else {
@@ -146,6 +145,6 @@ jQuery('.directory_slider > .col-md-8').css("width", "66%");
 
 <?php $this->registerCss("
 .container_eventslider,.first_events{text-transform:uppercase;}
-.border-none-class{background: transparent important!; border: none;}
+.border-none-class{background: transparent!important; border: none!important;}
 .first-event-btn{float: left;    margin-left: 225px;    margin-top: 45px;    min-height: 30px;}
 "); ?>
