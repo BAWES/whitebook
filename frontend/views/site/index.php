@@ -355,7 +355,7 @@ $this->registerCss("
     left: 1px;
     position: fixed;
     text-align: center;
-    top: 120px;
+    top: 65px;
     width: 100%;
 }
 .mobile-view-form-popup h4 a{
@@ -366,10 +366,15 @@ $this->registerCss("
 .mobile-view-form-popup h4{
  background: #f2f2f2 none repeat scroll 0 0;
     margin: 0 0 10px;
-    padding: 9px;
+    padding: 17px;
 }
 .margin-top-15{margin-top:15px;}
-
+.mobile-search-enable .mobile-logo-text{
+    display:none;
+}
+.mobile-search-enable .border-top-yellow{
+    min-height:63px;
+}
 
 ");?>
 <!-- Hide BG FOR EVENT SLIDER
