@@ -9,6 +9,10 @@ use frontend\models\Category;
     <div class="filter_section">
 
         <div class=""><!-- responsive-category-top -->
+            <div class="filter_title">
+                <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by') ?></span>
+            </div>
+
             <div class="listing_sub_cat1">
                 <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
                 <select class="selectpicker" id="main-category" placeholder="test"> 
@@ -75,10 +79,6 @@ use frontend\models\Category;
                 </div>
             </nav>
                                             
-            <div class="filter_title">
-                <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by') ?></span>
-            </div>
-
             <nav class="row-offcanvas row-offcanvas-left">
                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                     <div id="accordion" class="panel-group">
