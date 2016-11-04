@@ -34,52 +34,9 @@ $model = new Website();
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         echo curl_exec($ch);
         curl_close($ch);
-    $session = Yii::$app->session;
-    $dLocation = $session->get('deliver-location');
-    $date = $session->get('deliver-date');
     ?>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 clearfix left-div">
-            <form id='area-selection' name='area-selection' action="<?=Url::toRoute(['browse/list'],true);?>">
-                <p class="text-center color-white">Select Product Delivery Location & Date</p>
-                <input type="hidden" name="slug" value="all">
-                <div class="left-offset-25">&nbsp;</div>
-                    <div class="col-lg-3 col-sm-3 col-md-3 location-div">
-                        <select class="selectpicker trigger" name="location" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
-                            <option value="">All</option>
-                            <?php
-                            $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
-                            $list = '';
-                            foreach ($cities as $city) {
-                                $city_name = (Yii::$app->language == 'en') ? $city->city_name : $city->city_name_ar;
-                                $list .= '<optgroup label='.$city_name.'>';
-                                if (isset($city->locations)) {
-                                    foreach ($city->locations as $location) {
-                                        if ($location->trash == 'Default' && $location->status=='Active') {
-                                            $location_name = (Yii::$app->language == 'en') ? $location->location : $location->location_ar;
-                                            $selected = (isset($dLocation) && $dLocation != '' && $dLocation == $location->id) ? 'selected="selected"' : '';
-                                            $list .= '<option value="'.$location->id.'" '.$selected.'>'.$location_name.'</option>';
-                                        }
-                                    }
-                                }
-                                $list .= '</optgroup>';
-                            }
-                            echo $list;
-                            ?>
-                        </select>
-                    </div>
-                    <div class="col-lg-3 col-sm-3 col-md-3 date-div">
-                        <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
-                        <input value="<?=$date?>" type="text" name="date" id="delivery_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
-                        <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-2 col-md-2">
-                        <input type="submit" class="btn btn-default btn-submit" value="Find">
-                    </div>
-            </form>
-        </div>
-    <div class="col-lg-12 col-sm-12 col-md-12 black-overlay">&nbsp;</div>
+<?=$this->render('_search');?>
 </div>
 
 <!-- Content start -->
@@ -353,12 +310,9 @@ $this->registerJs("
 ", View::POS_READY);
 
 $this->registerCss("
-.fetu_product_list .index_redirect img {
-    width: 100%;
-    height: 219px;
-}
+.fetu_product_list .index_redirect img {width: 100%;height: 219px;}
 .color-white{color:#fff;}
-.left-offset-25{float: left;width: 25%;}
+.left-offset-25{float: left;width: 15%;}
 .left-div{width:100%;position:absolute;bottom: 1px;padding:19px;    z-index: 999;}
 .date-div{padding-right: 0px; margin-bottom: 13px;}
 .black-overlay{width:100%;background-color: #000;position:absolute;bottom: 1px;padding: 55px;opacity: .4}
@@ -366,18 +320,36 @@ $this->registerCss("
 #delivery_date{height: 45px;color: #000! important;}
 .btn-submit{padding: 12px;}
 #top_header {z-index: 9999;}
-.bootstrap-select .dropdown-toggle {
-    padding: 12px 12px;
-}
-.datepicker{
-    border: 2px solid rgb(242, 242, 242);
-}
-.datepicker table {
-    font-size: 12px;
-}
+.bootstrap-select .dropdown-toggle {padding: 12px 12px;}
+.datepicker{border: 2px solid rgb(242, 242, 242);}
+.datepicker table {font-size: 12px;}
 .position-relative{position: relative;}
+.height-46{height:46px}
 .position_news{top: 6px;}
 #delivery_date{color:#000! important;}
+.bg-000 {background:#000! important;}
+.color-fff {color:#fff! important;}
+.width-5-percent{width: 86px;}
+.padding-right-0{    padding-right: 0px;}
+.padding-left-0{    padding-left: 0px;}
+.or-area{
+    width: 40px;
+    color: #fff;
+    text-align: center;
+    padding: 13px 0px;
+}
+.width-45-percent{width:45%}
+.width-44-percent{width:44%}
+.width-50-percent{width:50%}
+.width-10-percent{width:10%}
+.width-100-percent{width:100%}
+@media screen and (max-width: 770px) {
+.desktop-view-search{display:none!important;}
+.mobile-view-search{display:block!important;}
+.or_mobile{text-align:center;color:#fff;padding:13px 0;width:35px;}
+.add-on.position_news{top:7px;}
+}
+
 ");?>
 <!-- Hide BG FOR EVENT SLIDER
  VIDEO PLAY HOME END -->
