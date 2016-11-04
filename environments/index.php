@@ -136,26 +136,4 @@ return [
             'admin/config/main-local.php',
         ],
     ],
-    'Demo' => [
-        'path' => 'demo',
-        'setWritable' => [
-            'imageserver/runtime',
-            'imageserver/web/assets',
-            'backend/runtime',
-            'backend/web/assets',
-            'frontend/runtime',
-            'frontend/web/assets',
-            'admin/runtime',
-            'admin/web/assets',
-        ],
-        'setExecutable' => [
-            'yii',
-        ],
-        'setCookieValidationKey' => [
-            'imageserver/config/main-local.php',
-            'backend/config/main-local.php',
-            'frontend/config/main-local.php',
-            'admin/config/main-local.php',
-        ],
-    ],
 ];
