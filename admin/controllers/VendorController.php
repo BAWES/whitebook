@@ -168,14 +168,8 @@ class VendorController extends Controller
         $package = Package::loadpackage();
         $model = new Vendor();
         $model->scenario = 'register';
-        $model_siteinfo = Siteinfo::find()->all();
-        foreach ($model_siteinfo as $key => $val) {
-            $first_id = $val['commision'];
-        }
 
-        if (count($model_siteinfo) == 1) {
-            $model->commision = $first_id;
-        }
+        $model->commision = Siteinfo::info('commission');
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -187,8 +181,8 @@ class VendorController extends Controller
                 $model->day_off = '';
             }
 
-            $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
-            $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
+            $vendor_working_am_pm_from = Yii::$app->request->post('vendor_working_am_pm_from');
+            $vendor_working_am_pm_to = Yii::$app->request->post('vendor_working_am_pm_to');
 
             $vendor = Yii::$app->request->post('Vendor');
             $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
@@ -449,13 +443,7 @@ class VendorController extends Controller
 
             if (($model->commision) > 1) {
             } else {
-                $model_siteinfo = Siteinfo::find()->all();
-                foreach ($model_siteinfo as $key => $val) {
-                    $first_id = $val['commision'];
-                }
-                if (count($model_siteinfo) == 1) {
-                    $model->commision = $first_id;
-                }
+                $model->commision = Siteinfo::info('commission');
             }
 
             //get vendor order notification email address

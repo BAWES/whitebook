@@ -247,8 +247,7 @@ class SiteController extends Controller
 
     public function actionProfile($id=false) {
 
-        $siteinfo = Siteinfo::find()->all();
-        $to = $siteinfo[0]['email_id']; // admin email
+        $to = Yii::$app->params['adminEmail'];
 
         $vendor_id = Yii::$app->user->getId();
 

@@ -117,7 +117,7 @@ class AccessControlList extends \yii\db\ActiveRecord
         }
 
         //for super admin 
-        $super_admin_role_id = Siteinfo::findOne(1)->super_admin_role_id;
+        $super_admin_role_id = Siteinfo::info('super_admin_role_id');
 
         if($user->role_id == $super_admin_role_id) {
             return true;

@@ -9,7 +9,6 @@ use frontend\assets\ArabicAsset;
 use frontend\widgets\Alert;
 use yii\helpers\Url;
 use common\models\Socialinfo;
-use common\models\Siteinfo;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -71,20 +70,25 @@ $this->beginPage()
         echo Alert::widget();
         $this->beginContent('@app/views/layouts/header.php');
         ?>
-<?php $this->endContent(); ?>
+        <?php $this->endContent(); ?>
         <!-- Header Section End -->
         <!--Content Start-->
-<?= $content ?>
+            <?= $content ?>
         <!--Content End-->
         <!-- Footer Section Start -->
-<?php $this->beginContent('@app/views/layouts/footer.php', ['socialinfo' => Socialinfo::socialinformation(), 'siteinfo' => Siteinfo::siteinformation()]); ?>
-<?php $this->endContent(); ?>
-<?php $this->registerJs('$(".alert").animate({opacity: 1.0}, 3000).fadeOut("slow");',yii\web\View::POS_READY); ?>
-<?php $this->endBody() ?>
-        <?php $this->registerCss("
-        .loader2{display:none;text-align: center; position: fixed; width: 100%;height: 100%;z-index: 1;opacity: 0.6;background: #fff;}
-        .loader2 img {position:absolute;top:50%;}
+        <?php $this->beginContent('@app/views/layouts/footer.php'); ?>
+        <?php $this->endContent(); ?>
 
+        <?php $this->registerJs(
+                '$(".alert").animate({opacity: 1.0}, 3000).fadeOut("slow");', 
+                yii\web\View::POS_READY
+            ); ?>
+
+        <?php $this->endBody() ?>
+
+        <?php $this->registerCss("
+            .loader2{display:none;text-align: center; position: fixed; width: 100%;height: 100%;z-index: 1;opacity: 0.6;background: #fff;}
+            .loader2 img {position:absolute;top:50%;}
         ");?>
         <!-- Footer Section End -->
     </body>

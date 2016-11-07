@@ -109,7 +109,7 @@ class Order extends \yii\db\ActiveRecord
         $addresses = Yii::$app->session->get('address');
 
         //default commision 
-        $default_commision = Siteinfo::findOne(1)->commision;
+        $default_commision = Siteinfo::info('commission');
 
         //make chunks of item by vendor id 
         $chanks = [];
