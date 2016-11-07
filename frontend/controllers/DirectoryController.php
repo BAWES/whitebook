@@ -199,7 +199,7 @@ class DirectoryController extends BaseController
         $item_ids = ArrayHelper::map($vendor_items, 'item_id', 'item_id');
 
         $themes = \common\models\VendorItemThemes::find()
-            ->select(['wt.theme_id','wt.slug','wt.theme_name'])
+            ->select(['wt.theme_id','wt.slug','wt.theme_name','wt.theme_name_ar'])
             ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
             ->Where([
                 'wt.theme_status' => 'Active',
