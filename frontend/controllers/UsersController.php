@@ -13,7 +13,6 @@ use common\models\Country;
 use common\models\Location;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
-use common\models\Siteinfo;
 use common\models\FeatureGroupItem;
 use common\models\LoginForm;
 use common\models\Vendor;
@@ -97,7 +96,7 @@ class UsersController extends BaseController
             $model->customer_mobile=$data['customer_mobile'];
 
             if ($model->validate() && $model->save()) {
-                $siteinfo = Siteinfo::find()->asArray()->all();
+               
                 $username = $model['customer_name'];
                 Yii::$app->session->set('register', '1');
                 $message = 'Thank you for registration with us.</br><a href='.Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true).' title="Click Here">Click here </a> to activate your account.';

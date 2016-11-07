@@ -1,6 +1,6 @@
 <?php
+
 use yii\bootstrap\ActiveForm;
-use app\models\Siteinfo;
 use backend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;

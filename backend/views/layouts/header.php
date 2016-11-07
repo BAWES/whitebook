@@ -1,5 +1,4 @@
 <?php
-use common\models\Siteinfo;
 use yii\helpers\Html;
 use yii\helpers\Url;
 ?>

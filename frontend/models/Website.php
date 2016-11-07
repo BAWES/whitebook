@@ -15,24 +15,34 @@ use yii\db\Query;
 
 class Website extends Model {
 
-    public static function get_general_settings() {
-        return $general = Siteinfo::find()->where(['id'=>1])->asArray()->all();
-    }
-
-    public static function get_social_network() {
-         return $social = Socialinfo::find()->where(['store_social_id'=>1])->asArray()->all();
-    }
-
     public static function get_main_category() {
-        return $general = Category::find()->select('category_id,category_name')->where(['parent_category_id'=>'IS NULL', 'trash'=>"Default",'category_allow_sale'=>"yes"])->asArray()->all();
+        
+        return Category::find()
+            ->select('category_id, category_name')
+            ->where([
+                'parent_category_id' => 'IS NULL', 
+                'trash' => "Default",
+                'category_allow_sale' => "yes"
+            ])
+            ->asArray()
+            ->all();
     }
 
     public static function get_home_ads() {
-        return $ads = AdvertHome::find()->select('advert_code')->where(['trash'=>'Default'])->limit(1)->asArray()->one();
+        return AdvertHome::find()
+            ->select('advert_code')
+            ->where(['trash' => 'Default'])
+            ->limit(1)
+            ->asArray()
+            ->one();
     }
 
     public static function get_banner_details() {
-        return $ads = Slide::find()->select('*')->where(['trash'=>'Default','slide_status'=>"Active"])->asArray()->all();
+        return Slide::find()
+            ->select('*')
+            ->where(['trash' => 'Default', 'slide_status' => "Active"])
+            ->asArray()
+            ->all();
     }
 
     public static function get_search_directory_list($categoryid, $sort = 'vendor_name') {
