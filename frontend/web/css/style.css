@@ -962,7 +962,7 @@ div#dp3,#eventdate_icon {
 .address_bot p{font-size:13px; color:#999;font-family:'OpenSansRegular' ;}
 .address_bot h4 a{font-size:13px; color:#999;font-family:'OpenSansRegular' ;  margin: 11px 0 11px; display: inline-block; background:url(../images/message.png) left center no-repeat; padding: 0 0 0 25px;  }
 .address_bot h5{font-size:11pt; color:#999;font-family:'OpenSansRegular' ; background:url(../images/phone.png) left center no-repeat; padding: 0 0 0 25px;  }
-.divider_bot{ display: inline-block; min-height: 193px; border-left: 1px solid #313131;}
+.divider_bot{ display: inline-block; min-height: 153px; border-left: 1px solid #313131;}
 .treams_of_ser{float: left; width: 100%; padding: 0px; margin:  0;}
 .treams_of_ser li{float: left; padding: 0px; list-style: none; margin:11px 0 0 0;}
 .treams_of_ser li a{ float: left; padding: 0px; margin: 0px; text-decoration: none;font-size:11pt; color:#999;font-family:'OpenSansRegular' ; }
@@ -970,7 +970,7 @@ div#dp3,#eventdate_icon {
 .social_share ul li a:hover{color:#B9B9B9;}
 .treams_of_ser li {font-size:10pt; color:#999;font-family:'OpenSansRegular' ; padding: 0 34px 15px 0;}
 .bootom_footer {    border-top: 1px solid #313131;    display: inline-block;    width: 100%;  margin: 50px 0 0;}
-.treams_of_ser.margin_top {    margin-top: 50px;}
+.treams_of_ser.margin_top {    margin-top: 20px;}
 .add_banner {    display: inline-block;    margin: 26px 0 40px;    width: 100%;}
 h1.space_height {height:30px;}
 /* footer  end*/
@@ -1734,4 +1734,30 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     border-radius: 100%;
     padding: 1px;
     margin: 5px;
+}
+
+.social_icons.desktop {
+    margin-top: 40px;
+    text-align: right;
+}
+.social_icons{
+    color: #999;
+}
+.social_icons i {
+    background: white;
+    border-radius: 100%;
+    padding: 10px 12px;
+    margin: 0 0 0 10px;
+    color: #999;
+}
+
+.social_icons.mobile {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.social_icons.mobile span {
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
 }
