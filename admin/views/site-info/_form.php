@@ -1,27 +1,33 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use admin\models\Admin;
+use yii\helpers\BaseHtml;
 
 ?>
 
 <div class="col-md-8 col-sm-8 col-xs-8">	
 	 
-	<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+	<?= BaseHtml::beginForm(); ?>
 	
-	<?= $form->field($model, 'home_slider_alias')->textInput([
-			'placeholder' => 'Enter slider alias',
-			'class'=> 'form-control'
-		]); ?>
-	
-	<?= $form->field($model, 'super_admin_role_id')->dropDownList(Admin::roles()); ?>
+	<?php foreach ($data as $key => $value) { ?>	
+		<div class="form-group"> 
+			<?= Html::label(
+					ucfirst(str_replace('_', ' ', $value->name)), 
+					$value->name, 
+					['class' => 'control-label']
+				) ?>
+			<div class="controls">
+				<?= Html::input('text', $value->name, $value->value, ['class' => 'form-control']); ?>
+			</div>
+		</div>		
+	<?php } ?>
+
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
     	<?= Html::a('Back', ['site/index'], ['class' => 'btn btn-default']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?= BaseHtml::endForm(); ?>
 
 </div>
