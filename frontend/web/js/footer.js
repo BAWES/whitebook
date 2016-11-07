@@ -2046,5 +2046,8 @@ function inviteeDetail(invitee_id)
 
 
 jQuery('#open-filter,#close-search-div').click(function(){
-    $(".mobile-view-form-popup").slideToggle();
+    $("#top_header").toggleClass('mobile-search-enable');
+    $(".mobile-view-form-popup").slideToggle(500,"linear", function () {
+        // actions to do when animation finish
+    });
 });

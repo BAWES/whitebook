@@ -55,8 +55,8 @@ $date = $session->get('deliver-date');
     <div class="mobile-view-search hide">
         <div class="width-44-percent pull-left">
 <!--            <input type="submit" class=" width-100-percent bg-000 color-fff btn btn-default btn-submit" value="Search">-->
-            <div class="input-append date position-relative">
-                <input type="text" name="date" readonly size="16" id="open-filter" class="form-control height-46" placeholder="<?php echo Yii::t('frontend', 'Event Date'); ?>" >
+            <div class="input-append date position-relative" id="open-filter">
+                <input type="text" name="date" readonly size="16" class="form-control height-46" placeholder="<?php echo Yii::t('frontend', 'Event Date'); ?>" >
                 <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
             </div>
         </div>

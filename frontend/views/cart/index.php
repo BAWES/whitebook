@@ -238,7 +238,7 @@ $this->registerJs("
     var isGuest = ".(int)Yii::$app->user->isGuest.";
     var customer_id = '".Yii::$app->user->id."';
     var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
-    var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
+    var getdeliverytimeslot_url = '".Url::toRoute('cart/get-delivery-timeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
     var availablity = '".Url::toRoute('browse/product-available')."';
     var product_availability = '".Url::toRoute('cart/validation-product-available')."';

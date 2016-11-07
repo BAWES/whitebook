@@ -348,6 +348,7 @@ $this->registerCss("
 .mobile-view-search{display:block!important;}
 .or_mobile{text-align:center;color:#fff;padding:13px 0;width:35px;}
 .add-on.position_news{top:7px;}
+.black-overlay{padding:28px;}
 }
 .mobile-view-form-popup{
     background: #fff none repeat scroll 0 0;
@@ -355,7 +356,7 @@ $this->registerCss("
     left: 1px;
     position: fixed;
     text-align: center;
-    top: 120px;
+    top: 65px;
     width: 100%;
 }
 .mobile-view-form-popup h4 a{
@@ -366,10 +367,15 @@ $this->registerCss("
 .mobile-view-form-popup h4{
  background: #f2f2f2 none repeat scroll 0 0;
     margin: 0 0 10px;
-    padding: 9px;
+    padding: 17px;
 }
 .margin-top-15{margin-top:15px;}
-
+.mobile-search-enable .mobile-logo-text{
+    display:none;
+}
+.mobile-search-enable .border-top-yellow{
+    min-height:63px;
+}
 
 ");?>
 <!-- Hide BG FOR EVENT SLIDER

@@ -297,7 +297,7 @@ if ($event_status > 0) {
                             $data = Yii::$app->request->get();
 
                             $category_list = VendorCategory::find()
-                                ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.slug','{{%category}}.icon'])
+                                ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.category_name_ar', '{{%category}}.slug','{{%category}}.icon'])
                                 ->leftJoin('{{%category}}','{{%category}}.category_id = {{%vendor_category}}.category_id')
                                 ->where([
                                     '{{%category}}.trash' =>'Default',
@@ -306,7 +306,6 @@ if ($event_status > 0) {
                                 ->groupBy('{{%category}}.category_id')
                                 ->asArray()
                                 ->all();
-
                             if (count($category_list) > 3) {
                                 $class = "test_scroll";
                             } else {

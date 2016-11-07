@@ -28,16 +28,16 @@ class m161017_091746_db_relations extends Migration
         $this->addForeignKey ('admin_role_fk', 'whitebook_admin', 'role_id', 'whitebook_role', 'role_id', 'SET NULL' , 'SET NULL');
 
         //whitebook_auth_assignment
-        $this->alterColumn ('whitebook_auth_assignment', 'user_id', $this->integer(11).' UNSIGNED NULL'); 
+        $this->alterColumn ('whitebook_auth_assignment', 'user_id', $this->integer(11).' UNSIGNED NULL');
         $this->alterColumn ('whitebook_auth_assignment', 'controller_id', $this->integer(11).' UNSIGNED NULL');
-        
+
         $this->addForeignKey ('auth_assignment_user_fk', 'whitebook_auth_assignment', 'controller_id', 'whitebook_controller', 'id', 'SET NULL' , 'SET NULL');
 
         $this->addForeignKey ('auth_assignment_controller_fk', 'whitebook_auth_assignment', 'user_id', 'whitebook_admin', 'id', 'SET NULL' , 'SET NULL');
-       
+
         //whitebook_auth_item_child
         $this->addForeignKey ('auth_item_parent_fk', 'whitebook_auth_item_child', 'parent', 'whitebook_auth_item', 'name', 'CASCADE' , 'CASCADE');
-    
+
         $this->addForeignKey ('auth_item_child_fk', 'whitebook_auth_item_child', 'child', 'whitebook_auth_item', 'name', 'CASCADE' , 'CASCADE');
 
         //whitebook_category_path
@@ -46,10 +46,10 @@ class m161017_091746_db_relations extends Migration
         $this->addForeignKey ('category_path_fk', 'whitebook_category_path', 'path_id', 'whitebook_category', 'category_id', 'SET NULL' , 'SET NULL');
 
         //whitebook_city
-        $this->alterColumn ('whitebook_city', 'country_id', $this->integer(11) . 'NULL');
+        $this->alterColumn ('whitebook_city', 'country_id', $this->integer(11) . 'NOT NULL');
 
         //whitebook_customer_address
-        
+
         $this->alterColumn ('whitebook_customer_address', 'customer_id', $this->integer(11) . ' UNSIGNED NULL');
         $this->alterColumn ('whitebook_customer_address', 'address_type_id', $this->integer(11) . '  UNSIGNED NULL');
         $this->alterColumn ('whitebook_customer_address', 'country_id', $this->integer(11) . ' NULL ');
@@ -65,7 +65,7 @@ class m161017_091746_db_relations extends Migration
         $this->addForeignKey ('customer_address_city_fk', 'whitebook_customer_address', 'city_id', 'whitebook_city', 'city_id', 'SET NULL' , 'SET NULL');
 
         $this->addForeignKey ('customer_address_area_fk', 'whitebook_customer_address', 'area_id', 'whitebook_location', 'id', 'SET NULL' , 'SET NULL');
-       
+
         //whitebook_customer_cart
         $this->alterColumn ('whitebook_customer_cart', 'customer_id', $this->integer(11) . ' UNSIGNED NULL');
         $this->alterColumn ('whitebook_customer_cart', 'item_id', $this->integer(11) . ' UNSIGNED NULL');
@@ -95,9 +95,9 @@ class m161017_091746_db_relations extends Migration
 
         //whitebook_faq
         $this->alterColumn ('whitebook_faq', 'faq_group_id', $this->integer(11) . ' NULL');
-        
+
         $this->addForeignKey ('whitebook_faq_group_fk', 'whitebook_faq', 'faq_group_id', 'whitebook_faq_group', 'faq_group_id', 'SET NULL' , 'SET NULL');
-        
+
         //whitebook_feature_event
         $this->alterColumn ('whitebook_feature_event', 'type_id', $this->integer(11) . ' UNSIGNED NULL');
         $this->alterColumn ('whitebook_feature_event', 'customer_id', $this->integer(11) . ' UNSIGNED NULL');
@@ -117,7 +117,7 @@ class m161017_091746_db_relations extends Migration
         //whitebook_vendor
         $this->alterColumn ('whitebook_vendor', 'package_id', $this->integer(11) . ' UNSIGNED NULL');
         $this->alterColumn ('whitebook_vendor', 'image_id', $this->integer(11) . ' UNSIGNED NULL');
-        
+
         $this->addForeignKey ('vendor_to_package_fk', 'whitebook_vendor', 'package_id', 'whitebook_package', 'package_id', 'SET NULL' , 'SET NULL');
 
         $this->addForeignKey ('vendor_image_fk', 'whitebook_vendor', 'image_id', 'whitebook_image', 'image_id', 'SET NULL' , 'SET NULL');
@@ -127,17 +127,17 @@ class m161017_091746_db_relations extends Migration
         $this->alterColumn ('whitebook_vendor_location', 'area_id', $this->integer(11) . ' UNSIGNED NULL');
         $this->addForeignKey ('vendor_location_city_fk', 'whitebook_vendor_location', 'city_id', 'whitebook_city', 'city_id', 'SET NULL' , 'SET NULL');
         $this->addForeignKey ('vendor_location_location_fk', 'whitebook_vendor_location', 'area_id', 'whitebook_location', 'id', 'SET NULL' , 'SET NULL');
-            
+
          //whitebook_customer_address_response
         $this->alterColumn ('whitebook_customer_address_response', 'address_id', $this->integer(11) . ' UNSIGNED NULL');
-        
+
         $this->addForeignKey ('customer_address_r_a_fk', 'whitebook_customer_address_response', 'address_id', 'whitebook_customer_address', 'address_id', 'SET NULL' , 'SET NULL');
 
         $this->alterColumn ('whitebook_customer_address_response', 'address_type_question_id', $this->integer(11) . ' NULL');
 
         $this->addForeignKey ('customer_address_r_q_fk', 'whitebook_customer_address_response', 'address_type_question_id', 'whitebook_address_question', 'ques_id', 'SET NULL' , 'SET NULL');
-    
-        //city 
+
+        //city
         $this->addForeignKey ('city_country_fk', 'whitebook_city', 'country_id', 'whitebook_country', 'country_id', 'CASCADE' , 'CASCADE');
 
         $this->execute("SET foreign_key_checks = 1;");

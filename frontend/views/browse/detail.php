@@ -100,7 +100,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                     <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date');?></div>
                 </div>
             </div>
-            <div class="col-md-2 padding-left-0 timeslot_id_select">
+            <div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
                     <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
@@ -560,7 +560,7 @@ $this->registerJs("
     var vendor_id = '".$model['vendor_id']."';
     var customer_id = '".Yii::$app->user->id."';
     var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
-    var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
+    var getdeliverytimeslot_url = '".Url::toRoute('cart/get-delivery-timeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
     var availablity = '".Url::toRoute('browse/product-available')."';
     var product_availability = '".Url::toRoute('cart/validation-product-available')."';
