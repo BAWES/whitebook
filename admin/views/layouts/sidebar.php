@@ -42,7 +42,7 @@ $item_pending_count = VendorItem::item_pending_count();
 				'options' => ['class'=>'dropdown'],
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'items' => [
-					['label' => 'Site Info', 'url' => ['site-info/index']],
+					['label' => 'Site Info', 'url' => ['site-info/update']],
 					['label' => 'Contact Enquiries', 'url' => ['contacts/index']],
 					['label' => 'Social media', 'url' => ['social-info/index']],
 					['label' => 'Manage Banner Slides', 'url' => ['slide/index']],
