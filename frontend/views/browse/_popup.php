@@ -1,6 +1,6 @@
 <?php
 use yii\widgets\ActiveForm;
-
+use common\components\LangFormat;
 $customer_id = Yii::$app->user->getId();
 if($customer_id) {
 
@@ -66,12 +66,12 @@ $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Acti
                                                     //$data
                                                     $list = '';
                                                     foreach ($cities as $city) {
-                                                        $city_name = (Yii::$app->language == 'en') ? $city->city_name : $city->city_name_ar;
+                                                        $city_name = LangFormat::format($city->city_name,$city->city_name_ar);
                                                         $list .= '<optgroup label='.$city_name.'>';
                                                         if (isset($city->locations)) {
                                                             foreach ($city->locations as $location) {
                                                                 if ($location->trash == 'Default' && $location->status=='Active') {
-                                                                    $location_name = (Yii::$app->language == 'en') ? $location->location : $location->location_ar;
+                                                                    $location_name = LangFormat::format($location->location,$location->location_ar);
                                                                     $list .= '<option value="'.$location->id.'">'.$location_name.'</option>';
                                                                 }
                                                             }

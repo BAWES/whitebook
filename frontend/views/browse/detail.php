@@ -4,35 +4,24 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
 use common\models\VendorItemPricing;
-use common\models\Location;
+use common\components\LangFormat;
 use common\components\CFormatter;
 
-if (Yii::$app->language == "en") {
-    $item_name = $model->item_name;
-    //$category_name = $model->category->category_name;
-    $vendor_name = $model->vendor->vendor_name;
-    $item_description = strip_tags($model->item_description);
-    $item_additional_info = strip_tags($model->item_additional_info);
-    $vendor_contact_address = $model->vendor->vendor_contact_address;
-} else {
-    $item_name = $model->item_name_ar;
-    //$category_name = $model->category->category_name_ar;
-    $vendor_name = $model->vendor->vendor_name_ar;
-    $item_description = strip_tags($model->item_description_ar);
-    $item_additional_info = strip_tags($model->item_additional_info_ar);
-    $vendor_contact_address = $model->vendor->vendor_contact_address_ar;
-}
+$item_name = LangFormat::format($model->item_name,$model->item_name_ar);
+$vendor_name = LangFormat::format($model->vendor->vendor_name,$model->vendor->vendor_name_ar);
+$item_description = LangFormat::format(strip_tags($model->item_description),strip_tags($model->item_description_ar));
+$item_additional_info = LangFormat::format(strip_tags($model->item_additional_info),strip_tags($model->item_additional_info_ar));
+$vendor_contact_address = LangFormat::format($model->vendor->vendor_contact_address_ar,$model->vendor->vendor_contact_address);
+
 
 $this->title = 'Whitebook - ' . $item_name;
 //$this->params['breadcrumbs'][] = ['label' => ucfirst($category_name), 'url' => Url::to(["shop/products", 'slug' => ''])];
-$this->params['breadcrumbs'][] = ucfirst($item_name);
+$this->params['breadcrumbs'][] = $item_name;
 
 $session = $session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 $quantity = $model->item_minimum_quantity_to_order;
-
-
 
 if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapacityExceptions)>0) {
     $exceptionDate = \yii\helpers\ArrayHelper::map($model->vendorItemCapacityExceptions, 'exception_date', 'exception_capacity');
@@ -402,13 +391,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                             <?php if (trim($model->vendor->vendor_contact_address)) { ?>
                                                                 <div class="col-md-6 col-sm-6 col-xs-12 paddingleft0 address_ifo_left border-top">
                                                                     <h5 class="margin-top-13">
-                                                                        <?php
-                                                                        if (Yii::$app->language == "en")  {
-                                                                                echo $model->vendor->vendor_contact_address;
-                                                                            } else {
-                                                                            echo $model->vendor->vendor_contact_address_ar;
-                                                                            }
-                                                                        ?>
+                                                                        <?=LangFormat::format($model->vendor->vendor_contact_address,$model->vendor->vendor_contact_address_ar); ?>
                                                                     </h5>
                                                                 </div>
                                                             <?php } ?>
@@ -495,17 +478,9 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
                         <h2>
-                            <?php 
-
-                            if(Yii::$app->language == 'en') {
-                                $vendor = $model->vendor->vendor_name;
-                            }else{
-                                $vendor = $model->vendor->vendor_name_ar;
-                            }
-
-                            echo Yii::t('frontend', 'More from {vendor_name}', [
-                                        'vendor_name' => '<b>'.$vendor.'</b>'
-                                    ]); ?>                            
+                            <?php
+                            $vendor = LangFormat::format($model->vendor->vendor_name,$model->vendor->vendor_name_ar);
+                            echo Yii::t('frontend', 'More from {vendor_name}', ['vendor_name' => '<b>'.$vendor.'</b>']); ?>
                         </h2>
                     </div>
                     <div class="feature_product_slider">
@@ -530,7 +505,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
 
                                                 <div class="deals_listing_cont">
-                                                    <h3><?= (Yii::$app->language == "en") ? $s->item_name : $s->item_name_ar; ?></h3>
+                                                    <h3><?=LangFormat::format($s->item_name,$s->item_name_ar); ?></h3>
                                                     <p><?= CFormatter::format($s['item_price_per_unit'])  ?></p>
                                                 </div>
                                             </a>

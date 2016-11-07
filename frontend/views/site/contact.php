@@ -49,31 +49,21 @@ $this->title = 'Contact us | Whitebook';
                     <?php foreach($faq_details as $group) { ?>
                     <li>
                         <div class="left_books">
-                            <?php  if(Yii::$app->language == "en"){
-                                        echo $group['group_name'];
-                                   }else {
-                                        echo $group['group_name_ar'];
-                                   }  ?>
+                            <?=\common\components\LangFormat::format($group['group_name'],$group['group_name_ar']); ?>
                         </div>
                         <div class="left_books_lis">
                             <ul>
                                 <?php foreach ($group['faq_list'] as $f) { ?>
                                     <li>
-                                        <?php if(Yii::$app->language == "en"){ ?>
-                                            <p><a class="show_content" href="javascript:void(0);">
-                                                <?= ucfirst($f['question']) ?></a>
-                                            </p>
-                                            <div class="toogle_botom">
-                                                <?= ucfirst($f['answer']) ?>
-                                            </div>
-                                        <?php }else{ ?>
-                                            <p><a class="show_content" href="javascript:void(0);">
-                                                <?= ucfirst($f['question_ar']) ?></a>
-                                            </p>
-                                            <div class="toogle_botom">
-                                                <?= ucfirst($f['answer_ar']) ?>
-                                            </div>
-                                        <?php } ?>
+                                        <p>
+                                            <a class="show_content" href="javascript:void(0);">
+                                                <?=\common\components\LangFormat::format(ucfirst($f['question']),ucfirst($f['question_ar'])); ?>
+                                            </a>
+                                        </p>
+                                        <div class="toogle_botom">
+                                            <?= ucfirst($f['answer']) ?>
+                                            <?=\common\components\LangFormat::format(ucfirst($f['answer']),ucfirst($f['answer_ar'])); ?>
+                                        </div>
                                     </li>
                                 <?php } ?>
                             </ul>

@@ -18,12 +18,12 @@ $date = $session->get('deliver-date');
                     $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
                     $list = '';
                     foreach ($cities as $city) {
-                        $city_name = (Yii::$app->language == 'en') ? $city->city_name : $city->city_name_ar;
+                        $city_name = \common\components\LangFormat::format($city->city_name,$city->city_name_ar);
                         $list .= '<optgroup label='.$city_name.'>';
                         if (isset($city->locations)) {
                             foreach ($city->locations as $location) {
                                 if ($location->trash == 'Default' && $location->status=='Active') {
-                                    $location_name = (Yii::$app->language == 'en') ? $location->location : $location->location_ar;
+                                    $location_name = \common\components\LangFormat::format($location->location,$location->location_ar);
                                     $selected = (isset($dLocation) && $dLocation != '' && $dLocation == $location->id) ? 'selected="selected"' : '';
                                     $list .= '<option value="'.$location->id.'" '.$selected.'>'.$location_name.'</option>';
                                 }
@@ -84,12 +84,12 @@ $date = $session->get('deliver-date');
                     $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
                     $list = '';
                     foreach ($cities as $city) {
-                        $city_name = (Yii::$app->language == 'en') ? $city->city_name : $city->city_name_ar;
+                        $city_name = \common\components\LangFormat::format($city->city_name,$city->city_name_ar);
                         $list .= '<optgroup label='.$city_name.'>';
                         if (isset($city->locations)) {
                             foreach ($city->locations as $location) {
                                 if ($location->trash == 'Default' && $location->status=='Active') {
-                                    $location_name = (Yii::$app->language == 'en') ? $location->location : $location->location_ar;
+                                    $location_name = \common\components\LangFormat::format($location->location,$location->location_ar);
                                     $selected = (isset($dLocation) && $dLocation != '' && $dLocation == $location->id) ? 'selected="selected"' : '';
                                     $list .= '<option value="'.$location->id.'" '.$selected.'>'.$location_name.'</option>';
                                 }

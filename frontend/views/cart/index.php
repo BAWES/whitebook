@@ -6,7 +6,7 @@ use yii\web\view;
 use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
-
+use common\components\LangFormat;
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
 ?>
@@ -106,11 +106,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		</td>
 	        		<td>
 	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
-	        				<?php if(Yii::$app->language == 'en') {
-	        					echo $item['item_name'];
-	        				} else {
-	        					echo $item['item_name_ar']; 
-	        				} ?>
+	        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']); ?>
 	        			</a>
 
 	        			<div class="visible-xs visible-sm">	        				
@@ -138,16 +134,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			if(isset($delivery_area->location)) {
 
 							$delivery_charge += $delivery_area->delivery_price;
-
+							echo LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar).' <br />';
+							echo LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar).' <br />';
 	        				?>
-	        					<?php if(Yii::$app->language == 'en') { ?>
-		            				<?= $delivery_area->location->location; ?> <br />
-		            				<?= $delivery_area->location->city->city_name; ?> <br />
-		                        <?php } else { ?>
-		                            <?= $delivery_area->location->location_ar; ?> <br />
-		                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
-		                        <?php } ?>
-
 	        					<?= $item['cart_delivery_date'] ?><br />
 								
 								<?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 

@@ -1,7 +1,7 @@
 <?php 
 
 use yii\helpers\Url;
-
+use common\components\LangFormat;
 ?>
 
 <div class="panel panel-default panel-pg-list">
@@ -18,11 +18,7 @@ use yii\helpers\Url;
     	<div class="radio">
             <input type="radio" name="payment_method" id="<?= $row->code ?>" value="<?= $row->code ?>" />   
     	    <label for="<?= $row->code ?>">                    
-		        <?php if(Yii::$app->language == 'en') {
-                    echo $row->name;
-                } else {
-                    echo $row->name_ar;
-                } ?>
+		        <?=LangFormat::format($row->name,$row->name_ar); ?>
 		    </label>
 		</div>
         <?php } ?>

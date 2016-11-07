@@ -30,14 +30,14 @@ use yii\web\view;
 							<select class="selectpicker" style="display: none;" id="filter_category" name="filter_category">
 							<option value="All"><?= Yii::t("frontend", "All"); ?></option>
 							<?php
-							$select = (Yii::$app->language == 'en') ? 'category_name' : 'category_name_ar';
 							$categories = \frontend\models\Category::find()
-								->select(''.$select.' as category_name,category_id,icon')
+								->select('category_name,category_name_ar,category_id,icon')
 								->where(['category_level'=>'0'])
 								->orderBy('sort')
 								->all();
 									foreach ($categories as $category) {
-										echo '<option data-icon="'.$category->icon.'" value="'.$category->category_id.'">'.$category->category_name.'</option>';
+										$select = \common\components\LangFormat::format($category->category_name,$category->category_name_ar);
+										echo '<option data-icon="'.$category->icon.'" value="'.$category->category_id.'">'.$select.'</option>';
 									}
 							?>
 							</select>

@@ -77,28 +77,12 @@ $this->title ='Address Book | Whitebook';
                                         <br />
 
                                         <b>Area:</b> <br />
-                                        <?php 
-
-                                        if(Yii::$app->language == 'en') { 
-                            			    echo $address['location']?$address['location'].'<br />':'';
-                                        } else {
-                                            echo $address['location_ar']?$address['location_ar'].'<br />':'';
-                                        }
-                            			
-                            			?>
+                                        <?=\common\components\LangFormat::format($address['location'],$address['location_ar']); ?><br/>
                                         
                                         <br />
 
                                         <b>City:</b> <br />
-                                        <?php 
-
-                                        if(Yii::$app->language == 'en') { 
-                                            echo $address['city_name']?$address['city_name'].'<br />':'';
-                                        } else {
-                                            echo $address['city_name_ar']?$address['city_name_ar'].'<br />':'';
-                                        }
-                                        
-                                        ?>
+                                        <?=\common\components\LangFormat::format($address['city_name'],$address['city_name_ar']); ?><br/>
                             		</div>
                             	</td>
                             </tr>    
