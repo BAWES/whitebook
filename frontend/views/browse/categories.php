@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use common\components\LangFormat;
 ?>
 <section id="inner_pages_white_back">
     <div class="container paddng0">
@@ -102,6 +103,7 @@ use yii\widgets\ActiveForm;
                                     <div class="form-group new_popup_common">
                                         <div class="bs-docs-example">
                                             <?php
+                                            //$name = LangFormat::format()
                                             if (Yii::$app->language == "en") {
                                                 $name = 'city_name';
                                             } else {

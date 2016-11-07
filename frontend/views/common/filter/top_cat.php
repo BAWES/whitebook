@@ -25,12 +25,7 @@ $get = Yii::$app->request->get();
                     $data = '';
                     $selected = '';
                 }
-
-                if(Yii::$app->language == "en"){
-                    $category_name = $category['category_name'];
-                }else{
-                    $category_name = $category['category_name_ar'];
-                }
+                $category_name  = \common\components\LangFormat::format($category['category_name'],$category['category_name_ar']);
                 ?>
                 <option
                     data-icon="<?= $category['icon'] ?>"

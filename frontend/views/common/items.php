@@ -49,15 +49,9 @@ if(!empty($items->getModels()))  {
 
                     </div>
                     <div class="events_descrip">
-
-                        <?php if(Yii::$app->language == 'en') { ?>
-                            <a href="<?= $item_url ?>"><?= $value['vendor_name'] ?></a>
-                            <h3><?= $value['item_name']  ?></h3>
-                        <?php } else { ?>
-                            <a href="<?= $item_url ?>"><?= $value['vendor_name_ar'] ?></a>
-                            <h3><?= $value['item_name_ar']  ?></h3>
-                        <?php } ?>
-                        <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
+                        <a href="<?= $item_url ?>"><?=\common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
+                            <h3><?=\common\components\LangFormat::format( $value['item_name'], $value['item_name_ar'])?></h3>
+                            <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
                         </a>
                     </div>
                 </div>

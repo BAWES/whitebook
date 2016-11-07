@@ -3,6 +3,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\view;
+use common\components\LangFormat;
 //$this->title = ''
 ?>
 
@@ -23,22 +24,18 @@ use yii\web\view;
 		</div>
 		<div id="mobile_respon">
 			<div class="mobile-view col-xs-12 padding0 directory-responsive">
-				<?php $fl = $first_letter;?>
+				<?php $fl = $first_letter;
+				?>
 				<div class="tabContainer">
 					<ul id="demoOne" class="demo">
-						<?php foreach($fl as $f) { ?>
+						<?php
+						foreach($fl as $f) {
+							?>
 							<li><h2><?php echo $f;?></h2></li>
-							<?php 
+							<?php
 							foreach($directory as $d) {
-								
-								if(Yii::$app->language == "en") {
-									$theme_name = $d['theme_name'];
-					            	$ltr = strtoupper(mb_substr($d['theme_name'], 0, 1, 'utf8'));
-					            }else{
-					            	$theme_name = $d['theme_name_ar'];
-					            	$ltr = strtoupper(mb_substr($d['theme_name_ar'], 0, 1, 'utf8'));
-					                //for arabic last letter will be first letter 
-					            }
+								$theme_name = LangFormat::format($d['theme_name'],$d['theme_name_ar']);
+								$ltr = LangFormat::format(strtoupper(mb_substr($d['theme_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['theme_name_ar'], 0, 1, 'utf8')));
 								if($ltr === $f) { ?>
 									<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php }
@@ -66,22 +63,17 @@ use yii\web\view;
 
 					$i=0;
 
-					foreach($first_letter as $f) { ?>
-					<?php if($i < $first) { ?>
+					foreach($first_letter as $f) {
+						if ($i < $first) {
+							?>
 						<div class="direct_list">
 							<h2><?php echo $f;?></h2>
 							<ul>
 							<?php 
 
 							foreach($directory as $d) {
-							
-							if(Yii::$app->language == "en") {
-								$first_letter = strtoupper(mb_substr($d['theme_name'], 0, 1, 'utf8'));
-								$theme_name = $d['theme_name'];
-							}else{
-								$first_letter = strtoupper(mb_substr($d['theme_name_ar'], 0, 1, 'utf8'));
-								$theme_name = $d['theme_name_ar'];
-							}
+							$theme_name = LangFormat::format($d['theme_name'],$d['theme_name_ar']);
+							$first_letter = LangFormat::format(strtoupper(mb_substr($d['theme_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['theme_name_ar'], 0, 1, 'utf8')));
 
 							if($first_letter == $f)
 								{if($i<$first){ ?>
@@ -105,14 +97,9 @@ use yii\web\view;
 							<ul>
 							<?php
 							foreach($directory as $d) {
-						
-							if(Yii::$app->language == "en") {
-								$first_letter = strtoupper(mb_substr($d['theme_name'], 0, 1, 'utf8'));
-								$theme_name = $d['theme_name'];
-							}else{
-								$first_letter = strtoupper(mb_substr($d['theme_name_ar'], 0, 1, 'utf8'));
-								$theme_name = $d['theme_name_ar'];
-							}
+
+							$theme_name = LangFormat::format($d['theme_name'],$d['theme_name_ar']);
+							$first_letter = LangFormat::format(strtoupper(mb_substr($d['theme_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['theme_name_ar'], 0, 1, 'utf8')));
 
 							if($first_letter == $f) { ?>
 								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
@@ -145,14 +132,10 @@ use yii\web\view;
 							<?php
 							
 							foreach($directory as $d) {
-							
-							if(Yii::$app->language == "en") {
-								$first_letter = strtoupper(mb_substr($d['theme_name'], 0, 1, 'utf8'));
-								$theme_name = $d['theme_name'];
-							}else{
-								$first_letter = strtoupper(mb_substr($d['theme_name_ar'], 0, 1, 'utf8'));
-								$theme_name = $d['theme_name_ar'];
-							}
+
+
+							$theme_name = LangFormat::format($d['theme_name'],$d['theme_name_ar']);
+							$first_letter = LangFormat::format(strtoupper(mb_substr($d['theme_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['theme_name_ar'], 0, 1, 'utf8')));
 
 							if($first_letter == $f) { ?>
 								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>

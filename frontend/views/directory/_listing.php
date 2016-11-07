@@ -22,15 +22,8 @@ if ((!empty($directory)) && ($total > 0)) {
                         <ul>
                             <?php
                             foreach ($directory as $d) {
-                               
-                                if(Yii::$app->language == "en") {
-                                    $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
-                                    $vendor_name = strtoupper($d['vendor_name']);
-                                }else{
-                                    $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
-                                    $vendor_name = strtoupper($d['vendor_name_ar']);
-                                }
-
+                                $first_letter = \common\components\LangFormat::format(strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8')));
+                                $vendor_name = \common\components\LangFormat::format(strtoupper($d['vendor_name']),strtoupper($d['vendor_name_ar']));
                                 if ($first_letter == $f) {
                                     if ($i < $first) {
                                         ?>
@@ -62,13 +55,8 @@ if ((!empty($directory)) && ($total > 0)) {
             
                 foreach ($directory as $d) {
 
-                if(Yii::$app->language == "en") {
-                    $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
-                    $vendor_name = strtoupper($d['vendor_name']);
-                }else{
-                    $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
-                    $vendor_name = strtoupper($d['vendor_name_ar']);    
-                }
+                    $first_letter = \common\components\LangFormat::format(strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8')));
+                    $vendor_name = \common\components\LangFormat::format(strtoupper($d['vendor_name']),strtoupper($d['vendor_name_ar']));
 
                 if ($first_letter == $f) { ?>
 
@@ -103,14 +91,10 @@ if ((!empty($directory)) && ($total > 0)) {
                         <?php
 
                         foreach ($directory as $d) {
-                            
-                            if(Yii::$app->language == "en") {
-                                $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
-                                $vendor_name = strtoupper($d['vendor_name']);
-                            }else{
-                                $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
-                                $vendor_name = strtoupper($d['vendor_name_ar']);    
-                            }
+
+
+                            $first_letter = \common\components\LangFormat::format(strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8')));
+                            $vendor_name = \common\components\LangFormat::format(strtoupper($d['vendor_name']),strtoupper($d['vendor_name_ar']));
 
                             if ($first_letter == $f) { ?>
                                 <li>

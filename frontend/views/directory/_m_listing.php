@@ -10,13 +10,9 @@
 
                     foreach ($directory as $d) {
 
-                        if(Yii::$app->language == "en") {
-                            $ltr = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
-                            $vname = strtoupper($d['vendor_name']);
-                        }else{
-                            $ltr = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
-                            $vname = strtoupper($d['vendor_name_ar']);
-                        }
+
+                        $ltr = \common\components\LangFormat::format(strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8')));
+                        $vname = \common\components\LangFormat::format(strtoupper($d['vendor_name']),strtoupper($d['vendor_name_ar']));
 
                         if ($ltr == $f) { ?>
                             <li>

@@ -2,29 +2,19 @@
 
 use yii\web\view;
 use yii\helpers\Url;
-use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-use frontend\models\Category;
-use frontend\models\Vendor;
+use common\components\LangFormat;
 use common\components\CFormatter;
 use common\models\VendorItemPricing;
 use common\models\ItemType;
 
 $vendor_det = $model->vendor;
 
-if(Yii::$app->language == "en"){
-    $item_name = $model['item_name'];
-    $vendor_name = $vendor_det['vendor_name'];
-    $item_description = $model['item_description'];
-    $item_additional_info = $model['item_additional_info'];
-    $vendor_contact_address = $vendor_det['vendor_contact_address'];
-}else{
-    $item_name = $model['item_name_ar'];
-    $vendor_name = $vendor_det['vendor_name_ar'];
-    $item_description = $model['item_description_ar'];
-    $item_additional_info = $model['item_additional_info_ar'];
-    $vendor_contact_address = $vendor_det['vendor_contact_address_ar'];
-}
+$item_name = LangFormat::format($model['item_name'],$model['item_name_ar']);
+$vendor_name = LangFormat::format($vendor_det['vendor_name'],$vendor_det['vendor_name_ar']);
+$item_description = LangFormat::format($model['item_description'],$model['item_description_ar']);
+$item_additional_info = LangFormat::format($model['item_additional_info'],$model['item_additional_info_ar']);
+$vendor_contact_address = LangFormat::format($vendor_det['vendor_contact_address'],$vendor_det['vendor_contact_address_ar']);
 
 $this->title = 'Whitebook - ' . $item_name;
 
@@ -337,13 +327,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                             <?php if (trim($model->vendor->vendor_contact_address)) { ?>
                                                                 <div class="col-md-6 col-sm-6 col-xs-12 paddingleft0 address_ifo_left border-top">
                                                                     <h5 class="margin-top-13">
-                                                                        <?php
-                                                                        if (Yii::$app->language == "en")  {
-                                                                            echo $model->vendor->vendor_contact_address;
-                                                                        } else {
-                                                                            echo $model->vendor->vendor_contact_address_ar;
-                                                                        }
-                                                                        ?>
+                                                                        <?=LangFormat::format($model->vendor->vendor_contact_address,$model->vendor->vendor_contact_address_ar); ?>
                                                                     </h5>
                                                                 </div>
                                                             <?php } ?>
@@ -431,14 +415,8 @@ $this->title = 'Whitebook - ' . $item_name;
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
                         <h2>
-                            <?php 
-
-                            if(Yii::$app->language == 'en') {
-                                $vendor = $model->vendor->vendor_name;
-                            }else{
-                                $vendor = $model->vendor->vendor_name_ar;
-                            }
-
+                            <?php
+                            $vendor = LangFormat::format($model->vendor->vendor_name,$model->vendor->vendor_name_ar);
                             echo Yii::t('frontend', 'More from {vendor_name}', [
                                         'vendor_name' => '<b>'.$vendor.'</b>'
                                     ]); ?>                            
@@ -467,7 +445,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
 
                                                 <div class="deals_listing_cont">
-                                                    <h3><?= (Yii::$app->language == "en") ? $s->item_name : $s->item_name_ar; ?></h3>
+                                                    <h3><?= LangFormat::format($s->item_name,$s->item_name_ar); ?></h3>
                                                     <p><?= CFormatter::format($s['item_price_per_unit'])  ?></p>
                                                 </div>
                                             </a>

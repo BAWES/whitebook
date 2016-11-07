@@ -2,13 +2,8 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\Breadcrumbs;
-use frontend\models\Category;
-use frontend\models\Vendor;
-use common\models\ChildCategory;
-use common\models\SubCategory;
 use common\models\VendorCategory;
-
+use common\components\LangFormat;
 $vendor_details = $vendor_detail;
 
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
@@ -102,13 +97,7 @@ if ($event_status > 0) {
                                         </div>
                                         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">
-                                                <p><?php
-                                                    if(Yii::$app->language == "en") {
-                                                        echo strip_tags($vendor_detail['short_description']);
-                                                    } else {
-                                                        echo strip_tags($vendor_detail['short_description_ar']);
-                                                    }
-                                                    ?></p>
+                                                <p><?=LangFormat::format(strip_tags($vendor_detail['short_description']),strip_tags($vendor_detail['short_description_ar'])); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -123,14 +112,7 @@ if ($event_status > 0) {
                                         </div>
                                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                                             <div class="panel-body">
-                                                <p><?php
-
-                                                    if(Yii::$app->language == "en") {
-                                                        echo strip_tags($vendor_detail['vendor_return_policy']);
-                                                    } else {
-                                                        echo strip_tags($vendor_detail['vendor_return_policy_ar']);
-                                                    }
-                                                    ?></p>
+                                                <p><?=LangFormat::format(strip_tags($vendor_detail['vendor_return_policy']),strip_tags($vendor_detail['vendor_return_policy_ar'])); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -234,10 +216,7 @@ if ($event_status > 0) {
                                                         <?php if (trim($vendor_detail['vendor_contact_address']) || $vendor_detail['vendor_contact_address'] != 'n/a') { ?>
                                                             <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
                                                                 <h5 class="margin-top-13">
-                                                                    <?php
-                                                                    $address = (Yii::$app->language == "en") ? 'vendor_contact_address' : 'vendor_contact_address_ar';
-                                                                    echo $vendor_detail[$address];
-                                                                    ?>
+                                                                    <?=LangFormat::format($vendor_detail['vendor_contact_address'],$vendor_detail['vendor_contact_address_ar']); ?>
                                                                 </h5>
                                                             </div>
                                                         <?php } ?>
@@ -327,12 +306,7 @@ if ($event_status > 0) {
                                                 $selected = '';
                                                 $attributes = '';
                                             }
-
-                                            if(Yii::$app->language == "en"){
-                                                $category_name = $category['category_name'];
-                                            }else{
-                                                $category_name = $category['category_name_ar'];
-                                            }
+                                            $category_name = LangFormat::format($category['category_name'],$category['category_name_ar']);
                                             ?>
                                             <option
                                                 data-icon="<?= $category['icon'] ?>"

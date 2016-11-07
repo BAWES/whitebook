@@ -4,7 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use common\models\Location;
 use common\models\CustomerCart;
-
+use common\components\LangFormat;
 ?>
 
 <div class="panel panel-default">
@@ -26,11 +26,7 @@ use common\models\CustomerCart;
                         <input type="hidden" class="hdn_address" name="address[<?= $item['cart_id'] ?>]" value="" />
 
                         <div class="item_name">
-                                <?php if(Yii::$app->language == 'en'){ 
-                                        echo $item['item_name'];
-                                } else{ 
-                                        echo $item['item_name_ar'];
-                                } ?>
+                            <?=LangFormat::format($item['item_name'],$item['item_name_ar']); ?>
                         </div>
 
                         <div class="address_block_wrapper">
@@ -47,13 +43,9 @@ use common\models\CustomerCart;
                                                                             
                                     echo $address['address_data'].'<br />';
 
-                                    if(Yii::$app->language == 'en'){ 
-                                            echo $address['location']['location'].'<br />';
-                                            echo $address['city']['city_name'];
-                                    }else{
-                                            echo $address['location']['location_ar'].'<br />';
-                                            echo $address['city']['city_name_ar'];
-                                    } ?>
+                                    echo LangFormat::format($address['location']['location'],$address['location']['location_ar']);
+                                    echo LangFormat::format($address['city']['city_name'],$address['city']['city_name_ar']);
+                                    ?>
                                 </div>
                         <?php } ?>
                                 

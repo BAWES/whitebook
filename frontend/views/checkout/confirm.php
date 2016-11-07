@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
+use common\components\LangFormat;
 ?>
 <h3>
 	<?= Yii::t('frontend', 'Payment method selected : <strong>{payment_method}</strong>', [
@@ -73,11 +74,7 @@ use common\components\CFormatter;
         		</td>
         		<td>
         			<a target="_blank" href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
-        				<?php if(Yii::$app->language == 'en') {
-        					echo $item['item_name'];
-        				} else {
-        					echo $item['item_name_ar']; 
-        				} ?>
+        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
         			</a>
 
                     <div class="visible-xs visible-sm">                         
@@ -94,16 +91,10 @@ use common\components\CFormatter;
         				?>
         				
         				<?= nl2br($address_data); ?> <br />
+                        <?=LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar);?><br/>
+                        <?=LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar);?><br/>
 
-                        <?php if(Yii::$app->language == 'en') { ?>
-            				<?= $delivery_area->location->location; ?> <br />
-            				<?= $delivery_area->location->city->city_name; ?> <br />
-                        <?php } else { ?>
-                            <?= $delivery_area->location->location_ar; ?> <br />
-                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
-                        <?php } ?>
-
-        				<?= $item['cart_delivery_date'] ?> <br />
+                        <?= $item['cart_delivery_date'] ?> <br />
         			
                         <?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
                         <?= date('h:m A', strtotime($item['timeslot_end_time'])); ?>

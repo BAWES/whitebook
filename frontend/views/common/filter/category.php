@@ -51,8 +51,7 @@ $get = Yii::$app->request->get();
 						foreach ($subcategory as $key => $value) {
 
 							if (isset($value['category_name'])) {
-								$lang_name = (Yii::$app->language == "en") ? 'category_name' : 'category_name_ar';
-								$category_name = ucfirst(strtolower($value[$lang_name]));
+								$category_name = \common\components\LangFormat::format(strtolower($value['category_name']),strtolower($value['category_name_ar']));
 								?>
 								<li for="<?= "class_" . $value['slug'] ?>">
 									<label class="label_check" for="checkbox-<?= $value['slug'] ?>"
@@ -77,7 +76,7 @@ $get = Yii::$app->request->get();
 								if ($_subcategory) {
 									echo  "<ul class=".$value['slug'].">";
 									foreach ($_subcategory as $_key => $_value) {
-										$_category_name = ucfirst(strtolower($_value[$lang_name]));
+										$_category_name = \common\components\LangFormat::format(strtolower($_value['category_name']),strtolower($_value['category_name_ar']));
 										?>
 										<li class="subcat" for="<?= "class_" . $value['slug'] ?>">
 											<label class="label_check"

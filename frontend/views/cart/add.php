@@ -1,7 +1,7 @@
 <?php 
 
 use common\models\Location;
-
+use common\components\LangFormat;
 ?>
 <div class="modal fade" id="productOptionModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -30,13 +30,8 @@ use common\models\Location;
                                    
                                     <?php 
 
-                                    foreach ($cities as $city) { 
-
-                                        if(Yii::$app->language == 'en') {
-                                            $city_name = $city['city_name'];
-                                        } else{ 
-                                            $city_name = $city['city_name_ar'];
-                                        }
+                                    foreach ($cities as $city) {
+                                        $city_name = LangFormat::format($city['city_name'],$city['city_name_ar']);
 
                                         //get areas
                                         $areas = Location::find()
@@ -45,26 +40,22 @@ use common\models\Location;
                                             ->asArray()
                                             ->all();
 
-                                    ?>    
+                                    ?>
                                         <optgroup label="<?= $city_name ?>">
 
-                                        <?php 
+                                        <?php
 
                                         foreach ($areas as $area) {
-                                            if(Yii::$app->language == 'en') { ?>
+                                            $area_name = LangFormat::format($area['location'],$area['location_ar']);
+                                            ?>
                                                 <option value="<?= $area['id'] ?>">
-                                                    <?= $area['location']; ?>
+                                                    <?= $area_name; ?>
                                                 </option>
-                                            <?php } else { ?>
-                                                <option value="<?= $area['id'] ?>">
-                                                    <?= $area['location_ar']; ?>
-                                                </option>
-                                            <?php } 
-                                        } ?>  
-                                        
+                                        <?php } ?>
+
                                         </optgroup>
 
-                                    <?php 
+                                    <?php
                                     } ?>
                                 </select>                                
                             </div>    
