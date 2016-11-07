@@ -161,7 +161,7 @@ class ThemesController extends BaseController
         ]);
        
         $vendor = Vendor::find()
-            ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
+            ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.vendor_name_ar,{{%vendor}}.slug')
             ->where(['in', '{{%vendor}}.vendor_id', $active_vendors])
             ->asArray()
             ->all();

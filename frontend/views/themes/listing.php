@@ -1,10 +1,4 @@
 <?php
-
-//use common\models\ChildCategory;
-//use common\models\SubCategory;
-use frontend\models\Category;
-//use common\models\Vendor;
-use frontend\models\Themes;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
