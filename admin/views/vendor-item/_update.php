@@ -294,13 +294,24 @@ function cmp($a, $b)
 				<div class="col-lg-5">
 					<p>Uploaded image list</p>
 					<table class="table table-bordered table-item-image">
-						<?php foreach ($model->images as $key => $value) { ?>
+						<thead>
+							<tr>
+								<th>Image</th>
+								<th>Sort order</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php $image_count = 0 ; foreach ($model->images as $key => $value) { ?>
 						<tr>
 							<td>
 								<div class="vendor_image_preview">
 									<img src="<?= Yii::getAlias("@s3/vendor_item_images_210/").$value->image_path ?>" />
 								</div>
-								<input type="hidden" name="images[]" value="<?= $value->image_path ?>" />
+								<input type="hidden" name="images[<?= $image_count ?>][image_path]" value="<?= $value->image_path ?>" />
+							</td>
+							<td>
+								<input type="text" name="images[<?= $image_count ?>][vendorimage_sort_order]" value="<?= $value->vendorimage_sort_order ?>" />
 							</td>
 							<td>
 								<button class="btn btn-danger btn-delete-image">
@@ -308,7 +319,8 @@ function cmp($a, $b)
 								</button>
 							</td>
 						</tr>
-						<?php } ?>
+						<?php $image_count++; } ?>
+						</tbody>
 					</table>
 				</div>
 			</div>
@@ -425,8 +437,8 @@ echo Html::hiddenInput('vendorcategory_url',Url::to(['/category/vendorcategory']
 echo Html::hiddenInput('loadsubcategory_url',Url::to(['/priority-item/loadsubcategory']), ['id'=>'loadsubcategory_url']);
 echo Html::hiddenInput('loadchildcategory_url',Url::to(['/priority-item/loadchildcategory']), ['id'=>'loadchildcategory_url']);
 echo Html::hiddenInput('renderquestion_url',Url::to(['/vendor-item/renderquestion']), ['id'=>'renderquestion_url']);
-echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
-
+echo Html::hiddenInput('croped_image_upload_url', Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
+echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
@@ -438,7 +450,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.2", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.3", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

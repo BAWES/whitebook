@@ -8453,3 +8453,7 @@ a.delivery_href:hover{
   width: 100px;
   height: 100px;
 }
+.table-item-image input[type="text"]{
+  width: 50px;  
+  text-align: center;
+}
