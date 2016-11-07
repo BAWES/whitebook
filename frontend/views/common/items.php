@@ -13,7 +13,7 @@ if(!empty($items->getModels()))  {
         ?>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301">
             <div class="events_items width-100-percent">
-                <div class="events_images text-center">
+                <div class="events_images text-center position-relative">
                     <div class="hover_events">
                         <div class="pluse_cont">
                             <?php if(Yii::$app->user->isGuest) { ?>
@@ -33,7 +33,7 @@ if(!empty($items->getModels()))  {
                             </div>
                             <?php } ?>
                         </div>
-                        <a href="<?= $item_url ?>" class="position-relative">
+                        <a href="<?= $item_url ?>" class="">
                             <?php
                             $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=208&h=208';
                             echo Html::img($path,['class'=>'item-img']);
@@ -91,16 +91,16 @@ img.item-img{width: 100%;}
 }
 .events_images .buy-text{
     position: absolute;
-    left: 12px;
-    top: 85px;
+    left: 9px;
+    bottom: 11px;
     color: #fff;
     font-weight: bold;
     font-size: 13px;
 }
 .events_images i{
     position: absolute;
-    top: 75px;
-    left: 7px;
+    bottom: 1px;
+    left: 4px;
     font-size: 39px;
     color: #000;
 }
