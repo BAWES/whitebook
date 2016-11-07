@@ -1,7 +1,7 @@
 <?php 
 
 use yii\helpers\Url;
-use frontend\models\Category;
+use common\components\LangFormat;
 
 ?>
 
@@ -20,13 +20,7 @@ use frontend\models\Category;
                     <?php
 
                     if(!empty($Category)) {
-
-                        if(Yii::$app->language == "en"){
-                            $category_name = $Category['category_name'];
-                        }else{
-                            $category_name = $Category['category_name_ar'];
-                        }
-
+                        $category_name = LangFormat::format($Category['category_name'],$Category['category_name_ar']);
                         ?>
                         <option
                             data-hidden="true"
@@ -50,13 +44,8 @@ use frontend\models\Category;
 
                         if ((isset($Category->category_id))  && $Category->category_id == $category['category_id']) {
                             continue;
-                        } 
-
-                        if(Yii::$app->language == "en"){
-                            $category_name = $category['category_name'];
-                        }else{
-                            $category_name = $category['category_name_ar'];
                         }
+                        $category_name = LangFormat::format($category['category_name'],$category['category_name_ar']);
                         ?>
                         <option
                             data-icon="<?= $category['icon'] ?>"

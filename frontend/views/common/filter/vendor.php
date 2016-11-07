@@ -26,9 +26,7 @@
 						$val = $get['vendor'];
 						$checked2 = (in_array($value['slug'],$val)) ? 'checked=checked' : '';
 					}
-					$name = (Yii::$app->language == "en") ? 'vendor_name' : 'vendor_name_ar';
-					$vendor_name = ucfirst(strtolower($value[$name]));
-
+					$vendor_name = \common\components\LangFormat::format(strtolower($value['vendor_name']),strtolower($value['vendor_name_ar']));
 					?>
 					<li>
 						<label class="label_check" for="checkbox-<?= $value['vendor_name'] ?>">

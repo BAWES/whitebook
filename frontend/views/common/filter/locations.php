@@ -77,12 +77,7 @@ if($customer_id) {
                         ?>
                             
                             <option <?=$checked?> value="<?= $value['id']; ?>">
-                                <?php 
-                                if(Yii::$app->language == 'en') { 
-                                    echo $value['location'];
-                                } else { 
-                                    echo $value['location_ar'];    
-                                } ?>                            
+                                <?=\common\components\LangFormat::format($value['location'],$value['location_ar']); ?>
                             </option>
                             <?php
                         }//foreach area ?>

@@ -143,16 +143,7 @@ $count_items = count($feature_group_sql_result);
 if (!empty($feature_group_sql_result)) {
 ?>
     <div class="feature_product_title">
-        <h2>
-        <?php
-
-            if(Yii::$app->language == "en"){
-                echo $value['group_name'];
-            }else{
-                echo $value['group_name_ar'];
-            }
-        ?>
-        </h2>
+        <h2><?=\common\components\LangFormat::format($value['group_name'],$value['group_name_ar']); ?></h2>
     </div>
 <?php } ?>
 
@@ -196,14 +187,8 @@ if (!empty($feature_group_sql_result)) {
                                         <?= Html::img($imglink); ?>
 
                                         <div class="deals_listing_cont">
-
-                                            <?php if(Yii::$app->language == "en"){ ?>
-                                                <?php echo $product_val['vendor_name']; ?>
-                                                <h3><?php echo $product_val['item_name']; ?></h3>
-                                            <?php }else{ ?>
-                                                <?php echo $product_val['vendor_name_ar']; ?>
-                                                <h3><?php echo $product_val['item_name_ar']; ?></h3>
-                                            <?php } ?>
+                                            <?=\common\components\LangFormat::format($product_val['vendor_name'],$product_val['vendor_name_ar']); ?>
+                                            <?=\common\components\LangFormat::format($product_val['item_name'],$product_val['item_name_ar']); ?>
                                             <p>
                                                 <?= CFormatter::format($product_val['item_price_per_unit']) ?>
                                             </p>
