@@ -30,7 +30,7 @@ return [
             'class' => 'codemix\localeurls\UrlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'enableStrictParsing' => true,
+            //'enableStrictParsing' => true,
 
             // Url Normalizer as Added in Yii 2.0.10
             'normalizer' => [

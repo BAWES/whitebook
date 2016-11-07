@@ -496,7 +496,7 @@ $this->registerJs("
     var vendor_id = '".$model['vendor_id']."';
     var customer_id = '".Yii::$app->user->id."';
     var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('users/addtobasket')."';
-    var getdeliverytimeslot_url = '".Url::toRoute('/product/getdeliverytimeslot')."';
+    var getdeliverytimeslot_url = '".Url::toRoute('/product/get-delivery-timeslot')."';
 
 ", View::POS_HEAD);
 
