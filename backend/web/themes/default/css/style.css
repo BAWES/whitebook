@@ -8469,3 +8469,7 @@ ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{backgro
   height: 100px;
 }
 
+.table-item-image input[type="text"]{
+  width: 50px;  
+  text-align: center;
+}

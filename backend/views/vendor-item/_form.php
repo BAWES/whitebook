@@ -182,13 +182,27 @@ if($model->isNewRecord){
 
 			<div class="tab-pane" id="4">
 				<div class="file-block" style="color:red; display: none;"> Please upload aleast a file</div>
+
+				<div class="alert alert-info">
+					<button class="close" data-dismiss="alert"></button>
+					Steps 
+					<ul>
+						<li>Select image by clicking on "Choose File" from top left side.</li>
+						<li>Move image in image preview area to get required image area, if image bigger than 530x530.</li>
+						<li>
+							Click on Upload button below preview area to upload image, wait for seconds. Image will get listed in right size.
+						</li>
+					</ul>
+				</div>
+
 				<div class="row">
 					<div class="col-lg-7">
 						
 						<p>Select, crop and upload image.</p>
 
 						<div class="image-editor">
-					        <input type="file" class="cropit-image-input">
+					        <input type="file" class="cropit-image-input" />
+					        <p style="color: red;">Minimum image size : 530 x 530</p>
 					        <div class="cropit-preview"></div>
 					        <div class="image-size-label">
 					          Resize image
@@ -200,13 +214,24 @@ if($model->isNewRecord){
 					<div class="col-lg-5">
 						<p>Uploaded image list</p>
 						<table class="table table-bordered table-item-image">
-							<?php foreach ($model->images as $key => $value) { ?>
+							<thead>
+								<tr>
+									<th>Image</th>
+									<th>Sort order</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $image_count = 0 ; foreach ($model->images as $key => $value) { ?>
 							<tr>
 								<td>
 									<div class="vendor_image_preview">
 										<img src="<?= Yii::getAlias("@s3/vendor_item_images_210/").$value->image_path ?>" />
 									</div>
-									<input type="hidden" name="images[]" value="<?= $value->image_path ?>" />
+									<input type="hidden" name="images[<?= $image_count ?>][image_path]" value="<?= $value->image_path ?>" />
+								</td>
+								<td>
+									<input type="text" name="images[<?= $image_count ?>][vendorimage_sort_order]" value="<?= $value->vendorimage_sort_order ?>" />
 								</td>
 								<td>
 									<button class="btn btn-danger btn-delete-image">
@@ -214,7 +239,8 @@ if($model->isNewRecord){
 									</button>
 								</td>
 							</tr>
-							<?php } ?>
+							<?php $image_count++; } ?>
+							</tbody>
 						</table>
 					</div>
 				</div>
@@ -255,6 +281,7 @@ echo Html::hiddenInput('render_question_url',Url::to(['vendoritem/renderquestion
 echo Html::hiddenInput('item_name_check_url',Url::to(['/vendoritem/itemnamecheck']),['id'=>'item_name_check_url']);
 echo Html::hiddenInput('image_order_url',Url::to(['/site/imageorder']),['id'=>'image_order_url']);
 echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
+echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
 
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
@@ -264,4 +291,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.3', ['depends' => [\yii\web\JqueryAsset::className()]]);
