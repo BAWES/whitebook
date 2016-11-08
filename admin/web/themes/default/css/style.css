@@ -8418,7 +8418,7 @@ a.delivery_href:hover{
     list-style: none;
 }
 
-.item_pending_count{
+.item_pending_count, .draft_item_count{
   background: red;
   color: white;
   border-radius: 100%;

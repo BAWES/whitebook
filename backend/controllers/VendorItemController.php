@@ -34,6 +34,7 @@ use common\models\CategoryPath;
 use common\models\VendorItemCapacityException;
 use common\models\CustomerCart;
 use common\models\EventItemlink;
+use common\models\VendorDraftItem;
 use backend\models\VendorItem;
 
 
@@ -69,6 +70,8 @@ class VendorItemController extends Controller
      */
     public function actionIndex()
     {
+        Yii::$app->session->setFlash('info', 'All changes done by vendor here will reflect on live site after admin approval.');
+        
         $searchModel = new VendorItemSearch();
 
         $dataProvider = $searchModel->searchVendor(Yii::$app->request->queryParams);
@@ -291,18 +294,32 @@ class VendorItemController extends Controller
      */
     public function actionUpdate($id)
     {
+        //check if item in draft
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $id])
+            ->one();
 
-         $model = $this->findModel($id);
-         $model1 = new Image();
-         $base = Yii::$app->basePath;
-         $len = rand(1,1000);
-         $item_id=$model->item_id;
+        //if not in draft and trying to post updated data
+        if(!$model && Yii::$app->request->isPost) {
+            $model = new VendorDraftItem();
+            $model->attributes = $this->findModel($id)->attributes;
+            $model->item_approved = 'Pending';
+        }
 
+        //if customer just viewing 
+        if(!$model) {
+            $model = $this->findModel($id);
+        }        
+     
+        $model1 = new Image();
+        $base = Yii::$app->basePath;
+        $len = rand(1,1000);
+        
         /* question and answer */
         $model_question = VendorItemQuestion::find()
-            ->where(['item_id' => $id,'answer_id' => Null,'question_answer_type' => 'selection'])
-            ->orwhere(['item_id' => $id,'question_answer_type' =>'text', 'answer_id' => Null])
-            ->orwhere(['item_id' => $id,'question_answer_type' =>'image', 'answer_id' => Null])
+            ->where(['item_id' => $model->item_id,'answer_id' => Null,'question_answer_type' => 'selection'])
+            ->orwhere(['item_id' => $model->item_id,'question_answer_type' =>'text', 'answer_id' => Null])
+            ->orwhere(['item_id' => $model->item_id,'question_answer_type' =>'image', 'answer_id' => Null])
             ->asArray()
             ->all();
 
@@ -310,9 +327,16 @@ class VendorItemController extends Controller
         $vendorname = Vendor::loadvendorname();
         $categoryname = Category::vendorcategory(Yii::$app->user->getId());
         
-        $loadpricevalues = VendorItemPricing::loadpricevalues($item_id);
+        $loadpricevalues = VendorItemPricing::loadpricevalues($model->item_id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        //to save VendorItem data to VendorDraftItem
+        if(Yii::$app->request->post('VendorItem')) {
+            $posted_data = ['VendorDraftItem' => Yii::$app->request->post('VendorItem')];
+        }else{
+            $posted_data = Yii::$app->request->post();
+        }
+        
+        if ($model->load($posted_data) && $model->save(false)) {
 
             $vendor_item = Yii::$app->request->post('VendorItem');
 
@@ -328,108 +352,102 @@ class VendorItemController extends Controller
             /* Vendor make it any changes item status should be deactivaed */
             $model->item_approved = 'Pending';
 
-            if ($model->save()) {
+            //remove all old category 
+            VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
 
-                $itemid = $model->item_id;
+            //add all category
+            $category = Yii::$app->request->post('category');
 
-                //remove all old category 
-                VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+            if(!$category) {
+                $category = array();
+            }
 
-                //add all category
-                $category = Yii::$app->request->post('category');
+            foreach($category as $key => $value) {
+                $vic = new VendorItemToCategory();
+                $vic->item_id = $model->item_id;
+                $vic->category_id = $value;
+                $vic->save();
+            }
 
-                if(!$category) {
-                    $category = array();
-                }
+            $file = UploadedFile::getInstances($model, 'image_path');
+            /* Begin Upload guide image table  */
+            $guide_image = UploadedFile::getInstances($model, 'guide_image');
 
-                foreach($category as $key => $value) {
-                    $vic = new VendorItemToCategory();
-                    $vic->item_id = $model->item_id;
-                    $vic->category_id = $value;
-                    $vic->save();
-                }
+            if ($guide_image) {
+                $i = 0;
+                foreach ($guide_image as $files) {
+                    if($files instanceof yii\web\UploadedFile) {
+                        $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
 
-                $file = UploadedFile::getInstances($model, 'image_path');
-                /* Begin Upload guide image table  */
-                $guide_image = UploadedFile::getInstances($model, 'guide_image');
+                        //Resize file using imagine
+                        $resize = true;
 
-                if ($guide_image) {
-                    $i = 0;
-                    foreach ($guide_image as $files) {
-                        if($files instanceof yii\web\UploadedFile) {
-                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
+                        if ($resize) {
 
-                            //Resize file using imagine
-                            $resize = true;
+                            $newTmpName = $files->tempName . "." . $files->extension;
 
-                            if ($resize) {
+                            $imagine = new \Imagine\Gd\Imagine();
+                            $image = $imagine->open($files->tempName);
+                            $image->resize($image->getSize()->widen(210));
+                            $image->save($newTmpName);
 
-                                $newTmpName = $files->tempName . "." . $files->extension;
-
-                                $imagine = new \Imagine\Gd\Imagine();
-                                $image = $imagine->open($files->tempName);
-                                $image->resize($image->getSize()->widen(210));
-                                $image->save($newTmpName);
-
-                                //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName;
-                            }
-
-                            //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADSALESGUIDE . $filename);
-
-                            if($awsResult){
-                                $model->guide_image = $filename;
-                            }
-
-                            $image_tbl = new Image();
-                            $image_tbl->image_path = $filename;
-                            $image_tbl->item_id = $itemid;
-                            $image_tbl->module_type = 'guides';
-                            $image_tbl->vendorimage_sort_order = $i;
-                            $image_tbl->image_user_id = Yii::$app->user->getId();
-                            $image_tbl->save();
-                            ++$i;
+                            //Overwrite old filename for S3 uploading
+                            $files->tempName = $newTmpName;
                         }
+
+                        //Save to S3
+                        $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADSALESGUIDE . $filename);
+
+                        if($awsResult){
+                            $model->guide_image = $filename;
+                        }
+
+                        $image_tbl = new Image();
+                        $image_tbl->image_path = $filename;
+                        $image_tbl->item_id = $model->item_id;
+                        $image_tbl->module_type = 'guides';
+                        $image_tbl->vendorimage_sort_order = $i;
+                        $image_tbl->image_user_id = Yii::$app->user->getId();
+                        $image_tbl->save();
+                        ++$i;
                     }
                 }
+            }
 
-                /* Begin Upload guide image table  */
+            /* Begin Upload guide image table  */
 
-                /* Delete item price table records if its available any price for item type rental or service */
-                if($model->type_id == 2) {
-                    VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
-                }
+            /* Delete item price table records if its available any price for item type rental or service */
+            if($model->type_id == 2) {
+                VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
+            }
 
-                //remove old images
-                Image::deleteAll(['item_id' => $id]);
+            //remove old images
+            Image::deleteAll(['item_id' => $model->item_id]);
 
-                //add new images
-                $images = Yii::$app->request->post('images');
+            //add new images
+            $images = Yii::$app->request->post('images');
 
-                foreach ($images as $key => $value) {
-                    $image = new Image();
-                    $image->image_path = $value['image_path'];
-                    $image->item_id = $model->item_id;
-                    $image->image_user_id = Yii::$app->user->getId();
-                    $image->module_type = 'vendor_item';
-                    $image->image_user_type = 'admin';
-                    $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
-                    $image->save();
-                }
-
-            }//end model->save()
+            foreach ($images as $key => $value) {
+                $image = new Image();
+                $image->image_path = $value['image_path'];
+                $image->item_id = $model->item_id;
+                $image->image_user_id = Yii::$app->user->getId();
+                $image->module_type = 'vendor_item';
+                $image->image_user_type = 'admin';
+                $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
+                $image->save();
+            }
 
             //BEGIN Manage item pricing table
             $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
 
             if(!empty($vendoritem_item_price['from'])) {
 
-                VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
+                VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
 
                 for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
                     $vendor_item_pricing = new VendorItemPricing();
-                    $vendor_item_pricing->item_id =  $itemid;
+                    $vendor_item_pricing->item_id =  $model->item_id;
                     $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
                     $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
                     $vendor_item_pricing->pricing_price_per_unit = $vendoritem_item_price['price'][$opt];
@@ -440,7 +458,7 @@ class VendorItemController extends Controller
 
             Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
-            Yii::info('[Item Updated] Vendor updated '.$model->item_name.' item information '. $id, __METHOD__);
+            Yii::info('[Item Updated] Vendor updated '.$model->item_name.' item information '. $model->item_id, __METHOD__);
 
             return $this->redirect(['index']);
 
@@ -462,8 +480,8 @@ class VendorItemController extends Controller
                 'itemtype' => $itemtype,
                 'vendorname' => $vendorname,
                 'categoryname' => $categoryname,
-                'guide_images' => Image::findAll(['item_id' => $id,'module_type'=>'guides']),
-                'images' => Image::findAll(['item_id' => $id,'module_type'=>'vendor_item']),
+                'guide_images' => Image::findAll(['item_id' => $model->item_id,'module_type'=>'guides']),
+                'images' => Image::findAll(['item_id' => $model->item_id,'module_type'=>'vendor_item']),
                 'model1' => $model1,
                 'loadpricevalues' => $loadpricevalues,
                 'model_question' => $model_question,
@@ -492,6 +510,7 @@ class VendorItemController extends Controller
         PriorityItem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
+        VendorDraftItem::deleteAll(['item_id' => $id]); 
         $model->delete();
         Yii::$app->session->setFlash('success', "Item deleted successfully!");
 

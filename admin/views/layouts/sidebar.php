@@ -4,8 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\Menu;
 use admin\models\VendorItem;
 use admin\models\AccessControlList;
+use common\models\VendorDraftItem;
 
 $item_pending_count = VendorItem::item_pending_count();
+$draft_item_count = VendorDraftItem::find()->count();
 
 ?>
 <div class="page-sidebar" id="main-menu">
@@ -32,6 +34,10 @@ $item_pending_count = VendorItem::item_pending_count();
 	        [	
 	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Item Pending</span><span class="item_pending_count">'.$item_pending_count.'</span>', 
 	        	'url' => ['vendor-item-pending/index'],
+	        ],
+	        [	
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Draft Item</span><span class="draft_item_count">'.$draft_item_count.'</span>', 
+	        	'url' => ['vendor-draft-item/index'],
 	        ],
 	        [	
 	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Order</span>', 

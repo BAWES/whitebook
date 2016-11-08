@@ -44,10 +44,15 @@ $this->beginPage();
 		<div class="page-content">
 			<div class="content">
 				<?php
+
+				if($flash = Yii::$app->session->getFlash('info'))
+					echo Alert::widget(['options' => ['class' => 'alert-info'], 'body' => $flash,'closeButton'=>['label'=>'']]);
+
 				if($flash = Yii::$app->session->getFlash('success'))
-				echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => $flash,'closeButton'=>['label'=>'']]);
+					echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => $flash,'closeButton'=>['label'=>'']]);
+
 				if($flash = Yii::$app->session->getFlash('danger'))
-				echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash,'closeButton'=>['label'=>'']]);
+					echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash,'closeButton'=>['label'=>'']]);
 				?>
 				<ul class="breadcrumb">
 					<?=
