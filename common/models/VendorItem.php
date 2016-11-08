@@ -229,15 +229,6 @@ class VendorItem extends \yii\db\ActiveRecord
         return $this->hasMany(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
     }
 
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getCategory()
-    {
-        return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
-    }
-
     /**
     * @return \yii\db\ActiveQuery
     */

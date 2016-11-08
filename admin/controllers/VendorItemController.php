@@ -35,6 +35,7 @@ use common\models\CategoryPath;
 use common\models\VendorItemCapacityException;
 use common\models\CustomerCart;
 use common\models\EventItemlink;
+use common\models\VendorDraftItem;
 
 /**
 * VendoritemController implements the CRUD actions for VendorItem model.
@@ -656,6 +657,7 @@ class VendorItemController extends Controller
         PriorityItem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
+        VendorDraftItem::deleteAll(['item_id' => $id]);
         $model->delete();
         Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
         return $this->redirect(['index']);

@@ -12,6 +12,7 @@ $this->title = 'Manage items';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?= Html::csrfMetaTags() ?>
+
 <div class="vendoritem-index">
 <p>
 	<?= Html::a('Create item', ['create'], ['class' => 'btn btn-success']) ?>
