@@ -336,6 +336,11 @@ $action = Yii::$app->controller->action->id;
 <nav class="ma5-menu-mobile mobile-menu">
     <div class="navbar-collapse">
         <ul class="nav navbar-nav ma5-ul" style=" border:none;">
+            <li class="ma5-li-0">
+                <a title="<?php echo Yii::t('frontend', 'Home'); ?>" href="<?= Url::toRoute(['/site/index'], true); ?>">
+                    <span> <?php echo Yii::t('frontend', 'Home'); ?></span>
+                </a>
+            </li>
             <li class="ma5-li-1"> 
                 <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Browse'); ?></a>
                 <ul class="ma5-ul-1 navbar-nav">
