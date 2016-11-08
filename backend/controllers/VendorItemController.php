@@ -246,12 +246,12 @@ class VendorItemController extends Controller
 
                 foreach ($images as $key => $value) {
                     $image = new Image();
-                    $image->image_path = $value;
+                    $image->image_path = $value['image_path'];
                     $image->item_id = $model->item_id;
                     $image->image_user_id = Yii::$app->user->getId();
                     $image->module_type = 'vendor_item';
                     $image->image_user_type = 'admin';
-                    $image->vendorimage_sort_order = 0;
+                    $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
                     $image->save();
                 }
 
@@ -409,12 +409,12 @@ class VendorItemController extends Controller
 
                 foreach ($images as $key => $value) {
                     $image = new Image();
-                    $image->image_path = $value;
-                    $image->item_id = $id;
+                    $image->image_path = $value['image_path'];
+                    $image->item_id = $model->item_id;
                     $image->image_user_id = Yii::$app->user->getId();
                     $image->module_type = 'vendor_item';
-                    $image->image_user_type = 'vendor';
-                    $image->vendorimage_sort_order = 0;
+                    $image->image_user_type = 'admin';
+                    $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
                     $image->save();
                 }
 

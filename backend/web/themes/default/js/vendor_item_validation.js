@@ -709,6 +709,9 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
  */
  $(function() {
  	
+ 	var croped_image_upload_url = $('#croped_image_upload_url').val();
+    var image_count = $('#image_count').val();
+
     $('.image-editor').cropit({ imageBackground: true });
 
     $('.btn-crop-upload').click(function(){
@@ -718,8 +721,6 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
 
     	var imageData = $('.image-editor').cropit('export');
 
-    	var croped_image_upload_url = $('#croped_image_upload_url').val();
-
     	//upload image 
     	$.post(croped_image_upload_url, { image : imageData }, function(json) {
 
@@ -728,7 +729,10 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
 			html +=	'		<div class="vendor_image_preview">';
 			html +=	'			<img src="' + json.image_url + '" />';
 			html +=	'		</div>';
-			html +=	'		<input type="hidden" name="images[]" value="' + json.image + '" />';
+			html +=	'		<input type="hidden" name="images[' + image_count + '][image_path]" value="' + json.image + '" />';
+			html +=	'	</td>';
+			html +=	'	<td>';
+			html +=	'		<input type="text" name="images[' + image_count + '][vendorimage_sort_order]" value="" />';
 			html +=	'	</td>';
 			html +=	'	<td>';
 			html +=	'		<button class="btn btn-danger btn-delete-image">';
@@ -737,10 +741,12 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
 			html +=	'	</td>';
 			html +=	'</tr>';
 
-    		$('.table-item-image').append(html);
+    		$('.table-item-image tbody').append(html);
 
     		$('.btn-crop-upload').html('Upload');
     		$('.btn-crop-upload').removeAttr('disabled');
+
+    		image_count++;
     	});
     });
 
