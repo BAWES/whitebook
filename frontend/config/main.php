@@ -60,6 +60,7 @@ return [
                   'themes/<slug:[A-Za-z0-9\_-]+>/<themes:[A-Za-z0-9\_-]+>' => 'themes/detail',
                   'vendor/<slug:[A-Za-z0-9\_-]+>/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',
                   'events/detail/<slug:[A-Za-z0-9\_-]+>' => 'events/detail',
+                  'sitemap.xml' => 'sitemap/index',
                   'edit-profile' => 'users/edit_profile',
                   'create-event' => 'users/create_event',
                   'event-slider' => 'product/event_slider',
