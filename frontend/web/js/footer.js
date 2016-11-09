@@ -1832,10 +1832,11 @@ function filter(){
         vendor_name = vendor_profile;
     }
 
-    if (slug != '') {
-        url_path += '&slug='+slug;
-        ajax_data.slug = slug;
-    }
+
+    //if (slug != '') {
+    //    url_path += '&slug='+slug;
+    //    ajax_data.slug = slug;
+    //}
 
     if (for_sale != '') {
         url_path += '&for_sale='+for_sale;
@@ -1851,12 +1852,12 @@ function filter(){
         url_path += '&category[]=' + category_name;
         ajax_data.category = category_name;
     }
-    if(theme_name != '') {
+    if(theme_name != '' && current_page != 'theme') {
         url_path += '&themes=' + theme_name;
         ajax_data.themes = theme_name;
     }
 
-    if(vendor_name != '') {
+    if(vendor_name != '' && current_page != 'vendor') {
         url_path += '&vendor=' + vendor_name;
         ajax_data.vendor = vendor_name;
     }
@@ -1877,14 +1878,25 @@ function filter(){
     }
 
     var path = load_items;
+    var url = path +'/'+slug+'?filter=1';
+
+    if (current_page == 'browse') {
+        path = path +'/'+slug+'?filter=1&'+$.param(ajax_data)
+    } else if (current_page == 'theme') {
+        var url = path +'/'+slug+'/'+theme_name+'?filter=1';
+        path = path +'/'+slug+'/'+theme_name+'?filter=1&'+$.param(ajax_data);
+    } else if (current_page == 'vendor') {
+        var url = path +'/'+slug+'/'+vendor_name+'?filter=1';
+        path = path +'/'+slug+'/'+vendor_name+'?filter=1&'+$.param(ajax_data);
+    }
 
     jQuery.ajax({
         type:'GET',
-        url:path,
+        url:url,
         data:ajax_data,
         success:function(data){
             //window.history.pushState('test', 'Title', $.param(ajax_data));
-            window.history.pushState(null, null, path+'?'+$.param(ajax_data));
+            window.history.pushState(null, null, path);
             jQuery('.listing_right').html(data);
             jQuery('#planloader').hide();
             jQuery('.listing_right').css({'opacity' : '1.0', 'position' : 'relative'});
