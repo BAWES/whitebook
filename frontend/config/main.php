@@ -52,6 +52,7 @@ return [
             // Url Rules for Frontend
             'rules' => [
                   '' => 'site/index',
+                  'sitemap.xml' => 'sitemap/index',
                   'edit-profile' => 'users/edit_profile',
                   'create-event' => 'users/create_event',
                   'event-slider' => 'product/event_slider',
