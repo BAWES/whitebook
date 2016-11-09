@@ -52,6 +52,14 @@ return [
             // Url Rules for Frontend
             'rules' => [
                   '' => 'site/index',
+                  'themes' => 'themes/index',
+                  'directories' => 'directory/index',
+                  'cart' => 'cart/index',
+                  'browse/<slug:[A-Za-z0-9\_-]+>' => 'browse/list',
+                  'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',
+                  'themes/<slug:[A-Za-z0-9\_-]+>/<themes:[A-Za-z0-9\_-]+>' => 'themes/detail',
+                  'vendor/<slug:[A-Za-z0-9\_-]+>/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',
+                  'events/detail/<slug:[A-Za-z0-9\_-]+>' => 'events/detail',
                   'edit-profile' => 'users/edit_profile',
                   'create-event' => 'users/create_event',
                   'event-slider' => 'product/event_slider',
@@ -86,7 +94,6 @@ return [
                   // list of category products page
                   'products/<slug:[A-Za-z0-9\_-]+>' => 'plan/plan/',
                   'experience' => 'site/experience',
-                  'directory' => 'site/directory',
                   'contact-us' => 'site/contact',
 
                   // particular products detail page

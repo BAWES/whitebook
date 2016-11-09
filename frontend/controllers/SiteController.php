@@ -436,6 +436,15 @@ class SiteController extends BaseController
         
         return $options;
     }
+
+    public function actionNormaliseUrl(){
+
+
+        echo "<pre>";
+        print_r($_GET);
+        echo "</pre>";
+        exit;
+    }
 }
 
 

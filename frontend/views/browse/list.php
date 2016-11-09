@@ -134,8 +134,10 @@ $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-var load_items = '".Url::to(['browse/list'])."';
+var load_items = '".Url::to(['/browse'],true)."';
+var normalize_url = '".Url::to(['site/normalise-url'])."';
 var product_slug = '".$get['slug']."';
+var current_page = 'browse';
 ", View::POS_BEGIN);
 
 $this->registerJs("

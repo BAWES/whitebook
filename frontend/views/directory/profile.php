@@ -364,9 +364,11 @@ $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends
 $get = Yii::$app->request->get();
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-var load_items = '".Url::to(['directory/profile'])."';
+//var load_items = '".Url::to(['directory/profile'])."';
+var load_items = '".Url::to(['/vendor'])."';
 var product_slug = '".$get['slug']."';
 var vendor_profile = '".$get['vendor']."';
+var current_page = 'vendor';
 ", yii\web\View::POS_BEGIN);
 
 $this->registerCss("
