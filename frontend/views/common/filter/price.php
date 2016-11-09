@@ -39,7 +39,7 @@ if($result && $result['max'] != $result['min']) { ?>
             </a>
         </div>
     </div>
-    <div class="panel-collapse collapse height-0"  id="price" area-expanded="true">
+    <div class="panel-collapse collapse"  id="price" area-expanded="true">
         <div class="panel-body">
             <input type="hidden" class="price_slider" value="<?= $result['min'].','.$result['max'] ?>" />
         </div>
