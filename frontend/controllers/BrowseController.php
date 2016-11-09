@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\components\LangFormat;
 use Yii;
 use yii\helpers\Url;
 use frontend\models\VendorItem;
@@ -17,6 +18,7 @@ use common\models\VendorItemThemes;
 use common\models\Location;
 use common\models\CategoryPath;
 use common\models\CustomerAddress;
+use yii\helpers\VarDumper;
 
 /**
 * Site controller.
@@ -246,12 +248,15 @@ class BrowseController extends BaseController
 
     public function actionDetail($slug)
     {
-
         $model = VendorItem::findOne(['slug' => $slug]);
 
         if (empty($model)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'] .' | '.LangFormat::format($model->item_name,$model->item_name_ar);
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => LangFormat::format(strip_tags($model->item_description),strip_tags($model->item_description_ar))]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
         if (
             $model->item_approved == 'Yes' &&

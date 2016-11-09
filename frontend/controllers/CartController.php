@@ -52,6 +52,10 @@ class CartController extends BaseController
     //list all products
     public function actionIndex()
     {
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Cart';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
         $items = CustomerCart::items();
 
         return $this->render('index', [

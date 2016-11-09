@@ -61,6 +61,10 @@ class EventsController extends BaseController
 
     public function actionIndex($type = '', $events ='', $thingsilike ='')
     {
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Events';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
         if (Yii::$app->user->isGuest) {
             Yii::$app->session->set('show_login_modal', 1);//to display login modal
             return $this->goHome();
@@ -165,6 +169,11 @@ class EventsController extends BaseController
         }
 
         $event_details = Events::findOne(['customer_id' => Yii::$app->user->identity->customer_id, 'slug' => $slug]);
+
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$event_details->event_name;
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
 
         if (empty($event_details)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
