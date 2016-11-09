@@ -76,14 +76,16 @@ class ThemesController extends BaseController
 
         $theme = Themes::findOne(['slug' => $themes, 'trash' => 'Default']);
 
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$theme->theme_name;
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
         $theme_result  = VendorItemThemes::find()->select('item_id')
             ->where(['trash' => "Default"])
             ->andWhere(['theme_id' => $theme->theme_id])
             ->asArray()
             ->all();
         $theme_items = ArrayHelper::map($theme_result,'item_id','item_id');
-
-        Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.ucfirst($theme->theme_name);
 
 
         if ($slug != 'all') {

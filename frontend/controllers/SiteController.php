@@ -34,7 +34,11 @@ class SiteController extends BaseController
     }
 
     public function actionIndex()
-    {     
+    {
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Home';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
         $website_model = new Website();
         $featuremodel = new FeatureGroupItem();
         $product_list = $featuremodel->get_featured_product_id();
@@ -60,6 +64,10 @@ class SiteController extends BaseController
     */
     public function actionActivate()
     {
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Activate';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
         Yii::$app->session->set('reset_password_mail', '');
 
         $website_model = new Website();
@@ -95,6 +103,10 @@ class SiteController extends BaseController
 
     public function actionContact()
     {
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Contact';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
         if (Yii::$app->request->isAjax) {
 
             $date = date('Y/m/d');
@@ -198,6 +210,10 @@ class SiteController extends BaseController
 
     public function actionInfo()
     {
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Info';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
         return $this->render('test');
     }
 
@@ -435,15 +451,6 @@ class SiteController extends BaseController
         }
         
         return $options;
-    }
-
-    public function actionNormaliseUrl(){
-
-
-        echo "<pre>";
-        print_r($_GET);
-        echo "</pre>";
-        exit;
     }
 }
 

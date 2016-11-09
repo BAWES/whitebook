@@ -30,7 +30,7 @@ class DirectoryController extends BaseController
 
     public function actionIndex()
     {
-        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Directory';
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Vendor';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
