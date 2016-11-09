@@ -56,17 +56,17 @@ use yii\helpers\Url;
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost/whitebook/frontend/web/terms-conditions</loc>
+    <loc><![CDATA[<?= Url::to(['/terms-conditions'], true); ?>]]></loc>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost/whitebook/frontend/web/about-us</loc>
+    <loc><![CDATA[<?= Url::to(['/about-us'], true); ?>]]></loc>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost/whitebook/frontend/web/privacy-policy</loc>
+    <loc><![CDATA[<?= Url::to(['/privacy-policy'], true); ?>]]></loc>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
