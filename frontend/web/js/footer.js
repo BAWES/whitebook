@@ -1886,8 +1886,8 @@ function filter(){
         var url = path +'/'+slug+'/'+theme_name+'?filter=1';
         path = path +'/'+slug+'/'+theme_name+'?filter=1&'+$.param(ajax_data);
     } else if (current_page == 'vendor') {
-        var url = path +'/'+slug+'/'+vendor_name+'?filter=1';
-        path = path +'/'+slug+'/'+vendor_name+'?filter=1&'+$.param(ajax_data);
+        var url = path +'/'+vendor_name+'?slug='+slug+'/'+'&filter=1';
+        path = path +'/'+vendor_name+'?slug='+slug+'&filter=1&'+$.param(ajax_data);
     }
 
     jQuery.ajax({
