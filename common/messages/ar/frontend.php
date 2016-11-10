@@ -328,4 +328,7 @@ return [
     'Your email does not exist' => 'لا وجود للبريد الإلكتروني',
     '{item_name} already exist with {event_name}' => ' {event_name}موجود بالفعل مع {item_name}',
     '{item_name} has been added to {event_name}' => ' {event_name}قد أضيف إلى {item_name} ',
+    '404 Not Found' => '404 لم يتم العثور على',
+    'The above error occurred while the Web server was processing your request' => 'حدث الخطأ أعلاه في حين ملقم ويب تم تجهيز طلبك',
+    'Please contact us if you think this is a server error. Thank you' => 'يرجى الاتصال بنا إذا كنت تعتقد أن هذا هو خطأ في الخادم. شكرا',
 ];
