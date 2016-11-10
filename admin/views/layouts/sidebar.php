@@ -78,9 +78,7 @@ $draft_item_count = VendorDraftItem::find()->count();
 				'options'=> ['class'=>'dropdown'],
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'items' => [
-					['label' => 'Level I', 'url' => ['category/index']],
-					['label' => 'Level II', 'url' => ['category/manage_subcategory']],
-					['label' => 'Level III', 'url' => ['category/child_category_index']],
+					['label' => 'All Categories', 'url' => ['category/index']],
 				]
 			],
 			[
