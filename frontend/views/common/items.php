@@ -101,7 +101,7 @@ img.item-img{width: 100%;}
     position: absolute;
     bottom: 1px;
     left: 4px;
-    font-size: 39px;
+    font-size: 39px!important;
     color: #000;
 }
 ");
