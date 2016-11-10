@@ -35,7 +35,7 @@ use common\components\LangFormat;
                        data-icon=""
                        value="<?= Url::toRoute(['browse/list', 'slug'=> 'all']) ?>"
                        name="category" >
-                       All
+                       <?=Yii::t('frontend','All')?>
                    </option>
 
                     <?php 
@@ -83,6 +83,6 @@ use common\components\LangFormat;
             </nav>
         </div>
 
-        <button class="btn btn-close-filter visible-sm visible-xs">Close filter</button>
+        <button class="btn btn-close-filter visible-sm visible-xs"><?=Yii::t('frontend','Close filter')?></button>
     </div>
 </div>

@@ -276,7 +276,7 @@ $this->registerJs("
 
 					<div class="col-md-2 padding-left-0">
 						<div class="form-group">
-							<label>Delivery Date</label>
+							<label><?=Yii::t('frontend','Delivery Date')?></label>
 							<div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
 								<input value="" readonly="true" name="delivery_date" id="delivery_date" class="date-picker-box form-control required"  placeholder="Date" >
 								<i class="fa fa-calendar" aria-hidden="true"></i>
@@ -286,8 +286,8 @@ $this->registerJs("
 					</div>
 					<div class="col-md-5 padding-left-0 timeslot_id_div">
 						<div class="form-group">
-							<label>Delivery Time Slot</label>
-							<div class="text padding-top-12">Please Select Delivery Date</div>
+							<label><?=Yii::t('frontend','Delivery Time Slot')?></label>
+							<div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date')?></div>
 						</div>
 					</div>
 					<div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">

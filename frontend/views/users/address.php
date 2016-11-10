@@ -43,21 +43,21 @@ $this->title ='Address Book | Whitebook';
                                         </a>
                                         
                                         <?php if($address['address_name']) { ?>
-                                            <b>Address Name:</b> <br />
+                                            <b><?=Yii::t('frontend','Address Name:')?></b> <br />
                                             <?= $address['address_name'] ?>
                                             <br />
                                             <br />
                                         <?php } ?>
 
                                         <!-- address type -->
-                                        <b>Address Type:</b> <br />
+                                        <b><?=Yii::t('frontend','Address Type:')?></b> <br />
                                         <?= AddressType::type_name($address['address_type_id']); ?>
 
                                         <br />
                                         <br />
 
                                         <!-- address -->
-                                        <b>Address:</b> <br />
+                                        <b><?=Yii::t('frontend','Address:')?></b> <br />
                                         <?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
                             			
                                         <!-- address question response -->
@@ -76,12 +76,12 @@ $this->title ='Address Book | Whitebook';
 
                                         <br />
 
-                                        <b>Area:</b> <br />
+                                        <b><?=Yii::t('frontend','Area:')?></b> <br />
                                         <?=\common\components\LangFormat::format($address['location'],$address['location_ar']); ?><br/>
                                         
                                         <br />
 
-                                        <b>City:</b> <br />
+                                        <b><?=Yii::t('frontend','City:')?></b> <br />
                                         <?=\common\components\LangFormat::format($address['city_name'],$address['city_name_ar']); ?><br/>
                             		</div>
                             	</td>

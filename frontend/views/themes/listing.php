@@ -63,7 +63,7 @@ $get = Yii::$app->request->get();
 						</div>
 					</div><!-- END .filter_section -->
 
-					<button class="btn btn-close-filter visible-sm visible-xs">Close filter</button>
+					<button class="btn btn-close-filter visible-sm visible-xs"><?=Yii::t('frontend','Close filter')?></button>
 
 				</div><!-- END .filter_content -->
 			</div><!-- END .left_side_cate -->

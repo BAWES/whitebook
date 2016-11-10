@@ -37,7 +37,7 @@ else {
     ?>
 
     <li>
-        No Record found
+        <?=Yii::t('frontend','No Record found')?>
     </li>
 <?php }
 $this->registerCss("

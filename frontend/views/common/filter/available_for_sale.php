@@ -25,7 +25,7 @@
 								<input name="for_sale" data-element="input" class="items"
 									   id="checkbox-available-for-sale"
 										value="Yes"
-									   type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >Available For Sale
+									   type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> ><?=Yii::t('frontend','Available For Sale')?>
 							</label>
 						</li>
 
