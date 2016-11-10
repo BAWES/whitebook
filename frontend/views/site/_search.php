@@ -13,7 +13,7 @@ $date = $session->get('deliver-date');
             <div class="left-offset-25">&nbsp;</div>
             <div class="col-lg-3 col-sm-3 col-md-3 location-div">
                 <select class="selectpicker trigger" name="location" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
-                    <option value="">All</option>
+                    <option value=""><?=Yii::t('frontend','All')?></option>
                     <?php
                     $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
                     $list = '';
