@@ -1,13 +1,13 @@
 <?php
+
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\DetailView;
 use admin\models\VendorItem;
 use common\models\VendorItemThemes;
 use common\models\VendorItemPricing;
 use common\models\FeatureGroupItem;
-
-
 use common\models\Image;
 use common\models\VendorItemQuestion;
 use common\models\VendorItemQuestionGuide;
@@ -180,37 +180,55 @@ $this->params['breadcrumbs'][] = $model->item_name;
 <!--End fourth Tab -->
 </div>
 
-<script>
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");
-    $(function (){ /* Begin when loading page first tab opened */
-        $('.nav-tabs li:first').addClass("active");
-        $(".tab-content div:first").addClass("active");
-	});/* End when loading page first tab opened */
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="z-index: 99999;">
+      <div class="modal-content">
+        <div class="modal-body"></div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
+<?php 
 
-function questionView(q_id,tis) { // single question view
+$this->registerJs("
 
-	var check = $('.show_ques'+q_id).html();
-	if (check=='') {
-        var path = "<?php echo Url::to(['/vendor-item/viewrenderquestion']); ?> ";
-        $.ajax({
-            type : 'POST',
-            url :  path,
-            data: { q_id: q_id ,_csrf : csrfToken}, //data to be send
-            success: function( data ) {
+  var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
+  
+  /* Begin when loading page first tab opened */
+  $(function (){ 
+        $('.nav-tabs li:first').addClass('active');
+        $('.tab-content div:first').addClass('active');
+  });
+
+  function questionView(q_id,tis) { // single question view
+
+    var check = $('.show_ques'+q_id).html();
+    
+    if (check=='') {
+          
+      var path = '".Url::to(['/vendor-item/viewrenderquestion'])."';
+
+      $.ajax({
+          type : 'POST',
+          url :  path,
+          data: { q_id: q_id ,_csrf : csrfToken}, //data to be send
+          success: function( data ) {
             $('.show_ques'+q_id).html(data);
-            $(tis).toggleClass("expanded");
+            $(tis).toggleClass('expanded');
             return false;
-            }
-        })
-	} else {
-        $('.show_ques'+q_id).toggle();
-        $(tis).toggleClass("expanded");
-	}
-}
-</script>
- <style>
-      ul {
+          }
+      });
+
+    } else {
+      $('.show_ques'+q_id).toggle();
+      $(tis).toggleClass('expanded');
+    }
+  }
+
+", View::POS_HEAD);
+	
+$this->registerCss("
+   ul {
           padding:0 0 0 0;
           margin:0 0 0 0;
       }
@@ -258,9 +276,8 @@ function questionView(q_id,tis) { // single question view
               display:none;
           }
       }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?= Url::to("@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js") ?>"></script>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="z-index: 99999;"><div class="modal-content"><div class="modal-body"></div></div><!-- /.modal-content --></div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+");
+     
+$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

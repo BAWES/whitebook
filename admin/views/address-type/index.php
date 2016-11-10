@@ -1,8 +1,10 @@
 <?php
+
 use yii\base;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
+use yii\web\View;
 use common\models\AddressTypeSearch;
 
 /* @var $this yii\web\View */
@@ -51,25 +53,32 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 </div>
 
-<script type="text/javascript">
+<?php 
 
-    function changeStatus(status, cid)
+$this->registerJs("
+
+	function changeStatus(status, cid)
     {
+		var csrfToken = jQuery('meta[name=\"csrf-token\"]').attr('content');
+		var path = '".Url::to(['/address-type/block'])."';
+	
+		jQuery.post(
+			path, 
+			{ 
+				status: status, cid: cid, _csrf : csrfToken 
+			}, 
+			function(data) {
+				
+				if(status == 'Active') {
+					var status1 =  'Deactive';
+				}else{
+					var status1 =  'Active';
+				}
 
-		var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-		var path = "<?php echo Url::to(['/address-type/block']); ?> ";
-		$.ajax({
-			type: 'POST',
-			url: path, //url to be called
-			data: { status: status, cid: cid, _csrf : csrfToken}, //data to be send
-			success: function(data) {
-				var status1 = (status == 'Active') ? 'Deactive' : 'Active';
-				$('#image-'+cid).attr('src',data);
-				$('#image-'+cid).parent('a').attr('onclick',
-					"changeStatus('"+status1+"', '"+cid+"')");
+				jQuery('#image-'+cid).attr('src',data);
+				jQuery('#image-'+cid).parent('a').attr('onclick', 'changeStatus(\"' + status1 + '\", ' + cid + ')');
 			}
-		});
+		);
      }
-</script>
 
-
+", View::POS_HEAD);
