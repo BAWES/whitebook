@@ -46,3 +46,7 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{font-family: 'Droid Arabic Kufi', serif 
 .glyphicon{
     font-family: 'Glyphicons Halflings' !important;
 }
+
+.category_listing_nav {
+    direction: rtl;
+}
