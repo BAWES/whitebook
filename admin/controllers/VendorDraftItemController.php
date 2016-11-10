@@ -55,11 +55,19 @@ class VendorDraftItemController extends Controller
 
         $draft = VendorDraftItem::findOne($id);
 
+        $attributes = $draft->attributes;
+
+        //unset sort and item_status from draft to keep sort and item_status from vendor item list 
+        unset($attributes['item_status']);
+        unset($attributes['sort']);
+        
+        //copy to item from draft 
         $item = VendorItem::findOne($draft->item_id);
-        $item->attributes = $draft->attributes;
+        $item->attributes = $attributes;
         $item->item_approved = 'Yes';
         $item->save();
 
+        //remove from draft 
         $draft->delete();
 
         Yii::$app->session->setFlash('success', 'Item approved successfully!');
