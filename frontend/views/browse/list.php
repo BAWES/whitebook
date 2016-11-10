@@ -63,7 +63,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <div class="col-lg-2 padding-left-0">
                         <div class="panel panel-default" id="top_panel_location">
                             <div class="panel-heading clearfix" id="top_panel_heading">
-                                <div class=""><p>Product Type</p></div>
+                                <div class=""><p><?=Yii::t('frontend','Product Type')?></p></div>
                             </div>
                             <div id="available-for-sale" class="panel-collapse " aria-expanded="false">
                                 <div class="">
@@ -79,7 +79,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                                    id="checkbox-available-for-sale"
                                                    value="sale"
                                                    type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
-                                                    <span>Available For Sale</span>
+                                                    <span><?=Yii::t('frontend','Available For Sale')?></span>
                                             </label>
                                         </div>
                                     </div>

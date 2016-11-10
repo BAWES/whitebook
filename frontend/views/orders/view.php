@@ -110,18 +110,18 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 
 				<!-- for small device -->
 				<tr class="visible-xs visible-sm">
-					<td align="right" colspan="2">Sub Total</td>
+					<td align="right" colspan="2"><?=Yii::t('frontend','Sub Total')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_without_delivery) ?>
 					</td>
 				</tr>
 				<tr class="visible-xs visible-sm">
-					<td align="right" colspan="2">Delivery Charge</td>
+					<td align="right" colspan="2"><?=Yii::t('frontend','Delivery Charge')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_delivery_charge) ?></td>
 				</tr>
 				<tr class="visible-xs visible-sm">
-					<td align="right" colspan="2">Total</td>
+					<td align="right" colspan="2"><?=Yii::t('frontend','Total')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_with_delivery) ?>
 					</td>
@@ -129,18 +129,18 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 
 				<!-- for desktop -->
 				<tr class="hidden-xs hidden-sm">
-					<td align="right" colspan="5">Sub Total</td>
+					<td align="right" colspan="5"><?=Yii::t('frontend','Sub Total')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_without_delivery) ?>
 					</td>
 				</tr>
 				<tr class="hidden-xs hidden-sm">
-					<td align="right" colspan="5">Delivery Charge</td>
+					<td align="right" colspan="5"><?=Yii::t('frontend','Delivery Charge')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_delivery_charge) ?></td>
 				</tr>
 				<tr class="hidden-xs hidden-sm">
-					<td align="right" colspan="5">Total</td>
+					<td align="right" colspan="5"><?=Yii::t('frontend','Total')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_with_delivery) ?>
 					</td>

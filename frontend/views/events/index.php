@@ -36,7 +36,7 @@ $this->title = 'Events/Wishlist | Whitebook';
 									<div class="select_category_sec">
 										<div class="select_boxes">
 											<select class="selectpicker" data-style="btn-primary" id="customer_event_type" name="customer_event_type" style="display:none" >
-												<option value='all'>Select event type </option>
+												<option value='all'><?=Yii::t('frontend','Select event type')?></option>
 												<?php
 												foreach ($customer_event_type as $key => $value) { ?>
 													<option value="<?= $value['event_type']; ?>"><?= $value['event_type']; ?></option>
@@ -69,7 +69,7 @@ $this->title = 'Events/Wishlist | Whitebook';
 								</div>
 							</div>
 							<div role="tabpanel" id="wishlist" class="tab-pane second_event <?=($slug=='thingsilike')?'active':'';?>">
-								<a class="filter-link" id="filter-toggle" style="display:none;">Filter</a>
+								<a class="filter-link" id="filter-toggle" style="display:none;"><?=Yii::t('frontend','Filter')?></a>
 								<div id="search_data">
 									<div class="events_listing_inner">
 										<div class="events_listing new-event">

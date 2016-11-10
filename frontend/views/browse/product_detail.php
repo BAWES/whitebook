@@ -119,7 +119,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                                     $baselink = $imgPath . $img['image_path'];
                                                 }
                                                 ?>
-                                                <li><img src="<?php echo $baselink; ?>" alt="item detail image"></li>
+                                                <li><img src="<?php echo $baselink; ?>" alt="<?=Yii::t('frontend','item detail image')?>"></li>
                                                 <?php
                                             }
                                         }
@@ -148,7 +148,7 @@ $this->title = 'Whitebook - ' . $item_name;
                                         <!-- add to event start -->
 
                                         <?php if (Yii::$app->user->isGuest) { ?>
-                                            <a href="" data-toggle="modal" class="add_events" data-target="#myModal" title="Add to event"  onclick="add_event_login(<?php echo $model['item_id']; ?>)">
+                                            <a href="" data-toggle="modal" class="add_events" data-target="#myModal" title="<?=Yii::t('frontend','Add to event')?>"  onclick="add_event_login(<?php echo $model['item_id']; ?>)">
                                                 <span class="plus-icon-prod">
                                                     <?php echo Yii::t('frontend', 'Add to Event'); ?>
                                                 </span>

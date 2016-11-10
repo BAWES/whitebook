@@ -23,7 +23,7 @@ $this->title='Whitebook - Checkout';
     <!-- Events slider end -->
     <div class="breadcrumb_common">
         <div class="bs-example">
-            <h2>Delivery & Payment Details</h2>
+            <h2><?=Yii::t('frontend','Delivery & Payment Details')?></h2>
         </div>
     </div>
     <!-- Mobile start Here-->
@@ -34,7 +34,7 @@ $this->title='Whitebook - Checkout';
 
     <table>
      <tr><td>
-      <span>Delivery Details</span>
+      <span><?=Yii::t('frontend','Delivery Details')?></span>
       </td>
      </tr>
       <tr>
@@ -61,7 +61,7 @@ $this->title='Whitebook - Checkout';
 
 
     </table>
-    <a href="<?= Yii::$app->homeUrl; ?>/cod">Cash on Delivery</a>
+    <a href="<?= Yii::$app->homeUrl; ?>/cod"><?=Yii::t('frontend','Cash on Delivery')?></a>
 
     <!-- Mobile end Here-->
 
