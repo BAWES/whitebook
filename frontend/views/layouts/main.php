@@ -36,7 +36,7 @@ if(Yii::$app->language == 'ar'){
 
 $this->beginPage()
 ?>
-<html lang="<?= Yii::$app->language ?>" dir="<?=(isset(Yii::$app->language) == 'ar') ? 'rtl' : 'ltr'; ?>">
+<html lang="<?= Yii::$app->language ?>" dir="<?=(Yii::$app->language == 'ar') ? 'rtl' : 'ltr'; ?>">
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
         <meta charset="utf-8">
