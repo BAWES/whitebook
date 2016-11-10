@@ -95,7 +95,7 @@ if($event_status>0){
 					</nav>
 				</div>
 
-				<button class="btn btn-close-filter visible-sm visible-xs">Close filter</button>
+				<button class="btn btn-close-filter visible-sm visible-xs"><?=Yii::t('frontend','Close filter')?></button>
 			</div>
 			</div>
 		</div>

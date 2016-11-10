@@ -34,7 +34,17 @@ $this->title = 'Whitebook - Checkout';
             <div class="col-md-12 padding0">
                 <div class="product_detials_common normal_tables">
                     <table border="2">
-                        <tr><td>S.No</td><td>Image</td><td>Vendor name</td><td>Item Name</td><td>Price</td><td>Quantity</td><td>Shipping / Delivery</td><td>Delete</td><td>Total Price</td></tr>
+                        <tr>
+                            <td><?=Yii::t('frontend','S.No')?></td>
+                            <td><?=Yii::t('frontend','Image')?></td>
+                            <td><?=Yii::t('frontend','Vendor name')?></td>
+                            <td><?=Yii::t('frontend','Item Name')?></td>
+                            <td><?=Yii::t('frontend','Price')?></td>
+                            <td><?=Yii::t('frontend','Quantity')?></td>
+                            <td><?=Yii::t('frontend','Shipping / Delivery')?></td>
+                            <td><?=Yii::t('frontend','Delete')?></td>
+                            <td><?=Yii::t('frontend','Total Price')?></td>
+                        </tr>
 
                         <?php
                         if (!empty($basketData)) {
@@ -80,7 +90,7 @@ $this->title = 'Whitebook - Checkout';
                                 <tr><td><?= Country::getCountry($key['country_id']) ?></td></tr>
 <?php } ?>
 
-                            <a href="<?php echo Yii::$app->homeUrl; ?>/checkout" id="check_out">Add Delivery Address</a></div>
+                            <a href="<?php echo Yii::$app->homeUrl; ?>/checkout" id="check_out"><?=Yii::t('frontend','Add Delivery Address')?></a></div>
 
                     </table>
 

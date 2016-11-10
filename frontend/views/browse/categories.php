@@ -109,7 +109,7 @@ use common\components\LangFormat;
                                             } else {
                                                 $name = 'city_name_ar';
                                             }
-                                            echo Html::dropDownList('city','',\yii\helpers\ArrayHelper::map($city,'city_id',$name),['prompt'=>'Please Select City','class'=>'selectpicker required trigger','id'=>'area']);
+                                            echo Html::dropDownList('city','',\yii\helpers\ArrayHelper::map($city,'city_id',$name),['prompt'=>Yii::t('frontend','Please Select City'),'class'=>'selectpicker required trigger','id'=>'area']);
                                             ?>
                                         </div>
                                     </div>
@@ -117,7 +117,7 @@ use common\components\LangFormat;
                                     <div class="form-group new_popup_common">
                                         <div class="bs-docs-example" id="location_div">
                                             <?php
-                                            echo Html::dropDownList('location','',[],['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'location'])
+                                            echo Html::dropDownList('location','',[],['prompt'=>Yii::t('frontend','Please Select Location'),'class'=>'selectpicker required trigger','id'=>'location'])
                                             ?>
                                         </div>
                                     </div>

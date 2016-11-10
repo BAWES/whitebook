@@ -32,10 +32,10 @@ $this->title = 'Delivery Address | Whitebook';
 
                                             <div class="col-md-6 paddingright0">
                                                 <div class="form-group">
-                                                    <label for="exampleInputPassword1">Address Type</label>
+                                                    <label for="exampleInputPassword1"><?=Yii::t('frontend','Address Type')?></label>
                                                     <div class="select_boxes">
                                                         <select class="selectpicker " data-style="btn-primary" id="address_type" name="address_type" >
-                                                            <option value="">Select Address Type</option>
+                                                            <option value=""><?=Yii::t('frontend','Select Address Type')?></option>
                                                             <?php
                                                             foreach ($addresstype as $key => $val) {
                                                                 echo '<option value="' . $key . '">' . $val . '</option>';
@@ -52,7 +52,7 @@ $this->title = 'Delivery Address | Whitebook';
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Country</label>
                                                     <select class="selectpicker" data-style="btn-primary" style="display: none;" id="country" name="country">
-                                                        <option value="">Select country</option>
+                                                        <option value=""><?=Yii::t('frontend','Select country')?></option>
                                                         <?php
                                                         foreach ($loadcountry as $key => $val) {
                                                             echo '<option value="' . $key . '">' . $val . '</option>';
@@ -68,7 +68,7 @@ $this->title = 'Delivery Address | Whitebook';
                                                     <label for="exampleInputPassword1">Area</label>
                                                     <div class="select_boxes">
                                                         <select class="selectpicker " data-style="btn-primary" id="city" name="city" >
-                                                            <option value="">Select city</option>
+                                                            <option value=""><?=Yii::t('frontend','Select city')?></option>
                                                             <?php
                                                             foreach ($loadcity as $key => $val) {
 
@@ -85,7 +85,7 @@ $this->title = 'Delivery Address | Whitebook';
                                                     <label for="exampleInputPassword1">Address Area</label>
                                                     <div class="select_boxes">
                                                         <select class="selectpicker " data-style="btn-primary" id="area" name="area">
-                                                            <option value="">Select Area</option>
+                                                            <option value=""><?=Yii::t('frontend','Select Area')?></option>
 <?php
 foreach ($area as $key => $val) {
     echo '<option value="' . $key . '">' . $val . '</option>';
@@ -99,7 +99,7 @@ foreach ($area as $key => $val) {
                                             </div>
                                             <div class="col-md-6 paddingleft0">
                                                 <div class="form-group">
-                                                    <label for="exampleInputEmail1">Address Details</label>
+                                                    <label for="exampleInputEmail1"><?=Yii::t('frontend','Address Details')?></label>
                                                     <input type="text" placeholder="Enter your address name here" id="address_data" name="address_data" class="form-control required" value="">
                                                 </div>
                                             </div>

@@ -118,7 +118,7 @@ if ((!empty($directory)) && ($total > 0)) {
     <div class="resposive-clearfix">
         <!-- first section start here-->
         <div class="col-md-3 resposive-clearfix">
-            <h5>No Records found</h5>
+            <h5><?=Yii::t('frontend','No Records found')?></h5>
         </div>
     </div>
 <?php } ?>
