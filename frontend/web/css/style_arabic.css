@@ -124,3 +124,7 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .cont_ifo_right, .address_ifo_left{
     padding-right: 0px;
 }
+
+.cont_ifo_right .border-bottom {
+    margin: 5px 0 11px;
+}
