@@ -51,7 +51,7 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 }
 
 .glyphicon{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings'!important;
 }
 .fa {
     font: normal normal normal 14px/1 FontAwesome !important;
@@ -68,4 +68,11 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
     .navbar-nav > li {
         float: right;
     }
+}
+.product_detail_section .right_descr_product .add_events {
+    padding: 10px 9px 2px 22px;
+    margin: 0px 11px 0 37px;
+}
+.cont_ifo_right .timer_common {
+    padding: 0 0 0 5px;
 }
