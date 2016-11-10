@@ -135,3 +135,27 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .cont_ifo_right .border-bottom {
     margin: 5px 0 11px;
 }
+#delivery_date,#delivery_date_2 {
+    padding-right: 47px!important;
+}
+.events_images .buy-text {
+    bottom: 18px!important;
+    font-size: 10px!important;
+    left: 166px;
+}
+.events_images i {
+    bottom: 1px!important;
+    font-size: 48px!important;
+    left: 162px;
+}
+.bootstrap-select.btn-group .dropdown-toggle .filter-option{
+    text-align: right;
+    padding-right:21px;
+}
+.bootstrap-select.btn-group .dropdown-menu li a {
+    text-align: right;
+}
+
+.filter_content span.glyphicon {
+    float: right;
+}
