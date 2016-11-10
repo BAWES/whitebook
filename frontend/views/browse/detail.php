@@ -13,10 +13,9 @@ $item_description = LangFormat::format(strip_tags($model->item_description),stri
 $item_additional_info = LangFormat::format(strip_tags($model->item_additional_info),strip_tags($model->item_additional_info_ar));
 $vendor_contact_address = LangFormat::format($model->vendor->vendor_contact_address_ar,$model->vendor->vendor_contact_address);
 
-
 $this->title = 'Whitebook - ' . $item_name;
 //$this->params['breadcrumbs'][] = ['label' => ucfirst($category_name), 'url' => Url::to(["shop/products", 'slug' => ''])];
-$this->params['breadcrumbs'][] = $item_name;
+$this->params['breadcrumbs'][] = ' '.$item_name;
 
 $session = $session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;

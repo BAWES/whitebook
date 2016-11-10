@@ -18,6 +18,7 @@ $vendor_contact_address = LangFormat::format($vendor_det['vendor_contact_address
 
 $this->title = 'Whitebook - ' . $item_name;
 
+$this->params['breadcrumbs'][] = $item_name;
 ?>
 
 <!-- coniner start -->
