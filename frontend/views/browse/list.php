@@ -9,7 +9,11 @@ use yii\web\view;
 
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
 
-$CName = (isset($Category->category_name)) ? $Category->category_name  : 'all';
+if(Yii::$app->language == 'ar') {
+    $CName = (isset($Category->category_name_ar)) ? $Category->category_name_ar  : Yii::t('frontend', 'All');
+}else{
+    $CName = (isset($Category->category_name)) ? $Category->category_name  : Yii::t('frontend', 'All');
+}
 
 $this->params['breadcrumbs'][] = ['label' => ucfirst($CName), 'url' => Url::to(["browse/list", 'slug' => 'all'])];
 

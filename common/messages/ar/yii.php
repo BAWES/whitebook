@@ -24,7 +24,7 @@ return [
     'Delete' => '',
     'Error' => '',
     'File upload failed.' => '',
-    'Home' => '',
+    'Home' => 'الصفحة الرئيسية',
     'Invalid data received for parameter "{param}".' => '',
     'Login Required' => '',
     'Missing required arguments: {params}' => '',

@@ -56,7 +56,11 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .fa {
     font: normal normal normal 14px/1 FontAwesome !important;
 }
-
+.breadcrumb > li + li::before {
+    position: relative;
+    right: -3px;
+    padding: 0 10px;
+}
 .category_listing_nav {
     direction: rtl;
 }
