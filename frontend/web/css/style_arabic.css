@@ -1,5 +1,8 @@
 @import url(https://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
-body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{font-family: 'Droid Arabic Kufi', serif;}
+
+body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
+    font-family: 'Droid Arabic Kufi', serif !important;
+}
 
 @media only screen and (min-width: 991px) {
     .venus_icon { background-position: -12px -8px !important; }
@@ -49,6 +52,9 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{font-family: 'Droid Arabic Kufi', serif;
 
 .glyphicon{
     font-family: 'Glyphicons Halflings';
+}
+.fa {
+    font: normal normal normal 14px/1 FontAwesome !important;
 }
 
 .category_listing_nav {
