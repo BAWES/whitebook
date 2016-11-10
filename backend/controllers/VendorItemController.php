@@ -258,6 +258,16 @@ class VendorItemController extends Controller
                     $image->save();
                 }
 
+                //create draft so admin can approve 
+                $draft_item = new VendorDraftItem();
+                $draft_item->attributes = $model->attributes;
+                $draft_item->priority = 'Normal';
+                $draft_item->item_archived = 'No';
+                $draft_item->item_approved = 'Pending';
+                $draft_item->item_status = 'Active';
+                $draft_item->trash = 'Default';
+                $draft_item->save(false);
+
                 /*  Upload image table End */
                 Yii::$app->session->setFlash('success', "Item added successfully. Admin will check and approve it.");
 

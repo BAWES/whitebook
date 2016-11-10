@@ -6,7 +6,6 @@ use admin\models\VendorItem;
 use admin\models\AccessControlList;
 use common\models\VendorDraftItem;
 
-$item_pending_count = VendorItem::item_pending_count();
 $draft_item_count = VendorDraftItem::find()->count();
 
 ?>
@@ -30,10 +29,6 @@ $draft_item_count = VendorDraftItem::find()->count();
 	        [	
 	        	'label' => '<i class="icon-custom-home"></i><span class="title">Dashboard</span>', 
 	        	'url' => ['site/index']
-	        ],
-	        [	
-	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Item Pending</span><span class="item_pending_count">'.$item_pending_count.'</span>', 
-	        	'url' => ['vendor-item-pending/index'],
 	        ],
 	        [	
 	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Draft Item</span><span class="draft_item_count">'.$draft_item_count.'</span>', 
