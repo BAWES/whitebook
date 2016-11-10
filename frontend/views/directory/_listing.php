@@ -28,7 +28,7 @@ if ((!empty($directory)) && ($total > 0)) {
                                     if ($i < $first) {
                                         ?>
                                         <li>
-                                            <a href="<?= Url::toRoute(['directory/profile','slug'=>'all','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
+                                            <a href="<?= Url::toRoute(['directory/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
                                         </li>
                                 <?php }
                                 }
@@ -61,7 +61,7 @@ if ((!empty($directory)) && ($total > 0)) {
                 if ($first_letter == $f) { ?>
 
                     <li>
-                        <a href="<?= Url::toRoute(['directory/profile','slug'=>'all','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
+                        <a href="<?= Url::toRoute(['directory/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
                     </li>
                 <?php 
                 }
@@ -98,7 +98,7 @@ if ((!empty($directory)) && ($total > 0)) {
 
                             if ($first_letter == $f) { ?>
                                 <li>
-                                    <a href="<?= Url::toRoute(['directory/profile','slug'=>'all','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
+                                    <a href="<?= Url::toRoute(['directory/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
                                 </li>
                             <?php 
                             }

@@ -16,7 +16,7 @@
 
                         if ($ltr == $f) { ?>
                             <li>
-                                <a href="<?= \yii\helpers\Url::toRoute(['directory/profile','slug'=>'all','vendor'=>$d['slug']]); ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a>
+                                <a href="<?= \yii\helpers\Url::toRoute(['directory/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vname; ?>"><?php echo $vname; ?></a>
                             </li>
                         <?php }
                     } ?>
