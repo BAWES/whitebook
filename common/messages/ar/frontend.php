@@ -331,4 +331,5 @@ return [
     '404 Not Found' => '404 لم يتم العثور على',
     'The above error occurred while the Web server was processing your request' => 'حدث الخطأ أعلاه في حين ملقم ويب تم تجهيز طلبك',
     'Please contact us if you think this is a server error. Thank you' => 'يرجى الاتصال بنا إذا كنت تعتقد أن هذا هو خطأ في الخادم. شكرا',
+    'Buy' => 'يشترى',
 ];
