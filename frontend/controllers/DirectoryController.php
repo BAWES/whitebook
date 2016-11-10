@@ -113,7 +113,7 @@ class DirectoryController extends BaseController
         ]);
     }
 
-    public function actionProfile($slug,$vendor){
+    public function actionProfile($vendor,$slug='all'){
         $website_model = new Website();
         $vendor_details = Vendor::findOne(['slug'=>$vendor]);
 
@@ -121,7 +121,6 @@ class DirectoryController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
         $data = Yii::$app->request->get();
-        $explode = (Yii::$app->request->isAjax) ? '+' : ' ';
 
         $main_category = Category::find()
             ->where(['category_level'=>'0', 'trash'=>"Default",'category_allow_sale'=>"yes"])

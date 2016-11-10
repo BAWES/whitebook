@@ -58,7 +58,8 @@ return [
                   'browse/<slug:[A-Za-z0-9\_-]+>' => 'browse/list',
                   'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',
                   'themes/<slug:[A-Za-z0-9\_-]+>/<themes:[A-Za-z0-9\_-]+>' => 'themes/detail',
-                  'vendor/<slug:[A-Za-z0-9\_-]+>/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',
+                  /*'vendor/<slug:[A-Za-z0-9\_-]+>/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',*/
+                  'vendor/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',
                   'events/detail/<slug:[A-Za-z0-9\_-]+>' => 'events/detail',
                   'sitemap.xml' => 'sitemap/index',
                   'edit-profile' => 'users/edit_profile',

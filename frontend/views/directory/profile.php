@@ -299,7 +299,7 @@ if ($event_status > 0) {
                                         <?php
                                         foreach($category_list as $category) {
 
-                                            if ($data['slug'] == $category['slug']) {
+                                            if (isset($data['slug']) && ($data['slug'] == $category['slug'])) {
                                                 $selected = 'selected="selected"';
                                                 $attributes = 'data-hidden="true"';
                                             } else {
@@ -362,11 +362,12 @@ $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $get = Yii::$app->request->get();
+$slug = (isset($get['slug'])) ? $get['slug'] : 'all';
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
 //var load_items = '".Url::to(['directory/profile'])."';
 var load_items = '".Url::to(['/vendor'])."';
-var product_slug = '".$get['slug']."';
+var product_slug = '".$slug."';
 var vendor_profile = '".$get['vendor']."';
 var current_page = 'vendor';
 ", yii\web\View::POS_BEGIN);
