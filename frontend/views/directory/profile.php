@@ -74,12 +74,12 @@ if ($event_status > 0) {
         <div class="container paddng0">
             <div class="vender_profile_new">
                 <div class="product_detials_vender aother_dates">
-                    <div class="col-md-6 padding0">
+                    <div class="col-md-6 padding0 vendor_photo">
                         <a href="#" title="">
                             <?= Html::img($baselink, ['class'=>'','width'=>'565','alt'=>'Logo']); ?>
                         </a>
                     </div>
-                    <div class="col-md-6 paddingcommon">
+                    <div class="col-md-6 paddingcommon vendor_detail">
                         <div class="right_descr_product">
                             <div class="accad_menus">
                                 <div class="bakery_title">
@@ -263,7 +263,7 @@ if ($event_status > 0) {
             </div>
 
             <div class="plan_venues total_continer" id="plan_vanues">
-                <div class="col-md-3 paddingleft0">
+                <div class="col-md-3 paddingleft0 filter_content_wrapper">
 
                     <div class="filter_content">
 
