@@ -84,7 +84,10 @@ $action = Yii::$app->controller->action->id;
                         <ul class="nav navbar-nav">
                             <li class="dropdown mega-dropdown">
                                 <?= Html::a(Yii::t('frontend', 'Browse'), ['browse/list','slug'=>'all'], ['title' => Yii::t('frontend', 'Product')]); ?>
-                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav plan_menu">
+
+                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav plan_menu 
+                                    <?php if(Yii::$app->language == 'ar') echo 'rtl'; ?>">
+
                                     <ul class="nav-list list-inline">
                                         <li>
                                             <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["browse/list", 'slug' => 'venues']); ?>">
