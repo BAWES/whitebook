@@ -49,10 +49,9 @@ if($model->isNewRecord){
 }
 
 $this->registerCss("
-#addresstype-status label{
-    float: left;
-    margin-right: 17px;
-}
-
+	#addresstype-status label{
+	    float: left;
+	    margin-right: 17px;
+	}
 ");
 

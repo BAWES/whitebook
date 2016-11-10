@@ -1,9 +1,11 @@
 <?php 	
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\web\View;
 use common\models\Image;
 use common\models\VendorItemQuestion;
 use common\models\VendorItemQuestionGuide;
+
 	  $count_q=(count($question)); // for initial count questions used in javascript
 
 	 $t=0;	 
@@ -98,19 +100,24 @@ use common\models\VendorItemQuestionGuide;
 
 <?php $t++; } ?>
 
+<?php 
 
-<script type="text/javascript">
-function viewQuestion(q_id,tis)
-{		
-	var question_id_append = q_id - 1; 
-	var path = "<?php echo Url::to(['/vendor-item/renderanswer']); ?> ";
-	$.ajax({
-		type : 'POST',
-		url :  path,
-		data: {q_id :q_id }, 
-        success: function( data ) {         
-        $(tis).closest('.question-section').after(data);   	
-        }
-	})	
-}
-</script>
+$this->registerJs("
+
+	function viewQuestion(q_id,tis)
+	{		
+		var question_id_append = q_id - 1; 
+		var path = '".Url::to(['/vendor-item/renderanswer'])."';
+
+		$.ajax({
+			type : 'POST',
+			url :  path,
+			data: { q_id : q_id }, 
+	        success: function( data ) {         
+	        	$(tis).closest('.question-section').after(data);   	
+	        }
+		});	
+	}
+	
+", View::POS_HEAD);
+

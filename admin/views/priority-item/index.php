@@ -11,6 +11,7 @@ use yii\base\Object;
 use yii\helpers\ArrayHelper;
 use common\models\PriorityItem;
 use yii\grid\CheckboxColumn;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\PriorityitemSearch */
@@ -114,127 +115,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- Filter items append this div-->
 <div id="filteritems"></div>
 
-<!-- BEGIN PLUGIN CSS -->
-<link href="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css") ?>" rel="stylesheet" type="text/css" />
-<!-- END PLUGIN CSS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?= Url::to("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js") ?>" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<script>
-    $('#one').click(function() {
-        var names = [];
-        $('#selection input:checked').each(function() {
-            names.push(this.name);
-            alert (names);
-        });
-    });
+<?php 
 
-    $('#clear').click(function()
-    {
-			$('#filter_start').val("");
-			$('#filter_end').val("");
-			$('#status').val("All");
-            $('#level').val("All");
+$this->registerJs("
+    var priority_item_url = '".Url::to(['/priority-item/index'])."';
+    var priority_item_status = '".Url::to(['/priority-item/status'])."';
+    var block_priority_url = '".Url::to(['/priority-item/blockpriority'])."';
+", View::POS_HEAD);
 
-    var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        // start and end date values
-        var start = $('#filter_start').val();
-        var start = start.split("-").reverse().join("-");
-        var end = $('#filter_end').val();
-        var end = end.split("-").reverse().join("-");
-        var status = $('#status').val();
-        var level = $('#level').val();
-        $('.loadingmessage').show();
-        var path = "<?php echo Url::to(['/priority-item/index']); ?> ";
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { start:start, end:end, status: status, level: level, _csrf : csrfToken}, //data to be send
-        success: function( data ) {
-            $('.loadingmessage').hide();
-             $('#w0').remove();
-            $('#filteritems').html(data);
-         }
-        })
+$this->registerCssFile("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css");
 
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-
-	});
-
-</script>
-
-<script type="text/javascript">
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");
-	var txt;
-
-	/* Change status for respective vendor items */
-		function Status(status){
-		var keys = $('#priority').yiiGridView('getSelectedRows');
-		var pathUrl = "<?php echo Url::to(['/priority-item/status']); ?>";
-		if(keys.length == 0) { alert ('Select Your priority item'); return false;}
-		var r = confirm("Are you sure want to " +status+ "?");
-		if (r == true) {
-			$.ajax({
-			   url: pathUrl,
-			   type : 'POST',
-			   data: {keylist: keys, status:status},
-			   success : function(data)
-			   {
-					window.location.reload(true);
-			   }
-
-			});
-			return false;
-        }
-		return false;
-    }
-
-/* BEGIN priority start and end date picker & filter */
-
-$('input#filter_start,input#filter_end').datepicker({
-    format: 'dd-mm-yyyy',
-    autoclose: true,
-});
-
-function prioritydatefilter()
-{
-    var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        // start and end date values
-        var start = $('#filter_start').val();
-        var end = $('#filter_end').val();
-        var status = $('#status').val();
-        var level = $('#level').val();
-        $('.loadingmessage').show();
-        var path = "<?php echo Url::to(['/priority-item/index']); ?> ";
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { start:start, end:end, status: status, level: level, _csrf : csrfToken}, //data to be send
-        success: function( data ) {
-            $('.loadingmessage').hide();
-             $('#w0').remove();
-            $('#filteritems').html(data);
-         }
-        })
-
-}
-/* END priority start and end date picker & filter */
-
-function change(status, aid)
-	{
-		var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var path = "<?php echo Url::to(['/priority-item/blockpriority']); ?> ";
-        $.ajax({
-        type: 'POST',
-        url: path, //url to be called
-        data: { status: status, aid: aid, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active';
-			$('#image-'+aid).attr('src',data);
-			$('#image-'+aid).parent('a').attr('onclick',
-			"change('"+status1+"', '"+aid+"')");
-         }
-        });
-     }
-
-</script>
+$this->registerJsFile("@web/themes/default/js/priority-item-list.js", ['depends' => [\yii\web\JqueryAsset::className()]]);

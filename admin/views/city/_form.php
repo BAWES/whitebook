@@ -18,9 +18,8 @@ use yii\widgets\ActiveForm;
 <?php
 
 $this->registerCss("
-#city-status label{
-    float: left;
-    margin-right: 17px;
-}
-
+    #city-status label{
+        float: left;
+        margin-right: 17px;
+    }
 ");

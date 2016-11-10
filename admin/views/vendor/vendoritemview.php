@@ -1,5 +1,6 @@
 <?php
 
+use yii\web\View;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
@@ -110,19 +111,25 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 </div>
 
+<?php 
 
-<script type="text/javascript">
-    var csrfToken = $('meta[name="csrf-token"]').attr("content");       
+$this->registerJs("
+
+    var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');       
     var txt;
     
     /* Change status for respective vendor items */    
-        function Status(status){
+    function Status(status){
                         
         var keys = $('#items').yiiGridView('getSelectedRows');      
-        var pathUrl = "<?php echo Url::to(['/vendor-item/status']); ?>";
+        var pathUrl = '".Url::to(['/vendor-item/status'])."';
+        
         if(keys.length == 0) { alert ('Select atleast one item'); return false;}
-        var r = confirm("Are you sure want to " +status+ "?");  
+        
+        var r = confirm(\"Are you sure want to \" +status+ \"?\");  
+        
         status = (status=='Activate')?'Active':((status=='Deactivate'))?'Deactive':status;          
+        
         if (r == true) {            
             $.ajax({
                url: pathUrl, 
@@ -141,34 +148,37 @@ $this->params['breadcrumbs'][] = $this->title;
     
     function change(status, id)
     {           
-        var path = "<?php echo Url::to(['/vendor-item/block']); ?> ";
+        var path = '".Url::to(['/vendor-item/block'])."';
+
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-            var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-            $('#image-'+id).attr('src',data);
-            $('#image-'+id).parent('a').attr('onclick', 
-            "change('"+status1+"', '"+id+"')");
-         }
+            type: 'POST',      
+            url: path, //url to be called
+            data: { status: status, id: id, _csrf : csrfToken}, //data to be send
+            success: function(data) {
+                var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+                $('#image-'+id).attr('src',data);
+                $('#image-'+id).parent('a').attr('onclick', 
+                \"change('\" + status1 + \"', '\" + id + \"')\");
+            }
         });
     }
-     function change_sort_order(sort_val,item_id)
-     {
-         var exist_sort=$('#hidden_'+item_id).val();
-         if(sort_val!=exist_sort || exist_sort==0)
-         {
+    
+    function change_sort_order(sort_val,item_id)
+    {
+        var exist_sort=$('#hidden_'+item_id).val();
+        
+        if(sort_val!=exist_sort || exist_sort==0)
+        {
             if(sort_val<=0 && sort_val!='')
             {
-                alert("Please enter greater than 0!");
+                alert('Please enter greater than 0!');
                 return false;
             }
             
             if(isNumeric(sort_val))
             {
-                var csrfToken = $('meta[name="csrf-token"]').attr("content");       
-                var path = "<?php echo Url::to(['/vendor-item/sort_vendor_item']); ?> ";
+                var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');       
+                var path = '".Url::to(['/vendor-item/sort_vendor_item'])."';
                 $.ajax({  
                 type: 'POST',      
                 url: path, //url to be called
@@ -185,15 +195,17 @@ $this->params['breadcrumbs'][] = $this->title;
             {
                 if(sort_val!='')
                 {
-                    alert("Enter only integer values!");
+                    alert('Enter only integer values!');
                     return false;
                 }
             }
         }
-     }
-     function isNumeric(n)
+    }
+    
+    function isNumeric(n)
     {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
+
+", View::POS_HEAD);
     
-</script>

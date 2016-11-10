@@ -12,7 +12,11 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="priorityitem-update">
 
     <?= $this->render('_form', [
-     'model' => $model,'priorityitem'=>$priorityitem,'category'=>$category,'subcategory'=>$subcategory,'childcategory'=>$childcategory,
+     		'model' => $model,
+     		'priorityitem' => $priorityitem,
+     		'category' => $category,
+     		'subcategory' => $subcategory,
+     		'childcategory' => $childcategory,
     ]) ?>
 
 </div>

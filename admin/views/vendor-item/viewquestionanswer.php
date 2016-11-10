@@ -1,18 +1,24 @@
 <?php 	
+
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\web\View;
 use common\models\Image;
 use common\models\VendorItemQuestion;
 use common\models\VendorItemQuestionGuide;
-	 $count_q=(count($question)); // for initial count questions used in javascript
-	 $t=0;	 
-	 ?>
-	 <table class="table table-striped table-bordered detail-view">
-		 <tbody>
-	 <?php
-	 foreach($question as $question_records)
-	 {			
-	?>
+
+$count_q = (count($question)); // for initial count questions used in javascript
+
+$t = 0;	 
+
+?>
+
+<table class="table table-striped table-bordered detail-view">
+<tbody>
+<?php
+foreach($question as $question_records)
+{			
+?>
 	
 		<tr><th> Question :<?= ucfirst($question_records['question_text']);?></th><th></th></tr>
 		<tr><th> Question Type :<?= ucfirst($question_records['question_answer_type']);?></th><th></th></tr>
@@ -58,20 +64,24 @@ use common\models\VendorItemQuestionGuide;
 </tbody>
 </table>
 
-<script type="text/javascript">
-function viewQuestion(q_id,tis)
-{	
+<?php 
+
+$this->registerJs("
+
+	function viewQuestion(q_id,tis)
+	{	
+		
+		var question_id_append = q_id - 1; // for after append question data	
+		var path = '".Url::to(['/vendor-item/renderanswer'])."';
+		
+		$.ajax({
+			type : 'POST',
+			url : path,
+			data: { q_id : q_id }, //data to be send
+	        success: function( data ) {         
+	        	$(tis).closest('.question-section').after(data);   	
+	        }
+		});		
+	}
 	
-	var question_id_append = q_id - 1; // for after append question data	
-	var path = "<?php echo Url::to(['/vendor-item/renderanswer']); ?> ";
-	$.ajax({
-		type : 'POST',
-		url :  path,
-		data: {q_id :q_id }, //data to be send
-        success: function( data ) {         
-        $(tis).closest('.question-section').after(data);   	
-        }
-	})
-	
-}
-</script>
+", View::POS_READY);
