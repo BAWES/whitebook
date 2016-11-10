@@ -372,15 +372,13 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                                                 $from = explode(':',$model->vendor->vendor_working_hours);
                                                                                 echo (isset($from[0])) ? $from[0] : '';
                                                                                 echo (isset($from[1])) ? ':'.$from[1] : '';
-                                                                                echo (isset($from[2])) ? ' '.$from[2] : ''
-                                                                                ?></span>
-
-                                                                            - <span class="timer_common">
+                                                                                echo (isset($from[2])) ? ''.$from[2] : ''
+                                                                                ?></span>- <span class="timer_common">
                                                                             <?php
                                                                             $to = explode(':',$model->vendor->vendor_working_hours_to);
                                                                             echo (isset($to[0])) ? $to[0] : '';
                                                                             echo (isset($to[1])) ? ':'.$to[1] : '';
-                                                                            echo (isset($to[2])) ? ' '.$to[2] : ''
+                                                                            echo (isset($to[2])) ? ''.$to[2] : ''
                                                                             ?>
                                                                         </span>
                                                                         <?php } ?>
