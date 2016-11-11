@@ -1761,9 +1761,6 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     text-align: center;
     margin-bottom: 10px;
 }
-.cont_ifo_left h3 a,.cont_ifo_left h4,.cont_ifo_right .links_left a,.address_ifo_left h5,.cont_ifo_right .timer_common {
-    background:none!important;
-}
 @media only screen and (max-width: 320px) {
     .events_images img {
         width: 16%;
