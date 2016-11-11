@@ -595,4 +595,4 @@ button.dropdown-toggle{background: #fff;color: #000;border-radius: 0px;height: 4
 .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
