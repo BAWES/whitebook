@@ -149,8 +149,12 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
     left: 162px;
 }
 .bootstrap-select.btn-group .dropdown-toggle .filter-option{
-    text-align: right;
+    text-align: right!important;
     padding-right:21px;
+}
+
+.bootstrap-select .filter-option .glyphicon{
+    float: right;
 }
 .bootstrap-select.btn-group .dropdown-menu li a {
     text-align: right;
@@ -158,4 +162,19 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 
 .filter_content span.glyphicon {
     float: right;
+}
+
+.directory .left-section{
+    float: right;
+    padding-right: 0px;
+    padding-left: 26px;
+}
+.themes #left_side_cate{
+    float: right;
+    padding-right: 0px;
+}
+
+.themes .right-side{
+    padding-left: 0px;
+    padding-right: 20px;
 }
