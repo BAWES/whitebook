@@ -40,7 +40,7 @@ if(!empty($items->getModels()))  {
                             ?>
                             <?php if($value['item_for_sale'] == 'Yes') { ?>
                                 <i class="fa fa-circle" aria-hidden="true"></i>
-                                <span class="buy-text">Buy</span>
+                                <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
                                 <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
                             <?php } ?>
                         </a>
@@ -83,27 +83,6 @@ $this->registerCss("
 img.item-img{width: 100%;}
 .width-100-percent{width: 100%;}
 .margin-top-15{margin-top: 15%;}
-
-@media only screen and (max-width: 320px) {
-.events_images img {
-    width: 16%;
-}
-}
-.events_images .buy-text{
-    position: absolute;
-    left: 9px;
-    bottom: 11px;
-    color: #fff;
-    font-weight: bold;
-    font-size: 13px;
-}
-.events_images i{
-    position: absolute;
-    bottom: 1px;
-    left: 4px;
-    font-size: 39px!important;
-    color: #000;
-}
 ");
 
 ?>

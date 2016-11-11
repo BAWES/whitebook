@@ -1764,3 +1764,26 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .cont_ifo_left h3 a,.cont_ifo_left h4,.cont_ifo_right .links_left a,.address_ifo_left h5,.cont_ifo_right .timer_common {
     background:none!important;
 }
+@media only screen and (max-width: 320px) {
+    .events_images img {
+        width: 16%;
+    }
+}
+.events_images .buy-text{
+    position: absolute;
+    left: 9px;
+    bottom: 11px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+}
+.events_images i{
+    position: absolute;
+    bottom: 1px;
+    left: 4px;
+    font-size: 39px!important;
+    color: #000;
+}
+.padding-left-6px{
+    padding-left: 6px;
+}

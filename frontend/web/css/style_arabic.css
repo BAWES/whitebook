@@ -70,6 +70,13 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
     }
 }
 
+.product_detail_section .right_descr_product .add_events {
+    padding: 10px 9px 2px 22px;
+    margin: 0px 11px 0 37px;
+}
+.cont_ifo_right .timer_common {
+    padding: 0 0 0 5px;
+}
 .vender_profile_new .vendor_photo,
 .vender_profile_new .vendor_detail {
     float: right;
@@ -127,4 +134,89 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 
 .cont_ifo_right .border-bottom {
     margin: 5px 0 11px;
+}
+#delivery_date,#delivery_date_2 {
+    padding-right: 47px!important;
+}
+.events_images .buy-text {
+    bottom: 18px!important;
+    font-size: 10px!important;
+    left: 166px;
+}
+.events_images i {
+    bottom: 1px!important;
+    font-size: 48px!important;
+    left: 162px;
+}
+.bootstrap-select.btn-group .dropdown-toggle .filter-option{
+    text-align: right!important;
+    padding-right:21px;
+}
+
+.bootstrap-select .filter-option .glyphicon{
+    float: right;
+}
+.bootstrap-select.btn-group .dropdown-menu li a {
+    text-align: right;
+}
+
+.filter_content span.glyphicon {
+    float: right;
+}
+
+.directory .left-section{
+    float: right;
+    padding-right: 0px;
+    padding-left: 26px;
+}
+.themes #left_side_cate{
+    float: right;
+    padding-right: 0px;
+}
+
+.themes .right-side{
+    padding-left: 0px;
+    padding-right: 20px;
+}
+
+.product_details_com .left-sidebar,.browse .left-sidebar {
+    float: right;
+    padding-right: 0px;
+}
+
+.product_details_com .left_descrip.desktop-view, .product_details_com .qantity-div{
+    float: right;
+}
+.col-md-4.quantity-lbl{
+    float: right!important;
+}
+
+.product_details_com .qantity-div{
+    padding-right: 6px;
+}
+.product_details_com .buy-btn{
+    margin-left: 149px;
+}
+
+.product_details_com .area-filter,.product_details_com .delivery-date-filter,.product_details_com .timeslot-filter{
+    float: right;
+}
+.browse .right-sidebar {
+    padding-left:0px;
+    padding-right:15px;
+
+}
+.browse .left-sidebar .clear_right {
+    width: 11%;
+}
+.browse .left-sidebar .clear_left {
+    width: 89%;
+    padding: 0 13px;
+}
+
+.browse .date-filter,.browse .location-filter,.browse .mid-space ,.browse .available-filter {
+    float: right;
+}
+.browse #available-for-sale {
+    padding: 15px 0px;
 }

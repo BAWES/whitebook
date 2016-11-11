@@ -7,7 +7,7 @@ use yii\web\view;
 ?>
 
 <!-- coniner start -->
-<section id="inner_pages_white_back">
+<section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
 
 	<div id="event_slider_wrapper">
 		<div class="container paddng0">
@@ -21,7 +21,7 @@ use yii\web\view;
 			<div class="title_main">
 				<h1><?= Yii::t("frontend", "Directory") ?></h1>
 			</div>
-			<div class="col-md-3 paddingleft0">
+			<div class="col-md-3 paddingleft0 left-section">
 				<div class="filter_content">
 					<div class="filter_section">
 					<span class="title_filter"><?= Yii::t("frontend", "Categories") ?></span>
@@ -50,7 +50,7 @@ use yii\web\view;
 				<?php echo $this->render('_m_listing',['directory'=>$directory,'first_letter'=>$first_letter]); ?>
 			</div>
 
-			<div id="filter">
+			<div id="filter" class="right-section">
 				<?php echo $this->render('_listing',['directory'=>$directory,'first_letter'=>$first_letter]); ?>
 			</div>
 
