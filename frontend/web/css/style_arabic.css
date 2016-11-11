@@ -179,7 +179,7 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
     padding-right: 20px;
 }
 
-.product_details_com .left-sidebar {
+.product_details_com .left-sidebar,.browse .left-sidebar {
     float: right;
     padding-right: 0px;
 }
@@ -200,4 +200,23 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 
 .product_details_com .area-filter,.product_details_com .delivery-date-filter,.product_details_com .timeslot-filter{
     float: right;
+}
+.browse .right-sidebar {
+    padding-left:0px;
+    padding-right:15px;
+
+}
+.browse .left-sidebar .clear_right {
+    width: 11%;
+}
+.browse .left-sidebar .clear_left {
+    width: 89%;
+    padding: 0 13px;
+}
+
+.browse .date-filter,.browse .location-filter,.browse .mid-space ,.browse .available-filter {
+    float: right;
+}
+.browse #available-for-sale {
+    padding: 15px 0px;
 }
