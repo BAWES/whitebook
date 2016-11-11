@@ -614,7 +614,7 @@ a:hover .plus-icon-prod{color:#000;display: inline-block;width:100%;height:16px;
 .product_detail_section .normal_tables .left_descrip{ width: 58%; display: inline-block;}
 .product_detail_section .normal_tables .left_descrip b{ margin: 13px 0 30px}
 .product_detail_section #slider .flex-direction-nav{display: none;}
-.product_detail_section #carousel .flex-viewport{padding:0px;margin:0 5px 0 0;}
+.product_detail_section #carousel .flex-viewport{padding:0px;margin:0 5px 0 0; direction: ltr;}
 .product_detail_section #slider.flexslider {margin: 0 !important; padding: 0px 0 0 0;}
 .product_detail_section #carousel.flexslider{padding:10px 0 0 28px;margin:0 28px 0 0;}
 .product_detail_section #carousel li {margin-right: 10px;}
