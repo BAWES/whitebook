@@ -72,6 +72,7 @@ class CategoryController extends Controller
             ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, c2.sort,c2.category_allow_sale,{{%category_path}}.category_id as ID")
             ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
             ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+            ->where(['c2.trash'=>'Default'])
             ->groupBy('{{%category_path}}.category_id')
             ->orderBy('category_name')
             ->asArray()
@@ -92,29 +93,6 @@ class CategoryController extends Controller
         ]);
 
     }
-
-    public function actionManage_subcategory()
-    {
-        $searchModel = new CategorySearch();
-        $dataProvider = $searchModel->subcategory_search(Yii::$app->request->queryParams);
-
-        return $this->render('subcategory_index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    public function actionChild_category_index()
-    {
-        $searchModel = new CategorySearch();
-        $dataProvider = $searchModel->childcategory_search(Yii::$app->request->queryParams);
-
-        return $this->render('child_category_index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
     /**
      * Displays a single Category model.
      *
@@ -184,7 +162,7 @@ class CategoryController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
-            $model->category_name = strtolower($model->category_name);
+            $model->category_name = $model->category_name;
 
             $max_sort = Category::find()
                 ->select('MAX(category_id) as sort')
@@ -197,43 +175,49 @@ class CategoryController extends Controller
             $model->sort = $sort;
 
             $model->category_level = Category::FIRST_LEVEL;
-            $model->save(false);
 
+            if (isset($_POST['Category']['parent_category_id']) && $_POST['Category']['parent_category_id'] != '') {
+                $model->parent_category_id = $_POST['Category']['parent_category_id'];
+            }
 
-            $level = 0;
-            $paths = CategoryPath::find()
+            if ($model->save()) {
+
+                $level = 0;
+                $paths = CategoryPath::find()
                     ->where(['category_id' => $model->parent_category_id])
                     ->orderBy('level ASC')
                     ->all();
 
-            foreach ($paths as $path) {
+                foreach ($paths as $path) {
+
+                    $cp = new CategoryPath();
+                    $cp->category_id = $model->category_id;
+                    $cp->level = $level;
+                    $cp->path_id = $path->path_id;
+                    $cp->save();
+
+                    $level++;
+                }
 
                 $cp = new CategoryPath();
                 $cp->category_id = $model->category_id;
+                $cp->path_id = $model->category_id;
                 $cp->level = $level;
-                $cp->path_id = $path->path_id;
                 $cp->save();
 
-                $level++;
+                Yii::$app->session->setFlash('success', 'Category created successfully!');
+
+                Yii::info('[New Category] Admin created new category ' . $model->category_name, __METHOD__);
+
+                return $this->redirect(['index']);
             }
-
-            $cp = new CategoryPath();
-            $cp->category_id = $model->category_id;
-            $cp->path_id = $model->category_id;
-            $cp->level = $level;
-            $cp->save();
-
-            Yii::$app->session->setFlash('success', 'Category created successfully!');
-
-            Yii::info('[New Category] Admin created new category '.$model->category_name, __METHOD__);
-
-            return $this->redirect(['index']);
 
         } else {
             $categories = CategoryPath::find()
                 ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
                 ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
                 ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+                ->where(['c2.trash'=>'Default'])
                 ->groupBy('{{%category_path}}.category_id')
                 ->orderBy('category_name')
                 ->asArray()
@@ -263,6 +247,7 @@ class CategoryController extends Controller
             ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
             ->where(['!=','{{%category_path}}.category_id',$id])
             ->groupBy('{{%category_path}}.category_id')
+            ->where(['c2.trash'=>'Default'])
             ->orderBy('category_name')
             ->asArray()
             ->all();
