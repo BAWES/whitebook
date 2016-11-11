@@ -178,3 +178,26 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
     padding-left: 0px;
     padding-right: 20px;
 }
+
+.product_details_com .left-sidebar {
+    float: right;
+    padding-right: 0px;
+}
+
+.product_details_com .left_descrip.desktop-view, .product_details_com .qantity-div{
+    float: right;
+}
+.col-md-4.quantity-lbl{
+    float: right!important;
+}
+
+.product_details_com .qantity-div{
+    padding-right: 6px;
+}
+.product_details_com .buy-btn{
+    margin-left: 149px;
+}
+
+.product_details_com .area-filter,.product_details_com .delivery-date-filter,.product_details_com .timeslot-filter{
+    float: right;
+}
