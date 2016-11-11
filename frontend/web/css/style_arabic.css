@@ -220,3 +220,7 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .browse #available-for-sale {
     padding: 15px 0px;
 }
+
+.rev_slider_wrapper{
+    direction: ltr;
+}
