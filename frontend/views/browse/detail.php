@@ -32,7 +32,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
 }
 ?>
 <!-- coniner start -->
-<section id="inner_pages_white_back" class="product_details_com">
+<section id="inner_pages_white_back" class="product_details_com <?=Yii::$app->controller->id;?>">
 
     <div id="event_slider_wrapper">
         <div class="container paddng0">
@@ -59,7 +59,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
         <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
         <div class="col-md-12 filter-bar ">
-            <div class="col-md-3 padding-right-0">
+            <div class="col-md-3 padding-right-0 area-filter">
                 <div class="form-group margin-left-0">
                     <label><?=Yii::t('frontend', 'Area'); ?></label>
                     <div class="select_boxes">
@@ -72,7 +72,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                     <span class="error area_id"></span>
                 </div>
             </div>
-            <div class="col-md-2 padding-left-0">
+            <div class="col-md-2 padding-left-0 delivery-date-filter">
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Delivery Date'); ?></label>
                     <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
@@ -82,13 +82,13 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                     <span class="error cart_delivery_date"></span>
                 </div>
             </div>
-            <div class="col-md-5 padding-left-0 timeslot_id_div">
+            <div class="col-md-5 padding-left-0 timeslot_id_div timeslot-filter">
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
                     <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date');?></div>
                 </div>
             </div>
-            <div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">
+            <div class="col-md-3 padding-left-0 timeslot_id_select timeslot-filter" style="display: none;">
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
                     <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
@@ -136,7 +136,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                         <!-- Indicators responsive slider end -->
                     </div>
 
-                    <div id="main" role="main" class="col-md-6 padding-left-0 normal_mode">
+                    <div id="main" role="main" class="col-md-6 padding-left-0 normal_mode left-sidebar">
                         <div class="slider">
                             <div id="slider" class="flexslider display_none">
                                 <ul class="slides">
@@ -173,9 +173,9 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="col-md-6 padding-left-0 padding-right-0 ">
+                    <div class="col-md-6 padding-left-0 padding-right-0 right-sidebar ">
                         <div class="right_descr_product">
-                            <div class="product_name">
+                            <div class="product_name clearfix">
                                 <div class="left_descrip desktop-view margin-bottom-14">
                                     <h2><?= $item_name; ?></h2>
                                     
@@ -250,17 +250,17 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                             <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
                             <div class="row margin-top-20">
-                                <div class="col-md-3 padding-top-12 pull-left">
+                                <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
                                     <label><?= Yii::t('frontend', 'Quantity');?></label>
                                 </div>
-                                <div class="col-md-4 clearfix">
+                                <div class="col-md-4 clearfix padding-left-6px qantity-div">
                                     <div class="form-group qty">
                                         <a href="#" class="btn-stepper" data-case="0">-</a>
                                         <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>"/>
                                         <a href="#" class="btn-stepper" data-case="1">+</a>
                                     </div>
                                 </div>
-                                <div class="col-lg-5 ">
+                                <div class="col-lg-5 buy-btn">
                                     <div class="button-signin">
                                         <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit">
                                             <?= Yii::t('frontend', 'Buy') ?>
