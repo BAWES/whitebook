@@ -6,7 +6,7 @@ use yii\widgets\Breadcrumbs;
 $get = Yii::$app->request->get();
 ?>
 
-<section id="inner_pages_white_back">
+<section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
 	<div class="container paddng0">
 		<?php $this->render('/product/events_slider.php'); ?>
 
@@ -67,7 +67,7 @@ $get = Yii::$app->request->get();
 
 				</div><!-- END .filter_content -->
 			</div><!-- END .left_side_cate -->
-			<div class="col-md-9 paddingright0">
+			<div class="col-md-9 paddingright0 right-side">
 				<div class="banner_section_plan">
 					<?= Html::img("@web/images/banner_plan.png") ?>
 				</div>
