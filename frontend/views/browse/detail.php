@@ -287,7 +287,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                             <?= Yii::t('frontend', $model->type->type_name); ?>
                                                         )
                                                         </span>
-                                                        <span class="glyphicon glyphicon-menu-down text-align pull-right"></span></a>
+                                                        <span class="glyphicon glyphicon-menu-down text-align"></span></a>
                                                 </h4>
                                             </div>
                                             <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
@@ -305,7 +305,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                 <h4 class="panel-title">
                                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" id="additional_click" aria-controls="collapseTwo">
                                                         <?= Yii::t('frontend', 'Additional Information') ?>
-                                                        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
+                                                        <span class="glyphicon glyphicon-menu-right text-align"></span></a>
                                                 </h4>
                                             </div>
                                             <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
@@ -324,7 +324,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                 <h4 class="panel-title">
                                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="contact_click" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                                         <?= Yii::t('frontend', 'Contact Info') ?>
-                                                        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+                                                        <span class="glyphicon glyphicon-menu-right text-align"></span>
                                                     </a>
                                                 </h4>
                                             </div>
@@ -412,7 +412,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                 <h4 class="panel-title">
                                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="price_click" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                                         <?= Yii::t('frontend', 'Price Cart'); ?>
-                                                        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
+                                                        <span class="glyphicon glyphicon-menu-right text-align"></span></a>
                                                 </h4>
                                             </div>
                                             <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
@@ -430,7 +430,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                                 <h4 class="panel-title">
                                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="custom_click" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                                                         <?= Yii::t('frontend', 'Customization') ?>
-                                                        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+                                                        <span class="glyphicon glyphicon-menu-right text-align"></span>
                                                     </a>
                                                 </h4>
                                             </div>

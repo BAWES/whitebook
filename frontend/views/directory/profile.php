@@ -91,7 +91,7 @@ if ($event_status > 0) {
                                             <h4 class="panel-title">
                                                 <a class="collapsed" id="description_click" data-toggle="collapse" data-parent="#sub_accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                                     <?php echo Yii::t('frontend', 'Description'); ?>
-                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+                                                    <span class="glyphicon glyphicon-menu-right text-align"></span>
                                                 </a>
                                             </h4>
                                         </div>
@@ -106,7 +106,7 @@ if ($event_status > 0) {
                                             <h4 class="panel-title">
                                                 <a class="collapsed" data-toggle="collapse" data-parent="#sub_accordion" id="policy_click" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                                     <?php echo Yii::t('frontend', 'Return policy'); ?>
-                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+                                                    <span class="glyphicon glyphicon-menu-right text-align"></span>
                                                 </a>
                                             </h4>
                                         </div>
@@ -121,7 +121,7 @@ if ($event_status > 0) {
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#sub_accordion"  id="contact_click" href="#collapseFive" aria-expanded="true" aria-controls="collapseOne">
                                                     <?= Yii::t('frontend', 'Contact info'); ?>
-                                                    <span class="glyphicon glyphicon-menu-down text-align pull-right"></span>
+                                                    <span class="glyphicon glyphicon-menu-down text-align"></span>
                                                 </a>
                                             </h4>
                                         </div>
