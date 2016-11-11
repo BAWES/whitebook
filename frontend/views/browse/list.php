@@ -26,7 +26,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
 ?>
 
     <!-- coniner start -->
-    <section id="inner_pages_white_back">
+    <section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
         <div id="event_slider_wrapper">
             <div class="container paddng0">
                 <?php echo $this->render('/product/events_slider.php');  ?>
@@ -48,7 +48,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
             <div class="plan_venues" id="wrapper">
                 <div class="overlay"></div>
                 <div class="overlay_filter clearfix">
-                    <div class="col-lg-3 padding-left-0">
+                    <div class="col-lg-3 padding-left-0 date-filter">
                         <?= $this->render('@frontend/views/common/filter/date.php', [
                             'deliver_date' => $deliver_date
                         ]); ?>
@@ -56,7 +56,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <div class="mid-space">
                         &nbsp;
                     </div>
-                    <div class="col-lg-3 padding-left-0">
+                    <div class="col-lg-3 padding-left-0 location-filter">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
                         ]);  ?>
@@ -64,7 +64,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <div class="mid-space">
                         &nbsp;
                     </div>
-                    <div class="col-lg-2 padding-left-0">
+                    <div class="col-lg-2 padding-left-0 available-filter">
                         <div class="panel panel-default" id="top_panel_location">
                             <div class="panel-heading clearfix" id="top_panel_heading">
                                 <div class=""><p><?=Yii::t('frontend','Product Type')?></p></div>
@@ -99,7 +99,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <i class="fa fa-filter"></i>
                 </span>
 
-                <div class="col-md-3 paddingleft0 hidden-xs hidden-sm" id="left_side_cate">
+                <div class="col-md-3 paddingleft0 hidden-xs hidden-sm left-sidebar" id="left_side_cate">
 
                     <?= $this->render('@frontend/views/browse/_filter.php', [
                             'deliver_date' => $deliver_date,
@@ -112,7 +112,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     ]);  ?>
 
                 </div>
-                <div class="col-md-9 paddingright0">
+                <div class="col-md-9 paddingright0 right-sidebar">
                     <div class="banner_section_plan">
                         <?= Html::img("@web/images/banner_plan.png") ?>
                     </div>
