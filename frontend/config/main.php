@@ -53,7 +53,7 @@ return [
             'rules' => [
                   '' => 'site/index',
                   'themes' => 'themes/index',
-                  'directories' => 'directory/index',
+                  'directory' => 'directory/index',
                   'cart' => 'cart/index',
                   'browse/<slug:[A-Za-z0-9\_-]+>' => 'browse/list',
                   'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',
