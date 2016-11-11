@@ -91,8 +91,7 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .vendor_detail .glyphicon-menu-right,
 .vendor_detail .glyphicon-menu-down
 {
-    right: -5px;
-    top: 5px;
+    top: 7px;
 }
 
 .cont_ifo_left h4 {
@@ -224,4 +223,22 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .owl-carousel,
 .rev_slider_wrapper{
     direction: ltr;
+}
+
+.right_descr_product .glyphicon-menu-down,
+.right_descr_product .glyphicon-menu-right {
+    float: left !important;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.right_descr_product .glyphicon-menu-right {
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */
+    transform: rotate(180deg);
+}
+
+.right_descr_product .collapsed, 
+.right_descr_product .panel-title > a {
+    width: auto !important;
 }
