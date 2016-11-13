@@ -6,7 +6,7 @@ use yii\web\view;
 use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
-
+use common\components\LangFormat;
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
 ?>
@@ -101,12 +101,8 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
                         ?>
 	        		</td>
 	        		<td>
-	        			<a href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
-	        				<?php if(Yii::$app->language == 'en') {
-	        					echo $item['item_name'];
-	        				} else {
-	        					echo $item['item_name_ar']; 
-	        				} ?>
+	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
+							<?=LangFormat::format($item['item_name'],$item['item_name_ar']); ?>
 	        			</a>
 	        		</td>
 	        		<td>
@@ -115,17 +111,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			if(isset($delivery_area->location)) { 
 
 							$delivery_charge += $delivery_area->delivery_price;
-
+							echo LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar).' <br />';
+							echo LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar).' <br />';
 	        				?>
-	        				
-	        				<?php if(Yii::$app->language == 'en') { ?>
-	            				<?= $delivery_area->location->location; ?> <br />
-	            				<?= $delivery_area->location->city->city_name; ?> <br />
-	                        <?php } else { ?>
-	                            <?= $delivery_area->location->location_ar; ?> <br />
-	                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
-	                        <?php } ?>
-
 	        				<?= $item['cart_delivery_date'] ?> <br />
 	        			
 	        				<?= $item['timeslot_start_time'].' - '.$item['timeslot_end_time'] ?>
@@ -137,7 +125,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			<?php } ?>		        			
 	        		</td>
 	        		<td align="center">
-		        		<div class="input-group btn-block" style="max-width: 140px;">
+		        		<div class="input-group btn-block max-width-140">
 		                    <input type="text" name="quantity[<?= $item['cart_id'] ?>]" value="<?= $item['cart_quantity'] ?>" size="1" class="form-control">
 		                    <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Update"><i class="glyphicon glyphicon-refresh"></i></button>
 		                    <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="glyphicon glyphicon-trash"></i></button>
@@ -215,4 +203,8 @@ $this->registerJs("
 		jQuery(this).parent().find('input').val(0);
 		jQuery('#cart-form').submit();
 	});
-", View::POS_READY);	 
+", View::POS_READY);
+
+$this->registerCss("
+.max-width-140{max-width: 140px;}
+");

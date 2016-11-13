@@ -9,7 +9,7 @@ use admin\models\RoleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use admin\models\AccessControlList;
 
 /**
  * RoleController implements the CRUD actions for Role model.
@@ -26,32 +26,29 @@ class RoleController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                   // 'delete' => ['post'],
+                //    'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all Role models.
@@ -60,20 +57,13 @@ class RoleController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '10');
-        if (yii::$app->user->can($access)) {
-            $searchModel = new RoleSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new RoleSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
     }
 
     /**
@@ -98,22 +88,39 @@ class RoleController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '10');
-        if (yii::$app->user->can($access)) {
-            $model = new Role();
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'New user role created successfully!');
+        $model = new Role();
+      
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('create', [
-                'model' => $model,
-            ]);
+            $access_control = Yii::$app->request->post('access_control');
+
+            if(!$access_control) {
+                $access_control = array();
             }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            foreach ($access_control as $key => $value) {
+                foreach ($value as $method) {
+                    $access = new AccessControlList();
+                    $access->role_id = $model->role_id;
+                    $access->controller = $key;
+                    $access->method = $method;
+                    $access->save();
+                }
+            }
+
+            Yii::$app->session->setFlash('success', 'New user role created successfully!');
+
+            return $this->redirect(['index']);
+
+        } else {
+
+            //list controller - method 
+            $action_list = Role::actionList();
+
+            return $this->render('create', [
+                'model' => $model,
+                'action_list' => $action_list
+            ]);
         }
     }
 
@@ -127,23 +134,54 @@ class RoleController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '10');
-        if (yii::$app->user->can($access)) {
             $model = $this->findModel($id);
+     
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+                //remove all old 
+                AccessControlList::deleteAll(['role_id' => $id]);
+
+                //insert new 
+                $access_control = Yii::$app->request->post('access_control');
+
+                if(!$access_control) {
+                    $access_control = array();
+                }
+
+                foreach ($access_control as $key => $value) {
+                    foreach ($value as $method) {
+                        $access = new AccessControlList();
+                        $access->role_id = $model->role_id;
+                        $access->controller = $key;
+                        $access->method = $method;
+                        $access->save();
+                    }
+                }
+
                 Yii::$app->session->setFlash('success', 'User role updated successfully!');
 
                 return $this->redirect(['index']);
-            } else {
-                return $this->render('update', [
-                'model' => $model,
-            ]);
-            }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
-        }
+            } else {
+
+                //list controller - method 
+                $action_list = Role::actionList();
+
+                //role access list 
+                $role_access_list = array();
+
+                $result = AccessControlList::findAll(['role_id' => $id]);
+
+                foreach ($result as $key => $value) {
+                    $role_access_list[$value->controller][] = $value->method;
+                }
+
+                return $this->render('update', [
+                    'model' => $model,
+                    'action_list' => $action_list,
+                    'role_access_list' => $role_access_list
+                ]);
+            }
     }
 
     /**
@@ -156,17 +194,14 @@ class RoleController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '10');
-        if (yii::$app->user->can($access)) {
-            $this->findModel($id)->delete();
-            Yii::$app->session->setFlash('success', 'User role deleted successfully!');
+        $this->findModel($id)->delete();
 
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+        //delete all access control
+        AccessControlList::deleteAll(['role_id' => $id]);
 
-            return $this->redirect(['site/index']);
-        }
+        Yii::$app->session->setFlash('success', 'User role deleted successfully!');
+
+        return $this->redirect(['index']);
     }
 
     /**

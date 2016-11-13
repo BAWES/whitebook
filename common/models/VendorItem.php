@@ -229,15 +229,6 @@ class VendorItem extends \yii\db\ActiveRecord
         return $this->hasMany(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
     }
 
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getCategory()
-    {
-        return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
-    }
-
     /**
     * @return \yii\db\ActiveQuery
     */
@@ -381,14 +372,20 @@ class VendorItem extends \yii\db\ActiveRecord
             Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $image_key);
             Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $image_key);
             Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $image_key);
+            return true;
+        }
+
+        public function deleteAllFiles() {
+            if (isset($this->images) && count($this->images)>0) {
+                foreach ($this->images as $img) {
+                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $img->image_path);
+                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $img->image_path);
+                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $img->image_path);
+                }
+            }
         }
 
         public static function get_featured_product() {
-          return $feature = \frontend\models\VendorItem::find()
-                      ->select(['{{%vendor_item}}.*'])
-                      ->where(['item_status' => 'Active'])
-                      ->with('vendor')
-                      ->asArray()
-                      ->all();
-            }
+            return $feature = \frontend\models\VendorItem::find()->select(['{{%vendor_item}}.*'])->where(['item_status' => 'Active'])->with('vendor')->asArray()->all();
+        }
 }

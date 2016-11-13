@@ -2,7 +2,6 @@
 namespace admin\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\db\Query;
@@ -28,7 +27,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => \yii\filters\AccessControl::className(),
                 'rules' => [
                     [
                         'actions' => ['login', 'error', 'recoverypassword'],

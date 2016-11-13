@@ -8440,3 +8440,36 @@ ul>li.blue {
 }
 ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{background:#393}ul>li.lime{background:#8cbf26}ul>li.teal{background:#00aba9}ul>li.purple{background:#ff0097}ul>li.brown{background:#a05000}ul>li.pink{background:#e671b8}ul>li.magenta{background:#a200ff}ul>li.grey{background:#333}ul>li.darkblue{background:#204e81}ul>li.lightred{background:#e63a3a}ul>li.lightgrey{background:#666}ul>li.satblue{background:#2c5e7b}ul>li.satgreen{background:#56af45}
 
+
+.cropit-preview {
+  background-color: #f8f8f8;
+  background-size: cover;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 7px;
+  width: 530px;
+  height: 530px;
+  overflow: hidden;
+}
+
+.cropit-preview-image-container {
+  cursor: move;
+}
+
+.image-size-label {
+  margin-top: 10px;
+}
+
+.cropit-image-zoom-input{
+  margin-bottom: 10px;
+}
+
+.vendor_image_preview img {
+  width: 100px;
+  height: 100px;
+}
+
+.table-item-image input[type="text"]{
+  width: 50px;  
+  text-align: center;
+}

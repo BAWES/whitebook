@@ -578,6 +578,9 @@ body.modal-open .chat-window-wrapper {
   background-color: #22262e;
   padding: 8px 0px 10px 0px;
 }
+.page-sidebar .page-sidebar-wrapper > ul > li.open > ul.sub-menu {
+  display: block;
+}
 .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li {
   background: none;
   margin: 0px;
@@ -8415,10 +8418,42 @@ a.delivery_href:hover{
     list-style: none;
 }
 
-.item_pending_count{
+.item_pending_count, .draft_item_count{
   background: red;
   color: white;
   border-radius: 100%;
   padding: 0 5px;
   margin-left: 10px;
+}
+
+.cropit-preview {
+  background-color: #f8f8f8;
+  background-size: cover;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 7px;
+  width: 530px;
+  height: 530px;
+  overflow: hidden;
+}
+
+.cropit-preview-image-container {
+  cursor: move;
+}
+
+.image-size-label {
+  margin-top: 10px;
+}
+
+.cropit-image-zoom-input{
+  margin-bottom: 10px;
+}
+
+.vendor_image_preview img {
+  width: 100px;
+  height: 100px;
+}
+.table-item-image input[type="text"]{
+  width: 50px;  
+  text-align: center;
 }

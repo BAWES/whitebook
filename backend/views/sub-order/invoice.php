@@ -10,16 +10,14 @@ use common\models\OrderStatus;
 use common\models\SuborderItemPurchase;
 use common\models\Siteinfo;
 
-$site_info = Siteinfo::find()->one();
-
 ?>
 
-<h1><?= $site_info->app_name ?></h1>
+<h1><?= Siteinfo::info('app_name') ?></h1>
 
 <div id="store_details">
-    <p>Email: <?= $site_info->email_id ?></p>
-    <p>Phone no: <?= $site_info->phone_number ?></p>
-    <p>Address: <?= $site_info->site_location ?></p>
+    <p>Email: <?= Yii::$app->params['adminEmail'] ?></p>
+    <p>Phone no: <?= Siteinfo::info('phone_numbe') ?></p>
+    <p>Address: <?= Siteinfo::info('site_location') ?></p>
 </div>
 
 <hr />

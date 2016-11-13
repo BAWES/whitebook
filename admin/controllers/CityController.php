@@ -9,7 +9,6 @@ use admin\models\AuthItem;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use common\models\Country;
 use common\models\City;
@@ -17,6 +16,8 @@ use common\models\CustomerAddress;
 use common\models\CustomerCart;
 use common\models\Location;
 use common\models\VendorLocation;
+use admin\models\AccessControlList;
+
 
 /**
 * CityController implements the CRUD actions for City model.
@@ -37,54 +38,38 @@ class CityController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'delete' => ['post'],
+                //   'delete' => ['POST'],
                 ],
             ],
-
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => \yii\filters\AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => [],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'allow' => AccessControlList::can()
                     ],
                 ],
-            ],
-
+            ],            
         ];
     }
 
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '12');
+       $searchModel = new CitySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if (yii::$app->user->can($access)) {
-        
-            $searchModel = new CitySearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -110,33 +95,24 @@ class CityController extends Controller
     */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '12');
-        
-        if (yii::$app->user->can($access)) {
-            
-            $model = new City();
-            $model->status = 'Active';
+        $model = new City();
+        $model->status = 'Active';
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'Governorate info created successfully!');
-                return $this->redirect(['index']);
-            
-            } else {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-                $countries = Country::loadcountry();
-                $country = ArrayHelper::map($countries, 'country_id', 'country_name');
+            Yii::$app->session->setFlash('success', 'Governorate info created successfully!');
+            return $this->redirect(['index']);
 
-                return $this->render('create', [
-                    'model' => $model, 'country' => $country,
-                ]);
-            }
-        
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+
+            $countries = Country::loadcountry();
+            $country = ArrayHelper::map($countries, 'country_id', 'country_name');
+
+            return $this->render('create', [
+                'model' => $model, 'country' => $country,
+            ]);
         }
+
     }
 
     /**
@@ -150,34 +126,24 @@ class CityController extends Controller
     */
     public function actionUpdate($city_id, $country_id)
     {
-        $access = AuthItem::AuthitemCheck('2', '12');
-        
-        if (yii::$app->user->can($access)) {
             
-            $model = $this->findModel($city_id, $country_id);
-            
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'Governorate info updated successfully!');
+        $model = $this->findModel($city_id, $country_id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-                return $this->redirect(['index']);
-            
-            } else {
-
-                $countries = Country::loadcountry();
-                $country = ArrayHelper::map($countries, 'country_id', 'country_name');
-
-                return $this->render('update', [
-                    'model' => $model, 
-                    'country' => $country,
-                ]);
-            }
+            Yii::$app->session->setFlash('success', 'Governorate info updated successfully!');
+            return $this->redirect(['index']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+
+            $countries = Country::loadcountry();
+            $country = ArrayHelper::map($countries, 'country_id', 'country_name');
+
+            return $this->render('update', [
+                'model' => $model,
+                'country' => $country,
+            ]);
         }
+
     }
 
     /**
@@ -191,33 +157,24 @@ class CityController extends Controller
     */
     public function actionDelete($city_id, $country_id)
     {
-        $access = AuthItem::AuthitemCheck('3', '12');
+        $this->findModel($city_id, $country_id)->delete();
 
-        if (yii::$app->user->can($access)) {
-        
-            $this->findModel($city_id, $country_id)->delete();
+        //delete all customer address
+        CustomerAddress::deleteAll(['city_id' => $city_id]);
 
-            //delete all customer address 
-            CustomerAddress::deleteAll(['city_id' => $city_id]);
+        //delete customer cart - area_id
+        CustomerCart::deleteAll('area_id in (select area_id from {{%location}}
+            where city_id = "'.$city_id.'")');
 
-            //delete customer cart - area_id 
-            CustomerCart::deleteAll('area_id in (select area_id from {{%location}} 
-                where city_id = "'.$city_id.'")');
+        //delete all location - city_id
+        Location::deleteAll(['city_id' => $city_id]);
 
-            //delete all location - city_id 
-            Location::deleteAll(['city_id' => $city_id]);
+        //delete all vendor location - city_id
+        VendorLocation::deleteAll(['city_id' => $city_id]);
 
-            //delete all vendor location - city_id 
-            VendorLocation::deleteAll(['city_id' => $city_id]);
+        Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
+        return $this->redirect(['index']);
 
-            Yii::$app->session->setFlash('success', 'Governorate deleted successfully!');
-            return $this->redirect(['index']);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
     }
 
     /**

@@ -44,7 +44,7 @@ return [
             ],
         ],
         'urlManager' => [
-          'class' => 'yii\web\UrlManager',
+            'class' => 'yii\web\UrlManager',
         ],
         'formatter' => [
             'currencyCode' => 'KWD',

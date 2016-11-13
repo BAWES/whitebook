@@ -18,7 +18,7 @@ if (!empty($wishlist)) {
                     <?php
                     $image = Image::find()->select('image_path')->where(['item_id' => $value['item_id'], 'module_type' => 'vendor_item', 'trash' => 'Default'])->asArray()->one();
                     ?>
-                    <?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $image['image_path'], ['class' => 'item-img', 'style' => 'width:210px; height:208px;']); ?>
+                    <?= Html::img(Yii::getAlias("@vendor_item_images_210/") . $image['image_path'], ['class' => 'item-img']); ?>
                 </div>
                 <div class="events_descrip">
                     <a title="" href="#"><?= $value['vendor_name']; ?>
@@ -37,6 +37,11 @@ else {
     ?>
 
     <li>
-        No Record found
+        <?=Yii::t('frontend','No Record found')?>
     </li>
-<?php } ?>
+<?php }
+$this->registerCss("
+    .item-img{width:210px; height:208px;}
+")
+
+?>

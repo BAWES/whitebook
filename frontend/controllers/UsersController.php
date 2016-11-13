@@ -13,7 +13,6 @@ use common\models\Country;
 use common\models\Location;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
-use common\models\Siteinfo;
 use common\models\FeatureGroupItem;
 use common\models\LoginForm;
 use common\models\Vendor;
@@ -97,7 +96,7 @@ class UsersController extends BaseController
             $model->customer_mobile=$data['customer_mobile'];
 
             if ($model->validate() && $model->save()) {
-                $siteinfo = Siteinfo::find()->asArray()->all();
+               
                 $username = $model['customer_name'];
                 Yii::$app->session->set('register', '1');
                 $message = 'Thank you for registration with us.</br><a href='.Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true).' title="Click Here">Click here </a> to activate your account.';
@@ -295,168 +294,6 @@ class UsersController extends BaseController
         ]);
     }
 
-    /**
-     * Create events    
-     */
-    public function actionCreate_event()
-    {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $request = Yii::$app->request;        
-
-        if ($request->post('event_name') && $request->post('event_type') && $request->post('event_date')) {
-
-            $model = new Users();
-            $event_name = $request->post('event_name');
-            $event_date = $request->post('event_date');
-            
-            Yii::$app->session->set('event_name', $event_name);
-            
-            $customer_id = Yii::$app->user->identity->customer_id;
-            
-            // Creating event start
-            $customer_id = Yii::$app->user->identity->customer_id;
-            $event_date1 = date('Y-m-d', strtotime($event_date));
-            $string = str_replace(' ', '-', $event_name); // Replaces all spaces with hyphens.
-            $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-            
-            $check = Events::find()
-                ->select('event_id')
-                ->where(['customer_id' => $customer_id, 'event_name' => $event_name])
-                ->asArray()
-                ->all();
-
-            if (count($check) > 0) {
-                $result = Events::EVENT_ALREADY_EXIST;
-            } else {
-                $event_modal=new Events;
-                $event_modal->customer_id=$customer_id;
-                $event_modal->event_name=$event_name;
-                $event_modal->event_date=$event_date1;
-                $event_modal->event_type= $request->post('event_type');
-                $event_modal->slug=$slug;
-                $event_modal->save();
-                $result=$event_modal->event_id;
-            }
-
-            // Creating event end
-
-            if ($result == Events::EVENT_ALREADY_EXIST) {
-            
-                return Events::EVENT_ALREADY_EXIST;
-            
-            } else {
-
-                if ($request->post('item_id') && ($request->post('item_id') > 0)) {
-
-                    Yii::$app->session->set('item_name', $request->post('item_name'));
-                    $item_id = $request->post('item_id');
-                    $event_id = $event_modal->event_id;
-                    
-                    $check = EventItemlink::find()
-                        ->select(['link_id'])
-                        ->where(['event_id'=> $event_id])
-                        ->andwhere(['item_id'=> $item_id])
-                        ->count();
-
-                    if($check > 0) {
-                        return EventItemlink::EVENT_ITEM_LINK_EXIST;
-                    } else {
-                        $event_date = date('Y-m-d H:i:s');
-                        $event_item_modal = new EventItemlink;
-                        $event_item_modal->event_id=$event_id;
-                        $event_item_modal->item_id=$item_id;
-                        $event_item_modal->link_datetime=$event_date;
-                        $event_item_modal->created_datetime=$event_date;
-                        $event_item_modal->modified_datetime=$event_date;
-                        $event_item_modal->save();
-
-                       return EventItemlink::EVENT_ITEM_CREATED;
-                   }
-                }
-
-                return Events::EVENT_CREATED;
-            }
-        }
-    }
-
-    /**
-     * Update events    
-     */
-    public function actionUpdate_event()
-    {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $request = Yii::$app->request;
-
-        if ($request->post('event_name') && $request->post('event_type') && $request->post('event_date')) {
-            $model = new Users();
-            $event_name = $request->post('event_name');
-            $event_type = $request->post('event_type');
-            $event_date = $request->post('event_date');
-            $event_id = $request->post('event_id');
-            $customer_id = Yii::$app->user->identity->customer_id;
-            $add_event = $model->update_event($event_name, $event_type, $event_date, $event_id);
-            
-            if ($add_event ==  Events::EVENT_ALREADY_EXIST) {
-                return  Events::EVENT_ALREADY_EXIST;
-            } else {
-                return $add_event;
-            }
-        }
-    }
-
-    /**
-     * Insert items to events    
-     */
-    public function actionAdd_event()
-    {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $request = Yii::$app->request;
-
-        if ($request->post('event_id') && $request->post('item_id')) {
-            
-            $model = new Users();
-            $event_id = $request->post('event_id');
-            $item_id = $request->post('item_id');
-
-            $item_name = Html::encode($request->post('item_name'));
-            $event_name = Html::encode($request->post('event_name'));
-
-            $customer_id = Yii::$app->user->identity->customer_id;
-            $insert_item_to_event = $model->insert_item_to_event($item_id, $event_id);
-
-            if ($insert_item_to_event == Events::EVENT_ADDED_SUCCESS) {
-                
-                return json_encode([
-                    'status' => Events::EVENT_ADDED_SUCCESS,
-                    'message' => Yii::t('frontend','{item_name} has been added to {event_name}',
-                    [
-                       'item_name' => $item_name,
-                       'event_name' => $event_name,
-                    ])
-               ]);
-
-            } elseif ($insert_item_to_event == Events::EVENT_ALREADY_EXIST) {
-                
-                return json_encode([
-                    'status' => Events::EVENT_ALREADY_EXIST,
-                    'message' => Yii::t('frontend','{item_name} already exist with {event_name}',
-                    [
-                       'item_name' => $item_name,
-                       'event_name' => $event_name,
-                    ])
-               ]);
-            }
-        }
-    }
 
     public function actionAdd_to_wishlist()
     {

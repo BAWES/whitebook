@@ -19,11 +19,11 @@ $this->title='Whitebook - Checkout';
 <section id="inner_pages_white_back" class="product_details_com">
     <div class="container paddng0">
     <!-- Events slider start -->
-    <?php require(__DIR__ . '/../product/events_slider.php'); ?>
+    <?php require(__DIR__ . '/../browse/events_slider.php'); ?>
     <!-- Events slider end -->
     <div class="breadcrumb_common">
         <div class="bs-example">
-            <h2>Delivery & Payment Details</h2>
+            <h2><?=Yii::t('frontend','Delivery & Payment Details')?></h2>
         </div>
     </div>
     <!-- Mobile start Here-->
@@ -34,7 +34,7 @@ $this->title='Whitebook - Checkout';
 
     <table>
      <tr><td>
-      <span>Delivery Details</span>
+      <span><?=Yii::t('frontend','Delivery Details')?></span>
       </td>
      </tr>
       <tr>
@@ -61,7 +61,7 @@ $this->title='Whitebook - Checkout';
 
 
     </table>
-    <a href="<?= Yii::$app->homeUrl; ?>/cod">Cash on Delivery</a>
+    <a href="<?= Yii::$app->homeUrl; ?>/cod"><?=Yii::t('frontend','Cash on Delivery')?></a>
 
     <!-- Mobile end Here-->
 

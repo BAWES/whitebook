@@ -6,7 +6,7 @@ use yii\web\view;
 use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
-
+use common\components\LangFormat;
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
 ?>
@@ -105,12 +105,8 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
                         ?>
 	        		</td>
 	        		<td>
-	        			<a href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
-	        				<?php if(Yii::$app->language == 'en') {
-	        					echo $item['item_name'];
-	        				} else {
-	        					echo $item['item_name_ar']; 
-	        				} ?>
+	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
+	        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']); ?>
 	        			</a>
 
 	        			<div class="visible-xs visible-sm">	        				
@@ -138,16 +134,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			if(isset($delivery_area->location)) {
 
 							$delivery_charge += $delivery_area->delivery_price;
-
+							echo LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar).' <br />';
+							echo LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar).' <br />';
 	        				?>
-	        					<?php if(Yii::$app->language == 'en') { ?>
-		            				<?= $delivery_area->location->location; ?> <br />
-		            				<?= $delivery_area->location->city->city_name; ?> <br />
-		                        <?php } else { ?>
-		                            <?= $delivery_area->location->location_ar; ?> <br />
-		                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
-		                        <?php } ?>
-
 	        					<?= $item['cart_delivery_date'] ?><br />
 								
 								<?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
@@ -165,7 +154,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			<?php } ?>		        			
 	        		</td>
 	        		<td align="center">
-		        		<div class="input-group btn-block" style="max-width: 150px;">
+		        		<div class="input-group btn-block max-width-150-px">
 		                    <input type="text" name="quantity[<?= $item['cart_id'] ?>]" value="<?= $item['cart_quantity'] ?>" size="1" class="form-control">
 		                    <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Update"><i class="glyphicon glyphicon-refresh"></i></button>
 		                    <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="glyphicon glyphicon-trash"></i></button>
@@ -207,7 +196,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
         </button>
 
-        <a href="<?= Url::to(['shop/index']) ?>" class="btn btn-primary pull-right btn-checkout">
+        <a href="<?= Url::to(['browse/list', 'slug' => 'all']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
         </a>
 
@@ -238,9 +227,9 @@ $this->registerJs("
     var isGuest = ".(int)Yii::$app->user->isGuest.";
     var customer_id = '".Yii::$app->user->id."';
     var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
-    var getdeliverytimeslot_url = '".Url::toRoute('cart/getdeliverytimeslot')."';
+    var getdeliverytimeslot_url = '".Url::toRoute('cart/get-delivery-timeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
-    var availablity = '".Url::toRoute('shop/product-available')."';
+    var availablity = '".Url::toRoute('browse/product-available')."';
     var product_availability = '".Url::toRoute('cart/validation-product-available')."';
     var update_cart_url = '".Url::toRoute('cart/update-cart-item')."';
 ", View::POS_HEAD);
@@ -281,13 +270,13 @@ $this->registerJs("
 				</h4>
 			</div>
 			<div class="modal-body">
-				<form class="form col-md-12 center-block" id="loginForm" name="update-cart" method="POST">
+				<form class="form col-md-12 center-block" id="update-cart" name="update-cart" method="POST">
 
-					<input type="hidden" id="_csrf" name="_csrf" value="QVc1WjZPZ1d0Gw0xeDoBODRjd2lUNwIxBBNvCF97LWENFgQ8fCseYQ==" />
+					<input type="hidden" id="_csrf" name="_csrf" value="<?=Yii::$app->request->csrfToken?>" />
 
 					<div class="col-md-2 padding-left-0">
 						<div class="form-group">
-							<label>Delivery Date</label>
+							<label><?=Yii::t('frontend','Delivery Date')?></label>
 							<div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
 								<input value="" readonly="true" name="delivery_date" id="delivery_date" class="date-picker-box form-control required"  placeholder="Date" >
 								<i class="fa fa-calendar" aria-hidden="true"></i>
@@ -297,8 +286,8 @@ $this->registerJs("
 					</div>
 					<div class="col-md-5 padding-left-0 timeslot_id_div">
 						<div class="form-group">
-							<label>Delivery Time Slot</label>
-							<div class="text padding-top-12">Please Select Delivery Date</div>
+							<label><?=Yii::t('frontend','Delivery Time Slot')?></label>
+							<div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date')?></div>
 						</div>
 					</div>
 					<div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">
@@ -313,3 +302,17 @@ $this->registerJs("
 		</div>
 	</div>
 </div>
+<?php
+
+$this->registerCss("
+.max-width-150-px{max-width: 150px;}
+.fa-calendar{
+position: absolute;
+right: 9px;
+top: 10px;
+}
+.position-relative {position:relative;}
+.fa-calendar{position: absolute;top: 9px;right: 7px;font-size: 17px;}
+div.datepicker{  top: 157px!important;  border: 1px solid #f2f2f2;}
+.dropdown-toggle{    background: none;  color: #000;  border: 1px solid #ccc;}
+");

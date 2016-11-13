@@ -414,8 +414,8 @@ textarea .form-group{ min-height: 126px;}
 .breadcrumb > li + li::before {    background: url("../images/bread.png") no-repeat scroll center center hsla(0, 0%, 0%, 0);    content: " ";    padding: 0 4px;}
 .breadcrumb a:hover{ color:#ebc000;; text-decoration: none;}
 .breadcrumb > .active{color:#999 !important;}
-.filter_content{ float: left; border: 1px solid #f3f3f3; border-bottom: none; }
-.listing_right{ float: left; /*width: 862px; */ min-height: 500px;}
+.filter_content{ float: left; width: 100%; border: 1px solid #f3f3f3; border-bottom: none; }
+.listing_right{ float: left; width: 100%; min-height: 500px;}
 .banner_section_plan{ display: inline-block; width: 100%; margin-bottom: 30px;}
 .add_more_commons .lode_more_buttons{ margin-top: 48px;}
 .add_more_commons .lode_more_buttons{ margin-bottom: 30px;}
@@ -479,7 +479,21 @@ textarea .form-group{ min-height: 126px;}
 .table > ul {    margin: 0;    padding: 0;}
 .panel-body label{color: #5b5858;font-family:'OpenSansRegular' ;font-size:13px; font-weight: normal;}
 .vender_profile_new .panel-heading .collapsed    {color: #1d1d1d;font-family:'OpenSansRegular' ;font-size:13px; font-weight: normal; text-transform: uppercase; }
-.vender_profile_new .panel-heading .panel-title > a{color: #1d1d1d;font-family:'OpenSansRegular' ; text-decoration: none;font-size:13px; font-weight: normal; text-transform: capitalize; border-bottom: 1px solid #cccccc; padding: 15px 0 17px;}
+.vender_profile_new .panel-heading .panel-title > a {
+    color: #1d1d1d;
+    font-family:'OpenSansRegular'; 
+    text-decoration: none;
+    font-size:13px; 
+    font-weight: normal; 
+    text-transform: capitalize; 
+    padding: 15px 0 17px;
+}
+.vender_profile_new .panel-heading .panel-title {
+    border-bottom: 1px solid #cccccc; 
+}
+.vender_profile_new .panel-body{
+    margin-bottom: 10px;
+}
 .table ul{ padding: 0px; margin: 0px; }
 .table ul li{ padding: 0px; margin: 0px; list-style: none; }
 .filter_section_fillter .panel-body .table label{font: 300 10pt; color: #808080;  padding-top: 1px;  padding-bottom: 10px;}
@@ -600,7 +614,7 @@ a:hover .plus-icon-prod{color:#000;display: inline-block;width:100%;height:16px;
 .product_detail_section .normal_tables .left_descrip{ width: 58%; display: inline-block;}
 .product_detail_section .normal_tables .left_descrip b{ margin: 13px 0 30px}
 .product_detail_section #slider .flex-direction-nav{display: none;}
-.product_detail_section #carousel .flex-viewport{padding:0px;margin:0 5px 0 0;}
+.product_detail_section #carousel .flex-viewport{padding:0px;margin:0 5px 0 0; direction: ltr;}
 .product_detail_section #slider.flexslider {margin: 0 !important; padding: 0px 0 0 0;}
 .product_detail_section #carousel.flexslider{padding:10px 0 0 28px;margin:0 28px 0 0;}
 .product_detail_section #carousel li {margin-right: 10px;}
@@ -962,7 +976,7 @@ div#dp3,#eventdate_icon {
 .address_bot p{font-size:13px; color:#999;font-family:'OpenSansRegular' ;}
 .address_bot h4 a{font-size:13px; color:#999;font-family:'OpenSansRegular' ;  margin: 11px 0 11px; display: inline-block; background:url(../images/message.png) left center no-repeat; padding: 0 0 0 25px;  }
 .address_bot h5{font-size:11pt; color:#999;font-family:'OpenSansRegular' ; background:url(../images/phone.png) left center no-repeat; padding: 0 0 0 25px;  }
-.divider_bot{ display: inline-block; min-height: 193px; border-left: 1px solid #313131;}
+.divider_bot{ display: inline-block; min-height: 153px; border-left: 1px solid #313131;}
 .treams_of_ser{float: left; width: 100%; padding: 0px; margin:  0;}
 .treams_of_ser li{float: left; padding: 0px; list-style: none; margin:11px 0 0 0;}
 .treams_of_ser li a{ float: left; padding: 0px; margin: 0px; text-decoration: none;font-size:11pt; color:#999;font-family:'OpenSansRegular' ; }
@@ -970,7 +984,7 @@ div#dp3,#eventdate_icon {
 .social_share ul li a:hover{color:#B9B9B9;}
 .treams_of_ser li {font-size:10pt; color:#999;font-family:'OpenSansRegular' ; padding: 0 34px 15px 0;}
 .bootom_footer {    border-top: 1px solid #313131;    display: inline-block;    width: 100%;  margin: 50px 0 0;}
-.treams_of_ser.margin_top {    margin-top: 50px;}
+.treams_of_ser.margin_top {    margin-top: 20px;}
 .add_banner {    display: inline-block;    margin: 26px 0 40px;    width: 100%;}
 h1.space_height {height:30px;}
 /* footer  end*/
@@ -1197,7 +1211,7 @@ table.table-bordered tr td
 /* 24112015*/
 
 /* Mari 26112015 */
-a.index_redirect > img, a.similar > img{ width: 208px !important;    height: 219px;}
+/*a.index_redirect > img, a.similar > img{ width: 208px !important;    height: 219px;}*/
 
 span.input-group-btn.mobile-search-icon{display:none;}
 /* selva 28-11-2015 start*/
@@ -1672,6 +1686,7 @@ a.thing_cont:hover {
     bottom: 40px;
     z-index: 11;
     border: 1px solid white;
+    cursor: pointer;
 }
 .btn-close-filter{
     width: 100%;
@@ -1719,4 +1734,72 @@ a.thing_cont:hover {
 
 .banner_section_plan img {
     width: 100%;
+}
+
+.events_images {
+    position: relative;
+}
+img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
+    width: 30px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: #ccc;
+    border-radius: 100%;
+    padding: 1px;
+    margin: 5px;
+}
+
+.social_icons.desktop {
+    margin-top: 40px;
+    text-align: right;
+}
+.social_icons{
+    color: #999;
+}
+.social_icons i {
+    background: white;
+    border-radius: 100%;
+    padding: 10px 12px;
+    margin: 0 0 0 10px;
+    color: #999;
+}
+
+.social_icons.mobile {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.social_icons.mobile span {
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+}
+@media only screen and (max-width: 320px) {
+    .events_images img {
+        width: 16%;
+    }
+}
+.events_images .buy-text{
+    position: absolute;
+    left: 9px;
+    bottom: 11px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+}
+.events_images i{
+    position: absolute;
+    bottom: 1px;
+    left: 4px;
+    font-size: 39px!important;
+    color: #000;
+}
+.padding-left-6px{
+    padding-left: 6px;
+}
+
+.right_descr_product #accordion .glyphicon-menu-down,
+.right_descr_product #accordion .glyphicon-menu-right {
+    float: right;
 }

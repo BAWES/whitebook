@@ -43,21 +43,21 @@ $this->title ='Address Book | Whitebook';
                                         </a>
                                         
                                         <?php if($address['address_name']) { ?>
-                                            <b>Address Name:</b> <br />
+                                            <b><?=Yii::t('frontend','Address Name:')?></b> <br />
                                             <?= $address['address_name'] ?>
                                             <br />
                                             <br />
                                         <?php } ?>
 
                                         <!-- address type -->
-                                        <b>Address Type:</b> <br />
+                                        <b><?=Yii::t('frontend','Address Type:')?></b> <br />
                                         <?= AddressType::type_name($address['address_type_id']); ?>
 
                                         <br />
                                         <br />
 
                                         <!-- address -->
-                                        <b>Address:</b> <br />
+                                        <b><?=Yii::t('frontend','Address:')?></b> <br />
                                         <?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
                             			
                                         <!-- address question response -->
@@ -76,29 +76,13 @@ $this->title ='Address Book | Whitebook';
 
                                         <br />
 
-                                        <b>Area:</b> <br />
-                                        <?php 
-
-                                        if(Yii::$app->language == 'en') { 
-                            			    echo $address['location']?$address['location'].'<br />':'';
-                                        } else {
-                                            echo $address['location_ar']?$address['location_ar'].'<br />':'';
-                                        }
-                            			
-                            			?>
+                                        <b><?=Yii::t('frontend','Area:')?></b> <br />
+                                        <?=\common\components\LangFormat::format($address['location'],$address['location_ar']); ?><br/>
                                         
                                         <br />
 
-                                        <b>City:</b> <br />
-                                        <?php 
-
-                                        if(Yii::$app->language == 'en') { 
-                                            echo $address['city_name']?$address['city_name'].'<br />':'';
-                                        } else {
-                                            echo $address['city_name_ar']?$address['city_name_ar'].'<br />':'';
-                                        }
-                                        
-                                        ?>
+                                        <b><?=Yii::t('frontend','City:')?></b> <br />
+                                        <?=\common\components\LangFormat::format($address['city_name'],$address['city_name_ar']); ?><br/>
                             		</div>
                             	</td>
                             </tr>    
@@ -128,13 +112,13 @@ $this->title ='Address Book | Whitebook';
 <div class="modal fade" id="modal_create_address">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header" style="padding-bottom:0; margin-bottom: 0;">
+      <div class="modal-header header-updated">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
       </div>
-      <div class="modal-body" style="background: white; margin-top: 0;">
+      <div class="modal-body body-updated" >
 
 			<?= $form->field($customer_address_modal, 'address_name'); ?>
 
@@ -242,5 +226,10 @@ $this->registerJs("
     });
 
 ", View::POS_READY);
+
+$this->registerCss("
+.header-updated{padding-bottom:0; margin-bottom: 0;}
+.body-updated{background: white; margin-top: 0;}
+");
 
     

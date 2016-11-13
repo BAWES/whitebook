@@ -7,7 +7,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii\filters\AccessControl;
+use admin\models\AccessControlList;
 use admin\models\AuthItem;
 use admin\models\LocationSearch;
 use common\models\Country;
@@ -32,30 +32,26 @@ class LocationController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-               'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'city', 'area'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                 //   'delete' => ['post'],
+                 //   'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
 
@@ -66,20 +62,13 @@ class LocationController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('3', '13');
-        if (yii::$app->user->can($access)) {
-            $searchModel = new LocationSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new LocationSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
     }
 
     /**
@@ -104,31 +93,24 @@ class LocationController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '13');
-        if (yii::$app->user->can($access)) {
-            $model = new Location();
+        $model = new Location();
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'Location info created successfully!');
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Location info created successfully!');
 
-                return $this->redirect(['index']);
-            } else {
-
-                $countries = Country::find()
-                    ->where(['trash'=>'Default','country_status'=>'Active'])
-                    ->orderBy('country_name')
-                    ->all();
-
-                $country = ArrayHelper::map($countries, 'country_id', 'country_name');
-
-                return $this->render('create', [
-                'model' => $model, 'country' => $country,
-            ]);
-            }
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            $countries = Country::find()
+                ->where(['trash'=>'Default','country_status'=>'Active'])
+                ->orderBy('country_name')
+                ->all();
+
+            $country = ArrayHelper::map($countries, 'country_id', 'country_name');
+
+            return $this->render('create', [
+            'model' => $model, 'country' => $country,
+        ]);
         }
     }
 
@@ -142,26 +124,19 @@ class LocationController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '13');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'Area info updated successfully!');
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Area info updated successfully!');
 
-                return $this->redirect(['index']);
-            } else {
-                $country = Country::loadcountry();
-                $cities = City::find()->all();
-                $city = ArrayHelper::map($cities, 'city_id', 'city_name');
-
-                return $this->render('update', [
-                'model' => $model, 'city' => $city, 'country' => $country,
-            ]);
-            }
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
+            $country = Country::loadcountry();
+            $cities = City::find()->all();
+            $city = ArrayHelper::map($cities, 'city_id', 'city_name');
 
-            return $this->redirect(['site/index']);
+            return $this->render('update', [
+            'model' => $model, 'city' => $city, 'country' => $country,
+        ]);
         }
     }
 
@@ -175,22 +150,14 @@ class LocationController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '13');
-        
-        if (yii::$app->user->can($access)) {
-            $this->findModel($id)->delete();
+        $this->findModel($id)->delete();
 
-            //remove customer address 
-            CustomerAddress::deleteAll(['area_id' => $id]);
-            CustomerCart::deleteAll(['area_id' => $id]);
-            VendorLocation::deleteAll(['area_id' => $id]);
+        //remove customer address
+        CustomerAddress::deleteAll(['area_id' => $id]);
+        CustomerCart::deleteAll(['area_id' => $id]);
+        VendorLocation::deleteAll(['area_id' => $id]);
 
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**

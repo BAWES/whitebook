@@ -5,12 +5,12 @@ namespace admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use admin\models\AccessController;
+use admin\models\AccessControl;
 
 /**
 * AccessControlSearch represents the model behind the search form about `common\models\Accesscontrol`.
 */
-class AccessControlSearch extends AccessController
+class AccessControlSearch extends AccessControl
 {
     /**
     * @inheritdoc
@@ -41,7 +41,7 @@ class AccessControlSearch extends AccessController
     */
     public function search($params)
     {
-        $query = AccessController::find()
+        $query = AccessControl::find()
             ->where(['=', 'default', '0'])
             ->groupBy('admin_id');
         

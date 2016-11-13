@@ -194,16 +194,34 @@ class CustomerCart extends \yii\db\ActiveRecord
             ];
         }
         
+        if(!$data['delivery_date'])  {
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Select Delivery date!');     
+            
+            /**
+             * all validation after this loop require delivery date, so 
+             * we returning delivery date require error 
+             */ 
+            return $errors;
+        }
+            
         // to check with old delivery date
-        if (strtotime($data['delivery_date']) < time()) { 
+        if ($data['delivery_date'] && strtotime($data['delivery_date']) < strtotime(date('Y-m-d'))) { 
             $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past delivery date');     
         }
 
         # check for current date time slot
-        if ((strtotime($data['delivery_date']) == strtotime(date('Y-m-d'))) &&
+        if (empty($data['timeslot_end_time']) && !empty($data['timeslot_id'])) {
+            $data['timeslot_end_time'] = DeliveryTimeSlot::findOne($data['timeslot_id'])->timeslot_end_time;
+        }
+
+        if(empty($data['timeslot_end_time'])) {
+
+            $errors['timeslot_id'][] = Yii::t('frontend', 'Select time slot!');
+
+        } elseif ((strtotime($data['delivery_date']) == strtotime(date('Y-m-d'))) &&
             (strtotime($data['timeslot_end_time']) < strtotime(date('H:i:s')))) {
                 
-            $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past time slot date');
+            $errors['timeslot_id'][] = Yii::t('frontend', 'Time slot not valid!');
         }
         
         //-------------- Start Item Capacity -----------------//
@@ -265,9 +283,6 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //-------------- END Item Capacity -----------------//
-
-        if(!$data['delivery_date']) 
-            return $errors;
 
         //current date should not in blocked date 
         $block_date = BlockedDate::findOne([

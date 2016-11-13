@@ -2,21 +2,17 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\view;
 use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
-
+use common\components\LangFormat;
 ?>
-
 <h3>
 	<?= Yii::t('frontend', 'Payment method selected : <strong>{payment_method}</strong>', [
 		'payment_method' => $payment_method
 	]) ?>	
 </h3>
-
 <hr />
-
 <?php if($items) { ?>
 
 <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">	
@@ -77,12 +73,8 @@ use common\components\CFormatter;
                     ?>
         		</td>
         		<td>
-        			<a target="_blank" href="<?= Url::to(["shop/product", 'slug' => $item['slug']]) ?>">
-        				<?php if(Yii::$app->language == 'en') {
-        					echo $item['item_name'];
-        				} else {
-        					echo $item['item_name_ar']; 
-        				} ?>
+        			<a target="_blank" href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
+        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
         			</a>
 
                     <div class="visible-xs visible-sm">                         
@@ -99,16 +91,10 @@ use common\components\CFormatter;
         				?>
         				
         				<?= nl2br($address_data); ?> <br />
+                        <?=LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar);?><br/>
+                        <?=LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar);?><br/>
 
-                        <?php if(Yii::$app->language == 'en') { ?>
-            				<?= $delivery_area->location->location; ?> <br />
-            				<?= $delivery_area->location->city->city_name; ?> <br />
-                        <?php } else { ?>
-                            <?= $delivery_area->location->location_ar; ?> <br />
-                            <?= $delivery_area->location->city->city_name_ar; ?> <br />
-                        <?php } ?>
-
-        				<?= $item['cart_delivery_date'] ?> <br />
+                        <?= $item['cart_delivery_date'] ?> <br />
         			
                         <?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
                         <?= date('h:m A', strtotime($item['timeslot_end_time'])); ?>
@@ -158,28 +144,29 @@ use common\components\CFormatter;
 </div>
         
 <div class="btn-set">
-        <button onclick="payment();" class="btn btn-primary btn-checkout pull-left" style="margin-left: 0;">
+        <button onclick="payment();" class="btn btn-primary btn-checkout pull-left margin-left-0">
                 <?= Yii::t('frontend', 'Back') ?>
         </button>
-
         <a href="<?= $pg_link ?>" class="btn btn-primary btn-checkout pull-right">
-                <?= Yii::t('frontend', 'Confirm Order') ?>
+            <?= Yii::t('frontend', 'Confirm Order') ?>
         </a>
 </div>
-
 <br />
 <br />
 <br />
-
 <?php } else { ?>
-	
 	<p class="text-center">
 		<?= Yii::t('frontend', 'Your cart is empty!') ?>
 	</p>
-
 	<br />
 	<br />
 	<br />
 	<br />
-
 <?php } ?>
+
+<?php
+
+$this->registerCss("
+    .margin-left-0{margin-left: 0;}
+");
+?>

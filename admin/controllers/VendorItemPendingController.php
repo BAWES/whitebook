@@ -3,9 +3,9 @@
 namespace admin\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use admin\models\AuthItem;
+use admin\models\AccessControlList;
+use yii\filters\VerbFilter;
 use common\models\VendorItemSearch;
 
 /**
@@ -13,14 +13,27 @@ use common\models\VendorItemSearch;
 */
 class VendorItemPendingController extends Controller
 {
-
-    public function init()
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
     {
-        parent::init();
-        if (Yii::$app->user->isGuest) { // chekck the admin logged in
-            $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
-            Yii::$app->getResponse()->redirect($url);
-        }
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                 //   'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
+        ];
     }
 
     /**
@@ -30,21 +43,12 @@ class VendorItemPendingController extends Controller
     */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '23');
-        
-        if (yii::$app->user->can($access)) {
+        $searchModel = new VendorItemSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 'Pending');
 
-            $searchModel = new VendorItemSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 'Pending');
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }    
 }

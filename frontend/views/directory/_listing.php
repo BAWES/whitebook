@@ -22,20 +22,13 @@ if ((!empty($directory)) && ($total > 0)) {
                         <ul>
                             <?php
                             foreach ($directory as $d) {
-                               
-                                if(Yii::$app->language == "en") {
-                                    $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
-                                    $vendor_name = strtoupper($d['vendor_name']);
-                                }else{
-                                    $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
-                                    $vendor_name = strtoupper($d['vendor_name_ar']);
-                                }
-
+                                $first_letter = \common\components\LangFormat::format(strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8')));
+                                $vendor_name = \common\components\LangFormat::format(strtoupper($d['vendor_name']),strtoupper($d['vendor_name_ar']));
                                 if ($first_letter == $f) {
                                     if ($i < $first) {
                                         ?>
                                         <li>
-                                            <a href="<?= Url::toRoute(['directory/profile','slug'=>'all','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
+                                            <a href="<?= Url::toRoute(['directory/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
                                         </li>
                                 <?php }
                                 }
@@ -62,18 +55,13 @@ if ((!empty($directory)) && ($total > 0)) {
             
                 foreach ($directory as $d) {
 
-                if(Yii::$app->language == "en") {
-                    $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
-                    $vendor_name = strtoupper($d['vendor_name']);
-                }else{
-                    $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
-                    $vendor_name = strtoupper($d['vendor_name_ar']);    
-                }
+                    $first_letter = \common\components\LangFormat::format(strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8')));
+                    $vendor_name = \common\components\LangFormat::format(strtoupper($d['vendor_name']),strtoupper($d['vendor_name_ar']));
 
                 if ($first_letter == $f) { ?>
 
                     <li>
-                        <a href="<?= Url::toRoute(['directory/profile','slug'=>'all','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
+                        <a href="<?= Url::toRoute(['directory/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
                     </li>
                 <?php 
                 }
@@ -103,18 +91,14 @@ if ((!empty($directory)) && ($total > 0)) {
                         <?php
 
                         foreach ($directory as $d) {
-                            
-                            if(Yii::$app->language == "en") {
-                                $first_letter = strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8'));
-                                $vendor_name = strtoupper($d['vendor_name']);
-                            }else{
-                                $first_letter = strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8'));
-                                $vendor_name = strtoupper($d['vendor_name_ar']);    
-                            }
+
+
+                            $first_letter = \common\components\LangFormat::format(strtoupper(mb_substr($d['vendor_name'], 0, 1, 'utf8')),strtoupper(mb_substr($d['vendor_name_ar'], 0, 1, 'utf8')));
+                            $vendor_name = \common\components\LangFormat::format(strtoupper($d['vendor_name']),strtoupper($d['vendor_name_ar']));
 
                             if ($first_letter == $f) { ?>
                                 <li>
-                                    <a href="<?= Url::toRoute(['directory/profile','slug'=>'all','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
+                                    <a href="<?= Url::toRoute(['directory/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>"><?php echo $vendor_name; ?></a>
                                 </li>
                             <?php 
                             }
@@ -134,7 +118,7 @@ if ((!empty($directory)) && ($total > 0)) {
     <div class="resposive-clearfix">
         <!-- first section start here-->
         <div class="col-md-3 resposive-clearfix">
-            <h5>No Records found</h5>
+            <h5><?=Yii::t('frontend','No Records found')?></h5>
         </div>
     </div>
 <?php } ?>

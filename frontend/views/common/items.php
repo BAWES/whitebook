@@ -7,11 +7,13 @@ use common\components\CFormatter;
 if(!empty($items->getModels()))  {
     $result = \yii\helpers\ArrayHelper::getColumn($customer_events_list,'item_id');
     foreach ($items->getModels() as $key => $value) {
-        $item_url = ($value['item_for_sale'] == 'Yes') ? Url::to(["shop/product", 'slug' => $value['slug']]) : Url::to(["product/product", 'slug' => $value['slug']]);
+
+        $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
+
         ?>
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-            <div class="events_items">
-                <div class="events_images text-center">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301">
+            <div class="events_items width-100-percent">
+                <div class="events_images text-center position-relative">
                     <div class="hover_events">
                         <div class="pluse_cont">
                             <?php if(Yii::$app->user->isGuest) { ?>
@@ -31,24 +33,25 @@ if(!empty($items->getModels()))  {
                             </div>
                             <?php } ?>
                         </div>
-
-                        <a href="<?= $item_url ?>">
+                        <a href="<?= $item_url ?>" class="" >
                             <?php
-                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
-                            echo Html::img($path,['class'=>'item-img', 'style'=>'width:210px; height:208px;']);
+                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=208&h=208';
+                            echo Html::img($path,['class'=>'item-img']);
                             ?>
+                            <?php if($value['item_for_sale'] == 'Yes') { ?>
+                                <i class="fa fa-circle" aria-hidden="true"></i>
+                                <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
+                                <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
+                            <?php } ?>
                         </a>
+
+
+
                     </div>
                     <div class="events_descrip">
-
-                        <?php if(Yii::$app->language == 'en') { ?>
-                            <a href="<?= $item_url ?>"><?= $value['vendor_name'] ?></a>
-                            <h3><?= $value['item_name']  ?></h3>
-                        <?php } else { ?>
-                            <a href="<?= $item_url ?>"><?= $value['vendor_name_ar'] ?></a>
-                            <h3><?= $value['item_name_ar']  ?></h3>
-                        <?php } ?>
-                        <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
+                        <a href="<?= $item_url ?>"><?=\common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
+                            <h3><?=\common\components\LangFormat::format( $value['item_name'], $value['item_name_ar'])?></h3>
+                            <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
                         </a>
                     </div>
                 </div>
@@ -59,13 +62,9 @@ if(!empty($items->getModels()))  {
     echo '<div class="no-record-found">'.Yii::t('frontend', "No records found").'</div>';
 }
 
-$this->registerCss("
-.no-record-found {padding: 12px 0 36px 0px;text-align: center;}
-.col-lg-3{margin-bottom: 28px;}
-")
 ?>
             <div id="planloader">
-                <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;">
+                <img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader" class="margin-top-15">
             </div>
         </div>
     <div class="add_more_commons text-center">
@@ -75,3 +74,15 @@ $this->registerCss("
         ]);
         ?>
     </div>
+
+<?php
+
+$this->registerCss("
+.no-record-found {padding: 12px 0 36px 0px;text-align: center;}
+.min-height-301 {min-height: 301px;padding-left: 3px;padding-right: 3px;}
+img.item-img{width: 100%;}
+.width-100-percent{width: 100%;}
+.margin-top-15{margin-top: 15%;}
+");
+
+?>

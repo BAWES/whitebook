@@ -54,4 +54,9 @@ class EventInvitees extends \yii\db\ActiveRecord
             'modified_by' => 'Modified By',
         ];
     }
+
+    public function getCustomer()
+    {
+        return $this->hasOne(Customer::className(),['customer_id'=>'customer_id']);
+    }
 }

@@ -6,11 +6,11 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use admin\models\AuthItem;
 use admin\models\Package;
 use admin\models\PackageSearch;
 use common\models\VendorPackages;
+use admin\models\AccessControlList;
 
 /**
  * PackageController implements the CRUD actions for Package model.
@@ -26,32 +26,29 @@ class PackageController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'delete' => ['post'],
+                //    'delete' => ['POST'],
                 ],
             ],
-           'access' => [
-               'class' => AccessControl::className(),
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
                 'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'packagedelete', 'packageupdate'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-           ],
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all Package models.
@@ -60,20 +57,13 @@ class PackageController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '16');
-        if (yii::$app->user->can($access)) {
-            $searchModel = new PackageSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new PackageSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
     }
 
     /**
@@ -98,25 +88,18 @@ class PackageController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '16');
-        if (yii::$app->user->can($access)) {
-            $model = new Package();
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->save();
-                $pack = Yii::$app->request->post();
-                Yii::$app->session->setFlash('success', 'Package created successfully!');
-                Yii::info('[Package Created] '. Yii::$app->user->identity->admin_name .' created new '.$model->package_name.' package', __METHOD__);
+        $model = new Package();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->save();
+            $pack = Yii::$app->request->post();
+            Yii::$app->session->setFlash('success', 'Package created successfully!');
+            Yii::info('[Package Created] '. Yii::$app->user->identity->admin_name .' created new '.$model->package_name.' package', __METHOD__);
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('create', [
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('create', [
                 'model' => $model,
             ]);
-            }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
         }
     }
 
@@ -130,21 +113,15 @@ class PackageController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '16');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'Package Updated successfully!');
-                Yii::info('[Package Updated] '. Yii::$app->user->identity->admin_name .' updated '.$model->package_name.' package information', __METHOD__);
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('update', [
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Package Updated successfully!');
+            Yii::info('[Package Updated] '. Yii::$app->user->identity->admin_name .' updated '.$model->package_name.' package information', __METHOD__);
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('update', [
                 'model' => $model,
             ]);
-            }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
         }
     }
 
@@ -158,25 +135,17 @@ class PackageController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '16');
-        
-        if (yii::$app->user->can($access)) {
-            
-            $model = $this->findModel($id);
-            $model->trash = 'Deleted';
-            $model->load(Yii::$app->request->post());
-            $model->save();
+        $model = $this->findModel($id);
+        $model->trash = 'Deleted';
+        $model->load(Yii::$app->request->post());
+        $model->save();
 
-            //remove from vendor package 
-            VendorPackages::deleteAll(['package_id' => $id]);
+        //remove from vendor package
+        VendorPackages::deleteAll(['package_id' => $id]);
 
-            Yii::$app->session->setFlash('success', 'Package deleted successfully!');
+        Yii::$app->session->setFlash('success', 'Package deleted successfully!');
 
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     public function actionPackagedelete()

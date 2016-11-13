@@ -19,7 +19,7 @@ $model = new Website();
 ?>
 <!-- content main start -->
 
-<div id="home_slider">
+<div id="home_slider" class="position-relative">
     <?php
         if(Yii::$app->language == 'en'){
             $url = 'https://slider.thewhitebook.com.kw/embed_whitebook.php?alias='.$home_slider_alias;
@@ -35,6 +35,8 @@ $model = new Website();
         echo curl_exec($ch);
         curl_close($ch);
     ?>
+
+<?=$this->render('_search');?>
 </div>
 
 <!-- Content start -->
@@ -141,16 +143,7 @@ $count_items = count($feature_group_sql_result);
 if (!empty($feature_group_sql_result)) {
 ?>
     <div class="feature_product_title">
-        <h2>
-        <?php
-
-            if(Yii::$app->language == "en"){
-                echo $value['group_name'];
-            }else{
-                echo $value['group_name_ar'];
-            }
-        ?>
-        </h2>
+        <h2><?=\common\components\LangFormat::format($value['group_name'],$value['group_name_ar']); ?></h2>
     </div>
 <?php } ?>
 
@@ -181,19 +174,9 @@ if (!empty($feature_group_sql_result)) {
                                 $imglink = Yii::getAlias("@web/images/no_image.jpg");
                             }
 
-                            if($product_val['item_for_sale'] == 'Yes'){
-
-                                $item_url = Url::to(['shop/product',
+                                $item_url = Url::to(['browse/detail',
                                     'slug' => $product_val["slug"]
                                 ]);
-
-                            } else {
-
-                                $item_url = Url::to(['product/product',
-                                    'slug' => $product_val["slug"]
-                                ]);
-
-                            }
 
                             ?>
                             <div class="item">
@@ -201,18 +184,11 @@ if (!empty($feature_group_sql_result)) {
 
                                     <a href="<?= $item_url ?>" class='index_redirect' data-hr='<?= $item_url; ?>'>
 
-                                        <?= Html::img($imglink,['style'=>'width:208px; height:219px;']); ?>
+                                        <?= Html::img($imglink); ?>
 
                                         <div class="deals_listing_cont">
-
-                                            <?php if(Yii::$app->language == "en"){ ?>
-                                                <?php echo $product_val['vendor_name']; ?>
-                                                <h3><?php echo $product_val['item_name']; ?></h3>
-                                            <?php }else{ ?>
-                                                <?php echo $product_val['vendor_name_ar']; ?>
-                                                <h3><?php echo $product_val['item_name_ar']; ?></h3>
-                                            <?php } ?>
-
+                                            <?=\common\components\LangFormat::format($product_val['vendor_name'],$product_val['vendor_name_ar']); ?>
+                                            <?=\common\components\LangFormat::format($product_val['item_name'],$product_val['item_name_ar']); ?>
                                             <p>
                                                 <?= CFormatter::format($product_val['item_price_per_unit']) ?>
                                             </p>
@@ -318,8 +294,75 @@ $this->registerJs("
 
 ", View::POS_READY);
 
-?>
+$this->registerCss("
+.fetu_product_list .index_redirect img {width: 100%;height: 219px;}
+.color-white{color:#fff;}
+.left-offset-25{float: left;width: 15%;}
+.left-div{width:100%;position:absolute;bottom: 1px;padding:13px;    z-index: 999;}
+.date-div{padding-right: 0px; margin-bottom: 13px;}
+.black-overlay{width:100%;background-color: #000;position:absolute;bottom: 1px;padding: 42px;opacity: 0.69}
+.location-div{padding-right: 0px; margin-bottom: 13px;}
+#delivery_date{height: 45px;color: #000! important;}
+.btn-submit{padding: 12px;}
+#top_header {z-index: 9999;}
+.bootstrap-select .dropdown-toggle {padding: 12px 12px;}
+.datepicker{border: 2px solid rgb(242, 242, 242);}
+.datepicker table {font-size: 12px;}
+.position-relative{position: relative;}
+.height-46{height:46px}
+.position_news{top: 6px;}
+#delivery_date{color:#000! important;}
+.bg-000 {background:#000! important;}
+.color-fff {color:#fff! important;}
+.width-5-percent{width: 86px;}
+.padding-right-0{    padding-right: 0px;}
+.padding-left-0{    padding-left: 0px;}
+.or-area{
+    width: 40px;
+    color: #fff;
+    text-align: center;
+    padding: 13px 0px;
+}
+.width-45-percent{width:45%}
+.width-44-percent{width:44%}
+.width-50-percent{width:50%}
+.width-10-percent{width:10%}
+.width-100-percent{width:100%}
+@media screen and (max-width: 770px) {
+.desktop-view-search{display:none!important;}
+.mobile-view-search{display:block!important;}
+.or_mobile{text-align:center;color:#fff;padding:13px 0;width:35px;}
+.add-on.position_news{top:7px;}
+.black-overlay{padding:28px;}
+}
+.mobile-view-form-popup{
+    background: #fff none repeat scroll 0 0;
+    height: 100%;
+    left: 1px;
+    position: fixed;
+    text-align: center;
+    top: 65px;
+    width: 100%;
+}
+.mobile-view-form-popup h4 a{
+    float: right;
+    margin-right: 15px;
+    color:#000;
+}
+.mobile-view-form-popup h4{
+ background: #f2f2f2 none repeat scroll 0 0;
+    margin: 0 0 10px;
+    padding: 17px;
+}
+.margin-top-15{margin-top:15px;}
+.mobile-search-enable .mobile-logo-text{
+    display:none;
+}
+.mobile-search-enable .border-top-yellow{
+    min-height:63px;
+}
 
+");?>
 <!-- Hide BG FOR EVENT SLIDER
  VIDEO PLAY HOME END -->
 

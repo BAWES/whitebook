@@ -28,6 +28,10 @@ class CheckoutController extends BaseController
 
 	public function actionIndex()
 	{
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Checkout';
+		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
 		//validate cart
 		foreach (CustomerCart::items() as $item) {
             

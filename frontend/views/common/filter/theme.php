@@ -33,8 +33,7 @@ if($themes) { ?>
 								$checked1 = (in_array($value['slug'], $val)) ? 'checked=checked' : '';
 							}
 							if (isset($value['theme_name'])) {
-								$lang_name = (Yii::$app->language == "en") ? 'theme_name' : 'theme_name_ar';
-								$theme_name = ucfirst(strtolower($value[$lang_name]));
+								$theme_name = \common\components\LangFormat::format(strtolower($value['theme_name']),strtolower($value['theme_name_ar']));
 								?>
 								<li>
 									<label class="label_check" for="checkbox-<?= $value['theme_name'] ?>">

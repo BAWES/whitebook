@@ -1,7 +1,4 @@
-<?php 
-
-use yii\helpers\Url;
-
+<?php
 $this->title = Yii::t('frontend', 'Checkout Error | Whitebook'); 
 
 ?>

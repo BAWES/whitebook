@@ -8,7 +8,7 @@ foreach ($model as $key => $value) { ?>
 <div class="product_popup_signup">
 <div class="product_popup_prod">
 <span class="prod_popu">
-<?= Url::to(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img', 'style'=>'width:210px; height:208px;'])); ?>
+<?= Url::to(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img'])); ?>
 </span>
 <div class="desc_popup_cont">
 <h4><?= $value['vendor_name']  ?></h4>
@@ -47,11 +47,11 @@ foreach ($model as $key => $value) { ?>
 	</div>
 	<?php } ?>
 
-	<div class="error err-message" id="add_to_event_failure<?php echo $value['item_id'];?>" style="color:red;margin-bottom: 10px;"></div>
+	<div class="error err-message" id="add_to_event_failure<?php echo $value['item_id'];?>"></div>
 
-	<div id="add_to_event_success<?php echo $value['item_id'];?>" style="color:red;margin-bottom: 10px;"></div>
+	<div class="success_event" id="add_to_event_success<?php echo $value['item_id'];?>"></div>
 
-	<div class="event_loader" id="add_to_event_loader" style="display:none;text-align:center;margin-bottom: 10px;">
+	<div class="event_loader" id="add_to_event_loader" style="display:none;">
 		<img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader">
 	</div>
 
@@ -74,4 +74,12 @@ foreach ($model as $key => $value) { ?>
 </div>
 
 
-<?php } ?>
+<?php }
+$this->registerCss("
+	.item-img{width:210px; height:208px;}
+	.err-message{color:red;margin-bottom: 10px;}
+	.success_event{color:red;margin-bottom: 10px;}
+	#add_to_event_loader{text-align:center;margin-bottom: 10px;}
+");
+
+?>

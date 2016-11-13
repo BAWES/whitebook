@@ -39,7 +39,7 @@ if($result && $result['max'] != $result['min']) { ?>
             </a>
         </div>
     </div>
-    <div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true">
+    <div class="panel-collapse collapse"  id="price" area-expanded="true">
         <div class="panel-body">
             <input type="hidden" class="price_slider" value="<?= $result['min'].','.$result['max'] ?>" />
         </div>
@@ -69,7 +69,9 @@ if (isset($get['price'])) {
         $price = explode('-',$get['price']);
     $this->registerJs("jQuery('.price_slider').jRange('updateRange', '".$result['min'].",".$result['max']."', '".$price[0].",".$price[1]."');", View::POS_READY);
 }
-
-
-}//END if 
+}//END if
+//
+$this->registerCss("
+.height-0{height: 0px!important;}
+");
 

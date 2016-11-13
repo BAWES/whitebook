@@ -3,9 +3,8 @@
 use common\models\Order;
 use common\models\Vendor;
 use common\models\OrderStatus;
-use common\models\SuborderItemPurchase;
 use common\components\CFormatter;
-
+use common\components\LangFormat;
 $this->title = Yii::t('frontend', 'View Order | Whitebook'); 
 
 ?>
@@ -53,23 +52,15 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 			<thead>
 				<tr>
 					<td colspan="2">
-					<?php if(Yii::$app->language == 'en') { 
-							echo $vendor->vendor_name;
-						  } else { 
-						  	echo $vendor->vendor_name_ar;
-						  } ?>
+					<?=LangFormat::format($vendor->vendor_name,$vendor->vendor_name_ar);?>
 					</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td>
-						<?= Yii::t('frontend', 'Order status') ?>: 
-						<?php if(Yii::$app->language == 'en') { 
-								echo OrderStatus::findOne($row->status_id)->name;
-							  } else {
-								echo OrderStatus::findOne($row->status_id)->name_ar;
-							  } ?>	
+						<?= Yii::t('frontend', 'Order status') ?>:
+						<?=LangFormat::format(OrderStatus::findOne($row->status_id)->name,OrderStatus::findOne($row->status_id)->name_ar);?>
 						<br />
 					</td>
 					<td>
@@ -96,12 +87,7 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 			<?php foreach (Order::subOrderItems($row->suborder_id) as $item) { ?>
 				<tr>
 					<td align="left">
-						<?php if(Yii::$app->language == 'en') {
-        					echo $item->vendoritem->item_name;
-        				} else {
-        					echo $item->vendoritem->item_name_ar; 
-        				} ?>
-
+					<?=LangFormat::format($item->vendoritem->item_name,$item->vendoritem->item_name_ar);?>
         				<div class="visible-xs visible-sm">
         					x <?= $item->purchase_quantity ?> = <?= CFormatter::format($item->purchase_total_price) ?>
         				</div>
@@ -124,18 +110,18 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 
 				<!-- for small device -->
 				<tr class="visible-xs visible-sm">
-					<td align="right" colspan="2">Sub Total</td>
+					<td align="right" colspan="2"><?=Yii::t('frontend','Sub Total')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_without_delivery) ?>
 					</td>
 				</tr>
 				<tr class="visible-xs visible-sm">
-					<td align="right" colspan="2">Delivery Charge</td>
+					<td align="right" colspan="2"><?=Yii::t('frontend','Delivery Charge')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_delivery_charge) ?></td>
 				</tr>
 				<tr class="visible-xs visible-sm">
-					<td align="right" colspan="2">Total</td>
+					<td align="right" colspan="2"><?=Yii::t('frontend','Total')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_with_delivery) ?>
 					</td>
@@ -143,18 +129,18 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 
 				<!-- for desktop -->
 				<tr class="hidden-xs hidden-sm">
-					<td align="right" colspan="5">Sub Total</td>
+					<td align="right" colspan="5"><?=Yii::t('frontend','Sub Total')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_without_delivery) ?>
 					</td>
 				</tr>
 				<tr class="hidden-xs hidden-sm">
-					<td align="right" colspan="5">Delivery Charge</td>
+					<td align="right" colspan="5"><?=Yii::t('frontend','Delivery Charge')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_delivery_charge) ?></td>
 				</tr>
 				<tr class="hidden-xs hidden-sm">
-					<td align="right" colspan="5">Total</td>
+					<td align="right" colspan="5"><?=Yii::t('frontend','Total')?></td>
 					<td align="right">
 						<?= CFormatter::format($row->suborder_total_with_delivery) ?>
 					</td>

@@ -1,15 +1,10 @@
 <?php
-use frontend\models\Category;
-use common\models\ChildCategory;
-use common\models\SubCategory;
-use frontend\models\Vendor;
+
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\Breadcrumbs;
-
-
+use common\models\VendorCategory;
+use common\components\LangFormat;
 $vendor_details = $vendor_detail;
-
 
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
 
@@ -17,10 +12,12 @@ $vendor_details = $vendor_detail;
 \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 
-$baselink = Yii::$app->homeUrl.Yii::getAlias('@vendor_images/').'no_image.jpg';
+$baselink = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=565&h=565';
+
 if(isset($vendor_details['vendor_logo_path'])) {
     $baselink = Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path'];
 }
+
 $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details->slug], true);
 \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
 \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
@@ -32,7 +29,6 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
 \Yii::$app->view->registerMetaTag(['property' => 'og:description', 'content' => trim(strip_tags($vendor_details->short_description))]);
 
 \Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
-
 
 $event_status = Yii::$app->session->get('event_status');
 
@@ -78,14 +74,12 @@ if ($event_status > 0) {
         <div class="container paddng0">
             <div class="vender_profile_new">
                 <div class="product_detials_vender aother_dates">
-                    <div class="col-md-6 padding0">
+                    <div class="col-md-6 padding0 vendor_photo">
                         <a href="#" title="">
-                            <?php if(isset($vendor_detail['vendor_logo_path'])) {
-                                echo Html::img(Yii::getAlias('@vendor_logo/').$vendor_detail['vendor_logo_path'], ['class'=>'','width'=>'565','alt'=>'Logo']);
-                            } ?>
+                            <?= Html::img($baselink, ['class'=>'','width'=>'565','alt'=>'Logo']); ?>
                         </a>
                     </div>
-                    <div class="col-md-6 paddingcommon">
+                    <div class="col-md-6 paddingcommon vendor_detail">
                         <div class="right_descr_product">
                             <div class="accad_menus">
                                 <div class="bakery_title">
@@ -97,19 +91,13 @@ if ($event_status > 0) {
                                             <h4 class="panel-title">
                                                 <a class="collapsed" id="description_click" data-toggle="collapse" data-parent="#sub_accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                                     <?php echo Yii::t('frontend', 'Description'); ?>
-                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+                                                    <span class="glyphicon glyphicon-menu-right text-align"></span>
                                                 </a>
                                             </h4>
                                         </div>
                                         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                             <div class="panel-body">
-                                                <p><?php
-                                                    if(Yii::$app->language == "en") {
-                                                        echo strip_tags($vendor_detail['short_description']);
-                                                    } else {
-                                                        echo strip_tags($vendor_detail['short_description_ar']);
-                                                    }
-                                                    ?></p>
+                                                <p><?=LangFormat::format(strip_tags($vendor_detail['short_description']),strip_tags($vendor_detail['short_description_ar'])); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -118,20 +106,13 @@ if ($event_status > 0) {
                                             <h4 class="panel-title">
                                                 <a class="collapsed" data-toggle="collapse" data-parent="#sub_accordion" id="policy_click" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                                     <?php echo Yii::t('frontend', 'Return policy'); ?>
-                                                    <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+                                                    <span class="glyphicon glyphicon-menu-right text-align"></span>
                                                 </a>
                                             </h4>
                                         </div>
                                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                                             <div class="panel-body">
-                                                <p><?php
-
-                                                    if(Yii::$app->language == "en") {
-                                                        echo strip_tags($vendor_detail['vendor_return_policy']);
-                                                    } else {
-                                                        echo strip_tags($vendor_detail['vendor_return_policy_ar']);
-                                                    }
-                                                    ?></p>
+                                                <p><?=LangFormat::format(strip_tags($vendor_detail['vendor_return_policy']),strip_tags($vendor_detail['vendor_return_policy_ar'])); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -140,7 +121,7 @@ if ($event_status > 0) {
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#sub_accordion"  id="contact_click" href="#collapseFive" aria-expanded="true" aria-controls="collapseOne">
                                                     <?= Yii::t('frontend', 'Contact info'); ?>
-                                                    <span class="glyphicon glyphicon-menu-down text-align pull-right"></span>
+                                                    <span class="glyphicon glyphicon-menu-down text-align"></span>
                                                 </a>
                                             </h4>
                                         </div>
@@ -158,7 +139,7 @@ if ($event_status > 0) {
                                                                         <span class="border-bottom"></span>
                                                                     <?php } ?>
                                                                     <?php if (trim($vendor_detail['vendor_public_phone'])) { ?>
-                                                                        <h4 style="margin-top: 13px;">
+                                                                        <h4 class="margin-top-13">
                                                                             <a class="color-808080" href="tel:<?=$vendor_detail['vendor_public_phone']; ?>"><?=$vendor_detail['vendor_public_phone']; ?></a>&nbsp;
                                                                         </h4>
                                                                         <span class="border-bottom border-bottom-none"></span>
@@ -235,10 +216,7 @@ if ($event_status > 0) {
                                                         <?php if (trim($vendor_detail['vendor_contact_address']) || $vendor_detail['vendor_contact_address'] != 'n/a') { ?>
                                                             <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
                                                                 <h5 class="margin-top-13">
-                                                                    <?php
-                                                                    $address = (Yii::$app->language == "en") ? 'vendor_contact_address' : 'vendor_contact_address_ar';
-                                                                    echo $vendor_detail[$address];
-                                                                    ?>
+                                                                    <?=LangFormat::format($vendor_detail['vendor_contact_address'],$vendor_detail['vendor_contact_address_ar']); ?>
                                                                 </h5>
                                                             </div>
                                                         <?php } ?>
@@ -271,7 +249,7 @@ if ($event_status > 0) {
                                                     <?php if ($vendor_detail['vendor_instagram']) { ?>
                                                         <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-instagram7"></span></a></li>
                                                     <?php } ?>
-                                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true" style="font-size: 169%;margin-top: 2px;"></i></a></li>
+                                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
                                                     <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
                                                 </ul>
                                             </div>
@@ -285,15 +263,20 @@ if ($event_status > 0) {
             </div>
 
             <div class="plan_venues total_continer" id="plan_vanues">
-                <div class="col-md-3 paddingleft0">
+                <div class="col-md-3 paddingleft0 filter_content_wrapper">
+
                     <div class="filter_content">
+
+                        <div class="filter_title">
+                            <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by'); ?></span>
+                        </div>
                         <div class="filter_section">
                             <?php
 
-                            use common\models\VendorCategory;
                             $data = Yii::$app->request->get();
+
                             $category_list = VendorCategory::find()
-                                ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.slug','{{%category}}.icon'])
+                                ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.category_name_ar', '{{%category}}.slug','{{%category}}.icon'])
                                 ->leftJoin('{{%category}}','{{%category}}.category_id = {{%vendor_category}}.category_id')
                                 ->where([
                                     '{{%category}}.trash' =>'Default',
@@ -302,38 +285,33 @@ if ($event_status > 0) {
                                 ->groupBy('{{%category}}.category_id')
                                 ->asArray()
                                 ->all();
-
                             if (count($category_list) > 3) {
                                 $class = "test_scroll";
                             } else {
                                 $class = "";
                             } ?>
 
-
                             <div class="responsive-category-top">
                                 <div class="listing_sub_cat1">
                                     <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
                                     <select class="selectpicker" style="display: none;" id="main-category">
-                                        <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute(['directory/profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>">All</option>
+                                        <option data-icon="" value="<?=yii\helpers\Url::toRoute(['directory/profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>"><?=Yii::t('frontend','All')?></option>
                                         <?php
                                         foreach($category_list as $category) {
 
-                                            if ($data['slug'] == $category['slug']) {
+                                            if (isset($data['slug']) && ($data['slug'] == $category['slug'])) {
                                                 $selected = 'selected="selected"';
+                                                $attributes = 'data-hidden="true"';
                                             } else {
                                                 $selected = '';
+                                                $attributes = '';
                                             }
-
-                                            if(Yii::$app->language == "en"){
-                                                $category_name = $category['category_name'];
-                                            }else{
-                                                $category_name = $category['category_name_ar'];
-                                            }
+                                            $category_name = LangFormat::format($category['category_name'],$category['category_name_ar']);
                                             ?>
                                             <option
                                                 data-icon="<?= $category['icon'] ?>"
-                                                value="<?=yii\helpers\Url::toRoute(['directory/profile','slug' => $category['slug'],'vendor'=>$data['vendor']]); ?>"
-                                                name="category" <?= $selected ?>>
+                                                value="<?=yii\helpers\Url::toRoute(['directory/profile','slug' => $category['slug'], 'vendor' => $data['vendor']]); ?>"
+                                                name="category" <?= $selected .' '. $attributes ?>>
                                                 <?= $category_name ?>
                                             </option>
                                         <?php } ?>
@@ -349,10 +327,7 @@ if ($event_status > 0) {
                                             <?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]);?>
                                         </div>
                                 </nav>
-                                <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas">Filter</span>
-                                <div class="filter_title">
-                                    <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by'); ?></span>
-                                </div>
+                                <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas"><?=Yii::t('frontend','Filter')?></span>
                                 <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
                                     <img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg"); ?>" alt="click here">
                                 </div>
@@ -387,19 +362,23 @@ $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $get = Yii::$app->request->get();
+$slug = (isset($get['slug'])) ? $get['slug'] : 'all';
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-var load_items = '".Url::to(['directory/profile'])."';
-var product_slug = '".$get['slug']."';
+//var load_items = '".Url::to(['directory/profile'])."';
+var load_items = '".Url::to(['/vendor'])."';
+var product_slug = '".$slug."';
 var vendor_profile = '".$get['vendor']."';
+var current_page = 'vendor';
 ", yii\web\View::POS_BEGIN);
 
 $this->registerCss("
 .color-808080{color: #808080!important;}
-
+.fa-whatsapp{font-size: 169%;margin-top: 2px;}
 .slider-container{
     clear: both;
     padding-top: 9px;
     width: 200px;
 }
+.margin-top-13{margin-top: 13px;}
 ")?>

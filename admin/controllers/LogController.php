@@ -8,6 +8,7 @@ use common\models\LogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use admin\models\AccessControlList;
 
 /**
  * LogController implements the CRUD actions for Log model.
@@ -22,14 +23,17 @@ class LogController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
                 ],
-            ],
+            ],            
         ];
     }
+
 
     /**
      * Displays a single Log model.

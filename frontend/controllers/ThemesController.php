@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\components\LangFormat;
 use Yii;
 use common\models\VendorItem;
 use common\models\VendorItemThemes;
@@ -44,22 +45,13 @@ class ThemesController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        if(Yii::$app->language == "en") {
-            $directory = Themes::loadthemenames();
-        }else{
-            $directory = Themes::loadthemenames('theme_name_ar');
-        }
+        $directory = Themes::loadthemenames();
 
         $prevLetter = '';
         $result = array();
         foreach ($directory as $d) {
 
-            if(Yii::$app->language == "en") {
-                $firstLetter = mb_substr($d['theme_name'], 0, 1, 'utf8');
-            }else{
-                $firstLetter = mb_substr($d['theme_name_ar'], 0, 1, 'utf8');
-                //for arabic last letter will be first letter
-            }
+            $firstLetter  = LangFormat::format(mb_substr($d['theme_name'], 0, 1, 'utf8'),mb_substr($d['theme_name_ar'], 0, 1, 'utf8'));
 
             if ($firstLetter != $prevLetter) {
                 $result[] = strtoupper($firstLetter);
@@ -84,14 +76,16 @@ class ThemesController extends BaseController
 
         $theme = Themes::findOne(['slug' => $themes, 'trash' => 'Default']);
 
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$theme->theme_name;
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
         $theme_result  = VendorItemThemes::find()->select('item_id')
             ->where(['trash' => "Default"])
             ->andWhere(['theme_id' => $theme->theme_id])
             ->asArray()
             ->all();
         $theme_items = ArrayHelper::map($theme_result,'item_id','item_id');
-
-        Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.ucfirst($theme->theme_name);
 
 
         if ($slug != 'all') {
@@ -161,7 +155,7 @@ class ThemesController extends BaseController
         ]);
        
         $vendor = Vendor::find()
-            ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
+            ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.vendor_name_ar,{{%vendor}}.slug')
             ->where(['in', '{{%vendor}}.vendor_id', $active_vendors])
             ->asArray()
             ->all();

@@ -9,7 +9,7 @@ use admin\models\ContactsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use admin\models\AccessControlList;
 
 /**
  * ContactsController implements the CRUD actions for Contacts model.
@@ -25,32 +25,29 @@ class ContactsController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-             //       'delete' => ['post'],
+                //   'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all Contacts models.
@@ -59,23 +56,13 @@ class ContactsController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '6');
-        
-        if (yii::$app->user->can($access)) {
+        $searchModel = new ContactsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            $searchModel = new ContactsSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -100,29 +87,18 @@ class ContactsController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '6');
-        
-        if (yii::$app->user->can($access)) {
-            
-            $model = new Contacts();
-            
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'New contacts created successfully!');
+        $model = new Contacts();
 
-                return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            } else {
-                
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
-        
+            Yii::$app->session->setFlash('success', 'New contacts created successfully!');
+            return $this->redirect(['index']);
+
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
     }
 
@@ -136,29 +112,20 @@ class ContactsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '6');
-        
-        if (yii::$app->user->can($access)) {
-        
-            $model = $this->findModel($id);
-        
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'Contacts updated successfully!');
-                return $this->redirect(['index']);
-            
-            } else {
-            
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            Yii::$app->session->setFlash('success', 'Contacts updated successfully!');
+            return $this->redirect(['index']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
+
     }
 
     /**
@@ -171,20 +138,9 @@ class ContactsController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '6');
-        
-        if (yii::$app->user->can($access)) {
-            
-            $this->findModel($id)->delete();
-            
-            Yii::$app->session->setFlash('success', 'Contact information deleted successfully!');
-            return $this->redirect(['index']);
-
-        } else {
-
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('success', 'Contact information deleted successfully!');
+        return $this->redirect(['index']);
     }
 
     /**

@@ -17,6 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Select time slot!' => 'اختر فتحة الوقت!',
+    'Time slot not valid!' => 'فتحة الوقت غير صحيح!',
+    'Select Delivery date!' => 'حدد تاريخ التسليم!',
+    'Browse' => 'تصفح',
     'Select Event' => 'حدد الحدث',
     'Sunday' => 'الأحد',
     'Monday' => 'الإثنين',
@@ -324,4 +328,8 @@ return [
     'Your email does not exist' => 'لا وجود للبريد الإلكتروني',
     '{item_name} already exist with {event_name}' => ' {event_name}موجود بالفعل مع {item_name}',
     '{item_name} has been added to {event_name}' => ' {event_name}قد أضيف إلى {item_name} ',
+    '404 Not Found' => '404 لم يتم العثور على',
+    'The above error occurred while the Web server was processing your request' => 'حدث الخطأ أعلاه في حين ملقم ويب تم تجهيز طلبك',
+    'Please contact us if you think this is a server error. Thank you' => 'يرجى الاتصال بنا إذا كنت تعتقد أن هذا هو خطأ في الخادم. شكرا',
+    'Buy' => 'يشترى',
 ];

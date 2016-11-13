@@ -89,7 +89,7 @@
 	.normal_tables .events_inner_listing_new .events_listing ul li {margin: 0 26px 28px 0 !important;}
 	#exTab2 .events_listing ul li:nth-child(3n){margin-right:0 !important;}
 	.events_items{width:215px;}
-	.events_images img {width: 100%;max-width:100%;}
+	.events_images .item-img {width: 100%;max-width:100%;}
 	.vender_profile_new .col-md-6.padding0 img{max-width:100%;}
 	.col-md-6.paddingcommon {padding: 0 0 0 15px;}
 
@@ -660,6 +660,11 @@
 }
 
 @media only screen and (max-width: 991px) {
+	
+	.listing_right .hover_events {
+		display: block !important; 
+	}
+
 	.events_content_part .margin-rightnone{margin: 9px 18px 9px 0!important;}
 	.thinl_like_sectons .thing_items li {margin: 9px 18px 9px 0;}
 	.thinl_like_sectons .thing_items li:nth-child(5n){margin-right:0;}
@@ -675,7 +680,7 @@
 	.product_details_com .paddng0{ padding:0px;margin:0;width:100%;}
 	.slider{ display:none;}
 	.product_detials_common.normal_tables .paddig0{ padding:0px;}
-	.responsive_slider_detials .item img{ width:100% !important;padding:0 5px;max-height:400px !important;}
+	.responsive_slider_detials .item img{padding:0 5px;max-height:400px !important;}
 	.responsive_slider_detials .carousel-indicators{ display: block;}
 	.responsive_slider_detials .carousel-indicators li{ background:#666; border-color:#666;}
 	.responsive_slider_detials .carousel-indicators .active{ background:#000!important;}

@@ -1,7 +1,9 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
+use yii\web\View;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use common\models\Vendor;
@@ -94,22 +96,25 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?= Html::a('Activate', [''], ['class' => 'btn btn-info','id'=>'Reject','onclick'=>'return Status("Activate")', 'style'=>'float:right;']) ?>			
 
 </p>
-<script type="text/javascript">
 
-	var csrfToken = $('meta[name="csrf-token"]').attr("content");		
+<?php 
+
+$this->registerJs("
+
+	var csrfToken = $('meta[name=\"csrf-token\"]').attr(\"content\");		
 	var txt;
 	
 	function approve(status){
 						
 		var keys = $('#items').yiiGridView('getSelectedRows');		
-		var pathUrl = "<?php echo Url::to(['/vendoritem/approve']); ?>";		
+		var pathUrl = '".Url::to(['/vendor-item/approve'])."';
 		
 		if(keys.length == 0) { 
 			alert ('Select atleast one item'); 
 			return false;
 		}
 
-		var r = confirm("Are you sure? Item approve status will be '" +status+ "'.");	
+		var r = confirm(\"Are you sure? Item approve status will be '\" +status+ \"'.\");	
 		
 		if (r == true) {			
 			$.ajax({
@@ -132,9 +137,9 @@ $this->params['breadcrumbs'][] = $this->title;
     function Status(status){
 						
 		var keys = $('#items').yiiGridView('getSelectedRows');		
-		var pathUrl = "<?php echo Url::to(['/vendoritem/status']); ?>";		
+		var pathUrl = '".Url::to(['/vendor-item/status'])."';
 		if(keys.length == 0) { alert ('Select atleast one item'); return false;}
-		var r = confirm("Are you sure want to " +status+ "?");	
+		var r = confirm('Are you sure want to ' + status+ '?');	
 		status = (status=='Activate')?'Active':((status=='Deactivate'))?'Deactive':status;			
 		if (r == true) {			
 			$.ajax({
@@ -154,19 +159,19 @@ $this->params['breadcrumbs'][] = $this->title;
     
     function change(status, id)
 	{			
-        var path = "<?php echo Url::to(['/vendoritem/block']); ?> ";
+        var path = '".Url::to(['/vendor-item/block'])."';
+
         $.ajax({  
-        type: 'POST',      
-        url: path, //url to be called
-        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
-        success: function(data) {
-			var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
-			$('#image-'+id).attr('src',data);
-			$('#image-'+id).parent('a').attr('onclick', 
-			"change('"+status1+"', '"+id+"')");
-         }
+	        type: 'POST',      
+	        url: path, //url to be called
+	        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
+	        success: function(data) {
+				var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+				$('#image-'+id).attr('src',data);
+				$('#image-'+id).parent('a').attr('onclick', 
+				\"change('\"+status1+\"', '\"+id+\"')\");
+	         }
         });
     }
-    
-</script>
 
+", View::POS_HEAD);

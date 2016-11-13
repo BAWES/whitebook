@@ -16,12 +16,12 @@ $this->registerJs("
     var reg_email = '".Yii::t('frontend','Enter registered email')."';
     var email_check = '".Url::toRoute('/users/email_check')."';
     var signup = '".Url::toRoute('/users/signup')."';
-    var create_event = '".Url::toRoute('/users/create_event')."';
+    var create_event = '".Url::toRoute('/events/create-event')."';
     var event_exist = '".Yii::t('frontend','Same event name already exists')."';
-    var update_event = '".Url::toRoute('/users/update_event')."';
+    var update_event = '".Url::toRoute('/events/update-event')."';
     var event_exists = '".Yii::t('frontend','Same event name already exists')."';
     var update_msg = '".Yii::t('frontend','Event updated successfully')."';
-    var event_details = '".Yii::$app->homeUrl."/event-details/';
+    var event_details = '".Url::toRoute('/events/detail')."';
     var forgot_password_url = '".Url::toRoute('users/forget_password')."';
     var receive_email = '".Yii::t("frontend","You will now receive an email to reset your password by email")."';
     var contact_admin = '".Yii::t("frontend","Email not found")."';
@@ -46,11 +46,11 @@ $this->registerJs("
     var_added_to = '".Yii::t("frontend","added to")."';
 
     var isGuest = '".Yii::$app->user->isGuest."';
-    var add_event_url = '".Url::toRoute('/users/add_event')."';
+    var add_event_url = '".Url::toRoute('/events/add-event-item')."';
     var successfully_added_to = '".Yii::t('frontend',' successfully added to ')."';
     var category = '".Yii::t('frontend','Category')."';
-    var eventinvitees_url = '".Url::toRoute(['eventinvitees/index'])."';
-    var eventinvitees_add_event_url = '".Url::toRoute(['/eventinvitees/addevent'])."';
+    var eventinvitees_url = '".Url::toRoute(['event-invitees/index'])."';
+    var eventinvitees_add_event_url = '".Url::toRoute(['/event-invitees/addevent'])."';
     var login_success_msg = '".Yii::t('frontend','You are now logged in')."';
     var session_default = '".Yii::$app->session->get('default')."';
     var session_favourite_status = '".Yii::$app->session->get('favourite_status')."';

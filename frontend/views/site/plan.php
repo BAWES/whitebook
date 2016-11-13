@@ -6,7 +6,7 @@
 <section id="inner_pages_white_back">
     <div class="container paddng0">
         <!-- Directory slider start -->
-        <?php require(__DIR__ . '/../product/directory_slider.php'); ?>
+        <?php require(__DIR__ . '/../browse/directory_slider.php'); ?>
         <!-- Directory slider end -->
         <div class="breadcrumb_common">
             <div class="bs-example">
@@ -75,7 +75,7 @@
                                             </h4>
                                         </a>
                                     </div>
-                                    <div class="panel-collapse collapse" style="height: 0px;" id="dairy">
+                                    <div class="panel-collapse collapse" id="dairy">
                                         <div class="panel-body">
                                             <div class="table">
                                                 <ul>
@@ -97,12 +97,12 @@
                                 <div class="panel panel-default" >
                                     <div class="panel-heading">
                                         <a href="#vendor" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_vendor">
-                                            <h4 class="panel-title">Vendor <i style="font-size:11px;">- Clear</i>
+                                            <h4 class="panel-title">Vendor <i class="font-size-11">- Clear</i>
                                                 <span class="plus_acc"></span>
 
                                             </h4></a>
                                     </div>
-                                    <div class="panel-collapse collapse" style="height: 0px;" id="vendor">
+                                    <div class="panel-collapse collapse" id="vendor">
                                         <div class="panel-body">
                                             <div class="table">
                                                 <ul class="test_scroll">
@@ -148,11 +148,11 @@
 
 
                                         <a href="#theme" data-parent="#accordion" data-toggle="collapse" class="collapsed" id="sub_category_theme">
-                                            <h4 class="panel-title" style="text-align:left;">Theme<span class="plus_acc"> </span>
+                                            <h4 class="panel-title text-left">Theme<span class="plus_acc"> </span>
                                             </h4>
                                         </a>
                                     </div>
-                                    <div class="panel-collapse collapse" style="height: 0px;" id="theme">
+                                    <div class="panel-collapse collapse" id="theme">
                                         <div class="panel-body">
                                             <div class="table">
                                                 <ul class="test_scroll">
@@ -201,7 +201,7 @@
                                                 </span>
                                             </h4></a>
                                     </div>
-                                    <div class="panel-collapse collapse" style="height: 0px;" id="price" area-expanded="true" aria-expanded="true">
+                                    <div class="panel-collapse collapse" id="price" area-expanded="true" aria-expanded="true">
                                         <div class="panel-body">
                                             <div class="table">
                                                 <ul class="test_scroll">
@@ -538,7 +538,14 @@
                 </div>
             </div>
         </div>
-
     </div>
 </section>
+
+<?php
+
+$this->registerCss("
+    #dairy,#price,#theme,#vendor{height: 0px;}
+    .font-size-11{font-size:11px;}
+");
+?>
 <!-- continer end -->

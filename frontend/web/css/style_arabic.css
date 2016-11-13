@@ -1,5 +1,8 @@
 @import url(https://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
-body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{font-family: 'Droid Arabic Kufi', serif !important;}
+
+body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
+    font-family: 'Droid Arabic Kufi', serif !important;
+}
 
 @media only screen and (min-width: 991px) {
     .venus_icon { background-position: -12px -8px !important; }
@@ -8,7 +11,11 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{font-family: 'Droid Arabic Kufi', serif 
     .supplies { background-position: -290px -11px !important; }
     .entert { background-position: -358px -10px !important; padding: 0 5px; float: none; }
     .serv { background-position: -443px -3px !important; } 
-    .other { background-position: -526px -13px !important; }
+    .other {
+        background-position: -526px -13px !important;
+        width: 24px;
+        display: block;
+    }
     .category_listing_nav ul li a:hover .venus_icon{background-position: -12px -71px  !important; }
     .category_listing_nav ul li a:hover .invit_icon{background-position: -83px -76px  !important; }
     .category_listing_nav ul li a:hover .supplies{background-position: -291px -68px !important; }
@@ -45,4 +52,193 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{font-family: 'Droid Arabic Kufi', serif 
 
 .glyphicon{
     font-family: 'Glyphicons Halflings' !important;
+}
+.fa {
+    font: normal normal normal 14px/1 FontAwesome !important;
+}
+.breadcrumb > li + li::before {
+    position: relative;
+    right: -3px;
+    padding: 0 10px;
+}
+.category_listing_nav {
+    direction: rtl;
+}
+@media (min-width: 768px) {
+    .navbar-nav > li {
+        float: right;
+    }
+}
+
+.product_detail_section .right_descr_product .add_events {
+    padding: 10px 9px 2px 22px;
+    margin: 0px 11px 0 37px;
+}
+.cont_ifo_right .timer_common {
+    padding: 0 0 0 5px;
+}
+.vender_profile_new .vendor_photo,
+.vender_profile_new .vendor_detail {
+    float: right;
+}
+
+.filter_content_wrapper{
+    padding-right: 0;
+    padding-left: 15px;
+    float: right;
+}
+
+.vendor_detail .glyphicon-menu-right,
+.vendor_detail .glyphicon-menu-down
+{
+    top: 7px;
+}
+
+.cont_ifo_left h4 {
+    padding: 0 19px 0 0;
+    background-position: right center;
+    float: right;
+}
+
+.cont_ifo_left h3 a {
+    padding: 0 22px 0 0;
+    background: url(../images/mssg.png) right center no-repeat;
+}
+
+.cont_ifo_right .links_left a {
+    padding: 0 30px 0 0;
+    background: url(../images/linkes.png) right center no-repeat;
+}
+
+.vender_profile_new .working_days {
+    padding: 0 25px 0 0;
+    background: url(../images/time.png) right center no-repeat;
+}
+
+.address_ifo_left h5 {
+    padding: 0 22px 0 0;
+    background: url(../images/enus11.png) right center no-repeat;
+}
+
+.cont_ifo_right .timer_common {
+    font: 300 13px 'OpenSansRegular';
+    padding: 0 20px 0 0px;
+    background: url(../images/time.png) right center no-repeat;
+    display: inline-block;
+}
+
+.cont_ifo_right, .address_ifo_left{
+    padding-right: 0px;
+}
+
+.cont_ifo_right .border-bottom {
+    margin: 5px 0 11px;
+}
+#delivery_date,#delivery_date_2 {
+    padding-right: 47px!important;
+}
+.events_images .buy-text {
+    bottom: 18px!important;
+    font-size: 10px!important;
+    left: 166px;
+}
+.events_images i {
+    bottom: 1px!important;
+    font-size: 48px!important;
+    left: 162px;
+}
+.bootstrap-select.btn-group .dropdown-toggle .filter-option{
+    text-align: right!important;
+    padding-right:21px;
+}
+
+.bootstrap-select .filter-option .glyphicon{
+    float: right;
+}
+.bootstrap-select.btn-group .dropdown-menu li a {
+    text-align: right;
+}
+
+.filter_content span.glyphicon {
+    float: right;
+}
+
+.directory .left-section{
+    float: right;
+    padding-right: 0px;
+    padding-left: 26px;
+}
+.themes #left_side_cate{
+    float: right;
+    padding-right: 0px;
+}
+
+.themes .right-side{
+    padding-left: 0px;
+    padding-right: 20px;
+}
+
+.product_details_com .left-sidebar,.browse .left-sidebar {
+    float: right;
+    padding-right: 0px;
+}
+
+.product_details_com .left_descrip.desktop-view, .product_details_com .qantity-div{
+    float: right;
+}
+.col-md-4.quantity-lbl{
+    float: right!important;
+}
+
+.product_details_com .qantity-div{
+    padding-right: 6px;
+}
+.product_details_com .buy-btn{
+    margin-left: 149px;
+}
+
+.product_details_com .area-filter,.product_details_com .delivery-date-filter,.product_details_com .timeslot-filter{
+    float: right;
+}
+.browse .right-sidebar {
+    padding-left:0px;
+    padding-right:15px;
+
+}
+.browse .left-sidebar .clear_right {
+    width: 11%;
+}
+.browse .left-sidebar .clear_left {
+    width: 89%;
+    padding: 0 13px;
+}
+
+.browse .date-filter,.browse .location-filter,.browse .mid-space ,.browse .available-filter {
+    float: right;
+}
+.browse #available-for-sale {
+    padding: 15px 0px;
+}
+
+.owl-carousel,
+.rev_slider_wrapper{
+    direction: ltr;
+}
+
+.right_descr_product .glyphicon-menu-down,
+.right_descr_product .glyphicon-menu-right {
+    float: left !important;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.right_descr_product .glyphicon-menu-right {
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */
+    transform: rotate(180deg);
+}
+
+.right_descr_product .collapsed, 
+.right_descr_product .panel-title > a {
+    width: auto !important;
 }

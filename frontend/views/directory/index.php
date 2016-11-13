@@ -7,7 +7,7 @@ use yii\web\view;
 ?>
 
 <!-- coniner start -->
-<section id="inner_pages_white_back">
+<section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
 
 	<div id="event_slider_wrapper">
 		<div class="container paddng0">
@@ -21,7 +21,7 @@ use yii\web\view;
 			<div class="title_main">
 				<h1><?= Yii::t("frontend", "Directory") ?></h1>
 			</div>
-			<div class="col-md-3 paddingleft0">
+			<div class="col-md-3 paddingleft0 left-section">
 				<div class="filter_content">
 					<div class="filter_section">
 					<span class="title_filter"><?= Yii::t("frontend", "Categories") ?></span>
@@ -30,14 +30,14 @@ use yii\web\view;
 							<select class="selectpicker" style="display: none;" id="filter_category" name="filter_category">
 							<option value="All"><?= Yii::t("frontend", "All"); ?></option>
 							<?php
-							$select = (Yii::$app->language == 'en') ? 'category_name' : 'category_name_ar';
 							$categories = \frontend\models\Category::find()
-								->select(''.$select.' as category_name,category_id,icon')
+								->select('category_name,category_name_ar,category_id,icon')
 								->where(['category_level'=>'0'])
 								->orderBy('sort')
 								->all();
 									foreach ($categories as $category) {
-										echo '<option data-icon="'.$category->icon.'" value="'.$category->category_id.'">'.$category->category_name.'</option>';
+										$select = \common\components\LangFormat::format($category->category_name,$category->category_name_ar);
+										echo '<option data-icon="'.$category->icon.'" value="'.$category->category_id.'">'.$select.'</option>';
 									}
 							?>
 							</select>
@@ -50,7 +50,7 @@ use yii\web\view;
 				<?php echo $this->render('_m_listing',['directory'=>$directory,'first_letter'=>$first_letter]); ?>
 			</div>
 
-			<div id="filter">
+			<div id="filter" class="right-section">
 				<?php echo $this->render('_listing',['directory'=>$directory,'first_letter'=>$first_letter]); ?>
 			</div>
 

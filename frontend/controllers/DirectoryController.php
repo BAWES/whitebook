@@ -30,7 +30,7 @@ class DirectoryController extends BaseController
 
     public function actionIndex()
     {
-        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Directory';
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Vendor';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
@@ -113,7 +113,7 @@ class DirectoryController extends BaseController
         ]);
     }
 
-    public function actionProfile($slug,$vendor){
+    public function actionProfile($vendor,$slug='all'){
         $website_model = new Website();
         $vendor_details = Vendor::findOne(['slug'=>$vendor]);
 
@@ -121,7 +121,6 @@ class DirectoryController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
         $data = Yii::$app->request->get();
-        $explode = (Yii::$app->request->isAjax) ? '+' : ' ';
 
         $main_category = Category::find()
             ->where(['category_level'=>'0', 'trash'=>"Default",'category_allow_sale'=>"yes"])
@@ -199,7 +198,7 @@ class DirectoryController extends BaseController
         $item_ids = ArrayHelper::map($vendor_items, 'item_id', 'item_id');
 
         $themes = \common\models\VendorItemThemes::find()
-            ->select(['wt.theme_id','wt.slug','wt.theme_name'])
+            ->select(['wt.theme_id','wt.slug','wt.theme_name','wt.theme_name_ar'])
             ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
             ->Where([
                 'wt.theme_status' => 'Active',

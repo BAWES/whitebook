@@ -95,7 +95,7 @@ if($event_status>0){
 					</nav>
 				</div>
 
-				<button class="btn btn-close-filter visible-sm visible-xs">Close filter</button>
+				<button class="btn btn-close-filter visible-sm visible-xs"><?=Yii::t('frontend','Close filter')?></button>
 			</div>
 			</div>
 		</div>
@@ -106,7 +106,7 @@ if($event_status>0){
 			<div class="listing_right">
 				<div class="events_listing">
 						<?=$this->render('@frontend/views/common/items',['items' => $items, 'customer_events_list' => $customer_events_list]); ?>
-					<div id="planloader"><img src="<?=Url::to("@web/images/ajax-loader.gif");?>" title="Loader" style="margin-top: 15%;"></div>
+					<div id="planloader"><img src="<?=Url::to("@web/images/ajax-loader.gif");?>" title="Loader" class="margin-top-15"></div>
 				</div>
 				<?php /*
 				<div class="add_more_commons">
@@ -124,6 +124,10 @@ if($event_status>0){
 </section>
 
 <?php
+$this->registerCss("
+.margin-top-15{margin-top: 15%}
+");
+
 $this->registerJs("
 	var page = 'search',
         search_keyword      = '".$search."',

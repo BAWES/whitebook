@@ -23,8 +23,8 @@ if (count($category_list) > 3) {
 <div class="responsive-category-top">
     <div class="listing_sub_cat1">
         <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-        <select class="selectpicker" style="display: none;" id="main-category">
-            <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute(['site/vendor_profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>">All</option>
+        <select class="selectpicker " id="main-category">
+            <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute(['site/vendor_profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>"><?=Yii::t('frontend','All')?></option>
             <?php
             foreach($category_list as $category) {
 
@@ -33,12 +33,7 @@ if (count($category_list) > 3) {
                 } else {
                     $selected = '';
                 }
-
-                if(Yii::$app->language == "en"){
-                    $category_name = $category['category_name'];
-                }else{
-                    $category_name = $category['category_name_ar'];
-                }
+                $category_name = \common\components\LangFormat::format($category['category_name'],$category['category_name_ar']);
                 ?>
                 <option
                     data-icon="<?= $category['icon'] ?>"
@@ -53,7 +48,7 @@ if (count($category_list) > 3) {
 
 <div class="panel panel-default" >
     <div class="panel-heading">
-         <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a>
+         <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- <?=Yii::t('frontend','Clear')?></a>
 <!--        <div class="clear_left"><p>--><?//= Yii::t('frontend', 'Categories'); ?><!-- <a href="javascript:void(0)" class="filter-clear" id="filter-clear" title="Clear">- Clear</a></p></div>-->
 <!--        <div class="clear_right">-->
 <!--            <a href="#bakery" id="sub_category_cakes" data-parent="#accordion" data-toggle="collapse" class="collapsed">-->

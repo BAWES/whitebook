@@ -12,6 +12,10 @@ class OrdersController extends BaseController
 {
 	public function actionIndex() {
 
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders';
+		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
 		if (Yii::$app->user->isGuest) {
 			Yii::$app->session->set('show_login_modal', 1);//to display login modal			
 	        return $this->redirect(['/site/index']);
@@ -38,6 +42,11 @@ class OrdersController extends BaseController
 
 	//View order detail 
 	public function actionView() {
+
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders Detail';
+		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
 
 		if (Yii::$app->user->isGuest) {
 			Yii::$app->session->set('show_login_modal', 1);//to display login modal			

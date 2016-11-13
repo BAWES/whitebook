@@ -1,10 +1,4 @@
 <?php
-
-//use common\models\ChildCategory;
-//use common\models\SubCategory;
-use frontend\models\Category;
-//use common\models\Vendor;
-use frontend\models\Themes;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
@@ -12,7 +6,7 @@ use yii\widgets\Breadcrumbs;
 $get = Yii::$app->request->get();
 ?>
 
-<section id="inner_pages_white_back">
+<section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
 	<div class="container paddng0">
 		<?php $this->render('/product/events_slider.php'); ?>
 
@@ -69,11 +63,11 @@ $get = Yii::$app->request->get();
 						</div>
 					</div><!-- END .filter_section -->
 
-					<button class="btn btn-close-filter visible-sm visible-xs">Close filter</button>
+					<button class="btn btn-close-filter visible-sm visible-xs"><?=Yii::t('frontend','Close filter')?></button>
 
 				</div><!-- END .filter_content -->
 			</div><!-- END .left_side_cate -->
-			<div class="col-md-9 paddingright0">
+			<div class="col-md-9 paddingright0 right-side">
 				<div class="banner_section_plan">
 					<?= Html::img("@web/images/banner_plan.png") ?>
 				</div>
@@ -98,8 +92,9 @@ $get = Yii::$app->request->get();
 <?php $this->registerJs("
 	var theme =  '".$theme->slug."';
 	var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-	var load_more_items = '".Url::to(['shop/load-more-items'])."';
-	var load_items = '".Url::to(['themes/detail'])."';
+	var load_more_items = '".Url::to(['browse/load-more-items'])."';
+	var load_items = '".Url::to(['/themes'],true)."';
 	var product_slug = '".$get['slug']."';
+	var current_page = 'theme';
 	", \yii\web\View::POS_BEGIN);
 ?>

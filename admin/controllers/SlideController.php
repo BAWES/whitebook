@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use admin\models\AuthItem;
 use yii\web\UploadedFile;
-use yii\filters\AccessControl;
+use admin\models\AccessControlList;
 
 /**
 * SlideController implements the CRUD actions for Slide model.
@@ -27,32 +27,29 @@ class SlideController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => [],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['create', 'update', 'index', 'view', 'delete', 'block', 'sort_slide', 'status'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //        'delete' => ['post'],
+                //    'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
     * Lists all Slide models.
@@ -61,20 +58,13 @@ class SlideController extends Controller
     */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('1', '32');
-        if (yii::$app->user->can($access)) {
-            $searchModel = new SlideSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new SlideSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -113,43 +103,35 @@ class SlideController extends Controller
 
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '1');
-        if (yii::$app->user->can($access)) {
-            $model = new Slide();
-            $model->scenario = "create";
+        $model = new Slide();
+        $model->scenario = "create";
 
-            if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
 
-                //Switch value from checkbox input into Active or Inactive strings
-                $model->slide_status = $model->slide_status ? 'Active' : 'Deactive';
+            //Switch value from checkbox input into Active or Inactive strings
+            $model->slide_status = $model->slide_status ? 'Active' : 'Deactive';
 
-                //Get Maximum sort order, then increment by 1 for this upload
-                
-                $max_sort = Slide::find()->select('max(sort) as sort')
-				->where(['trash' => 'default'])
-				->asarray()
-				->all();
-                $model->sort = ($max_sort[0]['sort'] + 1);
-                
-                //Get Uploaded Instances
-                $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
-                $model->slide_image = UploadedFile::getInstance($model, 'slide_image');
+            //Get Maximum sort order, then increment by 1 for this upload
 
-                if($model->save()){
-                    Yii::$app->session->setFlash('success', 'Slide created successfully!');
-                    return $this->redirect(['index']);
-                }
+            $max_sort = Slide::find()->select('max(sort) as sort')
+            ->where(['trash' => 'default'])
+            ->asarray()
+            ->all();
+            $model->sort = ($max_sort[0]['sort'] + 1);
+
+            //Get Uploaded Instances
+            $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
+            $model->slide_image = UploadedFile::getInstance($model, 'slide_image');
+
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'Slide created successfully!');
+                return $this->redirect(['index']);
             }
-
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -162,55 +144,47 @@ class SlideController extends Controller
     */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '32');
-        if (yii::$app->user->can($access)) {
-            $model = $this->findModel($id);
+        $model = $this->findModel($id);
 
-            if ($model->load(Yii::$app->request->post())) {
-                //Change value from checkbox input into Active or Inactive strings
-                $model->slide_status = $model->slide_status ? 'Active' : 'Deactive';
+        if ($model->load(Yii::$app->request->post())) {
+            //Change value from checkbox input into Active or Inactive strings
+            $model->slide_status = $model->slide_status ? 'Active' : 'Deactive';
 
-                //If there's uploaded files, replace old ones
-                if(UploadedFile::getInstance($model, 'slide_video_url') || UploadedFile::getInstance($model, 'slide_image')){
-                    //Set scenario to Update
-                    $model->scenario = "update";
+            //If there's uploaded files, replace old ones
+            if(UploadedFile::getInstance($model, 'slide_video_url') || UploadedFile::getInstance($model, 'slide_image')){
+                //Set scenario to Update
+                $model->scenario = "update";
 
-                    //Store old values in case we need to delete them
-                    $oldVideo = $model->slide_video_url;
-                    $oldImage = $model->slide_image;
+                //Store old values in case we need to delete them
+                $oldVideo = $model->slide_video_url;
+                $oldImage = $model->slide_image;
 
-                    //Get Uploaded Instances
-                    $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
-                    $model->slide_image = UploadedFile::getInstance($model, 'slide_image');
+                //Get Uploaded Instances
+                $model->slide_video_url = UploadedFile::getInstance($model, 'slide_video_url');
+                $model->slide_image = UploadedFile::getInstance($model, 'slide_image');
 
-                    if ($model->save()) {
-                        //Delete Old Uploads
-                        Yii::$app->resourceManager->delete("slider_uploads/" . $oldVideo);
-                        Yii::$app->resourceManager->delete("slider_uploads/" . $oldImage);
+                if ($model->save()) {
+                    //Delete Old Uploads
+                    Yii::$app->resourceManager->delete("slider_uploads/" . $oldVideo);
+                    Yii::$app->resourceManager->delete("slider_uploads/" . $oldImage);
 
-                        //Redirect
-                        Yii::$app->session->setFlash('success', 'Slides updated successfully!');
-                        return $this->redirect(['view', 'id' => $model->slide_id]);
-                    }
-
-                }else{//Otherwise, just change the data and redirect
-                    if ($model->save()) { //ISSUE HERE!! MASSIVELY ASSIGNED BLANK IMAGE/VIDEO<MAYBE SCENARIO?
-                        Yii::$app->session->setFlash('success', 'Slides updated successfully!');
-                        return $this->redirect(['view', 'id' => $model->slide_id]);
-                    }
+                    //Redirect
+                    Yii::$app->session->setFlash('success', 'Slides updated successfully!');
+                    return $this->redirect(['view', 'id' => $model->slide_id]);
                 }
 
+            }else{//Otherwise, just change the data and redirect
+                if ($model->save()) { //ISSUE HERE!! MASSIVELY ASSIGNED BLANK IMAGE/VIDEO<MAYBE SCENARIO?
+                    Yii::$app->session->setFlash('success', 'Slides updated successfully!');
+                    return $this->redirect(['view', 'id' => $model->slide_id]);
+                }
             }
 
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     public function actionStatus()
@@ -257,17 +231,8 @@ class SlideController extends Controller
     */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('1', '32');
-        if (yii::$app->user->can($access)) {
-
-            $this->findModel($id)->delete();
-
-            return $this->redirect(['index']);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        $this->findModel($id)->delete();
+        return $this->redirect(['index']);
     }
 
     /**

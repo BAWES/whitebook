@@ -1,13 +1,13 @@
 <?php
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\CitySearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use yii\web\View;
 
 $this->title = 'Governorate';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="row-fluid">
    <div class="span12">
@@ -39,11 +39,15 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
+
+<?php 
+
+$this->registerJs("
+
 function change(status, cid)
 {
 	var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-	var path = "<?php echo Url::to(['/city/block']); ?> ";
+	var path = '".Url::to(['/city/block'])."';
 	$.ajax({
 		type: 'POST',
 		url: path, //url to be called
@@ -51,8 +55,9 @@ function change(status, cid)
 		success: function(data) {
 			var status1 = (status == 'Active') ? 'Deactive' : 'Active';
 			$('#image-'+cid).attr('src',data);
-			$('#image-'+cid).parent('a').attr('onclick', "change('"+status1+"', '"+cid+"')");
+			$('#image-'+cid).parent('a').attr('onclick', \"change('\"+status1+\"', '\"+cid+\"')\");
 		}
 	});
 }
-</script>
+
+", View::POS_HEAD);

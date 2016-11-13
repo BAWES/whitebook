@@ -10,15 +10,15 @@ use yii\helpers\Html;
         <div class="exp_sect">
             <div class="plan_inner_sec">
                 <h2><?= Yii::t("frontend", "Experience") ?></h2>
-                <h5 style='text-align:center;'><?= Yii::t("frontend", "Experience is a list of value added services provided by The White Book's team") ?></h5>
+                <h5 class="text-center"><?= Yii::t("frontend", "Experience is a list of value added services provided by The White Book's team") ?></h5>
             </div>
         </div>
 
-        <div style='text-align:center'>
+        <div class="text-center">
             <div class='row'>
-                <h3 style='margin-top:1.2em;'><?= Yii::t("frontend", "Boost your Event!") ?></h3>
+                <h3 class="margin-top-1-2"><?= Yii::t("frontend", "Boost your Event!") ?></h3>
 
-                <p style='font-size:1.1em; margin:1.5em auto; width:85%;'>
+                <p class="provide-event-class">
                     <?= Yii::t("frontend", "We provide event boosting services where we assist with brainstorming and researching ideas, suggesting vendors and ideas to implement at your event, getting quotations from different vendors and booking them for the event"); ?>
                 </p>
             </div>
@@ -97,4 +97,11 @@ use yii\helpers\Html;
     }
 
 </script>
+
+<?php
+$this->registerCss("
+.margin-top-1-2{margin-top:1.2em;}
+.provide-event-class{font-size:1.1em; margin:1.5em auto; width:85%}
+");
+?>
 <!-- END REMOVE THE SCRIPT ONCE PAGE WORKOUT !IMPORTANT-->

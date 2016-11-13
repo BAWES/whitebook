@@ -89,4 +89,51 @@ class Role extends \yii\db\ActiveRecord
             ],
         ];
     }
+
+    /**
+     * @return controller_id to method_id relations
+     */
+    public function actionList() {
+        
+        return [
+	        'site' => ['index'],
+            'address-type' => ['index', 'view', 'create', 'update', 'delete', 'block'],
+            'address-question' => ['index', 'view', 'create', 'update', 'delete', 'block', 'sort_addressquestion'],
+            'admin' => ['index', 'view', 'create', 'update', 'delete', 'galleryitem'],
+            'advert-home' => ['index', 'view', 'create', 'update', 'delete'],
+            'category' => ['index', 'manage_subcategory', 'child_category_index', 'view', 'sort_sub_category', 'sort_category', 'create', 'create_subcategory', 'child_category_create', 'update', 'subcategory_update', 'child_category_update', 'delete', 'category_delete', 'subcategory_delete', 'childcategory_delete', 'block', 'subcategory_block', 'loadcategory', 'vendorcategory', 'loadsubcategory'],
+            'city' => ['index', 'view', 'create', 'update', 'delete', 'block'],
+            'cms' => ['index', 'view', 'create', 'update', 'delete', 'block'],
+            'contacts' => ['index', 'view', 'create', 'update', 'delete', 'block'],
+            'country' => ['index', 'view', 'create', 'update', 'delete', 'block'],
+            'customer' => ['index', 'view', 'create', 'update', 'delete', 'block', 'questions', 'export', 'newsletter', 'address_delete', 'address'],
+            'events' => ['create','update', 'index', 'view', 'delete'],
+            'event-type' => ['index', 'view', 'create', 'update', 'delete'],
+            'faq' => ['index', 'view', 'create', 'update', 'delete', 'block', 'sort_faq'],
+            'faq-group' => ['index', 'view', 'create', 'update', 'delete', 'sort_faq_group'],
+            'feature-group' => ['index', 'view', 'create', 'update', 'delete', 'block'],
+            'item-type' => ['index', 'view', 'create', 'update', 'delete'],
+            'location' => ['index', 'view', 'create', 'update', 'delete', 'city', 'area'],
+            'log' => ['view'],
+            'order' => ['index', 'view', 'invoice', 'order-status', 'delete'],
+            'order-status' => ['index', 'view', 'create', 'update', 'delete'],
+            'package' => ['index', 'view', 'create', 'update', 'delete', 'packagedelete', 'packageupdate', 'block'],
+            'payment-gateway' => ['index', 'view', 'create', 'update', 'delete'],
+            'priority-item' => ['index', 'view', 'create', 'update', 'delete', 'loadcategory', 'loadsubcategory', 'loadchildcategory', 'loaditems', 'loaddatetime', 'checkprioritydate', 'checkitem', 'status', 'blockpriority'],
+            'priority-log' => ['index', 'view', 'create', 'update', 'delete'],
+            'report' => ['commission', 'package'],
+            'role' => ['index', 'view', 'create', 'update', 'delete'],
+            'site-info' => ['index', 'view', 'create', 'update', 'delete'],
+            'slide' => ['index', 'view', 'create', 'update', 'delete', 'Sort_slide', 'status', 'block'],
+            'social-info' => ['index', 'view', 'create', 'update', 'delete'],
+            'themes' => ['index', 'view', 'create', 'update', 'delete', 'block'],
+            'vendor' => ['index', 'view', 'vendoritemview', 'password', 'create', 'update', 'delete', 'loadcategory', 'loadsubcategory', 'emailcheck', 'block', 'changepackage', 'changeeditpackage', 'loadpackagedate', 'packageupdate', 'vendornamecheck', 'validateVendor'],
+            'vendor-item' => ['index', 'view', 'create', 'update', 'delete', 'check', 'block', 'approve', 'status', 'removequestion', 'sort_vendor_item', 'addquestion', 'guideimage', 'renderquestion', 'viewrenderquestion', 'renderanswer', 'galleryupload', 'ttemgallery', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck', 'upload-cropped-image'],
+            'vendor-item-pending' => ['index'],
+            'vendor-draft-item' => ['index', 'approve'],
+            'vendor-item-question-answer-option' => ['index', 'view', 'create', 'update', 'delete', 'deletequestionoptions'],
+            'vendor-item-question' => ['index', 'view', 'create', 'update', 'delete'],
+            'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete']
+        ];        
+    }
 }

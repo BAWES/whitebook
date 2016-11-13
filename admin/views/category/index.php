@@ -11,8 +11,51 @@ $this->title = 'Category';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="category-index">
-    
-    <?= GridView::widget([
+	<p>
+		<?= Html::a('Create category', ['create'], ['class' => 'btn btn-success']) ?>
+	</p>
+
+	<?= GridView::widget([
+		'dataProvider' => $provider,
+		'columns' => [
+			['class' => 'yii\grid\SerialColumn'],
+			[
+				'attribute'=>'category_name',
+				'format' => 'html'
+			],
+			'sort',
+			[
+				'header'=>'Status',
+				'format' => 'raw',
+				'value'=>function($data) {
+					return HTML::a('<img src='.\admin\models\Category::statusImageurl($data['category_allow_sale']).' id="image-'.$data['ID'].'" alt="my_image" title='.\admin\models\Category::statusTitle($data['category_allow_sale']).'>','javascript:void(0)',['id'=>'status',
+						'onclick'=>'change("'.$data['category_allow_sale'].'","'.$data['ID'].'")']);
+				},
+			],
+			['class' => 'yii\grid\ActionColumn',
+				'header'=>'Action',
+				'template' => ' {update} {delete}',
+				'buttons' => [
+					'update' => function ($url, $model) {
+						$url = Url::toRoute(['category/update','id'=>$model['ID']]);
+						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+							[
+								'title' => Yii::t('app', 'update'),
+							]);
+					},
+					'delete' => function ($url, $model) {
+						$url = Url::toRoute(['category/delete','id'=>$model['ID']]);
+						return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
+							[
+								'title' => Yii::t('app', 'update'),
+							]);
+					}
+				],
+			],
+		],
+	]); ?>
+
+    <?php /*GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -45,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => ' {update} {delete} {link}',
 			],
         ],
-    ]); ?>
+    ]); */?>
 
 </div>
 

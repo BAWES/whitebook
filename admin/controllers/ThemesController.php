@@ -6,11 +6,11 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use admin\models\Themes;
 use admin\models\ThemesSearch;
 use admin\models\AuthItem;
 use common\models\VendorItemThemes;
+use admin\models\AccessControlList;
 
 /**
  * ThemesController implements the CRUD actions for Themes model.
@@ -26,32 +26,29 @@ class ThemesController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                   // 'delete' => ['post'],
+                //    'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
+
 
     /**
      * Lists all Themes models.
@@ -60,20 +57,13 @@ class ThemesController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '20');
-        if (yii::$app->user->can($access)) {
-            $searchModel = new ThemesSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new ThemesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
     }
 
     /**
@@ -98,25 +88,18 @@ class ThemesController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '20');
-        if (yii::$app->user->can($access)) {
-            $model = new Themes();
-            $model->scenario = 'insert';
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->theme_name = strtolower($model->theme_name);               
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Theme added successfully!');
+        $model = new Themes();
+        $model->scenario = 'insert';
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->theme_name = strtolower($model->theme_name);
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Theme added successfully!');
 
-                return $this->redirect(['index']);
-            } else {
-                return $this->render('create', [
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('create', [
                 'model' => $model,
             ]);
-            }
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
         }
     }
 
@@ -130,63 +113,45 @@ class ThemesController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '20');
+        $model = $this->findModel($id);
 
-        if (yii::$app->user->can($access)) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->theme_name = strtolower($model->theme_name);
+            $model->save();
 
-            $model = $this->findModel($id);
+            Yii::$app->session->setFlash('success', 'Theme updated successfully!');
 
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->theme_name = strtolower($model->theme_name);
-                $model->save();
-
-                Yii::$app->session->setFlash('success', 'Theme updated successfully!');
-
-                return $this->redirect(['index']);
-            } else {
-
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+            return $this->redirect(['index']);
         } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
 
-            return $this->redirect(['site/index']);
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
     }
 
-         /**
-          * Deletes an existing Themes model.
-          * If deletion is successful, the browser will be redirected to the 'index' page.
-          *
-          * @param string $id
-          *
-          * @return mixed
-          */
-         public function actionDelete($id)
-         {
-             $access = AuthItem::AuthitemCheck('3', '20');
-             if (yii::$app->user->can($access)) {
-                 
-                $model = $this->findModel($id);
-                $model->trash = 'Deleted';
-                $model->load(Yii::$app->request->post());
-                $model->save();
+    /**
+    * Deletes an existing Themes model.
+    * If deletion is successful, the browser will be redirected to the 'index' page.
+    *
+    * @param string $id
+    *
+    * @return mixed
+    */
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        $model->trash = 'Deleted';
+        $model->load(Yii::$app->request->post());
+        $model->save();
 
-                //delete vendor item theme 
-                VendorItemThemes::deleteAll(['theme_id' => $id]);
+        //delete vendor item theme
+        VendorItemThemes::deleteAll(['theme_id' => $id]);
 
-                Yii::$app->session->setFlash('success', 'Theme deleted successfully!');
+        Yii::$app->session->setFlash('success', 'Theme deleted successfully!');
 
-                return $this->redirect(['index']);
-
-             } else {
-                 Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-                 return $this->redirect(['site/index']);
-             }
-         }
+        return $this->redirect(['index']);
+    }
 
     /**
      * Finds the Themes model based on its primary key value.

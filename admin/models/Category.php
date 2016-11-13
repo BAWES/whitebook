@@ -43,13 +43,13 @@ class Category extends \common\models\Category
     {
            return array_merge(parent::rules(), [
             ['category_name', 'categoryvalidation','on' => 'insert',],   
-            [['parent_category_id', 'created_by', 'modified_by',], 'integer'],
+            [['parent_category_id', 'created_by', 'modified_by'], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             ['category_allow_sale', 'default', 'value' => true],
             [['category_name', 'category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required','on' => 'register'],
-            [['parent_category_id', 'category_name','category_name_ar'], 'required','on' => 'sub_update',],
-            [['created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
+            //[['parent_category_id', 'category_name','category_name_ar'], 'required','on' => 'sub_update',],
+            [['created_datetime', 'modified_datetime','top_ad','bottom_ad','parent_category_id'], 'safe'],
             [['category_name','category_name_ar'], 'string', 'max' => 128]
         ]);
     }
@@ -57,7 +57,6 @@ class Category extends \common\models\Category
     public function scenarios()
     {
         $scenarios = parent::scenarios();      
-        $scenarios['sub_update'] = ['parent_category_id','category_name','category_name_ar'];//Scenario Values Only Accepted
         $scenarios['register'] = ['category_name','category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'];
         return $scenarios;
     }
@@ -66,9 +65,7 @@ class Category extends \common\models\Category
   public  function categoryvalidation($attribute_name,$params)
   {
     if(!empty($this->category_name) ){
-      $model = Category::find()
-      ->where(['category_name'=>$this->category_name])
-      ->andwhere(['parent_category_id'=>null])->one();
+      $model = Category::find()->where(['category_name'=>$this->category_name])->andwhere(['parent_category_id'=>null])->one();
        if($model){
         $this->addError('category_name','Please enter a unique category name');
        }
@@ -109,9 +106,9 @@ class Category extends \common\models\Category
     }
 
 
-    public function statusImageurl($img_status)
+    public static function statusImageurl($img_status)
     {
-        if($img_status == 'Active')     
+        if($img_status == 'yes')
         return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
     }

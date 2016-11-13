@@ -10,7 +10,7 @@ use admin\models\CmsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use admin\models\AccessControlList;
 
 /**
  * CmsController implements the CRUD actions for Cms model.
@@ -26,30 +26,26 @@ class CmsController extends Controller
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-               'rules' => [
-                   [
-                       'actions' => [],
-                       'allow' => true,
-                       'roles' => ['?'],
-                   ],
-                   [
-                       'actions' => ['create', 'update', 'index', 'view', 'delete', 'block'],
-                       'allow' => true,
-                       'roles' => ['@'],
-                   ],
-               ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                 //   'delete' => ['post'],
+                //   'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
 
@@ -60,25 +56,15 @@ class CmsController extends Controller
      */
     public function actionIndex()
     {
-        $access = AuthItem::AuthitemCheck('4', '27');
-        
-        if (yii::$app->user->can($access)) {
+        $model = new Cms();
+        $searchModel = new CmsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            $model = new Cms();
-            $searchModel = new CmsSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'model' => $model,
-            ]);
-
-        } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
-        }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -103,27 +89,17 @@ class CmsController extends Controller
      */
     public function actionCreate()
     {
-        $access = AuthItem::AuthitemCheck('1', '27');
-        
-        if (yii::$app->user->can($access)) {
-        
-            $model = new Cms();
+        $model = new Cms();
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'New static page created successfully!');
-                return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
+            Yii::$app->session->setFlash('success', 'New static page created successfully!');
+            return $this->redirect(['index']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
     }
 
@@ -137,29 +113,19 @@ class CmsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $access = AuthItem::AuthitemCheck('2', '27');
+        $model = $this->findModel($id);
 
-        if (yii::$app->user->can($access)) {
-            
-            $model = $this->findModel($id);
-            
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                
-                Yii::$app->session->setFlash('success', 'Static page updated successfully!');
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-                return $this->redirect(['index']);
-            
-            } else {
+            Yii::$app->session->setFlash('success', 'Static page updated successfully!');
 
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+            return $this->redirect(['index']);
 
         } else {
-            
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-            return $this->redirect(['site/index']);
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
     }
 
@@ -173,21 +139,11 @@ class CmsController extends Controller
      */
     public function actionDelete($id)
     {
-        $access = AuthItem::AuthitemCheck('3', '27');
-        
-        if (yii::$app->user->can($access)) {
-        
-            $this->findModel($id)->delete();
-            
-            Yii::$app->session->setFlash('success', 'Static page deleted successfully!');
+        $this->findModel($id)->delete();
 
-            return $this->redirect(['index']);
+        Yii::$app->session->setFlash('success', 'Static page deleted successfully!');
 
-        } else {
-            Yii::$app->session->setFlash('danger', 'Your are not allowed to access the page!');
-
-            return $this->redirect(['site/index']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**

@@ -4,7 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use common\models\Location;
 use common\models\CustomerCart;
-
+use common\components\LangFormat;
 ?>
 
 <div class="panel panel-default">
@@ -13,7 +13,7 @@ use common\models\CustomerCart;
                         <?= Yii::t('frontend', 'Select delivery address for each items') ?>                        
                 </h4>
         </div>
-        <div class="panel-body" style="padding: 0px">
+        <div class="panel-body padding-0">
 
         <br />
 
@@ -26,11 +26,7 @@ use common\models\CustomerCart;
                         <input type="hidden" class="hdn_address" name="address[<?= $item['cart_id'] ?>]" value="" />
 
                         <div class="item_name">
-                                <?php if(Yii::$app->language == 'en'){ 
-                                        echo $item['item_name'];
-                                } else{ 
-                                        echo $item['item_name_ar'];
-                                } ?>
+                            <?=LangFormat::format($item['item_name'],$item['item_name_ar']); ?>
                         </div>
 
                         <div class="address_block_wrapper">
@@ -47,13 +43,9 @@ use common\models\CustomerCart;
                                                                             
                                     echo $address['address_data'].'<br />';
 
-                                    if(Yii::$app->language == 'en'){ 
-                                            echo $address['location']['location'].'<br />';
-                                            echo $address['city']['city_name'];
-                                    }else{
-                                            echo $address['location']['location_ar'].'<br />';
-                                            echo $address['city']['city_name_ar'];
-                                    } ?>
+                                    echo LangFormat::format($address['location']['location'],$address['location']['location_ar']);
+                                    echo LangFormat::format($address['city']['city_name'],$address['city']['city_name_ar']);
+                                    ?>
                                 </div>
                         <?php } ?>
                                 
@@ -74,7 +66,7 @@ use common\models\CustomerCart;
 </div>
 
 <div class="btn-set">
-        <a href="<?= Url::to(['shop/index']); ?>" class="btn btn-primary btn-checkout pull-left" style="margin-left: 0;">
+        <a href="<?= Url::to(['browse/index']); ?>" class="btn btn-primary btn-checkout pull-left margin-left-0">
                 <?= Yii::t('frontend', 'Back to shopping') ?>
         </a>
 
@@ -93,13 +85,13 @@ use common\models\CustomerCart;
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <div class="modal-header" style="padding-bottom:0; margin-bottom: 0;">
+        <div class="modal-header margin-padding-0">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
         </div>
-        <div class="modal-body" style="background: white; margin-top: 0;">
+        <div class="modal-body body-update">
 
                 <?= $form->field($customer_address_modal, 'address_name'); ?>
                 
@@ -134,7 +126,11 @@ use common\models\CustomerCart;
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
-
-    
+<?php
+$this->registerCss("
+    .margin-left-0{margin-left: 0;}
+    .padding-0{padding:0px!important;}
+    .margin-padding-0{padding-bottom:0; margin-bottom: 0;}
+    .body-update{background: white; margin-top: 0;}
+");
+?>

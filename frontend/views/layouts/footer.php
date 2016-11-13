@@ -37,8 +37,8 @@ use frontend\models\Users;
                             <span class="customer_password password errors"></span>
                         </div>
                         <div id="login_msg"></div>
-                        <div id="result" style="color:red"></div>
-                        <div id="loginErrorMsg" style="color:red"></div>
+                        <div id="result color-red"></div>
+                        <div id="loginErrorMsg color-red" ></div>
                         <span class="customer_status errors"></span>
                         <div class="form-group">
                             <div class="button-signin">
@@ -46,7 +46,7 @@ use frontend\models\Users;
                                 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="login_button">
                                     <?= Yii::t('frontend','Login');?></button>
                                 </div>
-                                <div id="login_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
+                                <div id="login_loader"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
                                 <span class="text-center forgotpwd"><a data-target="#forgotPwdModal" onclick="forgot_modal();"  data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#forgotPwdModal"> <?= Yii::t('frontend', 'Forgot your password') ?></a></span>
                             </div>
                         </div>
@@ -63,7 +63,7 @@ use frontend\models\Users;
                 <div class="modal-header">
                     <button type="button" id="reload_page1" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div id="success" style="width: 360px;"></div>
+                <div id="success" class="width-360"></div>
             </div>
         </div>
     </div>
@@ -76,7 +76,7 @@ use frontend\models\Users;
                 <div class="modal-header">
                     <button type="button" class="close"  id="reload_page1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div id="success" style="width: 360px;"><span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;"><?= Yii::t('frontend', 'Your account has been activated successfully') ?></span></div>
+                <div id="success" class="width-360"><span class="sucess_close">&nbsp;</span><span class="msg-success"><?= Yii::t('frontend', 'Your account has been activated successfully') ?></span></div>
             </div>
         </div>
     </div>
@@ -104,12 +104,12 @@ use frontend\models\Users;
                                 <input type="text" placeholder="" name="forget_email" id="forget_email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
                                 <span class="help-block"></span>
                             </div>
-                            <div id="forgot_result" style="color:red"></div>
+                            <div id="forgot_result color-red"></div>
                             <div class="button-signin">
                                 <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();"><?= Yii::t('frontend', 'New User') ?></button>
                                 <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="forgot_button" name="forgot_button"><?= Yii::t('frontend', 'Send') ?></button>
                             </div>
-                            <div id="forgot_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
+                            <div id="forgot_loader"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 
                             <span class="text-center forgotpwd">
                                 <a data-target="#myModal" data-dismiss="modal" data-toggle="modal" title="Sign in" class="actionButtons" href="#forgotPwdModal"><?= Yii::t('frontend', 'Sign In') ?></a>
@@ -151,11 +151,11 @@ use frontend\models\Users;
                             <input type="password" placeholder="" name="confirm_password" id="confirm_password" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
                             <span class="help-block"></span>
                         </div>
-                        <div id="reset_pwd_result" style="color:red"></div>
+                        <div id="reset_pwd_result color-red"></div>
                         <div class="button-signin">
                             <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="reset_button" name="reset_button"><?= Yii::t('frontend', 'Submit') ?></button>
                         </div>
-                        <div id="reset_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
+                        <div id="reset_loader"><img src="<?php  echo Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
                         <div class="button-signin">
                         </div>
                     </div>
@@ -174,7 +174,7 @@ use frontend\models\Users;
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <div class="text-center">
-                    <div id="registration_msg" style="color:green;margin-bottom: 10px;"></div>
+                    <div id="registration_msg"></div>
                 </div>
                 <h4 class="modal-title text-center" id="myModalLabel">
                     <span> <?= Yii::t('frontend', 'Register') ?></span>
@@ -311,10 +311,10 @@ use frontend\models\Users;
                                 <div id="agree" class="error"></div>
                             </div>
 
-                            <div id="register_loader" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?= Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
+                            <div id="register_loader"><img src="<?= Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
 
                             <div class="button-signin">
-                                <div id="loader1" style="display:none;text-align:center;margin-bottom: 10px;"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
+                                <div id="loader1"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
                                 <button type="button" id="register" name="register" class="btn btn-primary btn-lg btn-block login_btn"><?= Yii::t('frontend', 'Register') ?></button>
                             </div>
                             <span class="text-center forgotpwd"><?= Yii::t('frontend', 'Already a member?') ?><a data-target="#myModal" onclick="show_mydata();" data-toggle="modal" title="<?= Yii::t('frontend', 'Sign In') ?>" class="actionButtons" href="">
@@ -365,14 +365,16 @@ use frontend\models\Users;
                 <span class="footer_logo">
                     <a href="<?= Url::toRoute('site/index');?>" title="Logo"><?= Html::img("@web/images/footer_logo.png") ?></a>
                 </span>
-                <p class="bot_desc"><!-- Description here --></p>
+                <p class="bot_desc">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                </p>
             </div>
             <div class="col-md-1"><div class="divider_bot"></div></div>
             <div class="col-md-4 padding_left0">
                 <address class="address_bot">
                     <h3><?= Yii::t("frontend", "We're here to help") ?></h3>
                     <p><?= Yii::t("frontend", "Our team is ready to help via email") ?></p>
-                    <a style='color:white' href='mailto:hello@thewhitebook.com.kw'>hello@thewhitebook.com.kw</a>
+                    <a class="color-white" href='mailto:hello@thewhitebook.com.kw'>hello@thewhitebook.com.kw</a>
                 </address>
             </div>
         </div>
@@ -388,7 +390,20 @@ use frontend\models\Users;
                     <li><a href="<?= Url::toRoute('/privacy-policy',true);?>"><?= Yii::t("frontend", "Privacy Policy") ?></a></li>
                 </ul>
             </div>
-            <div class="col-md-5"></div>
+            <div class="col-md-5">
+                <div class="social_icons desktop">
+                    <span>Keep in touch</span>
+                    <a target="_blank" href="#">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+                    <a target="_blank" href="https://www.instagram.com/thewhitebookkw/">
+                        <i class="fa fa-instagram"></i>
+                    </a>
+                    <a target="_blank" href="#">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div class="bootom_footer_responsive">
@@ -406,23 +421,44 @@ use frontend\models\Users;
                         <li><a href="<?= Url::toRoute('/privacy-policy',true);?>"><?= Yii::t("frontend", "Privacy Policy") ?></a></li>
                     </ul>
                 </div>
-
             </div>
+            <div class="col-md-5">
+                <div class="social_icons mobile">
+                    <span>Keep in touch</span>
+                    <a target="_blank" href="#">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+                    <a target="_blank" href="https://www.instagram.com/thewhitebookkw/">
+                        <i class="fa fa-instagram"></i>
+                    </a>
+                    <a target="_blank" href="#">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                </div>
+            </div>            
             <ul class="treams_of_ser copyright col-md-7 col-sm-12 padding_left0">
                 <li>   &COPY;2015 - The White Book </li>
-
             </ul>
-            <div class="col-md-5"></div>
         </div>
     </div>
 </footer>
 
 <!-- megamenu script -->
-<style>
-    .datepicker{z-index:1151 !important;}
-</style>
-
 <?php
+
+$this->registerCss("
+ .datepicker{z-index:1151 !important;}
+ .color-red{color:red;}
+ .registration_msg{color:green;margin-bottom: 10px;}
+ #forgot_loader{display:none;text-align:center;margin-bottom: 10px;}
+ .msg-success{margin-top: 5px; width: 320px; float: left; text-align: left;}
+ .width-360{width: 360px;}
+ #login_loader{display:none;text-align:center;margin-bottom: 10px;}
+ #reset_loader{display:none;text-align:center;margin-bottom: 10px;}
+ #register_loader{display:none;text-align:center;margin-bottom: 10px}
+ #loader1{display:none;text-align:center;margin-bottom: 10px;}
+ .color-white{color:white;}
+");
 
 require(__DIR__ . '/footer_js.php');
 
