@@ -366,7 +366,7 @@ use frontend\models\Users;
                     <a href="<?= Url::toRoute('site/index');?>" title="Logo"><?= Html::img("@web/images/footer_logo.png") ?></a>
                 </span>
                 <p class="bot_desc">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                    &nbsp;
                 </p>
             </div>
             <div class="col-md-1"><div class="divider_bot"></div></div>
@@ -385,22 +385,16 @@ use frontend\models\Users;
                     <li><a href="<?= Url::toRoute('/directory/index', true); ?>"> <?= Yii::t("frontend", "Directory") ?></a></li>
                 </ul>
                 <ul class="treams_of_ser">
-                    <li> &COPY;2015 - The White Book </li>
+                    <li> &COPY;2016 - The White Book </li>
                     <li><a href="<?= Url::toRoute('/terms-conditions',true);?>"><?= Yii::t("frontend", "Terms and Conditions") ?></a></li>
                     <li><a href="<?= Url::toRoute('/privacy-policy',true);?>"><?= Yii::t("frontend", "Privacy Policy") ?></a></li>
                 </ul>
             </div>
             <div class="col-md-5">
                 <div class="social_icons desktop">
-                    <span>Keep in touch</span>
-                    <a target="_blank" href="#">
-                        <i class="fa fa-facebook"></i>
-                    </a>
+                    <span>Check out our Instagram</span>
                     <a target="_blank" href="https://www.instagram.com/thewhitebookkw/">
                         <i class="fa fa-instagram"></i>
-                    </a>
-                    <a target="_blank" href="#">
-                        <i class="fa fa-twitter"></i>
                     </a>
                 </div>
             </div>
@@ -435,7 +429,7 @@ use frontend\models\Users;
                         <i class="fa fa-twitter"></i>
                     </a>
                 </div>
-            </div>            
+            </div>
             <ul class="treams_of_ser copyright col-md-7 col-sm-12 padding_left0">
                 <li>   &COPY;2015 - The White Book </li>
             </ul>

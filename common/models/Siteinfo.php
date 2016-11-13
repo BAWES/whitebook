@@ -37,7 +37,7 @@ class Siteinfo extends \yii\db\ActiveRecord
         ];
     }
 
-    public function info($name)
+    public static function info($name)
     {
         $result = Siteinfo::find()
             ->where(['name' => $name])
