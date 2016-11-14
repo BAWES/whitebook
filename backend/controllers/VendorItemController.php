@@ -557,17 +557,17 @@ class VendorItemController extends Controller
         $data = Yii::$app->request->post();
         $status = $data['status'] == 'Active' ? 'Deactive' : 'Active';
 
-        $command = VendorItem::updateAll(['item_status' => $status], ['item_id= '.$data['id']]);
+        $command = VendorItem::updateAll(['item_status' => $status], ['item_id' => $data['id']]);
 
         if($status == 'Active')
         {
-            Yii::$app->session->setFlash('success', "Category status updated!");
+            Yii::$app->session->setFlash('success', "Item status updated!");
 
             return Url::to('@web/uploads/app_img/active.png');
 
         } else {
 
-            Yii::$app->session->setFlash('success', "Category status updated!");
+            Yii::$app->session->setFlash('success', "Item status updated!");
 
             return Url::to('@web/uploads/app_img/inactive.png');
         }
