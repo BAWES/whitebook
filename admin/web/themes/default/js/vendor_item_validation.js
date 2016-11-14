@@ -422,7 +422,7 @@ var j= 2;
 
 function addPrice(tis)
 {
-	$(tis).before('<div class="controls'+j+'"><input type="text" id="vendoritem-item_from" class="form-control from_range_'+j+'" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From range"><input type="text" id="vendoritem-item_to" class="form-control to_range_'+j+'" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To range"><input type="text" id="item_price_per_unit" class="form-control price_kd'+j+'" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>');
+	$(tis).before('<div class="controls'+j+'"><input type="text" id="vendoritem-item_from" class="form-control from_range_'+j+'" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From Quantity" /><input type="text" id="vendoritem-item_to" class="form-control to_range_'+j+'" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To Quantity" /><input type="text" id="item_price_per_unit" class="form-control price_kd'+j+'" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>');
 	j++;
 }
 
@@ -626,24 +626,10 @@ $("#validtwo2").click(function() {
 			return false;
   	}
 
-  	if($("#vendoritem-category_id").val()=='')
+  	if($("input[name='category[]']").length == 0)
 	{
-			$(".field-vendoritem-category_id").addClass('has-error');
-			$(".field-vendoritem-category_id").find('.help-block').html('Category cannot be blank.');
-			return false;
-  	}
-
-  	if($("#vendoritem-subcategory_id").val()=='')
-	{
-			$(".field-vendoritem-subcategory_id").addClass('has-error');
-			$(".field-vendoritem-subcategory_id").find('.help-block').html('Subcategory cannot be blank.');
-			return false;
-  	}
-
-  	if($("#vendoritem-child_category").val()=='')
-	{
-			$(".field-vendoritem-child_category").addClass('has-error');
-			$(".field-vendoritem-child_category").find('.help-block').html('Child category cannot be blank.');
+			$(".field-category-list").addClass('has-error');
+			$(".field-category-list").find('.help-block').html('Add Category.');
 			return false;
   	}
 
@@ -666,6 +652,7 @@ $("#validtwo2").click(function() {
 });
 
 $("#validthree3").click(function() {
+
 	if($("#vendoritem-vendor_id").val()=='')
 	{
 		$(".field-vendoritem-vendor_id").addClass('has-error');
@@ -680,24 +667,11 @@ $("#validthree3").click(function() {
 		return false;
   	}
 
-  	if($("#vendoritem-category_id").val()=='')
+  	if($("input[name='category[]']").length == 0)
 	{
-		$(".field-vendoritem-category_id").addClass('has-error');
-		$(".field-vendoritem-category_id").find('.help-block').html('Category cannot be blank.');
-		return false;
-  	}
-
-  	if($("#vendoritem-subcategory_id").val()=='')
-	{
-		$(".field-vendoritem-subcategory_id").addClass('has-error');
-		$(".field-vendoritem-subcategory_id").find('.help-block').html('Subcategory cannot be blank.');
-  	}
-
-  	if($("#vendoritem-child_category").val()=='')
-	{
-		$(".field-vendoritem-child_category").addClass('has-error');
-		$(".field-vendoritem-child_category").find('.help-block').html('Child category cannot be blank.');
-		return false;
+			$(".field-category-list").addClass('has-error');
+			$(".field-category-list").find('.help-block').html('Add Category.');
+			return false;
   	}
 
 	/* BEGIN Validate item for sale yes or no */
@@ -730,6 +704,21 @@ $("#validthree3").click(function() {
 				$(".field-vendoritem-item_minimum_quantity_to_order").find('.help-block').html('Item minimum quantity to order cannot be blank.');
 				return false;
 	  	}
+    }
+
+    $is_price_valid = true;
+
+    $('.form-group.multiple_price input[type="text"]').each(function() {
+    	if(!$.isNumeric($(this).val())) {
+    		$is_price_valid = false;
+		}
+    });
+
+    if($is_price_valid) {
+    	$('.form-group.multiple_price').removeClass('has-error');
+    }else{
+    	$('.form-group.multiple_price').addClass('has-error');
+    	return false;
     }
 
   	var messageLength = CKEDITOR.instances['vendoritem-item_description'].getData().replace(/<[^>]*>/gi, '').length;
@@ -808,6 +797,21 @@ $("#validfour4").click(function() {
 	  	}
 	}
 
+    $is_price_valid = true;
+
+    $('.form-group.multiple_price input[type="text"]').each(function() {
+    	if(!$.isNumeric($(this).val())) {
+    		$is_price_valid = false;
+		}
+    });
+
+    if($is_price_valid) {
+    	$('.form-group.multiple_price').removeClass('has-error');
+    }else{
+    	$('.form-group.multiple_price').addClass('has-error');
+    	return false;
+    }
+
   	if($("#vendoritem-type_id").val()=='')
 	{
 			$(".field-vendoritem-type_id").addClass('has-error');
@@ -865,6 +869,22 @@ $("#validfive5").click(function() {
 			$(".field-vendoritem-child_category").find('.help-block').html('Child category cannot be blank.');
 			return false;
   	}
+
+    $is_price_valid = true;
+
+    $('.form-group.multiple_price input[type="text"]').each(function() {
+    	if(!$.isNumeric($(this).val())) {
+    		$is_price_valid = false;
+		}
+    });
+
+    if($is_price_valid) {
+    	$('.form-group.multiple_price').removeClass('has-error');
+    }else{
+    	$('.form-group.multiple_price').addClass('has-error');
+    	return false;
+    }
+
 
 	/* BEGIN Validate item for sale yes or no */
 	if($("#vendoritem-item_for_sale").prop('checked') == true)
@@ -980,6 +1000,21 @@ $("#validsix6").click(function() {
 				return false;
 	  	}
 	}
+
+    $is_price_valid = true;
+
+    $('.form-group.multiple_price input[type="text"]').each(function() {
+    	if(!$.isNumeric($(this).val())) {
+    		$is_price_valid = false;
+		}
+    });
+
+    if($is_price_valid) {
+    	$('.form-group.multiple_price').removeClass('has-error');
+    }else{
+    	$('.form-group.multiple_price').addClass('has-error');
+    	return false;
+    }
 
   	return true;
 });
