@@ -39,41 +39,44 @@ function cmp($a, $b)
 
 				<?= $form->field($model, 'item_name_ar')->textInput(['maxlength' => 128]) ?>
 				
-				<label>Categories</label>
-				<table class="table table-bordered table-category-list">
-					<tbody>
-						<?php foreach($vendor_item_to_category as $key => $value) { ?>
-						<tr>	
-							<td>
-								<?= $value->category->category_title ?>
-								<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
-							</td>	
-							<td>		
-								<button class="btn btn-danger" type="button">			
-									<i class="glyphicon glyphicon-trash"></i>
-								</button>	
-							</td>
-						</tr>
-						<?php } ?>
-					</tbody>
-					<tfoot>
-						<tr>
-							<td>
-								<select id="category_id">
-									<option></option>
-									<?php foreach($categories as $key => $value) { ?>
-										<option value="<?= $value['category_id'] ?>">
-											<?= $value['category_name'] ?>
-										</option>
-									<?php } ?>
-								</select>
-							</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-add-category">Add</button>
-							</td>
-						</tr>
-					</tfoot>
-				</table>
+				<div class="field-category-list">
+					<label>Categories</label>
+					<table class="table table-bordered table-category-list">
+						<tbody>
+							<?php foreach($vendor_item_to_category as $key => $value) { ?>
+							<tr>	
+								<td>
+									<?= $value->category->category_title ?>
+									<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
+								</td>	
+								<td>		
+									<button class="btn btn-danger" type="button">			
+										<i class="glyphicon glyphicon-trash"></i>
+									</button>	
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>
+									<select id="category_id">
+										<option></option>
+										<?php foreach($categories as $key => $value) { ?>
+											<option value="<?= $value['category_id'] ?>">
+												<?= $value['category_name'] ?>
+											</option>
+										<?php } ?>
+									</select>
+									<span class="help-block"></span>
+								</td>
+								<td>
+									<button type="button" class="btn btn-primary btn-add-category">Add</button>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 				
 				<?= $form->field($model, 'item_status')
 						->dropDownList(['Active' => 'Yes','Deactive' => 'No']) ?>
