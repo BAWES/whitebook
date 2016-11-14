@@ -7,10 +7,7 @@ class m161028_072258_super_admin_permission extends Migration
 {
     public function up()
     {
-        $this->addColumn('whitebook_siteinfo', 'super_admin_role_id', $this->integer(11)->after('commision'));
-
-        $info = Siteinfo::findOne(1);
-        $info->super_admin_role_id = 1;
-        $info->save();
+        $this->dropColumn('whitebook_siteinfo', 'super_admin_role_id');
+        $this->addColumn('whitebook_siteinfo', 'super_admin_role_id', $this->integer(11)->defaultValue(1)->after('commision'));
     }
 }
