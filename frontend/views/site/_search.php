@@ -13,7 +13,7 @@ $date = $session->get('deliver-date');
             <div class="left-offset-25">&nbsp;</div>
             <div class="col-lg-3 col-sm-3 col-md-3 location-div">
                 <select class="selectpicker trigger" name="location" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
-                    <option value=""><?=Yii::t('frontend','All')?></option>
+                    <option value=""><?=Yii::t('frontend','Area')?></option>
                     <?php
                     $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
                     $list = '';
@@ -45,7 +45,7 @@ $date = $session->get('deliver-date');
                 <input type="submit" class="bg-000 color-fff btn btn-default btn-submit" value="Search">
             </div>
             <div class="col-lg-1 col-sm-1 col-md-1 or-area">
-                OR
+                <?=Yii::t('frontend','OR'); ?>
             </div>
             <div class="col-lg-1 col-sm-1 col-md-1 padding-left-0">
                 <?=Html::a('Just Browse',['browse/list','slug'=>'all'],['class'=>'btn btn-default btn-submit bg-000 color-fff']);?>
@@ -79,7 +79,7 @@ $date = $session->get('deliver-date');
             </div>
             <div class="col-lg-12 col-sm-12 col-md-12 margin-top-15">
                 <select class="selectpicker trigger" name="location" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
-                    <option value="">All</option>
+                    <option value=""><?=Yii::t('frontend','All'); ?></option>
                     <?php
                     $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
                     $list = '';
