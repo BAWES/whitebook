@@ -8457,3 +8457,10 @@ a.delivery_href:hover{
   width: 50px;  
   text-align: center;
 }
+
+.field-category-list.has-error select {
+  border-color: red;
+}
+.field-category-list.has-error .btn-add-category{
+  background: red;
+}

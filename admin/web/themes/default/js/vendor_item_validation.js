@@ -555,24 +555,10 @@ $("#validone1").click(function() {
 			return false;
   	}
 
-  	if($("#vendoritem-category_id").val()=='')
+  	if($("input[name='category[]']").length == 0)
 	{
-			$(".field-vendoritem-category_id").addClass('has-error');
-			$(".field-vendoritem-category_id").find('.help-block').html('Category cannot be blank.');
-			return false;
-  	}
-
-  	if($("#vendoritem-subcategory_id").val()=='')
-	{
-			$(".field-vendoritem-subcategory_id").addClass('has-error');
-			$(".field-vendoritem-subcategory_id").find('.help-block').html('Subcategory cannot be blank.');
-			return false;
-  	}
-
-  	if($("#vendoritem-child_category").val()=='')
-	{
-			$(".field-vendoritem-child_category").addClass('has-error');
-			$(".field-vendoritem-child_category").find('.help-block').html('Child category cannot be blank.');
+			$(".field-category-list").addClass('has-error');
+			$(".field-category-list").find('.help-block').html('Add Category.');
 			return false;
   	}
 
@@ -1158,6 +1144,9 @@ $('.btn-add-category').click(function(){
 	$html += '</tr>';
 
 	$('.table-category-list tbody').append($html);
+
+	$(".field-category-list").removeClass('has-error');
+	$(".field-category-list").find('.help-block').html('');
 });
 
 $(document).delegate('.table-category-list .btn-danger','click', function(){

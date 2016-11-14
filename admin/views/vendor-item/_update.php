@@ -62,41 +62,44 @@ function cmp($a, $b)
 
 			<?= $form->field($model, 'item_name_ar')->textInput(['maxlength' => 128,'autocomplete' => 'off']); ?>
 			
-			<label>Categories</label>
-			<table class="table table-bordered table-category-list">
-				<tbody>
-					<?php foreach($vendor_item_to_category as $key => $value) { ?>
-					<tr>	
-						<td>
-							<?= $value->category->category_title ?>
-							<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
-						</td>	
-						<td>		
-							<button class="btn btn-danger" type="button">			
-								<i class="glyphicon glyphicon-trash"></i>
-							</button>	
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td>
-							<select id="category_id">
-								<option></option>
-								<?php foreach($categories as $key => $value) { ?>
-									<option value="<?= $value['category_id'] ?>">
-										<?= $value['category_name'] ?>
-									</option>
-								<?php } ?>
-							</select>
-						</td>
-						<td>
-							<button type="button" class="btn btn-primary btn-add-category">Add</button>
-						</td>
-					</tr>
-				</tfoot>
-			</table>
+			<div class="field-category-list">
+				<label>Categories</label>
+				<table class="table table-bordered table-category-list">
+					<tbody>
+						<?php foreach($vendor_item_to_category as $key => $value) { ?>
+						<tr>	
+							<td>
+								<?= $value->category->category_title ?>
+								<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
+							</td>	
+							<td>		
+								<button class="btn btn-danger" type="button">			
+									<i class="glyphicon glyphicon-trash"></i>
+								</button>	
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td>
+								<select id="category_id">
+									<option></option>
+									<?php foreach($categories as $key => $value) { ?>
+										<option value="<?= $value['category_id'] ?>">
+											<?= $value['category_name'] ?>
+										</option>
+									<?php } ?>
+								</select>
+								<span class="help-block"></span>
+							</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-add-category">Add</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>				
+			</div>
 
 			<div class="form-group" >
 			<div class="col-lg-6 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete pull-left']) ?></div>
@@ -464,7 +467,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.3", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.4", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
