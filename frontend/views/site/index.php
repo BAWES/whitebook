@@ -12,7 +12,7 @@ use common\models\Image;
 use frontend\models\Website;
 use common\components\CFormatter;
 
-$this->title = 'Home | Whitebook';
+$this->title = 'The White Book | Ideas for your event in Kuwait!';
 
 $model = new Website();
 
