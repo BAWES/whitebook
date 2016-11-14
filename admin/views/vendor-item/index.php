@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
 				'attribute'=>'item_status',
-             	'label'=>'Visible On Website',
+             	'label'=>'Status',
              	'format'=>'raw',
 				'contentOptions' => ['class' => 'text-center'],
 				'headerOptions' => ['class' => 'text-center'],
