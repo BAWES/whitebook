@@ -207,9 +207,9 @@ class VendorItemController extends Controller
                 }
 
                 //BEGIN Manage item pricing table
-                $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
+                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
-                if ($vendoritem_item_price['from']) {
+                if ($vendoritem_item_price) {
 
                     $from = $vendoritem_item_price['from'];
                     $to = $vendoritem_item_price['to'];
@@ -510,11 +510,11 @@ class VendorItemController extends Controller
                 $save = 'update';
 
                 //BEGIN Manage item pricing table
-                $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
+                VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
 
-                if ($vendoritem_item_price['from'] != '') {
+                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
-                    VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $item_id]);
+                if ($vendoritem_item_price) {
 
                     $from = $vendoritem_item_price['from'];
                     $to = $vendoritem_item_price['to'];

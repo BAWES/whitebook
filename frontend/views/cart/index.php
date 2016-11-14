@@ -7,6 +7,8 @@ use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
 use common\components\LangFormat;
+use common\models\VendorItemPricing;
+
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
 ?>
@@ -80,7 +82,22 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        	foreach ($items as $item) {
 
 				$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
-				$row_total = $item['item_price_per_unit'] * $item['cart_quantity'];
+
+				//check quantity fall in price chart 
+				$price_chart = VendorItemPricing::find()
+					->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+					->andWhere(['<=', 'range_from', $item['cart_quantity']])
+					->andWhere(['>=', 'range_to', $item['cart_quantity']])
+					->orderBy('pricing_price_per_unit DESC')
+					->one();
+
+				if($price_chart) {
+					$unit_price = $price_chart->pricing_price_per_unit;
+				}else{
+					$unit_price = $item['item_price_per_unit'];
+				}
+
+				$row_total = $unit_price * $item['cart_quantity'];
     			$sub_total += $row_total;
 	        	
 	        	?>
@@ -106,7 +123,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		</td>
 	        		<td>
 	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
-	        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']); ?>
+	        				<?= LangFormat::format($item['item_name'], $item['item_name_ar']); ?>
 	        			</a>
 
 	        			<div class="visible-xs visible-sm">	        				
@@ -161,7 +178,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	                    </div>
                     </td>
 	        		<td align="right" class="visible-md visible-lg">
-	        			<?= CFormatter::format($item['item_price_per_unit'])  ?>
+	        			<?= CFormatter::format($unit_price)  ?>
 	        		</td>
 	        		<td align="right" class="visible-md visible-lg">
 	        			<?= CFormatter::format($row_total)  ?>

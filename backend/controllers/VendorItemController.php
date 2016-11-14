@@ -183,9 +183,9 @@ class VendorItemController extends Controller
                     $vic->save();
                 }
 
-                $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
+                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
-                if(!empty($vendoritem_item_price['from'])) {
+                if($vendoritem_item_price) {
 
                     for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
                         $vendor_item_pricing = new VendorItemPricing();
@@ -449,9 +449,9 @@ class VendorItemController extends Controller
             }
 
             //BEGIN Manage item pricing table
-            $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
+            $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
-            if(!empty($vendoritem_item_price['from'])) {
+            if($vendoritem_item_price) {
 
                 VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
 
