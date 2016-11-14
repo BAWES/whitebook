@@ -6,6 +6,8 @@ use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
 use common\components\LangFormat;
+use common\models\VendorItemPricing;
+
 ?>
 <h3>
 	<?= Yii::t('frontend', 'Payment method selected : <strong>{payment_method}</strong>', [
@@ -42,11 +44,25 @@ use common\components\LangFormat;
 
         	foreach ($items as $item) {
 
+            //check quantity fall in price chart 
+            $price_chart = VendorItemPricing::find()
+                ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+                ->andWhere(['<=', 'range_from', $item['cart_quantity']])
+                ->andWhere(['>=', 'range_to', $item['cart_quantity']])
+                ->orderBy('pricing_price_per_unit DESC')
+                ->one();
+
+            if($price_chart) {
+                $unit_price = $price_chart->pricing_price_per_unit;
+            }else{
+                $unit_price = $item['item_price_per_unit'];
+            }
+
 			$address_data = CustomerCart::getAddressData($address[$item['cart_id']]);
 
 			$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
 
-			$row_total = $item['item_price_per_unit'] * $item['cart_quantity'];
+			$row_total = $unit_price * $item['cart_quantity'];
 
 			$sub_total += $row_total;
 
@@ -110,7 +126,7 @@ use common\components\LangFormat;
                     </div>
                 </td>
         		<td align="right" class="visible-md visible-lg">
-                    <?= CFormatter::format($item['item_price_per_unit']); ?>
+                    <?= CFormatter::format($unit_price); ?>
                 </td>
         		<td align="right" class="visible-md visible-lg">
                     <?= CFormatter::format($row_total) ?>

@@ -8473,3 +8473,10 @@ ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{backgro
   width: 50px;  
   text-align: center;
 }
+
+.field-category-list.has-error select {
+  border-color: red;
+}
+.field-category-list.has-error .btn-add-category{
+  background: red;
+}

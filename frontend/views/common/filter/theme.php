@@ -18,12 +18,7 @@ if($themes) { ?>
 	<div id="themes" class="panel-collapse collapse" aria-expanded="false">
 		<div class="panel-body">
 			<div class="table">
-				<?php
-				/* BEGIN Display scroll for more than three li */
-				if(count($themes) > 3 ) { $class = "test_scroll"; } else { $class = "";}
-				/* END Display scroll for more than three li */
-				?>
-				<ul class="<?= $class; ?>">
+				<ul class="css-updated">
 					<?php
 					foreach ($themes as $key => $value) {
 						$value = (isset($value['themeDetail'])) ? $value['themeDetail'] : $value;

@@ -156,7 +156,6 @@ $(function(){
 	CKEDITOR.replace('vendoritem-item_additional_info');
 	CKEDITOR.replace('vendoritem-item_price_description');
 	CKEDITOR.replace('vendoritem-item_customization_description');
-
 	CKEDITOR.replace('vendoritem-item_description_ar');
 	CKEDITOR.replace('vendoritem-item_additional_info_ar');
 	CKEDITOR.replace('vendoritem-item_price_description_ar');
@@ -182,7 +181,7 @@ var j= 2;
 
 function addPrice(tis)
 {
-	$(tis).before('<div class="controls'+j+'"><input type="text" id="vendoritem-item_from" class="form-control from_range_'+j+'" name="vendoritem-item_price[from][]" multiple="multiple" Placeholder="From range"><input type="text" id="vendoritem-item_to" class="form-control to_range_'+j+'" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To range"><input type="text" id="item_price_per_unit" class="form-control price_kd'+j+'" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>');
+	$(tis).before('<div class="controls'+j+'"><input type="text" id="vendoritem-item_from" class="form-control from_range_'+j+'" name="vendoritem-item_price[from][]" multiple="multiple" Placeholder="From Quantity"><input type="text" id="vendoritem-item_to" class="form-control to_range_'+j+'" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To Quantity"><input type="text" id="item_price_per_unit" class="form-control price_kd'+j+'" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>');
 	j++;
 }
 
@@ -191,7 +190,7 @@ function removePrice(tis)
 	var r = confirm("Are you sure want to delete?");
 	
 	if (r == true) {
-		$(this).parent().remove();
+		$(tis).parent().remove();
         return false;
 	}
 }
@@ -355,27 +354,13 @@ $('#validone1').click(function() {
 		return false;
   	}
 
-  	if($('#vendoritem-category_id').val()=='')
+  	if($("input[name='category[]']").length == 0)
 	{
-		$('.field-vendoritem-category_id').addClass('has-error');
-		$('.field-vendoritem-category_id').find('.help-block').html('Category cannot be blank.');
-		return false;
+			$(".field-category-list").addClass('has-error');
+			$(".field-category-list").find('.help-block').html('Add Category.');
+			return false;
   	}
-
-  	if($('#vendoritem-subcategory_id').val()=='')
-	{
-		$('.field-vendoritem-subcategory_id').addClass('has-error');
-		$('.field-vendoritem-subcategory_id').find('.help-block').html('Subcategory cannot be blank.');
-		return false;
-  	}
-
-  	if($('#vendoritem-child_category').val()=='')
-	{
-		$('.field-vendoritem-child_category').addClass('has-error');
-		$('.field-vendoritem-child_category').find('.help-block').html('Child category cannot be blank.');
-		return false;
-  	}
-
+  	
 	/*   //validate email already exist or not
  	var item_len = $('#vendoritem-item_name').val().length;
 
@@ -430,27 +415,13 @@ $('#validtwo2').click(function() {
 		$('.field-vendoritem-item_name').find('.help-block').html('Item name cannot be blank.');
 		return false;
   	}
-
-    if($('#vendoritem-category_id').val()=='')
+    
+  	if($("input[name='category[]']").length == 0)
 	{
-		$('.field-vendoritem-category_id').addClass('has-error');
-		$('.field-vendoritem-category_id').find('.help-block').html('Category cannot be blank.');
-		return false;
+			$(".field-category-list").addClass('has-error');
+			$(".field-category-list").find('.help-block').html('Add Category.');
+			return false;
   	}
-
-    if($('#vendoritem-subcategory_id').val()=='')
-	{
-		$('.field-vendoritem-subcategory_id').addClass('has-error');
-		$('.field-vendoritem-subcategory_id').find('.help-block').html('Subcategory cannot be blank.');
-		return false;
-    }
-
-  	if($('#vendoritem-child_category').val()=='')
-	{
-		$('.field-vendoritem-child_category').addClass('has-error');
-		$('.field-vendoritem-child_category').find('.help-block').html('Child category cannot be blank.');
-		return false;
-    }
 
     if($('#vendoritem-type_id').val()=='')
 	{
@@ -482,26 +453,12 @@ $('#validthree3').click(function() {
 		return false;
     }
 
-    if($('#vendoritem-category_id').val()=='')
+  	if($("input[name='category[]']").length == 0)
 	{
-		$('.field-vendoritem-category_id').addClass('has-error');
-		$('.field-vendoritem-category_id').find('.help-block').html('Category cannot be blank.');
+		$(".field-category-list").addClass('has-error');
+		$(".field-category-list").find('.help-block').html('Add Category.');
 		return false;
   	}
-
-    if($('#vendoritem-subcategory_id').val()=='')
-	{
-		$('.field-vendoritem-subcategory_id').addClass('has-error');
-		$('.field-vendoritem-subcategory_id').find('.help-block').html('Subcategory cannot be blank.');
-		return false;
-    }
-
-  	if($('#vendoritem-child_category').val()=='')
-	{
-		$('.field-vendoritem-child_category').addClass('has-error');
-		$('.field-vendoritem-child_category').find('.help-block').html('Child category cannot be blank.');
-		return false;
-    }
 
 	/* BEGIN Validate item for sale yes or no */
     if($('#vendoritem-item_for_sale').prop('checked') == true)
@@ -534,6 +491,22 @@ $('#validthree3').click(function() {
 			return false;
   		}
    	}
+
+    $is_price_valid = true;
+
+    $('.form-group.multiple_price input[type="text"]').each(function() {
+    	if(!$.isNumeric($(this).val())) {
+    		$is_price_valid = false;
+		}
+    });
+
+    if($is_price_valid) {
+    	$('.form-group.multiple_price').removeClass('has-error');
+    }else{
+    	$('.form-group.multiple_price').addClass('has-error');
+    	return false;
+    }
+
 
   	if($('#vendoritem-type_id').val()=='')
 	{
@@ -698,6 +671,9 @@ $('.btn-add-category').click(function(){
 	$html += '</tr>';
 
 	$('.table-category-list tbody').append($html);
+
+	$(".field-category-list").removeClass('has-error');
+	$(".field-category-list").find('.help-block').html('');
 });
 
 $(document).delegate('.table-category-list .btn-danger','click', function(){

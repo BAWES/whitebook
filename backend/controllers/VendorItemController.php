@@ -183,9 +183,9 @@ class VendorItemController extends Controller
                     $vic->save();
                 }
 
-                $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
+                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
-                if(!empty($vendoritem_item_price['from'])) {
+                if($vendoritem_item_price) {
 
                     for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
                         $vendor_item_pricing = new VendorItemPricing();
@@ -449,9 +449,9 @@ class VendorItemController extends Controller
             }
 
             //BEGIN Manage item pricing table
-            $vendoritem_item_price = Yii::$app->request->post('VendorItem-item_price');
+            $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
 
-            if(!empty($vendoritem_item_price['from'])) {
+            if($vendoritem_item_price) {
 
                 VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
 
@@ -557,17 +557,17 @@ class VendorItemController extends Controller
         $data = Yii::$app->request->post();
         $status = $data['status'] == 'Active' ? 'Deactive' : 'Active';
 
-        $command = VendorItem::updateAll(['item_status' => $status], ['item_id= '.$data['id']]);
+        $command = VendorItem::updateAll(['item_status' => $status], ['item_id' => $data['id']]);
 
         if($status == 'Active')
         {
-            Yii::$app->session->setFlash('success', "Category status updated!");
+            Yii::$app->session->setFlash('success', "Item status updated!");
 
             return Url::to('@web/uploads/app_img/active.png');
 
         } else {
 
-            Yii::$app->session->setFlash('success', "Category status updated!");
+            Yii::$app->session->setFlash('success', "Item status updated!");
 
             return Url::to('@web/uploads/app_img/inactive.png');
         }

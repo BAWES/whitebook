@@ -3,17 +3,18 @@
 namespace common\models;
 
 use Yii;
+use yii\web\Request;
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use common\models\Customer;
 use common\models\Order;
 use common\models\Suborder;
 use common\models\SuborderItemPurchase;
 use common\models\CustomerAddress;
 use common\models\OrderStatus;
-use yii\behaviors\BlameableBehavior;
-use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
-use yii\web\Request;
-use yii\helpers\ArrayHelper;
+use common\models\VendorItemPricing;
 
 /**
  * This is the model class for table "whitebook_order".
@@ -111,10 +112,30 @@ class Order extends \yii\db\ActiveRecord
         //default commision 
         $default_commision = Siteinfo::info('commission');
 
+        $items = CustomerCart::items();
+
+        //price chart 
+        $price_chart = array();
+
+        //check if quantity fall in price chart 
+        foreach ($items as $key => $item) {
+
+            $price = VendorItemPricing::find()
+                ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+                ->andWhere(['<=', 'range_from', $item['cart_quantity']])
+                ->andWhere(['>=', 'range_to', $item['cart_quantity']])
+                ->orderBy('pricing_price_per_unit DESC')
+                ->one();
+
+            if($price) {
+                $price_chart[$item['item_id']] = $price->pricing_price_per_unit;
+            }else{
+                $price_chart[$item['item_id']] = $item['item_price_per_unit'];
+            }
+        }
+        
         //make chunks of item by vendor id 
         $chanks = [];
-
-        $items = CustomerCart::items();
 
         $total = $sub_total = $delivery_charge = 0;
 
@@ -124,7 +145,7 @@ class Order extends \yii\db\ActiveRecord
 
             $delivery_charge += $delivery_area->delivery_price;
 
-            $sub_total += $item['item_price_per_unit'] * $item['cart_quantity'];
+            $sub_total += $price_chart[$item['item_id']] * $item['cart_quantity'];
 
             $chanks[$item['vendor_id']][] = $item;
         }
@@ -179,17 +200,18 @@ class Order extends \yii\db\ActiveRecord
                 $item_purchase->address_id = $address_id;
                 $item_purchase->purchase_delivery_address = Order::getPurchaseDeliveryAddress($address_id);
                 $item_purchase->purchase_delivery_date = $item['cart_delivery_date'];
-                $item_purchase->purchase_price_per_unit = $item['item_price_per_unit'];
+                $item_purchase->purchase_price_per_unit = $price_chart[$item['item_id']];
                 $item_purchase->purchase_customization_price_per_unit = 0;
                 $item_purchase->purchase_quantity = $item['cart_quantity'];
-                $item_purchase->purchase_total_price = $item['item_price_per_unit'] * $item['cart_quantity'];
+                $item_purchase->purchase_total_price = $price_chart[$item['item_id']] * $item['cart_quantity'];
                 $item_purchase->trash = 'Default';
                 $item_purchase->save(false);
 
                 //sub order total data 
                 $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
                 $delivery_charge += $delivery_area->delivery_price;
-                $sub_total += $item['item_price_per_unit'] * $item['cart_quantity'];
+
+                $sub_total += $item_purchase->purchase_total_price;
             }
 
             $total = $sub_total + $delivery_charge;

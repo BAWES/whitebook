@@ -241,4 +241,14 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .right_descr_product .collapsed, 
 .right_descr_product .panel-title > a {
     width: auto !important;
+
+}
+
+.browse #slider {
+    padding-right: 0px!important;
+    padding-left: 30px!important;
+}
+
+.slides {
+    padding-right: 0px;
 }

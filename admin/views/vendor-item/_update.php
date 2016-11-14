@@ -62,41 +62,44 @@ function cmp($a, $b)
 
 			<?= $form->field($model, 'item_name_ar')->textInput(['maxlength' => 128,'autocomplete' => 'off']); ?>
 			
-			<label>Categories</label>
-			<table class="table table-bordered table-category-list">
-				<tbody>
-					<?php foreach($vendor_item_to_category as $key => $value) { ?>
-					<tr>	
-						<td>
-							<?= $value->category->category_title ?>
-							<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
-						</td>	
-						<td>		
-							<button class="btn btn-danger" type="button">			
-								<i class="glyphicon glyphicon-trash"></i>
-							</button>	
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td>
-							<select id="category_id">
-								<option></option>
-								<?php foreach($categories as $key => $value) { ?>
-									<option value="<?= $value['category_id'] ?>">
-										<?= $value['category_name'] ?>
-									</option>
-								<?php } ?>
-							</select>
-						</td>
-						<td>
-							<button type="button" class="btn btn-primary btn-add-category">Add</button>
-						</td>
-					</tr>
-				</tfoot>
-			</table>
+			<div class="field-category-list">
+				<label>Categories</label>
+				<table class="table table-bordered table-category-list">
+					<tbody>
+						<?php foreach($vendor_item_to_category as $key => $value) { ?>
+						<tr>	
+							<td>
+								<?= $value->category->category_title ?>
+								<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
+							</td>	
+							<td>		
+								<button class="btn btn-danger" type="button">			
+									<i class="glyphicon glyphicon-trash"></i>
+								</button>	
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td>
+								<select id="category_id">
+									<option></option>
+									<?php foreach($categories as $key => $value) { ?>
+										<option value="<?= $value['category_id'] ?>">
+											<?= $value['category_name'] ?>
+										</option>
+									<?php } ?>
+								</select>
+								<span class="help-block"></span>
+							</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-add-category">Add</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>				
+			</div>
 
 			<div class="form-group" >
 			<div class="col-lg-6 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete pull-left']) ?></div>
@@ -166,12 +169,20 @@ function cmp($a, $b)
 					'maxlength' => 128
 				]); ?>
 
-			<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price  From - To </div>
+			<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price Chart </div>
 
 					<?php $t=0;
 					foreach ($itemPricing as $value) {  ?>
 
-					<div class="controls<?= $t; ?>"><input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From range" value="<?= $value['range_from'];?>"><input type="text" id="vendoritem-item_to" class="form-control to_range_<?= $t; ?>" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To range" value="<?= $value['range_to'];?>"><input type="text" id="item_price_per_unit" class="form-control price_kd_<?= $t; ?>" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price" value="<?= $value['pricing_price_per_unit'];?>">KD<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" /></div>
+					<div class="controls<?= $t; ?>">
+						<input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From Quantit" value="<?= $value['range_from'];?>" />
+
+						<input type="text" id="vendoritem-item_to" class="form-control to_range_<?= $t; ?>" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To Quantity" value="<?= $value['range_to'];?>" />
+
+						<input type="text" id="item_price_per_unit" class="form-control price_kd_<?= $t; ?>" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price" value="<?= $value['pricing_price_per_unit'];?>">KD
+
+						<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" />
+					</div>
 
 					<?php $t++; }?>
 					<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
@@ -464,7 +475,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.3", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.5", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

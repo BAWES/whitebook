@@ -54,9 +54,9 @@ $this->params['breadcrumbs'][] = $this->title;
 				'label'=>'Status',
 				'format'=>'raw',
 				'value'=>function($data) {
-					$status = ($data->item_status == 'Active') ? 'active' : 'deactive';
-					return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','#',['id'=>'status', 'class'=>'status '.$status]);
-				},
+					return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image-'.$data->item_id.'" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','javascript:void(0)',['id'=>'status',
+					'onclick'=>'change("'.$data->item_status.'","'.$data->item_id.'")']);
+				}, 
 				'filter' =>  \admin\models\VendorItem::Activestatus(),
 			],
 			[
@@ -130,18 +130,23 @@ $this->params['breadcrumbs'][] = $this->title;
 		return false;
     }
 
-	function change(status, id)
-	{
-        var path = '".Url::to(['vendoritem/block'])."';
-        $.ajax({
-	        type: 'POST',
+    function change(status, id)
+	{			
+        var path = '".Url::to(['/vendor-item/block'])."';
+        
+        $.ajax({  
+	        type: 'POST',      
 	        url: path, //url to be called
-	        data: { status: status, id: id,_csrf : csrfToken}, //data to be send
+	        data: { status: status, id: id, _csrf : csrfToken}, //data to be send
 	        success: function(data) {
+				var status1 = (status == 'Active') ? 'Deactive' : 'Active'; 
+				$('#image-'+id).attr('src',data);
+				$('#image-'+id).parent('a').attr('onclick', 
+				\"change('\"+status1+\"', '\"+id+\"')\");
 	        }
         });
-     }
-
+    }
+    
 	function change_sort_order(sort_val,item_id)
 	{
 		 var exist_sort = $('#hidden_'+item_id).val();
