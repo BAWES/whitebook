@@ -186,6 +186,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
                                     </label>
 
                                     <b class="font-27"><?= CFormatter::format($model['item_price_per_unit']) ?></b>
+                                    <strong><?= $model['item_price_description'] ?></strong>
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
