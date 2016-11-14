@@ -35,9 +35,15 @@ function cmp($a, $b)
 		<div class="tab-content">
 			<div class="tab-pane clearfix" id="1">
 
-				<?= $form->field($model, 'item_name')->textInput(['maxlength' => 128]) ?>
+				<?= $form->field($model, 'item_name')->textInput([
+						'maxlength' => 128,
+						'id' => 'vendoritem-item_name'
+					]) ?>
 
-				<?= $form->field($model, 'item_name_ar')->textInput(['maxlength' => 128]) ?>
+				<?= $form->field($model, 'item_name_ar')->textInput([
+						'maxlength' => 128,
+						'id' => 'vendoritem-item_name_ar'
+					]) ?>
 				
 				<div class="field-category-list">
 					<label>Categories</label>
@@ -79,7 +85,10 @@ function cmp($a, $b)
 				</div>
 				
 				<?= $form->field($model, 'item_status')
-						->dropDownList(['Active' => 'Yes','Deactive' => 'No']) ?>
+						->dropDownList(
+							['Active' => 'Yes','Deactive' => 'No'], 
+							['id' => 'vendoritem-item_status']
+						); ?>
 
 				<div class="form-group">
 					<div class="col-lg-6">
@@ -97,21 +106,21 @@ function cmp($a, $b)
 			<div class="tab-pane clearfix" id="2">
 
 				<?= $form->field($model, 'type_id')
-						->dropDownList($itemtype, ['prompt'=>'Select...']) ?>
+						->dropDownList($itemtype, ['prompt'=>'Select...', 'id' => 'vendoritem-type_id']) ?>
 
 				<?= $form->field($model, 'item_description')
 						->label('Item description'.Html::tag('span', '*',['class'=>'required']))
-						->textarea(['maxlength' => 128]); ?>
+						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_description']); ?>
 
 				<?= $form->field($model, 'item_description_ar')
 						->label('Item description - Arabic'.Html::tag('span', '*',['class'=>'required']))
-						->textarea(['maxlength' => 128]); ?>
+						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_description_ar']); ?>
 
 				<?= $form->field($model, 'item_additional_info')
-						->textarea(['maxlength' => 128]); ?>
+						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_additional_info']); ?>
 
 				<?= $form->field($model, 'item_additional_info_ar')
-						->textarea(['maxlength' => 128]); ?>
+						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_additional_info_ar']); ?>
 
 				<div class="col-lg-4">
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
@@ -133,23 +142,24 @@ function cmp($a, $b)
 
 				<input type="hidden" id="test" value="0" name="tests" />
 				
-				<?= $form->field($model, 'item_for_sale')->dropDownList(['Yes'=>'Yes','No'=>'No']) ?>
+				<?= $form->field($model, 'item_for_sale')->dropDownList(['Yes'=>'Yes', 'No'=>'No'], 
+						['id' => 'vendoritem-item_for_sale']) ?>
 				
 				<?= $form->field($model, 'item_amount_in_stock')
 						->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128]); ?>
+						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_amount_in_stock']); ?>
 
 				<?= $form->field($model, 'item_default_capacity')
 						->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128]); ?>
+						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_default_capacity']); ?>
 
 				<?= $form->field($model, 'item_how_long_to_make')
 						->label('No of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128]); ?>
+						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_how_long_to_make']); ?>
 
 				<?= $form->field($model, 'item_minimum_quantity_to_order')
 						->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128]); ?>
+						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_minimum_quantity_to_order']); ?>
 
 				<?= $form->field($model, 'item_price_per_unit')->textInput(['maxlength' => 128]); ?>
 
@@ -186,20 +196,26 @@ function cmp($a, $b)
 				</div>
 				<?php } ?>
 
-				<?= $form->field($model, 'item_price_description')->textarea() ?>
+				<?= $form->field($model, 'item_price_description')->textarea([
+						'id' => 'vendoritem-item_price_description'
+					]) ?>
 				
-				<?= $form->field($model, 'item_price_description_ar')->textarea() ?>
+				<?= $form->field($model, 'item_price_description_ar')->textarea([
+						'id' => 'vendoritem-item_price_description_ar'
+					]) ?>
 
 				<?= $form->field($model, 'item_customization_description')
 						->textarea([
 							'class' => 'form-group custom_description',
-							'maxlength' => 128
+							'maxlength' => 128,
+							'id' => 'vendoritem-item_customization_description'
 						]); ?>
 
 				<?= $form->field($model, 'item_customization_description_ar')
 						->textarea([
 							'class' => 'form-group custom_description_ar',
-							'maxlength' => 128
+							'maxlength' => 128,
+							'id' => 'vendoritem-item_customization_description_ar'
 						]); ?>
 
 				<!-- guide image -->
