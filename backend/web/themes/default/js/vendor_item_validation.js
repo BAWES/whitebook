@@ -156,7 +156,6 @@ $(function(){
 	CKEDITOR.replace('vendoritem-item_additional_info');
 	CKEDITOR.replace('vendoritem-item_price_description');
 	CKEDITOR.replace('vendoritem-item_customization_description');
-
 	CKEDITOR.replace('vendoritem-item_description_ar');
 	CKEDITOR.replace('vendoritem-item_additional_info_ar');
 	CKEDITOR.replace('vendoritem-item_price_description_ar');
