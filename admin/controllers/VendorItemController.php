@@ -252,51 +252,6 @@ class VendorItemController extends Controller
                     }
                 }
 
-                /* Groups table End */
-
-                /* Begin Upload guide image table  */
-                $guide_image = UploadedFile::getInstances($model, 'guide_image');
-
-                if ($guide_image) {
-                    $i = 0;
-                    foreach ($guide_image as $files) {
-                        if($files instanceof yii\web\UploadedFile){
-                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
-
-                            //Resize file using imagine
-                            $resize = true;
-
-                            if($resize){
-                                $newTmpName = $files->tempName . "." . $files->extension;
-
-                                $imagine = new \Imagine\Gd\Imagine();
-                                $image = $imagine->open($files->tempName);
-                                $image->resize($image->getSize()->widen(210));
-                                $image->save($newTmpName);
-
-                                //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName;
-                            }
-
-                            //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADSALESGUIDE . $filename);
-
-                            if($awsResult){
-                                $model->guide_image = $filename;
-                            }
-
-                            $image_tbl = new Image();
-                            $image_tbl->image_path = $filename;
-                            $image_tbl->item_id = $itemid;
-                            $image_tbl->image_user_id = Yii::$app->user->getId();
-                            $image_tbl->module_type ='guides';
-                            $image_tbl->vendorimage_sort_order = $i;
-                            $image_tbl->save();
-                            ++$i;
-                        }//if files 
-                    }//foreach images 
-                }//if images 
-
                 //add new images
                 $images = Yii::$app->request->post('images');
 
@@ -423,48 +378,7 @@ class VendorItemController extends Controller
             $model->item_status = (Yii::$app->request->post()['VendorItem']['item_status'] == 1) ? 'Active' : 'Deactive';
 
             if ($model->save()) {
-                /* Begin Upload guide image table  */
-                $guide_image = UploadedFile::getInstances($model, 'guide_image');
-                
-                if (count($guide_image) > 0) {
-                    $i = 0;
-                
-                    foreach ($guide_image as $files) {
-                        if ($files instanceof yii\web\UploadedFile) {
-                            $filename = Yii::$app->security->generateRandomString() . "." . $files->extension;
-
-                            //Resize file using imagine
-                            $resize = true;
-
-                            if ($resize) {
-                                $newTmpName = $files->tempName . "." . $files->extension;
-                                $imagine = new \Imagine\Gd\Imagine();
-                                $image = $imagine->open($files->tempName);
-                                $image->resize($image->getSize()->widen(210));
-                                $image->save($newTmpName);
-
-                                //Overwrite old filename for S3 uploading
-                                $files->tempName = $newTmpName;
-                            }
-
-                            //Save to S3
-                            $awsResult = Yii::$app->resourceManager->save($files, VendorItem::UPLOADSALESGUIDE . $filename);
-                            if ($awsResult) {
-                                $model->guide_image = $filename;
-                            }
-
-                            $image_tbl = new Image;
-                            $image_tbl->image_path = $filename;
-                            $image_tbl->item_id = $itemid;
-                            $image_tbl->image_user_id = Yii::$app->user->getId();
-                            $image_tbl->module_type = 'guides';
-                            $image_tbl->vendorimage_sort_order = $i;
-                            $image_tbl->save();
-                            ++$i;
-                        }
-                    }
-                }
-
+               
                 //remove old images
                 Image::deleteAll(['item_id' => $id]);
 
@@ -480,11 +394,6 @@ class VendorItemController extends Controller
                     $image->image_user_type = 'admin';
                     $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
                     $image->save();
-                }
-
-                /* Delete item price table records if its available any price for item type rental or service */
-                if ($model->type_id == 2) {
-                    VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
                 }
 
                 if ($model->priority != $priorityvalue) {

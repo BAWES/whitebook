@@ -85,7 +85,6 @@ class BrowseController extends BaseController
             $arr_vendor_slugs = [];
         }
 
-
         $ActiveVendors = Vendor::loadvalidvendorids(
             false, //current category
             $arr_vendor_slugs, //only selected from filter
@@ -119,8 +118,6 @@ class BrowseController extends BaseController
             $item_query->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
         }
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
-
-
 
         //price filter
         if (isset($data['price']) && $data['price'] != '') {
