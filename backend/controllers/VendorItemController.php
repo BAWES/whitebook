@@ -161,7 +161,7 @@ class VendorItemController extends Controller
                 ->asArray()
                 ->all();
             $sort = ($max_sort[0]['sort'] + 1);
-            $model->item_status='Deactive';
+            $model->item_status='Active';
             $model->sort = $sort;
 
             if($model->save())
