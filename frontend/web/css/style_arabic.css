@@ -295,3 +295,18 @@ td[align="left"] {
     right: 54%;
     left: 0px;
 }
+#register_form .right-side{
+    float: left!important;
+    padding-left: 0px;
+    padding-right: 15px;
+}
+
+#register_form .left-side{
+    float: right!important;
+}
+
+.accont_informations .left-side {
+    float: right;
+}
+.account_setings_sections .address_box .control-icons{float: left;}
+.edit_address_sections .left-side{float: right;}
