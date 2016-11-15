@@ -46,16 +46,16 @@ use yii\helpers\Url;
   <!-- vendors -->
   <?php foreach($vendors as $vendor) { ?>
   <url>
-    <loc><![CDATA[<?= Url::to(['directory/profile', 'vendor' => $vendor['slug'], 'slug' => 'all'], true); ?>]]></loc>
+    <loc><![CDATA[<?= Url::to(['directory/profile', 'vendor' => $vendor['slug']], true); ?>]]></loc>
       <xhtml:link
           rel="alternate"
           hreflang="en"
-          href="<?= Url::to(['directory/profile', 'vendor' => $vendor['slug'], 'slug' => 'all'], true); ?>"
+          href="<?= Url::to(['directory/profile', 'vendor' => $vendor['slug']], true); ?>"
       />
       <xhtml:link
           rel="alternate"
           hreflang="ar-KW"
-          href="<?= Url::to(['/ar/directory/profile', 'vendor' => $vendor['slug'], 'slug' => 'all'], true); ?>"
+          href="<?= Url::to(['/ar/directory/profile', 'vendor' => $vendor['slug']], true); ?>"
       />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
