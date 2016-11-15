@@ -8,8 +8,7 @@ $date = $session->get('deliver-date');
 
 <div class="col-lg-12 col-md-12 col-sm-12 clearfix left-div">
     <div class="desktop-view-search">
-        <form id='area-selection' name='area-selection' action="<?=Url::toRoute(['browse/list'],true);?>">
-            <input type="hidden" name="slug" value="all">
+        <form id='area-selection' name='area-selection' action="<?=Url::toRoute(['browse/all'],true);?>">
             <div class="left-offset-25">&nbsp;</div>
             <div class="col-lg-3 col-sm-3 col-md-3 location-div">
                 <select class="selectpicker trigger" name="location" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
