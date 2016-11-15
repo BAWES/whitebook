@@ -9,6 +9,18 @@ use yii\helpers\Url;
   <?php foreach($categories as $category) { ?>
   <url>
     <loc><![CDATA[<?= Url::to(['browse/list', 'slug' => $category['slug']], true); ?>]]></loc>
+
+    <xhtml:link
+        rel="alternate"
+        hreflang="en"
+        href="<![CDATA[<?= Url::to(['browse/list', 'slug' => $category['slug']], true); ?>]]>"
+    />
+    <xhtml:link
+        rel="alternate"
+        hreflang="ar-KW"
+        href="<![CDATA[<?= Url::to(['/ar/browse/list', 'slug' => $category['slug']], true); ?>]]>"
+    />
+
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
