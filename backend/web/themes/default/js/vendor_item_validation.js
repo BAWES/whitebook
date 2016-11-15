@@ -22,11 +22,13 @@ var image_order_url = $('#image_order_url').val();
 
 /* Begin Tabs NEXT & PREV buttons */
 	$('.btnNext').click(function(){
-	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
+	  	$('.nav-tabs > .active').next('li').find('a').trigger('click');
+		$("html, body").animate({ scrollTop: 0 }, "slow");
 	});
 
 	 $('.btnPrevious').click(function(){
-	  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+	  	$('.nav-tabs > .active').prev('li').find('a').trigger('click');
+	 	$("html, body").animate({ scrollTop: 0 }, "slow");
 	});
 	/* End Tabs NEXT & PREV buttons */
 
