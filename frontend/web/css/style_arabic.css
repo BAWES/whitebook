@@ -256,3 +256,12 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .cart-table tr td {
     text-align: right;
 }
+
+.modal_member_login .button-signin {
+    width: 48%;
+    margin: 0 auto;
+}
+
+.modal_member_login #signup_button{
+    float: left;
+}
