@@ -298,13 +298,13 @@ $this->registerCss("
 .fetu_product_list .index_redirect img {width: 100%;height: 219px;}
 .color-white{color:#fff;}
 .left-offset-25{float: left;width: 15%;}
-.left-div{width:100%;position:absolute;bottom: 1px;padding:13px;    z-index: 999;}
+.left-div{width:100%;position:absolute;bottom: 1px;padding:13px;z-index: 99;}
 .date-div{padding-right: 0px; margin-bottom: 13px;}
 .black-overlay{width:100%;background-color: #000;position:absolute;bottom: 1px;padding: 42px;opacity: 0.69}
 .location-div{padding-right: 0px; margin-bottom: 13px;}
 #delivery_date{height: 45px;color: #000! important;}
 .btn-submit{padding: 12px;}
-#top_header {z-index: 9999;}
+#top_header {z-index: 999;}
 .bootstrap-select .dropdown-toggle {padding: 12px 12px;}
 .datepicker{border: 2px solid rgb(242, 242, 242);}
 .datepicker table {font-size: 12px;}
