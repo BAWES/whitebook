@@ -29,7 +29,17 @@ use yii\helpers\Url;
   <?php foreach($items as $item) { ?>
   <url>
     <loc><![CDATA[<?= Url::to(['browse/detail', 'slug' => $item['slug']], true); ?>]]></loc>
-    <changefreq>daily</changefreq>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['browse/detail', 'slug' => $item['slug']], true); ?>"
+      />
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['/ar/browse/detail', 'slug' => $item['slug']], true); ?>"
+      />
+      <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <?php } ?>
@@ -37,6 +47,16 @@ use yii\helpers\Url;
   <?php foreach($vendors as $vendor) { ?>
   <url>
     <loc><![CDATA[<?= Url::to(['directory/profile', 'vendor' => $vendor['slug'], 'slug' => 'all'], true); ?>]]></loc>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['directory/profile', 'vendor' => $vendor['slug'], 'slug' => 'all'], true); ?>"
+      />
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['/ar/directory/profile', 'vendor' => $vendor['slug'], 'slug' => 'all'], true); ?>"
+      />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
