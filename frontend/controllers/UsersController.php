@@ -121,21 +121,20 @@ class UsersController extends BaseController
                 );
 
                 $send_admin
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo(Yii::$app->params['adminEmail'])
-                ->setSubject('User registered')
-                ->send();
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setSubject('User registered')
+                    ->send();
 
                 return Users::SUCCESS;
             } else {
                 return Users::FAILURE;
             }
-        }
 
-        return $this->render('/users/signup', [
-            'model' => $model,
-            'error' => $error,
-        ]);
+        } else {
+            Yii::$app->session->set('show_login_modal', '1');
+            return $this->redirect(['site/index']);
+        }
     }
 
     public function actionReset_confirm($cust_id)
