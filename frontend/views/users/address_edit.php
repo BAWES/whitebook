@@ -27,7 +27,7 @@ $this->title ='Address Book | Whitebook';
         <div class="edit_address_sections">
 			<div class="col-md-2 hidde_res"></div>
 			<div class="col-md-8">
-				<div class="col-md-6 paddingleft0">
+				<div class="col-md-6 paddingleft0 left-side">
 					<?= $form->field($address, 'address_type_id')->dropDownList($addresstype, 
 		                    ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
 		                ); ?>
@@ -41,7 +41,7 @@ $this->title ='Address Book | Whitebook';
 		                ); ?>
 		        </div>
 		                
-		        <div class="col-md-6 paddingleft0">
+		        <div class="col-md-6 paddingleft0 right-side">
 
 					<div class="form-group">
 						<?= $form->field($address, 'address_name'); ?>

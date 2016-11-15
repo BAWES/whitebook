@@ -275,3 +275,9 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 #register_form .left-side{
     float: right!important;
 }
+
+.accont_informations .left-side {
+    float: right;
+}
+.account_setings_sections .address_box .control-icons{float: left;}
+.edit_address_sections .left-side{float: right;}
