@@ -98,6 +98,14 @@ class CheckoutController extends BaseController
           
         $customer_address->customer_id = Yii::$app->user->getId();
 
+        //get are id from cart_id 
+        $cart_item = CustomerCart::find()
+            ->where(['cart_id' => Yii::$app->request->post()])
+            ->one();
+
+        $customer_address->area_id = $cart_item->area_id;
+
+        //get city & country from area 
         $location = Location::findOne($customer_address->area_id);
 
         $customer_address->city_id = $location->city_id;
@@ -115,6 +123,7 @@ class CheckoutController extends BaseController
                 $customer_address_response->response_text = $value;                                        
                 $customer_address_response->save();
             }
+            
         }else{
         	$json['errors'] = $customer_address->getErrors();
         }

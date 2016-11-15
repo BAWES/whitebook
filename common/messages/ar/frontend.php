@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Sub Total' => 'المجموع الفرعي',
     'Select time slot!' => 'اختر فتحة الوقت!',
     'Time slot not valid!' => 'فتحة الوقت غير صحيح!',
     'Select Delivery date!' => 'حدد تاريخ التسليم!',

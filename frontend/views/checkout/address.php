@@ -34,7 +34,7 @@ use common\components\LangFormat;
                         $addresses = CustomerCart::customerAddress($item['area_id'],Yii::$app->user->id);
 
                         foreach ($addresses as $address) { ?>
-                                <div class="address_block" data-id="<?= $address['address_id'] ?>">
+                                <div class="address_block pull-left" data-id="<?= $address['address_id'] ?>">
                                     <?php 
 
                                     if($address['address_name']) {
@@ -49,7 +49,7 @@ use common\components\LangFormat;
                                 </div>
                         <?php } ?>
                                 
-                                <div class="address_insert_block" data-toggle="modal" data-target="#modal_create_address">
+                                <div class="address_insert_block pull-left" data-toggle="modal" data-target="#modal_create_address" data-id="<?= $item['cart_id'] ?>">
                                         <i class="glyphicon glyphicon-plus"></i>
                                         <br /><br /> 
                                         <?= Yii::t('frontend', 'Add new address') ?>
@@ -93,6 +93,8 @@ use common\components\LangFormat;
         </div>
         <div class="modal-body body-update">
 
+                <input type="hidden" name="cart_id" value="" />
+
                 <?= $form->field($customer_address_modal, 'address_name'); ?>
                 
                 <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, 
@@ -103,11 +105,12 @@ use common\components\LangFormat;
                     <!-- question will go here -->
                 </div>
 
-                <?= $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(), 
+                <?php /* $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(), 
                         ['class' => 'selectpicker', 'data-live-search' => 'true', 'data-size' => 10]
-                    ); ?>
-                <span class="error area_id"></span>
-
+                    );
+                    <span class="error area_id"></span>
+                */ ?>
+                
                 <div class="form-group">
                         <?= $form->field($customer_address_modal, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
                         ])->textArea(['rows' => 6]) ?>
