@@ -265,3 +265,13 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 .modal_member_login #signup_button{
     float: left;
 }
+
+#register_form .right-side{
+    float: left!important;
+    padding-left: 0px;
+    padding-right: 15px;
+}
+
+#register_form .left-side{
+    float: right!important;
+}
