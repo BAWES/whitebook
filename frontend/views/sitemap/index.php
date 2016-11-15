@@ -1,7 +1,7 @@
 <?php 
 
 use yii\helpers\Url;
-
+header("Content-type: text/xml");
 ?>
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -18,7 +18,7 @@ use yii\helpers\Url;
     <xhtml:link
         rel="alternate"
         hreflang="ar-KW"
-        href="<?= Url::to(['/ar/browse/list', 'slug' => $category['slug']], true); ?>"
+        href="<?= Url::to(['browse/list', 'slug' => $category['slug'],'language'=>'ar'], true); ?>"
     />
 
     <changefreq>daily</changefreq>
@@ -37,7 +37,7 @@ use yii\helpers\Url;
       <xhtml:link
           rel="alternate"
           hreflang="ar-KW"
-          href="<?= Url::to(['/ar/browse/detail', 'slug' => $item['slug']], true); ?>"
+          href="<?= Url::to(['browse/detail', 'slug' => $item['slug'],'language'=>'ar'], true); ?>"
       />
       <changefreq>daily</changefreq>
     <priority>0.5</priority>
@@ -55,7 +55,7 @@ use yii\helpers\Url;
       <xhtml:link
           rel="alternate"
           hreflang="ar-KW"
-          href="<?= Url::to(['/ar/directory/profile', 'vendor' => $vendor['slug']], true); ?>"
+          href="<?= Url::to(['directory/profile', 'vendor' => $vendor['slug'],'language'=>'ar'], true); ?>"
       />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
@@ -64,41 +64,123 @@ use yii\helpers\Url;
   <!-- other pages -->
   <url>
     <loc><![CDATA[<?= Url::to(['browse/list', 'slug' => 'all'], true); ?>]]></loc>
-    <changefreq>daily</changefreq>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['browse/list', 'slug' => 'all'], true); ?>"
+      />
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['browse/list', 'slug' => 'all','language'=>'ar'], true); ?>"
+      />
+      <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc><![CDATA[<?= Url::to(['site/contact'], true); ?>]]></loc>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['site/contact'], true); ?>"
+      />
+
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['site/contact','language'=>'ar'], true); ?>"
+      />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc><![CDATA[<?= Url::to(['themes/index'], true); ?>]]></loc>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['themes/index'], true); ?>"
+      />
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['themes/index','language'=>'ar'], true); ?>"
+      />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc><![CDATA[<?= Url::to(['/experience'], true); ?>]]></loc>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['/experience'], true); ?>"
+      />
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['experience','language'=>'ar'], true); ?>"
+      />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc><![CDATA[<?= Url::to(['events/index', 'slug' => 'events'], true); ?>]]></loc>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['events/index', 'slug' => 'events'], true); ?>"
+      />
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['events/index', 'slug' => 'events','language'=>'ar'], true); ?>"
+      />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc><![CDATA[<?= Url::to(['/terms-conditions'], true); ?>]]></loc>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['/terms-conditions'], true); ?>"
+      />
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['/terms-conditions','language'=>'ar'], true); ?>"
+      />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc><![CDATA[<?= Url::to(['/about-us'], true); ?>]]></loc>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['/about-us'], true); ?>"
+      />
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['/about-us','language'=>'ar'], true); ?>"
+      />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc><![CDATA[<?= Url::to(['/privacy-policy'], true); ?>]]></loc>
+      <xhtml:link
+          rel="alternate"
+          hreflang="en"
+          href="<?= Url::to(['/privacy-policy'], true); ?>"
+      />
+
+      <xhtml:link
+          rel="alternate"
+          hreflang="ar-KW"
+          href="<?= Url::to(['/privacy-policy','language'=>'ar'], true); ?>"
+      />
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
