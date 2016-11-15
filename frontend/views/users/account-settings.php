@@ -27,30 +27,37 @@ $this->title ='Account Setting | Whitebook';
 						<div class="account_form">
 						
 							<?php $form = ActiveForm::begin(); ?>
+							<div class="clearfix">
+								<div class="left-side col-lg-6 padding-right-0">
+									<div class="col-md-12 paddingleft0">
+										<?= $form->field($model, 'customer_name') ?>
+									</div>
 
-								<div class="col-md-6 paddingleft0">
-									<?= $form->field($model, 'customer_name') ?>
-								</div>
+									<div class="col-md-12 paddingleft0">
+										<?= $form->field($model, 'customer_email') ?>
+									</div>
 
-								<div class="col-md-6 paddingright0">
-									<?= $form->field($model, 'customer_last_name') ?>
-								</div>
+									<div class="col-md-12 paddingleft0">
+										<?= $form->field($model, 'customer_dateofbirth') ?>
+									</div>
 
-								<div class="col-md-6 paddingleft0">
-									<?= $form->field($model, 'customer_email') ?>
 								</div>
+								<div class="right-side col-lg-6 padding-left-0">
+									<div class="col-md-12 paddingright0">
+										<?= $form->field($model, 'customer_last_name') ?>
+									</div>
 
-								<div class="col-md-6 paddingright0">
-									<?= $form->field($model, 'customer_gender') ?>
-								</div>
 
-								<div class="col-md-6 paddingleft0">
-									<?= $form->field($model, 'customer_dateofbirth') ?>
-								</div>
+									<div class="col-md-12 paddingright0">
+										<?= $form->field($model, 'customer_gender') ?>
+									</div>
 
-								<div class="col-md-6 paddingright0">
-									<?= $form->field($model, 'customer_mobile') ?>
+
+									<div class="col-md-12 paddingright0">
+										<?= $form->field($model, 'customer_mobile') ?>
+									</div>
 								</div>
+							</div>
 
 								<div class="submitt_buttons">
 									<button class="btn btn-default" title="Save Changes" id="saved">
@@ -86,6 +93,8 @@ $this->registerJs("
 $this->registerCss("
 	#acc_status{color:green;margin-bottom: 10px;}
 	#login_loader{text-align:center;margin-bottom: 10px;}
+	.padding-right-0{padding-right:0px! important;}
+	.padding-left-0{padding-left:0px! important;}
 ");
 
 

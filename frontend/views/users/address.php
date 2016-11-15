@@ -33,14 +33,15 @@ $this->title ='Address Book | Whitebook';
                             <tr>
                             	<td>
                             		<div class="address_box">
-                            			
-                                        <a data-id="<?= $address['address_id'] ?>" class="address_delete btn pull-right">
-                                            <i class="glyphicon glyphicon-trash"></i>
-                                        </a>
+                            			<div class="control-icons clearfix">
+                                            <a data-id="<?= $address['address_id'] ?>" class="address_delete btn pull-right">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
 
-                                        <a href="<?= Url::to(['users/edit-address', 'address_id' => $address['address_id']]) ?>" class="btn-edit btn-primary btn pull-right" >
-                                            <i class="glyphicon glyphicon-pencil"></i>
-                                        </a>
+                                            <a href="<?= Url::to(['users/edit-address', 'address_id' => $address['address_id']]) ?>" class="btn-edit btn-primary btn pull-right" >
+                                                <i class="glyphicon glyphicon-pencil"></i>
+                                            </a>
+                                        </div>
                                         
                                         <?php if($address['address_name']) { ?>
                                             <b><?=Yii::t('frontend','Address Name:')?></b> <br />
