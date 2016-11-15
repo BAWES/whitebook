@@ -13,12 +13,12 @@ use yii\helpers\Url;
     <xhtml:link
         rel="alternate"
         hreflang="en"
-        href="<![CDATA[<?= Url::to(['browse/list', 'slug' => $category['slug']], true); ?>]]>"
+        href="<?= Url::to(['browse/list', 'slug' => $category['slug']], true); ?>>"
     />
     <xhtml:link
         rel="alternate"
         hreflang="ar-KW"
-        href="<![CDATA[<?= Url::to(['/ar/browse/list', 'slug' => $category['slug']], true); ?>]]>"
+        href="<?= Url::to(['/ar/browse/list', 'slug' => $category['slug']], true); ?>"
     />
 
     <changefreq>daily</changefreq>
