@@ -18,7 +18,7 @@
 				if(count($vendor) > 3 ) { $class = "test_scroll"; } else { $class = "";}
 				/* END Display scroll for more than three li */
 				?>
-				<ul class="<?= $class; ?>">
+				<ul class="css-updated <?= $class; ?>">
 					<?php foreach ($vendor as $key => $value) {
 
 					if (isset($get['vendor']) && count($get['vendor'])>0) {

@@ -67,7 +67,7 @@ class Vendor extends \common\models\Vendor
         /* STEP 1 GET ACTIVE VENDORS*/
         $package = [];
         $vendor = Vendor::find()
-        ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.slug')
+        ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.vendor_name_ar,{{%vendor}}.slug')
         ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
         ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
         ->all();
@@ -79,7 +79,7 @@ class Vendor extends \common\models\Vendor
             if (count($package)>0) {
                 $active_vendors = implode('","', array_filter($package));
                 $query = Vendor::find()
-                    ->select(['vendor_id', 'slug', 'vendor_name'])
+                    ->select(['vendor_id', 'slug', 'vendor_name','vendor_name_ar'])
                     ->where('vendor_id IN ("' . $active_vendors . '")')->asArray()->all();
                 return ($query);
             }
