@@ -87,11 +87,10 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 			<?php foreach (Order::subOrderItems($row->suborder_id) as $item) { ?>
 				<tr>
 					<td align="left">
-					<?=LangFormat::format($item->vendoritem->item_name,$item->vendoritem->item_name_ar);?>
+						<?= LangFormat::format($item->vendoritem->item_name, $item->vendoritem->item_name_ar); ?>
         				<div class="visible-xs visible-sm">
         					x <?= $item->purchase_quantity ?> = <?= CFormatter::format($item->purchase_total_price) ?>
         				</div>
-
 		        	</th>
 		    		<td align="left">
 		    			<?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>

@@ -4,6 +4,19 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
     font-family: 'Droid Arabic Kufi', serif !important;
 }
 
+.pull-right{
+    float: left !important;
+}
+.pull-left{
+    float: right !important;
+}
+td[align="right"] {
+    text-align: left;
+}
+td[align="left"] {
+    text-align: right;
+}
+
 @media only screen and (min-width: 991px) {
     .venus_icon { background-position: -12px -8px !important; }
     .invit_icon { background-position: -83px -12px !important; }
@@ -264,4 +277,21 @@ body,h1,h2,h3,h4,h5,h6,a,p,i,b,div,span{
 
 .modal_member_login #signup_button{
     float: left;
+}
+
+.btn-checkout {
+    margin-left: 0px;
+    margin-right: 5px;
+}
+.checkout-step,
+.progress-bar {
+    float: right !important;
+}
+.checkout-wizard > .checkout-step:nth-child(1) > .progress {
+    right: 54%;
+    left: 0px;
+}
+.checkout-wizard > .checkout-step:nth-child(2) > .progress {
+    right: 54%;
+    left: 0px;
 }

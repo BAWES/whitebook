@@ -177,4 +177,9 @@ $(function (){
             }
         });
     });
+
+	$(document).delegate('.address_insert_block', 'click', function(){
+	    $('input[name="cart_id"]').val($(this).attr('data-id'));
+	});
 });
+
