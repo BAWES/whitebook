@@ -171,29 +171,6 @@ if($model->isNewRecord){
 							'class' => 'form-group custom_description'
 						]); ?>
 
-				<!-- guide image -->
-                <div class="form-group guide_image" style="display: none;">
-                        <?php
-                        // Usage with ActiveForm and model
-                        echo $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"])->widget(FileInput::classname(), [
-                            'options' => [
-                                'accept' => 'image/*',
-                                'multiple' => true,
-
-                            ],
-                            'pluginOptions'=>[
-                                'browseClass' => 'btn btn-primary btn-block',
-                                'browseIcon' => ' ',
-                                'browseLabel' => 'Select Photo',
-                                'showUpload'=>false,
-                                'showRemove'=>false,
-                                'overwriteInitial'=> false,
-                                //'uploadUrl' => '/dummy/dummy',
-                            ]
-                        ]);
-                        ?>
-                    </div>
-
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 			</div>
