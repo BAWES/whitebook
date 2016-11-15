@@ -788,7 +788,7 @@ function show_register_modal()
 function show_login_modal(x)
 {
     jQuery.noConflict();
-    jQuery('.ma5-toggle-menu').trigger('click');
+    jQuery('.ma5-menu-active').removeClass('ma5-menu-active');
     jQuery('#register').modal('hide');
     jQuery('#forgotPwdModal').modal('hide');
     jQuery('#event_status').val(x);
