@@ -1,7 +1,7 @@
 <?php 
 
 use yii\helpers\Url;
-header("Content-type: text/xml");
+header("Content-type: application/xml");
 ?>
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -20,9 +20,7 @@ header("Content-type: text/xml");
         hreflang="ar-KW"
         href="<?= Url::to(['browse/list', 'slug' => $category['slug'],'language'=>'ar'], true); ?>"
     />
-
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
+  <priority>0.5</priority>
   </url>
   <?php } ?>
   <!-- items -->
@@ -39,7 +37,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['browse/detail', 'slug' => $item['slug'],'language'=>'ar'], true); ?>"
       />
-      <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <?php } ?>
@@ -57,7 +54,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['directory/profile', 'vendor' => $vendor['slug'],'language'=>'ar'], true); ?>"
       />
-    <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <?php } ?>
@@ -74,7 +70,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['browse/list', 'slug' => 'all','language'=>'ar'], true); ?>"
       />
-      <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
@@ -90,7 +85,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['site/contact','language'=>'ar'], true); ?>"
       />
-    <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
@@ -105,7 +99,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['themes/index','language'=>'ar'], true); ?>"
       />
-    <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
@@ -120,7 +113,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['experience','language'=>'ar'], true); ?>"
       />
-    <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
@@ -135,7 +127,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['events/index', 'slug' => 'events','language'=>'ar'], true); ?>"
       />
-    <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
@@ -150,7 +141,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['/terms-conditions','language'=>'ar'], true); ?>"
       />
-    <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
@@ -165,7 +155,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['/about-us','language'=>'ar'], true); ?>"
       />
-    <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
@@ -181,7 +170,6 @@ header("Content-type: text/xml");
           hreflang="ar-KW"
           href="<?= Url::to(['/privacy-policy','language'=>'ar'], true); ?>"
       />
-    <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
 </urlset>
