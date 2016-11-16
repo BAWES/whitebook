@@ -49,7 +49,7 @@ if(!empty($items->getModels()))  {
 
                     </div>
                     <div class="events_descrip">
-                        <a href="<?= $item_url ?>"><?=\common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
+                        <a href="<?= $item_url ?>"><?= \common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
                             <h3><?=\common\components\LangFormat::format( $value['item_name'], $value['item_name_ar'])?></h3>
                             <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
                         </a>

@@ -295,7 +295,7 @@ textarea .form-group{ min-height: 126px;}
 .padding-left0{ padding-right: 0px;}
 .padding-right0{ padding-left: 0px;}
 .nav-tabs > li{ border: none;}
-.events_listing_inner{ margin: 0 auto; width: 1083px;}
+.events_listing_inner{ margin: 0 auto;}
 .events_listing{ display: inline-block; width: 100%;}
 .events_listing ul{ padding: 0px; margin: 0px;}
 .events_descrip a:focus{text-decoration:none;}
