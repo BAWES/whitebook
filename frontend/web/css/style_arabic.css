@@ -310,3 +310,16 @@ td[align="left"] {
 }
 .account_setings_sections .address_box .control-icons{float: left;}
 .edit_address_sections .left-side{float: right;}
+
+.contact_center_sec .left_books_lis,
+.contact_center_sec .left_books {
+    float: right;
+}
+
+.left_books_lis ul li p {
+    background: none;
+}
+.left_books_lis ul li p a {
+    background: url(../images/right_trm.png) right center no-repeat;
+    padding-right: 12px;
+}
