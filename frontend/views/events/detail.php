@@ -296,7 +296,7 @@ if(!empty($items))
                         'delete' => function ($url, $model) {
                             $url = Url::toRoute(['events/delete-invitee','id'=>$model->invitees_id]);
                             return  Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                            'title' => Yii::t('app', 'Gallery'),
+                            'title' => Yii::t('app', 'Gallery'),'onClick' => 'return (confirm("Are you sure you want to delete this invitee?"))'
                             ]);
                         },
                         'update' => function ($url, $model) {
