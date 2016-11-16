@@ -48,8 +48,10 @@ $this->title ='Account Setting | Whitebook';
 									</div>
 
 
-									<div class="col-md-12 paddingright0">
-										<?= $form->field($model, 'customer_gender') ?>
+									<div class="col-md-12 paddingright0 position-relative">
+										<?=$form->field($model, 'customer_gender')
+											->dropDownList(['Male' => 'Male', 'Female' =>'Female']);   ?>
+										<i class="position-absolute fa fa-sort" aria-hidden="true"></i>
 									</div>
 
 
@@ -95,6 +97,7 @@ $this->registerCss("
 	#login_loader{text-align:center;margin-bottom: 10px;}
 	.padding-right-0{padding-right:0px! important;}
 	.padding-left-0{padding-left:0px! important;}
+	.position-absolute.fa-sort{position: absolute;right: 17px;top: 41px;}
 ");
 
 
