@@ -15,7 +15,6 @@ use common\components\CFormatter;
 $this->title = 'The White Book | Ideas for your event in Kuwait!';
 
 $model = new Website();
-
 ?>
 <!-- content main start -->
 

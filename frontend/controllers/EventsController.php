@@ -254,9 +254,11 @@ class EventsController extends BaseController
 
     public function actionDeleteInvitee($id)
     {
-        EventInvitees::findOne($id)->delete();
+        $event = EventInvitees::findOne($id);
+        $slug = $event->event->slug;
+        $event->delete();
         Yii::$app->session->setFlash('success','Invitee Deleted Successfully');
-        return $this->redirect(['events/detail','slug'=>$_REQUEST['slug']]);
+        return $this->redirect(['events/detail','slug'=> $event->event->slug]);
     }
 
     public function actionInviteeDetails()
