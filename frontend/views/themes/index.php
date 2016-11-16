@@ -58,7 +58,7 @@ use common\components\LangFormat;
 
 				<!-- first section start here-->
 				<div class="resposive-clearfix">
-					<div class="col-md-4 resposive-clearfix">
+					<div class="col-md-4 resposive-clearfix pull-left">
 					<?php 
 
 					$i=0;
@@ -86,7 +86,7 @@ use common\components\LangFormat;
 					<!-- first section end here-->
 
 					<!-- second section start here-->
-					<div class="col-md-4">
+					<div class="col-md-4 pull-left">
 					<?php 
 
 					$i=0;
@@ -116,7 +116,7 @@ use common\components\LangFormat;
 					<!-- second section end here-->
 
 					<!-- Third section start here-->
-					<div class="col-md-4 paddingright0">
+					<div class="col-md-4 paddingright0 pull-left">
 
 					<?php 
 
