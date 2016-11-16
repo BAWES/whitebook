@@ -23,10 +23,10 @@ $this->title = 'Events/Wishlist | Whitebook';
 				<div class="tab_sections">
 					<div id="exTab2">
 						<ul class="nav nav-tabs" role="tablist">
-							<li class="col-md-6 col-xs-6 padding0 first-event-tab <?= $events ?> ">
+							<li class="col-md-6 col-xs-6 padding0 first-event-tab <?= $events ?> pull-left">
 								<a role="tab" data-toggle="tab" href="#events" aria-expanded="false"><?=Yii::t('frontend','EVENTS');?></a>
 							</li>
-							<li class="col-md-6 col-xs-6 padding0 second-event-tab <?= $thingsilike ?> ">
+							<li class="col-md-6 col-xs-6 padding0 second-event-tab <?= $thingsilike ?> pull-left">
 								<a role="tab" data-toggle="tab" href="#wishlist" aria-expanded="true"><span class="heart-icon"><?=Yii::t('frontend','THINGS I LIKE');?></span></a>
 							</li>
 						</ul>
