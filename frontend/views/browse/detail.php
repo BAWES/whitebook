@@ -44,7 +44,7 @@ if($model->images) {
   "@type": "Product",
   "name": "<?= $item_name; ?>",
   "image": "<?= $image ?>",
-  "description": "<?= $item_description ?>",
+  "description": "<?= addslashes(strip_tags($item_description)) ?>",
    "offers": {
     "@type": "Offer",
     "priceCurrency": "KWD",
