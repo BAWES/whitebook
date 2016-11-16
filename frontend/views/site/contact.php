@@ -13,7 +13,7 @@ $this->title = 'Contact us | Whitebook';
             <h1><?= Yii::t('frontend', 'About and Contact') ?></h1>
         </div>
         <div class="contact_us">
-            <div class="col-md-4 paddingleft0">
+            <div class="col-md-4 pull-left paddingleft0">
                 <div class="contact_us_sec">
                     <h3 class="inner_title"><?= Yii::t('frontend', 'Ask a Question') ?></h3>
                     <div data-example-id="basic-forms" class="bs-example">
@@ -39,10 +39,9 @@ $this->title = 'Contact us | Whitebook';
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-7 pull-left">
             <div class="contact_center_sec">
                 <h3 class="inner_title"><?= Yii::t('frontend', 'Find an Answer') ?></h3>
                 <ul class="inner_contents">
@@ -73,7 +72,7 @@ $this->title = 'Contact us | Whitebook';
                 </ul>
             </div>
         </div>
-        <div class="col-md-1"></div>
+        <div class="col-md-1 pull-left"></div>
     </div>
 </div>
 </section>
