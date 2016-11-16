@@ -101,7 +101,12 @@ if($event_status>0){
 		</div>
 		<div class="col-md-9 paddingright0">
 			<div class="banner_section_plan">
-				<h3>Search Result for:<?= $search?> (<?= $count; ?>)</h3>
+				<h3>
+					<?= Yii::t('frontend', 'Search Result for: {search} ({count})', [
+							'search' => $search,
+							'count' => $count
+					]) ?>
+				</h3>
 			</div>
 			<div class="listing_right">
 				<div class="events_listing">
