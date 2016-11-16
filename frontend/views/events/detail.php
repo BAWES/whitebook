@@ -293,8 +293,8 @@ if(!empty($items))
                     'header'=> Yii::t('frontend', 'Action'),
                     'template' => '{delete}{update}',
                     'buttons' => [
-                        'delete' => function ($url, $model, $slug) {
-                            $url = Url::toRoute(['events/delete-invitee','id'=>$model->invitees_id,'slug'=>$_REQUEST['slug']]);
+                        'delete' => function ($url, $model) {
+                            $url = Url::toRoute(['events/delete-invitee','id'=>$model->invitees_id]);
                             return  Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
                             'title' => Yii::t('app', 'Gallery'),
                             ]);

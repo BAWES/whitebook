@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\Events;
 use Yii;
 
 /**
@@ -58,5 +59,10 @@ class EventInvitees extends \yii\db\ActiveRecord
     public function getCustomer()
     {
         return $this->hasOne(Customer::className(),['customer_id'=>'customer_id']);
+    }
+
+    public function getEvent()
+    {
+        return $this->hasOne(Events::className(),['event_id'=>'event_id']);
     }
 }
