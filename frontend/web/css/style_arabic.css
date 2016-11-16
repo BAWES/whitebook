@@ -323,3 +323,10 @@ td[align="left"] {
     background: url(../images/right_trm.png) right center no-repeat;
     padding-right: 12px;
 }
+.thing_items li {
+    float: right;
+    margin: 0 0 19.5px 19.5px;
+}
+.tab_section_event .nav-tabs{
+    padding: 0;
+}
