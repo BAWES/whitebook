@@ -361,9 +361,11 @@ class Users extends Model
         
         $data = Wishlist::find()
             ->select(['{{%vendor}}.vendor_name',
+                    '{{%vendor}}.vendor_name_ar',
                     '{{%vendor_item}}.slug',
                     '{{%vendor_item}}.item_id',
                     '{{%vendor_item}}.item_name',
+                    '{{%vendor_item}}.item_name_ar',
                     '{{%vendor_item}}.item_price_per_unit'])
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')

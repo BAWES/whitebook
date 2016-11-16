@@ -330,3 +330,10 @@ td[align="left"] {
 .tab_section_event .nav-tabs{
     padding: 0;
 }
+.events_listing ul#wishlist li {
+    float: right;
+    margin: 30px 0 20px 20px;
+}
+.tab_section_event .nav-tabs > li.second-event-tab.active > a, .tab_section_event .nav-tabs > li.second-event-tab.active > a:focus, .tab_section_event .nav-tabs > li.second-event-tab.active > a:hover{
+    border-right: 1px solid #e6e6e6;
+}

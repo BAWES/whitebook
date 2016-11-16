@@ -76,7 +76,9 @@ $this->title = 'Events/Wishlist | Whitebook';
 											<div id="loader1" ><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
 											<ul id="wishlist">
 											<?php
+											
 											$wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
+
 											foreach ($wishlist as $key => $value) {
 											?>
 												<li id="<?php echo $value['item_id'];?>">
@@ -91,8 +93,8 @@ $this->title = 'Events/Wishlist | Whitebook';
 															Url::toRoute(['/browse/detail/','slug'=>$value['slug']])); ?>
 														</div>
 														<div class="events_descrip">
-															<?= Html::a($value['vendor_name'], Url::toRoute(['/browse/detail/','slug'=>$value['slug']]));?>
-															<h3><?= $value['item_name']; ?></h3>
+															<?= Html::a(\common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']), Url::toRoute(['/browse/detail/','slug'=>$value['slug']])); ?>
+															<h3><?=\common\components\LangFormat::format( $value['item_name'], $value['item_name_ar'])?></h3>
 															<p><?= CFormatter::format($value['item_price_per_unit'])?></p>
 														</div>
 													</div>
