@@ -2,13 +2,14 @@
 namespace common\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
-use common\models\Vendor;
+use yii\db\Expression;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+use common\models\Vendor;
+use common\models\VendorDraftItem;
 
 /**
 * This is the model class for table "whitebook_vendor_item".
@@ -169,6 +170,14 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_status'=> 'Display on website',
             'child_category'=>'Third Level Category',
         ];
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getDraftItem()
+    {
+        return $this->hasOne(VendorDraftItem::className(), ['item_id' => 'item_id']);
     }
 
     /**
