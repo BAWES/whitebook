@@ -29,8 +29,8 @@ return [
     'Development [Khalid]' => [
         'path' => 'dev-khalid',
         'setWritable' => [
-            'imageserver/runtime',
-            'imageserver/web/assets',
+            'api/runtime',
+            'api/web/assets',
             'backend/runtime',
             'backend/web/assets',
             'frontend/runtime',
@@ -42,7 +42,7 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'imageserver/config/main-local.php',
+            'api/config/main-local.php',
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
             'admin/config/main-local.php',
@@ -51,8 +51,8 @@ return [
 	'Development [Riyas]' => [
         'path' => 'dev-riyas',
         'setWritable' => [
-            'imageserver/runtime',
-            'imageserver/web/assets',
+            'api/runtime',
+            'api/web/assets',
             'backend/runtime',
             'backend/web/assets',
             'frontend/runtime',
@@ -64,7 +64,7 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'imageserver/config/main-local.php',
+            'api/config/main-local.php',
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
             'admin/config/main-local.php',
@@ -73,8 +73,8 @@ return [
     'Development [Technoduce]' => [
         'path' => 'dev-technoduce',
         'setWritable' => [
-            'imageserver/runtime',
-            'imageserver/web/assets',
+            'api/runtime',
+            'api/web/assets',
             'backend/runtime',
             'backend/web/assets',
             'frontend/runtime',
@@ -86,7 +86,7 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'imageserver/config/main-local.php',
+            'api/config/main-local.php',
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
             'admin/config/main-local.php',
@@ -95,8 +95,8 @@ return [
     'Dev-Server' => [
         'path' => 'dev-server',
         'setWritable' => [
-            'imageserver/runtime',
-            'imageserver/web/assets',
+            'api/runtime',
+            'api/web/assets',
             'backend/runtime',
             'backend/web/assets',
             'frontend/runtime',
@@ -108,7 +108,7 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'imageserver/config/main-local.php',
+            'api/config/main-local.php',
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
             'admin/config/main-local.php',
@@ -117,8 +117,8 @@ return [
     'Production' => [
         'path' => 'prod',
         'setWritable' => [
-            'imageserver/runtime',
-            'imageserver/web/assets',
+            'api/runtime',
+            'api/web/assets',
             'backend/runtime',
             'backend/web/assets',
             'frontend/runtime',
@@ -130,7 +130,7 @@ return [
             'yii',
         ],
         'setCookieValidationKey' => [
-            'imageserver/config/main-local.php',
+            'api/config/main-local.php',
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
             'admin/config/main-local.php',
