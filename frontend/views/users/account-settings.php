@@ -16,14 +16,10 @@ $this->title ='Account Setting | Whitebook';
 		</div>
 
 		<div class="account_setings_sections">
-			<div class="col-md-2 hidde_res"></div>
-			<div class="col-md-8">
+			<?=$this->render('_sidebar_menu');?>
+			<div class="col-md-9 border-left">
 				<div class="accont_informations">
 					<div class="accont_info">
-						<div class="account_title">
-							<div id="acc_status"></div>
-							<h4><?= Yii::t('frontend','Account Info'); ?></h4>
-						</div>
 						<div class="account_form">
 						
 							<?php $form = ActiveForm::begin(); ?>
@@ -98,6 +94,10 @@ $this->registerCss("
 	.padding-right-0{padding-right:0px! important;}
 	.padding-left-0{padding-left:0px! important;}
 	.position-absolute.fa-sort{position: absolute;right: 17px;top: 41px;}
+#inner_pages_sections .container{background:#fff; margin-top:12px;}
+.border-left{border-left: 1px solid #e2e2e2;}
 ");
+
+
 
 
