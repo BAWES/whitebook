@@ -414,28 +414,33 @@ function logincheck()
 
                     if(status==-1)
                     {
+                        console.log(not_activate_msg);
                         jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-warning alert fade in');
-                        jQuery('#result').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#login_msg').addClass('alert-warning alert fade in');
+                        jQuery('#login_msg').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                         jQuery('#login_forget').show();
                         jQuery('#loader').hide();
                     }
                     else if(status==-2)
                     {
+                        console.log(user_blocked_msg);
                         jQuery('#login_loader').hide();
-                        jQuery('#result').html(user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#login_msg').addClass('alert-warning alert fade in');
+                        jQuery('#login_msg').html(user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-3)
                     {
+                        console.log(email_not_exist);
                         jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-warning alert fade in');
-                        jQuery('#result').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#login_msg').addClass('alert-warning alert fade in');
+                        jQuery('#login_msg').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-4)
                     {
+                        console.log(email_not_match);
                         jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-warning alert fade in');
-                        jQuery('#result').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        jQuery('#login_msg').addClass('alert-warning alert fade in');
+                        jQuery('#login_msg').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==1)
                     {
@@ -1230,7 +1235,7 @@ function add_to_event(x)
 
 function MyFunction()
 {
-    jQuery('#result').fadeOut('fast');
+    jQuery('#login_msg').fadeOut('fast');
 }
 
 function MyEventFunction()
