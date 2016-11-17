@@ -351,6 +351,7 @@ class Users extends Model
         }
 
         return $item_query
+            ->groupBy('item_id')
             ->asArray()
             ->all();
     }

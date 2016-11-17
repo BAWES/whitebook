@@ -408,30 +408,6 @@ class UsersController extends BaseController
 //        ]);
 //    }
 
-    public function actionRemove_from_wishlist()
-    {
-        $request = Yii::$app->request;
-
-        if (Yii::$app->request->isAjax) {
-
-            if ($request->post('item_id')) {
-                
-                $model = new Users();
-                $item_id = $request->post('item_id');
-                $customer_id = Yii::$app->user->identity->customer_id;
-                $delete_wishlist = $model->delete_wishlist($item_id, $customer_id);
-                
-                if ($delete_wishlist == Users::SUCCESS) {
-                    return Users::SUCCESS; // Wish list deleted successfully
-                } else {
-                    return Users::FAILURE; // Wish list not deleted
-                }
-            } else {
-                return $this->goHome();
-            }
-        }
-    }
-
     public function actionLoad_more_events()
     {
         $request = Yii::$app->request;
@@ -654,7 +630,6 @@ class UsersController extends BaseController
             $addresses[] = $row;
         }
 
-        $query = new Query;
         $provider = new \yii\data\ArrayDataProvider([
             'allModels' => $addresses,
             'sort' => [
