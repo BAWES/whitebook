@@ -392,6 +392,8 @@ function logincheck()
     if(jQuery('#loginForm').valid())
     {
         jQuery('#login_loader').show();
+        jQuery('#login_button').html('Please Wait...');
+        jQuery('#login_button').attr('disabled',true);
         var email=jQuery('#email').val();
         var password=jQuery('#password').val();
         var _csrf=jQuery('#_csrf').val();
@@ -415,7 +417,6 @@ function logincheck()
                     if(status==-1)
                     {
                         console.log(not_activate_msg);
-                        jQuery('#login_loader').hide();
                         jQuery('#login_msg').addClass('alert-warning alert fade in');
                         jQuery('#login_msg').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                         jQuery('#login_forget').show();
@@ -424,27 +425,23 @@ function logincheck()
                     else if(status==-2)
                     {
                         console.log(user_blocked_msg);
-                        jQuery('#login_loader').hide();
                         jQuery('#login_msg').addClass('alert-warning alert fade in');
                         jQuery('#login_msg').html(user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-3)
                     {
                         console.log(email_not_exist);
-                        jQuery('#login_loader').hide();
                         jQuery('#login_msg').addClass('alert-warning alert fade in');
                         jQuery('#login_msg').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-4)
                     {
                         console.log(email_not_match);
-                        jQuery('#login_loader').hide();
                         jQuery('#login_msg').addClass('alert-warning alert fade in');
                         jQuery('#login_msg').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==1)
                     {
-                        jQuery('#login_loader').hide();
                         jQuery('#myModal').modal('hide');
 
                         if(favourite_status>0){
@@ -462,6 +459,9 @@ function logincheck()
                             window.setTimeout(function(){location.reload()},1000)
                         }
                     }
+                    jQuery('#login_loader').hide();
+                    jQuery('#login_button').html('Login');
+                    jQuery('#login_button').removeAttr('disabled');
 
                 },
                 error:function(data)
@@ -474,8 +474,8 @@ function logincheck()
         {
             jQuery('#login_loader').hide();
             //jQuery('#loginErrorMsg').addClass('alert-failure alert fade in');
-            jQuery('#result').addClass('alert-success alert fade in');
-            jQuery('#result').html(reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+            jQuery('#login_msg').addClass('alert-success alert fade in');
+            jQuery('#login_msg').html(reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
 
         }
     }
