@@ -24,84 +24,71 @@ $this->title ='Address Book | Whitebook';
         <?php } ?>
 
         <div class="account_setings_sections">
-            <div class="col-md-2 hidde_res"></div>
-            <div class="col-md-8">
+            <?=$this->render('_sidebar_menu');?>
+            <div class="col-md-9 border-left">
                 <div class="accont_informations">
-                    <div class="accont_info">                        
-                        <table class="table table-bordered">
-                            <?php foreach ($addresses as $address) { ?>
-                            <tr>
-                            	<td>
-                            		<div class="address_box">
-                            			<div class="control-icons clearfix">
-                                            <a data-id="<?= $address['address_id'] ?>" class="address_delete btn pull-right">
-                                                <i class="glyphicon glyphicon-trash"></i>
-                                            </a>
+                    <?= \yii\grid\GridView::widget([
+                        'dataProvider' => $provider,
+                        'summary' => '',
+                        'columns' => [
+                            'address_name',
+                            [
+                                'attribute' =>'address_type_id',
+                                'header' =>'Type',
+                                'value' => function($model) {
+                                    return AddressType::type_name($model['address_type_id']);
+                                }
+                            ],
+                            [
+                                'attribute' =>'location',
+                                'value' => function($model) {
+                                    return \common\components\LangFormat::format($model['location'],$model['location_ar']);
+                                }
+                            ],
+                            [
+                                'attribute' =>'city_name',
+                                'value' => function($model) {
+                                    return \common\components\LangFormat::format($model['city_name'],$model['city_name_ar']);
+                                }
+                            ],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header'=>'Action',
+                                'contentOptions' => ['class' => 'text-center'],
+                                'buttons' => [
+                                    'view' => function ($url, $model) {
+                                        $url = Url::to(['users/view-address','address_id'=>$model['address_id']],true);
+                                        return  Html::a('<span class="fa fa-search"></span> &nbsp;View', $url,
+                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', ]) ;
+                                    },
+                                    'update' => function ($url, $model) {
+                                        $url = Url::to(['users/edit-address','address_id'=>$model['address_id']],true);
+                                        return  Html::a('<span class="fa fa-pencil"></span> &nbsp;Update', $url,
+                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', ]) ;
+                                    },
+                                    'delete' => function ($url, $model) {
+                                        $url = Url::to(['users/address-delete','address_id'=>$model['address_id']],true);
+                                        return  Html::a('<span class="fa fa-trash"></span >&nbsp;Delete', $url,
+                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', 'onclick'=>'return (confirm("Are you sure you want to delete this address?"))']
+                                        ) ;
+                                    },
+                                ]
+                            ],
+                        ],
+                    ]); ?>
 
-                                            <a href="<?= Url::to(['users/edit-address', 'address_id' => $address['address_id']]) ?>" class="btn-edit btn-primary btn pull-right" >
-                                                <i class="glyphicon glyphicon-pencil"></i>
-                                            </a>
-                                        </div>
-                                        
-                                        <?php if($address['address_name']) { ?>
-                                            <b><?=Yii::t('frontend','Address Name:')?></b> <br />
-                                            <?= $address['address_name'] ?>
-                                            <br />
-                                            <br />
-                                        <?php } ?>
-
-                                        <!-- address type -->
-                                        <b><?=Yii::t('frontend','Address Type:')?></b> <br />
-                                        <?= AddressType::type_name($address['address_type_id']); ?>
-
-                                        <br />
-                                        <br />
-
-                                        <!-- address -->
-                                        <b><?=Yii::t('frontend','Address:')?></b> <br />
-                                        <?= $address['address_data']?nl2br($address['address_data']).'<br />':'' ?>
-                            			
-                                        <!-- address question response -->
-                                        <?php if($address['questions']) { ?>
-                                        <ul>
-                                        <?php foreach ($address['questions'] as $row) { ?>
-                                            <li>
-                                                <br />
-                                                <b><?= $row['question'] ?></b>
-                                                <br />
-                                                <?= $row['response_text'] ?>
-                                            </li>
-                                        <?php } ?>
-                                        <?php } ?>
-                                        </ul>
-
-                                        <br />
-
-                                        <b><?=Yii::t('frontend','Area:')?></b> <br />
-                                        <?=\common\components\LangFormat::format($address['location'],$address['location_ar']); ?><br/>
-                                        
-                                        <br />
-
-                                        <b><?=Yii::t('frontend','City:')?></b> <br />
-                                        <?=\common\components\LangFormat::format($address['city_name'],$address['city_name_ar']); ?><br/>
-                            		</div>
-                            	</td>
-                            </tr>    
-                            <?php } ?>
-                            </table>
-
-                            <div class="clearfix"></div>
-
-                            <hr />
-
-                            <center class="submitt_buttons">
-                            <a class="btn btn-default" data-toggle="modal" data-target="#modal_create_address">
-                            	<?php echo Yii::t('frontend','Add new address') ?>
-                            </a>
-                            </center>
-                        </div>
                     </div>
                 </div>
+
+            <div class="clearfix"></div>
+
+            <hr />
+
+            <center class="submitt_buttons">
+                <a class="btn btn-default" data-toggle="modal" data-target="#modal_create_address">
+                    <?php echo Yii::t('frontend','Add new address') ?>
+                </a>
+            </center>
             </div>    
             </div>
         </div>
@@ -229,8 +216,11 @@ $this->registerJs("
 ", View::POS_READY);
 
 $this->registerCss("
+table{    font-size: 12px;}
 .header-updated{padding-bottom:0; margin-bottom: 0;}
 .body-updated{background: white; margin-top: 0;}
+#inner_pages_sections .container{background:#fff; margin-top:12px;}
+.border-left{border-left: 1px solid #e2e2e2;}
 ");
 
     
