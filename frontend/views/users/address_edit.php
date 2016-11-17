@@ -25,8 +25,8 @@ $this->title ='Address Book | Whitebook';
         <br />
 
         <div class="edit_address_sections">
-			<div class="col-md-2 hidde_res"></div>
-			<div class="col-md-8">
+			<?=$this->render('_sidebar_menu');?>
+			<div class="col-md-9 border-left">
 				<div class="col-md-6 paddingleft0 left-side">
 					<?= $form->field($address, 'address_type_id')->dropDownList($addresstype, 
 		                    ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
@@ -123,4 +123,8 @@ $this->registerJs("
 
 ", View::POS_READY);
 
-    
+
+$this->registerCss("
+#inner_pages_sections .container{background:#fff; margin-top:12px;}
+.border-left{border-left: 1px solid #e2e2e2;}
+");
