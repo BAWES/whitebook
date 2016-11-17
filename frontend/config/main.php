@@ -52,6 +52,8 @@ return [
             // Url Rules for Frontend
             'rules' => [
                   '' => 'site/index',
+                  'my-events' => 'events/index',
+                  'things-i-like' => 'things-i-like/index',
                   'themes' => 'themes/index',
                   'directory' => 'directory/index',
                   'cart' => 'cart/index',
