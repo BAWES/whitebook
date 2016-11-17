@@ -85,6 +85,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				'headerOptions' => ['class' => 'text-center'],
 				'label'=>'Item approved',
 				'filter'=>'',
+				'value' => function($data) {
+
+					if($data->draftItem) {
+					 	return $data->draftItem->item_approved;
+					}else{
+						return $data->item_approved;
+					}
+				},
 			],
 			[
 				'attribute'=>'created_datetime',
