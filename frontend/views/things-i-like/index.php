@@ -23,49 +23,49 @@ $this->title = 'Events/Wishlist | Whitebook';
 				<div class="tab_sections">
 					<div id="exTab2">
 						<ul class="nav nav-tabs" role="tablist">
-							<li class="col-md-6 col-xs-6 padding0 first-event-tab active pull-left">
-								<a href="<?= Url::to(['events/index']) ?>"><?=Yii::t('frontend','EVENTS');?></a>
+							<li class="col-md-6 col-xs-6 padding0 first-event-tab pull-left">
+								<a href="<?= Url::to(['events/index']) ?>" aria-expanded="false"><?=Yii::t('frontend','EVENTS');?></a>
 							</li>
-							<li class="col-md-6 col-xs-6 padding0 second-event-tab pull-left">
+							<li class="col-md-6 col-xs-6 padding0 second-event-tab active pull-left">
 								<a href="<?= Url::to(['things-i-like/index']) ?>"><span class="heart-icon"><?=Yii::t('frontend','THINGS I LIKE');?></span></a>
 							</li>
 						</ul>
 						<div class="tab-content">
-							<div role="tabpanel" id="events" class="tab-pane active">
-								<div class="cat_events_items">
-									<div class="select_category_sec">
-										<div class="select_boxes">
-											<select class="selectpicker" data-style="btn-primary" id="customer_event_type" name="customer_event_type" style="display:none" >
-												<option value='all'><?=Yii::t('frontend','Select event type')?></option>
-												<?php
-												foreach ($customer_event_type as $key => $value) { ?>
-													<option value="<?= $value['event_type']; ?>"><?= $value['event_type']; ?></option>
-												<?php }  ?>
-											</select>
+							<div role="tabpanel" id="wishlist" class="tab-pane second_event active">
+								<a class="filter-link" id="filter-toggle" style="display:none;"><?=Yii::t('frontend','Filter')?></a>
+								<div id="search_data">
+									<div class="events_listing_inner">
+										<div class="events_listing new-event">
+											<div id="loader1" ><img src="<?php echo Url::to("@web/images/ajax-loader.gif");?>" title="Loader"></div>
+											<ul id="wishlist">
+											<?php
+											
+											$wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
+
+											foreach ($wishlist as $key => $value) {
+											?>
+												<li id="<?php echo $value['item_id'];?>">
+													<div class="events_items">
+														<div class="events_images">
+															<div class="hover_events">
+																<div class="pluse_cont"><a href="javascript:;" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class=""   data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a></div>
+																<div class="delet_icons"><a href="javascript:;" title=""   onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"onclick="remove_from_favourite(<?php echo $value['item_id'];?>)"></a></div>
+															</div>
+															<?php $image = Image::find()->select('image_path')->where(['item_id'=>$value['item_id'],'module_type'=>'vendor_item', 'trash'=>'Default'])->asArray()->one(); ?>
+															<?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$image['image_path'],['class'=>'item-img']),
+															Url::toRoute(['/browse/detail/','slug'=>$value['slug']])); ?>
+														</div>
+														<div class="events_descrip">
+															<?= Html::a(\common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']), Url::toRoute(['/browse/detail/','slug'=>$value['slug']])); ?>
+															<h3><?=\common\components\LangFormat::format( $value['item_name'], $value['item_name_ar'])?></h3>
+															<p><?= CFormatter::format($value['item_price_per_unit'])?></p>
+														</div>
+													</div>
+												</li>
+											<?php } ?>
+											</ul>
 										</div>
 									</div>
-								</div>
-								<div class="thinl_like_sectons" >
-									<ul class="thing_items" id="user_event_list">
-										<?php
-										foreach ($customer_events as $key => $value) { ?>
-										<li>
-											<div class="delet_icons_new" onclick="deletefiltering1('<?php echo $value['event_id'];?>');"></div>
-											<a href="<?= Url::toRoute(['detail','slug'=>$value['slug']]); ?>" id="<?php echo $value['event_id'];?>" title="<?= $value['event_name']; ?>">
-												<div class="thing_inner_items">
-													<h3><?php if(strlen($value['event_name'])>12){echo substr($value['event_name'], 0, 12).' ...';}else{ echo$value['event_name'];} ?></h3>
-													<p><?= $value['event_date']; ?></p>
-													<p><?= $value['event_type']; ?><br/></p>
-												</div>
-											</a>
-										</li>
-										<?php } ?>
-										<li>
-											<div class="thing_inner_items border_none <?php if($slug=='thingsilike'){echo 'active';}?>">
-												<a href="#" data-toggle="modal" data-target="#EventModal" title="">&nbsp;</a>
-											</div>
-										</li>
-									</ul>
 								</div>
 							</div>
 						</div>
