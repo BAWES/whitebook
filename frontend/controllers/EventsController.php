@@ -144,10 +144,20 @@ class EventsController extends BaseController
             ->asArray()
             ->all();
 
+        $provider = new \yii\data\ArrayDataProvider([
+            'allModels' => $customer_events,
+            'sort' => [
+                //'attributes' => ['city_name', 'address_type_id', 'location'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         return $this->render('index', [
             'event_type' => $event_type,
             'customer_event_type' => $customer_event_type,
-            'customer_events' => $customer_events,
+            'provider' => $provider,
             'customer_wishlist' => $customer_wishlist,
             'customer_wishlist_count' => $customer_wishlist_count,
             'vendor' => $vendor,
@@ -467,4 +477,11 @@ class EventsController extends BaseController
             }
         }
     }
+    public function actionDeleteEvent($id)
+    {
+        Events::deleteAll('event_id='.$id);
+        Yii::$app->session->setFlash('success','Events Deleted Successfully');
+        $this->redirect(['events/index']);
+    }
+
 }

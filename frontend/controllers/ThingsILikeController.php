@@ -17,9 +17,6 @@ class ThingsILikeController extends BaseController
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
             ],
         ];
     }
@@ -58,11 +55,25 @@ class ThingsILikeController extends BaseController
 
         $website_model = new Website();
         $event_type = $website_model->get_event_types();
-
+        $provider = new \yii\data\ArrayDataProvider([
+            'allModels' => $customer_wishlist,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
         return $this->render('index', [
             'customer_wishlist' => $customer_wishlist,
             'customer_wishlist_count' => $customer_wishlist_count,
             'event_type' => $event_type,
+            'provider' => $provider,
         ]);
+    }
+
+    public function actionDelete($id)
+    {
+        \frontend\models\Wishlist::deleteAll(['item_id'=>$id,'customer_id'=>Yii::$app->user->identity->customer_id]);
+
+        Yii::$app->session->setFlash('success','Item removed from your wishlist');
+        $this->redirect(['/things-i-like']);
     }
 }
