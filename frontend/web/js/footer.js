@@ -286,12 +286,6 @@ jQuery(window).load(function () {
 
 });
 
-jQuery('.index_redirect').click(function()
-{
-    var a = jQuery(this).attr('data-hr');
-    window.location.href = a; //Will take you to Google.
-});
-
 jQuery('.accor-link').click(function()
 {
     (jQuery(this).hasClass('accor-link-min'))?jQuery(this).removeClass('accor-link-min'):jQuery(this).addClass('accor-link-min');
@@ -1145,7 +1139,7 @@ function remove_from_favourite(x)
 }
 
 //add to favorites
-jQuery(".add_to_favourite").click(function(){
+jQuery(".add_to_favourite").click(function(e){
 
     jQuery('#loading_img_list').show();
     jQuery('#loading_img_list').html('<img id="loading-image" src="'+giflink+'" alt="Loading..." />');
@@ -1155,6 +1149,7 @@ jQuery(".add_to_favourite").click(function(){
     jQuery(jQueryelement).parent().toggleClass("faverited_icons");
 
     var _csrf=jQuery('#_csrf').val();
+
     jQuery.ajax({
         url: add_to_wishlist_url,
         type:"post",
@@ -1166,6 +1161,9 @@ jQuery(".add_to_favourite").click(function(){
             jQuery('#loading_img_list').hide();
         }
     });
+
+    e.preventDefault();
+    e.stopPropagation();
 });
 
 jQuery(".faver_evnt_product").click(function(){
@@ -1434,6 +1432,12 @@ function Searchinvitee(event_id)
         }
     });
 }
+
+$(document).delegate('.btn_add_to_event', 'click', function(e) {
+    addevent($(this).parents('.item').attr('data-id'));    
+    e.preventDefault();
+    e.stopPropagation();    
+});
 
 /* BEGIN ADD EVENT */
 function addevent(item_id)

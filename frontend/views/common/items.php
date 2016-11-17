@@ -35,8 +35,11 @@ if(!empty($items->getModels()))  {
                         </div>
                         <a href="<?= $item_url ?>" class="" >
                             <?php
+                            
                             $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=208&h=208';
+                                
                             echo Html::img($path,['class'=>'item-img']);
+
                             ?>
                             <?php if($value['item_for_sale'] == 'Yes') { ?>
                                 <i class="fa fa-circle" aria-hidden="true"></i>
