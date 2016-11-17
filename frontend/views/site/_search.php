@@ -4,6 +4,24 @@ use yii\helpers\Html;
 $session = Yii::$app->session;
 $dLocation = $session->get('deliver-location');
 $date = $session->get('deliver-date');
+
+$customer_id = Yii::$app->user->getId();
+
+if($customer_id) {
+
+    $my_addresses =  \common\models\CustomerAddress::find()
+        ->select(['{{%location}}.id, {{%customer_address}}.address_id,{{%customer_address}}.address_name'])
+        ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
+        ->where(['{{%customer_address}}.trash'=>'Default'])
+        ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+        ->groupby(['{{%location}}.id'])
+        ->asArray()
+        ->all();
+
+} else {
+    $my_addresses = array();
+}
+
 ?>
 
 <div class="col-lg-12 col-md-12 col-sm-12 clearfix left-div">
@@ -14,6 +32,27 @@ $date = $session->get('deliver-date');
                 <select class="selectpicker trigger" name="location" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
                     <option value=""><?=Yii::t('frontend','Area')?></option>
                     <?php
+
+                    if($my_addresses) { ?>
+                        <optgroup label="My Addresses">
+                            <?php foreach ($my_addresses as $key => $value) {
+                                $checked = '';
+                                if ($dLocation != null) {
+                                    $checked = ($dLocation == 'address_'.$value['address_id']) ? 'selected' : '';
+                                }
+                                ?>
+
+                                <option <?=$checked; ?> value="address_<?= $value['address_id']; ?>">
+                                    <?= $value['address_name'] ?>
+                                </option>
+                                <?php
+                            }//foreach my addresses ?>
+
+                        </optgroup>
+                        <?php
+                    }//if my addresses
+
+
                     $cities = \common\models\City::find()->where(['trash'=>'Default','status'=>'Active'])->with('locations')->all();
                     $list = '';
                     foreach ($cities as $city) {
