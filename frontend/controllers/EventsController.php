@@ -363,7 +363,14 @@ class EventsController extends BaseController
                 $event_id = $request->post('event_id');
                 $item_id = $request->post('item_id');
 
-                $item_name = Html::encode($request->post('item_name'));
+                $item = VendorItem::findOne($item_id);
+
+                if(Yii::$app->language == 'en') {
+                    $item_name = $item->item_name;
+                }else{
+                    $item_name = $item->item_name_ar;
+                }
+
                 $event_name = Html::encode($request->post('event_name'));
 
                 $customer_id = Yii::$app->user->identity->customer_id;

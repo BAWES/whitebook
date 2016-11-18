@@ -1189,47 +1189,50 @@ jQuery(".faver_evnt_product").click(function(){
 });
 
 function add_to_event(x)
-    {
-        var item_name=jQuery('.desc_popup_cont h3').text();
-        var event_id=jQuery('#eventlist'+x).val();
-        var event_name=jQuery('#eventlist'+x+' option:selected').text();
+{
+    var event_id = jQuery('#eventlist'+x).val();
+    var event_name = jQuery('#eventlist'+x+' option:selected').text();
 
-        if(event_id!=''){
-            jQuery('#add_to_event_loader').show();
-            var _csrf=jQuery('#_csrf').val();
-            jQuery.ajax({
-                url:add_event_url,
-                type:"post",
-                data:{"event_name":event_name,"item_name":item_name,
-                "event_id":event_id,"item_id":x,"_csrf":_csrf},
-                async: false,
-                dataType:'JSON',
-                success:function(data)
+    if(event_id!=''){
+        jQuery('#add_to_event_loader').show();
+        var _csrf=jQuery('#_csrf').val();
+
+        jQuery.ajax({
+            url:add_event_url,
+            type:"post",
+            data: {
+                "event_name":event_name,
+                "event_id":event_id,
+                "item_id":x,
+                "_csrf":_csrf
+            },
+            async: false,
+            dataType:'JSON',
+            success:function(data)
+            {
+                if(data.status==1)
                 {
-                    if(data.status==1)
-                    {
-                        jQuery("#event-slider").load("<?= Url::toRoute('/product/event-slider'); ?>");
-                        jQuery('#add_to_event_loader').hide();
-                        jQuery('#add_to_event').modal('hide');
-                        jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+data.message+'</span>');
-                        window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
-                        //jQuery('#add_to_event_success'+x).html('Item Add to Your event list');
-                    }
-                    else if(data.status==-1)
-                    {
-                        jQuery('#add_to_event_loader').hide();
-                        jQuery('#add_to_event_success'+x).html(data.message);
-                    }
+                    jQuery("#event-slider").load("<?= Url::toRoute('/product/event-slider'); ?>");
+                    jQuery('#add_to_event_loader').hide();
+                    jQuery('#add_to_event').modal('hide');
+                    jQuery('#login_success').modal('show');
+                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+data.message+'</span>');
+                    window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
+                    //jQuery('#add_to_event_success'+x).html('Item Add to Your event list');
                 }
-            });
-        }
-        else
-        {
-            jQuery('#add_to_event_error'+x).html(kindly_select_event_type);
-        }
-
+                else if(data.status==-1)
+                {
+                    jQuery('#add_to_event_loader').hide();
+                    jQuery('#add_to_event_success'+x).html(data.message);
+                }
+            }
+        });
     }
+    else
+    {
+        jQuery('#add_to_event_error'+x).html(kindly_select_event_type);
+    }
+}
 
 function MyFunction()
 {
