@@ -103,5 +103,5 @@ $this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/dat
 
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@wweb/themes/default/js/priority_item.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/priority_item.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 

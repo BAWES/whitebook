@@ -2,23 +2,24 @@
 
 namespace frontend\controllers;
 
-use common\components\LangFormat;
 use Yii;
 use yii\helpers\Url;
+use yii\db\Expression;
+use yii\helpers\VarDumper;
+use yii\helpers\ArrayHelper;
+use yii\data\ArrayDataProvider;
 use frontend\models\VendorItem;
 use frontend\models\Users;
-use common\models\Events;
-use common\models\VendorLocation;
-use yii\data\ArrayDataProvider;
-use yii\helpers\ArrayHelper;
 use frontend\models\Website;
 use frontend\models\Vendor;
+use common\models\Events;
+use common\models\VendorLocation;
 use common\models\Category;
 use common\models\VendorItemThemes;
 use common\models\Location;
 use common\models\CategoryPath;
 use common\models\CustomerAddress;
-use yii\helpers\VarDumper;
+use common\components\LangFormat;
 
 /**
 * Site controller.
@@ -103,6 +104,10 @@ class BrowseController extends BaseController
                 '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
             )
             ->leftJoin(
+                '{{%priority_item}}',
+                '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
+            )
+            ->leftJoin(
                 '{{%vendor_location}}',
                 '{{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id'
             )
@@ -117,6 +122,7 @@ class BrowseController extends BaseController
         if (isset($data['for_sale']) && $data['for_sale'] != '') {
             $item_query->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
         }
+
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
 
         //price filter
@@ -163,6 +169,7 @@ class BrowseController extends BaseController
 
                 $location = CustomerAddress::findOne($address_id)->area_id;
             }
+
             $item_query->andWhere(['in', '{{%vendor_location}}.area_id', $location]);
         }
 
@@ -174,9 +181,23 @@ class BrowseController extends BaseController
 
         $item_query->andWhere($condition);
 
+        $expression = new Expression(
+            "CASE 
+                WHEN
+                    `whitebook_priority_item`.priority_level IS NULL 
+                    OR whitebook_priority_item.status = 'Inactive' 
+                    OR whitebook_priority_item.trash = 'Deleted' 
+                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW()) 
+                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW()) 
+                THEN 2 
+                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1 
+                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0 
+                ELSE 2 
+            END, {{%vendor_item}}.sort");
+
         $items = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy('{{%image}}.vendorimage_sort_order', SORT_ASC)
+            ->orderBy($expression)
             ->asArray()
             ->all();
 
@@ -192,6 +213,7 @@ class BrowseController extends BaseController
         if (!empty($items)) {
 
             $item_ids = ArrayHelper::map($items, 'item_id', 'item_id');
+
             $themes = VendorItemThemes::find()
                 ->select(['theme_id'])
                 ->with('themeDetail')
@@ -201,13 +223,11 @@ class BrowseController extends BaseController
                 ->all();
         }
 
-
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
             ->where(['IN', '{{%vendor}}.vendor_id', $ActiveVendors])
             ->asArray()
             ->all();
-
 
         $TopCategories = Category::find()
             ->where(['category_level' => 0, 'trash' => 'Default'])
@@ -326,7 +346,6 @@ class BrowseController extends BaseController
                 ->asArray()
                 ->all();
 
-
             $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
 
             if (count($myaddress_area_list)>0) {
@@ -345,6 +364,7 @@ class BrowseController extends BaseController
             }
 
             $user = new Users();
+
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
             return $this->render('detail', [
