@@ -1,6 +1,7 @@
 <?php
 
 namespace admin\models;
+
 use Yii;
 use admin\models\VendorItem;
 use yii\helpers\ArrayHelper;
@@ -9,6 +10,7 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+
 /**
 * This is the model class for table "whitebook_priority_item".
 *
@@ -51,8 +53,7 @@ class PriorityItem extends \yii\db\ActiveRecord
     {
         return [
             [['item_id',  'priority_start_date', 'priority_end_date', 'priority_level'], 'required'],
-            [['category_id','subcategory_id','child_category'], 'default', 'value' => 0],
-            [['created_by','category_id', 'subcategory_id','child_category', 'modified_by'], 'integer'],
+            [['created_by', 'modified_by'], 'integer'],
             [['priority_level', 'trash'], 'string'],
             [['priority_start_date', 'priority_end_date', 'created_datetime', 'modified_datetime'], 'safe'],
             ['item_id', 'unique', 'targetAttribute' => ['priority_level', 'priority_start_date','priority_end_date'],'message' => 'Item name, Priority level, Start date, End date are already exists .' ],
@@ -66,7 +67,6 @@ class PriorityItem extends \yii\db\ActiveRecord
     {
         return [
             'priority_id' => 'Priority Name',
-            'vendor_id'=>'Vendor Name',
             'item_id' => 'Item Name',
             'priority_level' => 'Priority level',
             'priority_start_date' => 'Priority Start Date',
@@ -75,10 +75,7 @@ class PriorityItem extends \yii\db\ActiveRecord
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
             'modified_datetime' => 'Modified Datetime',
-            'trash' => 'Trash',
-            'subcategory_id'=>'Sub category',
-            'category_id'=>'category',
-            'child_category'=>'Child category'
+            'trash' => 'Trash'
         ];
     }
 

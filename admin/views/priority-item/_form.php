@@ -14,18 +14,9 @@ $request = Yii::$app->request;
 </div>
 
     <?php $form = ActiveForm::begin(array('options' => array('id' => 'formId','name' => 'formId'),'enableClientValidation'=>false)); ?>
-    <h4>    Category filter</h4>
-    <?= $form->field($model, 'category_id',['template' => "<div class='controls'>{input}</div> {hint} {error}"
-    ])->dropDownList($category, ['prompt'=>'Select category...','class'=>'filter','style'=>'float:left;margin-left: 15px;  width: 215px;  margin-top: 10px;']); ?>
-
-    <?= $form->field($model, 'subcategory_id',['template' => "<div class='controls'>{input}</div> {hint} {error}"
-    ])->dropDownList($subcategory, ['prompt'=>'Select sub category...','class'=>'filter','style'=>'float:left;margin-left: 5px;  width: 215px;']); ?>
-
-    <?= $form->field($model, 'child_category',['template' => "<div class='controls'>{input}</div> {hint} {error}"
-    ])->dropDownList($childcategory, ['prompt'=>'Select child category...','class'=>'filter','style'=>'float:left;margin-left: 5px;  width: 215px;']);?>
 
   <div class="col-md-8 col-sm-8 col-xs-8">
-  <br><br/>
+  
   <?php if($model->isNewRecord) {
     echo $form->field($model, 'item_id',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"
     ])->dropDownList($priorityitem,['prompt'=>'Select...']); 
@@ -85,13 +76,16 @@ if($request->get('id')) {
     $priority_id = 0;
 }
 
+if($model->isNewRecord) {
+    $is_new_record = 1;
+}else{
+    $is_new_record = 0;
+}
+
 $this->registerJs("
     var priority_id = '".$priority_id."';
+    var is_new_record = ".$is_new_record.";
 ", View::POS_HEAD);
-
-echo Html::hiddenInput('load_sub_category_url', Url::to(['/priority-item/loadsubcategory']), ['id' => 'load_sub_category_url']);
-
-echo Html::hiddenInput('load_child_category_url', Url::to(['/priority-item/loadchildcategory']), ['id' => 'load_child_category_url']);
 
 echo Html::hiddenInput('load_item_url', Url::to(['/priority-item/loaditems']), ['id' => 'load_item_url']);
 
@@ -103,5 +97,5 @@ $this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/dat
 
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/priority_item.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/priority_item.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
