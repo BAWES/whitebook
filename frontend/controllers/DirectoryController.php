@@ -141,10 +141,6 @@ class DirectoryController extends BaseController
                 '{{%priority_item}}',
                 '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
             )
-            ->leftJoin(
-                '{{%vendor_location}}',
-                '{{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id'
-            )
             ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->where([

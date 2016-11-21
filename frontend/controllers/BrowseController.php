@@ -107,10 +107,6 @@ class BrowseController extends BaseController
                 '{{%priority_item}}',
                 '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
             )
-            ->leftJoin(
-                '{{%vendor_location}}',
-                '{{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id'
-            )
             ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->where([
@@ -170,7 +166,7 @@ class BrowseController extends BaseController
                 $location = CustomerAddress::findOne($address_id)->area_id;
             }
 
-            $item_query->andWhere(['in', '{{%vendor_location}}.area_id', $location]);
+            $item_query->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
         }
 
 
