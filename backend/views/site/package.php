@@ -32,15 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 
-	<style>
+<?php echo $this->registerCss("
 	.package_grid .pro-plan-wrap{border: 2px solid #efefef;padding: 0 15px 10px;margin:0 0 30px;}
-	.package_grid .pro-plan-wrap .plan-title{color: #000000;display: inline-block;font-size: 20pt;
-		line-height: 20px;font-weight: 700;width: 100%;}
+	.package_grid .pro-plan-wrap .plan-title{color: #000000;display: inline-block;font-size: 20pt;line-height: 20px;font-weight: 700;width: 100%;}
 	.package_grid .pro-plan-wrap .plan-price-wrap {padding-bottom: 30px;}
-	.package_grid .pro-plan-wrap p.plan-text,.package_grid .pro-plan-wrap p.h6 {color: #808080;cursor: default;font-size: 11pt;
-		line-height: 20px; font-weight: 500;}
-
+	.package_grid .pro-plan-wrap p.plan-text,.package_grid .pro-plan-wrap p.h6 {color: #808080;cursor: default;font-size: 11pt;line-height: 20px; font-weight: 500;}
 	.package_grid .btn-group-lg > .btn,.package_grid .btn-lg{background: #c4c4c4 none repeat scroll 0 0;border-radius: 0; color: #fff;display: inline-block;font-size: 12pt;
 	font-weight: 700;padding: 10px 0; text-align: center;text-transform: uppercase;width: 100%;border:none;margin:20px 0 0;}
 	.package_grid .btn-group-lg > .btn:hover,.package_grid .btn-lg:hover{background: #ebc000 none repeat scroll 0 0;}
-	</style>
+");
+?>
