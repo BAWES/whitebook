@@ -199,18 +199,6 @@ class VendorController extends Controller
             $model->approve_status = 'Yes';
             $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
 
-            //add categories
-            if(!$vendor['category_id']) {
-                $vendor['category_id'] = [];
-            }
-
-            foreach ($vendor['category_id'] as $key => $value) {
-               $vc = new VendorCategory;
-               $vc->vendor_id = $model->vendor_id;
-               $vc->category_id = $value;
-               $vc->save();
-            }
-
             $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
             $model->slug = str_replace(' ', '-', $model->slug);
 
@@ -242,7 +230,19 @@ class VendorController extends Controller
             }            
 
             if ($model->save(false)) {
-                
+                    
+                //add categories
+                if(!$vendor['category_id']) {
+                    $vendor['category_id'] = [];
+                }
+
+                foreach ($vendor['category_id'] as $key => $value) {
+                   $vc = new VendorCategory;
+                   $vc->vendor_id = $model->vendor_id;
+                   $vc->category_id = $value;
+                   $vc->save();
+                }
+
                 //remove old packages
                 VendorPackages::deleteAll(['vendor_id' => $model->vendor_id]);
 
@@ -300,7 +300,9 @@ class VendorController extends Controller
                 ->setSubject('Welcome '.$model['vendor_name'])
                 ->send();
             }
+            
             $command=Vendor::updateAll(['vendor_password' => $vendor_password],'vendor_id= '.$model->id);
+
             Yii::$app->session->setFlash('success', 'Vendor created successfully!');
 
             return $this->redirect(['view', 'id' => $model->id]);
