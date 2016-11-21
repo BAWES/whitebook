@@ -167,7 +167,6 @@ $this->params['breadcrumbs'][] = $this->title;
 		<tr>
 			<th>Item Type</th>
             <th>Item Name</th>
-            <th>Category</th>
             <th>Status</th>
             <th>Priority</th>
             <th>Item Approved</th>
@@ -177,7 +176,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <tr>
             <td><?= ItemType::itemtypename($log['type_id']); ?></td>
             <td><?= VendorItem::vendoritemname($log['item_id']); ?></td>
-            <td><?= Category::viewcategoryname($log['category_id']); ?></td>
             <td><?= ($log['item_status']); ?></td>
             <td><?= ($log['priority']); ?></td>
             <td><?= ($log['item_approved']); ?></td>
