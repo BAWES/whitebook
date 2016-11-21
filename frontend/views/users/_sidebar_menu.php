@@ -27,6 +27,16 @@ $action = Yii::$app->controller->action->id;
     .hidde_res {background: #f2f2f2;padding: 0px;margin-right: 15px;}
     .side-bar-menu li.active a{background-color: #000;border-radius: 0px !important;}
     .side-bar-menu a{color: #000;}
-    .text-center a {background-color:#000;border-color:#000;}
+    .account_setings_sections .text-center a {background-color:#000;border-color:#000;}
+    .account_setings_sections { margin-top: 20px; }
+    .mobile-logo-text { display: none; }
+    @media only screen and (max-width: 991px) {
+        #banner_sections, #inner_pages_sections {
+            margin: 50px 0 0;
+        }
+        .border-top-yellow {
+            min-height : auto;
+        }  
+    }      
     ')
 ?>
