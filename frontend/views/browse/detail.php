@@ -9,8 +9,9 @@ use common\components\CFormatter;
 
 $item_name = LangFormat::format($model->item_name,$model->item_name_ar);
 $vendor_name = LangFormat::format($model->vendor->vendor_name,$model->vendor->vendor_name_ar);
-$item_description = LangFormat::format(strip_tags($model->item_description),strip_tags($model->item_description_ar));
-$item_additional_info = LangFormat::format(strip_tags($model->item_additional_info),strip_tags($model->item_additional_info_ar));
+$item_description = LangFormat::format($model->item_description, $model->item_description_ar);
+$item_additional_info = LangFormat::format($model->item_additional_info, $model->item_additional_info_ar);
+
 $vendor_contact_address = LangFormat::format($model->vendor->vendor_contact_address_ar,$model->vendor->vendor_contact_address);
 
 $this->title = 'Whitebook - ' . $item_name;
