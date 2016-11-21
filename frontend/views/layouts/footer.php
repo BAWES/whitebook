@@ -194,39 +194,6 @@ use frontend\models\Users;
                                     </div>
                                 </div>
 
-                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
-                                    <div class="form-group">
-                                        <label><?= Yii::t('frontend', 'Email') ?></label>
-                                        <input type="text" placeholder="" name="reg_email" id="reg_email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                        <span class="customer_email errors"></span>
-                                        <div id="customer_email" class="error"></div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
-                                    <div class="form-group reg_gender">
-                                        <label><?= Yii::t('frontend', 'Gender') ?></label>
-                                        <div class="col-md-12 padding0 gender-select">
-                                            <select class="selectpicker" data-style="btn-primary" id="gender" name="gender" style="display: none;">
-                                                <option value=""><?= Yii::t('frontend', 'Select Gender') ?></option>
-                                                <option value="Male"><?= Yii::t('frontend', 'Male') ?></option>
-                                                <option value="Female"><?= Yii::t('frontend', 'Female') ?></option>
-                                            </select>
-                                        </div>
-                                        <div class="clearfix">
-                                            <span class="customer_status errors"></span>
-                                            <div id="gen_er" class="error"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
-                                    <div class="form-group">
-                                        <label><?= Yii::t('frontend', 'Password') ?></label>
-                                        <input type="password" placeholder="" name="userpassword" id="userpassword" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                        <span class="customer_password password errors"></span>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
@@ -237,10 +204,22 @@ use frontend\models\Users;
                                         <span class="customer_lname errors"></span>
                                     </div>
                                 </div>
+                            </div>
 
                             <div class="clearfix"></div>
 
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'Email') ?></label>
+                                        <input type="text" placeholder="" name="reg_email" id="reg_email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                        <span class="customer_email errors"></span>
+                                        <div id="customer_email" class="error"></div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
                                 <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0 margin-bottom-11">
                                     <div class="form-group">
                                         <label><?= Yii::t('frontend', 'Date of birth') ?></label>
@@ -293,17 +272,52 @@ use frontend\models\Users;
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix"></div>
+                            </div>
 
+                            <div class="clearfix"></div>
+
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
                                 <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group reg_gender">
+                                        <label><?= Yii::t('frontend', 'Gender') ?></label>
+                                        <div class="col-md-12 padding0 gender-select">
+                                            <select class="selectpicker" data-style="btn-primary" id="gender" name="gender" style="display: none;">
+                                                <option value=""><?= Yii::t('frontend', 'Select Gender') ?></option>
+                                                <option value="Male"><?= Yii::t('frontend', 'Male') ?></option>
+                                                <option value="Female"><?= Yii::t('frontend', 'Female') ?></option>
+                                            </select>
+                                        </div>
+                                        <div class="clearfix">
+                                            <span class="customer_status errors"></span>
+                                            <div id="gen_er" class="error"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
+                                 <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
                                     <div class="form-group">
                                         <label><?= Yii::t('frontend', 'Mobile Number') ?></label>
                                         <input type="text" placeholder="" name="phone" id="phone" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
                                         <span class="customer_mobile errors"></span>
                                     </div>
                                 </div>
-        <!--                        <div class="clearfix"></div>-->
+                            </div>
 
+                            <div class="clearfix"></div>
+                            
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'Password') ?></label>
+                                        <input type="password" placeholder="" name="userpassword" id="userpassword" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                        <span class="customer_password password errors"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
                                 <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
                                     <div class="form-group">
                                         <label><?= Yii::t('frontend', 'Confirm Password') ?></label>
