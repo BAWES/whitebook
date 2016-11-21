@@ -19,10 +19,6 @@ $this->title ='Address Book | Whitebook';
             <h1><?php echo Yii::t('frontend','Address Book'); ?></h1>
         </div>
 
-        <?php if($addresses) { ?>
-            <br /><br />
-        <?php } ?>
-
         <div class="account_setings_sections">
             <?=$this->render('_sidebar_menu');?>
             <div class="col-md-9 border-left">
