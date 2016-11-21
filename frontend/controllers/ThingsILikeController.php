@@ -53,9 +53,7 @@ class ThingsILikeController extends BaseController
         $customer_wishlist_count = $model->get_customer_wishlist_count(
             $customer_id, $category_id, $price, $vendor, $avail_sale, $theme);
 
-        echo "<pre>";
-        print_r($customer_wishlist);
-        exit;
+        echo $customer_wishlist_count;
         $website_model = new Website();
         $event_type = $website_model->get_event_types();
         $provider = new \yii\data\ArrayDataProvider([
