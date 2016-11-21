@@ -31,15 +31,18 @@ $t=0;
 				<?php 
 				}//foreach 
 				
-			} else if($question_records['question_answer_type']=='text') { ?>
+			} else if($question_records['question_answer_type']=='text') {
+				?>
 			
-		<tr><th>Text </th><th></th></tr>
-		
-		<?php foreach($answers as $values){ ?>
-		<tr><td colspan="2"><?= ucfirst($values['answer_price_added']) ?></td></tr>
-		<?php } ?>
+				<tr><th>Text </th><th></th></tr>
 
-		<?php }  else if($question_records['question_answer_type']=='image') { 	?>
+				<?php foreach($answers as $values){ ?>
+				<tr><td colspan="2"><?= ucfirst($values['answer_price_added']) ?></td></tr>
+				<?php } ?>
+
+			<?php
+			}  else if($question_records['question_answer_type']=='image') {
+			?>
 			<tr><th>Image </th><th></th></tr>
 			<tr>
 				<td colspan="2">
@@ -48,15 +51,16 @@ $t=0;
 						foreach($answers as $values){
 						
 				 		$exist_image = image::find()->where( [ 'image_id' => $values['guide_image_id'],'module_type'=>'guides' ] )->one();		
-				 		if(!empty($exist_image))
-				 		{
-				 		echo Html::img(Yii::getAlias('@web/uploads/vendor_images/').$exist_image['image_path'], ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo1'.$exist_image['image_path']]);
+				 		if (!empty($exist_image)) {
+				 			echo Html::img(Yii::getAlias('@web/uploads/vendor_images/').$exist_image['image_path'], ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo1'.$exist_image['image_path']]);
 				 		}
 					?>
 					</div>
 				</td>
 			</tr>
-		<?php  }  } } ?>
+		<?php  			}
+			}
+		} ?>
 		<!-- End Append selected option values -->
 
 <?php $t++; } ?>
@@ -66,8 +70,7 @@ $t=0;
 
 <?php $this->registerJs("
 	function viewQuestion(q_id,tis)
-	{	
-		
+	{
 		var question_id_append = q_id - 1; 
 		var path = '".Url::to(['/admin/vendoritem/renderanswer'])."';
 		

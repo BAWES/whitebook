@@ -11,9 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Blocked dates', 'url' => ['index']
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blockeddate-create">
-
     <?= $this->render('_form', [
         'model' => $model,'block'=>$block
     ]) ?>
-
 </div>
