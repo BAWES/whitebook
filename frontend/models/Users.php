@@ -246,10 +246,7 @@ class Users extends Model
                 '{{%vendor}}.trash'=> 'Default',
                 '{{%vendor}}.approve_status'=> 'Yes',
                 '{{%vendor_item}}.item_archived'=>'no'
-            ])  
-            ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
-            ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
-            ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0]);
+            ]);
 
         if ($avail_sale != '') {
             $item_query->andWhere(['{{vendor_item}}.item_for_sale' => 'no']);
@@ -315,10 +312,7 @@ class Users extends Model
                 '{{%vendor}}.trash'=> 'Default',
                 '{{%vendor}}.approve_status'=> 'Yes',
                 '{{%vendor_item}}.item_archived'=>'no'
-            ])  
-            ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
-            ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
-            ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0]);
+            ]);
 
         if ($avail_sale != '') {
             $item_query->andWhere(['{{vendor_item}}.item_for_sale' => 'no']);

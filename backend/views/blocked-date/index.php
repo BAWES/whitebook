@@ -37,17 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	       </div>
 	       </div>
         </div>
-  <!--div id="dp5" data-date="12-02-2013" data-date-format="dd-mm-yyyy"></div-->
   </div>
 
-<?php 
-
+<?php
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css");
-
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-
 $this->registerJs("
-
 var active_dates = ['5/1/2015', '10/1/2015'];
 var today = new Date();
 

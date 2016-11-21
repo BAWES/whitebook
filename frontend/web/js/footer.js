@@ -467,9 +467,11 @@ function logincheck()
         else
         {
             jQuery('#login_loader').hide();
+            jQuery('#login_button').html('Login');
+            jQuery('#login_button').removeAttr('disabled');
             //jQuery('#loginErrorMsg').addClass('alert-failure alert fade in');
-            jQuery('#login_msg').addClass('alert-success alert fade in');
-            jQuery('#login_msg').html(reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+            jQuery('#login_msg').addClass('alert-warning alert fade in');
+            jQuery('#login_msg').html("Enter Valid Email ID"+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
 
         }
     }
@@ -1291,7 +1293,7 @@ jQuery(".close").click(function () {
 });
 function all_form_reset(){
 
-    var loginForm = jQuery( "#loginForm" ).validate();
+    var loginForm = jQuery( "#loginForm" ).validate({errorLabelContainer: "#login_msg"});
     loginForm.resetForm();
     jQuery(':input','#loginForm')
     .not(':button, :submit, :reset, :hidden')
