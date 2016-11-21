@@ -2,9 +2,10 @@
 
 namespace frontend\controllers;
 
-
 use Yii;
-use common\models\VendorItemThemes;
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
+use yii\data\ArrayDataProvider;
 use frontend\models\Vendor;
 use frontend\models\Category;
 use frontend\models\Themes;
@@ -12,8 +13,7 @@ use frontend\models\Website;
 use frontend\models\Users;
 use common\models\Smtp;
 use common\models\CategoryPath;
-use yii\helpers\ArrayHelper;
-use yii\data\ArrayDataProvider;
+use common\models\VendorItemThemes;
 
 class DirectoryController extends BaseController
 {
@@ -138,6 +138,10 @@ class DirectoryController extends BaseController
                 '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
             )
             ->leftJoin(
+                '{{%priority_item}}',
+                '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
+            )
+            ->leftJoin(
                 '{{%vendor_location}}',
                 '{{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id'
             )
@@ -181,12 +185,25 @@ class DirectoryController extends BaseController
             $item_query->andWhere($q);
         }
 
+        $expression = new Expression(
+            "CASE 
+                WHEN
+                    `whitebook_priority_item`.priority_level IS NULL 
+                    OR whitebook_priority_item.status = 'Inactive' 
+                    OR whitebook_priority_item.trash = 'Deleted' 
+                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW()) 
+                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW()) 
+                THEN 2 
+                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1 
+                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0 
+                ELSE 2 
+            END, {{%vendor_item}}.sort");
+
         $vendor_items = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy('{{%image}}.vendorimage_sort_order', SORT_ASC)
+            ->orderBy($expression)
             ->asArray()
             ->all();
-
 
         $provider = new ArrayDataProvider([
             'allModels' => $vendor_items,

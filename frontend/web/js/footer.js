@@ -286,12 +286,6 @@ jQuery(window).load(function () {
 
 });
 
-jQuery('.index_redirect').click(function()
-{
-    var a = jQuery(this).attr('data-hr');
-    window.location.href = a; //Will take you to Google.
-});
-
 jQuery('.accor-link').click(function()
 {
     (jQuery(this).hasClass('accor-link-min'))?jQuery(this).removeClass('accor-link-min'):jQuery(this).addClass('accor-link-min');
@@ -392,6 +386,8 @@ function logincheck()
     if(jQuery('#loginForm').valid())
     {
         jQuery('#login_loader').show();
+        jQuery('#login_button').html('Please Wait...');
+        jQuery('#login_button').attr('disabled',true);
         var email=jQuery('#email').val();
         var password=jQuery('#password').val();
         var _csrf=jQuery('#_csrf').val();
@@ -414,32 +410,32 @@ function logincheck()
 
                     if(status==-1)
                     {
-                        jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-warning alert fade in');
-                        jQuery('#result').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        console.log(not_activate_msg);
+                        jQuery('#login_msg').addClass('alert-warning alert fade in');
+                        jQuery('#login_msg').html(not_activate_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                         jQuery('#login_forget').show();
                         jQuery('#loader').hide();
                     }
                     else if(status==-2)
                     {
-                        jQuery('#login_loader').hide();
-                        jQuery('#result').html(user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        console.log(user_blocked_msg);
+                        jQuery('#login_msg').addClass('alert-warning alert fade in');
+                        jQuery('#login_msg').html(user_blocked_msg+'<a id="boxclose" name="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-3)
                     {
-                        jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-warning alert fade in');
-                        jQuery('#result').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        console.log(email_not_exist);
+                        jQuery('#login_msg').addClass('alert-warning alert fade in');
+                        jQuery('#login_msg').html(email_not_exist+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==-4)
                     {
-                        jQuery('#login_loader').hide();
-                        jQuery('#result').addClass('alert-warning alert fade in');
-                        jQuery('#result').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+                        console.log(email_not_match);
+                        jQuery('#login_msg').addClass('alert-warning alert fade in');
+                        jQuery('#login_msg').html(email_not_match+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
                     }
                     else if(status==1)
                     {
-                        jQuery('#login_loader').hide();
                         jQuery('#myModal').modal('hide');
 
                         if(favourite_status>0){
@@ -457,6 +453,9 @@ function logincheck()
                             window.setTimeout(function(){location.reload()},1000)
                         }
                     }
+                    jQuery('#login_loader').hide();
+                    jQuery('#login_button').html('Login');
+                    jQuery('#login_button').removeAttr('disabled');
 
                 },
                 error:function(data)
@@ -468,9 +467,11 @@ function logincheck()
         else
         {
             jQuery('#login_loader').hide();
+            jQuery('#login_button').html('Login');
+            jQuery('#login_button').removeAttr('disabled');
             //jQuery('#loginErrorMsg').addClass('alert-failure alert fade in');
-            jQuery('#result').addClass('alert-success alert fade in');
-            jQuery('#result').html(reg_email+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
+            jQuery('#login_msg').addClass('alert-warning alert fade in');
+            jQuery('#login_msg').html("Enter Valid Email ID"+'<a id="boxclose" class="boxclose" onclick="MyFunction();"></a>').animate({ color: "red" }).show();
 
         }
     }
@@ -788,6 +789,7 @@ function show_register_modal()
 function show_login_modal(x)
 {
     jQuery.noConflict();
+    jQuery('.ma5-menu-active').removeClass('ma5-menu-active');
     jQuery('#register').modal('hide');
     jQuery('#forgotPwdModal').modal('hide');
     jQuery('#event_status').val(x);
@@ -1139,7 +1141,7 @@ function remove_from_favourite(x)
 }
 
 //add to favorites
-jQuery(".add_to_favourite").click(function(){
+jQuery(".add_to_favourite").click(function(e){
 
     jQuery('#loading_img_list').show();
     jQuery('#loading_img_list').html('<img id="loading-image" src="'+giflink+'" alt="Loading..." />');
@@ -1149,6 +1151,7 @@ jQuery(".add_to_favourite").click(function(){
     jQuery(jQueryelement).parent().toggleClass("faverited_icons");
 
     var _csrf=jQuery('#_csrf').val();
+
     jQuery.ajax({
         url: add_to_wishlist_url,
         type:"post",
@@ -1160,6 +1163,9 @@ jQuery(".add_to_favourite").click(function(){
             jQuery('#loading_img_list').hide();
         }
     });
+
+    e.preventDefault();
+    e.stopPropagation();
 });
 
 jQuery(".faver_evnt_product").click(function(){
@@ -1185,51 +1191,54 @@ jQuery(".faver_evnt_product").click(function(){
 });
 
 function add_to_event(x)
-    {
-        var item_name=jQuery('.desc_popup_cont h3').text();
-        var event_id=jQuery('#eventlist'+x).val();
-        var event_name=jQuery('#eventlist'+x+' option:selected').text();
+{
+    var event_id = jQuery('#eventlist'+x).val();
+    var event_name = jQuery('#eventlist'+x+' option:selected').text();
 
-        if(event_id!=''){
-            jQuery('#add_to_event_loader').show();
-            var _csrf=jQuery('#_csrf').val();
-            jQuery.ajax({
-                url:add_event_url,
-                type:"post",
-                data:{"event_name":event_name,"item_name":item_name,
-                "event_id":event_id,"item_id":x,"_csrf":_csrf},
-                async: false,
-                dataType:'JSON',
-                success:function(data)
+    if(event_id!=''){
+        jQuery('#add_to_event_loader').show();
+        var _csrf=jQuery('#_csrf').val();
+
+        jQuery.ajax({
+            url:add_event_url,
+            type:"post",
+            data: {
+                "event_name":event_name,
+                "event_id":event_id,
+                "item_id":x,
+                "_csrf":_csrf
+            },
+            async: false,
+            dataType:'JSON',
+            success:function(data)
+            {
+                if(data.status==1)
                 {
-                    if(data.status==1)
-                    {
-                        jQuery("#event-slider").load("<?= Url::toRoute('/product/event-slider'); ?>");
-                        jQuery('#add_to_event_loader').hide();
-                        jQuery('#add_to_event').modal('hide');
-                        jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+data.message+'</span>');
-                        window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
-                        //jQuery('#add_to_event_success'+x).html('Item Add to Your event list');
-                    }
-                    else if(data.status==-1)
-                    {
-                        jQuery('#add_to_event_loader').hide();
-                        jQuery('#add_to_event_success'+x).html(data.message);
-                    }
+                    jQuery("#event-slider").load("<?= Url::toRoute('/product/event-slider'); ?>");
+                    jQuery('#add_to_event_loader').hide();
+                    jQuery('#add_to_event').modal('hide');
+                    jQuery('#login_success').modal('show');
+                    jQuery('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+data.message+'</span>');
+                    window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 3000);
+                    //jQuery('#add_to_event_success'+x).html('Item Add to Your event list');
                 }
-            });
-        }
-        else
-        {
-            jQuery('#add_to_event_error'+x).html(kindly_select_event_type);
-        }
-
+                else if(data.status==-1)
+                {
+                    jQuery('#add_to_event_loader').hide();
+                    jQuery('#add_to_event_success'+x).html(data.message);
+                }
+            }
+        });
     }
+    else
+    {
+        jQuery('#add_to_event_error'+x).html(kindly_select_event_type);
+    }
+}
 
 function MyFunction()
 {
-    jQuery('#result').fadeOut('fast');
+    jQuery('#login_msg').fadeOut('fast');
 }
 
 function MyEventFunction()
@@ -1284,7 +1293,7 @@ jQuery(".close").click(function () {
 });
 function all_form_reset(){
 
-    var loginForm = jQuery( "#loginForm" ).validate();
+    var loginForm = jQuery( "#loginForm" ).validate({errorLabelContainer: "#login_msg"});
     loginForm.resetForm();
     jQuery(':input','#loginForm')
     .not(':button, :submit, :reset, :hidden')
@@ -1428,6 +1437,12 @@ function Searchinvitee(event_id)
         }
     });
 }
+
+$(document).delegate('.btn_add_to_event', 'click', function(e) {
+    addevent($(this).parents('.item').attr('data-id'));    
+    e.preventDefault();
+    e.stopPropagation();    
+});
 
 /* BEGIN ADD EVENT */
 function addevent(item_id)

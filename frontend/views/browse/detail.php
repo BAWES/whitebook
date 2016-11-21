@@ -9,12 +9,12 @@ use common\components\CFormatter;
 
 $item_name = LangFormat::format($model->item_name,$model->item_name_ar);
 $vendor_name = LangFormat::format($model->vendor->vendor_name,$model->vendor->vendor_name_ar);
-$item_description = LangFormat::format(strip_tags($model->item_description),strip_tags($model->item_description_ar));
-$item_additional_info = LangFormat::format(strip_tags($model->item_additional_info),strip_tags($model->item_additional_info_ar));
+$item_description = LangFormat::format($model->item_description, $model->item_description_ar);
+$item_additional_info = LangFormat::format($model->item_additional_info, $model->item_additional_info_ar);
+
 $vendor_contact_address = LangFormat::format($model->vendor->vendor_contact_address_ar,$model->vendor->vendor_contact_address);
 
 $this->title = 'Whitebook - ' . $item_name;
-//$this->params['breadcrumbs'][] = ['label' => ucfirst($category_name), 'url' => Url::to(["shop/products", 'slug' => ''])];
 $this->params['breadcrumbs'][] = ' '.$item_name;
 
 $session = $session = Yii::$app->session;
@@ -30,7 +30,34 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
         }
     }
 }
+
+if($model->images) {
+    $image = Yii::getAlias("@s3/vendor_item_images_530/"). $model->images[0]->image_path;
+}else{
+    $image = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=530x530&w=530&h=550';
+}
+
 ?>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": "<?= $item_name; ?>",
+  "image": "<?= $image ?>",
+  "description": "<?= addslashes(strip_tags($item_description)) ?>",
+   "offers": {
+    "@type": "Offer",
+    "priceCurrency": "KWD",
+    "price": "<?= $model['item_price_per_unit'] ?>",
+    "availability": "http://schema.org/InStock",
+    "seller": {
+      "name": "<?= $vendor_name; ?>"
+    }
+  }
+}
+</script>
+
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com <?=Yii::$app->controller->id;?>">
 

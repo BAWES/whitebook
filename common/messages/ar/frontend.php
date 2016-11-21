@@ -17,6 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Search Result for: {search} ({count})' => 'نتائج البحث عن: {search}. ({count})',
+    'Select event type' => 'حدد نوع الحدث',
+    'EVENTS' => 'أحداث',
+    'THINGS I LIKE' => 'أشياء تعجبني',
+    'Sub Total' => 'المجموع الفرعي',
     'Select time slot!' => 'اختر فتحة الوقت!',
     'Time slot not valid!' => 'فتحة الوقت غير صحيح!',
     'Select Delivery date!' => 'حدد تاريخ التسليم!',

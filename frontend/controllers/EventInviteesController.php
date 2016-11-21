@@ -3,13 +3,14 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\db\Expression;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use common\models\Events;
 use frontend\models\EventInvitees;
 use frontend\models\EventInviteesSearch;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use frontend\models\Users;
 use frontend\models\VendorItem;
-use common\models\Events;
 
 /**
  * EventInviteesController implements the CRUD actions for EventInvitees model.
@@ -182,8 +183,7 @@ class EventInviteesController extends BaseController
         $data = Yii::$app->request->post();
 
         $model = VendorItem::find()
-            ->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name',
-                '{{%image}}.image_path'])
+            ->select(['{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.item_name','{{%vendor}}.vendor_name', '{{%image}}.image_path'])
             ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
             ->andwhere(['{{%vendor_item}}.item_id' => $data['item_id']])

@@ -13,6 +13,7 @@ function removePhone(phone) {
 
 /* Begin Tabs NEXT & PREV buttons */
 $('.btnNext').click(function(){
+	console.log('profile page');
   $('.nav-tabs > .active').next('li').find('a').trigger('click');
 });
 

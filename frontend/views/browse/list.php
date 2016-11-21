@@ -118,7 +118,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     </div>
                     <!-- BEGIN Item lists -->
                     <div class="listing_right">
-                        <?=$this->render('@frontend/views/common/items', [
+                        <?= $this->render('@frontend/views/common/items', [
                             'items' => $provider, 
                             'customer_events_list' => $customer_events_list
                         ]); ?>

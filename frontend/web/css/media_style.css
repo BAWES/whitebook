@@ -281,6 +281,10 @@
 
 @media only screen and (max-width: 768px){
 
+	#register_form .right-side {
+	    padding-left: 0px;
+	}
+
 	/*checkout*/
 	.select_category_sec .btn-primary{ padding:13px 15px;}
 	.navbar-collapse.collapse{ float:left;}

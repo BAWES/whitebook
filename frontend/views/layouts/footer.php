@@ -183,127 +183,153 @@ use frontend\models\Users;
             <div class="modal-body">
                 <form class="form col-md-12 center-block" id="register_form">
                     <div class="login-padding">
-                        <div class="col-md-6 col-sm-6 col-xs-12 padding-right0">
-                            <div class="form-group">
-                                <label><?= Yii::t('frontend', 'First Name') ?></label>
-                                <input type="text" placeholder="" name="fname" id="fname" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                <input type="hidden" id="_csrf1" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
-                                <span class="customer_fname errors"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 padding-left0">
-                            <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Last Name') ?></label>
-                                <input type="text" placeholder="" name="lname" id="lname" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                <span class="customer_lname errors"></span>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="col-md-6 col-sm-6 col-xs-12 padding-right0">
-                            <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Email') ?></label>
-                                <input type="text" placeholder="" name="reg_email" id="reg_email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                <span class="customer_email errors"></span>
-                                <div id="customer_email" class="error"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 padding-left0">
-                            <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Date of birth') ?></label>
-                                <div class="col-md-12 padding0 birth_date_drop">
-                                    <ul class="padding0">
-                                        <li class="day-select">
-                                            <select name="bday" id="bday" class="selectpicker" data-style="btn-primary" style=" display: none;">
-                                                <option value=""><?= Yii::t('frontend', 'Day') ?></option>
-                                                <?php for($i=1;$i<=31;$i++)
-                                                { ?>
-                                                    <option value="<?php echo $i; ?>" <?php if(isset($model['bday']) && $model['bday']==$i) { echo "selected=selected"; } ?>><?php echo $i; ?></option>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </li>
-                                        <li class="month-select">
-
-                                            <select name="bmonth"  id="bmonth" class="selectpicker" data-style="btn-primary" style="display: none;">
-                                                <option value=""><?= Yii::t('frontend', 'Month') ?></option>
-                                                <option value="1" ><?= Yii::t('frontend', 'Jan') ?></option>
-                                                <option value="2" ><?= Yii::t('frontend', 'Feb') ?></option>
-                                                <option value="3" ><?= Yii::t('frontend', 'Mar') ?></option>
-                                                <option value="4" ><?= Yii::t('frontend', 'Apr') ?></option>
-                                                <option value="5" ><?= Yii::t('frontend', 'May') ?></option>
-                                                <option value="6" ><?= Yii::t('frontend', 'Jun') ?></option>
-                                                <option value="7" ><?= Yii::t('frontend', 'Jul') ?></option>
-                                                <option value="8" ><?= Yii::t('frontend', 'Aug') ?></option>
-                                                <option value="9" ><?= Yii::t('frontend', 'Sep') ?></option>
-                                                <option value="10"><?= Yii::t('frontend', 'Oct') ?></option>
-                                                <option value="11"><?= Yii::t('frontend', 'Nov') ?></option>
-                                                <option value="12"><?= Yii::t('frontend', 'Dec') ?></option>
-                                            </select>
-                                        </li>
-                                        <li class="year-select">
-                                            <select class="selectpicker" id="byear" name="byear" data-style="btn-primary" style="display: none;">
-                                                <option value=''><?= Yii::t('frontend', 'Year') ?></option>
-                                                <?php
-                                                $current= date('Y');
-                                                $current= $current-5;
-                                                for($i=$current; $i>1950; $i--) {
-                                                    $sel='';
-                                                    print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
-                                                }
-                                                ?>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                    <div id="dob_er" class="error"></div>
+                        <div class="clearfix">
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'First Name') ?></label>
+                                        <input type="text" placeholder="" name="fname" id="fname" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                        <input type="hidden" id="_csrf1" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
+                                        <span class="customer_fname errors"></span>
+                                    </div>
                                 </div>
+
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 padding-right0">
-                            <div class="form-group reg_gender">
-                                <label><?= Yii::t('frontend', 'Gender') ?></label>
-                                <div class="col-md-12 padding0 gender-select">
-                                    <select class="selectpicker" data-style="btn-primary" id="gender" name="gender" style="display: none;">
-                                        <option value=""><?= Yii::t('frontend', 'Select Gender') ?></option>
-                                        <option value="Male"><?= Yii::t('frontend', 'Male') ?></option>
-                                        <option value="Female"><?= Yii::t('frontend', 'Female') ?></option>
-                                    </select>
-                                </div>
-                                <div class="clearfix">
-                                    <span class="customer_status errors"></span>
-                                    <div id="gen_er" class="error"></div>
+
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'Last Name') ?></label>
+                                        <input type="text" placeholder="" name="lname" id="lname" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                        <span class="customer_lname errors"></span>
+                                    </div>
                                 </div>
                             </div>
 
+                            <div class="clearfix"></div>
 
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 padding-left0">
-                            <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Mobile Number') ?></label>
-                                <input type="text" placeholder="" name="phone" id="phone" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                <span class="customer_mobile errors"></span>
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'Email') ?></label>
+                                        <input type="text" placeholder="" name="reg_email" id="reg_email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                        <span class="customer_email errors"></span>
+                                        <div id="customer_email" class="error"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 padding-right0">
-                            <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Password') ?></label>
-                                <input type="password" placeholder="" name="userpassword" id="userpassword" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                <span class="customer_password password errors"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 padding-left0">
-                            <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Confirm Password') ?></label>
-                                <input type="password" placeholder="" name="conpassword" id="conpassword" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                <span class="customer_conpassword password errors"></span>
 
-                                <div id="con_pass"  class="error"></div>
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0 margin-bottom-11">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'Date of birth') ?></label>
+                                        <div class="col-md-12 padding0 birth_date_drop">
+                                            <ul class="padding0">
+                                                <li class="day-select">
+                                                    <select name="bday" id="bday" class="selectpicker" data-style="btn-primary" style=" display: none;">
+                                                        <option value=""><?= Yii::t('frontend', 'Day') ?></option>
+                                                        <?php for($i=1;$i<=31;$i++)
+                                                        { ?>
+                                                            <option value="<?php echo $i; ?>" <?php if(isset($model['bday']) && $model['bday']==$i) { echo "selected=selected"; } ?>><?php echo $i; ?></option>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </li>
+                                                <li class="month-select">
+
+                                                    <select name="bmonth"  id="bmonth" class="selectpicker" data-style="btn-primary" style="display: none;">
+                                                        <option value=""><?= Yii::t('frontend', 'Month') ?></option>
+                                                        <option value="1" ><?= Yii::t('frontend', 'Jan') ?></option>
+                                                        <option value="2" ><?= Yii::t('frontend', 'Feb') ?></option>
+                                                        <option value="3" ><?= Yii::t('frontend', 'Mar') ?></option>
+                                                        <option value="4" ><?= Yii::t('frontend', 'Apr') ?></option>
+                                                        <option value="5" ><?= Yii::t('frontend', 'May') ?></option>
+                                                        <option value="6" ><?= Yii::t('frontend', 'Jun') ?></option>
+                                                        <option value="7" ><?= Yii::t('frontend', 'Jul') ?></option>
+                                                        <option value="8" ><?= Yii::t('frontend', 'Aug') ?></option>
+                                                        <option value="9" ><?= Yii::t('frontend', 'Sep') ?></option>
+                                                        <option value="10"><?= Yii::t('frontend', 'Oct') ?></option>
+                                                        <option value="11"><?= Yii::t('frontend', 'Nov') ?></option>
+                                                        <option value="12"><?= Yii::t('frontend', 'Dec') ?></option>
+                                                    </select>
+                                                </li>
+                                                <li class="year-select">
+                                                    <select class="selectpicker" id="byear" name="byear" data-style="btn-primary" style="display: none;">
+                                                        <option value=''><?= Yii::t('frontend', 'Year') ?></option>
+                                                        <?php
+                                                        $current= date('Y');
+                                                        $current= $current-5;
+                                                        for($i=$current; $i>1950; $i--) {
+                                                            $sel='';
+                                                            print('<option value="'.$i.'" '.$sel.' >'.$i.'</option>'."\n");
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </li>
+                                            </ul>
+                                            <div id="dob_er" class="error"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group reg_gender">
+                                        <label><?= Yii::t('frontend', 'Gender') ?></label>
+                                        <div class="col-md-12 padding0 gender-select">
+                                            <select class="selectpicker" data-style="btn-primary" id="gender" name="gender" style="display: none;">
+                                                <option value=""><?= Yii::t('frontend', 'Select Gender') ?></option>
+                                                <option value="Male"><?= Yii::t('frontend', 'Male') ?></option>
+                                                <option value="Female"><?= Yii::t('frontend', 'Female') ?></option>
+                                            </select>
+                                        </div>
+                                        <div class="clearfix">
+                                            <span class="customer_status errors"></span>
+                                            <div id="gen_er" class="error"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
+                                 <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'Mobile Number') ?></label>
+                                        <input type="text" placeholder="" name="phone" id="phone" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                        <span class="customer_mobile errors"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'Password') ?></label>
+                                        <input type="password" placeholder="" name="userpassword" id="userpassword" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                        <span class="customer_password password errors"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
+                                <div class="col-md-12 col-sm-12 col-xs-12 padding-left-0 padding-right-0">
+                                    <div class="form-group">
+                                        <label><?= Yii::t('frontend', 'Confirm Password') ?></label>
+                                        <input type="password" placeholder="" name="conpassword" id="conpassword" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                        <span class="customer_conpassword password errors"></span>
+
+                                        <div id="con_pass"  class="error"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="clearfix"></div>
+<!--                        <div class="clearfix"></div>-->
                         <div class="form-group">
                            <div class="i-agree text-center col-xs-12">
                             <label for="checkbox-50" class="label_check c_off" id="label_check1">
@@ -452,6 +478,10 @@ $this->registerCss("
  #register_loader{display:none;text-align:center;margin-bottom: 10px}
  #loader1{display:none;text-align:center;margin-bottom: 10px;}
  .color-white{color:white;}
+ #myModal1 li.year-select {
+    width: 90px;
+}
+.margin-bottom-11{margin-bottom:11px;}
 ");
 
 require(__DIR__ . '/footer_js.php');

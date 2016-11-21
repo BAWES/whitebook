@@ -3,7 +3,9 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\db\Expression;
 use yii\web\Controller;
+use common\models\Events;
 use frontend\models\CategoryModel;
 
 /**

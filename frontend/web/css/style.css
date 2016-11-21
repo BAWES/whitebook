@@ -295,7 +295,7 @@ textarea .form-group{ min-height: 126px;}
 .padding-left0{ padding-right: 0px;}
 .padding-right0{ padding-left: 0px;}
 .nav-tabs > li{ border: none;}
-.events_listing_inner{ margin: 0 auto; width: 1083px;}
+.events_listing_inner{ margin: 0 auto;}
 .events_listing{ display: inline-block; width: 100%;}
 .events_listing ul{ padding: 0px; margin: 0px;}
 .events_descrip a:focus{text-decoration:none;}
@@ -1802,4 +1802,27 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .right_descr_product #accordion .glyphicon-menu-down,
 .right_descr_product #accordion .glyphicon-menu-right {
     float: right;
+}
+
+.fetu_product_list i.fa-circle {
+    position: absolute;
+    bottom: 1px;
+    left: 4px;
+    font-size: 39px!important;
+    color: #000;
+}
+.fetu_product_list .buy-text {
+    position: absolute;
+    left: 9px;
+    bottom: 11px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+}
+.fetu_product_list a.index_redirect{
+    position: relative;
+}
+.fetu_product_list .hover_events a{
+    z-index: 1;
+    position: relative;
 }

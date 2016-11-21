@@ -116,7 +116,7 @@ function cmp($a, $b)
 			<?= $form->field($model, 'item_description')
 					->label('Item description'.Html::tag('span', '*',['class'=>'required']))
 					->textarea(['maxlength' => 128]); ?>
-
+	
 			<?= $form->field($model, 'item_description_ar')
 					->label('Item description - Arabic '.Html::tag('span', '*',['class'=>'required']))
 					->textarea(['maxlength' => 128]); ?>
@@ -204,49 +204,6 @@ function cmp($a, $b)
 						['maxlength' => 128]
 					); ?>
 
-            	<?php if ($model->item_for_sale == 'No') { ?>
-            	<div class="form-group guide_image" >
-                <?php } else { ?>
-                <div class="form-group guide_image" style="display: none;">
-                    <?php } ?>
-
-                    <?php
-                    $initialPreview = [];
-                    $initialPreviewConfig = [];
-                    if(!empty($guideImages)) {
-
-                        $i=0;
-                        foreach ($guideImages as $value) {
-                            $key = $value->image_id;
-                            $initialPreview[] = Html::img(Yii::getAlias('@sales_guide_images/').$value->image_path, [ 'style'=>'width:143px;height:160px;','alt'=>'', 'data-key'=>$value->image_id,'title'=>'']);
-                            $url = Url::to(["/vendor-item/deleteserviceguideimage", "id" => $key]);
-                            $initialPreviewConfig[] = ["width" => "120px", 'url' => $url, 'key' => $key];
-                            $i++;
-                        }
-                    }
-
-                    // Usage with ActiveForm and model
-                    echo $form->field($model, 'guide_image[]',['template' => "{label}<div class='controls append_address'>{input}</div> {hint} {error}"])->widget(FileInput::classname(), [
-                        'options' => [
-                            'accept' => 'image/*',
-                            'multiple' => true,
-
-                        ],
-                        'pluginOptions'=>[
-                            'browseClass' => 'btn btn-primary btn-block',
-                            'browseIcon' => ' ',
-                            'browseLabel' => 'Select Photo',
-                            'showUpload'=>false,
-							'showRemove'=>false,
-                            'overwriteInitial'=> false,
-                            'initialPreview' => $initialPreview,
-                            'initialPreviewConfig' => $initialPreviewConfig,
-                            //'uploadUrl' => '/dummy/dummy',
-                        ]
-                    ]);
-                    ?>
-                </div>
-			<!-- END display exist images -->
 			<div class="col-lg-4">
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
 			</div>
@@ -475,7 +432,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.5", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.6", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

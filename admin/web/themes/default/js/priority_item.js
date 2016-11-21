@@ -3,88 +3,17 @@ $('#blocked_error').hide();
 
 var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
 
-$(function (){
-    $('#priorityitem-category_id').change(function (){
-        var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-        var id = $('#priorityitem-category_id').val();
-        var path = $('#load_sub_category_url').val(); 
-
-        $('.loadingmessage').show();
-
-        $.ajax({
-            type: 'POST',
-            url: path, //url to be called
-            data: { id: id ,_csrf : csrfToken}, //data to be send
-            success: function( data ) {
-                $('.loadingmessage').hide();
-                 $('#priorityitem-subcategory_id').html(data);
-            }
-        });
+if(!is_new_record) {
+    $('input#priorityitem-priority_start_date').datepicker({
+        format: 'dd-mm-yyyy',
+        autoclose: true,
     });
-});
 
-
-$(function (){
-    $("#priorityitem-category_id").change(function (){
-        var id = $('#priorityitem-category_id').val();
-        var path = $('#load_sub_category_url').val(); 
-        
-        $('.loadingmessage').show();
-        
-        $.ajax({
-            type: 'POST',
-            url: path, //url to be called
-            data: { id: id ,_csrf : csrfToken}, //data to be send
-            success: function( data ) {
-                $('.loadingmessage').hide();
-                $('#priorityitem-subcategory_id').html(data);
-            }
-        });
+    $('input#priorityitem-priority_end_date').datepicker({
+        format: 'dd-mm-yyyy',
+        autoclose: true
     });
-});
-
-//* Load Child Category *//
-$(function (){
-    $("#priorityitem-subcategory_id").change(function (){
-        var id = $('#priorityitem-subcategory_id').val();
-        var path = $('#load_child_category_url').val(); 
-        
-        $('.loadingmessage').show();
-        
-        $.ajax({
-            type: 'POST',
-            url: path, //url to be called
-            data: { id: id ,_csrf : csrfToken}, //data to be send
-            success: function( data ) {
-                $('.loadingmessage').hide();
-                $('#priorityitem-child_category').html(data);
-            }
-        });
-    });
-});
-
-$(function (){
-    $("#priorityitem-child_category").change(function (){
-        var csrfToken = $('meta[name="csrf-token"]').attr("content");
-        var id2 = $('#priorityitem-category_id').val();
-        var id3 = $('#priorityitem-subcategory_id').val();
-        var id4 = $('#priorityitem-child_category').val();
-        
-        $('.loadingmessage').show();
-        
-        var path = $('#load_item_url').val();
-        
-        $.ajax({
-            type: 'POST',
-            url: path, //url to be called
-            data: { id2: id2 ,id3: id3 ,id4: id4 ,_csrf : csrfToken}, //data to be send
-            success: function( data ) {
-                $('.loadingmessage').hide();
-                $('#priorityitem-item_id').html(data);
-            }
-        })
-    });
-});
+}
 
 $(function (){
     $("#priorityitem-item_id").on("change",function (){
@@ -180,6 +109,7 @@ $( "#priorityitem-priority_end_date" ).click(function() {
         url: path, //url to be called
         data: { item: item ,priority_id : priority_id, _csrf : csrfToken}, //data to be send
         success: function( data ) {
+
             $('.loadingmessage').hide();
             $('.field-priorityitem-priority_end_date').find('input').remove();
             $('.field-priorityitem-priority_end_date').find('label').after(data.input2);
@@ -202,25 +132,23 @@ $( "#priorityitem-priority_end_date" ).click(function() {
 
 $(function(){
 
-if(is_new_record) {
+    if(is_new_record) {
 
-    var item = $("#priorityitem-item_id").val();
-    var path = $('#load_date_time_url').val();
- 
-    $.ajax({
-        type: 'POST',
-        dataType:"json",
-        url: path, //url to be called
-        data: { item: item, priority_id: priority_id, _csrf : csrfToken}, //data to be send
-        success: function( data ) {
+        var item = $("#priorityitem-item_id").val();
+        var path = $('#load_date_time_url').val();
+     
+        $.ajax({
+            type: 'POST',
+            dataType:"json",
+            url: path, //url to be called
+            data: { item: item, priority_id: priority_id, _csrf : csrfToken}, //data to be send
+            success: function( data ) {
                 $('.loadingmessage').hide();
                 $('#blocked_dates').attr('value',data.date1);
             }
-
-        })
-    });
-}
-
+        });
+    }
+});
 
 $("#submit1").click(function () {
     if($("#priorityitem-item_id").val()=='')
@@ -275,6 +203,8 @@ $("#submit1").click(function () {
                 $('.loadingmessage').hide();
                 $('form#formId').submit();
             }
+
+            $('.loadingmessage').hide();
         }
     });
 });

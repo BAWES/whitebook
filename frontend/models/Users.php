@@ -246,10 +246,7 @@ class Users extends Model
                 '{{%vendor}}.trash'=> 'Default',
                 '{{%vendor}}.approve_status'=> 'Yes',
                 '{{%vendor_item}}.item_archived'=>'no'
-            ])  
-            ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
-            ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
-            ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0]);
+            ]);
 
         if ($avail_sale != '') {
             $item_query->andWhere(['{{vendor_item}}.item_for_sale' => 'no']);
@@ -315,10 +312,7 @@ class Users extends Model
                 '{{%vendor}}.trash'=> 'Default',
                 '{{%vendor}}.approve_status'=> 'Yes',
                 '{{%vendor_item}}.item_archived'=>'no'
-            ])  
-            ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
-            ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
-            ->andWhere(['>','{{%vendor_item}}.item_amount_in_stock',0]);
+            ]);
 
         if ($avail_sale != '') {
             $item_query->andWhere(['{{vendor_item}}.item_for_sale' => 'no']);
@@ -351,6 +345,7 @@ class Users extends Model
         }
 
         return $item_query
+            ->groupBy('item_id')
             ->asArray()
             ->all();
     }
@@ -361,9 +356,11 @@ class Users extends Model
         
         $data = Wishlist::find()
             ->select(['{{%vendor}}.vendor_name',
+                    '{{%vendor}}.vendor_name_ar',
                     '{{%vendor_item}}.slug',
                     '{{%vendor_item}}.item_id',
                     '{{%vendor_item}}.item_name',
+                    '{{%vendor_item}}.item_name_ar',
                     '{{%vendor_item}}.item_price_per_unit'])
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')

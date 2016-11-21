@@ -16,41 +16,46 @@ $this->title ='Account Setting | Whitebook';
 		</div>
 
 		<div class="account_setings_sections">
-			<div class="col-md-2 hidde_res"></div>
-			<div class="col-md-8">
+			<?=$this->render('_sidebar_menu');?>
+			<div class="col-md-9 border-left">
 				<div class="accont_informations">
 					<div class="accont_info">
-						<div class="account_title">
-							<div id="acc_status"></div>
-							<h4><?= Yii::t('frontend','Account Info'); ?></h4>
-						</div>
 						<div class="account_form">
 						
 							<?php $form = ActiveForm::begin(); ?>
+							<div class="clearfix">
+								<div class="left-side col-lg-6 padding-right-0">
+									<div class="col-md-12 paddingleft0">
+										<?= $form->field($model, 'customer_name') ?>
+									</div>
 
-								<div class="col-md-6 paddingleft0">
-									<?= $form->field($model, 'customer_name') ?>
-								</div>
+									<div class="col-md-12 paddingleft0">
+										<?= $form->field($model, 'customer_email') ?>
+									</div>
 
-								<div class="col-md-6 paddingright0">
-									<?= $form->field($model, 'customer_last_name') ?>
-								</div>
+									<div class="col-md-12 paddingleft0">
+										<?= $form->field($model, 'customer_dateofbirth') ?>
+									</div>
 
-								<div class="col-md-6 paddingleft0">
-									<?= $form->field($model, 'customer_email') ?>
 								</div>
+								<div class="right-side col-lg-6 padding-left-0">
+									<div class="col-md-12 paddingright0">
+										<?= $form->field($model, 'customer_last_name') ?>
+									</div>
 
-								<div class="col-md-6 paddingright0">
-									<?= $form->field($model, 'customer_gender') ?>
-								</div>
 
-								<div class="col-md-6 paddingleft0">
-									<?= $form->field($model, 'customer_dateofbirth') ?>
-								</div>
+									<div class="col-md-12 paddingright0 position-relative">
+										<?=$form->field($model, 'customer_gender')
+											->dropDownList(['Male' => 'Male', 'Female' =>'Female']);   ?>
+										<i class="position-absolute fa fa-sort" aria-hidden="true"></i>
+									</div>
 
-								<div class="col-md-6 paddingright0">
-									<?= $form->field($model, 'customer_mobile') ?>
+
+									<div class="col-md-12 paddingright0">
+										<?= $form->field($model, 'customer_mobile') ?>
+									</div>
 								</div>
+							</div>
 
 								<div class="submitt_buttons">
 									<button class="btn btn-default" title="Save Changes" id="saved">
@@ -86,6 +91,13 @@ $this->registerJs("
 $this->registerCss("
 	#acc_status{color:green;margin-bottom: 10px;}
 	#login_loader{text-align:center;margin-bottom: 10px;}
+	.padding-right-0{padding-right:0px! important;}
+	.padding-left-0{padding-left:0px! important;}
+	.position-absolute.fa-sort{position: absolute;right: 17px;top: 41px;}
+#inner_pages_sections .container{background:#fff; margin-top:12px;}
+.border-left{border-left: 1px solid #e2e2e2;}
 ");
+
+
 
 

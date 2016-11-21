@@ -139,7 +139,7 @@ use common\models\VendorItemPricing;
 </form>
 
 <div class="row">
-    <div class="col-sm-4 col-sm-offset-8">
+    <div class="col-sm-4 pull-right">
       <table class="table table-bordered">
         <tbody>
         <tr>

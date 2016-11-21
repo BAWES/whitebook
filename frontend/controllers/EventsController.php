@@ -144,10 +144,20 @@ class EventsController extends BaseController
             ->asArray()
             ->all();
 
+        $provider = new \yii\data\ArrayDataProvider([
+            'allModels' => $customer_events,
+            'sort' => [
+                //'attributes' => ['city_name', 'address_type_id', 'location'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         return $this->render('index', [
             'event_type' => $event_type,
             'customer_event_type' => $customer_event_type,
-            'customer_events' => $customer_events,
+            'provider' => $provider,
             'customer_wishlist' => $customer_wishlist,
             'customer_wishlist_count' => $customer_wishlist_count,
             'vendor' => $vendor,
@@ -254,9 +264,11 @@ class EventsController extends BaseController
 
     public function actionDeleteInvitee($id)
     {
-        EventInvitees::findOne($id)->delete();
+        $event = EventInvitees::findOne($id);
+        $slug = $event->event->slug;
+        $event->delete();
         Yii::$app->session->setFlash('success','Invitee Deleted Successfully');
-        return $this->redirect(['events/detail','slug'=>$_REQUEST['slug']]);
+        return $this->redirect(['events/detail','slug'=> $event->event->slug]);
     }
 
     public function actionInviteeDetails()
@@ -351,7 +363,14 @@ class EventsController extends BaseController
                 $event_id = $request->post('event_id');
                 $item_id = $request->post('item_id');
 
-                $item_name = Html::encode($request->post('item_name'));
+                $item = VendorItem::findOne($item_id);
+
+                if(Yii::$app->language == 'en') {
+                    $item_name = $item->item_name;
+                }else{
+                    $item_name = $item->item_name_ar;
+                }
+
                 $event_name = Html::encode($request->post('event_name'));
 
                 $customer_id = Yii::$app->user->identity->customer_id;
@@ -465,4 +484,11 @@ class EventsController extends BaseController
             }
         }
     }
+    public function actionDeleteEvent($id)
+    {
+        Events::deleteAll('event_id='.$id);
+        Yii::$app->session->setFlash('success','Events Deleted Successfully');
+        $this->redirect(['events/index']);
+    }
+
 }

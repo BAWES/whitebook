@@ -19,7 +19,33 @@ $vendor_contact_address = LangFormat::format($vendor_det['vendor_contact_address
 $this->title = 'Whitebook - ' . $item_name;
 
 $this->params['breadcrumbs'][] = $item_name;
+
+if($model->images) {
+    $image = Yii::getAlias("@s3/vendor_item_images_530/"). $model->images[0]->image_path;
+}else{
+    $image = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=530x530&w=530&h=550';
+}
+
 ?>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": "<?= $item_name; ?>",
+  "image": "<?= $image ?>",
+  "description": "<?= $item_description ?>",
+   "offers": {
+    "@type": "Offer",
+    "priceCurrency": "KWD",
+    "price": "<?= $model['item_price_per_unit'] ?>",
+    "availability": "http://schema.org/InStock",
+    "seller": {
+      "name": "<?= $vendor_name; ?>"
+    }
+  }
+}
+</script>
 
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com">

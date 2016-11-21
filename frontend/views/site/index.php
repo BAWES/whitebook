@@ -9,13 +9,13 @@ use common\models\VendorItem;
 use common\models\Vendor;
 use common\models\Themes;
 use common\models\Image;
-use frontend\models\Website;
 use common\components\CFormatter;
+use frontend\models\Website;
+use frontend\models\Wishlist;
 
 $this->title = 'The White Book | Ideas for your event in Kuwait!';
 
 $model = new Website();
-
 ?>
 <!-- content main start -->
 
@@ -36,7 +36,7 @@ $model = new Website();
         curl_close($ch);
     ?>
 
-<?=$this->render('_search');?>
+    <?= $this->render('_search'); ?>
 </div>
 
 <!-- Content start -->
@@ -111,12 +111,26 @@ $model = new Website();
 <!-- BEGIN FEATURE GROUP ITEM-->
 <?php
 
+if (Yii::$app->user->isGuest) {
+   
+    $wishlist_ids = array();
+
+} else {
+    
+    $wishlist = Wishlist::find()
+                    ->where(['customer_id' => Yii::$app->user->getId()])
+                    ->all();
+
+    $wishlist_ids = \yii\helpers\ArrayHelper::getColumn($wishlist, 'item_id');
+}
+
 $featured_produc = FeatureGroup::find()
     ->select(['group_id', 'group_name_ar', 'group_name'])
     ->where(['group_status' => 'Active', 'trash' => 'Default'])
     ->asArray()->all();
 
 $i = 1;
+
 foreach ($featured_produc as $key => $value) {
 
  $feature_group_sql_result = FeatureGroupItem::find()->select([
@@ -154,7 +168,7 @@ if (!empty($feature_group_sql_result)) {
         <div class="slider_new_up">
             <div class="flexslider3">
                 <div id="demo">
-                    <div class="owl-carousel twb-slider" id="feature-group-slider" >
+                    <div class="owl-carousel twb-slider events_listing" id="feature-group-slider" >
                         <?php
 
                         $i = 0;
@@ -174,28 +188,58 @@ if (!empty($feature_group_sql_result)) {
                                 $imglink = Yii::getAlias("@web/images/no_image.jpg");
                             }
 
-                                $item_url = Url::to(['browse/detail',
-                                    'slug' => $product_val["slug"]
-                                ]);
+                            $item_url = Url::to(['browse/detail',
+                                'slug' => $product_val["slug"]
+                            ]);
+
 
                             ?>
-                            <div class="item">
-                                <div class="fetu_product_list index_redirect" data-hr='<?= $item_url ?>'>
+                            <div class="item" data-id="<?= $product_val['item_id'] ?>">
+                                <div class="events_items fetu_product_list index_redirect" data-hr='<?= $item_url ?>'>
 
-                                    <a href="<?= $item_url ?>" class='index_redirect' data-hr='<?= $item_url; ?>'>
+                                <div class="hover_events">    
+                                    <div class="pluse_cont">
+                                        <?php if(Yii::$app->user->isGuest) { ?>
+                                            <a role="button" class="" data-toggle="modal"  onclick="show_login_modal(<?php echo $product_val['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+                                        <?php } else { ?>
+                                            <a href="#" role="button" id="<?php echo $product_val['item_id'];?>" name="<?php echo $product_val['item_id'];?>" class="btn_add_to_event" data-toggle="modal" data-target="#add_to_event" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+                                        <?php } ?>
+                                    </div>
 
-                                        <?= Html::img($imglink); ?>
-
-                                        <div class="deals_listing_cont">
-                                            <?=\common\components\LangFormat::format($product_val['vendor_name'],$product_val['vendor_name_ar']); ?>
-                                            <?=\common\components\LangFormat::format($product_val['item_name'],$product_val['item_name_ar']); ?>
-                                            <p>
-                                                <?= CFormatter::format($product_val['item_price_per_unit']) ?>
-                                            </p>
+                                    <?php if(Yii::$app->user->isGuest) { ?>
+                                        <div class="faver_icons">
+                                            <a role="button" class="" data-toggle="modal" id="<?php echo $product_val['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $product_val['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
                                         </div>
-                                    </a>
+                                    <?php } else { ?>
+                                        <div class="faver_icons <?= in_array($product_val['item_id'], $wishlist_ids) ? 'faverited_icons' : '' ?>">
+                                            <a role="button" id="<?php echo $product_val['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+                                        </div>
+                                    <?php } ?>
                                 </div>
-                            </div>
+
+                                <a href="<?= $item_url ?>" class='index_redirect' data-hr='<?= $item_url; ?>'>
+
+                                    <?= Html::img($imglink); ?>
+
+                                    <?php if($product_val['item_for_sale'] == 'Yes') { ?>
+                                        <i class="fa fa-circle" aria-hidden="true"></i>
+                                        <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
+                                        <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
+                                    <?php } ?>
+                                </a>
+                                
+                                <a href="<?= $item_url ?>">
+                                    <div class="deals_listing_cont">
+                                        <?=\common\components\LangFormat::format($product_val['vendor_name'],$product_val['vendor_name_ar']); ?>
+                                        <?=\common\components\LangFormat::format($product_val['item_name'],$product_val['item_name_ar']); ?>
+                                        <p>
+                                            <?= CFormatter::format($product_val['item_price_per_unit']) ?>
+                                        </p>
+                                    </div>
+                                </a>
+
+                                </div>
+                            </div><!-- END .item -->
                         <?php $i++;
                         } ?>
                     </div>
@@ -209,6 +253,9 @@ if (!empty($feature_group_sql_result)) {
 
 <!-- END FEATURE PRODUCT DESKTOP  -->
 <!-- BEGIN FEATURE PRODUCT RESPONSIVE -->
+
+<br />
+<br />
 
 </div>
 </section>
@@ -298,13 +345,13 @@ $this->registerCss("
 .fetu_product_list .index_redirect img {width: 100%;height: 219px;}
 .color-white{color:#fff;}
 .left-offset-25{float: left;width: 15%;}
-.left-div{width:100%;position:absolute;bottom: 1px;padding:13px;    z-index: 999;}
+.left-div{width:100%;position:absolute;bottom: 1px;padding:13px;z-index: 99;}
 .date-div{padding-right: 0px; margin-bottom: 13px;}
 .black-overlay{width:100%;background-color: #000;position:absolute;bottom: 1px;padding: 42px;opacity: 0.69}
 .location-div{padding-right: 0px; margin-bottom: 13px;}
 #delivery_date{height: 45px;color: #000! important;}
 .btn-submit{padding: 12px;}
-#top_header {z-index: 9999;}
+#top_header {z-index: 999;}
 .bootstrap-select .dropdown-toggle {padding: 12px 12px;}
 .datepicker{border: 2px solid rgb(242, 242, 242);}
 .datepicker table {font-size: 12px;}

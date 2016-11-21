@@ -33,8 +33,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			['class' => 'yii\grid\SerialColumn'],
 			[
 				'attribute'=>'item_name',
-				'value'=>function($data){
-					 return (strlen($data->item_name)>30) ? substr($data->item_name,0,30).'...' : $data->item_name;
+				'value' => function($data) {
+
+					if($data->draftItem) {
+					 	$item_name = $data->draftItem->item_name;
+					}else{
+						$item_name = $data->item_name;
+					}
+
+					return (strlen($item_name)>30) ? substr($item_name, 0, 30).'...' : $item_name;
 				},
 			],
 			[
@@ -43,7 +50,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				'headerOptions' => ['class' => 'text-center'],
 				'label'=>'Item Type',
 				'value'=>function($data){
-					return $data->getItemType($data->type_id);
+					if($data->draftItem) {
+						return $data->getItemType($data->draftItem->type_id);
+					} else {
+						return $data->getItemType($data->type_id);
+					}
 				},
 				'filter' => Html::activeDropDownList($searchModel, 'type_id', ArrayHelper::map(common\models\ItemType::find()->where(['!=','trash','Deleted'])->asArray()->all(), 'type_id','type_name'),['class'=>'form-control','prompt' => 'All']),
 			],
@@ -74,6 +85,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				'headerOptions' => ['class' => 'text-center'],
 				'label'=>'Item approved',
 				'filter'=>'',
+				'value' => function($data) {
+
+					if($data->draftItem) {
+					 	return $data->draftItem->item_approved;
+					}else{
+						return $data->item_approved;
+					}
+				},
 			],
 			[
 				'attribute'=>'created_datetime',

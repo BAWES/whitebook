@@ -22,11 +22,13 @@ var image_order_url = $('#image_order_url').val();
 
 /* Begin Tabs NEXT & PREV buttons */
 	$('.btnNext').click(function(){
-	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
+	  	$('.nav-tabs > .active').next('li').find('a').trigger('click');
+		$("html, body").animate({ scrollTop: 0 }, "slow");
 	});
 
 	 $('.btnPrevious').click(function(){
-	  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+	  	$('.nav-tabs > .active').prev('li').find('a').trigger('click');
+	 	$("html, body").animate({ scrollTop: 0 }, "slow");
 	});
 	/* End Tabs NEXT & PREV buttons */
 
@@ -151,15 +153,19 @@ var image_order_url = $('#image_order_url').val();
 		}
 	}
 
-$(function(){
-	CKEDITOR.replace('vendoritem-item_description');
-	CKEDITOR.replace('vendoritem-item_additional_info');
-	CKEDITOR.replace('vendoritem-item_price_description');
-	CKEDITOR.replace('vendoritem-item_customization_description');
-	CKEDITOR.replace('vendoritem-item_description_ar');
-	CKEDITOR.replace('vendoritem-item_additional_info_ar');
-	CKEDITOR.replace('vendoritem-item_price_description_ar');
-	CKEDITOR.replace('vendoritem-item_customization_description_ar');
+$(function() {
+
+	$config = {};
+	$config.allowedContent = true;
+
+	CKEDITOR.replace('vendoritem-item_description', $config);
+	CKEDITOR.replace('vendoritem-item_additional_info', $config);
+	CKEDITOR.replace('vendoritem-item_price_description', $config);
+	CKEDITOR.replace('vendoritem-item_customization_description', $config);
+	CKEDITOR.replace('vendoritem-item_description_ar', $config);
+	CKEDITOR.replace('vendoritem-item_additional_info_ar', $config);
+	CKEDITOR.replace('vendoritem-item_price_description_ar', $config);
+	CKEDITOR.replace('vendoritem-item_customization_description_ar', $config);
 });
 
 // Question and answer begin

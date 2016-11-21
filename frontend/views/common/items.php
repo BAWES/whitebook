@@ -11,7 +11,7 @@ if(!empty($items->getModels()))  {
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
 
         ?>
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301 pull-left">
             <div class="events_items width-100-percent">
                 <div class="events_images text-center position-relative">
                     <div class="hover_events">
@@ -35,8 +35,11 @@ if(!empty($items->getModels()))  {
                         </div>
                         <a href="<?= $item_url ?>" class="" >
                             <?php
+                            
                             $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=208&h=208';
+                                
                             echo Html::img($path,['class'=>'item-img']);
+
                             ?>
                             <?php if($value['item_for_sale'] == 'Yes') { ?>
                                 <i class="fa fa-circle" aria-hidden="true"></i>
@@ -49,7 +52,7 @@ if(!empty($items->getModels()))  {
 
                     </div>
                     <div class="events_descrip">
-                        <a href="<?= $item_url ?>"><?=\common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
+                        <a href="<?= $item_url ?>"><?= \common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
                             <h3><?=\common\components\LangFormat::format( $value['item_name'], $value['item_name_ar'])?></h3>
                             <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
                         </a>

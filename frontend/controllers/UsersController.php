@@ -121,21 +121,20 @@ class UsersController extends BaseController
                 );
 
                 $send_admin
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo(Yii::$app->params['adminEmail'])
-                ->setSubject('User registered')
-                ->send();
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setSubject('User registered')
+                    ->send();
 
                 return Users::SUCCESS;
             } else {
                 return Users::FAILURE;
             }
-        }
 
-        return $this->render('/users/signup', [
-            'model' => $model,
-            'error' => $error,
-        ]);
+        } else {
+            Yii::$app->session->set('show_login_modal', '1');
+            return $this->redirect(['site/index']);
+        }
     }
 
     public function actionReset_confirm($cust_id)
@@ -409,30 +408,6 @@ class UsersController extends BaseController
 //        ]);
 //    }
 
-    public function actionRemove_from_wishlist()
-    {
-        $request = Yii::$app->request;
-
-        if (Yii::$app->request->isAjax) {
-
-            if ($request->post('item_id')) {
-                
-                $model = new Users();
-                $item_id = $request->post('item_id');
-                $customer_id = Yii::$app->user->identity->customer_id;
-                $delete_wishlist = $model->delete_wishlist($item_id, $customer_id);
-                
-                if ($delete_wishlist == Users::SUCCESS) {
-                    return Users::SUCCESS; // Wish list deleted successfully
-                } else {
-                    return Users::FAILURE; // Wish list not deleted
-                }
-            } else {
-                return $this->goHome();
-            }
-        }
-    }
-
     public function actionLoad_more_events()
     {
         $request = Yii::$app->request;
@@ -629,6 +604,7 @@ class UsersController extends BaseController
                 $customer_address_response->response_text = $value;
                 $customer_address_response->save();
             }
+            Yii::$app->session->setFlash('success','Address Added Successfully');
         }
 
         $addresses = array();
@@ -654,13 +630,24 @@ class UsersController extends BaseController
             $addresses[] = $row;
         }
 
+        $provider = new \yii\data\ArrayDataProvider([
+            'allModels' => $addresses,
+            'sort' => [
+                'attributes' => ['city_name', 'address_type_id', 'location'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         $customer_address_modal = new CustomerAddress();
         $addresstype = AddressType::loadAddresstype();
 
         return $this->render('address', [
             'addresses' => $addresses,
             'customer_address_modal' => $customer_address_modal,
-            'addresstype' => $addresstype
+            'addresstype' => $addresstype,
+            'provider' => $provider
         ]);
     }
 
@@ -680,7 +667,7 @@ class UsersController extends BaseController
         $customer_address = CustomerAddress::findone([
             'address_id' => $address_id, 
             'customer_id' => $customer_id
-        ]);     
+        ]);
 
         if(!$customer_address) {
             throw new \yii\web\NotFoundHttpException();
@@ -714,7 +701,7 @@ class UsersController extends BaseController
                 $customer_address_response->response_text = $value;
                 $customer_address_response->save();
             }
-
+            Yii::$app->session->setFlash('success','Address updated successfully');
             return $this->redirect(['users/address']);
         }
 
@@ -726,11 +713,43 @@ class UsersController extends BaseController
         ]);
     }
 
+    public function actionViewAddress($address_id)
+    {
+        $customer_id = Yii::$app->user->getId();
+
+        if ($customer_id == '') {
+            Yii::$app->session->set('show_login_modal', 1);//to display login modal
+            return $this->goHome();
+        }
+
+        $customer_address = CustomerAddress::findone([
+            'address_id' => $address_id,
+            'customer_id' => $customer_id
+        ]);
+
+        $questions = CustomerAddressResponse::find()
+            ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
+            ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
+            ->where('address_id = :address_id', [':address_id' => $address_id])
+            ->asArray()
+            ->all();
+
+        if(!$customer_address) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+
+        //display edit form
+        return $this->render('address-view', [
+            'address' => $customer_address,
+            'questions' => $questions,
+        ]);
+    }
+
     /**
      * Delete customer address
      * @param integer $address_id
      */
-    public function actionAddress_delete()
+    public function actionAddressDelete($address_id)
     {
         $customer_id = Yii::$app->user->identity->customer_id;
         
@@ -738,17 +757,19 @@ class UsersController extends BaseController
             return $this->goHome();
         }
   
-        $address_id = yii::$app->request->post('address_id');
+        $address_id = yii::$app->request->get('address_id');
 
         //check if address belong to login customer 
         $exist = CustomerAddress::find()
                     ->where(['address_id' => $address_id, 'customer_id' => $customer_id])
                     ->one();
 
-        if($exist) {
+        if ($exist) {
             CustomerAddressResponse::deleteAll('address_id = ' . $address_id);
             CustomerAddress::deleteAll('address_id = ' . $address_id);    
-        }        
+        }
+        Yii::$app->session->setFlash('success','Address deleted successfully');
+        return $this->redirect(['users/address']);
     }
 
     /**

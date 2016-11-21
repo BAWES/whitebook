@@ -42,7 +42,7 @@ if(!Yii::$app->user->isGuest) {
 											<div id="owl-demo" class="owl-carousel">
 												<div class="item border-none-class">
 													<?php if(!empty($customer_events)) {?>
-														<a href="<?= Url::toRoute(['/events/index','slug'=>'thingsilike']); ?>" class="thing_cont" title="Things I like"><span class="heart_fave" id="heart_fave"><?= count($wishlist); ?></span>
+														<a href="<?= Url::toRoute(['/things-i-like/index']); ?>" class="thing_cont" title="Things I like"><span class="heart_fave" id="heart_fave"><?= count($wishlist); ?></span>
 															<?php echo Yii::t('frontend','Things I like'); ?>
 														</a>
 													<?php } else {?>

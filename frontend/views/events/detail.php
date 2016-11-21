@@ -13,43 +13,17 @@ $this->title = 'My Event | '.$event_details->event_name;
 
 ?>
 <!-- coniner start -->
-<section id="inner_pages_white_back">
+    <section id="inner_pages_sections">
+        <div class="container">
+            <div class="title_main">
+                <h1><?php echo Yii::t('frontend','Events'); ?></h1>
+            </div>
 
-<?php if(!Yii::$app->user->isGuest) { ?>
-<div id="event_slider_wrapper">
-    <div class="container paddng0">
-        <?php $this->render('/product/events_slider.php'); ?>
-    </div>
-</div>
-<?php } ?>
 
-<div class="container paddng0">
-
-<div class="breadcrumb_common">
-<div class="bs-example">
-<!-- <ul class="breadcrumb"> -->
-<?php
-
-$this->params['breadcrumbs'][] = [
-    'label' => ucfirst($slug),
-    'url' => Yii::$app->homeUrl.'/Event details/'.$slug
-];
-
-echo Breadcrumbs::widget([
-        'options' => ['class' => 'new breadcrumb'],
-        'homeLink' => [
-        'label' => Yii::t('yii', 'Home'),
-        'url' => Yii::$app->homeUrl,
-    ],
-    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-]);
-
-?>
-
-<!-- </ul> -->
-</div>
-</div>
-<div class="events_detials_common">
+            <div class="account_setings_sections">
+                <?=$this->render('/users/_sidebar_menu');?>
+                <div class="col-md-9 border-left">
+                    <div class="events_detials_common">
 <div class="events_inner_contents_new">
 <div class="col-md-10 padding0">
 <div class="events_inner_descript">
@@ -293,10 +267,10 @@ if(!empty($items))
                     'header'=> Yii::t('frontend', 'Action'),
                     'template' => '{delete}{update}',
                     'buttons' => [
-                        'delete' => function ($url, $model, $slug) {
-                            $url = Url::toRoute(['events/delete-invitee','id'=>$model->invitees_id,'slug'=>$_REQUEST['slug']]);
+                        'delete' => function ($url, $model) {
+                            $url = Url::toRoute(['events/delete-invitee','id'=>$model->invitees_id]);
                             return  Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                            'title' => Yii::t('app', 'Gallery'),
+                            'title' => Yii::t('app', 'Gallery'),'onClick' => 'return (confirm("Are you sure you want to delete this invitee?"))'
                             ]);
                         },
                         'update' => function ($url, $model) {
@@ -323,9 +297,11 @@ if(!empty($items))
 </div>
 </div><!--events detail end-->
 </div>
+                </div>
+            </div>
+        </div>
 </section>
 <!-- continer end -->
-
 
 <?php
 $this->registerCss("
@@ -333,6 +309,11 @@ $this->registerCss("
 .margin-left-10{margin-left:10px;}
 .msg-success{margin-top: 5px; width: 320px; float: left; text-align: left;}
 .color-red{color:red;}
+table{    font-size: 12px;}
+.header-updated{padding-bottom:0; margin-bottom: 0;}
+.body-updated{background: white; margin-top: 0;}
+#inner_pages_sections .container{background:#fff; margin-top:12px;}
+.border-left{border-left: 1px solid #e2e2e2;}
 ");
 
 $this->registerJs("

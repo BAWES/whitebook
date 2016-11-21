@@ -4,11 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\helpers\Url;
+use yii\db\Expression;
 use yii\data\ArrayDataProvider;
-use common\models\VendorItem;
 use frontend\models\Vendor;
 use frontend\models\Themes;
 use frontend\models\Users;
+use frontend\models\CategoryModel;
+use common\models\VendorItem;
 use common\models\Smtp;
 use common\models\CategoryPath;
 
@@ -53,6 +55,10 @@ class SearchController extends BaseController
                 '{{%vendor_item}}',
                 '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
             )
+            ->leftJoin(
+                '{{%priority_item}}',
+                '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
+            )
             ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->where([
@@ -92,8 +98,23 @@ class SearchController extends BaseController
             $items_query->andWhere(['like','{{%vendor_item}}.item_name', $search]);
         }
 
-        $items = $items_query->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy('{{%image}}.vendorimage_sort_order', SORT_ASC)
+        $expression = new Expression(
+            "CASE 
+                WHEN
+                    `whitebook_priority_item`.priority_level IS NULL 
+                    OR whitebook_priority_item.status = 'Inactive' 
+                    OR whitebook_priority_item.trash = 'Deleted' 
+                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW()) 
+                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW()) 
+                THEN 2 
+                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1 
+                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0 
+                ELSE 2 
+            END, {{%vendor_item}}.sort");
+
+        $items = $items_query
+            ->groupBy('{{%vendor_item}}.item_id')
+            ->orderBy($expression)
             ->asArray()
             ->all();
 

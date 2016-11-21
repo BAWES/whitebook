@@ -51,7 +51,7 @@ $action = Yii::$app->controller->action->id;
 
                 <?php } else { ?>
 
-                    <a href="<?= Url::toRoute(['/events/index','slug'=>'events' ]); ?>" title="THEWHITEBOOK">
+                    <a href="<?= Url::toRoute(['events/index']); ?>" title="THEWHITEBOOK">
                         <?= Yii::t('frontend', 'My Events') ?>
                     </a>
                 <?php } ?>
@@ -216,7 +216,7 @@ $action = Yii::$app->controller->action->id;
         <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
     </a>
 </li>    
-<li><a href="<?php echo Url::toRoute(['/events/index','slug'=>'events' ]) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
+<li><a href="<?php echo Url::toRoute(['/events/index']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
 <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
 
@@ -446,7 +446,7 @@ $action = Yii::$app->controller->action->id;
             </a>
         </li>
 
-        <li><a href="<?= Url::toRoute(['/events/index','slug'=>'events' ]) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
+        <li><a href="<?= Url::toRoute(['/events/index']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
 
         <li>
             <a href="<?php echo Url::toRoute('/users/address', true); ?>">

@@ -11,7 +11,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Blockeddates', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blockeddate-view">
-
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->block_id], ['class' => 'btn btn-primary']) ?>
         
@@ -23,7 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -37,5 +35,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'trash',
         ],
     ]) ?>
-
 </div>
