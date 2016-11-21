@@ -61,6 +61,9 @@ class ThingsILikeController extends BaseController
                 'pageSize' => 10,
             ],
         ]);
+        echo "<pre>";
+        print_r($provider->getModels());
+        exit;
         return $this->render('index', [
             'customer_wishlist' => $customer_wishlist,
             'customer_wishlist_count' => $customer_wishlist_count,
