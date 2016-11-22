@@ -296,42 +296,6 @@ function vendor_load(){
     });
 }
 
-//* Load Sub Category *//
-$(function (){
-    $("#vendoritem-category_id").change(function (){
-		var id = $('#vendoritem-category_id').val();
-        var path = loadsubcategory_url;
-        $('.loadingmessage').show();
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { id: id ,_csrf : csrfToken}, //data to be send
-	        success: function( data ) {
-				$('.loadingmessage').hide();
-	            $('#vendoritem-subcategory_id').html(data);
-	        }
-        });
-     });
- });
-
-//* Load Child Category *//
-$(function (){
-    $("#vendoritem-subcategory_id").change(function (){
-		var id = $('#vendoritem-subcategory_id').val();
-        var path = loadchildcategory_url;
-        $('.loadingmessage').show();
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { id: id ,_csrf : csrfToken}, //data to be send
-	        success: function( data ) {
-				$('.loadingmessage').hide();
-	            $('#vendoritem-child_category').html(data);
-	        }
-        });
-     });
- });
-
 // Add questions
 var j = count_q;
 
@@ -360,21 +324,6 @@ function questionView(q_id,tis){
 		$(tis).toggleClass("expanded");
 	}
 }
-
-/* 	BEGIN Themes and groups multiselect widget */
-$(function(){
- 	//$('#vendoritem-themes').multiselect({
-		//'enableFiltering': true,
-    //    'filterPlaceholder': 'Search for something...'
-    //});
-    //
-    //$('#vendoritem-groups').multiselect({
-		//'enableFiltering': true,
-    //    'filterPlaceholder': 'Search for something...'
-    //});
-
-});
-/* END Themes and groups multiselect widget */
 
 // Add more for pricing 
 $(function(){
@@ -459,56 +408,6 @@ $(document).ready(function(){
 $(document).on('ready', function() {
 	$('.file-block').hide();
 
-	//if(imagedata) {
-	//	$("#vendoritem-image_path").fileinput({
-	//    	resizeImage: true,
-	//    	showUpload:false,
-	//		showRemove:false,
-	//		minImageWidth: 208,
-	//    	minImageHeight: 221,
-	//		initialPreview: [
-	//			img,
-	//		],
-	//		initialPreviewConfig: [
-	//		   action,
-	//		],
-	//		overwriteInitial: false,
-	//    	uploadUrl : '/dummy/dummy',
-	//	});
-	//} else {
-	//	$("#vendoritem-image_path").fileinput({
-	//    	resizeImage: true,
-	//    	showUpload:false,
-	//		showRemove:false,
-	//		minImageWidth: 208,
-	//    	minImageHeight: 221,
-	//		overwriteInitial: false,
-	//    	uploadUrl : '/dummy/dummy',
-	//	});
-	//}
-    
-    //if(guideimagedata) {
-    //	$("#vendoritem-guide_image").fileinput({
-	 //   	showUpload:false,
-		//	showRemove:false,
-		//	initialPreview: [
-		//		img1,
-		//	],
-		//	initialPreviewConfig: [
-		//	   action1,
-		//	],
-		//	overwriteInitial: false,
-	 //   	uploadUrl : '/dummy/dummy',
-	 //  	});
-    //} else {
-    //	$("#vendoritem-guide_image").fileinput({
-	 //   	showUpload:false,
-		//	showRemove:false,
-		//	overwriteInitial: false,
-	 //   	uploadUrl : '/dummy/dummy',
-	 //  	});
-    //}
-	
 	var path = image_order_url;
 
 	$(".file-preview-thumbnails").sortable({ 
@@ -551,13 +450,6 @@ $("#validone1").click(function() {
 			return false;
   	}
 
-  	if($("#vendoritem-item_name").val()=='')
-	{
-			$(".field-vendoritem-item_name").addClass('has-error');
-			$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
-			return false;
-  	}
-
   	if($("input[name='category[]']").length == 0)
 	{
 			$(".field-category-list").addClass('has-error');
@@ -566,52 +458,7 @@ $("#validone1").click(function() {
   	}
 
     //validate email already exist or not
- 	var item_len = $("#vendoritem-item_name").val().length;
-
-    if($("#vendoritem-item_name").val()=='')
-	{
-	 	$(".field-vendoritem-item_name").addClass('has-error');
-		$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
-		return false;
-	} else if(item_len < 4) {
-		$(".field-vendoritem-item_name").addClass('has-error');
-		$(".field-vendoritem-item_name").find('.help-block').html('Item name minimum 4 letters.');
-		return false;
-	} else if(item_len > 3) {
-
-		var mail=$("#vendoritem-item_name").val();
-        var path = item_name_check;
-        $('.loadingmessage').show();
-
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { item: mail , item_id : item_id, _csrf : csrfToken}, //data to be send
-	        success: function( data ) {
-				
-				$("#test").val(mail);
-	            
-	            if(data>0)
-	            {
-					$('.loadingmessage').hide();
-					$(".field-vendoritem-item_name").removeClass('has-success');
-					$(".field-vendoritem-item_name").addClass('has-error');
-					$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
-					$(".field-vendoritem-item_name" ).focus();
-					$('#test').val(1);
-				}
-				else
-				{
-					$(".field-vendoritem-item_name").find('.help-block').html('');
-					$('.loadingmessage').hide();
-					$('#test').val(0);
-				}
-	         }
-        });
-
-  	} else {
-	  	return true;
-	}
+ 	return item_name_check();
 });
 
 $("#validtwo2").click(function() {
@@ -1116,38 +963,8 @@ function deletequestionselection(selection_val)
 
 /* BEGIN Vendor item check exist or not */
 $(function () {
-
- 	$("#vendoritem-item_name").on('keyup keypress focusout',function () {
-
-		if($("#vendoritem-item_name").val().length > 3)
-		{
-			var mail=$("#vendoritem-item_name").val();
-
-	        var path = item_name_check;
-	        $('.loadingmessage').show();
-
-	        $.ajax({
-		        type: 'POST',
-		        url: path, //url to be called
-		        data: { item: mail ,item_id : item_id, _csrf : csrfToken}, //data to be send
-		        success: function( data ) {
-					$("#test").val(mail);
-		            if(data>0)
-		            {
-						$('.loadingmessage').hide();
-						$(".field-vendoritem-item_name").removeClass('has-success');
-						$(".field-vendoritem-item_name").addClass('has-error');
-						$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
-						$(".field-vendoritem-item_name" ).focus();
-						$('#test').val(1);
-					} else {
-						$(".field-vendoritem-item_name").find('.help-block').html('');
-						$('.loadingmessage').hide();
-						$('#test').val(0);
-					}
-		        }
-	        });
-		}
+ 	$("#vendoritem-item_name").on('keyup keypress focusout', function() {
+		return item_name_check();
 	}); 	
 });
 /* END Vendor item check exist or not */
@@ -1242,3 +1059,53 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
     	$(this).parents('tr').remove();
     });
 });
+
+function item_name_check() {
+
+	var item_len = $("#vendoritem-item_name").val().length;
+
+    if($("#vendoritem-item_name").val()=='')
+	{
+	 	$(".field-vendoritem-item_name").addClass('has-error');
+		$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
+		return false;
+	} else if(item_len < 4) {
+		$(".field-vendoritem-item_name").addClass('has-error');
+		$(".field-vendoritem-item_name").find('.help-block').html('Item name minimum 4 letters.');
+		return false;
+	} else if(item_len > 3) {
+
+		var mail=$("#vendoritem-item_name").val();
+        var path = item_name_check;
+        $('.loadingmessage').show();
+
+        $.ajax({
+	        type: 'POST',
+	        url: path, //url to be called
+	        data: { item: mail , item_id : item_id, _csrf : csrfToken}, //data to be send
+	        success: function( data ) {
+				
+				$("#test").val(mail);
+	            
+	            if(data>0)
+	            {
+					$('.loadingmessage').hide();
+					$(".field-vendoritem-item_name").removeClass('has-success');
+					$(".field-vendoritem-item_name").addClass('has-error');
+					$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
+					$(".field-vendoritem-item_name" ).focus();
+					$('#test').val(1);					
+				}
+				else
+				{
+					$(".field-vendoritem-item_name").find('.help-block').html('');
+					$('.loadingmessage').hide();
+					$('#test').val(0);
+				}
+	         }
+        });
+
+  	} else {
+	  	return true;
+	}
+}

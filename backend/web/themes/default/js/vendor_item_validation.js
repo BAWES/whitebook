@@ -76,43 +76,6 @@ var image_order_url = $('#image_order_url').val();
 		$(this).attr('data-option-count',p);
 	});
 
-    $('#vendoritem-category_id').change(function (){
-        
-        var id = $('#vendoritem-category_id').val();
-        var path = load_sub_category_url;
-        
-        $('.loadingmessage').show();
-        
-        $.ajax({
-	        type: 'POST',
-	        url: path,
-	        data: { id: id ,_csrf : csrfToken},
-	        success: function( data ) {
-	        	$('.loadingmessage').hide();
-	             $('#vendoritem-subcategory_id').html(data);
-	        }
-        });
-    });
-
-	//* Load Child Category *//
-    $('#vendoritem-subcategory_id').change(function (){
-
-		var id = $('#vendoritem-subcategory_id').val();
-        var path = load_child_category_url;
-        
-        $('.loadingmessage').show();
-        
-        $.ajax({
-	        type: 'POST',
-	        url: path,
-	        data: { id: id ,_csrf : csrfToken},
-	        success: function( data ) {
-				$('.loadingmessage').hide();
-	            $('#vendoritem-child_category').html(data);
-	        }
-        });
-    });
-
 	function deletePhoto(image_id, loc){
 
 		var path = image_delete_url;
@@ -346,19 +309,13 @@ if(isNewRecord) {
 
 /*BEGIN  VALIDATION */
 
-$('#validone1').click(function() {
+$("#validone1").click(function() {
 
+	//to check name 
 	if($('#test').val()==1)
 	{
-  		return false;
-	}
-
-  	if($('#vendoritem-item_name').val()=='')
-	{
-		$('.field-vendoritem-item_name').addClass('has-error');
-		$('.field-vendoritem-item_name').find('.help-block').html('Item name cannot be blank.');
 		return false;
-  	}
+	}
 
   	if($("input[name='category[]']").length == 0)
 	{
@@ -366,50 +323,11 @@ $('#validone1').click(function() {
 			$(".field-category-list").find('.help-block').html('Add Category.');
 			return false;
   	}
-  	
-	/*   //validate email already exist or not
- 	var item_len = $('#vendoritem-item_name').val().length;
 
-  	if($('#vendoritem-item_name').val()=='')
-	{
-	 	$('.field-vendoritem-item_name').addClass('has-error');
-			$('.field-vendoritem-item_name').find('.help-block').html('Item name cannot be blank.');
-			return false;
-	 	} else if(item_len < 4){
-			$('.field-vendoritem-item_name').addClass('has-error');
- 			$('.field-vendoritem-item_name').find('.help-block').html('Item name minimum 4 letters.');
-			return false;
-	 } else if(item_len > 3) {
-  		var mail = $('#vendoritem-item_name').val();
-        var path = '".Url::to(['/vendoritem/itemnamecheck1'])."';
-        
-        $('.loadingmessage').show();
-        
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { item: mail , item_id : item_id, _csrf : csrfToken}, //data to be send
-	        success: function( data ) {
-				$('#test').val(mail);
-	            
-	            if(data > 0) {
-		            $('.loadingmessage').hide();
-					$('.field-vendoritem-item_name').removeClass('has-success');
-					$('.field-vendoritem-item_name').addClass('has-error');
-					$('.field-vendoritem-item_name').find('.help-block').html('Item name already exists.');
-					$('.field-vendoritem-item_name').focus();
-					$('#test').val(1);
-		   			return false;
-				} else {
-					$('.field-vendoritem-item_name').find('.help-block').html('');
-					$('.loadingmessage').hide();
-					$('#test').val(0);
-				}
-	         }
-        });
-  	} else {
-	  	return true;
-	}*/
+    //validate email already exist or not
+ 	$validate_item = item_name_check();
+
+ 	return $validate_item;
 });
 
 /* BEGIN TAB 2 */
@@ -583,52 +501,12 @@ $(function(){
 	} 
 });
 
-/* Guide images and descrition show / hide */
-
-/* END VALIDATION */
-
 /* BEGIN Vendor item check exist or not */
-/*$(function () {
-
- 	//$('#vendoritem-item_name').on('keyup keypress focusout',function () {
-  	$('#w0').on('afterValidateAttribute', function (event, messages) {
-		alert('test');
-		return false;
-
-		if($('#vendoritem-item_name').val().length > 3) {
-
-			var mail = $('#vendoritem-item_name').val();
-	        var path = item_name_check_url;
-	        //$('.loadingmessage').show();
-	        
-	        $.ajax({
-		        type: 'POST',
-		        url: path,
-		        data: { item: mail ,item_id : item_id, _csrf : csrfToken},
-		        async:false,
-		        success: function( data ) {
-					
-					$('#test').val(mail);
-
-		            if(data > 0) {
-						//('.loadingmessage').hide();
-						//$('.field-vendoritem-item_name').removeClass('has-success');
-						//$('.field-vendoritem-item_name').addClass('has-error');
-						//$('.field-vendoritem-item_name').find('.help-block').html('Item name already exists.');
-						//	$('.field-vendoritem-item_name').focus();
-						//$('#test').val(1);
-			   			//return false;
-					//} else {
-			    		//alert(234);
-					//	$('.field-vendoritem-item_name').find('.help-block').html('');
-						//$('.loadingmessage').hide();
-					//	$('#test').val(0);
-					}
-		        }
-	        });
-	  	}
-	});
-});*/
+$(function () {
+ 	$("#vendoritem-item_name").on('keyup keypress focusout',function () {
+ 		return item_name_check();
+	}); 	
+});
 /* END Vendor item check exist or not */
 
 // single question view
@@ -737,3 +615,56 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
     	$(this).parents('tr').remove();
     });
 });
+
+
+function item_name_check() {
+
+	var item_len = $("#vendoritem-item_name").val().length;
+
+    if($("#vendoritem-item_name").val()=='')
+	{
+	 	$(".field-vendoritem-item_name").addClass('has-error');
+		$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
+		return false;
+	} else if(item_len < 4) {
+		$(".field-vendoritem-item_name").addClass('has-error');
+		$(".field-vendoritem-item_name").find('.help-block').html('Item name minimum 4 letters.');
+		return false;
+	} else if(item_len > 3) {
+
+		var mail=$("#vendoritem-item_name").val();
+        var path = item_name_check_url;
+        $('.loadingmessage').show();
+
+        $.ajax({
+	        type: 'POST',
+	        url: path, //url to be called
+	        data: { item: mail , item_id : item_id, _csrf : csrfToken}, //data to be send
+	        success: function( data ) {
+				
+				$("#test").val(mail);
+	            
+	            if(data>0)
+	            {
+					$('.loadingmessage').hide();
+					$(".field-vendoritem-item_name").removeClass('has-success');
+					$(".field-vendoritem-item_name").addClass('has-error');
+					$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
+					$(".field-vendoritem-item_name" ).focus();
+					$('#test').val(1);	
+					return false;				
+				}
+				else
+				{
+					$(".field-vendoritem-item_name").find('.help-block').html('');
+					$('.loadingmessage').hide();
+					$('#test').val(0);
+					return true;
+				}
+	         }
+        });
+
+  	} else {
+	  	return true;
+	}
+}
