@@ -328,10 +328,10 @@ echo Html::hiddenInput('item_status',$model->item_status,['id'=>'item_status']);
 echo Html::hiddenInput('item_id',Yii::$app->request->get('id'),['id'=>'item_id']);
 echo Html::hiddenInput('load_sub_category_url',Url::to(['/priorityitem/loadsubcategory']),['id'=>'load_sub_category_url']);
 echo Html::hiddenInput('load_child_category_url',Url::to(['/priorityitem/loadchildcategory']),['id'=>'load_child_category_url']);
-echo Html::hiddenInput('image_delete_url',Url::to(['vendoritem/imagedelete']),['id'=>'image_delete_url']);
-echo Html::hiddenInput('remove_question_url',Url::to(['vendoritem/removequestion']),['id'=>'remove_question_url']);
-echo Html::hiddenInput('render_question_url',Url::to(['vendoritem/renderquestion']),['id'=>'render_question_url']);
-echo Html::hiddenInput('item_name_check_url',Url::to(['/vendoritem/itemnamecheck']),['id'=>'item_name_check_url']);
+echo Html::hiddenInput('image_delete_url',Url::to(['vendor-item/imagedelete']),['id'=>'image_delete_url']);
+echo Html::hiddenInput('remove_question_url',Url::to(['vendor-item/removequestion']),['id'=>'remove_question_url']);
+echo Html::hiddenInput('render_question_url',Url::to(['vendor-item/renderquestion']),['id'=>'render_question_url']);
+echo Html::hiddenInput('item_name_check_url',Url::to(['/vendor-item/itemnamecheck']),['id'=>'item_name_check_url']);
 echo Html::hiddenInput('image_order_url',Url::to(['/site/imageorder']),['id'=>'image_order_url']);
 echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
 echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
@@ -344,4 +344,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);

@@ -697,36 +697,24 @@ class VendorItemController extends Controller
     */
     public function actionItemnamecheck()
     {
-        if (!Yii::$app->request->isAjax)
-            die();
+        if (!Yii::$app->request->isAjax) {
+            Yii::$app->end();
+        }
 
         $data = Yii::$app->request->post();
 
-        if ($data['item_id'] == 0) {
+        $count_query = VendorItem::find()
+            ->select('item_name')
+            ->where([
+                'item_name' => $data['item'],
+                'trash' => 'Default'
+            ]);
 
-            $itemname = VendorItem::find()->select('item_name')
-            ->where(['item_name' => $data['item']])
-            ->andwhere(['trash' => 'Default'])
-            ->all();
-
-        } else {
-
-            $itemname = VendorItem::find()->select('item_name')
-            ->where(['item_name' => $data['item']])
-            ->where(['item_id' => $data['item_id']])
-            ->andwhere(['trash' => 'Default'])
-            ->all();
-
-            if (count($itemname) > 0) {
-                return  $result = 0;
-                die;
-            } else {
-                return  $result = 1;
-                die;
-            }
+        if ($data['item_id']) {            
+            $count_query->andWhere(['!=', 'item_id', $data['item_id']]);
         }
 
-        return $result = count($itemname);
+        echo $count_query->count();
     }
 
     public function actionRenderanswer()
