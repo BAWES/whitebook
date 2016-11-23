@@ -3,7 +3,7 @@ var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
 var c1 = true;
   
-$package_count = 0;
+$package_count = $('.table-package-list tbody tr').length;
 
 $('.btn-add-package').click(function() {
 
@@ -76,6 +76,39 @@ $('.btn-add-address').click(function(){
 });
 
 $(document).delegate('.table-email-list .btn-danger','click', function(){
+	$(this).parent().parent().remove();
+});
+
+$phone_no_count = $('.table-phone-list tbody tr').length;
+
+//phone no 
+$('.btn-add-phone-no').click(function(){
+	
+	$html  = '<tr>';
+	$html += '	<td>';
+	$html += '		<input value="" name="phone['+$phone_no_count+'][phone_no]" class="form-control" />';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<select name="phone['+$phone_no_count+'][type]" class="form-control">';
+	$html += '		 	<option>Office</option>';
+	$html += '		 	<option>Mobile</option>';
+	$html += '		 	<option>Fax</option>';
+	$html += '		 	<option>Whatsapp</option>';
+	$html += '		</select>';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<button class="btn btn-danger" type="button">';
+	$html += '			<i class="glyphicon glyphicon-trash"></i>';
+	$html += '		</button>';
+	$html += '	</td>';
+	$html += '</tr>';
+
+	$('.table-phone-list tbody').append($html);
+
+	$phone_no_count++;
+});
+
+$(document).delegate('.table-phone-list .btn-danger','click', function(){
 	$(this).parent().parent().remove();
 });
 

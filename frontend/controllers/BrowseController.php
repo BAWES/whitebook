@@ -20,6 +20,7 @@ use common\models\Location;
 use common\models\CategoryPath;
 use common\models\CustomerAddress;
 use common\components\LangFormat;
+use common\models\VendorPhoneNo;
 
 /**
 * Site controller.
@@ -321,6 +322,7 @@ class BrowseController extends BaseController
                 'model' => $model,
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'vendor_area' => [],
+                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
                 'my_addresses' => []
             ]);
 
@@ -365,6 +367,7 @@ class BrowseController extends BaseController
 
             return $this->render('detail', [
                 'model' => $model,
+                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,

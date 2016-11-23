@@ -13,6 +13,7 @@ use frontend\models\Website;
 use frontend\models\Users;
 use common\models\Smtp;
 use common\models\CategoryPath;
+use common\models\VendorPhoneNo;
 use common\models\VendorItemThemes;
 
 class DirectoryController extends BaseController
@@ -253,7 +254,8 @@ class DirectoryController extends BaseController
             'provider' => $provider,
             'slug' => $slug,
             'customer_events' => $customer_events,
-            'customer_events_list' => $customer_events_list
+            'customer_events_list' => $customer_events_list,
+            'phones' => VendorPhoneNo::findAll(['vendor_id' => $vendor_details->vendor_id])
         ]);
     }
 }

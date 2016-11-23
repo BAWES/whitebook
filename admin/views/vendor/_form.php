@@ -188,7 +188,56 @@ use yii\widgets\ActiveForm;
 				
 				<?= $form->field($model, 'vendor_public_email'); ?>
 
-				<?= $form->field($model, 'vendor_public_phone'); ?>
+				<div class="form-group">
+					<label>Vendor public phone</label>
+					<table class="table table-bordered table-phone-list">
+						<thead>
+							<tr>
+								<th>Phone no</th>
+								<th>Type</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ($phones as $key => $value) { ?>
+							<tr>
+								<td>
+									<input value="<?= $value->phone_no ?>" name="phone[<?= $key ?>][phone_no]" class="form-control" />
+								</td>
+								<td>
+									<select name="phone[<?= $key ?>][type]" class="form-control">
+										<option <?php if($value->type == 'Office') echo 'selected'; ?> 
+											value="Office">Office</option>
+									 	<option <?php if($value->type == 'Mobile') echo 'selected'; ?>
+									 		value="Mobile">Mobile									 		
+									 	</option>
+									 	<option <?php if($value->type == 'Fax') echo 'selected'; ?>
+									 		value="Fax">Fax									 		
+									 	</option>
+									 	<option <?php if($value->type == 'Whatsapp') echo 'selected'; ?>
+									 		value="Whatsapp">Whatsapp
+									 	</option>
+									</select>
+								</td>
+								<td>
+									<button class="btn btn-danger" type="button">
+										<i class="glyphicon glyphicon-trash"></i>
+									</button>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3">
+									<button type="button" class="btn btn-primary btn-add-phone-no">
+										Add new phone no
+									</button>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 
 				<div class="form-group" style="height: 10px;">
 					<input type="button" class="btn btn-info btnNext" value="Next" />
@@ -400,6 +449,6 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>

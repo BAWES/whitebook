@@ -337,3 +337,13 @@ td[align="left"] {
 .tab_section_event .nav-tabs > li.second-event-tab.active > a, .tab_section_event .nav-tabs > li.second-event-tab.active > a:focus, .tab_section_event .nav-tabs > li.second-event-tab.active > a:hover{
     border-right: 1px solid #e6e6e6;
 }
+
+.vendor_phone_list a {
+    padding-right: 0px;
+    padding-left: 10px;
+}
+
+.vendor_phone_list .fa {
+    padding-right: 0px;
+    padding-left: 3px;
+}
