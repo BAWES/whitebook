@@ -33,6 +33,7 @@ $model->vendor_working_min_to = $to_min;
         'day_off' => $day_off,
         'vendor_order_alert_emails' => $vendor_order_alert_emails,
         'packages' => $packages,
-        'vendor_packages' => $vendor_packages
+        'vendor_packages' => $vendor_packages,
+        'phones' => $phones
 	]); ?>
 </div>

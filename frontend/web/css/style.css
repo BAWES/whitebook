@@ -573,7 +573,12 @@ textarea .form-group{ min-height: 126px;}
 .cont_ifo_left h4{font:300 13px 'OpenSansRegular'; color: #808080 ;  margin: 7px 0 0 0;padding:0 0 0 19px; background: url(../images/mobil1.png) left center no-repeat; }
 .cont_ifo_left .flaticon-email5::before{ font-size: 10pt; color: #808080; }
 .cont_ifo_right .links_left a {font:300 13px 'OpenSansRegular'; color: #808080 ; padding:0 0 0 30px; background: url(../images/linkes.png) left center no-repeat; display: inline-block;}
-.cont_ifo_right .timer_common{font:300 13px 'OpenSansRegular'; color: #808080 ; padding:0 0 0 30px; background: url(../images/time.png) left center no-repeat;}
+.cont_ifo_right .timer_common{
+    font:300 13px 'OpenSansRegular'; 
+    color: #808080; 
+    padding: 0 5px 0 20px; 
+    background: url(../images/time.png) left center no-repeat;
+}
 .border-bottom{ display: inline-block; width: 100%;  border-bottom: 1px solid #e6e6e6; vertical-align: top; margin: 10px 0 0 0;}
 .border-bottom.border-bottom-none{display:none;}
 .cont_ifo_right .border-bottom{ margin: 13px 0 11px;}
@@ -1825,4 +1830,26 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .fetu_product_list .hover_events a{
     z-index: 1;
     position: relative;
+}
+
+.vendor_phone_list {
+    padding-top: 10px;
+}
+
+.vendor_phone_list a {
+    padding-right: 10px;
+}
+
+.vendor_phone_list .fa {
+    padding-right: 3px;
+}
+
+.vendor_phone_list .fa-mobile {
+    font-size: 20px !important;
+    position: relative;
+    top: 2px;
+}
+
+.vendor_phone_list .fa-whatsapp {
+    font-size: 16px;
 }

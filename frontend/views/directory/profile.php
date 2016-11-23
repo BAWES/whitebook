@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use common\models\VendorCategory;
 use common\components\LangFormat;
+
 $vendor_details = $vendor_detail;
 
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
@@ -130,19 +131,13 @@ if ($event_status > 0) {
                                                 <div class="contact_information">
                                                     <address>
                                                         <div class="clearfix">
-                                                            <?php if (trim($vendor_detail['vendor_public_email']) || trim($vendor_detail['vendor_public_phone'])) { ?>
+                                                            <?php if (trim($vendor_detail['vendor_public_email'])) { ?>
                                                                 <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
                                                                     <?php if (trim($vendor_detail['vendor_public_email'])) { ?>
                                                                         <h3>
                                                                             <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?=$vendor_detail['vendor_public_email']; ?>"><?=$vendor_detail['vendor_public_email']; ?>&nbsp;</a>
                                                                         </h3>
                                                                         <span class="border-bottom"></span>
-                                                                    <?php } ?>
-                                                                    <?php if (trim($vendor_detail['vendor_public_phone'])) { ?>
-                                                                        <h4 class="margin-top-13">
-                                                                            <a class="color-808080" href="tel:<?=$vendor_detail['vendor_public_phone']; ?>"><?=$vendor_detail['vendor_public_phone']; ?></a>&nbsp;
-                                                                        </h4>
-                                                                        <span class="border-bottom border-bottom-none"></span>
                                                                     <?php } ?>
                                                                 </div>
                                                             <?php } ?>
@@ -161,27 +156,46 @@ if ($event_status > 0) {
                                                                             </a>
                                                                         </span>
                                                                         <span class="border-bottom"></span>
-                                                                    <?php } ?>
-                                                                    <?php if (trim($vendor_detail['vendor_working_hours'])) { ?>
-
-                                                                        <span class="timer_common"><?php
-                                                                            $from = explode(':',$vendor_detail['vendor_working_hours']);
-                                                                            echo (isset($from[0])) ? $from[0] : '';
-                                                                            echo (isset($from[1])) ? ':'.$from[1] : '';
-                                                                            echo (isset($from[2])) ? ' '.$from[2] : ''
-                                                                            ?></span>
-
-                                                                        - <span class="timer_common">
-                                                                            <?php
-                                                                            $to = explode(':',$vendor_detail['vendor_working_hours_to']);
-                                                                            echo (isset($to[0])) ? $to[0] : '';
-                                                                            echo (isset($to[1])) ? ':'.$to[1] : '';
-                                                                            echo (isset($to[2])) ? ' '.$to[2] : ''
-                                                                            ?>
-                                                                        </span>
-                                                                    <?php } ?>
+                                                                    <?php } ?>                    
                                                                 </div>
                                                             <?php } ?>
+                                                        </div>
+
+                                                        <div class="cont_ifo_right paddingleft0">
+                                                            <?php if (trim($vendor_detail['vendor_working_hours'])) { ?>
+
+                                                                <span class="timer_common"><?php
+                                                                    $from = explode(':',$vendor_detail['vendor_working_hours']);
+                                                                    echo (isset($from[0])) ? $from[0] : '';
+                                                                    echo (isset($from[1])) ? ':'.$from[1] : '';
+                                                                    echo (isset($from[2])) ? ''.$from[2] : ''
+                                                                    ?></span>- <span class="timer_common">
+                                                                <?php
+                                                                $to = explode(':',$vendor_detail['vendor_working_hours_to']);
+                                                                echo (isset($to[0])) ? $to[0] : '';
+                                                                echo (isset($to[1])) ? ':'.$to[1] : '';
+                                                                echo (isset($to[2])) ? ''.$to[2] : ''
+                                                                ?>
+                                                                </span>
+                                                            <?php } ?>
+                                                        </div>
+
+                                                        <span class="border-bottom"></span>
+                                                        
+                                                        <div class="cont_ifo_left vendor_phone_list paddingleft0">
+                                                        <?php 
+
+                                                        $phone_icons = [
+                                                                'Whatsapp' => 'fa fa-whatsapp',
+                                                                'Mobile' => 'fa fa-mobile',
+                                                                'Fax' => 'fa fa-fax',
+                                                                'Office' => 'fa fa-building'
+                                                            ];
+
+                                                        foreach ($phones as $key => $value) { ?>
+                                                            <a class="color-808080" href="tel:<?= $value->phone_no; ?>"><i class="<?= $phone_icons[$value->type] ?>"></i><?= $value->phone_no; ?>
+                                                            </a>
+                                                        <?php } ?>
                                                         </div>
 
                                                         <?php
