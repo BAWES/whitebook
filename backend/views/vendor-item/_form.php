@@ -27,14 +27,16 @@ if($model->isNewRecord){
 
 	<div class="tabbable">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#1" data-toggle="tab">Item Info </a></li>
-			<li><a href="#2" data-toggle="tab" id="validone1">Item description</a></li>
-			<li><a href="#3" data-toggle="tab" id="validtwo2"> Item price </a></li>
-			<li><a href="#4" data-toggle="tab" id="validthree3">Images</a></li>
+			<li class="active"><a href="#1" data-toggle="tab" id="tab_1">Item Info </a></li>
+			<li><a href="#2" id="tab_2">Item description</a></li>
+			<li><a href="#3" id="tab_3"> Item price </a></li>
+			<li><a href="#4" id="tab_4">Images</a></li>
 		</ul>
 		<div class="tab-content">
 
 			<div class="tab-pane" id="1" >
+
+				<input type="hidden" name="item_id" value="<?= $model->item_id ?>" />
 
 				<?= $form->field($model, 'item_name')->textInput(['maxlength' => 128]) ?>
 
@@ -267,8 +269,10 @@ echo Html::hiddenInput('item_for_sale', $model->item_for_sale, ['id' => 'item_fo
 echo Html::hiddenInput('item_status', $model->item_status, ['id' => 'item_status']);
 echo Html::hiddenInput('item_id', Yii::$app->request->get('id'), ['id'=>'item_id']);
 
-echo Html::hiddenInput('load_sub_category_url',Url::to(['/priorityitem/loadsubcategory']),['id'=>'load_sub_category_url']);
-echo Html::hiddenInput('load_child_category_url',Url::to(['/priorityitem/loadchildcategory']),['id'=>'load_child_category_url']);
+//ajax step urls 
+echo Html::hiddenInput('item_info_url', Url::to(['vendor-item/item-info']), ['id' => 'item_info_url']);
+echo Html::hiddenInput('item_description_url', Url::to(['vendor-item/item-description']), ['id' => 'item_description_url']);
+echo Html::hiddenInput('item_price_url', Url::to(['vendor-item/item-price']), ['id' => 'item_price_url']);
 
 echo Html::hiddenInput('image_delete_url',Url::to(['vendor-item/imagedelete']),['id'=>'image_delete_url']);
 echo Html::hiddenInput('remove_question_url',Url::to(['vendor-item/removequestion']),['id'=>'remove_question_url']);
