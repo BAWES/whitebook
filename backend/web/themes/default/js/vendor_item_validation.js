@@ -21,114 +21,123 @@ var image_order_url = $('#image_order_url').val();
 
 
 /* Begin Tabs NEXT & PREV buttons */
-	$('.btnNext').click(function(){
-	  	$('.nav-tabs > .active').next('li').find('a').trigger('click');
-		$("html, body").animate({ scrollTop: 0 }, "slow");
+$('.btnNext').click(function(){
+  	$('.nav-tabs > .active').next('li').find('a').trigger('click');
+	$("html, body").animate({ scrollTop: 0 }, "slow");
+});
+
+ $('.btnPrevious').click(function(){
+  	$('.nav-tabs > .active').prev('li').find('a').trigger('click');
+ 	$("html, body").animate({ scrollTop: 0 }, "slow");
+});
+/* End Tabs NEXT & PREV buttons */
+
+	/* Begin when loading page first tab opened */
+	$(function(){
+		$('.nav-tabs li:first').addClass("active");
+		$('.tab-content div:first').addClass('active');
 	});
 
-	 $('.btnPrevious').click(function(){
-	  	$('.nav-tabs > .active').prev('li').find('a').trigger('click');
-	 	$("html, body").animate({ scrollTop: 0 }, "slow");
-	});
-	/* End Tabs NEXT & PREV buttons */
+var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
- 	/* Begin when loading page first tab opened */
- 	$(function(){
- 		$('.nav-tabs li:first').addClass("active");
- 		$('.tab-content div:first').addClass('active');
- 	});
+$('#option').hide();
 
-	var csrfToken = $('meta[name="csrf-token"]').attr('content');
+$('.vendoritemquestion-question_answer_type').on('change',function (){
 
-	$('#option').hide();
+	var type = $(this).val();
 
-    $('.vendoritemquestion-question_answer_type').on('change',function (){
+	if(type =='selection')
+	{
+		$(this).next('.price_val').remove();
+		var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
+		$('#option').show();
 
-		var type = $(this).val();
+		$(this).after('<div class="selection"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id=\add_question'+j+'" data-option-count="1" name="Addss" value="Add Selection"></div>');
+	
+	} else if(type =='image' ||  type =='text') {
 
-		if(type =='selection')
-		{
-			$(this).next('.price_val').remove();
-			var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
-			$('#option').show();
+		$(this).next('.selection').remove();
+		$(this).next('.price_val').remove();
+		var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
+		$('#option').show();
 
-			$(this).after('<div class="selection"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][text][0][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price][0][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"><input type="button" class="add_question" id=\add_question'+j+'" data-option-count="1" name="Addss" value="Add Selection"></div>');
-		
-		} else if(type =='image' ||  type =='text') {
-
-			$(this).next('.selection').remove();
-			$(this).next('.price_val').remove();
-			var j = $(this).attr('id').replace(/vendoritemquestion-question_answer_type/, '');
-			$('#option').show();
-
-			$(this).after('<div class="price_val"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
-		}
-
-		// Add selection for questions //
-	});
-
-	var p = 1;
-
-	$('.add_question').on('click',function(){
-		var j = $(this).attr('id').replace(/add_question/, '');
-		var p = $(this).attr('data-option-count');
-		$(this).before('<div class="selection"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:45%;float:left;"></div>');p++;
-		$(this).attr('data-option-count',p);
-	});
-
-	function deletePhoto(image_id, loc){
-
-		var path = image_delete_url;
-        
-        $.ajax({
-	        type: 'POST',
-	        url: path,
-	        data: { id: image_id ,_csrf : csrfToken, loc : loc},
-	        success: function( data ) {
-				if(data == 'Deleted')
-				{
-					$('img#'+image_id).parent().remove();
-				}
-				return false;
-	         }
-        });
+		$(this).after('<div class="price_val"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price][]" placeholder="Price (Optional)" id="price" style="width:40%;float:left;"></div>');
 	}
 
-	function deleteAddress(d,question_id) {
-		if(question_id != '')
-		{
-			if (confirm('Are you sure want to delete?')) {
-				$('#'+d).remove();
-				var path = remove_question_url;
-	        
-		        $.ajax({
-			        type: 'POST',
-			        url: path,
-			        data: { question_id: question_id ,_csrf : csrfToken},
-			        success: function( data ) {
-			             alert(data);
-			        }
-		        });
+	// Add selection for questions //
+});
 
-		        return false;
+var p = 1;
+
+$('.add_question').on('click',function(){
+	var j = $(this).attr('id').replace(/add_question/, '');
+	var p = $(this).attr('data-option-count');
+	$(this).before('<div class="selection"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][text]['+p+'][]" placeholder="Question" id="question" style="width:50%;float:left;"><input type="text" class="form-control" name="VendorItemQuestion['+j+'][price]['+p+'][]" placeholder="Price (Optional)" id="price" style="width:45%;float:left;"></div>');p++;
+	$(this).attr('data-option-count',p);
+});
+
+function deletePhoto(image_id, loc){
+
+	var path = image_delete_url;
+    
+    $.ajax({
+        type: 'POST',
+        url: path,
+        data: { id: image_id ,_csrf : csrfToken, loc : loc},
+        success: function( data ) {
+			if(data == 'Deleted')
+			{
+				$('img#'+image_id).parent().remove();
 			}
 			return false;
+         }
+    });
+}
+
+function deleteAddress(d,question_id) {
+	if(question_id != '')
+	{
+		if (confirm('Are you sure want to delete?')) {
+			$('#'+d).remove();
+			var path = remove_question_url;
+        
+	        $.ajax({
+		        type: 'POST',
+		        url: path,
+		        data: { question_id: question_id ,_csrf : csrfToken},
+		        success: function( data ) {
+		             alert(data);
+		        }
+	        });
+
+	        return false;
 		}
+		return false;
 	}
+}
+
+var ck_item_description = '';
+var ck_additional_info = '';
+var ck_price_description = '';
+var ck_customization_description = '';
+var ck_item_description_ar = '';
+var ck_additional_info_ar = '';
+var ck_price_description_ar = '';
+var ck_customization_description_ar = '';
 
 $(function() {
 
 	$config = {};
 	$config.allowedContent = true;
 
-	CKEDITOR.replace('vendoritem-item_description', $config);
-	CKEDITOR.replace('vendoritem-item_additional_info', $config);
-	CKEDITOR.replace('vendoritem-item_price_description', $config);
-	CKEDITOR.replace('vendoritem-item_customization_description', $config);
-	CKEDITOR.replace('vendoritem-item_description_ar', $config);
-	CKEDITOR.replace('vendoritem-item_additional_info_ar', $config);
-	CKEDITOR.replace('vendoritem-item_price_description_ar', $config);
-	CKEDITOR.replace('vendoritem-item_customization_description_ar', $config);
+	ck_item_description = CKEDITOR.replace('vendoritem-item_description', $config);
+	ck_additional_info = CKEDITOR.replace('vendoritem-item_additional_info', $config);
+	ck_price_description = CKEDITOR.replace('vendoritem-item_price_description', $config);
+	ck_customization_description = CKEDITOR.replace('vendoritem-item_customization_description', $config);
+	ck_item_description_ar = CKEDITOR.replace('vendoritem-item_description_ar', $config);
+	ck_additional_info_ar = CKEDITOR.replace('vendoritem-item_additional_info_ar', $config);
+	ck_price_description_ar = CKEDITOR.replace('vendoritem-item_price_description_ar', $config);
+	ck_customization_description_ar = CKEDITOR.replace('vendoritem-item_customization_description_ar', $config);
 });
 
 // Question and answer begin
@@ -170,96 +179,6 @@ function removePrice(tis)
 /* BEGIN bootstrap file input widget for image preview */
 $(document).on('ready', function() {
 	
-	//$('.file-block').hide();
-
-	/* Sort item image */
-	/*if(!imagedata) {
-
-		$('#vendoritem-image_path').fileinput({
-		    showUpload:false,
-			showRemove:false,
-			overwriteInitial: false,
-		    uploadUrl : '/dummy/dummy',
-		});
-	} else {*/
-
-        /*var text = '{ "employees" : [' +
-            '{ "firstName":"John" , "lastName":"Doe" },' +
-            '{ "firstName":"Anna" , "lastName":"Smith" },' +
-            '{ "firstName":"Peter" , "lastName":"Jones" } ]}';
-
-        var obj12 = JSON.parse(text);
-
-        console.log(obj12);
-*/
-        //var reviewtext = '{"reviewer1": "Pam", "stars1": 2, "text1": "Pretty good, but could have used more Jason"}'; +
-        //var moviereviewtext = '{"title": "Friday the 13th", "year": 1980, "reviews": [{"reviewer": "Pam", "stars": 3, "text": "Pretty good, but could have used more Jason"}, {"reviewer": "Alice", "stars": 4, "text": "The end was good, but a little unsettling"}]}';
-        //var jsonobj = eval("(" + moviereviewtext + ")");
-        //var jsonobj = eval("(" + action + ")");
-
-       /* console.log(action);
-
-        var temp = img.split(',');
-        var pluginArrayArg = new Array();
-
-		for (a in temp ) {
-			var html = $.parseHTML( temp[a] );
-
-            var jsonArg = new Object();
-            jsonArg.url = '/vendoritem/deleteitemimage';
-            jsonArg.key = $(html).data('key');
-            pluginArrayArg.push(jsonArg);
-		}*/
-
-        ////var pluginArrayArg = new Array();
-        ////pluginArrayArg.push(jsonArg1);
-        ////pluginArrayArg.push(jsonArg2);
-        //
-        //
-        //var obj1 = JSON.stringify(pluginArrayArg);
-		//var ob2 = jQuery.parseJSON(obj1)
-		////console.log(ob2[1]);
-        //var $var1 = '{url: "/vendoritem/deleteitemimage",key: 745},';
-        //var $var2 = '{url: "/vendoritem/deleteitemimage",key: 741}';
-		//var res = $var1.concat($var2);
-        //console.log({url: "/vendoritem/deleteitemimage",key: 745);
-		//console.log({url: "/vendoritem/deleteitemimage",key: 745},{url: "/vendoritem/deleteitemimage",key: 734});
-		//var p = JSON.parse(action);
-		//console.log(p);
-
-		/*$('#vendoritem-image_path').fileinput({
-	    	showUpload:false,
-			showRemove:false,
-			initialPreview: img.split(','),
-			initialPreviewConfig: action,
-			overwriteInitial: false,
-	    	uploadUrl : '/dummy/dummy',
-		});*/
-	//}
-
-	/* Sort guide image */
-	//if(guideimagedata) {
-	//	$('#vendoritem-guide_image').fileinput({
-	//    	showUpload:false,
-	//		showRemove:false,
-    //
-	//		initialPreview: [
-	//			img1,
-	//		],
-	//		initialPreviewConfig: [
-	//		   	action1,
-	//		],
-	//		overwriteInitial: false,
-	//    	uploadUrl : '/dummy/dummy',
-	//   	});
-	//}else{
-	//	$('#vendoritem-guide_image').fileinput({
-	//    	showUpload:false,
-	//		showRemove:false,
-	//		overwriteInitial: false,
-	//    	uploadUrl : '/dummy/dummy',
-	//   	});
-	//}
 		/* BEGIN SORT code for item and guide images */
 		var path = image_order_url;
 		$(".file-preview-thumbnails").sortable({
@@ -305,163 +224,6 @@ if(isNewRecord) {
 		$('#vendoritem-item_status').prop('checked', false);
 	}
 } 
-/* END bootstrap file input widget for image preview */
-
-/*BEGIN  VALIDATION */
-
-$("#validone1").click(function() {
-
-	//to check name 
-	if($('#test').val()==1)
-	{
-		return false;
-	}
-
-  	if($("input[name='category[]']").length == 0)
-	{
-			$(".field-category-list").addClass('has-error');
-			$(".field-category-list").find('.help-block').html('Add Category.');
-			return false;
-  	}
-
-    //validate email already exist or not
- 	$validate_item = item_name_check();
-
- 	return $validate_item;
-});
-
-/* BEGIN TAB 2 */
-$('#validtwo2').click(function() {
-
-  	if($('#vendoritem-item_name').val()=='')
-	{
-		$('.field-vendoritem-item_name').addClass('has-error');
-		$('.field-vendoritem-item_name').find('.help-block').html('Item name cannot be blank.');
-		return false;
-  	}
-    
-  	if($("input[name='category[]']").length == 0)
-	{
-			$(".field-category-list").addClass('has-error');
-			$(".field-category-list").find('.help-block').html('Add Category.');
-			return false;
-  	}
-
-    if($('#vendoritem-type_id').val()=='')
-	{
-		$('.field-vendoritem-type_id').addClass('has-error');
-		$('.field-vendoritem-type_id').find('.help-block').html('Item type cannot be blank.');
-		return false;
-  	}
-
-  	var messageLength = CKEDITOR.instances['vendoritem-item_description'].getData().replace(/<[^>]*>/gi, '').length;
-       
-    if(!messageLength ) {
-        $('.field-vendoritem-item_description').addClass('has-error');
-	    $('.field-vendoritem-item_description').find('.help-block').html('Item description cannot be blank.');
-		return false;
-    } else {
-   		$('.field-vendoritem-item_description').removeClass('has-error');
-  		$('.field-vendoritem-item_description').find('.help-block').html('');
-   		return true;
-    }
-});
-
-/* BEGIN TAB 3 */
-$('#validthree3').click(function() {
-
-    if($('#vendoritem-item_name').val()=='')
-	{
-		$('.field-vendoritem-item_name').addClass('has-error');
-		$('.field-vendoritem-item_name').find('.help-block').html('Item name cannot be blank.');
-		return false;
-    }
-
-  	if($("input[name='category[]']").length == 0)
-	{
-		$(".field-category-list").addClass('has-error');
-		$(".field-category-list").find('.help-block').html('Add Category.');
-		return false;
-  	}
-
-	/* BEGIN Validate item for sale yes or no */
-    if($('#vendoritem-item_for_sale').prop('checked') == true)
-    {
-		if($('#vendoritem-item_amount_in_stock').val()=='')
-		{
-			$('.field-vendoritem-item_amount_in_stock').addClass('has-error');
-			$('.field-vendoritem-item_amount_in_stock').find('.help-block').html('Item number of stock cannot be blank.');
-			return false;
- 		}
-
-    	if($('#vendoritem-item_default_capacity').val()=='')
-		{
-			$('.field-vendoritem-item_default_capacity').addClass('has-error');
-			$('.field-vendoritem-item_default_capacity').find('.help-block').html('Item default capacity cannot be blank.');
-			return false;
-  		}
-
- 	 	if($('#vendoritem-item_how_long_to_make').val()=='')
-		{
-			$('.field-vendoritem-item_how_long_to_make').addClass('has-error');
-			$('.field-vendoritem-item_how_long_to_make').find('.help-block').html('No of days delivery cannot be blank.');
-			return false;
- 	 	}
-
- 	 	if($('#vendoritem-item_minimum_quantity_to_order').val()=='')
-		{
-			$('.field-vendoritem-item_minimum_quantity_to_order').addClass('has-error');
-			$('.field-vendoritem-item_minimum_quantity_to_order').find('.help-block').html('Item minimum quantity to order cannot be blank.');
-			return false;
-  		}
-   	}
-
-    $is_price_valid = true;
-
-    $('.form-group.multiple_price input[type="text"]').each(function() {
-    	if(!$.isNumeric($(this).val())) {
-    		$is_price_valid = false;
-		}
-    });
-
-    if($is_price_valid) {
-    	$('.form-group.multiple_price').removeClass('has-error');
-    }else{
-    	$('.form-group.multiple_price').addClass('has-error');
-    	return false;
-    }
-
-
-  	if($('#vendoritem-type_id').val()=='')
-	{
-		$('.field-vendoritem-type_id').addClass('has-error');
-		$('.field-vendoritem-type_id').find('.help-block').html('Item type cannot be blank.');
-		return false;
-    } else {
-    	return true;
-    }
-});
-/* END TAB 3 */
-
-$('.complete').click(function()
-{
-	if($(".table-item-image img").length <= 0)
-	{
-		$('.file-block').show();
-		return false;
-	}
-	else if($(".table-item-image img").length >= 1)
- 	{
- 		$('.file-block').hide();
- 		return true;
- 	}
-
-	$(this).attr('disabled', 'disabled');
-	$(this).html('Please wait...');
-	$(this).parents('form').submit();
-});
-
-/* Guide images and descrition show / hide */
 
 $(function(){
 	$('.custom_description').hide();
@@ -500,14 +262,6 @@ $(function(){
 		}
 	} 
 });
-
-/* BEGIN Vendor item check exist or not */
-$(function () {
- 	$("#vendoritem-item_name").on('keyup keypress focusout',function () {
- 		return item_name_check();
-	}); 	
-});
-/* END Vendor item check exist or not */
 
 // single question view
 function questionView(q_id,tis){
@@ -567,7 +321,7 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
 /** 
  * Image crop and upload 
  */
- $(function() {
+$(function() {
  	
  	var croped_image_upload_url = $('#croped_image_upload_url').val();
     var image_count = $('#image_count').val();
@@ -617,54 +371,199 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
 });
 
 
-function item_name_check() {
+/** 
+ * Save tab 1 data on click of tab 2 or on click of next in tab 1 
+ */
+$('#tab_2').click(function(e) {
 
-	var item_len = $("#vendoritem-item_name").val().length;
+	$('.loadingmessage').show();
 
-    if($("#vendoritem-item_name").val()=='')
+	$.post($('#item_info_url').val(), get_form_data(), function(json) {
+
+		$('.loadingmessage').hide();
+
+		//switch to edit mode 
+		if(json['item_id']) {
+			$('input[name="item_id"]').val(json['item_id']);	
+		}
+		
+		if(json['edit_url']) {
+			$('#w0').attr('action', json['edit_url']);	
+		}		
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_2').parent().addClass('active');
+			$('#2.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);
+		}
+	});
+});
+
+/** 
+ * Save tab 2 data on click of tab 3 or on click of next in tab 2
+ */
+$('#tab_3').click(function(e) {
+
+	$('.loadingmessage').show();
+
+	$.post($('#item_description_url').val(), get_form_data(), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_3').parent().addClass('active');
+			$('#3.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);
+		}
+	});
+});
+
+/** 
+ * Save tab 3 data on click of tab 4 or on click of next in tab 3
+ */
+$('#tab_4').click(function(e) {
+
+	$('.loadingmessage').show();
+
+	$.post($('#item_price_url').val(), get_form_data(), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_4').parent().addClass('active');
+			$('#4.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+});
+
+/** 
+ * Click in final submit button 
+ */
+$('.complete').click(function()
+{
+	if($(".table-item-image img").length <= 0)
 	{
-	 	$(".field-vendoritem-item_name").addClass('has-error');
-		$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
+		$('.file-block').show();
 		return false;
-	} else if(item_len < 4) {
-		$(".field-vendoritem-item_name").addClass('has-error');
-		$(".field-vendoritem-item_name").find('.help-block').html('Item name minimum 4 letters.');
-		return false;
-	} else if(item_len > 3) {
-
-		var mail=$("#vendoritem-item_name").val();
-        var path = item_name_check_url;
-        $('.loadingmessage').show();
-
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { item: mail , item_id : item_id, _csrf : csrfToken}, //data to be send
-	        success: function( data ) {
-				
-				$("#test").val(mail);
-	            
-	            if(data>0)
-	            {
-					$('.loadingmessage').hide();
-					$(".field-vendoritem-item_name").removeClass('has-success');
-					$(".field-vendoritem-item_name").addClass('has-error');
-					$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
-					$(".field-vendoritem-item_name" ).focus();
-					$('#test').val(1);	
-					return false;				
-				}
-				else
-				{
-					$(".field-vendoritem-item_name").find('.help-block').html('');
-					$('.loadingmessage').hide();
-					$('#test').val(0);
-					return true;
-				}
-	         }
-        });
-
-  	} else {
-	  	return true;
 	}
+	else if($(".table-item-image img").length >= 1)
+ 	{
+ 		$('.file-block').hide();
+ 	}
+
+	$(this).attr('disabled', 'disabled');
+	$(this).html('Please wait...');
+	$(this).parents('form').submit();
+});
+
+
+function show_errors(json) 
+{
+	$('.has-error').removeClass('has-error');
+	$('.form-group .help-block').html('');
+
+	//step 1 
+	
+	if(json['errors']['item_name']) 
+	{
+		$(".field-vendoritem-item_name").removeClass('has-success');
+		$(".field-vendoritem-item_name").addClass('has-error');
+		$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
+	}
+				
+	if(json['errors']['category']) 
+	{
+		$(".field-category-list").addClass('has-error');
+		$(".field-category-list").find('.help-block').html('Add Category.');
+  	}
+
+  	//step 2 
+
+  	if(json['errors']['type_id'])
+  	{
+  		$('.field-vendoritem-type_id').addClass('has-error');
+		$('.field-vendoritem-type_id').find('.help-block').html('Item type cannot be blank.');
+  	}
+
+  	if(json['errors']['item_description'])
+  	{
+        $('.field-vendoritem-item_description').addClass('has-error');
+	    $('.field-vendoritem-item_description').find('.help-block').html('Item description cannot be blank.');
+	}
+
+	//step 3
+
+	if(json['errors']['item_amount_in_stock'])
+	{
+		$('.field-vendoritem-item_amount_in_stock').addClass('has-error');
+		$('.field-vendoritem-item_amount_in_stock').find('.help-block').html('Item number of stock cannot be blank.');
+	}
+
+	if(json['errors']['item_default_capacity'])
+	{
+		$('.field-vendoritem-item_default_capacity').addClass('has-error');
+		$('.field-vendoritem-item_default_capacity').find('.help-block').html('Item default capacity cannot be blank.');
+	}
+
+	if(json['errors']['item_how_long_to_make'])
+	{
+		$('.field-vendoritem-item_how_long_to_make').addClass('has-error');
+		$('.field-vendoritem-item_how_long_to_make').find('.help-block').html('No of days delivery cannot be blank.');
+	}
+
+	if(json['errors']['item_minimum_quantity_to_order'])
+	{
+		$('.field-vendoritem-item_minimum_quantity_to_order').addClass('has-error');
+		$('.field-vendoritem-item_minimum_quantity_to_order').find('.help-block').html('Item minimum quantity to order cannot be blank.');
+	}
+
+	if(json['errors']['multiple_price']) 
+	{
+		$('.form-group.multiple_price').addClass('has-error');
+	}
+}
+
+//append ckeditor data 
+function get_form_data() {
+
+	$data = $('form').serialize();
+
+	$data += '&VendorItem[item_description]=' + ck_item_description.getData(); 
+	$data += '&VendorItem[additional_info]=' + ck_additional_info.getData();
+	$data += '&VendorItem[price_description]=' + ck_price_description.getData();
+	$data += '&VendorItem[customization_description]=' + ck_customization_description.getData(); 
+	$data += '&VendorItem[item_description_ar]=' + ck_item_description_ar.getData();
+	$data += '&VendorItem[additional_info_ar]=' + ck_additional_info_ar.getData();
+	$data += '&VendorItem[price_description_ar]=' + ck_price_description_ar.getData();
+	$data += '&VendorItem[customization_description_ar]=' + ck_customization_description_ar.getData();	
+
+	return $data;
 }
