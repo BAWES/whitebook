@@ -48,10 +48,12 @@ var csrfToken = $('meta[name="csrf-token"]').attr("content");
 /* Begin Tabs NEXT & PREV buttons */
 $('.btnNext').click(function(){
   $('.nav-tabs > .active').next('li').find('a').trigger('click');
+  $('html, body').animate({ scrollTop: 0 }, 'slow');
 });
 
 $('.btnPrevious').click(function(){
   $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+  $('html, body').animate({ scrollTop: 0 }, 'slow');
 });
 /* End Tabs NEXT & PREV buttons */
 
@@ -438,11 +440,6 @@ $(document).on('ready', function() {
 
 $("#validone1").click(function() {
 
-	if($('#test').val()==1)
-	{
-		return false;
-	}
-
 	if($("#vendoritem-vendor_id").val()=='')
 	{
 			$(".field-vendoritem-vendor_id").addClass('has-error');
@@ -457,8 +454,53 @@ $("#validone1").click(function() {
 			return false;
   	}
 
-    //validate email already exist or not
- 	return item_name_check();
+  	var item_len = $("#vendoritem-item_name").val().length;
+
+    if($("#vendoritem-item_name").val()=='')
+	{
+	 	$(".field-vendoritem-item_name").addClass('has-error');
+		$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
+		return false;
+	} 
+
+	if(item_len < 4) {
+		$(".field-vendoritem-item_name").addClass('has-error');
+		$(".field-vendoritem-item_name").find('.help-block').html('Item name minimum 4 letters.');
+		return false;
+	} 
+
+	var item_name = $("#vendoritem-item_name").val();
+    var path = item_name_check;
+    $('.loadingmessage').show();
+
+    $.ajax({
+        type: 'POST',
+        url: path, //url to be called
+        data: { item: item_name , item_id : item_id, _csrf : csrfToken}, //data to be send
+        success: function( data ) {
+			
+            if(data > 0)
+            {
+				$('.loadingmessage').hide();
+				$(".field-vendoritem-item_name").removeClass('has-success');
+				$(".field-vendoritem-item_name").addClass('has-error');
+				$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
+				$(".field-vendoritem-item_name" ).focus();		
+			}
+			else
+			{
+				$(".field-vendoritem-item_name").find('.help-block').html('');
+				$('.loadingmessage').hide();				
+				
+				//update active tab 
+				$('.nav-tabs .active').removeClass('active');
+				$('.tab-content .active').removeClass('active');
+				
+				$('#validone1').parent().addClass('active');
+				$('#2.tab-pane').addClass('active');		
+			}
+         }
+    });
 });
 
 $("#validtwo2").click(function() {
@@ -960,16 +1002,6 @@ function deletequestionselection(selection_val)
 	}
 }
 
-
-/* BEGIN Vendor item check exist or not */
-$(function () {
- 	$("#vendoritem-item_name").on('keyup keypress focusout', function() {
-		return item_name_check();
-	}); 	
-});
-/* END Vendor item check exist or not */
-
-
 $('.complete').click(function()
 {
 	$(this).attr('disabled', 'disabled');
@@ -1059,53 +1091,3 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
     	$(this).parents('tr').remove();
     });
 });
-
-function item_name_check() {
-
-	var item_len = $("#vendoritem-item_name").val().length;
-
-    if($("#vendoritem-item_name").val()=='')
-	{
-	 	$(".field-vendoritem-item_name").addClass('has-error');
-		$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
-		return false;
-	} else if(item_len < 4) {
-		$(".field-vendoritem-item_name").addClass('has-error');
-		$(".field-vendoritem-item_name").find('.help-block').html('Item name minimum 4 letters.');
-		return false;
-	} else if(item_len > 3) {
-
-		var mail=$("#vendoritem-item_name").val();
-        var path = item_name_check;
-        $('.loadingmessage').show();
-
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { item: mail , item_id : item_id, _csrf : csrfToken}, //data to be send
-	        success: function( data ) {
-				
-				$("#test").val(mail);
-	            
-	            if(data>0)
-	            {
-					$('.loadingmessage').hide();
-					$(".field-vendoritem-item_name").removeClass('has-success');
-					$(".field-vendoritem-item_name").addClass('has-error');
-					$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
-					$(".field-vendoritem-item_name" ).focus();
-					$('#test').val(1);					
-				}
-				else
-				{
-					$(".field-vendoritem-item_name").find('.help-block').html('');
-					$('.loadingmessage').hide();
-					$('#test').val(0);
-				}
-	         }
-        });
-
-  	} else {
-	  	return true;
-	}
-}
