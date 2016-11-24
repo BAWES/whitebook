@@ -299,102 +299,104 @@ class VendorItem extends \yii\db\ActiveRecord
 
     public static function getCategoryName($id)
     {
-        if($id){
-            $model = Category::find()->where(['category_id'=>$id])->one();
-            return $model->category_name;}
-            else
-            {return null;}
+        $model = Category::find()->where(['category_id'=>$id])->one();
+        
+        if($model){
+            return $model->category_name;
         }
+    }
 
 
-        public static function getItemType($id)
-        {
-            $model = ItemType::find()->where(['type_id'=>$id])->one();
-            return $model->type_name;
+    public static function getItemType($id)
+    {
+        $model = ItemType::find()->where(['type_id'=>$id])->one();
+        
+        if($model) {                
+            return $model->type_name;   
         }
+    }
 
-
-
-        public static function loadvendoritem()
-        {
-            $item= VendorItem::find()
+    public static function loadvendoritem()
+    {
+        $item= VendorItem::find()
             ->where(['trash' =>'Default','item_for_sale' =>'Yes'])
             ->all();
-            $item=ArrayHelper::map($item,'item_id','item_name');
-            return $item;
-        }
+        
+        return ArrayHelper::map($item,'item_id','item_name');
+    }
 
 
-        public static function vendoritemname($id)
-        {
-            $item= VendorItem::find()
+    public static function vendoritemname($id)
+    {
+        $item= VendorItem::find()
             ->select(['item_name'])
             ->where(['=', 'item_id',$id])
             ->andwhere(['trash' =>'Default'])
             ->one();
-            return $item['item_name'];
-        }
 
-        public static function groupvendoritem($categoryid, $subcategory)
-        {
-            $vendor_item = VendorItem::find()
+        return $item['item_name'];
+    }
+
+    public static function groupvendoritem($categoryid, $subcategory)
+    {
+        $vendor_item = VendorItem::find()
             ->where(['=', 'category_id', $categoryid])
             ->andwhere(['=', 'subcategory_id',$subcategory])
             ->all();
-            $vendor_item1=ArrayHelper::map($vendor_item,'item_id','item_name');
-            return $vendor_item1;
-        }
+        
+        return ArrayHelper::map($vendor_item,'item_id','item_name');
+    }
 
 
-        /* Load vendor items for vendor capacity exception dates*/
-        /* backend */
-        public static function loaditems()
-        {
-            $item= VendorItem::find()
+    /* Load vendor items for vendor capacity exception dates*/
+    /* backend */
+    public static function loaditems()
+    {
+        $item= VendorItem::find()
             ->where(['!=', 'item_status', 'Deactive'])
             ->andwhere(['!=', 'trash', 'Deleted'])
             ->andwhere(['vendor_id'=> Vendor::getVendor('vendor_id')])
             ->all();
-            $items=ArrayHelper::map($item,'item_id','item_name');
-            return $items;
-        }
+        
+        return ArrayHelper::map($item,'item_id','item_name');
+    }
 
-        public function statusImageurl($img_status)
-        {
-            if($img_status == 'Active')
+    public function statusImageurl($img_status)
+    {
+        if($img_status == 'Active')
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-        }
+        return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
+    }
 
-        // Status Image title
-        public function statusTitle($status)
-        {
-            if($status == 'Active')
+    // Status Image title
+    public function statusTitle($status)
+    {
+        if($status == 'Active')
             return 'Activate';
-            return 'Deactivate';
-        }
+        return 'Deactivate';
+    }
 
-        /**
-        * Deletes uploaded files related to this model from S3
-        */
-        public static function deleteFiles($image_key){
-            Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $image_key);
-            Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $image_key);
-            Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $image_key);
-            return true;
-        }
+    /**
+    * Deletes uploaded files related to this model from S3
+    */
+    public static function deleteFiles($image_key){
+        Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $image_key);
+        Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $image_key);
+        Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $image_key);
+        return true;
+    }
 
-        public function deleteAllFiles() {
-            if (isset($this->images) && count($this->images)>0) {
-                foreach ($this->images as $img) {
-                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $img->image_path);
-                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $img->image_path);
-                    Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $img->image_path);
-                }
+    public function deleteAllFiles() {
+        if (isset($this->images) && count($this->images)>0) {
+            foreach ($this->images as $img) {
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $img->image_path);
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $img->image_path);
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $img->image_path);
             }
         }
+    }
 
-        public static function get_featured_product() {
-            return $feature = \frontend\models\VendorItem::find()->select(['{{%vendor_item}}.*'])->where(['item_status' => 'Active'])->with('vendor')->asArray()->all();
-        }
+    public static function get_featured_product() {
+        return $feature = \frontend\models\VendorItem::find()->select(['{{%vendor_item}}.*'])->where(['item_status' => 'Active'])->with('vendor')->asArray()->all();
+    }
 }

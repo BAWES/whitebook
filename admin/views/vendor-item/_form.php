@@ -48,7 +48,7 @@ if($model->isNewRecord){
 	      <a href="#1" data-toggle="tab">Item Info </a>
 	    </li>
 	    <li>
-	      <a href="#2" data-toggle="tab" id="validone1">Item description</a>
+	      <a href="#2" id="validone1">Item description</a>
 	    </li>
 	    <li>
 	      <a href="#3" data-toggle="tab" id="validtwo2"> Item price </a>
@@ -469,7 +469,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.6", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.7", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
