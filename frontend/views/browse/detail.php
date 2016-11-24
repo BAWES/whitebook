@@ -597,45 +597,45 @@ $this->registerJs("
 ", View::POS_READY);
 
 $this->registerCss("
-.width-100-percent{width:100%!important;}
-.margin-top-20{margin-top:20px;}
-.width-20-percent{width: 20%;}
-.width-63-percent{width: 63%!important;}
-.datepicker{border: 2px solid rgb(242, 242, 242);}
-.datepicker table{font-size: 12px;}
-.form-group{margin-bottom:15px;width: 92%;margin-left: 11px;}
-.filter-bar{margin-top: 22px;padding-left: 0px;}
-.date-picker-box{height: 44px;border-radius: 0px;box-shadow: none;border-color: #e6e6e6;}
-.filter-bar .fa-calendar{position: absolute;right: 8px;top: 12px;font-size: 15px;color:#e6e6e6;}
-#form_product_option .selectpicker.btn-primary {color: #555!important;}
-#delivery_date_wrapper{position:relative;}
-.padding-right-0{padding-right:0px!important;}
-.padding-left-0{padding-left:0px!important;}
-.selectpicker,#area_id,#delivery_date,#timeslot_id{color:#000!important;}
-.margin-left-0{margin-left:0px!important;}
-.filter-bar .submit-btn{border-radius: 0px;padding: 10px;width: 72%;}
-.filter-bar .form-group label{font-weight:normal;color: #999 !important;font-size: 13px;}
-.margin-top-0{margin-top:0px!important;}
-.padding-top-12{padding-top: 12px;}
-.btn-stepper {width: 31%;color: white;background-color: #000;display: inline-block;text-align: center;height: 100%;float: left;line-height: 43px;font-size: 25px;font-style: normal;font-weight: bold;}
-.form-group input[name=quantity] {float: left;width: 38%;line-height: 38px;height: 100%!important;text-align: center;margin: 0;border-top: 1px solid #e6e6e6;box-shadow: none;border-bottom: 1px solid #e6e6e6;}
-.qty {width: 91%;display: block;height: 45px;margin-right: 8px;overflow: hidden;}
-.product_detail_section .panel-body p{text-align:justify;}
-.font-27{font-size:27px!important;}
-.margin-bottom-14{margin-bottom:14px!important;}
-.qty a:hover, .qty a:focus {color: #fff!important;}
-button.dropdown-toggle{background: #fff;color: #000;border-radius: 0px;height: 42px;border-color: #e6e6e6;}
-.color-808080{color: #808080!important;}
-.height-2{height:2px!important;}
-.margin-4{margin: 4px 0 0px;}
-.product-right-width{width:607px;float:none;padding:0;}
-.resp_hide{text-align:center;}
-.normal_mode ul.slides li img{width:100%!important;}
-.mobile_mode .responsive_slider_detials ul.slides li img{width:auto!important;}
-.color-999999{color: #999999!important;}
-#available{display: none;margin-top: 18px;}
-.margin-top-13{margin-top: 13px!important;}
-.fa-whatsapp{font-size: 169%;margin-top: 2px;}
+    .width-100-percent{width:100%!important;}
+    .margin-top-20{margin-top:20px;}
+    .width-20-percent{width: 20%;}
+    .width-63-percent{width: 63%!important;}
+    .datepicker{border: 2px solid rgb(242, 242, 242);}
+    .datepicker table{font-size: 12px;}
+    .form-group{margin-bottom:15px;width: 92%;margin-left: 11px;}
+    .filter-bar{margin-top: 22px;padding-left: 0px;}
+    .date-picker-box{height: 44px;border-radius: 0px;box-shadow: none;border-color: #e6e6e6;}
+    .filter-bar .fa-calendar{position: absolute;right: 8px;top: 12px;font-size: 15px;color:#e6e6e6;}
+    #form_product_option .selectpicker.btn-primary {color: #555!important;}
+    #delivery_date_wrapper{position:relative;}
+    .padding-right-0{padding-right:0px!important;}
+    .padding-left-0{padding-left:0px!important;}
+    .selectpicker,#area_id,#delivery_date,#timeslot_id{color:#000!important;}
+    .margin-left-0{margin-left:0px!important;}
+    .filter-bar .submit-btn{border-radius: 0px;padding: 10px;width: 72%;}
+    .filter-bar .form-group label{font-weight:normal;color: #999 !important;font-size: 13px;}
+    .margin-top-0{margin-top:0px!important;}
+    .padding-top-12{padding-top: 12px;}
+    .btn-stepper {width: 31%;color: white;background-color: #000;display: inline-block;text-align: center;height: 100%;float: left;line-height: 43px;font-size: 25px;font-style: normal;font-weight: bold;}
+    .form-group input[name=quantity] {float: left;width: 38%;line-height: 38px;height: 100%!important;text-align: center;margin: 0;border-top: 1px solid #e6e6e6;box-shadow: none;border-bottom: 1px solid #e6e6e6;}
+    .qty {width: 91%;display: block;height: 45px;margin-right: 8px;overflow: hidden;}
+    .product_detail_section .panel-body p{text-align:justify;}
+    .font-27{font-size:27px!important;}
+    .margin-bottom-14{margin-bottom:14px!important;}
+    .qty a:hover, .qty a:focus {color: #fff!important;}
+    button.dropdown-toggle{background: #fff;color: #000;border-radius: 0px;height: 42px;border-color: #e6e6e6;}
+    .color-808080{color: #808080!important;}
+    .height-2{height:2px!important;}
+    .margin-4{margin: 4px 0 0px;}
+    .product-right-width{width:607px;float:none;padding:0;}
+    .resp_hide{text-align:center;}
+    .normal_mode ul.slides li img{width:100%!important;}
+    .mobile_mode .responsive_slider_detials ul.slides li img{width:auto!important;}
+    .color-999999{color: #999999!important;}
+    #available{display: none;margin-top: 18px;}
+    .margin-top-13{margin-top: 13px!important;}
+    .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
 $this->registerJsFile('@web/js/product_detail.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);

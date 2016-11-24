@@ -2,8 +2,10 @@
 
 use yii\helpers\Html;
 use frontend\models\Website;
+use yii\web\View;
+
 ?>
-<!-- BEGIN Create event Modal Box -->
+
 <div class="modal-dialog">
     <div class="modal-content  modal_member_login signup_poupu row">
         <div class="modal-header">
@@ -72,18 +74,19 @@ use frontend\models\Website;
     </div>
 </div>
 <!-- END Create event Modal Box -->
-<script type="text/javascript">
-    jQuery('#eventdate_icon').datepicker({
+
+<?php 
+
+$this->registerJs("
+    $('#eventdate_icon').datepicker({
         format: 'dd-mm-yyyy',
         startDate: 'today',
         autoclose: true,
     });
-</script>
-
-<?php
+", View::POS_READY);
 
 $this->registerCss("
-#eventresult{color:red;}
-.eventErrorMsg{color:red;margin-bottom: 10px;}
-.event_loader{display:none;text-align:center;margin-bottom: 10px;}
+    #eventresult{color:red;}
+    .eventErrorMsg{color:red;margin-bottom: 10px;}
+    .event_loader{display:none;text-align:center;margin-bottom: 10px;}
 ");
