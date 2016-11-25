@@ -395,9 +395,11 @@ use yii\widgets\ActiveForm;
 								<input id="package_end_date" name="end_date" class="form-control" />
 							</td>	
 							<td>
+								<!--
 								<button type="button" class="btn btn-primary btn-add-package">
 									<i class="fa fa-plus"></i>
 								</button>
+								-->
 							</td>
 						</tr>
 					</tfoot>
@@ -449,6 +451,6 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.2", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>

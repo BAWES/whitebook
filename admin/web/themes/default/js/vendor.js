@@ -3,11 +3,15 @@ var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
 var c1 = true;
   
+//trigger add package 
 $package_count = $('.table-package-list tbody tr').length;
 
-$('.btn-add-package').click(function() {
-
+function add_package() {
 	$('.package-list-error').html('');
+
+	if($('#package_end_date').val() == '' || $('#package_start_date').val().length == '') {
+		return false;
+	}
 
 	$.post(validate_vendor_url, $('form').serialize(), function(json) {
 
@@ -53,7 +57,7 @@ $('.btn-add-package').click(function() {
 	});
 
 	$package_count++;
-});
+}
 
 $(document).delegate('.table-package-list .btn-danger','click', function(){
 	$(this).parent().parent().remove();
@@ -152,8 +156,20 @@ $(function(){
 
 $(document).ready(function () {
 
-	$('#package_start_date').datepicker({  format: 'dd-mm-yyyy', startDate: 'today',});
-	$('#package_end_date').datepicker({  format: 'dd-mm-yyyy', });
+	$('#package_start_date').datepicker({  
+		format: 'dd-mm-yyyy', 
+		startDate: 'today'
+	}).on('changeDate', function() {
+		add_package();
+	});
+
+	$('#package_end_date').datepicker({  
+		format: 'dd-mm-yyyy', 
+		startDate: 'today'
+	})
+	.on('changeDate', function() {
+		add_package();
+	});
 
 	//called when key is pressed in textbox
     $("#vendor-vendor_contact_number").keypress(function (e) {
