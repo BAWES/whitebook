@@ -10,6 +10,20 @@ class VendorItem extends \common\models\VendorItem
         return parent::behaviors();
     }
 
+    public function get_posted_data()
+    {
+        $arr_data_1 = Yii::$app->request->post('VendorItem');
+        $arr_data_2 = Yii::$app->request->post('VendorDraftItem');
+
+        if(!$arr_data_1) 
+            $arr_data_1 = [];
+
+        if(!$arr_data_2) 
+            $arr_data_2 = [];
+        
+        return array_merge($arr_data_1, $arr_data_2);
+    }        
+
     /**
      * Validate step 1 on update / create item  
      */

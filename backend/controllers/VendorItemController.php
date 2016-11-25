@@ -411,28 +411,22 @@ class VendorItemController extends Controller
     public function actionItemInfo() 
     {
         $item_id = Yii::$app->request->post('item_id');
-        
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
         //to save VendorItem data to VendorDraftItem
-        $arr_data_1 = Yii::$app->request->post('VendorItem');
-        $arr_data_2 = Yii::$app->request->post('VendorDraftItem');
-
-        if(!$arr_data_1) 
-            $arr_data_1 = [];
-
-        if(!$arr_data_2) 
-            $arr_data_2 = [];
-
-        $posted_data = array_merge($arr_data_1, $arr_data_2);
+        $posted_data = VendorItem::get_posted_data();
 
         //validate 
-        $errors = VendorItem::validate_item_info($posted_data);
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_info($posted_data);
 
-        if($errors) {
-            \Yii::$app->response->format = 'json';
-            
-            return [
-                'errors' => $errors
-            ];
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }
         }
         
         $model = false;
@@ -510,28 +504,22 @@ class VendorItemController extends Controller
     public function actionItemDescription() 
     {
         $item_id = Yii::$app->request->post('item_id');
-        
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
         //to save VendorItem data to VendorDraftItem
-        $arr_data_1 = Yii::$app->request->post('VendorItem');
-        $arr_data_2 = Yii::$app->request->post('VendorDraftItem');
-
-        if(!$arr_data_1) 
-            $arr_data_1 = [];
-
-        if(!$arr_data_2) 
-            $arr_data_2 = [];
-
-        $posted_data = array_merge($arr_data_1, $arr_data_2);
+        $posted_data = VendorItem::get_posted_data();
 
         //validate 
-        $errors = VendorItem::validate_item_description($posted_data);
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_description($posted_data);
 
-        if($errors) {
-            \Yii::$app->response->format = 'json';
-            
-            return [
-                'errors' => $errors
-            ];
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }
         }
         
         $model = VendorDraftItem::find()
@@ -560,29 +548,23 @@ class VendorItemController extends Controller
     public function actionItemPrice() 
     {
         $item_id = Yii::$app->request->post('item_id');
-        
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
         //to save VendorItem data to VendorDraftItem
-        $arr_data_1 = Yii::$app->request->post('VendorItem');
-        $arr_data_2 = Yii::$app->request->post('VendorDraftItem');
+        $posted_data = VendorItem::get_posted_data();
 
-        if(!$arr_data_1) 
-            $arr_data_1 = [];
+        //validate
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_price($posted_data);
 
-        if(!$arr_data_2) 
-            $arr_data_2 = [];
-
-        $posted_data = array_merge($arr_data_1, $arr_data_2);
-
-        //validate 
-        $errors = VendorItem::validate_item_price($posted_data);
-
-        if($errors) {
-            \Yii::$app->response->format = 'json';
-            
-            return [
-                'errors' => $errors
-            ];
-        }
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
         
         $model = VendorDraftItem::find()
             ->where(['item_id' => $item_id])

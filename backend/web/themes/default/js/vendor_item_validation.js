@@ -19,8 +19,6 @@ var render_question_url = $('#render_question_url').val();
 var item_name_check_url = $('#item_name_check_url').val();
 var image_order_url = $('#image_order_url').val();
 
-
-/* Begin Tabs NEXT & PREV buttons */
 $('.btnNext').click(function(){
   	$('.nav-tabs > .active').next('li').find('a').trigger('click');
 	$("html, body").animate({ scrollTop: 0 }, "slow");
@@ -30,13 +28,22 @@ $('.btnNext').click(function(){
   	$('.nav-tabs > .active').prev('li').find('a').trigger('click');
  	$("html, body").animate({ scrollTop: 0 }, "slow");
 });
-/* End Tabs NEXT & PREV buttons */
 
-	/* Begin when loading page first tab opened */
-	$(function(){
+$(function() {
+
+	var hash = location.hash.substr(1);
+
+	if(hash) {
+		$('.nav-tabs .active').removeClass('active');
+		$('.tab-content .active').removeClass('active');
+		
+		$('#tab_' + hash).parent().addClass('active');
+		$('#' + hash + '.tab-pane').addClass('active');
+	} else {
 		$('.nav-tabs li:first').addClass("active");
-		$('.tab-content div:first').addClass('active');
-	});
+		$('.tab-content div:first').addClass('active');	
+	}	
+});
 
 var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -375,93 +382,21 @@ $(function() {
  * Save tab 1 data on click of tab 2 or on click of next in tab 1 
  */
 $('#tab_2').click(function(e) {
-
-	$('.loadingmessage').show();
-
-	$.post($('#item_info_url').val(), get_form_data(), function(json) {
-
-		$('.loadingmessage').hide();
-
-		//switch to edit mode 
-		if(json['item_id']) {
-			$('input[name="item_id"]').val(json['item_id']);	
-		}
-		
-		if(json['edit_url']) {
-			$('#w0').attr('action', json['edit_url']);	
-		}		
-
-		if(json['success']) 
-		{
-			//update active tab 
-			$('.nav-tabs .active').removeClass('active');
-			$('.tab-content .active').removeClass('active');
-			
-			$('#tab_2').parent().addClass('active');
-			$('#2.tab-pane').addClass('active');
-		}
-
-		if(json['errors']) 
-		{
-			show_errors(json);
-		}
-	});
+	save_item_info();
 });
 
 /** 
  * Save tab 2 data on click of tab 3 or on click of next in tab 2
  */
 $('#tab_3').click(function(e) {
-
-	$('.loadingmessage').show();
-
-	$.post($('#item_description_url').val(), get_form_data(), function(json) {
-
-		$('.loadingmessage').hide();
-
-		if(json['success']) 
-		{
-			//update active tab 
-			$('.nav-tabs .active').removeClass('active');
-			$('.tab-content .active').removeClass('active');
-			
-			$('#tab_3').parent().addClass('active');
-			$('#3.tab-pane').addClass('active');
-		}
-
-		if(json['errors']) 
-		{
-			show_errors(json);
-		}
-	});
+	save_item_description();
 });
 
 /** 
  * Save tab 3 data on click of tab 4 or on click of next in tab 3
  */
 $('#tab_4').click(function(e) {
-
-	$('.loadingmessage').show();
-
-	$.post($('#item_price_url').val(), get_form_data(), function(json) {
-
-		$('.loadingmessage').hide();
-
-		if(json['success']) 
-		{
-			//update active tab 
-			$('.nav-tabs .active').removeClass('active');
-			$('.tab-content .active').removeClass('active');
-			
-			$('#tab_4').parent().addClass('active');
-			$('#4.tab-pane').addClass('active');
-		}
-
-		if(json['errors']) 
-		{
-			show_errors(json);	
-		}
-	});
+	save_item_price();
 });
 
 /** 
@@ -552,9 +487,15 @@ function show_errors(json)
 }
 
 //append ckeditor data 
-function get_form_data() {
+function get_form_data($is_autosave) {
 
 	$data = $('form').serialize();
+
+	if($is_autosave) {
+		$data += '&is_autosave=' + 1;
+	}else{
+		$data += '&is_autosave=' + 0;
+	}
 
 	$data += '&VendorItem[item_description]=' + ck_item_description.getData(); 
 	$data += '&VendorItem[additional_info]=' + ck_additional_info.getData();
@@ -565,5 +506,141 @@ function get_form_data() {
 	$data += '&VendorItem[price_description_ar]=' + ck_price_description_ar.getData();
 	$data += '&VendorItem[customization_description_ar]=' + ck_customization_description_ar.getData();	
 
+	$data += '&VendorDraftItem[item_description]=' + ck_item_description.getData(); 
+	$data += '&VendorDraftItem[additional_info]=' + ck_additional_info.getData();
+	$data += '&VendorDraftItem[price_description]=' + ck_price_description.getData();
+	$data += '&VendorDraftItem[customization_description]=' + ck_customization_description.getData(); 
+	$data += '&VendorDraftItem[item_description_ar]=' + ck_item_description_ar.getData();
+	$data += '&VendorDraftItem[additional_info_ar]=' + ck_additional_info_ar.getData();
+	$data += '&VendorDraftItem[price_description_ar]=' + ck_price_description_ar.getData();
+	$data += '&VendorDraftItem[customization_description_ar]=' + ck_customization_description_ar.getData();	
+
 	return $data;
 }
+
+/** 
+ * We will not display errors and loading image on autosave 
+ */ 
+function save_item_info($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').show();	
+	}
+
+	$.post($('#item_info_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		//switch to edit mode 
+		if(json['item_id']) {
+			$('input[name="item_id"]').val(json['item_id']);	
+		}
+		
+		if(json['edit_url']) {
+			$('#w0').attr('action', json['edit_url']);	
+		}
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//redirect 
+			if(isNewRecord) {
+				location = json['edit_url'] + '#2';
+			}
+
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_2').parent().addClass('active');
+			$('#2.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);
+		}
+	});
+}
+
+function save_item_description($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#item_description_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_3').parent().addClass('active');
+			$('#3.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);
+		}
+	});
+}
+
+function save_item_price($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#item_price_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_4').parent().addClass('active');
+			$('#4.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
+/** 
+ * Autosave active tab fields 
+ */ 
+setInterval(function(){
+
+	if($('#tab_1').parent().hasClass('active')){
+		save_item_info(true);
+	}
+	
+	if($('#tab_2').parent().hasClass('active')){
+		save_item_description(true);
+	}
+
+	if($('#tab_3').parent().hasClass('active')){
+		save_item_price(true);
+	}
+
+}, 2000);
+
