@@ -14,6 +14,7 @@ use common\models\VendorCategory;
 use common\models\Siteinfo;
 use common\models\VendorOrderAlertEmails;
 use common\models\Suborder;
+use common\models\VendorPhoneNo;
 use backend\models\Vendor;
 use backend\models\VendorItem;
 use backend\models\VendorLogin;
@@ -335,7 +336,25 @@ class SiteController extends Controller
             
             if($model->save()) {
 
+                //public phone 
+                VendorPhoneNo::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                $phones = Yii::$app->request->post('phone');
+
+                if(!$phones) {
+                    $phones = [];
+                }
+
+                foreach ($phones as $key => $value) {
+                   $vp = new VendorPhoneNo;
+                   $vp->vendor_id = $model->vendor_id;
+                   $vp->phone_no = $value['phone_no'];
+                   $vp->type = $value['type'];
+                   $vp->save();
+                }
+
                 $v_name = $model['vendor_name'];
+                
                 Yii::info('[Vendor Profile Updated] Vendor updated profile information', __METHOD__);
                 Yii::$app->session->setFlash('success', "Successfully updated your profile!");
                 return $this->redirect(['index']);
@@ -358,7 +377,8 @@ class SiteController extends Controller
             'vendor_order_alert_emails' => $vendor_order_alert_emails,
             'vendor_contact_number' => $vendor_contact_number,
             'vendor_categories' => $vendor_categories,
-            'day_off' => $day_off
+            'day_off' => $day_off,
+            'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id])
         ]);
     }
 

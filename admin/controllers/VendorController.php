@@ -40,7 +40,8 @@ use common\models\VendorItem;
 use common\models\VendorCategory;
 use common\models\BlockedDate;
 use common\models\DeliveryTimeSlot;
- 
+use common\models\VendorPhoneNo;
+
 /**
  * VendorController implements the CRUD actions for Vendor model.
  */
@@ -193,23 +194,10 @@ class VendorController extends Controller
             $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
 
             $model->vendor_public_email= $vendor['vendor_public_email'];
-            $model->vendor_public_phone= $vendor['vendor_public_phone'];
-
+            
             $model->vendor_status = (Yii::$app->request->post()['Vendor']['vendor_status']) ? 'Active' : 'Deactive';
             $model->approve_status = 'Yes';
             $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
-
-            //add categories
-            if(!$vendor['category_id']) {
-                $vendor['category_id'] = [];
-            }
-
-            foreach ($vendor['category_id'] as $key => $value) {
-               $vc = new VendorCategory;
-               $vc->vendor_id = $model->vendor_id;
-               $vc->category_id = $value;
-               $vc->save();
-            }
 
             $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
             $model->slug = str_replace(' ', '-', $model->slug);
@@ -243,6 +231,33 @@ class VendorController extends Controller
 
             if ($model->save(false)) {
                 
+                //add categories
+                if(!$vendor['category_id']) {
+                    $vendor['category_id'] = [];
+                }
+
+                foreach ($vendor['category_id'] as $key => $value) {
+                   $vc = new VendorCategory;
+                   $vc->vendor_id = $model->vendor_id;
+                   $vc->category_id = $value;
+                   $vc->save();
+                }
+
+                //public phone 
+                $phones = Yii::$app->request->post('phone');
+
+                if(!$phones) {
+                    $phones = [];
+                }
+
+                foreach ($phones as $key => $value) {
+                   $vp = new VendorPhoneNo;
+                   $vp->vendor_id = $model->vendor_id;
+                   $vp->phone_no = $value['phone_no'];
+                   $vp->type = $value['type'];
+                   $vp->save();
+                }
+
                 //remove old packages
                 VendorPackages::deleteAll(['vendor_id' => $model->vendor_id]);
 
@@ -300,6 +315,7 @@ class VendorController extends Controller
                 ->setSubject('Welcome '.$model['vendor_name'])
                 ->send();
             }
+
             $command=Vendor::updateAll(['vendor_password' => $vendor_password],'vendor_id= '.$model->id);
             Yii::$app->session->setFlash('success', 'Vendor created successfully!');
 
@@ -402,7 +418,6 @@ class VendorController extends Controller
             $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
 
             $model->vendor_public_email= $vendor['vendor_public_email'];
-            $model->vendor_public_phone= $vendor['vendor_public_phone'];
 
             if(Yii::$app->request->post('image')) {
 
@@ -433,6 +448,24 @@ class VendorController extends Controller
             }            
 
             if($model->save(false)) {
+
+                //public phone 
+                VendorPhoneNo::deleteAll(['vendor_id' => $model->vendor_id]);
+
+                $phones = Yii::$app->request->post('phone');
+
+                if(!$phones) {
+                    $phones = [];
+                }
+
+                foreach ($phones as $key => $value) {
+                   $vp = new VendorPhoneNo;
+                   $vp->vendor_id = $model->vendor_id;
+                   $vp->phone_no = $value['phone_no'];
+                   $vp->type = $value['type'];
+                   $vp->save();
+                }
+
                 Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
                 return $this->redirect(['index']);
             }
@@ -468,7 +501,8 @@ class VendorController extends Controller
                 'vendor_order_alert_emails' => $vendor_order_alert_emails,
                 'day_off' => $day_off,
                 'vendor_packages' => $vendor_packages,
-                'packages' => $packages
+                'packages' => $packages,
+                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id])
             ]);
         }
     }

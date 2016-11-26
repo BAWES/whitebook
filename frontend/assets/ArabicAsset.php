@@ -15,7 +15,7 @@ class ArabicAsset extends AssetBundle
 
     //CSS will be added before closing </head> tag
     public $css = [
-        'css/style_arabic.css?v=1.6',
+        'css/style_arabic.css?v=1.7',
     ];
 
     //This arabic asset is an adjustment for TemplateAsset in the case of Arabic language

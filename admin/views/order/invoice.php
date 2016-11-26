@@ -75,8 +75,7 @@ use common\models\Siteinfo;
                               } ?>  
                     </td>
                     <td>
-                        <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?> <br />
-                        <?= Yii::t('frontend', 'Contact Number') ?>: <?= $vendor->vendor_public_phone ?>
+                        <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?>
                     </td>
                 </tr>
             </tbody>

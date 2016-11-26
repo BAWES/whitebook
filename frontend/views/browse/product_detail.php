@@ -297,22 +297,31 @@ if($model->images) {
                                                     <div class="contact_information margin-4">
                                                         <address>
                                                             <div class="clearfix">
-                                                                <?php if (trim($model->vendor->vendor_public_email) || trim($model->vendor->vendor_public_phone)) { ?>
+                                                                <?php if (trim($model->vendor->vendor_public_email)) { ?>
                                                                     <div class="col-md-6 col-sm-6 col-xs-12 cont_ifo_left paddingleft0">
-                                                                        <?php if (trim($model->vendor->vendor_public_email)) { ?>
-                                                                            <h3>
-                                                                                <a href="mailto:<?=$model->vendor->vendor_public_email; ?>" title="<?=$model->vendor->vendor_public_email; ?>"><?=$model->vendor->vendor_public_email; ?>&nbsp;</a>
-                                                                            </h3>
-                                                                            <span class="border-bottom"></span>
-                                                                        <?php } ?>
-                                                                        <?php if (trim($model->vendor->vendor_public_phone)) { ?>
-                                                                            <h4 class="margin-top-13">
-                                                                                <a class="color-808080" href="tel:<?=$model->vendor->vendor_public_phone; ?>"><?=$model->vendor->vendor_public_phone; ?></a>&nbsp;
-                                                                            </h4>
-                                                                            <span class="border-bottom border-bottom-none"></span>
-                                                                        <?php } ?>
+                                                                        <h3>
+                                                                            <a href="mailto:<?=$model->vendor->vendor_public_email; ?>" title="<?=$model->vendor->vendor_public_email; ?>"><?=$model->vendor->vendor_public_email; ?>&nbsp;</a>
+                                                                        </h3>
+                                                                        <span class="border-bottom"></span>
                                                                     </div>
                                                                 <?php } ?>
+
+                                                                <div class="cont_ifo_left vendor_phone_list paddingleft0">
+                                                                <?php 
+
+                                                                $phone_icons = [
+                                                                        'Whatsapp' => 'fa fa-whatsapp',
+                                                                        'Mobile' => 'fa fa-mobile',
+                                                                        'Fax' => 'fa fa-fax',
+                                                                        'Office' => 'fa fa-building'
+                                                                    ];
+
+                                                                foreach ($phones as $key => $value) { ?>
+                                                                    <a class="color-808080" href="tel:<?= $value->phone_no; ?>"><i class="<?= $phone_icons[$value->type] ?>"></i><?= $value->phone_no; ?>
+                                                                    </a>
+                                                                <?php } ?>
+                                                                </div>
+                                                                
                                                                 <?php if (trim($model->vendor->vendor_website) || trim($model->vendor->vendor_working_hours)) { ?>
                                                                     <div class="col-md-6 col-sm-6 col-xs-12 paddingright0 paddingleft0 cont_ifo_right">
                                                                         <?php if (trim($model->vendor->vendor_website)) { ?>

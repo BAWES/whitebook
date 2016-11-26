@@ -20,6 +20,7 @@ use common\models\Location;
 use common\models\CategoryPath;
 use common\models\CustomerAddress;
 use common\components\LangFormat;
+use common\models\VendorPhoneNo;
 
 /**
 * Site controller.
@@ -107,10 +108,6 @@ class BrowseController extends BaseController
                 '{{%priority_item}}',
                 '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
             )
-            ->leftJoin(
-                '{{%vendor_location}}',
-                '{{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id'
-            )
             ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->where([
@@ -170,7 +167,7 @@ class BrowseController extends BaseController
                 $location = CustomerAddress::findOne($address_id)->area_id;
             }
 
-            $item_query->andWhere(['in', '{{%vendor_location}}.area_id', $location]);
+            $item_query->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
         }
 
 
@@ -325,6 +322,7 @@ class BrowseController extends BaseController
                 'model' => $model,
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'vendor_area' => [],
+                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
                 'my_addresses' => []
             ]);
 
@@ -369,6 +367,7 @@ class BrowseController extends BaseController
 
             return $this->render('detail', [
                 'model' => $model,
+                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,

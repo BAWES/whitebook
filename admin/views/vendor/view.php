@@ -60,7 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value'=>strip_tags($model->vendor_return_policy)
                 ],
                 'vendor_public_email',
-                'vendor_public_phone',
                 'vendor_working_hours',
                 'vendor_contact_name',
                 'vendor_contact_email',
