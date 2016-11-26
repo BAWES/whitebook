@@ -1,7 +1,7 @@
 {
     "name": "BAWES/whitebook",
     "description": "The White Book Online Event Planning Platform",
-    "version": "2.1.2",
+    "version": "2.1.3",
     "keywords": ["plan", "event"],
     "homepage": "http://www.thewhitebook.com.kw/",
     "type": "project",
@@ -14,6 +14,7 @@
         "yiisoft/yii2-swiftmailer": "*",
         "yiisoft/yii2-httpclient": "dev-master",
         "yiisoft/yii2-redis": "~2.0.0",
+	"yiisoft/yii2-shell": "~2.0.0",
         "openbuildings/swiftmailer-css-inliner": "*",
         "costa-rico/yii2-images": "dev-master",
         "dektrium/yii2-user": "*",
