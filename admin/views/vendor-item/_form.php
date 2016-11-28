@@ -45,35 +45,37 @@ if($model->isNewRecord){
 <div class="tabbable">
 	<ul class="nav nav-tabs">
 	    <li class="active">
-	      <a href="#1" data-toggle="tab">Item Info </a>
+	      <a href="#1" data-toggle="tab" id="tab_1">Item Info </a>
 	    </li>
 	    <li>
-	      <a href="#2" id="validone1">Item description</a>
+	      <a href="#2" id="tab_2">Item description</a>
 	    </li>
 	    <li>
-	      <a href="#3" data-toggle="tab" id="validtwo2"> Item price </a>
+	      <a href="#3" id="tab_3">Item price </a>
 	    </li>
 	    <li>
-	      <a href="#4" data-toggle="tab" id="validthree3"> Approval </a>
+	      <a href="#4" id="tab_4">Approval </a>
 	    </li>
 	    <li>
-	      <a href="#5" data-toggle="tab" id="validfour4">Images</a>
+	      <a href="#5" id="tab_5">Images</a>
 	    </li>
 	    <li>
-	      <a href="#6" data-toggle="tab" id="validfive5">Themes & Groups</a>
+	      <a href="#6" id="tab_6">Themes & Groups</a>
 	    </li>
-	    <!-- BEGIN if item type sales question and answer tab will be display -->
-	    <?php if(!$model->isNewRecord && $model->item_for_sale =='Yes') {?>
+	    <?php 
+	    /*if(!$model->isNewRecord && $model->item_for_sale =='Yes') {?>
 	    <li>
-	      <a href="#7" data-toggle="tab" id="validsix6"> Questions </a>
+	      <a href="#7" id="tab_7"> Questions </a>
 	    </li>
-	    <?php } ?>
-	    <!-- END if item type sales question and answer tab will be display -->
+	    <?php }*/ ?>
 	</ul>
 
 	<div class="tab-content">
 		<!-- Begin First Tab -->
 		<div class="tab-pane active" id="1">
+
+			<input type="hidden" name="item_id" value="<?= $model->item_id ?>" />
+
 			<!-- vid - click create item button from item view page for the particular item view page-->
 			<?php if($request->get('vid')) {	
 			
@@ -455,6 +457,15 @@ echo Html::hiddenInput('renderquestion_url',Url::to(['/vendor-item/renderquestio
 echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
 echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
 
+//ajax step urls 
+echo Html::hiddenInput('item_info_url', Url::to(['vendor-item/item-info']), ['id' => 'item_info_url']);
+echo Html::hiddenInput('item_description_url', Url::to(['vendor-item/item-description']), ['id' => 'item_description_url']);
+echo Html::hiddenInput('item_price_url', Url::to(['vendor-item/item-price']), ['id' => 'item_price_url']);
+echo Html::hiddenInput('item_approval_url', Url::to(['vendor-item/item-approval']), ['id' => 'item_approval_url']);
+echo Html::hiddenInput('item_images_url', Url::to(['vendor-item/item-images']), ['id' => 'item_images_url']);
+
+echo Html::hiddenInput('item_themes_groups', Url::to(['vendor-item/item-themes-groups']), ['id' => 'item_themes_groups']);
+
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
@@ -469,7 +480,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.7", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.8", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
