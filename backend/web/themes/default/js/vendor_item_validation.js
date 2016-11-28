@@ -498,22 +498,22 @@ function get_form_data($is_autosave) {
 	}
 
 	$data += '&VendorItem[item_description]=' + ck_item_description.getData(); 
-	$data += '&VendorItem[additional_info]=' + ck_additional_info.getData();
-	$data += '&VendorItem[price_description]=' + ck_price_description.getData();
-	$data += '&VendorItem[customization_description]=' + ck_customization_description.getData(); 
+	$data += '&VendorItem[item_additional_info]=' + ck_additional_info.getData();
+	$data += '&VendorItem[item_price_description]=' + ck_price_description.getData();
+	$data += '&VendorItem[item_customization_description]=' + ck_customization_description.getData(); 
 	$data += '&VendorItem[item_description_ar]=' + ck_item_description_ar.getData();
-	$data += '&VendorItem[additional_info_ar]=' + ck_additional_info_ar.getData();
-	$data += '&VendorItem[price_description_ar]=' + ck_price_description_ar.getData();
-	$data += '&VendorItem[customization_description_ar]=' + ck_customization_description_ar.getData();	
+	$data += '&VendorItem[item_additional_info_ar]=' + ck_additional_info_ar.getData();
+	$data += '&VendorItem[item_price_description_ar]=' + ck_price_description_ar.getData();
+	$data += '&VendorItem[item_customization_description_ar]=' + ck_customization_description_ar.getData();	
 
 	$data += '&VendorDraftItem[item_description]=' + ck_item_description.getData(); 
-	$data += '&VendorDraftItem[additional_info]=' + ck_additional_info.getData();
-	$data += '&VendorDraftItem[price_description]=' + ck_price_description.getData();
-	$data += '&VendorDraftItem[customization_description]=' + ck_customization_description.getData(); 
+	$data += '&VendorDraftItem[item_additional_info]=' + ck_additional_info.getData();
+	$data += '&VendorDraftItem[item_price_description]=' + ck_price_description.getData();
+	$data += '&VendorDraftItem[item_customization_description]=' + ck_customization_description.getData(); 
 	$data += '&VendorDraftItem[item_description_ar]=' + ck_item_description_ar.getData();
-	$data += '&VendorDraftItem[additional_info_ar]=' + ck_additional_info_ar.getData();
-	$data += '&VendorDraftItem[price_description_ar]=' + ck_price_description_ar.getData();
-	$data += '&VendorDraftItem[customization_description_ar]=' + ck_customization_description_ar.getData();	
+	$data += '&VendorDraftItem[item_additional_info_ar]=' + ck_additional_info_ar.getData();
+	$data += '&VendorDraftItem[item_price_description_ar]=' + ck_price_description_ar.getData();
+	$data += '&VendorDraftItem[item_customization_description_ar]=' + ck_customization_description_ar.getData();	
 
 	return $data;
 }

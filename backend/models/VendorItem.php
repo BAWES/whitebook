@@ -1,7 +1,9 @@
 <?php
+
 namespace backend\models;
-use backend\models\Vendor;
+
 use Yii;
+use backend\models\Vendor;
 
 class VendorItem extends \common\models\VendorItem
 {

@@ -89,7 +89,7 @@ class VendorItemController extends Controller
      */
     public function actionView($id)
     {
-        $dataProvider1=PriorityItem::find()
+        $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
             ->where(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
 
