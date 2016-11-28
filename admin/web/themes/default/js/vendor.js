@@ -7,13 +7,28 @@ var c1 = true;
 $package_count = $('.table-package-list tbody tr').length;
 
 function add_package() {
+
 	$('.package-list-error').html('');
 
 	if($('#package_end_date').val() == '' || $('#package_start_date').val().length == '') {
 		return false;
 	}
 
+	//show indicator 
+	$('.loadingmessage').show();
+
+	//disable create button 
+	$('#6 .btn-success').attr('disabled', 'disabled');
+
+	$('.datepicker-days').hide();
+
 	$.post(validate_vendor_url, $('form').serialize(), function(json) {
+
+		//hide indicator 
+		$('.loadingmessage').hide();
+
+		//enable create button 
+		$('#6 .btn-success').removeAttr('disabled');
 
 		if(json.errors.length > 0) {
 
