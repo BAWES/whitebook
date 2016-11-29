@@ -24,7 +24,7 @@ $this->title = 'Events/Wishlist | Whitebook';
 								'attribute'=>'image_path',
 								'header'=>'image',
 								'value' => function ($model) {
-									return Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$model['image_path'],['class'=>'item-img']), ['/browse/detail/','slug'=>$model['slug']]);
+									return Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$model['image_path'],['class'=>'table-item-img']), ['/browse/detail/','slug'=>$model['slug']]);
 								},
 								'format' =>'raw'
 							],
@@ -40,12 +40,12 @@ $this->title = 'Events/Wishlist | Whitebook';
 									'view' => function ($url, $model) {
 										$url = Url::to(['/browse/detail/','slug'=>$model['slug']],true);
 										return  Html::a('<span class="fa fa-search"></span> &nbsp;View', $url,
-											[ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', ]) ;
+											[ 'title' => Yii::t('app', 'View'), 'class'=>'btn-view-thing-i-like btn btn-primary btn-xs', ]) ;
 									},
 									'delete' => function ($url, $model) {
 										$url = Url::to(['things-i-like/delete','id'=>$model['item_id']],true);
 										return  Html::a('<span class="fa fa-trash"></span >&nbsp;Delete', $url,
-											[ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', 'onclick'=>'return (confirm("Are you sure you want to remove this item from your wishlist?"))']
+											[ 'title' => Yii::t('app', 'View'), 'class'=>'btn-delete-thing-i-like btn btn-primary btn-xs', 'onclick'=>'return (confirm("Are you sure you want to remove this item from your wishlist?"))']
 										) ;
 									},
 								]
