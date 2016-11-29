@@ -438,6 +438,7 @@ class EventsController extends BaseController
                     $event_modal->event_name = $event_name;
                     $event_modal->event_date = $event_date1;
                     $event_modal->event_type = $request->post('event_type');
+                    $event_modal->no_of_guests = $request->post('no_of_guests');
                     $event_modal->slug = $slug;
                     $event_modal->save();
                     $result = $event_modal->event_id;
@@ -453,10 +454,19 @@ class EventsController extends BaseController
 
                     if ($request->post('item_id') && ($request->post('item_id') > 0)) {
 
-                        Yii::$app->session->set('item_name', $request->post('item_name'));
                         $item_id = $request->post('item_id');
                         $event_id = $event_modal->event_id;
 
+                        $item = VendorItem::find()
+                            ->where(['item_id' => $item_id])
+                            ->one();
+
+                        if(Yii::$app->language == 'en') {
+                            Yii::$app->session->set('item_name', $item->item_name);
+                        }else{
+                            Yii::$app->session->set('item_name', $item->item_name_ar);
+                        }
+                        
                         $check = EventItemlink::find()
                             ->select(['link_id'])
                             ->where(['event_id' => $event_id])

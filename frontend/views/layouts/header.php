@@ -283,8 +283,6 @@ $action = Yii::$app->controller->action->id;
                                         <input type="hidden" name="item_id" class="form-control required" id="item_id" value="0">
                                     </div>
                                     <div class="form-group top_calie_new">
-
-
                                         <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
                                             <input type="text"  name="event_date" id="event_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>">
                                             <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
@@ -292,19 +290,27 @@ $action = Yii::$app->controller->action->id;
                                         <label for="event_date" class="error"></label>
                                     </div>
                                     <div class="form-group new_popup_common">
-                                        <div class="bs-docs-example"><select class="selectpicker required trigger" name="event_type" data""-style="btn-primary" id="event_type" >
-                                                                             <option value="">Select event type</option>
-                                            <?php
-                                            $event_type = Website::get_event_types();
-                                            foreach ($event_type as $e) {
-                                                ?>
-                                                    <option value="<?php echo $e['type_name']; ?>"><?php echo $e['type_name']; ?></option>
-<?php } ?>
+                                        <div class="bs-docs-example">
+                                            <select class="selectpicker required trigger" name="event_type" style="btn-primary" id="event_type" >
+                                            <option value="">
+                                                <?php echo Yii::t('frontend', 'Select event type') ?>
+                                            </option>
+                                            <?php $event_type = Website::get_event_types();
+                                            foreach ($event_type as $e) { ?>
+                                            <option value="<?php echo $e['type_name']; ?>">
+                                                <?php echo $e['type_name']; ?>
+                                                    
+                                            </option>
+                                            <?php } ?>
                                             </select>
 
                                             <div class="error" id="type_error"></div>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <input type="text" name="no_of_guests" class="form-control required" id="no_of_guests" placeholder="<?php echo Yii::t('frontend', 'Enter number of guests'); ?>" />
+                                    </div>
+
                                     <div id="eventresult"></div>
                                     <div class="eventErrorMsg error"></div>
                                     <div class="event_loader"><img src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>" title="Loader"></div>

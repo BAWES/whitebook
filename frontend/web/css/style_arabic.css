@@ -347,3 +347,7 @@ td[align="left"] {
     padding-right: 0px;
     padding-left: 3px;
 }
+.add-on.position_news {
+    right: auto;
+    left: 23px;
+}
