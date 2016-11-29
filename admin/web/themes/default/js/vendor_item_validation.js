@@ -48,10 +48,12 @@ var csrfToken = $('meta[name="csrf-token"]').attr("content");
 /* Begin Tabs NEXT & PREV buttons */
 $('.btnNext').click(function(){
   $('.nav-tabs > .active').next('li').find('a').trigger('click');
+  $('html, body').animate({ scrollTop: 0 }, 'slow');
 });
 
 $('.btnPrevious').click(function(){
   $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+  $('html, body').animate({ scrollTop: 0 }, 'slow');
 });
 /* End Tabs NEXT & PREV buttons */
 
@@ -296,42 +298,6 @@ function vendor_load(){
     });
 }
 
-//* Load Sub Category *//
-$(function (){
-    $("#vendoritem-category_id").change(function (){
-		var id = $('#vendoritem-category_id').val();
-        var path = loadsubcategory_url;
-        $('.loadingmessage').show();
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { id: id ,_csrf : csrfToken}, //data to be send
-	        success: function( data ) {
-				$('.loadingmessage').hide();
-	            $('#vendoritem-subcategory_id').html(data);
-	        }
-        });
-     });
- });
-
-//* Load Child Category *//
-$(function (){
-    $("#vendoritem-subcategory_id").change(function (){
-		var id = $('#vendoritem-subcategory_id').val();
-        var path = loadchildcategory_url;
-        $('.loadingmessage').show();
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { id: id ,_csrf : csrfToken}, //data to be send
-	        success: function( data ) {
-				$('.loadingmessage').hide();
-	            $('#vendoritem-child_category').html(data);
-	        }
-        });
-     });
- });
-
 // Add questions
 var j = count_q;
 
@@ -360,21 +326,6 @@ function questionView(q_id,tis){
 		$(tis).toggleClass("expanded");
 	}
 }
-
-/* 	BEGIN Themes and groups multiselect widget */
-$(function(){
- 	//$('#vendoritem-themes').multiselect({
-		//'enableFiltering': true,
-    //    'filterPlaceholder': 'Search for something...'
-    //});
-    //
-    //$('#vendoritem-groups').multiselect({
-		//'enableFiltering': true,
-    //    'filterPlaceholder': 'Search for something...'
-    //});
-
-});
-/* END Themes and groups multiselect widget */
 
 // Add more for pricing 
 $(function(){
@@ -459,56 +410,6 @@ $(document).ready(function(){
 $(document).on('ready', function() {
 	$('.file-block').hide();
 
-	//if(imagedata) {
-	//	$("#vendoritem-image_path").fileinput({
-	//    	resizeImage: true,
-	//    	showUpload:false,
-	//		showRemove:false,
-	//		minImageWidth: 208,
-	//    	minImageHeight: 221,
-	//		initialPreview: [
-	//			img,
-	//		],
-	//		initialPreviewConfig: [
-	//		   action,
-	//		],
-	//		overwriteInitial: false,
-	//    	uploadUrl : '/dummy/dummy',
-	//	});
-	//} else {
-	//	$("#vendoritem-image_path").fileinput({
-	//    	resizeImage: true,
-	//    	showUpload:false,
-	//		showRemove:false,
-	//		minImageWidth: 208,
-	//    	minImageHeight: 221,
-	//		overwriteInitial: false,
-	//    	uploadUrl : '/dummy/dummy',
-	//	});
-	//}
-    
-    //if(guideimagedata) {
-    //	$("#vendoritem-guide_image").fileinput({
-	 //   	showUpload:false,
-		//	showRemove:false,
-		//	initialPreview: [
-		//		img1,
-		//	],
-		//	initialPreviewConfig: [
-		//	   action1,
-		//	],
-		//	overwriteInitial: false,
-	 //   	uploadUrl : '/dummy/dummy',
-	 //  	});
-    //} else {
-    //	$("#vendoritem-guide_image").fileinput({
-	 //   	showUpload:false,
-		//	showRemove:false,
-		//	overwriteInitial: false,
-	 //   	uploadUrl : '/dummy/dummy',
-	 //  	});
-    //}
-	
 	var path = image_order_url;
 
 	$(".file-preview-thumbnails").sortable({ 
@@ -539,22 +440,10 @@ $(document).on('ready', function() {
 
 $("#validone1").click(function() {
 
-	if($('#test').val()==1)
-	{
-		return false;
-	}
-
 	if($("#vendoritem-vendor_id").val()=='')
 	{
 			$(".field-vendoritem-vendor_id").addClass('has-error');
 			$(".field-vendoritem-vendor_id").find('.help-block').html('Select Vendor name');
-			return false;
-  	}
-
-  	if($("#vendoritem-item_name").val()=='')
-	{
-			$(".field-vendoritem-item_name").addClass('has-error');
-			$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
 			return false;
   	}
 
@@ -565,53 +454,53 @@ $("#validone1").click(function() {
 			return false;
   	}
 
-    //validate email already exist or not
- 	var item_len = $("#vendoritem-item_name").val().length;
+  	var item_len = $("#vendoritem-item_name").val().length;
 
     if($("#vendoritem-item_name").val()=='')
 	{
 	 	$(".field-vendoritem-item_name").addClass('has-error');
 		$(".field-vendoritem-item_name").find('.help-block').html('Item name cannot be blank.');
 		return false;
-	} else if(item_len < 4) {
+	} 
+
+	if(item_len < 4) {
 		$(".field-vendoritem-item_name").addClass('has-error');
 		$(".field-vendoritem-item_name").find('.help-block').html('Item name minimum 4 letters.');
 		return false;
-	} else if(item_len > 3) {
+	} 
 
-		var mail=$("#vendoritem-item_name").val();
-        var path = item_name_check;
-        $('.loadingmessage').show();
+	var item_name = $("#vendoritem-item_name").val();
+    var path = item_name_check;
+    $('.loadingmessage').show();
 
-        $.ajax({
-	        type: 'POST',
-	        url: path, //url to be called
-	        data: { item: mail , item_id : item_id, _csrf : csrfToken}, //data to be send
-	        success: function( data ) {
+    $.ajax({
+        type: 'POST',
+        url: path, //url to be called
+        data: { item: item_name , item_id : item_id, _csrf : csrfToken}, //data to be send
+        success: function( data ) {
+			
+            if(data > 0)
+            {
+				$('.loadingmessage').hide();
+				$(".field-vendoritem-item_name").removeClass('has-success');
+				$(".field-vendoritem-item_name").addClass('has-error');
+				$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
+				$(".field-vendoritem-item_name" ).focus();		
+			}
+			else
+			{
+				$(".field-vendoritem-item_name").find('.help-block').html('');
+				$('.loadingmessage').hide();				
 				
-				$("#test").val(mail);
-	            
-	            if(data>0)
-	            {
-					$('.loadingmessage').hide();
-					$(".field-vendoritem-item_name").removeClass('has-success');
-					$(".field-vendoritem-item_name").addClass('has-error');
-					$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
-					$(".field-vendoritem-item_name" ).focus();
-					$('#test').val(1);
-				}
-				else
-				{
-					$(".field-vendoritem-item_name").find('.help-block').html('');
-					$('.loadingmessage').hide();
-					$('#test').val(0);
-				}
-	         }
-        });
-
-  	} else {
-	  	return true;
-	}
+				//update active tab 
+				$('.nav-tabs .active').removeClass('active');
+				$('.tab-content .active').removeClass('active');
+				
+				$('#validone1').parent().addClass('active');
+				$('#2.tab-pane').addClass('active');		
+			}
+         }
+    });
 });
 
 $("#validtwo2").click(function() {
@@ -1112,46 +1001,6 @@ function deletequestionselection(selection_val)
   		});
 	}
 }
-
-
-/* BEGIN Vendor item check exist or not */
-$(function () {
-
- 	$("#vendoritem-item_name").on('keyup keypress focusout',function () {
-
-		if($("#vendoritem-item_name").val().length > 3)
-		{
-			var mail=$("#vendoritem-item_name").val();
-
-	        var path = item_name_check;
-	        $('.loadingmessage').show();
-
-	        $.ajax({
-		        type: 'POST',
-		        url: path, //url to be called
-		        data: { item: mail ,item_id : item_id, _csrf : csrfToken}, //data to be send
-		        success: function( data ) {
-					$("#test").val(mail);
-		            if(data>0)
-		            {
-						$('.loadingmessage').hide();
-						$(".field-vendoritem-item_name").removeClass('has-success');
-						$(".field-vendoritem-item_name").addClass('has-error');
-						$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
-						$(".field-vendoritem-item_name" ).focus();
-						$('#test').val(1);
-					} else {
-						$(".field-vendoritem-item_name").find('.help-block').html('');
-						$('.loadingmessage').hide();
-						$('#test').val(0);
-					}
-		        }
-	        });
-		}
-	}); 	
-});
-/* END Vendor item check exist or not */
-
 
 $('.complete').click(function()
 {

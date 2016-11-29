@@ -13,6 +13,7 @@ use frontend\models\Website;
 use frontend\models\Users;
 use common\models\Smtp;
 use common\models\CategoryPath;
+use common\models\VendorPhoneNo;
 use common\models\VendorItemThemes;
 
 class DirectoryController extends BaseController
@@ -141,10 +142,6 @@ class DirectoryController extends BaseController
                 '{{%priority_item}}',
                 '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
             )
-            ->leftJoin(
-                '{{%vendor_location}}',
-                '{{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id'
-            )
             ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->where([
@@ -257,7 +254,8 @@ class DirectoryController extends BaseController
             'provider' => $provider,
             'slug' => $slug,
             'customer_events' => $customer_events,
-            'customer_events_list' => $customer_events_list
+            'customer_events_list' => $customer_events_list,
+            'phones' => VendorPhoneNo::findAll(['vendor_id' => $vendor_details->vendor_id])
         ]);
     }
 }

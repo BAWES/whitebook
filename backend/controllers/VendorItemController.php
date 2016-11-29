@@ -303,8 +303,6 @@ class VendorItemController extends Controller
         
         if ($model->load($posted_data) && $model->save(false)) {
 
-            $vendor_item = Yii::$app->request->post('VendorItem');
-
             /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
             if ($model->item_for_sale == 'No') {
                 $model->item_amount_in_stock = '';
@@ -404,6 +402,206 @@ class VendorItemController extends Controller
             ]);
         }
     }
+
+    /**
+    * Save item info from update and create page
+    *
+    * @return json
+    */
+    public function actionItemInfo() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        //to save VendorItem data to VendorDraftItem
+        $posted_data = VendorItem::get_posted_data();
+
+        //validate 
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_info($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }
+        }
+        
+        $model = false;
+
+        //if new item 
+        if(!$item_id) {
+
+            $vendor_item = new VendorItem();
+            $vendor_item->load(['VendorItem' => $posted_data]);
+            $vendor_item->vendor_id = Yii::$app->user->getId();
+            $vendor_item->save(false);
+
+            $model = new VendorDraftItem();
+            $model->item_id = $vendor_item->item_id;
+            $model->vendor_id = Yii::$app->user->getId();
+            $model->item_approved = 'Pending';
+            $model->priority = 'Normal';
+            $model->sort = 0;
+            $model->item_archived = 'No';
+            $model->item_status = 'inactive';
+            $model->trash = 'Default';
+        }
+
+        //if old item & in draft 
+        if(!$model) {
+            $model = VendorDraftItem::find()
+                ->where(['item_id' => $item_id])
+                ->one();            
+        }
+        
+        //if old item & not in draft
+        if(!$model) {
+            $model = new VendorDraftItem();
+            $model->attributes = $this->findModel($item_id)->attributes;
+            $model->item_approved = 'Pending';
+        }
+
+        //load posted data to model 
+        $model->load(['VendorDraftItem' => $posted_data]);
+
+        //save first step data without validation 
+        $model->save(false);
+
+        //remove all old category 
+        VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+
+        //add all category
+        $category = Yii::$app->request->post('category');
+
+        if(!$category) {
+            $category = array();
+        }
+
+        foreach($category as $key => $value) {
+            $vic = new VendorItemToCategory();
+            $vic->item_id = $model->item_id;
+            $vic->category_id = $value;
+            $vic->save();
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id,
+            'edit_url' => Url::to(['vendor-item/update', 'id' => $model->item_id])
+        ];
+    }
+
+    /**
+    * Save item description from update and create page
+    *
+    * @return json
+    */
+    public function actionItemDescription() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        //to save VendorItem data to VendorDraftItem
+        $posted_data = VendorItem::get_posted_data();
+
+        //validate 
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_description($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }
+        }
+        
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['VendorDraftItem' => $posted_data]);
+
+        //save data without validation 
+        $model->save(false);
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id
+        ];
+    }
+
+    /**
+    * Save item price from update and create page
+    *
+    * @return json
+    */
+    public function actionItemPrice() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        //to save VendorItem data to VendorDraftItem
+        $posted_data = VendorItem::get_posted_data();
+
+        //validate
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_price($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['VendorDraftItem' => $posted_data]);
+
+        //save data without validation 
+        $model->save(false);
+
+        //remove old price chart
+        VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
+
+        //add price chart
+        $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
+
+        if($vendoritem_item_price) {
+
+            for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
+                $vendor_item_pricing = new VendorItemPricing();
+                $vendor_item_pricing->item_id =  $model->item_id;
+                $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
+                $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
+                $vendor_item_pricing->pricing_price_per_unit = $vendoritem_item_price['price'][$opt];
+                $vendor_item_pricing->save();
+            }
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id
+        ];
+    }
+
 
     /**
      * Deletes an existing VendorItem model.
@@ -697,36 +895,24 @@ class VendorItemController extends Controller
     */
     public function actionItemnamecheck()
     {
-        if (!Yii::$app->request->isAjax)
-            die();
+        if (!Yii::$app->request->isAjax) {
+            Yii::$app->end();
+        }
 
         $data = Yii::$app->request->post();
 
-        if ($data['item_id'] == 0) {
+        $count_query = VendorItem::find()
+            ->select('item_name')
+            ->where([
+                'item_name' => $data['item'],
+                'trash' => 'Default'
+            ]);
 
-            $itemname = VendorItem::find()->select('item_name')
-            ->where(['item_name' => $data['item']])
-            ->andwhere(['trash' => 'Default'])
-            ->all();
-
-        } else {
-
-            $itemname = VendorItem::find()->select('item_name')
-            ->where(['item_name' => $data['item']])
-            ->where(['item_id' => $data['item_id']])
-            ->andwhere(['trash' => 'Default'])
-            ->all();
-
-            if (count($itemname) > 0) {
-                return  $result = 0;
-                die;
-            } else {
-                return  $result = 1;
-                die;
-            }
+        if ($data['item_id']) {            
+            $count_query->andWhere(['!=', 'item_id', $data['item_id']]);
         }
 
-        return $result = count($itemname);
+        echo $count_query->count();
     }
 
     public function actionRenderanswer()

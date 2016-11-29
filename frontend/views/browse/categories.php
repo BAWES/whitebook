@@ -148,39 +148,46 @@ use common\components\LangFormat;
 <?php
 
 if (!Yii::$app->user->isGuest) {
+    
     $session = Yii::$app->session;
-    if (!$session->has('deliver-location')) {
-        echo $this->render('_popup');
-        $this->registerJS("
-            jQuery('#ShopLocationDateModal').modal('show');
 
-            jQuery('#select_date_button').click(function(event)
+    if (!$session->has('deliver-location')) {
+        
+        echo $this->render('_popup');
+
+        $this->registerJS("
+            $('#ShopLocationDateModal').modal('show');
+
+            $('#select_date_button').click(function(event)
             {
-                jQuery.ajax({
+                $.ajax({
                     type:'POST',
                     url:'" . yii\helpers\Url::to(['browse/location-date-selection']) . "',
-                    data:jQuery('#shop-date-location-hook').serialize(),
+                    data: $('#shop-date-location-hook').serialize(),
                     success:function(data){
 
-                    if (jQuery.trim(data) == 'date') {
-                        jQuery('.datetimepicker').addClass('border-red');
+                    if ($.trim(data) == 'date') {
+                        $('.datetimepicker').addClass('border-red');
                     } else {
-                        jQuery('#ShopLocationDateModal').modal('hide');
+                        $('#ShopLocationDateModal').modal('hide');
                     }
-                    jQuery('.event_loader').hide();
-                }
-            })
-        });", \yii\web\View::POS_READY);
+
+                    $('.event_loader').hide();
+                    }
+                });
+
+            });", \yii\web\View::POS_READY);
     }
+    
     $this->registerCss("
-    .border-red{border:1px solid red! important;}
-    .datepicker{border: 2px solid rgb(242, 242, 242);}
-    .datepicker table {font-size: 15px;}
-    .product_popup_signup_log > form {padding: 2px 0 0;}
-    .m-0{margin:0px! important;}
-    .padding-left-0{padding-left: 0px!important;}
-    .padding-right-0{padding-right: 0px!important;}
-    .new_popup_common .bootstrap-select button,#dp3 input[type=\"text\"]{color: #0a0a0a!important;}
+        .border-red{border:1px solid red! important;}
+        .datepicker{border: 2px solid rgb(242, 242, 242);}
+        .datepicker table {font-size: 15px;}
+        .product_popup_signup_log > form {padding: 2px 0 0;}
+        .m-0{margin:0px! important;}
+        .padding-left-0{padding-left: 0px!important;}
+        .padding-right-0{padding-right: 0px!important;}
+        .new_popup_common .bootstrap-select button,#dp3 input[type=\"text\"]{color: #0a0a0a!important;}
     ");
 }
 ?>

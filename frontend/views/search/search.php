@@ -4,43 +4,11 @@ use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 
 $this->title = 'Search Result | Whitebook';
-$get = Yii::$app->request->get();
-$controller = get_class($this->context);
-$event_status=Yii::$app->session->get('event_status');
+
 $search = ($search != '') ? $search : 'All';
-if($event_status==-1) { ?>
 
-	<script type="text/javascript">
-	function display_event_modal() {
-		jQuery('#EventModal').modal('show');
-	}
-	window.onload=display_event_modal;
-</script>
-<?php
-}
-
-if($event_status>0){
 ?>
-	<script type="text/javascript">
-	/* BEGIN ADD EVENT */
-	 function addevent1(item_id) {
-		jQuery.ajax({
-			type:'POST',
-			url:"<?= Url::toRoute('/product/addevent'); ?>",
-			data:{'item_id':item_id},
-			success:function(data)
-			{
-				jQuery('#addevent').html(data);
-				jQuery('#eventlist'+item_id).selectpicker('refresh');
-				jQuery('#add_to_event').modal('show');
-			}
-		});
-	}
-	/* END ADD EVENT */
-	var x='<?= $event_status;?>';
-	window.onload=addevent1(x);
-   </script>
-<?php } ?>
+
 <!-- coniner start -->
 <section id="inner_pages_white_back">
 	<div id="event_slider_wrapper">
@@ -134,9 +102,9 @@ $this->registerCss("
 ");
 
 $this->registerJs("
-	var page = 'search',
+	var page = current_page ='search',
         search_keyword      = '".$search."',
-        load_items          = '".Url::toRoute(['/search/index'],true)."',
+        load_items          = '".Url::toRoute(['search/index'], true)."',
         load_more_items		= '".Url::toRoute(['plan/loadmoreitems'],true)."'
 	", \yii\web\View::POS_HEAD, 'searching-options'
 );

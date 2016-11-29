@@ -27,14 +27,16 @@ function cmp($a, $b)
 
 	<div class="tabbable">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#1" data-toggle="tab">Item Info </a></li>
-			<li><a href="#2" data-toggle="tab" id="validone1">Item description</a></li>
-			<li><a href="#3" data-toggle="tab" id="validtwo2"> Item price </a></li>
-			<li><a href="#4" data-toggle="tab" id="validthree3">Images</a></li>
+			<li class="active"><a href="#1" data-toggle="tab" id="tab_1">Item Info </a></li>
+			<li><a href="#2" id="tab_2">Item description</a></li>
+			<li><a href="#3" id="tab_3"> Item price </a></li>
+			<li><a href="#4" id="tab_4">Images</a></li>
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane clearfix" id="1">
 
+				<input type="hidden" name="item_id" value="<?= $model->item_id ?>" />
+				
 				<?= $form->field($model, 'item_name')->textInput([
 						'maxlength' => 128,
 						'id' => 'vendoritem-item_name'
@@ -328,13 +330,18 @@ echo Html::hiddenInput('item_status',$model->item_status,['id'=>'item_status']);
 echo Html::hiddenInput('item_id',Yii::$app->request->get('id'),['id'=>'item_id']);
 echo Html::hiddenInput('load_sub_category_url',Url::to(['/priorityitem/loadsubcategory']),['id'=>'load_sub_category_url']);
 echo Html::hiddenInput('load_child_category_url',Url::to(['/priorityitem/loadchildcategory']),['id'=>'load_child_category_url']);
-echo Html::hiddenInput('image_delete_url',Url::to(['vendoritem/imagedelete']),['id'=>'image_delete_url']);
-echo Html::hiddenInput('remove_question_url',Url::to(['vendoritem/removequestion']),['id'=>'remove_question_url']);
-echo Html::hiddenInput('render_question_url',Url::to(['vendoritem/renderquestion']),['id'=>'render_question_url']);
-echo Html::hiddenInput('item_name_check_url',Url::to(['/vendoritem/itemnamecheck']),['id'=>'item_name_check_url']);
+echo Html::hiddenInput('image_delete_url',Url::to(['vendor-item/imagedelete']),['id'=>'image_delete_url']);
+echo Html::hiddenInput('remove_question_url',Url::to(['vendor-item/removequestion']),['id'=>'remove_question_url']);
+echo Html::hiddenInput('render_question_url',Url::to(['vendor-item/renderquestion']),['id'=>'render_question_url']);
+echo Html::hiddenInput('item_name_check_url',Url::to(['/vendor-item/itemnamecheck']),['id'=>'item_name_check_url']);
 echo Html::hiddenInput('image_order_url',Url::to(['/site/imageorder']),['id'=>'image_order_url']);
 echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
 echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
+
+//ajax step urls 
+echo Html::hiddenInput('item_info_url', Url::to(['vendor-item/item-info']), ['id' => 'item_info_url']);
+echo Html::hiddenInput('item_description_url', Url::to(['vendor-item/item-description']), ['id' => 'item_description_url']);
+echo Html::hiddenInput('item_price_url', Url::to(['vendor-item/item-price']), ['id' => 'item_price_url']);
 
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
@@ -344,4 +351,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.9', ['depends' => [\yii\web\JqueryAsset::className()]]);

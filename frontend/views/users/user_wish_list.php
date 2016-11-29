@@ -40,6 +40,7 @@ else {
         <?=Yii::t('frontend','No Record found')?>
     </li>
 <?php }
+
 $this->registerCss("
     .item-img{width:210px; height:208px;}
 ")
