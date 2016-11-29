@@ -33,6 +33,10 @@ $this->title = 'My Event | '.$event_details->event_name;
     </h3>
     <p><?php echo date('d-m-Y',strtotime($event_details->event_date)); ?></p>
     <label><?php echo $event_details->event_type; ?></label>
+
+    <?php if($event_details->no_of_guests) { ?>
+    <p><?php echo Yii::t('frontend', 'Guests : {count}', ['count' => $event_details->no_of_guests]); ?></p>
+    <?php } ?>
 </div>
 </div>
 <div class="col-md-2 padding-left0">
