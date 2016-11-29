@@ -1853,3 +1853,8 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .vendor_phone_list .fa-whatsapp {
     font-size: 16px;
 }
+
+.table-item-img{
+    width: 150px;
+    height: 150px;
+}
