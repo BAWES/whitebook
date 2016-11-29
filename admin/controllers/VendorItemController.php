@@ -85,6 +85,7 @@ class VendorItemController extends Controller
     public function actionIndex()
     {
         $searchModel = new VendorItemSearch();
+        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

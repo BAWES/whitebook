@@ -21,8 +21,8 @@ class VendorDraftItemSearch extends VendorDraftItem
     public function rules()
     {
         return [
-            [['item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
-            [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale',  'item_approved','priority',], 'safe'],
+            [['item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
+            [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale',  'item_approved','priority','is_ready'], 'safe'],
             [['item_price_per_unit'], 'number'],
            
         ];
@@ -84,6 +84,7 @@ class VendorDraftItemSearch extends VendorDraftItem
         $query->andFilterWhere([
             'item_id' => $this->item_id,
             'type_id' => $this->type_id,
+            'is_ready' => $this->is_ready,
             'item_status' => $this->item_status,
             'item_amount_in_stock' => $this->item_amount_in_stock,
             'item_default_capacity' => $this->item_default_capacity,
