@@ -6,7 +6,9 @@ use admin\models\VendorItem;
 use admin\models\AccessControlList;
 use common\models\VendorDraftItem;
 
-$draft_item_count = VendorDraftItem::find()->count();
+$draft_item_count = VendorDraftItem::find()
+	->where(['is_ready' => 1])
+	->count();
 
 ?>
 <div class="page-sidebar" id="main-menu">

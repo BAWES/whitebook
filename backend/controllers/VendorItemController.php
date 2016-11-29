@@ -144,7 +144,6 @@ class VendorItemController extends Controller
 
             $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale'])?'Yes':'No';
 
-            /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
             if($model->item_for_sale == 'No')
             {
                 $model->item_amount_in_stock = '';
@@ -152,7 +151,6 @@ class VendorItemController extends Controller
                 $model->item_minimum_quantity_to_order='';
                 $model->item_how_long_to_make='';
             }
-            /* END Scenario if item for sale is no not required below four fields */
 
             // get the max sort order
             $max_sort = VendorItem::find()
@@ -301,7 +299,12 @@ class VendorItemController extends Controller
             $posted_data = Yii::$app->request->post();
         }
         
-        if ($model->load($posted_data) && $model->save(false)) {
+        if ($model->load($posted_data)) {
+
+            //to make draft visible to admin 
+            $model->is_ready = 1;
+
+            $model->save(false);
 
             /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
             if ($model->item_for_sale == 'No') {
@@ -466,6 +469,9 @@ class VendorItemController extends Controller
 
         //load posted data to model 
         $model->load(['VendorDraftItem' => $posted_data]);
+
+        //to make draft invisible to admin 
+        $model->is_ready = 0;
 
         //save first step data without validation 
         $model->save(false);

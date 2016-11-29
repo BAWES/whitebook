@@ -414,11 +414,10 @@ $('.complete').click(function()
  		$('.file-block').hide();
  	}
 
-	$(this).attr('disabled', 'disabled');
-	$(this).html('Please wait...');
+	//$(this).attr('disabled', 'disabled');
+	//$(this).html('Please wait...');
 	$(this).parents('form').submit();
 });
-
 
 function show_errors(json) 
 {
