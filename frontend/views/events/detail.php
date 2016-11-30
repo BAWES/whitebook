@@ -356,7 +356,7 @@ $this->registerJs("
     /* END Insert invitees for respective event */
 
     /* Event detail slide items !IMPORTANT * Mariyappan */
-    jQuery(document).ready(function () {
+    $(document).ready(function () {
         jQuery('#collapse0').attr('aria-expanded', 'true');
         jQuery('#collapse0').attr('class', 'panel-collapse collapse in');
     });
@@ -367,7 +367,7 @@ $this->registerJs("
         return regex.test(email);
     }
 
-    jQuery('label#search-labl3').click(function(){
+    $('label#search-labl3').click(function(){
         jQuery.pjax.reload({container:'#invitee-grid'});
     });
 
@@ -405,6 +405,6 @@ $this->registerJs("
             })
         }
     }
-", View::POS_HEAD);
+", View::POS_BEGIN);
 
 $this->registerJsFile('@web/js/event_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

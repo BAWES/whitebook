@@ -335,16 +335,19 @@ class EventsController extends BaseController
 
         if ($request->post('event_name') && $request->post('event_type') && $request->post('event_date')) {
             $model = Events::findOne($request->post('event_id'));
+
             if ($model) {
                 $model->event_name = $request->post('event_name');
                 $model->event_date = date('Y-m-d', strtotime($request->post('event_date')));
                 $model->event_type = $request->post('event_type');
+                $model->no_of_guests = $request->post('no_of_guests');
 
                 $string = str_replace(' ', '-', $request->post('event_name')); // Replaces all spaces with hyphens.
                 $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
                 $model->slug = $slug.'-'.time();
                 $model->save();
-                return $model->slug;
+
+                return Url::to(['events/detail', 'slug' => $model->slug]);
             }
         }
     }

@@ -335,7 +335,7 @@ $action = Yii::$app->controller->action->id;
 <!-- END Create event Modal Box -->
 
 <!-- BEGIN EDIT EVENT MODAL BOX -->
-<div class="modal fade" id="EditeventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="EditeventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" id="editeventModal">
     </div>
 </div>

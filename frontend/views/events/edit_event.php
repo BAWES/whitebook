@@ -28,7 +28,7 @@ use frontend\models\Website;
                                     <input type="hidden" name="item_id" class="form-control required" id="item_id" value="0">
                                 </div>
                                 <div class="form-group">
-                                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="eventdate_icon" class="input-append date">
+                                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="eventdate_icon" class="input-append date" style="height: auto;">
                                         <input readonly="true" name="event_date" id="edit_event_date" class="form-control required datetimepicker" value=<?= date('d-m-Y', strtotime($edit_eventinfo[0]['event_date'])); ?> placeholder="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>">
                                         <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                                     </div>
@@ -46,11 +46,13 @@ use frontend\models\Website;
                                             } else {
                                                 echo '';
                                             } ?>><?php echo $e['type_name']; ?></option>
-<?php } ?>
+                                            <?php } ?>
                                         </select>
-
                                         <div class="error" id="type_error"></div>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="no_of_guests" class="form-control required" placeholder="<?php echo Yii::t('frontend', 'Enter number of guests'); ?>" value="<?= $edit_eventinfo[0]['no_of_guests'] ?>" />
                                 </div>
                                 <div id="eventresult"></div>
                                 <div class="eventErrorMsg error"></div>
