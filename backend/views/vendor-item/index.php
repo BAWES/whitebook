@@ -87,10 +87,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				'filter'=>'',
 				'value' => function($data) {
 
-					if($data->draftItem) {
-					 	return $data->draftItem->item_approved;
+					if($data->draftItem && $data->draftItem->is_ready) {
+						return 'Draft | Waiting';
+					}elseif($data->draftItem && !$data->draftItem->is_ready){
+						return 'Incomplete Draft';
+					} elseif($data->type_id) {
+						return $data->getItemType($data->type_id);
 					}else{
-						return $data->item_approved;
+						return 'Incomplete Draft';
 					}
 				},
 			],
