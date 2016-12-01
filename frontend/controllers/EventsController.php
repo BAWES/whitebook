@@ -16,6 +16,7 @@ use yii\helpers\Arrayhelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\Controller;
+use yii\web\Response;
 use arturoliveira\ExcelView;
 use common\models\Country;
 use common\models\Location;
@@ -497,6 +498,7 @@ class EventsController extends BaseController
             }
         }
     }
+
     public function actionDeleteEvent($id)
     {
         Events::deleteAll('event_id='.$id);
@@ -504,4 +506,71 @@ class EventsController extends BaseController
         $this->redirect(['events/index']);
     }
 
+    public function actionMarkComplete() 
+    {
+        if (!Yii::$app->request->isAjax) {
+            die();
+        }
+
+        $event_id = Yii::$app->request->post('event_id');
+        $category_id = Yii::$app->request->post('category_id');
+
+        if(!$event_id || !$category_id) {
+            die();
+        }
+        
+        EventItemlink::markComplete($event_id, $category_id);  
+
+        $categories = \frontend\models\Category::find()
+            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->asArray()
+            ->all();
+
+        $progress = $this->renderPartial('_progress', [
+            'categories' => $categories, 
+            'event_id' => $event_id
+        ], true);
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return [
+            'progress' => $progress,
+            'btn_text' => Yii::t('frontend', 'Mark Incomplete')
+        ];
+    }
+
+    public function actionMarkIncomplete() 
+    {
+        if (!Yii::$app->request->isAjax) {
+            die();
+        }
+
+        $event_id = Yii::$app->request->post('event_id');
+        $category_id = Yii::$app->request->post('category_id');
+
+        if(!$event_id || !$category_id) {
+            die();
+        }
+        
+        EventItemlink::markIncomplete($event_id, $category_id);   
+
+        $categories = \frontend\models\Category::find()
+            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->asArray()
+            ->all();
+
+        $progress = $this->renderPartial('_progress', [
+            'categories' => $categories, 
+            'event_id' => $event_id
+        ], true);
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return [
+            'progress' => $progress,
+            'btn_text' => Yii::t('frontend', 'Mark Complete')
+        ];
+    }
 }
