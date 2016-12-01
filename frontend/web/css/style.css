@@ -836,8 +836,15 @@ input#search-terms::-ms-input-placeholder {
 .events_inner_contents_new {    display: inline-block;    padding: 7px 0 0;    width: 100%;}
 .events_inner_contents_new .panel-title .panel-title{ font: 13px 'OpenSansRegular'; color:#000000;}
 .events_inner_listing_new .events_listing ul li{ margin:0 32px 28px 0;}
-.margin_0_auto{ margin: 0 auto; width:253px;}
-.margin_0_auto .btn-danger {font: 13px 'OpenSansRegular'; color:#000000; border:1px solid #e6e6e6; background:none; padding:14px 12px;}
+.margin_0_auto{ margin: 0 auto; max-width:400px;}
+.margin_0_auto .btn-danger {
+    font: 13px 'OpenSansRegular'; 
+    color:#000000; 
+    border:1px solid #e6e6e6; 
+    background:none; 
+    padding:14px 12px;
+    float: left;
+}
 .margin_0_auto .btn-danger:hover{ background:#F0F0F0;}
 .events_brows_buttons_common{ display:inline-block; width:100%; margin:5px 0 24px 0;}
 .invates_common{ display:inline-block; width:100%;}
@@ -1857,4 +1864,73 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .table-item-img{
     width: 150px;
     height: 150px;
+}
+
+.events_brows_buttons_common .btn-mark-complete,
+.events_brows_buttons_common .btn-mark-incomplete {
+    float: left;
+    width: 40%;
+    margin-right: 10px;
+    padding: 13px 12px;
+}
+.progressbar_wrapper{
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+.progressbar {
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+  position: relative;
+  z-index: 1;
+}
+.progressbar li {
+  list-style-type: none;
+  width: 11.11%;
+  float: left;
+  font-size: 12px;
+  position: relative;
+  text-align: center;
+  color: #ccc;
+}
+.progressbar li:before {
+  width: 30px;
+  height: 30px;
+  content: counter(step);
+  counter-increment: step;
+  line-height: 27px;
+  border: 2px solid #ccc;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  border-radius: 50%;
+  background-color: white;
+}
+.progressbar li:after {
+  width: 100%;
+  height: 2px;
+  content: '';
+  position: absolute;
+  background-color: #ccc;
+  top: 15px;
+  left: -50%;
+  z-index: -1;
+}
+.progressbar li:first-child:after {
+  content: none;
+}
+.progressbar li.active {
+  color: green;
+}
+.progressbar li.active:before {
+  border-color: #55b776;
+}
+/*.progressbar li.active + li:after*/
+.progressbar li.active:after {
+  background-color: #55b776;
 }

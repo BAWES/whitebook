@@ -616,6 +616,20 @@
 }
 
 @media only screen and (max-width: 720px){
+
+	.progressbar li span {
+	    -ms-transform: rotate(-90deg);
+	    -webkit-transform: rotate(-90deg);
+	    transform: rotate(-90deg);
+	    display: block;
+	    margin-top: 20px;
+	    width: 100%;
+	    text-align: right;
+	    text-overflow: ellipsis;
+	    overflow: hidden;
+	    white-space: nowrap;
+	}	
+
 	.col-xs-4.responsive-hid {    width: 38.333%;}
 	.events_content_part .margin-rightnone{ margin: 9px 4px !important;}
 	.thinl_like_sectons .thing_items li{ margin: 9px 4px; }

@@ -1,29 +1,29 @@
 <?php
-use yii\helpers\Html;
+
+use yii\web\view;
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
 use common\models\VendorItem;
 use common\models\Category;
-use yii\grid\GridView;
-use yii\web\view;
 use common\components\CFormatter;
+use frontend\models\EventItemlink;
 
 $this->title = 'My Event | '.$event_details->event_name;
 
-
 ?>
 <!-- coniner start -->
-    <section id="inner_pages_sections">
-        <div class="container">
-            <div class="title_main">
-                <h1><?php echo Yii::t('frontend','Events'); ?></h1>
-            </div>
+<section id="inner_pages_sections">
+    <div class="container">
+        <div class="title_main">
+            <h1><?php echo Yii::t('frontend','Events'); ?></h1>
+        </div>
 
-
-            <div class="account_setings_sections">
-                <?=$this->render('/users/_sidebar_menu');?>
-                <div class="col-md-9 border-left">
-                    <div class="events_detials_common">
+        <div class="account_setings_sections">
+            <?=$this->render('/users/_sidebar_menu');?>
+            <div class="col-md-9 border-left">
+                <div class="events_detials_common">
 <div class="events_inner_contents_new">
 <div class="col-md-10 padding0">
 <div class="events_inner_descript">
@@ -53,6 +53,10 @@ $this->title = 'My Event | '.$event_details->event_name;
 
 <div class="col-md-12 paddng0">
 <div class="right_descr_product">
+
+<div class="progressbar_wrapper">
+    <?= $this->render('_progress', ['categories' => $cat_exist, 'event_id' => $event_details->event_id]); ?>
+</div>
 
 <div class="accad_menus">
 <div class="panel-group row" id="accordion">
@@ -130,7 +134,7 @@ if(!empty($items))
 
                 $result = array_search($value['item_id'], $k);
 
-                if (is_numeric ($result)) { ?>
+                if (is_numeric($result)) { ?>
                     <div class="faver_icons faverited_icons"><a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
                     </div> 
                 <?php } else { ?>
@@ -148,7 +152,7 @@ if(!empty($items))
 
             <?= Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img'])) ?>
             
-            <h3><?= $value['item_name']  ?></h3>
+            <h3><?= $value['item_name'] ?></h3>
 
             <p><?= CFormatter::format($value['item_price_per_unit']) ?></p>
         </div><!-- END .events_descrip --> 
@@ -161,7 +165,21 @@ if(!empty($items))
 </ul>
 <div class="events_brows_buttons_common">
     <div class="margin_0_auto">
-        <a href="<?= Url::toRoute(['/browse/list/','slug'=>$value1['slug']]);?>" class="btn btn-danger">
+    <?php 
+
+        $is_complete = EventItemlink::is_cat_complete($event_details->event_id, $value1['category_id']);
+
+        if($is_complete) { ?>
+            <button class="btn btn-default btn-mark-incomplete" data-event-id="<?= $event_details->event_id ?>" data-cat-id="<?= $value1['category_id'] ?>">
+                <?= Yii::t('frontend','Mark Incomplete');?>
+            </button>
+        <?php }else{ ?>
+            <button class="btn btn-primary btn-mark-complete" data-event-id="<?= $event_details->event_id ?>" data-cat-id="<?= $value1['category_id'] ?>">
+                <?= Yii::t('frontend','Mark Complete');?>
+            </button>
+        <?php } ?>
+
+        <a href="<?= Url::toRoute(['/browse/list/','slug'=>$value1['slug']]);?>" class="btn btn-danger" style="width: 57%;">
             <?= Yii::t('frontend','Browse the Category');?>
         </a>
     </div>
@@ -327,6 +345,8 @@ $this->registerJs("
     var invite_detail = '".Url::toRoute('/events/invitee-details')."';
     var update_invite = '".Url::toRoute('/events/add-invitee')."';
     var delete_invite = '".Url::toRoute('/events/add-invitee')."';
+    var event_mark_incomplete = '".Url::toRoute('/events/mark-incomplete')."';
+    var event_mark_complete = '".Url::toRoute('/events/mark-complete')."';
     /* BEGIN Insert invitees for respective event */
 
 
