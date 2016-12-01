@@ -1934,3 +1934,7 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .progressbar li.active:after {
   background-color: #55b776;
 }
+
+.btn-cat-note-modal{
+    margin-bottom: 20px;
+}
