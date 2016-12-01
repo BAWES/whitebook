@@ -257,6 +257,10 @@ class VendorItemController extends Controller
                 //add new images
                 $images = Yii::$app->request->post('images');
 
+                if(!$images) {
+                    $images = [];
+                }
+
                 foreach ($images as $key => $value) {
                     $image = new Image();
                     $image->image_path = $value['image_path'];
@@ -387,6 +391,10 @@ class VendorItemController extends Controller
                 //add new images
                 $images = Yii::$app->request->post('images');
 
+                if(!$images) {
+                    $images = [];
+                }
+
                 foreach ($images as $key => $value) {
                     $image = new Image();
                     $image->image_path = $value['image_path'];
@@ -399,7 +407,9 @@ class VendorItemController extends Controller
                 }
 
                 if ($model->priority != $priorityvalue) {
-                    $query = Prioritylog::find()->select('log_id')
+
+                    $query = Prioritylog::find()
+                        ->select('log_id')
                         ->where(['vendor_id' => $vendorid, 'item_id' => $itemid])
                         ->orderBy(['log_id' => SORT_DESC])
                         ->limit(1)
@@ -410,6 +420,7 @@ class VendorItemController extends Controller
                         $prioritylog->priority_end_date = $model->created_datetime;
                         $prioritylog->update();
                     }
+
                     $prioritylog = new Prioritylog;
                     $prioritylog->vendor_id = $vendorid;
                     $prioritylog->item_id = $itemid;
@@ -417,6 +428,7 @@ class VendorItemController extends Controller
                     $prioritylog->priority_start_date = $model->created_datetime;
                     $prioritylog->save();
                 }
+
                 $itemid = $model->item_id;
                 $save = 'update';
 
@@ -454,8 +466,6 @@ class VendorItemController extends Controller
                     }
                 }
 
-
-                /* Groups table Begin*/
                 if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups']) > 0) {
                     FeatureGroupItem::deleteAll(['item_id' => $id]); # to clear old values
                     foreach ($vendor_item['groups'] as $value) {
@@ -466,7 +476,6 @@ class VendorItemController extends Controller
                         $groupModel->save();
                     }
                 }
-                /* Groups table End */
 
                 $vendor_item_question = Yii::$app->request->post('VendorItemQuestion');
 
@@ -924,6 +933,33 @@ class VendorItemController extends Controller
             'success' => 1,
             'item_id' => $item_id
         ];
+    }
+    
+    /**
+    * Validate whole form on for complete button 
+    *
+    * @return json
+    */
+    public function actionItemValidate()
+    {
+        \Yii::$app->response->format = 'json';
+        
+        $posted_data = VendorItem::get_posted_data();
+        
+        $errors = VendorItem::validate_form($posted_data);
+
+        if($errors) 
+        {            
+            return [
+                'errors' => $errors
+            ];
+        }
+        else
+        {
+            return [
+                'success' => 1
+            ];
+        }
     }
 
     /**

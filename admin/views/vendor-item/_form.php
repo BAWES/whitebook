@@ -236,7 +236,7 @@ if($model->isNewRecord){
 		<!--End fourth Tab -->
 
 		<div class="tab-pane" id="5">
-			<div class="file-block" style="color:red; display: none;"> Please upload aleast a file</div>
+			<div class="file-block alert alert-danger" style="color:red; display: none;"> Please upload aleast a file</div>
 
 			<div class="alert alert-info">
 				<button class="close" data-dismiss="alert"></button>
@@ -466,6 +466,9 @@ echo Html::hiddenInput('item_images_url', Url::to(['vendor-item/item-images']), 
 
 echo Html::hiddenInput('item_themes_groups', Url::to(['vendor-item/item-themes-groups']), ['id' => 'item_themes_groups']);
 
+echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate']), ['id' => 'item_validate_url']);
+
+
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
@@ -480,7 +483,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.8", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.9", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

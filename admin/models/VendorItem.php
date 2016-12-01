@@ -14,6 +14,19 @@ class VendorItem extends \common\models\VendorItem
     }        
 
     /**
+     * Validate for complete button 
+     */
+    public static function validate_form($data)
+    {
+        $step_1 = VendorItem::validate_item_info($data);
+        $step_2 = VendorItem::validate_item_description($data);
+        $step_3 = VendorItem::validate_item_price($data);
+        $step_4 = VendorItem::validate_item_images($data);
+
+        return array_merge($step_1, $step_2, $step_3, $step_4);
+    }
+
+    /**
      * Validate step 1 on update / create item  
      */
     public static function validate_item_info($data)

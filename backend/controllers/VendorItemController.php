@@ -608,7 +608,33 @@ class VendorItemController extends Controller
         ];
     }
 
+    /**
+    * Validate whole form on for complete button 
+    *
+    * @return json
+    */
+    public function actionItemValidate()
+    {
+        \Yii::$app->response->format = 'json';
+        
+        $posted_data = VendorItem::get_posted_data();
+        
+        $errors = VendorItem::validate_form($posted_data);
 
+        if($errors) 
+        {            
+            return [
+                'errors' => $errors
+            ];
+        }
+        else
+        {
+            return [
+                'success' => 1
+            ];
+        }
+    }
+    
     /**
      * Deletes an existing VendorItem model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

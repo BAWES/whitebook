@@ -179,7 +179,7 @@ if($model->isNewRecord){
 			<!--End Third Tab -->
 
 			<div class="tab-pane" id="4">
-				<div class="file-block" style="color:red; display: none;"> Please upload aleast a file</div>
+				<div class="file-block alert alert-danger" style="color:red; display: none;"> Please upload aleast a file</div>
 
 				<div class="alert alert-info">
 					<button class="close" data-dismiss="alert"></button>
@@ -277,6 +277,8 @@ echo Html::hiddenInput('item_price_url', Url::to(['vendor-item/item-price']), ['
 echo Html::hiddenInput('image_delete_url',Url::to(['vendor-item/imagedelete']),['id'=>'image_delete_url']);
 echo Html::hiddenInput('remove_question_url',Url::to(['vendor-item/removequestion']),['id'=>'remove_question_url']);
 
+echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate']), ['id' => 'item_validate_url']);
+
 echo Html::hiddenInput('render_question_url',Url::to(['vendor-item/renderquestion']),['id'=>'render_question_url']);
 echo Html::hiddenInput('item_name_check_url',Url::to(['/vendor-item/itemnamecheck']),['id'=>'item_name_check_url']);
 echo Html::hiddenInput('image_order_url',Url::to(['/site/imageorder']),['id'=>'image_order_url']);
@@ -291,4 +293,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.8', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.10', ['depends' => [\yii\web\JqueryAsset::className()]]);

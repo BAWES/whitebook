@@ -337,10 +337,26 @@ $(function() {
 
     $('.btn-crop-upload').click(function(){
 
-    	$(this).attr('disabled', 'disabled');
-    	$(this).html('Uploading...');
+    	//remove old warning 
+    	$('.alert-image-size').remove();
 
     	var imageData = $('.image-editor').cropit('export');
+
+		if(!imageData) {
+			$html  = '<div class="alert alert-warning alert-image-size">';
+			$html += '	Please upload valid image with size of atlease 530px x 530px!';
+			$html += '	<button class="close" data-dismiss="alert"></button>';
+			$html += '</div>';
+
+			$('.file-block').after($html);
+
+			$('html, body').animate({ scrollTop: 0 }, 'slow');
+			
+			return false;
+		}
+
+    	$(this).attr('disabled', 'disabled');
+    	$(this).html('Uploading...');
 
     	//upload image 
     	$.post(croped_image_upload_url, { image : imageData }, function(json) {
@@ -404,19 +420,46 @@ $('#tab_4').click(function(e) {
  */
 $('.complete').click(function()
 {
-	if($(".table-item-image img").length <= 0)
+	//CKEDITOR + validation.js issue 
+	for (var i in CKEDITOR.instances)
 	{
-		$('.file-block').show();
-		return false;
+	    CKEDITOR.instances[i].updateElement();
 	}
-	else if($(".table-item-image img").length >= 1)
- 	{
- 		$('.file-block').hide();
- 	}
 
-	//$(this).attr('disabled', 'disabled');
-	//$(this).html('Please wait...');
-	$(this).parents('form').submit();
+	//remove warning alert before each new call 
+	$('.alert-warning').remove();
+
+	$(this).attr('disabled', 'disabled');
+	$(this).html('Please wait...');
+			
+	$('.loadingmessage').show();
+	
+	$.post($('#item_validate_url').val(), get_form_data(false), function(json) {
+
+		if(json['errors']) 
+		{
+			show_errors(json);
+
+			$html  = '<div class="alert alert-warning">';
+			$html += '	Please check form carefully!';
+			$html += '	<button class="close" data-dismiss="alert"></button>';
+			$html += '</div>';
+
+			$('.loadingmessage').after($html);
+
+			$('.loadingmessage').hide();
+
+			$('.complete').removeAttr('disabled');
+			$('.complete').html('Complete');
+
+			$('html, body').animate({ scrollTop: 0 }, 'slow');
+		}
+
+		if(json['success']) 
+		{
+			$('.complete').parents('form').submit();
+		}
+	});
 });
 
 function show_errors(json) 
@@ -483,6 +526,15 @@ function show_errors(json)
 	{
 		$('.form-group.multiple_price').addClass('has-error');
 	}
+	
+	if(json['errors']['images'])
+	{
+		$('.file-block').show();
+	} 
+	else 
+	{
+ 		$('.file-block').hide();
+ 	}
 }
 
 //append ckeditor data 
@@ -545,16 +597,19 @@ function save_item_info($is_autosave = false) {
 		if(json['success']) 
 		{
 			//redirect 
-			if(isNewRecord) {
+			if(isNewRecord) 
+			{
 				location = json['edit_url'] + '#2';
 			}
-
-			//update active tab 
-			$('.nav-tabs .active').removeClass('active');
-			$('.tab-content .active').removeClass('active');
-			
-			$('#tab_2').parent().addClass('active');
-			$('#2.tab-pane').addClass('active');
+			else
+			{
+				//update active tab 
+				$('.nav-tabs .active').removeClass('active');
+				$('.tab-content .active').removeClass('active');
+				
+				$('#tab_2').parent().addClass('active');
+				$('#2.tab-pane').addClass('active');
+			}			
 		}
 
 		if(json['errors']) 
