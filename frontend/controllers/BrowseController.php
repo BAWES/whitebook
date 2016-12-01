@@ -21,6 +21,7 @@ use common\models\CategoryPath;
 use common\models\CustomerAddress;
 use common\components\LangFormat;
 use common\models\VendorPhoneNo;
+use common\models\CategoryNote;
 
 /**
 * Site controller.
@@ -256,6 +257,7 @@ class BrowseController extends BaseController
             'vendor' => $vendor,
             'Category' => $Category,
             'slug' => $slug,
+            'note' => CategoryNote::getCustomerNote($Category->category_id),
             'customer_events_list' => $customer_events_list
         ]);
     }
@@ -464,5 +466,43 @@ class BrowseController extends BaseController
             $session->set('deliver-location', $location_name);
             $session->set('deliver-date', $delivery_date);
         }
+    }
+
+    /** 
+     * Save categoory note for customer 
+     */
+    public function actionSaveNote()
+    {
+        if (Yii::$app->user->isGuest) 
+        {
+            die();
+        }
+
+        $category_id = Yii::$app->request->post('category_id');        
+        $note = Yii::$app->request->post('note');
+
+        //validate category 
+        $category = Category::findOne($category_id);
+
+        if (!$category) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $model = CategoryNote::find()
+            ->where([
+                'category_id' => $category_id,
+                'customer_id' => Yii::$app->user->getId()
+            ])
+            ->one();
+
+        if(!$model) 
+        {
+            $model = new CategoryNote;
+            $model->category_id = $category_id;
+            $model->customer_id = Yii::$app->user->getId();
+        }
+
+        $model->note = $note;
+        $model->save();
     }
 }
