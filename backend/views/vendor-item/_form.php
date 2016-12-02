@@ -69,6 +69,9 @@ if($model->isNewRecord){
 				</div>
 
 				<div class="form-group" style="height: 10px;">
+
+					<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft', 'style'=>'float:left;']) ?>
+
 					<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
 				</div>
 			</div>
@@ -93,8 +96,18 @@ if($model->isNewRecord){
 				<?= $form->field($model, 'item_additional_info_ar')
 						->textarea(['maxlength' => 128]) ?>
 
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+				<div class="col-lg-4">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+				</div>
+
+				<div class="col-lg-4 text-center">
+					<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+				</div>
+
+				<div class="col-lg-4">
+					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+				</div>
+
 			</div>
 			<!--End Second Tab -->
 
@@ -173,8 +186,18 @@ if($model->isNewRecord){
 							'class' => 'form-group custom_description'
 						]); ?>
 
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+				<div class="col-lg-4">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+				</div>
+
+				<div class="col-lg-4 text-center">
+					<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+				</div>
+
+				<div class="col-lg-4">
+					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+				</div>
+
 			</div>
 			<!--End Third Tab -->
 
@@ -245,8 +268,17 @@ if($model->isNewRecord){
 
 				<hr />
 
-				<div class="form-group"><?= Html::submitButton('Complete', ['class' => 'btn btn-primary complete','style'=>'float:right;']) ?></div>
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+				<div class="col-lg-4">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+				</div>
+
+				<div class="col-lg-4 text-center">
+					<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+				</div>
+
+				<div class="col-lg-4">					
+					<?= Html::submitButton('Submit for Admin Approval', ['class' => 'btn btn-primary complete', 'style'=>'float:right;']) ?>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -268,6 +300,8 @@ echo Html::hiddenInput('isNewRecord', $model->isNewRecord, ['id' => 'isNewRecord
 echo Html::hiddenInput('item_for_sale', $model->item_for_sale, ['id' => 'item_for_sale']);
 echo Html::hiddenInput('item_status', $model->item_status, ['id' => 'item_status']);
 echo Html::hiddenInput('item_id', Yii::$app->request->get('id'), ['id'=>'item_id']);
+
+echo Html::hiddenInput('item_list_url', Url::to(['vendor-item/index']), ['id' => 'item_list_url']);
 
 //ajax step urls 
 echo Html::hiddenInput('item_info_url', Url::to(['vendor-item/item-info']), ['id' => 'item_info_url']);
@@ -293,4 +327,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.10', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.11', ['depends' => [\yii\web\JqueryAsset::className()]]);
