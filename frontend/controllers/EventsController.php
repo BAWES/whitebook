@@ -3,39 +3,39 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\EventInvitees;
-use frontend\models\EventInviteesSearch;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use frontend\models\Users;
-use frontend\models\VendorItem;
-use common\models\Events;
-
 use yii\db\Query;
-use yii\helpers\Arrayhelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\web\Controller;
 use yii\web\Response;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\helpers\Arrayhelper;
+use yii\web\NotFoundHttpException;
 use arturoliveira\ExcelView;
+use common\models\City;
+use common\models\Events;
+use common\models\Vendor;
 use common\models\Country;
 use common\models\Location;
-use common\models\CustomerAddress;
-use common\models\CustomerAddressResponse;
 use common\models\Siteinfo;
-use common\models\FeatureGroupItem;
 use common\models\LoginForm;
-use common\models\Vendor;
-use common\models\City;
-use frontend\models\Website;
-use frontend\models\EventItemlink;
-use frontend\models\Wishlist;
-use frontend\models\AddressType;
-use frontend\models\AddressQuestion;
-use frontend\models\Customer;
-use frontend\models\Themes;
-use common\models\VendorItemToCategory;
+use common\models\CategoryNote;
+use common\models\CustomerAddress;
 use common\models\VendorItemThemes;
+use common\models\FeatureGroupItem;
+use common\models\VendorItemToCategory;
+use common\models\CustomerAddressResponse;
+use frontend\models\Users;
+use frontend\models\Themes;
+use frontend\models\Website;
+use frontend\models\Wishlist;
+use frontend\models\Customer;
+use frontend\models\VendorItem;
+use frontend\models\AddressType;
+use frontend\models\EventItemlink;
+use frontend\models\EventInvitees;
+use frontend\models\AddressQuestion;
+use frontend\models\EventInviteesSearch;
 
 /**
  * EventinviteesController implements the CRUD actions for EventInvitees model.
@@ -571,6 +571,46 @@ class EventsController extends BaseController
         return [
             'progress' => $progress,
             'btn_text' => Yii::t('frontend', 'Mark Complete')
+        ];
+    }
+
+    /** 
+     * Save categoory note for customer 
+     */
+    public function actionSaveNote()
+    {
+        if (Yii::$app->user->isGuest) 
+        {
+            die();
+        }
+
+        $category_id = Yii::$app->request->post('category_id');        
+        $event_id = Yii::$app->request->post('event_id');        
+        $note = Yii::$app->request->post('note');
+
+        $model = CategoryNote::find()
+            ->where([
+                'category_id' => $category_id,
+                'customer_id' => Yii::$app->user->getId(),
+                'event_id' => $event_id
+            ])
+            ->one();
+
+        if(!$model) 
+        {
+            $model = new CategoryNote;
+            $model->event_id = $event_id;
+            $model->category_id = $category_id;
+            $model->customer_id = Yii::$app->user->getId();
+        }
+
+        $model->note = $note;
+        $model->save();
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return [
+            'note' => $note
         ];
     }
 }
