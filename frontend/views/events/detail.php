@@ -7,6 +7,7 @@ use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
 use common\models\VendorItem;
 use common\models\Category;
+use common\models\CategoryNote;
 use common\components\CFormatter;
 use frontend\models\EventItemlink;
 
@@ -111,6 +112,26 @@ $items = VendorItem::find()
 <div class="panel-body">
 <div class="events_inner_listing_new">
 <div class="events_listing">
+
+<div class="note_wrapper">
+    <?php $note = CategoryNote::getNote($value1['category_id'], $event_details->event_id); ?>
+    <p>
+        <span><?= $note?$note:Yii::t('frontend', 'You can add your personel note here...'); ?></span>
+        <button class="btn btn-xs btn-primary btn-edit" type="button">
+            <i class="fa fa-pencil"></i>
+        </button>        
+    </p>
+    <form style="display: none;">
+        <input type="hidden" name="category_id" value="<?= $value1['category_id'] ?>" />
+        <input type="hidden" name="event_id" value="<?= $event_details->event_id ?>" />
+        <div class="form-group">
+            <textarea name="note" class="form-control" placeholder="<?= Yii::t('frontend', 'You can add your personel note here...') ?>"><?= $note ?></textarea>
+        </div>        
+        <button class="btn btn-primary btn-save" type="button">
+            <?= Yii::t('frontend', 'Save changes') ?></button>    
+    </form>
+</div>
+
 <ul>
 <?php
 if(!empty($items))
@@ -347,10 +368,8 @@ $this->registerJs("
     var delete_invite = '".Url::toRoute('/events/add-invitee')."';
     var event_mark_incomplete = '".Url::toRoute('/events/mark-incomplete')."';
     var event_mark_complete = '".Url::toRoute('/events/mark-complete')."';
-    /* BEGIN Insert invitees for respective event */
+    var event_save_note = '".Url::toRoute('/events/save-note')."';
 
-
-    /* BEGIN EDIT EVENT */
     function editevent(event_id)
     {
         jQuery.ajax({
@@ -427,4 +446,4 @@ $this->registerJs("
     }
 ", View::POS_BEGIN);
 
-$this->registerJsFile('@web/js/event_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/event_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);

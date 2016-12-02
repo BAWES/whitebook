@@ -90,9 +90,6 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 padding-left-0 text-center">
-                        <button type="button" class="btn btn-default btn-cat-note-modal" data-toggle="modal" data-target="#category_note_modal">Category Note</button>
-                    </div>
                 </div>
 
                 <span class="filter_butt visible-xs visible-sm">
@@ -133,28 +130,6 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
         </div>
     </section>
 
-<div class="modal fade" id="category_note_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="padding-bottom: 0;">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title text-center" style="margin-top: 0px;">
-                    <?= Yii::t('frontend', 'Your personel note for category') ?>
-                </h4>
-            </div>
-            <div class="modal-body" style="padding-top: 0px;">
-                 <textarea class="category_note form-control" placeholder="Add your category note here..." style="height: 100px;"><?= $note ?></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    <?= Yii::t('frontend', 'Close') ?></button>
-                <button type="button" class="btn btn-primary btn-save-cat-note" data-id="<?= $Category->category_id ?>">
-                    <?= Yii::t('frontend', 'Save chanages') ?></button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <?php
 $this->registerCssFile("@web/css/owl.carousel.css");
 $this->registerCssFile("@web/css/jquery.mCustomScrollbar.css");
@@ -175,18 +150,6 @@ jQuery(document).delegate('a#filter-clear-date', 'click', function() {
     jQuery('#delivery_date_2').val('');
     jQuery(this).hide();
     filter();
-});
-
-jQuery(document).delegate('.btn-save-cat-note', 'click', function() {
-    jQuery.post('".Url::to(['browse/save-note'])."', 
-        { 
-            note: jQuery('.category_note').val(),
-            category_id: jQuery(this).attr('data-id')
-        }, 
-        function() {
-            jQuery('#category_note_modal').modal('hide');
-        }
-    );
 });
 
 ", View::POS_END);

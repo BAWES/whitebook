@@ -30,7 +30,8 @@ class CategoryNote extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'category_id'], 'integer'],
+            [['customer_id', 'category_id', 'event_id'], 'integer'],
+            [['event_id'], 'exist', 'skipOnError' => true, 'targetClass' => Events::className(), 'targetAttribute' => ['event_id' => 'event_id']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'category_id']],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'customer_id']],
         ];
@@ -64,23 +65,19 @@ class CategoryNote extends \yii\db\ActiveRecord
         return $this->hasOne(Customer::className(), ['customer_id' => 'customer_id']);
     }
 
-    public static function getCustomerNote($category_id) 
+    public static function getNote($category_id, $event_id) 
     {
-        if (Yii::$app->user->isGuest) 
-        {
-            return null;
-        }
-
         $query = CategoryNote::find()
             ->where([
                 'customer_id' => Yii::$app->user->getId(),
-                'category_id' => $category_id
+                'category_id' => $category_id,
+                'event_id' => $event_id
             ])
             ->one();
 
         if($query)
         {
             return $query->note;
-        }
+        } 
     }   
 }

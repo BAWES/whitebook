@@ -1,3 +1,23 @@
+$(document).delegate('.note_wrapper .btn-edit', 'click', function() {
+	$note_wrapper = $(this).parents('.note_wrapper');
+	$note_wrapper.find('p').hide();
+	$note_wrapper.find('form').fadeIn();
+});
+
+$(document).delegate('.note_wrapper .btn-save', 'click', function() {
+	
+	$data = $(this).parents('form').serialize();
+
+	$.post(event_save_note, $data, function(json) {
+
+		$note_wrapper.find('textarea').html(json.note);
+		$note_wrapper.find('p span').html(json.note);
+
+		$note_wrapper.find('p').fadeIn();
+		$note_wrapper.find('form').hide();
+	});
+});
+
 $(document).delegate('.btn-mark-incomplete', 'click', function() {
 	
 	$event_id = $(this).attr('data-event-id');
