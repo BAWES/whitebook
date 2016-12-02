@@ -43,6 +43,8 @@ class VendorDraftItemController extends Controller
     public function actionIndex()
     {
         $searchModel = new VendorDraftItemSearch();
+        $searchModel->is_ready = 1;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

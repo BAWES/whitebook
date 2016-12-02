@@ -17,6 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Guests : {count}' => 'الضيوف: {عدد}',
+    'Enter number of guests' => 'أدخل عدد من الضيوف',
+    'Event {event} created successfully!' => 'خلقت الحدث {event} بنجاح!',
+    'Event {event} created and {item_name} added successfully!' => 'الحدث {event} خلق و{item_name} أضاف بنجاح!',
     'Search Result for: {search} ({count})' => 'نتائج البحث عن: {search}. ({count})',
     'Select event type' => 'حدد نوع الحدث',
     'EVENTS' => 'أحداث',

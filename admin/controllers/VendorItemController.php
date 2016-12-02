@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use admin\models\AccessControlList;
 use yii\helpers\UploadHandler;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use admin\models\VendorItem;
 use common\models\VendorItemQuestion;
 use admin\models\VendorItemQuestionAnswerOption;
@@ -84,6 +85,7 @@ class VendorItemController extends Controller
     public function actionIndex()
     {
         $searchModel = new VendorItemSearch();
+        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -101,7 +103,7 @@ class VendorItemController extends Controller
     */
     public function actionView($id)
     {
-        $dataProvider1=  PriorityItem::find()
+        $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
             ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
             ->addParams([':item_id' => $id])
@@ -255,6 +257,10 @@ class VendorItemController extends Controller
                 //add new images
                 $images = Yii::$app->request->post('images');
 
+                if(!$images) {
+                    $images = [];
+                }
+
                 foreach ($images as $key => $value) {
                     $image = new Image();
                     $image->image_path = $value['image_path'];
@@ -385,6 +391,10 @@ class VendorItemController extends Controller
                 //add new images
                 $images = Yii::$app->request->post('images');
 
+                if(!$images) {
+                    $images = [];
+                }
+
                 foreach ($images as $key => $value) {
                     $image = new Image();
                     $image->image_path = $value['image_path'];
@@ -397,7 +407,9 @@ class VendorItemController extends Controller
                 }
 
                 if ($model->priority != $priorityvalue) {
-                    $query = Prioritylog::find()->select('log_id')
+
+                    $query = Prioritylog::find()
+                        ->select('log_id')
                         ->where(['vendor_id' => $vendorid, 'item_id' => $itemid])
                         ->orderBy(['log_id' => SORT_DESC])
                         ->limit(1)
@@ -408,6 +420,7 @@ class VendorItemController extends Controller
                         $prioritylog->priority_end_date = $model->created_datetime;
                         $prioritylog->update();
                     }
+
                     $prioritylog = new Prioritylog;
                     $prioritylog->vendor_id = $vendorid;
                     $prioritylog->item_id = $itemid;
@@ -415,6 +428,7 @@ class VendorItemController extends Controller
                     $prioritylog->priority_start_date = $model->created_datetime;
                     $prioritylog->save();
                 }
+
                 $itemid = $model->item_id;
                 $save = 'update';
 
@@ -452,8 +466,6 @@ class VendorItemController extends Controller
                     }
                 }
 
-
-                /* Groups table Begin*/
                 if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups']) > 0) {
                     FeatureGroupItem::deleteAll(['item_id' => $id]); # to clear old values
                     foreach ($vendor_item['groups'] as $value) {
@@ -464,7 +476,6 @@ class VendorItemController extends Controller
                         $groupModel->save();
                     }
                 }
-                /* Groups table End */
 
                 $vendor_item_question = Yii::$app->request->post('VendorItemQuestion');
 
@@ -546,6 +557,412 @@ class VendorItemController extends Controller
     }
 
     /**
+    * Save item info from update and create page
+    *
+    * @return json
+    */
+    public function actionItemInfo() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = VendorItem::get_posted_data();
+
+        //validate 
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_info($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }
+        }
+
+        //if new item 
+        if(!$item_id) {
+            $model = new VendorItem();         
+        } else {
+            $model = VendorItem::find()
+                ->where(['item_id' => $item_id])
+                ->one();
+        }
+
+        $model->load(['VendorItem' => $posted_data]);
+        $model->save(false);
+
+        //remove all old category 
+        VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+
+        //add all category
+        $category = Yii::$app->request->post('category');
+
+        if(!$category) {
+            $category = array();
+        }
+
+        foreach($category as $key => $value) {
+            $vic = new VendorItemToCategory();
+            $vic->item_id = $model->item_id;
+            $vic->category_id = $value;
+            $vic->save();
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id,
+            'edit_url' => Url::to(['vendor-item/update', 'id' => $model->item_id])
+        ];
+    }
+
+    /**
+    * Save item description from update and create page
+    *
+    * @return json
+    */
+    public function actionItemDescription() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = VendorItem::get_posted_data();
+
+        //validate 
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_description($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }
+        }
+        
+        $model = VendorItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['VendorItem' => $posted_data]);
+
+        //save data without validation 
+        $model->save(false);
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id
+        ];
+    }
+
+    /**
+    * Save item price from update and create page
+    *
+    * @return json
+    */
+    public function actionItemPrice() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = VendorItem::get_posted_data();
+
+        //validate
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_price($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = VendorItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['VendorItem' => $posted_data]);
+
+        //save data without validation 
+        $model->save(false);
+
+        //remove old price chart
+        VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
+
+        //add price chart
+        $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
+
+        if($vendoritem_item_price) {
+
+            for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
+                $vendor_item_pricing = new VendorItemPricing();
+                $vendor_item_pricing->item_id =  $model->item_id;
+                $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
+                $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
+                $vendor_item_pricing->pricing_price_per_unit = $vendoritem_item_price['price'][$opt];
+                $vendor_item_pricing->save();
+            }
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id
+        ];
+    }
+
+    /**
+    * Save item images from update and create page
+    *
+    * @return json
+    */
+    public function actionItemApproval() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = VendorItem::get_posted_data();
+
+        //validate
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_price($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = VendorItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['VendorItem' => $posted_data]);
+
+        //save data without validation 
+        $model->save(false);
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id
+        ];
+    }
+
+    /**
+    * Save item images from update and create page
+    *
+    * @return json
+    */
+    public function actionItemImages() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = VendorItem::get_posted_data();
+
+        //validate
+        if(!$is_autosave) {
+            $errors = VendorItem::validate_item_images($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = VendorItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['VendorItem' => $posted_data]);
+
+        //save data without validation 
+        $model->save(false);
+
+        //add new images
+        $images = Yii::$app->request->post('images');
+
+        if(!$images) {
+            $images = array();
+        }
+
+        $arr_image_path = [];
+
+        foreach ($images as $key => $value) {
+
+            //check if image already added 
+            $image = Image::find()
+                ->where([
+                    'item_id' => $item_id,
+                    'image_path' => $value['image_path']
+                ])
+                ->one();
+
+            if($image) {                
+                $image->image_user_id = Yii::$app->user->getId();
+                $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
+                $image->save();
+            } else {
+                $image = new Image();
+                $image->image_path = $value['image_path'];
+                $image->item_id = $item_id;
+                $image->image_user_id = Yii::$app->user->getId();
+                $image->module_type = 'vendor_item';
+                $image->image_user_type = 'admin';
+                $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
+                $image->save();
+            }
+
+            $arr_image_path[] = $value['image_path'];
+        }
+        
+        //remove old images
+        if($arr_image_path) {
+            Image::deleteAll('item_id=' . $item_id . ' AND 
+                image_path NOT IN ("'.implode('","', $arr_image_path).'")');
+        }
+        
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id
+        ];
+    }
+
+    /**
+    * Save item themes & groups from update and create page
+    *
+    * @return json
+    */
+    public function actionItemThemesGroups() 
+    {
+        $item_id = Yii::$app->request->post('item_id'); 
+        $vendor_item = Yii::$app->request->post('VendorItem');
+
+        if (empty($vendor_item['themes'])){
+            $vendor_item['themes'] = [];
+        }
+
+        $arr_theme = [];
+
+        foreach ($vendor_item['themes'] as $value) {
+
+            $themesModel = VendorItemThemes::find()
+                ->where([
+                    'item_id' => $item_id,
+                    'theme_id' => $value
+                ])
+                ->one();
+
+            if(!$themesModel) {
+                $themesModel = new VendorItemThemes();
+                $themesModel->item_id = $item_id;
+                $themesModel->theme_id = $value;
+                $themesModel->save();
+            }            
+
+            $arr_theme[] = $value;
+        }
+
+        if($arr_theme) {
+            VendorItemThemes::deleteAll('item_id = ' . $item_id . ' AND 
+                theme_id NOT IN ('.implode(',', $arr_theme).')');    
+        }
+        
+        if (empty($vendor_item['groups'])){
+            $vendor_item['groups'] = [];
+        }
+
+        $arr_group = [];
+
+        foreach ($vendor_item['groups'] as $value) {
+
+            $groupModel = FeatureGroupItem::find()
+                ->where([
+                    'item_id' => $item_id,
+                    'group_id' => $value
+                ])
+                ->one();
+
+
+            if(!$groupModel) {
+
+                $model = VendorItem::findOne($item_id);
+                
+                $groupModel = new FeatureGroupItem();
+                $groupModel->item_id = $item_id;
+                $groupModel->group_id = $value;
+                $groupModel->vendor_id = $model->vendor_id;
+                $groupModel->save();  
+            }            
+
+            $arr_group[] = $value;
+        }
+
+        if($arr_group) {
+            FeatureGroupItem::deleteAll('item_id = ' . $item_id . ' AND 
+                group_id NOT IN ('.implode(',', $arr_group).')');     
+        }        
+        
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $item_id
+        ];
+    }
+    
+    /**
+    * Validate whole form on for complete button 
+    *
+    * @return json
+    */
+    public function actionItemValidate()
+    {
+        \Yii::$app->response->format = 'json';
+        
+        $posted_data = VendorItem::get_posted_data();
+        
+        $errors = VendorItem::validate_form($posted_data);
+
+        if($errors) 
+        {            
+            return [
+                'errors' => $errors
+            ];
+        }
+        else
+        {
+            return [
+                'success' => 1
+            ];
+        }
+    }
+
+    /**
     * Deletes an existing VendorItem model.
     * If deletion is successful, the browser will be redirected to the 'index' page.
     *
@@ -599,9 +1016,11 @@ class VendorItemController extends Controller
 
     public function actionBlock()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            die();
         }
+
+        $data = Yii::$app->request->post();
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
         $vendor_item_update = VendorItem::findOne($data['id']);
         $vendor_item_update->item_status = $status;
@@ -616,9 +1035,11 @@ class VendorItemController extends Controller
     //Approve item 
     public function actionApprove()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            die();
         }
+
+        $data = Yii::$app->request->post();
 
         $command = VendorItem::updateAll(['item_approved' => $data['item_approved']],['item_id' =>$data['keylist']]);
 

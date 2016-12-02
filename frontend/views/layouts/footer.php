@@ -486,12 +486,27 @@ $this->registerCss("
 
 require(__DIR__ . '/footer_js.php');
 
-$event=Yii::$app->session->get('event_name');
+$event = Yii::$app->session->get('event_name');
+$item_name = Yii::$app->session->get('item_name');
 
 if(!empty($event)){
+
+    if(!$item_name)
+    {
+        $message = Yii::t('frontend', 'Event {event} created successfully!', [
+                'event' => $event
+            ]);        
+    } 
+    else 
+    {
+        $message = Yii::t('frontend', 'Event {event} created and {item_name} added successfully!', [
+                'event' => $event,
+                'item_name' => $item_name
+            ]); 
+    }
+
     $this->registerJs('
-        window.onload=show_event_modal_true();
-        /* Registration Completed start*/
+        window.onload = show_event_modal_true("'.$message.'");
     ');
 
     Yii::$app->session->set('event_name','');

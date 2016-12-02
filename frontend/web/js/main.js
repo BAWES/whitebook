@@ -680,22 +680,29 @@ $(document).delegate('#create_event_button', 'click', function(){
         i=0;
         $('#type_error').hide();
     }
+
     if($('#create_event').valid()&& (i==0))
     {
         $('#event_loader').show();
-        var event_date=$('#event_date').val();
-        var item_id=$('#item_id').val();
-        var event_name=$('#event_name').val();
+
+        var event_date = $('#event_date').val();
+        var item_id = $('#item_id').val();
+        var event_name = $('#event_name').val();
+        var no_of_guests = $('#no_of_guests').val();
+
         var _csrf=$('#_csrf').val();
+
         if(item_id!=0)
         {
             var item_name=$('.desc_popup_cont h3').text();
         }else{
-            var item_name='item ';}
+            var item_name='item ';
+        }
+
             $.ajax({
                 url: create_event,
                 type:"post",
-                data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf,
+                data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf + "&no_of_guests=" + no_of_guests,
                 success:function(data,slider)
                 {
                     $('.directory_slider,.container_eventslider').load('events_slider', function(){
@@ -758,12 +765,16 @@ $(document).delegate("#update_event_button", 'click', function()
         var event_date = $('#edit_event_date').val();
         var item_id = $('#item_id').val();
         var event_name = $('#edit_event_name').val();
+        var no_of_guests = $('#update_event input[name="no_of_guests"]').val();
+
+        console.log($('#no_of_guests'));
+
         var _csrf = $('#_csrf').val();
 
         $.ajax({
             url: update_event,
             type:"post",
-            data:"event_id="+$('#edit_event_id').val()+"&event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&event_type="+event_type+"&_csrf="+_csrf,
+            data:"event_id="+$('#edit_event_id').val()+"&event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&event_type="+event_type+"&no_of_guests="+no_of_guests+"&_csrf="+_csrf,
             success:function(data)
             {
                 if(data==-1)
@@ -785,7 +796,7 @@ $(document).delegate("#update_event_button", 'click', function()
                     setTimeout(function() {$('#login_success').modal('hide');}, 2000);
                     //$('#EventModal').modal('hide');
                     setTimeout(function(){
-                        window.location = event_details + '?slug='+data;
+                        window.location = data;//event_details + '?slug='+data;
                     },2000);
                 }
             },
@@ -1566,17 +1577,15 @@ function show_register_modal_true()
 }
 
 // Registration Completed start
-function show_event_modal_true()
+function show_event_modal_true($message)
 {
     $('#login_success').modal('show');
-    if(!item_name.length){
-        var event_created_msg = '"'+ text_event + ' ' + event_name + ' ' + created_successfully + '"';
-        $('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+event_created_msg+'</span>');
-    } else {
-        var event_added_msg = '"'+ text_event + ' ' + event_name + ' ' + created_successfully_and + ' ' + item_name +' '+ added_to +' '+ event_name +'"';
-        $('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+event_added_msg+' </span>');
-    }
-    window.setTimeout(function() {$('#login_success').modal('hide');}, 2000);
+    
+    $('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+$message+' </span>');
+    
+    window.setTimeout(function() {
+        $('#login_success').modal('hide');
+    }, 2000);
 }
 
 function show_password_reset_modal_true()

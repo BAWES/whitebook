@@ -27,24 +27,23 @@ $this->title ='Address Book | Whitebook';
                         'dataProvider' => $provider,
                         'summary' => '',
                         'columns' => [
-                            'address_name',
+                            [
+                                'attribute' => 'address_name',
+                                'format' => 'raw',
+                                'value' => function($model) {
+
+                                    $city = \common\components\LangFormat::format($model['city_name'],$model['city_name_ar']);
+
+                                    $location = \common\components\LangFormat::format($model['location'],$model['location_ar']);
+
+                                    return $model['address_name']. '<br />' . $location . '<br />' . $city;
+                                }
+                            ],
                             [
                                 'attribute' =>'address_type_id',
                                 'header' =>'Type',
                                 'value' => function($model) {
                                     return AddressType::type_name($model['address_type_id']);
-                                }
-                            ],
-                            [
-                                'attribute' =>'location',
-                                'value' => function($model) {
-                                    return \common\components\LangFormat::format($model['location'],$model['location_ar']);
-                                }
-                            ],
-                            [
-                                'attribute' =>'city_name',
-                                'value' => function($model) {
-                                    return \common\components\LangFormat::format($model['city_name'],$model['city_name_ar']);
                                 }
                             ],
                             [
@@ -55,17 +54,17 @@ $this->title ='Address Book | Whitebook';
                                     'view' => function ($url, $model) {
                                         $url = Url::to(['users/view-address','address_id'=>$model['address_id']],true);
                                         return  Html::a('<span class="fa fa-search"></span> &nbsp;View', $url,
-                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', ]) ;
+                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-address-view btn-xs', ]) ;
                                     },
                                     'update' => function ($url, $model) {
                                         $url = Url::to(['users/edit-address','address_id'=>$model['address_id']],true);
                                         return  Html::a('<span class="fa fa-pencil"></span> &nbsp;Update', $url,
-                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', ]) ;
+                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn-address-update btn btn-primary btn-xs', ]) ;
                                     },
                                     'delete' => function ($url, $model) {
                                         $url = Url::to(['users/address-delete','address_id'=>$model['address_id']],true);
                                         return  Html::a('<span class="fa fa-trash"></span >&nbsp;Delete', $url,
-                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', 'onclick'=>'return (confirm("Are you sure you want to delete this address?"))']
+                                            [ 'title' => Yii::t('app', 'View'), 'class'=>'btn-address-delete btn btn-primary btn-xs', 'onclick'=>'return (confirm("Are you sure you want to delete this address?"))']
                                         ) ;
                                     },
                                 ]

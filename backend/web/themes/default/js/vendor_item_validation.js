@@ -337,10 +337,26 @@ $(function() {
 
     $('.btn-crop-upload').click(function(){
 
-    	$(this).attr('disabled', 'disabled');
-    	$(this).html('Uploading...');
+    	//remove old warning 
+    	$('.alert-image-size').remove();
 
     	var imageData = $('.image-editor').cropit('export');
+
+		if(!imageData) {
+			$html  = '<div class="alert alert-warning alert-image-size">';
+			$html += '	Please upload valid image with size of atlease 530px x 530px!';
+			$html += '	<button class="close" data-dismiss="alert"></button>';
+			$html += '</div>';
+
+			$('.file-block').after($html);
+
+			$('html, body').animate({ scrollTop: 0 }, 'slow');
+			
+			return false;
+		}
+
+    	$(this).attr('disabled', 'disabled');
+    	$(this).html('Uploading...');
 
     	//upload image 
     	$.post(croped_image_upload_url, { image : imageData }, function(json) {
@@ -404,21 +420,47 @@ $('#tab_4').click(function(e) {
  */
 $('.complete').click(function()
 {
-	if($(".table-item-image img").length <= 0)
+	//CKEDITOR + validation.js issue 
+	for (var i in CKEDITOR.instances)
 	{
-		$('.file-block').show();
-		return false;
+	    CKEDITOR.instances[i].updateElement();
 	}
-	else if($(".table-item-image img").length >= 1)
- 	{
- 		$('.file-block').hide();
- 	}
+
+	//remove warning alert before each new call 
+	$('.alert-warning').remove();
 
 	$(this).attr('disabled', 'disabled');
 	$(this).html('Please wait...');
-	$(this).parents('form').submit();
-});
+			
+	$('.loadingmessage').show();
+	
+	$.post($('#item_validate_url').val(), get_form_data(false), function(json) {
 
+		if(json['errors']) 
+		{
+			show_errors(json);
+
+			$html  = '<div class="alert alert-warning">';
+			$html += '	Please check form carefully!';
+			$html += '	<button class="close" data-dismiss="alert"></button>';
+			$html += '</div>';
+
+			$('.loadingmessage').after($html);
+
+			$('.loadingmessage').hide();
+
+			$('.complete').removeAttr('disabled');
+			$('.complete').html('Complete');
+
+			$('html, body').animate({ scrollTop: 0 }, 'slow');
+		}
+
+		if(json['success']) 
+		{
+			$('.complete').parents('form').submit();
+		}
+	});
+});
 
 function show_errors(json) 
 {
@@ -484,6 +526,15 @@ function show_errors(json)
 	{
 		$('.form-group.multiple_price').addClass('has-error');
 	}
+	
+	if(json['errors']['images'])
+	{
+		$('.file-block').show();
+	} 
+	else 
+	{
+ 		$('.file-block').hide();
+ 	}
 }
 
 //append ckeditor data 
@@ -498,22 +549,22 @@ function get_form_data($is_autosave) {
 	}
 
 	$data += '&VendorItem[item_description]=' + ck_item_description.getData(); 
-	$data += '&VendorItem[additional_info]=' + ck_additional_info.getData();
-	$data += '&VendorItem[price_description]=' + ck_price_description.getData();
-	$data += '&VendorItem[customization_description]=' + ck_customization_description.getData(); 
+	$data += '&VendorItem[item_additional_info]=' + ck_additional_info.getData();
+	$data += '&VendorItem[item_price_description]=' + ck_price_description.getData();
+	$data += '&VendorItem[item_customization_description]=' + ck_customization_description.getData(); 
 	$data += '&VendorItem[item_description_ar]=' + ck_item_description_ar.getData();
-	$data += '&VendorItem[additional_info_ar]=' + ck_additional_info_ar.getData();
-	$data += '&VendorItem[price_description_ar]=' + ck_price_description_ar.getData();
-	$data += '&VendorItem[customization_description_ar]=' + ck_customization_description_ar.getData();	
+	$data += '&VendorItem[item_additional_info_ar]=' + ck_additional_info_ar.getData();
+	$data += '&VendorItem[item_price_description_ar]=' + ck_price_description_ar.getData();
+	$data += '&VendorItem[item_customization_description_ar]=' + ck_customization_description_ar.getData();	
 
 	$data += '&VendorDraftItem[item_description]=' + ck_item_description.getData(); 
-	$data += '&VendorDraftItem[additional_info]=' + ck_additional_info.getData();
-	$data += '&VendorDraftItem[price_description]=' + ck_price_description.getData();
-	$data += '&VendorDraftItem[customization_description]=' + ck_customization_description.getData(); 
+	$data += '&VendorDraftItem[item_additional_info]=' + ck_additional_info.getData();
+	$data += '&VendorDraftItem[item_price_description]=' + ck_price_description.getData();
+	$data += '&VendorDraftItem[item_customization_description]=' + ck_customization_description.getData(); 
 	$data += '&VendorDraftItem[item_description_ar]=' + ck_item_description_ar.getData();
-	$data += '&VendorDraftItem[additional_info_ar]=' + ck_additional_info_ar.getData();
-	$data += '&VendorDraftItem[price_description_ar]=' + ck_price_description_ar.getData();
-	$data += '&VendorDraftItem[customization_description_ar]=' + ck_customization_description_ar.getData();	
+	$data += '&VendorDraftItem[item_additional_info_ar]=' + ck_additional_info_ar.getData();
+	$data += '&VendorDraftItem[item_price_description_ar]=' + ck_price_description_ar.getData();
+	$data += '&VendorDraftItem[item_customization_description_ar]=' + ck_customization_description_ar.getData();	
 
 	return $data;
 }
@@ -546,16 +597,19 @@ function save_item_info($is_autosave = false) {
 		if(json['success']) 
 		{
 			//redirect 
-			if(isNewRecord) {
+			if(isNewRecord) 
+			{
 				location = json['edit_url'] + '#2';
 			}
-
-			//update active tab 
-			$('.nav-tabs .active').removeClass('active');
-			$('.tab-content .active').removeClass('active');
-			
-			$('#tab_2').parent().addClass('active');
-			$('#2.tab-pane').addClass('active');
+			else
+			{
+				//update active tab 
+				$('.nav-tabs .active').removeClass('active');
+				$('.tab-content .active').removeClass('active');
+				
+				$('#tab_2').parent().addClass('active');
+				$('#2.tab-pane').addClass('active');
+			}			
 		}
 
 		if(json['errors']) 
@@ -629,6 +683,21 @@ function save_item_price($is_autosave = false) {
  * Autosave active tab fields 
  */ 
 setInterval(function(){
+	save_draft();
+}, 2000);
+
+$(document).delegate('.btn-save-draft', 'click', function() {
+
+	save_draft();
+
+	//redirect to list 
+	location = $('#item_list_url').val();
+});
+
+/** 
+ * Save draft data 
+ */
+function save_draft() {
 
 	if($('#tab_1').parent().hasClass('active')){
 		save_item_info(true);
@@ -641,6 +710,4 @@ setInterval(function(){
 	if($('#tab_3').parent().hasClass('active')){
 		save_item_price(true);
 	}
-
-}, 2000);
-
+}

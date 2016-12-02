@@ -125,6 +125,32 @@
 }
 
 @media only screen and (max-width: 991px) {
+
+	.btn-view-thing-i-like,
+	.btn-delete-thing-i-like,
+	.account_setings_sections .btn-address-update,
+	.account_setings_sections .btn-address-view,
+	.account_setings_sections .btn-address-delete,
+	.accont_informations .btn-event-view {
+		margin-bottom: 5px;
+	}
+
+	.account_setings_sections .hidde_res,
+	.edit_address_sections .hidde_res {
+		margin-right: 0px;
+	}
+	.account_setings_sections .border-left,
+	.edit_address_sections .border-left {
+	    margin-top: 15px;
+	    border: none;
+	    padding: 0;
+	}
+
+	.table-item-img{
+	    width: 50px;
+	    height: 50px;
+	}
+
 	.responsive-category-bottom.search-list{float:right;}
 	.girdle-header{display:none;}
 	#label,#label1{cursor:pointer;  width: 28px;    height: 28px;    position: relative;    z-index: 20;    float: right;}
@@ -590,6 +616,20 @@
 }
 
 @media only screen and (max-width: 720px){
+
+	.progressbar li span {
+	    -ms-transform: rotate(-90deg);
+	    -webkit-transform: rotate(-90deg);
+	    transform: rotate(-90deg);
+	    display: block;
+	    margin-top: 20px;
+	    width: 100%;
+	    text-align: right;
+	    text-overflow: ellipsis;
+	    overflow: hidden;
+	    white-space: nowrap;
+	}	
+
 	.col-xs-4.responsive-hid {    width: 38.333%;}
 	.events_content_part .margin-rightnone{ margin: 9px 4px !important;}
 	.thinl_like_sectons .thing_items li{ margin: 9px 4px; }

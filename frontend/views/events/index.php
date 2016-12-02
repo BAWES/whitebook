@@ -24,7 +24,12 @@ $this->title = 'Events/Wishlist | Whitebook';
 								'event_name',
 								'event_date',
 								'event_type',
-								'created_datetime',
+								[
+	                                'attribute' =>'created_datetime',
+	                                'header' =>'Created Date',
+									'contentOptions' => ['class' => 'visible-md visible-lg'],
+	                                'headerOptions' => ['class' => 'visible-md visible-lg'],
+	                            ],
 								[
 									'class' => 'yii\grid\ActionColumn',
 									'header'=>'Action',
@@ -34,7 +39,7 @@ $this->title = 'Events/Wishlist | Whitebook';
 										'view' => function ($url, $model) {
 											$url = Url::to(['events/detail','slug'=>$model['slug']],true);
 											return  Html::a('<span class="fa fa-search"></span> &nbsp;View / Update', $url,
-												[ 'title' => Yii::t('app', 'View'), 'class'=>'btn btn-primary btn-xs', ]) ;
+												[ 'title' => Yii::t('app', 'View'), 'class'=>'btn-event-view btn btn-primary btn-xs', ]) ;
 										},
 										'delete' => function ($url, $model) {
 											$url = Url::to(['events/delete-event','id'=>$model['event_id']],true);

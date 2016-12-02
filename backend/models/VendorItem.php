@@ -1,7 +1,9 @@
 <?php
+
 namespace backend\models;
-use backend\models\Vendor;
+
 use Yii;
+use backend\models\Vendor;
 
 class VendorItem extends \common\models\VendorItem
 {
@@ -24,6 +26,19 @@ class VendorItem extends \common\models\VendorItem
         return array_merge($arr_data_1, $arr_data_2);
     }        
 
+    /**
+     * Validate for complete button 
+     */
+    public static function validate_form($data)
+    {
+        $step_1 = VendorItem::validate_item_info($data);
+        $step_2 = VendorItem::validate_item_description($data);
+        $step_3 = VendorItem::validate_item_price($data);
+        $step_4 = VendorItem::validate_item_images($data);
+
+        return array_merge($step_1, $step_2, $step_3, $step_4);
+    }
+    
     /**
      * Validate step 1 on update / create item  
      */
@@ -86,7 +101,6 @@ class VendorItem extends \common\models\VendorItem
         return $errors;
     }
 
-
     /**
      * Validate step 3 on update / create item  
      */
@@ -114,6 +128,22 @@ class VendorItem extends \common\models\VendorItem
 
         if($item_for_sale && !$data['item_minimum_quantity_to_order']) {
             $errors['item_minimum_quantity_to_order'] = 'Item minimum quantity to order cannot be blank.';
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Validate step 5 on update / create item  
+     */
+    public static function validate_item_images($data)
+    {
+        $errors = VendorItem::validate_item_price($data);
+
+        $images = Yii::$app->request->post('images');
+
+        if(!$images) {
+            $errors['images'] = 'Item image require.';
         }
 
         return $errors;

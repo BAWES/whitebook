@@ -1,29 +1,30 @@
 <?php
-use yii\helpers\Html;
+
+use yii\web\view;
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
 use common\models\VendorItem;
 use common\models\Category;
-use yii\grid\GridView;
-use yii\web\view;
+use common\models\CategoryNote;
 use common\components\CFormatter;
+use frontend\models\EventItemlink;
 
 $this->title = 'My Event | '.$event_details->event_name;
 
-
 ?>
 <!-- coniner start -->
-    <section id="inner_pages_sections">
-        <div class="container">
-            <div class="title_main">
-                <h1><?php echo Yii::t('frontend','Events'); ?></h1>
-            </div>
+<section id="inner_pages_sections">
+    <div class="container">
+        <div class="title_main">
+            <h1><?php echo Yii::t('frontend','Events'); ?></h1>
+        </div>
 
-
-            <div class="account_setings_sections">
-                <?=$this->render('/users/_sidebar_menu');?>
-                <div class="col-md-9 border-left">
-                    <div class="events_detials_common">
+        <div class="account_setings_sections">
+            <?=$this->render('/users/_sidebar_menu');?>
+            <div class="col-md-9 border-left">
+                <div class="events_detials_common">
 <div class="events_inner_contents_new">
 <div class="col-md-10 padding0">
 <div class="events_inner_descript">
@@ -33,6 +34,10 @@ $this->title = 'My Event | '.$event_details->event_name;
     </h3>
     <p><?php echo date('d-m-Y',strtotime($event_details->event_date)); ?></p>
     <label><?php echo $event_details->event_type; ?></label>
+
+    <?php if($event_details->no_of_guests) { ?>
+    <p><?php echo Yii::t('frontend', 'Guests : {count}', ['count' => $event_details->no_of_guests]); ?></p>
+    <?php } ?>
 </div>
 </div>
 <div class="col-md-2 padding-left0">
@@ -49,6 +54,10 @@ $this->title = 'My Event | '.$event_details->event_name;
 
 <div class="col-md-12 paddng0">
 <div class="right_descr_product">
+
+<div class="progressbar_wrapper">
+    <?= $this->render('_progress', ['categories' => $cat_exist, 'event_id' => $event_details->event_id]); ?>
+</div>
 
 <div class="accad_menus">
 <div class="panel-group row" id="accordion">
@@ -103,6 +112,26 @@ $items = VendorItem::find()
 <div class="panel-body">
 <div class="events_inner_listing_new">
 <div class="events_listing">
+
+<div class="note_wrapper">
+    <?php $note = CategoryNote::getNote($value1['category_id'], $event_details->event_id); ?>
+    <p>
+        <span><?= $note?$note:Yii::t('frontend', 'You can add your personel note here...'); ?></span>
+        <button class="btn btn-xs btn-primary btn-edit" type="button">
+            <i class="fa fa-pencil"></i>
+        </button>        
+    </p>
+    <form style="display: none;">
+        <input type="hidden" name="category_id" value="<?= $value1['category_id'] ?>" />
+        <input type="hidden" name="event_id" value="<?= $event_details->event_id ?>" />
+        <div class="form-group">
+            <textarea name="note" class="form-control" placeholder="<?= Yii::t('frontend', 'You can add your personel note here...') ?>"><?= $note ?></textarea>
+        </div>        
+        <button class="btn btn-primary btn-save" type="button">
+            <?= Yii::t('frontend', 'Save changes') ?></button>    
+    </form>
+</div>
+
 <ul>
 <?php
 if(!empty($items))
@@ -126,7 +155,7 @@ if(!empty($items))
 
                 $result = array_search($value['item_id'], $k);
 
-                if (is_numeric ($result)) { ?>
+                if (is_numeric($result)) { ?>
                     <div class="faver_icons faverited_icons"><a  href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
                     </div> 
                 <?php } else { ?>
@@ -144,7 +173,7 @@ if(!empty($items))
 
             <?= Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img'])) ?>
             
-            <h3><?= $value['item_name']  ?></h3>
+            <h3><?= $value['item_name'] ?></h3>
 
             <p><?= CFormatter::format($value['item_price_per_unit']) ?></p>
         </div><!-- END .events_descrip --> 
@@ -157,7 +186,21 @@ if(!empty($items))
 </ul>
 <div class="events_brows_buttons_common">
     <div class="margin_0_auto">
-        <a href="<?= Url::toRoute(['/browse/list/','slug'=>$value1['slug']]);?>" class="btn btn-danger">
+    <?php 
+
+        $is_complete = EventItemlink::is_cat_complete($event_details->event_id, $value1['category_id']);
+
+        if($is_complete) { ?>
+            <button class="btn btn-default btn-mark-incomplete" data-event-id="<?= $event_details->event_id ?>" data-cat-id="<?= $value1['category_id'] ?>">
+                <?= Yii::t('frontend','Mark Incomplete');?>
+            </button>
+        <?php }else{ ?>
+            <button class="btn btn-primary btn-mark-complete" data-event-id="<?= $event_details->event_id ?>" data-cat-id="<?= $value1['category_id'] ?>">
+                <?= Yii::t('frontend','Mark Complete');?>
+            </button>
+        <?php } ?>
+
+        <a href="<?= Url::toRoute(['/browse/list/','slug'=>$value1['slug']]);?>" class="btn btn-danger" style="width: 57%;">
             <?= Yii::t('frontend','Browse the Category');?>
         </a>
     </div>
@@ -323,10 +366,10 @@ $this->registerJs("
     var invite_detail = '".Url::toRoute('/events/invitee-details')."';
     var update_invite = '".Url::toRoute('/events/add-invitee')."';
     var delete_invite = '".Url::toRoute('/events/add-invitee')."';
-    /* BEGIN Insert invitees for respective event */
+    var event_mark_incomplete = '".Url::toRoute('/events/mark-incomplete')."';
+    var event_mark_complete = '".Url::toRoute('/events/mark-complete')."';
+    var event_save_note = '".Url::toRoute('/events/save-note')."';
 
-
-    /* BEGIN EDIT EVENT */
     function editevent(event_id)
     {
         jQuery.ajax({
@@ -352,7 +395,7 @@ $this->registerJs("
     /* END Insert invitees for respective event */
 
     /* Event detail slide items !IMPORTANT * Mariyappan */
-    jQuery(document).ready(function () {
+    $(document).ready(function () {
         jQuery('#collapse0').attr('aria-expanded', 'true');
         jQuery('#collapse0').attr('class', 'panel-collapse collapse in');
     });
@@ -363,7 +406,7 @@ $this->registerJs("
         return regex.test(email);
     }
 
-    jQuery('label#search-labl3').click(function(){
+    $('label#search-labl3').click(function(){
         jQuery.pjax.reload({container:'#invitee-grid'});
     });
 
@@ -401,6 +444,6 @@ $this->registerJs("
             })
         }
     }
-", View::POS_HEAD);
+", View::POS_BEGIN);
 
-$this->registerJsFile('@web/js/event_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/event_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);

@@ -79,19 +79,16 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                         }
                                         ?>
                                         <label class="label_check margin-0" for="checkbox-available-for-sale">
-                                            <input name="for_sale" data-element="input" class="items"
-                                                   id="checkbox-available-for-sale"
-                                                   value="sale"
-                                                   type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
-                                                    <span><?=Yii::t('frontend','Available For Sale')?></span>
-                                            </label>
-                                        </div>
+                                        <input name="for_sale" data-element="input" class="items"
+                                               id="checkbox-available-for-sale"
+                                               value="sale"
+                                               type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
+                                                <span><?=Yii::t('frontend','Available For Sale')?></span>
+                                        </label>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -116,6 +113,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <div class="banner_section_plan">
                         <?= Html::img("@web/images/banner_plan.png") ?>
                     </div>
+
                     <!-- BEGIN Item lists -->
                     <div class="listing_right">
                         <?= $this->render('@frontend/views/common/items', [
@@ -131,11 +129,13 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
             </div>
         </div>
     </section>
+
 <?php
 $this->registerCssFile("@web/css/owl.carousel.css");
 $this->registerCssFile("@web/css/jquery.mCustomScrollbar.css");
 $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
 var load_items = '".Url::to(['/browse'],true)."';
@@ -145,11 +145,13 @@ var current_page = 'browse';
 ", View::POS_BEGIN);
 
 $this->registerJs("
-jQuery(document).delegate('a#filter-clear-date', 'click', function(){
+
+jQuery(document).delegate('a#filter-clear-date', 'click', function() {
     jQuery('#delivery_date_2').val('');
     jQuery(this).hide();
     filter();
-})
+});
+
 ", View::POS_END);
 
 $this->registerCss("

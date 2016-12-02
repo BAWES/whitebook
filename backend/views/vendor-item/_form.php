@@ -69,6 +69,9 @@ if($model->isNewRecord){
 				</div>
 
 				<div class="form-group" style="height: 10px;">
+
+					<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft', 'style'=>'float:left;']) ?>
+
 					<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
 				</div>
 			</div>
@@ -93,8 +96,18 @@ if($model->isNewRecord){
 				<?= $form->field($model, 'item_additional_info_ar')
 						->textarea(['maxlength' => 128]) ?>
 
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+				<div class="col-lg-4">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+				</div>
+
+				<div class="col-lg-4 text-center">
+					<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+				</div>
+
+				<div class="col-lg-4">
+					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+				</div>
+
 			</div>
 			<!--End Second Tab -->
 
@@ -173,20 +186,30 @@ if($model->isNewRecord){
 							'class' => 'form-group custom_description'
 						]); ?>
 
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
+				<div class="col-lg-4">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+				</div>
+
+				<div class="col-lg-4 text-center">
+					<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+				</div>
+
+				<div class="col-lg-4">
+					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+				</div>
+
 			</div>
 			<!--End Third Tab -->
 
 			<div class="tab-pane" id="4">
-				<div class="file-block" style="color:red; display: none;"> Please upload aleast a file</div>
+				<div class="file-block alert alert-danger" style="color:red; display: none;"> Please upload aleast a file</div>
 
 				<div class="alert alert-info">
 					<button class="close" data-dismiss="alert"></button>
 					Steps 
 					<ul>
 						<li>Select image by clicking on "Choose File" from top left side.</li>
-						<li>Move image in image preview area to get required image area, if image bigger than 530x530.</li>
+						<li>Move image in image preview area to get required image area, if image bigger than 450x450.</li>
 						<li>
 							Click on Upload button below preview area to upload image, wait for seconds. Image will get listed in right size.
 						</li>
@@ -194,13 +217,13 @@ if($model->isNewRecord){
 				</div>
 
 				<div class="row">
-					<div class="col-lg-7">
+					<div class="col-lg-6">
 						
 						<p>Select, crop and upload image.</p>
 
 						<div class="image-editor">
 					        <input type="file" class="cropit-image-input" />
-					        <p style="color: red;">Minimum image size : 530 x 530</p>
+					        <p style="color: red;">Minimum image size : 450 x 450</p>
 					        <div class="cropit-preview"></div>
 					        <div class="image-size-label">
 					          Resize image
@@ -209,7 +232,7 @@ if($model->isNewRecord){
 					        <button type="button" class="btn btn-primary btn-crop-upload">Upload</button>
 					    </div>
 					</div>
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<p>Uploaded image list</p>
 						<table class="table table-bordered table-item-image">
 							<thead>
@@ -245,8 +268,17 @@ if($model->isNewRecord){
 
 				<hr />
 
-				<div class="form-group"><?= Html::submitButton('Complete', ['class' => 'btn btn-primary complete','style'=>'float:right;']) ?></div>
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+				<div class="col-lg-4">
+					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
+				</div>
+
+				<div class="col-lg-4 text-center">
+					<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+				</div>
+
+				<div class="col-lg-4">					
+					<?= Html::submitButton('Submit for Admin Approval', ['class' => 'btn btn-primary complete', 'style'=>'float:right;']) ?>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -269,6 +301,8 @@ echo Html::hiddenInput('item_for_sale', $model->item_for_sale, ['id' => 'item_fo
 echo Html::hiddenInput('item_status', $model->item_status, ['id' => 'item_status']);
 echo Html::hiddenInput('item_id', Yii::$app->request->get('id'), ['id'=>'item_id']);
 
+echo Html::hiddenInput('item_list_url', Url::to(['vendor-item/index']), ['id' => 'item_list_url']);
+
 //ajax step urls 
 echo Html::hiddenInput('item_info_url', Url::to(['vendor-item/item-info']), ['id' => 'item_info_url']);
 echo Html::hiddenInput('item_description_url', Url::to(['vendor-item/item-description']), ['id' => 'item_description_url']);
@@ -276,6 +310,8 @@ echo Html::hiddenInput('item_price_url', Url::to(['vendor-item/item-price']), ['
 
 echo Html::hiddenInput('image_delete_url',Url::to(['vendor-item/imagedelete']),['id'=>'image_delete_url']);
 echo Html::hiddenInput('remove_question_url',Url::to(['vendor-item/removequestion']),['id'=>'remove_question_url']);
+
+echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate']), ['id' => 'item_validate_url']);
 
 echo Html::hiddenInput('render_question_url',Url::to(['vendor-item/renderquestion']),['id'=>'render_question_url']);
 echo Html::hiddenInput('item_name_check_url',Url::to(['/vendor-item/itemnamecheck']),['id'=>'item_name_check_url']);
@@ -291,4 +327,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.8', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.11', ['depends' => [\yii\web\JqueryAsset::className()]]);

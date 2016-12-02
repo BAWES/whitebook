@@ -3,38 +3,39 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\EventInvitees;
-use frontend\models\EventInviteesSearch;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use frontend\models\Users;
-use frontend\models\VendorItem;
-use common\models\Events;
-
 use yii\db\Query;
-use yii\helpers\Arrayhelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\web\Response;
 use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\helpers\Arrayhelper;
+use yii\web\NotFoundHttpException;
 use arturoliveira\ExcelView;
+use common\models\City;
+use common\models\Events;
+use common\models\Vendor;
 use common\models\Country;
 use common\models\Location;
-use common\models\CustomerAddress;
-use common\models\CustomerAddressResponse;
 use common\models\Siteinfo;
-use common\models\FeatureGroupItem;
 use common\models\LoginForm;
-use common\models\Vendor;
-use common\models\City;
-use frontend\models\Website;
-use frontend\models\EventItemlink;
-use frontend\models\Wishlist;
-use frontend\models\AddressType;
-use frontend\models\AddressQuestion;
-use frontend\models\Customer;
-use frontend\models\Themes;
-use common\models\VendorItemToCategory;
+use common\models\CategoryNote;
+use common\models\CustomerAddress;
 use common\models\VendorItemThemes;
+use common\models\FeatureGroupItem;
+use common\models\VendorItemToCategory;
+use common\models\CustomerAddressResponse;
+use frontend\models\Users;
+use frontend\models\Themes;
+use frontend\models\Website;
+use frontend\models\Wishlist;
+use frontend\models\Customer;
+use frontend\models\VendorItem;
+use frontend\models\AddressType;
+use frontend\models\EventItemlink;
+use frontend\models\EventInvitees;
+use frontend\models\AddressQuestion;
+use frontend\models\EventInviteesSearch;
 
 /**
  * EventinviteesController implements the CRUD actions for EventInvitees model.
@@ -335,16 +336,19 @@ class EventsController extends BaseController
 
         if ($request->post('event_name') && $request->post('event_type') && $request->post('event_date')) {
             $model = Events::findOne($request->post('event_id'));
+
             if ($model) {
                 $model->event_name = $request->post('event_name');
                 $model->event_date = date('Y-m-d', strtotime($request->post('event_date')));
                 $model->event_type = $request->post('event_type');
+                $model->no_of_guests = $request->post('no_of_guests');
 
                 $string = str_replace(' ', '-', $request->post('event_name')); // Replaces all spaces with hyphens.
                 $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
                 $model->slug = $slug.'-'.time();
                 $model->save();
-                return $model->slug;
+
+                return Url::to(['events/detail', 'slug' => $model->slug]);
             }
         }
     }
@@ -438,6 +442,7 @@ class EventsController extends BaseController
                     $event_modal->event_name = $event_name;
                     $event_modal->event_date = $event_date1;
                     $event_modal->event_type = $request->post('event_type');
+                    $event_modal->no_of_guests = $request->post('no_of_guests');
                     $event_modal->slug = $slug;
                     $event_modal->save();
                     $result = $event_modal->event_id;
@@ -453,10 +458,19 @@ class EventsController extends BaseController
 
                     if ($request->post('item_id') && ($request->post('item_id') > 0)) {
 
-                        Yii::$app->session->set('item_name', $request->post('item_name'));
                         $item_id = $request->post('item_id');
                         $event_id = $event_modal->event_id;
 
+                        $item = VendorItem::find()
+                            ->where(['item_id' => $item_id])
+                            ->one();
+
+                        if(Yii::$app->language == 'en') {
+                            Yii::$app->session->set('item_name', $item->item_name);
+                        }else{
+                            Yii::$app->session->set('item_name', $item->item_name_ar);
+                        }
+                        
                         $check = EventItemlink::find()
                             ->select(['link_id'])
                             ->where(['event_id' => $event_id])
@@ -484,6 +498,7 @@ class EventsController extends BaseController
             }
         }
     }
+
     public function actionDeleteEvent($id)
     {
         Events::deleteAll('event_id='.$id);
@@ -491,4 +506,111 @@ class EventsController extends BaseController
         $this->redirect(['events/index']);
     }
 
+    public function actionMarkComplete() 
+    {
+        if (!Yii::$app->request->isAjax) {
+            die();
+        }
+
+        $event_id = Yii::$app->request->post('event_id');
+        $category_id = Yii::$app->request->post('category_id');
+
+        if(!$event_id || !$category_id) {
+            die();
+        }
+        
+        EventItemlink::markComplete($event_id, $category_id);  
+
+        $categories = \frontend\models\Category::find()
+            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->asArray()
+            ->all();
+
+        $progress = $this->renderPartial('_progress', [
+            'categories' => $categories, 
+            'event_id' => $event_id
+        ], true);
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return [
+            'progress' => $progress,
+            'btn_text' => Yii::t('frontend', 'Mark Incomplete')
+        ];
+    }
+
+    public function actionMarkIncomplete() 
+    {
+        if (!Yii::$app->request->isAjax) {
+            die();
+        }
+
+        $event_id = Yii::$app->request->post('event_id');
+        $category_id = Yii::$app->request->post('category_id');
+
+        if(!$event_id || !$category_id) {
+            die();
+        }
+        
+        EventItemlink::markIncomplete($event_id, $category_id);   
+
+        $categories = \frontend\models\Category::find()
+            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->asArray()
+            ->all();
+
+        $progress = $this->renderPartial('_progress', [
+            'categories' => $categories, 
+            'event_id' => $event_id
+        ], true);
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return [
+            'progress' => $progress,
+            'btn_text' => Yii::t('frontend', 'Mark Complete')
+        ];
+    }
+
+    /** 
+     * Save categoory note for customer 
+     */
+    public function actionSaveNote()
+    {
+        if (Yii::$app->user->isGuest) 
+        {
+            die();
+        }
+
+        $category_id = Yii::$app->request->post('category_id');        
+        $event_id = Yii::$app->request->post('event_id');        
+        $note = Yii::$app->request->post('note');
+
+        $model = CategoryNote::find()
+            ->where([
+                'category_id' => $category_id,
+                'customer_id' => Yii::$app->user->getId(),
+                'event_id' => $event_id
+            ])
+            ->one();
+
+        if(!$model) 
+        {
+            $model = new CategoryNote;
+            $model->event_id = $event_id;
+            $model->category_id = $category_id;
+            $model->customer_id = Yii::$app->user->getId();
+        }
+
+        $model->note = $note;
+        $model->save();
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return [
+            'note' => $note
+        ];
+    }
 }

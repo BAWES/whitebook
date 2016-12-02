@@ -87,10 +87,16 @@ $this->params['breadcrumbs'][] = $this->title;
 				'filter'=>'',
 				'value' => function($data) {
 
-					if($data->draftItem) {
-					 	return $data->draftItem->item_approved;
+					if($data->draftItem && $data->draftItem->is_ready) {
+						return 'Pending Admin Approval';
+					}elseif($data->draftItem && !$data->draftItem->is_ready){
+						return 'Incomplete Draft';
+					} elseif($data->item_approved = 'Yes') {
+						return 'Approved';
+					} elseif($data->item_approved = 'Pending') {
+						return 'Pending Admin Approval';
 					}else{
-						return $data->item_approved;
+						return 'Rejected';
 					}
 				},
 			],

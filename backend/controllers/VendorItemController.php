@@ -89,7 +89,7 @@ class VendorItemController extends Controller
      */
     public function actionView($id)
     {
-        $dataProvider1=PriorityItem::find()
+        $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
             ->where(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
 
@@ -144,7 +144,6 @@ class VendorItemController extends Controller
 
             $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale'])?'Yes':'No';
 
-            /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
             if($model->item_for_sale == 'No')
             {
                 $model->item_amount_in_stock = '';
@@ -152,7 +151,6 @@ class VendorItemController extends Controller
                 $model->item_minimum_quantity_to_order='';
                 $model->item_how_long_to_make='';
             }
-            /* END Scenario if item for sale is no not required below four fields */
 
             // get the max sort order
             $max_sort = VendorItem::find()
@@ -301,7 +299,12 @@ class VendorItemController extends Controller
             $posted_data = Yii::$app->request->post();
         }
         
-        if ($model->load($posted_data) && $model->save(false)) {
+        if ($model->load($posted_data)) {
+
+            //to make draft visible to admin 
+            $model->is_ready = 1;
+
+            $model->save(false);
 
             /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
             if ($model->item_for_sale == 'No') {
@@ -467,6 +470,9 @@ class VendorItemController extends Controller
         //load posted data to model 
         $model->load(['VendorDraftItem' => $posted_data]);
 
+        //to make draft invisible to admin 
+        $model->is_ready = 0;
+
         //save first step data without validation 
         $model->save(false);
 
@@ -602,7 +608,33 @@ class VendorItemController extends Controller
         ];
     }
 
+    /**
+    * Validate whole form on for complete button 
+    *
+    * @return json
+    */
+    public function actionItemValidate()
+    {
+        \Yii::$app->response->format = 'json';
+        
+        $posted_data = VendorItem::get_posted_data();
+        
+        $errors = VendorItem::validate_form($posted_data);
 
+        if($errors) 
+        {            
+            return [
+                'errors' => $errors
+            ];
+        }
+        else
+        {
+            return [
+                'success' => 1
+            ];
+        }
+    }
+    
     /**
      * Deletes an existing VendorItem model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
