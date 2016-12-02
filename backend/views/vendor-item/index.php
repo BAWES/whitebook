@@ -88,13 +88,15 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value' => function($data) {
 
 					if($data->draftItem && $data->draftItem->is_ready) {
-						return 'Draft | Waiting';
+						return 'Pending Admin Approval';
 					}elseif($data->draftItem && !$data->draftItem->is_ready){
 						return 'Incomplete Draft';
-					} elseif($data->type_id) {
-						return $data->getItemType($data->type_id);
+					} elseif($data->item_approved = 'Yes') {
+						return 'Approved';
+					} elseif($data->item_approved = 'Pending') {
+						return 'Pending Admin Approval';
 					}else{
-						return 'Incomplete Draft';
+						return 'Rejected';
 					}
 				},
 			],

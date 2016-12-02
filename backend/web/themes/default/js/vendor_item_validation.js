@@ -683,6 +683,21 @@ function save_item_price($is_autosave = false) {
  * Autosave active tab fields 
  */ 
 setInterval(function(){
+	save_draft();
+}, 2000);
+
+$(document).delegate('.btn-save-draft', 'click', function() {
+
+	save_draft();
+
+	//redirect to list 
+	location = $('#item_list_url').val();
+});
+
+/** 
+ * Save draft data 
+ */
+function save_draft() {
 
 	if($('#tab_1').parent().hasClass('active')){
 		save_item_info(true);
@@ -695,6 +710,4 @@ setInterval(function(){
 	if($('#tab_3').parent().hasClass('active')){
 		save_item_price(true);
 	}
-
-}, 2000);
-
+}

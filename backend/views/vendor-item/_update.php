@@ -92,14 +92,18 @@ function cmp($a, $b)
 							['id' => 'vendoritem-item_status']
 						); ?>
 
-				<div class="form-group">
-					<div class="col-lg-6">
-						<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete','style'=>'float:left;']) ?>
-					</div>
-					<div class="col-lg-6">
-						<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
+				<div class="row">
+					<div class="col-lg-4">
+						<?= Html::submitButton('Submit for Admin Approval', ['class' => 'btn btn-primary complete', 'style' => 'float:left;']) ?>
 					</div>
 
+					<div class="col-lg-4 text-center">
+						<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+					</div>
+
+					<div class="col-lg-4">
+						<input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next" />
+					</div>
 				</div>
 			</div>
 			<!--End First Tab -->
@@ -124,16 +128,25 @@ function cmp($a, $b)
 				<?= $form->field($model, 'item_additional_info_ar')
 						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_additional_info_ar']); ?>
 
-				<div class="col-lg-4">
-					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
-				</div>
-				
-				<div class="col-lg-4 text-center">
-					<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?>
-				</div>
+				<div class="row">
+					<div class="col-lg-2">
+						<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+					</div>
+					
+					<div class="col-lg-8">
 
-				<div class="col-lg-4">
-					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+						<div class="col-lg-6 text-center">
+							<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+						</div>
+
+						<div class="col-lg-6 text-center">
+							<?= Html::submitButton('Submit for Admin Approval', ['class' => 'btn btn-primary complete']) ?>
+						</div>
+					</div>
+
+					<div class="col-lg-2">
+						<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+					</div>
 				</div>
 			</div>
 
@@ -220,16 +233,25 @@ function cmp($a, $b)
 							'id' => 'vendoritem-item_customization_description_ar'
 						]); ?>
 
-				<div class="col-lg-4">
-					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
-				</div>
+				<div class="row">
+					<div class="col-lg-2">
+						<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+					</div>
+					
+					<div class="col-lg-8">
 
-				<div class="col-lg-4 text-center">
-					<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?>
-				</div>
+						<div class="col-lg-6 text-center">
+							<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+						</div>
 
-				<div class="col-lg-4">
-					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+						<div class="col-lg-6 text-center">
+							<?= Html::submitButton('Submit for Admin Approval', ['class' => 'btn btn-primary complete']) ?>
+						</div>
+					</div>
+
+					<div class="col-lg-2">
+						<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+					</div>
 				</div>
 			</div>
 			<!--End Third Tab -->
@@ -301,11 +323,19 @@ function cmp($a, $b)
 
 				<hr />
 
-				<div class="form-group">
-					<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete','style'=>'float:right;']) ?>
-				</div>
+				<div class="row">
+					<div class="col-lg-4">
+						<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+					</div>
+					
+					<div class="col-lg-4 text-center">
+						<?= Html::button('Save as Draft/Complete Later', ['class' => 'btn btn-primary btn-save-draft']) ?>
+					</div>
 
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+					<div class="col-lg-4">
+						<?= Html::submitButton('Submit for Admin Approval', ['class' => 'btn btn-info complete', 'style'=>'float:right;']) ?>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -338,6 +368,8 @@ echo Html::hiddenInput('image_order_url',Url::to(['/site/imageorder']),['id'=>'i
 echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
 echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
 
+echo Html::hiddenInput('item_list_url', Url::to(['vendor-item/index']), ['id' => 'item_list_url']);
+
 //ajax step urls 
 echo Html::hiddenInput('item_info_url', Url::to(['vendor-item/item-info']), ['id' => 'item_info_url']);
 echo Html::hiddenInput('item_description_url', Url::to(['vendor-item/item-description']), ['id' => 'item_description_url']);
@@ -352,4 +384,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.10', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.11', ['depends' => [\yii\web\JqueryAsset::className()]]);
