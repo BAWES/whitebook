@@ -163,7 +163,7 @@ if($model->images) {
                         <!-- Indicators responsive slider end -->
                     </div>
 
-                    <div id="main" role="main" class="col-md-6 padding-left-0 normal_mode left-sidebar">
+                    <div id="main" role="main" class="col-md-5 padding-left-0 normal_mode left-sidebar">
                         <div class="slider">
                             <div id="slider" class="flexslider display_none">
                                 <ul class="slides">
@@ -200,7 +200,7 @@ if($model->images) {
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="col-md-6 padding-left-0 padding-right-0 right-sidebar ">
+                    <div class="col-md-7 padding-left-0 padding-right-0 right-sidebar ">
                         <div class="right_descr_product">
                             <div class="product_name clearfix">
                                 <div class="left_descrip desktop-view margin-bottom-14">

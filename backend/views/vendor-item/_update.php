@@ -264,7 +264,7 @@ function cmp($a, $b)
 					Steps 
 					<ul>
 						<li>Select image by clicking on "Choose File" from top left side.</li>
-						<li>Move image in image preview area to get required image area, if image bigger than 530x530.</li>
+						<li>Move image in image preview area to get required image area, if image bigger than 450x450.</li>
 						<li>
 							Click on Upload button below preview area to upload image, wait for seconds. Image will get listed in right size.
 						</li>
@@ -272,13 +272,13 @@ function cmp($a, $b)
 				</div>
 
 				<div class="row">
-					<div class="col-lg-7">
+					<div class="col-lg-6">
 						
 						<p>Select, crop and upload image.</p>
 
 						<div class="image-editor">
 					        <input type="file" class="cropit-image-input" />
-					        <p style="color: red;">Minimum image size : 530 x 530</p>
+					        <p style="color: red;">Minimum image size : 450 x 450</p>
 					        <div class="cropit-preview"></div>
 					        <div class="image-size-label">
 					          Resize image
@@ -287,7 +287,7 @@ function cmp($a, $b)
 					        <button type="button" class="btn btn-primary btn-crop-upload">Upload</button>
 					    </div>
 					</div>
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<p>Uploaded image list</p>
 						<table class="table table-bordered table-item-image">
 							<thead>

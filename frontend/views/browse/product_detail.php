@@ -114,7 +114,7 @@ if($model->images) {
                         <!-- Indicators responsive slider end -->
                     </div>
 
-                    <div id="main" role="main" class="col-md-6 padding-right0 product-left-width">
+                    <div id="main" role="main" class="col-md-5 padding-right0 product-left-width">
                         <div class="slider">
                             <div id="slider" class="flexslider display_none">
                                 <ul class="slides">
@@ -156,7 +156,7 @@ if($model->images) {
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="col-md-6 product-right-width paddng0">
+                    <div class="col-md-7 product-right-width paddng0">
                         <div class="right_descr_product">
                             <div class="product_name">
                                 <div class="left_descrip desktop-view">
