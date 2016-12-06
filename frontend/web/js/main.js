@@ -1889,7 +1889,7 @@ function filter(){
 
 function imgError() {
     $(".events_items img").error(function () {
-        $(this).unbind("error").attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208");
+        $(this).unbind("error").attr("src", item_default_image);
     });
 }
 
