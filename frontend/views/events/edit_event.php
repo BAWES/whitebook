@@ -38,7 +38,9 @@ use frontend\models\Website;
                                     <div class="bs-docs-example"><select class="selectpicker required trigger" name="event_typee" data="" id="edit_event_type" >
                                             <option value="">Select event type</option>
                                             <?php
+                                            
                                             $event_type = Website::get_event_types();
+
                                             foreach ($event_type as $e) {
                                                 ?>
                                                 <option value="<?php echo $e['type_name']; ?>" <?php if ($edit_eventinfo[0]['event_type'] == $e['type_name']) {
@@ -52,7 +54,7 @@ use frontend\models\Website;
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" name="no_of_guests" class="form-control required" placeholder="<?php echo Yii::t('frontend', 'Enter number of guests'); ?>" value="<?= $edit_eventinfo[0]['no_of_guests'] ?>" />
+                                    <input type="text" name="no_of_guests" class="form-control" placeholder="<?php echo Yii::t('frontend', 'Enter number of guests'); ?>" value="<?= $edit_eventinfo[0]['no_of_guests'] ?>" />
                                 </div>
                                 <div id="eventresult"></div>
                                 <div class="eventErrorMsg error"></div>

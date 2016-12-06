@@ -3,11 +3,13 @@
 namespace common\models;
 
 use Yii;
+use yii\db\Expression;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+use yii\helpers\StringHelper;
+
 /**
 * This is the model class for table "{{%events}}".
 *
@@ -75,5 +77,33 @@ class Events extends \yii\db\ActiveRecord
             'event_date' => 'Event Date',
             'event_type' => 'Event Type',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord && empty($this->token)) {
+            $this->token = Events::generateToken();
+        }
+
+        return parent::beforeSave($insert);
+    }
+
+    public function generateToken($length = 32)
+    {
+        $randomString = Yii::$app->getSecurity()->generateRandomString($length);
+                
+        $exist = Events::findOne(['token' => $randomString]);
+
+        if(!$exist)
+            return $randomString;
+        else
+            return $this->generateToken($length);
+    }
+
+    public function findByToken($token)
+    {
+        return Events::findByAttributes([
+            'token' => $token,
+        ]);    
     }
 }
