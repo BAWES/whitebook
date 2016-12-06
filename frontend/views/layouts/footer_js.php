@@ -78,6 +78,8 @@ $this->registerJs("
     var kindly_select_event_type = '".Yii::t('frontend', 'Kindly select Event type')."';
     var no_record_found = '".Yii::t('frontend', 'No Record found')."';
     var giflink             = '".Url::to("@web/images/ajax-loader.gif")."';
+    var item_default_image =  '".Url::to("@web/images/item-default.png")."';
+
     var addevent            = '".Url::to(['/product/addevent'])."';
 ", View::POS_HEAD);
 

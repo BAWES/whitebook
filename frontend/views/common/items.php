@@ -38,7 +38,7 @@ if(!empty($items->getModels()))  {
                         <a href="<?= $item_url ?>" class="" >
                             <?php
                             
-                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=208&h=208';
+                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : Url::to("@web/images/item-default.png");
                                 
                             echo Html::img($path,['class'=>'item-img']);
 
