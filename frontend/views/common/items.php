@@ -5,7 +5,9 @@ use yii\helpers\Url;
 use common\components\CFormatter;
 
 if(!empty($items->getModels()))  {
+    
     $result = \yii\helpers\ArrayHelper::getColumn($customer_events_list,'item_id');
+
     foreach ($items->getModels() as $key => $value) {
 
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
@@ -47,9 +49,6 @@ if(!empty($items->getModels()))  {
                                 <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
                             <?php } ?>
                         </a>
-
-
-
                     </div>
                     <div class="events_descrip">
                         <a href="<?= $item_url ?>"><?= \common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>

@@ -220,10 +220,10 @@ class Users extends Model
 
     public static function get_customer_wishlist_details($customer_id)
     {
-		return $result = Wishlist::find()->select(['item_id'])
-						->where(['customer_id' => $customer_id])
-						->asArray()
-						->all();
+		return Wishlist::find()->select(['item_id'])
+    		->where(['customer_id' => $customer_id])
+    		->asArray()
+    		->all();
     }
 
     public function get_customer_wishlist_count($customer_id, $category, $price, $vendor, $avail_sale, $theme)

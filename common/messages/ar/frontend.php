@@ -17,7 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Guests : {count}' => 'الضيوف: {عدد}',
+    'Close' => 'قريب',
+    'Share your event' => 'مشاركة هذا الحدث الخاص بك',
+    'Share this url with your friends...' => 'مشاركة هذا الرابط مع أصدقائك',
+    'Event Detail' => 'تفاصيل الحدث',
+    'Guests : {count}' => 'الضيوف: {count}',
     'Enter number of guests' => 'أدخل عدد من الضيوف',
     'Event {event} created successfully!' => 'خلقت الحدث {event} بنجاح!',
     'Event {event} created and {item_name} added successfully!' => 'الحدث {event} خلق و{item_name} أضاف بنجاح!',

@@ -181,26 +181,15 @@ class EventsController extends BaseController
 
         $event_details = Events::findOne(['customer_id' => Yii::$app->user->identity->customer_id, 'slug' => $slug]);
 
-        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$event_details->event_name;
-        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
-        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-
-
         if (empty($event_details)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$event_details->event_name;
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+        
         $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
-
-        $eventitem_details = EventItemlink::find()->select(['{{%event_item_link}}.item_id'])
-            ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%event_item_link}}.item_id')
-            ->Where(['{{%vendor_item}}.item_status'=>'Active',
-                '{{%vendor_item}}.trash'=>'Default',
-                '{{%vendor_item}}.item_for_sale'=>'Yes',
-                '{{%vendor_item}}.type_id'=>'2',
-                '{{%event_item_link}}.event_id' => $event_details->event_id])
-            ->asArray()
-            ->all();
 
         $searchModel = new EventInviteesSearch();
 
@@ -220,6 +209,44 @@ class EventsController extends BaseController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'cat_exist'=>$cat_exist
+        ]);
+    }
+
+    public function actionPublic($token)
+    {
+        $event_details = Events::findOne(['token' => $token]);
+
+        if (empty($event_details)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$event_details->event_name;
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
+        $searchModel = new EventInviteesSearch();
+
+        $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $event_details->event_id);
+
+        /* Load level 1 category */
+        $categories = \frontend\models\Category::find()
+            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->asArray()
+            ->all();
+
+        if (!Yii::$app->user->isGuest) {
+            $customer_events_list = Users::get_customer_wishlist_details(Yii::$app->user->getId());
+        } else {
+            $customer_events_list = [];
+        }
+
+        return $this->render('public', [
+            'customer_events_list' => $customer_events_list,
+            'event_details' => $event_details,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'categories' => $categories
         ]);
     }
 
