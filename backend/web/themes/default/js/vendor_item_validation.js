@@ -216,7 +216,7 @@ $(document).on('ready', function() {
 	});
 });
 
-if(isNewRecord) {
+if(isNewRecord > 0) {
     $('#vendoritem-item_for_sale').prop('checked', true);
 } else {
 	if(item_for_sale=='Yes') {
@@ -253,7 +253,7 @@ $(function(){
 		}
 	});
 
-	if(isNewRecord) {
+	if(isNewRecord > 0) {
 		if($('#vendoritem-item_for_sale').prop('checked') == true){
 			$('.custom_description').hide();
 			$('.custom_description_ar').hide();
@@ -597,7 +597,7 @@ function save_item_info($is_autosave = false) {
 		if(json['success']) 
 		{
 			//redirect 
-			if(isNewRecord) 
+			if(isNewRecord > 0) 
 			{
 				location = json['edit_url'] + '#2';
 			}
