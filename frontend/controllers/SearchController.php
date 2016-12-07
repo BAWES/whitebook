@@ -213,7 +213,7 @@ class SearchController extends BaseController
             if (!empty($item_details)) {
                 foreach ($item_details as $i) {
                     if (!empty($i['item_name'])) {
-                        $k = $k.'<li><a href='.Url::to(['search/index', 'search' => $i['slug']]).'>'.$i['item_name'].'</a></li>';
+                        $k = $k.'<li><a href='.Url::to(['search/index', 'search' => $request->post('search')]).'>'.$i['item_name'].'</a></li>';
                     }
                 }
                 return '<ul>'.$k.'</ul>';
