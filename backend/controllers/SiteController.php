@@ -86,61 +86,57 @@ class SiteController extends Controller
 
     public function actionLogin() {
 
+        if(!Yii::$app->user->isGuest){
+            $this->redirect(['site/index']);
+        }
+
         $this->layout = "login";
 
         $model = new VendorLogin();
 
-        if(!Yii::$app->user->isGuest){
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
-            $this->redirect(['site/index']);
+            $vendor_id = Yii::$app->user->getId();
 
-        }else{
+            $package = Vendor::packageCheck($vendor_id);
 
-            if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $status = Vendor::statusCheck($vendor_id);
 
-                $vendor_id = Yii::$app->user->getId();
+            if(!$status){
 
-                $package = Vendor::packageCheck($vendor_id);
+                Yii::warning('[Account Deactivated - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' needs to contact admin, account deactivated', __METHOD__);
 
-                $status = Vendor::statusCheck($vendor_id);
+                $session = Yii::$app->session;
+                Yii::$app->user->logout();
+                $session->destroy();
+                
+                Yii::$app->session->setFlash('danger', "Kindly contact admin, account deactivated!");
 
-                if(!$status){
-
-                    $session = Yii::$app->session;
-                    Yii::$app->user->logout();
-                    $session->destroy();
-
-                    Yii::$app->session->setFlash('danger', "Kindly contact admin, account deactivated!");
-
-                    Yii::warning('[Account Deactivated - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' needs to contact admin, account deactivated', __METHOD__);
-
-                    return $this->redirect(['site/login']);
-                }
-
-                if($package){
-
-                    Yii::info('[Vendor Login - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' has logged in to manage their items', __METHOD__);
-                    return $this->goBack(['site/index']);
-
-                } else {
-
-                    $session = Yii::$app->session;
-                    Yii::$app->user->logout();
-                    $session->destroy();
-
-                    Yii::$app->session->setFlash('danger', "Kindly contact admin, package expired!");
-
-                    Yii::warning('[Vendor Package Expired - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' needs contact admin, package expired', __METHOD__);
-
-                    return $this->redirect(['site/login']);
-                }
-
-            } else {
-
-                return $this->render('login', [
-                    'model' => $model,
-                ]);
+                return $this->redirect(['site/login']);
             }
+
+            if(!$package){
+
+                Yii::warning('[Vendor Package Expired - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' needs contact admin, package expired', __METHOD__);
+
+                $session = Yii::$app->session;
+                Yii::$app->user->logout();
+                $session->destroy();
+                
+                Yii::$app->session->setFlash('danger', "Kindly contact admin, package expired!");
+
+                return $this->redirect(['site/login']);
+            }
+
+            Yii::info('[Vendor Login - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' has logged in to manage their items', __METHOD__);
+
+            return $this->goBack(['site/index']);
+
+        } else {
+
+            return $this->render('login', [
+                'model' => $model,
+            ]);
         }
     }
 
