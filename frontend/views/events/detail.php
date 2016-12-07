@@ -18,7 +18,7 @@ $this->title = 'My Event | '.$event_details->event_name;
 <section id="inner_pages_sections">
     <div class="container">
         <div class="title_main">
-            <h1><?php echo Yii::t('frontend','Events'); ?></h1>
+            <h1><?php echo Yii::t('frontend', 'Events'); ?></h1>
         </div>
 
         <div class="account_setings_sections">
@@ -112,30 +112,31 @@ $items = VendorItem::find()
 
         <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
     </h4>
+
+    <div class="note_wrapper">
+        <?php $note = CategoryNote::getNote($value1['category_id'], $event_details->event_id); ?>
+        <p>
+            <span><?= $note?$note:Yii::t('frontend', 'You can add your personel note here...'); ?></span>
+            <button class="btn btn-xs btn-primary btn-edit" type="button">
+                <i class="fa fa-pencil"></i>
+            </button>        
+        </p>
+        <form style="display: none;">
+            <input type="hidden" name="category_id" value="<?= $value1['category_id'] ?>" />
+            <input type="hidden" name="event_id" value="<?= $event_details->event_id ?>" />
+            <div class="form-group">
+                <textarea name="note" class="form-control" placeholder="<?= Yii::t('frontend', 'You can add your personel note here...') ?>"><?= $note ?></textarea>
+            </div>        
+            <button class="btn btn-primary btn-save" type="button">
+                <?= Yii::t('frontend', 'Save changes') ?></button>    
+        </form>
+    </div>
+
 </div>
 <div id="collapse<?= $key ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?= $key ?>" aria-expanded="false">
 <div class="panel-body">
 <div class="events_inner_listing_new">
 <div class="events_listing">
-
-<div class="note_wrapper">
-    <?php $note = CategoryNote::getNote($value1['category_id'], $event_details->event_id); ?>
-    <p>
-        <span><?= $note?$note:Yii::t('frontend', 'You can add your personel note here...'); ?></span>
-        <button class="btn btn-xs btn-primary btn-edit" type="button">
-            <i class="fa fa-pencil"></i>
-        </button>        
-    </p>
-    <form style="display: none;">
-        <input type="hidden" name="category_id" value="<?= $value1['category_id'] ?>" />
-        <input type="hidden" name="event_id" value="<?= $event_details->event_id ?>" />
-        <div class="form-group">
-            <textarea name="note" class="form-control" placeholder="<?= Yii::t('frontend', 'You can add your personel note here...') ?>"><?= $note ?></textarea>
-        </div>        
-        <button class="btn btn-primary btn-save" type="button">
-            <?= Yii::t('frontend', 'Save changes') ?></button>    
-    </form>
-</div>
 
 <ul>
 <?php
@@ -201,12 +202,12 @@ if(!empty($items))
             </button>
         <?php }else{ ?>
             <button class="btn btn-primary btn-mark-complete" data-event-id="<?= $event_details->event_id ?>" data-cat-id="<?= $value1['category_id'] ?>">
-                <?= Yii::t('frontend','Mark Complete');?>
+                <?= Yii::t('frontend', 'Mark Complete');?>
             </button>
         <?php } ?>
 
         <a href="<?= Url::toRoute(['/browse/list/','slug'=>$value1['slug']]);?>" class="btn btn-danger" style="width: 57%;">
-            <?= Yii::t('frontend','Browse the Category');?>
+            <?= Yii::t('frontend', 'Browse the Category');?>
         </a>
     </div>
 </div>
@@ -355,13 +356,46 @@ if(!empty($items))
 <div id="event_share_modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header" style="padding-bottom: 0;">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title text-center"><?= Yii::t('frontend', 'Share your event') ?></h4>
-      </div>
-      <div class="modal-body">
-        <p><?= Yii::t('frontend', 'Share this url with your friends...') ?></p>
-        <textarea class="form-control" readonly style="direction: ltr;"><?= Url::to(['events/public', 'token' => $event_details->token], true) ?></textarea>
+        <div class="modal-header" style="padding-bottom: 0;">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title text-center"><?= Yii::t('frontend', 'Share your event') ?></h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#share_url"><?= Yii::t('frontend', 'URL') ?></a></li>
+              <li><a data-toggle="tab" href="#share_email"><?= Yii::t('frontend', 'Email') ?></a></li>
+              <li><a data-toggle="tab" href="#share_whatsapp"><?= Yii::t('frontend', 'Whatsapp') ?></a></li>
+            </ul>
+
+            <br />
+
+            <div class="tab-content">
+                <div id="share_url" class="tab-pane fade in active">
+                    <p><?= Yii::t('frontend', 'Share this url with your friends...') ?></p>
+                    <textarea class="form-control" readonly style="direction: ltr;"><?= Url::to(['events/public', 'token' => $event_details->token], true) ?></textarea>
+                </div>
+                <div id="share_email" class="tab-pane fade">
+                    <div class="form-group">
+                        <label><?= Yii::t('frontend', 'Add comma(,) separated email') ?></label>
+                        <textarea class="form-control" id="txt_share_email" style="direction: ltr;"></textarea>
+                    </div>
+                    <button class="btn btn-default btn-share-email" data-id="<?= $event_details->event_id ?>">
+                        <?= Yii::t('frontend', 'Send email') ?>
+                    </button>
+                </div>
+                <div id="share_whatsapp" class="tab-pane fade">
+
+                    <div id="share_whatsapp_info">
+                        <?= Yii::t('frontend', 'Please share this event in mobile device') ?>
+                    </div>
+
+                    <hr />
+
+                    <button class="btn btn-primary btn-share-whatsapp" data-text="Event : <?= $event_details->event_name ?>" data-link="<?= Url::to(['events/public', 'token' => $event_details->token], true) ?>">
+                        <?= Yii::t('frontend', 'Share') ?>
+                    </button>
+                </div>
+            </div>        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -397,8 +431,10 @@ echo Html::hiddenInput('event_mark_incomplete', Url::toRoute('/events/mark-incom
 echo Html::hiddenInput('event_mark_complete', Url::toRoute('/events/mark-complete'), ['id' => 'event_mark_complete']);
 echo Html::hiddenInput('event_save_note', Url::toRoute('/events/save-note'), ['id' => 'event_save_note']);
 echo Html::hiddenInput('edit_popup_url', Url::toRoute('/events/event-details'), ['id' => 'edit_popup_url']);
+echo Html::hiddenInput('share_email_url', Url::to(['/events/share-email']), ['id' => 'share_email_url']);
+
 echo Html::hiddenInput('txt_delete_confirm', Yii::t('frontend', 'Are you sure you want to delete this item?'), ['id' => 'txt_delete_confirm']);
 
 echo Html::hiddenInput('delete_event_url', Url::to(['/users/deleteeventitem']), ['id' => 'delete_event_url']);
 
-$this->registerJsFile('@web/js/event_detail.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/event_detail.js?v=1.3', ['depends' => [\yii\web\JqueryAsset::className()]]);

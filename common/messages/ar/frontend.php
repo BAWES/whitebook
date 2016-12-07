@@ -17,6 +17,13 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Please share this event in mobile device' => 'يرجى حصة هذا الحدث في جهاز الهاتف النقال',
+    'Add comma(,) separated email' => 'إضافة فاصلة (،) فصل البريد الإلكتروني',
+    'Whatsapp' => 'ال WhatsApp',
+    'URL' => 'رابط',
+    'Mark Complete' => 'كامل علامة', 
+    'Mark Incomplete' => 'علامة غير مكتمل',
+    'You can add your personel note here...' => 'يمكنك إضافة مذكرة شخصي هنا ...',
     'Close' => 'قريب',
     'Share your event' => 'مشاركة هذا الحدث الخاص بك',
     'Share this url with your friends...' => 'مشاركة هذا الرابط مع أصدقائك',
@@ -27,6 +34,7 @@ return [
     'Event {event} created and {item_name} added successfully!' => 'الحدث {event} خلق و{item_name} أضاف بنجاح!',
     'Search Result for: {search} ({count})' => 'نتائج البحث عن: {search}. ({count})',
     'Select event type' => 'حدد نوع الحدث',
+    'Events' => 'أحداث',
     'EVENTS' => 'أحداث',
     'THINGS I LIKE' => 'أشياء تعجبني',
     'Sub Total' => 'المجموع الفرعي',
@@ -298,6 +306,7 @@ return [
     'Sender Email *' => 'البريد  الإلكتروني للمرسل*',
     'Sender Name *' => 'اسم المرسل *',
     'Services' => 'خدمات',
+    'Share' => 'إنشر',
     'Share this' => 'إنشر',
     'Shop' => 'تسوق',
     'Shopping Cart' => 'عربة التسوق',

@@ -411,7 +411,7 @@
 	/*TD032-12-10-2015*/
 	.deliver-detail{ text-align:left;}
 	.product_detail_section a.deliver-detail{ text-align:left;}
-	.events_inner_contents_new .select_butons,
+	/*.events_inner_contents_new .select_butons,*/
 	.add_events_new .btn-default.search-hide,.invates_common .responsive-number,.product_detail_section .normal_tables .left_descrip.desktop-view {display:none;}
 	.prient_common a{margin:15px 0 0 20px;}
 	.desktop-hide,.mobile-view,.select_items_select.mobile-view{display:block;}
