@@ -10,6 +10,70 @@ var event_save_note = $('#event_save_note').val();
 var edit_popup_url = $('#edit_popup_url').val();
 var txt_delete_confirm = $('#txt_delete_confirm').val();
 var delete_event_url = $('#delete_event_url').val();
+var share_email_url = $('#share_email_url').val();
+
+var isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
+
+$(document).delegate('.btn-share-whatsapp', 'click', function() {
+
+    if(isMobile.any()) {
+        var text = $(this).attr("data-text");
+        var url = $(this).attr("data-link");
+        var message = encodeURIComponent(text) + " - " + encodeURIComponent(url);
+        var whatsapp_url = "whatsapp://send?text=" + message;
+        window.location.href = whatsapp_url;
+    } else {
+        alert($('#share_whatsapp_info').text());
+    }
+});
+
+$(document).delegate('.btn-share-email', 'click', function() {
+    
+    $('#share_email .alert').remove();
+
+    $(this).attr('disabled', 'disabled');
+    $(this).html('Sending email...');
+
+    $.post(share_email_url, { 
+        event_id : $(this).attr('data-id'),
+        txt_share_email : $('#txt_share_email').val() 
+    }, function(json) {
+
+        $('.btn-share-email').removeAttr('disabled');
+        $('.btn-share-email').html('Send email');
+
+        if(json.success) {
+            $('#share_email').append('<div class="alert alert-success">' 
+                + '<button class="close" data-dismiss="alert">&times;</button>'
+                + json.success + '</div>');    
+        }
+
+        if(json.errors) {
+            $('#share_email').append('<div class="alert alert-danger">' 
+                + '<button class="close" data-dismiss="alert">&times;</button>'
+                + json.errors.join('<br />') + '</div>');    
+        }   
+    });
+});
 
 $(document).delegate('.note_wrapper .btn-edit', 'click', function() {
 	$note_wrapper = $(this).parents('.note_wrapper');

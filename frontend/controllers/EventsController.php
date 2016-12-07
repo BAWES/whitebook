@@ -602,7 +602,7 @@ class EventsController extends BaseController
     }
 
     /** 
-     * Save categoory note for customer 
+     * Save category note for customer 
      */
     public function actionSaveNote()
     {
@@ -638,6 +638,60 @@ class EventsController extends BaseController
 
         return [
             'note' => $note
+        ];
+    }
+
+    /** 
+     * Send event email 
+     */
+    public function actionShareEmail()
+    {
+        $event_id = Yii::$app->request->post('event_id');
+        $emails = explode(',', Yii::$app->request->post('txt_share_email'));
+
+        $errors = [];
+
+        foreach ($emails as $key => $value) {
+            if (!filter_var(trim($value), FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Email(s) not valid!';
+            }
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if($errors) {
+            return [
+                'errors' => $errors
+            ];
+        }
+
+        $event = Events::findOne($event_id);
+
+        //if no event or guest 
+        if(!$event || Yii::$app->user->isGuest) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');    
+        }
+
+        $customer = Customer::find()
+            ->where(['customer_id' => Yii::$app->user->getId()])
+            ->one();
+
+        $template = Yii::$app->mailer->compose("customer/event", [
+                'event' => $event,
+                'customer' => $customer
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setSubject('Event : '.$event->event_name);
+
+        foreach ($emails as $key => $value) {
+
+            $template
+                ->setTo(trim($value))
+                ->send();
+        }
+
+        return [
+            'success' => Yii::t('frontend', 'Mail sent successfully!')
         ];
     }
 }
