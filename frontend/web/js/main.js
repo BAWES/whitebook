@@ -1888,7 +1888,7 @@ function filter(){
 }//end of function
 
 function imgError() {
-    $(".events_items img").error(function () {
+    $(".events_items img, .owl-item img").error(function () {
         $(this).unbind("error").attr("src", item_default_image);
     });
 }

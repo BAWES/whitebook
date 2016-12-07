@@ -294,11 +294,8 @@ class BrowseController extends BaseController
         if (!empty($model->images[0])) {
             $baselink = Yii::getAlias("@s3/vendor_item_images_530/") . $model->images[0]['image_path'];
         } else {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-            //$baselink = Yii::getAlias("@s3/vendor_item_images_530/") . 'no_image.jpg';
+            $baselink = Url::to("@web/images/item-default.png");
         }
-
-        /* BEGIN DELIVERY AREAS --VENDOR */
 
         \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => Yii::$app->name.' - ' . ucfirst($model->vendor->vendor_name)]);
         \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
