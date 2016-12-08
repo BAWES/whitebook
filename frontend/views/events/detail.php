@@ -5,8 +5,8 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
-use common\models\VendorItem;
 use common\models\Category;
+use common\models\VendorItem;
 use common\models\CategoryNote;
 use common\components\CFormatter;
 use frontend\models\EventItemlink;
@@ -18,7 +18,7 @@ $this->title = 'My Event | '.$event_details->event_name;
 <section id="inner_pages_sections">
     <div class="container">
         <div class="title_main">
-            <h1><?php echo Yii::t('frontend','Events'); ?></h1>
+            <h1><?php echo Yii::t('frontend', 'Events'); ?></h1>
         </div>
 
         <div class="account_setings_sections">
@@ -41,9 +41,19 @@ $this->title = 'My Event | '.$event_details->event_name;
 </div>
 </div>
 <div class="col-md-2 padding-left0">
-    <div class="select_butons">
+    <div class="select_butons" style="margin-top: 0px;">
+        <a data-toggle="modal" data-target="#event_share_modal" class="btn btn-warning">
+            <?= Yii::t('frontend', 'Share') ?>
+        </a>
+    </div>
+    <div class="select_butons" style="margin-top: 5px;">
         <a href="#invitee" title="<?= Yii::t('frontend', 'Invitees') ?>" type="button" class="btn btn-warning">
             <?= Yii::t('frontend', 'Invitees') ?>
+        </a>
+    </div>
+    <div class="select_butons" style="margin-top: 5px;">
+        <a href="<?= Url::to(['events/pdf', 'slug' => $event_details->slug]) ?>" class="btn btn-warning">
+            <?= Yii::t('frontend', 'Pdf') ?>
         </a>
     </div>
 </div>
@@ -107,30 +117,31 @@ $items = VendorItem::find()
 
         <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
     </h4>
+
+    <div class="note_wrapper">
+        <?php $note = CategoryNote::getNote($value1['category_id'], $event_details->event_id); ?>
+        <p>
+            <span><?= $note?$note:Yii::t('frontend', 'You can add your personel note here...'); ?></span>
+            <button class="btn btn-xs btn-primary btn-edit" type="button">
+                <i class="fa fa-pencil"></i>
+            </button>        
+        </p>
+        <form style="display: none;">
+            <input type="hidden" name="category_id" value="<?= $value1['category_id'] ?>" />
+            <input type="hidden" name="event_id" value="<?= $event_details->event_id ?>" />
+            <div class="form-group">
+                <textarea name="note" class="form-control" placeholder="<?= Yii::t('frontend', 'You can add your personel note here...') ?>"><?= $note ?></textarea>
+            </div>        
+            <button class="btn btn-primary btn-save" type="button">
+                <?= Yii::t('frontend', 'Save changes') ?></button>    
+        </form>
+    </div>
+
 </div>
 <div id="collapse<?= $key ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?= $key ?>" aria-expanded="false">
 <div class="panel-body">
 <div class="events_inner_listing_new">
 <div class="events_listing">
-
-<div class="note_wrapper">
-    <?php $note = CategoryNote::getNote($value1['category_id'], $event_details->event_id); ?>
-    <p>
-        <span><?= $note?$note:Yii::t('frontend', 'You can add your personel note here...'); ?></span>
-        <button class="btn btn-xs btn-primary btn-edit" type="button">
-            <i class="fa fa-pencil"></i>
-        </button>        
-    </p>
-    <form style="display: none;">
-        <input type="hidden" name="category_id" value="<?= $value1['category_id'] ?>" />
-        <input type="hidden" name="event_id" value="<?= $event_details->event_id ?>" />
-        <div class="form-group">
-            <textarea name="note" class="form-control" placeholder="<?= Yii::t('frontend', 'You can add your personel note here...') ?>"><?= $note ?></textarea>
-        </div>        
-        <button class="btn btn-primary btn-save" type="button">
-            <?= Yii::t('frontend', 'Save changes') ?></button>    
-    </form>
-</div>
 
 <ul>
 <?php
@@ -138,7 +149,7 @@ if(!empty($items))
 {
     foreach ($items as $key => $value) {
 ?>
-<li>
+<li class="pull-left">
     <div class="events_items">
         <div class="events_images">
             <div class="hover_events">
@@ -196,12 +207,12 @@ if(!empty($items))
             </button>
         <?php }else{ ?>
             <button class="btn btn-primary btn-mark-complete" data-event-id="<?= $event_details->event_id ?>" data-cat-id="<?= $value1['category_id'] ?>">
-                <?= Yii::t('frontend','Mark Complete');?>
+                <?= Yii::t('frontend', 'Mark Complete');?>
             </button>
         <?php } ?>
 
         <a href="<?= Url::toRoute(['/browse/list/','slug'=>$value1['slug']]);?>" class="btn btn-danger" style="width: 57%;">
-            <?= Yii::t('frontend','Browse the Category');?>
+            <?= Yii::t('frontend', 'Browse the Category');?>
         </a>
     </div>
 </div>
@@ -346,104 +357,76 @@ if(!empty($items))
 </section>
 <!-- continer end -->
 
+
+<div id="event_share_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" style="padding-bottom: 0;">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title text-center"><?= Yii::t('frontend', 'Share your event') ?></h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#share_url"><?= Yii::t('frontend', 'URL') ?></a></li>
+              <li><a data-toggle="tab" href="#share_email"><?= Yii::t('frontend', 'Email') ?></a></li>
+              <li id="tab_share_whatsapp"><a data-toggle="tab" href="#share_whatsapp"><?= Yii::t('frontend', 'Whatsapp') ?></a></li>
+            </ul>
+
+            <br />
+
+            <div class="tab-content">
+                <div id="share_url" class="tab-pane fade in active">
+                    <p><?= Yii::t('frontend', 'Share this url with your friends...') ?></p>
+                    <textarea class="form-control" readonly style="direction: ltr;"><?= Url::to(['events/public', 'token' => $event_details->token], true) ?></textarea>
+                </div>
+                <div id="share_email" class="tab-pane fade">
+                    <a target="_blank" class="btn btn-default btn-share-email" 
+                       href="mailto:someone@example.com?Subject=Check out <?= $event_details->event_name ?>&body=Check out <?= $event_details->event_name ?> on The Whitebook <?= Url::to(['events/public', 'token' => $event_details->token], true) ?>"><?= Yii::t('frontend', 'Send email') ?>
+                    </a>
+                </div>
+                <div id="share_whatsapp" class="tab-pane fade">
+                    <a class="btn btn-primary btn-share-whatsapp" href="whatsapp://send?text=Check out <?= $event_details->event_name ?> on The Whitebook <?= Url::to(['events/public', 'token' => $event_details->token], true) ?>" data-action="share/whatsapp/share"><?= Yii::t('frontend', 'Share') ?>
+                    </a>
+                </div>
+            </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+            <?= Yii::t('frontend', 'Close') ?>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <?php
+
 $this->registerCss("
-.item-img{width:210px; height:208px;}
-.margin-left-10{margin-left:10px;}
-.msg-success{margin-top: 5px; width: 320px; float: left; text-align: left;}
-.color-red{color:red;}
-table{    font-size: 12px;}
-.header-updated{padding-bottom:0; margin-bottom: 0;}
-.body-updated{background: white; margin-top: 0;}
-#inner_pages_sections .container{background:#fff; margin-top:12px;}
-.border-left{border-left: 1px solid #e2e2e2;}
+    .item-img{width:210px; height:208px;}
+    .margin-left-10{margin-left:10px;}
+    .msg-success{margin-top: 5px; width: 320px; float: left; text-align: left;}
+    .color-red{color:red;}
+    table{    font-size: 12px;}
+    .header-updated{padding-bottom:0; margin-bottom: 0;}
+    .body-updated{background: white; margin-top: 0;}
+    #inner_pages_sections .container{background:#fff; margin-top:12px;}
+    .border-left{border-left: 1px solid #e2e2e2;}
 ");
 
-$this->registerJs("
-    var event_id = '".$event_details->event_id."';
-    var event_name = '".$event_details->event_name."';
-    var add_invite = '".Url::toRoute('/events/add-invitee')."';
-    var invite_detail = '".Url::toRoute('/events/invitee-details')."';
-    var update_invite = '".Url::toRoute('/events/add-invitee')."';
-    var delete_invite = '".Url::toRoute('/events/add-invitee')."';
-    var event_mark_incomplete = '".Url::toRoute('/events/mark-incomplete')."';
-    var event_mark_complete = '".Url::toRoute('/events/mark-complete')."';
-    var event_save_note = '".Url::toRoute('/events/save-note')."';
+echo Html::hiddenInput('event_id', $event_details->event_id, ['id' => 'event_id']);
+echo Html::hiddenInput('event_name', $event_details->event_name, ['id' => 'event_name']);
+echo Html::hiddenInput('add_invite', Url::toRoute('/events/add-invitee'), ['id' => 'add_invite']);
+echo Html::hiddenInput('invite_detail', Url::toRoute('/events/invitee-details'), ['id' => 'invite_detail']);
+echo Html::hiddenInput('update_invite', Url::toRoute('/events/add-invitee'), ['id' => 'update_invite']);
+echo Html::hiddenInput('delete_invite', Url::toRoute('/events/add-invitee'), ['id' => 'delete_invite']);
+echo Html::hiddenInput('event_mark_incomplete', Url::toRoute('/events/mark-incomplete'), ['id' => 'event_mark_incomplete']);
+echo Html::hiddenInput('event_mark_complete', Url::toRoute('/events/mark-complete'), ['id' => 'event_mark_complete']);
+echo Html::hiddenInput('event_save_note', Url::toRoute('/events/save-note'), ['id' => 'event_save_note']);
+echo Html::hiddenInput('edit_popup_url', Url::toRoute('/events/event-details'), ['id' => 'edit_popup_url']);
 
-    function editevent(event_id)
-    {
-        jQuery.ajax({
-            type:'POST',
-            url: '".Yii::t('frontend', Url::toRoute('/events/event-details'))."',
-            data:{
-                'event_id':event_id
-            },
-            success:function(data)
-            {
+echo Html::hiddenInput('txt_delete_confirm', Yii::t('frontend', 'Are you sure you want to delete this item?'), ['id' => 'txt_delete_confirm']);
 
-                jQuery('#editeventModal').html(data);
-                jQuery('.selectpicker').selectpicker('refresh');
-                jQuery('#edit_event_date').datepicker({
-                    format: 'dd-mm-yyyy',
-                    startDate:'today',
-                    autoclose:true,
-                });
-                jQuery('#EditeventModal').modal('show');
-            }
-        });
-    }
-    /* END Insert invitees for respective event */
+echo Html::hiddenInput('delete_event_url', Url::to(['/users/deleteeventitem']), ['id' => 'delete_event_url']);
 
-    /* Event detail slide items !IMPORTANT * Mariyappan */
-    $(document).ready(function () {
-        jQuery('#collapse0').attr('aria-expanded', 'true');
-        jQuery('#collapse0').attr('class', 'panel-collapse collapse in');
-    });
-
-    /* Event detail slide items !IMPORTANT * Mariyappan */
-    function isEmail(email) {
-        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        return regex.test(email);
-    }
-
-    $('label#search-labl3').click(function(){
-        jQuery.pjax.reload({container:'#invitee-grid'});
-    });
-
-    /* BEGIN USER CAN DELETE THE ITEM FOR THE PARTICULAR EVENT */
-    function deleteeventitem(item_link_id, category_name,category_id,event_id,tis)
-    {
-        var r = confirm('".Yii::t('frontend', 'Are you sure you want to delete this item?')."');
-
-        if (r == true) {
-
-            jQuery.ajax({
-                url: '".Url::to(['/users/deleteeventitem'])."',
-                type:'POST',
-                data: {
-                    'item_link_id':item_link_id,
-                    'category_id':category_id,
-                    'event_id':event_id
-                },
-                success:function(data)
-                {
-                    if(data!=-1)
-                    {
-                        jQuery('#'+tis).parents('.panel-default').find('span#item_count').html(data);
-                        jQuery('#'+tis).parents('li').remove();
-                        jQuery('#login_success').modal('show');
-                        jQuery('#login_success #success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\" >Success! Item removed from the '+category_name+'.</span>');
-                        window.setTimeout(function() {jQuery('#login_success').modal('hide');},2000);
-                    }
-                    else{
-                        jQuery('#login_success').modal('show');
-                        jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\">Error! Something went wrong.</span>');
-                        window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
-                    }
-                }
-            })
-        }
-    }
-", View::POS_BEGIN);
-
-$this->registerJsFile('@web/js/event_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/event_detail.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);

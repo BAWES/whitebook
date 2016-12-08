@@ -133,11 +133,11 @@ class VendorItem extends \common\models\VendorItem
     {
         $errors = VendorItem::validate_item_price($data);
 
-        $images = Yii::$app->request->post('images');
+        /*$images = Yii::$app->request->post('images');
 
         if(!$images) {
             $errors['images'] = 'Item image require.';
-        }
+        }*/
 
         return $errors;
     }

@@ -783,6 +783,8 @@ function get_form_data($is_autosave) {
 	return $data;
 }
 
+			console.log(isNewRecord);
+
 /** 
  * We will not display errors and loading image on autosave 
  */ 
@@ -811,7 +813,7 @@ function save_item_info($is_autosave = false) {
 		if(json['success']) 
 		{
 			//redirect 
-			if(isNewRecord) 
+			if(isNewRecord > 0) 
 			{
 				location = json['edit_url'] + '#2';
 			}

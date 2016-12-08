@@ -11,6 +11,7 @@ use common\models\SuborderItemPurchase;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use kartik\mpdf\Pdf;
 
 /**
@@ -30,6 +31,15 @@ class SubOrderController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [//allow authenticated users only
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
         ];
     }
 

@@ -351,3 +351,6 @@ td[align="left"] {
     right: auto;
     left: 23px;
 }
+.events_inner_listing_new .events_listing ul li{
+    margin: 0 0 28px 32px;
+}

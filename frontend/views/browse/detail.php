@@ -145,17 +145,16 @@ if($model->images) {
 
                             <!--23-10-2015 slider start-->
                             <div class="carousel-inner owl-carousel" id="mobile-slider">
-                                <?php
-                                if (count($model->images) > 0) {
-                                    foreach ($model->images as $image) {
-                                        if ($image->image_path) {
-                                            echo '<div class="item">'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']).'</div>';
-                                        } else {
-                                            echo '<div class="item">'.Html::img(Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg',['alt'=>'item detail image']).'</div>';
-                                        }
-                                    }
-                                }
-                                ?>
+                                <?php if(!$model->images) { ?>
+                                    <div class="item">
+                                        <?= Html::img(Url::to("@web/images/item-default.png")) ?>
+                                    </div>
+                                <?php } ?>
+                                <?php foreach ($model->images as $image) { ?>
+                                    <div class="item">
+                                        <?= Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path) ?>
+                                    </div>
+                                <?php } ?>
                             </div>
                             <!--23-10-2015 slider end-->
 
@@ -167,34 +166,26 @@ if($model->images) {
                         <div class="slider">
                             <div id="slider" class="flexslider display_none">
                                 <ul class="slides">
-                                    <?php
-                                    if (count($model->images) > 0) {
-                                        foreach ($model->images as $image) {
-                                            if ($image->image_path) {
-                                                echo '<li>'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']).'</li>';
-                                            } else {
-                                                echo '<li>'.Html::img(Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg',['alt'=>'item detail image']).'</li>';
-                                            }
-                                        }
-                                    }
-                                     ?>
+                                    <?php if(!$model->images) { ?>
+                                        <li>
+                                            <?= Html::img(Url::to("@web/images/item-default.png")) ?>
+                                        </li>
+                                    <?php } ?>
+                                    <?php foreach ($model->images as $image) { ?>
+                                        <li>
+                                            <?= Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']) ?>
+                                        </li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                             <?php if (count($model->images) > 1) { ?>
                                 <div id="carousel" class="flexslider display_none_thumb">
                                     <ul class="slides">
-
                                         <?php
 
                                         foreach ($model->images as $image) {
-                                            if ($image->image_path) {
-                                                echo '<li>'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']).'</li>';
-                                            } else {
-                                                echo '<li>'.Html::img(Yii::$app->homeUrl . Yii::getAlias('@vendor_images/') . 'no_image.jpg',['alt'=>'item detail image']).'</li>';
-                                            }
-                                        }
-
-                                        ?>
+                                            echo '<li>'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']).'</li>';
+                                        } ?>
                                     </ul>
                                 </div>
                             <?php } ?>
