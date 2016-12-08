@@ -36,6 +36,7 @@ use frontend\models\EventItemlink;
 use frontend\models\EventInvitees;
 use frontend\models\AddressQuestion;
 use frontend\models\EventInviteesSearch;
+use kartik\mpdf\Pdf;
 
 /**
  * EventinviteesController implements the CRUD actions for EventInvitees model.
@@ -248,6 +249,66 @@ class EventsController extends BaseController
             'dataProvider' => $dataProvider,
             'categories' => $categories
         ]);
+    }
+
+    public function actionPdf($slug)
+    {
+        $event_details = Events::findOne(['slug' => $slug]);
+
+        if (empty($event_details)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $this->layout = 'pdf';
+
+        $categories = \frontend\models\Category::find()
+            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->asArray()
+            ->all();
+
+        $invitees = EventInvitees::find()
+            ->where([
+                'event_id' => $event_details->event_id
+            ])
+            ->all();
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+
+        $content = $this->render('pdf', [
+            'event_details' => $event_details,
+            'categories' => $categories,
+            'invitees' => $invitees
+        ]);
+
+        if(Yii::$app->language == 'en') {
+            $header = $event_details->event_name;
+        } else {
+            $header = $event_details->event_name_ar;
+        }
+        
+        $pdf = new Pdf([
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $content,  
+            // any css to be embedded if required
+            'cssInline' => '', 
+             // set mPDF properties on the fly
+            'options' => [],//['title' => 'Order #'.$id],
+             // call mPDF methods on the fly
+            //'cssFile' => '@web/css/event_pdf.css',
+            'methods' => [ 
+                'SetHeader'=>[$header], 
+                'SetFooter'=>['{PAGENO}'],
+            ]
+        ]);    
+
+        return $pdf->render();     
     }
 
     public function actionAddInvitee()
