@@ -32,6 +32,8 @@ $this->title = Yii::t('frontend', 'Event Detail');
                 <p><?= Yii::t('frontend', 'Guests : {count}', [
                         'count' => $event_details->no_of_guests
                     ]); ?></p>
+            <?php }else{ ?>
+            <br />
             <?php } ?>
         </center>
         
