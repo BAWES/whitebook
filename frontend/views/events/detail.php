@@ -5,8 +5,8 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
-use common\models\VendorItem;
 use common\models\Category;
+use common\models\VendorItem;
 use common\models\CategoryNote;
 use common\components\CFormatter;
 use frontend\models\EventItemlink;
@@ -41,14 +41,19 @@ $this->title = 'My Event | '.$event_details->event_name;
 </div>
 </div>
 <div class="col-md-2 padding-left0">
-    <div class="select_butons" style="margin-top: 30px;">
+    <div class="select_butons" style="margin-top: 0px;">
         <a data-toggle="modal" data-target="#event_share_modal" class="btn btn-warning">
             <?= Yii::t('frontend', 'Share') ?>
         </a>
     </div>
-    <div class="select_butons" style="margin-top: 10px;">
+    <div class="select_butons" style="margin-top: 5px;">
         <a href="#invitee" title="<?= Yii::t('frontend', 'Invitees') ?>" type="button" class="btn btn-warning">
             <?= Yii::t('frontend', 'Invitees') ?>
+        </a>
+    </div>
+    <div class="select_butons" style="margin-top: 5px;">
+        <a href="<?= Url::to(['events/pdf', 'slug' => $event_details->slug]) ?>" class="btn btn-warning">
+            <?= Yii::t('frontend', 'Pdf') ?>
         </a>
     </div>
 </div>

@@ -63,6 +63,7 @@ return [
                   'themes/<slug:[A-Za-z0-9\_-]+>/<themes:[A-Za-z0-9\_-]+>' => 'themes/detail',
                   /*'vendor/<slug:[A-Za-z0-9\_-]+>/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',*/
                   'vendor/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',
+                  'events/pdf/<slug:[A-Za-z0-9\_-]+>' => 'events/pdf',
                   'events/detail/<slug:[A-Za-z0-9\_-]+>' => 'events/detail',
                   'events/public/<token:[A-Za-z0-9\_-]+>' => 'events/public',
                   'sitemap.xml' => 'sitemap/index',
