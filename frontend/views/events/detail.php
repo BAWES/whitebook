@@ -364,7 +364,7 @@ if(!empty($items))
             <ul class="nav nav-tabs">
               <li class="active"><a data-toggle="tab" href="#share_url"><?= Yii::t('frontend', 'URL') ?></a></li>
               <li><a data-toggle="tab" href="#share_email"><?= Yii::t('frontend', 'Email') ?></a></li>
-              <li><a data-toggle="tab" href="#share_whatsapp"><?= Yii::t('frontend', 'Whatsapp') ?></a></li>
+              <li id="tab_share_whatsapp"><a data-toggle="tab" href="#share_whatsapp"><?= Yii::t('frontend', 'Whatsapp') ?></a></li>
             </ul>
 
             <br />
@@ -375,25 +375,13 @@ if(!empty($items))
                     <textarea class="form-control" readonly style="direction: ltr;"><?= Url::to(['events/public', 'token' => $event_details->token], true) ?></textarea>
                 </div>
                 <div id="share_email" class="tab-pane fade">
-                    <div class="form-group">
-                        <label><?= Yii::t('frontend', 'Add comma(,) separated email') ?></label>
-                        <textarea class="form-control" id="txt_share_email" style="direction: ltr;"></textarea>
-                    </div>
-                    <button class="btn btn-default btn-share-email" data-id="<?= $event_details->event_id ?>">
-                        <?= Yii::t('frontend', 'Send email') ?>
-                    </button>
+                    <a target="_blank" class="btn btn-default btn-share-email" 
+                       href="mailto:someone@example.com?Subject=Check out <?= $event_details->event_name ?>&body=Check out <?= $event_details->event_name ?> on The Whitebook <?= Url::to(['events/public', 'token' => $event_details->token], true) ?>"><?= Yii::t('frontend', 'Send email') ?>
+                    </a>
                 </div>
                 <div id="share_whatsapp" class="tab-pane fade">
-
-                    <div id="share_whatsapp_info">
-                        <?= Yii::t('frontend', 'Please share this event in mobile device') ?>
-                    </div>
-
-                    <hr />
-
-                    <button class="btn btn-primary btn-share-whatsapp" data-text="Event : <?= $event_details->event_name ?>" data-link="<?= Url::to(['events/public', 'token' => $event_details->token], true) ?>">
-                        <?= Yii::t('frontend', 'Share') ?>
-                    </button>
+                    <a class="btn btn-primary btn-share-whatsapp" href="whatsapp://send?text=Check out <?= $event_details->event_name ?> on The Whitebook <?= Url::to(['events/public', 'token' => $event_details->token], true) ?>" data-action="share/whatsapp/share"><?= Yii::t('frontend', 'Share') ?>
+                    </a>
                 </div>
             </div>        
       </div>
@@ -431,10 +419,9 @@ echo Html::hiddenInput('event_mark_incomplete', Url::toRoute('/events/mark-incom
 echo Html::hiddenInput('event_mark_complete', Url::toRoute('/events/mark-complete'), ['id' => 'event_mark_complete']);
 echo Html::hiddenInput('event_save_note', Url::toRoute('/events/save-note'), ['id' => 'event_save_note']);
 echo Html::hiddenInput('edit_popup_url', Url::toRoute('/events/event-details'), ['id' => 'edit_popup_url']);
-echo Html::hiddenInput('share_email_url', Url::to(['/events/share-email']), ['id' => 'share_email_url']);
 
 echo Html::hiddenInput('txt_delete_confirm', Yii::t('frontend', 'Are you sure you want to delete this item?'), ['id' => 'txt_delete_confirm']);
 
 echo Html::hiddenInput('delete_event_url', Url::to(['/users/deleteeventitem']), ['id' => 'delete_event_url']);
 
-$this->registerJsFile('@web/js/event_detail.js?v=1.3', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/event_detail.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);
