@@ -34,6 +34,7 @@ $this->title = Yii::t('frontend', 'Event Detail');
                     ]); ?></p>
             <?php }else{ ?>
             <br />
+            <br />
             <?php } ?>
         </center>
         
