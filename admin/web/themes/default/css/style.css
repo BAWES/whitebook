@@ -8464,3 +8464,9 @@ a.delivery_href:hover{
 .field-category-list.has-error .btn-add-category{
   background: red;
 }
+
+.theme_form_wrapper .input-group-addon {
+    background: #1B3148;
+    color: white;
+    border-color: #1B3148;
+}

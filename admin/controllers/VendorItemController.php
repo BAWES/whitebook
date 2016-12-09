@@ -1464,6 +1464,59 @@ class VendorItemController extends Controller
         echo $count_query->count();
     }
 
+    public function actionAddTheme()
+    {
+        $data = Yii::$app->request->post();
+
+        $model = new Themes();
+        $model->scenario = 'insert';        
+        $model->theme_name_ar = $data['theme_name_ar'];
+        $model->theme_name = strtolower($data['theme_name']);
+        $model->theme_status = 'Active';
+        $model->trash = 'Default';
+
+        Yii::$app->response->format = 'json';
+
+        if($model->save())
+        {
+            return [
+                'theme_id' => $model->theme_id
+            ];    
+        }
+        else
+        {
+            return [
+                'errors' => $model->getErrors()
+            ];
+        }        
+    }
+
+    public function actionAddGroup()
+    {
+        $data = Yii::$app->request->post();
+
+        $model = new FeatureGroup();
+        $model->group_name_ar = $data['group_name_ar'];
+        $model->group_name = strtolower($data['group_name']);
+        $model->group_status = 'Active';
+        $model->trash = 'Default';
+
+        Yii::$app->response->format = 'json';
+
+        if($model->save())
+        {
+            return [
+                'group_id' => $model->group_id
+            ];    
+        }
+        else
+        {
+            return [
+                'errors' => $model->getErrors()
+            ];
+        }        
+    }
+
     /**
      * upload croped image 
      * @param base64 image data 
