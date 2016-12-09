@@ -33,9 +33,6 @@ use yii\widgets\ActiveForm;
 		      <a href="#4" data-toggle="tab" class="twovalid2">Social Info</a>
 		    </li>
 		    <li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
-		    <?php if($model->isNewRecord) { ?>
-		    <li><a href="#6" data-toggle="tab" class="twovalid2">Packages</a></li>
-		    <?php } ?>
 		  </ul>
 		  <div class="tab-content">
 
@@ -351,66 +348,10 @@ use yii\widgets\ActiveForm;
 				<div class="form-group">
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 
-					<?php if($model->isNewRecord) { ?>
-						<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
-					<?php } else { ?>
-						<?= Html::submitButton('Update', ['class' => 'btn btn-primary','style'=>'float:right;']) ?>
-					<?php } ?>
+					<?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'style'=>'float:right;']) ?>
 
 				</div>
 			</div>
-
-			<?php if($model->isNewRecord) { ?>
-			<div class="tab-pane" id="6">
-				Vendor package list  
-				<br />
-				<br />
-
-				<div class="package-list-error"></div>
-
-				<table class="table table-bordered table-package-list">
-					<tbody>
-						<tr>
-							<th>Package</th>
-							<th>Start date</th>
-							<th>End date</th>
-							<th></th>
-						</tr>
-					</tbody>
-					<tfoot>
-						<tr>
-							<td>
-								<select id="package_id" class="form-control">
-									<?php foreach ($packages as $key => $value) { ?>
-										<option value="<?= $key ?>">
-											<?= $value ?>
-										</option>
-									<?php } ?>
-								</select>
-							</td>
-							<td>
-								<input id="package_start_date" name="start_date" class="form-control" />
-							</td>
-							<td>
-								<input id="package_end_date" name="end_date" class="form-control" />
-							</td>	
-							<td>
-								<!--
-								<button type="button" class="btn btn-primary btn-add-package">
-									<i class="fa fa-plus"></i>
-								</button>
-								-->
-							</td>
-						</tr>
-					</tfoot>
-				</table>
-
-				<div class="form-group">
-					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-					<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
-				</div>
-			</div>
-			<?php } ?>
 
 		<?php ActiveForm::end(); ?>	
 		</div>

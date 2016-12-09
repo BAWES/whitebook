@@ -16,14 +16,13 @@ class CategoryModel extends Model
 			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			
 			->Where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_approved' => 'yes','{{%vendor_item}}.item_archived' => 'no','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%image}}.module_type' => 'vendor_item',
-			'{{%vendor}}.vendor_Status' => 'Active',
-			'{{%category}}.trash' => 'Default',
-			'{{%category}}.approve_status' => 'yes',
-			'{{%category}}.category_id' => $cat_id,
-			'{{%category}}.trash' => 'Default',
-			'{{%category}}.category_allow_sale' => 'yes'])
-			->andwhere(['<=','package_start_date',$today])
-			->andwhere(['>=','package_end_date',$today])
+				'{{%vendor}}.vendor_Status' => 'Active',
+				'{{%category}}.trash' => 'Default',
+				'{{%category}}.approve_status' => 'yes',
+				'{{%category}}.category_id' => $cat_id,
+				'{{%category}}.trash' => 'Default',
+				'{{%category}}.category_allow_sale' => 'yes'
+			])
 			->asArray()
 			->all();
     }
@@ -66,17 +65,14 @@ class CategoryModel extends Model
     public function vendor_list()
     {
         $today = date('Y-m-d H:i:s');
-        return $vendor = \admin\models\Vendor::find()
+        return  \admin\models\Vendor::find()
 			->select(['vendor_id','vendor_name'])
 			->Where(['vendor_status'=>'Active'])
 			->andWhere(['trash'=>'default'])
 			->andWhere(['approve_status'=>'Yes'])
-			->andWhere(['<=','package_start_date',$today])
-			->andWhere(['>=','package_end_date',$today])
 			->orderBy(['vendor_name'=>ASC])
 			->asArray()
 			->all();
-        return $vendor;
     }
 
     public function get_event_types()

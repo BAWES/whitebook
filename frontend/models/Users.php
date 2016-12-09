@@ -374,24 +374,21 @@ class Users extends Model
     public static function vendor_list()
     {
         $today = date('Y-m-d H:i:s');
-        return $vendor = Vendor::find()->select('vendor_id,vendor_name')
-                        ->where(['vendor_Status'=>'Active','trash'=>"Default",'approve_status'=>"Yes",
-                            'package_start_date'=>"Yes"])
-                        ->andwhere(['<=','package_end_date',$today])
-                        ->andWhere(['>=','package_end_date',$today])
-                        ->orderBy('vendor_name ASC')
-                        ->asArray()
-                        ->all();
+        return Vendor::find()->select('vendor_id,vendor_name')
+            ->where(['vendor_Status'=>'Active','trash'=>"Default",'approve_status'=>"Yes"])
+            ->orderBy('vendor_name ASC')
+            ->asArray()
+            ->all();
     }
 
     public static function get_main_category()
     {
-        return $general = Category::find()->select('category_id,category_name')
-                        ->where(['parent_category_id'=>'IS NULL'])
-                        ->andwhere(['trash'=>'Default'])
-                        ->andwhere(['category_allow_sale'=>'yes'])
-                        ->asArray()
-                        ->all();
+        return Category::find()->select('category_id,category_name')
+            ->where(['parent_category_id'=>'IS NULL'])
+            ->andwhere(['trash'=>'Default'])
+            ->andwhere(['category_allow_sale'=>'yes'])
+            ->asArray()
+            ->all();
     }
 
     public static function get_themes()

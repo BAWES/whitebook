@@ -83,7 +83,6 @@ $draft_item_count = VendorDraftItem::find()
 				'options'=>['class'=>'dropdown'],
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'items' => [
-					['label' => 'Manage Package', 'url' => ['package/index']],
 					['label' => 'Manage Vendor', 'url' => ['vendor/index']],
 					['label' => 'Manage Vendor Item', 'url' => ['vendor-item/index']],
 				]
