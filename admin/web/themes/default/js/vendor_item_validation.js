@@ -1006,3 +1006,64 @@ setInterval(function(){
 
 }, 2000);
 
+/* -------------------- Theme -----------------------*/
+
+$(document).delegate('.btn_theme_form_wrapper', 'click', function() {
+	$('.theme_form_wrapper').removeClass('hidden');
+	$(this).addClass('hidden');
+});
+
+$(document).delegate('.btn-add-theme-calcle', 'click', function() {
+	$('.theme_form_wrapper').addClass('hidden');
+	$('.btn_theme_form_wrapper').removeClass('hidden');
+});
+
+$(document).delegate('.btn-add-theme', 'click', function() {
+
+	$theme_name = $('.theme_form_wrapper input[name="theme_name"]').val();
+	$theme_name_ar = $('.theme_form_wrapper input[name="theme_name_ar"]').val();
+
+	if($theme_name && $theme_name_ar) {
+
+		$.post($('#add_theme_url').val(), { 'theme_name' : $theme_name, 'theme_name_ar' : $theme_name_ar } , function(json) {
+
+			if(json.theme_id) {
+				$html = '<label><input type="checkbox" name="VendorItem[themes][]" value="' + json.theme_id + '">' + $theme_name + '</label>';
+				$('#vendoritem-themes').append($html);
+				$('.btn_theme_form_wrapper').removeClass('hidden');
+				$('.theme_form_wrapper').addClass('hidden');	
+			}			
+		});
+	}
+});
+
+/* -------------------- Group -----------------------*/
+
+$(document).delegate('.btn_group_form_wrapper', 'click', function() {
+	$('.group_form_wrapper').removeClass('hidden');
+	$(this).addClass('hidden');
+});
+
+$(document).delegate('.btn-add-group-calcle', 'click', function() {
+	$('.group_form_wrapper').addClass('hidden');
+	$('.btn_group_form_wrapper').removeClass('hidden');
+});
+
+$(document).delegate('.btn-add-group', 'click', function() {
+
+	$group_name = $('.group_form_wrapper input[name="group_name"]').val();
+	$group_name_ar = $('.group_form_wrapper input[name="group_name_ar"]').val();
+
+	if($group_name && $group_name_ar) {
+
+		$.post($('#add_group_url').val(), { 'group_name' : $group_name, 'group_name_ar' : $group_name_ar } , function(json) {
+
+			if(json.group_id) {
+				$html = '<label><input type="checkbox" name="VendorItem[groups][]" value="' + json.group_id + '">' + $group_name + '</label>';
+				$('#vendoritem-groups').append($html);
+				$('.btn_group_form_wrapper').removeClass('hidden');
+				$('.group_form_wrapper').addClass('hidden');	
+			}			
+		});
+	}
+});
