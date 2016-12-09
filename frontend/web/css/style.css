@@ -1955,3 +1955,50 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .events_pdf .event_note {
     padding: 10px 0 0 0;
 }
+
+.wishlist_category_wrapper {
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.wishlist_category_wrapper ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;    
+}
+
+.wishlist_category_wrapper ul li {
+    display: inline;
+    padding: 0 10px;
+    border-right: 1px solid #ccc;
+}
+
+.wishlist_category_wrapper ul li:last-child {
+    border-right: none;
+}
+
+.wishlist_category_wrapper a {
+    color: #000;
+    cursor: pointer;
+    font-size: 12px;
+}
+.wishlist_category_wrapper a:hover {
+    text-decoration: underline;
+}
+
+.wishlist_item_wrapper .wishlist_item {
+    padding: 0 3px;
+}
+
+.wishlist_item_wrapper .btn-wishlist-remove {
+    display: inline-block;
+    background: url(../images/delet.png) no-repeat left center;
+    float: left;
+    width: 16px;
+    height: 16px;
+    margin: 14px 11px;
+    background-color: transparent !important;
+}

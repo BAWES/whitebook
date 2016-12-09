@@ -285,13 +285,10 @@ class Users extends Model
 
     public function get_customer_wishlist(
         $customer_id, 
-        $limit, 
-        $offset, 
         $category, 
         $price, 
         $vendor, 
-        $avail_sale, 
-        $theme)
+        $avail_sale)
     {
 
         $today = date('Y-m-d H:i:s');
@@ -321,7 +318,7 @@ class Users extends Model
         if ($category != '') {
             $item_query->leftJoin(
                 '{{%vendor_item_to_category}}', 
-                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+                '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
             );
             $item_query->leftJoin(
                 '{{%category_path}}', 
