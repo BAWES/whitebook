@@ -27,53 +27,49 @@ class ThingsILikeController extends BaseController
      * @return mixed
      */
 
-    public function actionIndex()
+    public function actionIndex($category_id = '')
     {
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Things I Like';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        if (Yii::$app->user->isGuest) {
+        if (Yii::$app->user->isGuest && Yii::$app->request->isAjax) 
+        {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+        elseif (Yii::$app->user->isGuest) 
+        {
             Yii::$app->session->set('show_login_modal', 1);//to display login modal
             return $this->goHome();
         }
 
         $customer_id = Yii::$app->user->getId();
 
-        $model = new Users();
-        $wish_limit = 6;
-        $offset = 0;
-
         $price = $vendor = $avail_sale = $theme = '';
-        $avail_sale = $category_id = $vendor = $theme = '';
+        $avail_sale = $vendor = $theme = '';
 
-        $customer_wishlist = $model->get_customer_wishlist(
-            $customer_id, $wish_limit, $offset, $category_id, $price, $vendor, $avail_sale, $theme);
+        $customer_wishlist = Users::get_customer_wishlist($customer_id, $category_id, $price, $vendor, $avail_sale);
 
-        $customer_wishlist_count = $model->get_customer_wishlist_count(
-            $customer_id, $category_id, $price, $vendor, $avail_sale, $theme);
+        $categories = \frontend\models\Category::find()
+            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->all();
 
-        $website_model = new Website();
-        $event_type = $website_model->get_event_types();
-        $provider = new \yii\data\ArrayDataProvider([
-            'allModels' => $customer_wishlist,
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
+        if (Yii::$app->request->isAjax) {
+            return $this->renderPartial('_items', [
+                'items' => $customer_wishlist, 
+            ]); 
+        }
+
         return $this->render('index', [
             'customer_wishlist' => $customer_wishlist,
-            'customer_wishlist_count' => $customer_wishlist_count,
-            'event_type' => $event_type,
-            'provider' => $provider,
+            'categories' => $categories
         ]);
     }
+                    
 
     public function actionDelete($id)
     {
         \frontend\models\Wishlist::deleteAll(['item_id'=>$id,'customer_id'=>Yii::$app->user->identity->customer_id]);
-
-        Yii::$app->session->setFlash('success','Item removed from your wishlist');
-        $this->redirect(['/things-i-like']);
     }
 }
