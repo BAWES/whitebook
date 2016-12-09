@@ -44,10 +44,6 @@ class DirectoryController extends BaseController
         $today = date('Y-m-d H:i:s');
 
         $query = Vendor::find()
-            ->leftJoin('{{%vendor_packages}}', '{{%vendor}}.vendor_id = {{%vendor_packages}}.vendor_id')
-           // ->leftJoin('{{%vendor_category}}', '{{%vendor}}.vendor_id = {{%vendor_category}}.vendor_id')
-            ->where(['<=','{{%vendor_packages}}.package_start_date', $today])
-            ->andWhere(['>=','{{%vendor_packages}}.package_end_date', $today])
             ->andWhere(['{{%vendor}}.trash'=>'Default'])
             ->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
             ->andWhere(['{{%vendor}}.vendor_status'=>'Active']);

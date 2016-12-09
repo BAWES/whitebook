@@ -74,10 +74,6 @@ use common\models\Vendor;
                 </ul>
             </li>
 
-			<!-- block date management-->
-			<li class="<?=($cntrl == 'vendor-packages') ? "active" : "noactive" ?>">
-				<?= Html::a('<i class="fa fa-book"></i><span class="title">My Package</span>', ['vendor-packages/index'], ['class'=>'link-title']) ?>
-			</li>
 			<li class="<?=($cntrl == 'site'  && $action == 'profile') ? "active" : "noactive" ?>">
 				<?= Html::a('<i class="fa fa-user"></i><span class="title">My Profile</span>', ['site/profile'], ['class'=>'link-title']) ?>
 			</li>

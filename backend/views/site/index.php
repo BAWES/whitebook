@@ -7,10 +7,7 @@ use common\models\Vendor;
 $this->title = 'Whitebook Application';
  
 ?>
-<!-- BEGIN DASHBOARD TILES -->
 <div class="row">	 
-	<p style="font-weight: bold;font-size: 22px; margin-left: 15px;">Your package will expire on <?php echo $packageenddate; ?></p>
-
 	<div class="col-md-12">
 		<ul class="stats">
 			<li class="lime">

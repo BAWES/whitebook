@@ -8,7 +8,6 @@ use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\Session;
 use yii\filters\AccessControl;
-use common\models\Package;
 use common\models\Category;
 use common\models\VendorCategory;
 use common\models\Siteinfo;
@@ -63,7 +62,6 @@ class SiteController extends Controller
         $vendoritemcnt = VendorItem::vendoritemcount($vendor_id);
         $monthitemcnt = VendorItem::vendoritemmonthcount($vendor_id);
         $dateitemcnt = VendorItem::vendoritemdatecount($vendor_id);
-        $packageenddate = Vendor::getVendor_packagedate($vendor_id);
 
         $commission_total = Suborder::find()
             ->where(['vendor_id' => $vendor_id])
@@ -77,7 +75,6 @@ class SiteController extends Controller
             'vendoritemcnt' => $vendoritemcnt,
             'monthitemcnt' => $monthitemcnt,
             'dateitemcnt' => $dateitemcnt,
-            'packageenddate' => $packageenddate,
             'commission_total' => number_format($commission_total, 3).' KD',
             'earning_total' => number_format($earning_total, 3).' KD'
         ]);
@@ -98,8 +95,6 @@ class SiteController extends Controller
 
             $vendor_id = Yii::$app->user->getId();
 
-            $package = Vendor::packageCheck($vendor_id);
-
             $status = Vendor::statusCheck($vendor_id);
 
             if(!$status){
@@ -111,19 +106,6 @@ class SiteController extends Controller
                 $session->destroy();
                 
                 Yii::$app->session->setFlash('danger', "Kindly contact admin, account deactivated!");
-
-                return $this->redirect(['site/login']);
-            }
-
-            if(!$package){
-
-                Yii::warning('[Vendor Package Expired - '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' needs contact admin, package expired', __METHOD__);
-
-                $session = Yii::$app->session;
-                Yii::$app->user->logout();
-                $session->destroy();
-                
-                Yii::$app->session->setFlash('danger', "Kindly contact admin, package expired!");
 
                 return $this->redirect(['site/login']);
             }
@@ -157,8 +139,7 @@ class SiteController extends Controller
         $vendoritemcnt = VendorItem::vendoritemcount();
         $monthitemcnt = VendorItem::vendoritemmonthcount();
         $dateitemcnt = VendorItem::vendoritemdatecount();
-        $packageenddate = Vendor::getVendor_packagedate(Yii::$app->user->identity->id);
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $form = Yii::$app->request->post('VendorPassword');
@@ -185,8 +166,7 @@ class SiteController extends Controller
                 return $this->render('index',[
                     'vendoritemcnt' => $vendoritemcnt,
                     'monthitemcnt' => $monthitemcnt,
-                    'dateitemcnt' => $dateitemcnt,
-                    'packageenddate' => $packageenddate
+                    'dateitemcnt' => $dateitemcnt
                 ]);
             }
         }
