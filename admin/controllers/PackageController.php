@@ -3,29 +3,18 @@
 namespace admin\controllers;
 
 use Yii;
+use common\models\Package;
+use common\models\PackageSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
-use admin\models\AuthItem;
-use admin\models\Package;
-use admin\models\PackageSearch;
-use common\models\VendorPackages;
-use admin\models\AccessControlList;
 
 /**
  * PackageController implements the CRUD actions for Package model.
  */
 class PackageController extends Controller
 {
-    public function init()
-    {
-        parent::init();
-        if (Yii::$app->user->isGuest) { 
-            $url = Yii::$app->urlManager->createUrl(['admin/site/login']);
-            Yii::$app->getResponse()->redirect($url);
-        }
-    }
-
     /**
      * @inheritdoc
      */
@@ -35,24 +24,14 @@ class PackageController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                //    'delete' => ['POST'],
+                    'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => AccessControlList::can()
-                    ],
-                ],
-            ],            
         ];
     }
 
-
     /**
      * Lists all Package models.
-     *
      * @return mixed
      */
     public function actionIndex()
@@ -68,9 +47,7 @@ class PackageController extends Controller
 
     /**
      * Displays a single Package model.
-     *
-     * @param string $id
-     *
+     * @param integer $id
      * @return mixed
      */
     public function actionView($id)
@@ -83,19 +60,32 @@ class PackageController extends Controller
     /**
      * Creates a new Package model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     *
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Package();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->save();
-            $pack = Yii::$app->request->post();
-            Yii::$app->session->setFlash('success', 'Package created successfully!');
-            Yii::info('[Package Created] '. Yii::$app->user->identity->admin_name .' created new '.$model->package_name.' package', __METHOD__);
 
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            
+            $imageFile = UploadedFile::getInstance($model, 'imageFile');
+            
+            if($imageFile) 
+            {
+                $image_name = Yii::$app->security->generateRandomString();
+
+                $model->package_background_image = Package::UPLOAD_FOLDER . $image_name . '.' . $imageFile->extension;
+
+                Yii::$app->resourceManager->save(
+                    $imageFile, //file upload object  
+                    $model->package_background_image
+                );
+            }
+
+            $model->save();
+
+            return $this->redirect(['view', 'id' => $model->package_id]);
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -106,18 +96,31 @@ class PackageController extends Controller
     /**
      * Updates an existing Package model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param string $id
-     *
+     * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Package Updated successfully!');
-            Yii::info('[Package Updated] '. Yii::$app->user->identity->admin_name .' updated '.$model->package_name.' package information', __METHOD__);
-            return $this->redirect(['index']);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $imageFile = UploadedFile::getInstance($model, 'imageFile');
+            
+            if($imageFile) {
+                $image_name = Yii::$app->security->generateRandomString();
+
+                $model->package_background_image = Package::UPLOAD_FOLDER . $image_name . '.' . $imageFile->extension;
+
+                Yii::$app->resourceManager->save(
+                    $imageFile, //file upload object  
+                    $model->package_background_image
+                );
+            }
+            
+            $model->save();
+
+            return $this->redirect(['index', 'id' => $model->package_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -128,60 +131,21 @@ class PackageController extends Controller
     /**
      * Deletes an existing Package model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param string $id
-     *
+     * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $model->trash = 'Deleted';
-        $model->load(Yii::$app->request->post());
-        $model->save();
-
-        //remove from vendor package
-        VendorPackages::deleteAll(['package_id' => $id]);
-
-        Yii::$app->session->setFlash('success', 'Package deleted successfully!');
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
-
-    public function actionPackagedelete()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = VendorPackages::findOne(Yii::$app->request->post('packid'));
-            return $data->delete();
-        }
-    }
-
-    public function actionPackageupdate()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $pack_id=$data['packid'];
-            $output= Package::find()->where(['id'=>$pack_id])->asArray()->all();
-            foreach ($output as $o) {
-                $id = $o['package_id'];
-                $start = $o['package_start_date'];
-                $start = date('Y-m-d', strtotime($start));
-                $end = $o['package_end_date'];
-                $end = date('Y-m-d', strtotime($end));
-            }
-            echo json_encode(array('id' => $id, 'start' => $start, 'end' => $end));
-            exit;
-        }
     }
 
     /**
      * Finds the Package model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param string $id
-     *
+     * @param integer $id
      * @return Package the loaded model
-     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
@@ -192,20 +156,4 @@ class PackageController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
-    public function actionBlock()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
-            Package::updateAll(['package_status' => $status],'package_id= '.$data['id']);
-
-            if ($status == 'Active') {
-                return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-            } else {
-                return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-            }
-        }
-    }
 }
-?>

@@ -3,147 +3,61 @@
 namespace common\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
-use yii\db\ActiveRecord;
-use yii\behaviors\SluggableBehavior;
-use yii\behaviors\BlameableBehavior;
-use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+use yii\web\UploadedFile;
 
 /**
-* This is the model class for table "whitebook_package".
-*
-* @property string $package_id
-* @property string $package_name
-* @property integer $package_max_number_of_listings
-* @property string $package_sales_commission
-* @property string $package_pricing
-* @property integer $created_by
-* @property integer $modified_by
-* @property string $created_datetime
-* @property string $modified_datetime
-* @property string $trash
-*
-* @property Vendor[] $vendors
-*/
+ * This is the model class for table "whitebook_package".
+ *
+ * @property integer $package_id
+ * @property string $package_name
+ * @property string $package_background_image
+ * @property string $package_description
+ * @property string $package_avg_price
+ * @property string $package_number_of_guests
+ */
 class Package extends \yii\db\ActiveRecord
 {
-    const STATUS_ACTIVE = "Active";
-    const STATUS_DEACTIVE = "Deactive";
+    const UPLOAD_FOLDER = "package/";
 
-    public $package_value;
-    public $arr = array();
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public static function tableName()
     {
         return 'whitebook_package';
     }
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by',
-            ],
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_datetime',
-                'updatedAtAttribute' => 'modified_datetime',
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
-
     /**
-    * @inheritdoc
-    */
+     * @var UploadedFile
+     */
+    public $imageFile;
+    
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            //[['package_name','package_max_number_of_listings', 'package_sales_commission', 'package_pricing',], 'required'],
-            [['package_name','package_max_number_of_listings','package_sales_commission', 'package_pricing',], 'required'],
-            [['package_max_number_of_listings', 'created_by', 'modified_by'], 'integer'],
-            [['package_sales_commission'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
-
-            [['package_pricing'], 'number'],
-            [['trash'], 'string'],
-            [['package_name'], 'string', 'max' => 128]
+            [['package_name'], 'required'],
+            [['package_description'], 'string'],
+            [['package_name', 'package_avg_price', 'package_number_of_guests'], 'string', 'max' => 100],
+            [['package_background_image'], 'string', 'max' => 250],
+            [['imageFile'], 'image', 'skipOnEmpty' => true, 'minWidth' => 250, 'maxWidth' => 1250, 'minHeight' => 250, 'maxHeight' => 1250, 'extensions' => 'png, jpg', 'maxSize' => 1024 * 1024 * 2],
         ];
     }
 
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [
-            'package_id' => 'Package ID',
-            'package_name' => 'Package ',
-            'package_max_number_of_listings' => 'Maximum no of List',
-            'package_sales_commission' => 'Sales Commission ( % )',
-            'package_pricing' => 'Pricing ',
-            'package_type'=>'Package Period',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
-            'created_datetime' => 'Created Datetime',
-            'modified_datetime' => 'Modified Datetime',
-            'trash' => 'Trash',
-            'package_value'=>'',
+            'package_id' => Yii::t('app', 'Package ID'),
+            'package_name' => Yii::t('app', 'Package Name'),
+            'package_background_image' => Yii::t('app', 'Package Background Image'),
+            'package_description' => Yii::t('app', 'Package Description'),
+            'package_avg_price' => Yii::t('app', 'Package Avg Price'),
+            'package_number_of_guests' => Yii::t('app', 'Package Number Of Guests'),
         ];
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendors()
-    {
-        return $this->hasMany(Vendor::className(), ['package_id' => 'package_id']);
-    }
-
-
-    public static function loadpackage()
-    {
-        $packages=Package::find()->where(['package_status' => 'Active','trash'=>'Default'])
-        ->all();
-        $package=ArrayHelper::map($packages,'package_id','package_name');
-        return $package;
-    }
-
-    public static function PackageData($pack_id)
-    {
-        if($pack_id){
-            $package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();
-            //return $package_data;
-            return $package_data[0]['package_name'];
-        }else {
-            return '----';
-        }
-    }
-
-
-    public static function loadpackageall()
-    {
-        $packages=Package::find()->where(['package_status' => 'Active','trash'=>'default'])->all();
-        return $packages;
-    }
-
-    public static function loadpackageprice($pack_id)
-    {
-        $package_data= Package::find()->where(['package_id' => $pack_id,'package_status' => 'Active'])->all();
-        foreach($package_data as $pack => $data)
-        {
-            return  $package_price = $data['package_pricing'];
-        }
-
-    }
-
-    public static function packagecount($pack_id)
-    {
-        return $package_data= Vendor::find()->where(['package_id' => $pack_id])->count();
-
     }
 }

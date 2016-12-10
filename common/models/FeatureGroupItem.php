@@ -165,11 +165,9 @@ class FeatureGroupItem extends \yii\db\ActiveRecord
         $today_date = date('Y-m-d');
 
         return $vendor = FeatureGroupItem::find()
-        ->select('{{%feature_group_item}}.item_id')
-        ->joinWith('vendor')
-        ->where(['{{%feature_group_item}}.group_item_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor}}.approve_status' => 'Yes'])
-        ->andWhere(['<=','{{%vendor}}.package_start_date',$today])
-        ->andWhere(['>=','{{%vendor}}.package_end_date',$today])
-        ->all();
+            ->select('{{%feature_group_item}}.item_id')
+            ->joinWith('vendor')
+            ->where(['{{%feature_group_item}}.group_item_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor}}.approve_status' => 'Yes'])
+            ->all();
     }
 }

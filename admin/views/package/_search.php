@@ -15,13 +15,17 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
+    <?= $form->field($model, 'package_id') ?>
+
     <?= $form->field($model, 'package_name') ?>
 
-    <?= $form->field($model, 'package_max_number_of_listings') ?>
+    <?= $form->field($model, 'package_background_image') ?>
 
-    <?= $form->field($model, 'package_sales_commission') ?>
+    <?= $form->field($model, 'package_description') ?>
 
-    <?= $form->field($model, 'package_pricing') ?>
+    <?= $form->field($model, 'package_avg_price') ?>
+
+    <?php // echo $form->field($model, 'package_number_of_guests') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
