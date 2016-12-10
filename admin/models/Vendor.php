@@ -43,21 +43,6 @@ class Vendor extends \common\models\Vendor
             ->count();
     }
 
-    public static function vendorperiod()
-    {
-        $contractDateBegin=date('Y-m-d');
-        $date = strtotime(date("Y-m-d", strtotime($contractDateBegin)) . " +60 days");
-        $contractDateEnd = date('Y-m-d',$date);
-
-        $period = Vendor::find()
-            ->where(['>=', 'package_end_date', $contractDateBegin])
-            ->andwhere(['<=', 'package_end_date', $contractDateBegin])
-            ->one();
-
-        return  $period;
-    }
-
-
     public static function getvendorname($id){
         $vendorname= Vendor::find()
             ->where(['vendor_id'=>$id])

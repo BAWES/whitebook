@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = 'Update';
             'model_question' => $model_question,
             'themes' => $themes,
             'grouplist' => $grouplist,
+            'packagelist' => $packagelist,
             'itemPricing' => $itemPricing,
             'guideImages' => $guideImages,
             'categories' => $categories,

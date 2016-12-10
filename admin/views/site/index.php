@@ -209,153 +209,102 @@ $this->title = 'Dashboard';
 </div>
 </div>
 
-<!-- Start  -->
+<!-- Start -->
 <div class="col-md-12 col-vlg-12m-b-10 ">
 	<div class="tiles white">
 		<div class="row">
-			<h4 class="semi-bold m-t-30 m-l-30">Package expiry in 15 days</h4>
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<th style="width:20%">Package name</th>
-						<th style="width:25%">Vendor name</th>
-						<th style="width:25%">Email</th>
-						<th style="width:15%">Expiry date</th>
-						<th style="width:25%">Action </th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php $j=0; 
-	 if(!empty($vendorperiod)){
-	foreach ($vendorperiod as $i){ if($j<5){
-						$p= Package::PackageData($i['package_id']);
-						if((($i['package_id'])>0)&&($p)) {?>
-							<tr>
-								<td class="v-align-middle bold text-success"> <?= Package::PackageData($i['package_id']);?></td>
-								<td class="v-align-middle"><span class="muted"><?= $i['vendor_name']?></span> </td>
-								<td class="v-align-middle"><span class="muted"><?= $i['vendor_contact_email']?></span> </td>
-								<td class="v-align-middle bold text-success"><?= date( 'd-M-Y', strtotime($i['package_end_date'] ) );?></td>
-								<td class="v-align-middle bold text-success"><?php $url = Yii::$app->urlManagerBackEnd->createAbsoluteUrl('/admin/vendor/view?id='.$i['vendor_id']);
-								echo  Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
-									'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
-								]);?></td>
+			<h4 class="semi-bold m-t-30 m-l-30">Customer report</h4>
+			<?php
+			for ($x = 0; $x < 5; $x++) {
+				$year=date('Y');
+				$previousyear = $year -$x;
+				$previousyears[] = $year -$x;
+				$h[]=  Customer::find()
+				->select(['created_datetime'])
+				->where(['YEAR(created_datetime)' => $previousyear])
+				->andwhere(['customer_status' => 'Active'])
+				->count();
+			}
+			$data=array_map('intVal', $h);
+			
+			echo Highcharts::widget([
+				'options' => [
+					'credits' => ['enabled' => false],
+					'chart' => [
+						'type' => 'areaspline'
+					],
+					'title' => ['text' => 'Customer report'],
+					'xAxis' => [
+						'categories' =>$previousyears,
+					],
+					'yAxis' => [
+						'title' => ['text' => 'Customer count'],
+					],
+					'series' => [
+						['name' => 'Year', 'data' => $data],
+					]
+				]
+			]);
 
-							</tr><?php $j++; }}}} ?>
-							<?php if(count($vendorperiod)>5){ ?>
-								<tr>
-									<td class="v-align-middle">&nbsp;</td>
-									<td>&nbsp; </td>
-									<td>&nbsp; </td>
-									<td>&nbsp; </td>
-									<td class="v-align-middle bold text-success"><?php if(count($vendorperiod)>5){ $url = Url::to(['/vendor/index']);
-										echo Html::a('<span>View more >></span>', $url, [
-											'title' => Yii::t('app', 'View more')]);}?></td>
+			?>
+		</div>
+	</div>
+</div>
+<!-- End -->
 
-										</tr>
-										<?php } ?>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<!-- ENd -->
-
-
-						<!-- Start -->
-						<div class="col-md-12 col-vlg-12m-b-10 ">
-							<div class="tiles white">
-								<div class="row">
-									<h4 class="semi-bold m-t-30 m-l-30">Customer report</h4>
-									<?php
-									for ($x = 0; $x < 5; $x++) {
-										$year=date('Y');
-										$previousyear = $year -$x;
-										$previousyears[] = $year -$x;
-										$h[]=  Customer::find()
-										->select(['created_datetime'])
-										->where(['YEAR(created_datetime)' => $previousyear])
-										->andwhere(['customer_status' => 'Active'])
-										->count();
-									}
-									$data=array_map('intVal', $h);
-									
-									echo Highcharts::widget([
-										'options' => [
-											'credits' => ['enabled' => false],
-											'chart' => [
-												'type' => 'areaspline'
-											],
-											'title' => ['text' => 'Customer report'],
-											'xAxis' => [
-												'categories' =>$previousyears,
-											],
-											'yAxis' => [
-												'title' => ['text' => 'Customer count'],
-											],
-											'series' => [
-												['name' => 'Year', 'data' => $data],
-											]
-										]
-									]);
-
-									?>
-								</div>
-							</div>
-						</div>
-						<!-- End -->
-
-						<!-- Start -->
-						<div class="col-md-12 col-vlg-12m-b-10 ">
-							<div class="tiles white">
-								<div class="row">
-									<h4 class="semi-bold m-t-30 m-l-30">Product report</h4>
-									<?php
-									for ($x = 1; $x <=12; $x++) {
-										$year=date('Y');
-										$active[]=  VendorItem::find()
-										->select(['created_datetime'])
-										->where(['YEAR(created_datetime)' => $year])
-										->andwhere(['MONTH(created_datetime)' => $x])
-										->andwhere(['item_status' => 'Active'])
-										->count();
-									}
-									$active=array_map('intVal', $active);
-									for ($x = 1; $x <=12; $x++) {
-										$year=date('Y');
-										$deactive[]=  VendorItem::find()
-										->select(['created_datetime'])
-										->where(['YEAR(created_datetime)' => $year])
-										->andwhere(['MONTH(created_datetime)' => $x])
-										->andwhere(['item_status' => 'Deactive'])
-										->count();
-									}
-									$deactive=array_map('intVal', $deactive);
-									
-									echo  Highcharts::widget([
-										'options' => [
-											'credits' => ['enabled' => false],
-											'chart' => [
-												'type' => 'column'
-											],
-											'title' => [
-												'text' => 'Product report'
-											],
-											'yAxis' => [
-												'title' => [
-													'text' => 'Item count'
-												]
-											],
-											'xAxis' => [
-												'categories' => ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec']
-											],
-											'series' => [
-												['name' => 'Approved', 'data' => $active],
-												['name' => 'Blocked', 'data' => $deactive]
-											]
-										]
-									]);
-									?>
-								</div>
-							</div>
-						</div>
-						<!-- End -->
-						<!-- END DASHBOARD TILES -->
+<!-- Start -->
+<div class="col-md-12 col-vlg-12m-b-10 ">
+	<div class="tiles white">
+		<div class="row">
+			<h4 class="semi-bold m-t-30 m-l-30">Product report</h4>
+			<?php
+			for ($x = 1; $x <=12; $x++) {
+				$year=date('Y');
+				$active[]=  VendorItem::find()
+				->select(['created_datetime'])
+				->where(['YEAR(created_datetime)' => $year])
+				->andwhere(['MONTH(created_datetime)' => $x])
+				->andwhere(['item_status' => 'Active'])
+				->count();
+			}
+			$active=array_map('intVal', $active);
+			for ($x = 1; $x <=12; $x++) {
+				$year=date('Y');
+				$deactive[]=  VendorItem::find()
+				->select(['created_datetime'])
+				->where(['YEAR(created_datetime)' => $year])
+				->andwhere(['MONTH(created_datetime)' => $x])
+				->andwhere(['item_status' => 'Deactive'])
+				->count();
+			}
+			$deactive=array_map('intVal', $deactive);
+			
+			echo  Highcharts::widget([
+				'options' => [
+					'credits' => ['enabled' => false],
+					'chart' => [
+						'type' => 'column'
+					],
+					'title' => [
+						'text' => 'Product report'
+					],
+					'yAxis' => [
+						'title' => [
+							'text' => 'Item count'
+						]
+					],
+					'xAxis' => [
+						'categories' => ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec']
+					],
+					'series' => [
+						['name' => 'Approved', 'data' => $active],
+						['name' => 'Blocked', 'data' => $deactive]
+					]
+				]
+			]);
+			?>
+		</div>
+	</div>
+</div>
+<!-- End -->
+<!-- END DASHBOARD TILES -->
