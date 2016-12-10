@@ -1,10 +1,11 @@
 <?php
 
-namespace admin\models;
+namespace common\models;
+
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use admin\models\Package;
+use common\models\Package;
 
 /**
  * PackageSearch represents the model behind the search form about `common\models\Package`.
@@ -17,10 +18,8 @@ class PackageSearch extends Package
     public function rules()
     {
         return [
-            [['package_id', 'package_max_number_of_listings', ], 'integer'],
-            [['package_name',], 'safe'],
-            [['package_name',  'modified_datetime', 'trash'], 'safe'],
-            [['package_pricing'], 'number'],
+            [['package_id'], 'integer'],
+            [['package_name', 'package_background_image', 'package_description', 'package_avg_price', 'package_number_of_guests'], 'safe'],
         ];
     }
 
@@ -42,33 +41,32 @@ class PackageSearch extends Package
      */
     public function search($params)
     {
-		$query = Package::find()
-        ->where(['!=', 'trash', 'Deleted'])
-		->orderBy('package_id');
+        $query = Package::find();
+
+        // add conditions that should always apply here
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['package_id'=>SORT_DESC]]
         ]);
+
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to any records when validation fails
+            // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
 
+        // grid filtering conditions
         $query->andFilterWhere([
             'package_id' => $this->package_id,
-            'package_max_number_of_listings' => $this->package_max_number_of_listings,
-            'package_pricing' => $this->package_pricing,
-            'created_by' => $this->created_by,
-            'modified_by' => $this->modified_by,
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
         ]);
 
         $query->andFilterWhere(['like', 'package_name', $this->package_name])
-            ->andFilterWhere(['like', 'trash', $this->trash]);
+            ->andFilterWhere(['like', 'package_background_image', $this->package_background_image])
+            ->andFilterWhere(['like', 'package_description', $this->package_description])
+            ->andFilterWhere(['like', 'package_avg_price', $this->package_avg_price])
+            ->andFilterWhere(['like', 'package_number_of_guests', $this->package_number_of_guests]);
 
         return $dataProvider;
     }
