@@ -35,7 +35,7 @@ function cmp($a, $b)
 	    <li><a href="#3" id="tab_3"> Item price </a></li>
 	    <li><a href="#4" id="tab_4"> Approval </a></li>
 	    <li><a href="#5" id="tab_5">Images</a></li>
-	    <li><a href="#6" id="tab_6">Themes & Groups</a></li>
+	    <li><a href="#6" id="tab_6">Themes & Groups & Packages</a></li>
 
 	    <?php if($model->item_for_sale =='Yes') {?>
 	    	<li><a href="#7" id="tab_7"> Questions </a></li>
@@ -369,9 +369,15 @@ function cmp($a, $b)
 						<button class="btn btn-default btn-add-group-calcle" type="button">Cancle</button>
 					</div>
 				</div>
+
 				<button class="btn btn-xs btn-default btn_group_form_wrapper" type="button">
 					<i class="fa fa-plus"></i> Add new group
 				</button>
+			</div>
+
+			<div class="border-top"></div>
+			<div class="padding-top-bottom form-group clearfix">
+				<?php echo $form->field($model, 'packages')->checkboxlist($packagelist);?>
 			</div>
 
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
@@ -513,7 +519,9 @@ $this->registerCss("
 	.superbox-s > li > b { margin:10px 0px 5px 0px;}
 	.question_title{font-weight: bold;  margin-top: 15px;  line-height: 31px;  font-size: 15px;}
 	.upimage {margin: 5px 0px 10px 0px;}
-	#vendoritem-groups label,#vendoritem-themes label {float: left;min-width: 15%;margin-right: 43px;}
+	#vendoritem-groups label,#vendoritem-themes label, #vendoritem-packages label {
+		float: left;min-width: 15%;margin-right: 43px;
+	}
 	.border-top{border-top: 1px solid;}
 	.padding-top-bottom{padding: 36px 0;}
 	.btn-xs, .btn-group-xs>.btn {

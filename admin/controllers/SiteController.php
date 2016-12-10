@@ -69,13 +69,21 @@ class SiteController extends Controller
         $vendorcnt = Vendor::vendorcount();
         $vendormonth = Vendor::vendormonthcount();
         $vendorday = Vendor::vendordatecount();
-        $vendorperiod = Vendor::vendorperiod();
         $customercnt = Customer::customercount();
         $customermonth = Customer::customermonthcount();
         $customerday = Customer::customerdatecount();
-        return $this->render('index', ['vendoritemcnt' => $vendoritemcnt, 'monthitemcnt' => $monthitemcnt, 'dateitemcnt' => $dateitemcnt,
-        'vendorcnt' => $vendorcnt, 'vendormonth' => $vendormonth, 'vendorday' => $vendorday,
-        'customercnt' => $customercnt, 'customermonth' => $customermonth, 'customerday' => $customerday, 'vendorperiod' => $vendorperiod, ]);
+
+        return $this->render('index', [
+            'vendoritemcnt' => $vendoritemcnt, 
+            'monthitemcnt' => $monthitemcnt, 
+            'dateitemcnt' => $dateitemcnt,
+            'vendorcnt' => $vendorcnt, 
+            'vendormonth' => $vendormonth, 
+            'vendorday' => $vendorday,
+            'customercnt' => $customercnt, 
+            'customermonth' => $customermonth, 
+            'customerday' => $customerday
+        ]);
     }
 
     public function actionLogin()

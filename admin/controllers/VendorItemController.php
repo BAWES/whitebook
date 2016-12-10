@@ -10,6 +10,7 @@ use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 use admin\models\AccessControlList;
 use yii\helpers\UploadHandler;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use admin\models\VendorItem;
@@ -37,6 +38,8 @@ use common\models\VendorItemCapacityException;
 use common\models\CustomerCart;
 use common\models\EventItemlink;
 use common\models\VendorDraftItem;
+use common\models\VendorItemToPackage;
+use common\models\Package;
 
 /**
 * VendoritemController implements the CRUD actions for VendorItem model.
@@ -147,8 +150,10 @@ class VendorItemController extends Controller
         $model_question = new VendorItemQuestion();
         $model1 = new Image();
         $themelist = Themes::loadthemename();
-
         $grouplist = FeatureGroup::loadfeaturegroup();
+
+        $packagelist = ArrayHelper::map(Package::find()->all(), 'package_id', 'package_name');
+
         $base = Yii::$app->basePath;
         $len = rand(1, 1000);
         $itemtype = ItemType::loaditemtype();
@@ -235,7 +240,7 @@ class VendorItemController extends Controller
                 if (isset($vendor_item['themes']) && $_POST['VendorItem']['themes'] != '' && count($vendor_item['themes'])>0 ) {
                     foreach($vendor_item['themes'] as $value) {
                         $themeModel = new VendorItemThemes();
-                        $themeModel->item_id = $itemid;
+                        $themeModel->item_id = $model->item_id;
                         $themeModel->theme_id = $value;
                         $themeModel->save();
                     }
@@ -247,11 +252,36 @@ class VendorItemController extends Controller
                 if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups'])>0 ) {
                     foreach ($vendor_item['groups'] as $value) {
                         $groupModel = new FeatureGroupItem();
-                        $groupModel->item_id = $itemid;
+                        $groupModel->item_id = $model->item_id;
                         $groupModel->group_id = $value;
                         $groupModel->vendor_id = $vendor_item['vendor_id'];
                         $groupModel->save();
                     }
+                }
+
+                $arr_packages = [];
+
+                if(empty($vendor_item['packages'])) {
+                    $vendor_item['packages'] = [];
+                }
+
+                foreach ($vendor_item['packages'] as $value) {
+
+                    $item_to_package = VendorItemToPackage::find()
+                        ->where([
+                            'item_id' => $model->item_id,
+                            'package_id' => $value
+                        ])
+                        ->one();
+
+                    if(!$item_to_package) {
+                        $item_to_package = new VendorItemToPackage();
+                        $item_to_package->item_id = $model->item_id;
+                        $item_to_package->package_id = $value;
+                        $item_to_package->save();
+                    }            
+
+                    $arr_packages[] = $value;
                 }
 
                 //add new images
@@ -298,6 +328,7 @@ class VendorItemController extends Controller
                 'model_question' => $model_question,
                 'themelist' => $themelist,
                 'grouplist' => $grouplist,
+                'packagelist' => $packagelist,
                 'categories' => $categories
             ]);
         }
@@ -317,6 +348,7 @@ class VendorItemController extends Controller
 
         $model->themes = \yii\helpers\ArrayHelper::map($model->vendorItemThemes, 'theme_id', 'theme_id');
         $model->groups = \yii\helpers\ArrayHelper::map($model->featureGroupItems, 'group_id', 'group_id');
+        $model->packages = \yii\helpers\ArrayHelper::map($model->vendorItemToPackage, 'package_id', 'package_id');
 
         $model_question = VendorItemQuestion::find()
             ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
@@ -476,6 +508,36 @@ class VendorItemController extends Controller
                         $groupModel->save();
                     }
                 }
+                
+                $arr_packages = [];
+
+                if(empty($vendor_item['packages'])) {
+                    $vendor_item['packages'] = [];
+                }
+
+                foreach ($vendor_item['packages'] as $value) {
+
+                    $item_to_package = VendorItemToPackage::find()
+                        ->where([
+                            'item_id' => $item_id,
+                            'package_id' => $value
+                        ])
+                        ->one();
+
+                    if(!$item_to_package) {
+                        $item_to_package = new VendorItemToPackage();
+                        $item_to_package->item_id = $item_id;
+                        $item_to_package->package_id = $value;
+                        $item_to_package->save();
+                    }            
+
+                    $arr_packages[] = $value;
+                }
+
+                if($arr_packages) {
+                    VendorItemToPackage::deleteAll('item_id = ' . $item_id . ' AND 
+                        package_id NOT IN ('.implode(',', $arr_packages).')');     
+                }  
 
                 $vendor_item_question = Yii::$app->request->post('VendorItemQuestion');
 
@@ -543,6 +605,7 @@ class VendorItemController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'packagelist' => ArrayHelper::map(Package::find()->all(), 'package_id', 'package_name'),
             'itemType' => ItemType::findAll(['trash' => 'Default']),
             'categoryname' => $categoryname,
             'images' => Image::findAll(['item_id' => $id, 'module_type' => 'vendor_item']),
@@ -925,7 +988,39 @@ class VendorItemController extends Controller
         if($arr_group) {
             FeatureGroupItem::deleteAll('item_id = ' . $item_id . ' AND 
                 group_id NOT IN ('.implode(',', $arr_group).')');     
-        }        
+        }       
+
+        /* packages */ 
+
+        $arr_packages = [];
+
+        if(empty($vendor_item['packages'])) {
+            $vendor_item['packages'] = [];
+        }
+
+        foreach ($vendor_item['packages'] as $value) {
+
+            $item_to_package = VendorItemToPackage::find()
+                ->where([
+                    'item_id' => $item_id,
+                    'package_id' => $value
+                ])
+                ->one();
+
+            if(!$item_to_package) {
+                $item_to_package = new VendorItemToPackage();
+                $item_to_package->item_id = $item_id;
+                $item_to_package->package_id = $value;
+                $item_to_package->save();
+            }            
+
+            $arr_packages[] = $value;
+        }
+
+        if($arr_packages) {
+            VendorItemToPackage::deleteAll('item_id = ' . $item_id . ' AND 
+                package_id NOT IN ('.implode(',', $arr_packages).')');     
+        }  
         
         \Yii::$app->response->format = 'json';
         
