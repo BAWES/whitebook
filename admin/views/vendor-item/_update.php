@@ -339,7 +339,7 @@ function cmp($a, $b)
 							</div>
 						</div>
 						<button class="btn btn-primary btn-add-theme" type="button">Add</button>
-						<button class="btn btn-default btn-add-theme-calcle" type="button">Cancle</button>
+						<button class="btn btn-default btn-add-theme-calcle" type="button">Cancel</button>
 					</div>
 				</div>
 				<button class="btn btn-xs btn-default btn_theme_form_wrapper" type="button">
@@ -366,7 +366,7 @@ function cmp($a, $b)
 							</div>
 						</div>
 						<button class="btn btn-primary btn-add-group" type="button">Add</button>
-						<button class="btn btn-default btn-add-group-calcle" type="button">Cancle</button>
+						<button class="btn btn-default btn-add-group-calcle" type="button">Cancel</button>
 					</div>
 				</div>
 
