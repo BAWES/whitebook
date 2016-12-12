@@ -21,18 +21,24 @@ $this->title = 'Events/Wishlist | Whitebook';
 				<div class="wishlist_category_wrapper">
 					<ul>
 						<li>
-							<a data-href="<?= Url::to(['things-i-like/index']) ?>">
-								<?= Yii::t('frontend', 'All') ?>
+							<a data-href="<?= Url::to(['things-i-like/index']) ?>" class="active">
+								<span class="icon icon-all"></span>
+								<span class="category_name">
+									<?= Yii::t('frontend', 'All') ?>
+								</span>
 							</a>
 						</li>		
 						<?php foreach ($categories as $key => $value) { ?>
 						<li>
 							<a data-href="<?= Url::to(['things-i-like/index', 'category_id' => $value->category_id]) ?>">
-								<?php if(Yii::$app->language == 'en') { ?>
-									<?= $value->category_name ?>
-								<?php } else { ?>
-									<?= $value->category_name_ar ?>
-								<?php } ?>
+								<span class="icon icon-<?= $value->slug ?>"></span>
+								<span class="category_name">
+									<?php if(Yii::$app->language == 'en') { ?>
+										<?= $value->category_name ?>
+									<?php } else { ?>
+										<?= $value->category_name_ar ?>
+									<?php } ?>
+								</span>
 							</a>
 						</li>						
 						<?php } ?>
@@ -71,4 +77,4 @@ $this->registerCss("
 	}
 ");
 
-$this->registerJsFile('@web/js/thing_i_like.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/thing_i_like.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);

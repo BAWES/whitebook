@@ -1972,18 +1972,14 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 
 .wishlist_category_wrapper ul li {
     display: inline;
-    padding: 0 10px;
-    border-right: 1px solid #ccc;
-}
-
-.wishlist_category_wrapper ul li:last-child {
-    border-right: none;
+    padding: 0 10px 0 0;
 }
 
 .wishlist_category_wrapper a {
     color: #000;
     cursor: pointer;
     font-size: 12px;
+    display: inline-block;
 }
 .wishlist_category_wrapper a:hover {
     text-decoration: underline;
@@ -2001,4 +1997,57 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     height: 16px;
     margin: 14px 11px;
     background-color: transparent !important;
+}
+
+.wishlist_category_wrapper li span {
+    display: inline-block;
+}
+.wishlist_category_wrapper li span.icon {
+    width: 26px;
+    height: 36px;
+    float: left;
+}
+.wishlist_category_wrapper li span.category_name {
+    padding: 12px 0 0 5px;
+}
+.wishlist_category_wrapper .icon-all {
+
+}
+.wishlist_category_wrapper .icon-gift-favors {
+    background: url(../images/sprit.png) -599px -20px no-repeat;
+}
+.wishlist_category_wrapper .icon-venues {
+    background: url(../images/sprit.png) no-repeat -11px -11px;
+}
+.wishlist_category_wrapper .icon-invitations {
+    background: url(../images/sprit.png) no-repeat -84px -13px;
+    width: 32px !important;
+}
+.wishlist_category_wrapper .icon-food-beverage {
+    background: url(../images/sprit.png) no-repeat -163px -14px;
+}
+.wishlist_category_wrapper .icon-decor {
+    background: url(../images/sprit.png) no-repeat -226px -12px;
+}
+.wishlist_category_wrapper .icon-supplies {
+    background: url(../images/sprit.png) no-repeat -287px -11px;
+}
+.wishlist_category_wrapper .icon-entertainment {
+    background: url(../images/sprit.png) no-repeat -363px -13px;
+    width: 30px !important;
+}
+.wishlist_category_wrapper .icon-services {
+    background: url(../images/sprit.png) no-repeat -443px -14px;
+    width: 32px !important;
+}
+.wishlist_category_wrapper .icon-others {
+    background: url(../images/sprit.png) no-repeat -521px -13px;
+}
+.wishlist_category_wrapper .icon-all {
+    background: url(../images/sprit.png) no-repeat -521px -13px;
+}
+
+.wishlist_category_wrapper a:hover,
+.wishlist_category_wrapper a.active  {
+    color: #ebc000 !important;
 }
