@@ -311,6 +311,9 @@ $( ".twovalid2" ).click(function() {
 
 function validate_step0() {
 
+	return true;
+
+	/*
 	//old record
 	if(!is_new_record) {
 		return true;
@@ -324,9 +327,8 @@ function validate_step0() {
 		return true;
   	}
 
-  	console.log('Vendor logo not selected!');
-
   	return false;
+  	*/
 }
 	
 //------------------------- validation step : 1 -----------------------------//
