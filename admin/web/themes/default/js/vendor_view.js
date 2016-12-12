@@ -183,7 +183,6 @@ function packagedelete(id)
     }
 }
 
-
 function packageedit(id)
 {
 	$('#information_fail').html('');

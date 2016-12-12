@@ -316,7 +316,6 @@ class VendorItem extends \yii\db\ActiveRecord
         }
     }
 
-
     public static function getItemType($id)
     {
         $model = ItemType::find()->where(['type_id'=>$id])->one();
@@ -335,10 +334,9 @@ class VendorItem extends \yii\db\ActiveRecord
         return ArrayHelper::map($item,'item_id','item_name');
     }
 
-
     public static function vendoritemname($id)
     {
-        $item= VendorItem::find()
+        $item = VendorItem::find()
             ->select(['item_name'])
             ->where(['=', 'item_id',$id])
             ->andwhere(['trash' =>'Default'])
@@ -353,8 +351,9 @@ class VendorItem extends \yii\db\ActiveRecord
             ->where(['=', 'category_id', $categoryid])
             ->andwhere(['=', 'subcategory_id',$subcategory])
             ->all();
-        
-        return ArrayHelper::map($vendor_item,'item_id','item_name');
+
+        $vendor_item1 = ArrayHelper::map($vendor_item,'item_id','item_name');
+        return $vendor_item1;
     }
 
 
@@ -367,8 +366,9 @@ class VendorItem extends \yii\db\ActiveRecord
             ->andwhere(['!=', 'trash', 'Deleted'])
             ->andwhere(['vendor_id'=> Vendor::getVendor('vendor_id')])
             ->all();
-        
-        return ArrayHelper::map($item,'item_id','item_name');
+            
+        $items = ArrayHelper::map($item,'item_id','item_name');
+        return $items;
     }
 
     public function statusImageurl($img_status)
