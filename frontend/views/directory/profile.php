@@ -13,9 +13,9 @@ $vendor_details = $vendor_detail;
 \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 
-$baselink = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=565&h=565';
+$baselink =  Url::to("@web/images/item-default.png");
 
-if(isset($vendor_details['vendor_logo_path'])) {
+if($vendor_details['vendor_logo_path']) {
     $baselink = Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path'];
 }
 
