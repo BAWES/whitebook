@@ -1,5 +1,9 @@
 
 $(document).delegate('.wishlist_category_wrapper a', 'click', function() {
+
+	$('.wishlist_category_wrapper .active').removeClass('active');
+	$(this).addClass('active');
+
 	$.get($(this).attr('data-href'), function(html) {
 		$('.wishlist_item_wrapper').html(html);
 		imgError();
