@@ -12,9 +12,6 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'package_name')->textInput(['maxlength' => true]) ?>
 
-
-
-
         <?= $form->field($model, 'imageFile')->fileInput() ?>
 
         <?php if(!$model->isNewRecord && $model->package_background_image) { ?>

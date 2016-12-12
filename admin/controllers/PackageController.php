@@ -5,6 +5,8 @@ namespace admin\controllers;
 use Yii;
 use common\models\Package;
 use common\models\PackageSearch;
+use common\models\VendorItem;
+use common\models\VendorItemToPackage;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -45,6 +47,41 @@ class PackageController extends Controller
         ]);
     }
 
+    public function actionUpdateItem($id)
+    {
+        $items = Yii::$app->request->post('items');
+
+        $arr_items = [];
+
+        if(empty($items)) {
+            $items = [];
+        }
+
+        foreach ($items as $value) {
+
+            $item_to_package = VendorItemToPackage::find()
+                ->where([
+                    'item_id' => $value,
+                    'package_id' => $id
+                ])
+                ->one();
+
+            if(!$item_to_package) {
+                $item_to_package = new VendorItemToPackage();
+                $item_to_package->item_id = $value;
+                $item_to_package->package_id = $id;
+                $item_to_package->save();
+            }            
+
+            $arr_items[] = $value;
+        }
+
+        if($arr_items) {
+            VendorItemToPackage::deleteAll('package_id = ' . $id . ' AND 
+                item_id NOT IN ('.implode(',', $arr_items).')');     
+        }  
+    }
+
     /**
      * Displays a single Package model.
      * @param integer $id
@@ -52,8 +89,25 @@ class PackageController extends Controller
      */
     public function actionView($id)
     {
+        $items = VendorItem::find()
+            ->where(['trash' => 'Default'])
+            ->all();
+
+        $selected_items = VendorItem::find()
+            ->innerJoin(
+                '{{%vendor_item_to_package}}', 
+                '{{%vendor_item_to_package}}.item_id = {{%vendor_item}}.item_id'
+            )
+            ->where([
+                '{{%vendor_item}}.trash' => 'Default',
+                '{{%vendor_item_to_package}}.package_id' => $id
+            ])
+            ->all();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'items' => $items,
+            'selected_items' => $selected_items
         ]);
     }
 

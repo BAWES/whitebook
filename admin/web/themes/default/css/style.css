@@ -8470,3 +8470,39 @@ a.delivery_href:hover{
     color: white;
     border-color: #1B3148;
 }
+
+.package-view .heading {
+  padding: 10px;
+  background: black;
+  color: white;
+  text-align: center;
+}
+
+.package-view .search_box input {
+  width: 100%;
+}
+    
+.package-view .item_list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    max-height: 350px;
+    overflow-y: scroll;
+}
+
+.package-view .item_list li {
+    line-height: 20px;
+    padding: 5px 0 5px 5px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.package-view .item_list li .fa-close {
+    float: right;
+    right: 5px;
+    position: relative;
+    top: 4px;
+}
+  
