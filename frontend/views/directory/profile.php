@@ -37,12 +37,12 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
     <div class="container paddng0">
         <div class="vender_profile_new">
             <div class="product_detials_vender aother_dates">
-                <div class="col-md-6 padding0 vendor_photo">
+                <div class="col-md-5 padding0 vendor_photo">
                     <a href="#" title="">
-                        <?= Html::img($baselink, ['class'=>'','width'=>'565','alt'=>'Logo']); ?>
+                        <?= Html::img($baselink, ['class'=>'','width'=>'450','alt'=>'Logo']); ?>
                     </a>
                 </div>
-                <div class="col-md-6 paddingcommon vendor_detail">
+                <div class="col-md-7 paddingcommon vendor_detail">
                     <div class="right_descr_product">
                         <div class="accad_menus">
                             <div class="bakery_title">
