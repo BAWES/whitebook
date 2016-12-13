@@ -2116,3 +2116,14 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .cards li:nth-child(3) .card-info .title {    
     font-size: 30px;
 }
+
+.package_description {
+    margin: 20px 0;
+}
+    
+.package_items .panel-title{
+    margin: 0px 0 10px;    
+}
+.package_items .item-img {
+    max-width: 100%;
+}
