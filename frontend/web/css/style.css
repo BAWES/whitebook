@@ -2051,3 +2051,68 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .wishlist_category_wrapper a.active  {
     color: #ebc000 !important;
 }
+
+.cards:after, .cards:before {
+    content: " ";
+    display: table;
+}
+.cards {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.cards li {
+    -webkit-transition: .15s ease-out;
+    -moz-transition: .15s ease-out;
+    -ms-transition: .15s ease-out;
+    -o-transition: .15s ease-out;
+    transition: .15s ease-out;
+    float: left;
+    vertical-align: middle;
+    margin: 20px 0 0 11px;
+    width: 15%;
+    background-position: 50%;
+    background-size: cover;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    -o-flex-direction: row;
+    flex-direction: row;
+}
+
+.cards a {    
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding-top: 43%;
+}
+.cards li:nth-child(1), 
+.cards li:nth-child(2),
+.cards li:nth-child(3) 
+{
+    width: 31%;
+}
+.cards li:before{
+  content:' ';
+  padding:50% 0;/* vertical value as  100% equals width */
+  display:inline-block;
+  vertical-align:middle; /* or whatever */
+}
+.cards .card-info {
+    margin: auto;
+    color: #fff;
+    font-size: 20px;
+}
+.cards li:nth-child(1) .card-info .title, 
+.cards li:nth-child(2) .card-info .title, 
+.cards li:nth-child(3) .card-info .title {    
+    font-size: 30px;
+}

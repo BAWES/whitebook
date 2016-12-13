@@ -19,7 +19,7 @@ class PackageSearch extends Package
     {
         return [
             [['package_id'], 'integer'],
-            [['package_name', 'package_background_image', 'package_description', 'package_avg_price', 'package_number_of_guests'], 'safe'],
+            [['package_name', 'package_name_ar', 'package_background_image', 'package_description', 'package_description_ar', 'package_avg_price', 'package_number_of_guests', 'status', 'package_slug'], 'safe'],
         ];
     }
 
@@ -63,9 +63,13 @@ class PackageSearch extends Package
         ]);
 
         $query->andFilterWhere(['like', 'package_name', $this->package_name])
+            ->andFilterWhere(['like', 'package_name_ar', $this->package_name_ar])
             ->andFilterWhere(['like', 'package_background_image', $this->package_background_image])
             ->andFilterWhere(['like', 'package_description', $this->package_description])
+            ->andFilterWhere(['like', 'package_description_ar', $this->package_description_ar])
             ->andFilterWhere(['like', 'package_avg_price', $this->package_avg_price])
+            ->andFilterWhere(['like', 'status', $this->status])
+            //->andFilterWhere(['like', 'package_slug', $this->package_slug])
             ->andFilterWhere(['like', 'package_number_of_guests', $this->package_number_of_guests]);
 
         return $dataProvider;
