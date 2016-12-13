@@ -145,6 +145,11 @@ $action = Yii::$app->controller->action->id;
                                             </a></li>
                                     </ul>
                                 </div>
+                            </li>                            
+                            <li class="<?php if ($action == "packages") { echo "active";} ?>">
+                                <a href="<?= Url::toRoute('packages/index', true); ?>" title="<?php echo Yii::t('frontend', 'Packages'); ?>">
+                                    <?php echo Yii::t('frontend', 'Packages'); ?>
+                                </a>
                             </li>
                             <li  class="<?php if ($action == "experience") { echo "active";} ?>">
                                 <a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>">

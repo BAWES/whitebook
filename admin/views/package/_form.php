@@ -12,6 +12,8 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'package_name')->textInput(['maxlength' => true]) ?>
 
+        <?= $form->field($model, 'package_name_ar')->textInput(['maxlength' => true]) ?>
+
         <?= $form->field($model, 'imageFile')->fileInput() ?>
 
         <?php if(!$model->isNewRecord && $model->package_background_image) { ?>
@@ -25,9 +27,18 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'package_description')->textarea(['rows' => 6]) ?>
 
+        <?= $form->field($model, 'package_description_ar')->textarea(['rows' => 6]) ?>
+
         <?= $form->field($model, 'package_avg_price')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'package_number_of_guests')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'status') ->dropDownList(
+                            [
+                                '1' => 'Active',
+                                '0' => 'Inactive'
+                            ]
+                        ); ?>
 
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
