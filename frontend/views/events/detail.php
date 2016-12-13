@@ -14,6 +14,7 @@ use frontend\models\EventItemlink;
 $this->title = 'My Event | '.$event_details->event_name;
 
 ?>
+
 <!-- coniner start -->
 <section id="inner_pages_sections">
     <div class="container">
