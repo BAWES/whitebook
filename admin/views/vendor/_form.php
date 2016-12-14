@@ -348,7 +348,7 @@ use yii\widgets\ActiveForm;
 				<div class="form-group">
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 
-					<?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'style'=>'float:right;']) ?>
+					<?= Html::submitButton('Submit', ['class' => 'btn btn-complete btn-primary', 'style'=>'float:right;']) ?>
 
 				</div>
 			</div>
@@ -392,6 +392,6 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.4", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.5", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>
