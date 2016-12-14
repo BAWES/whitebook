@@ -544,4 +544,12 @@ function addPhone(current)
     j++;
 }
 
-$('.image-editor').cropit();
+$(function() {
+
+	$('.image-editor').cropit();
+
+	$('.btn-complete').click(function() {
+		$('input[name="image"]').val($('.image-editor').cropit('export'));
+	});
+});
+
