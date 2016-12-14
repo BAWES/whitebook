@@ -27,7 +27,13 @@ $model = new Website();
             $url = 'https://slider.thewhitebook.com.kw/embed_whitebook.php?alias=arabic-slider';
         }
 
-        echo file_get_contents($url);
+        $ch = curl_init();
+        $timeout = 200;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        echo curl_exec($ch);
+        curl_close($ch);
     ?>
 
     <?= $this->render('_search'); ?>
