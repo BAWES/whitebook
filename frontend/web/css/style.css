@@ -2140,7 +2140,15 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     margin: 2px 0 0 0;
 }
 .vendor_social_info ul li {
-    display: inline-block;
+    display: block;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e6e6e6;
+    margin-bottom: 10px;
+}
+.vendor_social_info ul li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 .vendor_social_info a,
 .vendor_social_info i {

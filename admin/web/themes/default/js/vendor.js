@@ -549,6 +549,16 @@ $(function() {
 	$('.image-editor').cropit();
 
 	$('.btn-complete').click(function() {
+
+		$('.alert-warning').remove();
+
+		//check if error 
+		if($('.form-group.has-error').length > 0) 
+		{
+			$('.message_wrapper').html('<div class="alert alert-warning">Please check form carefully!</div>');
+			$('html, body').animate({ scrollTop: 0 }, 'slow');
+		}
+
 		$('input[name="image"]').val($('.image-editor').cropit('export'));
 	});
 });

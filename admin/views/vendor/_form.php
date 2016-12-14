@@ -14,6 +14,9 @@ use yii\widgets\ActiveForm;
 		<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
 		</p>
 		</div>
+
+		<div class="message_wrapper"></div>
+
 		<!-- Begin Twitter Tabs-->
 		<div class="tabbable">
 		  <ul class="nav nav-tabs">
@@ -290,21 +293,85 @@ use yii\widgets\ActiveForm;
 
 			<div class="tab-pane" id="4">
 			
-				<?= $form->field($model, 'vendor_twitter')
-						->textInput()
-						->label('Vendor Twitter URL', ['class'=> 'form-label-cap']); ?>
-			
-				<?= $form->field($model, 'vendor_instagram')
-						->textInput()
-						->label('Vendor Instagram URL', ['class'=> 'form-label-cap']) ?>
-			
-				<?= $form->field($model, 'vendor_googleplus')
-						->textInput()
-						->label('Vendor Google Plus URL', ['class'=> 'form-label-cap']); ?>
-
-				<?= $form->field($model, 'vendor_skype')
-						->textInput()
-						->label('Skype ID',['class'=> 'form-label-cap']); ?>
+				<table class="table table-bordered table-social">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Text</th>
+							<th>Link</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Instagram</td>
+							<td>
+								<?= $form->field($model, 'vendor_instagram_text', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Instagram link text'
+									]); ?>
+							</td>
+							<td>
+								<?= $form->field($model, 'vendor_instagram', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Instagram link url'
+									]); ?>
+							</td>
+						</tr>
+						<tr>
+							<td>Twitter</td>
+							<td>
+								<?= $form->field($model, 'vendor_twitter_text', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Twitter link text'
+									]); ?>
+							</td>
+							<td>
+								<?= $form->field($model, 'vendor_twitter', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Twitter link url'
+									]); ?>
+							</td>
+						</tr>
+						<tr>
+							<td>Facebook</td>
+							<td>
+								<?= $form->field($model, 'vendor_facebook_text', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Facebook link text'
+									]); ?>
+							</td>
+							<td>
+								<?= $form->field($model, 'vendor_facebook', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Facebook link url'
+									]); ?>
+							</td>
+						</tr>
+						<tr>
+							<td>Youtube</td>
+							<td>
+								<?= $form->field($model, 'vendor_youtube_text', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Youtube link text'
+									]); ?>
+							</td>
+							<td>
+								<?= $form->field($model, 'vendor_youtube', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Youtube link url'
+									]); ?>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 
 				<div class="form-groups">
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
@@ -364,6 +431,16 @@ $this->registerCss('
 	.field-vendor-category_id .dropdown-toggle{
 		width: 100%;
 	}
+	.table-social .form-group {
+		margin-bottom: 0px;
+	}
+	.table-social td {
+		vertical-align: middle !important;
+	}
+	.table-social .help-block{
+		margin-bottom:0px;
+		margin-top:2px;
+	}	
 ');
 
 if($model->isNewRecord) {
@@ -392,6 +469,6 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.5", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.6", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>
