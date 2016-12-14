@@ -14,6 +14,9 @@ use yii\widgets\ActiveForm;
 		<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
 		</p>
 		</div>
+
+		<div class="message_wrapper"></div>
+
 		<!-- Begin Twitter Tabs-->
 		<div class="tabbable">
 		  <ul class="nav nav-tabs">
@@ -33,9 +36,6 @@ use yii\widgets\ActiveForm;
 		      <a href="#4" data-toggle="tab" class="twovalid2">Social Info</a>
 		    </li>
 		    <li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
-		    <?php if($model->isNewRecord) { ?>
-		    <li><a href="#6" data-toggle="tab" class="twovalid2">Packages</a></li>
-		    <?php } ?>
 		  </ul>
 		  <div class="tab-content">
 
@@ -293,21 +293,85 @@ use yii\widgets\ActiveForm;
 
 			<div class="tab-pane" id="4">
 			
-				<?= $form->field($model, 'vendor_twitter')
-						->textInput()
-						->label('Vendor Twitter URL', ['class'=> 'form-label-cap']); ?>
-			
-				<?= $form->field($model, 'vendor_instagram')
-						->textInput()
-						->label('Vendor Instagram URL', ['class'=> 'form-label-cap']) ?>
-			
-				<?= $form->field($model, 'vendor_googleplus')
-						->textInput()
-						->label('Vendor Google Plus URL', ['class'=> 'form-label-cap']); ?>
-
-				<?= $form->field($model, 'vendor_skype')
-						->textInput()
-						->label('Skype ID',['class'=> 'form-label-cap']); ?>
+				<table class="table table-bordered table-social">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Text</th>
+							<th>Link</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Instagram</td>
+							<td>
+								<?= $form->field($model, 'vendor_instagram_text', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Instagram link text'
+									]); ?>
+							</td>
+							<td>
+								<?= $form->field($model, 'vendor_instagram', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Instagram link url'
+									]); ?>
+							</td>
+						</tr>
+						<tr>
+							<td>Twitter</td>
+							<td>
+								<?= $form->field($model, 'vendor_twitter_text', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Twitter link text'
+									]); ?>
+							</td>
+							<td>
+								<?= $form->field($model, 'vendor_twitter', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Twitter link url'
+									]); ?>
+							</td>
+						</tr>
+						<tr>
+							<td>Facebook</td>
+							<td>
+								<?= $form->field($model, 'vendor_facebook_text', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Facebook link text'
+									]); ?>
+							</td>
+							<td>
+								<?= $form->field($model, 'vendor_facebook', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Facebook link url'
+									]); ?>
+							</td>
+						</tr>
+						<tr>
+							<td>Youtube</td>
+							<td>
+								<?= $form->field($model, 'vendor_youtube_text', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Youtube link text'
+									]); ?>
+							</td>
+							<td>
+								<?= $form->field($model, 'vendor_youtube', [
+										'template' => '{input}{error}'
+									])->textInput([
+										'placeholder' => 'Youtube link url'
+									]); ?>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 
 				<div class="form-groups">
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
@@ -351,66 +415,10 @@ use yii\widgets\ActiveForm;
 				<div class="form-group">
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 
-					<?php if($model->isNewRecord) { ?>
-						<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
-					<?php } else { ?>
-						<?= Html::submitButton('Update', ['class' => 'btn btn-primary','style'=>'float:right;']) ?>
-					<?php } ?>
+					<?= Html::submitButton('Submit', ['class' => 'btn btn-complete btn-primary', 'style'=>'float:right;']) ?>
 
 				</div>
 			</div>
-
-			<?php if($model->isNewRecord) { ?>
-			<div class="tab-pane" id="6">
-				Vendor package list  
-				<br />
-				<br />
-
-				<div class="package-list-error"></div>
-
-				<table class="table table-bordered table-package-list">
-					<tbody>
-						<tr>
-							<th>Package</th>
-							<th>Start date</th>
-							<th>End date</th>
-							<th></th>
-						</tr>
-					</tbody>
-					<tfoot>
-						<tr>
-							<td>
-								<select id="package_id" class="form-control">
-									<?php foreach ($packages as $key => $value) { ?>
-										<option value="<?= $key ?>">
-											<?= $value ?>
-										</option>
-									<?php } ?>
-								</select>
-							</td>
-							<td>
-								<input id="package_start_date" name="start_date" class="form-control" />
-							</td>
-							<td>
-								<input id="package_end_date" name="end_date" class="form-control" />
-							</td>	
-							<td>
-								<!--
-								<button type="button" class="btn btn-primary btn-add-package">
-									<i class="fa fa-plus"></i>
-								</button>
-								-->
-							</td>
-						</tr>
-					</tfoot>
-				</table>
-
-				<div class="form-group">
-					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-					<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;']) ?>
-				</div>
-			</div>
-			<?php } ?>
 
 		<?php ActiveForm::end(); ?>	
 		</div>
@@ -423,6 +431,16 @@ $this->registerCss('
 	.field-vendor-category_id .dropdown-toggle{
 		width: 100%;
 	}
+	.table-social .form-group {
+		margin-bottom: 0px;
+	}
+	.table-social td {
+		vertical-align: middle !important;
+	}
+	.table-social .help-block{
+		margin-bottom:0px;
+		margin-top:2px;
+	}	
 ');
 
 if($model->isNewRecord) {
@@ -451,6 +469,6 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.4", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.6", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 ?>

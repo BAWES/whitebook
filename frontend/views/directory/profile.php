@@ -160,6 +160,42 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
                                                     <?php } ?>
                                                     </div>
 
+
+                                                    <?php if($vendor_detail['vendor_youtube'] || $vendor_detail['vendor_facebook'] || $vendor_detail['vendor_twitter'] || $vendor_detail['vendor_instagram']) { ?>
+                                                    <div class="vendor_social_info paddingleft0">
+                                                        <ul>                                                       
+                                                            <?php if($vendor_detail['vendor_instagram']) { ?>
+                                                            <li>
+                                                                <a target="_blank" href="<?= $vendor_detail['vendor_instagram'] ?>" alt="<?= Yii::t('frontend', 'Instatgram') ?>"><i class="fa fa-instagram"></i>
+                                                                    <?= $vendor_detail['vendor_instagram_text'] ?>
+                                                                </a>
+                                                            </li>
+                                                            <?php } ?>  
+                                                            <?php if($vendor_detail['vendor_twitter']) { ?>
+                                                            <li>
+                                                                <a target="_blank" href="<?= $vendor_detail['vendor_twitter'] ?>" alt="<?= Yii::t('frontend', 'Twitter') ?>"><i class="fa fa-twitter"></i>
+                                                                    <?= $vendor_detail['vendor_twitter_text'] ?>
+                                                                </a>
+                                                            </li>
+                                                            <?php } ?>
+                                                            <?php if($vendor_detail['vendor_facebook']) { ?>
+                                                            <li>
+                                                                <a target="_blank" href="<?= $vendor_detail['vendor_facebook'] ?>" alt="<?= Yii::t('frontend', 'Facebook') ?>"><i class="fa fa-facebook"></i>
+                                                                    <?= $vendor_detail['vendor_facebook_text'] ?>
+                                                                </a>
+                                                            </li>
+                                                            <?php } ?>
+                                                            <?php if($vendor_detail['vendor_youtube']) { ?>
+                                                            <li>
+                                                                <a target="_blank" href="<?= $vendor_detail['vendor_youtube'] ?>" alt="<?= Yii::t('frontend', 'Youtube') ?>"><i class="fa fa-youtube"></i>
+                                                                    <?= $vendor_detail['vendor_youtube_text'] ?>
+                                                                </a>
+                                                            </li>
+                                                            <?php } ?>
+                                                        </ul>
+                                                    </div>
+                                                    <?php } ?>
+                                                    
                                                     <?php
 
                                                     $search = array(0, 1, 2, 3, 4, 5, 6, ',');
@@ -196,7 +232,6 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
                                                             </h5>
                                                         </div>
                                                     <?php } ?>
-
 
                                                 </address>
                                             </div>

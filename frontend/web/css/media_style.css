@@ -125,6 +125,19 @@
 }
 
 @media only screen and (max-width: 991px) {
+	.package_content {
+		margin-top: 20px;
+	}
+	.cards li,
+	.cards li:nth-child(3) {
+	    width: 31%;
+	    margin: 20px 0 0 8px;
+	}
+	.cards li:nth-child(1), 
+	.cards li:nth-child(2) 
+	{
+	    width: 47%;
+	}
 
 	.btn-view-thing-i-like,
 	.btn-delete-thing-i-like,
@@ -258,7 +271,7 @@
 	.normal_tables .events_inner_listing_new .events_listing ul li:nth-child(4n) {margin:0 20px 28px 0 !important;}
 
 	#dp1,#dp2,#datepicker{margin-bottom:0;background-position:98.2% 55%;}
-	section#inner_page_detials { margin: 110px 0 0; display: inline-block;min-height:700px;}
+	section#inner_page_detials { margin: 110px 0 0; display: inline-block;min-height:700px; width: 100%;}
 	.about_content_sec p{text-align:justify;}
 
 	#input3.right_slider.focus .mobile-search-icon.input-group-btn:last-child>.btn{border-left:1px solid #000;    margin-left: 0px; border-radius: 0;  position: relative;  border-top: 0;  border-right: 0; border-bottom: 0; left: -2px;}
@@ -904,6 +917,7 @@
 }
 
 @media only screen and (max-width: 568px){
+
 	.all_popup_common{padding:50px 20px;}
 	.thinl_like_sectons .thing_items li {    margin: 9px 2px;}
 	.events_content_part .margin-rightnone{    margin: 9px 2px!important;}
@@ -1074,6 +1088,11 @@
 }
 
 @media only screen and (max-width: 480px){
+
+	.cards li {
+	    width: 100% !important;
+	    margin: 10px 0 !important;
+	}
 
 	.thinl_like_sectons .thing_items li {    margin: 9px 10.5px;}
 	.events_content_part .margin-rightnone{margin: 9px 10.5px!important;}

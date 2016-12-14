@@ -19,7 +19,7 @@ use yii\helpers\Url;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
-        Admin created your username password. Once you subscribe the package you can access account.
+        Admin created your username password. You can access account.
         <br/>
         User Id : <?= $vendorEmail ?>  <br/>
         Password : <?= $vendorPassword ?>

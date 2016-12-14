@@ -205,6 +205,16 @@ $(document).delegate('.table-email-list .btn-danger','click', function(){
 });
 
 $('form').submit(function(){
+
+	$('.alert-warning').remove();
+
+	//check if error 
+	if($('.form-group.has-error').length > 0) 
+	{
+		$('.message_wrapper').html('<div class="alert alert-warning">Please check form carefully!</div>');
+		$('html, body').animate({ scrollTop: 0 }, 'slow');
+	}
+
 	var imageData = $('.image-editor').cropit('export');
 
 	if(typeof imageData != 'undefined' && imageData.length > 0)
@@ -214,7 +224,6 @@ $('form').submit(function(){
 });
 	
 $('.image-editor').cropit();
-
 
 $phone_no_count = $('.table-phone-list tbody tr').length;
 

@@ -60,7 +60,7 @@ if($model->isNewRecord){
 	      <a href="#5" id="tab_5">Images</a>
 	    </li>
 	    <li>
-	      <a href="#6" id="tab_6">Themes & Groups</a>
+	      <a href="#6" id="tab_6">Themes & Groups & Packages</a>
 	    </li>
 	    <?php 
 	    /*if(!$model->isNewRecord && $model->item_for_sale =='Yes') {?>
@@ -314,6 +314,11 @@ if($model->isNewRecord){
 			<div class="border-top"></div>
 			<div class="padding-top-bottom form-group clearfix">
 				<?php echo $form->field($model, 'groups')->checkboxlist($grouplist);?>
+			</div>
+
+			<div class="border-top"></div>
+			<div class="padding-top-bottom form-group clearfix">
+				<?php echo $form->field($model, 'packages')->checkboxlist($packagelist);?>
 			</div>
 
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">

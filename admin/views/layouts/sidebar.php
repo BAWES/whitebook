@@ -26,7 +26,7 @@ $draft_item_count = VendorDraftItem::find()
 
 	<p class="menu-title">NAVIGATION</p>
 
-	<?=\admin\widgets\MenuExtended::widget([
+	<?= \admin\widgets\MenuExtended::widget([
 	    'items' => [
 	        [	
 	        	'label' => '<i class="icon-custom-home"></i><span class="title">Dashboard</span>', 
@@ -83,7 +83,6 @@ $draft_item_count = VendorDraftItem::find()
 				'options'=>['class'=>'dropdown'],
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'items' => [
-					['label' => 'Manage Package', 'url' => ['package/index']],
 					['label' => 'Manage Vendor', 'url' => ['vendor/index']],
 					['label' => 'Manage Vendor Item', 'url' => ['vendor-item/index']],
 				]
@@ -98,6 +97,7 @@ $draft_item_count = VendorDraftItem::find()
 					['label' => 'Manage Item Type', 'url' => ['item-type/index']],
 					['label' => 'Manage Priority Item', 'url' => ['priority-item/index']],
 					['label' => 'Manage Event Type', 'url' => ['event-type/index']],
+					['label' => 'Manage Package', 'url' => ['package/index']]
 				]
 			],
 			[

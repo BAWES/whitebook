@@ -31,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="tabbable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#1" data-toggle="tab">Vendor Info </a></li>
-        <li><a href="#3" data-toggle="tab">Package Log</a></li>
         <li><a href="#4" data-toggle="tab">Vendor Item Details</a></li>
         <li><a href="#5" data-toggle="tab">Delivery timeslot</a></li>
         <li><a href="#6" data-toggle="tab">Exception dates</a></li>
@@ -51,10 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 'vendor_name',
                 'vendor_name_ar',
-//                  ['label'=>'package id',
-//                 'value'=> isset($model->package->package_name) ? $model->package->package_name : 'Not set' ,
-//                ],
-
                 [
                     'label'=>'vendor_return_policy',
                     'value'=>strip_tags($model->vendor_return_policy)
@@ -64,14 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vendor_contact_name',
                 'vendor_contact_email',
                 'vendor_contact_number',
-                [
-                    'attribute'=>'package_start_date',
-                    'format' => ['date', 'php:d/m/Y'],
-                ],
-                [
-                    'attribute'=>'package_end_date',
-                    'format' => ['date', 'php:d/m/Y'],
-                ],
                 'vendor_emergency_contact_name',
                 'vendor_emergency_contact_email',
                 'vendor_emergency_contact_number',
@@ -82,81 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <!--End First Tab -->
-
-<!--End Second Tab -->
-<div class="tab-pane" id="3">
-<table class="table table-striped  detail-view">
-	<tbody>
-		<tr class="add">
-            <td>
-                <?php   $package = Package::loadpackage();
-	                    $form = ActiveForm::begin([]); $model->package_id='';$model->package_start_date='';$model->package_end_date='';
-	echo $form->field($model, 'package_id')->dropdownList($package,['prompt'=>'Select Package',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"],'style' => 'margin-top:10px;'])->label(false); ?></td>
-	
-    <td><?= $form->field($model, 'package_start_date',['template' => "{label}<div class='controls mystart'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'Start date',])->label(false);?></td>
-	
-    <td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date',])->label(false);?></td>
-
-	<td style="float:left;"><?php echo Html::Button($model->isNewRecord ? 'Add' : 'Add', [ 'onclick' => 'return check_validation();','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary-ads','style'=>'float:right;margin-top:10px;']);
-	echo $form->field($model, 'vendor_id')->hiddenInput()->label('');
-	ActiveForm::end();
-			?></td><td></td><td></td>
-			<div id="result"></div>
-			<div id="information" style="color:green; margin-top:8px;"></div>
-			<div id="information_fail" style="color:red; margin-top:8px;"></div>
-			</tr>
-
-		<tr class="edit"><td><?php $package = Package::loadpackage();
-			   $model->package_id='';$model->package_start_date='';$model->package_end_date='';
-	echo $form->field($model, 'package_id')->dropdownList($package,['prompt'=>'Select Package',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"], 'class'=>'form-control edit_package','style' => 'margin-top:10px;'])->label(false); ?></td>
-	<td><?= $form->field($model, 'package_start_date',['template' => "{label}<div class='controls mystart1'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'Start date','class'=>'edit_start'])->label(false);?></td>
-	<td><?= $form->field($model, 'package_end_date',['template' => "{label}<div class='controls myend1'>{input}</div>{hint}{error}"])->textInput(['maxlength' => 128,'placeholder' => 'End date','class'=>'edit_end'])->label(false);?></td>
-	<td style="float:left;"><?php echo Html::Button($model->isNewRecord ? 'Update' : 'Update', [ 'onclick' => 'return check_edit_validation();','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','style'=>'float:right;margin-top:10px;']);
-	echo $form->field($model, 'vendor_id')->hiddenInput()->label(''); ?></td>
-	<td><?php echo Html::Button($model->isNewRecord ? 'Cancel' : 'Cancel', [ 'onclick' => 'return cancel();','class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-info','style'=>'float:right;margin-top:10px;']);
-	echo $form->field($model, 'vendor_id')->hiddenInput()->label(''); ?></td><td></td><td></td>
-
-		<div id="update_information" style="color:green; margin-top:8px;"></div>
-		<div id="update_information_fail" style="color:red; margin-top:8px;"></div>
-			</tr>
-	</tbody>
-	</table>
-			<table class="table table-striped table-bordered detail-view" id="myTable">
-	<tbody>
-		<th>Package Name</th><th>Start Date</th><th>End Date</th><th>Package Price</th><th>Action</th>
-			</tr>
-			<?php
-   
-      $i=0;
-      
-    foreach ($vendorPackage as $log) {
-        $sel = ($i==0)?'':'';
-        ?>
-
-        <tr id="tr-<?php echo $log['id']; ?>">
-            <td><?= Package::PackageData($log['package_id']);  ?></td>
-            <td><?php $sd=($log['package_start_date']); echo date("d/m/Y", strtotime($sd));?></td>
-            <td><?php $sd=($log['package_end_date']);echo date("d/m/Y", strtotime($sd)); ?></td>
-            <td>
-                <?php print_r($log['package_price']); ?>
-                <input type="hidden" id="packedit" value="<?=$log['id'];?>">
-            </td>
-            <td>
-                <?php
-                $url = Url::to(['package/packagedelete', 'id' => $log['package_id']]);
-                echo Html::a('<span class="glyphicon glyphicon-trash"></span>','#', ['onclick' => 'packagedelete('.$log['id'].');','title'=>'Delete','class' =>$sel]);
-                echo Html::a('<span class="glyphicon glyphicon-pencil"></span>','#', ['onclick' => 'packageedit('.$log['id'].');','title'=>'Edit','class' =>$sel]);
-                ?>
-            </td>
-			</tr>
-			<?php $i++; } ?>
-	</tbody>
-</table>
-
-<div id="output"></div>
-<!--End Third Tab -->
-
-</div>
 
 <!--Start Fourth Tab -->
 <div class="tab-pane" id="4">
@@ -374,12 +286,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php 
-
-echo Html::hiddenInput('change_package_url', Url::to(['/vendor/changepackage']), ['id' => 'change_package_url']);
-echo Html::hiddenInput('package_delete_url', Url::to(['/vendor/packagedelete']), ['id' => 'package_delete_url']);
-echo Html::hiddenInput('package_update_url', Url::to(['/vendor/packageupdate']), ['id' => 'package_update_url']);
-echo Html::hiddenInput('change_edit_package_url', Url::to(['/vendor/changeeditpackage']), ['id' => 'change_edit_package_url']);
-echo Html::hiddenInput('load_package_date_url', Url::to(['/vendor/loadpackagedate']), ['id' => 'load_package_date_url']);
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css");
 

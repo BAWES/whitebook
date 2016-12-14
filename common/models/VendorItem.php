@@ -10,6 +10,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\Vendor;
 use common\models\VendorDraftItem;
+use common\models\VendorItemToPackage;
 
 /**
 * This is the model class for table "whitebook_vendor_item".
@@ -64,6 +65,7 @@ class VendorItem extends \yii\db\ActiveRecord
     
     public $themes;
     public $groups;
+    public $packages;
     public $image_path;
     public $guide_image;
     
@@ -202,6 +204,14 @@ class VendorItem extends \yii\db\ActiveRecord
     public function getSuborderItemPurchases()
     {
         return $this->hasMany(SuborderItemPurchase::className(), ['item_id' => 'item_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getVendorItemToPackage()
+    {
+        return $this->hasMany(VendorItemToPackage::className(), ['item_id' => 'item_id']);
     }
 
     /**

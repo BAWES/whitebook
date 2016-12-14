@@ -16,12 +16,9 @@ use admin\models\Vendor;
 use admin\models\AuthItem;
 use admin\models\Category;
 use admin\models\VendorSearch;
-use admin\models\Package;
-use admin\models\VendorPackagesSearch;
 use common\models\Prioritylog;
 use common\models\PrioritylogSearch;
 use common\models\Siteinfo;
-use common\models\VendorPackages;
 use common\models\VendorItemCapacityException;
 use common\models\VendorItemCapacityExceptionSearch;
 use common\models\VendorItemSearch;
@@ -94,12 +91,6 @@ class VendorController extends Controller
         $searchModel = new VendorItemSearch();
         $dataProvider = $searchModel->searchviewVendor(Yii::$app->request->queryParams, $request->get('id'));
 
-        $vendorPackage = VendorPackagesSearch::find()
-            ->where(['!=', 'trash', 'Deleted'])
-            ->andwhere(['vendor_id' => $id])
-            ->orderBy('id')
-            ->all();
-
         $searchModel3 = new VendorItemCapacityExceptionSearch();
         $dataProvider3 = $searchModel3->search(Yii::$app->request->queryParams, $id);
 
@@ -113,7 +104,6 @@ class VendorController extends Controller
             'searchModel3' => $searchModel3,
             'dataProvider' => $dataProvider,
             'dataProvider3' => $dataProvider3,
-            'vendorPackage' => $vendorPackage,
             'vendor_order_alert_emails' => $vendor_order_alert_emails
         ]);
     }
@@ -166,7 +156,6 @@ class VendorController extends Controller
      */
     public function actionCreate()
     {
-        $package = Package::loadpackage();
         $model = new Vendor();
         $model->scenario = 'register';
 
@@ -258,32 +247,6 @@ class VendorController extends Controller
                    $vp->save();
                 }
 
-                //remove old packages
-                VendorPackages::deleteAll(['vendor_id' => $model->vendor_id]);
-
-                //save packages
-                $vendor_packages = Yii::$app->request->post('vendor_packages');
-
-                if($vendor_packages) {
-                    foreach ($vendor_packages as $key => $value) {
-
-                        $package = Package::findOne($value['package_id']);
-
-                        if(!$package) {
-                            continue;
-                        }
-
-                        $vp = new VendorPackages;
-                        $vp->vendor_id = $model->vendor_id;
-                        $vp->package_id = $value['package_id'];
-                        $vp->package_price = $package->package_pricing;
-                        $vp->package_start_date = date('Y-m-d', strtotime($value['package_start_date']));
-                        $vp->package_end_date = date('Y-m-d', strtotime($value['package_end_date']));
-                        $vp->trash = 'Default';
-                        $vp->save();
-                    }
-                }
-
                 //remove old alert emails
                 VendorOrderAlertEmails::deleteAll(['vendor_id' => $model->vendor_id]);
 
@@ -323,7 +286,6 @@ class VendorController extends Controller
         } else {
 
             return $this->render('create', [
-                'packages' => $package,
                 'model' => $model
             ]);
         }
@@ -347,13 +309,7 @@ class VendorController extends Controller
         $len = rand(1, 1000);
         $model = $this->findModel($id);
         $model->scenario = 'vendorUpdate';
-        // List all packages
-        $package = Package::loadpackage();
-
-        //Current package
-        $packname = Package::findOne($model->package_id);
-        $present_package = $packname['package_name'];
-
+       
         // Current logo
         $exist_logo_image = $model->vendor_logo_path;
 
@@ -484,13 +440,6 @@ class VendorController extends Controller
                 ->where(['vendor_id' => $id])
                 ->all();
 
-            $vendor_packages = VendorPackages::findAll(['vendor_id' => $model->vendor_id]);
-
-            $packages = Package::findAll([
-                'package_status' => 'Active',
-                'trash' => 'Default'
-            ]);
-
             $vendor_category = VendorCategory::findAll(['vendor_id' => $model->vendor_id]);
 
             $model->category_id = ArrayHelper::map($vendor_category, 'category_id', 'category_id');
@@ -500,8 +449,6 @@ class VendorController extends Controller
                 'vendor_contact_number' => $vendor_contact_number,
                 'vendor_order_alert_emails' => $vendor_order_alert_emails,
                 'day_off' => $day_off,
-                'vendor_packages' => $vendor_packages,
-                'packages' => $packages,
                 'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id])
             ]);
         }
@@ -550,7 +497,6 @@ class VendorController extends Controller
         DeliveryTimeSlot::deleteAll(['vendor_id' => $id]);
         VendorLocation::deleteAll(['vendor_id' => $id]);
         VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
-        VendorPackages::deleteAll(['vendor_id' => $id]);
         VendorItem::deleteAll(['vendor_id' => $id]);
 
         Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
@@ -586,30 +532,6 @@ class VendorController extends Controller
         }
     }
 
-    public function actionLoadcategory()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-        }
-        $categoryid = Vendor::find()->select('category_id')->where(['vendor_id' => $data['id']])->one();
-        $k = $categoryid->category_id;
-        $category = Category::find()->select('category_id,category_name')->where(['category_id' => $k])->all();
-        echo  '<option value="">Select...</option>';
-        foreach ($category as $key => $val) {
-            echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-        }
-    }
-    public function actionLoadsubcategory()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-        }
-        $subcategory = Category::find()->select('category_id,category_name')->where(['parent_category_id' => $data['id']])->all();
-        echo  '<option value="">Select...</option>';
-        foreach ($subcategory as $key => $val) {
-            echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
-        }
-    }
     public function actionEmailcheck()
     {
         if (Yii::$app->request->isAjax) {
@@ -636,201 +558,6 @@ class VendorController extends Controller
         }
     }
 
-    public function actionChangepackage()
-    {
-        if (!Yii::$app->request->isAjax)
-            die();
-
-        $json = ['errors' => []];
-
-        $data = Yii::$app->request->post();
-
-        //check if date is valid
-        if (strtotime($data['start_date']) >= strtotime($data['end_date'])) {
-            $json['errors'][] = Yii::t('admin', 'Given Date is not a valid one. Kindly entered valid date!');
-        }
-
-        //check if other package available in selected date
-        $package_exists = VendorPackages::find()
-            ->where(['vendor_id' => $data['vid']])
-            ->andWhere(['between', 'package_start_date', $data['start_date'], $data['end_date']])
-            ->andWhere(['between', 'package_end_date', $data['start_date'], $data['end_date']])
-            ->asArray()->one();
-
-        if ($package_exists) {
-
-            $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
-                    'start_date' => date('d/m/Y', strtotime($package_exists['package_start_date'])),
-                    'end_date' => date('d/m/Y', strtotime($package_exists['package_end_date']))
-                ]);
-        }
-
-        if (!$json['errors']) {
-
-            $package_pricing = Package::loadpackageprice($data['id']);
-            $package_name = Package::PackageData($data['id']);
-
-            $vendor_pack = new VendorPackages();
-            $vendor_pack->vendor_id = $data['vid'];
-            $vendor_pack->package_id = $data['id'];
-            $vendor_pack->package_price = $package_pricing;
-            $vendor_pack->package_start_date = $data['start_date'];
-            $vendor_pack->package_end_date = $data['end_date'];
-    		$vendor_pack->save();
-    		$packageid = $vendor_pack->id;
-
-            $url = Url::to('/package/packagedelete?id='.$packageid);
-            $startshow = date('d/m/Y', strtotime($data['start_date']));
-            $endshow = date('d/m/Y', strtotime($data['end_date']));
-
-            $json['html'] = '<tr id="tr-'.$packageid.'"><td>'.$package_name.'</td><td>'.$startshow.'</td><td>'.$endshow.'</td><td>'.$package_pricing.'<input type="hidden" id="packedit" value='.$packageid.'></td><td>'.Html::a('<span class="glyphicon glyphicon-trash"></span>', '#', ['onclick' => 'packagedelete('.$packageid.');', 'title' => 'Delete']).''.Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', ['onclick' => 'packageedit('.$packageid.');', 'title' => 'Edit']).'</td></tr>';
-        }
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        return $json;
-    }
-
-    public function actionChangeeditpackage()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-        }
-        $user_start_date = ($data['start_date']);
-        $user_end_date = ($data['end_date']);
-        $packedit = $data['packedit'];
-        if (strtotime($data['start_date']) <= strtotime($data['end_date'])) {
-            while (strtotime($user_start_date) <= strtotime($user_end_date)) {
-                $selected_dates[] = $user_start_date;
-                $user_start_date = date('Y-m-d', strtotime('+1 day', strtotime($user_start_date)));
-            }
-        } else {
-            return '2';
-            die;
-        }
-
-        $package_pricing = Package::loadpackageprice($data['id']);
-        $package_name = Package::PackageData($data['id']);
-                $datetime = VendorPackages::find()->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") as package_end_date'])
-          ->where(['vendor_id' => $data['id']])
-          ->andwhere(['!=','id',$packedit])
-          ->asArray()
-          ->all();
-
-      /*  $datetime = (new \yii\db\Query())->from('{{%vendor_packages}}')->select(['DATE_FORMAT(package_start_date,"%Y-%m-%d") as package_start_date','DATE_FORMAT(package_end_date,"%Y-%m-%d") AS package_end_date'])->where(['vendor_id' => $data['vid'],['!=', 'id', $packedit]])->all();*/
-
-        $blocked_dates = array();
-        if (!empty($datetime)) {
-            foreach ($datetime as $d) {
-                $date = $date1 = $d['package_start_date'];
-                $end_date = $end_date1 = $d['package_end_date'];
-                while (strtotime($date) <= strtotime($end_date)) {
-                    $blocked_dates[] = $date;
-                    $date = date('Y-m-d', strtotime('+1 day', strtotime($date)));
-                }
-            }
-        }
-        $available = 0;
-        if (!empty($selected_dates)) {
-            foreach ($selected_dates as $key => $value) {
-                $available = in_array($value, $blocked_dates);
-                if ($available) {
-                    return '1';
-                    die;
-                }
-            }
-        }
-        if ($available == 0) {
-            $start1 = date('Y/m/d', strtotime($data['start_date']));
-            $end1 = date('Y/m/d', strtotime($data['end_date']));
-            $user_start_date = ($data['start_date']);
-            $user_start_date = ($data['start_date']);
-
-            $command=VendorPackages::updateAll(['package_id' => $data['id'],'package_start_date' => $start1,'package_end_date' => $end1],'id= '.$packedit);
-
-
-            $url = Url::to('/package/packagedelete?id='.$packedit);
-            $startshow = date('d/m/Y', strtotime($data['start_date']));
-            $endshow = date('d/m/Y', strtotime($data['end_date']));
-            $output = '<tr id="tr-'.$packedit.'" class="update_row"><td>'.$package_name.'</td><td>'.$startshow.'</td><td>'.$endshow.'<input type="hidden" id="packedit" value='.$packedit.'></td><td>'.$package_pricing.'</td><td>'.Html::a('<span class="glyphicon glyphicon-trash"></span>', '#', ['onclick' => 'packagedelete('.$packedit.');', 'title' => 'Delete']).''.Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', ['onclick' => 'packageedit('.$packedit.');', 'title' => 'Edit']).'</td></tr>';
-
-            return $output;
-        }
-    }
-
-    public function actionLoadpackagedate()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-        }
-        if ($data['id']):
-
-        $datetime = VendorPackages::find()->select(['package_start_date','package_end_date'])
-          ->where(['vendor_id' => $data['id']])
-          ->asArray()
-          ->all();
-        $k = array();
-        foreach ($datetime as $d) {
-            $date = $d['package_start_date'];
-            $date = date('Y-m-d', strtotime('-2 day', strtotime($date)));
-            $end_date = $d['package_end_date'];
-            $end_date = date('Y-m-d', strtotime('-2 day', strtotime($end_date)));
-            while (strtotime($date) <= strtotime($end_date)) {
-                $date = date('Y-m-d', strtotime('+1 day', strtotime($date)));
-                $k[] = $date;
-            }
-        }
-        $cnt = count($k);
-        $as = '<input type="text" id="vendor-package_start_date" class="form-control" name="Vendor[package_start_date]">';
-        $ae = '<input type="text" id="vendor-package_end_date" class="form-control" name="Vendor[package_end_date]">';
-        echo json_encode(array('date' => $k, 'count' => $cnt, 'input1' => $as, 'input2' => $ae));
-        exit;
-        endif;
-    }
-
-    public function actionPackageupdate()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-        }
-        if ($data['packid']):
-
-        $packdate = VendorPackages::find()->select(['package_id','package_start_date','package_end_date'])
-          ->where(['vendor_id' => $data['vid']])
-          ->andwhere(['id' =>$data['packid']])
-          ->asArray()->all();
-
-        $package_id = $packdate[0]['package_id'];
-        $edit_start_date = date('Y-m-d', strtotime('+0 day', strtotime($packdate[0]['package_start_date'])));
-        $edit_end_date = date('Y-m-d', strtotime('+0 day', strtotime($packdate[0]['package_end_date'])));
-        if (strtotime($edit_start_date) > strtotime($edit_end_date)) {
-            return '2';
-            die;
-        }
-        $datetime = VendorPackages::find()->select(['package_id','package_start_date','package_end_date'])
-          ->where(['vendor_id' => $data['vid']])
-          ->andwhere(['id' =>$data['packid']])
-          ->asArray()->all();
-        $k = array();
-        foreach ($datetime as $d) {
-            $date = $d['package_start_date'];
-            $date = date('Y-m-d', strtotime('-2 day', strtotime($date)));
-            $end_date = $d['package_end_date'];
-            $end_date = date('Y-m-d', strtotime('-2 day', strtotime($end_date)));
-            while (strtotime($date) <= strtotime($end_date)) {
-                $date = date('Y-m-d', strtotime('+1 day', strtotime($date)));
-                $k[] = $date;
-            }
-        }
-
-        $cnt = count($k);
-        $as = '<input type="text" id="edit_start" class="form-control edit_start" name="Vendor[package_start_date]" value="" maxlength="125" placeholder="Start date">';
-        $ae = '<input type="text" id="edit_end" class="form-control edit_end" name="Vendor[package_end_date]" value="" maxlength="125" placeholder="End date">';
-        echo json_encode(array('date' => $k, 'packid' => $package_id, 'start' => $edit_start_date, 'end' => $edit_end_date, 'input1' => $as, 'input2' => $ae));
-        exit;
-        endif;
-    }
-
     public function actionVendornamecheck()
     {
         if (Yii::$app->request->isAjax) {
@@ -841,52 +568,5 @@ class VendorController extends Controller
           ->andwhere(['trash' => 'Default'])
           ->all();
         return $result = count($vendorname);
-    }
-
-    //check vendor package conflict on create vendor 
-    public function actionValidateVendor()
-    {
-        if (!Yii::$app->request->isAjax)
-            die();
-
-        $json = ['errors' => []];
-
-        $data = Yii::$app->request->post();
-
-        //check if date is valid
-        if (strtotime($data['start_date']) >= strtotime($data['end_date'])) {
-            $json['errors'][] = Yii::t('admin', 'Given Date is not a valid one. Kindly entered valid date!');
-        }
-
-        //check if other package available in selected date
-        $packages = Yii::$app->request->post('vendor_packages');
-
-        if(!$packages) {
-            $packages = [];
-        }
-
-        foreach ($packages as $key => $value) {
-            
-            if(strtotime($data['start_date']) >= strtotime($value['package_start_date'])  &&
-                    strtotime($data['start_date']) <= strtotime($value['package_end_date'])){
-
-                $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
-                    'start_date' => $value['package_start_date'],
-                    'end_date' => $value['package_end_date']
-                ]);
-
-            } elseif(strtotime($data['end_date']) >= strtotime($value['package_start_date'])  &&
-                    strtotime($data['end_date']) <= strtotime($value['package_end_date'])){
-
-                $json['errors'][] = Yii::t('admin', 'Package available for {start_date} to {end_date}!', [
-                    'start_date' => $value['package_start_date'],
-                    'end_date' => $value['package_end_date']
-                ]);
-            }
-        }
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        return $json;
     }
 }

@@ -12,16 +12,11 @@ use admin\models\Vendor;
  */
 class VendorSearch extends Vendor
 {
-    /**
-     * @inheritdoc
-     */
-    public $package_name;
-
     public function rules()
     {
         return [
-            [['vendor_id', 'package_id', 'image_id', 'created_by', 'modified_by'], 'integer'],
-            [['vendor_name', 'vendor_return_policy', 'vendor_public_email', 'vendor_working_hours', 'vendor_contact_name', 'vendor_contact_email', 'vendor_contact_number', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_website', 'package_end_date', 'package_start_date', 'vendor_password', 'vendor_status','package_name',], 'safe'],
+            [['vendor_id', 'image_id', 'created_by', 'modified_by'], 'integer'],
+            [['vendor_name', 'vendor_return_policy', 'vendor_public_email', 'vendor_working_hours', 'vendor_contact_name', 'vendor_contact_email', 'vendor_contact_number', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_website', 'vendor_password', 'vendor_status',], 'safe'],
         ];
     }
 
@@ -62,10 +57,7 @@ class VendorSearch extends Vendor
 
         $query->andFilterWhere([
             'vendor_id' => $this->vendor_id,
-            'package_id' => $this->package_id,
             'image_id' => $this->image_id,
-            'package_end_date' => $this->package_end_date,
-            'package_start_date' => $this->package_start_date,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,
             'created_datetime' => $this->created_datetime,

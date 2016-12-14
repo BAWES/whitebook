@@ -35,7 +35,7 @@ function cmp($a, $b)
 	    <li><a href="#3" id="tab_3"> Item price </a></li>
 	    <li><a href="#4" id="tab_4"> Approval </a></li>
 	    <li><a href="#5" id="tab_5">Images</a></li>
-	    <li><a href="#6" id="tab_6">Themes & Groups</a></li>
+	    <li><a href="#6" id="tab_6">Themes & Groups & Packages</a></li>
 
 	    <?php if($model->item_for_sale =='Yes') {?>
 	    	<li><a href="#7" id="tab_7"> Questions </a></li>
@@ -321,14 +321,65 @@ function cmp($a, $b)
 
 		<div class="tab-pane clearfix" id="6">
 			<div class="form-group clearfix padding-top-bottom">
-				<?php echo $form->field($model, 'themes')->checkboxlist($themelist);?>
-				<?php //$form->field($model, 'themes',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($themelist , ['multiple'=>'multiple',]) ?>
+				<?php echo $form->field($model, 'themes')->checkboxlist($themelist); ?>
+				<div class="clearfix"></div>
+				<div class="theme_form_wrapper row hidden">
+					<hr />
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label class="control-label">Theme Name</label>
+							<div class="controls">
+								<input type="text" class="form-control" name="theme_name" maxlength="128">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label">Theme Name - Arabic</label>
+							<div class="controls">
+								<input type="text" class="form-control" name="theme_name_ar" maxlength="128">
+							</div>
+						</div>
+						<button class="btn btn-primary btn-add-theme" type="button">Add</button>
+						<button class="btn btn-default btn-add-theme-calcle" type="button">Cancel</button>
+					</div>
+				</div>
+				<button class="btn btn-xs btn-default btn_theme_form_wrapper" type="button">
+					<i class="fa fa-plus"></i> Add new theme
+				</button>
 			</div>
 			<div class="border-top"></div>
 			<div class="padding-top-bottom form-group clearfix">
-				<?=$form->field($model, 'groups')->checkboxlist($grouplist);?>
-				<?php //$form->field($model, 'groups',['template' => "{label}<div class='controls'>{input}</div>{hint}{error}"])->dropDownList($grouplist , ['multiple'=>'multiple']) ?>
+				<?= $form->field($model, 'groups')->checkboxlist($grouplist); ?>		
+				<div class="clearfix"></div>
+				<div class="group_form_wrapper row hidden">
+					<hr />
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label class="control-label">Group Name</label>
+							<div class="controls">
+								<input type="text" class="form-control" name="group_name" maxlength="128">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label">Group Name - Arabic</label>
+							<div class="controls">
+								<input type="text" class="form-control" name="group_name_ar" maxlength="128">
+							</div>
+						</div>
+						<button class="btn btn-primary btn-add-group" type="button">Add</button>
+						<button class="btn btn-default btn-add-group-calcle" type="button">Cancel</button>
+					</div>
+				</div>
+
+				<button class="btn btn-xs btn-default btn_group_form_wrapper" type="button">
+					<i class="fa fa-plus"></i> Add new group
+				</button>
 			</div>
+
+			<div class="border-top"></div>
+			<div class="padding-top-bottom form-group clearfix">
+				<?php echo $form->field($model, 'packages')->checkboxlist($packagelist);?>
+			</div>
+
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 			
 			<?= Html::submitButton('Complete', [
@@ -387,7 +438,6 @@ function cmp($a, $b)
 <?php ActiveForm::end(); ?>
 <div class="modal fade" id="myModal" role="dialog"><div class="modal-dialog"><div class="modal-content"></div></div></div>
 
-
 <?php 
 
 if(isset($model->item_id)) { 
@@ -435,6 +485,9 @@ echo Html::hiddenInput('item_themes_groups', Url::to(['vendor-item/item-themes-g
 
 echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate']), ['id' => 'item_validate_url']);
 
+echo Html::hiddenInput('add_theme_url', Url::to(['vendor-item/add-theme']), ['id' => 'add_theme_url']);
+echo Html::hiddenInput('add_group_url', Url::to(['vendor-item/add-group']), ['id' => 'add_group_url']);
+
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
 $this->registerCssFile("@web/themes/default/plugins/jquery-superbox/css/style.css");
@@ -466,9 +519,14 @@ $this->registerCss("
 	.superbox-s > li > b { margin:10px 0px 5px 0px;}
 	.question_title{font-weight: bold;  margin-top: 15px;  line-height: 31px;  font-size: 15px;}
 	.upimage {margin: 5px 0px 10px 0px;}
-	#vendoritem-groups label,#vendoritem-themes label {float: left;min-width: 15%;margin-right: 43px;}
+	#vendoritem-groups label,#vendoritem-themes label, #vendoritem-packages label {
+		float: left;min-width: 15%;margin-right: 43px;
+	}
 	.border-top{border-top: 1px solid;}
 	.padding-top-bottom{padding: 36px 0;}
+	.btn-xs, .btn-group-xs>.btn {
+	    padding: 1px 5px !important;
+	    margin-top: 5px;
+	}
 ");
-
 

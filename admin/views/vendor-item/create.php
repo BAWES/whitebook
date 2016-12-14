@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model_question' => $model_question,
         'themelist' => $themelist,
         'grouplist' => $grouplist,
+        'packagelist' => $packagelist,
         'categories' => $categories
     ]) ?>
 </div>
