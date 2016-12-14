@@ -2129,3 +2129,25 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     display: block;
     clear: both;
 }
+.vendor_social_info {
+    padding-top: 10px;
+    border-top: 1px solid #e6e6e6;
+    margin-top: 10px;
+}
+.vendor_social_info ul {
+    list-style: none;
+    padding: 0;
+    margin: 2px 0 0 0;
+}
+.vendor_social_info ul li {
+    display: inline-block;
+}
+.vendor_social_info a,
+.vendor_social_info i {
+    color: #808080;    
+}
+
+.vendor_social_info i {
+    font-size: 18px;
+    margin-right: 5px;
+}
