@@ -36,7 +36,7 @@ $action = Yii::$app->controller->action->id;
                         <input type="text" name="search" id="search-terms2" class="search-box" placeholder="Search here" autocomplete="off" />
                         <button class="btn btn-primary"><i class="fa fa-arrow-right"></i></button>
                         <button type="button" class="btn btn-default btn-close"><i class="fa fa-close"></i></button>
-                    </div>                    
+                    </div>
                 </form><!-- END #search_form -->
                 <div id="mobile_search_list" class="mobile-search-term"></div>
                 <div id="mobile_search_fail"></div>
@@ -85,7 +85,7 @@ $action = Yii::$app->controller->action->id;
                             <li class="dropdown mega-dropdown">
                                 <?= Html::a(Yii::t('frontend', 'Browse'), ['browse/list','slug'=>'all'], ['title' => Yii::t('frontend', 'Product')]); ?>
 
-                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav plan_menu 
+                                <div class="dropdown-menu mega-dropdown-menu category_listing_nav plan_menu
                                     <?php if(Yii::$app->language == 'ar') echo 'rtl'; ?>">
 
                                     <ul class="nav-list list-inline">
@@ -145,12 +145,16 @@ $action = Yii::$app->controller->action->id;
                                             </a></li>
                                     </ul>
                                 </div>
-                            </li>                            
-                            <li class="<?php if ($action == "packages") { echo "active";} ?>">
-                                <a href="<?= Url::toRoute('packages/index', true); ?>" title="<?php echo Yii::t('frontend', 'Packages'); ?>">
-                                    <?php echo Yii::t('frontend', 'Packages'); ?>
-                                </a>
                             </li>
+
+                            <?php if(Yii::$app->params['feature.packages.enabled'] == true){ ?>
+                                <li class="<?php if ($action == "packages") { echo "active";} ?>">
+                                    <a href="<?= Url::toRoute('packages/index', true); ?>" title="<?php echo Yii::t('frontend', 'Packages'); ?>">
+                                        <?php echo Yii::t('frontend', 'Packages'); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+
                             <li  class="<?php if ($action == "experience") { echo "active";} ?>">
                                 <a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>">
                                     <?php echo Yii::t('frontend', 'Experience'); ?>
@@ -220,7 +224,7 @@ $action = Yii::$app->controller->action->id;
     <a href="<?php echo Url::to(['cart/index']); ?>">
         <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
     </a>
-</li>    
+</li>
 <li><a href="<?php echo Url::toRoute(['/events/index']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
 <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
 <?php } ?>
@@ -304,7 +308,7 @@ $action = Yii::$app->controller->action->id;
                                             foreach ($event_type as $e) { ?>
                                             <option value="<?php echo $e['type_name']; ?>">
                                                 <?php echo $e['type_name']; ?>
-                                                    
+
                                             </option>
                                             <?php } ?>
                                             </select>
@@ -355,7 +359,7 @@ $action = Yii::$app->controller->action->id;
                     <span> <?php echo Yii::t('frontend', 'Home'); ?></span>
                 </a>
             </li>
-            <li class="ma5-li-1"> 
+            <li class="ma5-li-1">
                 <a class="ma5-path-to-active ma5-btn-enter" href="#node1"><?= Yii::t('frontend', 'Browse'); ?></a>
                 <ul class="ma5-ul-1 navbar-nav">
                     <li class="ma5-li-1-0">
@@ -431,19 +435,19 @@ $action = Yii::$app->controller->action->id;
             <li class="<?php if ($action == "contact-us") { echo "active"; } ?>">
                 <a href="<?= Url::toRoute('/contact-us', true); ?>" title="<?php echo Yii::t('frontend', 'About and Contact'); ?>"><?php echo Yii::t('frontend', 'About and Contact'); ?></a>
             </li>
-                    
+
 
         <?php if (Yii::$app->user->isGuest) { ?>
             <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a>
             </li>
 
         <?php } else { ?>
-        
+
         <li>
             <a href="<?php echo Url::to(['cart/index']); ?>">
                 <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
             </a>
-        </li>  
+        </li>
 
          <li class="<?php if ($action == "account-settings") { echo "active"; } ?>">
             <a href="<?= Url::toRoute('/users/account_settings', true); ?>">
