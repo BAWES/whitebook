@@ -25,6 +25,18 @@ use yii\helpers\Url;
                                     echo $value->package_name_ar;
                                 } ?>
                             </span>
+                            <?php if($value->package_avg_price) { ?>
+                            <span class="price">
+                                <?= $value->package_avg_price ?>
+                            </span>
+                            <?php } ?>
+                            <?php if($value->package_number_of_guests) { ?>
+                            <span class="guests">
+                                <?= Yii::t('frontend', '{guests} guests', [
+                                        'guests' => $value->package_number_of_guests
+                                    ]) ?>
+                            </span>
+                            <?php } ?>
                         </span>         
                     </a>
                 </li>

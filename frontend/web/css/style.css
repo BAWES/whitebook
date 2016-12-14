@@ -2084,15 +2084,9 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     -o-flex-direction: row;
     flex-direction: row;
 }
-
 .cards a {    
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    text-align: center;
     width: 100%;
-    padding-top: 43%;
+    position: relative;
 }
 .cards li:nth-child(1), 
 .cards li:nth-child(2),
@@ -2110,6 +2104,9 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     margin: auto;
     color: #fff;
     font-size: 20px;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
 }
 .cards li:nth-child(1) .card-info .title, 
 .cards li:nth-child(2) .card-info .title, 
@@ -2126,4 +2123,9 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 }
 .package_items .item-img {
     max-width: 100%;
+}
+.cards li .price,
+.cards li .guests {
+    display: block;
+    clear: both;
 }
