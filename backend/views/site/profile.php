@@ -28,6 +28,9 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 <div class="col-md-12 col-sm-12 col-xs-12">
     <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data']]); ?>
 		<div class="loadingmessage" style="display: none;"><p><?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?></p></div>
+		
+		<div class="message_wrapper"></div>
+
 		<div class="tabbable">
 			<ul class="nav nav-tabs">
 				<li class="active">
@@ -289,17 +292,86 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 					</div>
 				</div>
 
-				<div class="tab-pane" id="4">
-
-					<?= $form->field($model, 'vendor_facebook')->textInput(['maxlength' => 100]); ?>
-
-					<?= $form->field($model, 'vendor_twitter')->textInput(['maxlength' => 100]); ?>
-
-					<?= $form->field($model, 'vendor_instagram')->textInput(['maxlength' => 100]); ?>
-
-					<?= $form->field($model, 'vendor_googleplus')->textInput(['maxlength' => 100]); ?>
-					
-					<?= $form->field($model, 'vendor_skype')->textInput(['maxlength' => 100]); ?>
+				<div class="tab-pane" id="4">						
+					<table class="table table-bordered table-social">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Text</th>
+								<th>Link</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Instagram</td>
+								<td>
+									<?= $form->field($model, 'vendor_instagram_text', [
+											'template' => '{input}{error}'
+										])->textInput([
+											'placeholder' => 'Instagram link text'
+										]); ?>
+								</td>
+								<td>
+									<?= $form->field($model, 'vendor_instagram', [
+											'template' => '{input}{error}'
+										])->textInput([
+											'placeholder' => 'Instagram link url'
+										]); ?>
+								</td>
+							</tr>
+							<tr>
+								<td>Twitter</td>
+								<td>
+									<?= $form->field($model, 'vendor_twitter_text', [
+											'template' => '{input}{error}'
+										])->textInput([
+											'placeholder' => 'Twitter link text'
+										]); ?>
+								</td>
+								<td>
+									<?= $form->field($model, 'vendor_twitter', [
+											'template' => '{input}{error}'
+										])->textInput([
+											'placeholder' => 'Twitter link url'
+										]); ?>
+								</td>
+							</tr>
+							<tr>
+								<td>Facebook</td>
+								<td>
+									<?= $form->field($model, 'vendor_facebook_text', [
+											'template' => '{input}{error}'
+										])->textInput([
+											'placeholder' => 'Facebook link text'
+										]); ?>
+								</td>
+								<td>
+									<?= $form->field($model, 'vendor_facebook', [
+											'template' => '{input}{error}'
+										])->textInput([
+											'placeholder' => 'Facebook link url'
+										]); ?>
+								</td>
+							</tr>
+							<tr>
+								<td>Youtube</td>
+								<td>
+									<?= $form->field($model, 'vendor_youtube_text', [
+											'template' => '{input}{error}'
+										])->textInput([
+											'placeholder' => 'Youtube link text'
+										]); ?>
+								</td>
+								<td>
+									<?= $form->field($model, 'vendor_youtube', [
+											'template' => '{input}{error}'
+										])->textInput([
+											'placeholder' => 'Youtube link url'
+										]); ?>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 
 					<div class="form-group clearfix">
 						<div class="col-md-4" ><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
@@ -356,9 +428,22 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 
 <?php
 
+$this->registerCss('
+	.table-social .form-group {
+		margin-bottom: 0px;
+	}
+	.table-social td {
+		vertical-align: middle !important;
+	}
+	.table-social .help-block{
+		margin-bottom:0px;
+		margin-top:2px;
+	}	
+');
+
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js');
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/themes/default/js/profile.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/profile.js?v=1.3', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJs('
 

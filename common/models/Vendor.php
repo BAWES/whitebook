@@ -102,12 +102,12 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             [['created_by', 'modified_by'], 'integer'],
             [['vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name',], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe'],
-            [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus'],'url', 'defaultScheme' => 'http'],
+            [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram', 'vendor_youtube'],'url', 'defaultScheme' => 'http'],
             /* Validation Rules */
             [['confirm_password'], 'compare', 'compareAttribute'=>'vendor_password','message'=>'Password and confirm password not same' ],
             [['vendor_contact_email'],'email'],
             ['vendor_contact_email', 'unique'],
-            [['approve_status','vendor_name', 'vendor_name_ar', 'vendor_public_email','vendor_contact_name','vendor_contact_email','vendor_contact_address', 'vendor_contact_address_ar' ,'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number','vendor_logo_path', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no', 'vendor_website', 'vendor_facebook', 'vendor_twitter', 'vendor_instagram', 'vendor_googleplus', 'vendor_skype'], 'string', 'max' => 128],
+            [['approve_status','vendor_name', 'vendor_name_ar', 'vendor_public_email','vendor_contact_name','vendor_contact_email','vendor_contact_address', 'vendor_contact_address_ar' ,'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number','vendor_logo_path', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no', 'vendor_website', 'vendor_facebook','vendor_facebook_text', 'vendor_twitter','vendor_twitter_text', 'vendor_instagram','vendor_instagram_text', 'vendor_youtube','vendor_youtube_text'], 'string', 'max' => 128],
             ['vendor_logo_path', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'on' => 'register'],
         ];
     }
@@ -115,9 +115,9 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['register'] = ['day_off', 'vendor_name', 'vendor_name_ar', 'vendor_password','confirm_password','vendor_contact_name','vendor_contact_email','vendor_contact_number','vendor_contact_address', 'vendor_contact_address_ar','vendor_return_policy','vendor_return_policy_ar', 'vendor_status','vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus','vendor_skype','vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no','vendor_fax','vendor_logo_path','short_description','short_description_ar'];//Scenario Values Only Accepted
-        $scenarios['vendorUpdate'] = ['day_off', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_contact_email','vendor_contact_number','vendor_contact_address', 'vendor_contact_address_ar','vendor_return_policy','vendor_return_policy_ar', 'vendor_status','vendor_website','vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus','vendor_skype','vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no','vendor_fax','short_description','short_description_ar', 'vendor_logo_path'];//Scenario Values Only Accepted
-        $scenarios['vendorprofile'] = ['day_off', 'vendor_logo_path', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_contact_email','vendor_contact_number','vendor_contact_address', 'vendor_contact_address_ar','vendor_working_hours', 'vendor_working_min', 'vendor_working_am_pm_from', 'vendor_working_hours_to','vendor_working_min_to', 'vendor_working_am_pm_to', 'vendor_return_policy','vendor_return_policy_ar', 'vendor_fax', 'short_description', 'short_description_ar', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no', 'vendor_public_email', 'vendor_emergency_contact_email', 'vendor_website', 'vendor_facebook','vendor_twitter','vendor_instagram','vendor_googleplus','vendor_skype'];//Scenario Values Only Accepted
+        $scenarios['register'] = ['day_off', 'vendor_name', 'vendor_name_ar', 'vendor_password','confirm_password','vendor_contact_name','vendor_contact_email','vendor_contact_number','vendor_contact_address', 'vendor_contact_address_ar','vendor_return_policy','vendor_return_policy_ar', 'vendor_status','vendor_website','vendor_facebook','vendor_facebook_text','vendor_twitter','vendor_twitter_text','vendor_instagram','vendor_instagram_text','vendor_youtube','vendor_youtube_text','vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no','vendor_fax','vendor_logo_path','short_description','short_description_ar'];//Scenario Values Only Accepted
+        $scenarios['vendorUpdate'] = ['day_off', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_contact_email','vendor_contact_number','vendor_contact_address', 'vendor_contact_address_ar','vendor_return_policy','vendor_return_policy_ar', 'vendor_status','vendor_website','vendor_facebook','vendor_facebook_text','vendor_twitter','vendor_twitter_text','vendor_instagram','vendor_instagram_text','vendor_youtube','vendor_youtube_text','vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no','vendor_fax','short_description','short_description_ar', 'vendor_logo_path'];//Scenario Values Only Accepted
+        $scenarios['vendorprofile'] = ['day_off', 'vendor_logo_path', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_contact_email','vendor_contact_number','vendor_contact_address', 'vendor_contact_address_ar','vendor_working_hours', 'vendor_working_min', 'vendor_working_am_pm_from', 'vendor_working_hours_to','vendor_working_min_to', 'vendor_working_am_pm_to', 'vendor_return_policy','vendor_return_policy_ar', 'vendor_fax', 'short_description', 'short_description_ar', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no', 'vendor_public_email', 'vendor_emergency_contact_email', 'vendor_website', 'vendor_facebook','vendor_facebook_text','vendor_twitter','vendor_twitter_text','vendor_instagram','vendor_instagram_text','vendor_youtube','vendor_youtube_text'];//Scenario Values Only Accepted
         $scenarios['change'] = ['vendor_password'];//Scenario Values Only Accepted
         return $scenarios;
     }
@@ -149,11 +149,9 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             'vendor_emergency_contact_email' => 'Vendor Emergency Contact Email',
             'vendor_emergency_contact_number' => 'Vendor Emergency Contact Number',
             'vendor_website' => 'Vendor Website URL',
-            'vendor_facebook' => 'Vendor Facebook URL',
+            'vendor_facebook','vendor_facebook_text' => 'Vendor Facebook URL',
             'vendor_twitter' => 'Vendor Twitter URL',
             'vendor_instagram' => 'Vendor Instagram URL',
-            'vendor_googleplus' => 'Vendor Google Plus URL',
-            'vendor_skype' => 'Vendor Skype id',
             'vendor_password' => 'Password',
             'vendor_status' => 'Active Vendor',
             'created_by' => 'Created By',
