@@ -108,33 +108,21 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 
 					</div>
 
-					<div class="row margin-left-2">
-						<div class="form-group" style="width: 150px; float: left;"><?php
-                            $model->vendor_working_hours = $from_hour;
-                            echo $form->field($model, 'vendor_working_hours',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
-						<div class="form-group" style="width: 150px; float: left;  margin-left: 25px;"><?php
-                            $model->vendor_working_min = $from_min;
-                            echo $form->field($model, 'vendor_working_min',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
-						<div class="form-group" style="width: 150px; float: left;  margin-left: 25px;">
-							<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
-							<div class="controls">
-								<?= Html::dropDownList( 'vendor_working_am_pm_from',$from,['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
-							</div>
+					<div class="working_hours_wrapper row">
+						<label class="col-md-12">Working hours</label>
+						<div class="col-md-2">
+							<?= $form->field($model, 'vendor_working_hours', [
+									'template' => '{input}'
+								])->textInput([
+									'placeholder' => 'From'
+								]); ?>
 						</div>
-					</div>
-					
-					<div class="row margin-left-2">
-						<div class="form-group" style="width: 150px; float: left;"><?php
-                            $model->vendor_working_hours_to = $to_hour;
-                            echo $form->field($model, 'vendor_working_hours_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12'])->label(); ?></div>
-						<div class="form-group" style="width: 150px; float: left;  margin-left: 25px;"><?php
-                            $model->vendor_working_min_to = $to_min;
-                            echo $form->field($model, 'vendor_working_min_to',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->dropDownList(['00'=>'00','01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12','13'=>'13','14'=>'14','15'=>'15','16'=>'16','17'=>'17','18'=>'18','19'=>'19','20'=>'20','21'=>'21','22'=>'22','23'=>'23','24'=>'24','25'=>'25','26'=>'26','27'=>'27','28'=>'28','29'=>'29','30'=>'30','31'=>'31','32'=>'32','33'=>'33','34'=>'34','35'=>'35','36'=>'36','37'=>'37','38'=>'38','39'=>'39','40'=>'40','41'=>'41','42'=>'42','43'=>'43','44'=>'44','45'=>'45','46'=>'46','47'=>'47','48'=>'48','49'=>'49','50'=>'50','51'=>'51','52'=>'52','53'=>'53','54'=>'54','55'=>'55','56'=>'56','57'=>'57','58'=>'58','59'=>'59'])->label(); ?></div>
-						<div class="form-group" style="width: 150px; float: left;  margin-left: 25px;">
-							<label for="vendor-vendor_working_min" class="control-label">&nbsp;</label>
-							<div class="controls">
-								<?= Html::dropDownList( 'vendor_working_am_pm_to',$to,['am'=>'AM','pm'=>'PM'],['class'=>'form-control']); ?>
-							</div>
+						<div class="col-md-2">
+							<?= $form->field($model, 'vendor_working_hours_to', [
+									'template' => '{input}'
+								])->textInput([
+									'placeholder' => 'To'
+								]); ?>
 						</div>
 					</div>
 
@@ -441,9 +429,15 @@ $this->registerCss('
 	}	
 ');
 
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css');
+
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-datetimepicker/js/moment.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile("@web/themes/default/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js');
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/themes/default/js/profile.js?v=1.3', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/profile.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJs('
 
