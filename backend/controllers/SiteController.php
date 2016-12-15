@@ -262,13 +262,8 @@ class SiteController extends Controller
                 $model->day_off = '';
             }
             
-            $vendor_working_am_pm_from = Yii::$app->request->post('vendor_working_am_pm_from');
-            $vendor_working_am_pm_to = Yii::$app->request->post('vendor_working_am_pm_to');
-
             $vendor = Yii::$app->request->post('Vendor');
             $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
-            $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
-            $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
 
             //remove old alert emails 
             VendorOrderAlertEmails::deleteAll(['vendor_id' => $vendor_id]);

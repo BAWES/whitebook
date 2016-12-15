@@ -257,3 +257,12 @@ $('.btn-add-phone-no').click(function(){
 $(document).delegate('.table-phone-list .btn-danger','click', function(){
 	$(this).parent().parent().remove();
 });
+
+$(function(){
+	$('.working_hours_wrapper input').datetimepicker({
+		//inline: true,
+        //sideBySide: true,
+        format: 'LT'
+    });
+});
+	
