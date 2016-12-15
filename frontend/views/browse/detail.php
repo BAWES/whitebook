@@ -296,143 +296,154 @@ if($model->images) {
                                 <div class="panel-group" id="accordion">
                                         <?php if (!empty($model['item_description'])) { ?>
                                         <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="headingOne">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" id="description_click" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                         <?= Yii::t('frontend', 'Product Description') ?>
-                                                        <span class="produ_type">
-                                                        ( 
-                                                            <?= Yii::t('frontend', 'Product type') ?>: 
-                                                            <?= Yii::t('frontend', $model->type->type_name); ?>
-                                                        )
-                                                        </span>
-                                                        <span class="glyphicon glyphicon-menu-down text-align"></span></a>
-                                                </h4>
+                                            <div class="panel-heading">
+                                              <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                                    <?= Yii::t('frontend', 'Product Description') ?>
+                                                    <span class="produ_type">
+                                                    ( 
+                                                        <?= Yii::t('frontend', 'Product type') ?>: 
+                                                        <?= Yii::t('frontend', $model->type->type_name); ?>
+                                                    )
+                                                    </span>
+                                                </a>
+                                              </h4>
                                             </div>
-                                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                                <div class="panel-body">
-                                                    <p><?= $item_description; ?></p>
-                                                    <h1 class="space_height"></h1>
-                                                </div>
+                                            <div id="collapse1" class="panel-collapse collapse in">
+                                              <div class="panel-body">
+                                                <p><?= $item_description; ?></p>
+                                              </div>
                                             </div>
-                                        </div>
+                                        </div><!-- END .panel -->
                                         <?php } ?>
 
                                         <?php if (!empty($model['item_additional_info'])) { ?>
                                         <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="headingTwo">
-                                                <h4 class="panel-title">
-                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" id="additional_click" aria-controls="collapseTwo">
-                                                        <?= Yii::t('frontend', 'Additional Information') ?>
-                                                        <span class="glyphicon glyphicon-menu-right text-align"></span></a>
-                                                </h4>
+                                            <div class="panel-heading">
+                                              <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed">
+                                                    <?= Yii::t('frontend', 'Additional Information') ?>
+                                                </a>
+                                              </h4>
                                             </div>
-                                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                                <div class="panel-body">
-                                                    <p><?= $item_additional_info; ?></p>
-                                                    <h1 class="space_height"></h1>
-                                                </div>
+                                            <div id="collapse2" class="panel-collapse collapse">
+                                              <div class="panel-body">
+                                                <p><?= nl2br($item_additional_info); ?></p>
+                                              </div>
                                             </div>
-                                        </div>
+                                        </div><!-- END .panel -->
+                                        <?php } ?>
 
-                                        <?php }
-                                        if ($model->vendor->vendor_contact_number || $vendor_contact_address) {
-                                        ?>
                                         <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="headingThree">
-                                                <h4 class="panel-title">
-                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="contact_click" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                        <?= Yii::t('frontend', 'Contact Info') ?>
-                                                        <span class="glyphicon glyphicon-menu-right text-align"></span>
-                                                    </a>
-                                                </h4>
+                                            <div class="panel-heading">
+                                              <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed">
+                                                    <?= Yii::t('frontend', 'Contact info'); ?>
+                                                </a>
+                                              </h4>
                                             </div>
-                                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                                <div class="panel-body">
-                                                    <div class="contact_information margin-4">
-                                                        <address>
-                                                            <div class="clearfix">
-                                                                <?php if (trim($model->vendor->vendor_public_email)) { ?>
-                                                                    <div class="col-md-6 col-sm-6 col-xs-12 cont_ifo_left paddingleft0">
-                                                                        <h3>
-                                                                            <a href="mailto:<?=$model->vendor->vendor_public_email; ?>" title="<?=$model->vendor->vendor_public_email; ?>"><?=$model->vendor->vendor_public_email; ?>&nbsp;</a>
-                                                                        </h3>
-                                                                        <span class="border-bottom"></span>
-                                                                    </div>
-                                                                <?php } ?>
-                                                                <?php if (trim($model->vendor->vendor_website) || trim($model->vendor->vendor_working_hours)) { ?>
-                                                                    <div class="col-md-6 col-sm-6 col-xs-12 paddingright0 paddingleft0 cont_ifo_right">
-                                                                        <?php if (trim($model->vendor->vendor_website)) { ?>
-                                                                            <span class="links_left">
-                                                                            <?php
-                                                                            if (strpos($model->vendor->vendor_website,'http://') === false){
-                                                                                $vendor_website = 'http://'.$model->vendor->vendor_website;
-                                                                            } else {
-                                                                                $vendor_website = $model->vendor->vendor_website;
-                                                                            }
-                                                                            ?>
-                                                                                <a target="_blank" href="<?=$vendor_website; ?>" title="<?php echo $vendor_website; ?>">
-                                                                                    <?php echo $vendor_website; ?>&nbsp;
-                                                                                </a>
-                                                                        </span>
-                                                                            <span class="border-bottom"></span>
-                                                                        <?php } ?>
-
-                                                                    </div>
-                                                                <?php } ?>
-                                                            </div>
-
-                                                            <div class="cont_ifo_right paddingleft0">
-                                                                <?php if (trim($model->vendor->vendor_working_hours)) { ?>
-
-                                                                    <span class="timer_common"><?php
-                                                                        $from = explode(':',$model->vendor->vendor_working_hours);
-                                                                        echo (isset($from[0])) ? $from[0] : '';
-                                                                        echo (isset($from[1])) ? ':'.$from[1] : '';
-                                                                        echo (isset($from[2])) ? ''.$from[2] : ''
-                                                                        ?></span>- <span class="timer_common">
-                                                                    <?php
-                                                                    $to = explode(':',$model->vendor->vendor_working_hours_to);
-                                                                    echo (isset($to[0])) ? $to[0] : '';
-                                                                    echo (isset($to[1])) ? ':'.$to[1] : '';
-                                                                    echo (isset($to[2])) ? ''.$to[2] : ''
-                                                                    ?>
-                                                                    </span>
-                                                                <?php } ?>
-                                                            </div>
-
-                                                            <span class="border-bottom"></span>
-                                                            
-                                                            <div class="cont_ifo_left vendor_phone_list paddingleft0">
-                                                            <?php 
-
-                                                            $phone_icons = [
-                                                                    'Whatsapp' => 'fa fa-whatsapp',
-                                                                    'Mobile' => 'fa fa-mobile',
-                                                                    'Fax' => 'fa fa-fax',
-                                                                    'Office' => 'fa fa-building'
-                                                                ];
-
-                                                            foreach ($phones as $key => $value) { ?>
+                                            <div id="collapse3" class="panel-collapse collapse">
+                                                <div class="panel-body vendor_social_info">
+                                                    <ul>         
+                                                        <?php if($phones) { ?>
+                                                        <li class="vendor_phone_list">
+                                                            <?php foreach ($phones as $key => $value) { ?>
                                                                 <a class="color-808080" href="tel:<?= $value->phone_no; ?>"><i class="<?= $phone_icons[$value->type] ?>"></i><?= $value->phone_no; ?>
                                                                 </a>
                                                             <?php } ?>
-                                                            </div>
+                                                        </li> 
+                                                        <?php } ?>
 
-                                                            <?php if (trim($model->vendor->vendor_contact_address)) { ?>
-                                                                <div class="col-md-6 col-sm-6 col-xs-12 paddingleft0 address_ifo_left border-top">
-                                                                    <h5 class="margin-top-13">
-                                                                        <?=LangFormat::format($model->vendor->vendor_contact_address,$model->vendor->vendor_contact_address_ar); ?>
-                                                                    </h5>
-                                                                </div>
+                                                        <?php if (!empty($vendor_detail['vendor_contact_address'])) { ?>
+                                                        <li>
+                                                            <a target="_blank" href="http://maps.google.com/?q=<?= $vendor_detail['vendor_contact_address'] ?>">
+                                                                <i class="fa fa-map-marker"></i>
+                                                                <?= LangFormat::format($vendor_detail['vendor_contact_address'], $vendor_detail['vendor_contact_address_ar']); ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php } ?>
+
+                                                        <?php if (!empty($vendor_detail['vendor_working_hours'])) { ?>
+                                                        <li class="vendor_working_hours">    
+                                                            <a>
+                                                            <i class="fa fa-clock-o"></i>
+                                                            <?php
+                                                                $from = explode(':',$vendor_detail['vendor_working_hours']);
+                                                                echo (isset($from[0])) ? $from[0] : '';
+                                                                echo (isset($from[1])) ? ':'.$from[1] : '';
+                                                                echo (isset($from[2])) ? ''.$from[2] : ''
+                                                            ?>
+                                                            - 
+                                                            <?php
+                                                                $to = explode(':',$vendor_detail['vendor_working_hours_to']);
+                                                                echo (isset($to[0])) ? $to[0] : '';
+                                                                echo (isset($to[1])) ? ':'.$to[1] : '';
+                                                                echo (isset($to[2])) ? ''.$to[2] : ''
+                                                            ?>
+
+                                                            <?php if($txt_day_off) { ?>
+                                                            |
+                                                            <?= Yii::t('frontend', '{txt_day_off} off', [
+                                                                        'txt_day_off' => $txt_day_off
+                                                                    ]); ?>
                                                             <?php } ?>
-                                                        </address>
-                                                    </div>
-                                                    <h1 class="height-2"></h1>
-                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        <?php } ?>                                                
+
+                                                        <?php if (!empty($vendor_detail['vendor_public_email'])) { ?>
+                                                        <li>                                                    
+                                                            <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?= $vendor_detail['vendor_public_email']; ?>">
+                                                                <i class="fa fa-envelope-o"></i>
+                                                                <?= $vendor_detail['vendor_public_email']; ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php } ?>
+
+                                                        <?php if (!empty($vendor_detail['vendor_website'])) { ?>
+                                                        <li>
+                                                            <a target="_blank" href="<?= $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>">
+                                                                <i class="fa fa-globe"></i>
+                                                                <?php echo $vendor_detail['vendor_website']; ?>
+                                                            </a>
+                                                        </li>     
+                                                        <?php } ?>
+
+                                                        <?php if($vendor_detail['vendor_instagram']) { ?>
+                                                        <li>
+                                                            <a target="_blank" href="<?= $vendor_detail['vendor_instagram'] ?>" alt="<?= Yii::t('frontend', 'Instatgram') ?>"><i class="fa fa-instagram"></i>
+                                                                <?= $vendor_detail['vendor_instagram_text'] ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php } ?>  
+
+                                                        <?php if($vendor_detail['vendor_twitter']) { ?>
+                                                        <li>
+                                                            <a target="_blank" href="<?= $vendor_detail['vendor_twitter'] ?>" alt="<?= Yii::t('frontend', 'Twitter') ?>"><i class="fa fa-twitter"></i>
+                                                                <?= $vendor_detail['vendor_twitter_text'] ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php } ?>
+
+                                                        <?php if($vendor_detail['vendor_facebook']) { ?>
+                                                        <li>
+                                                            <a target="_blank" href="<?= $vendor_detail['vendor_facebook'] ?>" alt="<?= Yii::t('frontend', 'Facebook') ?>"><i class="fa fa-facebook"></i>
+                                                                <?= $vendor_detail['vendor_facebook_text'] ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php } ?>
+
+                                                        <?php if($vendor_detail['vendor_youtube']) { ?>
+                                                        <li>
+                                                            <a target="_blank" href="<?= $vendor_detail['vendor_youtube'] ?>" alt="<?= Yii::t('frontend', 'Youtube') ?>"><i class="fa fa-youtube"></i>
+                                                                <?= $vendor_detail['vendor_youtube_text'] ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php } ?>
+                                                    </ul>
+                                                </div><!-- END .panel-body -->
                                             </div>
-                                        </div>
-                                        <?php } ?>
+                                        </div><!-- END .panel -->
 
                                         <?php if (VendorItemPricing::checkprice(
                                                     $model->item_id, 
@@ -440,40 +451,37 @@ if($model->images) {
                                                     $model->item_price_per_unit
                                                   )
                                               ) { ?>
-
                                         <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="headingFour">
-                                                <h4 class="panel-title">
-                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="price_click" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                                        <?= Yii::t('frontend', 'Price Cart'); ?>
-                                                        <span class="glyphicon glyphicon-menu-right text-align"></span></a>
-                                                </h4>
+                                            <div class="panel-heading">
+                                              <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="collapsed">
+                                                    <?php echo Yii::t('frontend', 'Price Cart'); ?>
+                                                </a>
+                                              </h4>
                                             </div>
-                                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                                                <div class="panel-body">
-                                                    <p><?= VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
-                                                    <h1 class="space_height"></h1>
-                                                </div>
+                                            <div id="collapse4" class="panel-collapse collapse">
+                                              <div class="panel-body">
+                                                <p><?= VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
+                                              </div>
                                             </div>
-                                        </div>
+                                        </div><!-- END .panel -->
                                         <?php } ?>
                                         
                                         <?php if (!empty($model['item_customization_description'])) { ?>
                                         <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="headingFive">
-                                                <h4 class="panel-title">
-                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" id="custom_click" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                                        <?= Yii::t('frontend', 'Customization') ?>
-                                                        <span class="glyphicon glyphicon-menu-right text-align"></span>
-                                                    </a>
-                                                </h4>
+                                            <div class="panel-heading">
+                                              <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" class="collapsed">
+                                                    <?php echo Yii::t('frontend', 'Customization'); ?>
+                                                </a>
+                                              </h4>
                                             </div>
-                                            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                                                <div class="panel-body">
-                                                    <p><?= $model['item_customization_description']; ?></p>
-                                                    <h1 class="space_height"></h1>
-                                                </div>
+                                            <div id="collapse5" class="panel-collapse collapse">
+                                              <div class="panel-body">
+                                                <p><?= nl2br($model['item_customization_description']); ?></p>
+                                              </div>
                                             </div>
+                                        </div><!-- END .panel -->
                                         <?php } ?>
                                     </div>
                                 </div>
