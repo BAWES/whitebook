@@ -42,230 +42,182 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
                         <?= Html::img($baselink, ['class'=>'','width'=>'450','alt'=>'Logo']); ?>
                     </a>
                 </div>
-                <div class="col-md-7 paddingcommon vendor_detail">
+                <div class="col-md-7 vendor_detail">
                     <div class="right_descr_product">
                         <div class="accad_menus">
                             <div class="bakery_title">
                                 <h3><?php echo $vendor_detail['vendor_name']; ?></h3>
                             </div>
-                            <div class="panel-group" id="sub_accordion">
-                                <div class="panel panel-default" >
-                                    <div class="panel-heading" role="tab" id="headingThree">
-                                        <h4 class="panel-title">
-                                            <a class="collapsed" id="description_click" data-toggle="collapse" data-parent="#sub_accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                <?php echo Yii::t('frontend', 'Description'); ?>
-                                                <span class="glyphicon glyphicon-menu-right text-align"></span>
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                        <div class="panel-body">
-                                            <p><?=LangFormat::format(strip_tags($vendor_detail['short_description']),strip_tags($vendor_detail['short_description_ar'])); ?></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default" >
-                                    <div class="panel-heading" role="tab" id="headingTwo">
-                                        <h4 class="panel-title">
-                                            <a class="collapsed" data-toggle="collapse" data-parent="#sub_accordion" id="policy_click" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                <?php echo Yii::t('frontend', 'Return policy'); ?>
-                                                <span class="glyphicon glyphicon-menu-right text-align"></span>
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                        <div class="panel-body">
-                                            <p><?=LangFormat::format(strip_tags($vendor_detail['vendor_return_policy']),strip_tags($vendor_detail['vendor_return_policy_ar'])); ?></p>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="panel-group" id="accordion">
+
                                 <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingFive">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#sub_accordion"  id="contact_click" href="#collapseFive" aria-expanded="true" aria-controls="collapseOne">
-                                                <?= Yii::t('frontend', 'Contact info'); ?>
-                                                <span class="glyphicon glyphicon-menu-down text-align"></span>
-                                            </a>
-                                        </h4>
+                                    <div class="panel-heading">
+                                      <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                            <?php echo Yii::t('frontend', 'Description'); ?>
+                                        </a>
+                                      </h4>
                                     </div>
-                                    <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                        <div class="panel-body">
-                                            <div class="contact_information">
-                                                <address>
-                                                    <div class="clearfix">
-                                                        <?php if (trim($vendor_detail['vendor_public_email'])) { ?>
-                                                            <div class="col-md-6 col-xs-6 cont_ifo_left paddingleft0">
-                                                                <?php if (trim($vendor_detail['vendor_public_email'])) { ?>
-                                                                    <h3>
-                                                                        <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?=$vendor_detail['vendor_public_email']; ?>"><?=$vendor_detail['vendor_public_email']; ?>&nbsp;</a>
-                                                                    </h3>
-                                                                    <span class="border-bottom"></span>
-                                                                <?php } ?>
-                                                            </div>
-                                                        <?php } ?>
-                                                        <?php if (trim($vendor_detail['vendor_website']) || trim($vendor_detail['vendor_working_hours'])) { ?>
-                                                            <div class="col-md-6 col-xs-6 paddingright0 paddingleft0 cont_ifo_right">
-                                                                <?php if (trim($vendor_detail['vendor_website'])) { ?>
-                                                                    <span class="links_left">
-                                                                        <?php
-                                                                        if (strpos($vendor_detail['vendor_website'],'http://') === false){
-                                                                            $vendor_detail['vendor_website'] = 'http://'.$vendor_detail['vendor_website'];
-                                                                        }
-                                                                        ?>
+                                    <div id="collapse1" class="panel-collapse collapse in">
+                                      <div class="panel-body">
+                                        <p><?= nl2br(LangFormat::format(strip_tags($vendor_detail['short_description']), strip_tags($vendor_detail['short_description_ar']))); ?></p>
+                                      </div>
+                                    </div>
+                                </div><!-- END .panel -->
 
-                                                                        <a target="_blank" href="<?=$vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>">
-                                                                            <?php echo $vendor_detail['vendor_website']; ?>&nbsp;
-                                                                        </a>
-                                                                    </span>
-                                                                    <span class="border-bottom"></span>
-                                                                <?php } ?>                    
-                                                            </div>
-                                                        <?php } ?>
-                                                    </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                      <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed">
+                                            <?php echo Yii::t('frontend', 'Return policy'); ?>
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapse2" class="panel-collapse collapse">
+                                      <div class="panel-body">
+                                        <p><?= nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_return_policy']), strip_tags($vendor_detail['vendor_return_policy_ar']))); ?></p>
+                                      </div>
+                                    </div>
+                                </div><!-- END .panel -->
 
-                                                    <div class="cont_ifo_right paddingleft0">
-                                                        <?php if (trim($vendor_detail['vendor_working_hours'])) { ?>
-
-                                                            <span class="timer_common"><?php
-                                                                $from = explode(':',$vendor_detail['vendor_working_hours']);
-                                                                echo (isset($from[0])) ? $from[0] : '';
-                                                                echo (isset($from[1])) ? ':'.$from[1] : '';
-                                                                echo (isset($from[2])) ? ''.$from[2] : ''
-                                                                ?></span>- <span class="timer_common">
-                                                            <?php
-                                                            $to = explode(':',$vendor_detail['vendor_working_hours_to']);
-                                                            echo (isset($to[0])) ? $to[0] : '';
-                                                            echo (isset($to[1])) ? ':'.$to[1] : '';
-                                                            echo (isset($to[2])) ? ''.$to[2] : ''
-                                                            ?>
-                                                            </span>
-                                                        <?php } ?>
-                                                    </div>
-
-                                                    <span class="border-bottom"></span>
-                                                    
-                                                    <div class="cont_ifo_left vendor_phone_list paddingleft0">
-                                                    <?php 
-
-                                                    $phone_icons = [
-                                                            'Whatsapp' => 'fa fa-whatsapp',
-                                                            'Mobile' => 'fa fa-mobile',
-                                                            'Fax' => 'fa fa-fax',
-                                                            'Office' => 'fa fa-building'
-                                                        ];
-
-                                                    foreach ($phones as $key => $value) { ?>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                      <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed">
+                                            <?= Yii::t('frontend', 'Contact info'); ?>
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapse3" class="panel-collapse collapse">
+                                        <div class="panel-body vendor_social_info">
+                                            <ul>         
+                                                <?php if($phones) { ?>
+                                                <li class="vendor_phone_list">
+                                                    <?php foreach ($phones as $key => $value) { ?>
                                                         <a class="color-808080" href="tel:<?= $value->phone_no; ?>"><i class="<?= $phone_icons[$value->type] ?>"></i><?= $value->phone_no; ?>
                                                         </a>
                                                     <?php } ?>
-                                                    </div>
+                                                </li> 
+                                                <?php } ?>
 
+                                                <?php if (!empty($vendor_detail['vendor_contact_address'])) { ?>
+                                                <li>
+                                                    <a target="_blank" href="http://maps.google.com/?q=<?= $vendor_detail['vendor_contact_address'] ?>">
+                                                        <i class="fa fa-map-marker"></i>
+                                                        <?= LangFormat::format($vendor_detail['vendor_contact_address'], $vendor_detail['vendor_contact_address_ar']); ?>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>
 
-                                                    <?php if($vendor_detail['vendor_youtube'] || $vendor_detail['vendor_facebook'] || $vendor_detail['vendor_twitter'] || $vendor_detail['vendor_instagram']) { ?>
-                                                    <div class="vendor_social_info paddingleft0">
-                                                        <ul>                                                       
-                                                            <?php if($vendor_detail['vendor_instagram']) { ?>
-                                                            <li>
-                                                                <a target="_blank" href="<?= $vendor_detail['vendor_instagram'] ?>" alt="<?= Yii::t('frontend', 'Instatgram') ?>"><i class="fa fa-instagram"></i>
-                                                                    <?= $vendor_detail['vendor_instagram_text'] ?>
-                                                                </a>
-                                                            </li>
-                                                            <?php } ?>  
-                                                            <?php if($vendor_detail['vendor_twitter']) { ?>
-                                                            <li>
-                                                                <a target="_blank" href="<?= $vendor_detail['vendor_twitter'] ?>" alt="<?= Yii::t('frontend', 'Twitter') ?>"><i class="fa fa-twitter"></i>
-                                                                    <?= $vendor_detail['vendor_twitter_text'] ?>
-                                                                </a>
-                                                            </li>
-                                                            <?php } ?>
-                                                            <?php if($vendor_detail['vendor_facebook']) { ?>
-                                                            <li>
-                                                                <a target="_blank" href="<?= $vendor_detail['vendor_facebook'] ?>" alt="<?= Yii::t('frontend', 'Facebook') ?>"><i class="fa fa-facebook"></i>
-                                                                    <?= $vendor_detail['vendor_facebook_text'] ?>
-                                                                </a>
-                                                            </li>
-                                                            <?php } ?>
-                                                            <?php if($vendor_detail['vendor_youtube']) { ?>
-                                                            <li>
-                                                                <a target="_blank" href="<?= $vendor_detail['vendor_youtube'] ?>" alt="<?= Yii::t('frontend', 'Youtube') ?>"><i class="fa fa-youtube"></i>
-                                                                    <?= $vendor_detail['vendor_youtube_text'] ?>
-                                                                </a>
-                                                            </li>
-                                                            <?php } ?>
-                                                        </ul>
-                                                    </div>
-                                                    <?php } ?>
-                                                    
+                                                <?php if (!empty($vendor_detail['vendor_working_hours'])) { ?>
+                                                <li class="vendor_working_hours">    
+                                                    <a>
+                                                    <i class="fa fa-clock-o"></i>
                                                     <?php
+                                                        $from = explode(':',$vendor_detail['vendor_working_hours']);
+                                                        echo (isset($from[0])) ? $from[0] : '';
+                                                        echo (isset($from[1])) ? ':'.$from[1] : '';
+                                                        echo (isset($from[2])) ? ''.$from[2] : ''
+                                                    ?>
+                                                    - 
+                                                    <?php
+                                                        $to = explode(':',$vendor_detail['vendor_working_hours_to']);
+                                                        echo (isset($to[0])) ? $to[0] : '';
+                                                        echo (isset($to[1])) ? ':'.$to[1] : '';
+                                                        echo (isset($to[2])) ? ''.$to[2] : ''
+                                                    ?>
 
-                                                    $search = array(0, 1, 2, 3, 4, 5, 6, ',');
-
-                                                    $replace = array(
-                                                        Yii::t('frontend', 'Sunday'),
-                                                        Yii::t('frontend', 'Monday'),
-                                                        Yii::t('frontend', 'Tuesday'),
-                                                        Yii::t('frontend', 'Wednesday'),
-                                                        Yii::t('frontend', 'Thursday'),
-                                                        Yii::t('frontend', 'Friday'),
-                                                        Yii::t('frontend', 'Saturday'),
-                                                        ', '
-                                                    );
-
-                                                    $day_off = explode(',', $vendor_detail['day_off']);
-
-                                                    $txt_day_off = str_replace($search, $replace, $vendor_detail['day_off']);
-
-                                                    if($txt_day_off) { ?>
-                                                        <div class="cont_ifo_right col-md-6 col-xs-6 paddingleft0 left border-top">
-                                                        <span class="working_days">
-                                                            <?= Yii::t('frontend', '{txt_day_off} off', [
+                                                    <?php if($txt_day_off) { ?>
+                                                    |
+                                                    <?= Yii::t('frontend', '{txt_day_off} off', [
                                                                 'txt_day_off' => $txt_day_off
                                                             ]); ?>
-                                                        </span>
-                                                        </div>
                                                     <?php } ?>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>                                                
 
-                                                    <?php if (trim($vendor_detail['vendor_contact_address']) || $vendor_detail['vendor_contact_address'] != 'n/a') { ?>
-                                                        <div class="col-md-6 col-xs-6 paddingleft0 address_ifo_left border-top">
-                                                            <h5 class="margin-top-13">
-                                                                <?=LangFormat::format($vendor_detail['vendor_contact_address'],$vendor_detail['vendor_contact_address_ar']); ?>
-                                                            </h5>
-                                                        </div>
-                                                    <?php } ?>
-
-                                                </address>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <?php if (count($vendor_detail) > 0) {
-
-                                        if ($vendor_detail['vendor_logo_path'] != '') {
-                                            $baselink = Yii::getAlias('@vendor_logo/').$vendor_detail['vendor_logo_path'];
-                                        } else {
-                                            $baselink = Yii::$app->homeUrl . Yii::getAlias('@vendor_images/no_image.png');
-                                        }
-                                        $title = Yii::$app->name .' '. ucfirst($vendor_detail->vendor_name);
-                                        $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
-                                        $summary = Yii::$app->name .' '. substr(strip_tags($vendor_detail->short_description),0,10);
-                                        $image = isset($baselink) ? $baselink : '';
-                                        $vendorUrl = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_detail->slug], true);
-                                        $mailbody = "Check out ".ucfirst($vendor_detail->vendor_name)." on ".Yii::$app->name." ".$vendorUrl;
-                                        ?>
-                                        <div class="social_share">
-                                            <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
-                                            <ul>
-                                                <li><a title="Facebook" href='https://www.facebook.com/sharer/sharer.php?u=<?=urlencode($vendorUrl)?>' onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><span class="flaticon-facebook55"></span></a></li>
-                                                <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$title?>&url=<?=$vendorUrl; ?>" ><span class="flaticon-twitter13"></span></a></li>
-                                                <?php if ($vendor_detail['vendor_instagram']) { ?>
-                                                    <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-instagram7"></span></a></li>
+                                                <?php if (!empty($vendor_detail['vendor_public_email'])) { ?>
+                                                <li>                                                    
+                                                    <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?= $vendor_detail['vendor_public_email']; ?>">
+                                                        <i class="fa fa-envelope-o"></i>
+                                                        <?= $vendor_detail['vendor_public_email']; ?>
+                                                    </a>
+                                                </li>
                                                 <?php } ?>
-                                                <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
-                                                <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
+
+                                                <?php if (!empty($vendor_detail['vendor_website'])) { ?>
+                                                <li>
+                                                    <a target="_blank" href="<?= $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>">
+                                                        <i class="fa fa-globe"></i>
+                                                        <?php echo $vendor_detail['vendor_website']; ?>
+                                                    </a>
+                                                </li>     
+                                                <?php } ?>
+
+                                                <?php if($vendor_detail['vendor_instagram']) { ?>
+                                                <li>
+                                                    <a target="_blank" href="<?= $vendor_detail['vendor_instagram'] ?>" alt="<?= Yii::t('frontend', 'Instatgram') ?>"><i class="fa fa-instagram"></i>
+                                                        <?= $vendor_detail['vendor_instagram_text'] ?>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>  
+
+                                                <?php if($vendor_detail['vendor_twitter']) { ?>
+                                                <li>
+                                                    <a target="_blank" href="<?= $vendor_detail['vendor_twitter'] ?>" alt="<?= Yii::t('frontend', 'Twitter') ?>"><i class="fa fa-twitter"></i>
+                                                        <?= $vendor_detail['vendor_twitter_text'] ?>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>
+
+                                                <?php if($vendor_detail['vendor_facebook']) { ?>
+                                                <li>
+                                                    <a target="_blank" href="<?= $vendor_detail['vendor_facebook'] ?>" alt="<?= Yii::t('frontend', 'Facebook') ?>"><i class="fa fa-facebook"></i>
+                                                        <?= $vendor_detail['vendor_facebook_text'] ?>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>
+
+                                                <?php if($vendor_detail['vendor_youtube']) { ?>
+                                                <li>
+                                                    <a target="_blank" href="<?= $vendor_detail['vendor_youtube'] ?>" alt="<?= Yii::t('frontend', 'Youtube') ?>"><i class="fa fa-youtube"></i>
+                                                        <?= $vendor_detail['vendor_youtube_text'] ?>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>
                                             </ul>
-                                        </div>
-                                    <?php } ?>
-                                </div>
+                                        </div><!-- END .panel-body -->
+                                    </div>
+                                </div><!-- END .panel -->
+
+                                <?php 
+
+                                if ($vendor_detail['vendor_logo_path'] != '') {
+                                    $baselink = Yii::getAlias('@vendor_logo/').$vendor_detail['vendor_logo_path'];
+                                } else {
+                                    $baselink = Url::to("@web/images/item-default.png");
+                                }
+
+                                $title = Yii::$app->name .' '. ucfirst($vendor_detail->vendor_name);
+                                $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
+                                $summary = Yii::$app->name .' '. substr(strip_tags($vendor_detail->short_description),0,10);
+                                $image = isset($baselink) ? $baselink : '';
+                                $vendorUrl = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_detail->slug], true);
+                                $mailbody = "Check out ".ucfirst($vendor_detail->vendor_name)." on ".Yii::$app->name." ".$vendorUrl;
+                                ?>
+                                <div class="social_share">
+                                    <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
+                                    <ul>
+                                        <li><a title="Facebook" href='https://www.facebook.com/sharer/sharer.php?u=<?=urlencode($vendorUrl)?>' onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><span class="flaticon-facebook55"></span></a></li>
+                                        <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$title?>&url=<?=$vendorUrl; ?>" ><span class="flaticon-twitter13"></span></a></li>
+                                        <?php if ($vendor_detail['vendor_instagram']) { ?>
+                                            <li><a target="_blank" href="<?php echo $vendor_detail['vendor_instagram']; ?>" title="Instatgram"><span class="flaticon-instagram7"></span></a></li>
+                                        <?php } ?>
+                                        <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
+                                        <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
+                                    </ul>
+                                </div><!-- END .social_share -->
                             </div>
                         </div>
                     </div>

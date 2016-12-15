@@ -242,6 +242,35 @@ class DirectoryController extends BaseController
             return $this->renderPartial('@frontend/views/common/items',['items' => $provider,'customer_events_list' => $customer_events_list]);
         }
 
+        if (strpos($vendor_details['vendor_website'], 'http://') === false) {
+            $vendor_details['vendor_website'] = 'http://'.$vendor_details['vendor_website'];
+        }
+
+        $phone_icons = [
+            'Whatsapp' => 'fa fa-whatsapp',
+            'Mobile' => 'fa fa-mobile',
+            'Fax' => 'fa fa-fax',
+            'Office' => 'fa fa-building'
+        ];
+
+        //day off 
+        $search = array(0, 1, 2, 3, 4, 5, 6, ',');
+
+        $replace = array(
+            Yii::t('frontend', 'Sunday'),
+            Yii::t('frontend', 'Monday'),
+            Yii::t('frontend', 'Tuesday'),
+            Yii::t('frontend', 'Wednesday'),
+            Yii::t('frontend', 'Thursday'),
+            Yii::t('frontend', 'Friday'),
+            Yii::t('frontend', 'Saturday'),
+            ', '
+        );
+
+        $day_off = explode(',', $vendor_details['day_off']);
+
+        $txt_day_off = str_replace($search, $replace, $vendor_details['day_off']);
+
         return $this->render('profile', [
             'vendor_detail' => $vendor_details,
             'vendor_items' => $vendor_items,
@@ -251,7 +280,9 @@ class DirectoryController extends BaseController
             'slug' => $slug,
             'customer_events' => $customer_events,
             'customer_events_list' => $customer_events_list,
-            'phones' => VendorPhoneNo::findAll(['vendor_id' => $vendor_details->vendor_id])
+            'phones' => VendorPhoneNo::findAll(['vendor_id' => $vendor_details->vendor_id]),
+            'phone_icons' => $phone_icons,
+            'txt_day_off' => $txt_day_off
         ]);
     }
 }

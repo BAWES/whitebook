@@ -35,7 +35,6 @@ class BrowseController extends BaseController
         parent::init();
     }
 
-
     public function actionCategories(){
         \Yii::$app->view->title = 'The White Book | Categories';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
@@ -312,6 +311,37 @@ class BrowseController extends BaseController
             'content' => trim(strip_tags($model->item_description))
         ]);
 
+        $vendor_detail = $model->vendor;
+
+        $phone_icons = [
+            'Whatsapp' => 'fa fa-whatsapp',
+            'Mobile' => 'fa fa-mobile',
+            'Fax' => 'fa fa-fax',
+            'Office' => 'fa fa-building'
+        ];
+
+        //day off 
+        $search = array(0, 1, 2, 3, 4, 5, 6, ',');
+
+        $replace = array(
+            Yii::t('frontend', 'Sunday'),
+            Yii::t('frontend', 'Monday'),
+            Yii::t('frontend', 'Tuesday'),
+            Yii::t('frontend', 'Wednesday'),
+            Yii::t('frontend', 'Thursday'),
+            Yii::t('frontend', 'Friday'),
+            Yii::t('frontend', 'Saturday'),
+            ', '
+        );
+
+        $day_off = explode(',', $vendor_detail->day_off);
+
+        $txt_day_off = str_replace($search, $replace, $vendor_detail->day_off);
+
+        if (strpos($vendor_detail->vendor_website, 'http://') === false) {
+            $vendor_detail->vendor_website = 'http://'.$vendor_detail->vendor_website;
+        }
+
         if (Yii::$app->user->isGuest) {
 
             return $this->render('detail', [
@@ -319,7 +349,10 @@ class BrowseController extends BaseController
                 'model' => $model,
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'vendor_area' => [],
+                'vendor_detail' => $vendor_detail,
                 'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
+                'phone_icons' => $phone_icons,
+                'txt_day_off' => $txt_day_off,
                 'my_addresses' => []
             ]);
 
@@ -364,7 +397,10 @@ class BrowseController extends BaseController
 
             return $this->render('detail', [
                 'model' => $model,
+                'vendor_detail' => $vendor_detail,
                 'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
+                'phone_icons' => $phone_icons,
+                'txt_day_off' => $txt_day_off,
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'AvailableStock' => $AvailableStock,
                 'customer_events_list' => $customer_events_list,
