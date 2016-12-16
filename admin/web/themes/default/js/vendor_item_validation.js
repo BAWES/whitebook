@@ -682,6 +682,7 @@ function show_errors(json)
 {
 	$('.has-error').removeClass('has-error');
 	$('.form-group .help-block').html('');
+	$('.alert-warning').remove();
 
 	//step 1 
 	
@@ -699,10 +700,28 @@ function show_errors(json)
 		$(".field-vendoritem-item_name").find('.help-block').html(json['errors']['item_name']);
 	}
 				
-	if(json['errors']['category']) 
+	if(json['errors']['main_category']) 
 	{
-		$(".field-category-list").addClass('has-error');
-		$(".field-category-list").find('.help-block').html('Add Category.');
+		$html  = '<div class="alert alert-warning">';
+		$html += json['errors']['main_category'] + '<button class="close" data-dismiss="alert"></button>';
+		$html += '</div>';
+		$('.loadingmessage').after($html);
+  	}
+
+  	if(json['errors']['sub_category']) 
+	{
+		$html  = '<div class="alert alert-warning">';
+		$html += json['errors']['sub_category'] + '<button class="close" data-dismiss="alert"></button>';
+		$html += '</div>';
+		$('.loadingmessage').after($html);
+  	}
+
+  	if(json['errors']['child_category']) 
+	{
+		$html  = '<div class="alert alert-warning">';
+		$html += json['errors']['child_category'] + '<button class="close" data-dismiss="alert"></button>';
+		$html += '</div>';
+		$('.loadingmessage').after($html);
   	}
 
   	//step 2 
@@ -1067,3 +1086,103 @@ $(document).delegate('.btn-add-group', 'click', function() {
 		});
 	}
 });
+
+$(document).delegate('.txt-main-cat-search', 'keyup', function() {
+
+	$q = $(this).val().toLowerCase();
+
+	$('.main-category-list .checkbox').each(function() {
+
+		$a = $(this).attr('data-name').toLowerCase();
+
+		if($a.indexOf($q) == -1) {
+			$(this).hide();
+		}else{
+			$(this).show();
+		}
+	});
+});
+
+$(document).delegate('.txt-sub-cat-search', 'keyup', function() {
+
+	$q = $(this).val().toLowerCase();
+
+	$('.sub-category-list .checkbox').each(function() {
+
+		$a = $(this).attr('data-name').toLowerCase();
+
+		if($a.indexOf($q) == -1) {
+			$(this).hide();
+		}else{
+			$(this).show();
+		}
+	});
+});
+
+
+$(document).delegate('.txt-child-cat-search', 'keyup', function() {
+
+	$q = $(this).val().toLowerCase();
+
+	$('.child-category-list .checkbox').each(function() {
+
+		$a = $(this).attr('data-name').toLowerCase();
+
+		if($a.indexOf($q) == -1) {
+			$(this).hide();
+		}else{
+			$(this).show();
+		}
+	});
+});
+
+$(function() {
+
+	$(document).delegate('#sub_category_form', 'submit', function(e) {
+
+		$.post($('#category_add_url').val(), $('#sub_category_form').serialize(), function(json) {
+			
+			if(json.category_id) {
+
+				$html  = '<div class="checkbox" data-name="'+json.category_name+'">';
+				$html += '	<label>';
+				$html += '		<input type="checkbox" name="sub_category[]" value="'+json.category_id+'" checked />';
+				$html += 		json.category_name;
+				$html += '	</label>';
+				$html += '</div>';
+
+				$('.sub-category-list .chk_wrapper').append($html);
+
+				$('#sub_category_modal').modal('hide');
+			}
+		});
+
+		e.preventDefault();
+		e.stopPropogation();
+	});
+
+
+	$(document).delegate('#child_category_form', 'submit', function(e) {
+
+		$.post($('#category_add_url').val(), $('#child_category_form').serialize(), function(json) {
+			
+			if(json.category_id) {
+
+				$html  = '<div class="checkbox" data-name="'+json.category_name+'">';
+				$html += '	<label>';
+				$html += '		<input type="checkbox" name="child_category[]" value="'+json.category_id+'" checked />';
+				$html += 		json.category_name;
+				$html += '	</label>';
+				$html += '</div>';
+
+				$('.child-category-list .chk_wrapper').append($html);
+
+				$('#child_category_modal').modal('hide');
+			}
+		});
+
+		e.preventDefault();
+		e.stopPropagation();
+	});
+});
+

@@ -23,7 +23,10 @@ $this->params['breadcrumbs'][] = 'Update';
             'packagelist' => $packagelist,
             'itemPricing' => $itemPricing,
             'guideImages' => $guideImages,
-            'categories' => $categories,
+            'main_categories' => $main_categories,
+            'sub_categories' => $sub_categories,
+            'child_categories' => $child_categories,
+            'category_model' => $category_model,
             'vendor_item_to_category' => $vendor_item_to_category
     ]); ?>
 
