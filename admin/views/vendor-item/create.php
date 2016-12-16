@@ -18,6 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'themelist' => $themelist,
         'grouplist' => $grouplist,
         'packagelist' => $packagelist,
-        'categories' => $categories
+        'main_categories' => $main_categories,
+        'sub_categories' => $sub_categories,
+        'child_categories' => $child_categories,
+        'category_model' => $category_model,
+        'vendor_item_to_category' => []
     ]) ?>
 </div>

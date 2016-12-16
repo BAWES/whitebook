@@ -33,11 +33,25 @@ class VendorItem extends \common\models\VendorItem
     {
         $errors = [];
 
-        $category = Yii::$app->request->post('category');
+        $category = Yii::$app->request->post('main_category');
 
         if(!$category) 
         {
-            $errors['category'] = 'Please select category.';
+            $errors['main_category'] = 'Please select main category.';
+        }
+
+        $category = Yii::$app->request->post('sub_category');
+
+        if(!$category) 
+        {
+            $errors['sub_category'] = 'Please select sub category.';
+        }
+
+        $category = Yii::$app->request->post('child_category');
+
+        if(!$category) 
+        {
+            $errors['child_category'] = 'Please select child category.';
         }
 
         if(empty($data['vendor_id'])) {
