@@ -682,6 +682,7 @@ function show_errors(json)
 {
 	$('.has-error').removeClass('has-error');
 	$('.form-group .help-block').html('');
+	$('.alert-warning').remove();
 
 	//step 1 
 	
@@ -701,8 +702,10 @@ function show_errors(json)
 				
 	if(json['errors']['category']) 
 	{
-		$(".field-category-list").addClass('has-error');
-		$(".field-category-list").find('.help-block').html('Add Category.');
+		$html  = '<div class="alert alert-warning">';
+		$html += json['errors']['category'] + '<button class="close" data-dismiss="alert"></button>';
+		$html += '</div>';
+		$('.loadingmessage').after($html);
   	}
 
   	//step 2 
@@ -1067,3 +1070,194 @@ $(document).delegate('.btn-add-group', 'click', function() {
 		});
 	}
 });
+
+$(document).delegate('.txt-main-cat-search', 'keyup', function() {
+
+	$q = $(this).val().toLowerCase();
+
+	$('.main-category-list .checkbox').each(function() {
+
+		$a = $(this).attr('data-name').toLowerCase();
+
+		if($a.indexOf($q) == -1) {
+			$(this).hide();
+		}else{
+			$(this).show();
+		}
+	});
+});
+
+$(document).delegate('.txt-sub-cat-search', 'keyup', function() {
+
+	$q = $(this).val().toLowerCase();
+
+	$('.sub-category-list .checkbox').each(function() {
+
+		$a = $(this).attr('data-name').toLowerCase();
+
+		if($a.indexOf($q) == -1) {
+			$(this).hide();
+		}else{
+			$(this).show();
+		}
+	});
+});
+
+
+$(document).delegate('.txt-child-cat-search', 'keyup', function() {
+
+	$q = $(this).val().toLowerCase();
+
+	$('.child-category-list .checkbox').each(function() {
+
+		$a = $(this).attr('data-name').toLowerCase();
+
+		if($a.indexOf($q) == -1) {
+			$(this).hide();
+		}else{
+			$(this).show();
+		}
+	});
+});
+
+$(function() {
+
+	$(document).delegate('#sub_category_form', 'submit', function(e) {
+
+		$.post($('#category_add_url').val(), $('#sub_category_form').serialize(), function(json) {
+			
+			if(json.category_id) {
+
+				$html  = '<div class="radio" data-name="'+json.category_name+'">';
+				$html += '	<input type="radio" name="sub_category" value="'+json.category_id+'" id="sub_cat_'+json.category_id+'" />';
+				$html += '	<label for="sub_cat_'+json.category_id+'">';
+				$html += 		json.category_name;
+				$html += '	</label>';
+				$html += '</div>';
+
+				$('.sub-category-list .chk_wrapper').append($html);
+
+				$('.sub-category-list .chk_wrapper input:last-child').trigger('click');
+
+				$('#sub_category_modal').modal('hide');
+			}
+		});
+
+		e.preventDefault();
+		e.stopPropagation();
+	});
+
+
+	$(document).delegate('#child_category_form', 'submit', function(e) {
+
+		$.post($('#category_add_url').val(), $('#child_category_form').serialize(), function(json) {
+			
+			if(json.category_id) {
+
+				$html  = '<div class="radio" data-name="'+json.category_name+'">';
+				$html += '	<input type="radio" name="child_category" value="'+json.category_id+'" id="child_cat_'+json.category_id+'" />';
+				$html += '	<label for="child_cat_'+json.category_id+'">';
+				$html += 		json.category_name;
+				$html += '	</label>';
+				$html += '</div>';
+
+				$('.child-category-list .chk_wrapper').append($html);
+
+				$('.child-category-list .chk_wrapper input:last-child').trigger('click');
+
+				$('#child_category_modal').modal('hide');
+			}
+		});
+
+		e.preventDefault();
+		e.stopPropagation();
+	});
+
+	$(document).delegate('.main-category-list input', 'change', function() {
+
+		$.post($('#category_list_url').val(), { parent_id : $(this).val() }, function(json) {
+			
+			$html = '';
+
+			for(var i=0; i < json.categories.length; i++){
+				$html += '<div class="radio" data-name="'+json.categories[i].category_name+'">';
+				$html += '	<input type="radio" name="sub_category" value="'+json.categories[i].category_id+'" id="sub_cat_'+json.categories[i].category_id+'" />';
+				$html += '	<label for="sub_cat_'+json.categories[i].category_id+'">';
+				$html += 		json.categories[i].category_name;
+				$html += '	</label>'; 
+				$html += '</div>';
+			}
+		
+			$('.sub-category-list .chk_wrapper').html($html);
+		});
+	});
+
+	$(document).delegate('.sub-category-list input', 'change', function() {
+
+		$.post($('#category_list_url').val(), { parent_id : $(this).val() }, function(json) {
+			
+			$html = '';
+
+			for(var i=0; i < json.categories.length; i++){
+				$html += '<div class="radio" data-name="'+json.categories[i].category_name+'">';
+				$html += '	<input type="radio" name="child_category" value="'+json.categories[i].category_id+'" id="child_cat_'+json.categories[i].category_id+'" />';
+				$html += '	<label for="child_cat_'+json.categories[i].category_id+'">';
+				$html += 		json.categories[i].category_name;
+				$html += '	</label>'; 
+				$html += '</div>';
+			}
+		
+			$('.child-category-list .chk_wrapper').html($html);
+		});
+	});
+
+	$(document).delegate('.child-category-list input', 'change', function() {
+
+		$html  = '<tr>';
+		$html += '	<td>';
+		$html += 		$('.main-category-list input:checked').parents('.radio').attr('data-name');
+		$html += '		<input type="hidden" name="category[]" value="'+$('.main-category-list input:checked').val() + '" />';
+		$html += '	</td>';
+		$html += '	<td>';
+		$html +=  		$('.sub-category-list input:checked').parents('.radio').attr('data-name');
+		$html += '		<input type="hidden" name="category[]" value="'+$('.sub-category-list input:checked').val() + '" />';
+		$html += '	</td>';
+		$html += '	<td>';
+		$html +=  		$('.child-category-list input:checked').parents('.radio').attr('data-name');
+		$html += '		<input type="hidden" name="category[]" value="'+$('.child-category-list input:checked').val() + '" />';
+		$html += '	</td>';
+		$html += '	<td>';
+		$html += '		<button class="btn btn-danger btn-remove-cat"><i class="fa fa-trash-o"></i></button>';
+		$html += '	</td>';
+		$html += '</tr>';
+
+		$('.table-item-category-list tbody').append($html);
+	});
+
+	$(document).delegate('.btn-remove-cat', 'click', function() {
+		$(this).parents('tr').remove();
+	});
+
+	$(document).delegate('button[data-target="#sub_category_modal"]', 'click', function() {		
+		
+		$parent_id = $('.main-category-list input:checked').val();
+
+		if($parent_id) {
+			$('#hdn_sub_cat_parent').val($parent_id);
+		} else {
+			return false;
+		}		
+	});
+
+	$(document).delegate('button[data-target="#child_category_modal"]', 'click', function() {		
+		
+		$parent_id = $('.sub-category-list input:checked').val();
+
+		if($parent_id) {
+			$('#hdn_child_cat_parent').val($parent_id);
+		}else{
+			return false;
+		}
+	});
+});
+

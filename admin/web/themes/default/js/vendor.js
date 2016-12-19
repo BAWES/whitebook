@@ -132,7 +132,7 @@ $(document).delegate('.table-phone-list .btn-danger','click', function(){
 });
 
 $('.controls1').find('#remove').remove();
-$('.datepicker').datepicker();
+//$('.datepicker').datepicker();
 $('select#package').hide();
 
 $(function()
@@ -171,7 +171,7 @@ $(function(){
 
 $(document).ready(function () {
 
-	$('#package_start_date').datepicker({  
+	/*$('#package_start_date').datepicker({  
 		format: 'dd-mm-yyyy', 
 		startDate: 'today'
 	}).on('changeDate', function() {
@@ -184,7 +184,7 @@ $(document).ready(function () {
 	})
 	.on('changeDate', function() {
 		add_package();
-	});
+	});*/
 
 	//called when key is pressed in textbox
     $("#vendor-vendor_contact_number").keypress(function (e) {
@@ -561,5 +561,11 @@ $(function() {
 
 		$('input[name="image"]').val($('.image-editor').cropit('export'));
 	});
+
+	$('.working_hours_wrapper input').datetimepicker({
+		//inline: true,
+        //sideBySide: true,
+        format: 'LT'
+    });
 });
 

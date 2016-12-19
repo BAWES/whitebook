@@ -171,12 +171,7 @@ class VendorController extends Controller
                 $model->day_off = '';
             }
 
-            $vendor_working_am_pm_from = Yii::$app->request->post('vendor_working_am_pm_from');
-            $vendor_working_am_pm_to = Yii::$app->request->post('vendor_working_am_pm_to');
-
             $vendor = Yii::$app->request->post('Vendor');
-            $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
-            $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
 
             $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
             $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
@@ -326,12 +321,7 @@ class VendorController extends Controller
                 $model->day_off = '';
             }
 
-            $vendor_working_am_pm_from = $_POST['vendor_working_am_pm_from'];
-            $vendor_working_am_pm_to = $_POST['vendor_working_am_pm_to'];
-
             $vendor = Yii::$app->request->post('Vendor');
-            $model->vendor_working_hours = $vendor['vendor_working_hours'].':'.$vendor['vendor_working_min'].':'.$vendor_working_am_pm_from;
-            $model->vendor_working_hours_to = $vendor['vendor_working_hours_to'].':'.$vendor['vendor_working_min_to'].':'.$vendor_working_am_pm_to;
 
             $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
             $model->slug = str_replace(' ', '-', $model->slug);

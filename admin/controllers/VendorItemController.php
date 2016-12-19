@@ -311,14 +311,25 @@ class VendorItemController extends Controller
 
         } else {
 
-            $categories = CategoryPath::find()
+            //main
+            $main_categories = Category::find()
+                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+                ->where(['{{%category_path}}.level' => 0])
+                ->all();
+
+            $sub_categories = Category::find()
+                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+                ->where(['{{%category_path}}.level' => 1])
+                ->all();
+
+            /*$categories = CategoryPath::find()
                 ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
                 ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
                 ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
                 ->groupBy('{{%category_path}}.category_id')
                 ->orderBy('category_name')
                 ->asArray()
-                ->all();
+                ->all();*/
 
             return $this->render('create', [
                 'model' => $model,
@@ -329,7 +340,9 @@ class VendorItemController extends Controller
                 'themelist' => $themelist,
                 'grouplist' => $grouplist,
                 'packagelist' => $packagelist,
-                'categories' => $categories
+                'main_categories' => $main_categories,
+                'sub_categories' => $sub_categories,
+                'category_model' => new Category()
             ]);
         }
     }
@@ -592,16 +605,55 @@ class VendorItemController extends Controller
             }//if model->savel
         }//if model-load 
 
-        $categories = CategoryPath::find()
-            ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
-            ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
-            ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
-            ->groupBy('{{%category_path}}.category_id')
-            ->orderBy('category_name')
+        //main
+        $main_categories = Category::find()
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where(['{{%category_path}}.level' => 0])
+            ->all();
+
+        $sub_categories = Category::find()
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where(['{{%category_path}}.level' => 1])
+            ->all();
+
+        //item main category
+        $item_main_categories = VendorItemToCategory::find()
+            ->select('{{%category}}.category_name, {{%category}}.category_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category_path}}.level' => 0,
+                '{{%vendor_item_to_category}}.item_id' => $model->item_id
+            ])
+            ->groupBy('{{%vendor_item_to_category}}.category_id')
             ->asArray()
             ->all();
 
-        $vendor_item_to_category = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
+        //item sub
+        $item_sub_categories = VendorItemToCategory::find()
+            ->select('{{%category}}.category_name, {{%category}}.category_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category_path}}.level' => 1,
+                '{{%vendor_item_to_category}}.item_id' => $model->item_id
+            ])
+            ->groupBy('{{%vendor_item_to_category}}.category_id')
+            ->asArray()
+            ->all();
+
+        //child 
+        $item_child_categories = VendorItemToCategory::find()
+            ->select('{{%category}}.category_name, {{%category}}.category_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category_path}}.level' => 1,
+                '{{%vendor_item_to_category}}.item_id' => $model->item_id
+            ])
+            ->groupBy('{{%vendor_item_to_category}}.category_id')
+            ->asArray()
+            ->all();
 
         return $this->render('update', [
             'model' => $model,
@@ -614,8 +666,12 @@ class VendorItemController extends Controller
             'grouplist' => $grouplist,
             'itemPricing' => VendorItemPricing::findAll(['item_id' => $item_id]),
             'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
-            'vendor_item_to_category' => $vendor_item_to_category,
-            'categories' => $categories
+            'main_categories' => $main_categories,
+            'sub_categories' => $sub_categories,
+            'item_main_categories' => $item_main_categories,
+            'item_sub_categories' => $item_sub_categories,
+            'item_child_categories' => $item_child_categories,
+            'category_model' => new Category()
         ]);         
     }
 
@@ -661,7 +717,7 @@ class VendorItemController extends Controller
 
         //add all category
         $category = Yii::$app->request->post('category');
-
+        
         if(!$category) {
             $category = array();
         }
@@ -1685,6 +1741,60 @@ class VendorItemController extends Controller
         return [
             'image_url' => Yii::getAlias("@s3/vendor_item_images_210/") . $image_name . $image_extension,
             'image' => $image_name . $image_extension
+        ];
+    }
+
+    public function actionAddCategory()
+    {
+        $model = new Category();
+
+        Yii::$app->response->format = 'json';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        
+            $level = 0;
+            $paths = CategoryPath::find()
+                ->where(['category_id' => $model->parent_category_id])
+                ->orderBy('level ASC')
+                ->all();
+
+            foreach ($paths as $path) {
+
+                $cp = new CategoryPath();
+                $cp->category_id = $model->category_id;
+                $cp->level = $level;
+                $cp->path_id = $path->path_id;
+                $cp->save();
+
+                $level++;
+            }
+
+            $cp = new CategoryPath();
+            $cp->category_id = $model->category_id;
+            $cp->path_id = $model->category_id;
+            $cp->level = $level;
+            $cp->save();
+
+            return [
+                'category_id' => $model->category_id,
+                'category_name' => $model->category_name
+            ];
+        }
+    }
+
+    /** 
+     * return sub categories for a given category_id
+     * @param category_id 
+     * @return json containing sub categories for a given category_id 
+     */
+    public function actionCategoryList()
+    {        
+        $category_id = Yii::$app->request->post('parent_id');
+
+        Yii::$app->response->format = 'json';
+
+        return [
+            'categories' => Category::findAll(['parent_category_id' => $category_id])
         ];
     }
 }

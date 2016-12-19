@@ -45,7 +45,6 @@ function cmp($a, $b)
 	<div class="tab-content">
 		<!-- Begin First Tab -->
 		<div class="tab-pane active clearfix" id="1">
-			<!-- vid - click create item button from item view page for the particular item view page-->
 
 			<input type="hidden" name="item_id" value="<?= $model->item_id ?>" />
 			
@@ -66,37 +65,96 @@ function cmp($a, $b)
 			
 			<div class="field-category-list">
 				<label>Categories</label>
-				<table class="table table-bordered table-category-list">
+				<table class="table table-bordered table-item-category-list">
+					<thead>
+						<tr>
+							<td>Main categories</td>
+							<td>Sub categories</td>
+							<td>Child categories</td>
+							<td></td>
+						</tr>
+					</thead>
 					<tbody>
-						<?php foreach($vendor_item_to_category as $key => $value) { ?>
-						<tr>	
+						<?php for ($i=0; $i < sizeof($item_main_categories); $i++) { ?>
+						<tr>
 							<td>
-								<?= $value->category->category_title ?>
-								<input value="<?= $value->category_id ?>" name="category[]" type="hidden" />	
-							</td>	
-							<td>		
-								<button class="btn btn-danger" type="button">			
-									<i class="glyphicon glyphicon-trash"></i>
-								</button>	
+								<?php if(isset($item_main_categories[$i])) { ?>
+									<?= $item_main_categories[$i]['category_name'] ?>	
+									<input type="hidden" name="category[]" value="<?= $item_main_categories[$i]['category_id'] ?>" />
+								<?php } ?>
+							</td>
+							<td>
+								<?php if(isset($item_sub_categories[$i])) { ?>
+									<?= $item_sub_categories[$i]['category_name'] ?>	
+									<input type="hidden" name="category[]" value="<?= $item_sub_categories[$i]['category_id'] ?>" />
+								<?php } ?>
+							</td>
+							<td>
+								<?php if(isset($item_child_categories[$i])) { ?>
+									<?= $item_child_categories[$i]['category_name'] ?>	
+									<input type="hidden" name="category[]" value="<?= $item_child_categories[$i]['category_id'] ?>" />
+								<?php } ?>
+							</td>
+							<td>
+								<button class="btn btn-danger btn-remove-cat"><i class="fa fa-trash-o"></i></button>
 							</td>
 						</tr>
 						<?php } ?>
 					</tbody>
-					<tfoot>
+				</table>
+
+				<table class="table table-bordered table-category-list">
+					<thead>
+						<tr>
+							<td>Main categories</td>
+							<td>Sub categories</td>
+							<td>Child categories</td>
+						</tr>
 						<tr>
 							<td>
-								<select id="category_id">
-									<option></option>
-									<?php foreach($categories as $key => $value) { ?>
-										<option value="<?= $value['category_id'] ?>">
-											<?= $value['category_name'] ?>
-										</option>
-									<?php } ?>
-								</select>
-								<span class="help-block"></span>
+								<input placeholder="Search" class="form-control txt-main-cat-search" />
 							</td>
 							<td>
-								<button type="button" class="btn btn-primary btn-add-category">Add</button>
+								<input placeholder="Search" class="form-control txt-sub-cat-search" />
+							</td>
+							<td>
+								<input placeholder="Search" class="form-control txt-child-cat-search" />
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="main-category-list">
+								<div class="chk_wrapper">
+									<?php foreach($main_categories as $key => $value) { ?>
+									<div class="radio" data-name="<?= $value['category_name'] ?>"> 
+										<input type="radio" name="main_category" value="<?= $value['category_id'] ?>" id="main_cat_<?= $value['category_id'] ?>" /> 
+										<label for="main_cat_<?= $value['category_id'] ?>"> 
+											<?= $value['category_name'] ?>
+										</label> 
+									</div> 
+									<?php } ?>
+								</div>
+							</td>
+							<td class="sub-category-list">
+								<div class="chk_wrapper">
+								</div>
+							</td>
+							<td class="child-category-list">
+								<div class="chk_wrapper">
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td></td>
+							<td>
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sub_category_modal"><i class="fa fa-plus"></i> Add 
+								</button>
+							</td>
+							<td>
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#child_category_modal"><i class="fa fa-plus"></i> Add </button>
 							</td>
 						</tr>
 					</tfoot>
@@ -436,6 +494,74 @@ function cmp($a, $b)
 	</div><!-- END .tab-content -->
 </div><!-- END .tabbable -->
 <?php ActiveForm::end(); ?>
+
+
+<?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data', 'id' => 'child_category_form']]); ?>
+<div id="child_category_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add child category</h4>
+      </div>
+      <div class="modal-body">
+
+      		<?= Html::hiddenInput('Category[parent_category_id]', 0, ['id' => 'hdn_child_cat_parent']); ?>
+
+			<?= $form->field($category_model, 'category_name') ?>
+
+			<?= $form->field($category_model, 'category_name_ar') ?>
+
+			<?= $form->field($category_model, 'category_meta_title')->textArea(['maxlength' => 250])?>
+
+			<?= $form->field($category_model, 'category_meta_keywords')->textArea(['maxlength' => 250])?>
+
+			<?= $form->field($category_model, 'category_meta_description')->textArea(['maxlength' => 250])?>
+
+			<?= $form->field($category_model, 'category_allow_sale')->checkbox(['yes' => 'yes']) ?>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<?php ActiveForm::end(); ?>
+
+<?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data', 'id' => 'sub_category_form']]); ?>
+<div id="sub_category_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add sub category</h4>
+      </div>
+      <div class="modal-body">
+
+      		<?= Html::hiddenInput('Category[parent_category_id]', 0, ['id' => 'hdn_sub_cat_parent']); ?>
+
+			<?= $form->field($category_model, 'category_name') ?>
+
+			<?= $form->field($category_model, 'category_name_ar') ?>
+
+			<?= $form->field($category_model, 'category_meta_title')->textArea(['maxlength' => 250])?>
+
+			<?= $form->field($category_model, 'category_meta_keywords')->textArea(['maxlength' => 250])?>
+
+			<?= $form->field($category_model, 'category_meta_description')->textArea(['maxlength' => 250])?>
+
+			<?= $form->field($category_model, 'category_allow_sale')->checkbox(['yes' => 'yes']) ?>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<?php ActiveForm::end(); ?>
+
 <div class="modal fade" id="myModal" role="dialog"><div class="modal-dialog"><div class="modal-content"></div></div></div>
 
 <?php 
@@ -488,6 +614,9 @@ echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate'
 echo Html::hiddenInput('add_theme_url', Url::to(['vendor-item/add-theme']), ['id' => 'add_theme_url']);
 echo Html::hiddenInput('add_group_url', Url::to(['vendor-item/add-group']), ['id' => 'add_group_url']);
 
+echo Html::hiddenInput('category_add_url', Url::to(['vendor-item/add-category']), ['id' => 'category_add_url']);
+echo Html::hiddenInput('category_list_url', Url::to(['vendor-item/category-list']), ['id' => 'category_list_url']);
+
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
 $this->registerCssFile("@web/themes/default/plugins/jquery-superbox/css/style.css");
@@ -498,7 +627,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.9", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.11", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
@@ -527,6 +656,17 @@ $this->registerCss("
 	.btn-xs, .btn-group-xs>.btn {
 	    padding: 1px 5px !important;
 	    margin-top: 5px;
+	}
+
+	.table-category-list .checkbox {
+	    margin-left: 20px;
+	}
+	
+	.main-category-list .chk_wrapper,
+	.sub-category-list .chk_wrapper,
+	.child-category-list .chk_wrapper{
+		max-height: 200px;
+    	overflow-y: scroll;
 	}
 ");
 
