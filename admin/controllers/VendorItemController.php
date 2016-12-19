@@ -317,16 +317,9 @@ class VendorItemController extends Controller
                 ->where(['{{%category_path}}.level' => 0])
                 ->all();
 
-            //sub
             $sub_categories = Category::find()
                 ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
                 ->where(['{{%category_path}}.level' => 1])
-                ->all();
-
-            //child 
-            $child_categories = Category::find()
-                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where(['{{%category_path}}.level' => 2])
                 ->all();
 
             /*$categories = CategoryPath::find()
@@ -349,7 +342,6 @@ class VendorItemController extends Controller
                 'packagelist' => $packagelist,
                 'main_categories' => $main_categories,
                 'sub_categories' => $sub_categories,
-                'child_categories' => $child_categories,
                 'category_model' => new Category()
             ]);
         }
@@ -619,19 +611,49 @@ class VendorItemController extends Controller
             ->where(['{{%category_path}}.level' => 0])
             ->all();
 
-        //sub
         $sub_categories = Category::find()
             ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
             ->where(['{{%category_path}}.level' => 1])
             ->all();
 
-        //child 
-        $child_categories = Category::find()
+        //item main category
+        $item_main_categories = VendorItemToCategory::find()
+            ->select('{{%category}}.category_name, {{%category}}.category_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
             ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where(['{{%category_path}}.level' => 2])
+            ->where([
+                '{{%category_path}}.level' => 0,
+                '{{%vendor_item_to_category}}.item_id' => $model->item_id
+            ])
+            ->groupBy('{{%vendor_item_to_category}}.category_id')
+            ->asArray()
             ->all();
 
-        $vendor_item_to_category = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
+        //item sub
+        $item_sub_categories = VendorItemToCategory::find()
+            ->select('{{%category}}.category_name, {{%category}}.category_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category_path}}.level' => 1,
+                '{{%vendor_item_to_category}}.item_id' => $model->item_id
+            ])
+            ->groupBy('{{%vendor_item_to_category}}.category_id')
+            ->asArray()
+            ->all();
+
+        //child 
+        $item_child_categories = VendorItemToCategory::find()
+            ->select('{{%category}}.category_name, {{%category}}.category_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category_path}}.level' => 1,
+                '{{%vendor_item_to_category}}.item_id' => $model->item_id
+            ])
+            ->groupBy('{{%vendor_item_to_category}}.category_id')
+            ->asArray()
+            ->all();
 
         return $this->render('update', [
             'model' => $model,
@@ -644,10 +666,11 @@ class VendorItemController extends Controller
             'grouplist' => $grouplist,
             'itemPricing' => VendorItemPricing::findAll(['item_id' => $item_id]),
             'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
-            'vendor_item_to_category' => ArrayHelper::map($vendor_item_to_category, 'category_id', 'category_id'),
             'main_categories' => $main_categories,
-            'child_categories' => $child_categories,
             'sub_categories' => $sub_categories,
+            'item_main_categories' => $item_main_categories,
+            'item_sub_categories' => $item_sub_categories,
+            'item_child_categories' => $item_child_categories,
             'category_model' => new Category()
         ]);         
     }
@@ -693,23 +716,11 @@ class VendorItemController extends Controller
         VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
 
         //add all category
-        $main_category = Yii::$app->request->post('main_category');
-        $sub_category = Yii::$app->request->post('sub_category');
-        $child_category = Yii::$app->request->post('child_category');
-
-        if(!$main_category) {
-            $main_category = array();
+        $category = Yii::$app->request->post('category');
+        
+        if(!$category) {
+            $category = array();
         }
-
-        if(!$sub_category) {
-            $sub_category = array();
-        }
-
-        if(!$child_category) {
-            $child_category = array();
-        }
-
-        $category = array_merge($main_category, $sub_category, $child_category);
 
         foreach($category as $key => $value) {
             $vic = new VendorItemToCategory();
@@ -1769,5 +1780,21 @@ class VendorItemController extends Controller
                 'category_name' => $model->category_name
             ];
         }
+    }
+
+    /** 
+     * return sub categories for a given category_id
+     * @param category_id 
+     * @return json containing sub categories for a given category_id 
+     */
+    public function actionCategoryList()
+    {        
+        $category_id = Yii::$app->request->post('parent_id');
+
+        Yii::$app->response->format = 'json';
+
+        return [
+            'categories' => Category::findAll(['parent_category_id' => $category_id])
+        ];
     }
 }
