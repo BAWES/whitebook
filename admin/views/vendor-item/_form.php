@@ -103,7 +103,44 @@ if($model->isNewRecord){
 
 			<div class="field-category-list">
 				<label>Categories</label>
-				
+				<table class="table table-bordered table-item-category-list">
+					<thead>
+						<tr>
+							<td>Main categories</td>
+							<td>Sub categories</td>
+							<td>Child categories</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						<?php for ($i=0; $i < sizeof($item_main_categories); $i++) { ?>
+						<tr>
+							<td>
+								<?php if(isset($item_main_categories[$i])) { ?>
+									<?= $item_main_categories[$i]['category_name'] ?>	
+									<input type="hidden" name="category[]" value="<?= $item_main_categories[$i]['category_id'] ?>" />
+								<?php } ?>
+							</td>
+							<td>
+								<?php if(isset($item_sub_categories[$i])) { ?>
+									<?= $item_sub_categories[$i]['category_name'] ?>	
+									<input type="hidden" name="category[]" value="<?= $item_sub_categories[$i]['category_id'] ?>" />
+								<?php } ?>
+							</td>
+							<td>
+								<?php if(isset($item_child_categories[$i])) { ?>
+									<?= $item_child_categories[$i]['category_name'] ?>	
+									<input type="hidden" name="category[]" value="<?= $item_child_categories[$i]['category_id'] ?>" />
+								<?php } ?>
+							</td>
+							<td>
+								<button class="btn btn-danger btn-remove-cat"><i class="fa fa-trash-o"></i></button>
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+
 				<table class="table table-bordered table-category-list">
 					<thead>
 						<tr>
@@ -128,9 +165,9 @@ if($model->isNewRecord){
 							<td class="main-category-list">
 								<div class="chk_wrapper">
 									<?php foreach($main_categories as $key => $value) { ?>
-									<div class="checkbox" data-name="<?= $value['category_name'] ?>"> 
-										<label> 
-											<input type="checkbox" name="main_category[]" value="<?= $value['category_id'] ?>" <?php if(in_array($value['category_id'], $vendor_item_to_category)) echo 'checked'; ?> /> 
+									<div class="radio" data-name="<?= $value['category_name'] ?>"> 
+										<input type="radio" name="main_category" value="<?= $value['category_id'] ?>" id="main_cat_<?= $value['category_id'] ?>" /> 
+										<label for="main_cat_<?= $value['category_id'] ?>"> 
 											<?= $value['category_name'] ?>
 										</label> 
 									</div> 
@@ -139,26 +176,10 @@ if($model->isNewRecord){
 							</td>
 							<td class="sub-category-list">
 								<div class="chk_wrapper">
-									<?php foreach($sub_categories as $key => $value) { ?>
-									<div class="checkbox" data-name="<?= $value['category_name'] ?>"> 
-										<label> 
-											<input type="checkbox" name="sub_category[]" value="<?= $value['category_id'] ?>" <?php if(in_array($value['category_id'], $vendor_item_to_category)) echo 'checked'; ?> /> 
-											<?= $value['category_name'] ?>
-										</label> 
-									</div> 
-									<?php } ?>
 								</div>
 							</td>
 							<td class="child-category-list">
 								<div class="chk_wrapper">
-									<?php foreach($child_categories as $key => $value) { ?>
-									<div class="checkbox" data-name="<?= $value['category_name'] ?>"> 
-										<label> 
-											<input type="checkbox" name="child_category[]" value="<?= $value['category_id'] ?>" <?php if(in_array($value['category_id'], $vendor_item_to_category)) echo 'checked'; ?> /> 
-											<?= $value['category_name'] ?>
-										</label> 
-									</div> 
-									<?php } ?>
 								</div>
 							</td>
 						</tr>
@@ -175,7 +196,7 @@ if($model->isNewRecord){
 							</td>
 						</tr>
 					</tfoot>
-				</table>					
+				</table>						
 			</div>
 
 			<div class="form-group" style="height: 10px;">
@@ -443,6 +464,7 @@ if($model->isNewRecord){
 </div>
 <!-- END Dialog box for sales guide image -->
 
+
 <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data', 'id' => 'child_category_form']]); ?>
 <div id="child_category_modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -452,10 +474,8 @@ if($model->isNewRecord){
         <h4 class="modal-title">Add child category</h4>
       </div>
       <div class="modal-body">
-      		<?= $form->field($category_model, 'parent_category_id')
-					->dropDownList(
-						\yii\helpers\ArrayHelper::map($sub_categories, 'category_id', 'category_name')
-					) ?>
+
+      		<?= Html::hiddenInput('Category[parent_category_id]', 0, ['id' => 'hdn_child_cat_parent']); ?>
 
 			<?= $form->field($category_model, 'category_name') ?>
 
@@ -487,10 +507,8 @@ if($model->isNewRecord){
         <h4 class="modal-title">Add sub category</h4>
       </div>
       <div class="modal-body">
-      		<?= $form->field($category_model, 'parent_category_id')
-					->dropDownList(
-						\yii\helpers\ArrayHelper::map($main_categories, 'category_id', 'category_name')
-					) ?>
+
+      		<?= Html::hiddenInput('Category[parent_category_id]', 0, ['id' => 'hdn_sub_cat_parent']); ?>
 
 			<?= $form->field($category_model, 'category_name') ?>
 
@@ -512,6 +530,7 @@ if($model->isNewRecord){
   </div>
 </div>
 <?php ActiveForm::end(); ?>
+
 
 <?php 
 
@@ -595,6 +614,7 @@ echo Html::hiddenInput('item_themes_groups', Url::to(['vendor-item/item-themes-g
 echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate']), ['id' => 'item_validate_url']);
 
 echo Html::hiddenInput('category_add_url', Url::to(['vendor-item/add-category']), ['id' => 'category_add_url']);
+echo Html::hiddenInput('category_list_url', Url::to(['vendor-item/category-list']), ['id' => 'category_list_url']);
 
 $this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
 
@@ -610,7 +630,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.10", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.11", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
