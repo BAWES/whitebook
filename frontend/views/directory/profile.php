@@ -318,7 +318,10 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
             </div>
             <div class="col-md-9 paddingright0">
                 <div class="listing_right">
-                    <?=$this->render('@frontend/views/common/items',['items' => $provider, 'customer_events_list' => $customer_events_list]); ?>
+                    <?= $this->render('@frontend/views/common/items', [
+                            'items' => $provider, 
+                            'customer_events_list' => $customer_events_list
+                        ]); ?>
                 </div>
             </div>
         </div>

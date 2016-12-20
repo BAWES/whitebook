@@ -78,8 +78,13 @@ $search = ($search != '') ? $search : 'All';
 			</div>
 			<div class="listing_right">
 				<div class="events_listing">
-						<?=$this->render('@frontend/views/common/items',['items' => $items, 'customer_events_list' => $customer_events_list]); ?>
-					<div id="planloader"><img src="<?=Url::to("@web/images/ajax-loader.gif");?>" title="Loader" class="margin-top-15"></div>
+					<?=	$this->render('@frontend/views/common/items', [
+							'items' => $items, 
+							'customer_events_list' => $customer_events_list
+						]); ?>
+					<div id="planloader">
+						<img src="<?=Url::to("@web/images/ajax-loader.gif");?>" title="Loader" class="margin-top-15">
+					</div>
 				</div>
 				<?php /*
 				<div class="add_more_commons">

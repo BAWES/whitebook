@@ -46,7 +46,7 @@ class SearchController extends BaseController
         $data = Yii::$app->request->get();
 
         $items_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
+            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
             ->leftJoin(
                 '{{%vendor_item_to_category}}',
                 '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
@@ -59,7 +59,6 @@ class SearchController extends BaseController
                 '{{%priority_item}}',
                 '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
             )
-            ->leftJoin('{{%image}}', '{{%vendor_item}}.item_id = {{%image}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->where([
                 '{{%vendor_item}}.trash' => 'Default',

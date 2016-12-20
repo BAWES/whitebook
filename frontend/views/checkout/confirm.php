@@ -81,10 +81,10 @@ use common\models\VendorItemPricing;
                         $imglink = Yii::getAlias("@s3/vendor_item_images_210/")
                             . $image_row['image_path'];
                     } else {
-                        $imglink = Yii::getAlias("@web/images/no_image.jpg");
+                        $imglink = Url::to("@web/images/item-default.png");    
                     }
 
-                    echo Html::img($imglink, ['style'=>'width:50px; height:50px;']);
+                    echo Html::img($imglink, ['style' => 'width:50px; height:50px;']);
 
                     ?>
         		</td>
