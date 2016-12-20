@@ -48,7 +48,7 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
                             <div class="bakery_title">
                                 <h3><?php echo $vendor_detail['vendor_name']; ?></h3>
                             </div>
-                            <div class="panel-group" id="accordion">
+                            <div class="panel-group vendor-profile-detail" id="accordion">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
