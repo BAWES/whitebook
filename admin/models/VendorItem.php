@@ -33,7 +33,7 @@ class VendorItem extends \common\models\VendorItem
     {
         $errors = [];
 
-        $category = Yii::$app->request->post('main_category');
+        $category = Yii::$app->request->post('category');
 
         if(!$category) 
         {
