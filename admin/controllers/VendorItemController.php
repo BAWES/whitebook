@@ -648,7 +648,7 @@ class VendorItemController extends Controller
             ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
             ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
             ->where([
-                '{{%category_path}}.level' => 1,
+                '{{%category_path}}.level' => 2,
                 '{{%vendor_item_to_category}}.item_id' => $model->item_id
             ])
             ->groupBy('{{%vendor_item_to_category}}.category_id')
