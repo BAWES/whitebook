@@ -2128,8 +2128,7 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 #accordion.vendor-item-detail a[data-toggle="collapse"].collapsed:after {    
     content: "\f054";    
 }
-#accordion.vendor-profile-detail .panel-heading .panel-title > a,
-#accordion.vendor-item-detail .panel-heading .panel-title > a {
+#accordion .panel-heading .panel-title > a {
     color: #1d1d1d;
     text-decoration: none;
     font-size: 13px;

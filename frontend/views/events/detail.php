@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
+use common\models\Image;
 use common\models\Category;
 use common\models\VendorItem;
 use common\models\CategoryNote;
@@ -81,11 +82,10 @@ foreach ($cat_exist as $key => $value1) {
 
 $items = VendorItem::find()
     ->select(['{{%vendor}}.vendor_name','{{%vendor_item}}.item_id','{{%event_item_link}}.link_id',
-        '{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
-        '{{%vendor_item}}.item_name','{{%vendor_item}}.slug', '{{%vendor_item}}.item_id'
+        '{{%vendor_item}}.item_price_per_unit', '{{%vendor_item}}.item_name','{{%vendor_item}}.slug', 
+        '{{%vendor_item}}.item_id'
     ])
     ->innerJoin('{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
-    ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
     ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
     ->leftJoin(
         '{{%vendor_item_to_category}}', 
@@ -100,7 +100,6 @@ $items = VendorItem::find()
         '{{%event_item_link}}.trash' => 'Default',
         '{{%event_item_link}}.event_id' => $event_details->event_id
     ])
-    ->andWhere('{{%image}}.image_path != ""')    
     ->asArray()
     ->all();
 ?>
@@ -116,7 +115,11 @@ $items = VendorItem::find()
               }
         ?>
 
-        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span></a>
+        <?php if($items) { ?>
+        <span class="glyphicon glyphicon-menu-right text-align pull-right"></span>
+        <?php } ?>
+
+        </a>
     </h4>
 
     <div class="note_wrapper">
@@ -149,6 +152,18 @@ $items = VendorItem::find()
 if(!empty($items))
 {
     foreach ($items as $key => $value) {
+
+        $image_data = Image::find()
+            ->where(['item_id' => $value['item_id']])
+            ->orderBy(['vendorimage_sort_order' => SORT_ASC])
+            ->one();
+
+        if($image_data) {
+            $image = Yii::getAlias("@s3/vendor_item_images_210/").$image_data->image_path;
+        } else {
+            $image = Url::to("@web/images/item-default.png");    
+        }
+
 ?>
 <li class="pull-left">
     <div class="events_items">
@@ -178,12 +193,12 @@ if(!empty($items))
             
             </div><!-- END .hover_events -->
             
-            <?= Html::a(Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img']),Url::toRoute(['/browse/detail/','slug'=>$value['slug']])) ?>
+            <?= Html::a(Html::img($image, ['class'=>'item-img']), Url::toRoute(['/browse/detail/','slug'=>$value['slug']])) ?>
         </div><!-- END .events_images -->
 
         <div class="events_descrip">
 
-            <?= Html::a($value['vendor_name'], Html::img(Yii::getAlias("@vendor_item_images_210/").$value['image_path'],['class'=>'item-img'])) ?>
+            <?= Html::a($value['vendor_name'], Html::img($image, ['class'=>'item-img'])) ?>
             
             <h3><?= $value['item_name'] ?></h3>
 

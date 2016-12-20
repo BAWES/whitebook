@@ -2,6 +2,7 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use common\models\Image;
 use common\models\VendorItemToPackage;
 use common\components\CFormatter;
 
@@ -58,9 +59,10 @@ use common\components\CFormatter;
 		foreach ($categories as $key => $category) {
 
 			$items = VendorItemToPackage::find()
-			    ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.item_id',
-			        '{{%image}}.image_path','{{%vendor_item}}.item_price_per_unit',
-			        '{{%vendor_item}}.item_name', '{{%vendor_item}}.item_name_ar', '{{%vendor_item}}.item_for_sale', '{{%vendor_item}}.slug', '{{%vendor_item}}.item_id'
+			    ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.item_id', 
+			    	'{{%vendor_item}}.item_price_per_unit', '{{%vendor_item}}.item_name', 
+			    	'{{%vendor_item}}.item_name_ar', '{{%vendor_item}}.item_for_sale', '{{%vendor_item}}.slug', 
+			    	'{{%vendor_item}}.item_id'
 			    ])
 			    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_package}}.item_id')
 			    ->leftJoin(
@@ -71,7 +73,6 @@ use common\components\CFormatter;
 			        '{{%category_path}}', 
 			        '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id'
 			    )
-			    ->leftJoin('{{%image}}', '{{%image}}.item_id = {{%vendor_item}}.item_id')
 			    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			    ->where([
 			        '{{%vendor_item}}.item_status' => 'Active',
@@ -108,7 +109,19 @@ use common\components\CFormatter;
 				<div class="panel-body">				
 					<?php 
 					foreach ($items as $key => $value) { 
-						 $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
+						
+						$item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
+
+				        $image_data = Image::find()
+				            ->where(['item_id' => $value['item_id']])
+				            ->orderBy(['vendorimage_sort_order' => SORT_ASC])
+				            ->one();
+
+				        if($image_data) {
+				            $image = Yii::getAlias("@s3/vendor_item_images_210/").$image_data->image_path;
+				        } else {
+				            $image = Url::to("@web/images/item-default.png");    
+				        }
 					?>
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301 pull-left">
 		            <div class="events_items width-100-percent">
@@ -133,13 +146,9 @@ use common\components\CFormatter;
 		                            <?php } ?>
 		                        </div>
 		                        <a href="<?= $item_url ?>" class="" >
-		                            <?php
 		                            
-		                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : Url::to("@web/images/item-default.png");
-		                                
-		                            echo Html::img($path,['class'=>'item-img']);
+		                            <?= Html::img($image,['class'=>'item-img']); ?>
 
-		                            ?>
 		                            <?php if($value['item_for_sale'] == 'Yes') { ?>
 		                                <i class="fa fa-circle" aria-hidden="true"></i>
 		                                <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>

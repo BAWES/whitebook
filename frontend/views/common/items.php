@@ -1,7 +1,10 @@
 <div class="events_listing">
+
 <?php
-use yii\helpers\Html;
+
 use yii\helpers\Url;
+use yii\helpers\Html;
+use common\models\Image;
 use common\components\CFormatter;
 
 if(!empty($items->getModels()))  {
@@ -10,6 +13,17 @@ if(!empty($items->getModels()))  {
 
     foreach ($items->getModels() as $key => $value) {
 
+        $image_data = Image::find()
+            ->where(['item_id' => $value['item_id']])
+            ->orderBy(['vendorimage_sort_order' => SORT_ASC])
+            ->one();
+
+        if($image_data) {
+            $image = Yii::getAlias("@s3/vendor_item_images_210/").$image_data->image_path;
+        } else {
+            $image = Url::to("@web/images/item-default.png");    
+        }
+        
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
 
         ?>
@@ -36,17 +50,12 @@ if(!empty($items->getModels()))  {
                             <?php } ?>
                         </div>
                         <a href="<?= $item_url ?>" class="" >
-                            <?php
                             
-                            $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : Url::to("@web/images/item-default.png");
-                                
-                            echo Html::img($path,['class'=>'item-img']);
+                            <?= Html::img($image, ['class'=>'item-img']); ?>
 
-                            ?>
                             <?php if($value['item_for_sale'] == 'Yes') { ?>
                                 <i class="fa fa-circle" aria-hidden="true"></i>
                                 <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
-                                <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
                             <?php } ?>
                         </a>
                     </div>

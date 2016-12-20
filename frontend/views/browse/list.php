@@ -1,11 +1,11 @@
 <?php
 
-use common\models\ChildCategory;
-use common\models\SubCategory;
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\widgets\Breadcrumbs;
 use yii\web\view;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
+use common\models\SubCategory;
+use common\models\ChildCategory;
 
 \Yii::$app->view->registerMetaTag(['name' => 'csrf-token', 'content' => Yii::$app->request->csrfToken]);
 
