@@ -62,7 +62,6 @@ $this->registerCss("
 	.loader1{display:none;text-align:center;margin-bottom: 10px;}
 	.item-img{
 		width: 100%; 
-		min-height:208px;
 	}
 	.eventErrorMsg{color:red;margin-bottom: 10px;}
 	.event_loader{display:none;text-align:center;margin-bottom: 10px;}
