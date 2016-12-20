@@ -399,7 +399,7 @@ class VendorItemController extends Controller
                 $vic->save();
             }
 
-            $model->slug = Yii::$app->request->post()['VendorItem']['item_name'];
+            /*$model->slug = Yii::$app->request->post()['VendorItem']['item_name'];
 
             $c_slug1 = strtolower($model->slug);
             $c_slug2 = str_replace(' ', '-', $c_slug1);
@@ -423,7 +423,7 @@ class VendorItemController extends Controller
 
                 $vendorname = str_replace(' ', '-', $tbl_vendor['vendor_name']);
                 $model->slug = $c_slug4 . '-' . $vendorname;
-            }
+            }*/
 
             $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale']) ? 'Yes' : 'No';
             $model->item_status = (Yii::$app->request->post()['VendorItem']['item_status'] == 1) ? 'Active' : 'Deactive';
