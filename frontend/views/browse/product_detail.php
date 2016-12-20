@@ -231,7 +231,7 @@ if($model->images) {
                             </div>
 
                             <div class="accad_menus">
-                                <div class="panel-group" id="accordion">
+                                <div class="panel-group vendor-item-detail" id="accordion">
                                     <?php if (!empty($model['item_description'])) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">

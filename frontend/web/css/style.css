@@ -2118,15 +2118,18 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 
 /* product & vendor detail accordion */
 
-#accordion a[data-toggle="collapse"]:after {
+#accordion.vendor-profile-detail a[data-toggle="collapse"]:after,
+#accordion.vendor-item-detail a[data-toggle="collapse"]:after {
     font-family: 'FontAwesome';
     content: "\f078";    
     float: right;
 }
-#accordion a[data-toggle="collapse"].collapsed:after {    
+#accordion.vendor-profile-detail a[data-toggle="collapse"].collapsed:after,
+#accordion.vendor-item-detail a[data-toggle="collapse"].collapsed:after {    
     content: "\f054";    
 }
-#accordion .panel-heading .panel-title > a {
+#accordion.vendor-profile-detail .panel-heading .panel-title > a,
+#accordion.vendor-item-detail .panel-heading .panel-title > a {
     color: #1d1d1d;
     text-decoration: none;
     font-size: 13px;
@@ -2135,14 +2138,17 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     width: 100%;
     display: block;
 }
-#accordion .panel-heading .panel-title {
+#accordion.vendor-profile-detail .panel-heading .panel-title,
+#accordion.vendor-item-detail .panel-heading .panel-title {
     border-bottom: 1px solid #cccccc;
 }
-#accordion .panel-body {
+#accordion.vendor-profile-detail .panel-body,
+#accordion.vendor-item-detail .panel-body {
     border-bottom: 1px solid #cccccc;
     padding-bottom: 20px;
 }
-#accordion .panel-body p {
+#accordion.vendor-profile-detail .panel-body p,
+#accordion.vendor-item-detail .panel-body p {
     font: 13px/23px 'OpenSansRegular';
     color: #000000;
     margin: 18px 0 0 0;
