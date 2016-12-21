@@ -399,31 +399,8 @@ class VendorItemController extends Controller
                 $vic->save();
             }
 
-            /*$model->slug = Yii::$app->request->post()['VendorItem']['item_name'];
-
-            $c_slug1 = strtolower($model->slug);
-            $c_slug2 = str_replace(' ', '-', $c_slug1);
-            $c_slug3 = preg_replace("/[^a-z0-9_\s-]/", '', $c_slug2); //Make alphanumeric (removes all other characters)
-            $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
-            $model->slug = $c_slug4;
-
-            $chk_item_exist = VendorItem::find()
-                ->where(['trash' => 'default'])
-                ->andWhere(['LIKE', 'slug', $c_slug4])
-                ->one();
-
-            if (!empty($chk_item_exist)) {
-
-                $vendoritem = Yii::$app->request->post('VendorItem');
-
-                $tbl_vendor = Vendor::find()
-                    ->select('vendor_name')
-                    ->where(['vendor_id' => $vendoritem['vendor_id']])
-                    ->one();
-
-                $vendorname = str_replace(' ', '-', $tbl_vendor['vendor_name']);
-                $model->slug = $c_slug4 . '-' . $vendorname;
-            }*/
+            //force to generate slug again by removing old slug 
+            $model->slug = '';
 
             $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale']) ? 'Yes' : 'No';
             $model->item_status = (Yii::$app->request->post()['VendorItem']['item_status'] == 1) ? 'Active' : 'Deactive';
