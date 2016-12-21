@@ -51,7 +51,12 @@ class ThingsILikeController extends BaseController
         $customer_wishlist = Users::get_customer_wishlist($customer_id, $category_id, $price, $vendor, $avail_sale);
 
         $categories = \frontend\models\Category::find()
-            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category_path}}.level' => 0,
+                'category_allow_sale' =>'Yes', 
+                'trash' =>'Default'
+            ])
             ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
             ->all();
 
@@ -67,7 +72,6 @@ class ThingsILikeController extends BaseController
         ]);
     }
                     
-
     public function actionDelete($id)
     {
         \frontend\models\Wishlist::deleteAll(['item_id'=>$id,'customer_id'=>Yii::$app->user->identity->customer_id]);

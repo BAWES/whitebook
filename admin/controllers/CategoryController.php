@@ -205,6 +205,9 @@ class CategoryController extends Controller
                 $cp->level = $level;
                 $cp->save();
 
+                $model->category_level = $level;
+                $model->save();
+
                 Yii::$app->session->setFlash('success', 'Category created successfully!');
 
                 Yii::info('[New Category] Admin created new category ' . $model->category_name, __METHOD__);
