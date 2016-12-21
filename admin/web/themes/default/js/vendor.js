@@ -203,11 +203,6 @@ $(document).ready(function () {
      	}
     });
 
-
- 	$('#vendor-vendor_name').bind("paste",function(e) {
-    	e.preventDefault();
- 	});
-
  	$("#vendor-vendor_name").on('focusout',function () {//keyup keypress 
 
 		if($("#vendor-vendor_name").val().length > 3) {
@@ -255,14 +250,6 @@ function validateEmail(email) {
 
 $(document).ready(function(){
 
-  	$('#vendor-vendor_contact_number').bind("paste",function(e) {
-    	e.preventDefault();
-  	});
-
-  	$('#vendor-vendor_contact_email').bind("paste",function(e) {
-    	e.preventDefault();
-  	});
- 
  	$("#vendor-vendor_contact_email").on('focusout', function () {	 	
 	 	validateEmailAjax();
 	});//on #vendor-vendor_contact_email focusout 
