@@ -184,6 +184,8 @@ use yii\widgets\ActiveForm;
 				
 				<?= $form->field($model, 'vendor_public_email'); ?>
 
+				<?= $form->field($model, 'vendor_website') ?>
+				
 				<div class="form-group">
 					<label>Vendor public phone</label>
 					<table class="table table-bordered table-phone-list">
