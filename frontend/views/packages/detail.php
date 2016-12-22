@@ -26,6 +26,53 @@ use common\components\CFormatter;
 			    	</div>
 				</div>
 				<div class="col-lg-8">
+
+				    <div class="event_form_wrapper">
+				    	<form class="form-inline">
+						    <fieldset>
+						    	<legend><?= Yii::t('frontend', 'Add to event') ?></legend>
+
+						    	<?php if (!Yii::$app->user->isGuest) { ?>
+
+						    	<div class="form-group">
+							    	<select name="event_id" style="display: none;">
+							    		<?php foreach ($customer_events as $event) { ?>
+							    		<option value="<?= $event->event_id ?>">
+							    			<?= $event->event_name ?>
+							    		</option>
+							    		<?php } ?>
+							    	</select>
+						    	</div>
+
+						    	<div class="form-group">
+							    	<button class="btn btn-default btn-add-to-event" type="button">
+							    		<i class="fa fa-plus"></i> 
+							    		<?= Yii::t('frontend', 'Add') ?>
+							    	</button>
+						    	</div>
+
+						    	<div class="or">
+						    	or 
+						    	</div>
+
+						    	<div class="form-group">
+							    	<button class="btn btn-default" data-toggle="modal" data-target="#EventModal" type="button">
+							    		<?= Yii::t('frontend', 'Create Event') ?>
+							    	</button>				
+						    	</div>	
+
+						    	<?php } else { ?>
+
+							    	<a href="javascript:" role="button" class="btn btn-default" data-toggle="modal" onclick="show_login_modal(-1);" data-target="#myModal" title="Create Your First Event"><?= Yii::t('frontend', 'Create Your First Event') ?></a>
+
+							    <?php } ?>
+
+						    </fieldset>
+					    </form>
+				    </div><!-- END .event_form_wrapper -->
+
+				    <hr />
+
 			    	<p>
 					    <?php if(Yii::$app->language == 'en') { ?>
 					    	<?= $package->package_description ?>
@@ -173,3 +220,8 @@ use common\components\CFormatter;
 		</div><!-- END .package_items -->
 	</div><!-- END .container -->
 </section>
+
+<?php
+
+echo Html::hiddenInput('package_id', $package->package_id, ['id' => 'package_id']); 
+echo Html::hiddenInput('add_to_event_url', Url::to("add-to-event"), ['id' => 'add_to_event_url']); 

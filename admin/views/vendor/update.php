@@ -29,6 +29,7 @@ $model->vendor_working_min_to = $to_min;
 
    <?= $this->render('_form', [
         'model' => $model,
+        'main_categories' => $main_categories,
         'vendor_contact_number' => $vendor_contact_number,
         'day_off' => $day_off,
         'vendor_order_alert_emails' => $vendor_order_alert_emails,

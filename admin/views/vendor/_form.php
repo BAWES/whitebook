@@ -185,7 +185,7 @@ use yii\widgets\ActiveForm;
 				<?= $form->field($model, 'vendor_public_email'); ?>
 
 				<?= $form->field($model, 'vendor_website') ?>
-				
+
 				<div class="form-group">
 					<label>Vendor public phone</label>
 					<table class="table table-bordered table-phone-list">
@@ -249,7 +249,7 @@ use yii\widgets\ActiveForm;
 				<input type='hidden' id='test' value='0' name='tests1'>
 
 				<?= $form->field($model, 'category_id')
-						->dropDownList(\admin\models\Category::loadcategory() , ['multiple'=>'multiple']); ?>
+					->dropDownList($main_categories, ['multiple'=>'multiple']); ?>
 
 				<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
 

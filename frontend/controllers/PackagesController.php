@@ -3,7 +3,10 @@
 namespace frontend\controllers;
 
 use Yii;
+use common\models\Events;
 use common\models\Package;
+use common\models\EventItemlink;
+use common\models\VendorItemToPackage;
 use frontend\models\Users;
 
 /**
@@ -43,17 +46,64 @@ class PackagesController extends BaseController
             ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
             ->all();
 
-        if(Yii::$app->user->isGuest) {
+        if(Yii::$app->user->isGuest) 
+        {
             $wishlist_item_ids = [];
-        } else {
+            $customer_events = [];
+        } 
+        else 
+        {
             $wishlist = Users::get_customer_wishlist_details(Yii::$app->user->getId());
             $wishlist_item_ids = \yii\helpers\ArrayHelper::getColumn($wishlist, 'item_id'); 
+            
+            $customer_events = Events::find()
+                ->where(['customer_id' => Yii::$app->user->identity->customer_id])
+                ->all();            
         }
 
         return $this->render('detail', [
             'package' => $package,
             'categories' => $categories,
-            'wishlist_item_ids' => $wishlist_item_ids
+            'wishlist_item_ids' => $wishlist_item_ids,
+            'customer_events' => $customer_events
         ]);
+    }
+
+    public function actionAddToEvent()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+      
+        $data = Yii::$app->request->post();
+
+        $package = Package::findOne([
+                'package_id' => $data['package_id'],
+                'status' => 1
+            ]);
+
+        if (!$package) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $items = VendorItemToPackage::findAll([
+                'package_id' => $package->package_id
+            ]);
+
+        foreach ($items as $key => $value) {
+            $event_item = new EventItemlink();
+            $event_item->event_id = $data['event_id'];
+            $event_item->item_id = $value->item_id;
+            $event_item->trash = 'Default';
+            $event_item->save();
+        }
+
+        Yii::$app->response->format = 'json';
+
+        return [
+            'success' => Yii::t('frontend', '{count} item added to event.', [
+                            'count' => sizeof($items)
+                        ])
+        ];
     }
 }

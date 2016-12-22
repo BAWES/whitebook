@@ -2078,4 +2078,30 @@ $(function() {
             filter();
         });
     }
+
+    //package detail page js 
+
+    $('.package_description select[name="event_id"]').selectpicker();
+
+    $('.package_description .btn-add-to-event').click(function() {
+        $.ajax({
+            type:'POST',
+            url: $('#add_to_event_url').val(),
+            data:{ 
+                'package_id' : $('#package_id').val(),
+                'event_id' : $('select[name="event_id"]').val() 
+            },
+            success:function(json)
+            {
+                $html  = '<div class="alert alert-success">';
+                $html += json.success;
+                $html += '<button class="close" data-dismiss="alert">x</button>';
+                $html += '</div>';  
+                $('.alert_wrapper').html($html);
+
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
+            }
+        });
+    });
 });
+
