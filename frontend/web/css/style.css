@@ -2152,3 +2152,26 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     color: #000000;
     margin: 18px 0 0 0;
 }
+
+.btn-package-event {
+    line-height: 15px;
+    display: inline-block;
+    border: 1px solid #e6e6e6;
+    width: 165px;
+    padding: 10px 0 0 22px;
+    height: 40px;
+    margin: 10px 0 0px 0;
+    font-weight: bold;
+    font-size: 13px;
+    color: #000;
+    text-transform: uppercase;
+}
+    
+.package_description legend {
+    padding-bottom: 10px;
+    font-size: 18px;
+}
+.package_description .or {
+    display: inline;
+    margin: 0 20px;
+}

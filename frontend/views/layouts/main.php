@@ -65,11 +65,14 @@ $this->beginPage()
         <img src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>"
          title="Loader"></div>
         <!-- Header Section Start -->
-        <?php
-        $this->beginBody();
-        echo Alert::widget();
-        $this->beginContent('@app/views/layouts/header.php');
-        ?>
+        <?php $this->beginBody(); ?>
+        
+        <div class="alert_wrapper">
+            <?= Alert::widget(); ?>
+        </div>
+
+        <?php $this->beginContent('@app/views/layouts/header.php'); ?>
+
         <?php $this->endContent(); ?>
         <!-- Header Section End -->
         <!--Content Start-->
