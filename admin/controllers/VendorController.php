@@ -280,8 +280,18 @@ class VendorController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
 
+            $main_categories = Category::find()
+                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+                ->where([
+                    '{{%category_path}}.level' => 0,
+                    'trash' =>'Default'
+                ])
+                ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+                ->all();
+
             return $this->render('create', [
-                'model' => $model
+                'model' => $model,
+                'main_categories' => ArrayHelper::map($main_categories,'category_id','category_name')
             ]);
         }
     }
@@ -434,8 +444,18 @@ class VendorController extends Controller
 
             $model->category_id = ArrayHelper::map($vendor_category, 'category_id', 'category_id');
 
+            $main_categories = Category::find()
+                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+                ->where([
+                    '{{%category_path}}.level' => 0,
+                    'trash' =>'Default'
+                ])
+                ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+                ->all();
+
             return $this->render('update', [
                 'model' => $model,
+                'main_categories' => ArrayHelper::map($main_categories,'category_id','category_name'),
                 'vendor_contact_number' => $vendor_contact_number,
                 'vendor_order_alert_emails' => $vendor_order_alert_emails,
                 'day_off' => $day_off,
