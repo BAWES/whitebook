@@ -101,7 +101,7 @@ class PackagesController extends BaseController
         Yii::$app->response->format = 'json';
 
         return [
-            'success' => Yii::t('frontend', '{count} item added to package.', [
+            'success' => Yii::t('frontend', '{count} item added to event.', [
                             'count' => sizeof($items)
                         ])
         ];
