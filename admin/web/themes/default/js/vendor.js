@@ -1,5 +1,6 @@
 
 var csrfToken = $('meta[name="csrf-token"]').attr("content");
+var isNewRecord = $('#isNewRecord').val();
 
 var c1 = true;
   
@@ -135,28 +136,46 @@ $('.controls1').find('#remove').remove();
 //$('.datepicker').datepicker();
 $('select#package').hide();
 
-$(function()
-{	/* Begin when loading page first tab opened */
- 	$('.nav-tabs li:first').addClass("active");
- 	$(".tab-content div:first").addClass("active");
- 	/* End when loading page first tab opened */
+var ck_vendor_return_policy = ''; 
+var ck_vendor_return_policy_ar = '';
 
-	CKEDITOR.replace('text-editor');
-	CKEDITOR.replace('text-editor-2');
+$(function()
+{	
+ 	$config = {};
+	$config.allowedContent = true;
+
+	ck_vendor_return_policy = CKEDITOR.replace('text-editor', $config);
+	ck_vendor_return_policy_ar = CKEDITOR.replace('text-editor-2', $config);
+
+	var hash = location.hash.substr(1);
+
+	if(hash) {
+		$('.nav-tabs .active').removeClass('active');
+		$('.tab-content .active').removeClass('active');
+		
+		$('#tab_' + hash).parent().addClass('active');
+		$('#' + hash + '.tab-pane').addClass('active');
+	} else {
+		$('.nav-tabs li:first').addClass("active");
+		$('.tab-content div:first').addClass('active');	
+	}	
+
+	$('.btnNext').click(function(){
+	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
+	  $('html, body').animate({ scrollTop: 0 }, 'slow');
+	  location.hash = $(this).parents('.tab-pane').attr('id') + 1;
+	});
+
+	$('.btnPrevious').click(function(){
+	  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+	  $('html, body').animate({ scrollTop: 0 }, 'slow');
+	  location.hash = $(this).parents('.tab-pane').attr('id') - 1;
+	});
 });
 
 function removePhone(phone) {
 	$(".controls"+phone).remove();
 }
-
-/* Begin Tabs NEXT & PREV buttons */
-$('.btnNext').click(function(){
-  $('.nav-tabs > .active').next('li').find('a').trigger('click');
-});
-
-$('.btnPrevious').click(function(){
-  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-});
 
 //category add drop downlist
 $(".vendor-category_id:last-child").css({"clear" : "both","float" :"inherit"});
@@ -202,59 +221,11 @@ $(document).ready(function () {
             return false;
      	}
     });
-
- 	$("#vendor-vendor_name").on('focusout',function () {//keyup keypress 
-
-		if($("#vendor-vendor_name").val().length > 3) {
-			var mail = $("#vendor-vendor_name").val();
-	        
-	        var path = vendornamecheck_url;
-	        
-	        $('.loadingmessage').show();
-
-	        $.ajax({
-		        type: 'POST',
-		        url: path, //url to be called
-		        data: { vendor_name: mail ,_csrf : csrfToken}, //data to be send
-		        success: function( data ) {
-				
-					$("#test1").val(mail);
-		        
-		            if(data>0)
-		            {
-						$('.loadingmessage').hide();
-						$(".field-vendor-vendor_name").removeClass('has-success');
-						$(".field-vendor-vendor_name").addClass('has-error');
-						$(".field-vendor-vendor_name").find('.help-block').html('Vendor name already exists.');
-						$(".field-vendor-vendor_name" ).focus();
-						$('#test1').val(1);
-						return false
-					
-					} else {
-
-						$(".field-vendoritem-item_name").find('.help-block').html('');
-						$('.loadingmessage').hide();
-						$('#test1').val(0);
-						return false;
-					}
-		        }
-	        });
-		}
-	});
 });
-
-function validateEmail(email) {
-    var re = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
-    return re.test(email);
-}
 
 $(document).ready(function(){
 
- 	$("#vendor-vendor_contact_email").on('focusout', function () {	 	
-	 	validateEmailAjax();
-	});//on #vendor-vendor_contact_email focusout 
-
- 	if(is_new_record) { 
+ 	if(isNewRecord) { 
 	
 		$('#vendor-vendor_status').prop('checked', true);
 	
@@ -266,14 +237,13 @@ $(document).ready(function(){
 		} 
 	} 
 
-	if(is_new_record) { 
+	if(isNewRecord) { 
 
 		$('#vendor-approve_status').prop('checked', true);
 
 	} else {
 
 		if(approve_status=='Yes') {
-			//$("#vendor-vendor_logo_path").val('image');
 			$('#vendor-approve_status').prop('checked', true);
 		} else { 
 			$('#vendor-approve_status').prop('checked', false);
@@ -282,272 +252,128 @@ $(document).ready(function(){
 
 });//on doc ready 
 
-$(".zerovalid0" ).click(function() {
-	return validate_step0();
+/** 
+ * Save tab 1 data on click of tab 2 or on click of next in tab 1 
+ */
+$('#tab_2').click(function(e) {
+	save_logo();
 });
 
-$(".onevalid1" ).click(function() {
-	return validate_step1();
+/** 
+ * Save tab 2 data on click of tab 3 or on click of next in tab 1 
+ */
+$('#tab_3').click(function(e) {
+	save_basic_info();
 });
 
-$( ".twovalid2" ).click(function() {
-	return validate_step2();
-});//validation of second step 
+/** 
+ * Save tab 3 data on click of tab 4 or on click of next in tab 1 
+ */
+$('#tab_4').click(function(e) {
+	save_main_info();
+});
 
-//------------------------- validation step : 0 -----------------------------//
+/** 
+ * Save tab 4 data on click of tab 5 or on click of next in tab 1 
+ */
+$('#tab_5').click(function(e) {
+	save_additional_info();
+});
 
-function validate_step0() {
+/** 
+ * Save tab 5 data on click of tab 4 or on click of next in tab 1 
+ */
+$('#tab_6').click(function(e) {
+	save_social_info();
+});
 
-	return true;
-
-	/*
-	//old record
-	if(!is_new_record) {
-		return true;
-	}
-
-	var imageData = $('.image-editor').cropit('export');
-
-	if(typeof imageData != 'undefined' && imageData.length > 0)
-	{
-		$('input[name="image"]').val(imageData);
-		return true;
-  	}
-
-  	return false;
-  	*/
-}
-	
-//------------------------- validation step : 1 -----------------------------//
-
-function validate_step1() {
-
-	c1 = true;
-
-	if($('#test').val() == 1) {
-		console.log('test value!');
-		return false;
-	}
-
-	if($('#test1').val() == 1)
-	{
-		console.log('test1 value!');
-		return false;
-	}
-
-	$vendor_name_length = $("#vendor-vendor_name").val().length;
-
-	if($("#vendor-vendor_name").val()=='')
-	{
-		console.log('vendor name!');
-
-		$(".field-vendor-vendor_name").addClass('has-error');
-		$(".field-vendor-vendor_name").find('.help-block').html('Vendor name cannot be blank.');
-		
-		c1 = false;
-
-  	} else if($vendor_name_length < 3) {
-
-  		console.log('vendor name length!');
-
-		$(".field-vendor-vendor_name").addClass('has-error');
-		$(".field-vendor-vendor_name").find('.help-block').html('Item name minimum 4 letters.');
-		
-		c1 = false;
-	}
-  	
-  	if($("#vendor-vendor_contact_email").val()=='')
-	{
-		console.log('vendor contact email!');
-		$(".field-vendor-vendor_contact_email").addClass('has-error');
-		$(".field-vendor-vendor_contact_email").find('.help-block').html('Email cannot be blank.');
-		c1 = false;
-  	}
-  	
-  	if(is_new_record && $("#vendor-vendor_password").val()!='')
-	{
-		var pass = $("#vendor-vendor_password").val();
-
-		if(pass.length < 6)
-		{
-			console.log('password length!');
-			$(".field-vendor-vendor_password").addClass('has-error');
-			$(".field-vendor-vendor_password").find('.help-block').html('Password should contain minimum 6 Letter.');
-			c1 = false;
-		}
-  	}
-  	
-  	if(is_new_record && $("#vendor-confirm_password").val()=='')
-	{
-		console.log('confirm password require!');
-
-		$(".field-vendor-confirm_password").addClass('has-error');
-		$(".field-vendor-confirm_password").find('.help-block').html('Confirm password cannot be blank.');
-		c1 = false;
-  	
-  	} else if(is_new_record && $("#vendor-confirm_password").val() != $("#vendor-vendor_password").val()) {
-
-  		console.log('password and confirm password not matching!');
-
-		$(".field-vendor-confirm_password").addClass('has-error');
-		$(".field-vendor-confirm_password").find('.help-block').html('Password and confirm password not same.');
-		c1 = false;
-  	}
-  	
-    if($("#vendor-vendor_contact_name").val()=='')
-	{
-		console.log('vendor contact name!');
-
-		$(".field-vendor-vendor_contact_name").addClass('has-error');
-		$(".field-vendor-vendor_contact_name").find('.help-block').html('Contact name  cannot be blank.');
-		c1 = false;
-  	}
-
-    if($("#vendor-vendor_contact_number").val()=='')
-	{
-		console.log('vendor contact no require!');
-
-		$(".field-vendor-vendor_contact_number").addClass('has-error');
-		$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number cannot be blank.');
-		c1 = false;
-  	}
-
-  	if(c1 == false)
-	{
-		return false;
-	}
-
-	if($("#vendor-vendor_contact_email").val()!='')
-	{
-		c1 = validateEmailAjax();
-  	}
-
-	if(c1 == false)
-	{
-		return false;
-	}
-
-  	return validate_step0();
-}
-
-//------------------------- validation step : 2 -----------------------------//
-
-function validate_step2() {
-
-	if($("#vendoritem-item_amount_in_stock").val()=='')
-	{
-			$(".field-vendor-vendor_logo_path").addClass('has-error');
-			$(".field-vendor-vendor_logo_path").find('.help-block').html('Please upload a file.');
-			return false;
-  	}
-
-  	if(!$('#vendor-category_id').val())
-	{
-		$(".field-vendor-category_id").addClass('has-error');
-		$(".field-vendor-category_id").find('.help-block').html('category name cannot be blank.');
-		return false;
-  	} 
-
-  	return validate_step1();
-}
-
-function validateEmailAjax() {
-
-	if(!validateEmail($("#vendor-vendor_contact_email").val())) {
-		console.log('contact email not valid!');
-		c1 = false;
-		return false;
-	}
-
-	if(is_new_record){
-			
-		$(".field-vendor-vendor_contact_email").removeClass('has-success');
-		$(".field-vendor-vendor_contact_email").addClass('has-error');
-		$('.loadingmessage').show();
-
-		var mail = $("#vendor-vendor_contact_email").val();
-		var path = emailcheck_url;
-		
-		$.ajax({
-			type: 'POST',
-			url: path, //url to be called
-			async:true,
-			data: { id: mail ,_csrf : csrfToken}, //data to be send
-			success: function( data ) {
-				
-				$("input[name=email_valid]").val(data);
-				
-				if(data > 0)
-				{
-					$(".field-vendor-vendor_contact_email").removeClass('has-success');
-					$(".field-vendor-vendor_contact_email").addClass('has-error');
-					$(".field-vendor-vendor_contact_email").find('.help-block').html('Email already exists.');
-					$('.loadingmessage').hide();
-					c1 = false;
-					return false;
-				
-				} else {
-					$(".field-vendor-vendor_contact_email").removeClass('has-error');
-					$(".field-vendor-vendor_contact_email").addClass('has-success');
-					$(".field-vendor-vendor_contact_email").find('.help-block').html('');
-					$('.loadingmessage').hide();
-					$('#test').val(0);			
-					c1 = true;				
-				}
-			 }
-		});
-
-	} 
-
-	return true;
-}
-
-var j = $('input[name="Vendor[vendor_contact_number][]"]').length;
-
-function addPhone(current)
+/** 
+ * Click in final submit button 
+ */
+$('.btn-complete').click(function()
 {
-	$html  = '<div class="controls'+j+'">';
-	$html += '<input type="text" id="vendor-vendor_contact_number'+j+'" class="form-control" name="Vendor[vendor_contact_number][]" multiple = "multiple" maxlength="15" Placeholder="Phone Number" style="margin:5px 0px;">';
-	$html += '<input type="button" name="remove" id="remove" value="Remove" onClick="removePhone('+j+')" style="margin:5px;" />';
-	$html += '</div>';
+	//CKEDITOR + validation.js issue 
+	for (var i in CKEDITOR.instances)
+	{
+	    CKEDITOR.instances[i].updateElement();
+	}
+
+	//remove warning alert before each new call 
+	$('.alert-warning').remove();
+
+	$(this).attr('disabled', 'disabled');
+	$(this).html('Please wait...');
+			
+	$('.loadingmessage').show();
 	
-	$('#addnumber').before($html);
+	$.post($('#vendor_validate_url').val(), get_form_data(false), function(json) {
 
-  	$("#vendor-vendor_contact_number" + j ).keypress(function (e) {
-     	
-     	if (e.which != 43 && e.which != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-          	
-          	$(".field-vendor-vendor_contact_number")
-          		.find('.help-block')
-          		.html('Contact number digits only.')
-          		.animate({ color: "#a94442" })
-          		.show()
-          		.fadeOut(2000);
-            
-            return false;
-    	}
-    });
+		if(json['errors']) 
+		{
+			show_errors(json);
 
-    j++;
-}
+			$html  = '<div class="alert alert-warning">';
+			$html += '	Please check form carefully!';
+			$html += '	<button class="close" data-dismiss="alert"></button>';
+			$html += '</div>';
+
+			$('.loadingmessage').after($html);
+
+			$('.loadingmessage').hide();
+
+			$('.btn-complete').removeAttr('disabled');
+			$('.btn-complete').html('Complete');
+
+			$('html, body').animate({ scrollTop: 0 }, 'slow');
+		}
+
+		if(json['success']) 
+		{
+			$('.btn-complete').parents('form').submit();
+		}
+	});
+});
 
 $(function() {
 
 	$('.image-editor').cropit();
 
-	$('.btn-complete').click(function() {
+	$('.btn-crop-upload').click(function(){
 
-		$('.alert-warning').remove();
+    	//remove old warning 
+    	$('.message_wrapper .alert').remove();
 
-		//check if error 
-		if($('.form-group.has-error').length > 0) 
-		{
-			$('.message_wrapper').html('<div class="alert alert-warning">Please check form carefully!</div>');
+    	var imageData = $('.image-editor').cropit('export');
+
+		if(!imageData) {
+			$html  = '<div class="alert alert-warning alert-image-size">';
+			$html += '	Please upload valid image with size of atlease 450px x 450px!';
+			$html += '	<button class="close" data-dismiss="alert"></button>';
+			$html += '</div>';
+
+			$('.message_wrapper').html($html);
+
 			$('html, body').animate({ scrollTop: 0 }, 'slow');
+			
+			return false;
 		}
 
-		$('input[name="image"]').val($('.image-editor').cropit('export'));
-	});
+		$(this).attr('disabled', 'disabled');
+    	$(this).html('Uploading...');
+
+    	//upload image 
+    	$.post($('#croped_image_upload_url').val(), { image : imageData }, function(json) {
+			
+			$('#inpt_vendor_logo_path').val(json.image);
+			$('.vendor-logo-thumbnail img').attr('src', json.image_url);
+
+    		$('.btn-crop-upload').html('Upload');
+    		$('.btn-crop-upload').removeAttr('disabled');
+
+    		$('.cropit-preview-image').attr('src', 
+    			'https://placeholdit.imgix.net/~text?txtsize=20&txt=Drag%20and%20Drop%20Image%20Here&w=450&h=450');
+    	});
+    });
 
 	$('.working_hours_wrapper input').datetimepicker({
 		//inline: true,
@@ -556,3 +382,266 @@ $(function() {
     });
 });
 
+//append ckeditor data 
+function get_form_data($is_autosave) {
+
+	$data = $('form').serialize();
+
+	if($is_autosave) {
+		$data += '&is_autosave=' + 1;
+	}else{
+		$data += '&is_autosave=' + 0;
+	}
+
+	$data += '&Vendor[vendor_return_policy]=' + ck_vendor_return_policy.getData(); 
+	$data += '&Vendor[vendor_return_policy_ar]=' + ck_vendor_return_policy_ar.getData();
+
+	return $data;
+}
+
+function save_logo($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#logo_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+	
+		//switch to edit mode 
+		if(json['vendor_id']) {
+			$('input[name="vendor_id"]').val(json['vendor_id']);	
+		}
+		
+		if(json['edit_url']) {
+			$('#w0').attr('action', json['edit_url']);	
+		}
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//redirect 
+			if(isNewRecord > 0) 
+			{
+				location = json['edit_url'] + '#2';
+			}
+			else
+			{
+				//update active tab 
+				$('.nav-tabs .active').removeClass('active');
+				$('.tab-content .active').removeClass('active');
+				
+				$('#tab_2').parent().addClass('active');
+				$('#2.tab-pane').addClass('active');	
+			}			
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
+function save_basic_info($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#basic_info_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_3').parent().addClass('active');
+			$('#3.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
+function save_main_info($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#main_info_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_4').parent().addClass('active');
+			$('#4.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
+function save_additional_info($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#additional_info_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_5').parent().addClass('active');
+			$('#5.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
+function save_social_info($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#social_info_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_6').parent().addClass('active');
+			$('#6.tab-pane').addClass('active');
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
+function save_email_addresses($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#email_addresses_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
+
+function show_errors(json) 
+{
+	$('.has-error').removeClass('has-error');
+	$('.form-group .help-block').html('');
+	$('.alert-warning').remove();
+
+	if(json['errors']['vendor_name']) 
+	{
+		$(".field-vendor-vendor_name").removeClass('has-success');
+		$(".field-vendor-vendor_name").addClass('has-error');
+		$(".field-vendor-vendor_name").find('.help-block').html(json['errors']['vendor_name']);
+	}
+
+	if(json['errors']['vendor_contact_email']) 
+	{
+		$(".field-vendor-vendor_contact_email").removeClass('has-success');
+		$(".field-vendor-vendor_contact_email").addClass('has-error');
+		$(".field-vendor-vendor_contact_email").find('.help-block').html(json['errors']['vendor_contact_email']);
+	}
+
+	if(json['errors']['vendor_contact_name']) 
+	{
+		$(".field-vendor-vendor_contact_name").removeClass('has-success');
+		$(".field-vendor-vendor_contact_name").addClass('has-error');
+		$(".field-vendor-vendor_contact_name").find('.help-block').html(json['errors']['vendor_contact_name']);
+	}
+}
+
+/** 
+ * Autosave active tab fields 
+ */ 
+setInterval(function(){
+
+	if($('#tab_1').parent().hasClass('active')){
+		save_logo(true);
+	}
+	
+	if($('#tab_2').parent().hasClass('active')){
+		save_basic_info(true);
+	}
+
+	if($('#tab_3').parent().hasClass('active')){
+		save_main_info(true);
+	}
+
+	if($('#tab_4').parent().hasClass('active')){
+		save_additional_info(true);
+	}
+
+	if($('#tab_5').parent().hasClass('active')){
+		save_social_info(true);
+	}
+
+	if($('#tab_6').parent().hasClass('active')){
+		save_email_addresses(true);
+	}
+
+}, 2000);
