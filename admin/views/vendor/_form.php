@@ -45,9 +45,9 @@ use yii\widgets\ActiveForm;
 		  </ul>
 		  <div class="tab-content">
 
-		  	<div class="tab-pane" id="1">		  		
+		  	<div class="tab-pane" id="1">
 		    	<label class="control-label">Vendor logo</label>
-		    	
+
 		    	<div class="pull-left">
 		    		<div class="image-editor">
 				        <input type="file" class="cropit-image-input">
@@ -92,9 +92,9 @@ use yii\widgets\ActiveForm;
 
 		    	<?= $form->field($model, 'vendor_name')
 		    			->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>
-				
+
 				<?= $form->field($model, 'vendor_name_ar')
-						->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>	
+						->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>
 
 				<?= $form->field($model, 'vendor_contact_email')
 						->textInput(['maxlength' => 100, 'autocomplete' => 'off']); ?>
@@ -155,47 +155,47 @@ use yii\widgets\ActiveForm;
 					<div class="checkbox-inline">
 						<label for="day_1">
 							<input type="checkbox" name="vendor_day_off[]" value="1" id="day_1" <?php if(in_array('1', $day_off)) echo 'checked'; ?> />
-							Monday								
+							Monday
 						</label>
 					</div>
 					<div class="checkbox-inline">
 						<label for="day_2">
 							<input type="checkbox" name="vendor_day_off[]" value="2" id="day_2" <?php if(in_array('2', $day_off)) echo 'checked'; ?> />
-							Tuesday								
+							Tuesday
 						</label>
 					</div>
 					<div class="checkbox-inline">
 						<label for="day_3">
 							<input type="checkbox" name="vendor_day_off[]" value="3" id="day_3" <?php if(in_array('3', $day_off)) echo 'checked'; ?> />
-							Wednesday								
+							Wednesday
 						</label>
 					</div>
 					<div class="checkbox-inline">
 						<label for="day_4">
 							<input type="checkbox" name="vendor_day_off[]" value="4" id="day_4" <?php if(in_array('4', $day_off)) echo 'checked'; ?> />
-							Thirsday							
+							Thirsday
 						</label>
 					</div>
 					<div class="checkbox-inline">
 						<label for="day_5">
 							<input type="checkbox" name="vendor_day_off[]" value="5" id="day_5" <?php if(in_array('5', $day_off)) echo 'checked'; ?> />
-							Friday							
+							Friday
 						</label>
 					</div>
 					<div class="checkbox-inline">
 						<label for="day_6">
 							<input type="checkbox" name="vendor_day_off[]" value="6" id="day_6" <?php if(in_array('6', $day_off)) echo 'checked'; ?> />
-							Saturday						
+							Saturday
 						</label>
 					</div>
 					<div class="checkbox-inline">
 						<label for="day_0">
 							<input type="checkbox" name="vendor_day_off[]" value="0" id="day_0" <?php if(in_array('0', $day_off)) echo 'checked'; ?> />
-							Sunday						
+							Sunday
 						</label>
 					</div>
 				</div>
-				
+
 				<?= $form->field($model, 'vendor_public_email'); ?>
 
 				<?= $form->field($model, 'vendor_website') ?>
@@ -218,13 +218,13 @@ use yii\widgets\ActiveForm;
 								</td>
 								<td>
 									<select name="phone[<?= $key ?>][type]" class="form-control">
-										<option <?php if($value->type == 'Office') echo 'selected'; ?> 
+										<option <?php if($value->type == 'Office') echo 'selected'; ?>
 											value="Office">Office</option>
 									 	<option <?php if($value->type == 'Mobile') echo 'selected'; ?>
-									 		value="Mobile">Mobile									 		
+									 		value="Mobile">Mobile
 									 	</option>
 									 	<option <?php if($value->type == 'Fax') echo 'selected'; ?>
-									 		value="Fax">Fax									 		
+									 		value="Fax">Fax
 									 	</option>
 									 	<option <?php if($value->type == 'Whatsapp') echo 'selected'; ?>
 									 		value="Whatsapp">Whatsapp
@@ -260,10 +260,10 @@ use yii\widgets\ActiveForm;
 			<div class="tab-pane" id="3">
 				<input type="hidden" id="test1" value="0" name="tests">
 				<input type='hidden' id='test' value='0' name='tests1'>
-				
+
 				<?= $form->field($model, 'category_id')
-						->dropDownList($main_categories, ['multiple'=>'multiple']); ?>
-				
+					->dropDownList($main_categories, ['multiple'=>'multiple']); ?>
+
 				<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
 
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
@@ -272,15 +272,15 @@ use yii\widgets\ActiveForm;
 			</div>
 
 		    <div class="tab-pane" id="4">
-				
+
 				<?= $form->field($model, 'vendor_return_policy')->textArea(['id'=>'text-editor']); ?>
 
 				<?= $form->field($model, 'vendor_return_policy_ar')->textArea(['id'=>'text-editor-2']); ?>
 
 				<?= $form->field($model, 'vendor_fax')->textInput(); ?>
-				
+
 				<?= $form->field($model, 'short_description')->textArea(); ?>
-				
+
 				<?= $form->field($model, 'short_description_ar')->textArea(); ?>
 
 				<?= $form->field($model, 'vendor_bank_name')->textInput(); ?>
@@ -288,19 +288,19 @@ use yii\widgets\ActiveForm;
 				<?= $form->field($model, 'vendor_bank_branch')->textInput(); ?>
 
 				<?= $form->field($model, 'vendor_account_no')->textInput(); ?>
-				
+
 				<?= $form->field($model, 'vendor_emergency_contact_name'); ?>
-				
+
 				<?= $form->field($model, 'vendor_emergency_contact_email'); ?>
 
 				<?= $form->field($model, 'vendor_emergency_contact_number'); ?>
-				
+
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
 				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
 			</div>
 
 			<div class="tab-pane" id="5">
-			
+
 				<table class="table table-bordered table-social">
 					<thead>
 						<tr>
@@ -428,12 +428,12 @@ use yii\widgets\ActiveForm;
 				</div>
 			</div>
 
-		<?php ActiveForm::end(); ?>	
+		<?php ActiveForm::end(); ?>
 		</div>
 		<!--End Third Tab -->
 	</div>
 
-<?php 
+<?php
 
 $this->registerCss('
 	.field-vendor-category_id .dropdown-toggle{
@@ -448,7 +448,7 @@ $this->registerCss('
 	.table-social .help-block{
 		margin-bottom:0px;
 		margin-top:2px;
-	}	
+	}
 	.working_hours_wrapper .col-md-2 {
 		padding-right: 0px;
 	}
@@ -478,7 +478,7 @@ $this->registerJs('
 ', View::POS_HEAD);
 
 $this->registerCssFile('@web/themes/default/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css');
-$this->registerCssFile('@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css'); 
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css');
 
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
@@ -491,4 +491,3 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/js/vendor.js?V=1.9", ['depends' => [\yii\web\JqueryAsset::className()]]);
-
