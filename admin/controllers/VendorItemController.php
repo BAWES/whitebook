@@ -1064,7 +1064,7 @@ class VendorItemController extends Controller
     }
     
     /**
-    * Validate whole form on for complete button 
+    * Validate whole form on click of complete button 
     *
     * @return json
     */

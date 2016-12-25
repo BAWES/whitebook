@@ -630,7 +630,7 @@ $('#tab_5').click(function(e) {
 $('#tab_6').click(function(e) {
 	save_item_images();
 });
-
+ 
 /** 
  * Click in final submit button 
  */
@@ -785,8 +785,6 @@ function get_form_data($is_autosave) {
 
 	return $data;
 }
-
-			console.log(isNewRecord);
 
 /** 
  * We will not display errors and loading image on autosave 

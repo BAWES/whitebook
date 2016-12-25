@@ -67,7 +67,6 @@ class VendorController extends Controller
         ];
     }
 
-
     /**
      * Lists all Vendor models.
      *
@@ -369,13 +368,7 @@ class VendorController extends Controller
                 }
             }
 
-            $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
-            $model->vendor_emergency_contact_email= $vendor['vendor_emergency_contact_email'];
-            $model->vendor_emergency_contact_number= $vendor['vendor_emergency_contact_number'];
-
-            $model->vendor_public_email= $vendor['vendor_public_email'];
-
-            if(Yii::$app->request->post('image')) {
+            /*if(Yii::$app->request->post('image')) {
 
                 $temp_folder = sys_get_temp_dir().'/'; 
 
@@ -401,7 +394,7 @@ class VendorController extends Controller
 
                 //delete old image 
                 Yii::$app->resourceManager->delete("vendor_logo/" . $exist_logo_image);                
-            }            
+            }*/
 
             if($model->save(false)) {
 
@@ -423,6 +416,7 @@ class VendorController extends Controller
                 }
 
                 Yii::$app->session->setFlash('success', 'Vendor updated successfully!');
+
                 return $this->redirect(['index']);
             }
 
@@ -579,4 +573,450 @@ class VendorController extends Controller
           ->all();
         return $result = count($vendorname);
     }
+
+    /**
+    * Save vendor logo from update and create page
+    *
+    * @return json
+    */
+    public function actionVendorLogo() 
+    {
+        $vendor_id = Yii::$app->request->post('vendor_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = Yii::$app->request->post('Vendor');
+
+        //validate
+        if(!$is_autosave) {
+            $errors = Vendor::validate_vendor_logo($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+
+         //if new item 
+        if(!$vendor_id) {
+            $model = new Vendor();         
+        } else {
+            $model = Vendor::find()
+                ->where(['vendor_id' => $vendor_id])
+                ->one();
+        }
+        
+        //load posted data to model 
+        $model->load(['Vendor' => $posted_data]);
+
+        //data posted as array but saving in single column 
+        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+        if(is_array($vendor_day_off)) {
+            $model->day_off = implode(',', $vendor_day_off);
+        }else{
+            $model->day_off = '';
+        }
+
+        $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
+
+        //save data without validation 
+        $model->save(false);
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'vendor_id' => $model->vendor_id,
+            'edit_url' => Url::to(['vendor/update', 'id' => $model->vendor_id])
+        ];
+    }
+
+    /**
+    * Save vendor basic info from update and create page
+    *
+    * @return json
+    */
+    public function actionBasicInfo() 
+    {
+        $vendor_id = Yii::$app->request->post('vendor_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = Yii::$app->request->post('Vendor');
+
+        //validate
+        if(!$is_autosave) {
+            $errors = Vendor::validate_basic_info($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = Vendor::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['Vendor' => $posted_data]);
+
+        //data posted as array but saving in single column 
+        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+        if(is_array($vendor_day_off)) {
+            $model->day_off = implode(',', $vendor_day_off);
+        }else{
+            $model->day_off = '';
+        }
+
+        $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
+
+        //save data without validation 
+        $model->save(false);
+
+        //public phone 
+        VendorPhoneNo::deleteAll(['vendor_id' => $model->vendor_id]);
+
+        $phones = Yii::$app->request->post('phone');
+
+        if(!$phones) {
+            $phones = [];
+        }
+
+        foreach ($phones as $key => $value) {
+           $vp = new VendorPhoneNo;
+           $vp->vendor_id = $model->vendor_id;
+           $vp->phone_no = $value['phone_no'];
+           $vp->type = $value['type'];
+           $vp->save();
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'vendor_id' => $model->vendor_id
+        ];
+    }
+
+    /**
+    * Save vendor main info from update and create page
+    *
+    * @return json
+    */
+    public function actionMainInfo() 
+    {
+        $vendor_id = Yii::$app->request->post('vendor_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = Yii::$app->request->post('Vendor');
+
+        //validate
+        if(!$is_autosave) {
+            $errors = Vendor::validate_main_info($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = Vendor::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['Vendor' => $posted_data]);
+
+        //data posted as array but saving in single column 
+        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+        if(is_array($vendor_day_off)) {
+            $model->day_off = implode(',', $vendor_day_off);
+        }else{
+            $model->day_off = '';
+        }
+
+        $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
+
+        //save data without validation 
+        $model->save(false);
+       
+        //remove old categories
+        VendorCategory::deleteAll(['vendor_id' => $model->vendor_id]);
+
+        //add categories
+        if(!$posted_data['category_id']) {
+            $posted_data['category_id'] = [];
+        }
+
+        foreach ($posted_data['category_id'] as $key => $value) {
+           $vc = new VendorCategory;
+           $vc->vendor_id = $model->vendor_id;
+           $vc->category_id = $value;
+           $vc->save();
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'vendor_id' => $model->vendor_id
+        ];
+    }
+
+    /**
+    * Save vendor additional info from update and create page
+    *
+    * @return json
+    */
+    public function actionAdditionalInfo() 
+    {
+        $vendor_id = Yii::$app->request->post('vendor_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = Yii::$app->request->post('Vendor');
+
+        //validate
+        if(!$is_autosave) {
+            $errors = Vendor::validate_additional_info($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = Vendor::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['Vendor' => $posted_data]);
+
+        //data posted as array but saving in single column 
+        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+        if(is_array($vendor_day_off)) {
+            $model->day_off = implode(',', $vendor_day_off);
+        }else{
+            $model->day_off = '';
+        }
+
+        $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
+
+        //save data without validation 
+        $model->save(false);
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'vendor_id' => $model->vendor_id
+        ];
+    }
+
+    /**
+    * Save vendor social info from update and create page
+    *
+    * @return json
+    */
+    public function actionSocialInfo() 
+    {
+        $vendor_id = Yii::$app->request->post('vendor_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = Yii::$app->request->post('Vendor');
+
+        //validate
+        if(!$is_autosave) {
+            $errors = Vendor::validate_social_info($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = Vendor::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['Vendor' => $posted_data]);
+
+        //data posted as array but saving in single column 
+        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+        if(is_array($vendor_day_off)) {
+            $model->day_off = implode(',', $vendor_day_off);
+        }else{
+            $model->day_off = '';
+        }
+
+        $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
+
+        //save data without validation 
+        $model->save(false);
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'vendor_id' => $model->vendor_id
+        ];
+    }
+
+    /**
+    * Save vendor email addresses from update and create page
+    *
+    * @return json
+    */
+    public function actionEmailAddresses() 
+    {
+        $vendor_id = Yii::$app->request->post('vendor_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = Yii::$app->request->post('Vendor');
+
+        //validate
+        if(!$is_autosave) {
+            $errors = Vendor::validate_email_addresses($posted_data);
+
+            if($errors) {
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+            }                
+        } 
+        
+        $model = Vendor::find()
+            ->where(['vendor_id' => $vendor_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['Vendor' => $posted_data]);
+
+        //data posted as array but saving in single column 
+        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
+
+        if(is_array($vendor_day_off)) {
+            $model->day_off = implode(',', $vendor_day_off);
+        }else{
+            $model->day_off = '';
+        }
+
+        $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
+
+        //save data without validation 
+        $model->save(false);
+
+        //remove old alert emails
+        VendorOrderAlertEmails::deleteAll(['vendor_id' => $model->vendor_id]);
+
+        //save vendor order alert email
+        $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+        if($vendor_order_alert_emails) {
+            foreach ($vendor_order_alert_emails as $key => $value) {
+                $email = new VendorOrderAlertEmails;
+                $email->vendor_id = $model->vendor_id;
+                $email->email_address = $value;
+                $email->save();
+            }
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'vendor_id' => $model->vendor_id
+        ];
+    }   
+    
+    /**
+     * Validate whole form on click of complete button 
+     *
+     * @return json
+     */
+    public function actionVendorValidate()
+    {
+        \Yii::$app->response->format = 'json';
+        
+        $posted_data = Yii::$app->request->post('Vendor');
+        
+        $errors = Vendor::validate_form($posted_data);
+
+        if($errors) 
+        {            
+            return [
+                'errors' => $errors
+            ];
+        }
+        else
+        {
+            return [
+                'success' => 1
+            ];
+        }
+    } 
+
+    public function actionCropedImageUpload()
+    {
+        // Set max execution time 3 minutes.
+        set_time_limit(3 * 60); 
+
+        $temp_folder = sys_get_temp_dir().'/'; 
+
+        $image_name = Yii::$app->security->generateRandomString();
+        $image_extension = '.png';
+        $content_type = 'image/png';
+
+        $base64string = str_replace('data:image/png;base64,', '', Yii::$app->request->post('image'));
+
+        //save to temp folder 
+        file_put_contents($temp_folder . $image_name . $image_extension, base64_decode($base64string));
+
+        //save to s3
+        $awsResult = Yii::$app->resourceManager->save(
+            null, //file upload object  
+            Vendor::UPLOADFOLDER . $image_name . $image_extension, // name
+            [], //options 
+            $temp_folder . $image_name . $image_extension, // source file
+            $content_type
+        );
+
+        if (!$awsResult) {
+            return [
+                'error' => 'File not uploaded successfully!'
+            ];    
+        }
+
+        //delete temp file
+        unlink($temp_folder . $image_name . $image_extension);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        return [
+            'image_url' => Yii::getAlias("@s3/vendor_logo/") . $image_name . $image_extension,
+            'image' => $image_name . $image_extension
+        ];
+    }    
 }

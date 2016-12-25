@@ -8,7 +8,11 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
-		<?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]);?>
+
+	<?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]);?>
+
+		<input type="hidden" name="vendor_id" value="<?= $model->vendor_id ?>" />
+
 		<div class="loadingmessage" style="display: none;">
 		<p>
 		<?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
@@ -21,52 +25,62 @@ use yii\widgets\ActiveForm;
 		<div class="tabbable">
 		  <ul class="nav nav-tabs">
 		    <li class="active">
-		      <a href="#0" data-toggle="tab">Vendor Logo </a>
+		      <a href="#1" data-toggle="tab" id="tab_1">Vendor Logo </a>
 		    </li>
 		    <li>
-		      <a href="#1" data-toggle="tab" class="zerovalid0">Basic Info </a>
+		      <a href="#2" id="tab_2">Basic Info </a>
 		    </li>
 		    <li>
-		      <a href="#2" data-toggle="tab" class="onevalid1">Main Info</a>
+		      <a href="#3" id="tab_3">Main Info</a>
 		    </li>
 		    <li>
-		      <a href="#3" data-toggle="tab" class="twovalid2">Additional Info</a>
+		      <a href="#4" id="tab_4">Additional Info</a>
 		    </li>
 		    <li>
-		      <a href="#4" data-toggle="tab" class="twovalid2">Social Info</a>
+		      <a href="#5" id="tab_5">Social Info</a>
 		    </li>
-		    <li><a href="#5" data-toggle="tab" class="twovalid2">Email addresses</a></li>
+		    <li>
+		    	<a href="#6" id="tab_6">Email addresses</a>
+		    </li>
 		  </ul>
 		  <div class="tab-content">
 
-		  	<div class="tab-pane" id="0">
+		  	<div class="tab-pane" id="1">
 		    	<label class="control-label">Vendor logo</label>
 
-	    		<div class="image-editor">
-			        <input type="file" class="cropit-image-input">
-			        <p style="color: red;">
-			    		Minimum image dimension : 450px x 450px
-			    	</p>
-			        <div class="cropit-preview" style="width: 450px; height: 450px;">
-			        	<?php
+		    	<div class="pull-left">
+		    		<div class="image-editor">
+				        <input type="file" class="cropit-image-input">
+				        <p style="color: red;">
+				    		Minimum image dimension : 450px x 450px
+				    	</p>
+				        <div class="cropit-preview" style="width: 450px; height: 450px;">
+				        	<img class="cropit-preview-image" alt="" src="https://placeholdit.imgix.net/~text?txtsize=20&txt=Drag%20and%20Drop%20Image%20Here
+					        	&w=450&h=450" style="transform-origin: left top 0px; will-change: transform;" />
+				        </div>
+				        <div class="image-size-label">
+				          Resize image
+				        </div>
+				        <input type="range" class="cropit-image-zoom-input" style="width: 450px;" />
 
-			        	if($model->vendor_logo_path) {
-				        	$src = Yii::getAlias('@vendor_logo') . '/' . $model->vendor_logo_path;
-				        }else{
-				        	$src = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=Drag%20and%20Drop%20Image%20Here
-				        	&w=450&h=450';
-				        } ?>
-
-			        	<img class="cropit-preview-image" alt="" src="<?= $src ?>" style="transform-origin: left top 0px; will-change: transform;" />
-			        </div>
-			        <div class="image-size-label">
-			          Resize image
-			        </div>
-			        <input type="range" class="cropit-image-zoom-input" style="width: 450px;">
-			        <input type="hidden" name="image" />
+				        <button type="button" class="btn btn-primary btn-crop-upload">Upload</button>
+				    </div>
+			    </div>
+			    <div class="pull-right">
+			    	<h3>Your uploaded logo will display here</h3>
+			    	<input type="hidden" name="Vendor[vendor_logo_path]" id="inpt_vendor_logo_path" value="<?= $model->vendor_logo_path ?>" />
+			    	<div class="thumbnail vendor-logo-thumbnail">
+			    		<?php if($model->vendor_logo_path) { ?>
+			    		<img src="<?= Yii::getAlias('@vendor_logo') . '/' . $model->vendor_logo_path ?>" />
+			    		<?php }else { ?>
+			    		<img src="https://placeholdit.imgix.net/~text?txtsize=20&txt=uploaded logo will display here &w=450&h=450" />
+			    		<?php } ?>
+			    	</div>
 			    </div>
 
 			    <div class="clearfix"></div>
+
+			    <hr />
 
 			    <div class="form-group" style="height: 10px;">
 					<input type="button" class="btn btn-info btnNext" value="Next" />
@@ -74,7 +88,7 @@ use yii\widgets\ActiveForm;
 				</div>
 		  	</div>
 
-		    <div class="tab-pane" id="1" >
+		    <div class="tab-pane" id="2" >
 
 		    	<?= $form->field($model, 'vendor_name')
 		    			->textInput(['maxlength' => 100, 'autocomplete' => 'off']) ?>
@@ -242,9 +256,8 @@ use yii\widgets\ActiveForm;
 					<?= Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
 				</div>
 			</div>
-			<!--End First Tab -->
 
-			<div class="tab-pane" id="2">
+			<div class="tab-pane" id="3">
 				<input type="hidden" id="test1" value="0" name="tests">
 				<input type='hidden' id='test' value='0' name='tests1'>
 
@@ -258,9 +271,7 @@ use yii\widgets\ActiveForm;
 
 			</div>
 
-			<!--End Second Tab -->
-
-		    <div class="tab-pane" id="3">
+		    <div class="tab-pane" id="4">
 
 				<?= $form->field($model, 'vendor_return_policy')->textArea(['id'=>'text-editor']); ?>
 
@@ -287,9 +298,8 @@ use yii\widgets\ActiveForm;
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
 				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
 			</div>
-			<!--End Third Tab -->
 
-			<div class="tab-pane" id="4">
+			<div class="tab-pane" id="5">
 
 				<table class="table table-bordered table-social">
 					<thead>
@@ -375,9 +385,9 @@ use yii\widgets\ActiveForm;
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 					<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
 				</div>
-		 	</div><!-- END tab-4 -->
+		 	</div>
 
-			<div class="tab-pane" id="5">
+			<div class="tab-pane" id="6">
 				Email address list to get order notification
 				<br />
 				<br />
@@ -413,7 +423,7 @@ use yii\widgets\ActiveForm;
 				<div class="form-group">
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 
-					<?= Html::submitButton('Submit', ['class' => 'btn btn-complete btn-primary', 'style'=>'float:right;']) ?>
+					<?= Html::submitButton('Complete', ['class' => 'btn btn-complete btn-primary', 'style'=>'float:right;']) ?>
 
 				</div>
 			</div>
@@ -445,15 +455,23 @@ $this->registerCss('
 ');
 
 if($model->isNewRecord) {
-	$is_new_record = 1;
+	echo Html::hiddenInput('isNewRecord', 1, ['id' => 'isNewRecord']);
 } else {
-	$is_new_record = 0;
+	echo Html::hiddenInput('isNewRecord', 0, ['id' => 'isNewRecord']);
 }
+
+echo Html::hiddenInput('logo_url', Url::to(['vendor/vendor-logo']), ['id' => 'logo_url']);
+echo Html::hiddenInput('basic_info_url', Url::to(['vendor/basic-info']), ['id' => 'basic_info_url']);
+echo Html::hiddenInput('main_info_url', Url::to(['vendor/main-info']), ['id' => 'main_info_url']);
+echo Html::hiddenInput('additional_info_url', Url::to(['vendor/additional-info']), ['id' => 'additional_info_url']);
+echo Html::hiddenInput('social_info_url', Url::to(['vendor/social-info']), ['id' => 'social_info_url']);
+echo Html::hiddenInput('email_addresses_url', Url::to(['vendor/email-addresses']), ['id' => 'email_addresses_url']);
+echo Html::hiddenInput('vendor_validate_url', Url::to(['vendor/vendor-validate']), ['id' => 'vendor_validate_url']);
+echo Html::hiddenInput('croped_image_upload_url', Url::to(['vendor/croped-image-upload']), ['id' => 'croped_image_upload_url']);
 
 $this->registerJs('
 	var validate_vendor_url = "'.Url::to(['vendor/validate-vendor']).'";
 	var vendornamecheck_url = "'.Url::to(['/vendor/vendornamecheck']).'";
-	var is_new_record = '.$is_new_record.';
 	var emailcheck_url = "'.Url::to(['/vendor/emailcheck']).'";
 	var vendor_status = "'.$model->vendor_status.'";
 	var approve_status = "'.$model->approve_status.'";
@@ -472,4 +490,4 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.8", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.9", ['depends' => [\yii\web\JqueryAsset::className()]]);
