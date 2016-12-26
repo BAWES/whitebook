@@ -102,8 +102,7 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
 
                                                 <?php if (!empty($vendor_detail['vendor_contact_address'])) { ?>
                                                 <li>
-                                                    <a target="_blank" href="http://maps.google.com/?q=<?= $vendor_detail['vendor_contact_address'] ?>">
-                                                        <i class="fa fa-map-marker"></i>
+                                                    <a><i class="fa fa-map-marker"></i>
                                                         <?= LangFormat::format($vendor_detail['vendor_contact_address'], $vendor_detail['vendor_contact_address_ar']); ?>
                                                     </a>
                                                 </li>
