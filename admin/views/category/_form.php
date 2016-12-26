@@ -24,8 +24,6 @@ use yii\widgets\ActiveForm;
 
 	<?= $form->field($model, 'category_meta_description')->textArea(['maxlength' => 250])?>
 
-	<?= $form->field($model, 'category_allow_sale')->checkbox(['yes' => 'yes']) ?>
-
 	<?= $form->field($model, 'top_ad')->textArea(['maxlength' => 250])?>
 
 	<?= $form->field($model, 'bottom_ad')->textArea(['maxlength' => 250])?>
@@ -40,17 +38,3 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 </div>
 
-<?php 
-
-if($model->isNewRecord || $model->category_allow_sale=='yes'){
-	
-	$this->registerJs("
-		$('#category-category_allow_sale').prop('checked', true);
-	");
-
-} else { 
-
-	$this->registerJs("
-		$('#category-category_allow_sale').prop('checked', false);
-	");
-}

@@ -24,14 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => 'html'
 			],
 			'sort',
-			[
-				'header'=>'Status',
-				'format' => 'raw',
-				'value'=>function($data) {
-					return HTML::a('<img src='.\admin\models\Category::statusImageurl($data['category_allow_sale']).' id="image-'.$data['ID'].'" alt="my_image" title='.\admin\models\Category::statusTitle($data['category_allow_sale']).'>','javascript:void(0)',['id'=>'status',
-						'onclick'=>'change("'.$data['category_allow_sale'].'","'.$data['ID'].'")']);
-				},
-			],
 			['class' => 'yii\grid\ActionColumn',
 				'header'=>'Action',
 				'template' => ' {update} {delete}',
