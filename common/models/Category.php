@@ -20,7 +20,6 @@ use yii\behaviors\TimestampBehavior;
 * @property string $category_id
 * @property string $parent_category_id
 * @property string $category_name
-* @property string $category_allow_sale
 * @property integer $created_by
 * @property integer $modified_by
 * @property string $created_datetime
@@ -90,7 +89,6 @@ class Category extends \yii\db\ActiveRecord
             [['parent_category_id', 'created_by', 'modified_by',], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
-            ['category_allow_sale', 'default', 'value' => true],
             [['category_title', 'created_datetime', 'modified_datetime','top_ad','bottom_ad'], 'safe'],
             [['category_name'], 'string', 'max' => 128]
         ];
@@ -113,7 +111,6 @@ class Category extends \yii\db\ActiveRecord
             'parent_category_id' => 'Parent category',
             'category_name' => 'Category name',
             'category_name_ar' => 'Category name - Arabic',
-            'category_allow_sale' => 'Category allow status',
             'created_by' => 'Created by',
             'modified_by' => 'Modified by',
             'created_datetime' => 'Created datetime',

@@ -69,7 +69,7 @@ class CategoryController extends Controller
     public function actionIndex()
     {
         $categories = CategoryPath::find()
-            ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, c2.sort,c2.category_allow_sale,{{%category_path}}.category_id as ID")
+            ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, c2.sort, {{%category_path}}.category_id as ID")
             ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
             ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
             ->where(['c2.trash'=>'Default'])
@@ -84,7 +84,7 @@ class CategoryController extends Controller
                 'pageSize' => 20,
             ],
             'sort' => [
-                'attributes' => ['category_name','sort','category_allow_sale'],
+                'attributes' => ['category_name','sort'],
             ],
         ]);
 
@@ -161,7 +161,6 @@ class CategoryController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $model->category_allow_sale = (Yii::$app->request->post()['Category']['category_allow_sale']) ? 'yes' : 'no';
             $model->category_name = $model->category_name;
 
             $max_sort = Category::find()
@@ -401,41 +400,6 @@ class CategoryController extends Controller
         }
     }
 
-    public function actionBlock()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-        }
-
-        $status = ($data['status'] == 'yes' ? 'no' : 'yes');
-
-        $category = Category::updateAll(['category_allow_sale' => $status],[
-            'category_id' => $data['cid']
-        ]);
-
-        $category = Category::updateAll(['category_allow_sale' => $status],[
-            'parent_category_id' => $data['cid']
-        ]);
-
-        $sub_category = Category::find()
-            ->select('category_id')
-            ->where(['parent_category_id' => $data['cid']])
-            ->all();
-        
-        foreach ($sub_category as $cat) {
-
-			$category = Category::updateAll(['category_allow_sale' => $status], [
-                'parent_category_id' => $cat['category_id']
-            ]);
-        }
-
-        if ($status == 'yes') {
-            return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
-        } else {
-            return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
-        }
-    }
-
     public function actionLoadcategory()
     {
         if (!Yii::$app->request->isAjax) {
@@ -490,7 +454,6 @@ class CategoryController extends Controller
 
         $subcategory = Category::find()->select('category_id,category_name')
             ->where(['parent_category_id' => $data['id']])
-            ->andwhere(['!=', 'category_allow_sale', 'no'])
             ->andwhere(['!=', 'trash', 'Deleted'])
             ->andwhere(['!=', 'parent_category_id', 'null'])
             ->all();

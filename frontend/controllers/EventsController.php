@@ -233,7 +233,7 @@ class EventsController extends BaseController
 
         /* Load level 1 category */
         $categories = \frontend\models\Category::find()
-            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->where(['category_level' => 0, 'trash' =>'Default'])
             ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
             ->asArray()
             ->all();
@@ -264,7 +264,7 @@ class EventsController extends BaseController
         $this->layout = 'pdf';
 
         $categories = \frontend\models\Category::find()
-            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->where(['category_level' => 0, 'trash' =>'Default'])
             ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
             ->asArray()
             ->all();
@@ -612,7 +612,7 @@ class EventsController extends BaseController
         EventItemlink::markComplete($event_id, $category_id);  
 
         $categories = \frontend\models\Category::find()
-            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->where(['category_level' => 0, 'trash' =>'Default'])
             ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
             ->asArray()
             ->all();
@@ -646,7 +646,7 @@ class EventsController extends BaseController
         EventItemlink::markIncomplete($event_id, $category_id);   
 
         $categories = \frontend\models\Category::find()
-            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+            ->where(['category_level' => 0, 'trash' =>'Default'])
             ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
             ->asArray()
             ->all();

@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>function($data){
                     return $data->getCategoryName($data->category_id);
                 },  
-                'filter' => Html::activeDropDownList($searchModel, 'category_id', ArrayHelper::map(common\models\Category::find()->where(['category_allow_sale'=>'Yes','parent_category_id'=>null,'trash' =>'Default'])->orderBy('category_name')->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),                      
+                'filter' => Html::activeDropDownList($searchModel, 'category_id', ArrayHelper::map(common\models\Category::find()->where(['parent_category_id'=>null,'trash' =>'Default'])->orderBy('category_name')->asArray()->all(), 'category_id','category_name'),['class'=>'form-control','prompt' => 'All']),                      
             ],
             [
                 'attribute'=>'type_id',
