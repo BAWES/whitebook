@@ -80,26 +80,29 @@ $cust_id = Yii::$app->user->getId();
 
 foreach ($cat_exist as $key => $value1) {
 
-$items = VendorItem::find()
+$items = EventItemlink::find()
     ->select(['{{%vendor}}.vendor_name','{{%vendor_item}}.item_id','{{%event_item_link}}.link_id',
         '{{%vendor_item}}.item_price_per_unit', '{{%vendor_item}}.item_name','{{%vendor_item}}.slug', 
         '{{%vendor_item}}.item_id'
     ])
-    ->innerJoin('{{%event_item_link}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
+    ->leftJoin('{{%vendor_item}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
     ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
     ->leftJoin(
         '{{%vendor_item_to_category}}', 
         '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
     )
+    ->leftJoin(
+        '{{%category_path}}', 
+        '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id'
+    )
     ->where([
         '{{%vendor_item}}.item_status' => 'Active',
         '{{%vendor_item}}.trash' => 'Default',
-        '{{%vendor_item}}.item_for_sale' => 'Yes',
-        '{{%vendor_item_to_category}}.category_id' => $value1['category_id'],
-        '{{%vendor_item}}.type_id' => 2,
+        '{{%category_path}}.path_id' => $value1['category_id'],
         '{{%event_item_link}}.trash' => 'Default',
         '{{%event_item_link}}.event_id' => $event_details->event_id
     ])
+    ->groupBy('{{%event_item_link}}.item_id')
     ->asArray()
     ->all();
 ?>
@@ -445,4 +448,4 @@ echo Html::hiddenInput('txt_delete_confirm', Yii::t('frontend', 'Are you sure yo
 
 echo Html::hiddenInput('delete_event_url', Url::to(['/users/deleteeventitem']), ['id' => 'delete_event_url']);
 
-$this->registerJsFile('@web/js/event_detail.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/event_detail.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);

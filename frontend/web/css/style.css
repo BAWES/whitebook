@@ -1247,7 +1247,7 @@ video source { background:transparent;}
 .form-control[disabled],.form-control[readonly], fieldset[disabled] .form-control{background:#fff !important;}
 #eventdate_icon{height:35px;}
 
-#success .msg-success{  text-align: center;display: table-cell;vertical-align: middle;width: 100%;  text-transform: uppercase;}
+#success .msg-success { display: table-cell;vertical-align: middle; text-transform: uppercase;}
 
 .add_contact_table ul.pagination {float:right;}
 .add_contact_table ul.pagination .prev,.add_contact_table ul.pagination .next{display:none;}

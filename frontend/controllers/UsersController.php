@@ -542,6 +542,8 @@ class UsersController extends BaseController
         if (!Yii::$app->request->isAjax) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
+        Yii::$app->response->format = 'json';
             
         $data = Yii::$app->request->post();
 
@@ -552,13 +554,53 @@ class UsersController extends BaseController
 
         if($event) {
 
-            $command = EventItemlink::deleteAll([
-                'link_id' => $data['item_link_id'],
-                'event_id'=> $data['event_id']
-            ]);   
+            $model = EventItemlink::find()
+                ->where([
+                    'link_id' => $data['item_link_id'],
+                    'event_id'=> $data['event_id']
+                ])
+                ->one();
 
-            return Users::SUCCESS; // Event item removed successfully 
+            //to remove multiple entry of same item in same event 
+            if($model) 
+            {
+                EventItemlink::deleteAll([
+                    'item_id' => $model->item_id,
+                    'event_id'=> $data['event_id']
+                ]);    
+            }  
+
+            //get item count 
+            $count = EventItemlink::find()
+                ->leftJoin('{{%vendor_item}}', '{{%event_item_link}}.item_id = {{%vendor_item}}.item_id')
+                ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+                ->leftJoin(
+                    '{{%vendor_item_to_category}}', 
+                    '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
+                )                            
+                ->leftJoin(
+                    '{{%category_path}}', 
+                    '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id'
+                )
+                ->where([
+                    '{{%vendor_item}}.item_status' => 'Active',
+                    '{{%vendor_item}}.trash' => 'Default',
+                    '{{%category_path}}.path_id' => $data['category_id'],
+                    '{{%event_item_link}}.trash' => 'Default',
+                    '{{%event_item_link}}.event_id' => $data['event_id']
+                ])
+                ->groupBy('{{%event_item_link}}.item_id')
+                ->count();
+
+            return [
+                'success' => Yii::t('frontend', 'Success! Item removed.'),
+                'count' => $count
+            ];
         }
+
+        return [
+            'error' => Yii::t('frontend', 'Error! Something went wrong.')
+        ];
     }
 
     /**

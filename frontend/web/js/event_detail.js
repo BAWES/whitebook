@@ -147,20 +147,26 @@ function deleteeventitem(item_link_id, category_name,category_id,event_id,tis)
                 'category_id':category_id,
                 'event_id':event_id
             },
-            success:function(data)
+            success:function(json)
             {
-                if(data!=-1)
+                if(json.success)
                 {
-                    jQuery('#'+tis).parents('.panel-default').find('span#item_count').html(data);
+                    jQuery('#'+tis).parents('.panel-default').find('span#item_count').html(json.count);
                     jQuery('#'+tis).parents('li').remove();
                     jQuery('#login_success').modal('show');
-                    jQuery('#login_success #success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\" >Success! Item removed from the '+category_name+'.</span>');
-                    window.setTimeout(function() {jQuery('#login_success').modal('hide');},2000);
+                    jQuery('#login_success #success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\" >' + json.success + '</span>');
+                    window.setTimeout(function() {
+                        jQuery('#login_success').modal('hide');
+                    },2000);
                 }
-                else{
+                
+                if(json.error)
+                {
                     jQuery('#login_success').modal('show');
-                    jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\">Error! Something went wrong.</span>');
-                    window.setTimeout(function() {jQuery('#login_success').modal('hide');}, 2000);
+                    jQuery('#success').html('<span class=\"sucess_close\">&nbsp;</span><span class=\"msg-success\"> '+ json.error+' </span>');
+                    window.setTimeout(function() {
+                        jQuery('#login_success').modal('hide');
+                    }, 2000);
                 }
             }
         })

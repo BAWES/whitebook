@@ -27,6 +27,7 @@ use common\models\VendorItemToCategory;
 use common\models\CustomerAddressResponse;
 use frontend\models\Users;
 use frontend\models\Themes;
+use frontend\models\Category;
 use frontend\models\Website;
 use frontend\models\Wishlist;
 use frontend\models\Customer;
@@ -197,8 +198,9 @@ class EventsController extends BaseController
         $dataProvider = $searchModel->loadsearch(Yii::$app->request->queryParams, $event_details->event_id);
 
         /* Load level 1 category */
-        $cat_exist = \frontend\models\Category::find()
-            ->where(['category_level' => 0, 'category_allow_sale' =>'Yes', 'trash' =>'Default'])
+        $cat_exist = Category::find()
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where(['{{%category_path}}.level' => 0, 'trash' =>'Default'])
             ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
             ->asArray()
             ->all();
