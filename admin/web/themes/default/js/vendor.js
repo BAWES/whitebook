@@ -177,20 +177,18 @@ function removePhone(phone) {
 	$(".controls"+phone).remove();
 }
 
-//category add drop downlist
-$(".vendor-category_id:last-child").css({"clear" : "both","float" :"inherit"});
-$('#option').hide();
+$(document).ready(function () {
 
-$(function(){
+	$('#option').hide();
+
+	/*
+	$(".vendor-category_id:last-child").css({"clear" : "both","float" :"inherit"});
  	$('#vendor-category_id').multiselect({
 		'enableFiltering': true,
 		'filterPlaceholder': 'Search for something...'
 	});
-});
 
-$(document).ready(function () {
-
-	/*$('#package_start_date').datepicker({  
+	$('#package_start_date').datepicker({  
 		format: 'dd-mm-yyyy', 
 		startDate: 'today'
 	}).on('changeDate', function() {
