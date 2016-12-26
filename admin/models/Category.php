@@ -16,7 +16,6 @@ use yii\behaviors\BlameableBehavior;
  * @property string $category_id
  * @property string $parent_category_id
  * @property string $category_name
- * @property string $category_allow_sale
  * @property integer $created_by
  * @property integer $modified_by
  * @property string $created_datetime
@@ -46,7 +45,6 @@ class Category extends \common\models\Category
             [['parent_category_id', 'created_by', 'modified_by'], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
-            ['category_allow_sale', 'default', 'value' => true],
             [['category_name', 'category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required','on' => 'register'],
             //[['parent_category_id', 'category_name','category_name_ar'], 'required','on' => 'sub_update',],
             [['created_datetime', 'modified_datetime','top_ad','bottom_ad','parent_category_id'], 'safe'],
@@ -75,8 +73,7 @@ class Category extends \common\models\Category
   public static function loadcategory()
   {
     $categories=Category::find()
-    ->where(['category_allow_sale' => 'yes'])
-    ->andwhere(['!=', 'trash', 'Deleted'])
+    ->where(['!=', 'trash', 'Deleted'])
     ->andwhere(['parent_category_id' => null])
     ->all();
     $category=ArrayHelper::map($categories,'category_id','category_name');
@@ -86,8 +83,7 @@ class Category extends \common\models\Category
   public static function loadcategoryname()
   {
      $category= Category::find()
-     ->where(['category_allow_sale'=>'yes'])
-     ->andwhere(['!=', 'trash', 'Deleted'])
+     ->where(['!=', 'trash', 'Deleted'])
      ->andwhere(['=', 'category_level', '0'])
      ->andwhere(['parent_category_id' => null])
      ->all();
@@ -98,8 +94,7 @@ class Category extends \common\models\Category
     public static function viewcategoryname($id)
     {
      $categories=Category::find()
-     ->where(['category_allow_sale' => 'yes'])
-     ->andwhere(['category_id' => $id])
+     ->where(['category_id' => $id])
      ->andwhere(['!=', 'trash', 'Deleted'])
      ->one();
      return $categories['category_name'];

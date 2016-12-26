@@ -21,7 +21,7 @@ class CategorySearch extends Category
     {
         return [
             [['category_id', 'parent_category_id', 'created_by', 'modified_by'], 'integer'],
-            [['category_name', 'category_allow_sale', 'modified_datetime', 'trash'], 'safe'],
+            [['category_name', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
 

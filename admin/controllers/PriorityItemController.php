@@ -226,7 +226,6 @@ class PriorityItemController extends Controller
         }
         $categoryid = Vendor::find()->select('category_id')
             ->where(['vendor_id' => $data['id']])
-            ->andwhere(['category_allow_sale' => 'yes'])
             ->andwhere(['category_level' => 0])
             ->andwhere(['!=', 'trash', 'Deleted'])
             ->andwhere(['parent_category_id' => null])
@@ -247,7 +246,6 @@ class PriorityItemController extends Controller
         $subcategory = Category::find()->select('category_id,category_name')
           ->where(['parent_category_id' => $data['id']])
           ->andwhere(['category_level' => 1])
-          ->andwhere(['!=', 'category_allow_sale', 'no'])
           ->andwhere(['!=', 'trash', 'Deleted'])
           ->andwhere(['!=', 'parent_category_id', 'null'])->all();
           echo  '<option value="">Select subcategory...</option>';
@@ -265,7 +263,6 @@ class PriorityItemController extends Controller
         $subcategory = Category::find()->select('category_id,category_name')
           ->where(['parent_category_id' => $data['id']])
           ->andwhere(['category_level' => 2])
-          ->andwhere(['!=', 'category_allow_sale', 'no'])
           ->andwhere(['!=', 'trash', 'Deleted'])->all();
         echo  '<option value="">Select child category...</option>';
         foreach ($subcategory as $key => $val) {

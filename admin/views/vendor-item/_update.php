@@ -518,8 +518,6 @@ function cmp($a, $b)
 
 			<?= $form->field($category_model, 'category_meta_description')->textArea(['maxlength' => 250])?>
 
-			<?= $form->field($category_model, 'category_allow_sale')->checkbox(['yes' => 'yes']) ?>
-
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary">Submit</button>
@@ -550,8 +548,6 @@ function cmp($a, $b)
 			<?= $form->field($category_model, 'category_meta_keywords')->textArea(['maxlength' => 250])?>
 
 			<?= $form->field($category_model, 'category_meta_description')->textArea(['maxlength' => 250])?>
-
-			<?= $form->field($category_model, 'category_allow_sale')->checkbox(['yes' => 'yes']) ?>
 
       </div>
       <div class="modal-footer">

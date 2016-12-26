@@ -16,7 +16,6 @@ use yii\behaviors\TimestampBehavior;
 * @property string $category_id
 * @property string $parent_category_id
 * @property string $category_name
-* @property string $category_allow_sale
 * @property integer $created_by
 * @property integer $modified_by
 * @property string $created_datetime
@@ -68,7 +67,7 @@ class SubCategory extends \yii\db\ActiveRecord
     {
         return [
             [['parent_category_id','category_level', 'created_by', 'modified_by'], 'integer'],
-            [['category_allow_sale', 'trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad'], 'string'],
+            [['trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad'], 'string'],
             [['parent_category_id','category_name','category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             [['category_name'], 'string', 'max' => 128]
         ];
@@ -82,7 +81,6 @@ class SubCategory extends \yii\db\ActiveRecord
             'category_id' => 'Category name',
             'parent_category_id' => 'Parent Category',
             'category_name' => 'Category name',
-            'category_allow_sale' => 'Category Allow status',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
@@ -136,8 +134,7 @@ class SubCategory extends \yii\db\ActiveRecord
     public static function loadsubcategoryname()
     {
         $subcategoryname= SubCategory::find()
-        ->where(['!=', 'category_allow_sale', 'no'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
+        ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['!=', 'parent_category_id', 'null'])
         ->all();
 

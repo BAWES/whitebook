@@ -20,8 +20,7 @@ class CategoryModel extends Model
 				'{{%category}}.trash' => 'Default',
 				'{{%category}}.approve_status' => 'yes',
 				'{{%category}}.category_id' => $cat_id,
-				'{{%category}}.trash' => 'Default',
-				'{{%category}}.category_allow_sale' => 'yes'
+				'{{%category}}.trash' => 'Default'
 			])
 			->asArray()
 			->all();
@@ -33,7 +32,6 @@ class CategoryModel extends Model
 		return $category = \common\models\Category::find()
 			->select(['category_id','category_name'])
 			->Where(['trash'=>'default'])
-			->andWhere(['category_allow_sale'=>'yes'])
 			->andWhere(['category_url'=>$category])
 			->asArray()
 			->all();
@@ -45,7 +43,6 @@ class CategoryModel extends Model
 			->select(['category_id','category_name','category_url'])
 			->Where(['parent_category_id'=>null])
 			->andWhere(['trash'=>'default'])
-			->andWhere(['category_allow_sale'=>'yes'])
 			->asArray()
 			->all();
         return $general;

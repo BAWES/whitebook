@@ -261,10 +261,11 @@ use yii\widgets\ActiveForm;
 				<input type="hidden" id="test1" value="0" name="tests">
 				<input type='hidden' id='test' value='0' name='tests1'>
 
-				<?= $form->field($model, 'category_id')
-					->dropDownList($main_categories, ['multiple'=>'multiple']); ?>
-
 				<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
+
+				<hr />
+
+				<?= $form->field($model, 'category_id')->checkboxList($main_categories)->label('Categories'); ?>
 
 				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
 				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
@@ -490,4 +491,4 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.9", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.10", ['depends' => [\yii\web\JqueryAsset::className()]]);

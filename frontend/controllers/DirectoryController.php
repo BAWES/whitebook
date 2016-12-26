@@ -117,10 +117,11 @@ class DirectoryController extends BaseController
         if (empty($vendor_details)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
         $data = Yii::$app->request->get();
 
         $main_category = Category::find()
-            ->where(['category_level'=>'0', 'trash'=>"Default",'category_allow_sale'=>"yes"])
+            ->where(['category_level'=>'0', 'trash'=>"Default"])
             ->asArray()
             ->all();
 

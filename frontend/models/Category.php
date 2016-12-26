@@ -11,7 +11,6 @@ use yii\helpers\Url;
  * @property string $category_id
  * @property string $parent_category_id
  * @property string $category_name
- * @property string $category_allow_sale
  * @property integer $created_by
  * @property integer $modified_by
  * @property string $created_datetime
@@ -34,8 +33,7 @@ class Category extends \common\models\Category
     public static function category_slug($id)
     {
       return $categories=Category::find()
-        ->where(['category_allow_sale' => 'yes'])
-        ->andwhere(['category_id' => $id])
+        ->where(['category_id' => $id])
         ->andwhere(['!=', 'trash', 'Deleted'])
         ->one();
     }

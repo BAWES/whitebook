@@ -21,8 +21,7 @@ class Website extends Model {
             ->select('category_id, category_name')
             ->where([
                 'parent_category_id' => 'IS NULL', 
-                'trash' => "Default",
-                'category_allow_sale' => "yes"
+                'trash' => "Default"
             ])
             ->asArray()
             ->all();

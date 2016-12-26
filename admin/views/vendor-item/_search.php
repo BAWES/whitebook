@@ -9,9 +9,11 @@ use common\models\Themes;
 use common\models\FeatureGroup;
 
 $category_options = ArrayHelper::map(
-        Category::find()->where([
-                'category_allow_sale' => 'Yes', 'parent_category_id' => Null
-            ])->orderBy('category_name')->asArray()->all(), 
+        Category::find()
+            ->where(['parent_category_id' => Null])
+            ->orderBy('category_name')
+            ->asArray()
+            ->all(), 
         'category_id', 
         'category_name'
     );

@@ -386,7 +386,6 @@ class Users extends Model
         return Category::find()->select('category_id,category_name')
             ->where(['parent_category_id'=>'IS NULL'])
             ->andwhere(['trash'=>'Default'])
-            ->andwhere(['category_allow_sale'=>'yes'])
             ->asArray()
             ->all();
     }

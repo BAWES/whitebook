@@ -18,7 +18,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/style.css?v=1.24',
+        'css/style.css?v=1.25',
         'fonts/flaticon/flaticon.css',
         'css/demo.css?v=1.2',
         'css/media_style.css?v=1.7',
@@ -35,7 +35,7 @@ class AppAsset extends AssetBundle
         'js/bootstrap.min.js',
         'js/jquery.flexslider.js',
         'js/classie.js',
-        'js/main.js?v=1.8',
+        'js/main.js?v=1.10',
         'js/owl.carousel.js',
         'js/bootstrap-datepicker.js',
         'js/bootstrap-select.js'
