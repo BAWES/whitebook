@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use common\models\Image;
 use common\models\VendorItemToPackage;
+use frontend\models\Website;
 use common\components\CFormatter;
 
 ?>
@@ -56,8 +57,7 @@ use common\components\CFormatter;
 						    	</div>
 
 						    	<div class="form-group">
-							    	<button class="btn btn-default" data-toggle="modal" data-target="#EventModal" type="button">
-							    		<?= Yii::t('frontend', 'Create Event') ?>
+							    	<button class="btn btn-default" data-toggle="modal" data-target="#modal_event_from_package" type="button"><?= Yii::t('frontend', 'Create Event') ?>
 							    	</button>				
 						    	</div>	
 
@@ -127,7 +127,7 @@ use common\components\CFormatter;
 			        '{{%category_path}}.path_id' => $category->category_id,
 			        '{{%vendor_item_to_package}}.package_id' => $package->package_id
 			    ])
-			    ->groupBy('{{%vendor_item}}.item_id')
+			    ->groupBy('{{%vendor_item_to_package}}.item_id')
 			    ->asArray()
 			    ->all();
 
@@ -221,7 +221,87 @@ use common\components\CFormatter;
 	</div><!-- END .container -->
 </section>
 
+
+<?php if(!Yii::$app->user->isGuest) { ?>
+<!-- BEGIN Create event Modal Box -->
+<div class="modal fade" id="modal_event_from_package" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" id="eventModal">
+        <div class="modal-content  modal_member_login signup_poupu row">
+            <div class="modal-header">
+                <button type="button" class="close" id="boxclose" name="boxclose" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="text-center">
+                    <span class="yellow_top"></span>
+                </div>
+                <h4 class="modal-title text-center" id="myModalLabel"><?php echo Yii::t('frontend', 'Create New Event'); ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-8 col-xs-offset-2">
+                        <div class="product_popup_signup_box">
+                            <div class="product_popup_signup_log">
+                                <form>
+                                    <input type="hidden" id="_csrf" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
+                                    <div class="form-group">
+                                        <input type="text" name="event_name" class="form-control required" id="event_name" placeholder="<?php echo Yii::t('frontend', 'Enter Event Name'); ?>" title="<?php echo Yii::t('frontend', 'Enter Event Name'); ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" name="item_id" class="form-control required" id="item_id" value="0">
+                                    </div>
+                                    <div class="form-group top_calie_new">
+                                        <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
+                                            <input type="text"  name="event_date" id="event_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Event Date'); ?>">
+                                            <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
+                                        </div>
+                                        <label for="event_date" class="error"></label>
+                                    </div>
+                                    <div class="form-group new_popup_common">
+                                        <div class="bs-docs-example">
+                                            <select class="selectpicker required trigger" name="event_type" style="btn-primary" id="event_type" >
+                                            <option value="">
+                                                <?php echo Yii::t('frontend', 'Select event type') ?>
+                                            </option>
+                                            <?php $event_type = Website::get_event_types();
+                                            foreach ($event_type as $e) { ?>
+                                            <option value="<?php echo $e['type_name']; ?>">
+                                                <?php echo $e['type_name']; ?>
+
+                                            </option>
+                                            <?php } ?>
+                                            </select>
+
+                                            <div class="error" id="type_error"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="no_of_guests" class="form-control required" id="no_of_guests" placeholder="<?php echo Yii::t('frontend', 'Enter number of guests'); ?>" />
+                                    </div>
+
+                                    <div id="eventresult"></div>
+                                    <div class="eventErrorMsg error"></div>
+                                    <div class="event_loader"><img src="<?php echo Url::to('@web/images/ajax-loader.gif', true); ?>" title="Loader"></div>
+                                    <div class="buttons">
+                                        <div class="creat_evn_sig">
+                                            <button type="button" id="create_event_button" name="create_event_button" class="btn btn-default" title="<?php echo Yii::t('frontend', 'Create Event'); ?>"><?php echo Yii::t('frontend', 'Create Event'); ?></button>
+                                        </div>
+                                        <div class="cancel_sig">
+                                            <input class="btn btn-default" data-dismiss="modal"  id="cancel_button" name="cancel_button" type="button" value="<?php echo Yii::t('frontend', 'Cancel'); ?>" title="<?php echo Yii::t('frontend', 'Cancel'); ?>">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php } ?>
+<!-- END Create event Modal Box -->
+
+
 <?php
 
 echo Html::hiddenInput('package_id', $package->package_id, ['id' => 'package_id']); 
-echo Html::hiddenInput('add_to_event_url', Url::to("add-to-event"), ['id' => 'add_to_event_url']); 
+echo Html::hiddenInput('add_to_event_url', Url::to(["packages/add-to-event"]), ['id' => 'add_to_event_url']); 
+echo Html::hiddenInput('package_event_url', Url::to(["packages/add-event"]), ['id' => 'package_event_url']); 

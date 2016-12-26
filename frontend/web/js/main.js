@@ -668,27 +668,28 @@ $(document).delegate("#phone, #invitees_phone", 'keypress', function (e) {
 });
 
 /* BEGIN ADD TO EVENT */
-$(document).delegate('#create_event_button', 'click', function(){
+$(document).delegate('#EventModal #create_event_button', 'click', function(){
    
     var i=0;
     //var element = $(this).parents('form');
-    var event_type=$('#event_type').val();
+    var event_type=$('#EventModal  #event_type').val();
+    
     if(event_type==''){
-        $('#type_error').html(kindly_select_event_type);
+        $('#EventModal #type_error').html(kindly_select_event_type);
         i=1;
     }else{
         i=0;
-        $('#type_error').hide();
+        $('#EventModal #type_error').hide();
     }
 
     if($('#create_event').valid()&& (i==0))
     {
-        $('#event_loader').show();
+        $('#EventModal #event_loader').show();
 
-        var event_date = $('#event_date').val();
-        var item_id = $('#item_id').val();
-        var event_name = $('#event_name').val();
-        var no_of_guests = $('#no_of_guests').val();
+        var event_date = $('#EventModal #event_date').val();
+        var item_id = $('#EventModal #item_id').val();
+        var event_name = $('#EventModal #event_name').val();
+        var no_of_guests = $('#EventModal #no_of_guests').val();
 
         var _csrf=$('#_csrf').val();
 
@@ -699,41 +700,37 @@ $(document).delegate('#create_event_button', 'click', function(){
             var item_name='item ';
         }
 
-            $.ajax({
-                url: create_event,
-                type:"post",
-                data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf + "&no_of_guests=" + no_of_guests,
-                success:function(data,slider)
+        $.ajax({
+            url: create_event,
+            type:"post",
+            data:"event_date="+event_date+"&item_id="+item_id+"&event_name="+event_name+"&item_name="+item_name+"&event_type="+event_type+"&_csrf="+_csrf + "&no_of_guests=" + no_of_guests,
+            success:function(data,slider)
+            {
+                $('.directory_slider,.container_eventslider').load('events_slider', function(){
+                    $(this).css('background','transparent','important');
+                });
+                /* Hide BG FOR EVENT SLIDER*/
+                if(data==-1)
                 {
-                    $('.directory_slider,.container_eventslider').load('events_slider', function(){
-                        $(this).css('background','transparent','important');
-                    });
-                    /* Hide BG FOR EVENT SLIDER*/
-                    if(data==-1)
-                    {
-                        $('#event_loader').hide();
-                        $('#eventresult').addClass('alert-success alert fade in');
-                        $('#eventresult').html(event_exist+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
-                    }
-                    else if(data==1)
-                    {
-                        $(".eventErrorMsg").html('');
-                        $('#EventModal').modal('hide');
-                        window.setTimeout(function(){location.reload()});
-                    }
-                    else if(data==2)
-                    {
-                        $('#event_loader').hide();
-                        $(".eventErrorMsg").html('');
-                        $('#EventModal').modal('hide');
-                        window.setTimeout(function(){location.reload()});
-                    }
-                },
-                error:function(data)
-                {
-
+                    $('#EventModal #event_loader').hide();
+                    $('#EventModal #eventresult').addClass('alert-success alert fade in');
+                    $('#EventModal #eventresult').html(event_exist+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
                 }
-            })
+                else if(data==1)
+                {
+                    $("#EventModal .eventErrorMsg").html('');
+                    $('#EventModal').modal('hide');
+                    window.setTimeout(function(){location.reload()});
+                }
+                else if(data==2)
+                {
+                    $('#EventModal #event_loader').hide();
+                    $("#EventModal .eventErrorMsg").html('');
+                    $('#EventModal').modal('hide');
+                    window.setTimeout(function(){location.reload()});
+                }
+            }
+        });
     }
 });
 /* END ADD TO EVENT */
@@ -2093,15 +2090,72 @@ $(function() {
             },
             success:function(json)
             {
-                $html  = '<div class="alert alert-success">';
-                $html += json.success;
-                $html += '<button class="close" data-dismiss="alert">x</button>';
-                $html += '</div>';  
-                $('.alert_wrapper').html($html);
+                if(json.error)
+                {
+                    $html  = '<div class="alert alert-danger">';
+                    $html += json.error;
+                    $html += '<button class="close" data-dismiss="alert">x</button>';
+                    $html += '</div>';  
+                    $('.alert_wrapper').html($html);
 
-                $('html, body').animate({ scrollTop: 0 }, 'slow');
+                    $('html, body').animate({ scrollTop: 0 }, 'slow');
+                }
+                else
+                {
+                    location = json.event_url;    
+                }                
             }
         });
     });
 });
 
+
+/* BEGIN ADD TO EVENT */
+$(document).delegate('#modal_event_from_package #create_event_button', 'click', function(){
+   
+    var i=0;
+    //var element = $(this).parents('form');
+    var event_type=$('#modal_event_from_package  #event_type').val();
+    
+    if(event_type==''){
+        $('#modal_event_from_package #type_error').html(kindly_select_event_type);
+        i=1;
+    }else{
+        i=0;
+        $('#modal_event_from_package #type_error').hide();
+    }
+
+    if($('#modal_event_from_package form').valid()&& (i==0))
+    {
+        $('#modal_event_from_package #event_loader').show();
+
+        var event_date = $('#modal_event_from_package #event_date').val();
+        var item_id = $('#modal_event_from_package #item_id').val();
+        var event_name = $('#modal_event_from_package #event_name').val();
+        var no_of_guests = $('#modal_event_from_package #no_of_guests').val();
+        
+        var _csrf = $('#_csrf').val();
+
+        $.ajax({
+            url: $('#package_event_url').val(),
+            type:"post",
+            data:"event_date="+event_date+"&package_id="+$('#package_id').val()+"&event_name="+event_name+"&event_type="+event_type+"&_csrf="+_csrf + "&no_of_guests=" + no_of_guests,
+            success:function(json)
+            {
+                if(json.success)
+                {
+                    $('#modal_event_from_package').modal('hide');
+                    location = json.event_url;
+                }
+
+                if(json.error)
+                {
+                    $('#modal_event_from_package #event_loader').hide();
+                    $('#modal_event_from_package #eventresult').addClass('alert-success alert fade in');
+                    $('#modal_event_from_package #eventresult').html(event_exist+'<a id="boxclose" class="boxclose" onclick="MyEventFunction();"></a>').animate({ color: "red" }).show();
+                }
+            }
+        });
+    }
+});
+/* END ADD TO EVENT */
