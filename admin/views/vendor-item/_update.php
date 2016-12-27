@@ -177,6 +177,11 @@ function cmp($a, $b)
 		<!--BEGIN second Tab -->
 		<div class="tab-pane clearfix" id="2">
 			
+			<div class="alert alert-info">
+				Inline css will be removed from editor for item description, item additional info, price description and customization description.
+				<button class="close" data-dismiss="alert">x</button>
+			</div>
+
 			<?= $form->field($model, 'type_id')->dropDownList($itemType, ['prompt'=>'Select...']) ?>
 
 			<?= $form->field($model, 'item_description')

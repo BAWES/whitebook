@@ -27,6 +27,7 @@ $(function()
 	ck_additional_info = CKEDITOR.replace('vendoritem-item_additional_info', $config);
 	ck_price_description = CKEDITOR.replace('vendoritem-item_price_description', $config);
 	ck_customization_description = CKEDITOR.replace('vendoritem-item_customization_description', $config);
+	
 	ck_item_description_ar = CKEDITOR.replace('vendoritem-item_description_ar', $config);
 	ck_additional_info_ar = CKEDITOR.replace('vendoritem-item_additional_info_ar', $config);
 	ck_price_description_ar = CKEDITOR.replace('vendoritem-item_price_description_ar', $config);
@@ -698,6 +699,13 @@ function show_errors(json)
 		$(".field-vendoritem-item_name").removeClass('has-success');
 		$(".field-vendoritem-item_name").addClass('has-error');
 		$(".field-vendoritem-item_name").find('.help-block').html(json['errors']['item_name']);
+	}
+
+	if(json['errors']['item_name_ar']) 
+	{
+		$(".field-vendoritem-item_name_ar").removeClass('has-success');
+		$(".field-vendoritem-item_name_ar").addClass('has-error');
+		$(".field-vendoritem-item_name_ar").find('.help-block').html(json['errors']['item_name_ar']);
 	}
 				
 	if(json['errors']['category']) 

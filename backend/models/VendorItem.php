@@ -58,6 +58,11 @@ class VendorItem extends \common\models\VendorItem
             return $errors;
         }
 
+        if(empty($data['item_name_ar'])) {
+            $errors['item_name_ar'] = 'Item name - Arabic cannot be blank.';
+            return $errors;
+        }
+
         if(strlen($data['item_name']) < 4) {
             $errors['item_name'] = 'Item name minimum 4 letters.';
             return $errors;
