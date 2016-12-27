@@ -164,12 +164,14 @@ $(function()
 	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
 	  $('html, body').animate({ scrollTop: 0 }, 'slow');
 	  location.hash = $(this).parents('.tab-pane').attr('id') + 1;
+	  $('.alert-warning').remove();
 	});
 
 	$('.btnPrevious').click(function(){
 	  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
 	  $('html, body').animate({ scrollTop: 0 }, 'slow');
 	  location.hash = $(this).parents('.tab-pane').attr('id') - 1;
+	  $('.alert-warning').remove();
 	});
 });
 
@@ -283,53 +285,6 @@ $('#tab_5').click(function(e) {
  */
 $('#tab_6').click(function(e) {
 	save_social_info();
-});
-
-/** 
- * Click in final submit button 
- */
-$('.btn-complete').click(function()
-{
-	//CKEDITOR + validation.js issue 
-	for (var i in CKEDITOR.instances)
-	{
-	    CKEDITOR.instances[i].updateElement();
-	}
-
-	//remove warning alert before each new call 
-	$('.alert-warning').remove();
-
-	$(this).attr('disabled', 'disabled');
-	$(this).html('Please wait...');
-			
-	$('.loadingmessage').show();
-	
-	$.post($('#vendor_validate_url').val(), get_form_data(false), function(json) {
-
-		if(json['errors']) 
-		{
-			show_errors(json);
-
-			$html  = '<div class="alert alert-warning">';
-			$html += '	Please check form carefully!';
-			$html += '	<button class="close" data-dismiss="alert"></button>';
-			$html += '</div>';
-
-			$('.loadingmessage').after($html);
-
-			$('.loadingmessage').hide();
-
-			$('.btn-complete').removeAttr('disabled');
-			$('.btn-complete').html('Complete');
-
-			$('html, body').animate({ scrollTop: 0 }, 'slow');
-		}
-
-		if(json['success']) 
-		{
-			$('.btn-complete').parents('form').submit();
-		}
-	});
 });
 
 $(function() {
@@ -593,11 +548,56 @@ function save_email_addresses($is_autosave = false) {
 }
 
 
+/** 
+ * Click in final submit button 
+ */
+$('.btn-complete').click(function()
+{
+	//CKEDITOR + validation.js issue 
+	for (var i in CKEDITOR.instances)
+	{
+	    CKEDITOR.instances[i].updateElement();
+	}
+
+	//remove warning alert before each new call 
+	$('.alert-warning').remove();
+
+	$(this).attr('disabled', 'disabled');
+	$(this).html('Please wait...');
+			
+	$('.loadingmessage').show();
+	
+	$.post($('#vendor_validate_url').val(), get_form_data(false), function(json) {
+
+		if(json['errors']) 
+		{
+			show_errors(json);
+
+			$('.btn-complete').removeAttr('disabled');
+			$('.btn-complete').html('Complete');
+		}
+
+		if(json['success']) 
+		{
+			$('.btn-complete').parents('form').submit();
+		}
+	});
+});
+
 function show_errors(json) 
 {
 	$('.has-error').removeClass('has-error');
 	$('.form-group .help-block').html('');
 	$('.alert-warning').remove();
+
+	$html  = '<div class="alert alert-warning">';
+	$html += '	Please check form carefully!';
+	$html += '	<button class="close" data-dismiss="alert"></button>';
+	$html += '</div>';
+
+	$('.loadingmessage').after($html);
+
+	$('.loadingmessage').hide();
 
 	if(json['errors']['vendor_name']) 
 	{
@@ -619,6 +619,15 @@ function show_errors(json)
 		$(".field-vendor-vendor_contact_name").addClass('has-error');
 		$(".field-vendor-vendor_contact_name").find('.help-block').html(json['errors']['vendor_contact_name']);
 	}
+
+	if(json['errors']['vendor_contact_number']) 
+	{
+		$(".field-vendor-vendor_contact_number").removeClass('has-success');
+		$(".field-vendor-vendor_contact_number").addClass('has-error');
+		$(".field-vendor-vendor_contact_number").find('.help-block').html(json['errors']['vendor_contact_number']);
+	}
+
+	$('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 
 /** 
