@@ -409,4 +409,35 @@ class VendorItem extends \yii\db\ActiveRecord
     public static function get_featured_product() {
         return $feature = \frontend\models\VendorItem::find()->select(['{{%vendor_item}}.*'])->where(['item_status' => 'Active'])->with('vendor')->asArray()->all();
     }
+
+    /**
+     * sanitise data for item before save 
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            
+            // remove inline css 
+
+            $this->item_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_description);
+            
+            $this->item_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_description_ar);
+            
+            $this->item_additional_info = str_replace('style="', 'inline-style-not-allowed="', $this->item_additional_info);
+            
+            $this->item_additional_info_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_additional_info_ar);
+            
+            $this->item_price_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description);
+
+            $this->item_price_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description_ar);
+
+            $this->item_customization_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_customization_description);
+
+            $this->item_customization_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_customization_description_ar);            
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

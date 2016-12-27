@@ -475,6 +475,13 @@ function show_errors(json)
 		$(".field-vendoritem-item_name").addClass('has-error');
 		$(".field-vendoritem-item_name").find('.help-block').html('Item name already exists.');
 	}
+					
+	if(json['errors']['item_name_ar']) 
+	{
+		$(".field-vendoritem-item_name_ar").removeClass('has-success');
+		$(".field-vendoritem-item_name_ar").addClass('has-error');
+		$(".field-vendoritem-item_name_ar").find('.help-block').html(json['errors']['item_name_ar']);
+	}
 				
 	if(json['errors']['category']) 
 	{
