@@ -75,6 +75,15 @@ class Vendor extends \common\models\Vendor
         return $status = ['Active' => 'Activate', 'Deactive' => 'Deactivate'];
     }
 
+    /**
+     * Validate for complete button 
+     */
+    public static function validate_form($data)
+    {
+        //call last step validation method to validate whole form 
+        return Vendor::validate_email_addresses($data);
+    }
+
     public static function validate_unique_name($vendor_name)
     {
         $vendor_id = Yii::$app->request->post('vendor_id');
