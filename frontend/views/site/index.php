@@ -230,7 +230,7 @@ if (!empty($feature_group_sql_result)) {
                                 
                                 <a href="<?= $item_url ?>">
                                     <div class="deals_listing_cont">
-                                        <?=\common\components\LangFormat::format($product_val['vendor_name'],$product_val['vendor_name_ar']); ?>
+                                        <?=\common\components\LangFormat::format($product_val['vendor_name'],$product_val['vendor_name_ar']); ?><br/>
                                         <?=\common\components\LangFormat::format($product_val['item_name'],$product_val['item_name_ar']); ?>
                                         <p>
                                             <?= CFormatter::format($product_val['item_price_per_unit']) ?>

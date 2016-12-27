@@ -43,7 +43,7 @@ class PackagesController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => $package->package_description]);
 
         $categories = \frontend\models\Category::find()
-            ->where(['category_level' => 0, 'trash' =>'Default'])
+            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
             ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
             ->all();
 
