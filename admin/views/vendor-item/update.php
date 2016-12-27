@@ -25,8 +25,6 @@ $this->params['breadcrumbs'][] = 'Update';
             'guideImages' => $guideImages,
             'main_categories' => $main_categories,
             'sub_categories' => $sub_categories,
-            'item_main_categories' => $item_main_categories,
-            'item_sub_categories' => $item_sub_categories,
             'item_child_categories' => $item_child_categories,
             'category_model' => $category_model
     ]); ?>

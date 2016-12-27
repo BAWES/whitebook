@@ -593,32 +593,6 @@ class VendorItemController extends Controller
             ->where(['{{%category_path}}.level' => 1])
             ->all();
 
-        //item main category
-        $item_main_categories = VendorItemToCategory::find()
-            ->select('{{%category}}.category_name, {{%category}}.category_id')
-            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category_path}}.level' => 0,
-                '{{%vendor_item_to_category}}.item_id' => $model->item_id
-            ])
-            ->groupBy('{{%vendor_item_to_category}}.category_id')
-            ->asArray()
-            ->all();
-
-        //item sub
-        $item_sub_categories = VendorItemToCategory::find()
-            ->select('{{%category}}.category_name, {{%category}}.category_id')
-            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category_path}}.level' => 1,
-                '{{%vendor_item_to_category}}.item_id' => $model->item_id
-            ])
-            ->groupBy('{{%vendor_item_to_category}}.category_id')
-            ->asArray()
-            ->all();
-
         //child 
         $item_child_categories = VendorItemToCategory::find()
             ->select('{{%category}}.category_name, {{%category}}.category_id')
@@ -629,7 +603,6 @@ class VendorItemController extends Controller
                 '{{%vendor_item_to_category}}.item_id' => $model->item_id
             ])
             ->groupBy('{{%vendor_item_to_category}}.category_id')
-            ->asArray()
             ->all();
 
         return $this->render('update', [
@@ -645,8 +618,6 @@ class VendorItemController extends Controller
             'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),
             'main_categories' => $main_categories,
             'sub_categories' => $sub_categories,
-            'item_main_categories' => $item_main_categories,
-            'item_sub_categories' => $item_sub_categories,
             'item_child_categories' => $item_child_categories,
             'category_model' => new Category()
         ]);         

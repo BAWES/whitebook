@@ -113,31 +113,6 @@ if($model->isNewRecord){
 						</tr>
 					</thead>
 					<tbody>
-						<?php for ($i=0; $i < sizeof($item_main_categories); $i++) { ?>
-						<tr>
-							<td>
-								<?php if(isset($item_main_categories[$i])) { ?>
-									<?= $item_main_categories[$i]['category_name'] ?>	
-									<input type="hidden" name="category[]" value="<?= $item_main_categories[$i]['category_id'] ?>" />
-								<?php } ?>
-							</td>
-							<td>
-								<?php if(isset($item_sub_categories[$i])) { ?>
-									<?= $item_sub_categories[$i]['category_name'] ?>	
-									<input type="hidden" name="category[]" value="<?= $item_sub_categories[$i]['category_id'] ?>" />
-								<?php } ?>
-							</td>
-							<td>
-								<?php if(isset($item_child_categories[$i])) { ?>
-									<?= $item_child_categories[$i]['category_name'] ?>	
-									<input type="hidden" name="category[]" value="<?= $item_child_categories[$i]['category_id'] ?>" />
-								<?php } ?>
-							</td>
-							<td>
-								<button class="btn btn-danger btn-remove-cat"><i class="fa fa-trash-o"></i></button>
-							</td>
-						</tr>
-						<?php } ?>
 					</tbody>
 				</table>
 
