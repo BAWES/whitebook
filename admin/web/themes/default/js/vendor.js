@@ -383,6 +383,12 @@ $(function() {
 //append ckeditor data 
 function get_form_data($is_autosave) {
 
+	//CKEDITOR + validation.js issue 
+	for (var i in CKEDITOR.instances)
+	{
+	    CKEDITOR.instances[i].updateElement();
+	}
+
 	$data = $('form').serialize();
 
 	if($is_autosave) {
@@ -391,9 +397,11 @@ function get_form_data($is_autosave) {
 		$data += '&is_autosave=' + 0;
 	}
 
+	/*
 	$data += '&Vendor[vendor_return_policy]=' + ck_vendor_return_policy.getData(); 
 	$data += '&Vendor[vendor_return_policy_ar]=' + ck_vendor_return_policy_ar.getData();
-
+	*/
+	
 	return $data;
 }
 

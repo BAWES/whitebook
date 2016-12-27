@@ -539,6 +539,12 @@ function show_errors(json)
 
 //append ckeditor data 
 function get_form_data($is_autosave) {
+	
+	//CKEDITOR + validation.js issue 
+	for (var i in CKEDITOR.instances)
+	{
+	    CKEDITOR.instances[i].updateElement();
+	}
 
 	$data = $('form').serialize();
 
@@ -548,6 +554,7 @@ function get_form_data($is_autosave) {
 		$data += '&is_autosave=' + 0;
 	}
 
+	/*
 	$data += '&VendorItem[item_description]=' + ck_item_description.getData(); 
 	$data += '&VendorItem[item_additional_info]=' + ck_additional_info.getData();
 	$data += '&VendorItem[item_price_description]=' + ck_price_description.getData();
@@ -565,7 +572,8 @@ function get_form_data($is_autosave) {
 	$data += '&VendorDraftItem[item_additional_info_ar]=' + ck_additional_info_ar.getData();
 	$data += '&VendorDraftItem[item_price_description_ar]=' + ck_price_description_ar.getData();
 	$data += '&VendorDraftItem[item_customization_description_ar]=' + ck_customization_description_ar.getData();	
-
+	*/
+	
 	return $data;
 }
 
