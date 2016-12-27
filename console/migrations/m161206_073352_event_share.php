@@ -14,7 +14,8 @@ class m161206_073352_event_share extends Migration
 
         foreach ($events as $key => $value) 
         {
-            $value->token = Events::generateToken();
+            $model = new Events();
+            $value->token = $model->generateToken();
             $value->save();
         }
     }

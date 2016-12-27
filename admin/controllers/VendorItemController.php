@@ -488,8 +488,8 @@ class VendorItemController extends Controller
                     }
                 }
 
+                FeatureGroupItem::deleteAll(['item_id' => $id]); # to clear old values
                 if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups']) > 0) {
-                    FeatureGroupItem::deleteAll(['item_id' => $id]); # to clear old values
                     foreach ($vendor_item['groups'] as $value) {
                         $groupModel = new FeatureGroupItem();
                         $groupModel->item_id = $itemid;
@@ -498,7 +498,7 @@ class VendorItemController extends Controller
                         $groupModel->save();
                     }
                 }
-                
+
                 $arr_packages = [];
 
                 if(empty($vendor_item['packages'])) {
