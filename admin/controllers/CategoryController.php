@@ -157,11 +157,8 @@ class CategoryController extends Controller
     public function actionCreate()
     {
         $model = new Category();
-        $model->scenario = 'register';
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-            $model->category_name = $model->category_name;
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
             $max_sort = Category::find()
                 ->select('MAX(category_id) as sort')
@@ -173,48 +170,43 @@ class CategoryController extends Controller
             $sort = ($max_sort['sort'] + 1);
             $model->sort = $sort;
 
-            $model->category_level = Category::FIRST_LEVEL;
+            $model->save();
 
-            if (isset($_POST['Category']['parent_category_id']) && $_POST['Category']['parent_category_id'] != '') {
-                $model->parent_category_id = $_POST['Category']['parent_category_id'];
-            }
+            $level = 0;
 
-            if ($model->save()) {
+            $paths = CategoryPath::find()
+                ->where(['category_id' => $model->parent_category_id])
+                ->orderBy('level ASC')
+                ->all();
 
-                $level = 0;
-                $paths = CategoryPath::find()
-                    ->where(['category_id' => $model->parent_category_id])
-                    ->orderBy('level ASC')
-                    ->all();
-
-                foreach ($paths as $path) {
-
-                    $cp = new CategoryPath();
-                    $cp->category_id = $model->category_id;
-                    $cp->level = $level;
-                    $cp->path_id = $path->path_id;
-                    $cp->save();
-
-                    $level++;
-                }
+            foreach ($paths as $path) {
 
                 $cp = new CategoryPath();
                 $cp->category_id = $model->category_id;
-                $cp->path_id = $model->category_id;
                 $cp->level = $level;
+                $cp->path_id = $path->path_id;
                 $cp->save();
 
-                $model->category_level = $level;
-                $model->save();
-
-                Yii::$app->session->setFlash('success', 'Category created successfully!');
-
-                Yii::info('[New Category] Admin created new category ' . $model->category_name, __METHOD__);
-
-                return $this->redirect(['index']);
+                $level++;
             }
 
+            $cp = new CategoryPath();
+            $cp->category_id = $model->category_id;
+            $cp->path_id = $model->category_id;
+            $cp->level = $level;
+            $cp->save();
+
+            $model->category_level = $level;
+            $model->save();
+
+            Yii::$app->session->setFlash('success', 'Category created successfully!');
+
+            Yii::info('[New Category] Admin created new category ' . $model->category_name, __METHOD__);
+
+            return $this->redirect(['index']);
+
         } else {
+
             $categories = CategoryPath::find()
                 ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
                 ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
@@ -256,56 +248,42 @@ class CategoryController extends Controller
 
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            if ($model->parent_category_id) {
-                $results = CategoryPath::findAll(['category_id'=>$id]);
-                if ($results) {
-                    foreach ($results as $result) {
-                        if ($result['path_id'] == $id) {
-                            Yii::$app->session->setFlash('error', 'Category Parent Category issue');
-                            $this->refresh();
-                        }
-                    }
-                }
-            }
+            CategoryPath::deleteAll(['category_id' => $model->category_id]);
 
+            $level = 0;
 
-            if ($model->save()) {
-                $model->category_name = strtolower($model->category_name);
+            $paths = CategoryPath::find()
+                    ->where(['category_id' => $model->parent_category_id])
+                    ->orderBy('level ASC')
+                    ->all();
 
-
-                CategoryPath::deleteAll(['category_id' => $model->category_id]);
-
-                $level = 0;
-
-                $paths = CategoryPath::find()
-                        ->where(['category_id' => $model->parent_category_id])
-                        ->orderBy('level ASC')
-                        ->all();
-
-                foreach ($paths as $path) {
-
-                    $cp = new CategoryPath();
-                    $cp->category_id = $model->category_id;
-                    $cp->level = $level;
-                    $cp->path_id = $path->path_id;
-                    $cp->save();
-
-                    $level++;
-                }
+            foreach ($paths as $path) {
 
                 $cp = new CategoryPath();
                 $cp->category_id = $model->category_id;
-                $cp->path_id = $model->category_id;
                 $cp->level = $level;
+                $cp->path_id = $path->path_id;
                 $cp->save();
 
-                Yii::$app->session->setFlash('success', 'Category updated successfully!');
-                Yii::info('[Category Updated] Admin updated category ' . $model->category_name, __METHOD__);
-
-                return $this->redirect(['index']);
+                $level++;
             }
+
+            $cp = new CategoryPath();
+            $cp->category_id = $model->category_id;
+            $cp->path_id = $model->category_id;
+            $cp->level = $level;
+            $cp->save();
+
+            $model->category_level = $level;
+            $model->save();
+
+            Yii::$app->session->setFlash('success', 'Category updated successfully!');
+            Yii::info('[Category Updated] Admin updated category ' . $model->category_name, __METHOD__);
+
+            return $this->redirect(['index']);
+
         } else {
 
             return $this->render('update', [
