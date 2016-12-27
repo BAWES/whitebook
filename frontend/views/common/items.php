@@ -63,7 +63,7 @@ if(!empty($items->getModels()))  {
                         <a href="<?= $item_url ?>"><?= \common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
                             <h3><?php
                                 $name = \common\components\LangFormat::format( $value['item_name'], $value['item_name_ar']);
-                                echo (strlen($name)>28) ? substr($name,0,28).'...' : $name;
+                                echo (strlen($name)>25) ? substr($name,0,25).'...' : $name;
                                 ?></h3>
                             <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
                         </a>
