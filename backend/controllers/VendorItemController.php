@@ -341,6 +341,10 @@ class VendorItemController extends Controller
             //add new images
             $images = Yii::$app->request->post('images');
 
+            if(!$images) {
+                $images = [];
+            }
+            
             foreach ($images as $key => $value) {
                 $image = new Image();
                 $image->image_path = $value['image_path'];

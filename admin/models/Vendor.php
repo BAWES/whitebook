@@ -131,7 +131,7 @@ class Vendor extends \common\models\Vendor
     {
         $errors = [];
 
-        if(!$posted_data['vendor_name']) 
+        if(empty($posted_data['vendor_name'])) 
         {
             $errors['vendor_name'] = 'Vendor name cannot be blank.';
         }
@@ -145,7 +145,7 @@ class Vendor extends \common\models\Vendor
             $errors['vendor_name'] = 'Vendor name already exist.';
         }
 
-        if(!$posted_data['vendor_contact_email']) 
+        if(empty($posted_data['vendor_contact_email']))
         {
             $errors['vendor_contact_email'] = 'Email cannot be blank.';
         }
@@ -154,12 +154,12 @@ class Vendor extends \common\models\Vendor
             $errors['vendor_contact_email'] = 'Email already exist.';
         }
 
-        if(!$posted_data['vendor_contact_name']) 
+        if(empty($posted_data['vendor_contact_name']))
         {
             $errors['vendor_contact_name'] = 'Contact name cannot be blank.';
         }
 
-        if(!$posted_data['vendor_contact_number']) 
+        if(empty($posted_data['vendor_contact_number'][0]))
         {
             $errors['vendor_contact_number'] = 'Contact number cannot be blank.';
         }
