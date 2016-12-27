@@ -58,6 +58,7 @@ class ThemesController extends Controller
     public function actionIndex()
     {
         $searchModel = new ThemesSearch();
+        $searchModel->trash = 'Default';
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -142,8 +143,7 @@ class ThemesController extends Controller
     {
         $model = $this->findModel($id);
         $model->trash = 'Deleted';
-        $model->load(Yii::$app->request->post());
-        $model->save();
+        $model->save(false);
 
         //delete vendor item theme
         VendorItemThemes::deleteAll(['theme_id' => $id]);
