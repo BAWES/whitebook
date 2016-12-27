@@ -41,65 +41,74 @@ class Category extends \common\models\Category
     public function rules()
     {
            return array_merge(parent::rules(), [
-            ['category_name', 'categoryvalidation','on' => 'insert',],   
+            ['category_name', 'categoryvalidation'],               
             [['parent_category_id', 'created_by', 'modified_by'], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
             [['category_name', 'category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
-            [['category_name', 'category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required','on' => 'register'],
-            //[['parent_category_id', 'category_name','category_name_ar'], 'required','on' => 'sub_update',],
             [['created_datetime', 'modified_datetime','top_ad','bottom_ad','parent_category_id'], 'safe'],
             [['category_name','category_name_ar'], 'string', 'max' => 128]
         ]);
     }
 
-    public function scenarios()
+    public  function categoryvalidation($attribute_name,$params)
     {
-        $scenarios = parent::scenarios();      
-        $scenarios['register'] = ['category_name','category_name_ar', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'];
-        return $scenarios;
+        $query = Category::find()
+            ->where([
+                'category_name' => $this->category_name,
+                'parent_category_id' => $this->parent_category_id,
+                'trash' => 'Default'
+            ]);
+
+        if($this->category_id)
+        {
+            $model = $query
+                ->andWhere(['!=', 'category_id', $this->category_id])
+                ->one();
+        }       
+        else
+        {
+            $model = $query->one();
+        }            
+
+        if($model)
+        {
+            $this->addError('category_name', 'Please enter a unique category name');
+            return false;
+        }
+
+        return true;
+    } 
+
+    public static function loadcategory()
+    {
+        $categories = Category::find()
+            ->where(['!=', 'trash', 'Deleted'])
+            ->andwhere(['parent_category_id' => null])
+            ->all();
+
+        return ArrayHelper::map($categories, 'category_id', 'category_name');
     }
 
+    public static function loadcategoryname()
+    {
+        $category = Category::find()
+            ->where(['!=', 'trash', 'Deleted'])
+            ->andwhere(['=', 'category_level', '0'])
+            ->andwhere(['parent_category_id' => null])
+            ->all();
 
-  public  function categoryvalidation($attribute_name,$params)
-  {
-    if(!empty($this->category_name) ){
-      $model = Category::find()->where(['category_name'=>$this->category_name])->andwhere(['parent_category_id'=>null])->one();
-       if($model){
-        $this->addError('category_name','Please enter a unique category name');
-       }
+        return ArrayHelper::map($category,'category_id','category_name');
     }
-  } 
-
-  public static function loadcategory()
-  {
-    $categories=Category::find()
-    ->where(['!=', 'trash', 'Deleted'])
-    ->andwhere(['parent_category_id' => null])
-    ->all();
-    $category=ArrayHelper::map($categories,'category_id','category_name');
-    return $category;
-  }
-
-  public static function loadcategoryname()
-  {
-     $category= Category::find()
-     ->where(['!=', 'trash', 'Deleted'])
-     ->andwhere(['=', 'category_level', '0'])
-     ->andwhere(['parent_category_id' => null])
-     ->all();
-     $category=ArrayHelper::map($category,'category_id','category_name');
-     return $category;
-   }
  
     public static function viewcategoryname($id)
     {
-     $categories=Category::find()
-     ->where(['category_id' => $id])
-     ->andwhere(['!=', 'trash', 'Deleted'])
-     ->one();
-     return $categories['category_name'];
-    }
+        $categories=Category::find()
+            ->where(['category_id' => $id])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+            ->one();
 
+        return $categories['category_name'];
+    }
 
     public static function statusImageurl($img_status)
     {
