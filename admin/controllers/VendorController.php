@@ -925,6 +925,8 @@ class VendorController extends Controller
 
         $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
 
+        $model->approve_status = 'Yes';
+        
         //save data without validation 
         $model->save(false);
 
