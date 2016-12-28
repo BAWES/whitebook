@@ -117,12 +117,16 @@ class ThemesController extends BaseController
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.item_id' => $theme_items,
             ]);
+            
         $cats = $slug;
+
         $categories = [];
+
         if (isset($data['category']) && count($data['category'])>0) {
             $categories = array_merge($categories,$data['category']);
             $cats = implode("','",$categories);
         }
+
         if ($cats != 'all') {
             $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
             $items_query->andWhere($q);

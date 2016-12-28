@@ -657,19 +657,8 @@ $('.complete').click(function()
 		{
 			show_errors(json);
 
-			$html  = '<div class="alert alert-warning">';
-			$html += '	Please check form carefully!';
-			$html += '	<button class="close" data-dismiss="alert"></button>';
-			$html += '</div>';
-
-			$('.loadingmessage').after($html);
-
-			$('.loadingmessage').hide();
-
 			$('.complete').removeAttr('disabled');
 			$('.complete').html('Complete');
-
-			$('html, body').animate({ scrollTop: 0 }, 'slow');
 		}
 
 		if(json['success']) 
@@ -684,6 +673,15 @@ function show_errors(json)
 	$('.has-error').removeClass('has-error');
 	$('.form-group .help-block').html('');
 	$('.alert-warning').remove();
+	
+	$html  = '<div class="alert alert-warning">';
+	$html += '	Please check form carefully!';
+	$html += '	<button class="close" data-dismiss="alert"></button>';
+	$html += '</div>';
+
+	$('.loadingmessage').after($html);
+
+	$('.loadingmessage').hide();
 
 	//step 1 
 	
@@ -729,6 +727,12 @@ function show_errors(json)
         $('.field-vendoritem-item_description').addClass('has-error');
 	    $('.field-vendoritem-item_description').find('.help-block').html('Item description cannot be blank.');
 	}
+	
+	if(json['errors']['item_additional_info'])
+  	{
+        $('.field-vendoritem-item_additional_info').addClass('has-error');
+	    $('.field-vendoritem-item_additional_info').find('.help-block').html('Item additional info cannot be blank.');
+	}
 
 	//step 3
 
@@ -769,6 +773,8 @@ function show_errors(json)
 	{
  		$('.file-block').hide();
  	}
+
+ 	$('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 
 //append ckeditor data 

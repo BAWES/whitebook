@@ -59,7 +59,7 @@ $get = Yii::$app->request->get();
 										<input
 											name="category"
 											data-element="input"
-											class="items category <?=$value['slug'] ?>"
+											class="items category"
 											id="checkbox-<?= $value['slug'] ?>"
 											step="<?= $value['category_id'] ?>"
 											value="<?= $value['slug'] ?>"
@@ -74,7 +74,7 @@ $get = Yii::$app->request->get();
 								<?php
 								$_subcategory = SubCategory::loadsubcat($value['slug']);
 								if ($_subcategory) {
-									echo  "<ul class=".$value['slug'].">";
+									echo  "<ul>";
 									foreach ($_subcategory as $_key => $_value) {
 										$_category_name = \common\components\LangFormat::format(strtolower($_value['category_name']),strtolower($_value['category_name_ar']));
 										?>
@@ -128,7 +128,12 @@ li.subcat {
 		clear: both;
 	}
 	.b-g-f8f8f8{background-color: #f8f8f8;}
-	.css-updated{height:170px;overflow-y: scroll;}
+	.css-updated {
+	    max-height: 170px;
+	    overflow-y: scroll;
+	    float: left;
+	    width: 100%;
+	}
 ")
 ?>
 

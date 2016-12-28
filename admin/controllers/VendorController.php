@@ -586,6 +586,9 @@ class VendorController extends Controller
 
         $posted_data = Yii::$app->request->post('Vendor');
 
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
+
         //validate
         if(!$is_autosave) {
             $errors = Vendor::validate_vendor_logo($posted_data);
@@ -663,6 +666,14 @@ class VendorController extends Controller
             ->where(['vendor_id' => $vendor_id])
             ->one();
     
+        if(!empty($posted_data['vendor_password']))
+        {   
+            $model->vendor_password = Yii::$app->getSecurity()->generatePasswordHash($posted_data['vendor_password']);  
+        }
+        
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
+
         //load posted data to model 
         $model->load(['Vendor' => $posted_data]);
 
@@ -716,6 +727,9 @@ class VendorController extends Controller
         $is_autosave = Yii::$app->request->post('is_autosave');
 
         $posted_data = Yii::$app->request->post('Vendor');
+
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
 
         //validate
         if(!$is_autosave) {
@@ -786,6 +800,9 @@ class VendorController extends Controller
 
         $posted_data = Yii::$app->request->post('Vendor');
 
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
+
         //validate
         if(!$is_autosave) {
             $errors = Vendor::validate_additional_info($posted_data);
@@ -839,6 +856,9 @@ class VendorController extends Controller
         $is_autosave = Yii::$app->request->post('is_autosave');
 
         $posted_data = Yii::$app->request->post('Vendor');
+
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
 
         //validate
         if(!$is_autosave) {
@@ -894,6 +914,9 @@ class VendorController extends Controller
 
         $posted_data = Yii::$app->request->post('Vendor');
 
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
+        
         //validate
         if(!$is_autosave) {
             $errors = Vendor::validate_email_addresses($posted_data);
