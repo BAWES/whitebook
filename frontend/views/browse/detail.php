@@ -68,7 +68,7 @@ if($model->images) {
     </div>
 
     <div class="container paddng0">
-       
+
         <div class="breadcrumb_common">
             <div class="bs-example">
                 <?=
@@ -137,7 +137,7 @@ if($model->images) {
                                 </a>
                             </label>
                             <b class="font-27">
-                                <?= CFormatter::format($model['item_price_per_unit']) ?>
+                                <p><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
                             </b>
                         </div>
                         <!-- Indicators responsive slider -->
@@ -196,14 +196,14 @@ if($model->images) {
                             <div class="product_name clearfix">
                                 <div class="left_descrip desktop-view margin-bottom-14">
                                     <h2><?= $item_name; ?></h2>
-                                    
+
                                     <label>
                                     <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-999999">
                                         <?= $vendor_name; ?>
                                     </a>
                                     </label>
 
-                                    <b class="font-27"><?= CFormatter::format($model['item_price_per_unit']) ?></b>
+                                    <b class="font-27"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
                                     <strong><?= $model['item_price_description'] ?></strong>
                                 </div>
                                 <div class="right_descrip">
@@ -301,8 +301,8 @@ if($model->images) {
                                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
                                                     <?= Yii::t('frontend', 'Product Description') ?>
                                                     <span class="produ_type">
-                                                    ( 
-                                                        <?= Yii::t('frontend', 'Product type') ?>: 
+                                                    (
+                                                        <?= Yii::t('frontend', 'Product type') ?>:
                                                         <?= Yii::t('frontend', $model->type->type_name); ?>
                                                     )
                                                     </span>
@@ -344,14 +344,14 @@ if($model->images) {
                                             </div>
                                             <div id="collapse3" class="panel-collapse collapse">
                                                 <div class="panel-body vendor_social_info">
-                                                    <ul>         
+                                                    <ul>
                                                         <?php if($phones) { ?>
                                                         <li class="vendor_phone_list">
                                                             <?php foreach ($phones as $key => $value) { ?>
                                                                 <a class="color-808080" href="tel:<?= $value->phone_no; ?>"><i class="<?= $phone_icons[$value->type] ?>"></i><?= $value->phone_no; ?>
                                                                 </a>
                                                             <?php } ?>
-                                                        </li> 
+                                                        </li>
                                                         <?php } ?>
 
                                                         <?php if (!empty($vendor_detail['vendor_contact_address'])) { ?>
@@ -362,16 +362,16 @@ if($model->images) {
                                                             </a>
                                                         </li>
                                                         <?php } ?>
-                                                                
-                                                        <?php if ($vendor_detail['vendor_working_hours'] && 
+
+                                                        <?php if ($vendor_detail['vendor_working_hours'] &&
                                                                     $vendor_detail['vendor_working_hours_to']) { ?>
-                                                        <li class="vendor_working_hours">    
+                                                        <li class="vendor_working_hours">
                                                             <a>
                                                                 <i class="fa fa-clock-o"></i>
                                                                 <?php
                                                                     $from = explode(':', $vendor_detail['vendor_working_hours']);
 
-                                                                    if($from) 
+                                                                    if($from)
                                                                     echo (isset($from[0])) ? $from[0] : '';
                                                                     echo (isset($from[1])) ? ':'.$from[1] : '';
                                                                     echo (isset($from[2])) ? ''.$from[2] : '';
@@ -385,7 +385,7 @@ if($model->images) {
                                                                 ?>
                                                             </a>
                                                         </li>
-                                                        <?php } ?>     
+                                                        <?php } ?>
 
                                                         <?php if($txt_day_off) { ?>
                                                         <li>
@@ -396,10 +396,10 @@ if($model->images) {
                                                                     ]); ?>
                                                             </a>
                                                         </li>
-                                                        <?php } ?>                                           
+                                                        <?php } ?>
 
                                                         <?php if (!empty($vendor_detail['vendor_public_email'])) { ?>
-                                                        <li>                                                    
+                                                        <li>
                                                             <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?= $vendor_detail['vendor_public_email']; ?>">
                                                                 <i class="fa fa-envelope-o"></i>
                                                                 <?= $vendor_detail['vendor_public_email']; ?>
@@ -413,7 +413,7 @@ if($model->images) {
                                                                 <i class="fa fa-globe"></i>
                                                                 <?php echo $vendor_detail['vendor_website']; ?>
                                                             </a>
-                                                        </li>     
+                                                        </li>
                                                         <?php } ?>
 
                                                         <?php if($vendor_detail['vendor_instagram']) { ?>
@@ -422,7 +422,7 @@ if($model->images) {
                                                                 <?= $vendor_detail['vendor_instagram_text'] ?>
                                                             </a>
                                                         </li>
-                                                        <?php } ?>  
+                                                        <?php } ?>
 
                                                         <?php if($vendor_detail['vendor_twitter']) { ?>
                                                         <li>
@@ -453,8 +453,8 @@ if($model->images) {
                                         </div><!-- END .panel -->
 
                                         <?php if (VendorItemPricing::checkprice(
-                                                    $model->item_id, 
-                                                    $model->type_id, 
+                                                    $model->item_id,
+                                                    $model->type_id,
                                                     $model->item_price_per_unit
                                                   )
                                               ) { ?>
@@ -473,7 +473,7 @@ if($model->images) {
                                             </div>
                                         </div><!-- END .panel -->
                                         <?php } ?>
-                                        
+
                                         <?php if (!empty($model['item_customization_description'])) { ?>
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -532,11 +532,11 @@ if($model->images) {
                     <div class="feature_product_slider">
                         <div id="similar-products-slider">
                             <?php
-                            
+
                             $imgUrl = '';
 
                             $baselink = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
-                            
+
                             foreach ($similiar_item as $s) {
 
                                 if (isset($s->images) && count($s->images) > 0) {
@@ -552,7 +552,7 @@ if($model->images) {
 
                                                 <div class="deals_listing_cont">
                                                     <h3><?=LangFormat::format($s->item_name,$s->item_name_ar); ?></h3>
-                                                    <p><?= CFormatter::format($s['item_price_per_unit'])  ?></p>
+                                                    <p><?=(trim($s['item_price_per_unit'])) ? CFormatter::format($s['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
                                                 </div>
                                             </a>
                                         <?php } ?>
