@@ -27,6 +27,7 @@ if(!empty($items->getModels()))  {
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
 
         ?>
+
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301 pull-left">
             <div class="events_items width-100-percent">
                 <div class="events_images text-center position-relative">
@@ -73,7 +74,7 @@ if(!empty($items->getModels()))  {
                                 $name = \common\components\LangFormat::format( $value['item_name'], $value['item_name_ar']);
                                 echo (strlen($name)>25) ? substr($name,0,25).'...' : $name;
                                 ?></h3>
-                            <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
+                            <p><?=(trim($value['item_price_per_unit'])) ? CFormatter::format($value['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
                         </a>
                     </div>
                 </div>
