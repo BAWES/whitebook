@@ -2,6 +2,10 @@
 
 namespace common\models;
 
+use yii\db\Expression;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\TimestampBehavior;
+
 use Yii;
 
 /**
@@ -62,6 +66,25 @@ class VendorDraftItem extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'whitebook_vendor_draft_item';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => SluggableBehavior::className(),
+                'slugAttribute' => 'slug',
+                'attribute' => 'item_name',
+                'immutable' => true,
+                'ensureUnique'=>true,
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
