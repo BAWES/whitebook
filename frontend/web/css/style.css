@@ -2175,3 +2175,6 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     display: inline;
     margin: 0 20px;
 }
+div#search_list ul{
+    z-index: 99999;
+}

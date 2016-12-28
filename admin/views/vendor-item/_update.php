@@ -177,6 +177,11 @@ function cmp($a, $b)
 		<!--BEGIN second Tab -->
 		<div class="tab-pane clearfix" id="2">
 			
+			<div class="alert alert-info">
+				Inline css will be removed from editor for item description, item additional info, price description and customization description.
+				<button class="close" data-dismiss="alert">x</button>
+			</div>
+
 			<?= $form->field($model, 'type_id')->dropDownList($itemType, ['prompt'=>'Select...']) ?>
 
 			<?= $form->field($model, 'item_description')
@@ -629,7 +634,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.11", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.12", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
