@@ -60,6 +60,7 @@ class VendorItem extends \common\models\VendorItem
             return $errors;
         }
 
+        /*
         $count_query = VendorItem::find()
             ->select('item_name')
             ->where([
@@ -76,7 +77,8 @@ class VendorItem extends \common\models\VendorItem
         if($count_query->count()) {
             $errors['item_name'] = 'Item name already exists.';
         }
-
+        */
+        
         return $errors;
     }
 
