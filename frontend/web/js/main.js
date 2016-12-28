@@ -1010,7 +1010,7 @@ $(document).delegate("#search-terms1", 'keyup', function () {
 });
 
 function search_data(search){
-    if((search.length > 3) && (search != '')){
+    if((search.length > 0) && (search != '')){
         $("#search_list_fail1").html('');
         var _csrf = $('#_csrf').val();
 
@@ -1043,7 +1043,7 @@ function search_data(search){
 }
 
 function mobile_search_data(search){
-    if(search.length>3){
+    if(search.length>0){
         var _csrf = $('#_csrf').val();
 
         if(search != ''){
