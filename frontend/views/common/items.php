@@ -33,19 +33,27 @@ if(!empty($items->getModels()))  {
                     <div class="hover_events">
                         <div class="pluse_cont">
                             <?php if(Yii::$app->user->isGuest) { ?>
-                                <a href="" role="button" class="" data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+                                <a href="" role="button" class="" data-toggle="modal"  onclick="show_login_modal(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </a>
                             <?php } else { ?>
-                                <a href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class="" data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>"></a>
+                                <a href="#" role="button" id="<?php echo $value['item_id'];?>" name="<?php echo $value['item_id'];?>" class="" data-toggle="modal" data-target="#add_to_event<?php echo $value['item_id'];?>" onclick="addevent('<?php echo $value['item_id']; ?>')" title="<?php echo Yii::t('frontend','Add to Event');?>">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </a>
                             <?php } ?>
                         </div>
 
                         <?php if(Yii::$app->user->isGuest) { ?>
                             <div class="faver_icons">
-                                <a href="" role="button" class="" data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+                                <a href="" role="button" class="" data-toggle="modal" id="<?php echo $value['item_id']; ?>" onclick="show_login_modal_wishlist(<?php echo $value['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Things I Like');?>">
+                                    <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                </a>
                             </div>
                         <?php } else { ?>
                             <div class="faver_icons <?=(in_array($value['item_id'],$result)) ? 'faverited_icons' : ''?>">
-                                <a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>"></a>
+                                <a href="javascript:;" role="button" id="<?php echo $value['item_id']; ?>"  class="add_to_favourite" name="add_to_favourite" title="<?php echo Yii::t('frontend','Add to Things I Like');?>">
+                                    <i class="fa fa-heart<?=(in_array($value['item_id'],$result)) ? '' : '-o'?>" aria-hidden="true"></i>
+                                </a>
                             </div>
                             <?php } ?>
                         </div>
