@@ -128,7 +128,12 @@ li.subcat {
 		clear: both;
 	}
 	.b-g-f8f8f8{background-color: #f8f8f8;}
-	.css-updated{height:170px;overflow-y: scroll;}
+	.css-updated {
+	    max-height: 170px;
+	    overflow-y: scroll;
+	    float: left;
+	    width: 100%;
+	}
 ")
 ?>
 
