@@ -141,18 +141,25 @@ class BrowseController extends BaseController
         }//if themes
 
         //category filter
-        if ($slug != 'all') {
-            $cats = $Category->slug;
-            $categories = [];
+        $cats = '';
 
-            if (isset($data['category']) && count($data['category']) > 0) {
-                $categories = array_merge($categories, $data['category']);
-                $cats = implode("','", $categories);
-            }
-            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
-            $item_query->andWhere($q);
+        if($Category)
+        {
+            $cats = $Category->slug;    
+        }
+        
+        if (isset($data['category']) && count($data['category']) > 0) 
+        {
+            $cats = implode("','",  $data['category']);
         }
 
+        if($cats)
+        {
+            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
+        
+            $item_query->andWhere($q);    
+        }
+        
         if ($session->has('deliver-location')) {
 
             if (is_numeric($session->get('deliver-location'))) {
