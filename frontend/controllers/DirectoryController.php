@@ -242,7 +242,8 @@ class DirectoryController extends BaseController
             return $this->renderPartial('@frontend/views/common/items',['items' => $provider,'customer_events_list' => $customer_events_list]);
         }
 
-        if (strpos($vendor_details['vendor_website'], 'http://') === false) {
+        if ($vendor_details['vendor_website'] && strpos($vendor_details['vendor_website'], 'http') === false) 
+        {
             $vendor_details['vendor_website'] = 'http://'.$vendor_details['vendor_website'];
         }
 
