@@ -99,10 +99,9 @@ use yii\widgets\ActiveForm;
 				<?= $form->field($model, 'vendor_contact_email')
 						->textInput(['maxlength' => 100, 'autocomplete' => 'off']); ?>
 
-				<?php if($model->isNewRecord) { ?>
-					<?= $form->field($model, 'vendor_password')->passwordInput() ?>
-					<?= $form->field($model, 'confirm_password')->passwordInput() ?>
-				<?php } ?>
+				<?= $form->field($model, 'vendor_password')
+						->textInput()
+						->hint('Set this field to add new password.') ?>
 
 				<input type="hidden" name="email_valid" value="" />
 			 	<div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
