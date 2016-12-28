@@ -1003,6 +1003,8 @@ function save_item_themes_groups($is_autosave = false) {
  */ 
 setInterval(function(){
 
+	return true;//
+
 	if($('#tab_1').parent().hasClass('active')){
 		save_item_info(true);
 	}
@@ -1146,6 +1148,28 @@ $(function() {
 
 		$.post($('#category_add_url').val(), $('#sub_category_form').serialize(), function(json) {
 			
+			$('.msg_wrapper').html('');
+
+			if(json.errors) {
+
+				$html  = '<div class="alert alert-warning">';
+				$html += '<button class="close" data-dismiss="alert"></button>';
+				
+				$.each(json.errors, function(key, errors) 
+				{
+					$.each(errors, function(index, error)
+					{
+						$html += '<p>' + error + '</p>';	
+					});					
+				});
+
+				$html += '</div>';
+
+				$('#sub_category_modal .msg_wrapper').html($html);
+
+				$('html, body').animate({ scrollTop: 0 }, 'slow');
+			}
+
 			if(json.category_id) {
 
 				$html  = '<div class="radio" data-name="'+json.category_name+'">';
@@ -1170,9 +1194,31 @@ $(function() {
 
 	$(document).delegate('#child_category_form', 'submit', function(e) {
 
+		$('.msg_wrapper').html('');
+
 		$.post($('#category_add_url').val(), $('#child_category_form').serialize(), function(json) {
 			
-			if(json.category_id) {
+			if(json.errors) {
+
+				$html  = '<div class="alert alert-warning">';
+				$html += '<button class="close" data-dismiss="alert"></button>';
+				
+				$.each(json.errors, function(key, errors) 
+				{
+					$.each(errors, function(index, error)
+					{
+						$html += '<p>' + error + '</p>';	
+					});					
+				});
+
+				$html += '</div>';
+
+				$('#child_category_modal .msg_wrapper').html($html);
+
+				$('html, body').animate({ scrollTop: 0 }, 'slow');
+			}
+
+			if(json.success) {
 
 				$html  = '<div class="radio" data-name="'+json.category_name+'">';
 				$html += '	<input type="radio" name="child_category" value="'+json.category_id+'" id="child_cat_'+json.category_id+'" />';
@@ -1258,24 +1304,28 @@ $(function() {
 		$(this).parents('tr').remove();
 	});
 
-	$(document).delegate('button[data-target="#sub_category_modal"]', 'click', function() {		
+	$(document).delegate('.btn_sub_category_modal', 'click', function() {		
 		
 		$parent_id = $('.main-category-list input:checked').val();
 
-		if($parent_id) {
+		if($parent_id > 0) {
 			$('#hdn_sub_cat_parent').val($parent_id);
+			$('#sub_category_modal').modal('show');
 		} else {
+			alert('Please select main category.');
 			return false;
 		}		
 	});
 
-	$(document).delegate('button[data-target="#child_category_modal"]', 'click', function() {		
+	$(document).delegate('.btn_child_category_modal', 'click', function() {		
 		
 		$parent_id = $('.sub-category-list input:checked').val();
 
-		if($parent_id) {
+		if($parent_id > 0) {
 			$('#hdn_child_cat_parent').val($parent_id);
+			$('#child_category_modal').modal('show');
 		}else{
+			alert('Please select sub category.');
 			return false;
 		}
 	});

@@ -40,7 +40,7 @@ class Category extends \common\models\Category
      */
     public function rules()
     {
-           return array_merge(parent::rules(), [
+        return array_merge(parent::rules(), [
             ['category_name', 'categoryvalidation'],               
             [['parent_category_id', 'created_by', 'modified_by'], 'integer'],
             [['trash', 'category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'string'],
@@ -50,7 +50,7 @@ class Category extends \common\models\Category
         ]);
     }
 
-    public  function categoryvalidation($attribute_name,$params)
+    public  function categoryvalidation($attribute_name, $params)
     {
         $query = Category::find()
             ->where([
