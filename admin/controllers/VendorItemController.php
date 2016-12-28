@@ -658,6 +658,10 @@ class VendorItemController extends Controller
         }
 
         $model->load(['VendorItem' => $posted_data]);
+        
+        //force to generate slug again by removing old slug 
+        $model->slug = '';
+
         $model->save(false);
 
         //remove all old category 

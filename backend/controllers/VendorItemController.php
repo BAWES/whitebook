@@ -301,22 +301,13 @@ class VendorItemController extends Controller
         
         if ($model->load($posted_data)) {
 
+            //force to generate slug again by removing old slug 
+            $model->slug = '';
+
             //to make draft visible to admin 
             $model->is_ready = 1;
-
-            $model->save(false);
-
-            /* BEGIN  Scenario if item for sale is no not required below four fields all empty*/
-            if ($model->item_for_sale == 'No') {
-                $model->item_amount_in_stock = '';
-                $model->item_default_capacity = '';
-                $model->item_minimum_quantity_to_order='';
-                $model->item_how_long_to_make='';
-            }
-            /* END Scenario if item for sale is no not required below four fields */
-
-            /* Vendor make it any changes item status should be deactivaed */
             $model->item_approved = 'Pending';
+            $model->save();
 
             //remove all old category 
             VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
@@ -476,6 +467,9 @@ class VendorItemController extends Controller
 
         //to make draft invisible to admin 
         $model->is_ready = 0;
+
+        //force to generate slug again by removing old slug 
+        $model->slug = '';
 
         //save first step data without validation 
         $model->save(false);
