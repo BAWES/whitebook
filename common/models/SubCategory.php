@@ -146,22 +146,21 @@ class SubCategory extends \yii\db\ActiveRecord
     public static function loadsubcategory($id)
     {
         $subcategoryname= SubCategory::find()
-        ->where(['parent_category_id'=>$id])
-        ->andwhere(['!=', 'category_allow_sale', 'no'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-        ->andwhere(['=', 'category_level', '1'])
-        ->andwhere(['!=', 'parent_category_id', 'null'])
-        ->all();
-        $subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name','category_name_ar');
-        return $subcategoryname;
+            ->where(['parent_category_id' => $id])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+            //->andwhere(['=', 'category_level', '1'])
+            //->andwhere(['!=', 'parent_category_id', 'null'])
+            ->all();
+
+        return ArrayHelper::map($subcategoryname, 'category_id', 'category_name', 'category_name_ar');
     }
 
     // load sub category front-end plan page
     public static function loadsubcat($slug)
     {
-        $subcategory_slug = SubCategory::find()->where(['slug'=>$slug])->asArray()->one();
+        $category = SubCategory::find()->where(['slug' => $slug])->one();
 
-        if(!empty($subcategory_slug['category_id'])){
+        if($category){
 
             return SubCategory::find()
                 ->select([
@@ -170,9 +169,22 @@ class SubCategory extends \yii\db\ActiveRecord
                     '{{%category}}.category_name_ar',
                     '{{%category}}.slug'])
                 ->where([
-                    '{{%category}}.parent_category_id' => $subcategory_slug['category_id'],
+                    '{{%category}}.parent_category_id' => $category['category_id'],
                     '{{%category}}.trash' => 'Default'
                 ])
+                ->asArray()
+                ->all();
+        }
+        else
+        {
+            return SubCategory::find()
+                ->select([
+                    '{{%category}}.category_id',
+                    '{{%category}}.category_name',
+                    '{{%category}}.category_name_ar',
+                    '{{%category}}.slug'])
+                ->where('{{%category}}.parent_category_id IS NULL OR 0')
+                ->andWhere(['{{%category}}.trash' => 'Default'])
                 ->asArray()
                 ->all();
         }
