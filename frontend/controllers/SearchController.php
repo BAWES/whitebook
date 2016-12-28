@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\db\Expression;
 use yii\data\ArrayDataProvider;
@@ -209,13 +210,38 @@ class SearchController extends BaseController
                 ->all();
 
             $k = '';
+
+            $vendorSearchData = Vendor::find()
+                ->select(['vendor_name','slug'])
+                ->where(['like', 'vendor_name', $request->post('search')])
+                ->andWhere([
+                    '{{%vendor}}.trash' => 'Default',
+                    '{{%vendor}}.approve_status' => 'Yes',
+                    '{{%vendor}}.vendor_status' => 'Active'
+                ])
+                ->limit(10)
+                ->asArray()
+                ->all();
+
+            $k = '';
+
             if (!empty($item_details)) {
                 foreach ($item_details as $i) {
                     if (!empty($i['item_name'])) {
-                        $k = $k.'<li><a href='.Url::to(['search/index', 'search' => $request->post('search')]).'>'.$i['item_name'].'</a></li>';
+                        $item_name = (strlen($i['item_name'])>20) ? substr($i['item_name'],0,20).'...' : $i['item_name'];
+                        $k = $k.'<li><a href='.Url::to(['search/index', 'search' => $request->post('search')]).'>'.$item_name.'</a></li>';
                     }
                 }
-                return '<ul>'.$k.'</ul>';
+            }
+
+            if (!empty($vendorSearchData)) {
+                foreach ($vendorSearchData as $result) {
+                    $k .= '<li>'.Html::a($result['vendor_name'],['directory/profile','vendor'=>$result['slug']]).'</li>';
+                }
+            }
+
+            if ($k) {
+                return '<ul>' . $k . '</ul>';
             } else {
                 echo '0';
                 die;

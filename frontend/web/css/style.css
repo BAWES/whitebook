@@ -1747,7 +1747,7 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     font-weight: bold;
     font-size: 13px;
 }
-.events_images i{
+.events_images > a > i{
     position: absolute;
     bottom: 1px;
     left: 4px;
@@ -2174,4 +2174,22 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .package_description .or {
     display: inline;
     margin: 0 20px;
+}
+div#search_list ul{
+    z-index: 99999;
+}
+
+.hover_events {
+    background:rgba(0,0,0,0.5);
+    /*background: transparent;*/
+    /*background-color: #999;*/
+    z-index: 999;
+}
+.pluse_cont a,.faver_icons a{
+    background: none!important;
+}
+.pluse_cont a i,.faver_icons a i{
+    background: none!important;
+    color:#fff;
+    font-size: 17px!important;
 }
