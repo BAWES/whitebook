@@ -1180,13 +1180,22 @@ function remove_from_favourite(x)
 }
 
 //add to favorites
-$(document).delegate(".add_to_favourite", 'click', function(e){
 
-    $('#loading_img_list').show();
-    $('#loading_img_list').html('<img id="loading-image" src="'+giflink+'" alt="Loading..." />');
+$(document).delegate(".add_to_favourite", 'click', function(e){
+    //$('#loading_img_list').show();
+    //$('#loading_img_list').html('<img id="loading-image" src="'+giflink+'" alt="Loading..." />');
+
+    if ($(this).find('i').hasClass('fa-heart')) {
+        $(this).find('i').removeClass('fa-heart');
+        $(this).find('i').addClass('fa-heart-o');
+    } else {
+        $(this).find('i').removeClass('fa-heart-o');
+        $(this).find('i').addClass('fa-heart');
+    }
 
     item_id=($(this).attr('id'));
     $element = $(this);
+
     $($element).parent().toggleClass("faverited_icons");
 
     var _csrf=$('#_csrf').val();
