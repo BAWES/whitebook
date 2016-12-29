@@ -26,7 +26,7 @@ class AppAsset extends AssetBundle
         'css/ma5-mobile-menu.css',
         'css/bootstrap-select.min.css',
         'css/datepicker_popup.css',
-        'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
+        'css/font-awesome.min.css'
     ];
     public $js = [
         'js/jquery.min.js',
