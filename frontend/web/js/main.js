@@ -44,7 +44,7 @@ $(document).delegate('a#filter-clear', 'click', function(){
     $(this).parents('.panel-default').find('label.label_check input').prop('checked', false);
     $(this).hide();
     filter();
-})
+});
 
 $(document).delegate('[data-toggle="offcanvas"]', 'click', function () {
     $('#wrapper').toggleClass('toggled');
@@ -1179,21 +1179,14 @@ function remove_from_favourite(x)
     }
 }
 
+//add to favorites
 $(document).delegate(".add_to_favourite", 'click', function(e){
-    //$('#loading_img_list').show();
-    //$('#loading_img_list').html('<img id="loading-image" src="'+giflink+'" alt="Loading..." />');
 
-    if ($(this).find('i').hasClass('fa-heart')) {
-        $(this).find('i').removeClass('fa-heart');
-        $(this).find('i').addClass('fa-heart-o');
-    } else {
-        $(this).find('i').removeClass('fa-heart-o');
-        $(this).find('i').addClass('fa-heart');
-    }
+    $('#loading_img_list').show();
+    $('#loading_img_list').html('<img id="loading-image" src="'+giflink+'" alt="Loading..." />');
 
     item_id=($(this).attr('id'));
     $element = $(this);
-
     $($element).parent().toggleClass("faverited_icons");
 
     var _csrf=$('#_csrf').val();
