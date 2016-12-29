@@ -1125,7 +1125,6 @@ $(document).delegate('.txt-sub-cat-search', 'keyup', function() {
 	});
 });
 
-
 $(document).delegate('.txt-child-cat-search', 'keyup', function() {
 
 	$q = $(this).val().toLowerCase();
@@ -1241,6 +1240,10 @@ $(function() {
 
 	$(document).delegate('.main-category-list input', 'change', function() {
 
+		//remove sub and child list 
+		$('.sub-category-list .chk_wrapper').html('');
+		$('.child-category-list .chk_wrapper').html('');
+
 		$.post($('#category_list_url').val(), { parent_id : $(this).val() }, function(json) {
 			
 			$html = '';
@@ -1260,6 +1263,9 @@ $(function() {
 
 	$(document).delegate('.sub-category-list input', 'change', function() {
 
+		//remove child list 
+		$('.child-category-list .chk_wrapper').html('');
+		
 		$.post($('#category_list_url').val(), { parent_id : $(this).val() }, function(json) {
 			
 			$html = '';
