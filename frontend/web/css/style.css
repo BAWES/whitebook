@@ -2203,3 +2203,7 @@ div#search_list ul{
 .product_detials_vender .vendor_photo{
     padding: 0px;
 }
+
+span.small {
+    font-size: 69%;
+}
