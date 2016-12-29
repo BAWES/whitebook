@@ -105,10 +105,6 @@ class VendorItem extends \common\models\VendorItem
             $errors['item_description'] = 'Item description cannot be blank.';
         }
 
-        if(empty($data['item_additional_info'])) {
-            $errors['item_additional_info'] = 'Item additional info cannot be blank.';
-        }
-
         return $errors;
     }
 
