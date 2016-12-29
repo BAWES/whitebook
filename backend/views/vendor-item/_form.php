@@ -44,28 +44,63 @@ if($model->isNewRecord){
 				
 				<div class="field-category-list">
 					<label>Categories</label>
-					<table class="table table-bordered table-category-list">
+					<table class="table table-bordered table-item-category-list">
+						<thead>
+							<tr>
+								<td>Main categories</td>
+								<td>Sub categories</td>
+								<td>Child categories</td>
+								<td></td>
+							</tr>
+						</thead>
 						<tbody>
 						</tbody>
-						<tfoot>
+					</table>
+
+					<table class="table table-bordered table-category-list">
+						<thead>
+							<tr>
+								<td>Main categories</td>
+								<td>Sub categories</td>
+								<td>Child categories</td>
+							</tr>
 							<tr>
 								<td>
-									<select id="category_id">
-										<option></option>
-										<?php foreach($categories as $key => $value) { ?>
-											<option value="<?= $value['category_id'] ?>">
-												<?= $value['category_name'] ?>
-											</option>
-										<?php } ?>
-									</select>
-									<span class="help-block"></span>
+									<input placeholder="Search" class="form-control txt-main-cat-search" />
 								</td>
 								<td>
-									<button type="button" class="btn btn-primary btn-add-category">Add</button>
+									<input placeholder="Search" class="form-control txt-sub-cat-search" />
+								</td>
+								<td>
+									<input placeholder="Search" class="form-control txt-child-cat-search" />
 								</td>
 							</tr>
-						</tfoot>
-					</table>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="main-category-list">
+									<div class="chk_wrapper">
+										<?php foreach($main_categories as $key => $value) { ?>
+										<div class="radio" data-name="<?= $value['category_name'] ?>"> 
+											<input type="radio" name="main_category" value="<?= $value['category_id'] ?>" id="main_cat_<?= $value['category_id'] ?>" /> 
+											<label for="main_cat_<?= $value['category_id'] ?>"> 
+												<?= $value['category_name'] ?>
+											</label> 
+										</div> 
+										<?php } ?>
+									</div>
+								</td>
+								<td class="sub-category-list">
+									<div class="chk_wrapper">
+									</div>
+								</td>
+								<td class="child-category-list">
+									<div class="chk_wrapper">
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>						
 				</div>
 
 				<div class="form-group" style="height: 10px;">
@@ -294,7 +329,20 @@ $this->registerCss("
 	input#price{	margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
 	.price_val{  width: 100%;  float: left;}
 	.question-section input[type=\"text\"] { margin:10px 0px;}
+	
+	.table-category-list .checkbox {
+	    margin-left: 20px;
+	}
+	
+	.main-category-list .chk_wrapper,
+	.sub-category-list .chk_wrapper,
+	.child-category-list .chk_wrapper{
+		max-height: 200px;
+    	overflow-y: scroll;
+	}
 ");
+
+echo Html::hiddenInput('category_list_url', Url::to(['vendor-item/category-list']), ['id' => 'category_list_url']);
 
 echo Html::hiddenInput('isNewRecord', $model->isNewRecord, ['id' => 'isNewRecord']);
 echo Html::hiddenInput('item_for_sale', $model->item_for_sale, ['id' => 'item_for_sale']);
@@ -327,4 +375,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.13', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.14', ['depends' => [\yii\web\JqueryAsset::className()]]);

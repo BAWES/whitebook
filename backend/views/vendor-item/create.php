@@ -15,7 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model1' => $model1,
         'itemtype' => $itemtype,
         'vendorname' => $vendorname,
-        'categories' => $categories
+        'main_categories' => $main_categories,
+        'item_child_categories' => [],
     ]) ?>
 
 </div>

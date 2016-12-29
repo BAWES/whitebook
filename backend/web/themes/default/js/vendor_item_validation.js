@@ -293,38 +293,6 @@ function questionView(q_id,tis){
 	}
 }
 
-
-//add categort 
-$('.btn-add-category').click(function(){
-	
-	$category_id = $('#category_id').val();
-
-	if($category_id.length == 0) {
-		return false;
-	}
-
-	$html  = '<tr>';
-	$html += '	<td>';
-	$html += 		$('#category_id option:selected').html();
-	$html += '		<input value="' + $category_id + '" name="category[]" type="hidden" />';
-	$html += '	</td>';
-	$html += '	<td>';
-	$html += '		<button class="btn btn-danger" type="button">';
-	$html += '			<i class="glyphicon glyphicon-trash"></i>';
-	$html += '		</button>';
-	$html += '	</td>';
-	$html += '</tr>';
-
-	$('.table-category-list tbody').append($html);
-
-	$(".field-category-list").removeClass('has-error');
-	$(".field-category-list").find('.help-block').html('');
-});
-
-$(document).delegate('.table-category-list .btn-danger','click', function(){
-	$(this).parent().parent().remove();
-});
-
 /** 
  * Image crop and upload 
  */
@@ -733,3 +701,127 @@ function save_draft() {
 		save_item_price(true);
 	}
 }
+
+
+$(function() {
+
+	$(document).delegate('.txt-main-cat-search', 'keyup', function() {
+
+		$q = $(this).val().toLowerCase();
+
+		$('.main-category-list .checkbox').each(function() {
+
+			$a = $(this).attr('data-name').toLowerCase();
+
+			if($a.indexOf($q) == -1) {
+				$(this).hide();
+			}else{
+				$(this).show();
+			}
+		});
+	});
+
+	$(document).delegate('.txt-sub-cat-search', 'keyup', function() {
+
+		$q = $(this).val().toLowerCase();
+
+		$('.sub-category-list .checkbox').each(function() {
+
+			$a = $(this).attr('data-name').toLowerCase();
+
+			if($a.indexOf($q) == -1) {
+				$(this).hide();
+			}else{
+				$(this).show();
+			}
+		});
+	});
+
+	$(document).delegate('.txt-child-cat-search', 'keyup', function() {
+
+		$q = $(this).val().toLowerCase();
+
+		$('.child-category-list .checkbox').each(function() {
+
+			$a = $(this).attr('data-name').toLowerCase();
+
+			if($a.indexOf($q) == -1) {
+				$(this).hide();
+			}else{
+				$(this).show();
+			}
+		});
+	});
+
+	$(document).delegate('.main-category-list input', 'change', function() {
+
+		//remove sub and child list 
+		$('.sub-category-list .chk_wrapper').html('');
+		$('.child-category-list .chk_wrapper').html('');
+
+		$.post($('#category_list_url').val(), { parent_id : $(this).val() }, function(json) {
+			
+			$html = '';
+
+			for(var i=0; i < json.categories.length; i++){
+				$html += '<div class="radio" data-name="'+json.categories[i].category_name+'">';
+				$html += '	<input type="radio" name="sub_category" value="'+json.categories[i].category_id+'" id="sub_cat_'+json.categories[i].category_id+'" />';
+				$html += '	<label for="sub_cat_'+json.categories[i].category_id+'">';
+				$html += 		json.categories[i].category_name;
+				$html += '	</label>'; 
+				$html += '</div>';
+			}
+		
+			$('.sub-category-list .chk_wrapper').html($html);
+		});
+	});
+
+	$(document).delegate('.sub-category-list input', 'change', function() {
+
+		//remove sub and child list 
+		$('.child-category-list .chk_wrapper').html('');
+
+		$.post($('#category_list_url').val(), { parent_id : $(this).val() }, function(json) {
+			
+			$html = '';
+
+			for(var i=0; i < json.categories.length; i++){
+				$html += '<div class="radio" data-name="'+json.categories[i].category_name+'">';
+				$html += '	<input type="radio" name="child_category" value="'+json.categories[i].category_id+'" id="child_cat_'+json.categories[i].category_id+'" />';
+				$html += '	<label for="child_cat_'+json.categories[i].category_id+'">';
+				$html += 		json.categories[i].category_name;
+				$html += '	</label>'; 
+				$html += '</div>';
+			}
+		
+			$('.child-category-list .chk_wrapper').html($html);
+		});
+	});
+
+	$(document).delegate('.child-category-list input', 'change', function() {
+
+		$html  = '<tr>';
+		$html += '	<td>';
+		$html += 		$('.main-category-list input:checked').parents('.radio').attr('data-name');
+		$html += '		<input type="hidden" name="category[]" value="'+$('.main-category-list input:checked').val() + '" />';
+		$html += '	</td>';
+		$html += '	<td>';
+		$html +=  		$('.sub-category-list input:checked').parents('.radio').attr('data-name');
+		$html += '		<input type="hidden" name="category[]" value="'+$('.sub-category-list input:checked').val() + '" />';
+		$html += '	</td>';
+		$html += '	<td>';
+		$html +=  		$('.child-category-list input:checked').parents('.radio').attr('data-name');
+		$html += '		<input type="hidden" name="category[]" value="'+$('.child-category-list input:checked').val() + '" />';
+		$html += '	</td>';
+		$html += '	<td>';
+		$html += '		<button class="btn btn-danger btn-remove-cat"><i class="fa fa-trash-o"></i></button>';
+		$html += '	</td>';
+		$html += '</tr>';
+
+		$('.table-item-category-list tbody').append($html);
+	});
+
+	$(document).delegate('.btn-remove-cat', 'click', function() {
+		$(this).parents('tr').remove();
+	});
+});

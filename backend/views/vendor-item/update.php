@@ -20,10 +20,10 @@ $this->params['breadcrumbs'][] = 'Update';
         'categoryname'=>$categoryname,
         'images'=>$images,
         'model1' => $model1,
-        'categories' => $categories,
-        'vendor_item_to_category' => $vendor_item_to_category,
         'loadpricevalues'=>$loadpricevalues,
         'guide_images'=>$guide_images,
-        'model_question' => $model_question        
+        'model_question' => $model_question,
+        'main_categories' => $main_categories,
+        'item_child_categories' => $item_child_categories
     ]) ?>
 </div>
