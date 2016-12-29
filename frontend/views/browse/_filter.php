@@ -1,6 +1,7 @@
 <?php 
 
 use yii\helpers\Url;
+use common\models\CategoryPath;
 use common\components\LangFormat;
 
 ?>
@@ -45,6 +46,31 @@ use common\components\LangFormat;
                         if ((isset($Category->category_id))  && $Category->category_id == $category['category_id']) {
                             continue;
                         }
+
+                        //check if items available in this category 
+                        $have_item = CategoryPath::find()
+                            ->leftJoin(
+                                '{{%vendor_item_to_category}}',
+                                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+                            )
+                            ->leftJoin(
+                                '{{%vendor_item}}',
+                                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
+                            )
+                            ->where([
+                                '{{%vendor_item}}.trash' => 'Default',
+                                '{{%vendor_item}}.item_status' => 'Active',
+                                '{{%vendor_item}}.item_approved' => 'Yes',
+                                '{{%category_path}}.path_id' => $category['category_id']
+                            ])
+                            ->groupBy('{{%vendor_item}}.item_id')
+                            ->one();
+
+                        if(!$have_item)
+                        {
+                            continue;
+                        }
+                        
                         $category_name = LangFormat::format($category['category_name'],$category['category_name_ar']);
                         ?>
                         <option
