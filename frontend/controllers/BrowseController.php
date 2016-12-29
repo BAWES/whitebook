@@ -232,7 +232,7 @@ class BrowseController extends BaseController
             ->all();
 
         $TopCategories = Category::find()
-            ->where(['category_level' => 0, 'trash' => 'Default'])
+            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
             ->orderBy('sort')
             ->asArray()
             ->all();

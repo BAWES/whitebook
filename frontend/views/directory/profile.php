@@ -31,13 +31,17 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
 
 \Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
 
+$session = Yii::$app->session;
+$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+$deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+
 ?>
 <!-- coniner start -->
 <section id="inner_pages_white_back">
     <div class="container paddng0">
         <div class="vender_profile_new">
             <div class="product_detials_vender aother_dates">
-                <div class="col-md-5 padding0 vendor_photo">
+                <div class="col-md-5 padding0 vendor_photo thumbnail">
                     <a href="#" title="">
                         <?= Html::img($baselink, ['class'=>'','width'=>'450','alt'=>'Logo']); ?>
                     </a>
@@ -232,87 +236,22 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
         </div>
 
         <div class="plan_venues total_continer" id="plan_vanues">
-            <div class="col-md-3 paddingleft0 filter_content_wrapper">
 
-                <div class="filter_content">
+            <span class="filter_butt visible-xs visible-sm">
+                <i class="fa fa-filter"></i>
+            </span>
 
-                    <div class="filter_title">
-                        <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by'); ?></span>
-                    </div>
-                    <div class="filter_section">
-                        <?php
+            <div class="col-md-3 paddingleft0 hidden-xs hidden-sm vendor-filter" id="left_side_cate">
 
-                        $data = Yii::$app->request->get();
-
-                        $category_list = VendorCategory::find()
-                            ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.category_name_ar', '{{%category}}.slug','{{%category}}.icon'])
-                            ->leftJoin('{{%category}}','{{%category}}.category_id = {{%vendor_category}}.category_id')
-                            ->where([
-                                '{{%category}}.trash' =>'Default',
-                                '{{%category}}.category_level' => 0
-                            ])
-                            ->groupBy('{{%category}}.category_id')
-                            ->asArray()
-                            ->all();
-                        if (count($category_list) > 3) {
-                            $class = "test_scroll";
-                        } else {
-                            $class = "";
-                        } ?>
-
-                        <div class="responsive-category-top">
-                            <div class="listing_sub_cat1">
-                                <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-                                <select class="selectpicker" style="display: none;" id="main-category">
-                                    <option data-icon="" value="<?=yii\helpers\Url::toRoute(['directory/profile', 'slug' => 'all','vendor'=>$data['vendor']]); ?>"><?=Yii::t('frontend','All')?></option>
-                                    <?php
-                                    foreach($category_list as $category) {
-
-                                        if (isset($data['slug']) && ($data['slug'] == $category['slug'])) {
-                                            $selected = 'selected="selected"';
-                                            $attributes = 'data-hidden="true"';
-                                        } else {
-                                            $selected = '';
-                                            $attributes = '';
-                                        }
-                                        $category_name = LangFormat::format($category['category_name'],$category['category_name_ar']);
-                                        ?>
-                                        <option
-                                            data-icon="<?= $category['icon'] ?>"
-                                            value="<?=yii\helpers\Url::toRoute(['directory/profile','slug' => $category['slug'], 'vendor' => $data['vendor']]); ?>"
-                                            name="category" <?= $selected .' '. $attributes ?>>
-                                            <?= $category_name ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
-                            </div><!-- END .listing_sub_cat1 -->
-
-                        </div><!-- END .responsive-category-top -->
-
-                        <div class="responsive-category-bottom">
-                            <nav class="row-offcanvas row-offcanvas-left">
-                                <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
-                                    <div id="accordion" class="panel-group">
-                                        <?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]);?>
-                                    </div>
-                            </nav>
-                            <span class="filter_butt title_filter color_yellow col-xs-12 text-right padding0" data-toggle="offcanvas"><?=Yii::t('frontend','Filter')?></span>
-                            <div class="filter_butt hamburger is-closed" data-toggle="offcanvas">
-                                <img width="32" height="35" src="<?php echo Url::to("@web/images/cross92.svg"); ?>" alt="click here">
-                            </div>
-                            <nav class="row-offcanvas row-offcanvas-left">
-                                <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
-                                    <div id="accordion" class="panel-group">
-                                        <!-- BEGIN CATEGORY FILTER  -->
-                                        <?php
-                                            echo $this->render('@frontend/views/common/filter/price.php');
-                                            echo $this->render('@frontend/views/common/filter/theme.php',['themes'=>$themes]);
-                                        ?>
-                                    </div>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
+                <?= $this->render('@frontend/views/browse/_filter.php', [
+                            'deliver_date' => $deliver_date,
+                            'deliver_location' => $deliver_location,
+                            'themes' => $themes,
+                            'vendor' => [],
+                            'slug' => $slug,
+                            'TopCategories' => $TopCategories,
+                            'Category' => []
+                    ]);  ?>
 
             </div>
             <div class="col-md-9 paddingright0">

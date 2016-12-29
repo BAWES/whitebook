@@ -76,7 +76,16 @@ use common\components\LangFormat;
                         
                         <?= $this->render('@frontend/views/common/filter/theme.php', ['themes' => $themes]); ?>
 
-                        <?= $this->render('@frontend/views/common/filter/vendor.php', ['vendor' => $vendor]); ?>
+                        <?php 
+
+                        if($vendor) 
+                        {
+                            echo $this->render('@frontend/views/common/filter/vendor.php', [
+                                'vendor' => $vendor
+                            ]); 
+                        } 
+
+                        ?>
 
                     </div>
                 </div>
