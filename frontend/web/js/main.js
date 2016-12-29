@@ -62,7 +62,12 @@ $(document).delegate('#main-category', 'change', function(){
 $(document).delegate('.filter_butt', 'click', function(){
     $('#left_side_cate').toggleClass('hidden-sm');
     $('#left_side_cate').toggleClass('hidden-xs');
-    $('html, body').animate({ scrollTop: 0 }, 'slow');
+
+    if($('.vendor-filter').length > 0) {
+        $('html, body').animate({ scrollTop: $('.vendor-filter').offset().top - 120 }, 'slow');
+    }else{
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+    }    
 });
 
 //mobile - close filter button 
