@@ -7,8 +7,8 @@ $baselink =  Url::to("@web/images/item-default.png");
 if ($items) {
     foreach ($items as $key => $value) {
 
-        if($value['vendor_logo_path']) {
-            $baselink = Yii::getAlias('@vendor_logo/').$value['vendor_logo_path'];
+        if($value->vendor_logo_path) {
+            $baselink = Yii::getAlias('@vendor_logo/').$value->vendor_logo_path;
         }
 
         $item_url = Url::to(["directory/profile", 'vendor' => $value->slug]);

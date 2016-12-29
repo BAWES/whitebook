@@ -158,7 +158,7 @@ class SearchController extends BaseController
         }
 
         $vendorSearchData = Vendor::find()
-            ->select(['vendor_name','vendor_name_ar','slug'])
+            ->select(['vendor_name','vendor_name_ar','vendor_logo_path','slug'])
             ->where(['like', 'vendor_name', $search])
             ->andWhere([
                 '{{%vendor}}.trash' => 'Default',
