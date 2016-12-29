@@ -97,8 +97,8 @@ $search = ($search != '') ? $search : 'All';
 					]) ?>
 				</h3>
 			</div>
-			<div class="listing_right">
-				<div class="events_listing">
+			<div class="listing_right_vendor">
+				<div class="events_listing_vendor">
 					<?=	$this->render('@frontend/views/common/vendors', [
 						'items' => $vendorSearch,
 					]); ?>
