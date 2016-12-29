@@ -27,6 +27,7 @@ $(function()
 	ck_additional_info = CKEDITOR.replace('vendoritem-item_additional_info', $config);
 	ck_price_description = CKEDITOR.replace('vendoritem-item_price_description', $config);
 	ck_customization_description = CKEDITOR.replace('vendoritem-item_customization_description', $config);
+	
 	ck_item_description_ar = CKEDITOR.replace('vendoritem-item_description_ar', $config);
 	ck_additional_info_ar = CKEDITOR.replace('vendoritem-item_additional_info_ar', $config);
 	ck_price_description_ar = CKEDITOR.replace('vendoritem-item_price_description_ar', $config);
@@ -656,19 +657,8 @@ $('.complete').click(function()
 		{
 			show_errors(json);
 
-			$html  = '<div class="alert alert-warning">';
-			$html += '	Please check form carefully!';
-			$html += '	<button class="close" data-dismiss="alert"></button>';
-			$html += '</div>';
-
-			$('.loadingmessage').after($html);
-
-			$('.loadingmessage').hide();
-
 			$('.complete').removeAttr('disabled');
 			$('.complete').html('Complete');
-
-			$('html, body').animate({ scrollTop: 0 }, 'slow');
 		}
 
 		if(json['success']) 
@@ -683,6 +673,15 @@ function show_errors(json)
 	$('.has-error').removeClass('has-error');
 	$('.form-group .help-block').html('');
 	$('.alert-warning').remove();
+	
+	$html  = '<div class="alert alert-warning">';
+	$html += '	Please check form carefully!';
+	$html += '	<button class="close" data-dismiss="alert"></button>';
+	$html += '</div>';
+
+	$('.loadingmessage').after($html);
+
+	$('.loadingmessage').hide();
 
 	//step 1 
 	
@@ -698,6 +697,13 @@ function show_errors(json)
 		$(".field-vendoritem-item_name").removeClass('has-success');
 		$(".field-vendoritem-item_name").addClass('has-error');
 		$(".field-vendoritem-item_name").find('.help-block').html(json['errors']['item_name']);
+	}
+
+	if(json['errors']['item_name_ar']) 
+	{
+		$(".field-vendoritem-item_name_ar").removeClass('has-success');
+		$(".field-vendoritem-item_name_ar").addClass('has-error');
+		$(".field-vendoritem-item_name_ar").find('.help-block').html(json['errors']['item_name_ar']);
 	}
 				
 	if(json['errors']['category']) 
@@ -720,6 +726,12 @@ function show_errors(json)
   	{
         $('.field-vendoritem-item_description').addClass('has-error');
 	    $('.field-vendoritem-item_description').find('.help-block').html('Item description cannot be blank.');
+	}
+	
+	if(json['errors']['item_additional_info'])
+  	{
+        $('.field-vendoritem-item_additional_info').addClass('has-error');
+	    $('.field-vendoritem-item_additional_info').find('.help-block').html('Item additional info cannot be blank.');
 	}
 
 	//step 3
@@ -761,6 +773,8 @@ function show_errors(json)
 	{
  		$('.file-block').hide();
  	}
+
+ 	$('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 
 //append ckeditor data 
@@ -989,6 +1003,8 @@ function save_item_themes_groups($is_autosave = false) {
  */ 
 setInterval(function(){
 
+	return true;//
+
 	if($('#tab_1').parent().hasClass('active')){
 		save_item_info(true);
 	}
@@ -1132,6 +1148,28 @@ $(function() {
 
 		$.post($('#category_add_url').val(), $('#sub_category_form').serialize(), function(json) {
 			
+			$('.msg_wrapper').html('');
+
+			if(json.errors) {
+
+				$html  = '<div class="alert alert-warning">';
+				$html += '<button class="close" data-dismiss="alert"></button>';
+				
+				$.each(json.errors, function(key, errors) 
+				{
+					$.each(errors, function(index, error)
+					{
+						$html += '<p>' + error + '</p>';	
+					});					
+				});
+
+				$html += '</div>';
+
+				$('#sub_category_modal .msg_wrapper').html($html);
+
+				$('html, body').animate({ scrollTop: 0 }, 'slow');
+			}
+
 			if(json.category_id) {
 
 				$html  = '<div class="radio" data-name="'+json.category_name+'">';
@@ -1156,9 +1194,31 @@ $(function() {
 
 	$(document).delegate('#child_category_form', 'submit', function(e) {
 
+		$('.msg_wrapper').html('');
+
 		$.post($('#category_add_url').val(), $('#child_category_form').serialize(), function(json) {
 			
-			if(json.category_id) {
+			if(json.errors) {
+
+				$html  = '<div class="alert alert-warning">';
+				$html += '<button class="close" data-dismiss="alert"></button>';
+				
+				$.each(json.errors, function(key, errors) 
+				{
+					$.each(errors, function(index, error)
+					{
+						$html += '<p>' + error + '</p>';	
+					});					
+				});
+
+				$html += '</div>';
+
+				$('#child_category_modal .msg_wrapper').html($html);
+
+				$('html, body').animate({ scrollTop: 0 }, 'slow');
+			}
+
+			if(json.success) {
 
 				$html  = '<div class="radio" data-name="'+json.category_name+'">';
 				$html += '	<input type="radio" name="child_category" value="'+json.category_id+'" id="child_cat_'+json.category_id+'" />';
@@ -1244,24 +1304,28 @@ $(function() {
 		$(this).parents('tr').remove();
 	});
 
-	$(document).delegate('button[data-target="#sub_category_modal"]', 'click', function() {		
+	$(document).delegate('.btn_sub_category_modal', 'click', function() {		
 		
 		$parent_id = $('.main-category-list input:checked').val();
 
-		if($parent_id) {
+		if($parent_id > 0) {
 			$('#hdn_sub_cat_parent').val($parent_id);
+			$('#sub_category_modal').modal('show');
 		} else {
+			alert('Please select main category.');
 			return false;
 		}		
 	});
 
-	$(document).delegate('button[data-target="#child_category_modal"]', 'click', function() {		
+	$(document).delegate('.btn_child_category_modal', 'click', function() {		
 		
 		$parent_id = $('.sub-category-list input:checked').val();
 
-		if($parent_id) {
+		if($parent_id > 0) {
 			$('#hdn_child_cat_parent').val($parent_id);
+			$('#child_category_modal').modal('show');
 		}else{
+			alert('Please select sub category.');
 			return false;
 		}
 	});

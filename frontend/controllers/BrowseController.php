@@ -141,18 +141,25 @@ class BrowseController extends BaseController
         }//if themes
 
         //category filter
-        if ($slug != 'all') {
-            $cats = $Category->slug;
-            $categories = [];
+        $cats = '';
 
-            if (isset($data['category']) && count($data['category']) > 0) {
-                $categories = array_merge($categories, $data['category']);
-                $cats = implode("','", $categories);
-            }
-            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
-            $item_query->andWhere($q);
+        if($Category)
+        {
+            $cats = $Category->slug;    
+        }
+        
+        if (isset($data['category']) && count($data['category']) > 0) 
+        {
+            $cats = implode("','",  $data['category']);
         }
 
+        if($cats)
+        {
+            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
+        
+            $item_query->andWhere($q);    
+        }
+        
         if ($session->has('deliver-location')) {
 
             if (is_numeric($session->get('deliver-location'))) {
@@ -225,7 +232,7 @@ class BrowseController extends BaseController
             ->all();
 
         $TopCategories = Category::find()
-            ->where(['category_level' => 0, 'trash' => 'Default'])
+            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
             ->orderBy('sort')
             ->asArray()
             ->all();

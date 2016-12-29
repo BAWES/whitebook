@@ -163,11 +163,14 @@ if($model->isNewRecord){
 						<tr>
 							<td></td>
 							<td>
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sub_category_modal"><i class="fa fa-plus"></i> Add 
+								<button type="button" class="btn btn-primary btn_sub_category_modal" type="button">
+									<i class="fa fa-plus"></i> Add 
 								</button>
 							</td>
 							<td>
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#child_category_modal"><i class="fa fa-plus"></i> Add </button>
+								<button type="button" class="btn btn-primary btn_child_category_modal" type="button">
+									<i class="fa fa-plus"></i> Add 
+								</button>
 							</td>
 						</tr>
 					</tfoot>
@@ -450,6 +453,8 @@ if($model->isNewRecord){
       </div>
       <div class="modal-body">
 
+      		<div class="msg_wrapper"></div>
+
       		<?= Html::hiddenInput('Category[parent_category_id]', 0, ['id' => 'hdn_child_cat_parent']); ?>
 
 			<?= $form->field($category_model, 'category_name') ?>
@@ -480,6 +485,8 @@ if($model->isNewRecord){
         <h4 class="modal-title">Add sub category</h4>
       </div>
       <div class="modal-body">
+
+      		<div class="msg_wrapper"></div>
 
       		<?= Html::hiddenInput('Category[parent_category_id]', 0, ['id' => 'hdn_sub_cat_parent']); ?>
 
@@ -601,7 +608,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.12", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.14", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

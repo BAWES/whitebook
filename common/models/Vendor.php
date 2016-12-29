@@ -107,7 +107,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             [['confirm_password'], 'compare', 'compareAttribute'=>'vendor_password','message'=>'Password and confirm password not same' ],
             [['vendor_contact_email'],'email'],
             ['vendor_contact_email', 'unique'],
-            [['approve_status','vendor_name', 'vendor_name_ar', 'vendor_public_email','vendor_contact_name','vendor_contact_email','vendor_contact_address', 'vendor_contact_address_ar' ,'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number','vendor_logo_path', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no', 'vendor_website', 'vendor_facebook','vendor_facebook_text', 'vendor_twitter','vendor_twitter_text', 'vendor_instagram','vendor_instagram_text', 'vendor_youtube','vendor_youtube_text'], 'string', 'max' => 128],
+            [['approve_status','vendor_name', 'vendor_name_ar', 'vendor_public_email','vendor_contact_name','vendor_contact_email','vendor_contact_address', 'vendor_contact_address_ar' ,'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number','vendor_logo_path', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no', 'vendor_website', 'vendor_facebook','vendor_facebook_text', 'vendor_twitter','vendor_twitter_text', 'vendor_instagram','vendor_instagram_text', 'vendor_youtube','vendor_youtube_text'], 'string', 'max' => 128],            
             ['vendor_logo_path', 'image', 'extensions' => 'png, jpg, jpeg','skipOnEmpty' => false,'on' => 'register'],
         ];
     }

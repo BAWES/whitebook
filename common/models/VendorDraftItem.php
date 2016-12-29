@@ -2,6 +2,10 @@
 
 namespace common\models;
 
+use yii\db\Expression;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\TimestampBehavior;
+
 use Yii;
 
 /**
@@ -64,15 +68,36 @@ class VendorDraftItem extends \yii\db\ActiveRecord
         return 'whitebook_vendor_draft_item';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => SluggableBehavior::className(),
+                'slugAttribute' => 'slug',
+                'attribute' => 'item_name',
+                'immutable' => true,
+                'ensureUnique'=>true,
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['item_id', 'item_description', 'item_additional_info', 'item_customization_description', 'item_price_description', 'sort', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
+            [['item_id', 'item_description', 'item_additional_info', 'sort', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
+
             [['item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'sort', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
             [['item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_for_sale', 'item_archived', 'item_approved', 'item_status', 'trash'], 'string'],
+
             [['item_price_per_unit'], 'number'],
             [['created_datetime', 'modified_datetime'], 'safe'],
             [['item_name'], 'string', 'max' => 128],

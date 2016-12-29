@@ -120,11 +120,6 @@ class DirectoryController extends BaseController
 
         $data = Yii::$app->request->get();
 
-        $main_category = Category::find()
-            ->where(['category_level'=>'0', 'trash'=>"Default"])
-            ->asArray()
-            ->all();
-
         $item_query = CategoryPath::find()
             ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
             ->leftJoin(
@@ -242,7 +237,8 @@ class DirectoryController extends BaseController
             return $this->renderPartial('@frontend/views/common/items',['items' => $provider,'customer_events_list' => $customer_events_list]);
         }
 
-        if (strpos($vendor_details['vendor_website'], 'http://') === false) {
+        if ($vendor_details['vendor_website'] && strpos($vendor_details['vendor_website'], 'http') === false) 
+        {
             $vendor_details['vendor_website'] = 'http://'.$vendor_details['vendor_website'];
         }
 
@@ -271,11 +267,17 @@ class DirectoryController extends BaseController
 
         $txt_day_off = str_replace($search, $replace, $vendor_details['day_off']);
 
+        $TopCategories = Category::find()
+            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
+            ->orderBy('sort')
+            ->asArray()
+            ->all();
+
         return $this->render('profile', [
             'vendor_detail' => $vendor_details,
             'vendor_items' => $vendor_items,
             'themes' => $themes,
-            'category' => $main_category,
+            'TopCategories' => $TopCategories,
             'provider' => $provider,
             'slug' => $slug,
             'customer_events' => $customer_events,

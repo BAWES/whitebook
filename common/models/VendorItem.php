@@ -108,8 +108,11 @@ class VendorItem extends \yii\db\ActiveRecord
     {
         return [
             [['type_id', 'vendor_id', 'item_name', 'item_name_ar'], 'required'],
+            
             [['type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
+            
             [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash'], 'string'],
+            
             [['item_price_per_unit'], 'number'],
             
             [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
@@ -118,9 +121,7 @@ class VendorItem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
-            'item_default_capacity', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_how_long_to_make',
-            'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            [['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
 
@@ -408,5 +409,36 @@ class VendorItem extends \yii\db\ActiveRecord
 
     public static function get_featured_product() {
         return $feature = \frontend\models\VendorItem::find()->select(['{{%vendor_item}}.*'])->where(['item_status' => 'Active'])->with('vendor')->asArray()->all();
+    }
+
+    /**
+     * sanitise data for item before save 
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            
+            // remove inline css 
+
+            $this->item_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_description);
+            
+            $this->item_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_description_ar);
+            
+            $this->item_additional_info = str_replace('style="', 'inline-style-not-allowed="', $this->item_additional_info);
+            
+            $this->item_additional_info_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_additional_info_ar);
+            
+            $this->item_price_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description);
+
+            $this->item_price_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description_ar);
+
+            $this->item_customization_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_customization_description);
+
+            $this->item_customization_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_customization_description_ar);            
+
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -546,7 +546,13 @@ textarea .form-group{ min-height: 126px;}
 .directory_listing .bootstrap-select.btn-group .dropdown-menu li:nth-child(8) .text{ margin:7px 0 0 0;}
 .directory_listing .bootstrap-select.btn-group .dropdown-menu li:nth-child(10) .text{ margin:7px 0 0 0;}
 .accad_menus{ display: inline-block; width: 100%;}
-.vender_profile_new .bakery_title h3{color:#000;font: 16px 'OpenSansRegular';text-transform: uppercase; padding:0px; margin:42px 0 19px;}
+.vender_profile_new .bakery_title h3{
+    color:#000;
+    font: 16px 'OpenSansRegular';
+    text-transform: uppercase; 
+    padding:0px; 
+    margin:15px 0 19px;
+}
 
 .vender_profile_new{ display: inline-block; width: 100%; margin-top: 27px;}
 .panel-heading .panel-title > a:hover{ text-decoration: none;}
@@ -1747,7 +1753,7 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
     font-weight: bold;
     font-size: 13px;
 }
-.events_images i{
+.events_images > a > i{
     position: absolute;
     bottom: 1px;
     left: 4px;
@@ -2174,4 +2180,30 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .package_description .or {
     display: inline;
     margin: 0 20px;
+}
+div#search_list ul{
+    z-index: 99999;
+}
+
+.hover_events {
+    background:rgba(0,0,0,0.5);
+    /*background: transparent;*/
+    /*background-color: #999;*/
+    z-index: 1;
+}
+.pluse_cont a,.faver_icons a{
+    background: none!important;
+}
+.pluse_cont a i,.faver_icons a i{
+    background: none!important;
+    color:#fff;
+    font-size: 17px!important;
+}
+
+.product_detials_vender .vendor_photo{
+    padding: 0px;
+}
+
+span.small {
+    font-size: 69%;
 }

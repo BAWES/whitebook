@@ -322,6 +322,13 @@ class VendorController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
+            if(!empty(Yii::$app->request->post('vendor_password')))
+            {   
+                $model->vendor_password = Yii::$app->getSecurity()->generatePasswordHash(
+                    Yii::$app->request->post('vendor_password')
+                );  
+            }
+
             $vendor_day_off = Yii::$app->request->post('vendor_day_off');
 
             if(is_array($vendor_day_off)) {
@@ -446,6 +453,9 @@ class VendorController extends Controller
                 ])
                 ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
                 ->all();
+
+            //to prevent password from encrypting encrypted password 
+            $model->vendor_password = '';
 
             return $this->render('update', [
                 'model' => $model,
@@ -586,6 +596,9 @@ class VendorController extends Controller
 
         $posted_data = Yii::$app->request->post('Vendor');
 
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
+
         //validate
         if(!$is_autosave) {
             $errors = Vendor::validate_vendor_logo($posted_data);
@@ -663,6 +676,14 @@ class VendorController extends Controller
             ->where(['vendor_id' => $vendor_id])
             ->one();
     
+        if(!empty($posted_data['vendor_password']))
+        {   
+            $model->vendor_password = Yii::$app->getSecurity()->generatePasswordHash($posted_data['vendor_password']);  
+        }
+        
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
+
         //load posted data to model 
         $model->load(['Vendor' => $posted_data]);
 
@@ -716,6 +737,9 @@ class VendorController extends Controller
         $is_autosave = Yii::$app->request->post('is_autosave');
 
         $posted_data = Yii::$app->request->post('Vendor');
+
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
 
         //validate
         if(!$is_autosave) {
@@ -786,6 +810,9 @@ class VendorController extends Controller
 
         $posted_data = Yii::$app->request->post('Vendor');
 
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
+
         //validate
         if(!$is_autosave) {
             $errors = Vendor::validate_additional_info($posted_data);
@@ -839,6 +866,9 @@ class VendorController extends Controller
         $is_autosave = Yii::$app->request->post('is_autosave');
 
         $posted_data = Yii::$app->request->post('Vendor');
+
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
 
         //validate
         if(!$is_autosave) {
@@ -894,6 +924,9 @@ class VendorController extends Controller
 
         $posted_data = Yii::$app->request->post('Vendor');
 
+        //to prevent password field 
+        unset($posted_data['vendor_password']);
+        
         //validate
         if(!$is_autosave) {
             $errors = Vendor::validate_email_addresses($posted_data);

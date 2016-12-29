@@ -50,11 +50,17 @@ class VendorItem extends \common\models\VendorItem
             return $errors;
         }
 
+        if(empty($data['item_name_ar'])) {
+            $errors['item_name_ar'] = 'Item Name - Arabic cannot be blank.';
+            return $errors;
+        }
+
         if(strlen($data['item_name']) < 4) {
             $errors['item_name'] = 'Item name minimum 4 letters.';
             return $errors;
         }
 
+        /*
         $count_query = VendorItem::find()
             ->select('item_name')
             ->where([
@@ -71,7 +77,8 @@ class VendorItem extends \common\models\VendorItem
         if($count_query->count()) {
             $errors['item_name'] = 'Item name already exists.';
         }
-
+        */
+        
         return $errors;
     }
 
@@ -88,6 +95,10 @@ class VendorItem extends \common\models\VendorItem
 
         if(empty($data['item_description'])) {
             $errors['item_description'] = 'Item description cannot be blank.';
+        }
+
+        if(empty($data['item_additional_info'])) {
+            $errors['item_additional_info'] = 'Item additional info cannot be blank.';
         }
 
         return $errors;

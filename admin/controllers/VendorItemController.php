@@ -658,6 +658,10 @@ class VendorItemController extends Controller
         }
 
         $model->load(['VendorItem' => $posted_data]);
+        
+        //force to generate slug again by removing old slug 
+        $model->slug = '';
+
         $model->save(false);
 
         //remove all old category 
@@ -1701,6 +1705,7 @@ class VendorItemController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
         
             $level = 0;
+            
             $paths = CategoryPath::find()
                 ->where(['category_id' => $model->parent_category_id])
                 ->orderBy('level ASC')
@@ -1724,8 +1729,15 @@ class VendorItemController extends Controller
             $cp->save();
 
             return [
+                'success' => 1,
                 'category_id' => $model->category_id,
                 'category_name' => $model->category_name
+            ];
+        } 
+        else 
+        {
+            return [
+                'errors' => $model->getErrors()
             ];
         }
     }

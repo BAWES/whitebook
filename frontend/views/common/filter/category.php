@@ -1,7 +1,8 @@
 <?php
 
-use common\models\ChildCategory;
 use common\models\SubCategory;
+use common\models\CategoryPath;
+use common\models\ChildCategory;
 use frontend\models\Category;
 
 /* Get slug name to find category */
@@ -50,7 +51,32 @@ $get = Yii::$app->request->get();
 						}
 						foreach ($subcategory as $key => $value) {
 
+							//check if items available in this category 
+	                        $have_item = CategoryPath::find()
+	                            ->leftJoin(
+	                                '{{%vendor_item_to_category}}',
+	                                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+	                            )
+	                            ->leftJoin(
+	                                '{{%vendor_item}}',
+	                                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
+	                            )
+	                            ->where([
+	                                '{{%vendor_item}}.trash' => 'Default',
+	                                '{{%vendor_item}}.item_status' => 'Active',
+	                                '{{%vendor_item}}.item_approved' => 'Yes',
+	                                '{{%category_path}}.path_id' => $value['category_id']
+	                            ])
+	                            ->groupBy('{{%vendor_item}}.item_id')
+	                            ->one();
+
+	                        if(!$have_item)
+	                        {
+	                            continue;
+	                        }
+
 							if (isset($value['category_name'])) {
+								
 								$category_name = \common\components\LangFormat::format(strtolower($value['category_name']),strtolower($value['category_name_ar']));
 								?>
 								<li for="<?= "class_" . $value['slug'] ?>">
@@ -59,7 +85,7 @@ $get = Yii::$app->request->get();
 										<input
 											name="category"
 											data-element="input"
-											class="items category <?=$value['slug'] ?>"
+											class="items category"
 											id="checkbox-<?= $value['slug'] ?>"
 											step="<?= $value['category_id'] ?>"
 											value="<?= $value['slug'] ?>"
@@ -73,9 +99,35 @@ $get = Yii::$app->request->get();
 
 								<?php
 								$_subcategory = SubCategory::loadsubcat($value['slug']);
+
 								if ($_subcategory) {
-									echo  "<ul class=".$value['slug'].">";
+									echo  "<ul>";
 									foreach ($_subcategory as $_key => $_value) {
+
+										 //check if items available in this category 
+				                        $have_item = CategoryPath::find()
+				                            ->leftJoin(
+				                                '{{%vendor_item_to_category}}',
+				                                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+				                            )
+				                            ->leftJoin(
+				                                '{{%vendor_item}}',
+				                                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
+				                            )
+				                            ->where([
+				                                '{{%vendor_item}}.trash' => 'Default',
+				                                '{{%vendor_item}}.item_status' => 'Active',
+				                                '{{%vendor_item}}.item_approved' => 'Yes',
+				                                '{{%category_path}}.path_id' => $value['category_id']
+				                            ])
+				                            ->groupBy('{{%vendor_item}}.item_id')
+				                            ->one();
+
+				                        if(!$have_item)
+				                        {
+				                            continue;
+				                        }
+
 										$_category_name = \common\components\LangFormat::format(strtolower($_value['category_name']),strtolower($_value['category_name_ar']));
 										?>
 										<li class="subcat" for="<?= "class_" . $value['slug'] ?>">
@@ -128,7 +180,12 @@ li.subcat {
 		clear: both;
 	}
 	.b-g-f8f8f8{background-color: #f8f8f8;}
-	.css-updated{height:170px;overflow-y: scroll;}
+	.css-updated {
+	    max-height: 170px;
+	    overflow-y: scroll;
+	    float: left;
+	    width: 100%;
+	}
 ")
 ?>
 

@@ -99,10 +99,9 @@ use yii\widgets\ActiveForm;
 				<?= $form->field($model, 'vendor_contact_email')
 						->textInput(['maxlength' => 100, 'autocomplete' => 'off']); ?>
 
-				<?php if($model->isNewRecord) { ?>
-					<?= $form->field($model, 'vendor_password')->passwordInput() ?>
-					<?= $form->field($model, 'confirm_password')->passwordInput() ?>
-				<?php } ?>
+				<?= $form->field($model, 'vendor_password')
+						->textInput()
+						->hint('Set this field to add new password.') ?>
 
 				<input type="hidden" name="email_valid" value="" />
 			 	<div class="form-group"><?= $form->field($model, 'vendor_contact_name',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textInput(['maxlength' => 100,'autocomplete' => 'off']) ?></div>
@@ -491,4 +490,4 @@ $this->registerJsFile("@web/themes/default/plugins/ckeditor/ckeditor.js", ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.11", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor.js?V=1.12", ['depends' => [\yii\web\JqueryAsset::className()]]);
