@@ -157,6 +157,17 @@ class SearchController extends BaseController
             $vendor = Vendor::loadvendor_item($k);
         }
 
+        $vendorSearchData = Vendor::find()
+            ->select(['vendor_name','vendor_name_ar','slug'])
+            ->where(['like', 'vendor_name', $search])
+            ->andWhere([
+                '{{%vendor}}.trash' => 'Default',
+                '{{%vendor}}.approve_status' => 'Yes',
+                '{{%vendor}}.vendor_status' => 'Active'
+            ])
+            ->limit(10)
+            ->all();
+
         $usermodel = new Users();
 
         if (Yii::$app->user->isGuest) {
@@ -187,7 +198,8 @@ class SearchController extends BaseController
             'vendor' => $vendor,
             'slug' => $slug,
             'customer_events_list' => $customer_events_list,
-            'search' => $search
+            'search' => $search,
+            'vendorSearch' => $vendorSearchData
         ]);
     }
 
