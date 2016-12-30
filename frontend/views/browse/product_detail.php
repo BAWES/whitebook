@@ -516,6 +516,7 @@ if($model->images) {
                 <!-- Mobile end Here-->
 
                 <div class="clearfix"></div>
+
                 <?php if($similiar_item) { ?>
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
@@ -583,7 +584,7 @@ $this->registerJs("
 
 ", View::POS_HEAD);
 
-$this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 
 $this->registerCss("

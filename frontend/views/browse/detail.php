@@ -584,6 +584,8 @@ if($model->images) {
                 <!-- Mobile end Here-->
 
                 <div class="clearfix"></div>
+
+                <?php if($similiar_item) { ?>
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
                         <h2>
@@ -626,6 +628,8 @@ if($model->images) {
                         </div>
                     </div>
                 </div>
+                <?php } ?>
+
             </div><!--product detail end-->
         </div>
         <!-- one end -->
@@ -707,4 +711,4 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.3', ['depends' => [\yii\web\JqueryAsset::className()]]);
