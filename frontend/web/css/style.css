@@ -182,7 +182,18 @@ input[type="submit"] {
 /* inner pages about Us pages*/
 #inner_pages_sections{ display:inline-block; width:100%; min-height:341px; background:#f9f9f9;}
 .title_main{ display:inline-block; width:100%; text-align:center;}
-.title_main h1{ display:inline-block;  letter-spacing: 4px;  text-align:center; border-bottom:1px solid #000; font-size:18px;font-family: 'OpenSansRegular'; color:#000; text-transform:uppercase ; margin:30px 0 0 0px; padding:0 0 22px;  }
+.title_main h1{ 
+    display:inline-block;  
+    letter-spacing: 4px;  
+    text-align:center; 
+    border-bottom:1px solid #000; 
+    font-size:18px;
+    font-family: 'OpenSansRegular'; 
+    color:#000; 
+    text-transform:uppercase; 
+    margin:20px 0 0 0px; 
+    padding:0 0 22px;  
+}
 .about_content_sec h5{ width:100%; display:inline-block; text-align:center; font-size:13px;font-family: 'OpenSansRegular'; color:#000; line-height:1.462;}
 .about_content_sec {    display: inline-block;    margin: 20px 0 0;    width: 100%; }
 /*end*/
@@ -2207,4 +2218,8 @@ div#search_list ul{
 
 span.small {
     font-size: 69%;
+}
+
+.desktop-menu .category_listing_nav{
+    margin: 10px 0 20px 0;
 }
