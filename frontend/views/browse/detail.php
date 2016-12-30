@@ -139,6 +139,36 @@ if($model->images) {
                             <b class="font-27">
                                 <p><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
                             </b>
+ 
+                            <?php if($price_table) { ?>
+                            <table class="table table-bordered"> 
+                                <thead>
+                                    <tr>
+                                        <td><?= Yii::t('frontend', 'From') ?></td>
+                                        <td><?= Yii::t('frontend', 'To') ?></td>
+                                        <td><?= Yii::t('frontend', 'Price per unit') ?></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($price_table as $key => $value) { ?>
+                                    <tr>
+                                        <td>
+                                            <?= $value->range_from ?> 
+                                            <?= Yii::t('frontend', 'Unit') ?>
+                                        </td>
+                                        <td>
+                                            <?= $value->range_to ?> 
+                                            <?= Yii::t('frontend', 'Unit') ?>
+                                        </td>
+                                        <td>
+                                            <?= CFormatter::format($value->pricing_price_per_unit) ?>
+                                        </td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                            <?php } ?>
+
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -204,7 +234,40 @@ if($model->images) {
                                     </label>
 
                                     <b class="font-27"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
+
                                     <strong><?= $model['item_price_description'] ?></strong>
+
+                                    <hr />
+
+                                    <?php if($price_table) { ?>
+                                    <table class="table table-bordered"> 
+                                        <thead>
+                                            <tr>
+                                                <td><?= Yii::t('frontend', 'From') ?></td>
+                                                <td><?= Yii::t('frontend', 'To') ?></td>
+                                                <td><?= Yii::t('frontend', 'Price per unit') ?></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($price_table as $key => $value) { ?>
+                                            <tr>
+                                                <td>
+                                                    <?= $value->range_from ?> 
+                                                    <?= Yii::t('frontend', 'Unit') ?>
+                                                </td>
+                                                <td>
+                                                    <?= $value->range_to ?> 
+                                                    <?= Yii::t('frontend', 'Unit') ?>
+                                                </td>
+                                                <td>
+                                                    <?= CFormatter::format($value->pricing_price_per_unit) ?>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                    <?php } ?>
+
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
