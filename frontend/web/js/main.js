@@ -86,19 +86,7 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-$(window).resize(function(){
-
-    //make dropdown box fullwidth
-    $('.mega-dropdown-menu').css('width', $(window).width());
-
-    //set left position for dropdown ment
-    $left = $('.nav.navbar-nav').offset().left;
-
-    if($('.plan_menu').hasClass('rtl')) {
-        $('.plan_menu').css('left', '-' + ($left + 222.297) + 'px');
-    }else{
-        $('.plan_menu').css('left', '-' + ($left) + 'px');
-    }
+$(window).resize(function() {
     
     if($(window).width() <= 990) {
         $('#home_slider').css('padding-top', $('#top_header').height() + 'px');
