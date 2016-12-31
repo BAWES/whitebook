@@ -19,8 +19,9 @@ use common\models\VendorItemThemes;
 use common\models\Location;
 use common\models\CategoryPath;
 use common\models\CustomerAddress;
-use common\components\LangFormat;
 use common\models\VendorPhoneNo;
+use common\models\VendorItemPricing;
+use common\components\LangFormat;
 
 /**
 * Site controller.
@@ -343,9 +344,16 @@ class BrowseController extends BaseController
 
         $txt_day_off = str_replace($search, $replace, $vendor_detail->day_off);
 
-        if (strpos($vendor_detail->vendor_website, 'http://') === false) {
+        if ($vendor_detail->vendor_website && strpos($vendor_detail->vendor_website, 'http://') === false) {
             $vendor_detail->vendor_website = 'http://'.$vendor_detail->vendor_website;
         }
+
+        $price_table = VendorItemPricing::find()
+            ->where([
+                'item_id' => $model->item_id,
+                'trash' => 'Default'
+            ])
+            ->all();
 
         if (Yii::$app->user->isGuest) {
 
@@ -358,7 +366,8 @@ class BrowseController extends BaseController
                 'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
                 'phone_icons' => $phone_icons,
                 'txt_day_off' => $txt_day_off,
-                'my_addresses' => []
+                'my_addresses' => [],
+                'price_table' => $price_table
             ]);
 
         } else {
@@ -411,6 +420,7 @@ class BrowseController extends BaseController
                 'customer_events_list' => $customer_events_list,
                 'vendor_area' => $vendor_area_list,
                 'my_addresses' => $my_addresses,
+                'price_table' => $price_table
             ]);
         }
     }

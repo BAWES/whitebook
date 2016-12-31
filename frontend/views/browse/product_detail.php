@@ -86,9 +86,42 @@ if($model->images) {
                                     <?= $vendor_name; ?>
                                 </a>
                             </label>
+
                             <b>
                                 <?= CFormatter::format($model->item_price_per_unit)  ?>       
                             </b>
+
+                            <hr />
+                    
+                            <?php if($price_table) { ?>
+                            <table class="table table-bordered"> 
+                                <thead>
+                                    <tr>
+                                        <td><?= Yii::t('frontend', 'From') ?></td>
+                                        <td><?= Yii::t('frontend', 'To') ?></td>
+                                        <td><?= Yii::t('frontend', 'Price per unit') ?></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($price_table as $key => $value) { ?>
+                                    <tr>
+                                        <td>
+                                            <?= $value->range_from ?> 
+                                            <?= Yii::t('frontend', 'Unit') ?>
+                                        </td>
+                                        <td>
+                                            <?= $value->range_to ?> 
+                                            <?= Yii::t('frontend', 'Unit') ?>
+                                        </td>
+                                        <td>
+                                            <?= CFormatter::format($value->pricing_price_per_unit) ?>
+                                        </td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                            <?php } ?>
+
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -169,6 +202,36 @@ if($model->images) {
                                     </label>
 
                                     <b><?= CFormatter::format($model->item_price_per_unit)  ?></b>
+
+                                    <?php if($price_table) { ?>
+                                        <table class="table table-bordered"> 
+                                            <thead>
+                                                <tr>
+                                                    <td><?= Yii::t('frontend', 'From') ?></td>
+                                                    <td><?= Yii::t('frontend', 'To') ?></td>
+                                                    <td><?= Yii::t('frontend', 'Price per unit') ?></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($price_table as $key => $value) { ?>
+                                                <tr>
+                                                    <td>
+                                                        <?= $value->range_from ?> 
+                                                        <?= Yii::t('frontend', 'Unit') ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $value->range_to ?> 
+                                                        <?= Yii::t('frontend', 'Unit') ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= CFormatter::format($value->pricing_price_per_unit) ?>
+                                                    </td>
+                                                </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                        <?php } ?>
+
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
@@ -453,6 +516,7 @@ if($model->images) {
                 <!-- Mobile end Here-->
 
                 <div class="clearfix"></div>
+
                 <?php if($similiar_item) { ?>
                 <div class="similar_product_listing">
                     <div class="feature_product_title">
@@ -520,7 +584,7 @@ $this->registerJs("
 
 ", View::POS_HEAD);
 
-$this->registerJsFile('@web/js/product_detail.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 
 $this->registerCss("

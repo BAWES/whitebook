@@ -17,6 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Unit' => 'وحدة',
+    'From' => 'من عند',
+    'To' => 'إلى',
+    'Price per unit' => 'السعر لكل وحدة',
     '{count} item added to event.' => '{عدد} إضافة عنصر واحد لهذا الحدث.',
     'Please share this event in mobile device' => 'يرجى حصة هذا الحدث في جهاز الهاتف النقال',
     'Add comma(,) separated email' => 'إضافة فاصلة (،) فصل البريد الإلكتروني',

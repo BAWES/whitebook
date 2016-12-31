@@ -1125,9 +1125,11 @@ class VendorItemController extends Controller
 
         $data = Yii::$app->request->post();
         $status = ($data['status'] == 'Active' ? 'Deactive' : 'Active');
+
         $vendor_item_update = VendorItem::findOne($data['id']);
         $vendor_item_update->item_status = $status;
-        $vendor_item_update->update();
+        $vendor_item_update->save(false);
+
         if ($status == 'Active') {
             return \yii\helpers\Url::to('@web/uploads/app_img/active.png');
         } else {
@@ -1177,6 +1179,7 @@ class VendorItemController extends Controller
             }
         } else {
             $command = VendorItem::updateAll(['item_status' => $data['status']],['item_id' =>$data['keylist']]);
+            
             if ($command) {
                 Yii::$app->session->setFlash('success', 'Vendor item status updated!');
             } else {
