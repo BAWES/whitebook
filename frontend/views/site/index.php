@@ -35,8 +35,12 @@ $model = new Website();
         echo curl_exec($ch);
         curl_close($ch);
     ?>
-
-    <?= $this->render('_search'); ?>
+    <?php
+    // Slider Overlay Search
+    if(Yii::$app->params['feature.slideroverlay.enabled'] == true){
+        echo $this->render('_search');
+    }
+    ?>
 </div>
 
 <!-- Content start -->
@@ -112,11 +116,11 @@ $model = new Website();
 <?php
 
 if (Yii::$app->user->isGuest) {
-   
+
     $wishlist_ids = array();
 
 } else {
-    
+
     $wishlist = Wishlist::find()
                     ->where(['customer_id' => Yii::$app->user->getId()])
                     ->all();
@@ -185,7 +189,7 @@ if (!empty($feature_group_sql_result)) {
                                 $imglink = Yii::getAlias("@s3/vendor_item_images_210/")
                                     . $image_row['image_path'];
                             } else {
-                                $imglink = Url::to("@web/images/item-default.png");    
+                                $imglink = Url::to("@web/images/item-default.png");
                             }
 
                             $item_url = Url::to(['browse/detail',
@@ -197,7 +201,7 @@ if (!empty($feature_group_sql_result)) {
                             <div class="item" data-id="<?= $product_val['item_id'] ?>">
                                 <div class="events_items fetu_product_list index_redirect" data-hr='<?= $item_url ?>'>
 
-                                <div class="hover_events">    
+                                <div class="hover_events">
                                     <div class="pluse_cont">
                                         <?php if(Yii::$app->user->isGuest) { ?>
                                             <a role="button" class="" data-toggle="modal"  onclick="show_login_modal(<?php echo $product_val['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>">
@@ -235,7 +239,7 @@ if (!empty($feature_group_sql_result)) {
                                         <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
                                     <?php } ?>
                                 </a>
-                                
+
                                 <a href="<?= $item_url ?>">
                                     <div class="deals_listing_cont">
                                         <?=\common\components\LangFormat::format($product_val['vendor_name'],$product_val['vendor_name_ar']); ?><br/>
