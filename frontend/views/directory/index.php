@@ -34,7 +34,10 @@ use yii\web\view;
 							$categories = \frontend\models\Category::find()
 								->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
 								->select('{{%category}}.category_name, {{%category}}.category_name_ar, {{%category}}.category_id, {{%category}}.icon')
-								->where(['{{%category_path}}.level' => 0])
+								->where([
+									'{{%category}}.trash' => 'Default',
+									'{{%category_path}}.level' => 0
+								])
 								->orderBy('sort')
 								->all();
 
