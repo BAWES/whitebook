@@ -15,7 +15,6 @@ use yii\db\Expression;
 * @property string $category_id
 * @property string $parent_category_id
 * @property string $category_name
-* @property string $category_allow_sale
 * @property integer $created_by
 * @property integer $modified_by
 * @property string $created_datetime
@@ -47,7 +46,7 @@ class ChildCategory extends \yii\db\ActiveRecord
     {
         return [
             [['parent_category_id','category_level', 'created_by', 'modified_by'], 'integer'],
-            [['category_allow_sale', 'trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad','slug'], 'string'],
+            [['trash','category_meta_title', 'category_meta_keywords', 'category_meta_description','top_ad','bottom_ad','slug'], 'string'],
             [['parent_category_id','category_name','category_meta_title', 'category_meta_keywords', 'category_meta_description'], 'required'],
             [['category_name'], 'string', 'max' => 128]
         ];
@@ -62,7 +61,6 @@ class ChildCategory extends \yii\db\ActiveRecord
             'category_id' => 'Category name',
             'parent_category_id' => 'Parent Category',
             'category_name' => 'Category name',
-            'category_allow_sale' => 'Category Allow status',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',
@@ -168,8 +166,7 @@ class ChildCategory extends \yii\db\ActiveRecord
     public static function loadsubcategoryname()
     {
         $subcategoryname= SubCategory::find()
-        ->where(['!=', 'category_allow_sale', 'no'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
+        ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['!=', 'parent_category_id', 'null'])
         ->all();
         $subcategoryname=ArrayHelper::map($subcategoryname,'category_id','category_name');
@@ -180,7 +177,6 @@ class ChildCategory extends \yii\db\ActiveRecord
     {
         $subcategoryname= SubCategory::find()
         ->where(['parent_category_id'=>$id])
-        ->andwhere(['!=', 'category_allow_sale', 'no'])
         ->andwhere(['!=', 'trash', 'Deleted'])
         ->andwhere(['!=', 'parent_category_id', 'null'])
         ->all();
@@ -192,7 +188,6 @@ class ChildCategory extends \yii\db\ActiveRecord
     {
         $childcategoryname= ChildCategory::find()
         ->where(['parent_category_id'=>$id])
-        ->andwhere(['!=', 'category_allow_sale', 'no'])
         ->andwhere(['!=', 'trash', 'Deleted'])
         ->andwhere(['=', 'category_level', '2'])
         ->andwhere(['!=', 'parent_category_id', 'null'])
@@ -204,8 +199,7 @@ class ChildCategory extends \yii\db\ActiveRecord
     public static function loadchild()
     {
         $childcategoryname= ChildCategory::find()
-        ->where(['!=', 'category_allow_sale', 'no'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
+        ->where(['!=', 'trash', 'Deleted'])
         ->andwhere(['=', 'category_level', '2'])
         ->andwhere(['!=', 'parent_category_id', 'null'])
         ->all();

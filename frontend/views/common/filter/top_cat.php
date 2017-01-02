@@ -1,7 +1,12 @@
 <?php
 
 $top_categories = \common\models\Category::find()
-    ->where(['category_level' => 0, 'trash' => 'Default'])
+    ->select('{{%category}}.*')
+    ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+    ->where([
+        '{{%category_path}}.level' => 0,
+        'trash' =>'Default'
+    ])
     ->orderBy('sort')
     ->asArray()
     ->all();

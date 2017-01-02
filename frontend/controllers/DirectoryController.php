@@ -163,16 +163,27 @@ class DirectoryController extends BaseController
             $item_query->andWhere(['IN', '{{%theme}}.slug', $data['themes']]);
         }
 
-        $cats = $slug;
-        
-        if ($cats != 'all') {
-            $categories = [];
-            if (isset($data['category']) && count($data['category'])>0) {
-                $categories = array_merge($categories,$data['category']);
-                $cats = implode("','",$categories);
+        $cats = '';
+
+        if ($slug != 'all') 
+        {
+            $category = Category::findOne(['slug' => $slug]);
+
+            if (empty($Category)) {
+                throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
-            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
-            $item_query->andWhere($q);
+
+            $cats = $category->category_id;
+        }
+
+        if (isset($data['category']) && count($data['category']) > 0) 
+        {
+            $cats = implode("','", $data['category']);
+        }
+
+        if($cats)
+        {   
+            $item_query->andWhere("{{%category_path}}.path_id IN ('".$cats."')");
         }
 
         $expression = new Expression(
