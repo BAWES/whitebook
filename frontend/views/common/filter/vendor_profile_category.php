@@ -1,24 +1,26 @@
 <?php
 
 use common\models\VendorCategory;
+
 $data = Yii::$app->request->get();
+
 $category_list = VendorCategory::find()
-       ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.slug','{{%category}}.icon'])
-       ->leftJoin('{{%category}}','{{%category}}.category_id = {{%vendor_category}}.category_id')
-       ->where([
-            '{{%category}}.trash' =>'Default',
-            '{{%category}}.category_level' => 0
-        ])
-        ->groupBy('{{%category}}.category_id')
-       ->asArray()
-       ->all();
+    ->select(['{{%category}}.category_id', '{{%category}}.category_name', '{{%category}}.slug','{{%category}}.icon'])
+    ->leftJoin('{{%category}}','{{%category}}.category_id = {{%vendor_category}}.category_id')
+    ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')            
+    ->where([
+        '{{%category}}.trash' =>'Default',
+        '{{%category_path}}.level' => 0
+    ])
+    ->groupBy('{{%category}}.category_id')
+    ->asArray()
+    ->all();
 
 if (count($category_list) > 3) {
     $class = "test_scroll";
 } else {
     $class = "";
 } ?>
-
 
 <div class="responsive-category-top">
     <div class="listing_sub_cat1">

@@ -217,7 +217,6 @@ class CategoryController extends Controller
                 ->asArray()
                 ->all();
 
-
             return $this->render('create', [
                 'model' => $model,
                 'categories' => $categories,

@@ -30,15 +30,18 @@ use yii\web\view;
 							<select class="selectpicker" style="display: none;" id="filter_category" name="filter_category">
 							<option value="All"><?= Yii::t("frontend", "All"); ?></option>
 							<?php
+							
 							$categories = \frontend\models\Category::find()
-								->select('category_name,category_name_ar,category_id,icon')
-								->where(['category_level'=>'0'])
+								->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+								->select('{{%category}}.category_name, {{%category}}.category_name_ar, {{%category}}.category_id, {{%category}}.icon')
+								->where(['{{%category_path}}.level' => 0])
 								->orderBy('sort')
 								->all();
-									foreach ($categories as $category) {
-										$select = \common\components\LangFormat::format($category->category_name,$category->category_name_ar);
-										echo '<option data-icon="'.$category->icon.'" value="'.$category->category_id.'">'.$select.'</option>';
-									}
+
+							foreach ($categories as $category) {
+								$select = \common\components\LangFormat::format($category->category_name,$category->category_name_ar);
+								echo '<option data-icon="'.$category->icon.'" value="'.$category->category_id.'">'.$select.'</option>';
+							}
 							?>
 							</select>
 						</div>
