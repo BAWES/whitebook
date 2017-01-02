@@ -9,6 +9,7 @@ use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use common\models\CustomerAddress;
 
 /**
 * This is the model class for table "whitebook_category".
@@ -160,33 +161,120 @@ class SubCategory extends \yii\db\ActiveRecord
     {
         $category = SubCategory::find()->where(['slug' => $slug])->one();
 
-        if($category){
-
-            return SubCategory::find()
+        $q = SubCategory::find()
                 ->select([
                     '{{%category}}.category_id',
                     '{{%category}}.category_name',
                     '{{%category}}.category_name_ar',
-                    '{{%category}}.slug'])
-                ->where([
-                    '{{%category}}.parent_category_id' => $category['category_id'],
-                    '{{%category}}.trash' => 'Default'
+                    '{{%category}}.slug'
                 ])
-                ->asArray()
-                ->all();
+                ->where(['{{%category}}.trash' => 'Default']);                  
+                
+        if($category)
+        {
+            $q->andWhere(['{{%category}}.parent_category_id' => $category['category_id']]);            
         }
         else
         {
-            return SubCategory::find()
-                ->select([
-                    '{{%category}}.category_id',
-                    '{{%category}}.category_name',
-                    '{{%category}}.category_name_ar',
-                    '{{%category}}.slug'])
-                ->where('{{%category}}.parent_category_id IS NULL OR 0')
-                ->andWhere(['{{%category}}.trash' => 'Default'])
-                ->asArray()
-                ->all();
+            $q->andWhere('{{%category}}.parent_category_id IS NULL OR 0');                
         }
+
+        $rows = $q->asArray()
+                ->all();
+
+        $result = [];
+
+        foreach ($rows as $key => $value) 
+        {
+            if(SubCategory::have_item($value['category_id']))
+            {
+                $result[] = $value;
+            }
+        }
+
+        return $result;
+    }
+
+    private static function have_item($category_id)
+    {        
+        $session = Yii::$app->session;
+        
+        $data = Yii::$app->request->get();
+
+        $subQuery = CategoryPath::find()
+            ->select('{{%vendor_item}}.item_id')
+            ->leftJoin(
+                '{{%vendor_item_to_category}}',
+                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
+            )
+            ->leftJoin(
+                '{{%vendor_item}}',
+                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
+            )
+            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+            ->where([
+                '{{%vendor_item}}.trash' => 'Default',
+                '{{%vendor_item}}.item_status' => 'Active',
+                '{{%vendor_item}}.item_approved' => 'Yes',
+                '{{%vendor}}.vendor_status' => 'Active',
+                '{{%vendor}}.approve_status' => 'Yes',
+                '{{%vendor}}.trash' => 'Default',
+                '{{%category_path}}.path_id' => $category_id
+            ])
+            ->groupBy('{{%vendor_item}}.item_id');
+
+        //theme filter
+        if (!empty($data['themes'])) 
+        {
+            $subQuery->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
+            $subQuery->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
+
+            $subQuery->andWhere(['IN', '{{%theme}}.slug', $data['themes']]);
+        }
+        
+        if (isset($data['price']) && $data['price'] != '') 
+        {
+            $arr_min_max = explode('-', $data['price']);    
+
+            $subQuery->andWhere('{{%vendor_item}}.item_price_per_unit IS NULL OR {{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1]);
+        }
+
+        if (isset($data['for_sale']) && $data['for_sale'] != '') {
+            $subQuery->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
+        }
+
+        if (!empty($data['vendor'])) 
+        {
+            if(is_array($data['vendor']))
+            {               
+                $subQuery->andWhere('{{%vendor}}.slug IN ("'.implode('","', $data['vendor']).'")');    
+            }
+            else
+            {
+                $subQuery->andWhere('{{%vendor}}.slug = "'.$data['vendor'].'"');    
+            }
+        }
+
+        if ($session->has('deliver-location')) {
+
+            if (is_numeric($session->get('deliver-location'))) {
+                $location = $session->get('deliver-location');
+            } else {
+                $end = strlen($session->get('deliver-location'));
+                $from = strpos($session->get('deliver-location'), '_') + 1;
+                $address_id = substr($session->get('deliver-location'), $from, $end);
+
+                $location = CustomerAddress::findOne($address_id)->area_id;
+            }
+
+            $subQuery->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
+        }
+
+        if ($session->has('deliver-date')) {
+            $date = date('Y-m-d', strtotime($session->get('deliver-date')));
+            $subQuery->andWhere("({{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."'))");
+        }
+
+        return $subQuery->one();
     }
 }
