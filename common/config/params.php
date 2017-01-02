@@ -2,6 +2,7 @@
 
 return [
     'feature.packages.enabled' => true,
+    'feature.slideroverlay.enabled' => true,
     'user.passwordResetTokenExpire' => 3600,
     'adminEmail' => 'hello@thewhitebook.com.kw',
     'supportEmail' => 'hello@thewhitebook.com.kw',
