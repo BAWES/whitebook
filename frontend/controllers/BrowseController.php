@@ -127,6 +127,8 @@ class BrowseController extends BaseController
             $price_condition = [];
 
             $arr_min_max = explode('-', $data['price']);
+
+            $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
             $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
 
             $item_query->andWhere(implode(' OR ', $price_condition));

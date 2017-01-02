@@ -51,30 +51,6 @@ $get = Yii::$app->request->get();
 						}
 						foreach ($subcategory as $key => $value) {
 
-							//check if items available in this category 
-	                        $have_item = CategoryPath::find()
-	                            ->leftJoin(
-	                                '{{%vendor_item_to_category}}',
-	                                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
-	                            )
-	                            ->leftJoin(
-	                                '{{%vendor_item}}',
-	                                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
-	                            )
-	                            ->where([
-	                                '{{%vendor_item}}.trash' => 'Default',
-	                                '{{%vendor_item}}.item_status' => 'Active',
-	                                '{{%vendor_item}}.item_approved' => 'Yes',
-	                                '{{%category_path}}.path_id' => $value['category_id']
-	                            ])
-	                            ->groupBy('{{%vendor_item}}.item_id')
-	                            ->one();
-
-	                        if(!$have_item)
-	                        {
-	                            continue;
-	                        }
-
 							if (isset($value['category_name'])) {
 								
 								$category_name = \common\components\LangFormat::format(strtolower($value['category_name']),strtolower($value['category_name_ar']));
@@ -103,30 +79,6 @@ $get = Yii::$app->request->get();
 								if ($_subcategory) {
 									echo  "<ul>";
 									foreach ($_subcategory as $_key => $_value) {
-
-										 //check if items available in this category 
-				                        $have_item = CategoryPath::find()
-				                            ->leftJoin(
-				                                '{{%vendor_item_to_category}}',
-				                                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
-				                            )
-				                            ->leftJoin(
-				                                '{{%vendor_item}}',
-				                                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
-				                            )
-				                            ->where([
-				                                '{{%vendor_item}}.trash' => 'Default',
-				                                '{{%vendor_item}}.item_status' => 'Active',
-				                                '{{%vendor_item}}.item_approved' => 'Yes',
-				                                '{{%category_path}}.path_id' => $value['category_id']
-				                            ])
-				                            ->groupBy('{{%vendor_item}}.item_id')
-				                            ->one();
-
-				                        if(!$have_item)
-				                        {
-				                            continue;
-				                        }
 
 										$_category_name = \common\components\LangFormat::format(strtolower($_value['category_name']),strtolower($_value['category_name_ar']));
 										?>
