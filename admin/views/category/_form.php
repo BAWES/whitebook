@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
     
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-	<?= $form->field($model, 'parent_category_id')->dropDownList(\yii\helpers\ArrayHelper::map($categories,'category_id', 'category_name'),['encode' => false])?>
+	<?= $form->field($model, 'parent_category_id')->dropDownList(\yii\helpers\ArrayHelper::map($categories,'category_id', 'category_name'), ['prompt'=>'-- parent category --', 'encode' => false])?>
 
 	<?= $form->field($model, 'category_name')->textInput(['maxlength' => 128])?>
 
