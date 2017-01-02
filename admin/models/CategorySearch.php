@@ -87,10 +87,11 @@ class CategorySearch extends Category
     public function childcategory_search($params)
     {
         $query = ChildCategory::find()
-        ->where(['!=', 'parent_category_id', 'NULL'])
-        ->andwhere(['!=', 'trash', 'Deleted'])
-        ->andwhere(['=', 'category_level', '2'])
-		->orderBy(['parent_category_id'=>SORT_ASC]);
+            ->where(['!=', 'parent_category_id', 'NULL'])
+            ->andwhere(['!=', 'trash', 'Deleted'])
+            ->andwhere(['=', 'category_level', '2'])
+    		->orderBy(['parent_category_id'=>SORT_ASC]);
+            
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'sort'=> ['defaultOrder' => ['parent_category_id'=>SORT_ASC,'category_id' =>SORT_DESC]]

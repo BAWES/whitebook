@@ -1739,7 +1739,7 @@ function filter(){
 
     $('.listing_right').css({'opacity' : '0.5', 'position' : 'relative'});
 
-    var category_name = $('input[name=category]:checked').map(function() {
+    var arr_category_id = $('input[name=category]:checked').map(function() {
         return this.value;
     }).get();
 
@@ -1806,10 +1806,11 @@ function filter(){
         ajax_data.search = search;
     }
 
-    if (category_name != '') {
-        url_path += '&category[]=' + category_name;
-        ajax_data.category = category_name;
+    if (arr_category_id != '') {
+        url_path += '&category[]=' + arr_category_id;
+        ajax_data.category = arr_category_id;
     }
+
     if(theme_name != '' && current_page != 'theme') {
         url_path += '&themes=' + theme_name;
         ajax_data.themes = theme_name;

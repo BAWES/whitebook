@@ -146,7 +146,7 @@ class BrowseController extends BaseController
 
         if($Category)
         {
-            $cats = $Category->slug;    
+            $cats = $Category->category_id;    
         }
         
         if (isset($data['category']) && count($data['category']) > 0) 
@@ -156,7 +156,7 @@ class BrowseController extends BaseController
 
         if($cats)
         {
-            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
+            $q = "{{%category_path}}.path_id IN ('".$cats."')";
         
             $item_query->andWhere($q);    
         }

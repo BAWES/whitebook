@@ -224,12 +224,14 @@ class PriorityItemController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
+        
         $categoryid = Vendor::find()->select('category_id')
             ->where(['vendor_id' => $data['id']])
             ->andwhere(['category_level' => 0])
             ->andwhere(['!=', 'trash', 'Deleted'])
             ->andwhere(['parent_category_id' => null])
           ->one();
+
         $k = explode(',', $categoryid['category_id']);
         $category = Category::find()->select('category_id,category_name')->where(['category_id' => $k])->all();
         echo  '<option value="">Select...</option>';
