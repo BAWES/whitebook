@@ -88,7 +88,7 @@ $get = Yii::$app->request->get();
 											class="items category"
 											id="checkbox-<?= $value['slug'] ?>"
 											step="<?= $value['category_id'] ?>"
-											value="<?= $value['slug'] ?>"
+											value="<?= $value['category_id'] ?>"
 											data-slug="<?=$value['slug'] ?>"
 											data-parent = "yes"
 											type="checkbox"
@@ -138,7 +138,7 @@ $get = Yii::$app->request->get();
 													   class="items <?=$value['slug'] ?>"
 													   id="checkbox-<?= $_value['slug'] ?>"
 													   step="<?= $_value['category_id'] ?>"
-													   value="<?= $_value['slug'] ?>"
+													   value="<?= $_value['category_id'] ?>"
 													   type="checkbox"
 													   data-slug="<?=$value['slug'] ?>"
 													<?php echo (in_array($_value['slug'], array_values($val))) ? 'checked="checked"' : ''; ?> >

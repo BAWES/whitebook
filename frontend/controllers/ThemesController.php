@@ -88,7 +88,6 @@ class ThemesController extends BaseController
             ->all();
         $theme_items = ArrayHelper::map($theme_result,'item_id','item_id');
 
-
         if ($slug != 'all') {
             $category = Category::find()->select('category_id')->where(['slug' => $slug])->asArray()->one();
             $active_vendors = Vendor::loadvalidvendorids($category['category_id']);
@@ -117,22 +116,33 @@ class ThemesController extends BaseController
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.item_id' => $theme_items,
             ]);
-            
-        $cats = $slug;
 
-        $categories = [];
+        $cats = '';
 
-        if (isset($data['category']) && count($data['category'])>0) {
-            $categories = array_merge($categories,$data['category']);
-            $cats = implode("','",$categories);
+        if ($slug != 'all') 
+        {
+            $category = Category::findOne(['slug' => $slug]);
+
+            if (empty($Category)) {
+                throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+            }
+
+            $cats = $category->category_id;
         }
 
-        if ($cats != 'all') {
-            $q = "{{%category_path}}.path_id IN (select category_id from {{%category}} where slug IN ('$cats') and trash = 'Default')";
+        if (isset($data['category']) && count($data['category'])>0) 
+        {
+            $cats = implode("','", $data['category']);
+        }
+
+        if ($cats) 
+        {
+            $q = "{{%category_path}}.path_id IN ('".$cats."')";
             $items_query->andWhere($q);
         }
 
-        if (isset($data['vendor']) && $data['vendor'] != '') {
+        if (isset($data['vendor']) && $data['vendor'] != '') 
+        {
             $items_query->andWhere(['in', '{{%vendor}}.slug', $data['vendor']]);
         }
 
