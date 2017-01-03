@@ -45,6 +45,7 @@ $this->beginPage();
         <!-- BEGIN PAGE CONTAINER-->
         <div class="page-content">
             <div class="content">
+
                 <?php
                 if ($flash = Yii::$app->session->getFlash('success')) {
                     echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => $flash]);
@@ -53,15 +54,13 @@ $this->beginPage();
                     echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash]);
                 }
                 ?>
-                <ul class="breadcrumb">
-                    <?=
-                    Breadcrumbs::widget([
+ 
+                <?= Breadcrumbs::widget([
                         'homeLink' => [ 'label' => 'Dashboard', 'url' => ['site/index'],],
                         'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                         'activeItemTemplate' => '<li class=\"active\"><b>{link}</b></li>'
-                    ])
-                    ?>
-                </ul>
+                    ]); ?>
+
                 <div class="page-title">
                     <?=Html::a('<i class="icon-custom-left"></i>',Yii::$app->request->referrer)?>
                     <h3><span class="semi-bold"><?= Html::encode($this->title) ?></span></h3>
