@@ -58,6 +58,23 @@ $this->beginPage()
         <link rel="manifest" href="<?= Url::to('@web/manifest.json') ?>">
         <link rel="mask-icon" href="<?= Url::to('@web/safari-pinned-tab.svg') ?>" color="#5bbad5">
         <meta name="theme-color" content="#ffffff">
+
+        <!-- Facebook Pixel Code -->
+        <script>
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+        document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1174793345950856'); // Insert your pixel ID here.
+        fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1174793345950856&ev=PageView&noscript=1"
+        /></noscript>
+        <!-- DO NOT MODIFY -->
+        <!-- End Facebook Pixel Code -->
+
     </head>
     <body class="has-js">
         <!-- <div class="fullpage" style="width:100%;height:100%"></div> -->
@@ -66,7 +83,7 @@ $this->beginPage()
          title="Loader"></div>
         <!-- Header Section Start -->
         <?php $this->beginBody(); ?>
-        
+
         <div class="alert_wrapper">
             <?= Alert::widget(); ?>
         </div>
@@ -83,7 +100,7 @@ $this->beginPage()
         <?php $this->endContent(); ?>
 
         <?php $this->registerJs(
-                '$(".alert").animate({opacity: 1.0}, 3000).fadeOut("slow");', 
+                '$(".alert").animate({opacity: 1.0}, 3000).fadeOut("slow");',
                 yii\web\View::POS_READY
             ); ?>
 

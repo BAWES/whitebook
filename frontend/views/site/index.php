@@ -16,6 +16,15 @@ use frontend\models\Wishlist;
 $this->title = 'The White Book | Ideas for your event in Kuwait!';
 
 $model = new Website();
+
+
+// Facebook Pixel
+$this->registerJs("
+fbq('track', 'ViewContent', {
+value: 0.10,
+currency: 'USD'
+});
+");
 ?>
 <!-- content main start -->
 
