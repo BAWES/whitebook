@@ -66,7 +66,8 @@ if (count($category_list) > 3) {
                 <ul class="<?= $class; ?>">
                 <?php foreach ($category_list as $key => $c_value) { ?>
                     <li>                
-                    <label class="label_check" for="checkbox-<?= $c_value['category_name'] ?>"><input name="category" data-element="input" class="category" id="checkbox-<?= $c_value['category_name'] ?>" value="<?= $c_value['slug'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> ><?= ucfirst(strtolower($c_value['category_name'])); ?></label>
+                    <label class="label_check" for="checkbox-filter-cat-<?= $c_value['category_id'] ?>" />
+                    <input name="category" data-element="input" class="category" id="checkbox-filter-cat-<?= $c_value['category_id'] ?>" value="<?= $c_value['category_id'] ?>" step="<?= $c_value['category_id'] ?>" type="checkbox" <?php echo (isset($checked) && $checked != "") ? $checked : ''; ?> ><?= ucfirst(strtolower($c_value['category_name'])); ?></label>
                     </li>
                 <?php } ?>
                 </ul>
