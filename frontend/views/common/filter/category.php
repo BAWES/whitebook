@@ -56,16 +56,16 @@ $get = Yii::$app->request->get();
 								$category_name = \common\components\LangFormat::format(strtolower($value['category_name']),strtolower($value['category_name_ar']));
 								?>
 								<li for="<?= "class_" . $value['slug'] ?>">
-									<label class="label_check" for="checkbox-<?= $value['slug'] ?>"
+									<label class="label_check" for="checkbox-filter-cat-<?= $value['category_id'] ?>"
 										   data-class="<?= "class_" . $value['slug'] ?>">
 										<input
 											name="category"
 											data-element="input"
 											class="items category"
-											id="checkbox-<?= $value['slug'] ?>"
+											id="checkbox-filter-cat-<?= $value['category_id'] ?>"
 											step="<?= $value['category_id'] ?>"
 											value="<?= $value['category_id'] ?>"
-											data-slug="<?=$value['slug'] ?>"
+											data-slug="<?= $value['slug'] ?>"
 											data-parent = "yes"
 											type="checkbox"
 											<?php echo (in_array($value['slug'], array_values($val))) ? 'checked="checked"' : ''; ?> >
@@ -84,15 +84,15 @@ $get = Yii::$app->request->get();
 										?>
 										<li class="subcat" for="<?= "class_" . $value['slug'] ?>">
 											<label class="label_check"
-												   for="checkbox-<?= $_value['slug'] ?>"
+												   for="checkbox-filter-cat-<?= $_value['category_id'] ?>"
 												   data-class="<?= "class_" . $value['slug'] ?>">
 												<input name="category" data-element="input"
 													   class="items <?=$value['slug'] ?>"
-													   id="checkbox-<?= $_value['slug'] ?>"
+													   id="checkbox-filter-cat-<?= $_value['category_id'] ?>"
 													   step="<?= $_value['category_id'] ?>"
 													   value="<?= $_value['category_id'] ?>"
 													   type="checkbox"
-													   data-slug="<?=$value['slug'] ?>"
+													   data-slug="<?= $value['slug'] ?>"
 													<?php echo (in_array($_value['slug'], array_values($val))) ? 'checked="checked"' : ''; ?> >
 												<?= $_category_name ?>
 											</label>
