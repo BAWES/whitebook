@@ -6,8 +6,56 @@ use common\models\Image;
 use common\components\CFormatter;
 
 if (!empty($items->getModels())) {
+
     $result = \yii\helpers\ArrayHelper::getColumn($customer_events_list,'item_id');
-    foreach ($items->getModels() as $key => $value) {
+
+    /*
+    Whenever results within browse belong to multiple vendors, alternate items to show 1 from each vendor.
+
+    # Example:
+    5 from candy vendor, 2 from chocolate, one from juice vendor.
+
+    ## Will show in following order:
+    candy, chocolate, juice, candy chocolate, candy, candy, candy
+    */
+
+    $vendor_chunks = [];
+
+    foreach ($items->getModels() as $key => $value)
+    {
+        $vendor_chunks[$value['vendor_id']][] = $value;
+    }
+
+    //get size of biggest chunk 
+    
+    $max_size = 0;
+
+    foreach ($vendor_chunks as $key => $value) 
+    {
+        if(sizeof($value) > $max_size)
+        {
+            $max_size = sizeof($value);
+        }
+    }
+
+    //get items from every chunk one by one 
+
+    $item_sorted = [];
+
+    for($i = 0; $i < $max_size; $i++)
+    {
+        $have_more_items = true;
+
+        foreach ($vendor_chunks as $key => $value) 
+        {
+            if(isset($value[$i]))
+            {
+                $item_sorted[] = $value[$i];    
+            }            
+        }
+    }
+
+    foreach ($item_sorted as $key => $value) {
 
         $image_data = Image::find()
             ->where(['item_id' => $value['item_id']])

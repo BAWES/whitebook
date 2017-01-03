@@ -61,9 +61,14 @@ class ThemesController extends Controller
         $searchModel->trash = 'Default';
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $themes = Themes::find()
+            ->where(['trash' => 'Default'])
+            ->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'themes' => $themes
         ]);
     }
 
@@ -184,5 +189,67 @@ class ThemesController extends Controller
         } else {
             return \yii\helpers\Url::to('@web/uploads/app_img/inactive.png');
         }
+    }
+
+    /**
+     * Move all items of old theme to new theme 
+     * 
+     * @param integer old_theme_id 
+     * @param integer new_theme_id 
+     */
+    public function actionMoveItems()
+    {
+        $old_theme_id = Yii::$app->request->post('old_theme_id');
+        $new_theme_id = Yii::$app->request->post('new_theme_id');
+
+        $items = VendorItemThemes::find()
+            ->where([
+                'theme_id' => $old_theme_id,
+                'trash' => 'Default'
+            ])
+            ->all();
+
+        foreach ($items as $key => $value) 
+        {
+            //check it already added 
+
+            $count = VendorItemThemes::find()
+                ->where([
+                    'theme_id' => $new_theme_id,
+                    'item_id' => $value->item_id
+                ])
+                ->count();
+
+            if($count)
+                continue;
+
+            $model = new VendorItemThemes;
+            $model->item_id = $value->item_id;
+            $model->theme_id = $new_theme_id;
+            $model->trash = 'Default';
+            $model->save();
+        }
+
+        VendorItemThemes::deleteAll([
+                'theme_id' => $old_theme_id,
+                'trash' => 'Default'
+            ]);
+
+        $old_theme = Themes::find()
+            ->where(['theme_id' => $old_theme_id])
+            ->one();
+
+        $new_theme = Themes::find()
+            ->where(['theme_id' => $new_theme_id])
+            ->one();
+            
+        Yii::$app->response->format = 'json';
+
+        return [
+            'message' => Yii::t('app', 'Items moved from {old_theme} to {new_theme}', [
+                    'old_theme' => $old_theme->theme_name,
+                    'new_theme' => $new_theme->theme_name
+                ])
+        ];
     }
 }
