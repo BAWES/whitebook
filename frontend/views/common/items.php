@@ -96,12 +96,12 @@ if (!empty($items->getModels())) {
                 <div class="events_descrip">
                     <a href="<?= $item_url ?>"><?= \common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
                         <h3>
-                            <?php
-                                $name = \common\components\LangFormat::format( $value['item_name'], $value['item_name_ar']);
-                                echo (strlen($name)>25) ? substr($name,0,25).'...' : $name;
-                            ?>
+                            <?= \common\components\LangFormat::format(
+                                    $value['item_name'], 
+                                    $value['item_name_ar']
+                                ); ?>
                         </h3>
-                        <p><?=(trim($value['item_price_per_unit'])) ?
+                        <p><?= (trim($value['item_price_per_unit'])) ?
                                 CFormatter::format($value['item_price_per_unit']) :
                                 '<span class="small">'.Yii::t('app','Price upon request').'<span>'
                             ?></p>
@@ -129,7 +129,7 @@ if (!empty($items->getModels())) {
 <?php
 $this->registerCss("
     .no-record-found {padding: 12px 0 36px 0px;text-align: center;}
-    .min-height-301 {min-height: 301px;padding-left: 3px;padding-right: 3px;}
+    .min-height-301 {min-height: 310px;padding-left: 3px;padding-right: 3px;}
     img.item-img{width: 100%;}
     .width-100-percent{width: 100%;}
     .margin-top-15{margin-top: 15%;}
