@@ -67,6 +67,7 @@ class VendorDraftItemController extends Controller
         $item = VendorItem::findOne($draft->item_id);
         $item->attributes = $attributes;
         $item->item_approved = 'Yes';
+        $item->hide_from_admin = 0;
         $item->save();
 
         //remove from draft 
