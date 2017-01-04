@@ -35,16 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             	'header'=>'Action',
             	'template' => ' {view} {approve}',
             	'buttons' => [
-            		'view' => function($url, $data) {
-            			return HTML::a(
-            				'<i class="glyphicon glyphicon-eye-open"></i>', 
-            				Url::to(['vendor-item/view', 'id' => $data->item_id]),
-            				[
-            					'title' => 'View',
-            					'target' => '_blank'
-            				]
-            			);
-            		},
+            		
             		'approve' => function($url, $data) {
             			return HTML::a(
             				'<i class="glyphicon glyphicon-ok"></i>', 

@@ -170,4 +170,23 @@ class VendorDraftItem extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
     }
+    
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getVendorItemThemes()
+    {
+        return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
+    }
+
+    public function getThemeName() {
+
+        $string = [];
+        
+        foreach ($this->vendorItemThemes as $theme) {
+              $string[] = ucfirst($theme->themeDetail->theme_name);
+        }
+        
+        return implode(', ',$string);
+    }
 }
