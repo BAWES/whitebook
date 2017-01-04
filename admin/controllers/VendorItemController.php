@@ -314,12 +314,18 @@ class VendorItemController extends Controller
             //main
             $main_categories = Category::find()
                 ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where(['{{%category_path}}.level' => 0])
+                ->where([
+                    '{{%category_path}}.level' => 0,
+                    '{{%category}}.trash' => 'Default'
+                ])
                 ->all();
 
             $sub_categories = Category::find()
                 ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where(['{{%category_path}}.level' => 1])
+                ->where([
+                    '{{%category_path}}.level' => 1,
+                    '{{%category}}.trash' => 'Default'
+                ])
                 ->all();
 
             /*$categories = CategoryPath::find()
@@ -585,12 +591,18 @@ class VendorItemController extends Controller
         //main
         $main_categories = Category::find()
             ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where(['{{%category_path}}.level' => 0])
+            ->where([
+                '{{%category}}.trash' => 'Default',
+                '{{%category_path}}.level' => 0
+            ])
             ->all();
 
         $sub_categories = Category::find()
             ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where(['{{%category_path}}.level' => 1])
+            ->where([
+                '{{%category}}.trash' => 'Default',
+                '{{%category_path}}.level' => 1
+            ])
             ->all();
 
         //child 
@@ -599,6 +611,7 @@ class VendorItemController extends Controller
             ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
             ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
             ->where([
+                '{{%category}}.trash' => 'Default',
                 '{{%category_path}}.level' => 2,
                 '{{%vendor_item_to_category}}.item_id' => $model->item_id
             ])
