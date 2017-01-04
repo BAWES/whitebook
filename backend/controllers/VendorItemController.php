@@ -234,7 +234,10 @@ class VendorItemController extends Controller
             //main
             $main_categories = Category::find()
                 ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where(['{{%category_path}}.level' => 0])
+                ->where([
+                    '{{%category}}.trash' => 'Default',
+                    '{{%category_path}}.level' => 0
+                ])
                 ->all();
 
             return $this->render('create', [
@@ -375,7 +378,10 @@ class VendorItemController extends Controller
             //main
             $main_categories = Category::find()
                 ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where(['{{%category_path}}.level' => 0])
+                ->where([
+                    '{{%category}}.trash' => 'Default',
+                    '{{%category_path}}.level' => 0
+                ])
                 ->all();
 
             //item child categories 
@@ -384,6 +390,7 @@ class VendorItemController extends Controller
                 ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
                 ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
                 ->where([
+                    '{{%category}}.trash' => 'Default',
                     '{{%category_path}}.level' => 2,
                     '{{%vendor_item_to_category}}.item_id' => $model->item_id
                 ])
