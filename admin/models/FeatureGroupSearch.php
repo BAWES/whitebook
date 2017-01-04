@@ -42,8 +42,8 @@ class FeatureGroupSearch extends FeatureGroup
     public function search($params)
     {
         $query = FeatureGroup::find()
-        ->where(['!=', 'trash', 'Deleted'])
-		->orderBy('group_id');
+            ->where(['!=', 'trash', 'Deleted'])
+    		->orderBy('group_name');
 		
 
         $dataProvider = new ActiveDataProvider([

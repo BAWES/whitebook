@@ -21,16 +21,25 @@ use common\models\VendorItemThemes;
 class Themes extends \common\models\Themes
 {
 
-  public static function load_all_themename($id, $sort = 'theme_name')
+  public static function load_all_themename($ids)
   {
-        return $theme_name =  Themes::find()
-        ->select(['theme_id','theme_name','theme_name_ar','slug'])
-        ->where(['!=', 'theme_status', 'Deactive'])
-        ->andWhere(['!=', 'trash', 'Deleted'])
-        ->andWhere(['theme_id' => $id])
-        ->orderby($sort)
-        ->asArray()
-        ->all();        
+      $q = Themes::find()
+          ->select(['theme_id','theme_name','theme_name_ar','slug'])
+          ->where(['!=', 'theme_status', 'Deactive'])
+          ->andWhere(['!=', 'trash', 'Deleted'])
+          ->andWhere('theme_id in ("'.implode('","', $ids).'")');
+
+      if(Yii::$app->language == 'en')
+      {
+        $q->orderBy('theme_name');
+      }
+      else
+      {
+        $q->orderBy('theme_name_ar');
+      }
+
+      return $q->asArray()
+        ->all();           
   }
 
 
@@ -50,13 +59,22 @@ class Themes extends \common\models\Themes
 
   }
 
-  public static function loadthemenames($sort = 'theme_name')
+  public static function loadthemenames()
   {             
-      return $theme_name= Themes::find()
+      $q = Themes::find()
           ->where(['!=', 'theme_status', 'Deactive'])
-          ->andwhere(['!=', 'trash', 'Deleted'])
-          ->orderby([$sort => SORT_ASC])
-          ->asArray()
-          ->all();
+          ->andwhere(['!=', 'trash', 'Deleted']);
+
+      if(Yii::$app->language == 'en')
+      {
+        $q->orderBy('theme_name');
+      }
+      else
+      {
+        $q->orderBy('theme_name_ar');
+      }
+
+      return $q->asArray()
+        ->all();                
   }
 }
