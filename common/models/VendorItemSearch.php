@@ -54,7 +54,8 @@ class VendorItemSearch extends VendorItem
 		$v = array_reverse(array_keys($paramss));
 
 		$query = VendorItem::find()
-            ->where(['!=', 'whitebook_vendor_item.trash', 'Deleted'])       
+            ->where(['!=', 'whitebook_vendor_item.trash', 'Deleted'])    
+            ->andWhere(['hide_from_admin' => 0])
             ->orderBy(['item_id' => SORT_DESC]);
            // ->orderBy([new Expression('FIELD (item_approved,'. implode(',', array_reverse(array_keys($paramss))) . ')')]);
 

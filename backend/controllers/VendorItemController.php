@@ -440,6 +440,7 @@ class VendorItemController extends Controller
             $vendor_item = new VendorItem();
             $vendor_item->load(['VendorItem' => $posted_data]);
             $vendor_item->vendor_id = Yii::$app->user->getId();
+            $vendor_item->hide_from_admin = 1;
             $vendor_item->save(false);
 
             $model = new VendorDraftItem();
