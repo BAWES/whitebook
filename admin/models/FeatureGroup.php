@@ -21,7 +21,6 @@ use yii\helpers\ArrayHelper;
  */
 class FeatureGroup extends \common\models\FeatureGroup
 {
-
    /* 
     *
     *   To save created, modified user & date time 
@@ -52,9 +51,10 @@ class FeatureGroup extends \common\models\FeatureGroup
    			$featuregroup= FeatureGroup::find()
      			->where(['!=', 'group_status', 'Deactive'])
      			->andwhere(['!=', 'trash', 'Deleted'])
+          ->orderBy('group_name')
      			->all();
 
-   			return ArrayHelper::map($featuregroup,'group_id','group_name');
+   			return ArrayHelper::map($featuregroup, 'group_id', 'group_name');
    	}
 
   // Status Image title

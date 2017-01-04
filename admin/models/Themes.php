@@ -28,6 +28,7 @@ class Themes extends \common\models\Themes
         $theme_name= Themes::find()
           ->where(['!=', 'theme_status', 'Deactive'])
           ->andwhere(['!=', 'trash', 'Deleted'])
+          ->orderBy('theme_name')
           ->all();
 
         return ArrayHelper::map($theme_name, 'theme_id', 'theme_name');

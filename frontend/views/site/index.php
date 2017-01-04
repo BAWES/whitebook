@@ -137,10 +137,20 @@ if (Yii::$app->user->isGuest) {
     $wishlist_ids = \yii\helpers\ArrayHelper::getColumn($wishlist, 'item_id');
 }
 
-$featured_produc = FeatureGroup::find()
+$q = FeatureGroup::find()
     ->select(['group_id', 'group_name_ar', 'group_name'])
-    ->where(['group_status' => 'Active', 'trash' => 'Default'])
-    ->asArray()->all();
+    ->where(['group_status' => 'Active', 'trash' => 'Default']);
+
+if(Yii::$app->language == 'en')
+{
+    $q->orderBy('group_name');
+}
+else
+{
+    $q->orderBy('group_name_ar');
+}
+
+$featured_produc = $q->asArray()->all();
 
 $i = 1;
 

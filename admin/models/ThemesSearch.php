@@ -43,7 +43,7 @@ class themesSearch extends Themes
     {
 		$query = Themes::find()
             ->where(['!=', 'trash', 'Deleted'])
-    		->orderBy('theme_id');
+    		->orderBy('theme_name');
             
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
