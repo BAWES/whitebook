@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
-use common\models\VendorItemQuestion;
 use kartik\file\FileInput;
 //use dosamigos\fileupload\FileUploadUI;
 
@@ -254,7 +253,7 @@ function cmp($a, $b)
 					<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">
 					<div class="multi_pricing">Price Chart</div>
 					<?php $t=0;
-					foreach ($loadpricevalues as $value) { ?>
+					foreach ($pricing as $value) { ?>
 					<div class="controls<?= $t; ?>">
 						<input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From Quantity" value="<?= $value['range_from'];?>" />
 
@@ -356,7 +355,7 @@ function cmp($a, $b)
 								</tr>
 							</thead>
 							<tbody>
-							<?php $image_count = 0 ; foreach ($model->images as $key => $value) { ?>
+							<?php $image_count = 0 ; foreach ($images as $key => $value) { ?>
 							<tr>
 								<td>
 									<div class="vendor_image_preview">
