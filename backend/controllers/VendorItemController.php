@@ -35,6 +35,9 @@ use common\models\VendorItemCapacityException;
 use common\models\CustomerCart;
 use common\models\EventItemlink;
 use common\models\VendorDraftItem;
+use common\models\VendorDraftItemPricing;
+use common\models\VendorDraftItemToCategory;
+use common\models\VendorDraftImage;
 use backend\models\VendorItem;
 
 
@@ -91,26 +94,48 @@ class VendorItemController extends Controller
     {
         $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
-            ->where(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id])->all();
-
-        $model_question = VendorItemQuestion::find()
-            ->where(['item_id'=>$id,'answer_id'=>null,'question_answer_type'=>'selection'])
-            ->orwhere(['item_id'=>$id,'question_answer_type'=>'text','answer_id'=>null])
-            ->orwhere(['item_id'=>$id,'question_answer_type'=>'image','answer_id'=>null])
-            ->asArray()->all();
-
-        $imagedata = Image::find()->where('item_id = :id', [':id' => $id])->orderby(['vendorimage_sort_order'=>SORT_ASC])->all();
-
-        $model = $this->findModel($id);
-
-        $categories = VendorItemToCategory::find()
-            ->with('category')
-            ->Where(['item_id' => $id])
+            ->where(new Expression('FIND_IN_SET(:item_id, item_id)'))
+            ->addParams([':item_id' => $id])
             ->all();
 
-        $item_type = ItemType::itemtypename($model->type_id);
+        //check item in draft 
 
-        $price_values= VendorItemPricing::loadpricevalues($model->item_id);
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $id])
+            ->one();
+
+        if($model) {
+            
+            $imagedata = VendorDraftImage::find()
+                ->where('item_id = :id', [':id' => $model->item_id])
+                ->orderby(['vendorimage_sort_order' => SORT_ASC])
+                ->all();
+
+            $price_values= VendorDraftItemPricing::loadpricevalues($model->item_id);
+
+            $categories = VendorDraftItemToCategory::find()
+                ->with('category')
+                ->Where(['item_id' => $model->item_id])
+                ->all();
+        }
+        else
+        {
+            $model = $this->findModel($id);
+
+            $imagedata = Image::find()
+                ->where('item_id = :id', [':id' => $model->item_id])
+                ->orderby(['vendorimage_sort_order' => SORT_ASC])
+                ->all();
+
+            $price_values= VendorItemPricing::loadpricevalues($model->item_id);
+
+            $categories = VendorItemToCategory::find()
+                ->with('category')
+                ->Where(['item_id' => $model->item_id])
+                ->all();
+        }
+        
+        $item_type = ItemType::itemtypename($model->type_id);
 
         return $this->render('view', [
             'model' => $model,
@@ -119,7 +144,7 @@ class VendorItemController extends Controller
             'price_values' => $price_values,
             'dataProvider1' => $dataProvider1,
             'model_question' => $model_question,
-            'imagedata'=>$imagedata,
+            'imagedata' => $imagedata,
         ]);
     }
 
@@ -264,35 +289,22 @@ class VendorItemController extends Controller
             ->one();
 
         //if not in draft and trying to post updated data
+
         if(!$model && Yii::$app->request->isPost) {
             $model = new VendorDraftItem();
             $model->attributes = $this->findModel($id)->attributes;
             $model->item_approved = 'Pending';
         }
 
-        //if customer just viewing 
-        if(!$model) {
+        //if customer just viewing && not in draft 
+
+        if(!$model) 
+        {
             $model = $this->findModel($id);
-        }        
+        }
      
-        $model1 = new Image();
-        $base = Yii::$app->basePath;
-        $len = rand(1,1000);
-        
-        /* question and answer */
-        $model_question = VendorItemQuestion::find()
-            ->where(['item_id' => $model->item_id,'answer_id' => Null,'question_answer_type' => 'selection'])
-            ->orwhere(['item_id' => $model->item_id,'question_answer_type' =>'text', 'answer_id' => Null])
-            ->orwhere(['item_id' => $model->item_id,'question_answer_type' =>'image', 'answer_id' => Null])
-            ->asArray()
-            ->all();
-
         $itemtype = ItemType::loaditemtype();
-        $vendorname = Vendor::loadvendorname();
-        $categoryname = Category::vendorcategory(Yii::$app->user->getId());
         
-        $loadpricevalues = VendorItemPricing::loadpricevalues($model->item_id);
-
         //to save VendorItem data to VendorDraftItem
         if(Yii::$app->request->post('VendorItem')) {
             $posted_data = ['VendorDraftItem' => Yii::$app->request->post('VendorItem')];
@@ -306,12 +318,13 @@ class VendorItemController extends Controller
             $model->slug = '';
 
             //to make draft visible to admin 
+
             $model->is_ready = 1;
             $model->item_approved = 'Pending';
             $model->save();
 
             //remove all old category 
-            VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+            VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
 
             //add all category
             $category = Yii::$app->request->post('category');
@@ -321,14 +334,14 @@ class VendorItemController extends Controller
             }
 
             foreach($category as $key => $value) {
-                $vic = new VendorItemToCategory();
+                $vic = new VendorDraftItemToCategory();
                 $vic->item_id = $model->item_id;
                 $vic->category_id = $value;
                 $vic->save();
             }
 
             //remove old images
-            Image::deleteAll(['item_id' => $model->item_id]);
+            VendorDraftImage::deleteAll(['item_id' => $model->item_id]);
 
             //add new images
             $images = Yii::$app->request->post('images');
@@ -338,7 +351,7 @@ class VendorItemController extends Controller
             }
             
             foreach ($images as $key => $value) {
-                $image = new Image();
+                $image = new VendorDraftImage();
                 $image->image_path = $value['image_path'];
                 $image->item_id = $model->item_id;
                 $image->image_user_id = Yii::$app->user->getId();
@@ -349,7 +362,7 @@ class VendorItemController extends Controller
             }
 
             //remove old price chart
-            VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
+            VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
 
             //add price chart
             $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
@@ -357,7 +370,7 @@ class VendorItemController extends Controller
             if($vendoritem_item_price) {
 
                 for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
-                    $vendor_item_pricing = new VendorItemPricing();
+                    $vendor_item_pricing = new VendorDraftItemPricing();
                     $vendor_item_pricing->item_id =  $model->item_id;
                     $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
                     $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
@@ -375,6 +388,47 @@ class VendorItemController extends Controller
 
         } else {
 
+            $model_name = $model->formName();
+            
+            if($model_name == 'VendorItem') 
+            {
+                $pricing = VendorItemPricing::loadpricevalues($model->item_id);
+
+                $images = Image::findAll(['item_id' => $model->item_id]);
+
+                $item_child_categories = VendorItemToCategory::find()
+                    ->select('{{%category}}.category_name, {{%category}}.category_id')
+                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
+                    ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+                    ->where([
+                        '{{%category}}.trash' => 'Default',
+                        '{{%category_path}}.level' => 2,
+                        '{{%vendor_item_to_category}}.item_id' => $model->item_id
+                    ])
+                    ->groupBy('{{%vendor_item_to_category}}.category_id')
+                    ->all();
+            }
+            else //if in draft 
+            {
+                $pricing = VendorDraftItemPricing::findAll([
+                        'item_id' => $model->item_id
+                    ]);
+
+                $images = VendorDraftImage::findAll(['item_id' => $model->item_id]);
+
+                $item_child_categories = VendorDraftItemToCategory::find()
+                    ->select('{{%category}}.category_name, {{%category}}.category_id')
+                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_draft_item_to_category}}.category_id')
+                    ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+                    ->where([
+                        '{{%category}}.trash' => 'Default',
+                        '{{%category_path}}.level' => 2,
+                        '{{%vendor_draft_item_to_category}}.item_id' => $model->item_id
+                    ])
+                    ->groupBy('{{%vendor_draft_item_to_category}}.category_id')
+                    ->all();
+            }        
+
             //main
             $main_categories = Category::find()
                 ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
@@ -384,29 +438,11 @@ class VendorItemController extends Controller
                 ])
                 ->all();
 
-            //item child categories 
-            $item_child_categories = VendorItemToCategory::find()
-                ->select('{{%category}}.category_name, {{%category}}.category_id')
-                ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
-                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where([
-                    '{{%category}}.trash' => 'Default',
-                    '{{%category_path}}.level' => 2,
-                    '{{%vendor_item_to_category}}.item_id' => $model->item_id
-                ])
-                ->groupBy('{{%vendor_item_to_category}}.category_id')
-                ->all();
-
             return $this->render('update', [
                 'model' => $model,
                 'itemtype' => $itemtype,
-                'vendorname' => $vendorname,
-                'categoryname' => $categoryname,
-                'guide_images' => Image::findAll(['item_id' => $model->item_id,'module_type'=>'guides']),
-                'images' => Image::findAll(['item_id' => $model->item_id,'module_type'=>'vendor_item']),
-                'model1' => $model1,
-                'loadpricevalues' => $loadpricevalues,
-                'model_question' => $model_question,
+                'images' => $images,
+                'pricing' => $pricing,
                 'main_categories' => $main_categories,
                 'item_child_categories' => $item_child_categories
             ]);
@@ -488,7 +524,7 @@ class VendorItemController extends Controller
         $model->save(false);
 
         //remove all old category 
-        VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+        VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
 
         //add all category
         $category = Yii::$app->request->post('category');
@@ -498,7 +534,7 @@ class VendorItemController extends Controller
         }
 
         foreach($category as $key => $value) {
-            $vic = new VendorItemToCategory();
+            $vic = new VendorDraftItemToCategory();
             $vic->item_id = $model->item_id;
             $vic->category_id = $value;
             $vic->save();
@@ -563,7 +599,7 @@ class VendorItemController extends Controller
     * @return json
     */
     public function actionItemPrice() 
-    {
+    {   
         $item_id = Yii::$app->request->post('item_id');
         $is_autosave = Yii::$app->request->post('is_autosave');
 
@@ -594,7 +630,7 @@ class VendorItemController extends Controller
         $model->save(false);
 
         //remove old price chart
-        VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
+        VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
 
         //add price chart
         $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
@@ -602,7 +638,7 @@ class VendorItemController extends Controller
         if($vendoritem_item_price) {
 
             for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
-                $vendor_item_pricing = new VendorItemPricing();
+                $vendor_item_pricing = new VendorDraftItemPricing();
                 $vendor_item_pricing->item_id =  $model->item_id;
                 $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
                 $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
@@ -672,12 +708,6 @@ class VendorItemController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionCheck($image_id)
-    {
-        $user = Image::findOne($image_id);
-        $user->delete();
-    }
-
     /**
      * Finds the VendorItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -717,63 +747,6 @@ class VendorItemController extends Controller
             return Url::to('@web/uploads/app_img/inactive.png');
         }
     }
-
-    public function actionImagedelete()
-    {
-        if(!Yii::$app->request->isAjax)
-            die();
-
-        $data = Yii::$app->request->post();
-        $id = explode(',', $data['id']);
-        $ids = implode('","', $id);
-
-        $command=Image::deleteAll(['IN','image_id',$ids]);
-
-        if($command){
-           echo 'Deleted';  //die;
-        }
-
-        foreach($images as $img)
-        {
-            unlink(Yii::getAlias('@vendor_images').$img);
-        }
-
-        $images = explode(',', $data['loc']);
-
-        if(isset($data['scenario']))
-        {
-            if($data['scenario']=="top"){
-
-                foreach($images as $img) {
-                    unlink(Yii::getAlias('@top_category').$img);
-                }
-
-                echo 'Deleted';
-                die;
-
-            } else if($data['scenario']=="bottom"){
-
-                foreach($images as $img)
-                {
-                    unlink(Yii::getAlias('@bottom_category').$img);
-                }
-
-                echo 'Deleted';
-                die;
-
-            } else if($data['scenario']=="home"){
-
-                foreach($images as $img)
-                {
-                    unlink(Yii::getAlias('@home_ads').$img);
-                }
-
-                echo 'Deleted';
-                die;
-            }
-        }
-    }
-
 
     public function actionSort_vendor_item()
     {
@@ -835,150 +808,6 @@ class VendorItemController extends Controller
         }
     }
 
-    /* Vendor Item Image Drag SORT Order*/
-    public function actionImageorder()
-    {
-        if(!Yii::$app->request->isAjax)
-            die();
-
-        $data = Yii::$app->request->post();
-
-        $i =1;
-
-        foreach($data['id'] as $order=>$value) {
-            $ids = explode('images_',$value);
-            $command = Image::updateAll(['vendorimage_sort_order' => $i],['image_id'=>$ids[1]]);
-            $i++;
-        }
-    }
-
-    public function actionRenderquestion()
-    {
-        if(!Yii::$app->request->isAjax)
-            die();
-
-        $data = Yii::$app->request->post();
-
-        $question = VendorItemQuestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
-
-        if($question[0]['question_answer_type']=='image') {
-            $answers = VendorItemQuestionGuide::find()->where(['question_id' =>$data['q_id']])->asArray()->all();
-        } else {
-            $answers = VendorItemQuestionAnswerOption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
-        }
-
-        return $this->renderPartial('questionanswer',
-            [
-                'question' => $question,
-                'answers' => $answers
-            ]
-        );
-
-        die; /* ALL DIE STATEMENT IMPORTANT FOR VENDOR PANEL*/
-    }
-
-    public function actionViewrenderquestion()
-    {
-        if(!Yii::$app->request->isAjax)
-            die();
-
-        $data = Yii::$app->request->post();
-
-        $question = VendorItemQuestion::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
-
-        if($question[0]['question_answer_type']=='image'){
-            $answers = VendorItemQuestionGuide::find()->where(['question_id' =>$data['q_id']])->asArray()->all();
-        } else {
-            $answers = VendorItemQuestionAnswerOption::find()->where('question_id = "'.$data['q_id'].'"')->asArray()->all();
-        }
-
-        return $this->renderPartial(
-            'viewquestionanswer',
-            [
-                'question' => $question,
-                'answers' => $answers
-            ]
-        );
-    }
-
-    // Delete item image
-    public function actionDeleteItemImage()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-
-            if (isset($data['key']) &&  $data['key'] != '') {
-                $model = Image::findOne(['image_id'=>$data['key'],'module_type'=>'vendor_item']);
-                $image_path = $model['image_path'];
-                $model->delete();
-                VendorItem::deleteFiles($image_path);
-                return 1;
-            }
-        }
-    }
-
-    // Delete item type service or rental image
-    public function actionDeleteServiceGuideImage()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-
-            if (isset($data['key']) &&  $data['key'] != '') {
-                $model = Image::findOne(['image_id'=>$data['key'],'module_type'=>'guides']);
-                $image_path = $model['image_path'];
-                $model->delete();
-                VendorItem::deleteFiles($image_path);
-                return 1;
-            }
-        }
-    }
-
-    /*
-    *   To check Item name
-    */
-    public function actionItemnamecheck()
-    {
-        if (!Yii::$app->request->isAjax) {
-            Yii::$app->end();
-        }
-
-        $data = Yii::$app->request->post();
-
-        $count_query = VendorItem::find()
-            ->select('item_name')
-            ->where([
-                'item_name' => $data['item'],
-                'trash' => 'Default'
-            ]);
-
-        if ($data['item_id']) {            
-            $count_query->andWhere(['!=', 'item_id', $data['item_id']]);
-        }
-
-        echo $count_query->count();
-    }
-
-    public function actionRenderanswer()
-    {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $question = VendorItemQuestion::find()->where('answer_id = "'.$data['q_id'].'"')->asArray()->all();
-
-            $answers = VendorItemQuestionAnswerOption::find()
-            ->where(['question_id' => $question[0]['question_id']])
-            ->asArray()
-            ->all();
-
-            return $this->renderPartial('questionanswer',
-                [
-                    'question' => $question,
-                    'answers' => $answers
-                ]
-            );
-        }
-    }
-
-    
     /**
      * upload croped image 
      * @param base64 image data 
