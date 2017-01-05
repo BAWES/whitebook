@@ -215,7 +215,7 @@ class DirectoryController extends BaseController
 
         $item_ids = ArrayHelper::map($vendor_items, 'item_id', 'item_id');
 
-        $themes = \common\models\VendorItemThemes::find()
+        $q = \common\models\VendorItemThemes::find()
             ->select(['wt.theme_id','wt.slug','wt.theme_name','wt.theme_name_ar'])
             ->leftJoin('{{%theme}} AS wt', 'FIND_IN_SET({{%vendor_item_theme}}.theme_id,wt.theme_id)')
             ->Where([
@@ -224,8 +224,18 @@ class DirectoryController extends BaseController
                 '{{%vendor_item_theme}}.trash' => 'Default'
             ])
             ->andWhere(['IN', '{{%vendor_item_theme}}.item_id', $item_ids])
-            ->groupby(['wt.theme_id'])
-            ->asArray()
+            ->groupby(['wt.theme_id']);
+
+        if(Yii::$app->language == 'en')
+        {
+            $q->orderBy('wt.theme_name');
+        }
+        else
+        {
+            $q->orderBy('wt.theme_name_ar');
+        }
+            
+        $themes = $q->asArray()
             ->all();
 
         if (!isset(Yii::$app->user->identity->customer_id)) {

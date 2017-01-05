@@ -618,6 +618,11 @@ class VendorItemController extends Controller
             ->groupBy('{{%vendor_item_to_category}}.category_id')
             ->all();
 
+        $themes = Themes::find()
+            ->where(['theme_status' => 'Active', 'trash' => 'Default'])
+            ->orderBy('theme_name')
+            ->all();
+
         return $this->render('update', [
             'model' => $model,
             'packagelist' => ArrayHelper::map(Package::find()->all(), 'package_id', 'package_name'),
@@ -625,7 +630,7 @@ class VendorItemController extends Controller
             'categoryname' => $categoryname,
             'images' => Image::findAll(['item_id' => $id, 'module_type' => 'vendor_item']),
             'model_question' => $model_question,
-            'themes' => Themes::findAll(['theme_status' => 'Active', 'trash' => 'Default']),
+            'themes' => $themes,
             'grouplist' => $grouplist,
             'itemPricing' => VendorItemPricing::findAll(['item_id' => $item_id]),
             'guideImages' => Image::findAll(['item_id' => $id, 'module_type' => 'guides']),

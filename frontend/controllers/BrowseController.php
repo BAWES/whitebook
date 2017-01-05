@@ -219,13 +219,22 @@ class BrowseController extends BaseController
 
             $item_ids = ArrayHelper::map($items, 'item_id', 'item_id');
 
-            $themes = VendorItemThemes::find()
-                ->select(['theme_id'])
-                ->with('themeDetail')
-                ->where("trash='default' and item_id IN(".implode(',', array_keys($item_ids)).")")
-                ->groupBy('theme_id')
-                ->asArray()
-                ->all();
+            $q = VendorItemThemes::find()
+                ->select(['{{%vendor_item_theme}}.theme_id'])
+                ->joinWith('themeDetail')
+                ->where("{{%vendor_item_theme}}.trash='default' and {{%vendor_item_theme}}.item_id IN(".implode(',', array_keys($item_ids)).")")
+                ->groupBy('{{%vendor_item_theme}}.theme_id');
+            
+            if(Yii::$app->language == 'en')
+            {
+                $q->orderBy('theme_name');
+            }
+            else
+            {
+                $q->orderBy('theme_name_ar');
+            }
+
+            $themes = $q->asArray()->all();
         }
 
         $vendor = Vendor::find()

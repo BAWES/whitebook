@@ -2,7 +2,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use common\models\VendorItemQuestion;
 use yii\web\View;
 
 /* @var $model common\models\Vendoritem */
@@ -190,7 +189,7 @@ if($model->isNewRecord){
 					<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">
 					<div class="multi_pricing">Price Chart</div>
 					<?php $t=0;
-					foreach ($loadpricevalues as $value) { ?>
+					foreach ($pricing as $value) { ?>
 					<div class="controls<?= $t; ?>">
 						<input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple="multiple" Placeholder="From Quantity" value="<?= $value['range_from'];?>" />
 
@@ -278,7 +277,7 @@ if($model->isNewRecord){
 								</tr>
 							</thead>
 							<tbody>
-							<?php $image_count = 0 ; foreach ($model->images as $key => $value) { ?>
+							<?php $image_count = 0 ; foreach ($images as $key => $value) { ?>
 							<tr>
 								<td>
 									<div class="vendor_image_preview">

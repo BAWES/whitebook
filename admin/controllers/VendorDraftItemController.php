@@ -12,6 +12,9 @@ use common\models\VendorItem;
 use common\models\PriorityItem;
 use admin\models\Image;
 use common\models\VendorItemToCategory;
+use common\models\VendorDraftImage;
+use common\models\VendorDraftItemToCategory;
+use common\models\VendorDraftItemPricing;
 
 class VendorDraftItemController extends Controller
 {
@@ -73,21 +76,26 @@ class VendorDraftItemController extends Controller
             ->addParams([':item_id' => $model->item_id])
             ->all();
 
-        $imagedata = Image::find()
+        $imagedata = VendorDraftImage::find()
             ->where('item_id = :id', [':id' => $model->item_id])
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
 
-        $categories = VendorItemToCategory::find()
+        $categories = VendorDraftItemToCategory::find()
             ->with('category')
             ->Where(['item_id' => $model->item_id])
+            ->all();
+
+        $price_table = VendorDraftItemPricing::find()
+            ->where(['item_id' => $model->item_id])
             ->all();
 
         return $this->render('view', [
             'model' => $model,
             'dataProvider1' => $dataProvider1, 
             'imagedata' => $imagedata,
-            'categories' => $categories
+            'categories' => $categories,
+            'price_table' => $price_table
         ]);
     }
 

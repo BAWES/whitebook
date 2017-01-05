@@ -17,10 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <li><a href="#2" data-toggle="tab">Item description</a></li>
             <li><a href="#3" data-toggle="tab">Item price</a></li>
             <li><a href="#4" data-toggle="tab">Priority Log</a></li>
-            <?php if($model->item_for_sale=='Yes') { ?>
-                <li><a href="#5" data-toggle="tab">Question Answer Details</a></li>
-            <?php } ?>
-            <li><a href="#6" data-toggle="tab">Gallery</a></li>
+            <li><a href="#5" data-toggle="tab">Gallery</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane" id="1" >
@@ -91,25 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tbody>
                 </table>
             </div>
-            <?php if($model->item_for_sale=='Yes'){ ?>
-                <div class="tab-pane" id="5">
-                    <?php
-                    $t=0;
-                    foreach($model_question as $question_records) { ?>
-                            <div class="form-group superbox" id="delete_<?= $t;?>">
-                            <div class="form-group superbox-s" id="delete_<?= $t;?>">
-                                <li class="parent_question">
-                                    <?= ucfirst($question_records['question_text']); ?>
-                                    <span  class="plus"><a href="#" onclick="questionView('<?= $question_records['question_id']; ?>',this)"></a></span><div class="show_ques<?= $question_records['question_id']; ?>"></div>
-                                </li>
-                            </div>
-                        </div>
-                        <?php $t++;
-                    }
-                    ?>
-                </div>
-            <?php } ?>
-            <div class="tab-pane" id="6" >
+            <div class="tab-pane" id="5" >
                 <ul class="row">
                     <?php foreach ($imagedata as $image) {
                         $alias = ($image->module_type == 'vendor_item') ? Yii::getAlias('@vendor_item_images_210/') : Yii::getAlias('@sales_guide_images/')
