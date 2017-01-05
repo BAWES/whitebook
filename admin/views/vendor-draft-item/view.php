@@ -11,6 +11,7 @@ use common\models\FeatureGroupItem;
 use common\models\Image;
 use common\models\VendorItemQuestion;
 use common\models\VendorItemQuestionGuide;
+use common\components\CFormatter;
 
 $arr_categories = [];
 
@@ -41,6 +42,9 @@ $this->params['breadcrumbs'][] = $model->item_name;
         <li class="active"><a href="#1" data-toggle="tab">Vendor Info </a></li>
         <li><a href="#2" data-toggle="tab">Priority Log</a></li>
         <li><a href="#3" data-toggle="tab">Gallery</a></li>
+        <?php if($price_table) { ?>
+        <li><a href="#4" data-toggle="tab">Price Table</a></li>
+        <?php } ?>
     </ul>
     <div class="tab-content">
 
@@ -127,16 +131,10 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'format' => ['date', 'php:d/m/Y'],
                             'label'=>'created date',
                         ],
+                        'item_price_per_unit'
                   ],
                 ]) ?>
-                  <?= DetailView::widget([
-                    'model' => $model,
-                    'attributes' => [
-                          'item_price_per_unit',
-                    ],
-                  ]);
-                  VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit);
-                  ?>
+
             </div>
         </div>
 
@@ -153,14 +151,43 @@ $this->params['breadcrumbs'][] = $model->item_name;
 
         <div class="tab-pane" id="3">
             <ul class="row">
-                <?php foreach ($imagedata as $image) {
-                    $alias = ($image->module_type == 'vendor_item') ? Yii::getAlias('@vendor_item_images_210/') : Yii::getAlias('@sales_guide_images/')
+                <?php foreach ($imagedata as $key => $image) {
+                    $alias = Yii::getAlias('@vendor_item_images_210/');
                     ?>
                     <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-                        <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-responsive','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
+                        <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-responsive','id' => 'image-'.$key,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
                     </li>
                 <?php } ?>
             </ul>
+        </div>
+
+        <div class="tab-pane" id="4">
+            <table class="table table-striped table-bordered detail-view">
+                <thead>
+                    <tr>
+                        <th><?= Yii::t('frontend', 'From') ?></th>
+                        <th><?= Yii::t('frontend', 'To') ?></th>
+                        <th><?= Yii::t('frontend', 'Price per unit') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($price_table as $key => $value) { ?>
+                    <tr>
+                        <td>
+                            <?= $value->range_from ?> 
+                            <?= Yii::t('frontend', 'Unit') ?>
+                        </td>
+                        <td>
+                            <?= $value->range_to ?> 
+                            <?= Yii::t('frontend', 'Unit') ?>
+                        </td>
+                        <td>
+                            <?= CFormatter::format($value->pricing_price_per_unit) ?>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
 
 <!--End fourth Tab -->
