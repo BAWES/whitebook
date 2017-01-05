@@ -1003,8 +1003,6 @@ function save_item_themes_groups($is_autosave = false) {
  */ 
 setInterval(function(){
 
-	return true;//
-
 	if($('#tab_1').parent().hasClass('active')){
 		save_item_info(true);
 	}
