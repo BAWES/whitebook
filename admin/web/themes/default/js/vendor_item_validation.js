@@ -601,6 +601,7 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
  * Save tab 1 data on click of tab 2 or on click of next in tab 1 
  */
 $('#tab_2').click(function(e) {
+	$('.alert-validation-errors').remove();
 	save_item_info();
 });
 
@@ -608,6 +609,7 @@ $('#tab_2').click(function(e) {
  * Save tab 2 data on click of tab 3 or on click of next in tab 2
  */
 $('#tab_3').click(function(e) {
+	$('.alert-validation-errors').remove();
 	save_item_description();
 });
 
@@ -615,6 +617,7 @@ $('#tab_3').click(function(e) {
  * Save tab 3 data on click of tab 4 or on click of next in tab 3
  */
 $('#tab_4').click(function(e) {
+	$('.alert-validation-errors').remove();
 	save_item_price();
 });
 
@@ -622,6 +625,7 @@ $('#tab_4').click(function(e) {
  * Save tab 4 data on click of tab 5 or on click of next in tab 4
  */
 $('#tab_5').click(function(e) {
+	$('.alert-validation-errors').remove();
 	save_item_approval();
 });
 
@@ -629,6 +633,7 @@ $('#tab_5').click(function(e) {
  * Save tab 5 data on click of tab 6 or on click of next in tab 5
  */
 $('#tab_6').click(function(e) {
+	$('.alert-validation-errors').remove();
 	save_item_images();
 });
  
@@ -637,6 +642,8 @@ $('#tab_6').click(function(e) {
  */
 $('.complete').click(function()
 {
+	$('.alert-validation-errors').remove();
+
 	//CKEDITOR + validation.js issue 
 	for (var i in CKEDITOR.instances)
 	{
@@ -674,12 +681,9 @@ function show_errors(json)
 	$('.form-group .help-block').html('');
 	$('.alert-warning').remove();
 	
-	$html  = '<div class="alert alert-warning">';
-	$html += '	Please check form carefully!';
-	$html += '	<button class="close" data-dismiss="alert"></button>';
-	$html += '</div>';
-
-	$('.loadingmessage').after($html);
+	$html  = '<div class="alert alert-warning alert-validation-errors">';
+	$html += '	<b>Please check form carefully...</b>';
+	$html += '	<ul>';
 
 	$('.loadingmessage').hide();
 
@@ -690,6 +694,7 @@ function show_errors(json)
 		$(".field-vendoritem-vendor_id").removeClass('has-success');
 		$(".field-vendoritem-vendor_id").addClass('has-error');
 		$(".field-vendoritem-vendor_id").find('.help-block').html(json['errors']['vendor_id']);
+		$html += '<li>'+json['errors']['vendor_id']+'</li>';
 	}
 
 	if(json['errors']['item_name']) 
@@ -697,6 +702,7 @@ function show_errors(json)
 		$(".field-vendoritem-item_name").removeClass('has-success');
 		$(".field-vendoritem-item_name").addClass('has-error');
 		$(".field-vendoritem-item_name").find('.help-block').html(json['errors']['item_name']);
+		$html += '<li>'+json['errors']['item_name']+'</li>';
 	}
 
 	if(json['errors']['item_name_ar']) 
@@ -704,14 +710,12 @@ function show_errors(json)
 		$(".field-vendoritem-item_name_ar").removeClass('has-success');
 		$(".field-vendoritem-item_name_ar").addClass('has-error');
 		$(".field-vendoritem-item_name_ar").find('.help-block').html(json['errors']['item_name_ar']);
+		$html += '<li>'+json['errors']['item_name_ar']+'</li>';
 	}
 				
 	if(json['errors']['category']) 
 	{
-		$html  = '<div class="alert alert-warning">';
-		$html += json['errors']['category'] + '<button class="close" data-dismiss="alert"></button>';
-		$html += '</div>';
-		$('.loadingmessage').after($html);
+		$html += '<li>'+json['errors']['category']+'</li>';
   	}
 
   	//step 2 
@@ -719,19 +723,22 @@ function show_errors(json)
   	if(json['errors']['type_id'])
   	{
   		$('.field-vendoritem-type_id').addClass('has-error');
-		$('.field-vendoritem-type_id').find('.help-block').html('Item type cannot be blank.');
+		$('.field-vendoritem-type_id').find('.help-block').html(json['errors']['type_id']);
+		$html += '<li>'+json['errors']['type_id']+'</li>';
   	}
 
   	if(json['errors']['item_description'])
   	{
         $('.field-vendoritem-item_description').addClass('has-error');
-	    $('.field-vendoritem-item_description').find('.help-block').html('Item description cannot be blank.');
+	    $('.field-vendoritem-item_description').find('.help-block').html(json['errors']['item_description']);
+	    $html += '<li>'+json['errors']['item_description']+'</li>';
 	}
 	
 	if(json['errors']['item_additional_info'])
   	{
         $('.field-vendoritem-item_additional_info').addClass('has-error');
-	    $('.field-vendoritem-item_additional_info').find('.help-block').html('Item additional info cannot be blank.');
+	    $('.field-vendoritem-item_additional_info').find('.help-block').html(json['errors']['item_additional_info']);
+	    $html += '<li>'+json['errors']['item_additional_info']+'</li>';
 	}
 
 	//step 3
@@ -739,40 +746,51 @@ function show_errors(json)
 	if(json['errors']['item_amount_in_stock'])
 	{
 		$('.field-vendoritem-item_amount_in_stock').addClass('has-error');
-		$('.field-vendoritem-item_amount_in_stock').find('.help-block').html('Item number of stock cannot be blank.');
+		$('.field-vendoritem-item_amount_in_stock').find('.help-block').html(json['errors']['item_amount_in_stock']);
+		$html += '<li>'+json['errors']['item_amount_in_stock']+'</li>';
 	}
 
 	if(json['errors']['item_default_capacity'])
 	{
 		$('.field-vendoritem-item_default_capacity').addClass('has-error');
-		$('.field-vendoritem-item_default_capacity').find('.help-block').html('Item default capacity cannot be blank.');
+		$('.field-vendoritem-item_default_capacity').find('.help-block').html(json['errors']['item_default_capacity']);
+		$html += '<li>'+json['errors']['item_default_capacity']+'</li>';
 	}
 
 	if(json['errors']['item_how_long_to_make'])
 	{
 		$('.field-vendoritem-item_how_long_to_make').addClass('has-error');
-		$('.field-vendoritem-item_how_long_to_make').find('.help-block').html('No of days delivery cannot be blank.');
+		$('.field-vendoritem-item_how_long_to_make').find('.help-block').html(json['errors']['item_how_long_to_make']);
+		$html += '<li>'+json['errors']['item_how_long_to_make']+'</li>';
 	}
 
 	if(json['errors']['item_minimum_quantity_to_order'])
 	{
 		$('.field-vendoritem-item_minimum_quantity_to_order').addClass('has-error');
-		$('.field-vendoritem-item_minimum_quantity_to_order').find('.help-block').html('Item minimum quantity to order cannot be blank.');
+		$('.field-vendoritem-item_minimum_quantity_to_order').find('.help-block').html(json['errors']['item_minimum_quantity_to_order']);
+		$html += '<li>'+json['errors']['item_minimum_quantity_to_order']+'</li>';
 	}
 
 	if(json['errors']['multiple_price']) 
 	{
 		$('.form-group.multiple_price').addClass('has-error');
+		$html += '<li>'+json['errors']['multiple_price']+'</li>';
 	}
 
 	if(json['errors']['images'])
 	{
 		$('.file-block').show();
+		$html += '<li>'+json['errors']['images']+'</li>';
 	} 
 	else 
 	{
  		$('.file-block').hide();
  	}
+
+ 	$html += '	</ul><button class="close" data-dismiss="alert"></button>';
+	$html += '</div>';
+
+	$('.loadingmessage').after($html);
 
  	$('html, body').animate({ scrollTop: 0 }, 'slow');
 }

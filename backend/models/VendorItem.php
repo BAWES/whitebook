@@ -50,7 +50,7 @@ class VendorItem extends \common\models\VendorItem
 
         if(!$category) 
         {
-            $errors['category'] = 'Please select category.';
+            $errors['category'] = 'Select main, sub and child category!';
         }
 
         if(empty($data['item_name'])) {

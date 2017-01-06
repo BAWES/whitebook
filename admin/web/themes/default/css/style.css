@@ -8506,3 +8506,8 @@ a.delivery_href:hover{
     top: 4px;
 }
   
+.alert-validation-errors ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+    margin-top: 5px;
+}
