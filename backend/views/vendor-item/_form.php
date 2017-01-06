@@ -41,6 +41,12 @@ if($model->isNewRecord){
 
 				<?= $form->field($model, 'item_name_ar')->textInput(['maxlength' => 128]) ?>
 				
+				<?= $form->field($model, 'item_status')
+						->dropDownList(
+							['Active' => 'Yes','Deactive' => 'No'], 
+							['id' => 'vendoritem-item_status']
+						); ?>
+
 				<div class="field-category-list">
 					<label>Categories</label>
 					<table class="table table-bordered table-item-category-list">

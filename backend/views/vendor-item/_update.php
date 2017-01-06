@@ -46,6 +46,12 @@ function cmp($a, $b)
 						'id' => 'vendoritem-item_name_ar'
 					]) ?>
 				
+				<?= $form->field($model, 'item_status')
+						->dropDownList(
+							['Active' => 'Yes','Deactive' => 'No'], 
+							['id' => 'vendoritem-item_status']
+						); ?>
+
 				<div class="field-category-list">
 					<label>Categories</label>
 					<table class="table table-bordered table-item-category-list">
@@ -138,12 +144,6 @@ function cmp($a, $b)
 					</table>				
 				</div>
 				
-				<?= $form->field($model, 'item_status')
-						->dropDownList(
-							['Active' => 'Yes','Deactive' => 'No'], 
-							['id' => 'vendoritem-item_status']
-						); ?>
-
 				<div class="row">
 					<div class="col-lg-4">
 						<?= Html::submitButton('Submit for Admin Approval', ['class' => 'btn btn-primary complete', 'style' => 'float:left;']) ?>

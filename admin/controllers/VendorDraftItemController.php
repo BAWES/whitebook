@@ -11,6 +11,7 @@ use common\models\VendorDraftItem;
 use common\models\VendorItem;
 use common\models\PriorityItem;
 use admin\models\Image;
+use common\models\VendorItemPricing;
 use common\models\VendorItemToCategory;
 use common\models\VendorDraftImage;
 use common\models\VendorDraftItemToCategory;
@@ -105,8 +106,7 @@ class VendorDraftItemController extends Controller
 
         $attributes = $draft->attributes;
 
-        //unset sort and item_status from draft to keep sort and item_status from vendor item list 
-        unset($attributes['item_status']);
+        //unset sort from draft to keep sort from vendor item list 
         unset($attributes['sort']);
         
         //copy to item from draft 
@@ -119,7 +119,60 @@ class VendorDraftItemController extends Controller
         //remove from draft 
         $draft->delete();
 
+        //remove old price table data 
+
+        VendorItemPricing::deleteAll(['item_id' => $item->item_id]);
+
+        //add new price table data 
+
+        $pricing = VendorDraftItemPricing::findAll(['item_id' => $item->item_id]);
+
+        foreach ($pricing as $key => $value) 
+        {
+            $vip = new VendorItemPricing;
+            $vip->attributes = $value->attributes;
+            $vip->pricing_quantity_ordered = 0;
+            $vip->trash = 'Default';
+            $vip->save();
+        }
+        
+        //remove old categories 
+
+        VendorItemToCategory::deleteAll(['item_id' => $item->item_id]);
+
+        //add new categories 
+        
+        $categories = VendorDraftItemToCategory::findAll(['item_id' => $item->item_id]);
+
+        foreach ($categories as $key => $value) 
+        {
+            $vic = new VendorItemToCategory;
+            $vic->attributes = $value->attributes;
+            $vic->save();
+        }
+
+        //remove old images 
+
+        Image::deleteAll(['item_id' => $item->item_id]);
+
+        //add new images 
+
+        $images = VendorDraftImage::findAll(['item_id' => $item->item_id]);
+
+        foreach ($images as $key => $value) 
+        {
+            $image = new Image;
+            $image->attributes = $value->attributes;
+            $image->item_id = $value->item_id;
+            $image->image_user_type = 'vendor';
+            $image->module_type = 'vendor_item';
+            $image->image_status = 1;
+            $image->trash = 'Default';
+            $image->save();
+        }
+
         Yii::$app->session->setFlash('success', 'Item approved successfully!');
+
         return $this->redirect(['index']);
     }
 }
