@@ -21,7 +21,6 @@ use common\models\Vendor;
 use common\models\Image;
 use common\models\Category;
 use common\models\SubCategory;
-use common\models\VendorItemSearch;
 use common\models\ItemType;
 use common\models\Themes;
 use common\models\FeatureGroup;
@@ -39,7 +38,7 @@ use common\models\VendorDraftItemPricing;
 use common\models\VendorDraftItemToCategory;
 use common\models\VendorDraftImage;
 use backend\models\VendorItem;
-
+use backend\models\VendorItemSearch;
 
 /**
  * VendoritemController implements the CRUD actions for Vendoritem model.
