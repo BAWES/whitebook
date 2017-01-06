@@ -11,11 +11,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="vendoritem-create">
 
     <?= $this->render('_form', [
-        'model' => $model,
-        'itemtype' => $itemtype,
-        'main_categories' => $main_categories,
-        'item_child_categories' => [],
-        'images' => []
+	        'model' => $model,
+	        'itemtype' => $itemtype,
+	        'main_categories' => $main_categories,
+	        'item_child_categories' => [],
+	        'images' => []
     ]) ?>
 
 </div>
