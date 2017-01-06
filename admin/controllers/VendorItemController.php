@@ -147,210 +147,57 @@ class VendorItemController extends Controller
     public function actionCreate($vid = '')
     {
         $model = new VendorItem();
+        
         $model_question = new VendorItemQuestion();
-        $model1 = new Image();
+        
         $themelist = Themes::loadthemename();
+        
         $grouplist = FeatureGroup::loadfeaturegroup();
 
         $packagelist = ArrayHelper::map(Package::find()->all(), 'package_id', 'package_name');
 
-        $base = Yii::$app->basePath;
-        $len = rand(1, 1000);
         $itemtype = ItemType::loaditemtype();
+        
         $vendorname = Vendor::loadvendorname();
 
-        if ($model->load(Yii::$app->request->post())) {
+        //main
+        $main_categories = Category::find()
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category_path}}.level' => 0,
+                '{{%category}}.trash' => 'Default'
+            ])
+            ->all();
 
-            $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale']) ? 'Yes' : 'No';
+        $sub_categories = Category::find()
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category_path}}.level' => 1,
+                '{{%category}}.trash' => 'Default'
+            ])
+            ->all();
 
-            $max_sort = $model->findBysql("SELECT MAX(`sort`) as sort FROM `whitebook_vendor_item` where trash = 'Default'")->asArray()->all();
+        /*$categories = CategoryPath::find()
+            ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
+            ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
+            ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
+            ->groupBy('{{%category_path}}.category_id')
+            ->orderBy('category_name')
+            ->asArray()
+            ->all();*/
 
-            $sort = ($max_sort[0]['sort'] + 1);
-
-            $model->sort = $sort;
-            $model->slug = Yii::$app->request->post()['VendorItem']['item_name'];
-            $c_slug1 = strtolower($model->slug);
-            $c_slug2 = str_replace(' ', '-', $c_slug1);
-            //Make alphanumeric (removes all other characters)
-            $c_slug3 = preg_replace("/[^a-z0-9_\s-]/", '', $c_slug2);
-            //Convert whitespaces and underscore to dash
-            $c_slug4 = preg_replace("/[\s_]/", '-', $c_slug3);
-            $model->slug = $c_slug4;
-
-            $chk_item_exist = VendorItem::find()
-                ->where(['trash'=>'default'])
-                ->andWhere(['LIKE','slug',$c_slug4])
-                ->one();
-
-            if (!empty($chk_item_exist)) {
-
-                $vendor_item = Yii::$app->request->post('VendorItem');
-
-                $tbl_vendor = Vendor::find()
-                    ->select('vendor_name')
-                    ->where(['vendor_id' => $vendor_item['vendor_id']])
-                    ->one();
-
-                $vendorname = str_replace(' ', '-', $tbl_vendor['vendor_name']);
-                $model->slug = $c_slug4.'-'.$vendorname;
-            }
-
-            if ($model->save()) {
-
-                $itemid = $model->item_id;
-
-                //add all category
-                $category = Yii::$app->request->post('category');
-
-                if(!$category) {
-                    $category = array();
-                }
-
-                foreach($category as $key => $value) {
-                    $vic = new VendorItemToCategory();
-                    $vic->item_id = $model->item_id;
-                    $vic->category_id = $value;
-                    $vic->save();
-                }
-
-                //BEGIN Manage item pricing table
-                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
-
-                if ($vendoritem_item_price) {
-
-                    $from = $vendoritem_item_price['from'];
-                    $to = $vendoritem_item_price['to'];
-                    $price = $vendoritem_item_price['price'];
-
-                    for ($opt = 0;$opt < count($from);++$opt) {
-                        $vendor_item_pricing = new VendorItemPricing();
-                        $vendor_item_pricing->item_id = $itemid;
-                        $vendor_item_pricing->range_from = $from[$opt];
-                        $vendor_item_pricing->range_to = $to[$opt];
-                        $vendor_item_pricing->pricing_price_per_unit = $price[$opt];
-                        $vendor_item_pricing->save();
-                    }
-                }
-                //END Manage item pricing table
-
-                /* Themes table Begin*/
-
-                $vendor_item = Yii::$app->request->post('VendorItem');
-
-                if (isset($vendor_item['themes']) && $_POST['VendorItem']['themes'] != '' && count($vendor_item['themes'])>0 ) {
-                    foreach($vendor_item['themes'] as $value) {
-                        $themeModel = new VendorItemThemes();
-                        $themeModel->item_id = $model->item_id;
-                        $themeModel->theme_id = $value;
-                        $themeModel->save();
-                    }
-                }
-                /* Themes table End */
-
-                /* Groups table Begin*/
-
-                if (isset($vendor_item['groups']) && $_POST['VendorItem']['groups'] != '' && count($vendor_item['groups'])>0 ) {
-                    foreach ($vendor_item['groups'] as $value) {
-                        $groupModel = new FeatureGroupItem();
-                        $groupModel->item_id = $model->item_id;
-                        $groupModel->group_id = $value;
-                        $groupModel->vendor_id = $vendor_item['vendor_id'];
-                        $groupModel->save();
-                    }
-                }
-
-                $arr_packages = [];
-
-                if(empty($vendor_item['packages'])) {
-                    $vendor_item['packages'] = [];
-                }
-
-                foreach ($vendor_item['packages'] as $value) {
-
-                    $item_to_package = VendorItemToPackage::find()
-                        ->where([
-                            'item_id' => $model->item_id,
-                            'package_id' => $value
-                        ])
-                        ->one();
-
-                    if(!$item_to_package) {
-                        $item_to_package = new VendorItemToPackage();
-                        $item_to_package->item_id = $model->item_id;
-                        $item_to_package->package_id = $value;
-                        $item_to_package->save();
-                    }            
-
-                    $arr_packages[] = $value;
-                }
-
-                //add new images
-                $images = Yii::$app->request->post('images');
-
-                if(!$images) {
-                    $images = [];
-                }
-
-                foreach ($images as $key => $value) {
-                    $image = new Image();
-                    $image->image_path = $value['image_path'];
-                    $image->item_id = $model->item_id;
-                    $image->image_user_id = Yii::$app->user->getId();
-                    $image->module_type = 'vendor_item';
-                    $image->image_user_type = 'admin';
-                    $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
-                    $image->save();
-                }
-                
-                Yii::$app->session->setFlash('success', 'Vendor item added successfully!');
-                Yii::info('[New Item Created by '. Yii::$app->user->identity->admin_name .'] New Item added: '.addslashes($model->item_name), __METHOD__);
-
-                return $this->redirect(['index']);
-
-            }//if model->savel()
-
-        } else {
-
-            //main
-            $main_categories = Category::find()
-                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where([
-                    '{{%category_path}}.level' => 0,
-                    '{{%category}}.trash' => 'Default'
-                ])
-                ->all();
-
-            $sub_categories = Category::find()
-                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where([
-                    '{{%category_path}}.level' => 1,
-                    '{{%category}}.trash' => 'Default'
-                ])
-                ->all();
-
-            /*$categories = CategoryPath::find()
-                ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, {{%category_path}}.category_id")
-                ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
-                ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
-                ->groupBy('{{%category_path}}.category_id')
-                ->orderBy('category_name')
-                ->asArray()
-                ->all();*/
-
-            return $this->render('create', [
-                'model' => $model,
-                'model1' => $model1,
-                'itemtype' => $itemtype,
-                'vendorname' => $vendorname,
-                'model_question' => $model_question,
-                'themelist' => $themelist,
-                'grouplist' => $grouplist,
-                'packagelist' => $packagelist,
-                'main_categories' => $main_categories,
-                'sub_categories' => $sub_categories,
-                'category_model' => new Category()
-            ]);
-        }
+        return $this->render('create', [
+            'model' => $model,
+            'itemtype' => $itemtype,
+            'vendorname' => $vendorname,
+            'model_question' => $model_question,
+            'themelist' => $themelist,
+            'grouplist' => $grouplist,
+            'packagelist' => $packagelist,
+            'main_categories' => $main_categories,
+            'sub_categories' => $sub_categories,
+            'category_model' => new Category()
+        ]);
     }
 
     /**
