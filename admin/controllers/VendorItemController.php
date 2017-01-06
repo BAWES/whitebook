@@ -526,9 +526,12 @@ class VendorItemController extends Controller
         
         //force to generate slug again by removing old slug 
         $model->slug = '';
-
-        $model->save(false);
-
+        
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
+        
         //remove all old category 
         VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
 
@@ -588,7 +591,10 @@ class VendorItemController extends Controller
         $model->load(['VendorItem' => $posted_data]);
 
         //save data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         \Yii::$app->response->format = 'json';
         
@@ -631,7 +637,10 @@ class VendorItemController extends Controller
         $model->load(['VendorItem' => $posted_data]);
 
         //save data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         //remove old price chart
         VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
@@ -692,7 +701,10 @@ class VendorItemController extends Controller
         $model->load(['VendorItem' => $posted_data]);
 
         //save data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         \Yii::$app->response->format = 'json';
         
@@ -735,7 +747,10 @@ class VendorItemController extends Controller
         $model->load(['VendorItem' => $posted_data]);
 
         //save data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         //add new images
         $images = Yii::$app->request->post('images');
@@ -778,6 +793,8 @@ class VendorItemController extends Controller
         if($arr_image_path) {
             Image::deleteAll('item_id=' . $item_id . ' AND 
                 image_path NOT IN ("'.implode('","', $arr_image_path).'")');
+        }else{
+            Image::deleteAll('item_id=' . $item_id);
         }
         
         \Yii::$app->response->format = 'json';
@@ -861,7 +878,9 @@ class VendorItemController extends Controller
         if($arr_group) {
             FeatureGroupItem::deleteAll('item_id = ' . $item_id . ' AND 
                 group_id NOT IN ('.implode(',', $arr_group).')');     
-        }       
+        } else {
+            FeatureGroupItem::deleteAll('item_id = ' . $item_id);     
+        }   
 
         /* packages */ 
 
@@ -893,7 +912,9 @@ class VendorItemController extends Controller
         if($arr_packages) {
             VendorItemToPackage::deleteAll('item_id = ' . $item_id . ' AND 
                 package_id NOT IN ('.implode(',', $arr_packages).')');     
-        }  
+        } else {
+            VendorItemToPackage::deleteAll('item_id = ' . $item_id);     
+        }
         
         \Yii::$app->response->format = 'json';
         

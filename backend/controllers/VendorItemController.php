@@ -418,7 +418,10 @@ class VendorItemController extends Controller
         $model->slug = '';
 
         //save first step data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         //remove all old category 
         VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
@@ -480,7 +483,10 @@ class VendorItemController extends Controller
         $model->load(['VendorDraftItem' => $posted_data]);
 
         //save data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         \Yii::$app->response->format = 'json';
         
@@ -524,7 +530,10 @@ class VendorItemController extends Controller
         $model->load(['VendorDraftItem' => $posted_data]);
 
         //save data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         //remove old price chart
         VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
