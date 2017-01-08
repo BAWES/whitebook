@@ -41,6 +41,12 @@ if($model->isNewRecord){
 
 				<?= $form->field($model, 'item_name_ar')->textInput(['maxlength' => 128]) ?>
 				
+				<?= $form->field($model, 'item_status')
+						->dropDownList(
+							['Active' => 'Yes','Deactive' => 'No'], 
+							['id' => 'vendoritem-item_status']
+						); ?>
+
 				<div class="field-category-list">
 					<label>Categories</label>
 					<table class="table table-bordered table-item-category-list">
@@ -374,4 +380,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.14', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.15', ['depends' => [\yii\web\JqueryAsset::className()]]);

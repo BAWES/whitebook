@@ -8480,3 +8480,9 @@ ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{backgro
 .field-category-list.has-error .btn-add-category{
   background: red;
 }
+
+.alert-validation-errors ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+    margin-top: 5px;
+}

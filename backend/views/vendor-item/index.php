@@ -22,8 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </p>
 
-	<?php Pjax::begin(['enablePushState' => false]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -114,8 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
     	],
     ]); ?>
-    <?php Pjax::end(); ?>
-
+   
 </div>
 </div>
 

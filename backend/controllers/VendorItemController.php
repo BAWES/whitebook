@@ -21,7 +21,6 @@ use common\models\Vendor;
 use common\models\Image;
 use common\models\Category;
 use common\models\SubCategory;
-use common\models\VendorItemSearch;
 use common\models\ItemType;
 use common\models\Themes;
 use common\models\FeatureGroup;
@@ -39,7 +38,7 @@ use common\models\VendorDraftItemPricing;
 use common\models\VendorDraftItemToCategory;
 use common\models\VendorDraftImage;
 use backend\models\VendorItem;
-
+use backend\models\VendorItemSearch;
 
 /**
  * VendoritemController implements the CRUD actions for Vendoritem model.
@@ -158,121 +157,21 @@ class VendorItemController extends Controller
         $model = new VendorItem();
         $model->vendor_id = Vendor::getVendor('vendor_id');
 
-        $model1 = new Image();
-
-        $base = Yii::$app->basePath;
-        $len = rand(1,1000);
         $itemtype = ItemType::loaditemtype();
-        $vendorname = Vendor::loadvendorname();
         
-        if($model->load(Yii::$app->request->post()) && $model->validate()) {
+        $main_categories = Category::find()
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category}}.trash' => 'Default',
+                '{{%category_path}}.level' => 0
+            ])
+            ->all();
 
-            $model->item_for_sale = (Yii::$app->request->post()['VendorItem']['item_for_sale'])?'Yes':'No';
-
-            if($model->item_for_sale == 'No')
-            {
-                $model->item_amount_in_stock = '';
-                $model->item_default_capacity = '';
-                $model->item_minimum_quantity_to_order='';
-                $model->item_how_long_to_make='';
-            }
-
-            // get the max sort order
-            $max_sort = VendorItem::find()
-                ->select('MAX(`sort`) as sort')
-                ->where(['trash' => 'Default', 'vendor_id' => $model->vendor_id])
-                ->asArray()
-                ->all();
-            $sort = ($max_sort[0]['sort'] + 1);
-            $model->item_status='Active';
-            $model->sort = $sort;
-
-            if($model->save())
-            {
-                //BEGIN Manage item pricing table
-                $itemid = $model->item_id;
-
-                //add all category
-                $category = Yii::$app->request->post('category');
-
-                if(!$category) {
-                    $category = array();
-                }
-
-                foreach($category as $key => $value) {
-                    $vic = new VendorItemToCategory();
-                    $vic->item_id = $model->item_id;
-                    $vic->category_id = $value;
-                    $vic->save();
-                }
-
-                $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
-
-                if($vendoritem_item_price) {
-
-                    for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
-                        $vendor_item_pricing = new VendorItemPricing();
-                        $vendor_item_pricing->item_id =  $itemid;
-                        $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
-                        $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
-                        $vendor_item_pricing->pricing_price_per_unit = $vendoritem_item_price['price'][$opt];
-                        $vendor_item_pricing->save();
-                    }
-
-                }
-                //END Manage item pricing table
-
-                //add new images
-                $images = Yii::$app->request->post('images');
-
-                foreach ($images as $key => $value) {
-                    $image = new Image();
-                    $image->image_path = $value['image_path'];
-                    $image->item_id = $model->item_id;
-                    $image->image_user_id = Yii::$app->user->getId();
-                    $image->module_type = 'vendor_item';
-                    $image->image_user_type = 'admin';
-                    $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
-                    $image->save();
-                }
-
-                //create draft so admin can approve 
-                $draft_item = new VendorDraftItem();
-                $draft_item->attributes = $model->attributes;
-                $draft_item->priority = 'Normal';
-                $draft_item->item_archived = 'No';
-                $draft_item->item_approved = 'Pending';
-                $draft_item->item_status = 'Active';
-                $draft_item->trash = 'Default';
-                $draft_item->save(false);
-
-                /*  Upload image table End */
-                Yii::$app->session->setFlash('success', "Item added successfully. Admin will check and approve it.");
-
-                Yii::info('[New Item added by '. Yii::$app->user->identity->vendor_name .'] '. Yii::$app->user->identity->vendor_name .' created new item '.$model->item_name, __METHOD__);
-
-                return $this->redirect(['index']);
-            }
-
-        } else {
-
-            //main
-            $main_categories = Category::find()
-                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where([
-                    '{{%category}}.trash' => 'Default',
-                    '{{%category_path}}.level' => 0
-                ])
-                ->all();
-
-            return $this->render('create', [
-                'model' => $model,
-                'model1' => $model1,
-                'itemtype' => $itemtype,
-                'vendorname' => $vendorname,
-                'main_categories' => $main_categories
-            ]);
-        }
+        return $this->render('create', [
+            'model' => $model,
+            'itemtype' => $itemtype,
+            'main_categories' => $main_categories
+        ]);
     }
 
     /**
@@ -352,11 +251,9 @@ class VendorItemController extends Controller
             
             foreach ($images as $key => $value) {
                 $image = new VendorDraftImage();
-                $image->image_path = $value['image_path'];
                 $image->item_id = $model->item_id;
                 $image->image_user_id = Yii::$app->user->getId();
-                $image->module_type = 'vendor_item';
-                $image->image_user_type = 'admin';
+                $image->image_path = $value['image_path'];
                 $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
                 $image->save();
             }
@@ -521,7 +418,10 @@ class VendorItemController extends Controller
         $model->slug = '';
 
         //save first step data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         //remove all old category 
         VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
@@ -583,7 +483,10 @@ class VendorItemController extends Controller
         $model->load(['VendorDraftItem' => $posted_data]);
 
         //save data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         \Yii::$app->response->format = 'json';
         
@@ -627,7 +530,10 @@ class VendorItemController extends Controller
         $model->load(['VendorDraftItem' => $posted_data]);
 
         //save data without validation 
-        $model->save(false);
+        if(!$model->save())
+        {
+            $model->save(false);
+        }
 
         //remove old price chart
         VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
