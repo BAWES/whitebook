@@ -69,7 +69,18 @@ class VendorDraftItemController extends Controller
     */
     public function actionView($id)
     {
+        Yii::$app->session->setFlash('info', 'Fields mark with (*) are modified.');
+
         $model = VendorDraftItem::findOne($id);
+
+        //check if have change price table 
+        $is_price_table_changed = VendorDraftItem::is_price_table_changed($model->item_id);
+
+        //check if have change images
+        $is_images_changed = VendorDraftItem::is_images_changed($model->item_id);
+
+        //check if have change category 
+        $is_categories_changed = VendorDraftItem::is_categories_changed($model->item_id);
 
         $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
@@ -91,12 +102,18 @@ class VendorDraftItemController extends Controller
             ->where(['item_id' => $model->item_id])
             ->all();
 
+        $vendor_item = VendorItem::findOne($model->item_id);
+
         return $this->render('view', [
-            'model' => $model,
+            'model' => $model,            
+            'vendor_item' => $vendor_item,
             'dataProvider1' => $dataProvider1, 
             'imagedata' => $imagedata,
             'categories' => $categories,
-            'price_table' => $price_table
+            'price_table' => $price_table,
+            'is_price_table_changed' => $is_price_table_changed,
+            'is_images_changed' => $is_images_changed,
+            'is_categories_changed' => $is_categories_changed
         ]);
     }
 
