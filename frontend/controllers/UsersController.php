@@ -98,21 +98,27 @@ class UsersController extends BaseController
             if ($model->validate() && $model->save()) {
                
                 $username = $model['customer_name'];
+                
                 Yii::$app->session->set('register', '1');
-                $message = 'Thank you for registration with us.</br><a href='.Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true).' title="Click Here">Click here </a> to activate your account.';
-
+                
                 //Send Email to user
-                Yii::$app->mailer->compose("customer/welcome",
-                 [
-                     "message" => $message,
-                     "user" => $model->customer_name
-                 ])
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo($model['customer_email'])
-                ->setSubject('Welcome to The White Book')
-                ->send();
+                Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+                Yii::$app->mailer->compose("customer/confirm",
+                    [
+                        "user" => $model->customer_name,
+                        "confirm_link" => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                        "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                        "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
+                    ])
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo($model['customer_email'])
+                    ->setSubject('Welcome to The White Book')
+                    ->send();
 
                 //Send Email to admin
+                Yii::$app->mailer->htmlLayout = 'layouts/html';
+
                 $message_admin = $model->customer_name.' registered in TheWhiteBook';
 
                 $send_admin = Yii::$app->mailer->compose(
