@@ -189,4 +189,112 @@ class VendorDraftItem extends \yii\db\ActiveRecord
         
         return implode(', ',$string);
     }
+
+    public function is_price_table_changed($item_id)
+    {
+        $item_pricing = VendorItemPricing::findAll(['item_id' => $item_id]);
+        $draft_pricing = VendorDraftItemPricing::findAll(['item_id' => $item_id]);
+        
+        //check item item deleted in draft 
+
+        foreach ($item_pricing as $key => $value) {
+            
+            $a = VendorDraftItemPricing::find()
+                ->where([
+                        'range_from' => $value->range_from,
+                        'range_to' => $value->range_to,
+                        'pricing_price_per_unit' => $value->pricing_price_per_unit,
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+
+        //check item item added in draft 
+
+        foreach ($draft_pricing as $key => $value) {
+            
+            $a = VendorItemPricing::find()
+                ->where([
+                        'range_from' => $value->range_from,
+                        'range_to' => $value->range_to,
+                        'pricing_price_per_unit' => $value->pricing_price_per_unit,
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+    }
+    
+    public function is_images_changed($item_id)
+    {
+        $item_images = Image::findAll(['item_id' => $item_id]);
+        $draft_images = VendorDraftImage::findAll(['item_id' => $item_id]);
+        
+        //check item item deleted in draft 
+
+        foreach ($item_images as $key => $value) {
+            
+            $a = VendorDraftImage::find()
+                ->where([
+                        'image_path' => $value->image_path,
+                        'vendorimage_sort_order' => $value->vendorimage_sort_order
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+
+        //check item item added in draft 
+
+        foreach ($draft_images as $key => $value) {
+            
+            $a = Image::find()
+                ->where([
+                        'image_path' => $value->image_path,
+                        'vendorimage_sort_order' => $value->vendorimage_sort_order
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+    }
+    
+    public function is_categories_changed($item_id)
+    {
+        $item_categories = VendorItemToCategory::findAll(['item_id' => $item_id]);
+        $draft_categories = VendorDraftItemToCategory::findAll(['item_id' => $item_id]);
+        
+        //check item item deleted in draft 
+
+        foreach ($item_categories as $key => $value) {
+            
+            $a = VendorDraftItemToCategory::find()
+                ->where([
+                        'category_id' => $value->category_id
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+
+        //check item item added in draft 
+
+        foreach ($draft_categories as $key => $value) {
+            
+            $a = VendorItemToCategory::find()
+                ->where([
+                        'category_id' => $value->category_id
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+    }
 }

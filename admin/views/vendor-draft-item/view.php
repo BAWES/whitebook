@@ -15,7 +15,8 @@ use common\components\CFormatter;
 
 $arr_categories = [];
 
-foreach($categories as $key => $value) { 
+foreach($categories as $key => $value) 
+{ 
     $arr_categories[] = $value->category->category_title;
 } 
 
@@ -36,6 +37,32 @@ $this->params['breadcrumbs'][] = $model->item_name;
 <br />
 <br />
 
+<div class="alert alert-info">
+  Fields mark with (*) are changed. 
+  <button class="close" data-dismiss="alert">&close;</button>
+</div>
+
+<?php if($is_price_table_changed) { ?>
+<div class="alert alert-info">
+  Price table changed.
+  <button class="close" data-dismiss="alert">&close;</button>
+</div>
+<?php } ?>
+
+<?php if($is_images_changed) { ?>
+<div class="alert alert-info">
+  Images changed.
+  <button class="close" data-dismiss="alert">&close;</button>
+</div>
+<?php } ?>
+
+<?php if($is_categories_changed) { ?>
+<div class="alert alert-info">
+  Categories changed.
+  <button class="close" data-dismiss="alert">&close;</button>
+</div>
+<?php } ?>
+
 <!-- Begin Twitter Tabs-->
 <div class="tabbable">
     <ul class="nav nav-tabs">
@@ -53,85 +80,112 @@ $this->params['breadcrumbs'][] = $model->item_name;
             <?php if(isset($model->vendor_logo_path)) {
                 echo Html::img(Yii::getAlias('@s3/vendor_logo/').$model->vendor_logo_path, ['class'=>'','width'=>'125px','height'=>'125px','alt'=>'Logo']);
             } ?>
-                </div>
+            </div>
             <div class="form-group">
                    <?= DetailView::widget([
                     'model' => $model,
                     'attributes' => [
                         //'item_id',
                         [
-                            'label'=>'Vendor Type',
-                            'value'  => VendorItem::getItemType($model->type_id),
+                            'label' => $vendor_item->type_id != $model->type_id? 'Vendor Type *' : 'Vendor Type ',
+                            'value' => VendorItem::getItemType($model->type_id),
                         ],
                         [
-                            'label'=>'Vendor',
-                            'value'  => VendorItem::getVendorName($model->vendor_id),
+                            'label' => $vendor_item->vendor_id != $model->vendor_id? 'Vendor *' : 'Vendor ',
+                            'value' => VendorItem::getVendorName($model->vendor_id),
                         ],
                         [
-                            'label'=>'Categories',
+                            'label' => 'Categories',
+                            'format' => 'raw',
+                            'value' => implode('<br />', $arr_categories)
+                        ],
+                        [
+                            'label' => $vendor_item->item_name != $model->item_name ? 'ITEM NAME *' : 'ITEM NAME ',
+                            'value' => $model->item_name
+                        ],
+                        [
+                            'label' =>  $vendor_item->item_name_ar != $model->item_name_ar ? 'ITEM NAME - ARABIC *' : 'ITEM NAME - ARABIC',
+                            'value' => $model->item_name_ar
+                        ],
+                        [
+                            'label' => $vendor_item->item_description != $model->item_description ? 'Item description *' : 'Item description',
+                            'format' => 'raw',
+                            'value' => strip_tags($model->item_description),
+                        ],
+                        [
+                            'label' => $vendor_item->item_description_ar != $model->item_description_ar ? 'Item description - Arabic *' : 'Item description - Arabic',
+                            'format' => 'raw',
+                            'value' => strip_tags($model->item_description_ar),
+                        ],
+                        [
+                            'label' => $vendor_item->item_additional_info != $model->item_additional_info ? 'Item additional info *' : 'Item additional info',
                             'format'=>'raw',
-                            'value'  => implode('<br />', $arr_categories)
-                        ],
-                        'item_name',
-                        'item_name_ar',
-                        [
-                            'label'=>'Item description',
-                            'format'=>'raw',
-                            'value'  =>strip_tags($model->item_description),
+                            'value' =>strip_tags($model->item_additional_info),
                         ],
                         [
-                            'label'=>'Item description - Arabic',
-                            'format'=>'raw',
-                            'value'  =>strip_tags($model->item_description_ar),
+                            'label' => $vendor_item->item_additional_info_ar != $model->item_additional_info_ar ? 'Item additional info - Arabic *' : 'Item additional info - Arabic',
+                            'format' => 'raw',
+                            'value' => strip_tags($model->item_additional_info_ar),
                         ],
                         [
-                            'label'=>'Item additional info',
-                            'format'=>'raw',
-                            'value'  =>strip_tags($model->item_additional_info),
+                            'label' => $vendor_item->item_amount_in_stock != $model->item_amount_in_stock ? 'ITEM AMOUNT IN STOCK *' : 'ITEM AMOUNT IN STOCK',
+                            'value' => $model->item_amount_in_stock,
                         ],
                         [
-                            'label'=>'Item additional info - Arabic',
-                            'format'=>'raw',
-                            'value'  =>strip_tags($model->item_additional_info_ar),
-                        ],
-                        'item_amount_in_stock',
-                        'item_default_capacity',
-                        [
-                            'label'=>'Item customization description',
-                            'format'=>'raw',
-                            'value'  =>strip_tags($model->item_customization_description),
+                            'label' => $vendor_item->item_default_capacity != $model->item_default_capacity ? 'ITEM DEFAULT CAPACITY *' : 'ITEM DEFAULT CAPACITY',
+                            'value' => $model->item_default_capacity,
                         ],
                         [
-                            'label'=>'Item customization description - Arabic',
-                            'format'=>'raw',
-                            'value'  =>strip_tags($model->item_customization_description_ar),
+                            'label' => $vendor_item->item_customization_description != $model->item_customization_description ? 'Item customization description *' : 'Item customization description',
+                            'format' => 'raw',
+                            'value' => strip_tags($model->item_customization_description),
                         ],
                         [
-                            'label'=>'Item price description',
-                            'value'  =>strip_tags($model->item_price_description),
+                            'label' => $vendor_item->item_customization_description_ar != $model->item_customization_description_ar ? 'Item customization description - Arabic *' : 'Item customization description - Arabic',
+                            'format' => 'raw',
+                            'value' => strip_tags($model->item_customization_description_ar),
                         ],
                         [
-                            'label' =>'Item price description - Arabic',
+                            'label' => $vendor_item->item_price_description != $model->item_price_description ? 'Item price description *' : 'Item price description',
+                            'value' => strip_tags($model->item_price_description),
+                        ],
+                        [
+                            'label' => $vendor_item->item_price_description_ar != $model->item_price_description_ar ? 'Item price description - Arabic*' : 'Item price description - Arabic',
                             'value' => strip_tags($model->item_price_description_ar),
                         ],
-                        'item_for_sale',
-                        'item_how_long_to_make',
-                        'item_minimum_quantity_to_order',
-                        'item_approved',
                         [
-                            'label'=>'Themes',
-                            'value'  => $model->getThemeName(),
+                            'label' => $vendor_item->item_for_sale != $model->item_for_sale ? 'ITEM FOR SALE *' : 'ITEM FOR SALE',
+                            'value' => strip_tags($model->item_for_sale),
                         ],
                         [
-                            'label'=>'Group',
-                            'value'  => FeatureGroupItem::groupList($model),
+                            'label' => $vendor_item->item_how_long_to_make != $model->item_how_long_to_make ? 'ITEM HOW LONG TO MAKE *' : 'ITEM HOW LONG TO MAKE',
+                            'value' => strip_tags($model->item_how_long_to_make),
                         ],
                         [
-                            'attribute'=>'created_datetime',
+                            'label' => $vendor_item->item_minimum_quantity_to_order != $model->item_minimum_quantity_to_order ? 'ITEM MINIMUM QUANTITY TO ORDER *' : 'ITEM MINIMUM QUANTITY TO ORDER',
+                            'value' => strip_tags($model->item_minimum_quantity_to_order),
+                        ],
+                        [
+                            'label' => $vendor_item->item_approved != $model->item_approved ? 'ITEM APPROVED *' : 'ITEM APPROVED',
+                            'value' => strip_tags($model->item_approved),
+                        ],
+                        [
+                            'label' => 'Themes',
+                            'value' => $model->getThemeName(),
+                        ],
+                        [
+                            'label' => 'Group',
+                            'value' => FeatureGroupItem::groupList($model),
+                        ],
+                        [
+                            'attribute' => 'created_datetime',
                             'format' => ['date', 'php:d/m/Y'],
-                            'label'=>'created date',
+                            'label' => 'created date',
                         ],
-                        'item_price_per_unit'
+                        [
+                            'label' => $vendor_item->item_price_per_unit != $model->item_price_per_unit ? 'ITEM PRICE PER UNIT *' : 'ITEM PRICE PER UNIT',
+                            'value' => $model->item_price_per_unit
+                        ]                        
                   ],
                 ]) ?>
 
@@ -155,7 +209,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                     $alias = Yii::getAlias('@vendor_item_images_210/');
                     ?>
                     <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-                        <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-responsive','id' => 'image-'.$key,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
+                        <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-responsive','id' => 'image-'.$key,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]); ?>
                     </li>
                 <?php } ?>
             </ul>
