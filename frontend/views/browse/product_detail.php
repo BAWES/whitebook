@@ -397,7 +397,7 @@ if($model->images) {
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="collapsed">
-                                                <?php echo Yii::t('frontend', 'Price Cart'); ?>
+                                                <?php echo Yii::t('frontend', 'Price Chart'); ?>
                                             </a>
                                           </h4>
                                         </div>

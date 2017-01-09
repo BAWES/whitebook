@@ -139,7 +139,6 @@ if($model->images) {
                             <b class="font-27">
                                 <p><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
                             </b>
-
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -192,7 +191,7 @@ if($model->images) {
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="col-md-7 padding-left-0 padding-right-0 right-sidebar ">
+                    <div class="col-md-7 right-sidebar">
                         <div class="right_descr_product">
                             <div class="product_name clearfix">
                                 <div class="left_descrip desktop-view margin-bottom-14">

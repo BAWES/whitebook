@@ -203,9 +203,10 @@ class ThemesController extends Controller
         $new_theme_id = Yii::$app->request->post('new_theme_id');
 
         $items = VendorItemThemes::find()
+            ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id')
             ->where([
-                'theme_id' => $old_theme_id,
-                'trash' => 'Default'
+                '{{%vendor_item_theme}}.theme_id' => $old_theme_id,
+                '{{%vendor_item_theme}}.trash' => 'Default'
             ])
             ->all();
 
