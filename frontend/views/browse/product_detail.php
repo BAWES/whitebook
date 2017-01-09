@@ -91,37 +91,6 @@ if($model->images) {
                                 <?= CFormatter::format($model->item_price_per_unit)  ?>       
                             </b>
 
-                            <hr />
-                    
-                            <?php if($price_table) { ?>
-                            <table class="table table-bordered"> 
-                                <thead>
-                                    <tr>
-                                        <td><?= Yii::t('frontend', 'From') ?></td>
-                                        <td><?= Yii::t('frontend', 'To') ?></td>
-                                        <td><?= Yii::t('frontend', 'Price per unit') ?></td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($price_table as $key => $value) { ?>
-                                    <tr>
-                                        <td>
-                                            <?= $value->range_from ?> 
-                                            <?= Yii::t('frontend', 'Unit') ?>
-                                        </td>
-                                        <td>
-                                            <?= $value->range_to ?> 
-                                            <?= Yii::t('frontend', 'Unit') ?>
-                                        </td>
-                                        <td>
-                                            <?= CFormatter::format($value->pricing_price_per_unit) ?>
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
-                            <?php } ?>
-
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -202,35 +171,6 @@ if($model->images) {
                                     </label>
 
                                     <b><?= CFormatter::format($model->item_price_per_unit)  ?></b>
-
-                                    <?php if($price_table) { ?>
-                                        <table class="table table-bordered"> 
-                                            <thead>
-                                                <tr>
-                                                    <td><?= Yii::t('frontend', 'From') ?></td>
-                                                    <td><?= Yii::t('frontend', 'To') ?></td>
-                                                    <td><?= Yii::t('frontend', 'Price per unit') ?></td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($price_table as $key => $value) { ?>
-                                                <tr>
-                                                    <td>
-                                                        <?= $value->range_from ?> 
-                                                        <?= Yii::t('frontend', 'Unit') ?>
-                                                    </td>
-                                                    <td>
-                                                        <?= $value->range_to ?> 
-                                                        <?= Yii::t('frontend', 'Unit') ?>
-                                                    </td>
-                                                    <td>
-                                                        <?= CFormatter::format($value->pricing_price_per_unit) ?>
-                                                    </td>
-                                                </tr>
-                                                <?php } ?>
-                                            </tbody>
-                                        </table>
-                                        <?php } ?>
 
                                 </div>
                                 <div class="right_descrip">
@@ -457,7 +397,7 @@ if($model->images) {
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="collapsed">
-                                                <?php echo Yii::t('frontend', 'Price Cart'); ?>
+                                                <?php echo Yii::t('frontend', 'Price Chart'); ?>
                                             </a>
                                           </h4>
                                         </div>
