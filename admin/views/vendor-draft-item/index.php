@@ -33,9 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\ActionColumn',
             	'header'=>'Action',
-            	'template' => ' {view} {approve}',
+            	'template' => ' {view} {approve} {reject}',
             	'buttons' => [
-            		
+            		'reject' => function($url, $data) {
+                        return '<a title="Reject" data-id="'.$data->draft_item_id.'" class="btn-reject"><i class="glyphicon glyphicon-remove"></i></a>';
+                    },
             		'approve' => function($url, $data) {
             			return HTML::a(
             				'<i class="glyphicon glyphicon-ok"></i>', 
@@ -51,3 +53,31 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+
+<div class="modal fade modal_reject" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Reject item</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+            <input type="hidden" name="draft_item_id" />
+            <textarea class="form-control" name="reason" placeholder="Reason for rejection"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-reject-submit">Submit</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<?php
+
+echo Html::hiddenInput('reject_url', Url::to(['vendor-draft-item/reject']), ['id' => 'reject_url']);
+
+$this->registerJsFile("@web/themes/default/js/vendor_draft_item.js", ['depends' => [\yii\web\JqueryAsset::className()]]);

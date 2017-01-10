@@ -16,6 +16,7 @@ use common\models\VendorItemToCategory;
 use common\models\VendorDraftImage;
 use common\models\VendorDraftItemToCategory;
 use common\models\VendorDraftItemPricing;
+use common\models\Vendor;
 
 class VendorDraftItemController extends Controller
 {
@@ -191,5 +192,34 @@ class VendorDraftItemController extends Controller
         Yii::$app->session->setFlash('success', 'Item approved successfully!');
 
         return $this->redirect(['index']);
+    }
+
+    public function actionReject()
+    {
+        $draft_item_id = Yii::$app->request->post('draft_item_id');
+
+        $reason = Yii::$app->request->post('reason'); 
+
+        $model = VendorDraftItem::findOne(['draft_item_id' => $draft_item_id]);
+
+        $vendor = Vendor::findOne($model->vendor_id);
+
+        //send mail 
+        Yii::$app->mailer->compose("admin/item-reject",
+            [
+                "reason" => $reason,
+                "model" => $model,
+                "vendor" => $vendor
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($vendor->vendor_contact_email)
+            ->setSubject('Item rejected')
+            ->send();
+
+        //hide draft from admin 
+        $model->is_ready = 0;
+        $model->save();
+
+        Yii::$app->session->setFlash('success', 'Item rejected and vendor notified by email!');
     }
 }
