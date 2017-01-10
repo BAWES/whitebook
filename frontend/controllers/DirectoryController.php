@@ -209,7 +209,7 @@ class DirectoryController extends BaseController
         $provider = new ArrayDataProvider([
             'allModels' => $vendor_items,
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 50,
             ],
         ]);
 
