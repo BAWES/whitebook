@@ -148,10 +148,10 @@ class BrowseController extends BaseController
 
         if($Category)
         {
-            $cats = $Category->category_id;    
+            $cats = $Category->category_id;
         }
-        
-        if (isset($data['category']) && count($data['category']) > 0) 
+
+        if (isset($data['category']) && count($data['category']) > 0)
         {
             $cats = implode("','",  $data['category']);
         }
@@ -159,8 +159,8 @@ class BrowseController extends BaseController
         if($cats)
         {
             $q = "{{%category_path}}.path_id IN ('".$cats."')";
-        
-            $item_query->andWhere($q);    
+
+            $item_query->andWhere($q);
         }
         
         if ($session->has('deliver-location')) {

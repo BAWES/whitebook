@@ -10,7 +10,7 @@ require(__DIR__.'/params-local.php')
 return [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
-    'controllerNamespace' => 'api\controllers',
+    'controllerNamespace' => 'api\modules\v1\controllers',
     'bootstrap' => ['log'],
     'modules' => [
         'v1' => [
@@ -49,6 +49,37 @@ return [
                         'OPTIONS create-account' => 'options',
                         'OPTIONS request-reset-password' => 'options',
                         'OPTIONS resend-verification-email' => 'options',
+                    ]
+                ],
+                [ // CategoryController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/category',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'category-listing',
+                    ]
+                ],
+
+                [ // ProductController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/product',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET index/<id>' => 'index',
+                        'GET detail/<id>' => 'detail',
+                    ]
+                ],
+
+                [ // EventController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/event',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'event-list',
+                        'GET <id>' => 'event-detail',
+                        'POST' => 'event-create',
+                        'PATCH <id>' => 'event-update',
+                        'DELETE <id>' => 'event-delete',
                     ]
                 ],
             ],
