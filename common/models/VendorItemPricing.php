@@ -41,7 +41,8 @@ class VendorItemPricing extends \yii\db\ActiveRecord
     {
         return [
             [['range_from', 'range_to', 'pricing_price_per_unit'], 'required'],
-            [['item_id', 'range_from', 'range_to', 'pricing_quantity_ordered', 'pricing_price_per_unit', 'created_by', 'modified_by'], 'integer'],
+            [['item_id', 'range_from', 'range_to', 'pricing_quantity_ordered', 'created_by', 'modified_by'], 'integer'],
+            [['pricing_price_per_unit'], 'number'],
             [['created_datetime', 'modified_datetime'], 'safe'],
             [['trash'], 'string'],
         ];
