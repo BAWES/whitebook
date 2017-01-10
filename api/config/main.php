@@ -56,7 +56,7 @@ return [
                     'controller' => 'v1/category',
                     'pluralize' => false,
                     'patterns' => [
-                        'GET' => 'index',
+                        'GET' => 'category-listing',
                     ]
                 ],
 

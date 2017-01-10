@@ -30,12 +30,9 @@ class CategoryController extends Controller
 
 
     /**
-     * Perform validation on the agent account (check if he's allowed login to platform)
-     * If everything is alright,
-     * Returns the BEARER access token required for futher requests to the API
      * @return array
      */
-    public function actionIndex()
+    public function actionCategoryListing()
     {
         return Category::find()
             ->select(['category_id','category_name','category_name_ar','icon'])
