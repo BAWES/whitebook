@@ -37,8 +37,9 @@ class VendorDraftItemPricing extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_id', 'range_from', 'range_to', 'pricing_quantity_ordered', 'pricing_price_per_unit', 'created_by', 'modified_by'], 'integer'],
+            [['item_id', 'range_from', 'range_to', 'pricing_quantity_ordered', 'created_by', 'modified_by'], 'integer'],
             [['created_datetime', 'modified_datetime'], 'safe'],
+            [['pricing_price_per_unit'], 'number'],
             [['trash'], 'string'],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorItem::className(), 'targetAttribute' => ['item_id' => 'item_id']],
         ];
