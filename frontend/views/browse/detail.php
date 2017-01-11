@@ -206,6 +206,7 @@ if($model->images) {
                                     <b class="font-27"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
 
                                     <strong><?= $model['item_price_description'] ?></strong>
+
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">

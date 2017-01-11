@@ -130,7 +130,7 @@ class Role extends \yii\db\ActiveRecord
             'vendor' => ['index', 'view', 'vendoritemview', 'password', 'create', 'update', 'delete', 'loadcategory', 'loadsubcategory', 'emailcheck', 'block', 'changepackage', 'changeeditpackage', 'loadpackagedate', 'packageupdate', 'vendornamecheck', 'validate-vendor', 'vendor-logo', 'basic-info', 'main-info', 'additional-info', 'social-info','email-addresses', 'vendor-validate', 'croped-image-upload'],
             'vendor-item' => ['index', 'view', 'create', 'update', 'delete', 'check', 'block', 'approve', 'status', 'removequestion', 'sort_vendor_item', 'addquestion', 'guideimage', 'renderquestion', 'viewrenderquestion', 'renderanswer', 'galleryupload', 'ttemgallery', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck', 'upload-cropped-image', 'item-info', 'item-description', 'item-price', 'item-approval', 'item-images', 'item-themes-groups', 'item-validate', 'add-theme', 'add-group', 'add-category', 'category-list'],
             'vendor-item-pending' => ['index'],
-            'vendor-draft-item' => ['index', 'approve', 'view'],
+            'vendor-draft-item' => ['index', 'approve', 'reject', 'view'],
             'vendor-item-question-answer-option' => ['index', 'view', 'create', 'update', 'delete', 'deletequestionoptions'],
             'vendor-item-question' => ['index', 'view', 'create', 'update', 'delete'],
             'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete']

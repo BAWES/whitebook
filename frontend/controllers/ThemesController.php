@@ -227,7 +227,7 @@ class ThemesController extends BaseController
         $provider = new ArrayDataProvider([
             'allModels' => $items,
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 50,
             ],
         ]);
        
