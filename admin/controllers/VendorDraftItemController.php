@@ -136,11 +136,11 @@ class VendorDraftItemController extends Controller
         $item->update();
 
         //remove from draft 
-        //$draft->delete();
+        $draft->delete();
 
         //remove old price table data 
 
-        //VendorItemPricing::deleteAll(['item_id' => $item->item_id]);
+        VendorItemPricing::deleteAll(['item_id' => $item->item_id]);
 
         //add new price table data 
 
@@ -157,7 +157,7 @@ class VendorDraftItemController extends Controller
         
         //remove old categories 
 
-        //VendorItemToCategory::deleteAll(['item_id' => $item->item_id]);
+        VendorItemToCategory::deleteAll(['item_id' => $item->item_id]);
 
         //add new categories 
         
@@ -172,7 +172,7 @@ class VendorDraftItemController extends Controller
 
         //remove old images 
 
-        //Image::deleteAll(['item_id' => $item->item_id]);
+        Image::deleteAll(['item_id' => $item->item_id]);
 
         //add new images 
 
