@@ -90,8 +90,10 @@ class AccessControlList extends \yii\db\ActiveRecord
         ];
     }
 
-    //check db if current controller/method assigned to user role         
-    public function can($controller_id = null, $method_id = null) 
+    /**
+     * check db if current controller/method assigned to user role         
+     */
+    public static function can($controller_id = null, $method_id = null) 
     {
         if (!$controller_id) {
             $controller_id = Yii::$app->controller->id; 
