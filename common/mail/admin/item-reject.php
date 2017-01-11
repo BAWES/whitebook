@@ -11,15 +11,15 @@ use yii\helpers\Url;
         
         Hi <?= $vendor->vendor_contact_name ?>,
 
-        <br />
+        <br /><br />
 
         Your item (<?= $model->item_name ?>) got rejected because of 
 
-        <br />
+        <br /><br />
 
         "<?= $reason ?>"
 
-        <br />
+        <br /><br />
 
         Please correct it and resubmit for approval. 
         
