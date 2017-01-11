@@ -77,6 +77,11 @@ class VendorItem extends \yii\db\ActiveRecord
         return 'whitebook_vendor_item';
     }
 
+    public function optimisticLock()
+    {
+        return 'version';
+    }
+
     public function behaviors()
     {
         return [
@@ -107,7 +112,7 @@ class VendorItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'vendor_id', 'item_name', 'item_name_ar'], 'required'],
+            [['type_id', 'vendor_id', 'item_name', 'item_name_ar', 'version'], 'required'],
             
             [['type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
