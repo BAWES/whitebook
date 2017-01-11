@@ -68,6 +68,11 @@ class VendorDraftItem extends \yii\db\ActiveRecord
         return 'whitebook_vendor_draft_item';
     }
 
+    public function optimisticLock()
+    {
+        return 'version';
+    }
+
     public function behaviors()
     {
         return [
@@ -93,7 +98,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_id', 'item_description', 'sort', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
+            [['item_id', 'item_description', 'sort', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'version'], 'required'],
 
             [['item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'sort', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
             [['item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_for_sale', 'item_archived', 'item_approved', 'item_status', 'trash'], 'string'],

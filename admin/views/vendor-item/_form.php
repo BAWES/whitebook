@@ -74,6 +74,8 @@ if($model->isNewRecord){
 		<!-- Begin First Tab -->
 		<div class="tab-pane active" id="1">
 
+			<?= Html::activeHiddenInput($model, 'version', ['id' => 'version']); ?>
+
 			<input type="hidden" name="item_id" value="<?= $model->item_id ?>" />
 
 			<!-- vid - click create item button from item view page for the particular item view page-->
@@ -608,7 +610,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.16", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.17", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

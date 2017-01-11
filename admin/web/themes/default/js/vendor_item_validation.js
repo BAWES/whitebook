@@ -777,6 +777,11 @@ function show_errors(json)
 		$html += '<li>'+json['errors']['multiple_price']+'</li>';
 	}
 
+	if(json['errors']['version']) 
+	{
+		$html += '<li>'+json['errors']['version']+'</li>';
+	}
+
 	if(json['errors']['images'])
 	{
 		$('.file-block').show();
@@ -866,7 +871,9 @@ function save_item_info($is_autosave = false) {
 				
 				$('#tab_2').parent().addClass('active');
 				$('#2.tab-pane').addClass('active');	
-			}			
+			}		
+
+			$('#version').val(json.version);	
 		}
 
 		if(json['errors']) 
@@ -897,6 +904,8 @@ function save_item_description($is_autosave = false) {
 			
 			$('#tab_3').parent().addClass('active');
 			$('#3.tab-pane').addClass('active');
+
+			$('#version').val(json.version);
 		}
 
 		if(json['errors']) 
@@ -927,6 +936,8 @@ function save_item_price($is_autosave = false) {
 			
 			$('#tab_4').parent().addClass('active');
 			$('#4.tab-pane').addClass('active');
+
+			$('#version').val(json.version);
 		}
 
 		if(json['errors']) 
@@ -957,6 +968,8 @@ function save_item_approval($is_autosave = false) {
 			
 			$('#tab_5').parent().addClass('active');
 			$('#5.tab-pane').addClass('active');
+
+			$('#version').val(json.version);
 		}
 
 		if(json['errors']) 
@@ -987,6 +1000,8 @@ function save_item_images($is_autosave = false) {
 			
 			$('#tab_6').parent().addClass('active');
 			$('#6.tab-pane').addClass('active');
+
+			$('#version').val(json.version);
 		}
 
 		if(json['errors']) 
@@ -1012,40 +1027,11 @@ function save_item_themes_groups($is_autosave = false) {
 		if(json['errors']) 
 		{
 			show_errors(json);	
+		} else {
+			$('#version').val(json.version);
 		}
 	});
 }
-
-/** 
- * Autosave active tab fields 
- */ 
-setInterval(function(){
-
-	if($('#tab_1').parent().hasClass('active')){
-		save_item_info(true);
-	}
-	
-	if($('#tab_2').parent().hasClass('active')){
-		save_item_description(true);
-	}
-
-	if($('#tab_3').parent().hasClass('active')){
-		save_item_price(true);
-	}
-
-	if($('#tab_4').parent().hasClass('active')){
-		save_item_approval(true);
-	}
-
-	if($('#tab_5').parent().hasClass('active')){
-		save_item_images(true);
-	}
-
-	if($('#tab_6').parent().hasClass('active')){
-		save_item_themes_groups(true);
-	}
-
-}, 2000);
 
 /* -------------------- Theme -----------------------*/
 

@@ -131,7 +131,7 @@ var ck_item_description_ar = '';
 var ck_additional_info_ar = '';
 var ck_price_description_ar = '';
 var ck_customization_description_ar = '';
-
+ 
 $(function() {
 
 	$config = {};
@@ -530,6 +530,11 @@ function show_errors(json)
  		$('.file-block').hide();
  	}
 
+	if(json['errors']['version']) 
+	{
+		$html += '<li>'+json['errors']['version']+'</li>';
+	}
+
  	$html += '	</ul><button class="close" data-dismiss="alert"></button>';
 	$html += '</div>';
 
@@ -618,7 +623,9 @@ function save_item_info($is_autosave = false) {
 				
 				$('#tab_2').parent().addClass('active');
 				$('#2.tab-pane').addClass('active');
-			}			
+			}	
+
+			$('#version').val(json.version);			
 		}
 
 		if(json['errors']) 
@@ -649,6 +656,8 @@ function save_item_description($is_autosave = false) {
 			
 			$('#tab_3').parent().addClass('active');
 			$('#3.tab-pane').addClass('active');
+
+			$('#version').val(json.version);	
 		}
 
 		if(json['errors']) 
@@ -679,6 +688,8 @@ function save_item_price($is_autosave = false) {
 			
 			$('#tab_4').parent().addClass('active');
 			$('#4.tab-pane').addClass('active');
+
+			$('#version').val(json.version);	
 		}
 
 		if(json['errors']) 
@@ -687,13 +698,6 @@ function save_item_price($is_autosave = false) {
 		}
 	});
 }
-
-/** 
- * Autosave active tab fields 
- */ 
-setInterval(function(){
-	save_draft();
-}, 2000);
 
 $(document).delegate('.btn-save-draft', 'click', function() {
 

@@ -39,6 +39,7 @@ use common\models\VendorDraftItemToCategory;
 use common\models\VendorDraftImage;
 use backend\models\VendorItem;
 use backend\models\VendorItemSearch;
+use yii\db\StaleObjectException;
 
 /**
  * VendoritemController implements the CRUD actions for Vendoritem model.
@@ -154,8 +155,17 @@ class VendorItemController extends Controller
      */
     public function actionCreate()
     {
-        $model = new VendorItem();
-        $model->vendor_id = Vendor::getVendor('vendor_id');
+        $item = new VendorItem();
+        $item->vendor_id = Vendor::getVendor('vendor_id');
+        $item->version = 1;
+        $item->hide_from_admin = 1;
+        $item->save(false);
+
+        $model = new VendorDraftItem();
+        $model->vendor_id = Vendor::getVendor('vendor_id'); 
+        $model->item_id = $item->item_id;
+        $model->version = 1;
+        $model->save(false);
 
         $itemtype = ItemType::loaditemtype();
         
@@ -360,21 +370,12 @@ class VendorItemController extends Controller
         $posted_data = VendorItem::get_posted_data();
 
         //validate 
-        if(!$is_autosave) {
-            $errors = VendorItem::validate_item_info($posted_data);
+        $errors = VendorItem::validate_item_info($posted_data);
 
-            if($errors) {
-                \Yii::$app->response->format = 'json';
-                
-                return [
-                    'errors' => $errors
-                ];
-            }
-        }
-        
         $model = false;
 
         //if new item 
+
         if(!$item_id) {
 
             $vendor_item = new VendorItem();
@@ -395,6 +396,7 @@ class VendorItemController extends Controller
         }
 
         //if old item & in draft 
+
         if(!$model) {
             $model = VendorDraftItem::find()
                 ->where(['item_id' => $item_id])
@@ -402,12 +404,28 @@ class VendorItemController extends Controller
         }
         
         //if old item & not in draft
+
         if(!$model) {
             $model = new VendorDraftItem();
             $model->attributes = $this->findModel($item_id)->attributes;
             $model->item_approved = 'Pending';
         }
 
+        //check version 
+
+        if($model->version != $posted_data['version'])
+        {
+            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+        }   
+    
+        if($errors) {
+            \Yii::$app->response->format = 'json';
+            
+            return [
+                'errors' => $errors
+            ];
+        }
+    
         //load posted data to model 
         $model->load(['VendorDraftItem' => $posted_data]);
 
@@ -418,9 +436,34 @@ class VendorItemController extends Controller
         $model->slug = '';
 
         //save first step data without validation 
-        if(!$model->save())
-        {
-            $model->save(false);
+        try {
+
+            if(!$model->save())
+            {                
+                if(!$model->version) {
+                    $model->version = 1;
+                }
+                
+                $model->save(false);
+            }
+
+        } catch (StaleObjectException $e) {
+            
+            //if model version defined and version not matching  
+            if($model->version){
+
+                $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+
+            //for first time validation, version not defined yet 
+            }else{
+                $model->save(false);
+            }
         }
 
         //remove all old category 
@@ -445,6 +488,7 @@ class VendorItemController extends Controller
         return [
             'success' => 1,
             'item_id' => $model->item_id,
+            'version' => $model->version,
             'edit_url' => Url::to(['vendor-item/update', 'id' => $model->item_id])
         ];
     }
@@ -463,36 +507,65 @@ class VendorItemController extends Controller
         $posted_data = VendorItem::get_posted_data();
 
         //validate 
-        if(!$is_autosave) {
-            $errors = VendorItem::validate_item_description($posted_data);
+        $errors = VendorItem::validate_item_description($posted_data);
+        
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
 
-            if($errors) {
+        if($model->version != $posted_data['version'])
+        {
+            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+        }   
+
+        if($errors) {
+            \Yii::$app->response->format = 'json';
+            
+            return [
+                'errors' => $errors
+            ];
+        }
+        
+        //load posted data to model 
+        $model->load(['VendorDraftItem' => $posted_data]);
+
+        //save data without validation 
+        try {
+
+            if(!$model->save())
+            {                
+                if(!$model->version) {
+                    $model->version = 1;
+                }
+                
+                $model->save(false);
+            }
+
+        } catch (StaleObjectException $e) {
+            
+            //if model version defined and version not matching  
+            if($model->version){
+
+                $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+
                 \Yii::$app->response->format = 'json';
                 
                 return [
                     'errors' => $errors
                 ];
-            }
-        }
-        
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $item_id])
-            ->one();
-    
-        //load posted data to model 
-        $model->load(['VendorDraftItem' => $posted_data]);
 
-        //save data without validation 
-        if(!$model->save())
-        {
-            $model->save(false);
+            //for first time validation, version not defined yet 
+            }else{
+                $model->save(false);
+            }
         }
 
         \Yii::$app->response->format = 'json';
         
         return [
             'success' => 1,
-            'item_id' => $model->item_id
+            'item_id' => $model->item_id,
+            'version' => $model->version
         ];
     }
 
@@ -507,32 +580,63 @@ class VendorItemController extends Controller
         $is_autosave = Yii::$app->request->post('is_autosave');
 
         //to save VendorItem data to VendorDraftItem
+
         $posted_data = VendorItem::get_posted_data();
 
         //validate
-        if(!$is_autosave) {
-            $errors = VendorItem::validate_item_price($posted_data);
 
-            if($errors) {
+        $errors = VendorItem::validate_item_price($posted_data);
+
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+
+        if($model->version != $posted_data['version'])
+        {
+            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+        }   
+
+        if($errors) {
+            \Yii::$app->response->format = 'json';
+            
+            return [
+                'errors' => $errors
+            ];
+        }    
+    
+        //load posted data to model 
+
+        $model->load(['VendorDraftItem' => $posted_data]);
+
+        //save data without validation 
+        try {
+
+            if(!$model->save())
+            {                
+                if(!$model->version) {
+                    $model->version = 1;
+                }
+                
+                $model->save(false);
+            }
+
+        } catch (StaleObjectException $e) {
+            
+            //if model version defined and version not matching  
+            if($model->version){
+
+                $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+
                 \Yii::$app->response->format = 'json';
                 
                 return [
                     'errors' => $errors
                 ];
-            }                
-        } 
-        
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $item_id])
-            ->one();
-    
-        //load posted data to model 
-        $model->load(['VendorDraftItem' => $posted_data]);
 
-        //save data without validation 
-        if(!$model->save())
-        {
-            $model->save(false);
+            //for first time validation, version not defined yet 
+            }else{
+                $model->save(false);
+            }
         }
 
         //remove old price chart
@@ -557,7 +661,8 @@ class VendorItemController extends Controller
         
         return [
             'success' => 1,
-            'item_id' => $model->item_id
+            'item_id' => $model->item_id,
+            'version' => $model->version,
         ];
     }
 
@@ -572,7 +677,18 @@ class VendorItemController extends Controller
         
         $posted_data = VendorItem::get_posted_data();
         
+        $item_id = Yii::$app->request->post('item_id');
+
         $errors = VendorItem::validate_form($posted_data);
+
+        //check version 
+
+        $item = VendorDraftItem::findOne(['item_id' => $item_id]);
+
+        if($item->version != $posted_data['version'])
+        {
+            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+        }
 
         if($errors) 
         {            

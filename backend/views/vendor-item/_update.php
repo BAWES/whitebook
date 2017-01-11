@@ -34,6 +34,8 @@ function cmp($a, $b)
 		<div class="tab-content">
 			<div class="tab-pane clearfix" id="1">
 
+				<?= Html::activeHiddenInput($model, 'version', ['id' => 'version']); ?>
+				
 				<input type="hidden" name="item_id" value="<?= $model->item_id ?>" />
 				
 				<?= $form->field($model, 'item_name')->textInput([
@@ -454,4 +456,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.15', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.16', ['depends' => [\yii\web\JqueryAsset::className()]]);
