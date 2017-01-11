@@ -69,17 +69,18 @@ return [
                         'GET detail/<id>' => 'detail',
                     ]
                 ],
-
                 [ // EventController
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'v1/event',
+                    'controller' => 'v1/wishlist',
                     'pluralize' => false,
                     'patterns' => [
-                        'GET' => 'event-list',
-                        'GET <id>' => 'event-detail',
-                        'POST' => 'event-create',
-                        'PATCH <id>' => 'event-update',
-                        'DELETE <id>' => 'event-delete',
+                        'GET' => 'wishlist-list',
+                        'POST' => 'wishlist-add',
+                        'DELETE' => 'wishlist-remove',
+//                        'GET <id>' => 'event-detail',
+//                        'POST' => 'event-create',
+//                        'PATCH <id>' => 'event-update',
+//                        'DELETE <id>' => 'event-delete',
                     ]
                 ],
             ],
