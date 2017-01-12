@@ -299,9 +299,37 @@ class VendorItemController extends Controller
             
             if($model_name == 'VendorItem') 
             {
+                //create draft 
+
+                $draft = new VendorDraftItem();
+                $draft->attributes = $model->attributes;
+                $draft->save();
+
+                //copy draft related data 
+
                 $pricing = VendorItemPricing::loadpricevalues($model->item_id);
 
+                foreach ($pricing as $key => $value) {
+                    $vdip = new VendorDraftItemPricing;
+                    $vdip->attributes = $value->attributes;
+                    $vdip->save();
+                }
+                
                 $images = Image::findAll(['item_id' => $model->item_id]);
+
+                foreach ($images as $key => $value) {
+                    $vdi = new VendorDraftImage;
+                    $vdi->attributes = $value->attributes;
+                    $vdi->save();
+                }
+
+                $categories = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
+
+                foreach ($categories as $key => $value) {
+                    $dic = new VendorDraftItemToCategory;
+                    $dic->attributes = $value->attributes;
+                    $dic->save();
+                }
 
                 $item_child_categories = VendorItemToCategory::find()
                     ->select('{{%category}}.category_name, {{%category}}.category_id')
