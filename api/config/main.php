@@ -77,10 +77,20 @@ return [
                         'GET' => 'wishlist-list',
                         'POST' => 'wishlist-add',
                         'DELETE' => 'wishlist-remove',
-//                        'GET <id>' => 'event-detail',
-//                        'POST' => 'event-create',
-//                        'PATCH <id>' => 'event-update',
-//                        'DELETE <id>' => 'event-delete',
+                    ]
+                ],
+                [ // AddressController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/address',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'address-list',
+                        'GET type' => 'address-type-list',
+                        'GET <id>' => 'address-view',
+                        'POST' => 'address-add',
+                        'PATCH' => 'address-update',
+                        'DELETE <id>' => 'address-remove',
+                        'GET questions/<address_type_id>' => 'address-questions',
                     ]
                 ],
             ],
