@@ -16,35 +16,35 @@ use yii\rest\Controller;
 class AddressController extends Controller
 {
 
-//    public function behaviors()
-//    {
-//        $behaviors = parent::behaviors();
-//
-//        // remove authentication filter for cors to work
-//        unset($behaviors['authenticator']);
-//
-//        // Allow XHR Requests from our different subdomains and dev machines
-//        $behaviors['corsFilter'] = [
-//            'class' => \yii\filters\Cors::className(),
-//            'cors' => [
-//                'Origin' => Yii::$app->params['allowedOrigins'],
-//                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-//                'Access-Control-Request-Headers' => ['*'],
-//                'Access-Control-Allow-Credentials' => null,
-//                'Access-Control-Max-Age' => 86400,
-//                'Access-Control-Expose-Headers' => [],
-//            ],
-//        ];
-//
-//        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-//        $behaviors['authenticator'] = [
-//            'class' => \yii\filters\auth\HttpBearerAuth::className(),
-//        ];
-//        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-//        $behaviors['authenticator']['except'] = ['options'];
-//
-//        return $behaviors;
-//    }
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        // remove authentication filter for cors to work
+        unset($behaviors['authenticator']);
+
+        // Allow XHR Requests from our different subdomains and dev machines
+        $behaviors['corsFilter'] = [
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                'Origin' => Yii::$app->params['allowedOrigins'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Credentials' => null,
+                'Access-Control-Max-Age' => 86400,
+                'Access-Control-Expose-Headers' => [],
+            ],
+        ];
+
+        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
+        $behaviors['authenticator'] = [
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
+        ];
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = ['options'];
+
+        return $behaviors;
+    }
 
     /**
      * @inheritdoc
@@ -85,7 +85,7 @@ class AddressController extends Controller
     }
 
     /*
-     * Commong method to call for Listing of all address
+     * Common method to call for Listing of all address
      */
     public function listing(){
 
@@ -264,6 +264,9 @@ class AddressController extends Controller
         return $this->listing();
     }
 
+    /*
+     * List address type related question
+     */
     public function actionAddressQuestions($address_type_id)
     {
         $questions = AddressQuestion::find()
