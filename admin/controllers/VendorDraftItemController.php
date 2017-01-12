@@ -4,6 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\helpers\Url;
 use yii\filters\VerbFilter;
 use admin\models\AccessControlList;
 use admin\models\VendorDraftItemSearch;
@@ -17,6 +18,7 @@ use common\models\VendorDraftImage;
 use common\models\VendorDraftItemToCategory;
 use common\models\VendorDraftItemPricing;
 use common\models\Vendor;
+use common\models\VendorOrderAlertEmails;
 
 class VendorDraftItemController extends Controller
 {
@@ -206,16 +208,30 @@ class VendorDraftItemController extends Controller
         $vendor = Vendor::findOne($model->vendor_id);
 
         //send mail 
-        Yii::$app->mailer->compose("admin/item-reject",
+        $mail = Yii::$app->mailer->compose("admin/item-reject",
             [
                 "reason" => $reason,
                 "model" => $model,
-                "vendor" => $vendor
+                "vendor" => $vendor,
+                "image_1" => Url::to("@web/images/twb-logo-trans.png", true),
+                "image_2" => Url::to("@web/images/twb-logo-horiz-white.png", true)
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
+            ->setSubject('Item rejected');
+
+        //to contact email  
+        $mail 
             ->setTo($vendor->vendor_contact_email)
-            ->setSubject('Item rejected')
             ->send();
+
+        //send to all notification mails 
+        $vendor_alert_emails = VendorOrderAlertEmails::findAll(['vendor_id' => $vendor->vendor_id]);
+
+        foreach ($vendor_alert_emails as $key => $value) {
+            $mail    
+                ->setTo($value->email_address)
+                ->send();
+        }
 
         //hide draft from admin 
         $model->is_ready = 0;
