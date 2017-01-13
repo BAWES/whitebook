@@ -1,3 +1,4 @@
+var menu_count = $('#menu_count').val();
 var count_q = $('#count_q').val();
 var appImageUrl = $('#appImageUrl').val();
 var image_order_url = $('#image_order_url').val();
@@ -17,6 +18,8 @@ var vendorcategory_url = $('#vendorcategory_url').val();
 var loadsubcategory_url = $('#loadsubcategory_url').val();
 var loadchildcategory_url = $('#loadchildcategory_url').val();
 var renderquestion_url = $('#renderquestion_url').val();
+
+console.log(menu_count);
 
 $(function()
 {
@@ -626,7 +629,7 @@ $('#tab_4').click(function(e) {
  */
 $('#tab_5').click(function(e) {
 	$('.alert-validation-errors').remove();
-	save_item_approval();
+	save_menu_items();
 });
 
 /** 
@@ -634,9 +637,17 @@ $('#tab_5').click(function(e) {
  */
 $('#tab_6').click(function(e) {
 	$('.alert-validation-errors').remove();
-	save_item_images();
+	save_item_approval();
 });
  
+ /** 
+ * Save tab 6 data on click of tab 7 or on click of next in tab 6
+ */
+$('#tab_7').click(function(e) {
+	$('.alert-validation-errors').remove();
+	save_item_images();
+});
+
 /** 
  * Click in final submit button 
  */
@@ -947,6 +958,38 @@ function save_item_price($is_autosave = false) {
 	});
 }
 
+function save_menu_items($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#menu_items_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//update active tab 
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_5').parent().addClass('active');
+			$('#5.tab-pane').addClass('active');
+
+			$('#version').val(json.version);
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
 function save_item_approval($is_autosave = false) {
 
 	if(!$is_autosave) {	
@@ -966,8 +1009,8 @@ function save_item_approval($is_autosave = false) {
 			$('.nav-tabs .active').removeClass('active');
 			$('.tab-content .active').removeClass('active');
 			
-			$('#tab_5').parent().addClass('active');
-			$('#5.tab-pane').addClass('active');
+			$('#tab_6').parent().addClass('active');
+			$('#6.tab-pane').addClass('active');
 
 			$('#version').val(json.version);
 		}
@@ -998,8 +1041,8 @@ function save_item_images($is_autosave = false) {
 			$('.nav-tabs .active').removeClass('active');
 			$('.tab-content .active').removeClass('active');
 			
-			$('#tab_6').parent().addClass('active');
-			$('#6.tab-pane').addClass('active');
+			$('#tab_7').parent().addClass('active');
+			$('#7.tab-pane').addClass('active');
 
 			$('#version').val(json.version);
 		}
@@ -1339,3 +1382,104 @@ $(function() {
 	});
 });
 
+$(document).delegate('.btn-remove-menu', 'click', function(){
+	$(this).parents('li').remove();
+});
+
+$(document).delegate('.btn-remove-menu-item', 'click', function(){
+	$(this).parents('tr').remove();
+});
+
+$(document).delegate('.btn-add-menu', 'click', function(){
+
+	$html  = '<li>';
+	$html += '	<table class="table table-bordered">';
+	$html += '		<thead>';
+	$html += '			<tr>';
+	$html += '				<th colspan="2" class="heading">Menu';
+	$html += '					<button type="button" class="btn btn-danger btn-remove-menu">';
+	$html += '						<i class="fa fa-trash-o"></i>';
+	$html += '					</button>';
+	$html += '				</th>';
+	$html += '			</tr>';
+	$html += '		</thead>';
+	$html += '		<tbody>';
+	$html += '			<tr>';
+	$html += '				<td>';
+	$html += '					<input placeholder="Name" name="menu_item['+menu_count+'][menu_name]" value="" class="form-control" />';
+	$html += '				</td>';
+	$html += '				<td>';
+	$html += '					<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_name_ar]" value="" class="form-control" />';
+	$html += '				</td>';
+	$html += '			</tr>';
+	$html += '		</tbody>';
+	$html += '	</table>';
+
+	$html += '	<table class="table table-bordered">';
+	$html += '		<thead>';
+	$html += '			<tr>';
+	$html += '				<th colspan="7" class="heading">Menu Items</th>';
+	$html += '			</tr>';
+	$html += '			<tr>';
+	$html += '				<th>Name</th>';
+	$html += '				<th>Name - Ar</th>';
+	$html += '				<th>Min Qty</th>';
+	$html += '				<th>Max Qty</th>';
+	$html += '				<th>Price</th>';
+	$html += '				<th>Hint</th>';
+	$html += '				<th></th>';
+	$html += '			</tr>';
+	$html += '		</thead>';
+	$html += '		<tbody>	';						
+	$html += '		</tbody>';
+	$html += '		<tfoot>';
+	$html += '			<tr>';
+	$html += '				<td colspan="7">';
+	$html += '					<button type="button" class="btn btn-primary btn-add-menu-item">';
+	$html += '						<i class="fa fa-plus"></i> Add Item';
+	$html += '					</button>';
+	$html += '				</td>';
+	$html += '			</tr>';
+	$html += '		</tfoot>';
+	$html += '	</table>';
+	$html += '</li>';
+
+	$('#item_menu_list').append($html);
+
+	menu_count++;
+
+	console.log(menu_count);
+});
+
+$(document).delegate('.btn-add-menu-item', 'click', function(){
+	
+	$html  = '<tr>';
+	$html += '	<td>';
+	$html += '		<input placeholder="Name" name="menu_item['+menu_count+'][menu_item_name]" value="" class="form-control" /></td>';
+	$html += '	<td>';
+	$html += '		<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_item_name_ar]" value="" class="form-control" /></td>';
+	$html += '	<td>';
+	$html += '		<input placeholder="Min. Qty" name="menu_item['+menu_count+'][min_quantity]" value="" class="form-control" />';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<input placeholder="Max. Qty" name="menu_item['+menu_count+'][max_quantity]" value="" class="form-control" />';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<input placeholder="Price" name="menu_item['+menu_count+'][price]" value="" class="form-control" />';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<input placeholder="Hint" name="menu_item['+menu_count+'][hint]" value="" class="form-control" />';
+	$html += '	</td>';
+	$html += '	<td>';
+	$html += '		<button type="button" class="btn btn-danger btn-remove-menu-item">';
+	$html += '			<i class="fa fa-trash-o"></i>';
+	$html += '		</button>';
+	$html += '	</td>';
+	$html += '</tr>';
+
+	$(this).parents('table').find('tbody').append($html);
+
+	menu_count++;
+
+	console.log(menu_count);
+});
