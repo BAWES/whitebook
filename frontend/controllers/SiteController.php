@@ -18,10 +18,8 @@ use frontend\models\Contacts;
 use frontend\models\FaqGroup;
 use yii\helpers\ArrayHelper;
 
-
 class SiteController extends BaseController
 {
-
     /**
      * @inheritdoc
      */
@@ -404,9 +402,11 @@ class SiteController extends BaseController
 
     public function actionArea()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
+        $data = Yii::$app->request->post();
 
         $area = Location::find()
             ->select('id, location, location_ar')
@@ -424,14 +424,17 @@ class SiteController extends BaseController
                 }
             }
         }
+
         return $options;
     }
 
     public function actionCity()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+
+        $data = Yii::$app->request->post();
 
         $city = City::find()
             ->select('city_id, city_name, city_name_ar')
