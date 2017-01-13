@@ -65,8 +65,9 @@ return [
                     'controller' => 'v1/product',
                     'pluralize' => false,
                     'patterns' => [
-                        'GET index/<id>' => 'index',
-                        'GET detail/<id>' => 'detail',
+                        'GET detail/<product_id>' => 'product-detail',
+                        'GET list' => 'category-products',
+                        'POST event' => 'add-product-to-event',
                     ]
                 ],
                 [ // EventController
