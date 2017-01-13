@@ -303,6 +303,7 @@ class VendorItemController extends Controller
 
                 $draft = new VendorDraftItem();
                 $draft->attributes = $model->attributes;
+                $model->item_approved = 'Pending';
                 $draft->save();
 
                 //copy draft related data 
@@ -342,6 +343,11 @@ class VendorItemController extends Controller
                     ])
                     ->groupBy('{{%vendor_item_to_category}}.category_id')
                     ->all();
+
+                //display draft instead of item to resolve optimistick lock version issue 
+
+                $model = $draft;
+
             }
             else //if in draft 
             {
