@@ -40,6 +40,7 @@ use common\models\EventItemlink;
 use common\models\VendorDraftItem;
 use common\models\VendorItemToPackage;
 use common\models\Package;
+use common\models\VendorItemMenu;
 use yii\db\StaleObjectException;
 
 /**
@@ -475,8 +476,11 @@ class VendorItemController extends Controller
             ->orderBy('theme_name')
             ->all();
 
+        $arr_menu = VendorItemMenu::findAll(['menu_id' => $model->item_id]);
+
         return $this->render('update', [
             'model' => $model,
+            'arr_menu' => $arr_menu,
             'packagelist' => ArrayHelper::map(Package::find()->all(), 'package_id', 'package_name'),
             'itemType' => ItemType::findAll(['trash' => 'Default']),
             'categoryname' => $categoryname,

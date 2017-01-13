@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use kartik\sortable\Sortable;
 use admin\models\Vendor;
 use common\models\VendorItemQuestion;
+use common\models\VendorItemMenuItem;
 
 use yii\web\view;
 use kartik\file\FileInput;
@@ -12,10 +13,12 @@ use kartik\file\FileInput;
 $request = Yii::$app->request;
 $itemType  = \yii\helpers\ArrayHelper::map($itemType,'type_id','type_name');
 $themelist = \yii\helpers\ArrayHelper::map($themes,'theme_id','theme_name');
+
 function cmp($a, $b)
 {
 	return strcmp($a["vendorimage_sort_order"], $b["vendorimage_sort_order"]);
 }
+
 ?>
 <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -36,9 +39,10 @@ function cmp($a, $b)
 	    <li><a href="#4" id="tab_4"> Approval </a></li>
 	    <li><a href="#5" id="tab_5">Images</a></li>
 	    <li><a href="#6" id="tab_6">Themes & Groups & Packages</a></li>
+	    <li><a href="#7" id="tab_7">Menu</a></li>
 
 	    <?php if($model->item_for_sale =='Yes') {?>
-	    	<li><a href="#7" id="tab_7"> Questions </a></li>
+	    	<li><a href="#8" id="tab_8"> Questions </a></li>
 	    <?php } ?>
 	</ul>
 
@@ -450,9 +454,83 @@ function cmp($a, $b)
 			</div>
 
 			<div class="border-top"></div>
+
 			<div class="padding-top-bottom form-group clearfix">
 				<?php echo $form->field($model, 'packages')->checkboxlist($packagelist);?>
 			</div>
+
+			<div class="row">
+				<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
+				<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
+				<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
+			</div>
+		</div>
+		<!--End sixth Tab -->
+
+		<div class="tab-pane" id="7">
+
+			<ul id="item_menu_list">
+				<?php foreach ($arr_menu as $key => $value) { ?>
+				<li data-menu-id="<?= $value->menu_id ?>">
+
+					<h2 class="menu-name">
+						<?= $value->menu_name ?> | <?= $value->menu_name_ar ?>
+
+						<button class="btn btn-danger">
+							<i class="fa fa-trash-o"></i>
+						</button>
+					</h2>
+
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Name - Ar</th>
+								<th>Min Qty</th>
+								<th>Max Qty</th>
+								<th>Price</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+
+							$arr_menu_item = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
+
+							$i = 0;
+
+							foreach ($arr_menu_item as $key => $menu_item) { ?>
+							<tr>
+								<td>
+									<input placeholder="Name" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['menu_item_name']" value="<?= $menu_item->menu_item_name ?>" class="form-control" /></td>
+								<td>
+									<input placeholder="Name - Arabic" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['menu_item_name_ar']" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control" /></td>
+								<td>
+									<input placeholder="Min. Qty" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['min_qty']" value="<?= $menu_item->min_qty ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Max. Qty" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['max_qty']" value="<?= $menu_item->max_qty ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Price" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['price']" value="<?= $menu_item->price ?>" class="form-control" />
+								</td>
+								<td>
+									<button type="button" class="btn btn-danger">
+										<i class="fa fa-trash-o"></i>
+									</button>
+								</td>
+							</tr>
+							<?php $i++; } ?>
+						</tbody>
+						<tfoot>
+							<button type="button" class="btn btn-primary">
+								<i class="fa fa-plus"></i> Add Item
+							</button>
+						</tfoot>
+					</table>
+				</li>
+				<?php } ?>
+			</ul>
 
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 			
@@ -460,10 +538,10 @@ function cmp($a, $b)
 				'class' => 'btn btn-success complete', 
 				'style'=>'float:right;']) ?>
 		</div>
-		<!--End sixth Tab -->
+		<!--End seventh Tab -->
 
 		<!-- Begin Question Answer Part -->
-		<div class="tab-pane" id="7">
+		<div class="tab-pane" id="8">
 			<div class="questionanswer" >
 			<?php
 				 $exist_question = VendorItemQuestion::find()->where( [ 'item_id' => $model->item_id ] )->count();
