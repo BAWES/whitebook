@@ -148,7 +148,8 @@ class VendorItemController extends Controller
     public function actionCreate($vid = '')
     {
         $model = new VendorItem();
-        
+        $model->version = 0;
+
         $model_question = new VendorItemQuestion();
         
         $themelist = Themes::loadthemename();
@@ -260,7 +261,7 @@ class VendorItemController extends Controller
             $model->item_status = (Yii::$app->request->post()['VendorItem']['item_status'] == 1) ? 'Active' : 'Deactive';
 
             if(!$model->version) {
-                $model->version = 1;
+                $model->version = 0;
             }
 
             if ($model->save()) {
@@ -510,6 +511,7 @@ class VendorItemController extends Controller
         //check version 
         
         if($item_id) {
+
             $item = VendorItem::findOne($item_id);
 
             if($item->version != $posted_data['version'])
@@ -545,7 +547,7 @@ class VendorItemController extends Controller
         try {
 
             if(!$model->version) {
-                $model->version = 1;
+                $model->version = 0;
             }
             
             if(!$model->save())
@@ -643,7 +645,7 @@ class VendorItemController extends Controller
         try {
 
             if(!$model->version) {
-                $model->version = 1;
+                $model->version = 0;
             }
             
             if(!$model->save())
@@ -725,7 +727,7 @@ class VendorItemController extends Controller
             if(!$model->save())
             {                
                 if(!$model->version) {
-                    $model->version = 1;
+                    $model->version = 0;
                 }
                 
                 $model->save(false);
@@ -823,7 +825,7 @@ class VendorItemController extends Controller
             if(!$model->save())
             {                
                 if(!$model->version) {
-                    $model->version = 1;
+                    $model->version = 0;
                 }
                 
                 $model->save(false);
@@ -904,7 +906,7 @@ class VendorItemController extends Controller
             if(!$model->save())
             {                
                 if(!$model->version) {
-                    $model->version = 1;
+                    $model->version = 0;
                 }
                 
                 $model->save(false);
