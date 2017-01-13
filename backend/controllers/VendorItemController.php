@@ -143,7 +143,6 @@ class VendorItemController extends Controller
             'item_type' => $item_type,
             'price_values' => $price_values,
             'dataProvider1' => $dataProvider1,
-            'model_question' => $model_question,
             'imagedata' => $imagedata,
         ]);
     }
@@ -164,7 +163,7 @@ class VendorItemController extends Controller
         $model = new VendorDraftItem();
         $model->vendor_id = Vendor::getVendor('vendor_id'); 
         $model->item_id = $item->item_id;
-        $model->version = 1;
+        $model->version = 0;
         $model->save(false);
 
         $itemtype = ItemType::loaditemtype();
@@ -475,7 +474,7 @@ class VendorItemController extends Controller
             if(!$model->save())
             {                
                 if(!$model->version) {
-                    $model->version = 1;
+                    $model->version = 0;
                 }
                 
                 $model->save(false);
@@ -569,7 +568,7 @@ class VendorItemController extends Controller
             if(!$model->save())
             {                
                 if(!$model->version) {
-                    $model->version = 1;
+                    $model->version = 0;
                 }
                 
                 $model->save(false);
@@ -648,7 +647,7 @@ class VendorItemController extends Controller
             if(!$model->save())
             {                
                 if(!$model->version) {
-                    $model->version = 1;
+                    $model->version = 0;
                 }
                 
                 $model->save(false);
