@@ -208,6 +208,8 @@ class VendorDraftItemController extends Controller
         $vendor = Vendor::findOne($model->vendor_id);
 
         //send mail 
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+        
         $mail = Yii::$app->mailer->compose("admin/item-reject",
             [
                 "reason" => $reason,
