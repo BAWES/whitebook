@@ -54,13 +54,16 @@ if($model->isNewRecord){
 	      <a href="#3" id="tab_3">Item price </a>
 	    </li>
 	    <li>
-	      <a href="#4" id="tab_4">Approval </a>
+	      <a href="#4" id="tab_4">Menu items</a>
 	    </li>
 	    <li>
-	      <a href="#5" id="tab_5">Images</a>
+	      <a href="#5" id="tab_5">Approval </a>
 	    </li>
 	    <li>
-	      <a href="#6" id="tab_6">Themes & Groups & Packages</a>
+	      <a href="#6" id="tab_6">Images</a>
+	    </li>
+	    <li>
+	      <a href="#7" id="tab_7">Themes & Groups & Packages</a>
 	    </li>
 	    <?php 
 	    /*if(!$model->isNewRecord && $model->item_for_sale =='Yes') {?>
@@ -71,7 +74,6 @@ if($model->isNewRecord){
 	</ul>
 
 	<div class="tab-content">
-		<!-- Begin First Tab -->
 		<div class="tab-pane active" id="1">
 
 			<?= Html::activeHiddenInput($model, 'version', ['id' => 'version']); ?>
@@ -184,252 +186,6 @@ if($model->isNewRecord){
 				<?= Html::a('Back', ['index', ], ['class' => 'btn btn-default']) ?>
 			</div>
 		</div>
-		<!--End First Tab -->
-
-		<!--BEGIN second Tab -->
-		<div class="tab-pane" id="2">
-
-			<?= $form->field($model, 'type_id')->dropDownList($itemtype, ['prompt'=>'Select...']) ?>
-
-			<?= $form->field($model, 'item_description')
-					->label('Item description'.Html::tag('span', '*',['class'=>'required']))
-					->textarea(['maxlength' => 128]); ?>
-		
-			<?= $form->field($model, 'item_description_ar')
-				->label('Item description - Arabic '.Html::tag('span', '*',['class'=>'required']))
-				->textarea(['maxlength' => 128]); ?>
-
-			<?= $form->field($model, 'item_additional_info')->textarea(['maxlength' => 128]); ?>
-
-			<?= $form->field($model, 'item_additional_info_ar')->textarea(['maxlength' => 128]); ?>
-
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
-
-		</div>
-		<!--End Second Tab -->
-
-		<!--BEGIN Third Tab -->
-		<div class="tab-pane" id="3">
-
-			<input type="hidden" id="test" value="0" name="tests">
-			
-			<?= $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
-			
-			<?= $form->field($model, 'item_amount_in_stock')
-					->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))
-					->textInput(['maxlength' => 128]); ?>
-
-			<?= $form->field($model, 'item_default_capacity')
-					->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
-					->textInput(['maxlength' => 128]); ?>
-
-			<?= $form->field($model, 'item_how_long_to_make')
-				->label('No of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))
-				->textInput(['maxlength' => 128]); ?>
-
-			<?= $form->field($model, 'item_minimum_quantity_to_order')
-				->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))
-				->textInput(['maxlength' => 128]); ?>
-
-			<!-- BEGIN if type is sale -->
-			<?= $form->field($model, 'item_price_per_unit')->textInput([
-					'class' => 'form-group single_price', 
-					'maxlength' => 128
-				]); ?>
-			<!-- END if type is sale -->
-
-			<!-- BEGIN if type is rental or service -->
-			<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">
-				<div class="multi_pricing">Price Chart</div>
-				
-				<div class="controls1">
-					<input type="text" id="vendoritem-item_from" class="form-control from_range_1" name="vendoritem-item_price[from][]" multiple="multiple" placeholder="From Quantity" />
-
-					<input type="text" id="vendoritem-item_to" class="form-control to_range_1" name="vendoritem-item_price[to][]" multiple="multiple" placeholder="To Quantity" />
-
-					<input type="text" id="item_price_per_unit" class="form-control price_kd_1" name="vendoritem-item_price[price][]" multiple="multiple" placeholder="Price">KD
-
-					<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onclick="removePrice(this)">
-				</div>
-				
-				<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
-			</div>
-
-			<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
-
-			<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
-
-			<?= $form->field($model, 'item_customization_description')->textarea([
-					'class' => 'custom_description',
-					'maxlength' => 128
-				]); ?>
-			
-			<?= $form->field($model, 'item_customization_description_ar')->textarea([
-					'class' => 'custom_description_ar',
-					'maxlength' => 128
-				]); ?>
-			
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
-		</div>
-		<!--End third Tab -->
-
-		<div class="tab-pane" id="4">
-		
-			<?= $form->field($model, 'item_approved')
-					->dropDownList([ 'Pending' => 'Pending','Yes' => 'Yes', 'Rejected'=>'Rejected']) ?>
-		
-			<?= $form->field($model, 'item_status')->checkbox(['Value' => true]); ?>
-		
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
-		</div>
-		<!--End fourth Tab -->
-
-		<div class="tab-pane" id="5">
-			<div class="file-block alert alert-danger" style="color:red; display: none;"> Please upload aleast a file</div>
-
-			<div class="alert alert-info">
-				<button class="close" data-dismiss="alert"></button>
-				Steps 
-				<ul>
-					<li>Select image by clicking on "Choose File" from top left side.</li>
-					<li>Move image in image preview area to get required image area, if image bigger than 450x450.</li>
-					<li>
-						Click on Upload button below preview area to upload image, wait for seconds. Image will get listed in right size.
-					</li>
-				</ul>
-			</div>
-
-			<div class="row">
-				<div class="col-lg-6">
-					
-					<p>Select, crop and upload image.</p>
-
-					<div class="image-editor">
-				        <input type="file" class="cropit-image-input" />
-				        <p style="color: red;">Minimum image size : 450 x 450</p>
-				        <div class="cropit-preview"></div>
-				        <div class="image-size-label">
-				          Resize image
-				        </div>
-				        <input type="range" class="cropit-image-zoom-input">
-				        <button type="button" class="btn btn-primary btn-crop-upload">Upload</button>
-				    </div>
-				</div>
-				<div class="col-lg-6">
-					<p>Uploaded image list</p>
-					<table class="table table-bordered table-item-image">
-						<thead>
-							<tr>
-								<th>Image</th>
-								<th>Sort order</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-						<?php $image_count = 0 ; foreach ($model->images as $key => $value) { ?>
-						<tr>
-							<td>
-								<div class="vendor_image_preview">
-									<img src="<?= Yii::getAlias("@s3/vendor_item_images_210/").$value->image_path ?>" />
-								</div>
-								<input type="hidden" name="images[<?= $image_count ?>][image_path]" value="<?= $value->image_path ?>" />
-							</td>
-							<td>
-								<input type="text" name="images[<?= $image_count ?>][vendorimage_sort_order]" value="<?= $value->vendorimage_sort_order ?>" />
-							</td>
-							<td>
-								<button class="btn btn-danger btn-delete-image">
-									<i class="fa fa-trash"></i>
-								</button>
-							</td>
-						</tr>
-						<?php $image_count++; } ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
-
-			<hr />
-
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-			<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next">
-		</div>
-		<!--End fifth Tab -->
-
-		<div class="tab-pane" id="6">
-			<div class="form-group clearfix padding-top-bottom">
-				<?php echo $form->field($model, 'themes')->checkboxlist($themelist);?>
-			</div>
-			<div class="border-top"></div>
-			<div class="padding-top-bottom form-group clearfix">
-				<?php echo $form->field($model, 'groups')->checkboxlist($grouplist);?>
-			</div>
-
-			<div class="border-top"></div>
-			<div class="padding-top-bottom form-group clearfix">
-				<?php echo $form->field($model, 'packages')->checkboxlist($packagelist);?>
-			</div>
-
-			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
-
-			<?= Html::submitButton('Complete', [
-					'class' => 'btn btn-success complete', 
-					'style'=>'float:right;']) ?>
-		</div>
-		<!--End sixth Tab -->
-
-		<!-- Begin Question Answer Part -->
-		<div class="tab-pane" id="7">
-			<div class="questionanswer" >
-			<?php
-				 $exist_question = VendorItemQuestion::find()->where( [ 'item_id' => $model->item_id ] )->count();
-
-				if($exist_question >= 1) {
-				$count_q=(count($model_question)); // for initial count questions used in javascript;
-				 $t=0;
-				 foreach($model_question as $question_records)
-				 {
-				?>
-				 	<div class="form-group superbox-s" id="delete_<?= $t;?>">
-					<li id="question-section_0" class="parent_question_<?= $question_records['question_id']; ?>"> <span class="question_title"> <?= $question_records['question_text']; ?></span> <span class="plus"><a href="#" onclick="questionView('<?= $question_records['question_id']; ?>',this)" ></a></span><div class="show_ques<?= $question_records['question_id']; ?>"></div></li>
-				</div>
-				<?php $t++;}	?>
-				<input type="button" name="add" id="add" value="Add Question" onclick="addAddress(this)" style="margin:10px 0px;">
-			<?php
-
-			} else {
-				$count_q=1;
-				$h_id =0;
-				?>
-			<div class="form-group">
-				<div id="question-section" class="question-section">
-				<input type="hidden" name="parent_id" id="adds" value="0" class="form-control temp_qa">
-				Question <input type="text" id="question_text_0" class="form-control temp_qa" name="VendorItemQuestion[0][question_text][]" style="margin:10px 0px;"> Question Type
-					<div class="append_address">
-						<select id="vendoritemquestion-question_answer_type0" class="form-control vendoritemquestion-question_answer_type temp_qa" name="VendorItemQuestion[0][question_answer_type][]" parent_id="0" style="margin:10px 0px;">
-						<option value="">Choose type</option>
-						<option value="text">Text</option>
-						<option value="image">Image</option>
-						<option value="selection">Selection</option></select>
-					</div>
-					</div>
-				</div>
-					<div class="question">
-					</div>
-				<input type="button" name="add" id="add" value="Add Question" onclick="addAddress(this)" style="margin:10px 0px;">
-			<?php } ?>
-
-			<!-- Question Answer Part	End	-->
-			<div class="form-groups" >
-				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
-				<?= Html::a('Back to Manage', ['index', ], ['class' => 'btn btn-info', 'style'=>'float:right;']) ?>
-			</div>
-
-			</div><!-- END .questionanswer -->
-		</div><!-- END tab-7 -->
 	</div><!-- END .tab-content -->
 </div><!-- END .tabbable -->
 

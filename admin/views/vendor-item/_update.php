@@ -35,12 +35,12 @@ function cmp($a, $b)
 	<ul class="nav nav-tabs">
 	    <li class="active"><a href="#1" data-toggle="tab" id="tab_1">Item Info </a></li>
 	    <li><a href="#2" id="tab_2">Item description</a></li>
-	    <li><a href="#3" id="tab_3"> Item price </a></li>
-	    <li><a href="#4" id="tab_4"> Approval </a></li>
-	    <li><a href="#5" id="tab_5">Images</a></li>
-	    <li><a href="#6" id="tab_6">Themes & Groups & Packages</a></li>
-	    <li><a href="#7" id="tab_7">Menu</a></li>
-
+	    <li><a href="#3" id="tab_3">Item price </a></li>
+	    <li><a href="#4" id="tab_4">Menu items</a></li>
+	    <li><a href="#5" id="tab_5">Approval </a></li>
+	    <li><a href="#6" id="tab_6">Images</a></li>
+	    <li><a href="#7" id="tab_7">Themes & Groups & Packages</a></li>
+	   
 	    <?php if($model->item_for_sale =='Yes') {?>
 	    	<li><a href="#8" id="tab_8"> Questions </a></li>
 	    <?php } ?>
@@ -300,6 +300,105 @@ function cmp($a, $b)
 		<!--End third Tab -->
 
 		<div class="tab-pane clearfix" id="4">
+			<ul id="item_menu_list">
+				<?php $menu_count = 0; foreach ($arr_menu as $key => $value) { ?>
+
+				<li>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th colspan="2" class="heading">
+									Menu
+									<button type="button" class="btn btn-danger btn-remove-menu">
+										<i class="fa fa-trash-o"></i>
+									</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<input placeholder="Name" name="menu_item[<?= $menu_count ?>][menu_name]" value="<?= $value->menu_name ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_name_ar]" value="<?= $value->menu_name_ar ?>" class="form-control" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th colspan="7" class="heading">Menu Items</th>
+							</tr>
+							<tr>
+								<th>Name</th>
+								<th>Name - Ar</th>
+								<th>Min Qty</th>
+								<th>Max Qty</th>
+								<th>Price</th>
+								<th>Hint</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+
+							$arr_menu_item = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
+
+							$menu_count++;
+
+							foreach ($arr_menu_item as $key => $menu_item) { ?>
+							<tr>
+								<td>
+									<input placeholder="Name" name="menu_item[<?= $menu_count ?>][menu_item_name]" value="<?= $menu_item->menu_item_name ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Min. Qty" name="menu_item[<?= $menu_count ?>][min_quantity]" value="<?= $menu_item->min_quantity ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Max. Qty" name="menu_item[<?= $menu_count ?>][max_quantity]" value="<?= $menu_item->max_quantity ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Price" name="menu_item[<?= $menu_count ?>][price]" value="<?= $menu_item->price ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Hint" name="menu_item[<?= $menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control" />
+								</td>
+								<td>
+									<button type="button" class="btn btn-danger btn-remove-menu-item">
+										<i class="fa fa-trash-o"></i>
+									</button>
+								</td>
+							</tr>
+							<?php $menu_count++; } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="7">
+									<button type="button" class="btn btn-primary btn-add-menu-item">
+										<i class="fa fa-plus"></i> Add Item
+									</button>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</li>
+				<?php } ?>
+			</ul>
+	
+			<br />			
+
+			<button type="button" class="btn btn-primary btn-add-menu">
+				<i class="fa fa-plus"></i> Add menu
+			</button>
+		</div>
+
+		<div class="tab-pane clearfix" id="5">
 			
 			<?= $form->field($model, 'item_approved')
 					->dropDownList([ 'Pending' => 'Pending','Yes' => 'Yes', 'Rejected'=>'Rejected']); ?>
@@ -322,7 +421,7 @@ function cmp($a, $b)
 		</div>
 		<!--End fourth Tab -->
 
-		<div class="tab-pane clearfix" id="5">
+		<div class="tab-pane clearfix" id="6">
 			<div class="file-block alert alert-danger" style="color:red; display: none;"> Please upload aleast a file</div>
 
 			<div class="alert alert-info">
@@ -397,7 +496,7 @@ function cmp($a, $b)
 		</div>
 		<!--End fifth Tab -->
 
-		<div class="tab-pane clearfix" id="6">
+		<div class="tab-pane clearfix" id="7">
 			<div class="form-group clearfix padding-top-bottom">
 				<?php echo $form->field($model, 'themes')->checkboxlist($themelist); ?>
 				<div class="clearfix"></div>
@@ -458,79 +557,6 @@ function cmp($a, $b)
 			<div class="padding-top-bottom form-group clearfix">
 				<?php echo $form->field($model, 'packages')->checkboxlist($packagelist);?>
 			</div>
-
-			<div class="row">
-				<div class="col-lg-4"><input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev"></div>
-				<div class="col-lg-4 text-center"><?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?></div>
-				<div class="col-lg-4"><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
-			</div>
-		</div>
-		<!--End sixth Tab -->
-
-		<div class="tab-pane" id="7">
-
-			<ul id="item_menu_list">
-				<?php foreach ($arr_menu as $key => $value) { ?>
-				<li data-menu-id="<?= $value->menu_id ?>">
-
-					<h2 class="menu-name">
-						<?= $value->menu_name ?> | <?= $value->menu_name_ar ?>
-
-						<button class="btn btn-danger">
-							<i class="fa fa-trash-o"></i>
-						</button>
-					</h2>
-
-					<table>
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Name - Ar</th>
-								<th>Min Qty</th>
-								<th>Max Qty</th>
-								<th>Price</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php 
-
-							$arr_menu_item = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
-
-							$i = 0;
-
-							foreach ($arr_menu_item as $key => $menu_item) { ?>
-							<tr>
-								<td>
-									<input placeholder="Name" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['menu_item_name']" value="<?= $menu_item->menu_item_name ?>" class="form-control" /></td>
-								<td>
-									<input placeholder="Name - Arabic" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['menu_item_name_ar']" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control" /></td>
-								<td>
-									<input placeholder="Min. Qty" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['min_qty']" value="<?= $menu_item->min_qty ?>" class="form-control" />
-								</td>
-								<td>
-									<input placeholder="Max. Qty" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['max_qty']" value="<?= $menu_item->max_qty ?>" class="form-control" />
-								</td>
-								<td>
-									<input placeholder="Price" name="menu_item[<?= $value->menu_id ?>][<?= $i ?>]['price']" value="<?= $menu_item->price ?>" class="form-control" />
-								</td>
-								<td>
-									<button type="button" class="btn btn-danger">
-										<i class="fa fa-trash-o"></i>
-									</button>
-								</td>
-							</tr>
-							<?php $i++; } ?>
-						</tbody>
-						<tfoot>
-							<button type="button" class="btn btn-primary">
-								<i class="fa fa-plus"></i> Add Item
-							</button>
-						</tfoot>
-					</table>
-				</li>
-				<?php } ?>
-			</ul>
 
 			<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev">
 			
@@ -672,6 +698,9 @@ if($model->isNewRecord) {
 	$isNewRecord = 0;
 }
 
+
+echo Html::hiddenInput('menu_count', $menu_count, ['id' => 'menu_count']);
+
 echo Html::hiddenInput('count_q',$count_q,['id'=>$count_q]);
 echo Html::hiddenInput('appImageUrl',Yii::getAlias('appImageUrl'),['id'=>'appImageUrl']);
 echo Html::hiddenInput('image_order_url',Url::to(['/image/imageorder']),['id'=>'image_order_url']);
@@ -703,6 +732,8 @@ echo Html::hiddenInput('item_images_url', Url::to(['vendor-item/item-images']), 
 
 echo Html::hiddenInput('item_themes_groups', Url::to(['vendor-item/item-themes-groups']), ['id' => 'item_themes_groups']);
 
+echo Html::hiddenInput('menu_items_url', Url::to(['vendor-item/menu-items']), ['id' => 'menu_items_url']);
+
 echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate']), ['id' => 'item_validate_url']);
 
 echo Html::hiddenInput('add_theme_url', Url::to(['vendor-item/add-theme']), ['id' => 'add_theme_url']);
@@ -721,7 +752,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.17", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.18", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

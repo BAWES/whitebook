@@ -8,12 +8,13 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
-use admin\models\AccessControlList;
+use yii\db\StaleObjectException;
 use yii\helpers\UploadHandler;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use admin\models\VendorItem;
+use admin\models\AccessControlList;
 use common\models\VendorItemQuestion;
 use admin\models\VendorItemQuestionAnswerOption;
 use admin\models\VendorItemQuestionGuide;
@@ -41,7 +42,7 @@ use common\models\VendorDraftItem;
 use common\models\VendorItemToPackage;
 use common\models\Package;
 use common\models\VendorItemMenu;
-use yii\db\StaleObjectException;
+use common\models\VendorItemMenuItem;
 
 /**
 * VendoritemController implements the CRUD actions for VendorItem model.
@@ -388,6 +389,40 @@ class VendorItemController extends Controller
                         package_id NOT IN ('.implode(',', $arr_packages).')');     
                 }  
 
+                //remove old menu and menu items 
+
+                VendorItemMenu::deleteALL(['item_id' => $model->item_id]);
+                VendorItemMenuItem::deleteALL(['item_id' => $model->item_id]);
+
+                $menu_items = Yii::$app->request->post('menu_item');
+
+                $menu_id = 0;
+
+                /* This method will allow user to sort menu and menu item easily */
+
+                foreach ($menu_items as $key => $value) {
+                    
+                    //if menu 
+                    if(isset($value['menu_name'])) {
+                        $menu = new VendorItemMenu;
+                        $menu->attributes = $value;
+                        $menu->item_id = $model->item_id;
+                        $menu->save();
+
+                        //update current menu id 
+                        $menu_id = $menu->menu_id;
+
+                    //if menu item 
+                    } else {
+
+                        $menu_item = new VendorItemMenuItem;
+                        $menu_item->attributes = $value;
+                        $menu_item->menu_id = $menu_id;
+                        $menu_item->item_id = $model->item_id;
+                        $menu_item->save();
+                    }
+                }
+
                 $vendor_item_question = Yii::$app->request->post('VendorItemQuestion');
 
                 if ($vendor_item_question) {
@@ -476,7 +511,7 @@ class VendorItemController extends Controller
             ->orderBy('theme_name')
             ->all();
 
-        $arr_menu = VendorItemMenu::findAll(['menu_id' => $model->item_id]);
+        $arr_menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
 
         return $this->render('update', [
             'model' => $model,
@@ -769,6 +804,120 @@ class VendorItemController extends Controller
                 $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
                 $vendor_item_pricing->pricing_price_per_unit = $vendoritem_item_price['price'][$opt];
                 $vendor_item_pricing->save();
+            }
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id,
+            'version' => $model->version
+        ];
+    }
+
+    /**
+    * Save menu and menu items from update page
+    *
+    * @return json
+    */
+    public function actionMenuItems() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = VendorItem::get_posted_data();
+
+        $errors = VendorItem::validate_item_price($posted_data);
+
+        //check version 
+
+        $item = VendorItem::findOne($item_id);
+
+        if($item->version != $posted_data['version'])
+        {
+            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+        }
+
+        //validate
+    
+        if($errors) {
+            \Yii::$app->response->format = 'json';
+            
+            return [
+                'errors' => $errors
+            ];
+        }                
+    
+        $model = VendorItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['VendorItem' => $posted_data]);
+
+        //save data without validation 
+        try {
+
+            if(!$model->save())
+            {                
+                if(!$model->version) {
+                    $model->version = 1;
+                }
+                
+                $model->save(false);
+            }
+
+        } catch (StaleObjectException $e) {
+            
+            //if model version defined and version not matching  
+            if($model->version){
+
+                $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+
+            //for first time validation, version not defined yet 
+            }else{
+                $model->save(false);
+            }
+        }
+        
+        //remove old menu and menu items 
+
+        VendorItemMenu::deleteALL(['item_id' => $model->item_id]);
+        VendorItemMenuItem::deleteALL(['item_id' => $model->item_id]);
+
+        $menu_items = Yii::$app->request->post('menu_item');
+
+        $menu_id = 0;
+
+        /* This method will allow user to sort menu and menu item easily */
+
+        foreach ($menu_items as $key => $value) {
+            
+            //if menu 
+            if(isset($value['menu_name'])) {
+                $menu = new VendorItemMenu;
+                $menu->attributes = $value;
+                $menu->item_id = $model->item_id;
+                $menu->save();
+
+                //update current menu id 
+                $menu_id = $menu->menu_id;
+
+            //if menu item 
+            } else {
+
+                $menu_item = new VendorItemMenuItem;
+                $menu_item->attributes = $value;
+                $menu_item->menu_id = $menu_id;
+                $menu_item->item_id = $model->item_id;
+                $menu_item->save();
             }
         }
 
