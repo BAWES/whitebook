@@ -77,6 +77,10 @@ class ThemesController extends BaseController
 
         $theme = Themes::findOne(['slug' => $themes, 'trash' => 'Default']);
 
+        if(!$theme) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+        
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | '.$theme->theme_name;
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
@@ -86,6 +90,7 @@ class ThemesController extends BaseController
             ->andWhere(['theme_id' => $theme->theme_id])
             ->asArray()
             ->all();
+
         $theme_items = ArrayHelper::map($theme_result,'item_id','item_id');
 
         if ($slug != 'all') {
