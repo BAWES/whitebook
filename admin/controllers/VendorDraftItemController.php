@@ -215,10 +215,10 @@ class VendorDraftItemController extends Controller
                 "reason" => $reason,
                 "model" => $model,
                 "vendor" => $vendor,
-                "image_1" => Url::to("@web/images/twb-logo-trans.png", true),
-                "image_2" => Url::to("@web/images/twb-logo-horiz-white.png", true)
+                "image_1" => Url::to("@web/twb-logo-trans.png", true),
+                "image_2" => Url::to("@web/twb-logo-horiz-white.png", true)
             ])
-            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name ])
             ->setSubject('Item rejected');
 
         //to contact email  
