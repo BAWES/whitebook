@@ -43,7 +43,6 @@ class AuthController extends Controller
                 if ($user && $user->validatePassword($password)) {
                     return $user;
                 }
-
                 return null;
             }
         ];
@@ -53,7 +52,6 @@ class AuthController extends Controller
             'options',
             'create-account',
             'request-reset-password',
-            'resend-verification-email'
         ];
 
         return $behaviors;

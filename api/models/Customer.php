@@ -5,7 +5,7 @@ namespace api\models;
 use common\models\CustomerToken;
 use Yii;
 
-class Customer extends \frontend\models\Customer
+class Customer extends \common\models\Customer
 {
     /**
      * @inheritdoc
@@ -28,31 +28,28 @@ class Customer extends \frontend\models\Customer
     public function getAccessToken(){
         // Return existing inactive token if found
         $token = CustomerToken::findOne([
-            'agent_id' => $this->agent_id,
-            'token_status' => AgentToken::STATUS_ACTIVE
+            'customer_id' => $this->customer_id,
+            'token_status' => CustomerToken::STATUS_ACTIVE
         ]);
+
         if($token){
             return $token;
         }
 
         // Create new inactive token
-        $token = new AgentToken();
-        $token->agent_id = $this->agent_id;
+        $token = new CustomerToken();
+        $token->customer_id = $this->customer_id;
         $token->token_value = Yii::$app->security->generateRandomString();
-        $token->token_status = AgentToken::STATUS_ACTIVE;
+        $token->token_status = CustomerToken::STATUS_ACTIVE;
         $token->save(false);
 
         return $token;
     }
 
     public function validatePassword($password){
-        if (!Yii::$app->getSecurity()->validatePassword($this->customer_password, $password)){
+        if (!Yii::$app->getSecurity()->validatePassword($password,$this->customer_password)){
             return false;
         }
         return true;
     }
-
-//    public function generateAuthKey() {
-//        $this->customer_auth_key = Yii::$app->security->generateRandomString();
-//    }
 }
