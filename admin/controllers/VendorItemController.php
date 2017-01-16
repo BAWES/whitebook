@@ -397,6 +397,10 @@ class VendorItemController extends Controller
 
                 $menu_items = Yii::$app->request->post('menu_item');
 
+                if(!$menu_items) {
+                    $menu_items = array();
+                }
+
                 $menu_id = 0;
 
                 /* This method will allow user to sort menu and menu item easily */
