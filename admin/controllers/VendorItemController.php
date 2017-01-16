@@ -899,6 +899,10 @@ class VendorItemController extends Controller
         VendorItemMenuItem::deleteALL(['item_id' => $model->item_id]);
 
         $menu_items = Yii::$app->request->post('menu_item');
+        
+        if(!$menu_items) {
+            $menu_items = array();
+        }
 
         $menu_id = 0;
 
