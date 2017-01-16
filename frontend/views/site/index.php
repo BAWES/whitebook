@@ -156,7 +156,7 @@ $i = 1;
 
 foreach ($featured_produc as $key => $value) {
 
- $feature_group_sql_result = FeatureGroupItem::find()->select([
+$feature_group_sql_result = FeatureGroupItem::find()->select([
         '{{%vendor_item}}.*',
         '{{%feature_group_item}}.vendor_id',
         '{{%vendor}}.vendor_name',
@@ -164,14 +164,17 @@ foreach ($featured_produc as $key => $value) {
     ])
     ->joinWith('item')
     ->joinWith('vendor')
-    //->join('inner join','{{%image}}','{{%image}}.item_id = {{%vendor_item}}.item_id')
-    ->where(['{{%feature_group_item}}.group_id'=>$value["group_id"]])
-    //->andWhere(['{{%vendor_item}}.type_id'=>2])
-    ->andWhere(['{{%vendor_item}}.trash'=>"Default"])
-    //->andWhere(['{{%vendor_item}}.item_for_sale'=>"Yes"])
-    ->andWhere(['{{%vendor_item}}.item_status'=>"Active"])
-    ->andWhere(['{{%feature_group_item}}.group_item_status'=>"Active"])
-    ->andWhere(['{{%feature_group_item}}.trash'=>"Default"])
+    ->where([
+        '{{%feature_group_item}}.group_id' => $value["group_id"],
+        '{{%vendor_item}}.trash' => 'Default',
+        '{{%vendor_item}}.item_approved' => 'Yes',
+        '{{%vendor_item}}.item_status' => 'Active',
+        '{{%vendor}}.vendor_status' => 'Active',
+        '{{%vendor}}.approve_status' => 'Yes',
+        '{{%vendor}}.trash' => 'Default',
+        '{{%feature_group_item}}.group_item_status' => "Active",
+        '{{%feature_group_item}}.trash' => "Default"
+    ])
     ->asArray()
     ->all();
 
