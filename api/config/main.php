@@ -59,6 +59,15 @@ return [
                         'GET' => 'index',
                     ]
                 ],
+                [ // AccountController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/account',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'index',
+                        'POST' => 'update',
+                    ]
+                ],
 
                 [ // CategoryController
                     'class' => 'yii\rest\UrlRule',
