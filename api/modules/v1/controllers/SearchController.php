@@ -62,8 +62,9 @@ class SearchController extends Controller
         return $actions;
     }
 
-    public function actionIndex($q)
+    public function actionIndex($q,$offset)
     {
+        $limit = '10';
         $items_query = CategoryPath::find()
             ->select('{{%vendor_item}}.item_id,{{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar')
             ->leftJoin(
@@ -106,6 +107,8 @@ class SearchController extends Controller
         $item_query_result = $items_query
             ->groupBy('{{%vendor_item}}.item_id')
             ->orderBy($expression)
+            ->limit($limit)
+            ->offset($offset)
             ->asArray()
             ->all();
         return $item_query_result;
