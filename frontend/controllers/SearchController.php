@@ -64,7 +64,10 @@ class SearchController extends BaseController
             ->where([
                 '{{%vendor_item}}.trash' => 'Default',
                 '{{%vendor_item}}.item_approved' => 'Yes',
-                '{{%vendor_item}}.item_status' => 'Active'
+                '{{%vendor_item}}.item_status' => 'Active',
+                '{{%vendor}}.vendor_status' => 'Active',
+                '{{%vendor}}.approve_status' => 'Yes',
+                '{{%vendor}}.trash' => 'Default',
             ]);
 
         //vendor filter
@@ -254,12 +257,16 @@ class SearchController extends BaseController
         if ($request->post('search') && $request->post('_csrf')) {
 
             $item_details = VendorItem::find()
-                ->select(['item_name','slug'])
-                ->where(['like', 'item_name', $request->post('search')])
+                ->select(['{{%vendor_item}}.item_name', '{{%vendor_item}}.slug'])
+                ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
+                ->where(['like', '{{%vendor_item}}.item_name', $request->post('search')])
                 ->andWhere([
                     '{{%vendor_item}}.trash' => 'Default',
                     '{{%vendor_item}}.item_approved' => 'Yes',
-                    '{{%vendor_item}}.item_status' => 'Active'
+                    '{{%vendor_item}}.item_status' => 'Active',
+                    '{{%vendor}}.vendor_status' => 'Active',
+                    '{{%vendor}}.approve_status' => 'Yes',
+                    '{{%vendor}}.trash' => 'Default'
                 ])
                 ->limit(10)
                 ->asArray()

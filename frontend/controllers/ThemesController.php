@@ -119,6 +119,9 @@ class ThemesController extends BaseController
                 '{{%vendor_item}}.trash' => 'Default',
                 '{{%vendor_item}}.item_approved' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
+                '{{%vendor}}.vendor_status' => 'Active',
+                '{{%vendor}}.approve_status' => 'Yes',
+                '{{%vendor}}.trash' => 'Default',
                 '{{%vendor_item}}.item_id' => $theme_items,
             ]);
 
