@@ -5,7 +5,7 @@ namespace api\models;
 use common\models\CustomerToken;
 use Yii;
 
-class Customer extends \common\models\Customer
+class Customer extends \frontend\models\Customer
 {
     /**
      * @inheritdoc

@@ -15,7 +15,6 @@ use yii\rest\Controller;
  */
 class AddressController extends Controller
 {
-
     public function behaviors()
     {
         $behaviors = parent::behaviors();
