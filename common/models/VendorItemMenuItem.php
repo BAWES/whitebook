@@ -38,7 +38,7 @@ class VendorItemMenuItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_id', 'menu_id', 'min_quantity', 'max_quantity'], 'integer'],
+            [['item_id', 'menu_id', 'min_quantity', 'max_quantity', 'sort_order'], 'integer'],
             [['price'], 'number'],
             [['menu_item_name', 'menu_item_name_ar'], 'string', 'max' => 100],
             [['hint'], 'string', 'max' => 250],
@@ -62,6 +62,7 @@ class VendorItemMenuItem extends \yii\db\ActiveRecord
             'max_quantity' => 'Max Quantity',
             'price' => 'Price',
             'hint' => 'Hint',
+            'sort_order' => 'Sort Order'
         ];
     }
 

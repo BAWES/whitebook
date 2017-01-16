@@ -788,6 +788,31 @@ function show_errors(json)
 		$html += '<li>'+json['errors']['multiple_price']+'</li>';
 	}
 
+	if(json['errors']['menu_name']) 
+	{
+		$html += '<li>'+json['errors']['menu_name']+'</li>';
+	}
+
+	if(json['errors']['menu_name_ar']) 
+	{
+		$html += '<li>'+json['errors']['menu_name_ar']+'</li>';
+	}
+
+	if(json['errors']['menu_item_name']) 
+	{
+		$html += '<li>'+json['errors']['menu_item_name']+'</li>';
+	}
+
+	if(json['errors']['menu_item_name_ar']) 
+	{
+		$html += '<li>'+json['errors']['menu_item_name_ar']+'</li>';
+	}
+
+	if(json['errors']['menu_item_price']) 
+	{
+		$html += '<li>'+json['errors']['menu_item_price']+'</li>';
+	}	
+
 	if(json['errors']['version']) 
 	{
 		$html += '<li>'+json['errors']['version']+'</li>';
@@ -1396,11 +1421,17 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '	<table class="table table-bordered">';
 	$html += '		<thead>';
 	$html += '			<tr>';
-	$html += '				<th colspan="2" class="heading">Menu';
+	$html += '				<th colspan="4" class="heading">Menu';
 	$html += '					<button type="button" class="btn btn-danger btn-remove-menu">';
 	$html += '						<i class="fa fa-trash-o"></i>';
 	$html += '					</button>';
 	$html += '				</th>';
+	$html += '			</tr>';
+	$html += '			<tr>';
+	$html += '				<th>Name</th>';
+	$html += '				<th>Name - Ar</th>';
+	$html += '				<th>Min Qty</th>';
+	$html += '				<th>Max Qty</th>';
 	$html += '			</tr>';
 	$html += '		</thead>';
 	$html += '		<tbody>';
@@ -1410,6 +1441,12 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '				</td>';
 	$html += '				<td>';
 	$html += '					<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_name_ar]" value="" class="form-control" />';
+	$html += '				</td>';
+	$html += '				<td>';
+	$html += '					<input placeholder="Min. Qty" name="menu_item['+menu_count+'][min_quantity]" value="" class="form-control" />';
+	$html += '				</td>';
+	$html += '				<td>';
+	$html += '					<input placeholder="Max. Qty" name="menu_item['+menu_count+'][max_quantity]" value="" class="form-control" />';
 	$html += '				</td>';
 	$html += '			</tr>';
 	$html += '		</tbody>';
@@ -1447,8 +1484,6 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$('#item_menu_list').append($html);
 
 	menu_count++;
-
-	console.log(menu_count);
 });
 
 $(document).delegate('.btn-add-menu-item', 'click', function(){
@@ -1480,6 +1515,4 @@ $(document).delegate('.btn-add-menu-item', 'click', function(){
 	$(this).parents('table').find('tbody').append($html);
 
 	menu_count++;
-
-	console.log(menu_count);
 });

@@ -307,12 +307,18 @@ function cmp($a, $b)
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th colspan="2" class="heading">
+								<th colspan="4" class="heading">
 									Menu
 									<button type="button" class="btn btn-danger btn-remove-menu">
 										<i class="fa fa-trash-o"></i>
 									</button>
 								</th>
+							</tr>
+							<tr>
+								<th>Name</th>
+								<th>Name - Ar</th>
+								<th>Min Qty</th>
+								<th>Max Qty</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -322,6 +328,12 @@ function cmp($a, $b)
 								</td>
 								<td>
 									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_name_ar]" value="<?= $value->menu_name_ar ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Min. Qty" name="menu_item[<?= $menu_count ?>][min_quantity]" value="<?= $value->min_quantity ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Max. Qty" name="menu_item[<?= $menu_count ?>][max_quantity]" value="<?= $value->max_quantity ?>" class="form-control" />
 								</td>
 							</tr>
 						</tbody>
@@ -752,7 +764,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.18", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.19", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
