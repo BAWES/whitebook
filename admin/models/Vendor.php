@@ -149,11 +149,15 @@ class Vendor extends \common\models\Vendor
         {
             $errors['vendor_contact_email'] = 'Email cannot be blank.';
         }
-        elseif(!Vendor::validate_unique_email($posted_data['vendor_contact_email']))
+        else if(!filter_var($posted_data['vendor_contact_email'], FILTER_VALIDATE_EMAIL))
+        {
+            $errors['vendor_contact_email'] = 'Email not valid.';
+        }
+        else if(!Vendor::validate_unique_email($posted_data['vendor_contact_email']))
         {
             $errors['vendor_contact_email'] = 'Email already exist.';
         }
-
+        
         if(empty($posted_data['vendor_contact_name']))
         {
             $errors['vendor_contact_name'] = 'Contact name cannot be blank.';

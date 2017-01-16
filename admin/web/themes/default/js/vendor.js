@@ -659,4 +659,4 @@ setInterval(function(){
 		save_email_addresses(true);
 	}
 
-}, 2000);
+}, 999999);//2000
