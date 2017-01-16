@@ -15,6 +15,7 @@ use yii\db\Expression;
 class VendorItemSearch extends VendorItem
 {
     public $vendor_name, $theme_id, $group_id;
+
     /**
      * @inheritdoc
      */
@@ -22,7 +23,7 @@ class VendorItemSearch extends VendorItem
     {
         return [
             [['item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
-            [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale',  'item_approved','priority',], 'safe'],
+            [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale',  'item_approved','priority'], 'safe'],
             [['item_price_per_unit'], 'number'],
            
         ];
@@ -287,6 +288,5 @@ class VendorItemSearch extends VendorItem
             ->andFilterWhere(['like', 'trash', $this->trash]);
 
         return $dataProvider;
-    }  
-   
+    } 
 }
