@@ -140,6 +140,9 @@ class DirectoryController extends BaseController
                 '{{%vendor_item}}.item_approved' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.vendor_id' => $vendor_details->vendor_id,
+                '{{%vendor}}.vendor_status' => 'Active',
+                '{{%vendor}}.approve_status' => 'Yes',
+                '{{%vendor}}.trash' => 'Default'
             ]);
 
         //price filter

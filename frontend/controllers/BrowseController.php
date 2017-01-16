@@ -322,7 +322,18 @@ class BrowseController extends BaseController
 
     public function actionDetail($slug)
     {
-        $model = VendorItem::findOne(['slug' => $slug]);
+        $model = VendorItem::find()
+                    ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+                    ->where([
+                        '{{%vendor_item}}.slug' => $slug,
+                        '{{%vendor_item}}.trash' => 'Default',
+                        '{{%vendor_item}}.item_status' => 'Active',
+                        '{{%vendor_item}}.item_approved' => 'Yes',
+                        '{{%vendor}}.vendor_status' => 'Active',
+                        '{{%vendor}}.approve_status' => 'Yes',
+                        '{{%vendor}}.trash' => 'Default',
+                    ])
+                    ->one();
 
         if (empty($model)) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
