@@ -45,6 +45,13 @@ class Customer extends \frontend\models\Customer
         return $token;
     }
 
+    public function validatePassword($password){
+        if (!Yii::$app->getSecurity()->validatePassword($this->customer_password, $password)){
+            return false;
+        }
+        return true;
+    }
+
 //    public function generateAuthKey() {
 //        $this->customer_auth_key = Yii::$app->security->generateRandomString();
 //    }
