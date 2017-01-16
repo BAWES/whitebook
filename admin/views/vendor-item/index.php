@@ -57,8 +57,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				'contentOptions' => ['class' => 'text-center'],
 				'headerOptions' => ['class' => 'text-center'],
 			  	'value'=>function($data) {
-					return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image-'.$data->item_id.'" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','javascript:void(0)',['id'=>'status',
-					'onclick'=>'change("'.$data->item_status.'","'.$data->item_id.'")']);
+
+			  		if($data->vendor['vendor_status'] == 'Deactive') 
+			  		{
+			  			return 'Vendor not active ';
+			  		} else {
+						return HTML::a('<img src='.$data->statusImageurl($data->item_status).' id="image-'.$data->item_id.'" alt="Status Image" title='.$data->statusTitle($data->item_status).'>','javascript:void(0)',['id'=>'status', 'onclick'=>'change("'.$data->item_status.'","'.$data->item_id.'")']);	
+			  		}
 				}, 
 				'filter' => \admin\models\VendorItem::Activestatus(),
 			
