@@ -834,7 +834,7 @@ class VendorItemController extends Controller
 
         $posted_data = VendorItem::get_posted_data();
 
-        $errors = VendorItem::validate_item_price($posted_data);
+        $errors = VendorItem::validate_item_menu($posted_data);
 
         //check version 
 
