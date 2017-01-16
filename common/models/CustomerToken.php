@@ -14,6 +14,8 @@ use Yii;
  */
 class CustomerToken extends \yii\db\ActiveRecord
 {
+
+    const STATUS_ACTIVE = 'Active';
     /**
      * @inheritdoc
      */
