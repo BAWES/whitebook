@@ -51,6 +51,16 @@ return [
                         'OPTIONS resend-verification-email' => 'options',
                     ]
                 ],
+
+                [ // SearchController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/search',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'index',
+                    ]
+                ],
+
                 [ // CategoryController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/category',
