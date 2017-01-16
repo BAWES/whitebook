@@ -5,8 +5,8 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\rest\Controller;
 use yii\filters\auth\HttpBasicAuth;
-
-use common\models\Agent;
+use yii\helpers\Url;
+use api\models\Customer;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -112,32 +112,66 @@ class AuthController extends Controller
      */
     public function actionCreateAccount()
     {
-        $model = new \common\models\Agent();
-        $model->scenario = "manualSignup";
+        $model = new Customer();
+        $model->scenario = 'signup';
 
-        $model->agent_name = Yii::$app->request->getBodyParam("fullname");
-        $model->agent_email = Yii::$app->request->getBodyParam("email");
-        $model->agent_password_hash = Yii::$app->request->getBodyParam("password");
+        $model->customer_name           = Yii::$app->request->getBodyParam("first_name");
+        $model->customer_last_name      = Yii::$app->request->getBodyParam("last_name");
+        $model->customer_email          = Yii::$app->request->getBodyParam("email");
+        $model->customer_dateofbirth    = Yii::$app->request->getBodyParam("date_of_birth");
+        $model->customer_gender         = Yii::$app->request->getBodyParam("gender");
+        $model->customer_mobile         = Yii::$app->request->getBodyParam("mobile_number");
+        $model->customer_password       = Yii::$app->getSecurity()->generatePasswordHash(Yii::$app->request->getBodyParam('customer_password'));
+        $model->confirm_password        = Yii::$app->request->getBodyParam('confirm_password');
+        $model->customer_activation_key = \frontend\models\Users::generateRandomString();
+        $model->created_datetime = date('Y-m-d H:i:s');
 
-        if (!$model->signup())
-        {
-            if(isset($model->errors['agent_email'])){
-                return [
-                    "operation" => "error",
-                    "message" => $model->errors['agent_email']
-                ];
-            }else{
-                return [
-                    "operation" => "error",
-                    "message" => "We've faced a problem creating your account, please contact us for assistance."
-                ];
-            }
+        if ($model->validate() && $model->save()) {
+
+            //Send Email to user
+            Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+            Yii::$app->mailer->compose("customer/confirm",
+                [
+                    "user" => $model->customer_name,
+                    "confirm_link" => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                    "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                    "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
+                ])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($model['customer_email'])
+                ->setSubject('Welcome to The White Book')
+                ->send();
+
+            //Send Email to admin
+            Yii::$app->mailer->htmlLayout = 'layouts/html';
+
+            $message_admin = $model->customer_name.' registered in TheWhiteBook';
+
+            $send_admin = Yii::$app->mailer->compose(
+                ["html" => "customer/user-register"],
+                ["message" => $message_admin]
+            );
+
+            $send_admin
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo(Yii::$app->params['adminEmail'])
+                ->setSubject('User registered')
+                ->send();
+
+            return [
+                "operation" => "success",
+                "message" => "Please click on the link sent to you by email to verify your account"
+            ];
+
+        } else {
+            return [
+                "operation" => "error",
+//                "message" => "We've faced a problem creating your account, please contact us for assistance."
+                "message" => $model->errors
+            ];
+
         }
-
-        return [
-            "operation" => "success",
-            "message" => "Please click on the link sent to you by email to verify your account"
-        ];
     }
 
     /**
