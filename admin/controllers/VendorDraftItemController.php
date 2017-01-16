@@ -240,5 +240,11 @@ class VendorDraftItemController extends Controller
         $model->save();
 
         Yii::$app->session->setFlash('success', 'Item rejected and vendor notified by email!');
+
+        Yii::$app->response->format = 'json';
+        
+        return [
+            'location' => Url::to(['vendor-draft-item/index'])
+        ];
     }
 }

@@ -34,6 +34,10 @@ $this->params['breadcrumbs'][] = $model->item_name;
   <?= Html::a('Back', ['index'], ['class' => 'btn btn-default']) ?>
   <?= Html::a('Approve', ['approve', 'id' => $model->draft_item_id], ['class' => 'btn btn-success']) ?>
 
+  <button type="button" class="btn btn-primary btn-reject" type="button" data-id="<?= $model->draft_item_id ?>">
+    Reject
+  </button>
+
 <br />
 <br />
 
@@ -247,13 +251,36 @@ $this->params['breadcrumbs'][] = $model->item_name;
 <!--End fourth Tab -->
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade view-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="z-index: 99999;">
       <div class="modal-content">
         <div class="modal-body"></div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade modal_reject" id="modal_reject" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Reject item</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+            <input type="hidden" name="draft_item_id" value="<?= $model->draft_item_id ?>" />
+            <textarea class="form-control" name="reason" placeholder="Reason for rejection"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-reject-submit">Submit</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 
 <?php 
 
@@ -295,7 +322,7 @@ $this->registerJs("
 ", View::POS_HEAD);
 	
 $this->registerCss("
-   ul {
+      ul {
           padding:0 0 0 0;
           margin:0 0 0 0;
       }
@@ -306,13 +333,13 @@ $this->registerCss("
       ul li img {
           cursor: pointer;
       }
-      .modal-body {
+      .view-modal .modal-body {
           padding:5px !important;
       }
-      .modal-content {
+      .view-modal .modal-content {
           border-radius:0;
       }
-      .modal-dialog img {
+      .view-modal .modal-dialog img {
           text-align:center;
           margin:0 auto;
       }
@@ -328,12 +355,12 @@ $this->registerCss("
         text-align:right;
     }
       /*override modal for demo only*/
-      .modal-dialog {
+      .view-modal .modal-dialog {
           max-width:500px;
           padding-top: 90px;
       }
       @media screen and (min-width: 768px){
-          .modal-dialog {
+          .view-modal .modal-dialog {
               width:500px;
               padding-top: 90px;
           }
@@ -345,6 +372,8 @@ $this->registerCss("
       }
 ");
      
-$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+echo Html::hiddenInput('reject_url', Url::to(['vendor-draft-item/reject']), ['id' => 'reject_url']);
 
 $this->registerJsFile('@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile("@web/themes/default/js/vendor_draft_item.js?v=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
