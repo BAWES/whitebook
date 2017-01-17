@@ -7,6 +7,8 @@ use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\VendorItem;
+use common\models\VendorItemMenu;
+use common\models\VendorItemMenuItem;
 
 /**
  * This is the model class for table "whitebook_customer_cart".
@@ -160,6 +162,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         } 
 
         //check if desire quantity available 
+
         if($valid_for_cart_item && $in_cart > $item->item_amount_in_stock) {
 
             $errors['cart_quantity'][] = [
@@ -172,6 +175,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         } 
 
         //validate to add product to cart 
+
         if (!$valid_for_cart_item && $data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
 
             $errors['cart_quantity'][] = [
@@ -183,6 +187,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //item_minimum_quantity_to_order
+
         if($data['quantity'] < $item->item_minimum_quantity_to_order) {
 
             $errors['cart_quantity'] = [
@@ -240,6 +245,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //2) get no of item purchased for selected date 
+
         $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "'.$data['item_id'].'" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(so.created_datetime) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
 
         if($purchased_result) {
@@ -249,6 +255,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //3) campare capacity 
+
         if($valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased;
@@ -266,6 +273,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //validate to add product to cart
+
         if(!$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased - $in_cart;
@@ -300,6 +308,62 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         if(!$block_date && in_array($day, $blocked_days)) {
             $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');             
+        }
+
+        //menu item quantity validation 
+
+        $menu = [];
+
+        if(!$data['menu_item']) {
+            $data['menu_item'] = [];
+        }
+
+        foreach ($data['menu_item'] as $key => $value) {
+
+            $mi = VendorItemMenuItem::findOne($key);
+
+            if(Yii::$app->language == 'en') {
+                $menu_item_name = $mi->menu_item_name;
+            }else{
+                $menu_item_name = $mi->menu_item_name_ar;
+            }
+            
+            if($mi->max_quantity && $value > $mi->max_quantity) {
+                $errors['menu_item_'.$mi->menu_item_id][] = 'Quantity must be less than or equal to '.$mi->max_quantity.' for "'.$menu_item_name.'"';
+            }
+
+            if($value < $mi->min_quantity) {
+                $errors['menu_item_'.$mi->menu_item_id][] = 'Quantity must be greater than or equal to '.$mi->min_quantity.' for "'.$menu_item_name.'"';
+            }
+
+            /* get quantity selected per menu to validate */
+
+            if(isset($menu[$mi->menu_id])) {
+                $menu[$mi->menu_id] = $value + $menu[$mi->menu_id];
+            } else {
+                $menu[$mi->menu_id] = $value;
+            }
+        }
+
+        //menu quantity validation 
+
+        foreach ($menu as $key => $value) {
+
+            $m = VendorItemMenu::findOne($key);
+
+            if(Yii::$app->language == 'en') {
+                $menu_name = $m->menu_name;
+            }else{
+                $menu_name = $m->menu_name_ar;
+            }
+            
+            if($m->max_quantity && $value > $m->max_quantity) {
+                $errors['menu_'.$m->menu_id][] = 'Quantity must be less than or equal to '.$m->max_quantity.' in "'.$menu_name.'"';
+            }
+
+            if($value < $m->min_quantity) {
+                $errors['menu_'.$m->menu_id][] = 'Quantity must be greater than or equal to '.$m->min_quantity.' in "'.$menu_name.'"';
+            }
         }
 
         return $errors;       

@@ -10,6 +10,9 @@ use common\models\VendorItem;
 use common\models\City;
 use common\models\CustomerCart;
 use common\models\DeliveryTimeSlot;
+use common\models\VendorItemMenu;
+use common\models\VendorItemMenuItem;
+use common\models\CustomerCartMenuItem;
 use yii\filters\AccessControl;
 
 class CartController extends BaseController
@@ -201,6 +204,24 @@ class CartController extends BaseController
             
             if($cart->save()) {
                 
+                // add menu 
+
+                if(!$data['menu_item']) {
+                    $data['menu_item'] = [];
+                }
+                
+                foreach ($data['menu_item'] as $key => $value) {
+
+                    $mi = VendorItemMenuItem::findOne($key);
+
+                    $cart_menu_item = new CustomerCartMenuItem;
+                    $cart_menu_item->cart_id = $cart->cart_id;
+                    $cart_menu_item->menu_id = $mi->menu_id;
+                    $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                    $cart_menu_item->quantity = $value;
+                    $cart_menu_item->save();
+                }
+
                 $item = VendorItem::findOne($data['item_id']);
 
                 Yii::$app->getSession()->setFlash('success', Yii::t(
@@ -242,6 +263,7 @@ class CartController extends BaseController
 
 
     public function actionValidationProductAvailable() {
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
 
