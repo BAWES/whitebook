@@ -59,6 +59,17 @@ return [
                         'GET' => 'index',
                     ]
                 ],
+                [ // CartController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/cart',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'listing',
+                        'GET count' => 'cart-count',
+                        'POST' => 'add',
+                        'PATCH' => 'update',
+                    ]
+                ],
                 [ // AccountController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/account',
