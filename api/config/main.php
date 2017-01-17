@@ -86,6 +86,8 @@ return [
                         'GET detail/<product_id>' => 'product-detail',
                         'GET list' => 'category-products',
                         'POST event' => 'add-product-to-event',
+                        'GET area' => 'product-areas',
+                        'GET time-slot' => 'product-delivery-time-slot',
                     ]
                 ],
                 [ // EventController
