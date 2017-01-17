@@ -588,6 +588,9 @@ if($model->images) {
 <div id="modal_booking_service" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <form action="<?= Url::to(['browse/booking']) ?>" method="post">
+
+        <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
