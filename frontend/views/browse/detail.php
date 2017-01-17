@@ -303,6 +303,8 @@ if($model->images) {
                                         <?php } ?>
                                     </h3>
 
+                                    <span class="error menu_<?= $value->menu_id ?>"></span>
+
                                     <ul class="menu-items">
                                     <?php 
 
@@ -344,6 +346,8 @@ if($model->images) {
                                             ?>
 
                                             <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+
+                                            <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
                                         </li>
                                     <?php } ?>
                                     </ul>
@@ -367,6 +371,8 @@ if($model->images) {
                                             <a href="#" class="btn-stepper" data-case="1">+</a>
                                         </div>
                                     </div>
+                                <?php } else { ?>
+                                    <input type="hidden" name="quantity" id="quantity" data-min="<?= $quantity ?>" value="<?= $quantity ?>" />
                                 <?php } ?>
 
                                 <div class="col-lg-5 buy-btn">

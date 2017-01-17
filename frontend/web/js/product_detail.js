@@ -289,8 +289,8 @@ if (!isGuest) {
                     location = location;
                 } else {
 
-                    $.each(data['errors'], function(index, errors) {
-                        $.each(errors, function() {
+                    $.each(data.errors, function(index, errors) {
+                        $.each(errors, function(key, value) {
                             jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');
                         });
                     });
