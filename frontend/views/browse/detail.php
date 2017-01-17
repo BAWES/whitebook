@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use yii\web\view;
 use common\models\VendorItemPricing;
+use common\models\VendorItemMenuItem;
 use common\components\LangFormat;
 use common\components\CFormatter;
 
@@ -203,7 +204,7 @@ if($model->images) {
                                     </a>
                                     </label>
 
-                                    <b class="font-27"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
+                                    <b class="font-27 item-final-price"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
 
                                     <strong><?= $model['item_price_description'] ?></strong>
 
@@ -268,19 +269,106 @@ if($model->images) {
                             </div>
 
                             <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+
+                            <!-- menu detail -->
+
+                            <div class="menu-item-detail">
+                            
+                            <?php foreach ($menu as $key => $value) { ?>
+                                <div class="menu-detail">    
+                                    <h3 class="menu-title">
+
+                                        <span class="title">
+                                            <?php if(Yii::$app->language == 'en') { 
+                                                    echo $value->menu_name;
+                                              } else { 
+                                                    echo $value->menu_name_ar;
+                                              } ?>
+                                        </span>
+
+                                        <?php if($value->min_quantity || $value->max_quantity) { ?>
+                                        <span class="menu-hint">
+                                            Select 
+
+                                            <?php if($value->min_quantity) { ?>
+                                                Minimum <?= $value->min_quantity ?>
+                                            <?php } ?>
+                                           
+                                            <?php if($value->min_quantity) { ?>
+                                                Maximum <?= $value->min_quantity ?> 
+                                            <?php } ?>
+                                            
+                                            Item(s) from list. 
+                                        </span>                                        
+                                        <?php } ?>
+                                    </h3>
+
+                                    <ul class="menu-items">
+                                    <?php 
+
+                                    $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
+
+                                    foreach ($menu_items as $menu_item) { ?>
+                                        <li>
+                                            <span class="menu-item-qty-box">
+                                                <i class="fa fa-minus"></i>
+                                                <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly data-min-qty="<?= $menu_item->min_quantity ?>" data-max-qty="<?= $menu_item->max_quantity ?>" />
+                                                <i class="fa fa-plus"></i>
+                                            </span>
+                                            <span class="menu-item-name">
+                                                <?php if(Yii::$app->language == 'en') { 
+                                                        echo $menu_item->menu_item_name;
+                                                  } else { 
+                                                        echo $menu_item->menu_item_name_ar;
+                                                  } ?> 
+                                            </span>
+
+                                            <span class="menu_item_price">
+                                                (+<?= CFormatter::format($menu_item->price) ?>)
+                                            </span>
+
+                                            <?php 
+                                            
+                                            $hint = '';
+
+                                            if($menu_item->min_quantity) {
+                                                $hint .= 'Min. '.$menu_item->min_quantity.' ';
+                                            }
+
+                                            if($menu_item->max_quantity) {
+                                                $hint .= 'Max. '.$menu_item->max_quantity.' ';
+                                            }
+
+                                            $hint .= $menu_item->hint; 
+
+                                            ?>
+
+                                            <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                        </li>
+                                    <?php } ?>
+                                    </ul>
+                                </div><!-- END .menu-detail -->
+                            <?php } ?>
+
                             <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
+                            </div><!-- END .menu-item-detail -->
+                           
                             <div class="row margin-top-20">
-                                <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
-                                    <label><?= Yii::t('frontend', 'Quantity');?></label>
-                                </div>
-                                <div class="col-md-4 clearfix padding-left-6px qantity-div">
-                                    <div class="form-group qty">
-                                        <a href="#" class="btn-stepper" data-case="0">-</a>
-                                        <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>"/>
-                                        <a href="#" class="btn-stepper" data-case="1">+</a>
+
+                                <?php if(!$menu) { ?>
+                                    <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
+                                        <label><?= Yii::t('frontend', 'Quantity');?></label>
                                     </div>
-                                </div>
+                                    <div class="col-md-4 clearfix padding-left-6px qantity-div">
+                                        <div class="form-group qty">
+                                            <a href="#" class="btn-stepper" data-case="0">-</a>
+                                            <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>"/>
+                                            <a href="#" class="btn-stepper" data-case="1">+</a>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                                 <div class="col-lg-5 buy-btn">
                                     <div class="button-signin">
                                         <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit">
@@ -581,6 +669,8 @@ if($model->images) {
 
 <?php
 
+echo Html::hiddenInput('final_price_url', Url::to(['browse/final-price']), ['id' => 'final_price_url']);
+
 $this->registerJs("
     var deliver_date = '".$deliver_date."';
     var isGuest = ".(int)Yii::$app->user->isGuest.";
@@ -650,4 +740,4 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.3', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);

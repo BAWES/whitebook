@@ -22,6 +22,9 @@ use common\models\CustomerAddress;
 use common\models\VendorPhoneNo;
 use common\models\VendorItemPricing;
 use common\components\LangFormat;
+use common\models\VendorItemMenu;
+use common\models\VendorItemMenuItem;
+use common\components\CFormatter;
 
 /**
 * Site controller.
@@ -475,8 +478,11 @@ class BrowseController extends BaseController
 
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
 
+            $menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+
             return $this->render('detail', [
                 'model' => $model,
+                'menu' => $menu,
                 'vendor_detail' => $vendor_detail,
                 'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
                 'phone_icons' => $phone_icons,
@@ -508,7 +514,6 @@ class BrowseController extends BaseController
             return $this->renderPartial('edit_event', array('edit_eventinfo' => $edit_eventinfo));
         }
     }
-
 
     public function actionGetLocationList(){
         if (Yii::$app->request->isAjax) {
@@ -563,6 +568,30 @@ class BrowseController extends BaseController
             }
             exit;
         }
+    }
+
+    public function actionFinalPrice() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+
+        $item = VendorItem::findOne($item_id);
+
+        $price = $item->item_price_per_unit;
+
+        $menu_items = Yii::$app->request->post('menu_item');
+
+        foreach ($menu_items as $key => $value) {
+            
+            $menu_item = VendorItemMenuItem::findOne($key);
+
+            $price += $menu_item->price * $value;
+        }
+
+        Yii::$app->response->format = 'json';
+
+        return [
+            'price' => CFormatter::format($price)
+        ];
     }
 
     public function actionLocationDateSelection()
