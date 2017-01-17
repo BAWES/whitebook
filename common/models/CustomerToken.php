@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\Customer;
 use Yii;
 
 /**
@@ -46,5 +47,9 @@ class CustomerToken extends \yii\db\ActiveRecord
             'token_value' => 'Token Value',
             'token_status' => 'Token Status',
         ];
+    }
+
+    public function getCustomer() {
+        return $this->hasOne(Customer::className(), ['customer_id' => 'customer_id']);
     }
 }
