@@ -8,6 +8,7 @@ use yii\db\Expression;
 use frontend\models\Vendor;
 use common\models\CategoryPath;
 use common\models\VendorItem;
+use common\models\VendorLocation;
 use api\models\EventItemlink;
 
 /**
@@ -16,6 +17,44 @@ use api\models\EventItemlink;
  */
 class ProductController extends Controller
 {
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        // remove authentication filter for cors to work
+        unset($behaviors['authenticator']);
+
+        // Allow XHR Requests from our different subdomains and dev machines
+        $behaviors['corsFilter'] = [
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                'Origin' => Yii::$app->params['allowedOrigins'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Credentials' => null,
+                'Access-Control-Max-Age' => 86400,
+                'Access-Control-Expose-Headers' => [],
+            ],
+        ];
+
+        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
+        $behaviors['authenticator'] = [
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
+        ];
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = [
+            'options',
+            'category-products',
+            'product-detail',
+            'product-areas', // need to remove
+            'product-delivery-time-slot', // need to remove
+        ];
+
+        return $behaviors;
+    }
+
+
     /**
      * @inheritdoc
      */
@@ -223,6 +262,122 @@ class ProductController extends Controller
                     ];
                 }
             }
+        }
+    }
+
+    public function actionProductAreas($vendor_id,$customer_id) {
+
+        $vendor_area_list = [];
+        if (empty($vendor_id) || !isset($vendor_id)) {
+            return [
+                "operation" => "error",
+                'message' => 'Invalid Vendor ID'
+            ];
+        }
+
+        if (empty($customer_id) || !isset($customer_id)) {
+            return [
+                "operation" => "error",
+                'message' => 'Invalid Customer ID'
+            ];
+        }
+        $vendor_area = VendorLocation::findAll(['vendor_id' => $vendor_id]);
+        $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
+        $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
+
+
+        $my_addresses =  \common\models\CustomerAddress::find()
+            ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
+            ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
+            ->where(['{{%customer_address}}.trash'=>'Default'])
+            ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+            ->andwhere(['{{%location}}.id' => $area_ids])
+            ->groupby(['{{%location}}.id'])
+            ->asArray()
+            ->all();
+
+        $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
+
+        if (count($myaddress_area_list)>0) {
+
+            // add prefix to address id ex: address_14,address_15
+            $myNewArray = array_combine(
+                array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
+                $myaddress_area_list
+            );
+
+            $combined_myaddress = array(
+                Yii::t('frontend', 'My Addresses') => $myNewArray
+            );
+
+            $vendor_area_list = $combined_myaddress + $vendor_area_list;
+        }
+        return $vendor_area_list;
+    }
+
+    /*
+     * Product delivery Time Slot
+    */
+    public function actionProductDeliveryTimeSlot($vendor_id, $date, $time, $current_date)
+    {
+        $list = [];
+        if (empty($vendor_id) || !isset($vendor_id)) {
+            return [
+                "operation" => "error",
+                'message' => 'Invalid Vendor ID'
+            ];
+        }
+
+        if (empty($date) || !isset($date)) {
+            return [
+                "operation" => "error",
+                'message' => 'Invalid Date'
+            ];
+        }
+
+        if (empty($time) || !isset($time)) {
+            return [
+                "operation" => "error",
+                'message' => 'Invalid Date'
+            ];
+        }
+
+        if (empty($current_date) || !isset($current_date)) {
+            return [
+                "operation" => "error",
+                'message' => 'Invalid Current Date'
+            ];
+        }
+
+        $string = $date;
+        $timestamp = strtotime($string);
+
+        $vendor_timeslot = \common\models\DeliveryTimeSlot::find()
+            ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+            ->where(['vendor_id' => $vendor_id])
+            ->andwhere(['timeslot_day' => date("l", $timestamp)])
+            ->asArray()->all();
+
+        if ($vendor_timeslot) {
+            foreach ($vendor_timeslot as $key => $value) {
+                if (strtotime($date) == (strtotime($current_date))) {
+                    if (strtotime($time) < strtotime($value['timeslot_start_time'])) {
+                        $start = date('g:i A', strtotime($value['timeslot_start_time']));
+                        $end = date('g:i A', strtotime($value['timeslot_end_time']));
+                        $list = array_merge($list,[$value['timeslot_id']=>$start . ' - ' . $end]);
+                    }
+                } else {
+                    $start = date('g:i A', strtotime($value['timeslot_start_time']));
+                    $end = date('g:i A', strtotime($value['timeslot_end_time']));
+                    $list = array_merge($list,[$value['timeslot_id']=>$start . ' - ' . $end]);
+                }
+            }
+            return $list;
+        } else {
+            return [
+                "operation" => "error",
+                'message' => 'Item is not available on selected date'
+            ];
         }
     }
 }

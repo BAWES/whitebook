@@ -43,7 +43,6 @@ return [
                         'GET login' => 'login',
                         'POST create-account' => 'create-account',
                         'POST request-reset-password' => 'request-reset-password',
-                        'POST resend-verification-email' => 'resend-verification-email',
                         // OPTIONS VERBS
                         'OPTIONS login' => 'options',
                         'OPTIONS create-account' => 'options',
@@ -58,6 +57,15 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'index',
+                    ]
+                ],
+                [ // AccountController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/account',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'index',
+                        'POST' => 'update',
                     ]
                 ],
 
@@ -78,6 +86,8 @@ return [
                         'GET detail/<product_id>' => 'product-detail',
                         'GET list' => 'category-products',
                         'POST event' => 'add-product-to-event',
+                        'GET area' => 'product-areas',
+                        'GET time-slot' => 'product-delivery-time-slot',
                     ]
                 ],
                 [ // EventController
