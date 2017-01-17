@@ -57,6 +57,7 @@ return [
                   'themes' => 'themes/index',
                   'directory' => 'directory/index',
                   'cart' => 'cart/index',
+                  'browse/final-price' => 'browse/final-price',
                   'browse/save-note' => 'browse/save-note',
                   'browse/<slug:[A-Za-z0-9\_-]+>' => 'browse/list',
                   'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',

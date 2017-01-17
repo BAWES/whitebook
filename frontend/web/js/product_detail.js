@@ -1,5 +1,8 @@
 
     jQuery(document).ready(function () {
+
+        $('[data-toggle="tooltip"]').tooltip(); 
+
         /* client say slider start*/
         jQuery('.flexslider2').flexslider({
             animation: "slide",
@@ -18,12 +21,12 @@
             }
         });
         /* client say slider end*/
-    });
+ 
+        /* FeatureD Products end*/
+        /*carousel slider*/
 
-    /* FeatureD Products end*/
-    /*carousel slider*/
-    jQuery(document).ready(function () {
         window.curSlide;
+
         jQuery('#carousel').flexslider({
             animation: "slide",
             controlNav: true,
@@ -393,3 +396,40 @@ $("#delivery_date").on("changeDate", function(e) {
     $('.error.cart_delivery_date').html('');
     productAvailability(jQuery(this).val());
 });
+
+$(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
+   
+    $qty_input = $(this).parent().find('input');
+
+    $qty = parseInt($qty_input.val());
+    $min_qty = parseInt($qty_input.attr('data-min-qty'));
+
+    if($qty - 1 >= $min_qty) {
+        $qty_input.val($qty - 1);
+        update_price();
+    }else{
+        //alert($qty + '' + $min_qty);
+    }
+});
+
+$(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
+   
+    $qty_input = $(this).parent().find('input');
+
+    $qty = parseInt($qty_input.val());
+    $max_qty = parseInt($qty_input.attr('data-max-qty'));
+
+    if($max_qty > 0 && $qty + 1 <= $max_qty) {
+        $qty_input.val($qty + 1);
+        update_price();
+    }else{
+        //alert($qty + '' + $max_qty);
+    }
+});
+
+function update_price() {
+    $.post($('#final_price_url').val(), $('.menu-item-detail input').serialize(), function(json) {
+        $('.item-final-price').html(json.price);
+    });
+}
+
