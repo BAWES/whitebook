@@ -137,6 +137,15 @@ return [
                         'GET success' => 'success',
                     ]
                 ],
+                [ // OrderController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/orders',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'list-order',
+                        'GET detail' => 'order-detail',
+                    ]
+                ],
             ],
         ],
         'log' => [
