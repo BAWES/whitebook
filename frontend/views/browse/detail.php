@@ -294,17 +294,28 @@ if($model->images) {
 
                                         <?php if($value->min_quantity || $value->max_quantity) { ?>
                                         <span class="menu-hint">
-                                            Select 
-
-                                            <?php if($value->min_quantity) { ?>
-                                                Minimum <?= $value->min_quantity ?>
-                                            <?php } ?>
-                                           
-                                            <?php if($value->min_quantity) { ?>
-                                                Maximum <?= $value->min_quantity ?> 
-                                            <?php } ?>
                                             
-                                            Item(s) from list. 
+                                            <?php 
+
+                                            echo Yii::t('frontend', 'Quantity range : ');
+
+                                            if($value->min_quantity) { 
+                                                echo Yii::t('frontend', 'Minimum {qty}', [
+                                                    'qty' => $value->min_quantity
+                                                ]); 
+                                            } 
+
+                                            if($value->min_quantity && $value->max_quantity) { 
+                                                echo ' , ';
+                                            }
+
+                                            if($value->max_quantity) { 
+                                                echo Yii::t('frontend', 'Maximum {qty}', [
+                                                    'qty' => $value->max_quantity
+                                                ]); 
+                                            } 
+                                           
+                                            ?>
                                         </span>                                        
                                         <?php } ?>
                                     </h3>
@@ -318,11 +329,16 @@ if($model->images) {
 
                                     foreach ($menu_items as $menu_item) { ?>
                                         <li>
+                                            <!-- qty box -->
+
                                             <span class="menu-item-qty-box">
                                                 <i class="fa fa-minus"></i>
-                                                <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly data-min-qty="<?= $menu_item->min_quantity ?>" data-max-qty="<?= $menu_item->max_quantity ?>" />
+                                                <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
                                                 <i class="fa fa-plus"></i>
                                             </span>
+
+                                            <!-- item name -->
+
                                             <span class="menu-item-name">
                                                 <?php if(Yii::$app->language == 'en') { 
                                                         echo $menu_item->menu_item_name;
@@ -331,28 +347,24 @@ if($model->images) {
                                                   } ?> 
                                             </span>
 
+                                            <!-- price -->
+
+                                            <?php if($menu_item->price > 0) { ?>
                                             <span class="menu_item_price">
                                                 (+<?= CFormatter::format($menu_item->price) ?>)
                                             </span>
+                                            <?php  } ?>
+
+                                            <!-- hint -->
 
                                             <?php 
-                                            
-                                            $hint = '';
 
-                                            if($menu_item->min_quantity) {
-                                                $hint .= 'Min. '.$menu_item->min_quantity.' ';
-                                            }
+                                            $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
 
-                                            if($menu_item->max_quantity) {
-                                                $hint .= 'Max. '.$menu_item->max_quantity.' ';
-                                            }
-
-                                            $hint .= $menu_item->hint; 
-
-                                            ?>
-
+                                            if($hint) { ?>
                                             <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
-
+                                            <?php } ?>
+                                            
                                             <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
                                         </li>
                                     <?php } ?>
@@ -791,4 +803,4 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);

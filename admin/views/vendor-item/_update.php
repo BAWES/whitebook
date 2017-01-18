@@ -342,15 +342,14 @@ function cmp($a, $b)
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th colspan="7" class="heading">Menu Items</th>
+								<th colspan="6" class="heading">Menu Items</th>
 							</tr>
 							<tr>
 								<th>Name</th>
 								<th>Name - Ar</th>
-								<th>Min Qty</th>
-								<th>Max Qty</th>
 								<th>Price</th>
 								<th>Hint</th>
+								<th>Hint - Ar</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -370,16 +369,13 @@ function cmp($a, $b)
 									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control" />
 								</td>
 								<td>
-									<input placeholder="Min. Qty" name="menu_item[<?= $menu_count ?>][min_quantity]" value="<?= $menu_item->min_quantity ?>" class="form-control" />
-								</td>
-								<td>
-									<input placeholder="Max. Qty" name="menu_item[<?= $menu_count ?>][max_quantity]" value="<?= $menu_item->max_quantity ?>" class="form-control" />
-								</td>
-								<td>
 									<input placeholder="Price" name="menu_item[<?= $menu_count ?>][price]" value="<?= $menu_item->price ?>" class="form-control" />
 								</td>
 								<td>
 									<input placeholder="Hint" name="menu_item[<?= $menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Hint - Ar" name="menu_item[<?= $menu_count ?>][hint_ar]" value="<?= $menu_item->hint_ar ?>" class="form-control" />
 								</td>
 								<td>
 									<button type="button" class="btn btn-danger btn-remove-menu-item">
@@ -391,7 +387,7 @@ function cmp($a, $b)
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="7">
+								<td colspan="6">
 									<button type="button" class="btn btn-primary btn-add-menu-item">
 										<i class="fa fa-plus"></i> Add Item
 									</button>

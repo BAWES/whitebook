@@ -402,14 +402,10 @@ $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
     $qty_input = $(this).parent().find('input');
 
     $qty = parseInt($qty_input.val());
-    $min_qty = parseInt($qty_input.attr('data-min-qty'));
 
-    if($qty - 1 >= $min_qty) {
-        $qty_input.val($qty - 1);
-        update_price();
-    }else{
-        //alert($qty + '' + $min_qty);
-    }
+    $qty_input.val($qty - 1);
+
+    update_price();
 });
 
 $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
@@ -417,14 +413,10 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
     $qty_input = $(this).parent().find('input');
 
     $qty = parseInt($qty_input.val());
-    $max_qty = parseInt($qty_input.attr('data-max-qty'));
 
-    if($max_qty > 0 && $qty + 1 <= $max_qty) {
-        $qty_input.val($qty + 1);
-        update_price();
-    }else{
-        //alert($qty + '' + $max_qty);
-    }
+    $qty_input.val($qty + 1);
+
+    update_price();
 });
 
 function update_price() {

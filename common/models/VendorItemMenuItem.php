@@ -12,10 +12,9 @@ use Yii;
  * @property integer $menu_id
  * @property string $menu_item_name
  * @property string $menu_item_name_ar
- * @property integer $min_quantity
- * @property integer $max_quantity
  * @property string $price
  * @property string $hint
+ * @property string $hint_ar
  *
  * @property CustomerCartMenuItem[] $customerCartMenuItems
  * @property SuborderItemMenu[] $suborderItemMenus
@@ -38,10 +37,10 @@ class VendorItemMenuItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_id', 'menu_id', 'min_quantity', 'max_quantity', 'sort_order'], 'integer'],
+            [['item_id', 'menu_id', 'sort_order'], 'integer'],
             [['price'], 'number'],
             [['menu_item_name', 'menu_item_name_ar'], 'string', 'max' => 100],
-            [['hint'], 'string', 'max' => 250],
+            [['hint', 'hint_ar'], 'string', 'max' => 250],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorItem::className(), 'targetAttribute' => ['item_id' => 'item_id']],
             [['menu_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorItemMenu::className(), 'targetAttribute' => ['menu_id' => 'menu_id']],
         ];
@@ -57,11 +56,10 @@ class VendorItemMenuItem extends \yii\db\ActiveRecord
             'item_id' => 'Item ID',
             'menu_id' => 'Menu ID',
             'menu_item_name' => 'Menu Item Name',
-            'menu_item_name_ar' => 'Menu Item Name Ar',
-            'min_quantity' => 'Min Quantity',
-            'max_quantity' => 'Max Quantity',
+            'menu_item_name_ar' => 'Menu Item Name - Arabic',
             'price' => 'Price',
             'hint' => 'Hint',
+            'hint_ar' => 'Hint - Arabic',
             'sort_order' => 'Sort Order'
         ];
     }

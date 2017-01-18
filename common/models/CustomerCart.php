@@ -322,20 +322,6 @@ class CustomerCart extends \yii\db\ActiveRecord
 
             $mi = VendorItemMenuItem::findOne($key);
 
-            if(Yii::$app->language == 'en') {
-                $menu_item_name = $mi->menu_item_name;
-            }else{
-                $menu_item_name = $mi->menu_item_name_ar;
-            }
-            
-            if($mi->max_quantity && $value > $mi->max_quantity) {
-                $errors['menu_item_'.$mi->menu_item_id][] = 'Quantity must be less than or equal to '.$mi->max_quantity.' for "'.$menu_item_name.'"';
-            }
-
-            if($value < $mi->min_quantity) {
-                $errors['menu_item_'.$mi->menu_item_id][] = 'Quantity must be greater than or equal to '.$mi->min_quantity.' for "'.$menu_item_name.'"';
-            }
-
             /* get quantity selected per menu to validate */
 
             if(isset($menu[$mi->menu_id])) {
@@ -358,11 +344,23 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
             
             if($m->max_quantity && $value > $m->max_quantity) {
-                $errors['menu_'.$m->menu_id][] = 'Quantity must be less than or equal to '.$m->max_quantity.' in "'.$menu_name.'"';
+                $errors['menu_'.$m->menu_id][] = Yii::t(
+                    'frontend', 
+                    'Quantity must be less than or equal to {qty} in "{menu_name}"', [
+                        'qty' => $m->max_quantity, 
+                        'menu_name' => $menu_name
+                    ]
+                );
             }
 
             if($value < $m->min_quantity) {
-                $errors['menu_'.$m->menu_id][] = 'Quantity must be greater than or equal to '.$m->min_quantity.' in "'.$menu_name.'"';
+                $errors['menu_'.$m->menu_id][] = Yii::t(
+                    'frontend', 
+                    'Quantity must be greater than or equal to {qty} in "{menu_name}"', [
+                        'qty' => $m->min_quantity, 
+                        'menu_name' => $menu_name
+                    ]
+                );
             }
         }
 

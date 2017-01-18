@@ -206,20 +206,23 @@ class CartController extends BaseController
                 
                 // add menu 
 
-                if(!$data['menu_item']) {
+                if(empty($data['menu_item'])) {
                     $data['menu_item'] = [];
                 }
                 
                 foreach ($data['menu_item'] as $key => $value) {
 
-                    $mi = VendorItemMenuItem::findOne($key);
+                    if($value > 0) {
+                                                
+                        $mi = VendorItemMenuItem::findOne($key);
 
-                    $cart_menu_item = new CustomerCartMenuItem;
-                    $cart_menu_item->cart_id = $cart->cart_id;
-                    $cart_menu_item->menu_id = $mi->menu_id;
-                    $cart_menu_item->menu_item_id = $mi->menu_item_id;
-                    $cart_menu_item->quantity = $value;
-                    $cart_menu_item->save();
+                        $cart_menu_item = new CustomerCartMenuItem;
+                        $cart_menu_item->cart_id = $cart->cart_id;
+                        $cart_menu_item->menu_id = $mi->menu_id;
+                        $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                        $cart_menu_item->quantity = $value;
+                        $cart_menu_item->save();   
+                    }
                 }
 
                 $item = VendorItem::findOne($data['item_id']);

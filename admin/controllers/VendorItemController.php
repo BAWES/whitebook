@@ -37,6 +37,7 @@ use common\models\VendorItemToCategory;
 use common\models\CategoryPath;
 use common\models\VendorItemCapacityException;
 use common\models\CustomerCart;
+use common\models\CustomerCartMenuItem;
 use common\models\EventItemlink;
 use common\models\VendorDraftItem;
 use common\models\VendorItemToPackage;
@@ -394,6 +395,18 @@ class VendorItemController extends Controller
 
                 VendorItemMenu::deleteALL(['item_id' => $model->item_id]);
                 VendorItemMenuItem::deleteALL(['item_id' => $model->item_id]);
+
+                //remove item from cart and cart menu item as item got change 
+                
+                $cart = CustomerCart::findAll(['item_id' => $model->item_id]);
+
+                foreach ($cart as $key => $value) {
+                    CustomerCartMenuItem::deleteAll(['cart_id' => $value->cart_id]);
+                }
+                
+                CustomerCart::deleteAll(['item_id' => $model->item_id]);
+
+                //add new menu items 
 
                 $menu_items = Yii::$app->request->post('menu_item');
 
@@ -897,6 +910,18 @@ class VendorItemController extends Controller
 
         VendorItemMenu::deleteALL(['item_id' => $model->item_id]);
         VendorItemMenuItem::deleteALL(['item_id' => $model->item_id]);
+
+        //remove item from cart and cart menu item as item got change 
+        
+        $cart = CustomerCart::findAll(['item_id' => $model->item_id]);
+
+        foreach ($cart as $key => $value) {
+            CustomerCartMenuItem::deleteAll(['cart_id' => $value->cart_id]);
+        }
+        
+        CustomerCart::deleteAll(['item_id' => $model->item_id]);
+
+        //add menu items 
 
         $menu_items = Yii::$app->request->post('menu_item');
         
