@@ -68,6 +68,7 @@ return [
                         'GET count' => 'cart-count',
                         'POST' => 'add',
                         'PATCH' => 'update',
+                        'DELETE' => 'remove',
                     ]
                 ],
                 [ // AccountController

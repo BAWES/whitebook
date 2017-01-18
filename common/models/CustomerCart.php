@@ -314,7 +314,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         $menu = [];
 
-        if(!$data['menu_item']) {
+        if(!isset($data['menu_item'])) {
             $data['menu_item'] = [];
         }
 
