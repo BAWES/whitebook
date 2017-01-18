@@ -88,7 +88,7 @@ class AddressController extends Controller
      */
     public function listing(){
 
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $addresses = array();
 
         $result = CustomerAddress::find()
@@ -119,7 +119,7 @@ class AddressController extends Controller
      */
     public function actionAddressAdd() {
 
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $questions = Yii::$app->request->getBodyParam("questions");
 
         $address_name = Yii::$app->request->getBodyParam("address_name");
@@ -168,7 +168,7 @@ class AddressController extends Controller
      */
     public function actionAddressUpdate()
     {
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $questions  = Yii::$app->request->getBodyParam('questions');
         $address_id = Yii::$app->request->getBodyParam('address_id');
 
@@ -222,7 +222,7 @@ class AddressController extends Controller
      */
     public function actionAddressView($id)
     {
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $address_id = $id;
         $combinedAddress = [];
         $combinedAddress['address'] = CustomerAddress::findone([
@@ -248,7 +248,7 @@ class AddressController extends Controller
      */
     public function actionAddressRemove($id)
     {
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $address_id = $id;
 
         $exist = CustomerAddress::find()
