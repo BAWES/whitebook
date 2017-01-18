@@ -252,6 +252,12 @@ if($model->images) {
                                             <?php $giflink = Url::to("@web/images/ajax-loader.gif"); ?>
                                             <img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />
                                         </div>
+
+                                        <button type="button" class="btn btn-default btn-booking-modal" data-toggle="modal" data-target="#modal_booking_service">
+                                            <i class="fa fa-envelope-o"></i> &nbsp;
+                                            REQUEST BOOKING SERVICE 
+                                        </button>
+
                                         <!-- Add to Event End here -->
                                         <div class="buy_events">
                                         <?php
@@ -672,6 +678,39 @@ if($model->images) {
 <!-- end -->
 
 <div id="option_modal_wrapper"></div>
+<div id="modal_booking_service" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <form action="<?= Url::to(['browse/booking']) ?>" method="post">
+
+        <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+        
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" style="padding: 0;">REQUEST BOOKING SERVICE </h4>
+          </div>
+          <div class="modal-body" style="padding-top: 0px;">
+            <div class="form-group">    
+                <label>Name</label>
+                <input class="form-control" name="name" placeholder="Your name" required />
+            </div>
+            <div class="form-group">    
+                <label>Phone</label>
+                <input class="form-control" name="phone" placeholder="Your phone no" required />
+            </div>
+            <div class="form-group">    
+                <label>Email</label>
+                <input type="email" class="form-control" name="email" placeholder="Your email address" required />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="Submit" class="btn btn-primary btn-booking-service">Submit</button>
+          </div>
+        </div>
+     </form>
+   </div>
+ </div>
 
 <?php
 
@@ -705,6 +744,12 @@ $this->registerJs("
 ", View::POS_READY);
 
 $this->registerCss("
+
+    .btn-booking-modal {
+        margin-top: 10px;
+        padding: 10px;
+    }
+ 
     .width-100-percent{width:100%!important;}
     .margin-top-20{margin-top:20px;}
     .width-20-percent{width: 20%;}
