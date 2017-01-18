@@ -11,35 +11,35 @@ use yii\rest\Controller;
  */
 class AccountController extends Controller
 {
-//    public function behaviors()
-//    {
-//        $behaviors = parent::behaviors();
-//
-//        // remove authentication filter for cors to work
-//        unset($behaviors['authenticator']);
-//
-//        // Allow XHR Requests from our different subdomains and dev machines
-//        $behaviors['corsFilter'] = [
-//            'class' => \yii\filters\Cors::className(),
-//            'cors' => [
-//                'Origin' => Yii::$app->params['allowedOrigins'],
-//                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-//                'Access-Control-Request-Headers' => ['*'],
-//                'Access-Control-Allow-Credentials' => null,
-//                'Access-Control-Max-Age' => 86400,
-//                'Access-Control-Expose-Headers' => [],
-//            ],
-//        ];
-//
-//        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-//        $behaviors['authenticator'] = [
-//            'class' => \yii\filters\auth\HttpBearerAuth::className(),
-//        ];
-//        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-//        $behaviors['authenticator']['except'] = ['options'];
-//
-//        return $behaviors;
-//    }
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        // remove authentication filter for cors to work
+        unset($behaviors['authenticator']);
+
+        // Allow XHR Requests from our different subdomains and dev machines
+        $behaviors['corsFilter'] = [
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                'Origin' => Yii::$app->params['allowedOrigins'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Credentials' => null,
+                'Access-Control-Max-Age' => 86400,
+                'Access-Control-Expose-Headers' => [],
+            ],
+        ];
+
+        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
+        $behaviors['authenticator'] = [
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
+        ];
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = ['options'];
+
+        return $behaviors;
+    }
 
     /**
      * @inheritdoc
@@ -62,17 +62,15 @@ class AccountController extends Controller
      */
     public function actionIndex()
     {
-        $customer_id = '185';
-        return Customer::findOne($customer_id);
+        return $this->currentUser();
     }
-
 
     /**
      * Update account detail
      */
     public function actionUpdate()
     {
-        $customer_id = '185';
+        $customer_id = Yii::$app->user->getId();
 
         $first_name = Yii::$app->request->getBodyParam('customer_name');
         $last_name  = Yii::$app->request->getBodyParam('customer_last_name');
@@ -99,7 +97,8 @@ class AccountController extends Controller
         if ($model->save()) {
             return [
                 "operation" => "success",
-                "message" => "Detail updated successfully.",
+                "message" => "Profile updated successfully.",
+                "detail" => $this->currentUser(),
             ];
         } else {
             return [
@@ -107,5 +106,10 @@ class AccountController extends Controller
                 "message" => "Server issue please try again.",
             ];
         }
+    }
+
+    private function currentUser(){
+        $customer_id = Yii::$app->user->getId();
+        return Customer::findOne($customer_id);
     }
 }
