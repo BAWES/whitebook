@@ -126,6 +126,17 @@ return [
                         'GET questions/<address_type_id>' => 'address-questions',
                     ]
                 ],
+                [ // CheckoutController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/checkout',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'list-cart-items',
+                        'GET payment-getaway' => 'payment-getaway-list',
+                        'GET address' => 'address',
+                        'GET success' => 'success',
+                    ]
+                ],
             ],
         ],
         'log' => [
