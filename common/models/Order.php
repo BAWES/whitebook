@@ -132,9 +132,21 @@ class Order extends \yii\db\ActiveRecord
             }else{
                 $price_chart[$item['item_id']] = $item['item_price_per_unit'];
             }
+
+            $menu_items = CustomerCartMenuItem::find()
+                ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                ->where(['cart_id' => $item['cart_id']])
+                ->asArray()
+                ->all();
+
+            foreach ($menu_items as $key => $menu_item) {
+                $price_chart[$item['item_id']] += $menu_item['quantity'] * $menu_item['price'];
+            }
         }
         
         //make chunks of item by vendor id 
+
         $chanks = [];
 
         $total = $sub_total = $delivery_charge = 0;
@@ -207,7 +219,35 @@ class Order extends \yii\db\ActiveRecord
                 $item_purchase->trash = 'Default';
                 $item_purchase->save(false);
 
+                //save menu item 
+
+                $menu_items = CustomerCartMenuItem::find()
+                    ->select([
+                        '{{%vendor_item_menu}}.menu_id',
+                        '{{%vendor_item_menu}}.menu_name',
+                        '{{%vendor_item_menu}}.menu_name_ar',
+                        '{{%vendor_item_menu_item}}.menu_item_id',
+                        '{{%vendor_item_menu_item}}.menu_item_name',
+                        '{{%vendor_item_menu_item}}.menu_item_name_ar',
+                        '{{%vendor_item_menu_item}}.price',
+                        '{{%customer_cart_menu_item}}.quantity'                        
+                    ])
+                    ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                    ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')                    
+                    ->where(['cart_id' => $item['cart_id']])
+                    ->asArray()
+                    ->all();
+
+                foreach ($menu_items as $key => $menu_item) {
+                    $soim = new SuborderItemMenu;
+                    $soim->attributes = $menu_item;
+                    $soim->purchase_id = $item_purchase->purchase_id;
+                    $soim->total = $soim->price * $soim->quantity;
+                    $soim->save();
+                }
+                
                 //sub order total data 
+                
                 $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
                 $delivery_charge += $delivery_area->delivery_price;
 

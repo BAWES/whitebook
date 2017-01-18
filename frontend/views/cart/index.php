@@ -98,8 +98,6 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 					$unit_price = $item['item_price_per_unit'];
 				}
 
-				$row_total = $unit_price * $item['cart_quantity'];
-
     			$menu_items = CustomerCartMenuItem::find()
     				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
     				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
@@ -108,8 +106,10 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
     				->all();
 
     			foreach ($menu_items as $key => $value) {
-    				$row_total += $value['quantity'] * $value['price'];
+    				$unit_price += $value['quantity'] * $value['price'];
     			}
+
+    			$row_total = $unit_price * $item['cart_quantity'];
 
     			$sub_total += $row_total;
 	        	

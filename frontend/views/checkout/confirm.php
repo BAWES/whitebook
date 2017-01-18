@@ -7,6 +7,7 @@ use common\models\CustomerCart;
 use common\components\CFormatter;
 use common\components\LangFormat;
 use common\models\VendorItemPricing;
+use common\models\CustomerCartMenuItem;
 
 ?>
 <h3>
@@ -58,13 +59,24 @@ use common\models\VendorItemPricing;
                 $unit_price = $item['item_price_per_unit'];
             }
 
-			$address_data = CustomerCart::getAddressData($address[$item['cart_id']]);
+            $menu_items = CustomerCartMenuItem::find()
+                ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                ->where(['cart_id' => $item['cart_id']])
+                ->asArray()
+                ->all();
 
-			$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+            foreach ($menu_items as $key => $value) {
+                $unit_price += $value['quantity'] * $value['price'];
+            }
 
 			$row_total = $unit_price * $item['cart_quantity'];
 
 			$sub_total += $row_total;
+
+            $address_data = CustomerCart::getAddressData($address[$item['cart_id']]);
+
+            $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
 
         	?>
         	<tr>
@@ -93,9 +105,27 @@ use common\models\VendorItemPricing;
         				<?=LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
         			</a>
 
-                    <div class="visible-xs visible-sm">                         
-                        x <?= $item['cart_quantity'] ?> = <?= CFormatter::format($row_total); ?>
-                    </div>
+                    <?php 
+
+                        foreach ($menu_items as $key => $menu_item) { 
+                            if(Yii::$app->language == 'en') {
+                                echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
+                            }else{
+                                echo '<i class="cart_menu_item">'.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'].'</i>';
+                            }
+                        } 
+
+                        ?>
+
+                        <?php if($menu_items) { ?>
+                            <div class="visible-xs visible-sm">                         
+                                 = <?= CFormatter::format($row_total); ?>
+                            </div>
+                        <?php } else { ?>
+                            <div class="visible-xs visible-sm">                         
+                                x <?= $item['cart_quantity'] ?> = <?= CFormatter::format($row_total); ?>
+                            </div>
+                        <?php } ?>
         		</td>
         		<td>
         			<?php 
