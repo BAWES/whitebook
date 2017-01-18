@@ -68,6 +68,7 @@ return [
                         'GET count' => 'cart-count',
                         'POST' => 'add',
                         'PATCH' => 'update',
+                        'DELETE' => 'remove',
                     ]
                 ],
                 [ // AccountController
@@ -123,6 +124,17 @@ return [
                         'PATCH' => 'address-update',
                         'DELETE <id>' => 'address-remove',
                         'GET questions/<address_type_id>' => 'address-questions',
+                    ]
+                ],
+                [ // CheckoutController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/checkout',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'list-cart-items',
+                        'GET payment-getaway' => 'payment-getaway-list',
+                        'GET address' => 'address',
+                        'GET success' => 'success',
                     ]
                 ],
             ],

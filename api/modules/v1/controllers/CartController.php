@@ -305,4 +305,31 @@ class CartController extends Controller
         $this->errors = CustomerCart::validate_item($data);
         return !$this->errors;
     }
+
+    /**
+     * method to remove cart from cart table
+     * @return array|\yii\db\ActiveRecord[]
+     * @throws \Exception
+     */
+    public function actionRemove() {
+
+        $cartID = Yii::$app->request->getBodyParam('cart_id');
+        if ($cartID) {
+            $cartData = CustomerCart::findOne($cartID);
+            if ($cartData) {
+                $cartData->delete();
+                return $this->listing();
+            } else {
+                return [
+                    "operation" => "error",
+                    "message" => "Invalid Cart ID"
+                ];
+            }
+        } else {
+            return [
+                "operation" => "error",
+                "message" => "Invalid Cart ID"
+            ];
+        }
+    }
 }
