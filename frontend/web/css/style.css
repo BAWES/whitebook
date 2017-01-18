@@ -2272,3 +2272,8 @@ span.small {
 .menu-item-qty-box .fa {
     cursor: pointer;
 }
+
+.cart_menu_item{
+    clear: both;
+    display: block;
+}

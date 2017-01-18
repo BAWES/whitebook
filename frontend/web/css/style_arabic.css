@@ -354,3 +354,12 @@ td[align="left"] {
 .events_inner_listing_new .events_listing ul li{
     margin: 0 0 28px 32px;
 }
+
+.menu-item-detail .menu-item-name {
+    margin-left: 0px;
+    margin-right: 10px;
+}
+
+.product_detials_common .buy-btn{
+    float: right;
+}

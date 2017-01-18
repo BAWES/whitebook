@@ -1455,15 +1455,14 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '	<table class="table table-bordered">';
 	$html += '		<thead>';
 	$html += '			<tr>';
-	$html += '				<th colspan="7" class="heading">Menu Items</th>';
+	$html += '				<th colspan="6" class="heading">Menu Items</th>';
 	$html += '			</tr>';
 	$html += '			<tr>';
 	$html += '				<th>Name</th>';
 	$html += '				<th>Name - Ar</th>';
-	$html += '				<th>Min Qty</th>';
-	$html += '				<th>Max Qty</th>';
 	$html += '				<th>Price</th>';
 	$html += '				<th>Hint</th>';
+	$html += '				<th>Hint - Ar</th>';
 	$html += '				<th></th>';
 	$html += '			</tr>';
 	$html += '		</thead>';
@@ -1471,7 +1470,7 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '		</tbody>';
 	$html += '		<tfoot>';
 	$html += '			<tr>';
-	$html += '				<td colspan="7">';
+	$html += '				<td colspan="6">';
 	$html += '					<button type="button" class="btn btn-primary btn-add-menu-item">';
 	$html += '						<i class="fa fa-plus"></i> Add Item';
 	$html += '					</button>';
@@ -1493,18 +1492,19 @@ $(document).delegate('.btn-add-menu-item', 'click', function(){
 	$html += '		<input placeholder="Name" name="menu_item['+menu_count+'][menu_item_name]" value="" class="form-control" /></td>';
 	$html += '	<td>';
 	$html += '		<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_item_name_ar]" value="" class="form-control" /></td>';
-	$html += '	<td>';
-	$html += '		<input placeholder="Min. Qty" name="menu_item['+menu_count+'][min_quantity]" value="" class="form-control" />';
-	$html += '	</td>';
-	$html += '	<td>';
-	$html += '		<input placeholder="Max. Qty" name="menu_item['+menu_count+'][max_quantity]" value="" class="form-control" />';
-	$html += '	</td>';
+	
 	$html += '	<td>';
 	$html += '		<input placeholder="Price" name="menu_item['+menu_count+'][price]" value="" class="form-control" />';
 	$html += '	</td>';
+	
 	$html += '	<td>';
 	$html += '		<input placeholder="Hint" name="menu_item['+menu_count+'][hint]" value="" class="form-control" />';
 	$html += '	</td>';
+	
+	$html += '	<td>';
+	$html += '		<input placeholder="Hint - Ar" name="menu_item['+menu_count+'][hint_ar]" value="" class="form-control" />';
+	$html += '	</td>';
+	
 	$html += '	<td>';
 	$html += '		<button type="button" class="btn btn-danger btn-remove-menu-item">';
 	$html += '			<i class="fa fa-trash-o"></i>';
