@@ -198,7 +198,8 @@ class CartController extends Controller
 
                 return [
                     "operation" => "success",
-                    "message" => "Item Added To Cart Successfully "
+                    "message" => "Item Added To Cart Successfully ",
+                    "total-cart-items" => CustomerCart::item_count()
                 ];
 
             } else {
@@ -278,7 +279,8 @@ class CartController extends Controller
 
                     return [
                         "operation" => "success",
-                        "message" => "Cart Updated Successfully "
+                        "message" => "Cart Updated Successfully ",
+                        "total-cart-items" => CustomerCart::item_count()
                     ];
 
                 } else {
@@ -318,7 +320,11 @@ class CartController extends Controller
             $cartData = CustomerCart::findOne($cartID);
             if ($cartData) {
                 $cartData->delete();
-                return $this->listing();
+                return [
+                    "operation" => "success",
+                    "message" => "Cart Item Deleted Successfully",
+                    "total-cart-items" => CustomerCart::item_count()
+                ];
             } else {
                 return [
                     "operation" => "error",
