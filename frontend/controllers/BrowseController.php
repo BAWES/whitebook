@@ -619,6 +619,31 @@ class BrowseController extends BaseController
         ];
     }
 
+    public function actionBooking() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+
+        $item = VendorItem::findOne($item_id);
+
+        Yii::$app->mailer->compose("customer/booking_support",
+            [
+                "name" => Yii::$app->request->post('name'),
+                "phone" => Yii::$app->request->post('phone'),
+                "email" => Yii::$app->request->post('email')
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo('hello@thewhitebook.com')
+            ->setSubject('Booking support request')
+            ->send();
+
+        Yii::$app->getSession()->setFlash('success', Yii::t(
+                    'frontend', 
+                    'Success: We got your request, we will contact you ASAP!'
+                ));
+
+        return $this->redirect(['browse/detail', 'slug' => $item['slug']]);
+    }
+
     public function actionLocationDateSelection()
     {
         $location_name = $_REQUEST['location_name'];

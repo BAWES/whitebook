@@ -138,7 +138,7 @@ if($model->images) {
                                 </a>
                             </label>
                             <b class="font-27">
-                                <p><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
+                                <p><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('frontend','Price upon request').'<span>'  ?></p>
                             </b>
                         </div>
                         <!-- Indicators responsive slider -->
@@ -253,9 +253,10 @@ if($model->images) {
                                             <img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />
                                         </div>
 
+                                        <div class="clerfix"></div>
+
                                         <button type="button" class="btn btn-default btn-booking-modal" data-toggle="modal" data-target="#modal_booking_service">
-                                            <i class="fa fa-envelope-o"></i> &nbsp;
-                                            REQUEST BOOKING SERVICE 
+                                            <?= Yii::t('frontend', 'REQUEST BOOKING SERVICE') ?>
                                         </button>
 
                                         <!-- Add to Event End here -->
@@ -724,6 +725,51 @@ if($model->images) {
    </div>
  </div>
 
+<div id="modal_booking_service" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <form action="<?= Url::to(['browse/booking']) ?>" method="post">
+
+        <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title text-center" id="myModalLabel">
+                <span>REQUEST BOOKING SERVICE </span>
+            </h4>
+          </div>
+
+          <div class="modal-body">
+            <div class="login-padding">
+                <div class="form-group">    
+                    <label>Name</label>
+                    <input class="form-control input-lg" name="name" placeholder="Your name" required />
+                    <span class="error name"></span>
+                </div>
+                <div class="form-group">    
+                    <label>Phone</label>
+                    <input class="form-control input-lg" name="phone" pattern='\d' placeholder="Your phone no" title="Digits only" required />
+                    <span class="error phone"></span>
+                </div>
+                <div class="form-group">    
+                    <label>Email</label>
+                    <input type="email" class="form-control input-lg" name="email" placeholder="Your email address" required />
+                    <span class="error email"></span>
+                </div>
+                <div class="form-group">
+                    <div class="button-signin">
+                        <button type="button" class="btn btn-primary btn-lg btn-block btn-booking-service">
+                            <?= Yii::t('frontend', 'Submit') ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
+          </div><!--END .modal-body -->
+        </div><!-- END .modal-content -->
+    </form>
+  </div>
+</div>
+
 <?php
 
 echo Html::hiddenInput('final_price_url', Url::to(['browse/final-price']), ['id' => 'final_price_url']);
@@ -758,10 +804,10 @@ $this->registerJs("
 $this->registerCss("
 
     .btn-booking-modal {
-        margin-top: 10px;
+        margin-top: 7px;
         padding: 10px;
+        width: 100%;
     }
- 
     .width-100-percent{width:100%!important;}
     .margin-top-20{margin-top:20px;}
     .width-20-percent{width: 20%;}

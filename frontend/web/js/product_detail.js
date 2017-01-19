@@ -425,3 +425,44 @@ function update_price() {
     });
 }
 
+$(document).delegate('.btn-booking-service', 'click', function() {
+
+    $('#modal_booking_service .error').html('');
+    
+    $have_error = 0;
+
+    $name = $('#modal_booking_service input[name="name"]').val();
+    $phone = $('#modal_booking_service input[name="phone"]').val();
+    $email = $('#modal_booking_service input[name="email"]').val();
+
+    if($name.length == 0) {
+        $('#modal_booking_service .error.name').html('This field is required');
+        $have_error = 1;
+    }
+
+    if($phone.length == 0) {
+        $('#modal_booking_service .error.phone').html('This field is required');
+        $have_error = 1;
+    }
+
+    if(!$phone.match(/^\d+$/)) {
+        $('#modal_booking_service .error.phone').html('Enter a valid phone number');
+        $have_error = 1;
+    }
+
+    if($email.length == 0) {
+        $('#modal_booking_service .error.email').html('This field is required');
+        $have_error = 1;
+    }
+
+    $emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    
+    if( !$emailReg.test($email) ) {
+        $('#modal_booking_service .error.email').html('Enter a valid email');
+        $have_error = 1;
+    }
+
+    if(!$have_error)  {
+        $('#modal_booking_service form').submit();
+    }
+});
