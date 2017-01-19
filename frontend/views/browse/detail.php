@@ -323,13 +323,14 @@ if($model->images) {
 
                                     <span class="error menu_<?= $value->menu_id ?>"></span>
 
-                                    <ul class="menu-items">
+                                    <ul class="menu-items"  data-max-quantity="<?= $value->max_quantity ?>">
                                     <?php 
 
                                     $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
                                     foreach ($menu_items as $menu_item) { ?>
-                                        <li>
+
+                                        <li> 
                                             <!-- qty box -->
 
                                             <span class="menu-item-qty-box">
@@ -816,4 +817,4 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.6', ['depends' => [\yii\web\JqueryAsset::className()]]);
