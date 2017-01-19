@@ -8,6 +8,7 @@ use common\models\Order;
 use common\models\Vendor;
 use common\models\OrderStatus;
 use common\models\SuborderItemPurchase;
+use common\models\SuborderItemMenu;
 
 $this->title = 'Sub order #'.$model->suborder_id;
 $this->params['breadcrumbs'][] = ['label' => 'Sub Orders', 'url' => ['index']];
@@ -91,6 +92,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         echo $item->vendoritem->item_name_ar; 
                     } ?>
+                    
+                    <?php
+
+                    $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
+
+                    foreach ($menu_items as $key => $menu_item) { 
+                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
+                    } 
+
+                    ?>
                 </th>
                 <td align="left"><?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?></th>
                 <td aligh="left"><?= $item->purchase_delivery_address ?></th>
