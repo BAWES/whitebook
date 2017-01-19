@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use common\models\Order;
 use common\models\Vendor;
 use common\models\OrderStatus;
+use common\models\SuborderItemMenu;
 use common\models\SuborderItemPurchase;
 
 ?>
@@ -114,7 +115,15 @@ use common\models\SuborderItemPurchase;
         					echo $item->vendoritem->item_name;
         				} else {
         					echo $item->vendoritem->item_name_ar; 
-        				} ?>
+        				} 
+
+	                    $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
+
+	                    foreach ($menu_items as $key => $menu_item) { 
+	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
+	                    } 
+
+	                    ?>
         				<br />
         				x <?= $item->purchase_quantity ?>
 		        	</th>
