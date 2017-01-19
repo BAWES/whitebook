@@ -77,11 +77,13 @@ class CheckoutController extends Controller
      */
 	public function actionListCartItems()
 	{
+		$model = new CustomerCart();
 		$items = CustomerCart::items();
+		$errors = [];
 		if ($items) {
 			foreach ($items as $item) {
 
-				$errors[] = CustomerCart::validate_item([
+				$errors[] = $model->validate_item([
 					'item_id' => $item['item_id'],
 					'delivery_date' => $item['cart_delivery_date'],
 					'timeslot_end_time' => $item['timeslot_end_time'],

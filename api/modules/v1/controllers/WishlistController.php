@@ -75,9 +75,9 @@ class WishlistController extends Controller
      * Method to list all whishlist related with particular user
      */
     public function listing(){
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $offset = 0;
-        $limit = 10;
+        $limit = Yii::$app->params['limit'];
         $q = "SELECT  `whitebook_vendor_item`.`item_id`, `whitebook_vendor_item`.`item_id`, ";
         $q .= "`whitebook_vendor_item`.`item_name`, `whitebook_vendor_item`.`item_name_ar`, `whitebook_vendor_item`.`item_price_per_unit`, ";
         $q .= "`whitebook_vendor`.`vendor_name`, `whitebook_vendor`.`vendor_name_ar`, `whitebook_image`.`image_path` FROM ";
@@ -95,7 +95,7 @@ class WishlistController extends Controller
      * Add to WishList table method
      */
     public function actionWishlistAdd() {
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $item_id = Yii::$app->request->getBodyParam("item_id");
 
         $exist = Wishlist::find()->where(['item_id'=>$item_id,'customer_id'=>$customer_id])->exists();
@@ -104,10 +104,18 @@ class WishlistController extends Controller
             $wish_modal->item_id = $item_id;
             $wish_modal->customer_id = $customer_id;
             $wish_modal->wish_status = 1;
-            $wish_modal->save();
+            if ($wish_modal->save()) {
+                return [
+                    "operation" => "success",
+                    "message" => "Item Added Successfully",
+                ];
+            } else {
+                return [
+                    "operation" => "error",
+                    "message" => "Error While Adding Item To Wishlist",
+                ];
+            }
         }
-
-        return $this->listing();
     }
 
     /*
@@ -115,9 +123,22 @@ class WishlistController extends Controller
      */
     public function actionWishlistRemove() {
 
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $item_id = Yii::$app->request->getBodyParam("item_id");
-        Wishlist::findOne(['item_id'=>$item_id,'customer_id'=>$customer_id])->delete();
+        $item = Wishlist::findOne(['item_id'=>$item_id,'customer_id'=>$customer_id]);
+
+        if ($item && $item->delete()) {
+            return [
+                "operation" => "success",
+                "message" => "Item Deleted Successfully",
+            ];
+        } else {
+            return [
+                "operation" => "error",
+                "message" => "Error While Deleting Item From Wishlist",
+            ];
+        }
+
         return $this->listing();
     }
 }

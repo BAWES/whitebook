@@ -61,6 +61,7 @@ class EventController extends Controller
     }
 
     /**
+     * method to list event
      * @return array
      */
     public function actionEventList()
@@ -68,15 +69,13 @@ class EventController extends Controller
         return $this->eventList();
     }
 
-    public function actionEventDetail($id)
+    public function actionEventDetail($event_id)
     {
-        if ($id){
-            $customer_id = 182; // it will be from session
+        if ($event_id){
             return Events::find()
                 ->select(['event_id', 'event_name', 'event_date', 'event_type'])
-                ->where(['customer_id' => $customer_id, 'event_id' => $id])
-                ->asArray()
-                ->all();
+                ->where(['customer_id' => Yii::$app->user->getId(), 'event_id' => $event_id])
+                ->one();
         } else {
             return [
                 "operation" => "error",
@@ -87,7 +86,7 @@ class EventController extends Controller
 
     public function actionEventCreate()
     {
-        $customer_id = 182;
+        $customer_id = Yii::$app->user->getId();
         $name = Yii::$app->request->getBodyParam("name");
         $date = Yii::$app->request->getBodyParam("date");
         $type = Yii::$app->request->getBodyParam("type");
@@ -101,7 +100,7 @@ class EventController extends Controller
             if ($exit) {
                 return [
                     "operation" => "error",
-                    "message" => "Event Already Exist with same name."
+                    "message" => "Event Already Exist With Same Name."
                 ];
             }
 
@@ -112,9 +111,21 @@ class EventController extends Controller
             $model->event_type = $type;
             $model->no_of_guests = $guest;
             $model->slug = $this->generateSlug($name);
-            $model->save();
+            if ($model->save()) {
+                return [
+                    "operation" => "success",
+                    "message" => "Event Created Successfully.",
+                    'event-list' => $this->eventList()
+                ];
 
-            return $this->eventList();
+            } else {
+                return [
+                    "operation" => "error",
+                    "message" => "Error While Saving Error.",
+                    "detail" => $model->errors
+                ];
+            }
+
         } else {
 
             return [
@@ -125,29 +136,37 @@ class EventController extends Controller
 
     }
 
-    public function actionEventUpdate($id)
+    public function actionEventUpdate()
     {
-        $customer_id = 182;
-
+        $event_id = Yii::$app->request->getBodyParam("event_id");
         $name = Yii::$app->request->getBodyParam("name");
         $date = Yii::$app->request->getBodyParam("date");
         $type = Yii::$app->request->getBodyParam("type");
         $guest = Yii::$app->request->getBodyParam("no_of_guests");
 
-        if ($name && $type && $date) {
-            $model = Events::findOne($id);
+        if ($name && $type && $date && $event_id) {
+            $model = Events::findOne($event_id);
 
             if ($model) {
                 $model->event_name = $name;
                 $model->event_date = date('Y-m-d', strtotime($date));
                 $model->event_type = $type;
                 $model->no_of_guests = $guest;
-
-
                 $model->slug = $this->generateSlug($name);
-                $model->save();
 
-                return $this->eventList();
+                if ($model->save()) {
+                    return [
+                        "operation" => "success",
+                        "message" => "Event Saved Successfully.",
+                        "event-list" => $this->eventList()
+                    ];
+                } else {
+                    return [
+                        "operation" => "error",
+                        "message" => "Invalid Event.",
+                        "detail" => $model->errors,
+                    ];
+                }
             } else {
                 return [
                     "operation" => "error",
@@ -155,10 +174,9 @@ class EventController extends Controller
                 ];
             }
         } else {
-
             return [
                 "operation" => "error",
-                "message" => "Empty event fields."
+                "message" => "Invalid Event ID."
             ];
         }
     }
@@ -166,37 +184,45 @@ class EventController extends Controller
     /*
      * Method will delete user event from event table
      */
-    public function actionEventDelete($id) {
+    public function actionEventRemove() {
 
-        $customer_id = 182; // it will be from session
+        $event_id = Yii::$app->request->getBodyParam('event_id');
 
-        $event =  Events::find()
-            ->where(['customer_id'=>$customer_id, 'event_id' => $id])
-            ->one();
-        if ($event) {
-            $event->delete();
+        if ($event_id) {
+            $event = Events::find()
+                ->where(['customer_id' => Yii::$app->user->getId(), 'event_id' => $event_id])
+                ->one();
+            if ($event) {
+                $event->delete();
+                return [
+                    "operation" => "success",
+                    "message" => "Event Deleted Successfully.",
+                    'event-list' => $this->eventList()
+                ];
+            } else {
+                return [
+                    "operation" => "error",
+                    "message" => "Invalid Event."
+                ];
+            }
         } else {
             return [
                 "operation" => "error",
                 "message" => "Invalid Event."
             ];
         }
-
-
-        return $this->eventList();
     }
 
     /*
      * Method to list all event related with particular user
      */
-    public function eventList(){
+    private function eventList(){
 
-        $customer_id = 182;
         $offset = 0;
-        $limit = 10;
+        $limit = $limit = Yii::$app->params['limit'];
         return Events::find()
             ->select(['event_id','event_name','event_date','event_type'])
-            ->where(['customer_id'=>$customer_id])
+            ->where(['customer_id'=>Yii::$app->user->getId()])
             ->offset($offset)
             ->limit($limit)
             ->all();

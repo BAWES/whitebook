@@ -104,6 +104,18 @@ return [
                 ],
                 [ // EventController
                     'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/event',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'event-list',
+                        'GET detail' => 'event-detail',
+                        'POST' => 'event-create',
+                        'PATCH' => 'event-update',
+                        'DELETE' => 'event-remove',
+                    ]
+                ],
+                [ // WishlistController
+                    'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/wishlist',
                     'pluralize' => false,
                     'patterns' => [
