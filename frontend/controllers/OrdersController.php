@@ -55,8 +55,17 @@ class OrdersController extends BaseController
 	    
 		$order_id = Yii::$app->request->get('order_id');
 
-		$order = Order::findOne($order_id);
+		$order = Order::find()
+			->where([
+				'order_id' => $order_id,
+				'customer_id' => Yii::$app->user->getId()
+			])
+			->one();
 		
+		if (!$order) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
 		$suborder = Suborder::find()
 			->where(['order_id' => $order_id])
 			->all();
