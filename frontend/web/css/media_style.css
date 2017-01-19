@@ -233,7 +233,9 @@
 
 	.thinl_like_sectons .margin-rightnone{margin:0 19.5px 19.5px 0 !important;}
 	.plan_sections .margin-rightnone{margin:0 !important;}
-	.product_detail_section .right_descr_product .add_events{margin:0;width:190px;}
+	.product_detail_section .right_descr_product .add_events{
+		margin: 0;
+	}		
 
 	.select_items_select .col-md-4{padding-left:0;}
 	.col-md-6.paddingright0.hidde_res{min-height:0;display: none;}
@@ -754,8 +756,11 @@
 	.product_detail_section.product-shop-common .right_descrip{width:100%;}
 	.product_detail_section.product-shop-common .left_descrip{width:100%;}
 	.responsive_width{ margin:0 auto; width:206px;}
-	.product_detail_section .right_descr_product .add_events{ margin:0 8px 0 0px;}
-	.product_detail_section .right_descr_product .add_events{ width:178px;}
+	.product_detail_section .right_descr_product .add_events { 
+		margin: 0px !important;
+		float: left;
+	}
+
 	.product_detail_section .product_name{ border:none;}
 	.right_descrip{ border-bottom:1px solid #ccc; padding-bottom: 29px;}
 	.right_descr_product .collapsed, .right_descr_product .panel-title > a{ padding:22px 13px;}
@@ -1136,9 +1141,7 @@
 @media only screen and (max-width: 414px){
 	.thinl_like_sectons .thing_items li{width: 130px;height:130px;}
 	.thinl_like_sectons .thing_items li:nth-child(2n+1){margin: 9px 92px 9px 10px ;}
-	.product_detail_section .right_descr_product .add_events{ padding:10px 0 0 10px;}
-
-
+	
 	.flex-direction-nav .flex-prev,.flex-direction-nav .flex-next{ height:175px;}
 	.logo_header{}
 
