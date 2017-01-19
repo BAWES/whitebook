@@ -8,6 +8,7 @@ use common\models\Order;
 use common\models\Vendor;
 use common\models\OrderStatus;
 use common\models\SuborderItemPurchase;
+use common\models\SuborderItemMenu;
 
 $this->title = 'Order #' . $model->order_id;
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
@@ -105,11 +106,18 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php foreach (Order::subOrderItems($row->suborder_id) as $item) { ?>
                 <tr>
                     <td align="left">
-                        <?php if(Yii::$app->language == 'en') {
-                            echo $item->vendoritem->item_name;
-                        } else {
-                            echo $item->vendoritem->item_name_ar; 
-                        } ?>
+                        
+                        <a href="<?= Url::to(['vendor-item/view', 'item_id' => $item->item_id]) ?>" style="padding: 0"><b><?= $item->vendoritem->item_name ?></b></a>
+                        
+                        <?php
+
+                        $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
+
+                        foreach ($menu_items as $key => $menu_item) { 
+                            echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
+                        } 
+
+                        ?>
                     </th>
                     <td align="left"><?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?></th>
                     <td aligh="left"><?= $item->purchase_delivery_address ?></th>

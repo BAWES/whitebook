@@ -5,6 +5,7 @@ use common\models\Vendor;
 use common\models\OrderStatus;
 use common\components\CFormatter;
 use common\components\LangFormat;
+
 $this->title = Yii::t('frontend', 'View Order | Whitebook'); 
 
 ?>
