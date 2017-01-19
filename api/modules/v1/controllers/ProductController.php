@@ -47,8 +47,6 @@ class ProductController extends Controller
             'options',
             'category-products',
             'product-detail',
-            'product-areas', // need to remove
-            'product-delivery-time-slot', // need to remove
         ];
 
         return $behaviors;
@@ -88,7 +86,7 @@ class ProductController extends Controller
     )
     {
         $offset = 0;
-        $limit = 10;
+        $limit = Yii::$app->user->getId();
 
         if (isset($requestedVendor) && $requestedVendor != '') {
             $arr_vendor_slugs = $requestedVendor;
@@ -130,7 +128,7 @@ class ProductController extends Controller
 
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
 
-//        //price filter
+        //price filter
         if (isset($requestedPrice) && $requestedPrice != '') {
 
             $price_condition = [];
@@ -143,7 +141,7 @@ class ProductController extends Controller
             $item_query->andWhere(implode(' OR ', $price_condition));
         }
 
-//        //theme filter
+        //theme filter
         if (isset($requestedTheme) && count($requestedTheme)>0) {
 
             $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
@@ -151,11 +149,11 @@ class ProductController extends Controller
             $item_query->andWhere(['IN', '{{%theme}}.slug', $requestedTheme]);
 
         }//if themes
-//
+
         //category filter
         $cats = '';
 
-        if($categoryId)
+        if ($categoryId)
         {
             $cats = $categoryId;
         }
@@ -224,7 +222,7 @@ class ProductController extends Controller
         if ($event_id && $item_id) {
 
             $model = new \frontend\models\Users();
-            $customer_id = 182;
+            $customer_id = Yii::$app->user->getId();
             $item = VendorItem::findOne($item_id);
             $item_name = $item->item_name;
 
@@ -265,7 +263,9 @@ class ProductController extends Controller
         }
     }
 
-    public function actionProductAreas($vendor_id,$customer_id) {
+    public function actionProductAreas($vendor_id) {
+
+        $customer_id = Yii::$app->user->getId();
 
         $vendor_area_list = [];
         if (empty($vendor_id) || !isset($vendor_id)) {

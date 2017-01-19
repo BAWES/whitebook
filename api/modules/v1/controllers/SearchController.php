@@ -15,35 +15,35 @@ use common\models\CategoryPath;
 use yii\rest\Controller;
 class SearchController extends Controller
 {
-//    public function behaviors()
-//    {
-//        $behaviors = parent::behaviors();
-//
-//        // remove authentication filter for cors to work
-//        unset($behaviors['authenticator']);
-//
-//        // Allow XHR Requests from our different subdomains and dev machines
-//        $behaviors['corsFilter'] = [
-//            'class' => \yii\filters\Cors::className(),
-//            'cors' => [
-//                'Origin' => Yii::$app->params['allowedOrigins'],
-//                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-//                'Access-Control-Request-Headers' => ['*'],
-//                'Access-Control-Allow-Credentials' => null,
-//                'Access-Control-Max-Age' => 86400,
-//                'Access-Control-Expose-Headers' => [],
-//            ],
-//        ];
-//
-//        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-//        $behaviors['authenticator'] = [
-//            'class' => \yii\filters\auth\HttpBearerAuth::className(),
-//        ];
-//        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-//        $behaviors['authenticator']['except'] = ['options'];
-//
-//        return $behaviors;
-//    }
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        // remove authentication filter for cors to work
+        unset($behaviors['authenticator']);
+
+        // Allow XHR Requests from our different subdomains and dev machines
+        $behaviors['corsFilter'] = [
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                'Origin' => Yii::$app->params['allowedOrigins'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Credentials' => null,
+                'Access-Control-Max-Age' => 86400,
+                'Access-Control-Expose-Headers' => [],
+            ],
+        ];
+
+        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
+        $behaviors['authenticator'] = [
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
+        ];
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = ['options','index'];
+
+        return $behaviors;
+    }
 
     /**
      * @inheritdoc
@@ -64,7 +64,7 @@ class SearchController extends Controller
 
     public function actionIndex($q,$offset)
     {
-        $limit = '10';
+        $limit = Yii::$app->params['limit'];
         $items_query = CategoryPath::find()
             ->select('{{%vendor_item}}.item_id,{{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar')
             ->leftJoin(
