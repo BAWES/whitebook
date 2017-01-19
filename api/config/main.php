@@ -119,11 +119,11 @@ return [
                     'patterns' => [
                         'GET' => 'address-list',
                         'GET type' => 'address-type-list',
-                        'GET <id>' => 'address-view',
+                        'GET view' => 'address-view',
                         'POST' => 'address-add',
                         'PATCH' => 'address-update',
-                        'DELETE <id>' => 'address-remove',
-                        'GET questions/<address_type_id>' => 'address-questions',
+                        'DELETE' => 'address-remove',
+                        'GET questions' => 'address-questions',
                     ]
                 ],
                 [ // CheckoutController
