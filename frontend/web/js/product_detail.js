@@ -1,5 +1,8 @@
 
     jQuery(document).ready(function () {
+
+        $('[data-toggle="tooltip"]').tooltip(); 
+
         /* client say slider start*/
         jQuery('.flexslider2').flexslider({
             animation: "slide",
@@ -18,12 +21,12 @@
             }
         });
         /* client say slider end*/
-    });
+ 
+        /* FeatureD Products end*/
+        /*carousel slider*/
 
-    /* FeatureD Products end*/
-    /*carousel slider*/
-    jQuery(document).ready(function () {
         window.curSlide;
+
         jQuery('#carousel').flexslider({
             animation: "slide",
             controlNav: true,
@@ -286,8 +289,8 @@ if (!isGuest) {
                     location = location;
                 } else {
 
-                    $.each(data['errors'], function(index, errors) {
-                        $.each(errors, function() {
+                    $.each(data.errors, function(index, errors) {
+                        $.each(errors, function(key, value) {
                             jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');
                         });
                     });
@@ -394,6 +397,34 @@ $("#delivery_date").on("changeDate", function(e) {
     productAvailability(jQuery(this).val());
 });
 
+$(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
+   
+    $qty_input = $(this).parent().find('input');
+
+    $qty = parseInt($qty_input.val());
+
+    $qty_input.val($qty - 1);
+
+    update_price();
+});
+
+$(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
+   
+    $qty_input = $(this).parent().find('input');
+
+    $qty = parseInt($qty_input.val());
+
+    $qty_input.val($qty + 1);
+
+    update_price();
+});
+
+function update_price() {
+    $.post($('#final_price_url').val(), $('.menu-item-detail input').serialize(), function(json) {
+        $('.item-final-price').html(json.price);
+    });
+}
+
 $(document).delegate('.btn-booking-service', 'click', function() {
 
     $('#modal_booking_service .error').html('');
@@ -433,5 +464,14 @@ $(document).delegate('.btn-booking-service', 'click', function() {
 
     if(!$have_error)  {
         $('#modal_booking_service form').submit();
+    }
+});
+
+$(document).delegate("#modal_booking_service input[name=\"phone\"]", 'keypress', function (e) {
+    //if the letter is not digit then display error and don't type anything
+    if (  e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57 )) {
+        //display error message
+        $(this).parent().find('.error').html('Contact number digits only+.');
+        return false;
     }
 });
