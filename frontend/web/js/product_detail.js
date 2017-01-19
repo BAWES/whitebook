@@ -406,7 +406,7 @@ $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
     if($qty - 1 >= 0)
     {
         $qty_input.val($qty - 1);    
-    }    
+    }  
 
     update_price();
 });
@@ -434,7 +434,7 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
     if($menu_total_qty + 1 <= $max || $max == 0) {
         $qty_input.val($qty + 1);    
     }    
-
+    
     update_price();
 });
 
