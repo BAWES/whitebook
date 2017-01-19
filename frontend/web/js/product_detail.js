@@ -466,3 +466,12 @@ $(document).delegate('.btn-booking-service', 'click', function() {
         $('#modal_booking_service form').submit();
     }
 });
+
+$(document).delegate("#modal_booking_service input[name=\"phone\"]", 'keypress', function (e) {
+    //if the letter is not digit then display error and don't type anything
+    if (  e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57 )) {
+        //display error message
+        $(this).parent().find('.error').html('Contact number digits only+.');
+        return false;
+    }
+});
