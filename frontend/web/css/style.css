@@ -625,13 +625,49 @@ a:hover .plus-icon-prod{color:#000;display: inline-block;width:100%;height:16px;
 .product_detail_section .with_tables_content .add_events{ padding: 11px 21px!important; margin: 0 0 0 30px;}
 .product_detail_section .right_descrip{ float: right; width: 40%;}
 .product_detail_section .flaticon-add186::before {font-size: 11pt!important; padding: 0 16px 0 0;}
-.product_detail_section .right_descr_product .add_events{line-height:15px; display: inline-block; border: 1px solid #e6e6e6;width:165px;padding:10px 0 0 22px; height:40px;margin:0 0 0 38px; font-weight:bold; font-size:13px;  color: #000; text-transform: uppercase;}
+.product_detail_section .right_descr_product .add_events {
+    line-height: 15px;
+    display: inline-block;
+    border: 1px solid #e6e6e6;
+    width: 80%;
+    padding: 10px 0 0 22px;
+    height: 40px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #000;
+    text-transform: uppercase;
+}
 .product_detail_section .right_descr_product .add_events:hover{background:#f0f0f0; text-decoration: none; color: #ebc000;}
 .product_detail_section .faver_evnt_product:hover{ text-decoration: none; color: #ebc000;}
-.product_detail_section .faver_evnt_product{display: inline-block;padding: 12px 0 12px; float: right; color: #808080;}
+.product_detail_section .faver_evnt_product {
+    display: inline-block;
+    padding: 12px 0 12px;
+    float: right;
+    color: #808080;
+    width: 20%;
+    text-align: center;
+}
 .product_detail_section .flaticon-favorite21::before{ font-size: 11pt!important;}
-.product_detail_section .buy_events{ display: inline-block; width: 95.8%; margin-top: 8px;float:right;}
-.product_detail_section .product_name .buy_events a{ text-decoration:none;border:1px solid #000;display: inline-block; padding:12px 27px 10px;font-family:'OpenSansRegular' ;font-weight:bold; margin:0 0 0 28px; color: #fff; text-transform: uppercase; background: #000000; width: 87.8%; text-align: center;}
+
+.product_detail_section .buy_events {
+    display: inline-block;
+    width: 100%;
+    margin-top: 8px;
+}
+.product_detail_section .product_name .buy_events a {
+    text-decoration: none;
+    border: 1px solid #000;
+    display: inline-block;
+    padding: 12px 27px 10px;
+    font-family: 'OpenSansRegular';
+    font-weight: bold;
+    /* margin: 0 0 0 28px; */
+    color: #fff;
+    text-transform: uppercase;
+    background: #000000;
+    width: 100%;
+    text-align: center;
+}
 .product_detail_section .product_name .buy_events a:hover{ background: #333; text-decoration: none;color:#fff;border:1px solid #333;}
 .product_detail_section .accad_menus{ display: inline-block; width: 100%;}
 .product_detail_section .flaticon-downwards::before{font-size:0 !important;background: url("../images/product-uparrow.png") no-repeat right center; float: right; margin: 0 0px 0 0;width:8px;height:16px;}
@@ -2222,4 +2258,17 @@ span.small {
 
 .desktop-menu .category_listing_nav{
     margin: 10px 0 20px 0;
+}
+
+.btn-booking-service {
+    border: 1px solid #000;
+    background: #000;
+    color: #fff;
+    text-transform: uppercase;
+}
+.btn-booking-service:focus,
+.btn-booking-service:hover {
+    background: #333;
+    border: 1px solid #333;
+    color: #fff;
 }
