@@ -86,7 +86,7 @@ class AddressController extends Controller
     /*
      * Common method to call for Listing of all address
      */
-    public function listing(){
+    private function listing(){
 
         $customer_id = Yii::$app->user->getId();
         $addresses = array();
@@ -147,20 +147,32 @@ class AddressController extends Controller
 
         $customer_address->city_id = $location->city_id;
         $customer_address->country_id = $location->country_id;
-        $customer_address->save(false);
+        if ($customer_address->save(false)) {
 
-        $address_id = $customer_address->address_id;
+            $address_id = $customer_address->address_id;
 
-//        save address questions
-        foreach ($questions as $key => $value) {
-            $customer_address_response = new CustomerAddressResponse();
-            $customer_address_response->address_id = $address_id;
-            $customer_address_response->address_type_question_id = $value['address_type_question_id'];
-            $customer_address_response->response_text = $value['response_text'];
-            $customer_address_response->save();
+            //save address questions
+            foreach ($questions as $key => $value) {
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $value['address_type_question_id'];
+                $customer_address_response->response_text = $value['response_text'];
+                $customer_address_response->save();
+            }
+
+            return [
+                "operation" => "success",
+                "message" => "Address Saved Successfully",
+                'address-list' => $this->listing()
+            ];
+
+        } else {
+            return [
+                "operation" => "error",
+                "message" => "Error While Saving Address",
+                'detail' => $customer_address->errors
+            ];
         }
-
-        return $this->listing();
     }
 
     /*
@@ -199,31 +211,46 @@ class AddressController extends Controller
 
             $customer_address->city_id = $location->city_id;
             $customer_address->country_id = $location->country_id;
-            $customer_address->save(false);
+            if ($customer_address->save(false)) {
 
-            //remove old questions
-            CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
+                //remove old questions
+                CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
 
-            //save address questions
-            foreach ($questions as $key => $value) {
-                $customer_address_response = new CustomerAddressResponse();
-                $customer_address_response->address_id = $address_id;
-                $customer_address_response->address_type_question_id = $value['address_type_question_id'];
-                $customer_address_response->response_text = $value['response_text'];
-                $customer_address_response->save();
+                //save address questions
+                foreach ($questions as $key => $value) {
+                    $customer_address_response = new CustomerAddressResponse();
+                    $customer_address_response->address_id = $address_id;
+                    $customer_address_response->address_type_question_id = $value['address_type_question_id'];
+                    $customer_address_response->response_text = $value['response_text'];
+                    $customer_address_response->save();
+                }
+                return [
+                    "operation" => "success",
+                    "message" => "Address Updated Successfully",
+                    'address-list' => $this->listing()
+                ];
+
+            } else {
+                return [
+                    "operation" => "error",
+                    "message" => "Error While Updating Address",
+                    'detail' => $customer_address->errors
+                ];
             }
+        } else {
+            return [
+                "operation" => "error",
+                "message" => "Unable To Find Address With Address ID",
+            ];
         }
-        return $this->listing();
-
     }
 
     /*
      * To view Particular address detail
      */
-    public function actionAddressView($id)
+    public function actionAddressView($address_id)
     {
         $customer_id = Yii::$app->user->getId();
-        $address_id = $id;
         $combinedAddress = [];
         $combinedAddress['address'] = CustomerAddress::findone([
             'address_id' => $address_id,
@@ -246,10 +273,10 @@ class AddressController extends Controller
     /*
      * To delete address and question/response
      */
-    public function actionAddressRemove($id)
+    public function actionAddressRemove()
     {
         $customer_id = Yii::$app->user->getId();
-        $address_id = $id;
+        $address_id = Yii::$app->request->getBodyParam('address_id');
 
         $exist = CustomerAddress::find()
             ->where(['address_id' => $address_id, 'customer_id' => $customer_id])
@@ -258,9 +285,19 @@ class AddressController extends Controller
         if ($exist) {
             CustomerAddressResponse::deleteAll('address_id = ' . $address_id);
             CustomerAddress::deleteAll('address_id = ' . $address_id);
-        }
 
-        return $this->listing();
+            return [
+                "operation" => "success",
+                "message" => "Address Deleted Successfully",
+                'address-list' => $this->listing()
+            ];
+        } else {
+            return [
+                "operation" => "error",
+                "message" => "Address Doesn't exist",
+                'address-list' => $this->listing()
+            ];
+        }
     }
 
     /*

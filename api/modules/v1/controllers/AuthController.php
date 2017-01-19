@@ -204,7 +204,7 @@ class AuthController extends Controller
             if ($send) {
                 return [
                     'operation' => 'success',
-                    'message' => Yii::t('agent', 'Password reset link sent, please check your email for further instructions.')
+                    'message' => 'Password reset link sent, please check your email for further instructions.'
                 ];
             } else {
                 return [

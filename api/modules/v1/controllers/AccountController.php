@@ -98,12 +98,13 @@ class AccountController extends Controller
             return [
                 "operation" => "success",
                 "message" => "Profile updated successfully.",
-                "detail" => $this->currentUser(),
+                "account-detail" => $this->currentUser(),
             ];
         } else {
             return [
                 "operation" => "error",
                 "message" => "Server issue please try again.",
+                "detail" => $model->errors,
             ];
         }
     }
