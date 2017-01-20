@@ -503,17 +503,17 @@ class BrowseController extends BaseController
 
         $item = VendorItem::findOne($item_id);
 
+        $phone = Yii::$app->request->post('phone');
+
         Yii::$app->mailer->compose("customer/booking_support",
             [
                "name" => Yii::$app->request->post('name'),
-               "phone" => Yii::$app->request->post('phone'),
+               "phone" => $phone,
                 "email" => Yii::$app->request->post('email')
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo(Yii::$app->params['supportEmail'])
-            ->setCc(Yii::$app->params['adminEmail'])
-            ->setBcc('me@iamkrushn.com')
-            ->setSubject('Booking support request')
+            ->setSubject('Booking support request from "'.$phone.'"')
             ->send();
 
         Yii::$app->getSession()->setFlash('success', Yii::t(
