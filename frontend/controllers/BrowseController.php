@@ -509,12 +509,9 @@ class BrowseController extends BaseController
                "phone" => Yii::$app->request->post('phone'),
                 "email" => Yii::$app->request->post('email')
             ])
-            ->setFrom(Yii::$app->request->post('email'))
-            ->setTo([
-                Yii::$app->params['supportEmail'],
-                Yii::$app->params['adminEmail'],
-                'me@iamkrushn.com'
-            ])
+            ->setTo(Yii::$app->params['supportEmail'])
+            ->setCc(Yii::$app->params['adminEmail'])
+            ->setBcc('me@iamkrushn.com')
             ->setSubject('Booking support request')
             ->send();
 
