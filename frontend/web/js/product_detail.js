@@ -494,3 +494,9 @@ $(document).delegate("#modal_booking_service input[name=\"phone\"]", 'keypress',
         return false;
     }
 });
+
+$(document).delegate(".btn-booking-modal", 'click', function(){
+    $('#modal_booking_service').modal('show');
+});
+
+

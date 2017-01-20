@@ -255,7 +255,7 @@ if($model->images) {
 
                                         <div class="clerfix"></div>
 
-                                        <button type="button" class="btn btn-default btn-booking-modal" data-toggle="modal" data-target="#modal_booking_service">
+                                        <button type="button" class="btn btn-default btn-booking-modal">
                                             <?= Yii::t('frontend', 'REQUEST BOOKING SERVICE') ?>
                                         </button>
 
@@ -691,8 +691,6 @@ if($model->images) {
 <!-- continer end -->
 <!-- end -->
 
-<div id="option_modal_wrapper"></div>
-
 <div id="modal_booking_service" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <form action="<?= Url::to(['browse/booking']) ?>" method="post">
@@ -737,6 +735,8 @@ if($model->images) {
     </form>
   </div>
 </div>
+
+<div id="option_modal_wrapper"></div>
 
 <?php
 
@@ -817,4 +817,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.6', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.7', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
