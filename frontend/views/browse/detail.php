@@ -559,7 +559,7 @@ if($model->images) {
                                         <?php if ($s['slug'] != '') { ?>
                                             <a href="<?= Url::to(["browse/detail", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
 
-                                                <img src="<?php echo $baselink; ?>" alt="Slide show images" width="208" height="219" />
+                                                <img src="<?php echo $baselink; ?>" alt="Slide show images" />
 
                                                 <div class="deals_listing_cont">
                                                     <h3><?=LangFormat::format($s->item_name,$s->item_name_ar); ?></h3>
