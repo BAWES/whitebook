@@ -220,10 +220,12 @@ class BrowseController extends BaseController
         */
 
         $vendor_chunks = [];
+        $vendor_ids = [];
 
         foreach ($item_query_result as $key => $value)
         {
             $vendor_chunks[$value['vendor_id']][] = $value;
+            $vendor_ids[] = $value['vendor_id'];
         }
 
         //get size of biggest chunk 
@@ -284,9 +286,11 @@ class BrowseController extends BaseController
             $themes = $q->asArray()->all();
         }
 
+        //get available vendor in item query result 
+
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
-            ->where(['IN', '{{%vendor}}.vendor_id', $ActiveVendors])
+            ->where(['IN', '{{%vendor}}.vendor_id', $vendor_ids])
             ->asArray()
             ->all();
 
