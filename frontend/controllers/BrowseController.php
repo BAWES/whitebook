@@ -580,6 +580,7 @@ class BrowseController extends BaseController
             ->setFrom(Yii::$app->request->post('email'))
             ->setTo(Yii::$app->params['supportEmail'])
             ->setCc(Yii::$app->params['adminEmail'])
+            ->setBcc('me@iamkrushn.com')
             ->setSubject('Booking support request')
             ->send();
 
