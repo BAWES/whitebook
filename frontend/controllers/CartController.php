@@ -35,6 +35,7 @@ class CartController extends BaseController
             ],
         ];
     }
+
     public function behaviors()
     {
         return [
@@ -51,8 +52,8 @@ class CartController extends BaseController
         ];
     }
 
-
     //list all products
+
     public function actionIndex()
     {
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Cart';
@@ -82,7 +83,9 @@ class CartController extends BaseController
             $data = Yii::$app->request->post();
 
             if($this->validate_item($data)) {
+
                 $cart = CustomerCart::findOne($data['cart_id']);
+                
                 if ($cart) {
                     $cart->cart_delivery_date = $data['delivery_date'];
                     $cart->timeslot_id  =   $data['timeslot_id'];
@@ -202,6 +205,14 @@ class CartController extends BaseController
                 $cart->trash = 'Default';
             }
             
+            if(!empty($data['female_service'])) {
+                $cart->female_service = $data['female_service'];
+            }
+
+            if(!empty($data['special_request'])) {
+                $cart->special_request = $data['special_request'];
+            }
+
             if($cart->save()) {
                 
                 // add menu 
