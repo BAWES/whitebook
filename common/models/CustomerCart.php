@@ -9,6 +9,7 @@ use yii\behaviors\TimestampBehavior;
 use common\models\VendorItem;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
+use common\components\CFormatter;
 
 /**
  * This is the model class for table "whitebook_customer_cart".
@@ -190,7 +191,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         if($data['quantity'] < $item->item_minimum_quantity_to_order) {
 
-            $errors['cart_quantity'] = [
+            $errors['cart_quantity'][] = [
                 
                 Yii::t('yii', '{attribute} must be greater than or equal to "{compareValueOrAttribute}".', [
                     'attribute' => Yii::t('frontend', 'Quantity'),
@@ -265,7 +266,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $no_of_available = $item->item_amount_in_stock;
             }
 
-            $errors['cart_quantity'] = [
+            $errors['cart_quantity'][] = [
                 Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
                    'no_of_available' => $no_of_available 
                 ])
@@ -283,7 +284,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $no_of_available = $item->item_amount_in_stock;
             }
 
-            $errors['cart_quantity'] = [
+            $errors['cart_quantity'][] = [
                 Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
                    'no_of_available' => $no_of_available 
                 ])
@@ -310,6 +311,10 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');             
         }
 
+        //item total 
+
+        $total = $item->item_price_per_unit * $data['quantity'];
+
         //menu item quantity validation 
 
         $menu = [];
@@ -329,6 +334,8 @@ class CustomerCart extends \yii\db\ActiveRecord
             } else {
                 $menu[$mi->menu_id] = $value;
             }
+
+            $total += $mi->price * $value;
         }
 
         //menu quantity validation 
@@ -362,6 +369,16 @@ class CustomerCart extends \yii\db\ActiveRecord
                     ]
                 );
             }
+        }
+
+        //min_order_amount
+        
+        if($total < $item->min_order_amount * $data['quantity']) {
+            $errors['cart_quantity'][] = [
+                Yii::t('frontend', 'Min order amount "{min_order_amount}".', [
+                   'min_order_amount' => CFormatter::format($item->min_order_amount)
+                ])
+            ];
         }
 
         return $errors;       

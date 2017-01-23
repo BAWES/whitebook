@@ -300,6 +300,25 @@ function cmp($a, $b)
 		<!--End third Tab -->
 
 		<div class="tab-pane clearfix" id="4">
+
+			<?= $form->field($model, 'set_up_time'); ?>
+
+			<?= $form->field($model, 'set_up_time_ar'); ?>
+
+			<?= $form->field($model, 'max_time'); ?>
+
+			<?= $form->field($model, 'max_time_ar'); ?>
+
+			<?= $form->field($model, 'requirements'); ?>
+
+			<?= $form->field($model, 'requirements_ar'); ?>
+
+			<?= $form->field($model, 'whats_include'); ?>
+
+			<?= $form->field($model, 'whats_include_ar'); ?>
+
+			<?= $form->field($model, 'min_order_amount'); ?>
+			
 			<ul id="item_menu_list">
 				<?php $menu_count = 0; foreach ($arr_menu as $key => $value) { ?>
 
