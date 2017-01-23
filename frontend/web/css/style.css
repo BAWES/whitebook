@@ -2325,3 +2325,32 @@ span.small {
     border: 1px solid #333;
     color: #fff;
 }
+
+.item img {
+    max-width: 100%;
+}
+
+.menu-requirements div {
+    float: left;
+    display: block;
+    max-width: 25%;
+    text-align: center;
+}
+.menu-requirements i {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+}
+.menu-requirements span.title {
+    font-weight: bold;
+}
+.menu-requirements span {
+    width: 100%;
+    display: block;
+    padding: 0 5px;
+}
+.menu-requirements {
+    padding-top: 10px;
+    width: 100%;
+    display: block;
+}

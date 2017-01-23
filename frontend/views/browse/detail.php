@@ -13,7 +13,13 @@ $vendor_name = LangFormat::format($model->vendor->vendor_name,$model->vendor->ve
 $item_description = LangFormat::format($model->item_description, $model->item_description_ar);
 $item_additional_info = LangFormat::format($model->item_additional_info, $model->item_additional_info_ar);
 
-$vendor_contact_address = LangFormat::format($model->vendor->vendor_contact_address_ar,$model->vendor->vendor_contact_address);
+$vendor_contact_address = LangFormat::format($model->vendor->vendor_contact_address, $model->vendor->vendor_contact_address_ar);
+
+$whats_include = LangFormat::format($model->whats_include, $model->whats_include_ar);
+
+$max_time = LangFormat::format($model->max_time, $model->max_time_ar);
+$set_up_time = LangFormat::format($model->set_up_time, $model->set_up_time_ar);
+$requirements = LangFormat::format($model->requirements, $model->requirements_ar);
 
 $this->title = 'Whitebook - ' . $item_name;
 $this->params['breadcrumbs'][] = ' '.$item_name;
@@ -207,7 +213,6 @@ if($model->images) {
                                     <b class="font-27 item-final-price"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
 
                                     <strong><?= $model['item_price_description'] ?></strong>
-
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
@@ -274,6 +279,40 @@ if($model->images) {
                                     </div>
                                 </div>
                             </div>
+
+                            <?php if($set_up_time || $max_time || $requirements || $modal->min_order_amount) { ?>
+                            <div class="menu-requirements">
+                                <?php if($set_up_time) { ?>
+                                <div>
+                                    <i class="fa fa-clock-o"></i>
+                                    <span class="title">Set-up Time</span>
+                                    <span class="value"><?= $set_up_time ?></span>
+                                </div>
+                                <?php } ?>
+                                <?php if($requirements) { ?>
+                                <div>
+                                    <i class="fa fa-cog"></i>
+                                    <span class="title">Requirements</span>
+                                    <span class="value"><?= $requirements ?></span>
+                                </div>
+                                <?php } ?>
+                                <?php if($max_time) { ?>
+                                <div>
+                                    <i class="fa fa-info"></i>
+                                    <span class="title">Max. Time</span>
+                                    <span class="value"><?= $max_time ?></span>
+                                </div>
+                                <?php } ?>
+                                <?php if($model->min_order_amount > 0) { ?>
+                                <div>
+                                    <i class="fa fa-truck"></i>
+                                    <span class="title">Min. order value</span>
+                                    <span class="value"><?= CFormatter::format($model->min_order_amount) ?></span>
+                                </div>
+                                <?php } ?>
+                                <span class="clearfix"></span>
+                            </div>
+                            <?php } ?>
 
                             <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
 
@@ -445,6 +484,23 @@ if($model->images) {
                                             <div id="collapse2" class="panel-collapse collapse">
                                               <div class="panel-body">
                                                 <p><?= nl2br($item_additional_info); ?></p>
+                                              </div>
+                                            </div>
+                                        </div><!-- END .panel -->
+                                        <?php } ?>
+
+                                        <?php if($whats_include) { ?>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                              <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" class="collapsed">
+                                                    <?= Yii::t('frontend', "What is include?") ?>
+                                                </a>
+                                              </h4>
+                                            </div>
+                                            <div id="collapse6" class="panel-collapse collapse">
+                                              <div class="panel-body">
+                                                <p><?= nl2br($whats_include); ?></p>
                                               </div>
                                             </div>
                                         </div><!-- END .panel -->

@@ -116,13 +116,16 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
-            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash'], 'string'],
+            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'whats_include_ar', 'whats_include'], 'string'],
             
-            [['item_price_per_unit'], 'number'],
+            [['item_price_per_unit', 'min_order_amount'], 'number'],
             
             [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
 
             [['item_name', 'item_name_ar'], 'string', 'max' => 128],
+
+            [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar'], 'string', 'max' => 256],
+
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
@@ -177,6 +180,15 @@ class VendorItem extends \yii\db\ActiveRecord
             'subcategory_id'=>'Sub category',
             'item_status'=> 'Display on website',
             'child_category'=>'Third Level Category',
+            'set_up_time' => 'Set up time',
+            'set_up_time_ar' => 'Set up time - Arabic',
+            'max_time' => 'Max time',
+            'max_time_ar' => 'Max time - Arabic',
+            'requirements' => 'Requirements',
+            'requirements_ar' => 'Requirements - Arabic',
+            'whats_include' => 'What\'s include?', 
+            'whats_include_ar' => 'What\'s include? - Arabic', 
+            'min_order_amount' => 'Min order amount'
         ];
     }
 
