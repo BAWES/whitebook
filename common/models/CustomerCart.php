@@ -10,7 +10,7 @@ use common\models\VendorItem;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\components\CFormatter;
-
+ 
 /**
  * This is the model class for table "whitebook_customer_cart".
  *
@@ -64,8 +64,10 @@ class CustomerCart extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'item_id', 'area_id', 'timeslot_id', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
-            [['customer_id', 'item_id', 'area_id', 'timeslot_id', 'cart_quantity', 'created_by', 'modified_by'], 'integer'],
-            [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['customer_id', 'item_id', 'area_id', 'timeslot_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
+
+            [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
+
             [['cart_customization_price_per_unit'], 'number'],
             ['cart_quantity', 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['cart_valid', 'trash'], 'string'],
@@ -335,7 +337,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $menu[$mi->menu_id] = $value;
             }
 
-            $total += $mi->price * $value;
+            $total += $mi->price * $value * $data['quantity'];
         }
 
         //menu quantity validation 
@@ -373,9 +375,9 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //min_order_amount
         
-        if($total < $item->min_order_amount * $data['quantity']) {
+        if($total < $item->min_order_amount) {
             $errors['cart_quantity'][] = [
-                Yii::t('frontend', 'Min order amount "{min_order_amount}".', [
+                Yii::t('frontend', 'Min. order amount "{min_order_amount}".', [
                    'min_order_amount' => CFormatter::format($item->min_order_amount)
                 ])
             ];

@@ -9,6 +9,7 @@ use common\components\CFormatter;
 use common\components\LangFormat;
 use common\models\VendorItemPricing;
 use common\models\CustomerCartMenuItem;
+use yii\helpers\ArrayHelper;
 
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
@@ -30,12 +31,16 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         if($items) { 
 
         	foreach ($items as $item) {
+
+        		$menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+
         		$errors = CustomerCart::validate_item([
         			'item_id' => $item['item_id'],
         			'delivery_date' => $item['cart_delivery_date'],
         			'timeslot_end_time' => $item['timeslot_end_time'],
         			'area_id' => $item['area_id'],
-        			'quantity' => $item['cart_quantity']
+        			'quantity' => $item['cart_quantity'],
+        			'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
         		], true);
 
         		if($errors) { ?>
@@ -46,7 +51,13 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         				<br />
         				<?php foreach ($errors as $key => $attrib_errors) {
         					foreach ($attrib_errors as $error) {
-        						echo '<p>' . $error . '</p>';
+        						if(is_array($error)) {
+        							foreach ($error as $key => $value) {
+        								echo '<p>' . $value . '</p>';
+        							}	
+        						} else {
+        							echo '<p>' . $error . '</p>';
+        						}        						
         					}
         				} ?>
         			</div>

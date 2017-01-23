@@ -120,7 +120,7 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['item_price_per_unit', 'min_order_amount'], 'number'],
             
-            [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
+            [['created_datetime', 'modified_datetime','item_status','image_path', 'allow_special_request', 'have_female_service'], 'safe'],
 
             [['item_name', 'item_name_ar'], 'string', 'max' => 128],
 

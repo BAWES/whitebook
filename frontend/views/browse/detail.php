@@ -413,6 +413,24 @@ if($model->images) {
                                 </div><!-- END .menu-detail -->
                             <?php } ?>
 
+                            <hr />
+
+                            <?php if($model->allow_special_request) { ?>
+                            <div class="form-group">
+                                <label><?= Yii::t('frontend', 'Special request') ?></label>
+                                <textarea name="special_request" class="form-control"></textarea>
+                            </div>
+                            <?php } ?>
+
+                            <?php if($model->have_female_service) { ?>
+                            <div class="form-group checkbox">
+                                <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
+                                <label for="chk_female_service">
+                                    <?= Yii::t('frontend', 'Female Service') ?>                                    
+                                </label>
+                            </div>
+                            <?php } ?>
+
                             <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
                             </div><!-- END .menu-item-detail -->

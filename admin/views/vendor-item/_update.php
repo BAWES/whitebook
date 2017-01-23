@@ -318,6 +318,10 @@ function cmp($a, $b)
 			<?= $form->field($model, 'whats_include_ar'); ?>
 
 			<?= $form->field($model, 'min_order_amount'); ?>
+
+			<?= $form->field($model, 'allow_special_request')->checkbox(); ?>
+
+			<?= $form->field($model, 'have_female_service')->checkbox(); ?>
 			
 			<ul id="item_menu_list">
 				<?php $menu_count = 0; foreach ($arr_menu as $key => $value) { ?>
