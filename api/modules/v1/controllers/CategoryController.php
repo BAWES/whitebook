@@ -71,7 +71,7 @@ class CategoryController extends Controller
         return Category::find()
             ->select(['category_id','category_name','category_name_ar','icon'])
             ->where([
-                'category_level' => 1,
+                'category_level' => 0,
                 'trash' => 'Default'
             ])->orderby('sort asc')
             ->all();
