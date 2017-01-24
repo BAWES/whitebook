@@ -19,7 +19,7 @@ class CartController extends BaseController
 {
     private $errors = array();
 
-    public function init(){
+    public function init() {
         if(Yii::$app->user->isGuest) {
             $this->redirect(['/site/index']);
         }
@@ -68,12 +68,30 @@ class CartController extends BaseController
     }
 
     public function actionUpdateCartItemPopup(){
-        if(Yii::$app->request->isAjax) {
-            $items = CustomerCart::findOne($_REQUEST['id']);
-            return $this->renderPartial('edit_cart', [
-                'items' => $items
-            ]);
+        
+        if(!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
+        
+        $item = CustomerCart::findOne(Yii::$app->request->post('id'));
+        
+        if(!$item) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $model = VendorItem::findOne($item->item_id);
+
+        if(!$model) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+
+        return $this->renderPartial('edit_cart', [
+            'item' => $item,
+            'model' => $model,
+            'menu' => $menu
+        ]);
     }
 
     public function actionUpdateCartItem(){
@@ -93,7 +111,40 @@ class CartController extends BaseController
                     $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                     $cart->modified_datetime  = date('Y-d-m h:i:s');
 
+                    if(!empty($data['female_service'])) {
+                        $cart->female_service = $data['female_service'];
+                    }
+
+                    if(!empty($data['special_request'])) {
+                        $cart->special_request = $data['special_request'];
+                    }
+
                     if ($cart->save()) {
+
+                        // remove old 
+
+                        CustomerCartMenuItem::deleteAll(['cart_id' => $cart->cart_id]);
+
+                        // add menu 
+
+                        if(empty($data['menu_item'])) {
+                            $data['menu_item'] = [];
+                        }
+                        
+                        foreach ($data['menu_item'] as $key => $value) {
+
+                            if($value > 0) {
+                                                        
+                                $mi = VendorItemMenuItem::findOne($key);
+
+                                $cart_menu_item = new CustomerCartMenuItem;
+                                $cart_menu_item->cart_id = $cart->cart_id;
+                                $cart_menu_item->menu_id = $mi->menu_id;
+                                $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                                $cart_menu_item->quantity = $value;
+                                $cart_menu_item->save();   
+                            }
+                        }
 
                         Yii::$app->getSession()->setFlash('success', Yii::t(
                             'frontend',
