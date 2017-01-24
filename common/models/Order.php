@@ -216,6 +216,8 @@ class Order extends \yii\db\ActiveRecord
                 $item_purchase->purchase_customization_price_per_unit = 0;
                 $item_purchase->purchase_quantity = $item['cart_quantity'];
                 $item_purchase->purchase_total_price = $price_chart[$item['item_id']] * $item['cart_quantity'];
+                $item_purchase->female_service = $item['female_service'];
+                $item_purchase->special_request = $item['special_request'];
                 $item_purchase->trash = 'Default';
                 $item_purchase->save(false);
 
