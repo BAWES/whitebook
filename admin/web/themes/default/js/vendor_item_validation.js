@@ -21,7 +21,7 @@ var renderquestion_url = $('#renderquestion_url').val();
 
 $(function()
 {
-	if(!isNewRecord) {
+	if($('#vendoritem-item_description').length > 0) {
 			
 		$config = {};
 		$config.allowedContent = true;
