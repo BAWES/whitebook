@@ -115,6 +115,14 @@ use common\models\CustomerCartMenuItem;
                             }
                         } 
 
+                        if($item['female_service']) {
+                            echo '<i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
+                        }
+
+                        if($item['special_request']) {
+                            echo '<i class="cart_menu_item">'.$item['special_request'].'</i>';
+                        }
+                        
                         ?>
 
                         <?php if($menu_items) { ?>

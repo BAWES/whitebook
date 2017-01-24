@@ -123,6 +123,14 @@ use common\models\SuborderItemPurchase;
 	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
 	                    } 
 
+                        if($item['female_service']) {
+                            echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
+                        }
+
+                        if($item['special_request']) {
+                            echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$item['special_request'].'</i>';
+                        }
+
 	                    ?>
         				<br />
         				x <?= $item->purchase_quantity ?>
