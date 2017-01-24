@@ -100,6 +100,14 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                                     }                                    
                                 } 
 
+                                if($item['female_service']) {
+                                    echo '<i class="cart_menu_item"> - '.Yii::t('frontend', 'Female service').'</i>';
+                                }
+
+                                if($item['special_request']) {
+                                    echo '<i class="cart_menu_item"> - '.$item['special_request'].'</i>';
+                                }
+                                
                                 ?>
 
                                 <div class="visible-xs visible-sm">
