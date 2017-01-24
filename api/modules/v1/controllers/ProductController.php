@@ -226,7 +226,7 @@ class ProductController extends Controller
      */
     public function actionProductDetail($product_id)
     {
-        return VendorItem::find()->where(['item_id'=>$product_id])->with('images')->asArray()->one();
+        return VendorItem::find()->where(['item_id'=>$product_id])->with(['images','vendor'])->asArray()->one();
     }
 
     /*
