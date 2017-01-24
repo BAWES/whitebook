@@ -3,6 +3,7 @@
 namespace api\modules\v1\controllers;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 use yii\db\Expression;
 use frontend\models\Vendor;
@@ -75,18 +76,19 @@ class ProductController extends Controller
      * @return array
      */
     public function actionCategoryProducts(
-        $categoryId,
-        $forSale,
-        $requestedLocation,
-        $requestedDeliverDate,
-        $requestedPrice,
-        array $requestedCategories,
-        array $requestedVendor,
-        array $requestedTheme
+        $category_id,
+        $forSale = null,
+        $requestedLocation = null,
+        $requestedDeliverDate = null,
+        $requestedPrice = null,
+        array $requestedCategories = [],
+        array $requestedVendor = [],
+        array $requestedTheme = []
     )
     {
+        $products = [];
         $offset = 0;
-        $limit = Yii::$app->user->getId();
+        $limit = Yii::$app->params['limit'];
 
         if (isset($requestedVendor) && $requestedVendor != '') {
             $arr_vendor_slugs = $requestedVendor;
@@ -153,9 +155,9 @@ class ProductController extends Controller
         //category filter
         $cats = '';
 
-        if ($categoryId)
+        if ($category_id)
         {
-            $cats = $categoryId;
+            $cats = $category_id;
         }
 
         if (isset($requestedCategories) && count($requestedCategories) > 0)
@@ -163,7 +165,7 @@ class ProductController extends Controller
             $cats = implode("','",  $requestedCategories);
         }
 
-        if ($categoryId != "all") {
+        if ($category_id != "all") {
             $q = "{{%category_path}}.path_id IN ('" . $cats . "')";
             $item_query->andWhere($q);
         }
@@ -193,13 +195,30 @@ class ProductController extends Controller
                 ELSE 2
             END, {{%vendor_item}}.sort");
 
-        return $item_query
+        $listing = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
             ->orderBy($expression)
             ->asArray()
             ->offset($offset)
             ->limit($limit)
             ->all();
+
+        if ($listing) {
+
+            foreach ($listing as $item) {
+                $image = \common\models\Image::find()
+                ->where(['item_id' => $item['item_id']])
+                ->orderBy(['vendorimage_sort_order' => SORT_ASC])
+                ->one();
+                if ($image) {
+                    $products[] = $item + ['image'=>Yii::getAlias("@s3/vendor_item_images_210/").$image->image_path];
+                } else {
+                    $products[] = $item;
+                }
+            }
+        }
+
+        return $products;
     }
 
     /*
@@ -207,8 +226,7 @@ class ProductController extends Controller
      */
     public function actionProductDetail($product_id)
     {
-        $productData = VendorItem::findOne($product_id);
-        return ($productData) ? $productData : [];
+        return VendorItem::find()->where(['item_id'=>$product_id])->with('images')->asArray()->one();
     }
 
     /*

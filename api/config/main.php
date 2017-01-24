@@ -95,11 +95,11 @@ return [
                     'controller' => 'v1/product',
                     'pluralize' => false,
                     'patterns' => [
-                        'GET detail/<product_id>' => 'product-detail',
+                        'GET detail' => 'product-detail',
                         'GET list' => 'category-products',
-                        'POST event' => 'add-product-to-event',
                         'GET area' => 'product-areas',
                         'GET time-slot' => 'product-delivery-time-slot',
+                        'POST event' => 'add-product-to-event',
                     ]
                 ],
                 [ // EventController
