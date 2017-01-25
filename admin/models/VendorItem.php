@@ -173,9 +173,7 @@ class VendorItem extends \common\models\VendorItem
                     $errors['menu_item_name_ar'] = 'Menu item name - Arabic field require.';
                 }
 
-                if($value['price'] == '') {
-                    $errors['menu_item_price'] = 'Menu item price field require.';
-                }elseif(!is_numeric($value['price'])) {
+                if($value['price'] && !is_numeric($value['price'])) {
                     $errors['menu_item_price'] = 'Menu item price is not valid.';
                 }
             }
