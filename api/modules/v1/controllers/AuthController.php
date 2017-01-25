@@ -120,7 +120,6 @@ class AuthController extends Controller
         $model->customer_gender         = Yii::$app->request->getBodyParam("gender");
         $model->customer_mobile         = Yii::$app->request->getBodyParam("mobile_number");
         $model->customer_password       = Yii::$app->getSecurity()->generatePasswordHash(Yii::$app->request->getBodyParam('customer_password'));
-        $model->confirm_password        = Yii::$app->request->getBodyParam('confirm_password');
         $model->customer_activation_key = \frontend\models\Users::generateRandomString();
         $model->created_datetime = date('Y-m-d H:i:s');
 
@@ -165,7 +164,7 @@ class AuthController extends Controller
         } else {
             return [
                 "operation" => "error",
-                "message" => $model->errors
+                "message" => $model->getErrorMessage($model->errors)
             ];
 
         }
@@ -215,7 +214,7 @@ class AuthController extends Controller
         } else {
             return [
                 'operation' => 'error',
-                'message' => 'Email Does not exist'
+                'message' => 'Email Does Not Exist'
             ];
         }
     }
