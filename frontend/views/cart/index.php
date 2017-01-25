@@ -160,6 +160,14 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        				}
 	        			} 
 
+                        if($item['female_service']) {
+                            echo '<i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
+                        }
+
+                        if($item['special_request']) {
+                            echo '<i class="cart_menu_item">'.$item['special_request'].'</i>';
+                        }
+
 	        			?>
 
 	        			<?php if($menu_items) { ?>
@@ -364,15 +372,17 @@ $this->registerJs("
 </div>
 <?php
 
+$this->registerJsFile('@web/js/cart.js?v=1.0', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
 $this->registerCss("
-.max-width-150-px{max-width: 150px;}
-.fa-calendar{
-position: absolute;
-right: 9px;
-top: 10px;
-}
-.position-relative {position:relative;}
-.fa-calendar{position: absolute;top: 9px;right: 7px;font-size: 17px;}
-div.datepicker{  top: 157px!important;  border: 1px solid #f2f2f2;}
-.dropdown-toggle{    background: none;  color: #000;  border: 1px solid #ccc;}
+	.max-width-150-px{max-width: 150px;}
+	.fa-calendar{
+	position: absolute;
+	right: 9px;
+	top: 10px;
+	}
+	.position-relative {position:relative;}
+	.fa-calendar{position: absolute;top: 9px;right: 7px;font-size: 17px;}
+	div.datepicker{  top: 157px!important;  border: 1px solid #f2f2f2;}
+	.dropdown-toggle{    background: none;  color: #000;  border: 1px solid #ccc;}
 ");

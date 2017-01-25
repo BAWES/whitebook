@@ -280,7 +280,7 @@ if($model->images) {
                                 </div>
                             </div>
 
-                            <?php if($set_up_time || $max_time || $requirements || $modal->min_order_amount) { ?>
+                            <?php if($set_up_time || $max_time || $requirements || $model->min_order_amount) { ?>
                             <div class="menu-requirements">
                                 <?php if($set_up_time) { ?>
                                 <div>
@@ -426,7 +426,7 @@ if($model->images) {
                             <div class="form-group checkbox">
                                 <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
                                 <label for="chk_female_service">
-                                    <?= Yii::t('frontend', 'Female Service') ?>                                    
+                                    <?= Yii::t('frontend', 'Female Service') ?>                                   
                                 </label>
                             </div>
                             <?php } ?>

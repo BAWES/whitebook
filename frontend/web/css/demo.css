@@ -196,7 +196,8 @@ html[xmlns] .slides {display: block;}
     .checkbox input[type="checkbox"]:checked + label::after,
     .checkbox input[type="radio"]:checked + label::after {
       font-family: "FontAwesome";
-          content: "✔"; }
+          content: "\f00c"; 
+      }
     .checkbox input[type="checkbox"]:disabled + label,
     .checkbox input[type="radio"]:disabled + label {
       opacity: 0.65; }

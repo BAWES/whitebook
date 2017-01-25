@@ -19,35 +19,36 @@ var loadsubcategory_url = $('#loadsubcategory_url').val();
 var loadchildcategory_url = $('#loadchildcategory_url').val();
 var renderquestion_url = $('#renderquestion_url').val();
 
-console.log(menu_count);
-
 $(function()
 {
-	$config = {};
-	$config.allowedContent = true;
+	if($('#vendoritem-item_description').length > 0) {
+			
+		$config = {};
+		$config.allowedContent = true;
 
-	ck_item_description = CKEDITOR.replace('vendoritem-item_description', $config);
-	ck_additional_info = CKEDITOR.replace('vendoritem-item_additional_info', $config);
-	ck_price_description = CKEDITOR.replace('vendoritem-item_price_description', $config);
-	ck_customization_description = CKEDITOR.replace('vendoritem-item_customization_description', $config);
-	
-	ck_item_description_ar = CKEDITOR.replace('vendoritem-item_description_ar', $config);
-	ck_additional_info_ar = CKEDITOR.replace('vendoritem-item_additional_info_ar', $config);
-	ck_price_description_ar = CKEDITOR.replace('vendoritem-item_price_description_ar', $config);
-	ck_customization_description_ar = CKEDITOR.replace('vendoritem-item_customization_description_ar', $config);
-
-	var hash = location.hash.substr(1);
-
-	if(hash) {
-		$('.nav-tabs .active').removeClass('active');
-		$('.tab-content .active').removeClass('active');
+		ck_item_description = CKEDITOR.replace('vendoritem-item_description', $config);
+		ck_additional_info = CKEDITOR.replace('vendoritem-item_additional_info', $config);
+		ck_price_description = CKEDITOR.replace('vendoritem-item_price_description', $config);
+		ck_customization_description = CKEDITOR.replace('vendoritem-item_customization_description', $config);
 		
-		$('#tab_' + hash).parent().addClass('active');
-		$('#' + hash + '.tab-pane').addClass('active');
-	} else {
-		$('.nav-tabs li:first').addClass("active");
-		$('.tab-content div:first').addClass('active');	
-	}	
+		ck_item_description_ar = CKEDITOR.replace('vendoritem-item_description_ar', $config);
+		ck_additional_info_ar = CKEDITOR.replace('vendoritem-item_additional_info_ar', $config);
+		ck_price_description_ar = CKEDITOR.replace('vendoritem-item_price_description_ar', $config);
+		ck_customization_description_ar = CKEDITOR.replace('vendoritem-item_customization_description_ar', $config);
+
+		var hash = location.hash.substr(1);
+
+		if(hash) {
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_' + hash).parent().addClass('active');
+			$('#' + hash + '.tab-pane').addClass('active');
+		} else {
+			$('.nav-tabs li:first').addClass("active");
+			$('.tab-content div:first').addClass('active');	
+		}	
+	}
 });
 
 var csrfToken = $('meta[name="csrf-token"]').attr("content");

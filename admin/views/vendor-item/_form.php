@@ -267,106 +267,22 @@ if($model->isNewRecord){
 </div>
 <?php ActiveForm::end(); ?>
 
-
 <?php 
 
-if(isset($model->item_id)) { 
-	$item_id = $model->item_id;
-} else { 
-	$item_id = 0;
-}
-
-if($model->isNewRecord) {
-	$isNewRecord = 1;
-} else {
-	$isNewRecord = 0;
-}
-
-if(!empty($imagedata)) { 
-
-	$this->registerJs("
-		var imagedata = 1;
-		var img = ".$img.";
-		var action = ".$action.";
-	", View::POS_HEAD);
-
-}else {
-
-	$this->registerJs("
-		var imagedata = '';	
-		var img = '';
-		var action = '';
-	", View::POS_HEAD);
-} 
-
-if(!empty($guideimagedata)) { 
-
-	$this->registerJs("
-		var guideimagedata = 1;
-		var img1 = ".$img1.";
-		var action1 = ".$action1.";
-	", View::POS_HEAD);
-
-}else{
-
-	$this->registerJs("
-		var guideimagedata = '';
-		var img1 = '';
-		var action1 = '';
-	", View::POS_HEAD);
-}
-
-echo Html::hiddenInput('count_q',$count_q,['id'=>$count_q]);
-echo Html::hiddenInput('appImageUrl',Yii::getAlias('appImageUrl'),['id'=>'appImageUrl']);
-echo Html::hiddenInput('image_order_url',Url::to(['/image/imageorder']),['id'=>'image_order_url']);
-echo Html::hiddenInput('deletequestionoptions_url',Url::to(['/vendor-item-question-answer-option/deletequestionoptions']),['id'=>'deletequestionoptions_url']);
-echo Html::hiddenInput('salesguideimage_url',Url::to(['/vendor-item/salesguideimage']),['id'=>'salesguideimage_url']);
-echo Html::hiddenInput('request_create',$request->get('create'), ['id'=>'request_create']);
-echo Html::hiddenInput('isNewRecord',$isNewRecord, ['id'=>'isNewRecord']);
-echo Html::hiddenInput('item_for_sale',$model->item_for_sale, ['id'=>'item_for_sale']);
-echo Html::hiddenInput('item_status',$model->item_status, ['id'=>'item_status']);
-echo Html::hiddenInput('item_id',$item_id, ['id'=>'item_id']);
-echo Html::hiddenInput('item_name_check',Url::to(['/vendor-item/itemnamecheck']), ['id'=>'item_name_check']);;
-echo Html::hiddenInput('add_question_url',Url::to(['/vendor-item/addquestion']), ['id'=>'add_question_url']);
-echo Html::hiddenInput('guideimage_url',Url::to(['/vendor-item/guideimage']), ['id'=>'guideimage_url']);
-echo Html::hiddenInput('exist_question',$exist_question, ['id'=>'exist_question']);
-echo Html::hiddenInput('removequestion_url',Url::to(['/vendor-item/removequestion']), ['id'=>'removequestion_url']);
-echo Html::hiddenInput('vendorcategory_url',Url::to(['/category/vendorcategory']), ['id'=>'vendorcategory_url']);
-echo Html::hiddenInput('loadsubcategory_url',Url::to(['/priority-item/loadsubcategory']), ['id'=>'loadsubcategory_url']);
-echo Html::hiddenInput('loadchildcategory_url',Url::to(['/priority-item/loadchildcategory']), ['id'=>'loadchildcategory_url']);
-echo Html::hiddenInput('renderquestion_url',Url::to(['/vendor-item/renderquestion']), ['id'=>'renderquestion_url']);
-echo Html::hiddenInput('croped_image_upload_url',Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
-echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
+echo Html::hiddenInput('isNewRecord', 1, ['id'=>'isNewRecord']);
 
 //ajax step urls 
+
 echo Html::hiddenInput('item_info_url', Url::to(['vendor-item/item-info']), ['id' => 'item_info_url']);
-echo Html::hiddenInput('item_description_url', Url::to(['vendor-item/item-description']), ['id' => 'item_description_url']);
-echo Html::hiddenInput('item_price_url', Url::to(['vendor-item/item-price']), ['id' => 'item_price_url']);
-echo Html::hiddenInput('item_approval_url', Url::to(['vendor-item/item-approval']), ['id' => 'item_approval_url']);
-echo Html::hiddenInput('item_images_url', Url::to(['vendor-item/item-images']), ['id' => 'item_images_url']);
-
-echo Html::hiddenInput('item_themes_groups', Url::to(['vendor-item/item-themes-groups']), ['id' => 'item_themes_groups']);
-
-echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate']), ['id' => 'item_validate_url']);
 
 echo Html::hiddenInput('category_add_url', Url::to(['vendor-item/add-category']), ['id' => 'category_add_url']);
 echo Html::hiddenInput('category_list_url', Url::to(['vendor-item/category-list']), ['id' => 'category_list_url']);
 
-$this->registerCssFile("@web/themes/default/plugins/bootstrap-fileinput/fileinput.min.css");
-
-$this->registerCssFile("@web/themes/default/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css");
-
-$this->registerCssFile("@web/themes/default/plugins/jquery-superbox/css/style.css");
-
-$this->registerJsFile("@web/themes/default/plugins/jquery-superbox/js/superbox.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
-$this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.17", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.18", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
