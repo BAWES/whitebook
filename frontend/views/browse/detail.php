@@ -411,10 +411,13 @@ if($model->images) {
                                     <?php } ?>
                                     </ul>
                                 </div><!-- END .menu-detail -->
+                            
                             <?php } ?>
 
+                            <?php if($menu) { ?>
                             <hr />
-
+                            <?php } ?>
+                            
                             <?php if($model->allow_special_request) { ?>
                             <div class="form-group">
                                 <label><?= Yii::t('frontend', 'Special request') ?></label>
