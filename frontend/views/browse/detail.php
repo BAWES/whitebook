@@ -268,9 +268,7 @@ if($model->images) {
                                         <div class="buy_events">
                                         <?php
                                         if ($model->item_for_sale == 'Yes') {
-                                            if (Yii::$app->user->isGuest) {
-                                                echo Html::a(Yii::t('frontend', 'Buy'),'#',['onclick'=>"show_login_modal('-2')",'class'=>'buy_item','data-target'=>'#myModal','data-toggle'=>"modal"]);
-                                            } else if (!$AvailableStock) {
+                                             if (!$AvailableStock) {
                                                 echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
                                             }
                                         }
@@ -314,7 +312,7 @@ if($model->images) {
                             </div>
                             <?php } ?>
 
-                            <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+                            <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
 
                             <!-- menu detail -->
 
@@ -418,32 +416,48 @@ if($model->images) {
                             <hr />
                             <?php } ?>
                             
-                            <?php if($model->allow_special_request) { ?>
-                            <div class="form-group">
-                                <label><?= Yii::t('frontend', 'Special request') ?></label>
-                                <textarea name="special_request" class="form-control"></textarea>
-                            </div>
-                            <?php } ?>
-
-                            <?php if($model->have_female_service) { ?>
-                            <div class="form-group checkbox">
-                                <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
-                                <label for="chk_female_service">
-                                    <?= Yii::t('frontend', 'Female Service') ?>                                   
-                                </label>
-                            </div>
-                            <?php } ?>
-
-                            <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
-
-                            </div><!-- END .menu-item-detail -->
-                           
-                            <div class="row margin-top-20">
-
-                                <?php if(!$menu) { ?>
-                                    <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
-                                        <label><?= Yii::t('frontend', 'Quantity');?></label>
+                            <?php if(Yii::$app->user->isGuest) {  ?>
+                                <div class="col-md-4 clearfix padding-left-6px qantity-div">
+                                    <div class="button-signin">
+                                        <button type="button" onclick="show_login_modal('-2');" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;" data-target='#myModal' data-toggle='modal'>
+                                            <?= Yii::t('frontend', 'Buy') ?>
+                                        </button>&nbsp;&nbsp;&nbsp;
                                     </div>
+                                </div>
+                            <?php } else { ?>
+
+                                <?php if($model->allow_special_request) { ?>
+                                <div class="form-group" style="margin-left: 0px;">
+                                    <label><?= Yii::t('frontend', 'Special request') ?></label>
+                                    <textarea name="special_request" class="form-control"></textarea>
+                                </div>
+                                <?php } ?>
+
+                                <?php if($model->have_female_service) { ?>
+                                <div class="form-group checkbox" style="margin-left: 0px;">
+                                    <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
+                                    <label for="chk_female_service">
+                                        <?= Yii::t('frontend', 'Female Service') ?>                                   
+                                    </label>
+                                </div>
+                                <?php } ?>
+
+                                <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+
+                                </div><!-- END .menu-item-detail -->
+                               
+                                <div class="row margin-top-20">
+
+                                    <?php if(!$menu) { ?>
+                                        <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
+                                            <label><?= Yii::t('frontend', 'Quantity');?></label>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
+                                            <label><?= Yii::t('frontend', 'Serve');?></label>
+                                        </div>
+                                    <?php } ?>
+
                                     <div class="col-md-4 clearfix padding-left-6px qantity-div">
                                         <div class="form-group qty">
                                             <a href="#" class="btn-stepper" data-case="0">-</a>
@@ -451,20 +465,20 @@ if($model->images) {
                                             <a href="#" class="btn-stepper" data-case="1">+</a>
                                         </div>
                                     </div>
-                                <?php } else { ?>
-                                    <input type="hidden" name="quantity" id="quantity" data-min="<?= $quantity ?>" value="<?= $quantity ?>" />
-                                <?php } ?>
 
-                                <div class="col-lg-5 buy-btn">
-                                    <div class="button-signin">
-                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit">
-                                            <?= Yii::t('frontend', 'Buy') ?>
-                                        </button>&nbsp;&nbsp;&nbsp;
+                                    <div class="col-lg-5 buy-btn">
+                                        <div class="button-signin">
+                                            <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
+                                                <?= Yii::t('frontend', 'Buy') ?>
+                                            </button>&nbsp;&nbsp;&nbsp;
+                                        </div>
                                     </div>
-                                </div>
-                                <span class=" col-lg-12 error cart_quantity"></span>
-                                <span id="available"></span>
-                            </div><!-- END .row -->
+                                    <span class=" col-lg-12 error cart_quantity"></span>
+                                    <span id="available"></span>
+                                </div><!-- END .row -->
+
+                            <?php } ?>
+
                         </form>
                         <?php } ?>
 
@@ -894,5 +908,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.7', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.8', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
