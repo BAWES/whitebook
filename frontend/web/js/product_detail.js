@@ -295,32 +295,8 @@ if (!isGuest) {
                         });
                     });
 
+                    $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 100 }, 'slow');
                 }
-            }
-        );
-
-        e.preventDefault();
-    });
-
-    jQuery('.buy_item').click(function (e) {
-
-        var item_id = jQuery(this).attr('id');
-
-        jQuery.get(
-            addtobasket_url,
-            {
-                'item_id': item_id,
-                'cust_id': customer_id
-            },
-            function (data)
-            {
-                jQuery('#option_modal_wrapper').html(data);
-                jQuery('#productOptionModal').modal('show');
-                jQuery('.selectpicker').selectpicker();
-
-                jQuery('.date').datepicker({
-                    container:'#delivery_date_wrapper'
-                });
             }
         );
 
@@ -399,6 +375,12 @@ $("#delivery_date").on("changeDate", function(e) {
 
 $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
    
+    if (isGuest) {
+        show_login_modal('-2');
+        $('#myModal').modal('show');
+        return false;
+    }
+
     $qty_input = $(this).parent().find('input');
 
     $qty = parseInt($qty_input.val());
@@ -412,6 +394,12 @@ $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
 });
 
 $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
+
+    if (isGuest) {
+        show_login_modal('-2');
+        $('#myModal').modal('show');
+        return false;
+    }
 
     //max quantity for menu 
 

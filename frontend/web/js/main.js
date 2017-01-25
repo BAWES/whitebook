@@ -1369,7 +1369,11 @@ function all_form_reset(){
     $('#forgot_result').removeClass('alert-success alert fade in');
     $('#forgot_result').html('');
     var create_event = $( "#create_event" ).validate();
-    create_event.resetForm();
+    
+    if(create_event) {
+        create_event.resetForm();
+    }
+
     $(':input','#create_event')
     .not(':button, :submit, :reset, :hidden')
     .val('')

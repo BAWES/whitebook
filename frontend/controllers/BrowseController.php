@@ -428,11 +428,14 @@ class BrowseController extends BaseController
             ])
             ->all();
 
+        $menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+
         if (Yii::$app->user->isGuest) {
 
             return $this->render('detail', [
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
+                'menu' => $menu,
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'vendor_area' => [],
                 'vendor_detail' => $vendor_detail,
@@ -481,8 +484,6 @@ class BrowseController extends BaseController
             $user = new Users();
 
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
-
-            $menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
 
             return $this->render('detail', [
                 'model' => $model,
