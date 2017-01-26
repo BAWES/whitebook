@@ -343,7 +343,7 @@ class BrowseController extends BaseController
                     ->one();
 
         if (empty($model)) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+           throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'] .' | '.LangFormat::format($model->item_name,$model->item_name_ar);
