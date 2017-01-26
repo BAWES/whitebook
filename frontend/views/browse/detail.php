@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = ' '.$item_name;
 $session = $session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+
 $quantity = $model->item_minimum_quantity_to_order;
 
 if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapacityExceptions)>0) {
@@ -845,7 +846,9 @@ if($model->images) {
 <?php
 
 echo Html::hiddenInput('final_price_url', Url::to(['browse/final-price']), ['id' => 'final_price_url']);
+echo Html::hiddenInput('save-delivery-timeslot-url', Url::to(['cart/save-delivery-timeslot']), ['id' => 'save-delivery-timeslot-url']);
 
+    
 $this->registerJs("
     var deliver_date = '".$deliver_date."';
     var isGuest = ".(int)Yii::$app->user->isGuest.";
@@ -921,5 +924,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.8', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.9', ['depends' => [\yii\web\JqueryAsset::className()]]);
 

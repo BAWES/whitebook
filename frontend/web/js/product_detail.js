@@ -488,3 +488,12 @@ $(document).delegate(".btn-booking-modal", 'click', function(){
 });
 
 
+$(document).delegate("#timeslot_id", 'changed.bs.select', function() {
+
+    alert(1);
+    
+    $timeslot_id = $(this).find('option:selected').val();
+
+    $.post($('#save-delivery-timeslot-url').val(), { 'deliver-timeslot' : $timeslot_id });
+});
+
