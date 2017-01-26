@@ -43,7 +43,7 @@ class CartController extends BaseController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'validation-product-available', 'update', 'get-delivery-timeslot'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'validation-product-available', 'update', 'get-delivery-timeslot', 'save-delivery-timeslot'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -459,37 +459,65 @@ class CartController extends BaseController
     */
     public function actionGetDeliveryTimeslot()
     {
-        if (Yii::$app->request->isAjax) {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            $data = Yii::$app->request->post();
-            $string = $data['sel_date'];
-            $timestamp = strtotime($string);
+        $data = Yii::$app->request->post();
+        $string = $data['sel_date'];
+        $timestamp = strtotime($string);
 
-            $vendor_timeslot = DeliveryTimeSlot::find()
+        $deliver_timeslot = Yii::$app->session->get('deliver-timeslot');
+
+        Yii::$app->session->set('deliver-date', $data['sel_date']);
+
+        $vendor_timeslot = DeliveryTimeSlot::find()
             ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
             ->where(['vendor_id' => $data['vendor_id']])
             ->andwhere(['timeslot_day' => date("l", $timestamp)])
-            ->asArray()->all();
-            if ($vendor_timeslot) {
+            ->asArray()
+            ->all();
 
-                foreach ($vendor_timeslot as $key => $value) {
-                    if (strtotime($data['sel_date']) == (strtotime($data['currentDate']))) {
-                        if (strtotime($data['time']) < strtotime($value['timeslot_start_time'])) {
-                            $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                            $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                            echo '<option value="' . $value['timeslot_id'] . '">' . $start . ' - ' . $end . '</option>';
-                        }
-                    } else {
+        if ($vendor_timeslot) {
+
+            foreach ($vendor_timeslot as $key => $value) {
+
+                if($deliver_timeslot == $value['timeslot_id']) {
+                    $selected = 'selected';
+                } else {
+                    $selected = '';
+                }
+
+                if (strtotime($data['sel_date']) == (strtotime($data['currentDate']))) {
+                    if (strtotime($data['time']) < strtotime($value['timeslot_start_time'])) {
                         $start = date('g:i A', strtotime($value['timeslot_start_time']));
                         $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                        echo '<option value="' . $value['timeslot_id'] . '">' . $start . ' - ' . $end . '</option>';
+                        echo '<option value="' . $value['timeslot_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
                     }
+                } else {
+                    $start = date('g:i A', strtotime($value['timeslot_start_time']));
+                    $end = date('g:i A', strtotime($value['timeslot_end_time']));
+                    echo '<option value="' . $value['timeslot_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
                 }
-            } else {
-                echo 0;
-                exit;
             }
+        } else {
+            echo 0;
+            exit;
         }
+    }
+
+    /**
+      *
+      */
+    public function actionSaveDeliveryTimeslot()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $deliver_timeslot = Yii::$app->request->post('deliver-timeslot');
+
+        Yii::$app->session->set('deliver-timeslot', $deliver_timeslot);
     }
 }
 
