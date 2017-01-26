@@ -1,6 +1,14 @@
 
     jQuery(document).ready(function () {
 
+        $start_date = '+' + $('#item_how_long_to_make').val() + 'd';
+
+        $('#item_delivery_date').datepicker({
+            format: 'dd-mm-yyyy',
+            startDate: $start_date,
+            autoclose:true,
+        });
+
         $('[data-toggle="tooltip"]').tooltip(); 
 
         /* client say slider start*/
@@ -351,7 +359,7 @@ if (!isGuest) {
 
     // pre set value for Delivery date on product detail page
     if (deliver_date) {
-        productAvailability(jQuery('#delivery_date').val());
+        productAvailability(jQuery('#item_delivery_date').val());
     }
 
     // Shop product page quantity increment and decrement stepper
@@ -368,7 +376,7 @@ if (!isGuest) {
 }
 
 // product detail page Delivery Date change event
-$("#delivery_date").on("changeDate", function(e) {
+$("#item_delivery_date").on("changeDate", function(e) {
     $('.error.cart_delivery_date').html('');
     productAvailability(jQuery(this).val());
 });

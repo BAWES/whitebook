@@ -310,15 +310,15 @@ $this->registerJs("
 
 	jQuery('.fa-edit').click(function(){
 		jQuery.ajax({
-                url: '".Url::to(['cart/update-cart-item-popup'])."',
-                type:'post',
-                data:{id:$(this).data('cart-id')},
-                success:function(data)
-                {
-                	jQuery('#update-cart-modal').modal('show');
-                	jQuery('#update-cart-modal .modal-body').html(data);
-                }
-            });
+            url: '".Url::to(['cart/update-cart-item-popup'])."',
+            type:'post',
+            data:{id:$(this).data('cart-id')},
+            success:function(data)
+            {
+            	jQuery('#update-cart-modal').modal('show');
+            	jQuery('#update-cart-modal .modal-body').html(data);
+            }
+        });
 	});
 ", View::POS_READY);
 
@@ -377,9 +377,9 @@ $this->registerJsFile('@web/js/cart.js?v=1.0', ['depends' => [\yii\web\JqueryAss
 $this->registerCss("
 	.max-width-150-px{max-width: 150px;}
 	.fa-calendar{
-	position: absolute;
-	right: 9px;
-	top: 10px;
+		position: absolute;
+		right: 9px;
+		top: 10px;
 	}
 	.position-relative {position:relative;}
 	.fa-calendar{position: absolute;top: 9px;right: 7px;font-size: 17px;}

@@ -341,6 +341,12 @@ class CartController extends BaseController
                 return Yii::t('frontend', 'Item not available for sell!');
             }
 
+            $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' days');
+
+            if(strtotime($data['delivery_date']) < $min_delivery_time) {
+                return Yii::t('frontend', 'Item notice period '.$item->item_how_long_to_make.' day!');
+            }
+
             $vendor_id = $item->vendor_id;
 
             /*

@@ -111,7 +111,7 @@ if($model->images) {
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Delivery Date'); ?></label>
                     <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
-                        <input value="<?=$deliver_date?>" readonly="true" name="delivery_date" id="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
+                        <input value="<?= $deliver_date ?>" readonly="true" name="delivery_date" id="item_delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                     </div>
                     <span class="error cart_delivery_date"></span>
@@ -120,7 +120,7 @@ if($model->images) {
             <div class="col-md-5 padding-left-0 timeslot_id_div timeslot-filter">
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
-                    <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date');?></div>
+                    <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Valid Delivery Date');?></div>
                 </div>
             </div>
             <div class="col-md-3 padding-left-0 timeslot_id_select timeslot-filter" style="display: none;">
@@ -845,6 +845,7 @@ if($model->images) {
 
 <?php
 
+echo Html::hiddenInput('item_how_long_to_make', $model['item_how_long_to_make'], ['id' => 'item_how_long_to_make']);
 echo Html::hiddenInput('final_price_url', Url::to(['browse/final-price']), ['id' => 'final_price_url']);
 echo Html::hiddenInput('save-delivery-timeslot-url', Url::to(['cart/save-delivery-timeslot']), ['id' => 'save-delivery-timeslot-url']);
 
@@ -924,5 +925,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.9', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.10', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
