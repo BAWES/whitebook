@@ -272,7 +272,7 @@ if($model->isNewRecord){
 echo Html::hiddenInput('isNewRecord', 1, ['id'=>'isNewRecord']);
 
 //ajax step urls 
-
+ 
 echo Html::hiddenInput('item_info_url', Url::to(['vendor-item/item-info']), ['id' => 'item_info_url']);
 
 echo Html::hiddenInput('category_add_url', Url::to(['vendor-item/add-category']), ['id' => 'category_add_url']);

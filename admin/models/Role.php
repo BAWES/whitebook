@@ -101,7 +101,7 @@ class Role extends \yii\db\ActiveRecord
             'address-question' => ['index', 'view', 'create', 'update', 'delete', 'block', 'sort_addressquestion'],
             'admin' => ['index', 'view', 'create', 'update', 'delete', 'galleryitem'],
             'advert-home' => ['index', 'view', 'create', 'update', 'delete'],
-            'category' => ['index', 'manage_subcategory', 'child_category_index', 'view', 'sort_sub_category', 'sort_category', 'create', 'create_subcategory', 'child_category_create', 'update', 'subcategory_update', 'child_category_update', 'delete', 'category_delete', 'subcategory_delete', 'childcategory_delete', 'block', 'subcategory_block', 'loadcategory', 'vendorcategory', 'loadsubcategory'],
+            'category' => ['index', 'manage_subcategory', 'child_category_index', 'view', 'sort_sub_category', 'sort_category', 'create', 'create_subcategory', 'child_category_create', 'update', 'subcategory_update', 'child_category_update', 'delete', 'category_delete', 'subcategory_delete', 'childcategory_delete', 'block', 'subcategory_block', 'loadcategory', 'vendorcategory', 'loadsubcategory', 'move'],
             'city' => ['index', 'view', 'create', 'update', 'delete', 'block'],
             'cms' => ['index', 'view', 'create', 'update', 'delete', 'block'],
             'contacts' => ['index', 'view', 'create', 'update', 'delete', 'block'],
