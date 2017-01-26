@@ -26,8 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
 			'sort',
 			['class' => 'yii\grid\ActionColumn',
 				'header'=>'Action',
-				'template' => ' {update} {delete}',
+				'template' => '{move} {update} {delete}',
 				'buttons' => [
+					'move' => function ($url, $model) {
+						if($model['category_level'] >= 2) {
+							return '<a class="btn-move-items" data-parent-id="'.$model['parent_category_id'].'" data-id="'.$model['ID'].'"><span class="glyphicon glyphicon-share"></span></a>';	
+						} 						
+					},
 					'update' => function ($url, $model) {
 						$url = Url::toRoute(['category/update','id'=>$model['ID']]);
 						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
@@ -47,44 +52,36 @@ $this->params['breadcrumbs'][] = $this->title;
 		],
 	]); ?>
 
-    <?php /*GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'category_name',
-		   [
-				'attribute'=>'sort',
-				'label'=>'Sort Order',	
-				'format' => 'raw',		
-				'value'=>function($data){
-					return '<b><input type="hidden" id="hidden_'.$data->category_id.'" value="'.$data->sort.'"><input type="text" value="'.$data->sort.'" onblur="change_sort_order(this.value,'.$data->category_id.')"></b>';
-					},
-				'contentOptions'=>['class'=>'sort','style'=>'max-width: 100px;'],			
-			],	
-			[
-				'attribute'=>'created_datetime',
-				'format' => ['date', Yii::$app->params['dateFormat']],
-				'label'=>'created date',			
-			],
-            [
-			  'header'=>'Status',
-			 'format' => 'raw',
-			  'value'=>function($data) {
-				return HTML::a('<img src='.$data->statusImageurl($data->category_allow_sale).' id="image-'.$data->category_id.'" alt="my_image" title='.$data->statusTitle($data->category_allow_sale).'>','javascript:void(0)',['id'=>'status', 
-				'onclick'=>'change("'.$data->category_allow_sale.'","'.$data->category_id.'")']);
-				},
-			 ],
-           ['class' => 'yii\grid\ActionColumn',
-            'header'=>'Action',
-            'template' => ' {update} {delete} {link}',
-			],
-        ],
-    ]); */?>
+</div>
 
+<div id="modal_move_cat_items" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Select category</h4>
+      </div>
+      <div class="modal-body">
+
+            <?= Html::hiddenInput('from_id', 0, ['id' => 'from_id']); ?>
+
+            <select class="form-control" id="to_id">
+            </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-move-submit" type="button">Submit</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <?php 
+
+echo Html::hiddenInput('load_sub_category_url', Url::to(['category/loadsubcategory']), ['id' => 'load_sub_category_url']);
+
+echo Html::hiddenInput('move_url', Url::to(['category/move']), ['id' => 'move_url']);
+
+$this->registerJsFile("@web/themes/default/js/category.js?v=1.0", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJs("
 
