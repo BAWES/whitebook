@@ -462,6 +462,7 @@ if($model->images) {
                                
                                 <div class="row margin-top-20">
 
+                                <?php if($model->item_default_capacity > 1) { ?>
                                     <?php if(!$menu) { ?>
                                         <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
                                             <label><?= Yii::t('frontend', 'Quantity');?></label>
@@ -479,6 +480,9 @@ if($model->images) {
                                             <a href="#" class="btn-stepper" data-case="1">+</a>
                                         </div>
                                     </div>
+                                <?php } else { ?>
+                                    <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>" />
+                                <?php } ?>
 
                                     <div class="col-lg-5 buy-btn">
                                         <div class="button-signin">
