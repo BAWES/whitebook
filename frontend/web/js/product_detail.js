@@ -487,10 +487,7 @@ $(document).delegate(".btn-booking-modal", 'click', function(){
     $('#modal_booking_service').modal('show');
 });
 
-
 $(document).delegate("#timeslot_id", 'changed.bs.select', function() {
-
-    alert(1);
     
     $timeslot_id = $(this).find('option:selected').val();
 
