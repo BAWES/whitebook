@@ -98,16 +98,16 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                                     } else {
                                         echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
                                     }                                    
+
+                                    $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                                    if($menu_item_total) {
+                                        echo ' = '.CFormatter::format($menu_item_total);    
+                                    }
+                                    
+                                    echo '</i>';
                                 } 
                                 
-                                $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
-
-                                if($menu_item_total) {
-                                    echo ' = '.CFormatter::format($menu_item_total);    
-                                }
-                                
-                                echo '</i>';
-
                                 if($item['female_service']) {
                                     echo '<i class="cart_menu_item"> - '.Yii::t('frontend', 'Female service').'</i>';
                                 }

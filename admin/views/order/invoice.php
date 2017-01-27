@@ -108,15 +108,15 @@ use common\components\CFormatter;
 
                         foreach ($menu_items as $key => $menu_item) { 
                             echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
-                        } 
-                            
-                        $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
 
-                        if($menu_item_total) {
-                            echo ' = '.CFormatter::format($menu_item_total);    
-                        }
-                        
-                        echo '</i>';
+                            $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                            if($menu_item_total) {
+                                echo ' = '.CFormatter::format($menu_item_total);    
+                            }
+                            
+                            echo '</i>';
+                        } 
 
                         if($item['female_service']) {
                             echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
