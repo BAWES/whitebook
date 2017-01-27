@@ -9,6 +9,7 @@ use common\models\Vendor;
 use common\models\OrderStatus;
 use common\models\SuborderItemPurchase;
 use common\models\SuborderItemMenu;
+use common\components\CFormatter;
 
 $this->title = 'Order #' . $model->order_id;
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
@@ -114,8 +115,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
 
                         foreach ($menu_items as $key => $menu_item) { 
-                            echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
+                            echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
                         } 
+
+                        $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                        if($menu_item_total) {
+                            echo ' = '.CFormatter::format($menu_item_total);    
+                        }
+                        
+                        echo '</i>';
 
                         if($item['female_service']) {
                             echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';

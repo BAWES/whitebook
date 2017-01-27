@@ -217,9 +217,9 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past delivery date');     
         }
 
-        //to check min possible delivery date 
-
-        $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' days');
+        //to check min possible delivery date, get date after x day then convert it to unix time 
+    
+        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' days')));
 
         if(strtotime($data['delivery_date']) < $min_delivery_time) {
             $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period '.$item->item_how_long_to_make.' day!');

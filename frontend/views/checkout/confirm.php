@@ -59,6 +59,8 @@ use common\models\CustomerCartMenuItem;
                 $unit_price = $item['item_price_per_unit'];
             }
 
+            $row_total = $unit_price * $item['cart_quantity'];
+
             $menu_items = CustomerCartMenuItem::find()
                 ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
                 ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
@@ -67,11 +69,9 @@ use common\models\CustomerCartMenuItem;
                 ->all();
 
             foreach ($menu_items as $key => $value) {
-                $unit_price += $value['quantity'] * $value['price'];
+                $row_total += $value['quantity'] * $value['price'];
             }
-
-			$row_total = $unit_price * $item['cart_quantity'];
-
+			
 			$sub_total += $row_total;
 
             $address_data = CustomerCart::getAddressData($address[$item['cart_id']]);
@@ -109,10 +109,18 @@ use common\models\CustomerCartMenuItem;
 
                         foreach ($menu_items as $key => $menu_item) { 
                             if(Yii::$app->language == 'en') {
-                                echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
+                                echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
                             }else{
-                                echo '<i class="cart_menu_item">'.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'].'</i>';
+                                echo '<i class="cart_menu_item">'.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
                             }
+
+                            $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                            if($menu_item_total) {
+                                echo ' = '.CFormatter::format($menu_item_total);    
+                            }
+                            
+                            echo '</i>';
                         } 
 
                         if($item['female_service']) {
