@@ -2335,6 +2335,7 @@ span.small {
     display: block;
     max-width: 25%;
     text-align: center;
+    padding: 0 10px;
 }
 .menu-requirements i {
     width: 100%;
@@ -2353,4 +2354,6 @@ span.small {
     padding-top: 10px;
     width: 100%;
     display: block;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
 }

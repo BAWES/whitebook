@@ -612,6 +612,10 @@ class BrowseController extends BaseController
 
         $menu_items = Yii::$app->request->post('menu_item');
 
+        if(!is_array($menu_items)) {
+            $menu_items = [];
+        }
+
         foreach ($menu_items as $key => $value) {
             
             $menu_item = VendorItemMenuItem::findOne($key);
