@@ -619,10 +619,12 @@ class BrowseController extends BaseController
             $price += $menu_item->price * $value;
         }
 
+        $total = $price * Yii::$app->request->post('quantity');
+
         Yii::$app->response->format = 'json';
 
         return [
-            'price' => CFormatter::format($price)
+            'price' => CFormatter::format($total)
         ];
     }
 
