@@ -608,7 +608,7 @@ class BrowseController extends BaseController
 
         $item = VendorItem::findOne($item_id);
 
-        $price = $item->item_price_per_unit;
+        $total = $item->item_price_per_unit * Yii::$app->request->post('quantity');
 
         $menu_items = Yii::$app->request->post('menu_item');
 
@@ -616,11 +616,9 @@ class BrowseController extends BaseController
             
             $menu_item = VendorItemMenuItem::findOne($key);
 
-            $price += $menu_item->price * $value;
+            $total += $menu_item->price * $value;
         }
-
-        $total = $price * Yii::$app->request->post('quantity');
-
+        
         Yii::$app->response->format = 'json';
 
         return [

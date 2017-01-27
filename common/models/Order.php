@@ -104,7 +104,7 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
-    public function place_order($gateway_name, $gateway_percentage, $gateway_fees, $order_status_id = 0, $transaction_id = ''){
+    public function place_order($gateway_name, $gateway_percentage, $gateway_fees, $order_status_id = 0, $transaction_id = '') {
 
         //address ids saved in session from checkout 
         $addresses = Yii::$app->session->get('address');
@@ -120,6 +120,8 @@ class Order extends \yii\db\ActiveRecord
         //check if quantity fall in price chart 
         foreach ($items as $key => $item) {
 
+            $price_chart[$item['item_id']] = [];
+
             $price = VendorItemPricing::find()
                 ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
                 ->andWhere(['<=', 'range_from', $item['cart_quantity']])
@@ -128,9 +130,9 @@ class Order extends \yii\db\ActiveRecord
                 ->one();
 
             if($price) {
-                $price_chart[$item['item_id']] = $price->pricing_price_per_unit;
+                $price_chart[$item['item_id']]['unit_price'] = $price->pricing_price_per_unit;
             }else{
-                $price_chart[$item['item_id']] = $item['item_price_per_unit'];
+                $price_chart[$item['item_id']]['unit_price'] = $item['item_price_per_unit'];
             }
 
             $menu_items = CustomerCartMenuItem::find()
@@ -140,8 +142,10 @@ class Order extends \yii\db\ActiveRecord
                 ->asArray()
                 ->all();
 
+            $price_chart[$item['item_id']]['menu_price'] = 0;
+
             foreach ($menu_items as $key => $menu_item) {
-                $price_chart[$item['item_id']] += $menu_item['quantity'] * $menu_item['price'];
+                $price_chart[$item['item_id']]['menu_price'] += $menu_item['quantity'] * $menu_item['price'];
             }
         }
         
@@ -157,7 +161,7 @@ class Order extends \yii\db\ActiveRecord
 
             $delivery_charge += $delivery_area->delivery_price;
 
-            $sub_total += $price_chart[$item['item_id']] * $item['cart_quantity'];
+            $sub_total += ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
 
             $chanks[$item['vendor_id']][] = $item;
         }
@@ -212,10 +216,10 @@ class Order extends \yii\db\ActiveRecord
                 $item_purchase->address_id = $address_id;
                 $item_purchase->purchase_delivery_address = Order::getPurchaseDeliveryAddress($address_id);
                 $item_purchase->purchase_delivery_date = $item['cart_delivery_date'];
-                $item_purchase->purchase_price_per_unit = $price_chart[$item['item_id']];
+                $item_purchase->purchase_price_per_unit = $price_chart[$item['item_id']]['unit_price'];
                 $item_purchase->purchase_customization_price_per_unit = 0;
                 $item_purchase->purchase_quantity = $item['cart_quantity'];
-                $item_purchase->purchase_total_price = $price_chart[$item['item_id']] * $item['cart_quantity'];
+                $item_purchase->purchase_total_price = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
                 $item_purchase->female_service = $item['female_service'];
                 $item_purchase->special_request = $item['special_request'];
                 $item_purchase->trash = 'Default';
