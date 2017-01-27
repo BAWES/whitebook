@@ -145,7 +145,22 @@ if($model->images) {
                                 </a>
                             </label>
                             <b class="font-27">
-                                <p class="item-final-price"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']) : '<span class="small">'.Yii::t('frontend','Price upon request').'<span>'  ?></p>
+                                <p class="item-final-price">
+                                   
+                                    <?php if($model['item_price_per_unit'] > 0) { 
+                                         
+                                            echo CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']);
+                                         
+                                          } elseif ($menu) { 
+                                        
+                                            echo '<span class="small">'.Yii::t('frontend','Price on selection of menu items').'<span>';
+
+                                          } else { 
+
+                                            echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
+
+                                          } ?>                                        
+                                </p>
                             </b>
                         </div>
                         <!-- Indicators responsive slider -->
@@ -211,7 +226,21 @@ if($model->images) {
                                     </a>
                                     </label>
 
-                                    <b class="font-27 item-final-price"><?= (trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
+                                    <b class="font-27 item-final-price">
+                                        <?php if($model['item_price_per_unit'] > 0) { 
+                                         
+                                            echo CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']);
+                                         
+                                          } elseif ($menu) { 
+                                        
+                                            echo '<span class="small">'.Yii::t('frontend','Price on selection of menu items').'<span>';
+
+                                          } else { 
+
+                                            echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
+
+                                          } ?>                   
+                                    </b>
 
                                     <strong><?= $model['item_price_description'] ?></strong>
                                 </div>
