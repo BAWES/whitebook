@@ -371,6 +371,9 @@ if (!isGuest) {
         } else if (jQuery(this).data('case') == 1) {
             jQuery('#quantity').val(parseInt(jQuery('#quantity').val())+1);
         }
+
+        update_price();
+
         return false;
     });
 }
@@ -435,7 +438,7 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 });
 
 function update_price() {
-    $.post($('#final_price_url').val(), $('.menu-item-detail input').serialize(), function(json) {
+    $.post($('#final_price_url').val(), $('#form_product_option').serialize(), function(json) {
         $('.item-final-price').html(json.price);
     });
 }

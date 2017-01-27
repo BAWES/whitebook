@@ -57,7 +57,7 @@ if($model->images) {
    "offers": {
     "@type": "Offer",
     "priceCurrency": "KWD",
-    "price": "<?= $model['item_price_per_unit'] ?>",
+    "price": "<?= $model['item_price_per_unit'] * $model['item_minimum_quantity_to_order'] ?>",
     "availability": "http://schema.org/InStock",
     "seller": {
       "name": "<?= $vendor_name; ?>"
@@ -145,7 +145,7 @@ if($model->images) {
                                 </a>
                             </label>
                             <b class="font-27">
-                                <p><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('frontend','Price upon request').'<span>'  ?></p>
+                                <p class="item-final-price"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']) : '<span class="small">'.Yii::t('frontend','Price upon request').'<span>'  ?></p>
                             </b>
                         </div>
                         <!-- Indicators responsive slider -->
@@ -211,7 +211,7 @@ if($model->images) {
                                     </a>
                                     </label>
 
-                                    <b class="font-27 item-final-price"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
+                                    <b class="font-27 item-final-price"><?= (trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></b>
 
                                     <strong><?= $model['item_price_description'] ?></strong>
                                 </div>
@@ -929,5 +929,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.10', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.11', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
