@@ -10,6 +10,7 @@ use common\models\Siteinfo;
 use common\models\OrderStatus;
 use common\models\SuborderItemMenu;
 use common\models\SuborderItemPurchase;
+use common\components\CFormatter;
 
 ?>
 <tr>
@@ -111,7 +112,15 @@ use common\models\SuborderItemPurchase;
 	                    $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
 
 	                    foreach ($menu_items as $key => $menu_item) { 
-	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
+	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+
+                            $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                            if($menu_item_total) {
+                                echo ' = '.CFormatter::format($menu_item_total);    
+                            }
+                            
+                            echo '</i>';
 	                    } 
 
                         if($item['female_service']) {
