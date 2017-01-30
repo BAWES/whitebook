@@ -285,7 +285,6 @@ $('body').on('click','.btn-cart-change',function(){
             }
         }
     });
-    console.log($('#update-cart').serialize());
     return false;
 });
 
@@ -1712,7 +1711,6 @@ $(document).delegate('button#loadmore', 'click', function(event) {
         }
     });
 });
-
 
 $(document).delegate('#main-category', 'change', function(){
     var s = $('#main-category :selected').val();

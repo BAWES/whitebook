@@ -357,108 +357,6 @@ if($model->images) {
 
                             <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
 
-                            <!-- menu detail -->
-
-                            <div class="menu-item-detail">
-                            
-                            <?php foreach ($menu as $key => $value) { ?>
-                                <div class="menu-detail">    
-                                    <h3 class="menu-title">
-
-                                        <span class="title">
-                                            <?php if(Yii::$app->language == 'en') { 
-                                                    echo $value->menu_name;
-                                              } else { 
-                                                    echo $value->menu_name_ar;
-                                              } ?>
-                                        </span>
-
-                                        <?php if($value->min_quantity || $value->max_quantity) { ?>
-                                        <span class="menu-hint">
-                                            
-                                            <?php 
-
-                                            echo Yii::t('frontend', 'Quantity range : ');
-
-                                            if($value->min_quantity) { 
-                                                echo Yii::t('frontend', 'Minimum {qty}', [
-                                                    'qty' => $value->min_quantity
-                                                ]); 
-                                            } 
-
-                                            if($value->min_quantity && $value->max_quantity) { 
-                                                echo ' , ';
-                                            }
-
-                                            if($value->max_quantity) { 
-                                                echo Yii::t('frontend', 'Maximum {qty}', [
-                                                    'qty' => $value->max_quantity
-                                                ]); 
-                                            } 
-                                           
-                                            ?>
-                                        </span>                                        
-                                        <?php } ?>
-                                    </h3>
-
-                                    <span class="error menu_<?= $value->menu_id ?>"></span>
-
-                                    <ul class="menu-items"  data-max-quantity="<?= $value->max_quantity ?>">
-                                    <?php 
-
-                                    $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
-
-                                    foreach ($menu_items as $menu_item) { ?>
-
-                                        <li> 
-                                            <!-- qty box -->
-
-                                            <span class="menu-item-qty-box">
-                                                <i class="fa fa-minus"></i>
-                                                <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-
-                                            <!-- item name -->
-
-                                            <span class="menu-item-name">
-                                                <?php if(Yii::$app->language == 'en') { 
-                                                        echo $menu_item->menu_item_name;
-                                                  } else { 
-                                                        echo $menu_item->menu_item_name_ar;
-                                                  } ?> 
-                                            </span>
-
-                                            <!-- price -->
-
-                                            <?php if($menu_item->price > 0) { ?>
-                                            <span class="menu_item_price">
-                                                (+<?= CFormatter::format($menu_item->price) ?>)
-                                            </span>
-                                            <?php  } ?>
-
-                                            <!-- hint -->
-
-                                            <?php 
-
-                                            $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
-
-                                            if($hint) { ?>
-                                            <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
-                                            <?php } ?>
-                                            
-                                            <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
-                                        </li>
-                                    <?php } ?>
-                                    </ul>
-                                </div><!-- END .menu-detail -->
-                            
-                            <?php } ?>
-
-                            <?php if($menu) { ?>
-                            <hr />
-                            <?php } ?>
-                            
                             <?php if(Yii::$app->user->isGuest) {  ?>
                                 <div class="col-md-4 clearfix padding-left-6px qantity-div">
                                     <div class="button-signin">
@@ -469,22 +367,6 @@ if($model->images) {
                                 </div>
                             <?php } else { ?>
 
-                                <?php if($model->allow_special_request) { ?>
-                                <div class="form-group" style="margin-left: 0px;">
-                                    <label><?= Yii::t('frontend', 'Special request') ?></label>
-                                    <textarea name="special_request" class="form-control"></textarea>
-                                </div>
-                                <?php } ?>
-
-                                <?php if($model->have_female_service) { ?>
-                                <div class="form-group checkbox" style="margin-left: 0px;">
-                                    <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
-                                    <label for="chk_female_service">
-                                        <?= Yii::t('frontend', 'Female Service') ?>                                   
-                                    </label>
-                                </div>
-                                <?php } ?>
-
                                 <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
 
                                 </div><!-- END .menu-item-detail -->
@@ -492,6 +374,7 @@ if($model->images) {
                                 <div class="row margin-top-20">
 
                                 <?php if($model->item_default_capacity > 1) { ?>
+
                                     <?php if(!$menu) { ?>
                                         <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
                                             <label><?= Yii::t('frontend', 'Quantity');?></label>
@@ -513,239 +396,391 @@ if($model->images) {
                                     <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>" />
                                 <?php } ?>
 
-                                    <div class="col-lg-5 buy-btn">
-                                        <div class="button-signin">
-                                            <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
-                                                <?= Yii::t('frontend', 'Buy') ?>
-                                            </button>&nbsp;&nbsp;&nbsp;
-                                        </div>
+                                <div class="col-lg-5 buy-btn">
+                                    <div class="button-signin">
+                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
+                                            <?= Yii::t('frontend', 'Buy') ?>
+                                        </button>&nbsp;&nbsp;&nbsp;
                                     </div>
-                                    <span class=" col-lg-12 error cart_quantity"></span>
-                                    <span id="available"></span>
-                                </div><!-- END .row -->
+                                </div>
+                                <span class=" col-lg-12 error cart_quantity"></span>
+                                <span id="available"></span>
+                            
+                            <?php } ?><!-- END not guest -->
 
-                            <?php } ?>
-
-                        </form>
-                        <?php } ?>
+                            <?php } ?><!-- END available in stock and for sale -->
 
                             <div class="accad_menus">
                                 <div class="panel-group vendor-item-detail" id="accordion">
-                                        <?php if (!empty($model['item_description'])) { ?>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                              <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                                                    <?= Yii::t('frontend', 'Product Description') ?>
-                                                    <span class="produ_type">
-                                                    (
-                                                        <?= Yii::t('frontend', 'Product type') ?>:
-                                                        <?= Yii::t('frontend', $model->type->type_name); ?>
-                                                    )
-                                                    </span>
-                                                </a>
-                                              </h4>
-                                            </div>
-                                            <div id="collapse1" class="panel-collapse collapse in">
-                                              <div class="panel-body">
-                                                <p><?= $item_description; ?></p>
-                                              </div>
-                                            </div>
-                                        </div><!-- END .panel -->
-                                        <?php } ?>
+                                    <?php if (!empty($model['item_description'])) { ?>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                                <?= Yii::t('frontend', 'Product Description') ?>
+                                                <span class="produ_type">
+                                                (
+                                                    <?= Yii::t('frontend', 'Product type') ?>:
+                                                    <?= Yii::t('frontend', $model->type->type_name); ?>
+                                                )
+                                                </span>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse1" class="panel-collapse collapse in">
+                                          <div class="panel-body">
+                                            <p><?= $item_description; ?></p>
+                                          </div>
+                                        </div>
+                                    </div><!-- END .panel -->
+                                    <?php } ?>
 
-                                        <?php if (!empty($model['item_additional_info'])) { ?>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                              <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed">
-                                                    <?= Yii::t('frontend', 'Additional Information') ?>
-                                                </a>
-                                              </h4>
-                                            </div>
-                                            <div id="collapse2" class="panel-collapse collapse">
-                                              <div class="panel-body">
-                                                <p><?= nl2br($item_additional_info); ?></p>
-                                              </div>
-                                            </div>
-                                        </div><!-- END .panel -->
-                                        <?php } ?>
+                                    <?php if($menu) { ?>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-options">
+                                                <?= Yii::t('frontend', 'Product Options') ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse-options" class="panel-collapse collapse">
+                                          <div class="panel-body">                                            
+                                             <div class="menu-item-detail">
+                                                <?php foreach ($menu as $key => $value) { ?>
+                                                    <div class="menu-detail">    
+                                                        <h3 class="menu-title">
 
-                                        <?php if($whats_include) { ?>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                              <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" class="collapsed">
-                                                    <?= Yii::t('frontend', "What is include?") ?>
-                                                </a>
-                                              </h4>
-                                            </div>
-                                            <div id="collapse6" class="panel-collapse collapse">
-                                              <div class="panel-body">
-                                                <p><?= nl2br($whats_include); ?></p>
-                                              </div>
-                                            </div>
-                                        </div><!-- END .panel -->
-                                        <?php } ?>
+                                                            <span class="title">
+                                                                <?php if(Yii::$app->language == 'en') { 
+                                                                        echo $value->menu_name;
+                                                                  } else { 
+                                                                        echo $value->menu_name_ar;
+                                                                  } ?>
+                                                            </span>
 
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                              <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed">
-                                                    <?= Yii::t('frontend', 'Contact info'); ?>
-                                                </a>
-                                              </h4>
-                                            </div>
-                                            <div id="collapse3" class="panel-collapse collapse">
-                                                <div class="panel-body vendor_social_info">
-                                                    <ul>
-                                                        <?php if($phones) { ?>
-                                                        <li class="vendor_phone_list">
-                                                            <?php foreach ($phones as $key => $value) { ?>
-                                                                <a class="color-808080" href="tel:<?= $value->phone_no; ?>"><i class="<?= $phone_icons[$value->type] ?>"></i><?= $value->phone_no; ?>
-                                                                </a>
+                                                            <?php if($value->min_quantity || $value->max_quantity) { ?>
+                                                            <span class="menu-hint">
+                                                                
+                                                                <?php 
+
+                                                                echo Yii::t('frontend', 'Quantity range : ');
+
+                                                                if($value->min_quantity) { 
+                                                                    echo Yii::t('frontend', 'Minimum {qty}', [
+                                                                        'qty' => $value->min_quantity
+                                                                    ]); 
+                                                                } 
+
+                                                                if($value->min_quantity && $value->max_quantity) { 
+                                                                    echo ' , ';
+                                                                }
+
+                                                                if($value->max_quantity) { 
+                                                                    echo Yii::t('frontend', 'Maximum {qty}', [
+                                                                        'qty' => $value->max_quantity
+                                                                    ]); 
+                                                                } 
+                                                               
+                                                                ?>
+                                                            </span>                                        
                                                             <?php } ?>
-                                                        </li>
+                                                        </h3>
+
+                                                        <span class="error menu_<?= $value->menu_id ?>"></span>
+
+                                                        <ul class="menu-items"  data-max-quantity="<?= $value->max_quantity ?>">
+                                                        <?php 
+
+                                                        $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
+
+                                                        foreach ($menu_items as $menu_item) { ?>
+
+                                                            <li> 
+                                                                <!-- qty box -->
+
+                                                                <span class="menu-item-qty-box">
+                                                                    <i class="fa fa-minus"></i>
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                                                    <i class="fa fa-plus"></i>
+                                                                </span>
+
+                                                                <!-- item name -->
+
+                                                                <span class="menu-item-name">
+                                                                    <?php if(Yii::$app->language == 'en') { 
+                                                                            echo $menu_item->menu_item_name;
+                                                                      } else { 
+                                                                            echo $menu_item->menu_item_name_ar;
+                                                                      } ?> 
+                                                                </span>
+
+                                                                <!-- price -->
+
+                                                                <?php if($menu_item->price > 0) { ?>
+                                                                <span class="menu_item_price">
+                                                                    (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                </span>
+                                                                <?php  } ?>
+
+                                                                <!-- hint -->
+
+                                                                <?php 
+
+                                                                $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
+
+                                                                if($hint) { ?>
+                                                                <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                                                <?php } ?>
+                                                                
+                                                                <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+                                                            </li>
                                                         <?php } ?>
+                                                        </ul>
+                                                    </div><!-- END .menu-detail -->
+                                                <?php } ?>
+                                             </div><!-- END .menu-item-detail -->
+                                          </div>
+                                        </div>
+                                    </div><!-- END .panel -->
+                                    <?php } ?>
 
-                                                        <?php if (!empty($vendor_detail['vendor_contact_address'])) { ?>
-                                                        <li>
-                                                            <a target="_blank" href="http://maps.google.com/?q=<?= $vendor_detail['vendor_contact_address'] ?>">
-                                                                <i class="fa fa-map-marker"></i>
-                                                                <?= LangFormat::format($vendor_detail['vendor_contact_address'], $vendor_detail['vendor_contact_address_ar']); ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
+                                    <?php if($model->allow_special_request) { ?>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-special-request">
+                                                <?= Yii::t('frontend', 'Special request') ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse-special-request" class="panel-collapse collapse">
+                                          <div class="panel-body">
+                                            
+                                            <br />
 
-                                                        <?php if ($vendor_detail['vendor_working_hours'] &&
-                                                                    $vendor_detail['vendor_working_hours_to']) { ?>
-                                                        <li class="vendor_working_hours">
-                                                            <a>
-                                                                <i class="fa fa-clock-o"></i>
-                                                                <?php
-                                                                    $from = explode(':', $vendor_detail['vendor_working_hours']);
-
-                                                                    if($from)
-                                                                    echo (isset($from[0])) ? $from[0] : '';
-                                                                    echo (isset($from[1])) ? ':'.$from[1] : '';
-                                                                    echo (isset($from[2])) ? ''.$from[2] : '';
-                                                                ?>
-                                                                -
-                                                                <?php
-                                                                    $to = explode(':', $vendor_detail['vendor_working_hours_to']);
-                                                                    echo (isset($to[0])) ? $to[0] : '';
-                                                                    echo (isset($to[1])) ? ':'.$to[1] : '';
-                                                                    echo (isset($to[2])) ? ''.$to[2] : ''
-                                                                ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
-
-                                                        <?php if($txt_day_off) { ?>
-                                                        <li>
-                                                            <a>
-                                                                <i class="fa fa-clock-o"></i>
-                                                                <?= Yii::t('frontend', '{txt_day_off} off', [
-                                                                        'txt_day_off' => $txt_day_off
-                                                                    ]); ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
-
-                                                        <?php if (!empty($vendor_detail['vendor_public_email'])) { ?>
-                                                        <li>
-                                                            <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?= $vendor_detail['vendor_public_email']; ?>">
-                                                                <i class="fa fa-envelope-o"></i>
-                                                                <?= $vendor_detail['vendor_public_email']; ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
-
-                                                        <?php if (!empty($vendor_detail['vendor_website'])) { ?>
-                                                        <li>
-                                                            <a target="_blank" href="<?= $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>">
-                                                                <i class="fa fa-globe"></i>
-                                                                <?php echo $vendor_detail['vendor_website']; ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
-
-                                                        <?php if($vendor_detail['vendor_instagram']) { ?>
-                                                        <li>
-                                                            <a target="_blank" href="<?= $vendor_detail['vendor_instagram'] ?>" alt="<?= Yii::t('frontend', 'Instatgram') ?>"><i class="fa fa-instagram"></i>
-                                                                <?= $vendor_detail['vendor_instagram_text'] ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
-
-                                                        <?php if($vendor_detail['vendor_twitter']) { ?>
-                                                        <li>
-                                                            <a target="_blank" href="<?= $vendor_detail['vendor_twitter'] ?>" alt="<?= Yii::t('frontend', 'Twitter') ?>"><i class="fa fa-twitter"></i>
-                                                                <?= $vendor_detail['vendor_twitter_text'] ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
-
-                                                        <?php if($vendor_detail['vendor_facebook']) { ?>
-                                                        <li>
-                                                            <a target="_blank" href="<?= $vendor_detail['vendor_facebook'] ?>" alt="<?= Yii::t('frontend', 'Facebook') ?>"><i class="fa fa-facebook"></i>
-                                                                <?= $vendor_detail['vendor_facebook_text'] ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
-
-                                                        <?php if($vendor_detail['vendor_youtube']) { ?>
-                                                        <li>
-                                                            <a target="_blank" href="<?= $vendor_detail['vendor_youtube'] ?>" alt="<?= Yii::t('frontend', 'Youtube') ?>"><i class="fa fa-youtube"></i>
-                                                                <?= $vendor_detail['vendor_youtube_text'] ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php } ?>
-                                                    </ul>
-                                                </div><!-- END .panel-body -->
-                                            </div>
-                                        </div><!-- END .panel -->
-
-                                        <?php if (VendorItemPricing::checkprice(
-                                                    $model->item_id,
-                                                    $model->type_id,
-                                                    $model->item_price_per_unit
-                                                  )
-                                              ) { ?>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                              <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="collapsed">
-                                                    <?php echo Yii::t('frontend', 'Price Chart'); ?>
-                                                </a>
-                                              </h4>
-                                            </div>
-                                            <div id="collapse4" class="panel-collapse collapse">
-                                              <div class="panel-body">
-                                                <p><?= VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
-                                              </div>
-                                            </div>
-                                        </div><!-- END .panel -->
-                                        <?php } ?>
-
-                                        <?php if (!empty($model['item_customization_description'])) { ?>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                              <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" class="collapsed">
-                                                    <?php echo Yii::t('frontend', 'Customization'); ?>
-                                                </a>
-                                              </h4>
-                                            </div>
-                                            <div id="collapse5" class="panel-collapse collapse">
-                                              <div class="panel-body">
-                                                <p><?= nl2br($model['item_customization_description']); ?></p>
-                                              </div>
-                                            </div>
-                                        </div><!-- END .panel -->
-                                        <?php } ?>
+                                            <textarea name="special_request" class="form-control"></textarea>
+                                          </div>
+                                        </div>
                                     </div>
+                                    <?php } ?>
+
+                                    <?php if($model->have_female_service) { ?>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-female">
+                                                <?= Yii::t('frontend', 'Female Service') ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse-female" class="panel-collapse collapse">
+                                          <div class="panel-body">
+                                            <div class="form-group checkbox" style="margin-left: 0px;">
+                                                <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
+                                                <label for="chk_female_service">
+                                                    <?= Yii::t('frontend', 'Female Service') ?>
+                                                </label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <?php } ?>
+
+                                    <?php if (!empty($model['item_additional_info'])) { ?>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed">
+                                                <?= Yii::t('frontend', 'Additional Information') ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse2" class="panel-collapse collapse">
+                                          <div class="panel-body">
+                                            <p><?= nl2br($item_additional_info); ?></p>
+                                          </div>
+                                        </div>
+                                    </div><!-- END .panel -->
+                                    <?php } ?>
+
+                                    <?php if($whats_include) { ?>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" class="collapsed">
+                                                <?= Yii::t('frontend', "What is include?") ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse6" class="panel-collapse collapse">
+                                          <div class="panel-body">
+                                            <p><?= nl2br($whats_include); ?></p>
+                                          </div>
+                                        </div>
+                                    </div><!-- END .panel -->
+                                    <?php } ?>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed">
+                                                <?= Yii::t('frontend', 'Contact info'); ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse3" class="panel-collapse collapse">
+                                            <div class="panel-body vendor_social_info">
+                                                <ul>
+                                                    <?php if($phones) { ?>
+                                                    <li class="vendor_phone_list">
+                                                        <?php foreach ($phones as $key => $value) { ?>
+                                                            <a class="color-808080" href="tel:<?= $value->phone_no; ?>"><i class="<?= $phone_icons[$value->type] ?>"></i><?= $value->phone_no; ?>
+                                                            </a>
+                                                        <?php } ?>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if (!empty($vendor_detail['vendor_contact_address'])) { ?>
+                                                    <li>
+                                                        <a target="_blank" href="http://maps.google.com/?q=<?= $vendor_detail['vendor_contact_address'] ?>">
+                                                            <i class="fa fa-map-marker"></i>
+                                                            <?= LangFormat::format($vendor_detail['vendor_contact_address'], $vendor_detail['vendor_contact_address_ar']); ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if ($vendor_detail['vendor_working_hours'] &&
+                                                                $vendor_detail['vendor_working_hours_to']) { ?>
+                                                    <li class="vendor_working_hours">
+                                                        <a>
+                                                            <i class="fa fa-clock-o"></i>
+                                                            <?php
+                                                                $from = explode(':', $vendor_detail['vendor_working_hours']);
+
+                                                                if($from)
+                                                                echo (isset($from[0])) ? $from[0] : '';
+                                                                echo (isset($from[1])) ? ':'.$from[1] : '';
+                                                                echo (isset($from[2])) ? ''.$from[2] : '';
+                                                            ?>
+                                                            -
+                                                            <?php
+                                                                $to = explode(':', $vendor_detail['vendor_working_hours_to']);
+                                                                echo (isset($to[0])) ? $to[0] : '';
+                                                                echo (isset($to[1])) ? ':'.$to[1] : '';
+                                                                echo (isset($to[2])) ? ''.$to[2] : ''
+                                                            ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if($txt_day_off) { ?>
+                                                    <li>
+                                                        <a>
+                                                            <i class="fa fa-clock-o"></i>
+                                                            <?= Yii::t('frontend', '{txt_day_off} off', [
+                                                                    'txt_day_off' => $txt_day_off
+                                                                ]); ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if (!empty($vendor_detail['vendor_public_email'])) { ?>
+                                                    <li>
+                                                        <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?= $vendor_detail['vendor_public_email']; ?>">
+                                                            <i class="fa fa-envelope-o"></i>
+                                                            <?= $vendor_detail['vendor_public_email']; ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if (!empty($vendor_detail['vendor_website'])) { ?>
+                                                    <li>
+                                                        <a target="_blank" href="<?= $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>">
+                                                            <i class="fa fa-globe"></i>
+                                                            <?php echo $vendor_detail['vendor_website']; ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if($vendor_detail['vendor_instagram']) { ?>
+                                                    <li>
+                                                        <a target="_blank" href="<?= $vendor_detail['vendor_instagram'] ?>" alt="<?= Yii::t('frontend', 'Instatgram') ?>"><i class="fa fa-instagram"></i>
+                                                            <?= $vendor_detail['vendor_instagram_text'] ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if($vendor_detail['vendor_twitter']) { ?>
+                                                    <li>
+                                                        <a target="_blank" href="<?= $vendor_detail['vendor_twitter'] ?>" alt="<?= Yii::t('frontend', 'Twitter') ?>"><i class="fa fa-twitter"></i>
+                                                            <?= $vendor_detail['vendor_twitter_text'] ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if($vendor_detail['vendor_facebook']) { ?>
+                                                    <li>
+                                                        <a target="_blank" href="<?= $vendor_detail['vendor_facebook'] ?>" alt="<?= Yii::t('frontend', 'Facebook') ?>"><i class="fa fa-facebook"></i>
+                                                            <?= $vendor_detail['vendor_facebook_text'] ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+
+                                                    <?php if($vendor_detail['vendor_youtube']) { ?>
+                                                    <li>
+                                                        <a target="_blank" href="<?= $vendor_detail['vendor_youtube'] ?>" alt="<?= Yii::t('frontend', 'Youtube') ?>"><i class="fa fa-youtube"></i>
+                                                            <?= $vendor_detail['vendor_youtube_text'] ?>
+                                                        </a>
+                                                    </li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div><!-- END .panel-body -->
+                                        </div>
+                                    </div><!-- END .panel -->
+
+                                    <?php if (VendorItemPricing::checkprice(
+                                                $model->item_id,
+                                                $model->type_id,
+                                                $model->item_price_per_unit
+                                              )
+                                          ) { ?>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="collapsed">
+                                                <?php echo Yii::t('frontend', 'Price Chart'); ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse4" class="panel-collapse collapse">
+                                          <div class="panel-body">
+                                            <p><?= VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
+                                          </div>
+                                        </div>
+                                    </div><!-- END .panel -->
+                                    <?php } ?>
+
+                                    <?php if (!empty($model['item_customization_description'])) { ?>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" class="collapsed">
+                                                <?php echo Yii::t('frontend', 'Customization'); ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse5" class="panel-collapse collapse">
+                                          <div class="panel-body">
+                                            <p><?= nl2br($model['item_customization_description']); ?></p>
+                                          </div>
+                                        </div>
+                                    </div><!-- END .panel -->
+                                    <?php } ?>
                                 </div>
+                            </div>
+
                             </div>
                             <div class="social_share">
                                 <?php
@@ -822,7 +857,8 @@ if($model->images) {
                 <?php } ?>
 
             </div><!--product detail end-->
-        </div>
+        </div>        
+        </form>
         <!-- one end -->
     </div>
 </section>
@@ -958,5 +994,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.11', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.12', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
