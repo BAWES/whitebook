@@ -2270,6 +2270,11 @@ span.small {
     margin: 0;
     list-style: none;
 }
+.menu-item-detail .error p {
+    color: red !important; 
+    margin-top: 2px  !important;
+}
+
 .menu-item-detail .menu-items li {
     padding: 5px;
 }

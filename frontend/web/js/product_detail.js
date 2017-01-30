@@ -303,7 +303,11 @@ if (!isGuest) {
                         });
                     });
 
-                    $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 100 }, 'slow');
+                    if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
+                        $('a[href="#collapse-options"]').trigger('click');
+                    }
+
+                    $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
                 }
             }
         );
