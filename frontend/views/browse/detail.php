@@ -230,6 +230,7 @@ if($model->images) {
                                     </label>
 
                                     <b class="font-27 item-final-price">
+
                                         <?php if($model['item_price_per_unit'] > 0) { 
                                          
                                             echo CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']);
@@ -243,20 +244,20 @@ if($model->images) {
                                             echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
 
                                           } 
-
-                                          if($model['min_order_amount'] > 0) { 
-
-                                                echo '<span class="small" style="clear: both;display: block;color: brown;">';
-
-                                                echo Yii::t('frontend','Min. order amount : {amount}', [
-                                                        'amount' => CFormatter::format($model['min_order_amount']) 
-                                                    ]);
-
-                                                echo '<span>';
-                                          }
-
                                           ?>                   
                                     </b>
+
+                                    <?php if($model['min_order_amount'] > 0) { 
+
+                                        echo '<h5 style="clear: both;display: block;color: brown;">';
+
+                                        echo Yii::t('frontend','Min. order amount : {amount}', [
+                                                'amount' => CFormatter::format($model['min_order_amount']) 
+                                            ]);
+
+                                        echo '</h5>';
+
+                                    } ?>
 
                                     <strong><?= $model['item_price_description'] ?></strong>
                                 </div>
@@ -457,6 +458,129 @@ if($model->images) {
                                           <div class="panel-body">                                            
                                              <div class="menu-item-detail">
                                                 <?php foreach ($menu as $key => $value) { ?>
+                                                    <div class="menu-detail">    
+                                                        <h3 class="menu-title">
+
+                                                            <span class="title">
+                                                                <?php if(Yii::$app->language == 'en') { 
+                                                                        echo $value->menu_name;
+                                                                  } else { 
+                                                                        echo $value->menu_name_ar;
+                                                                  } ?>
+                                                            </span>
+
+                                                            <?php if($value->min_quantity || $value->max_quantity) { ?>
+                                                            <span class="menu-hint">
+                                                                
+                                                                <?php 
+
+                                                                echo Yii::t('frontend', 'Quantity range : ');
+
+                                                                if($value->min_quantity) { 
+                                                                    echo Yii::t('frontend', 'Minimum {qty}', [
+                                                                        'qty' => $value->min_quantity
+                                                                    ]); 
+                                                                } 
+
+                                                                if($value->min_quantity && $value->max_quantity) { 
+                                                                    echo ' , ';
+                                                                }
+
+                                                                if($value->max_quantity) { 
+                                                                    echo Yii::t('frontend', 'Maximum {qty}', [
+                                                                        'qty' => $value->max_quantity
+                                                                    ]); 
+                                                                } 
+                                                               
+                                                                ?>
+                                                            </span>                                        
+                                                            <?php } ?>
+                                                        </h3>
+
+                                                        <span class="error menu_<?= $value->menu_id ?>"></span>
+
+                                                        <ul class="menu-items"  data-max-quantity="<?= $value->max_quantity ?>">
+                                                        <?php 
+
+                                                        $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
+
+                                                        foreach ($menu_items as $menu_item) { ?>
+
+                                                            <li> 
+                                                                <!-- qty box -->
+
+                                                                <span class="menu-item-qty-box">
+                                                                    <i class="fa fa-minus"></i>
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                                                    <i class="fa fa-plus"></i>
+                                                                </span>
+
+                                                                <!-- item name -->
+
+                                                                <span class="menu-item-name">
+                                                                    <?php if(Yii::$app->language == 'en') { 
+                                                                            echo $menu_item->menu_item_name;
+                                                                      } else { 
+                                                                            echo $menu_item->menu_item_name_ar;
+                                                                      } ?> 
+                                                                </span>
+
+                                                                <!-- price -->
+
+                                                                <?php if($menu_item->price > 0) { ?>
+                                                                <span class="menu_item_price">
+                                                                    (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                </span>
+                                                                <?php  } ?>
+
+                                                                <!-- hint -->
+
+                                                                <?php 
+
+                                                                $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
+
+                                                                if($hint) { ?>
+                                                                <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                                                <?php } ?>
+                                                                
+                                                                <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+                                                            </li>
+                                                        <?php } ?>
+                                                        </ul>
+                                                    </div><!-- END .menu-detail -->
+                                                <?php } ?>
+                                             </div><!-- END .menu-item-detail -->
+
+                                            <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+
+                                            <?php if(Yii::$app->user->isGuest) {  ?>
+                                                <button type="button" onclick="show_login_modal('-2');" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;" data-target="#myModal" data-toggle="modal">
+                                                            <?= Yii::t('frontend', 'Buy') ?></button>
+                                            <?php } else { ?>
+                                                <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
+                                                        <?= Yii::t('frontend', 'Buy') ?>
+                                                </button>          
+                                            <?php } ?><!-- END not guest -->
+                                            <?php } ?><!-- END available in stock and for sale -->
+
+                                          </div>
+                                        </div>
+                                    </div><!-- END .panel -->
+                                    <?php } ?>
+
+                                    <?php if($addons) { ?>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-addons">
+                                                <?= Yii::t('frontend', 'Product Addons') ?>
+                                            </a>
+                                          </h4>
+                                        </div>
+                                        <div id="collapse-addons" class="panel-collapse collapse">
+                                          <div class="panel-body">                                            
+                                             <div class="menu-item-detail">
+                                                <?php foreach ($addons as $key => $value) { ?>
                                                     <div class="menu-detail">    
                                                         <h3 class="menu-title">
 
