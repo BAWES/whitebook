@@ -93,6 +93,9 @@ if($model->images) {
         </div>
         <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
+
+        <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+
         <div class="col-md-12 filter-bar ">
             <div class="col-md-3 padding-right-0 area-filter">
                 <div class="form-group margin-left-0">
@@ -310,11 +313,62 @@ if($model->images) {
                                         <!-- Add to Event End here -->
                                         <div class="buy_events">
                                         <?php
+
                                         if ($model->item_for_sale == 'Yes') {
+
                                              if (!$AvailableStock) {
+                                                
                                                 echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
-                                            }
-                                        }
+
+                                            } elseif (Yii::$app->user->isGuest) { ?>
+
+                                                <div class="clearfix qantity-div">
+                                                    <div class="button-signin">
+                                                        <button type="button" onclick="show_login_modal('-2');" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;" data-target='#myModal' data-toggle='modal'>
+                                                            <?= Yii::t('frontend', 'Buy') ?>
+                                                        </button>&nbsp;&nbsp;&nbsp;
+                                                    </div>
+                                                </div>
+                                            <?php 
+                                            } else { ?>
+
+                                                <?php if($model->item_default_capacity > 1) { ?>
+
+                                                    <?php if(!$menu) { ?>
+                                                        <div class="padding-top-12 pull-left quantity-lbl">
+                                                            <label><?= Yii::t('frontend', 'Quantity');?></label>
+                                                        </div>
+                                                    <?php } else { ?>
+                                                        <div class="padding-top-12 pull-left quantity-lbl">
+                                                            <label><?= Yii::t('frontend', 'Serve');?></label>
+                                                        </div>
+                                                    <?php } ?>
+
+                                                    <div class="clearfix qantity-div">
+                                                        <div class="form-group qty" style="margin: 0px;">
+                                                            <a href="#" class="btn-stepper" data-case="0">-</a>
+                                                            <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity ?>" value="<?=$quantity?>"/>
+                                                            <a href="#" class="btn-stepper" data-case="1">+</a>
+                                                        </div>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity?>" value="<?= $quantity?>" />
+                                                <?php } ?>
+
+                                                <br />
+
+                                                <div class="buy-btn">
+                                                    <div class="button-signin">
+                                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
+                                                            <?= Yii::t('frontend', 'Buy') ?>
+                                                        </button>&nbsp;&nbsp;&nbsp;
+                                                    </div>
+                                                </div>
+                                                <span class=" col-lg-12 error cart_quantity"></span>
+                                                <span id="available"></span>
+                                        <?php 
+                                            } // END if not guest and item available 
+                                        } // END item for sale 
                                         ?>
                                         </div>
                                     </div>
@@ -364,63 +418,9 @@ if($model->images) {
                             </div>
                             <?php } ?>
 
-                            <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
-
-                            <?php if(Yii::$app->user->isGuest) {  ?>
-                                <div class="col-md-4 clearfix padding-left-6px qantity-div">
-                                    <div class="button-signin">
-                                        <button type="button" onclick="show_login_modal('-2');" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;" data-target='#myModal' data-toggle='modal'>
-                                            <?= Yii::t('frontend', 'Buy') ?>
-                                        </button>&nbsp;&nbsp;&nbsp;
-                                    </div>
-                                </div>
-                            <?php } else { ?>
-
-                                <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
-
-                                </div><!-- END .menu-item-detail -->
-                               
-                                <div class="row margin-top-20">
-
-                                <?php if($model->item_default_capacity > 1) { ?>
-
-                                    <?php if(!$menu) { ?>
-                                        <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
-                                            <label><?= Yii::t('frontend', 'Quantity');?></label>
-                                        </div>
-                                    <?php } else { ?>
-                                        <div class="col-md-4 padding-top-12 pull-left quantity-lbl">
-                                            <label><?= Yii::t('frontend', 'Serve');?></label>
-                                        </div>
-                                    <?php } ?>
-
-                                    <div class="col-md-4 clearfix padding-left-6px qantity-div">
-                                        <div class="form-group qty">
-                                            <a href="#" class="btn-stepper" data-case="0">-</a>
-                                            <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>"/>
-                                            <a href="#" class="btn-stepper" data-case="1">+</a>
-                                        </div>
-                                    </div>
-                                <?php } else { ?>
-                                    <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?=$quantity?>" value="<?=$quantity?>" />
-                                <?php } ?>
-
-                                <div class="col-lg-5 buy-btn">
-                                    <div class="button-signin">
-                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
-                                            <?= Yii::t('frontend', 'Buy') ?>
-                                        </button>&nbsp;&nbsp;&nbsp;
-                                    </div>
-                                </div>
-                                <span class=" col-lg-12 error cart_quantity"></span>
-                                <span id="available"></span>
-                            
-                            <?php } ?><!-- END not guest -->
-
-                            <?php } ?><!-- END available in stock and for sale -->
-
                             <div class="accad_menus">
                                 <div class="panel-group vendor-item-detail" id="accordion">
+
                                     <?php if (!empty($model['item_description'])) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
@@ -549,6 +549,19 @@ if($model->images) {
                                                     </div><!-- END .menu-detail -->
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
+
+                                            <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+
+                                            <?php if(Yii::$app->user->isGuest) {  ?>
+                                                <button type="button" onclick="show_login_modal('-2');" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;" data-target="#myModal" data-toggle="modal">
+                                                            <?= Yii::t('frontend', 'Buy') ?></button>
+                                            <?php } else { ?>
+                                                <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
+                                                        <?= Yii::t('frontend', 'Buy') ?>
+                                                </button>          
+                                            <?php } ?><!-- END not guest -->
+                                            <?php } ?><!-- END available in stock and for sale -->
+
                                           </div>
                                         </div>
                                     </div><!-- END .panel -->
@@ -982,7 +995,7 @@ $this->registerCss("
     .filter-bar .form-group label{font-weight:normal;color: #999 !important;font-size: 13px;}
     .margin-top-0{margin-top:0px!important;}
     .padding-top-12{padding-top: 12px;}
-    .btn-stepper {width: 31%;color: white;background-color: #000;display: inline-block;text-align: center;height: 100%;float: left;line-height: 43px;font-size: 25px;font-style: normal;font-weight: bold;}
+    .btn-stepper {width: 31% !important; padding: 0px !important; color: white;background-color: #000;display: inline-block;text-align: center;height: 100%;float: left;line-height: 43px;font-size: 25px;font-style: normal;font-weight: bold;}
     .form-group input[name=quantity] {float: left;width: 38%;line-height: 38px;height: 100%!important;text-align: center;margin: 0;border-top: 1px solid #e6e6e6;box-shadow: none;border-bottom: 1px solid #e6e6e6;}
     .qty {width: 91%;display: block;height: 45px;margin-right: 8px;overflow: hidden;}
     .product_detail_section .panel-body p{text-align:justify;}
