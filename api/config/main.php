@@ -108,10 +108,15 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'event-list',
+                        'GET type' => 'event-type-list',
                         'GET detail' => 'event-detail',
                         'POST' => 'event-create',
                         'PATCH' => 'event-update',
                         'DELETE' => 'event-remove',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS type' => 'options',
+                        'OPTIONS detail' => 'options',
                     ]
                 ],
                 [ // WishlistController
