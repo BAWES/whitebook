@@ -239,7 +239,20 @@ if($model->images) {
 
                                             echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
 
-                                          } ?>                   
+                                          } 
+
+                                          if($model['min_order_amount'] > 0) { 
+
+                                                echo '<span class="small" style="clear: both;display: block;color: brown;">';
+
+                                                echo Yii::t('frontend','Min. order amount : {amount}', [
+                                                        'amount' => CFormatter::format($model['min_order_amount']) 
+                                                    ]);
+
+                                                echo '<span>';
+                                          }
+
+                                          ?>                   
                                     </b>
 
                                     <strong><?= $model['item_price_description'] ?></strong>
@@ -308,8 +321,9 @@ if($model->images) {
                                 </div>
                             </div>
 
-                            <?php if($set_up_time || $max_time || $requirements || $model->min_order_amount || $model->item_how_long_to_make) { ?>
+                            <?php if($set_up_time || $max_time || $requirements || $model->item_how_long_to_make) { ?>
                             <div class="menu-requirements">
+
                                 <?php if($set_up_time) { ?>
                                 <div>
                                     <i class="fa fa-clock-o"></i>
@@ -317,6 +331,7 @@ if($model->images) {
                                     <span class="value"><?= $set_up_time ?></span>
                                 </div>
                                 <?php } ?>
+
                                 <?php if($requirements) { ?>
                                 <div>
                                     <i class="fa fa-cog"></i>
@@ -324,6 +339,7 @@ if($model->images) {
                                     <span class="value"><?= $requirements ?></span>
                                 </div>
                                 <?php } ?>
+
                                 <?php if($max_time) { ?>
                                 <div>
                                     <i class="fa fa-info"></i>
@@ -331,14 +347,7 @@ if($model->images) {
                                     <span class="value"><?= $max_time ?></span>
                                 </div>
                                 <?php } ?>
-                                <?php if($model->min_order_amount > 0) { ?>
-                                <div>
-                                    <i class="fa fa-truck"></i>
-                                    <span class="title">Min. order value</span>
-                                    <span class="value"><?= CFormatter::format($model->min_order_amount) ?></span>
-                                </div>
-                                <?php } ?>
-
+                                
                                 <?php if($model->item_how_long_to_make) { ?>
                                 <div>
                                     <i class="fa fa-clock-o"></i>
