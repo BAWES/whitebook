@@ -34,7 +34,7 @@ class VendorItemMenu extends \yii\db\ActiveRecord
     {
         return [
             [['item_id', 'min_quantity', 'max_quantity', 'sort_order'], 'integer'],
-            [['menu_name', 'menu_name_ar'], 'string', 'max' => 100],
+            [['menu_name', 'menu_name_ar', 'menu_type'], 'string', 'max' => 100],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorItem::className(), 'targetAttribute' => ['item_id' => 'item_id']],
         ];
     }

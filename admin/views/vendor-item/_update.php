@@ -37,12 +37,13 @@ function cmp($a, $b)
 	    <li><a href="#2" id="tab_2">Item description</a></li>
 	    <li><a href="#3" id="tab_3">Item price </a></li>
 	    <li><a href="#4" id="tab_4">Menu items</a></li>
-	    <li><a href="#5" id="tab_5">Approval </a></li>
-	    <li><a href="#6" id="tab_6">Images</a></li>
-	    <li><a href="#7" id="tab_7">Themes & Groups & Packages</a></li>
+	    <li><a href="#5" id="tab_5">Addons</a></li>
+	    <li><a href="#6" id="tab_6">Approval </a></li>
+	    <li><a href="#7" id="tab_7">Images</a></li>
+	    <li><a href="#8" id="tab_8">Other</a></li>
 	   
 	    <?php if($model->item_for_sale =='Yes') {?>
-	    	<li><a href="#8" id="tab_8"> Questions </a></li>
+	    	<li><a href="#9" id="tab_9"> Questions </a></li>
 	    <?php } ?>
 	</ul>
 
@@ -299,7 +300,7 @@ function cmp($a, $b)
 		</div>
 		<!--End third Tab -->
 
-		<div class="tab-pane clearfix" id="4">
+		<div class="tab-pane clearfix tab_menu_items" id="4">
 
 			<?= $form->field($model, 'set_up_time'); ?>
 
@@ -365,12 +366,11 @@ function cmp($a, $b)
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th colspan="6" class="heading">Menu Items</th>
+								<th colspan="5" class="heading">Menu Items</th>
 							</tr>
 							<tr>
 								<th>Name</th>
 								<th>Name - Ar</th>
-								<th>Price</th>
 								<th>Hint</th>
 								<th>Hint - Ar</th>
 								<th></th>
@@ -392,9 +392,6 @@ function cmp($a, $b)
 									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control" />
 								</td>
 								<td>
-									<input placeholder="Price" name="menu_item[<?= $menu_count ?>][price]" value="<?= $menu_item->price ?>" class="form-control" />
-								</td>
-								<td>
 									<input placeholder="Hint" name="menu_item[<?= $menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control" />
 								</td>
 								<td>
@@ -410,7 +407,7 @@ function cmp($a, $b)
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="6">
+								<td colspan="5">
 									<button type="button" class="btn btn-primary btn-add-menu-item">
 										<i class="fa fa-plus"></i> Add Item
 									</button>
@@ -427,9 +424,110 @@ function cmp($a, $b)
 			<button type="button" class="btn btn-primary btn-add-menu">
 				<i class="fa fa-plus"></i> Add menu
 			</button>
-		</div>
+		</div><!-- END .tab_menu_items -->
 
-		<div class="tab-pane clearfix" id="5">
+		<div class="tab-pane clearfix tab_addon_menu_items" id="5">
+
+			<ul id="item_addon_menu_list">
+
+				<?php $addon_menu_count = 0; foreach ($arr_addon_menu as $key => $value) { ?>
+
+				<li>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th colspan="2" class="heading">
+									Addon Menu
+									<button type="button" class="btn btn-danger btn-remove-menu">
+										<i class="fa fa-trash-o"></i>
+									</button>
+								</th>
+							</tr>
+							<tr>
+								<th>Name</th>
+								<th>Name - Ar</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<input placeholder="Name" name="addon_menu_item[<?= $addon_menu_count ?>][menu_name]" value="<?= $value->menu_name ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Name - Arabic" name="addon_menu_item[<?= $addon_menu_count ?>][menu_name_ar]" value="<?= $value->menu_name_ar ?>" class="form-control" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th colspan="6" class="heading">Menu Items</th>
+							</tr>
+							<tr>
+								<th>Name</th>
+								<th>Name - Ar</th>
+								<th>Price</th>
+								<th>Hint</th>
+								<th>Hint - Ar</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+
+							$arr_menu_item = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
+
+							$addon_menu_count++;
+
+							foreach ($arr_menu_item as $key => $menu_item) { ?>
+							<tr>
+								<td>
+									<input placeholder="Name" name="addon_menu_item[<?= $addon_menu_count ?>][menu_item_name]" value="<?= $menu_item->menu_item_name ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Name - Arabic" name="addon_menu_item[<?= $addon_menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Price" name="addon_menu_item[<?= $addon_menu_count ?>][price]" value="<?= $menu_item->price ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Hint" name="addon_menu_item[<?= $addon_menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control" />
+								</td>
+								<td>
+									<input placeholder="Hint - Ar" name="addon_menu_item[<?= $addon_menu_count ?>][hint_ar]" value="<?= $menu_item->hint_ar ?>" class="form-control" />
+								</td>
+								<td>
+									<button type="button" class="btn btn-danger btn-remove-menu-item">
+										<i class="fa fa-trash-o"></i>
+									</button>
+								</td>
+							</tr>
+							<?php $addon_menu_count++; } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="6">
+									<button type="button" class="btn btn-primary btn-add-addon-menu-item">
+										<i class="fa fa-plus"></i> Add addon item
+									</button>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</li>
+				<?php } ?>
+			</ul>
+	
+			<br />			
+
+			<button type="button" class="btn btn-primary btn-add-addon-menu">
+				<i class="fa fa-plus"></i> Add addon menu
+			</button>
+		</div><!-- END .tab_addon_menu_items -->
+
+		<div class="tab-pane clearfix" id="6">
 			
 			<?= $form->field($model, 'item_approved')
 					->dropDownList([ 'Pending' => 'Pending','Yes' => 'Yes', 'Rejected'=>'Rejected']); ?>
@@ -452,7 +550,7 @@ function cmp($a, $b)
 		</div>
 		<!--End fourth Tab -->
 
-		<div class="tab-pane clearfix" id="6">
+		<div class="tab-pane clearfix" id="7">
 			<div class="file-block alert alert-danger" style="color:red; display: none;"> Please upload aleast a file</div>
 
 			<div class="alert alert-info">
@@ -527,7 +625,7 @@ function cmp($a, $b)
 		</div>
 		<!--End fifth Tab -->
 
-		<div class="tab-pane clearfix" id="7">
+		<div class="tab-pane clearfix" id="8">
 			<div class="form-group clearfix padding-top-bottom">
 				<?php echo $form->field($model, 'themes')->checkboxlist($themelist); ?>
 				<div class="clearfix"></div>
@@ -598,7 +696,7 @@ function cmp($a, $b)
 		<!--End seventh Tab -->
 
 		<!-- Begin Question Answer Part -->
-		<div class="tab-pane" id="8">
+		<div class="tab-pane" id="9">
 			<div class="questionanswer" >
 			<?php
 				 $exist_question = VendorItemQuestion::find()->where( [ 'item_id' => $model->item_id ] )->count();
@@ -641,7 +739,7 @@ function cmp($a, $b)
 				<?= Html::a('Back to Manage', ['index', ], ['class' => 'btn btn-info', 'style'=>'float:right;']) ?>
 			</div>
 			</div><!-- END .questionanswer -->
-		</div><!-- END tab-7 -->
+		</div><!-- END tab-9 -->
 	</div><!-- END .tab-content -->
 </div><!-- END .tabbable -->
 <?php ActiveForm::end(); ?>
@@ -730,6 +828,7 @@ if($model->isNewRecord) {
 }
 
 
+echo Html::hiddenInput('addon_menu_count', $addon_menu_count, ['id' => 'addon_menu_count']);
 echo Html::hiddenInput('menu_count', $menu_count, ['id' => 'menu_count']);
 
 echo Html::hiddenInput('count_q',$count_q,['id'=>$count_q]);
@@ -763,6 +862,8 @@ echo Html::hiddenInput('item_images_url', Url::to(['vendor-item/item-images']), 
 
 echo Html::hiddenInput('item_themes_groups', Url::to(['vendor-item/item-themes-groups']), ['id' => 'item_themes_groups']);
 
+echo Html::hiddenInput('addon-menu-items', Url::to(['vendor-item/addon-menu-items']), ['id' => 'addon_menu_items_url']);
+
 echo Html::hiddenInput('menu_items_url', Url::to(['vendor-item/menu-items']), ['id' => 'menu_items_url']);
 
 echo Html::hiddenInput('item_validate_url', Url::to(['vendor-item/item-validate']), ['id' => 'item_validate_url']);
@@ -783,7 +884,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.19", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.20", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

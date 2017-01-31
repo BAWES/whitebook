@@ -22,9 +22,10 @@ class VendorItem extends \common\models\VendorItem
         $step_2 = VendorItem::validate_item_description($data);
         $step_3 = VendorItem::validate_item_price($data);
         $step_4 = VendorItem::validate_item_menu($data);
-        $step_5 = VendorItem::validate_item_images($data);
+        $step_5 = VendorItem::validate_item_addon_menu($data);        
+        $step_6 = VendorItem::validate_item_images($data);
 
-        return array_merge($step_1, $step_2, $step_3, $step_4, $step_5);
+        return array_merge($step_1, $step_2, $step_3, $step_4, $step_5, $step_6);
     }
 
     /**
@@ -172,8 +173,54 @@ class VendorItem extends \common\models\VendorItem
                 if(empty($value['menu_item_name_ar'])) {
                     $errors['menu_item_name_ar'] = 'Menu item name - Arabic field require.';
                 }
+            }
 
-                if($value['price'] && !is_numeric($value['price'])) {
+            $menu_id++;
+        }   
+
+        return $errors;
+    }
+
+    /**
+     * Validate step 5 on update / create item  
+     */
+    public static function validate_item_addon_menu($data)
+    {
+        $errors = VendorItem::validate_item_menu($data);
+
+        $menu_items = Yii::$app->request->post('addon_menu_item');
+        
+        if(!$menu_items) {
+            $menu_items = array();
+        }
+
+        $menu_id = 0;
+
+        foreach ($menu_items as $key => $value) {
+
+            //if menu 
+            if(isset($value['menu_name'])) {
+                
+                if(empty($value['menu_name'])) {
+                    $errors['menu_name'] = 'Menu name field require.';
+                }
+
+                if(empty($value['menu_name_ar'])) {
+                    $errors['menu_name_ar'] = 'Menu name - Arabic field require.';
+                }
+
+            //if menu item 
+            } else {
+
+                if(empty($value['menu_item_name'])) {
+                    $errors['menu_item_name'] = 'Menu item name field require.';
+                }
+
+                if(empty($value['menu_item_name_ar'])) {
+                    $errors['menu_item_name_ar'] = 'Menu item name - Arabic field require.';
+                }
+
+                if(!is_numeric($value['price'])) {
                     $errors['menu_item_price'] = 'Menu item price is not valid.';
                 }
             }
@@ -189,7 +236,7 @@ class VendorItem extends \common\models\VendorItem
      */
     public static function validate_item_images($data)
     {
-        $errors = VendorItem::validate_item_price($data);
+        $errors = VendorItem::validate_item_addon_menu($data);
 
         /*$images = Yii::$app->request->post('images');
 
