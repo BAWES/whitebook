@@ -108,7 +108,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tr>
                     <td align="left">
                         
-                        <a href="<?= Url::to(['vendor-item/view', 'item_id' => $item->item_id]) ?>" style="padding: 0"><b><?= $item->vendoritem->item_name ?></b></a>
+                        <a target="_blank" href="<?= Url::to(['vendor-item/view', 'id' => $item->item_id]) ?>" style="padding: 0"><b>
+                        <?= $item->vendoritem->item_name ?></b></a>
                         
                         <?php
 
