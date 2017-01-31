@@ -8535,3 +8535,28 @@ a.delivery_href:hover{
   color: white;
   position: relative;
 }
+
+
+#item_addon_menu_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#item_addon_menu_list li {
+  background: #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+#item_addon_menu_list td {
+  background: white;
+}
+#item_addon_menu_list .btn-remove-menu {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+#item_addon_menu_list .heading {
+  background: black;
+  color: white;
+  position: relative;
+}

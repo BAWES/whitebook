@@ -27,7 +27,8 @@ $this->params['breadcrumbs'][] = 'Update';
             'sub_categories' => $sub_categories,
             'item_child_categories' => $item_child_categories,
             'category_model' => $category_model,
-            'arr_menu' => $arr_menu
+            'arr_menu' => $arr_menu,
+            'arr_addon_menu' => $arr_addon_menu
     ]); ?>
 
 </div>
