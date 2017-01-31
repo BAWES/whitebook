@@ -5,8 +5,8 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\rest\Controller;
 use yii\filters\auth\HttpBasicAuth;
-
-use common\models\Agent;
+use yii\helpers\Url;
+use api\models\Customer;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -39,11 +39,10 @@ class AuthController extends Controller
             'class' => HttpBasicAuth::className(),
             'except' => ['options'],
             'auth' => function ($email, $password) {
-                $agent = Agent::findByEmail($email);
-                if ($agent && $agent->validatePassword($password)) {
-                    return $agent;
+                $user = Customer::findOne(['customer_email'=>$email]);
+                if ($user && $user->validatePassword($password)) {
+                    return $user;
                 }
-
                 return null;
             }
         ];
@@ -53,7 +52,6 @@ class AuthController extends Controller
             'options',
             'create-account',
             'request-reset-password',
-            'resend-verification-email'
         ];
 
         return $behaviors;
@@ -86,11 +84,11 @@ class AuthController extends Controller
      */
     public function actionLogin()
     {
-        $agent = Yii::$app->user->identity;
+        $user = Yii::$app->user->identity;
 
         // Email and password are correct, check if his email has been verified
         // If agent email has been verified, then allow him to log in
-        if($agent->agent_email_verified != Agent::EMAIL_VERIFIED){
+        if($user->customer_activation_status == Customer::ACTIVATION_FALSE){
             return [
                 "operation" => "error",
                 "errorType" => "email-not-verified",
@@ -99,7 +97,7 @@ class AuthController extends Controller
         }
 
         // Return agent access token if everything valid
-        $accessToken = $agent->accessToken->token_value;
+        $accessToken = $user->accessToken->token_value;
         return [
             "operation" => "success",
             "token" => $accessToken
@@ -112,81 +110,64 @@ class AuthController extends Controller
      */
     public function actionCreateAccount()
     {
-        $model = new \common\models\Agent();
-        $model->scenario = "manualSignup";
+        $model = new Customer();
+        $model->scenario = 'signup';
 
-        $model->agent_name = Yii::$app->request->getBodyParam("fullname");
-        $model->agent_email = Yii::$app->request->getBodyParam("email");
-        $model->agent_password_hash = Yii::$app->request->getBodyParam("password");
+        $model->customer_name           = Yii::$app->request->getBodyParam("first_name");
+        $model->customer_last_name      = Yii::$app->request->getBodyParam("last_name");
+        $model->customer_email          = Yii::$app->request->getBodyParam("email");
+        $model->customer_dateofbirth    = Yii::$app->request->getBodyParam("date_of_birth");
+        $model->customer_gender         = Yii::$app->request->getBodyParam("gender");
+        $model->customer_mobile         = Yii::$app->request->getBodyParam("mobile_number");
+        $model->customer_password       = Yii::$app->getSecurity()->generatePasswordHash(Yii::$app->request->getBodyParam('customer_password'));
+        $model->customer_activation_key = \frontend\models\Users::generateRandomString();
+        $model->created_datetime = date('Y-m-d H:i:s');
 
-        if (!$model->signup())
-        {
-            if(isset($model->errors['agent_email'])){
-                return [
-                    "operation" => "error",
-                    "message" => $model->errors['agent_email']
-                ];
-            }else{
-                return [
-                    "operation" => "error",
-                    "message" => "We've faced a problem creating your account, please contact us for assistance."
-                ];
-            }
-        }
+        if ($model->validate() && $model->save()) {
 
-        return [
-            "operation" => "success",
-            "message" => "Please click on the link sent to you by email to verify your account"
-        ];
-    }
+            //Send Email to user
+            Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
-    /**
-     * Re-send manual verification email to agent
-     * @return array
-     */
-    public function actionResendVerificationEmail()
-    {
-        $emailInput = Yii::$app->request->getBodyParam("email");
+            Yii::$app->mailer->compose("customer/confirm",
+                [
+                    "user" => $model->customer_name,
+                    "confirm_link" => \Yii::$app->params['@RootPath'].'/users/confirm_email?key='.$model->customer_activation_key,
+                    "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                    "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
+                ])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($model['customer_email'])
+                ->setSubject('Welcome to The White Book')
+                ->send();
 
-        $agent = Agent::findOne([
-            'agent_email' => $emailInput,
-        ]);
+            //Send Email to admin
+            Yii::$app->mailer->htmlLayout = 'layouts/html';
 
-        $errors = false;
+            $message_admin = $model->customer_name.' registered in TheWhiteBook';
 
-        if ($agent) {
-            //Check if this user sent an email in past few minutes (to limit email spam)
-            $emailLimitDatetime = new \DateTime($agent->agent_limit_email);
-            date_add($emailLimitDatetime, date_interval_create_from_date_string('2 minutes'));
-            $currentDatetime = new \DateTime();
+            $send_admin = Yii::$app->mailer->compose(
+                ["html" => "customer/user-register"],
+                ["message" => $message_admin]
+            );
 
-            if ($currentDatetime < $emailLimitDatetime) {
-                $difference = $currentDatetime->diff($emailLimitDatetime);
-                $minuteDifference = (int) $difference->i;
-                $secondDifference = (int) $difference->s;
+            $send_admin
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo(Yii::$app->params['adminEmail'])
+                ->setSubject('User registered')
+                ->send();
 
-                $errors = Yii::t('app', "Email was sent previously, you may request another one in {numMinutes, number} minutes and {numSeconds, number} seconds", [
-                            'numMinutes' => $minuteDifference,
-                            'numSeconds' => $secondDifference,
-                ]);
-            } else if ($agent->agent_email_verified == Agent::EMAIL_NOT_VERIFIED) {
-                $agent->sendVerificationEmail();
-            }
-        }
-
-        // If errors exist show them
-        if($errors){
             return [
-                'operation' => 'error',
-                'message' => $errors
+                "operation" => "success",
+                "message" => "Please click on the link sent to you by email to verify your account"
             ];
-        }
 
-        // Otherwise return success
-        return [
-            'operation' => 'success',
-            'message' => Yii::t('register', 'Please click on the link sent to you by email to verify your account')
-        ];
+        } else {
+            return [
+                "operation" => "error",
+                "message" => $model->getErrorMessage($model->errors)
+            ];
+
+        }
     }
 
     /**
@@ -195,55 +176,46 @@ class AuthController extends Controller
      */
     public function actionRequestResetPassword()
     {
-        $emailInput = Yii::$app->request->getBodyParam("email");
+        $email = Yii::$app->request->getBodyParam("email");
 
-        $model = new \agent\models\PasswordResetRequestForm();
-        $model->email = $emailInput;
-
-        $errors = false;
-
-        if ($model->validate()){
-
-            $agent = Agent::findOne([
-                'agent_email' => $model->email,
-            ]);
-
-            if ($agent) {
-                //Check if this user sent an email in past few minutes (to limit email spam)
-                $emailLimitDatetime = new \DateTime($agent->agent_limit_email);
-                date_add($emailLimitDatetime, date_interval_create_from_date_string('2 minutes'));
-                $currentDatetime = new \DateTime();
-
-                if ($currentDatetime < $emailLimitDatetime) {
-                    $difference = $currentDatetime->diff($emailLimitDatetime);
-                    $minuteDifference = (int) $difference->i;
-                    $secondDifference = (int) $difference->s;
-
-                    $errors = Yii::t('app', "Email was sent previously, you may request another one in {numMinutes, number} minutes and {numSeconds, number} seconds", [
-                                'numMinutes' => $minuteDifference,
-                                'numSeconds' => $secondDifference,
-                    ]);
-
-                } else if (!$model->sendEmail($agent)) {
-                    $errors = Yii::t('agent', 'Sorry, we are unable to reset password for email provided.');
-                }
-            }
-        }else if(isset($model->errors['email'])){
-            $errors = $model->errors['email'];
-        }
-
-        // If errors exist show them
-        if($errors){
+        if ($email == ' ') {
             return [
                 'operation' => 'error',
-                'message' => $errors
+                'message' => 'Invalid Email'
             ];
         }
 
-        // Otherwise return success
-        return [
-            'operation' => 'success',
-            'message' => Yii::t('agent', 'Password reset link sent, please check your email for further instructions.')
-        ];
+        $model = Customer::findOne(['customer_email'=>$email]);
+        if ($model) {
+
+            $time = date('Y-m-d H:i:s');
+            $model->modified_datetime = $time;
+            $model->save();
+
+            $message = 'Your requested password reset.</br><a href=' . Yii::$app->params['@RootPath'].'/users/reset_confirm?cust_id='.$model->customer_activation_key. ' title="Click Here">Click here </a> to reset your password';
+
+            $send = Yii::$app->mailer->compose("customer/password-reset",
+                ["message" => $message, "user" => "Customer"])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($email)
+                ->setSubject('Requested forgot Password')
+                ->send();
+            if ($send) {
+                return [
+                    'operation' => 'success',
+                    'message' => 'Password reset link sent, please check your email for further instructions.'
+                ];
+            } else {
+                return [
+                    'operation' => 'error',
+                    'message' => 'Server issue. Please try again'
+                ];
+            }
+        } else {
+            return [
+                'operation' => 'error',
+                'message' => 'Email Does Not Exist'
+            ];
+        }
     }
 }
