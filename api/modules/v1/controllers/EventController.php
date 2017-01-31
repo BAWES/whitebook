@@ -2,7 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
-use common\models\CustomerToken;
+use admin\models\EventType;
 use Yii;
 use yii\rest\Controller;
 use \common\models\Events;
@@ -64,16 +64,16 @@ class EventController extends Controller
      * method to list event
      * @return array
      */
-    public function actionEventList()
+    public function actionEventList($offset)
     {
-        return $this->eventList();
+        return $this->eventList($offset);
     }
 
     public function actionEventDetail($event_id)
     {
         if ($event_id){
             return Events::find()
-                ->select(['event_id', 'event_name', 'event_date', 'event_type'])
+                ->select(['event_id', 'event_name', 'event_date', 'event_type','no_of_guests'])
                 ->where(['customer_id' => Yii::$app->user->getId(), 'event_id' => $event_id])
                 ->one();
         } else {
@@ -96,14 +96,12 @@ class EventController extends Controller
             $exit = Events::find()
                 ->where(['customer_id' => $customer_id, 'event_name' => $name])
                 ->exists();
-
             if ($exit) {
                 return [
                     "operation" => "error",
                     "message" => "Event Already Exist With Same Name."
                 ];
             }
-
             $model = new Events;
             $model->customer_id = $customer_id;
             $model->event_name = $name;
@@ -115,9 +113,7 @@ class EventController extends Controller
                 return [
                     "operation" => "success",
                     "message" => "Event Created Successfully.",
-                    'event-list' => $this->eventList()
                 ];
-
             } else {
                 return [
                     "operation" => "error",
@@ -125,9 +121,7 @@ class EventController extends Controller
                     "detail" => $model->errors
                 ];
             }
-
         } else {
-
             return [
                 "operation" => "error",
                 "message" => "Empty event fields."
@@ -158,7 +152,6 @@ class EventController extends Controller
                     return [
                         "operation" => "success",
                         "message" => "Event Saved Successfully.",
-                        "event-list" => $this->eventList()
                     ];
                 } else {
                     return [
@@ -184,9 +177,7 @@ class EventController extends Controller
     /*
      * Method will delete user event from event table
      */
-    public function actionEventRemove() {
-
-        $event_id = Yii::$app->request->getBodyParam('event_id');
+    public function actionEventRemove($event_id) {
 
         if ($event_id) {
             $event = Events::find()
@@ -197,7 +188,6 @@ class EventController extends Controller
                 return [
                     "operation" => "success",
                     "message" => "Event Deleted Successfully.",
-                    'event-list' => $this->eventList()
                 ];
             } else {
                 return [
@@ -213,12 +203,12 @@ class EventController extends Controller
         }
     }
 
+
     /*
      * Method to list all event related with particular user
      */
-    private function eventList(){
+    private function eventList($offset = 0){
 
-        $offset = 0;
         $limit = $limit = Yii::$app->params['limit'];
         return Events::find()
             ->select(['event_id','event_name','event_date','event_type'])
@@ -228,6 +218,17 @@ class EventController extends Controller
             ->all();
     }
 
+
+    /*
+     * Method to list all event related with particular user
+     */
+    public function actionEventTypeList(){
+
+        return EventType::find()
+            ->select(['type_name'])
+            ->where(['trash'=>'Default'])
+            ->all();
+    }
     /*
      * Common method to generate slug from string
      */
