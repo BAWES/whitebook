@@ -428,7 +428,15 @@ class BrowseController extends BaseController
             ])
             ->all();
 
-        $menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+        $menu = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
+
+        $addons = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
 
         if (Yii::$app->user->isGuest) {
 
@@ -436,6 +444,7 @@ class BrowseController extends BaseController
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
                 'menu' => $menu,
+                'addons' => $addons,
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'vendor_area' => [],
                 'vendor_detail' => $vendor_detail,
@@ -488,6 +497,7 @@ class BrowseController extends BaseController
             return $this->render('detail', [
                 'model' => $model,
                 'menu' => $menu,
+                'addons' => $addons,
                 'vendor_detail' => $vendor_detail,
                 'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
                 'phone_icons' => $phone_icons,

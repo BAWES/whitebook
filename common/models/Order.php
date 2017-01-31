@@ -232,6 +232,7 @@ class Order extends \yii\db\ActiveRecord
                         '{{%vendor_item_menu}}.menu_id',
                         '{{%vendor_item_menu}}.menu_name',
                         '{{%vendor_item_menu}}.menu_name_ar',
+                        '{{%vendor_item_menu}}.menu_type',
                         '{{%vendor_item_menu_item}}.menu_item_id',
                         '{{%vendor_item_menu_item}}.menu_item_name',
                         '{{%vendor_item_menu_item}}.menu_item_name_ar',
