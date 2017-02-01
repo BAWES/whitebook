@@ -302,6 +302,11 @@ function cmp($a, $b)
 
 		<div class="tab-pane clearfix tab_menu_items" id="4">
 
+			<?= $form->field($model, 'quantity_label')->dropDownList([
+					'Quantity' => 'Quantity',
+					'Serve' => 'Serve'
+				]); ?>
+
 			<?= $form->field($model, 'set_up_time'); ?>
 
 			<?= $form->field($model, 'set_up_time_ar'); ?>

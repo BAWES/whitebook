@@ -335,15 +335,11 @@ if($model->images) {
 
                                                 <?php if($model->item_default_capacity > 1) { ?>
 
-                                                    <?php if(!$menu) { ?>
-                                                        <div class="padding-top-12 pull-left quantity-lbl">
-                                                            <label><?= Yii::t('frontend', 'Quantity');?></label>
-                                                        </div>
-                                                    <?php } else { ?>
-                                                        <div class="padding-top-12 pull-left quantity-lbl">
-                                                            <label><?= Yii::t('frontend', 'Serve');?></label>
-                                                        </div>
-                                                    <?php } ?>
+                                                    <div class="padding-top-12 pull-left quantity-lbl">
+                                                        <label>
+                                                            <?= Yii::t('frontend', $model['quantity_label']); ?>      
+                                                        </label>
+                                                    </div>
 
                                                     <div class="clearfix qantity-div">
                                                         <div class="form-group qty" style="margin: 0px;">
