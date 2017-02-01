@@ -107,14 +107,13 @@ return [
                         'GET' => 'event-list',
                         'GET type' => 'event-type-list',
                         'GET detail' => 'event-detail',
-                        'GET type' => 'event-type-list',
                         'POST' => 'event-create',
                         'PATCH' => 'event-update',
                         'DELETE' => 'event-remove',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+						'OPTIONS type' => 'options',
                         'OPTIONS detail' => 'options',
-                        'OPTIONS type' => 'options',
                     ]
                 ],
                 [ // WishlistController
@@ -139,6 +138,12 @@ return [
                         'PATCH' => 'address-update',
                         'DELETE' => 'address-remove',
                         'GET questions' => 'address-questions',
+
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS type' => 'options',
+                        'OPTIONS view' => 'options',
+                        'OPTIONS questions' => 'options',
                     ]
                 ],
                 [ // CheckoutController

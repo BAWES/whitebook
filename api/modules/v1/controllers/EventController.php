@@ -228,18 +228,6 @@ class EventController extends Controller
             ->where(['trash'=>'default'])
             ->all();
     }
-
-
-    /*
-     * Method to list all event related with particular user
-     */
-    public function actionEventTypeList(){
-
-        return EventType::find()
-            ->select(['type_name'])
-            ->where(['trash'=>'Default'])
-            ->all();
-    }
     /*
      * Common method to generate slug from string
      */
