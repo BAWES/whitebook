@@ -425,6 +425,18 @@ function cmp($a, $b)
 			<button type="button" class="btn btn-primary btn-add-menu">
 				<i class="fa fa-plus"></i> Add menu
 			</button>
+
+			<hr />
+
+			<div class="col-lg-4">
+				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+			</div>
+			<div class="col-lg-4 text-center">
+				<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?>
+			</div>
+			<div class="col-lg-4">
+				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+			</div>
 		</div><!-- END .tab_menu_items -->
 
 		<div class="tab-pane clearfix tab_addon_menu_items" id="5">
@@ -526,6 +538,19 @@ function cmp($a, $b)
 			<button type="button" class="btn btn-primary btn-add-addon-menu">
 				<i class="fa fa-plus"></i> Add addon menu
 			</button>
+
+			<hr />
+
+			<div class="col-lg-4">
+				<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
+			</div>
+			<div class="col-lg-4 text-center">
+				<?= Html::submitButton($model->isNewRecord ? 'Complete' : 'Complete', ['class' => $model->isNewRecord ? 'btn btn-success complete' : 'btn btn-primary complete']) ?>
+			</div>
+			<div class="col-lg-4">
+				<input type="button" name="btnNext" class="btnNext btn btn-info" value="Next" />
+			</div>
+
 		</div><!-- END .tab_addon_menu_items -->
 
 		<div class="tab-pane clearfix" id="6">
