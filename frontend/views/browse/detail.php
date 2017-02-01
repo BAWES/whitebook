@@ -198,14 +198,14 @@ if($model->images) {
                                     <h2><?= $item_name; ?></h2>
 
                                     <label>
-                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-999999">
-                                        <?= $vendor_name; ?>
-                                    </a>
+                                        <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-999999">
+                                            <?= $vendor_name; ?>
+                                        </a>
                                     </label>
 
                                     <b class="font-27"><?=(trim($model['item_price_per_unit'])) ? CFormatter::format($model['item_price_per_unit']) : '<span class="small">'.Yii::t('frontend','Price upon request').'<span>'  ?></b>
 
-                                    <strong><?= $model['item_price_description'] ?></strong>
+                                    <strong><?= LangFormat::format($model['item_price_description'], $model['item_price_description_ar']); ?></strong>
 
                                 </div>
                                 <div class="right_descrip">
