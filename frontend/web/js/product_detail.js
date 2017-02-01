@@ -441,6 +441,10 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
     update_price();
 });
 
+$(document).delegate('input[name="quantity"]', 'change', function() {
+    update_price();
+});
+
 function update_price() {
     $.post($('#final_price_url').val(), $('#form_product_option').serialize(), function(json) {
         $('.item-final-price').html(json.price);

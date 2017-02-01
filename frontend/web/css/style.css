@@ -2364,7 +2364,28 @@ span.small {
     margin-bottom: 15px;
 }
 
-.callout{
+.callout-container {
+    width: 98%;
+    position: absolute;
+    bottom: 5px;
+    right: 9px;
+}
+
+.callout-container::before{
+    background:url(../images/PLP_sprite.png) -5px -542px no-repeat;
+    content:'';
+    position:absolute;
+    height:56px;
+    width:5px;
+    bottom:-22px;
+    left:0
+}
+
+.callout {
+    position:relative;
+    -moz-box-shadow:3px 3px 6px 0 #ccc;
+    -webkit-box-shadow:3px 3px 6px 0 #ccc;
+    box-shadow:3px 3px 6px 0 #ccc
     background:#FFF;
     color:#666;
     float:left;
@@ -2378,25 +2399,22 @@ span.small {
     font-style:italic;
     line-height:1.286em
 }
-.callout.dark{background:#333;color:#FFF;float:left}
-.callout-container {
-    width: 98%;
-    position: absolute;
-    bottom: 5px;
-    right: 9px;
+
+.callout.dark{
+    background:#333;
+    color:#FFF;
 }
-.callout{
-    position:relative;
-    -moz-box-shadow:3px 3px 6px 0 #ccc;
-    -webkit-box-shadow:3px 3px 6px 0 #ccc;
-    box-shadow:3px 3px 6px 0 #ccc
+
+.callout.light{
+    background:#fff;
 }
-.callout-container::before{
-    background:url(../images/PLP_sprite.png) -5px -542px no-repeat;
-    content:'';
-    position:absolute;
-    height:56px;
-    width:5px;
-    bottom:-22px;
-    left:0
+
+.left-sidebar .callout-container {
+    bottom: auto;
+    top: 50px;
+    right: 13px;
+}
+
+.left-sidebar .callout {
+    font-size: 14px;
 }
