@@ -5,7 +5,6 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\rest\Controller;
 use common\models\Order;
-use common\models\Suborder;
 
 class OrdersController extends Controller
 {
@@ -56,10 +55,9 @@ class OrdersController extends Controller
 	}
 
 
-	public function actionListOrder() {
+	public function actionListOrder($offset = 0) {
 
 		$limit = Yii::$app->params['limit'];
-		$offset = Yii::$app->request->getBodyParam('offset',0);
 		return Order::find()
 			->where('customer_id = ' . Yii::$app->user->getId())
 			->andWhere('order_transaction_id != ""')
@@ -77,14 +75,15 @@ class OrdersController extends Controller
 		if ($order_id) {
 			$order = Order::findOne($order_id);
 			if ($order) {
+                $subOrder = \common\models\Suborder::find()->where(['order_id' => $order_id])->one();
 				$orderDetail['order'] = $order;
-				$orderDetail['suborder'] = Suborder::find()->where(['order_id' => $order_id])->all();
-				return $orderDetail;
+                $orderDetail['items'] = $order->subOrderItems($subOrder->suborder_id);
+                $orderDetail['suborder'] = $subOrder;
+                return $orderDetail;
 			} else {
 				return [
 					'operation' => 'error',
 					'message' => 'Invalid order id'
-
 				];
 			}
 		} else {

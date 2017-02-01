@@ -1,12 +1,10 @@
 <?php
-
 $params = array_merge(
-require(__DIR__.'/../../common/config/params.php'),
-require(__DIR__.'/../../common/config/params-local.php'),
-require(__DIR__.'/params.php'),
-require(__DIR__.'/params-local.php')
+    require(__DIR__.'/../../common/config/params.php'),
+    require(__DIR__.'/../../common/config/params-local.php'),
+    require(__DIR__.'/params.php'),
+    require(__DIR__.'/params-local.php')
 );
-
 return [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
@@ -50,7 +48,6 @@ return [
                         'OPTIONS resend-verification-email' => 'options',
                     ]
                 ],
-
                 [ // SearchController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/search',
@@ -77,10 +74,11 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'index',
-                        'POST' => 'update',
+                        'PATCH' => 'update',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
                     ]
                 ],
-
                 [ // CategoryController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/category',
@@ -89,7 +87,6 @@ return [
                         'GET' => 'category-listing',
                     ]
                 ],
-
                 [ // ProductController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/product',
@@ -109,9 +106,14 @@ return [
                     'patterns' => [
                         'GET' => 'event-list',
                         'GET detail' => 'event-detail',
+                        'GET type' => 'event-type-list',
                         'POST' => 'event-create',
                         'PATCH' => 'event-update',
                         'DELETE' => 'event-remove',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS detail' => 'options',
+                        'OPTIONS type' => 'options',
                     ]
                 ],
                 [ // WishlistController
@@ -156,6 +158,9 @@ return [
                     'patterns' => [
                         'GET' => 'list-order',
                         'GET detail' => 'order-detail',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS detail' => 'options',
                     ]
                 ],
             ],
@@ -171,5 +176,4 @@ return [
         ],
     ],
     'params' => $params,
-
 ];
