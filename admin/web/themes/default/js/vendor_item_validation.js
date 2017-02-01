@@ -1,3 +1,4 @@
+var addon_menu_count = $('#addon_menu_count').val();
 var menu_count = $('#menu_count').val();
 var count_q = $('#count_q').val();
 var appImageUrl = $('#appImageUrl').val();
@@ -638,13 +639,21 @@ $('#tab_5').click(function(e) {
  */
 $('#tab_6').click(function(e) {
 	$('.alert-validation-errors').remove();
+	save_addon_menu_items();
+});
+ 
+/** 
+ * Save tab 6 data on click of tab 7 or on click of next in tab 6
+ */
+$('#tab_7').click(function(e) {
+	$('.alert-validation-errors').remove();
 	save_item_approval();
 });
  
  /** 
- * Save tab 6 data on click of tab 7 or on click of next in tab 6
+ * Save tab 7 data on click of tab 8 or on click of next in tab 7
  */
-$('#tab_7').click(function(e) {
+$('#tab_8').click(function(e) {
 	$('.alert-validation-errors').remove();
 	save_item_images();
 });
@@ -1016,6 +1025,39 @@ function save_menu_items($is_autosave = false) {
 	});
 }
 
+function save_addon_menu_items($is_autosave = false) {
+
+	if(!$is_autosave) {	
+		$('.loadingmessage').hide();
+	}
+
+	$.post($('#addon_menu_items_url').val(), get_form_data($is_autosave), function(json) {
+
+		$('.loadingmessage').hide();
+
+		if($is_autosave)
+			return true;
+
+		if(json['success']) 
+		{
+			//update active tab 
+
+			$('.nav-tabs .active').removeClass('active');
+			$('.tab-content .active').removeClass('active');
+			
+			$('#tab_6').parent().addClass('active');
+			$('#6.tab-pane').addClass('active');
+
+			$('#version').val(json.version);
+		}
+
+		if(json['errors']) 
+		{
+			show_errors(json);	
+		}
+	});
+}
+
 function save_item_approval($is_autosave = false) {
 
 	if(!$is_autosave) {	
@@ -1035,8 +1077,8 @@ function save_item_approval($is_autosave = false) {
 			$('.nav-tabs .active').removeClass('active');
 			$('.tab-content .active').removeClass('active');
 			
-			$('#tab_6').parent().addClass('active');
-			$('#6.tab-pane').addClass('active');
+			$('#tab_7').parent().addClass('active');
+			$('#7.tab-pane').addClass('active');
 
 			$('#version').val(json.version);
 		}
@@ -1067,8 +1109,8 @@ function save_item_images($is_autosave = false) {
 			$('.nav-tabs .active').removeClass('active');
 			$('.tab-content .active').removeClass('active');
 			
-			$('#tab_7').parent().addClass('active');
-			$('#7.tab-pane').addClass('active');
+			$('#tab_8').parent().addClass('active');
+			$('#8.tab-pane').addClass('active');
 
 			$('#version').val(json.version);
 		}
@@ -1408,6 +1450,8 @@ $(function() {
 	});
 });
 
+// ---------------------- menu -------------------------//
+
 $(document).delegate('.btn-remove-menu', 'click', function(){
 	$(this).parents('li').remove();
 });
@@ -1456,12 +1500,11 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '	<table class="table table-bordered">';
 	$html += '		<thead>';
 	$html += '			<tr>';
-	$html += '				<th colspan="6" class="heading">Menu Items</th>';
+	$html += '				<th colspan="5" class="heading">Menu Items</th>';
 	$html += '			</tr>';
 	$html += '			<tr>';
 	$html += '				<th>Name</th>';
 	$html += '				<th>Name - Ar</th>';
-	$html += '				<th>Price</th>';
 	$html += '				<th>Hint</th>';
 	$html += '				<th>Hint - Ar</th>';
 	$html += '				<th></th>';
@@ -1471,7 +1514,7 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '		</tbody>';
 	$html += '		<tfoot>';
 	$html += '			<tr>';
-	$html += '				<td colspan="6">';
+	$html += '				<td colspan="5">';
 	$html += '					<button type="button" class="btn btn-primary btn-add-menu-item">';
 	$html += '						<i class="fa fa-plus"></i> Add Item';
 	$html += '					</button>';
@@ -1495,10 +1538,6 @@ $(document).delegate('.btn-add-menu-item', 'click', function(){
 	$html += '		<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_item_name_ar]" value="" class="form-control" /></td>';
 	
 	$html += '	<td>';
-	$html += '		<input placeholder="Price" name="menu_item['+menu_count+'][price]" value="" class="form-control" />';
-	$html += '	</td>';
-	
-	$html += '	<td>';
 	$html += '		<input placeholder="Hint" name="menu_item['+menu_count+'][hint]" value="" class="form-control" />';
 	$html += '	</td>';
 	
@@ -1516,4 +1555,100 @@ $(document).delegate('.btn-add-menu-item', 'click', function(){
 	$(this).parents('table').find('tbody').append($html);
 
 	menu_count++;
+});
+
+// ---------------------- addon menu -------------------------//
+
+$(document).delegate('.btn-add-addon-menu', 'click', function(){
+
+	$html  = '<li>';
+	$html += '	<table class="table table-bordered">';
+	$html += '		<thead>';
+	$html += '			<tr>';
+	$html += '				<th colspan="2" class="heading">Addon Menu';
+	$html += '					<button type="button" class="btn btn-danger btn-remove-menu">';
+	$html += '						<i class="fa fa-trash-o"></i>';
+	$html += '					</button>';
+	$html += '				</th>';
+	$html += '			</tr>';
+	$html += '			<tr>';
+	$html += '				<th>Name</th>';
+	$html += '				<th>Name - Ar</th>';
+	$html += '			</tr>';
+	$html += '		</thead>';
+	$html += '		<tbody>';
+	$html += '			<tr>';
+	$html += '				<td>';
+	$html += '					<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_name]" value="" class="form-control" />';
+	$html += '				</td>';
+	$html += '				<td>';
+	$html += '					<input placeholder="Name - Arabic" name="addon_menu_item['+addon_menu_count+'][menu_name_ar]" value="" class="form-control" />';
+	$html += '				</td>';
+	$html += '			</tr>';
+	$html += '		</tbody>';
+	$html += '	</table>';
+
+	$html += '	<table class="table table-bordered">';
+	$html += '		<thead>';
+	$html += '			<tr>';
+	$html += '				<th colspan="6" class="heading">Menu Items</th>';
+	$html += '			</tr>';
+	$html += '			<tr>';
+	$html += '				<th>Name</th>';
+	$html += '				<th>Name - Ar</th>';	
+	$html += '				<th>Price</th>';
+	$html += '				<th>Hint</th>';
+	$html += '				<th>Hint - Ar</th>';
+	$html += '				<th></th>';
+	$html += '			</tr>';
+	$html += '		</thead>';
+	$html += '		<tbody>	';						
+	$html += '		</tbody>';
+	$html += '		<tfoot>';
+	$html += '			<tr>';
+	$html += '				<td colspan="6">';
+	$html += '					<button type="button" class="btn btn-primary btn-add-addon-menu-item">';
+	$html += '						<i class="fa fa-plus"></i> Add addon item';
+	$html += '					</button>';
+	$html += '				</td>';
+	$html += '			</tr>';
+	$html += '		</tfoot>';
+	$html += '	</table>';
+	$html += '</li>';
+
+	$('#item_addon_menu_list').append($html);
+
+	addon_menu_count++;
+});
+
+$(document).delegate('.btn-add-addon-menu-item', 'click', function(){
+	
+	$html  = '<tr>';
+	$html += '	<td>';
+	$html += '		<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_item_name]" value="" class="form-control" /></td>';
+	$html += '	<td>';
+	$html += '		<input placeholder="Name - Arabic" name="addon_menu_item['+addon_menu_count+'][menu_item_name_ar]" value="" class="form-control" /></td>';
+	
+	$html += '	<td>';
+	$html += '		<input placeholder="Price" name="addon_menu_item['+addon_menu_count+'][price]" value="" class="form-control" />';
+	$html += '	</td>';
+	
+	$html += '	<td>';
+	$html += '		<input placeholder="Hint" name="addon_menu_item['+addon_menu_count+'][hint]" value="" class="form-control" />';
+	$html += '	</td>';
+	
+	$html += '	<td>';
+	$html += '		<input placeholder="Hint - Ar" name="addon_menu_item['+addon_menu_count+'][hint_ar]" value="" class="form-control" />';
+	$html += '	</td>';
+	
+	$html += '	<td>';
+	$html += '		<button type="button" class="btn btn-danger btn-remove-menu-item">';
+	$html += '			<i class="fa fa-trash-o"></i>';
+	$html += '		</button>';
+	$html += '	</td>';
+	$html += '</tr>';
+
+	$(this).parents('table').find('tbody').append($html);
+
+	addon_menu_count++;
 });

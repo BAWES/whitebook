@@ -31,6 +31,7 @@ class VendorItem extends \common\models\VendorItem
     }
 
     public static function more_from_vendor($model) {
+        
         return VendorItem::find()
             ->where([
                 'vendor_id' => $model->vendor_id,

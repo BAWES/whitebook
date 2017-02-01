@@ -105,6 +105,7 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'event-list',
+                        'GET type' => 'event-type-list',
                         'GET detail' => 'event-detail',
                         'GET type' => 'event-type-list',
                         'POST' => 'event-create',

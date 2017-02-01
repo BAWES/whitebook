@@ -424,6 +424,44 @@ class VendorItemController extends Controller
                     if(isset($value['menu_name'])) {
                         $menu = new VendorItemMenu;
                         $menu->attributes = $value;
+                        $menu->menu_type = 'options';
+                        $menu->item_id = $model->item_id;
+                        $menu->save();
+
+                        //update current menu id 
+                        $menu_id = $menu->menu_id;
+
+                    //if menu item 
+                    } else {
+
+                        $menu_item = new VendorItemMenuItem;
+                        $menu_item->attributes = $value;
+                        $menu_item->menu_id = $menu_id;
+                        $menu_item->item_id = $model->item_id;
+                        $menu_item->save();
+                    }
+                }
+
+                //add addon menu items 
+
+                $menu_items = Yii::$app->request->post('addon_menu_item');
+                
+                if(!$menu_items) {
+                    $menu_items = array();
+                }
+
+                $menu_id = 0;
+
+                /* This method will allow user to sort menu and menu item easily */
+
+                foreach ($menu_items as $key => $value) {
+                    
+                    //if menu 
+                    if(isset($value['menu_name'])) {
+                        
+                        $menu = new VendorItemMenu;
+                        $menu->attributes = $value;
+                        $menu->menu_type = 'addons';
                         $menu->item_id = $model->item_id;
                         $menu->save();
 
@@ -529,11 +567,20 @@ class VendorItemController extends Controller
             ->orderBy('theme_name')
             ->all();
 
-        $arr_menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+        $arr_menu = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
+
+        $arr_addon_menu = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
 
         return $this->render('update', [
             'model' => $model,
             'arr_menu' => $arr_menu,
+            'arr_addon_menu' => $arr_addon_menu,
             'packagelist' => ArrayHelper::map(Package::find()->all(), 'package_id', 'package_name'),
             'itemType' => ItemType::findAll(['trash' => 'Default']),
             'categoryname' => $categoryname,
@@ -907,9 +954,20 @@ class VendorItemController extends Controller
         }
         
         //remove old menu and menu items 
+        
+        $old_menues = VendorItemMenu::findALL([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
 
-        VendorItemMenu::deleteALL(['item_id' => $model->item_id]);
-        VendorItemMenuItem::deleteALL(['item_id' => $model->item_id]);
+        foreach ($old_menues as $key => $value) {
+            VendorItemMenuItem::deleteALL(['menu_id' => $value->menu_id]);
+        }
+
+        VendorItemMenu::deleteALL([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
 
         //remove item from cart and cart menu item as item got change 
         
@@ -937,8 +995,153 @@ class VendorItemController extends Controller
             
             //if menu 
             if(isset($value['menu_name'])) {
+
                 $menu = new VendorItemMenu;
                 $menu->attributes = $value;
+                $menu->menu_type = 'options';
+                $menu->item_id = $model->item_id;
+                $menu->save();
+
+                //update current menu id 
+                $menu_id = $menu->menu_id;
+
+            //if menu item 
+            } else {
+
+                $menu_item = new VendorItemMenuItem;
+                $menu_item->attributes = $value;
+                $menu_item->menu_id = $menu_id;
+                $menu_item->item_id = $model->item_id;
+                $menu_item->save();
+            }
+        }
+
+        \Yii::$app->response->format = 'json';
+        
+        return [
+            'success' => 1,
+            'item_id' => $model->item_id,
+            'version' => $model->version
+        ];
+    }
+
+    /**
+    * Save addon menu and menu items from update page
+    *
+    * @return json
+    */
+    public function actionAddonMenuItems() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+        $is_autosave = Yii::$app->request->post('is_autosave');
+
+        $posted_data = VendorItem::get_posted_data();
+
+        $errors = VendorItem::validate_item_addon_menu($posted_data);
+
+        //check version 
+
+        $item = VendorItem::findOne($item_id);
+
+        if($item->version != $posted_data['version'])
+        {
+            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+        }
+
+        //validate
+    
+        if($errors) {
+            \Yii::$app->response->format = 'json';
+            
+            return [
+                'errors' => $errors
+            ];
+        }                
+    
+        $model = VendorItem::find()
+            ->where(['item_id' => $item_id])
+            ->one();
+    
+        //load posted data to model 
+        $model->load(['VendorItem' => $posted_data]);
+
+        //save data without validation 
+        try {
+
+            if(!$model->save())
+            {                
+                if(!$model->version) {
+                    $model->version = 1;
+                }
+                
+                $model->save(false);
+            }
+
+        } catch (StaleObjectException $e) {
+            
+            //if model version defined and version not matching  
+            if($model->version){
+
+                $errors['version'] = 'You have old version of data, seems like someone have updated item!';
+
+                \Yii::$app->response->format = 'json';
+                
+                return [
+                    'errors' => $errors
+                ];
+
+            //for first time validation, version not defined yet 
+            }else{
+                $model->save(false);
+            }
+        }
+        
+        //remove old menu and menu items 
+
+        $old_menues = VendorItemMenu::findALL([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
+
+        foreach ($old_menues as $key => $value) {
+            VendorItemMenuItem::deleteALL(['menu_id' => $value->menu_id]);
+        }
+
+        VendorItemMenu::deleteALL([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
+
+        //remove item from cart and cart menu item as item got change 
+        
+        $cart = CustomerCart::findAll(['item_id' => $model->item_id]);
+
+        foreach ($cart as $key => $value) {
+            CustomerCartMenuItem::deleteAll(['cart_id' => $value->cart_id]);
+        }
+        
+        CustomerCart::deleteAll(['item_id' => $model->item_id]);
+
+        //add menu items 
+
+        $menu_items = Yii::$app->request->post('addon_menu_item');
+        
+        if(!$menu_items) {
+            $menu_items = array();
+        }
+
+        $menu_id = 0;
+
+        /* This method will allow user to sort menu and menu item easily */
+
+        foreach ($menu_items as $key => $value) {
+            
+            //if menu 
+            if(isset($value['menu_name'])) {
+                
+                $menu = new VendorItemMenu;
+                $menu->attributes = $value;
+                $menu->menu_type = 'addons';
                 $menu->item_id = $model->item_id;
                 $menu->save();
 

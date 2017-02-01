@@ -41,7 +41,7 @@ class SuborderItemMenu extends \yii\db\ActiveRecord
         return [
             [['purchase_id', 'menu_id', 'menu_item_id', 'quantity'], 'integer'],
             [['price', 'total'], 'number'],
-            [['menu_name', 'menu_name_ar', 'menu_item_name', 'menu_item_name_ar'], 'string', 'max' => 100],
+            [['menu_name', 'menu_name_ar', 'menu_item_name', 'menu_item_name_ar', 'menu_type'], 'string', 'max' => 100],
             [['menu_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorItemMenu::className(), 'targetAttribute' => ['menu_id' => 'menu_id']],
             [['menu_item_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorItemMenuItem::className(), 'targetAttribute' => ['menu_item_id' => 'menu_item_id']],
             [['purchase_id'], 'exist', 'skipOnError' => true, 'targetClass' => SuborderItemPurchase::className(), 'targetAttribute' => ['purchase_id' => 'purchase_id']],

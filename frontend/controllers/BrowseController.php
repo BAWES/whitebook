@@ -98,7 +98,7 @@ class BrowseController extends BaseController
         );
 
         $item_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
+            ->select('{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
             ->leftJoin(
                 '{{%vendor_item_to_category}}',
                 '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
@@ -428,7 +428,15 @@ class BrowseController extends BaseController
             ])
             ->all();
 
-        $menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+        $menu = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
+
+        $addons = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
 
         if (Yii::$app->user->isGuest) {
 
@@ -436,6 +444,7 @@ class BrowseController extends BaseController
                 'AvailableStock' => $AvailableStock,
                 'model' => $model,
                 'menu' => $menu,
+                'addons' => $addons,
                 'similiar_item' => VendorItem::more_from_vendor($model),
                 'vendor_area' => [],
                 'vendor_detail' => $vendor_detail,
@@ -488,6 +497,7 @@ class BrowseController extends BaseController
             return $this->render('detail', [
                 'model' => $model,
                 'menu' => $menu,
+                'addons' => $addons,
                 'vendor_detail' => $vendor_detail,
                 'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
                 'phone_icons' => $phone_icons,
