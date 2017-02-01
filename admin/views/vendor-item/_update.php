@@ -319,10 +319,6 @@ function cmp($a, $b)
 
 			<?= $form->field($model, 'requirements_ar'); ?>
 
-			<?= $form->field($model, 'whats_include'); ?>
-
-			<?= $form->field($model, 'whats_include_ar'); ?>
-
 			<?= $form->field($model, 'min_order_amount'); ?>
 
 			<?= $form->field($model, 'allow_special_request')->checkbox(); ?>

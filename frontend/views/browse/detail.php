@@ -15,8 +15,6 @@ $item_additional_info = LangFormat::format($model->item_additional_info, $model-
 
 $vendor_contact_address = LangFormat::format($model->vendor->vendor_contact_address, $model->vendor->vendor_contact_address_ar);
 
-$whats_include = LangFormat::format($model->whats_include, $model->whats_include_ar);
-
 $max_time = LangFormat::format($model->max_time, $model->max_time_ar);
 $set_up_time = LangFormat::format($model->set_up_time, $model->set_up_time_ar);
 $requirements = LangFormat::format($model->requirements, $model->requirements_ar);
@@ -189,6 +187,17 @@ if($model->images) {
                     </div>
 
                     <div id="main" role="main" class="col-md-5 padding-left-0 normal_mode left-sidebar">
+
+                        <?php if($model['item_how_long_to_make'] > 0) { ?>
+                        <div class="callout-container">
+                            <span class="callout light">
+                                <?= Yii::t('frontend', 'Collect in {count} days', [
+                                        'count' => $model['item_how_long_to_make']
+                                    ]); ?>
+                            </span>
+                        </div>
+                        <?php } ?>
+
                         <div class="slider">
                             <div id="slider" class="flexslider display_none">
                                 <ul class="slides">
@@ -424,7 +433,7 @@ if($model->images) {
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                                                <?= Yii::t('frontend', 'Product Description') ?>
+                                                <?= Yii::t('frontend', 'Description') ?>
                                                 <span class="produ_type">
                                                 (
                                                     <?= Yii::t('frontend', 'Product type') ?>:
@@ -447,7 +456,7 @@ if($model->images) {
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse-options">
-                                                <?= Yii::t('frontend', 'Product Options') ?>
+                                                <?= Yii::t('frontend', 'Options') ?>
                                             </a>
                                           </h4>
                                         </div>
@@ -570,7 +579,7 @@ if($model->images) {
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse-addons">
-                                                <?= Yii::t('frontend', 'Product Addons') ?>
+                                                <?= Yii::t('frontend', 'Addons') ?>
                                             </a>
                                           </h4>
                                         </div>
@@ -722,7 +731,7 @@ if($model->images) {
                                             <div class="form-group checkbox" style="margin-left: 0px;">
                                                 <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
                                                 <label for="chk_female_service">
-                                                    <?= Yii::t('frontend', 'Female Service') ?>
+                                                    <?= Yii::t('frontend', 'Include Female Service') ?>
                                                 </label>
                                             </div>
                                           </div>
@@ -747,23 +756,8 @@ if($model->images) {
                                     </div><!-- END .panel -->
                                     <?php } ?>
 
-                                    <?php if($whats_include) { ?>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                          <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" class="collapsed">
-                                                <?= Yii::t('frontend', "What is include?") ?>
-                                            </a>
-                                          </h4>
-                                        </div>
-                                        <div id="collapse6" class="panel-collapse collapse">
-                                          <div class="panel-body">
-                                            <p><?= nl2br($whats_include); ?></p>
-                                          </div>
-                                        </div>
-                                    </div><!-- END .panel -->
-                                    <?php } ?>
 
+                                    <?php if ($model->item_for_sale != 'Yes' || !$AvailableStock) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
@@ -881,6 +875,7 @@ if($model->images) {
                                             </div><!-- END .panel-body -->
                                         </div>
                                     </div><!-- END .panel -->
+                                    <?php } ?>
 
                                     <?php if (VendorItemPricing::checkprice(
                                                 $model->item_id,
@@ -990,7 +985,7 @@ if($model->images) {
                                                 </div>
 
                                                 <?php if($s['item_how_long_to_make'] > 0) { ?>
-                                                <div class="callout-container" style="top: 170px; bottom: auto;">
+                                                <div class="callout-container" style="top: 170px; bottom: auto; right: 5px;">
                                                     <span class="callout light">
                                                         <?= Yii::t('frontend', 'Collect in {count} days', [
                                                                 'count' => $s['item_how_long_to_make']
@@ -1148,5 +1143,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.12', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.13', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
