@@ -224,12 +224,13 @@ if($model->images) {
                                     <h2><?= $item_name; ?></h2>
 
                                     <label>
-                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-999999">
-                                        <?= $vendor_name; ?>
-                                    </a>
+                                        <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-999999">
+                                            <?= $vendor_name; ?>
+                                        </a>
                                     </label>
 
                                     <b class="font-27 item-final-price">
+
 
                                         <?php if($model['item_price_per_unit'] > 0) { 
                                          
@@ -244,7 +245,7 @@ if($model->images) {
                                             echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
 
                                           } 
-                                          ?>                   
+                                          ?>  
                                     </b>
 
                                     <?php if($model['min_order_amount'] > 0) { 
@@ -259,7 +260,7 @@ if($model->images) {
 
                                     } ?>
 
-                                    <strong><?= $model['item_price_description'] ?></strong>
+                                    <strong><?= LangFormat::format($model['item_price_description'], $model['item_price_description_ar']); ?></strong>
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
