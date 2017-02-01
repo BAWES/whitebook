@@ -1819,13 +1819,13 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 .fetu_product_list i.fa-circle {
     position: absolute;
     bottom: 1px;
-    left: 4px;
+    right: 4px;
     font-size: 39px!important;
     color: #000;
 }
 .fetu_product_list .buy-text {
     position: absolute;
-    left: 9px;
+    right: 9px;
     bottom: 11px;
     color: #fff;
     font-weight: bold;

@@ -988,6 +988,17 @@ if($model->images) {
                                                     <h3><?=LangFormat::format($s->item_name,$s->item_name_ar); ?></h3>
                                                     <p><?=(trim($s['item_price_per_unit'])) ? CFormatter::format($s['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
                                                 </div>
+
+                                                <?php if($s['item_how_long_to_make'] > 0) { ?>
+                                                <div class="callout-container" style="top: 170px; bottom: auto;">
+                                                    <span class="callout light">
+                                                        <?= Yii::t('frontend', 'Collect in {count} days', [
+                                                                'count' => $s['item_how_long_to_make']
+                                                            ]); ?>
+                                                    </span>
+                                                </div>
+                                                <?php } ?>
+
                                             </a>
                                         <?php } ?>
                                     </div>
