@@ -480,10 +480,10 @@ if($model->images) {
                                                                 
                                                                 <?php 
 
-                                                                echo Yii::t('frontend', 'Quantity range : ');
+                                                                echo Yii::t('frontend', 'Select ');
 
                                                                 if($value->min_quantity) { 
-                                                                    echo Yii::t('frontend', 'Minimum {qty}', [
+                                                                    echo Yii::t('frontend', 'atleast {qty} ', [
                                                                         'qty' => $value->min_quantity
                                                                     ]); 
                                                                 } 
@@ -493,7 +493,7 @@ if($model->images) {
                                                                 }
 
                                                                 if($value->max_quantity) { 
-                                                                    echo Yii::t('frontend', 'Maximum {qty}', [
+                                                                    echo Yii::t('frontend', ' upto {qty}', [
                                                                         'qty' => $value->max_quantity
                                                                     ]); 
                                                                 } 
