@@ -382,7 +382,7 @@ if($model->images) {
                                 </div>
                             </div>
 
-                            <?php if($set_up_time || $max_time || $requirements || $model->item_how_long_to_make) { ?>
+                            <?php if($set_up_time || $max_time || $requirements) { ?>
                             <div class="menu-requirements">
 
                                 <?php if($set_up_time) { ?>
@@ -409,18 +409,6 @@ if($model->images) {
                                 </div>
                                 <?php } ?>
                                 
-                                <?php if($model->item_how_long_to_make) { ?>
-                                <div>
-                                    <i class="fa fa-clock-o"></i>
-                                    <span class="title"><?= Yii::t('frontend', 'Notice period') ?></span>
-                                    <span class="value">
-                                        <?= Yii::t('frontend', '{count} days', [
-                                                'count' => $model->item_how_long_to_make
-                                            ]) ?>
-                                    </span>
-                                </div>
-                                <?php } ?>
-
                                 <span class="clearfix"></span>
                             </div>
                             <?php } ?>
