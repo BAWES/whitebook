@@ -91,7 +91,7 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                                 echo LangFormat::format($item->vendoritem->item_name, $item->vendoritem->item_name_ar);
 
                                 $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
-
+                                
                                 foreach ($menu_items as $key => $menu_item) { 
                                     if (Yii::$app->language == 'en') { 
                                         echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];

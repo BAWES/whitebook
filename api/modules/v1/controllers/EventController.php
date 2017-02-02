@@ -179,7 +179,7 @@ class EventController extends Controller
      */
     public function actionEventRemove($event_id) {
 
-        if ($event_id) {
+	if ($event_id) {
             $event = Events::find()
                 ->where(['customer_id' => Yii::$app->user->getId(), 'event_id' => $event_id])
                 ->one();
@@ -208,25 +208,24 @@ class EventController extends Controller
      * Method to list all event related with particular user
      */
     private function eventList($offset = 0){
-
         $limit = $limit = Yii::$app->params['limit'];
         return Events::find()
-            ->select(['event_id','event_name','event_date','event_type'])
+            ->select(['event_id','event_name','event_date','event_type','no_of_guests'])
             ->where(['customer_id'=>Yii::$app->user->getId()])
             ->offset($offset)
             ->limit($limit)
+            ->orderBy('event_id DESC')
             ->all();
     }
 
-
     /*
-     * Method to list all event related with particular user
+     * Method to list all event type
      */
     public function actionEventTypeList(){
 
         return EventType::find()
             ->select(['type_name'])
-            ->where(['trash'=>'Default'])
+            ->where(['trash'=>'default'])
             ->all();
     }
     /*

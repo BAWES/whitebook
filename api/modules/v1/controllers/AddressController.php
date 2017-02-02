@@ -78,19 +78,19 @@ class AddressController extends Controller
     /*
      * Listing of all address
      */
-    public function actionAddressList() {
+    public function actionAddressList($offset) {
 
-        return $this->listing();
+        return $this->listing($offset);
     }
 
     /*
      * Common method to call for Listing of all address
      */
-    private function listing(){
+    private function listing($offset = 0){
 
         $customer_id = Yii::$app->user->getId();
         $addresses = array();
-
+        $limit = Yii::$app->params['limit'];
         $result = CustomerAddress::find()
             ->select('whitebook_city.city_name, whitebook_city.city_name_ar, whitebook_location.location,
                 whitebook_location.location_ar, whitebook_customer_address.*')
@@ -98,18 +98,22 @@ class AddressController extends Controller
             ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
             ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
             ->asArray()
+            ->limit($limit)
+            ->offset($offset)
             ->all();
 
-        foreach($result as $row) {
+        if ($result) {
+            foreach ($result as $row) {
 
-            $row['questions'] = CustomerAddressResponse::find()
-                ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
-                ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
-                ->where('address_id = :address_id', [':address_id' => $row['address_id']])
-                ->asArray()
-                ->all();
+                $row['questions'] = CustomerAddressResponse::find()
+                    ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
+                    ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
+                    ->where('address_id = :address_id', [':address_id' => $row['address_id']])
+                    ->asArray()
+                    ->all();
 
-            $addresses[] = $row;
+                $addresses[] = $row;
+            }
         }
         return $addresses;
     }

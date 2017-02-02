@@ -65,16 +65,17 @@ class WishlistController extends Controller
     /**
      * @return array
      */
-    public function actionWishlistList()
+    public function actionWishlistList($offset)
     {
-        return $this->listing();
+        return $this->listing($offset);
     }
 
 
     /*
      * Method to list all whishlist related with particular user
      */
-    public function listing(){
+    private function listing($offset = 0){
+
         $customer_id = Yii::$app->user->getId();
         $offset = 0;
         $limit = Yii::$app->params['limit'];
@@ -89,7 +90,6 @@ class WishlistController extends Controller
         $q .= "AND (`whitebook_vendor_item`.`item_archived`='no') GROUP BY `item_id` ORDER BY `whitebook_vendor_item`.`item_name` LIMIT $limit OFFSET $offset";
         return \Yii::$app->db->createCommand($q)->queryAll();
     }
-
 
     /*
      * Add to WishList table method
