@@ -325,9 +325,9 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         $total = $item->item_price_per_unit * $data['quantity'];
 
-        //menu item quantity validation 
+        //get quantity ordered per menu 
 
-        $menu = [];
+        $menu_qty_ordered = [];
 
         if(!isset($data['menu_item'])) {
             $data['menu_item'] = [];
@@ -339,42 +339,50 @@ class CustomerCart extends \yii\db\ActiveRecord
 
             /* get quantity selected per menu to validate */
 
-            if(isset($menu[$mi->menu_id])) {
-                $menu[$mi->menu_id] = $value + $menu[$mi->menu_id];
+            if(isset($menu_qty_ordered[$mi->menu_id])) {
+                $menu_qty_ordered[$mi->menu_id] = $value + $menu_qty_ordered[$mi->menu_id];
             } else {
-                $menu[$mi->menu_id] = $value;
+                $menu_qty_ordered[$mi->menu_id] = $value;
             }
 
             $total += $mi->price * $value * $data['quantity'];
         }
 
+        //item menu 
+
+        $item_menues = VendorItemMenu::findAll(['item_id' => $item->item_id]);
+
         //menu quantity validation 
 
-        foreach ($menu as $key => $value) {
+        foreach ($item_menues as $key => $menu) {
 
-            $m = VendorItemMenu::findOne($key);
-
-            if(Yii::$app->language == 'en') {
-                $menu_name = $m->menu_name;
+            if(isset($menu_qty_ordered[$menu->menu_id])) {
+                $qty_ordered = $menu_qty_ordered[$menu->menu_id];
             }else{
-                $menu_name = $m->menu_name_ar;
+                $qty_ordered = 0;    
             }
             
-            if($m->max_quantity && $value > $m->max_quantity) {
-                $errors['menu_'.$m->menu_id][] = Yii::t(
+            if(Yii::$app->language == 'en') {
+                $menu_name = $menu->menu_name;
+            }else{
+                $menu_name = $menu->menu_name_ar;
+            }
+            
+            if($menu->max_quantity && $qty_ordered > $menu->max_quantity) {
+                $errors['menu_'.$menu->menu_id][] = Yii::t(
                     'frontend', 
                     'Quantity must be less than or equal to {qty} in "{menu_name}"', [
-                        'qty' => $m->max_quantity, 
+                        'qty' => $menu->max_quantity, 
                         'menu_name' => $menu_name
                     ]
                 );
             }
 
-            if($value < $m->min_quantity) {
-                $errors['menu_'.$m->menu_id][] = Yii::t(
+            if($qty_ordered < $menu->min_quantity) {
+                $errors['menu_'.$menu->menu_id][] = Yii::t(
                     'frontend', 
                     'Quantity must be greater than or equal to {qty} in "{menu_name}"', [
-                        'qty' => $m->min_quantity, 
+                        'qty' => $menu->min_quantity, 
                         'menu_name' => $menu_name
                     ]
                 );
