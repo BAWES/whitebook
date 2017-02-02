@@ -1466,7 +1466,7 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '	<table class="table table-bordered">';
 	$html += '		<thead>';
 	$html += '			<tr>';
-	$html += '				<th colspan="4" class="heading">Menu';
+	$html += '				<th colspan="5" class="heading">Menu';
 	$html += '					<button type="button" class="btn btn-danger btn-remove-menu">';
 	$html += '						<i class="fa fa-trash-o"></i>';
 	$html += '					</button>';
@@ -1477,6 +1477,7 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '				<th>Name - Ar</th>';
 	$html += '				<th>Min Qty</th>';
 	$html += '				<th>Max Qty</th>';
+	$html += '				<th>Qty Type</th>';
 	$html += '			</tr>';
 	$html += '		</thead>';
 	$html += '		<tbody>';
@@ -1492,6 +1493,12 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '				</td>';
 	$html += '				<td>';
 	$html += '					<input placeholder="Max. Qty" name="menu_item['+menu_count+'][max_quantity]" value="" class="form-control" />';
+	$html += '				</td>';
+	$html += '				<td>';
+	$html += '					<select name="menu_item['+menu_count+'][quantity_type]" class="form-control">';
+	$html += '						<option>selection</option>';
+	$html += '						<option>checkbox</option>';
+	$html += '					</select>';
 	$html += '				</td>';
 	$html += '			</tr>';
 	$html += '		</tbody>';

@@ -501,6 +501,10 @@ if($model->images) {
                                                         foreach ($menu_items as $menu_item) { ?>
 
                                                             <li> 
+                                                                
+
+                                                                <?php if($value->quantity_type == 'selection') { ?>
+
                                                                 <!-- qty box -->
 
                                                                 <span class="menu-item-qty-box">
@@ -519,15 +523,23 @@ if($model->images) {
                                                                       } ?> 
                                                                 </span>
 
-                                                                <!-- price -->
+                                                                <?php } else { ?>
 
-                                                                <?php if($menu_item->price > 0) { ?>
-                                                                <span class="menu_item_price">
-                                                                    (+<?= CFormatter::format($menu_item->price) ?>)
-                                                                </span>
-                                                                <?php  } ?>
+                                                                <div class="checkbox checkbox-inline">
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" />
 
-                                                                <!-- hint -->
+                                                                    <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
+                                                                        <?php if(Yii::$app->language == 'en') { 
+                                                                                echo $menu_item->menu_item_name;
+                                                                          } else { 
+                                                                                echo $menu_item->menu_item_name_ar;
+                                                                          } ?> 
+                                                                    </label>
+
+                                                                    &nbsp;
+                                                                </div>
+
+                                                                <?php } ?>
 
                                                                 <?php 
 

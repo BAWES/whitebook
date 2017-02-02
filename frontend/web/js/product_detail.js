@@ -441,6 +441,35 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
     update_price();
 });
 
+$(document).delegate('.menu-items .checkbox input', 'click', function(e) {
+
+    if (isGuest) {
+        show_login_modal('-2');
+        $('#myModal').modal('show');
+        return false;
+    }
+
+    //max quantity for menu 
+
+    $max = $(this).parents('.menu-items').attr('data-max-quantity');
+
+    //get total qty in menu
+
+    $menu_total_qty = 0;
+
+    $.each($(this).parents('.menu-items').find('input:checked'), function() {
+        $menu_total_qty += parseInt($(this).val());
+    });
+
+    // if max defined && total not exceeding max allowed
+
+    if($max > 0 && $menu_total_qty > $max) {
+        return false;
+    }    
+    
+    update_price();
+});
+
 $(document).delegate('input[name="quantity"]', 'change', function() {
     update_price();
 });

@@ -332,7 +332,7 @@ function cmp($a, $b)
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th colspan="4" class="heading">
+								<th colspan="5" class="heading">
 									Menu
 									<button type="button" class="btn btn-danger btn-remove-menu">
 										<i class="fa fa-trash-o"></i>
@@ -344,6 +344,7 @@ function cmp($a, $b)
 								<th>Name - Ar</th>
 								<th>Min Qty</th>
 								<th>Max Qty</th>
+								<th>Qty Type</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -359,6 +360,17 @@ function cmp($a, $b)
 								</td>
 								<td>
 									<input placeholder="Max. Qty" name="menu_item[<?= $menu_count ?>][max_quantity]" value="<?= $value->max_quantity ?>" class="form-control" />
+								</td>
+								<td>
+									<select name="menu_item[<?= $menu_count ?>][quantity_type]" class="form-control">
+										<?php if($value->quantity_type == 'selection') { ?>
+										<option selected>selection</option>
+										<option>checkbox</option>
+										<?php } else { ?>
+										<option>selection</option>
+										<option selected>checkbox</option>
+										<?php } ?>
+									</select>
 								</td>
 							</tr>
 						</tbody>
