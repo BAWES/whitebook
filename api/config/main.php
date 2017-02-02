@@ -124,6 +124,8 @@ return [
                         'GET' => 'wishlist-list',
                         'POST' => 'wishlist-add',
                         'DELETE' => 'wishlist-remove',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
                     ]
                 ],
                 [ // AddressController
