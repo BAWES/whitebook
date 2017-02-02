@@ -54,6 +54,8 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'index',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
                     ]
                 ],
                 [ // CartController
@@ -66,6 +68,9 @@ return [
                         'POST' => 'add',
                         'PATCH' => 'update',
                         'DELETE' => 'remove',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS count' => 'options',
                     ]
                 ],
                 [ // AccountController
@@ -85,6 +90,8 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'category-listing',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
                     ]
                 ],
                 [ // ProductController
