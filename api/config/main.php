@@ -104,6 +104,12 @@ return [
                         'GET area' => 'product-areas',
                         'GET time-slot' => 'product-delivery-time-slot',
                         'POST event' => 'add-product-to-event',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS detail' => 'options',
+                        'OPTIONS list' => 'options',
+                        'OPTIONS area' => 'options',
+                        'OPTIONS time-slot' => 'options'
                     ]
                 ],
                 [ // EventController
@@ -143,16 +149,18 @@ return [
                         'GET' => 'address-list',
                         'GET type' => 'address-type-list',
                         'GET view' => 'address-view',
+                        'GET questions' => 'address-questions',
+                        'GET location' => 'get-location',
                         'POST' => 'address-add',
                         'PATCH' => 'address-update',
                         'DELETE' => 'address-remove',
-                        'GET questions' => 'address-questions',
 
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS type' => 'options',
                         'OPTIONS view' => 'options',
                         'OPTIONS questions' => 'options',
+                        'OPTIONS location' => 'options',
                     ]
                 ],
                 [ // CheckoutController
@@ -164,6 +172,11 @@ return [
                         'GET payment-getaway' => 'payment-getaway-list',
                         'GET address' => 'address',
                         'GET success' => 'success',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS payment-getaway' => 'options',
+                        'OPTIONS address' => 'options',
+                        'OPTIONS success' => 'options'
                     ]
                 ],
                 [ // OrderController
