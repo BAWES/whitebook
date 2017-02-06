@@ -191,7 +191,7 @@ if($model->images) {
                         <?php if($model['item_how_long_to_make'] > 0) { ?>
                         <div class="callout-container">
                             <span class="callout light">
-                                <?= Yii::t('frontend', 'Collect in {count} days', [
+                                <?= Yii::t('frontend', 'Notice: {count} days', [
                                         'count' => $model['item_how_long_to_make']
                                     ]); ?>
                             </span>
@@ -987,7 +987,7 @@ if($model->images) {
                                                 <?php if($s['item_how_long_to_make'] > 0) { ?>
                                                 <div class="callout-container" style="top: 170px; bottom: auto; right: 5px;">
                                                     <span class="callout light">
-                                                        <?= Yii::t('frontend', 'Collect in {count} days', [
+                                                        <?= Yii::t('frontend', 'Notice: {count} days', [
                                                                 'count' => $s['item_how_long_to_make']
                                                             ]); ?>
                                                     </span>
