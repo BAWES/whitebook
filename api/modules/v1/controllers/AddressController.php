@@ -98,6 +98,7 @@ class AddressController extends Controller
             ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
             ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
             ->asArray()
+            ->orderBy('address_id DESC')
             ->limit($limit)
             ->offset($offset)
             ->all();
@@ -156,18 +157,19 @@ class AddressController extends Controller
             $address_id = $customer_address->address_id;
 
             //save address questions
-            foreach ($questions as $key => $value) {
-                $customer_address_response = new CustomerAddressResponse();
-                $customer_address_response->address_id = $address_id;
-                $customer_address_response->address_type_question_id = $value['address_type_question_id'];
-                $customer_address_response->response_text = $value['response_text'];
-                $customer_address_response->save();
+            if ($questions && count($questions) > 0) {
+                foreach ($questions as $key => $value) {
+                    $customer_address_response = new CustomerAddressResponse();
+                    $customer_address_response->address_id = $address_id;
+                    $customer_address_response->address_type_question_id = $value['address_type_question_id'];
+                    $customer_address_response->response_text = $value['response_text'];
+                    $customer_address_response->save();
+                }
             }
 
             return [
                 "operation" => "success",
                 "message" => "Address Saved Successfully",
-                'address-list' => $this->listing()
             ];
 
         } else {
@@ -217,21 +219,22 @@ class AddressController extends Controller
             $customer_address->country_id = $location->country_id;
             if ($customer_address->save(false)) {
 
-                //remove old questions
-                CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
+                if ($questions && count($questions) > 0) {
+                    //remove old questions
+                    CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
 
-                //save address questions
-                foreach ($questions as $key => $value) {
-                    $customer_address_response = new CustomerAddressResponse();
-                    $customer_address_response->address_id = $address_id;
-                    $customer_address_response->address_type_question_id = $value['address_type_question_id'];
-                    $customer_address_response->response_text = $value['response_text'];
-                    $customer_address_response->save();
+                    //save address questions
+                    foreach ($questions as $key => $value) {
+                        $customer_address_response = new CustomerAddressResponse();
+                        $customer_address_response->address_id = $address_id;
+                        $customer_address_response->address_type_question_id = $value['address_type_question_id'];
+                        $customer_address_response->response_text = $value['response_text'];
+                        $customer_address_response->save();
+                    }
                 }
                 return [
                     "operation" => "success",
                     "message" => "Address Updated Successfully",
-                    'address-list' => $this->listing()
                 ];
 
             } else {
