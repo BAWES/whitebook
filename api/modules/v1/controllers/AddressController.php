@@ -68,7 +68,7 @@ class AddressController extends Controller
     public function actionAddressTypeList() {
 
         return AddressType::find()
-            ->select(['type_id', 'type_name', 'type_name_ar'])
+            ->select(['type_id', 'type_name'])
             ->where([
                 'status' => 'Active',
                 'trash' => 'Default'
@@ -310,7 +310,7 @@ class AddressController extends Controller
     public function actionAddressQuestions($address_type_id)
     {
         $questions = AddressQuestion::find()
-            ->select(['ques_id','address_type_id','question','question_ar'])
+            ->select(['ques_id','address_type_id','question'])
             ->where([
                 'address_type_id' => $address_type_id,
                 'trash' => 'Default',
@@ -318,5 +318,9 @@ class AddressController extends Controller
             ->asArray()
             ->all();
         return $questions;
+    }
+
+    public function actionGetLocation(){
+        return Location::find()->where(['status'=>'Active', 'trash' => 'Default'])->all();
     }
 }
