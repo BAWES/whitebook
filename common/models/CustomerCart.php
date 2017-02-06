@@ -356,6 +356,9 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         foreach ($item_menues as $key => $menu) {
 
+            $max = $menu->max_quantity * $data['quantity']; 
+            $min = $menu->min_quantity * $data['quantity'];
+
             if(isset($menu_qty_ordered[$menu->menu_id])) {
                 $qty_ordered = $menu_qty_ordered[$menu->menu_id];
             }else{
@@ -368,21 +371,21 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $menu_name = $menu->menu_name_ar;
             }
             
-            if($menu->max_quantity && $qty_ordered > $menu->max_quantity) {
+            if($max && $qty_ordered > $max) {
                 $errors['menu_'.$menu->menu_id][] = Yii::t(
                     'frontend', 
                     'Quantity must be less than or equal to {qty} in "{menu_name}"', [
-                        'qty' => $menu->max_quantity, 
+                        'qty' => $max,
                         'menu_name' => $menu_name
                     ]
                 );
             }
 
-            if($qty_ordered < $menu->min_quantity) {
+            if($qty_ordered < $min) {
                 $errors['menu_'.$menu->menu_id][] = Yii::t(
                     'frontend', 
                     'Quantity must be greater than or equal to {qty} in "{menu_name}"', [
-                        'qty' => $menu->min_quantity, 
+                        'qty' => $min, 
                         'menu_name' => $menu_name
                     ]
                 );
