@@ -27,46 +27,90 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 
 <div class="tabbable">
 	<ul class="nav nav-tabs">
+	<?php if(!$model->isNewRecord) { ?>
 	    <li class="active">
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/update', 'id' => $model->item_id]) ?>">
 	    		Item Info 
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>">
 	    		Item description
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-price', 'id' => $model->item_id]) ?>">
 	    		Item price 
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>">
 	    		Menu items
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/addon-menu-items', 'id' => $model->item_id]) ?>">
 	    		Addons
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-approval', 'id' => $model->item_id]) ?>">
 	    		Approval 
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>">
 	    		Images
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-themes-groups', 'id' => $model->item_id]) ?>">
 	    		Other
 	    	</a>
 	    </li>
+	
+	<?php } else { ?>
+		<li class="active">
+	    	<a href="javascript::void();">
+	    		Item Info 
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Item description
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Item price 
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Menu items
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Addons
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Approval 
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Images
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Other
+	    	</a>
+	    </li>
+	<?php } ?>
 	</ul>
 
 	<div class="tab-content">
@@ -187,8 +231,16 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 			
 			<hr />
 
-			<input type="submit" name="btnNext" class="btn btn-info pull-right" value="Next" />
-
+			<div class="row">
+				<div class="col-md-6">
+					<?php if(!$model->isNewRecord) { ?>
+					<input type="submit" name="complete" class="btn btn-info" value="Complete" />
+					<?php } ?>
+				</div>
+				<div class="col-md-6">
+					<input type="submit" name="btnNext" class="btn btn-info pull-right" value="Next" />
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -242,6 +242,17 @@ class VendorItemController extends Controller
                 $vic->save();
             }
 
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
             return $this->redirect(['vendor-item/item-description', 'id' => $model->item_id]);
 
         }//if model-load 
@@ -300,6 +311,17 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemDescription';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
             return $this->redirect(['vendor-item/item-price', 'id' => $id]);
         }
 
@@ -341,6 +363,17 @@ class VendorItemController extends Controller
                     $vendor_item_pricing->save();
                 }
             }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
 
             return $this->redirect(['vendor-item/menu-items', 'id' => $id]);
         }
@@ -426,6 +459,17 @@ class VendorItemController extends Controller
                     $menu_item->save();
                 }
             }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
 
             return $this->redirect(['vendor-item/addon-menu-items', 'id' => $id]);
         }
@@ -515,6 +559,17 @@ class VendorItemController extends Controller
                 }
             }
 
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
             return $this->redirect(['vendor-item/item-approval', 'id' => $id]);
         }
 
@@ -541,6 +596,18 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemApproval';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
             return $this->redirect(['vendor-item/item-images', 'id' => $id]);
         }
 
@@ -556,6 +623,8 @@ class VendorItemController extends Controller
     */
     public function actionItemImages($id) 
     {
+        $model = $this->findModel($id);
+
         if(Yii::$app->request->isPost) 
         {
             $images = Yii::$app->request->post('images');
@@ -603,10 +672,19 @@ class VendorItemController extends Controller
                 Image::deleteAll('item_id=' . $id);
             }
 
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
             return $this->redirect(['vendor-item/item-themes-groups', 'id' => $id]);
         }
-
-        $model = $this->findModel($id);
 
         return $this->render('steps/images', [
             'model' => $model
