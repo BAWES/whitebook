@@ -315,76 +315,6 @@ if (!isGuest) {
         e.preventDefault();
     });
 
-    function deliveryTimeSlot(date){
-        var myDate = new Date()
-        time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
-        currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
-        jQuery.ajax({
-            type: 'POST',
-            url: getdeliverytimeslot_url,
-            data: { 'vendor_id': vendor_id, 'sel_date': date,'time':time,currentDate:currentDate},
-            success: function (data)
-            {
-                if (jQuery.trim(data) == 0) {
-                    $('.timeslot_id_div').show();
-                    $('.timeslot_id_div .text').html('Delivery not available for the selected date');
-                    $('.timeslot_id_select').hide();
-                    jQuery('#timeslot_id').html('');
-                } else {
-                    $('.timeslot_id_div').hide();
-                    $('.timeslot_id_select').show();
-                    jQuery('#timeslot_id').html(data);
-                    jQuery('#timeslot_id').selectpicker('refresh');
-                    jQuery('.error.timeslot_id').html('');
-                }
-            }
-        });
-    }
-
-    function productAvailability(date){
-        jQuery.ajax({
-            type: 'POST',
-            url: product_availability,
-            data: $('#form_product_option').serialize(),
-            success: function (json)
-            {
-                if (json['error']) {
-
-                    $('.timeslot_id_div').show();
-                    $('.timeslot_id_div .text').html(json['error']);
-                    $('.timeslot_id_select').hide();
-                    $('#timeslot_id').html('');
-                    return false;   
-
-                } else { 
-                    
-                    deliveryTimeSlot(date);
-
-                    //set capacity for given date 
-                    
-                    $('#capacity').val(json['capacity']);
-
-                    $qty = $('input[name="quantity"]').val();
-
-                    //if qty selected exceed capacity 
-
-                    if($qty > json['capacity']) {
-                        $('input[name="quantity"]').val(json['capacity']);   
-                        update_price();
-                        update_option_menu_title_hint();    
-                        update_option_menu_item_qty();             
-                    }
-
-                } 
-            }
-        });
-    }
-
-    // pre set value for Delivery date on product detail page
-    if (deliver_date) {
-        productAvailability(jQuery('#item_delivery_date').val());
-    }
-
     // Shop product page quantity increment and decrement stepper
     jQuery(document).on('click','.btn-stepper',function() {
 
@@ -405,6 +335,76 @@ if (!isGuest) {
 
         return false;
     });
+}
+
+function deliveryTimeSlot(date){
+    var myDate = new Date()
+    time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
+    currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
+    jQuery.ajax({
+        type: 'POST',
+        url: getdeliverytimeslot_url,
+        data: { 'vendor_id': vendor_id, 'sel_date': date,'time':time,currentDate:currentDate},
+        success: function (data)
+        {
+            if (jQuery.trim(data) == 0) {
+                $('.timeslot_id_div').show();
+                $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                $('.timeslot_id_select').hide();
+                jQuery('#timeslot_id').html('');
+            } else {
+                $('.timeslot_id_div').hide();
+                $('.timeslot_id_select').show();
+                jQuery('#timeslot_id').html(data);
+                jQuery('#timeslot_id').selectpicker('refresh');
+                jQuery('.error.timeslot_id').html('');
+            }
+        }
+    });
+}
+
+function productAvailability(date){
+    jQuery.ajax({
+        type: 'POST',
+        url: product_availability,
+        data: $('#form_product_option').serialize(),
+        success: function (json)
+        {
+            if (json['error']) {
+
+                $('.timeslot_id_div').show();
+                $('.timeslot_id_div .text').html(json['error']);
+                $('.timeslot_id_select').hide();
+                $('#timeslot_id').html('');
+                return false;   
+
+            } else { 
+                
+                deliveryTimeSlot(date);
+
+                //set capacity for given date 
+                
+                $('#capacity').val(json['capacity']);
+
+                $qty = $('input[name="quantity"]').val();
+
+                //if qty selected exceed capacity 
+
+                if($qty > json['capacity']) {
+                    $('input[name="quantity"]').val(json['capacity']);   
+                    update_price();
+                    update_option_menu_title_hint();    
+                    update_option_menu_item_qty();             
+                }
+
+            } 
+        }
+    });
+}
+
+// pre set value for Delivery date on product detail page
+if (deliver_date) {
+    productAvailability(jQuery('#item_delivery_date').val());
 }
 
 // product detail page Delivery Date change event

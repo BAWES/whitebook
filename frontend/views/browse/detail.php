@@ -93,7 +93,8 @@ if($model->images) {
                 ?>
             </div>
         </div>
-        <?php if (!Yii::$app->user->isGuest && $AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+
+        <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
 
         <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
@@ -1152,5 +1153,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.15', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.16', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
