@@ -329,51 +329,66 @@ class CartController extends BaseController
 
     public function actionValidationProductAvailable() {
 
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            $item = VendorItem::find()->where([
-                'item_id' => $data['item_id'],
-                'item_for_sale' => 'Yes'
-            ])->one();
+        Yii::$app->response->format = 'json';
 
-            if (!$item) {
-                return Yii::t('frontend', 'Item not available for sell!');
-            }
+        $json = [];
 
-            // get date after x day then convert it to unix time 
-            
-            $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' days')));
+        $data = Yii::$app->request->post();
 
-            if(strtotime($data['delivery_date']) < $min_delivery_time) {
-                return Yii::t('frontend', 'Item notice period '.$item->item_how_long_to_make.' day!');
-            }
+        $item = VendorItem::find()->where([
+            'item_id' => $data['item_id'],
+            'item_for_sale' => 'Yes'
+        ])->one();
 
-            $vendor_id = $item->vendor_id;
+        if (!$item) {
+            $json['error'] = Yii::t('frontend', 'Item not available for sell!');
 
-            /*
-                Check if deliery availabel in selected area
-            */
-            if (!empty($data['area_id'])) {
+            return $json;
+        }
 
-                if ($data['area_id'] != '') {
-                    $deliverlocation = $data['area_id'];
-                    if (is_numeric($deliverlocation)) {
-                        $location = $deliverlocation;
-                    } else {
-                        $end = strlen($deliverlocation);
-                        $from = strpos($deliverlocation, '_') + 1;
-                        $address_id = substr($deliverlocation, $from, $end);
-                        $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
-                    }
+        // get date after x day then convert it to unix time 
+        
+        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' days')));
+
+        if(strtotime($data['delivery_date']) < $min_delivery_time) 
+        {
+            $json['error'] = Yii::t('frontend', 'Item notice period '.$item->item_how_long_to_make.' day!');
+
+            return $json;
+        }
+
+        $vendor_id = $item->vendor_id;
+
+        /*
+            Check if deliery availabel in selected area
+        */
+        if (!empty($data['area_id'])) {
+
+            if ($data['area_id'] != '') {
+                $deliverlocation = $data['area_id'];
+                if (is_numeric($deliverlocation)) {
+                    $location = $deliverlocation;
+                } else {
+                    $end = strlen($deliverlocation);
+                    $from = strpos($deliverlocation, '_') + 1;
+                    $address_id = substr($deliverlocation, $from, $end);
+                    $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
                 }
-
-                $delivery_area = CustomerCart::checkLocation($location, $vendor_id);
-
-                if (!$delivery_area) {
-                    return Yii::t('frontend', 'Delivery not available on selected area');
-                }
             }
+
+            $delivery_area = CustomerCart::checkLocation($location, $vendor_id);
+
+            if (!$delivery_area) 
+            {
+                $json['error'] = Yii::t('frontend', 'Delivery not available on selected area');
+
+                return $json;
+            }
+        }
 
 //        //validate to add product to cart
 //        if ($data['quantity'] > ($item->item_amount_in_stock)) {
@@ -381,57 +396,68 @@ class CartController extends BaseController
 //            return Yii::t('frontend', 'Item is not available on selected date');
 //        }
 
-            //-------------- Start Item Capacity -----------------//
-            //default capacity is how many of it they can process per day
+        //-------------- Start Item Capacity -----------------//
+        //default capacity is how many of it they can process per day
 
-            //1) get capacity exception for selected date
-            $capacity_exception = \common\models\VendorItemCapacityException::findOne([
-                'item_id' => $data['item_id'],
-                'exception_date' => date('Y-m-d', strtotime($data['delivery_date']))
-            ]);
+        //1) get capacity exception for selected date
+        $capacity_exception = \common\models\VendorItemCapacityException::findOne([
+            'item_id' => $data['item_id'],
+            'exception_date' => date('Y-m-d', strtotime($data['delivery_date']))
+        ]);
 
-            if ($capacity_exception && $capacity_exception->exception_capacity) {
-                $capacity = $capacity_exception->exception_capacity;
-            } else {
-                $capacity = $item->item_default_capacity;
-            }
-
-            //2) get no of item purchased for selected date
-            $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "' . $data['item_id'] . '" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
-
-            if ($purchased_result) {
-                $purchased = $purchased_result['purchased'];
-            } else {
-                $purchased = 0;
-            }
-
-            if (($purchased) > $capacity) {
-                return Yii::t('frontend', 'Item is not available on selected date');
-            }
-
-            //-------------- END Item Capacity -----------------//
-
-            //current date should not in blocked date
-            $block_date = \common\models\BlockedDate::findOne([
-                'vendor_id' => $vendor_id,
-                'block_date' => date('Y-m-d', strtotime($data['delivery_date']))
-            ]);
-
-            if ($block_date) {
-                return Yii::t('frontend', 'Item is not available on selected date');
-            }
-
-            //day should not in week off
-            $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days);
-            $day = date('N', strtotime($data['delivery_date']));//7-sunday, 1-monday
-
-            if (in_array($day, $blocked_days)) {
-                return Yii::t('frontend', 'Item is not available on selected date');
-            }
-
-            return 1;
+        if ($capacity_exception && $capacity_exception->exception_capacity) {
+            $capacity = $capacity_exception->exception_capacity;
+        } else {
+            $capacity = $item->item_default_capacity;
         }
+
+        //2) get no of item purchased for selected date
+        $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "' . $data['item_id'] . '" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
+
+        if ($purchased_result) {
+            $purchased = $purchased_result['purchased'];
+        } else {
+            $purchased = 0;
+        }
+
+        if (($purchased) > $capacity) 
+        {
+            $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
+
+            return $json;
+        }
+
+        //-------------- END Item Capacity -----------------//
+
+        //current date should not in blocked date
+        $block_date = \common\models\BlockedDate::findOne([
+            'vendor_id' => $vendor_id,
+            'block_date' => date('Y-m-d', strtotime($data['delivery_date']))
+        ]);
+
+        if ($block_date) 
+        {
+            $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
+
+            return $json;
+        }
+
+        //day should not in week off
+        $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days);
+        $day = date('N', strtotime($data['delivery_date']));//7-sunday, 1-monday
+
+        if (in_array($day, $blocked_days)) 
+        {
+            $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
+
+            return $json;
+        }
+
+        $json['capacity'] = $capacity;
+
+        return $json;
     }
+
     /*
         Update item quantity 
     */

@@ -28,11 +28,15 @@ $deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date')
 
 $quantity = $model->item_minimum_quantity_to_order;
 
+$capacity = $model->item_default_capacity;
+
 if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapacityExceptions)>0) {
+    
     $exceptionDate = \yii\helpers\ArrayHelper::map($model->vendorItemCapacityExceptions, 'exception_date', 'exception_capacity');
+
     if (isset($exceptionDate) && count($exceptionDate) > 0) {
         if ($deliver_date && isset($exceptionDate[date('Y-m-d',strtotime($deliver_date))])) {
-            $quantity = $exceptionDate[date('Y-m-d',strtotime($deliver_date))];
+            $capacity = $exceptionDate[date('Y-m-d',strtotime($deliver_date))];
         }
     }
 }
@@ -1071,6 +1075,8 @@ echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'tx
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);
 echo Html::hiddenInput('txt-max', Yii::t('frontend', ' upto {qty}'), ['id' => 'txt-max']);
 
+echo Html::hiddenInput('capacity', $capacity, ['id' => 'capacity']);
+
 $this->registerJs("
     var deliver_date = '".$deliver_date."';
     var isGuest = ".(int)Yii::$app->user->isGuest.";
@@ -1146,5 +1152,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.14', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.15', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
