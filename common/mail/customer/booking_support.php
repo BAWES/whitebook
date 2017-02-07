@@ -16,7 +16,9 @@ use yii\helpers\Url;
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
 
-        We need support for booking <br /> <br />
+        We need support for booking <a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']], true); ?>"><?= $item->item_name ?></a>
+
+        <br /> <br />
 
         <b>Name:</b> <?= $name ?> <br /><br />
 

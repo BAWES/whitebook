@@ -522,8 +522,9 @@ class BrowseController extends BaseController
 
         Yii::$app->mailer->compose("customer/booking_support",
             [
-               "name" => Yii::$app->request->post('name'),
-               "phone" => $phone,
+                "item" => $item,
+                "name" => Yii::$app->request->post('name'),
+                "phone" => $phone,
                 "email" => Yii::$app->request->post('email')
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
