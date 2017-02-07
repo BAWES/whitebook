@@ -133,12 +133,24 @@ class VendorItemController extends Controller
             ->Where(['item_id' => $id])
             ->all();
 
+        $arr_menu = VendorItemMenu::findAll([
+            'item_id' => $id,
+            'menu_type' => 'options'
+        ]);
+
+        $arr_addon_menu = VendorItemMenu::findAll([
+            'item_id' => $id,
+            'menu_type' => 'addons'
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id), 
             'dataProvider1' => $dataProvider1, 
             'model_question' => $model_question, 
             'imagedata' => $imagedata,
-            'categories' => $categories
+            'categories' => $categories,
+            'arr_menu' => $arr_menu,
+            'arr_addon_menu' => $arr_addon_menu
         ]);
     }
 
