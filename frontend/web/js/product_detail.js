@@ -346,17 +346,36 @@ if (!isGuest) {
             type: 'POST',
             url: product_availability,
             data: $('#form_product_option').serialize(),
-            success: function (data)
+            success: function (json)
             {
-                if (jQuery.trim(data) != '1') {
+                if (json['error']) {
+
                     $('.timeslot_id_div').show();
-                    $('.timeslot_id_div .text').html(data);
+                    $('.timeslot_id_div .text').html(json['error']);
                     $('.timeslot_id_select').hide();
                     $('#timeslot_id').html('');
-                    return false;
-                }else{
+                    return false;   
+
+                } else { 
+                    
                     deliveryTimeSlot(date);
-                }
+
+                    //set capacity for given date 
+                    
+                    $('#capacity').val(json['capacity']);
+
+                    $qty = $('input[name="quantity"]').val();
+
+                    //if qty selected exceed capacity 
+
+                    if($qty > json['capacity']) {
+                        $('input[name="quantity"]').val(json['capacity']);   
+                        update_price();
+                        update_option_menu_title_hint();    
+                        update_option_menu_item_qty();             
+                    }
+
+                } 
             }
         });
     }
@@ -367,18 +386,22 @@ if (!isGuest) {
     }
 
     // Shop product page quantity increment and decrement stepper
-    jQuery(document).on('click','.btn-stepper',function(){
+    jQuery(document).on('click','.btn-stepper',function() {
+
+        $qty = parseInt($('input[name="quantity"]').val());
+        $capacity = parseInt($('#capacity').val());
+
         if (jQuery(this).data('case') == 0) {
-            if (parseInt(jQuery('#quantity').val()) >= parseInt(jQuery('#quantity').data('min'))+1) {
-                jQuery('#quantity').val(parseInt(jQuery('#quantity').val()) - 1);
-                reset_option_qty();//remove option qty for max option rule 
+            if ($qty >= parseInt(jQuery('#quantity').data('min'))+1) {
+                jQuery('#quantity').val($qty - 1);
+                update_option_menu_item_qty();//remove option qty for max option rule 
             }
-        } else if (jQuery(this).data('case') == 1) {
-            jQuery('#quantity').val(parseInt(jQuery('#quantity').val())+1);
+        } else if (jQuery(this).data('case') == 1 && $qty < $capacity) {
+            jQuery('#quantity').val($qty + 1);
         }
 
         update_price();
-        update_option_qty();
+        update_option_menu_title_hint();
 
         return false;
     });
@@ -546,11 +569,11 @@ $(document).delegate("#timeslot_id", 'changed.bs.select', function() {
 
 $(document).delegate('input[name="quantity"]', 'change', function() {
     update_price();
-    update_option_qty();
-    reset_option_qty();
+    update_option_menu_title_hint();
+    update_option_menu_item_qty();
 });
 
-function update_option_qty() {
+function update_option_menu_title_hint() {
 
     $.each($('.menu-hint'), function() {
 
@@ -578,7 +601,7 @@ function update_option_qty() {
     });    
 }
 
-function reset_option_qty() {
+function update_option_menu_item_qty() {
 
     $.each($('#collapse-options ul.menu-items'), function() {
 
