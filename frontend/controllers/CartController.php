@@ -37,7 +37,7 @@ class CartController extends BaseController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
