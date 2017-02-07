@@ -26,42 +26,42 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="tabbable">
 	<ul class="nav nav-tabs">
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/update', 'id' => $model->item_id]) ?>">
 	    		Item Info 
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>">
 	    		Item description
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-price', 'id' => $model->item_id]) ?>">
 	    		Item price 
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>">
 	    		Menu items
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/addon-menu-items', 'id' => $model->item_id]) ?>">
 	    		Addons
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-approval', 'id' => $model->item_id]) ?>">
 	    		Approval 
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>">
 	    		Images
 	    	</a>
 	    </li>
 	    <li class="active">
-	    	<a href="javascript::void()">
+	    	<a href="<?= Url::to(['vendor-item/item-themes-groups', 'id' => $model->item_id]) ?>">
 	    		Other
 	    	</a>
 	    </li>
@@ -132,10 +132,15 @@ $this->params['breadcrumbs'][] = 'Update';
 
 			<hr />
 
-			<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>" class="btn btn-info pull-left">Prev</a>
-		
-			<input type="submit" name="btnNext" class="btn btn-info pull-right" value="Complete" />
-
+			<div class="row">
+				<div class="col-md-6">
+					<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>" class="btn btn-info pull-left">Prev</a>
+				</div>
+				<div class="col-md-6">
+					<input type="submit" name="complete" class="btn btn-info pull-right" value="Complete" />
+				</div>
+			</div>
+			
 		</div><!-- END .tab-pane -->
 	</div><!-- END .tab-content -->
 </div><!-- END .tabbable -->
