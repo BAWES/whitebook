@@ -371,12 +371,14 @@ if (!isGuest) {
         if (jQuery(this).data('case') == 0) {
             if (parseInt(jQuery('#quantity').val()) >= parseInt(jQuery('#quantity').data('min'))+1) {
                 jQuery('#quantity').val(parseInt(jQuery('#quantity').val()) - 1);
+                reset_option_qty();//remove option qty for max option rule 
             }
         } else if (jQuery(this).data('case') == 1) {
             jQuery('#quantity').val(parseInt(jQuery('#quantity').val())+1);
         }
 
         update_price();
+        update_option_qty();
 
         return false;
     });
@@ -416,9 +418,11 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
         return false;
     }
 
+    $qty = $('input[name="quantity"]').val();
+
     //max quantity for menu 
 
-    $max = $(this).parents('.menu-items').attr('data-max-quantity');
+    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
 
     $qty_input = $(this).parent().find('input');
 
@@ -449,9 +453,11 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
         return false;
     }
 
+    $qty = $('input[name="quantity"]').val();
+
     //max quantity for menu 
 
-    $max = $(this).parents('.menu-items').attr('data-max-quantity');
+    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
 
     //get total qty in menu
 
@@ -467,10 +473,6 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
         return false;
     }    
     
-    update_price();
-});
-
-$(document).delegate('input[name="quantity"]', 'change', function() {
     update_price();
 });
 
@@ -541,4 +543,78 @@ $(document).delegate("#timeslot_id", 'changed.bs.select', function() {
 
     $.post($('#save-delivery-timeslot-url').val(), { 'deliver-timeslot' : $timeslot_id });
 });
+
+$(document).delegate('input[name="quantity"]', 'change', function() {
+    update_price();
+    update_option_qty();
+    reset_option_qty();
+});
+
+function update_option_qty() {
+
+    $.each($('.menu-hint'), function() {
+
+        $max = $(this).attr('data-max-quantity');
+        $min = $(this).attr('data-min-quantity');
+        $qty = $('#quantity').val();
+
+        //build html 
+
+        $html = $('#txt-select').val();
+
+        if($min > 0) {
+            $html += $('#txt-min').val().replace('{qty}', $min * $qty);
+        }
+        
+        if($min > 0 && $max > 0) { 
+            $html += ' , ';
+        }
+
+        if($max > 0) {
+            $html += $('#txt-max').val().replace('{qty}', $max * $qty);
+        }
+
+        $(this).html($html);
+    });    
+}
+
+function reset_option_qty() {
+
+    $.each($('#collapse-options ul.menu-items'), function() {
+
+        $max = $(this).attr('data-max-quantity') * $('input[name="quantity"]').val();
+
+        $total = 0;
+
+        $.each($(this).find('li'), function() {
+
+            $qty_input = $(this).find('.menu-item-qty');
+
+            $qty = parseInt($qty_input.val());
+
+            //if exceed limit 
+            if($total + $qty > $max) {
+
+                //if checkbox, uncheck
+                if($qty_input.attr('type') == "checkbox" && $qty_input.prop("checked") == true) 
+                {
+                    $qty_input.prop('checked', false);
+                } 
+                else if ($max - $total > 0) 
+                {
+                    $qty_input.val($max - $total);
+                    console.log('Setting : max - total = ' + ($max-$total));
+                } 
+                else 
+                {
+                    $qty_input.val(0);
+                    console.log('Setting : = ' + 0);
+                }
+            }
+
+            $total += $qty;
+        });
+    });
+}
+        
 

@@ -191,7 +191,7 @@ if($model->images) {
                         <?php if($model['item_how_long_to_make'] > 0) { ?>
                         <div class="callout-container">
                             <span class="callout light">
-                                <?= Yii::t('frontend', 'Collect in {count} days', [
+                                <?= Yii::t('frontend', 'Notice: {count} days', [
                                         'count' => $model['item_how_long_to_make']
                                     ]); ?>
                             </span>
@@ -464,7 +464,7 @@ if($model->images) {
                                                             </span>
 
                                                             <?php if($value->min_quantity || $value->max_quantity) { ?>
-                                                            <span class="menu-hint">
+                                                            <span class="menu-hint" data-max-quantity="<?= $value->max_quantity ?>" data-min-quantity="<?= $value->min_quantity ?>" data-txt-min="<?= Yii::t('frontend', 'atleast {qty} '); ?>" data-txt-max="<?= Yii::t('frontend', 'upto {qty} '); ?>">
                                                                 
                                                                 <?php 
 
@@ -472,7 +472,7 @@ if($model->images) {
 
                                                                 if($value->min_quantity) { 
                                                                     echo Yii::t('frontend', 'atleast {qty} ', [
-                                                                        'qty' => $value->min_quantity
+                                                                        'qty' => $value->min_quantity * $quantity
                                                                     ]); 
                                                                 } 
 
@@ -482,7 +482,7 @@ if($model->images) {
 
                                                                 if($value->max_quantity) { 
                                                                     echo Yii::t('frontend', ' upto {qty}', [
-                                                                        'qty' => $value->max_quantity
+                                                                        'qty' => $value->max_quantity * $quantity
                                                                     ]); 
                                                                 } 
                                                                
@@ -493,7 +493,7 @@ if($model->images) {
 
                                                         <span class="error menu_<?= $value->menu_id ?>"></span>
 
-                                                        <ul class="menu-items"  data-max-quantity="<?= $value->max_quantity ?>">
+                                                        <ul class="menu-items" data-max-quantity="<?= $value->max_quantity ?>">
                                                         <?php 
 
                                                         $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
@@ -987,7 +987,7 @@ if($model->images) {
                                                 <?php if($s['item_how_long_to_make'] > 0) { ?>
                                                 <div class="callout-container" style="top: 170px; bottom: auto; right: 5px;">
                                                     <span class="callout light">
-                                                        <?= Yii::t('frontend', 'Collect in {count} days', [
+                                                        <?= Yii::t('frontend', 'Notice: {count} days', [
                                                                 'count' => $s['item_how_long_to_make']
                                                             ]); ?>
                                                     </span>
@@ -1067,7 +1067,10 @@ echo Html::hiddenInput('item_how_long_to_make', $model['item_how_long_to_make'],
 echo Html::hiddenInput('final_price_url', Url::to(['browse/final-price']), ['id' => 'final_price_url']);
 echo Html::hiddenInput('save-delivery-timeslot-url', Url::to(['cart/save-delivery-timeslot']), ['id' => 'save-delivery-timeslot-url']);
 
-    
+echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
+echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);
+echo Html::hiddenInput('txt-max', Yii::t('frontend', ' upto {qty}'), ['id' => 'txt-max']);
+
 $this->registerJs("
     var deliver_date = '".$deliver_date."';
     var isGuest = ".(int)Yii::$app->user->isGuest.";
@@ -1143,5 +1146,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.13', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.14', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
