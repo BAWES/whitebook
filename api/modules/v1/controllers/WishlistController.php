@@ -65,28 +65,36 @@ class WishlistController extends Controller
     /**
      * @return array
      */
-    public function actionWishlistList($offset)
+    public function actionWishlistList($offset,$category_id)
     {
-        return $this->listing($offset);
+        return $this->listing($offset,$category_id);
     }
 
 
     /*
      * Method to list all whishlist related with particular user
      */
-    private function listing($offset = 0){
+    private function listing($offset = 0, $category){
 
         $customer_id = Yii::$app->user->getId();
-        $offset = 0;
         $limit = Yii::$app->params['limit'];
-        $q = "SELECT  `whitebook_vendor_item`.`item_id`, `whitebook_vendor_item`.`item_id`, ";
-        $q .= "`whitebook_vendor_item`.`item_name`, `whitebook_vendor_item`.`item_name_ar`, `whitebook_vendor_item`.`item_price_per_unit`, ";
-        $q .= "`whitebook_vendor`.`vendor_name`, `whitebook_vendor`.`vendor_name_ar`, `whitebook_image`.`image_path` FROM ";
-        $q .= "`whitebook_wishlist` LEFT JOIN `whitebook_vendor_item` ON `whitebook_vendor_item`.item_id = `whitebook_wishlist`.item_id ";
-        $q .= "LEFT JOIN `whitebook_image` ON `whitebook_vendor_item`.item_id = `whitebook_image`.item_id LEFT JOIN `whitebook_vendor` ";
-        $q .= "ON `whitebook_vendor_item`.vendor_id = `whitebook_vendor`.vendor_id WHERE (`whitebook_vendor_item`.`trash`='Default') ";
-        $q .= "AND (`whitebook_vendor_item`.`item_approved`='Yes') AND (`whitebook_vendor_item`.`item_status`='Active') AND ";
+        $q = "SELECT `whitebook_vendor_item`.`item_id`,`whitebook_wishlist`.`wishlist_id`, ";
+        $q .= "`whitebook_vendor_item`.`item_name`, `whitebook_vendor_item`.`item_price_per_unit`, ";
+        $q .= "`whitebook_vendor`.`vendor_name`, `whitebook_image`.`image_path` FROM `whitebook_wishlist` ";
+        $q .= "LEFT JOIN `whitebook_vendor_item` ON `whitebook_vendor_item`.item_id = `whitebook_wishlist`.item_id ";
+
+        if ($category) {
+            $q .= "LEFT JOIN `whitebook_vendor_item_to_category` ON `whitebook_vendor_item_to_category`.item_id = `whitebook_wishlist`.item_id ";
+        }
+
+        $q .= "LEFT JOIN `whitebook_image` ON `whitebook_vendor_item`.item_id = `whitebook_image`.item_id LEFT JOIN `whitebook_vendor` ON `whitebook_vendor_item`.vendor_id = `whitebook_vendor`.vendor_id  ";
+        $q .= "WHERE (`whitebook_vendor_item`.`trash`='Default') AND (`whitebook_vendor_item`.`item_approved`='Yes') AND (`whitebook_vendor_item`.`item_status`='Active') AND ";
         $q .= "(`whitebook_wishlist`.`customer_id`=$customer_id) AND (`whitebook_vendor`.`trash`='Default') AND (`whitebook_vendor`.`approve_status`='Yes') ";
+
+        if ($category) {
+            $q .= " AND `whitebook_vendor_item_to_category`.`category_id` = '{$category}' ";
+        }
+
         $q .= "AND (`whitebook_vendor_item`.`item_archived`='no') GROUP BY `item_id` ORDER BY `whitebook_vendor_item`.`item_name` LIMIT $limit OFFSET $offset";
         return \Yii::$app->db->createCommand($q)->queryAll();
     }
@@ -121,11 +129,10 @@ class WishlistController extends Controller
     /*
      * Remove to WishList table method
      */
-    public function actionWishlistRemove() {
+    public function actionWishlistRemove($wishlist_id) {
 
         $customer_id = Yii::$app->user->getId();
-        $item_id = Yii::$app->request->getBodyParam("item_id");
-        $item = Wishlist::findOne(['item_id'=>$item_id,'customer_id'=>$customer_id]);
+        $item = Wishlist::findOne(['wishlist_id'=>$wishlist_id,'customer_id'=>$customer_id]);
 
         if ($item && $item->delete()) {
             return [
@@ -138,7 +145,5 @@ class WishlistController extends Controller
                 "message" => "Error While Deleting Item From Wishlist",
             ];
         }
-
-        return $this->listing();
     }
 }
