@@ -19,12 +19,6 @@ class CartController extends BaseController
 {
     private $errors = array();
 
-    public function init() {
-        if(Yii::$app->user->isGuest) {
-            $this->redirect(['/site/index']);
-        }
-    }
-
     /**
      * @inheritdoc
      */
@@ -43,10 +37,15 @@ class CartController extends BaseController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'validation-product-available', 'update', 'get-delivery-timeslot', 'save-delivery-timeslot'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ]
                 ],
             ],
         ];

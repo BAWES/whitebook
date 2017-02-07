@@ -438,78 +438,74 @@ class BrowseController extends BaseController
             'menu_type' => 'addons'
         ]);
 
-        if (Yii::$app->user->isGuest) {
+        $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
+        $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
+        $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
 
-            return $this->render('detail', [
-                'AvailableStock' => $AvailableStock,
-                'model' => $model,
-                'menu' => $menu,
-                'addons' => $addons,
-                'similiar_item' => VendorItem::more_from_vendor($model),
-                'vendor_area' => [],
-                'vendor_detail' => $vendor_detail,
-                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
-                'phone_icons' => $phone_icons,
-                'txt_day_off' => $txt_day_off,
-                'my_addresses' => [],
-                'price_table' => $price_table
-            ]);
+        // customer address areas
 
-        } else {
-
-            $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
-            $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
-            $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
-
-            $customer_id = Yii::$app->user->getId();
-
+        if(!Yii::$app->user->isGuest) 
+        {
             $my_addresses =  \common\models\CustomerAddress::find()
                 ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
                 ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
                 ->where(['{{%customer_address}}.trash'=>'Default'])
-                ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+                ->andwhere(['{{%customer_address}}.customer_id' => Yii::$app->user->getId()])
                 ->andwhere(['{{%location}}.id' => $area_ids])
                 ->groupby(['{{%location}}.id'])
                 ->asArray()
                 ->all();
+        }
+        else
+        {
+            $my_addresses = [];
+        }
 
-            $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
+        $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
 
-            if (count($myaddress_area_list)>0) {
+        if ($myaddress_area_list) {
 
-                // add prefix to address id ex: address_14,address_15
-                $myNewArray = array_combine(
-                    array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
-                    $myaddress_area_list
-                );
+            // add prefix to address id ex: address_14,address_15
+            $myNewArray = array_combine(
+                array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
+                $myaddress_area_list
+            );
 
-                $combined_myaddress = array(
-                    Yii::t('frontend', 'My Addresses') => $myNewArray
-                );
+            $combined_myaddress = array(
+                Yii::t('frontend', 'My Addresses') => $myNewArray
+            );
 
-                $vendor_area_list = $combined_myaddress + $vendor_area_list;
-            }
+            $vendor_area_list = $combined_myaddress + $vendor_area_list;
+        }
 
+        // customer event list 
+        
+        if(Yii::$app->user->isGuest) 
+        {
+            $customer_events_list = [];    
+        }
+        else
+        {
             $user = new Users();
 
-            $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
-
-            return $this->render('detail', [
-                'model' => $model,
-                'menu' => $menu,
-                'addons' => $addons,
-                'vendor_detail' => $vendor_detail,
-                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
-                'phone_icons' => $phone_icons,
-                'txt_day_off' => $txt_day_off,
-                'similiar_item' => VendorItem::more_from_vendor($model),
-                'AvailableStock' => $AvailableStock,
-                'customer_events_list' => $customer_events_list,
-                'vendor_area' => $vendor_area_list,
-                'my_addresses' => $my_addresses,
-                'price_table' => $price_table
-            ]);
+            $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);    
         }
+        
+        return $this->render('detail', [
+            'model' => $model,
+            'menu' => $menu,
+            'addons' => $addons,
+            'vendor_detail' => $vendor_detail,
+            'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
+            'phone_icons' => $phone_icons,
+            'txt_day_off' => $txt_day_off,
+            'similiar_item' => VendorItem::more_from_vendor($model),
+            'AvailableStock' => $AvailableStock,
+            'customer_events_list' => $customer_events_list,
+            'vendor_area' => $vendor_area_list,
+            'my_addresses' => $my_addresses,
+            'price_table' => $price_table
+        ]);
     }
 
     public function actionBooking() 
