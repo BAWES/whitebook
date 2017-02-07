@@ -447,12 +447,12 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-options">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-options" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Options') ?>
                                             </a>
                                           </h4>
                                         </div>
-                                        <div id="collapse-options" class="panel-collapse collapse">
+                                        <div id="collapse-options" class="panel-collapse collapse in">
                                           <div class="panel-body">                                            
                                              <div class="menu-item-detail">
                                                 <?php foreach ($menu as $key => $value) { ?>
@@ -582,12 +582,12 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-addons">
+                                            <a data-toggle="collapse" data-parent="#accordion" aria-expanded="true" href="#collapse-addons">
                                                 <?= Yii::t('frontend', 'Addons') ?>
                                             </a>
                                           </h4>
                                         </div>
-                                        <div id="collapse-addons" class="panel-collapse collapse">
+                                        <div id="collapse-addons" class="panel-collapse collapse in">
                                           <div class="panel-body">                                            
                                              <div class="menu-item-detail">
                                                 <?php foreach ($addons as $key => $value) { ?>
@@ -705,12 +705,12 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-special-request">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-special-request" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Special request') ?>
                                             </a>
                                           </h4>
                                         </div>
-                                        <div id="collapse-special-request" class="panel-collapse collapse">
+                                        <div id="collapse-special-request" class="panel-collapse collapse in">
                                           <div class="panel-body">
                                             
                                             <br />
@@ -725,12 +725,12 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-female">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-female" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Female Service') ?>
                                             </a>
                                           </h4>
                                         </div>
-                                        <div id="collapse-female" class="panel-collapse collapse">
+                                        <div id="collapse-female" class="panel-collapse collapse in">
                                           <div class="panel-body">
                                             <div class="form-group checkbox" style="margin-left: 0px;">
                                                 <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
@@ -747,12 +747,12 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Additional Information') ?>
                                             </a>
                                           </h4>
                                         </div>
-                                        <div id="collapse2" class="panel-collapse collapse">
+                                        <div id="collapse2" class="panel-collapse collapse in">
                                           <div class="panel-body">
                                             <p><?= nl2br($item_additional_info); ?></p>
                                           </div>
@@ -765,12 +765,12 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Contact info'); ?>
                                             </a>
                                           </h4>
                                         </div>
-                                        <div id="collapse3" class="panel-collapse collapse">
+                                        <div id="collapse3" class="panel-collapse collapse in">
                                             <div class="panel-body vendor_social_info">
                                                 <ul>
                                                     <?php if($phones) { ?>
@@ -891,12 +891,12 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="collapsed">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="true">
                                                 <?php echo Yii::t('frontend', 'Price Chart'); ?>
                                             </a>
                                           </h4>
                                         </div>
-                                        <div id="collapse4" class="panel-collapse collapse">
+                                        <div id="collapse4" class="panel-collapse collapse in">
                                           <div class="panel-body">
                                             <p><?= VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
                                           </div>
@@ -908,12 +908,12 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" class="collapsed">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="true">
                                                 <?php echo Yii::t('frontend', 'Customization'); ?>
                                             </a>
                                           </h4>
                                         </div>
-                                        <div id="collapse5" class="panel-collapse collapse">
+                                        <div id="collapse5" class="panel-collapse collapse in">
                                           <div class="panel-body">
                                             <p><?= nl2br($model['item_customization_description']); ?></p>
                                           </div>
