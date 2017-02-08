@@ -117,13 +117,15 @@ class UsersController extends BaseController
                     ->send();
 
                 //Send Email to admin
-                Yii::$app->mailer->htmlLayout = 'layouts/html';
+                Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
-                $message_admin = $model->customer_name.' registered in TheWhiteBook';
-
-                $send_admin = Yii::$app->mailer->compose(
-                    ["html" => "customer/user-register"],
-                    ["message" => $message_admin]
+                $send_admin = Yii::$app->mailer->compose("customer/user-register",
+                    [
+                        'confirm_link' => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                        'logo_1' => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                        'logo_2' => Url::to("@web/images/twb-logo-trans.png", true),
+                        'model' => $model
+                    ]
                 );
 
                 $send_admin
