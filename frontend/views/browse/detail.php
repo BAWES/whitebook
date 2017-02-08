@@ -425,7 +425,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                            <a data-toggle="collapse"  href="#collapse1">
                                                 <?= Yii::t('frontend', 'Description') ?>
                                                 <span class="produ_type">
                                                 (
@@ -448,7 +448,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-options" aria-expanded="true">
+                                            <a data-toggle="collapse"  href="#collapse-options" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Options') ?>
                                             </a>
                                           </h4>
@@ -583,7 +583,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" aria-expanded="true" href="#collapse-addons">
+                                            <a data-toggle="collapse"  aria-expanded="true" href="#collapse-addons">
                                                 <?= Yii::t('frontend', 'Addons') ?>
                                             </a>
                                           </h4>
@@ -706,7 +706,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-special-request" aria-expanded="true">
+                                            <a data-toggle="collapse"  href="#collapse-special-request" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Special request') ?>
                                             </a>
                                           </h4>
@@ -726,7 +726,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-female" aria-expanded="true">
+                                            <a data-toggle="collapse"  href="#collapse-female" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Female Service') ?>
                                             </a>
                                           </h4>
@@ -748,7 +748,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" aria-expanded="true">
+                                            <a data-toggle="collapse"  href="#collapse2" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Additional Information') ?>
                                             </a>
                                           </h4>
@@ -766,7 +766,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" aria-expanded="true">
+                                            <a data-toggle="collapse"  href="#collapse3" aria-expanded="true">
                                                 <?= Yii::t('frontend', 'Contact info'); ?>
                                             </a>
                                           </h4>
@@ -892,7 +892,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="true">
+                                            <a data-toggle="collapse"  href="#collapse4" aria-expanded="true">
                                                 <?php echo Yii::t('frontend', 'Price Chart'); ?>
                                             </a>
                                           </h4>
@@ -909,7 +909,7 @@ if($model->images) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="true">
+                                            <a data-toggle="collapse"  href="#collapse5" aria-expanded="true">
                                                 <?php echo Yii::t('frontend', 'Customization'); ?>
                                             </a>
                                           </h4>
