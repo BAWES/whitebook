@@ -1,5 +1,6 @@
 var addon_menu_count = $('#addon_menu_count').val();
 var menu_count = $('#menu_count').val();
+
 var count_q = $('#count_q').val();
 var appImageUrl = $('#appImageUrl').val();
 var image_order_url = $('#image_order_url').val();

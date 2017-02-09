@@ -8259,10 +8259,6 @@ input.check{  background: #1F3853;  color: white;  border: none;  padding: 7px; 
 .check_box > input {    vertical-align: top;}
 .mrg_top{  margin-top: 20px;  display: inline-block;}
 
-
-
-
-
 .form-group .form-label #accesscontroller-controller1{
 	height:350px;
 	width: 250px;
@@ -8485,4 +8481,53 @@ ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{backgro
     margin-bottom: 0;
     padding-left: 20px;
     margin-top: 5px;
+}
+
+#item_menu_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#item_menu_list li {
+  background: #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+#item_menu_list td {
+  background: white;
+}
+#item_menu_list .btn-remove-menu {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+#item_menu_list .heading {
+  background: black;
+  color: white;
+  position: relative;
+}
+
+
+#item_addon_menu_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#item_addon_menu_list li {
+  background: #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+#item_addon_menu_list td {
+  background: white;
+}
+#item_addon_menu_list .btn-remove-menu {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+#item_addon_menu_list .heading {
+  background: black;
+  color: white;
+  position: relative;
 }
