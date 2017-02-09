@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
 use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
@@ -87,23 +87,48 @@ class VendorDraftItem extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['item_id', 'item_description', 'sort', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
 
-            [['item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'sort', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
-            [['item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_for_sale', 'item_archived', 'item_approved', 'item_status', 'trash'], 'string'],
+            //ItemApproval
 
-            [['item_price_per_unit'], 'number'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
-            [['item_name'], 'string', 'max' => 128],
-            [['slug'], 'string', 'max' => 255],
-            [['vendor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vendor::className(), 'targetAttribute' => ['vendor_id' => 'vendor_id']],
-            [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ItemType::className(), 'targetAttribute' => ['type_id' => 'type_id']],
+            [['item_approved'], 'required', 'on' => ['ItemApproval']],
+           
+            //MenuItems
+
+            [['allow_special_request', 'have_female_service', 'min_order_amount'], 'number', 'on' => ['MenuItems']],
+
+            [['quantity_label', 'set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar'], 'string', 'max' => 256, 'on' => ['MenuItems']],
+
+            //ItemPrice
+
+            [['item_for_sale', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
+            
+            [['item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
+            
+            [['item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
+
+            //ItemDescription
+
+            [['type_id'], 'integer', 'on' => ['ItemDescription']],
+            
+            [['item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
+
+            //ItemInfo
+            
+            [['item_name', 'item_name_ar'], 'required', 'on' => ['ItemInfo']]    
+        ];
+    }
+
+    public function scenarios()
+    {
+        return [
+            'ItemApproval' => ['item_status, item_approved'],
+            'MenuItems' => ['quantity_label', 'set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'min_order_amount', 'allow_special_request', 'have_female_service'],
+            'ItemPrice' => ['item_for_sale', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'],
+            'ItemDescription' => ['type_id', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'],
+            'ItemInfo' => ['item_name', 'item_name_ar', 'item_status']
         ];
     }
 
@@ -296,5 +321,66 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             if(!$a)
                 return true;
         }
+    }
+
+    public function create_from_item($id) { 
+
+        $model = VendorItem::findOne(['item_id' => $id, 'vendor_id'=>Yii::$app->user->getId()]);
+
+        if (!$model) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $draft = new VendorDraftItem();
+        $draft->attributes = $model->attributes;
+        $draft->item_approved = 'Pending';
+        $draft->save();
+
+        //copy draft related data 
+
+        $pricing = VendorItemPricing::loadpricevalues($model->item_id);
+
+        foreach ($pricing as $key => $value) {
+            $vdip = new VendorDraftItemPricing;
+            $vdip->attributes = $value->attributes;
+            $vdip->save();
+        }
+        
+        $images = Image::findAll(['item_id' => $model->item_id]);
+
+        foreach ($images as $key => $value) {
+            $vdi = new VendorDraftImage;
+            $vdi->attributes = $value->attributes;
+            $vdi->save();
+        }
+
+        $categories = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
+
+        foreach ($categories as $key => $value) {
+            $dic = new VendorDraftItemToCategory;
+            $dic->attributes = $value->attributes;
+            $dic->save();
+        }
+
+        //menu 
+        $menues = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+
+        foreach ($menues as $key => $menu) {
+            
+            $dm = new VendorDraftItemMenu;
+            $dm->attributes = $menu->attributes;
+            $dm->save();
+
+            $menu_items = VendorItemMenuItem::findAll(['menu_id' => $menu->menu_id]);
+
+            foreach ($menu_items as $key => $menu_item) {
+                $dmi = new VendorDraftItemMenuItem;
+                $dmi->attributes = $menu_item->attributes;
+                $dmi->draft_menu_id = $dm->draft_menu_id;
+                $dmi->save();
+            }
+        }
+
+        return $draft;
     }
 }
