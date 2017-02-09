@@ -1,7 +1,8 @@
 <?php
 
-use Yii\helpers\Url;
 use yii\web\View;
+use Yii\helpers\Url;
+use yii\helpers\Html;
 
 $this->registerJs("
     var password_reset_link = '".Url::toRoute(['/users/password_reset'])."';
@@ -92,6 +93,10 @@ Yii::$app->session->set('reset_password_mail','');
 Yii::$app->session->set('register',0);
 Yii::$app->session->set('key','0');
 Yii::$app->session->set('show_login_modal', 0);
+
+echo Html::hiddenInput('txt_loading', Yii::t('frontend','Loading...'), ['id' => 'txt_loading']);
+
+echo Html::hiddenInput('txt_register', Yii::t('frontend','Register'), ['id' => 'txt_register']);
 
 //$this->registerJsFile('@web/js/jquery.touchSwipe.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 //$this->registerJsFile('@web/js/search.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
