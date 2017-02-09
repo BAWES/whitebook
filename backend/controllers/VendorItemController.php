@@ -218,9 +218,7 @@ class VendorItemController extends Controller
     {
         //check if item in draft
 
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $id])
-            ->one();
+        $model = $this->findDraftModel($id);
 
         if(!$model) 
         {
@@ -312,9 +310,7 @@ class VendorItemController extends Controller
     {
         //check if item in draft
 
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $id])
-            ->one();
+        $model = $this->findDraftModel($id);
 
         if(!$model) 
         {
@@ -363,9 +359,7 @@ class VendorItemController extends Controller
     */
     public function actionItemPrice($id) 
     {   
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $id])
-            ->one();
+        $model = $this->findDraftModel($id);
 
         if(!$model) 
         {
@@ -427,9 +421,7 @@ class VendorItemController extends Controller
     */
     public function actionMenuItems($id) 
     {
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $id])
-            ->one();
+        $model = $this->findDraftModel($id);
 
         if(!$model) 
         {
@@ -438,7 +430,7 @@ class VendorItemController extends Controller
 
         $model->scenario = 'MenuItems';
 
-        if(Yii::$app->request->isPost) 
+        if($model->load(Yii::$app->request->post()) && $model->save()) 
         {
             //remove old menu and menu items 
             
@@ -531,7 +523,7 @@ class VendorItemController extends Controller
     */
     public function actionAddonMenuItems($id) 
     {
-        $model = $this->findModel($id);
+        $model = $this->findDraftModel($id);
         
         if(!$model) 
         {
@@ -626,9 +618,7 @@ class VendorItemController extends Controller
 
     public function actionItemImages($id) 
     {
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $id])
-            ->one();
+        $model = $this->findDraftModel($id);
 
         if(!$model) 
         {
@@ -696,10 +686,37 @@ class VendorItemController extends Controller
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
 
+        //menu 
+
+        $menues = VendorItemMenu::findAll(['item_id' => $id]);
+
+        foreach ($menues as $key => $menu) {
+            VendorItemMenuItem::deleteAll(['menu_id' => $menu->menu_id]);
+        }
+
+        VendorItemMenu::deleteAll(['item_id' => $id]);
+
+        //draft menu 
+
+        $menues = VendorDraftItemMenu::findAll(['item_id' => $id]);
+
+        foreach ($menues as $key => $menu) {
+            VendorDraftItemMenuItem::deleteAll(['draft_menu_id' => $menu->draft_menu_id]);
+        }
+
+        VendorDraftItemMenu::deleteAll(['item_id' => $id]);
+        
+        //draft related 
+        VendorDraftItemPricing::deleteAll(['item_id' => $id]);
+        VendorDraftImage::deleteAll(['item_id' => $id]);
+        VendorDraftItemToCategory::deleteAll(['item_id' => $id]);
+
+        //draft 
         VendorDraftItem::deleteAll(['item_id' => $id]); 
-
-
+        
+        //main model 
         $model->delete();
+
         Yii::$app->session->setFlash('success', "Item deleted successfully!");
 
         return $this->redirect(['index']);
@@ -719,6 +736,14 @@ class VendorItemController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    protected function findDraftModel($id)
+    {
+        return VendorDraftItem::findOne([
+            'item_id' => $id, 
+            'vendor_id' => Yii::$app->user->getId()
+        ]);
     }
 
     public function actionBlock()

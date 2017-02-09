@@ -5,6 +5,14 @@ namespace backend\models;
 use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use common\models\VendorItemPricing;
+use common\models\Image;
+use common\models\VendorItemToCategory;
+use common\models\VendorDraftItemToCategory;
+use common\models\VendorItemMenu;
+use common\models\VendorItemMenuItem;
+use common\models\VendorDraftItemMenu;
+use common\models\VendorDraftItemMenuItem;
 
 use Yii;
 
@@ -46,47 +54,8 @@ use Yii;
  * @property Vendor $vendor
  * @property ItemType $type
  */
-class VendorDraftItem extends \yii\db\ActiveRecord
+class VendorDraftItem extends \common\models\VendorDraftItem
 {
-    const STATUS_ACTIVE = "Active";
-    const STATUS_DEACTIVE = "Deactive";
-    const UPLOADFOLDER_210 = "vendor_item_images_210/";
-    const UPLOADFOLDER_530 = "vendor_item_images_530/";
-    const UPLOADFOLDER_1000 = "vendor_item_images_1000/";
-    const UPLOADSALESGUIDE = "sales_guide_images/";
-    
-    public $themes;
-    public $groups;
-    public $image_path;
-    public $guide_image;
-
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'whitebook_vendor_draft_item';
-    }
-
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => SluggableBehavior::className(),
-                'slugAttribute' => 'slug',
-                'attribute' => 'item_name',
-                'immutable' => true,
-                'ensureUnique'=>true,
-            ],
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_datetime',
-                'updatedAtAttribute' => 'modified_datetime',
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
-
     public function rules()
     {
         return [
@@ -123,204 +92,19 @@ class VendorDraftItem extends \yii\db\ActiveRecord
 
     public function scenarios()
     {
-        return [
-            'ItemApproval' => ['item_status, item_approved'],
-            'MenuItems' => ['quantity_label', 'set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'min_order_amount', 'allow_special_request', 'have_female_service'],
-            'ItemPrice' => ['item_for_sale', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'],
-            'ItemDescription' => ['type_id', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'],
-            'ItemInfo' => ['item_name', 'item_name_ar', 'item_status']
-        ];
-    }
+        $scenarios = parent::scenarios();
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'draft_item_id' => Yii::t('app', 'Draft Item ID'),
-            'item_id' => Yii::t('app', 'Item ID'),
-            'type_id' => Yii::t('app', 'Type ID'),
-            'vendor_id' => Yii::t('app', 'Vendor ID'),
-            'item_name' => Yii::t('app', 'Item Name'),
-            'item_name_ar' => Yii::t('app', 'Item Name Ar'),
-            'priority' => Yii::t('app', 'Priority'),
-            'item_description' => Yii::t('app', 'Item Description'),
-            'item_description_ar' => Yii::t('app', 'Item Description Ar'),
-            'item_additional_info' => Yii::t('app', 'Item Additional Info'),
-            'item_additional_info_ar' => Yii::t('app', 'Item Additional Info Ar'),
-            'item_amount_in_stock' => Yii::t('app', 'Item Amount In Stock'),
-            'item_default_capacity' => Yii::t('app', 'Item Default Capacity'),
-            'item_price_per_unit' => Yii::t('app', 'Item Price Per Unit'),
-            'item_customization_description' => Yii::t('app', 'Item Customization Description'),
-            'item_customization_description_ar' => Yii::t('app', 'Item Customization Description Ar'),
-            'item_price_description' => Yii::t('app', 'Item Price Description'),
-            'item_price_description_ar' => Yii::t('app', 'Item Price Description Ar'),
-            'item_for_sale' => Yii::t('app', 'Item For Sale'),
-            'sort' => Yii::t('app', 'Sort'),
-            'item_how_long_to_make' => Yii::t('app', 'Item How Long To Make'),
-            'item_minimum_quantity_to_order' => Yii::t('app', 'Item Minimum Quantity To Order'),
-            'item_archived' => Yii::t('app', 'Item Archived'),
-            'item_approved' => Yii::t('app', 'Item Approved'),
-            'item_status' => Yii::t('app', 'Item Status'),
-            'created_by' => Yii::t('app', 'Created By'),
-            'modified_by' => Yii::t('app', 'Modified By'),
-            'created_datetime' => Yii::t('app', 'Created Datetime'),
-            'modified_datetime' => Yii::t('app', 'Modified Datetime'),
-            'trash' => Yii::t('app', 'Trash'),
-            'slug' => Yii::t('app', 'Slug'),
-        ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getVendor()
-    {
-        return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getType()
-    {
-        return $this->hasOne(ItemType::className(), ['type_id' => 'type_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getImages()
-    {
-        return $this->hasMany(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
-    }
-    
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getVendorItemThemes()
-    {
-        return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
-    }
-
-    public function getThemeName() {
-
-        $string = [];
+        $scenarios['ItemApproval'] = ['item_status, item_approved'];
         
-        foreach ($this->vendorItemThemes as $theme) {
-              $string[] = ucfirst($theme->themeDetail->theme_name);
-        }
+        $scenarios['MenuItems'] = ['quantity_label', 'set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'min_order_amount', 'allow_special_request', 'have_female_service'];
         
-        return implode(', ',$string);
-    }
-
-    public function is_price_table_changed($item_id)
-    {
-        $item_pricing = VendorItemPricing::findAll(['item_id' => $item_id]);
-        $draft_pricing = VendorDraftItemPricing::findAll(['item_id' => $item_id]);
+        $scenarios['ItemPrice'] = ['item_for_sale', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
         
-        //check item item deleted in draft 
+        $scenarios['ItemDescription'] = ['type_id', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
 
-        foreach ($item_pricing as $key => $value) {
-            
-            $a = VendorDraftItemPricing::find()
-                ->where([
-                        'range_from' => $value->range_from,
-                        'range_to' => $value->range_to,
-                        'pricing_price_per_unit' => $value->pricing_price_per_unit,
-                    ])
-                ->count();
+        $scenarios['ItemInfo'] = ['item_name', 'item_name_ar', 'item_status'];
 
-            if(!$a)
-                return true;
-        }
-
-        //check item item added in draft 
-
-        foreach ($draft_pricing as $key => $value) {
-            
-            $a = VendorItemPricing::find()
-                ->where([
-                        'range_from' => $value->range_from,
-                        'range_to' => $value->range_to,
-                        'pricing_price_per_unit' => $value->pricing_price_per_unit,
-                    ])
-                ->count();
-
-            if(!$a)
-                return true;
-        }
-    }
-    
-    public function is_images_changed($item_id)
-    {
-        $item_images = Image::findAll(['item_id' => $item_id]);
-        $draft_images = VendorDraftImage::findAll(['item_id' => $item_id]);
-        
-        //check item item deleted in draft 
-
-        foreach ($item_images as $key => $value) {
-            
-            $a = VendorDraftImage::find()
-                ->where([
-                        'image_path' => $value->image_path,
-                        'vendorimage_sort_order' => $value->vendorimage_sort_order
-                    ])
-                ->count();
-
-            if(!$a)
-                return true;
-        }
-
-        //check item item added in draft 
-
-        foreach ($draft_images as $key => $value) {
-            
-            $a = Image::find()
-                ->where([
-                        'image_path' => $value->image_path,
-                        'vendorimage_sort_order' => $value->vendorimage_sort_order
-                    ])
-                ->count();
-
-            if(!$a)
-                return true;
-        }
-    }
-    
-    public function is_categories_changed($item_id)
-    {
-        $item_categories = VendorItemToCategory::findAll(['item_id' => $item_id]);
-        $draft_categories = VendorDraftItemToCategory::findAll(['item_id' => $item_id]);
-        
-        //check item item deleted in draft 
-
-        foreach ($item_categories as $key => $value) {
-            
-            $a = VendorDraftItemToCategory::find()
-                ->where([
-                        'category_id' => $value->category_id
-                    ])
-                ->count();
-
-            if(!$a)
-                return true;
-        }
-
-        //check item item added in draft 
-
-        foreach ($draft_categories as $key => $value) {
-            
-            $a = VendorItemToCategory::find()
-                ->where([
-                        'category_id' => $value->category_id
-                    ])
-                ->count();
-
-            if(!$a)
-                return true;
-        }
+        return $scenarios;
     }
 
     public function create_from_item($id) { 
@@ -331,7 +115,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        $draft = new VendorDraftItem();
+        $draft = new \common\models\VendorDraftItem();
         $draft->attributes = $model->attributes;
         $draft->item_approved = 'Pending';
         $draft->save();
