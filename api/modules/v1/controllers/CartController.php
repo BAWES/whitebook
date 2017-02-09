@@ -313,17 +313,16 @@ class CartController extends Controller
      * @return array|\yii\db\ActiveRecord[]
      * @throws \Exception
      */
-    public function actionRemove() {
+    public function actionRemove($cart_id) {
 
-        $cartID = Yii::$app->request->getBodyParam('cart_id');
+        $cartID = $cart_id;
         if ($cartID) {
             $cartData = CustomerCart::findOne($cartID);
             if ($cartData) {
                 $cartData->delete();
                 return [
                     "operation" => "success",
-                    "message" => "Cart Item Deleted Successfully",
-                    "total-cart-items" => CustomerCart::item_count()
+                    "message" => "Cart Item Deleted Successfully"
                 ];
             } else {
                 return [

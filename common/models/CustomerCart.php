@@ -108,6 +108,11 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $this->hasOne(DeliveryTimeSlot::className(), ['timeslot_id' => 'timeslot_id']);
     }
 
+    public function getImage()
+    {
+        return $this->hasOne(Image::className(), ['item_id' => 'item_id']);
+    }
+
     public function validate_item($data, $valid_for_cart_item = false) {
 
         $errors = [];
@@ -411,6 +416,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         $items = CustomerCart::find()
             ->select('
                 {{%customer_cart}}.*, 
+                {{%image}}.image_path,
                 {{%vendor_item}}.item_price_per_unit,
                 {{%vendor_item}}.slug,
                 {{%vendor_item}}.vendor_id,
@@ -420,6 +426,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 {{%vendor_delivery_timeslot}}.timeslot_end_time'
             )
             ->joinWith('item')
+            ->joinWith('image')
             ->joinWith('timeslot')
             ->where([
                 '{{%customer_cart}}.customer_id' => Yii::$app->user->getId(),
