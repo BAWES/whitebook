@@ -33,11 +33,13 @@ use common\models\CategoryPath;
 use common\models\VendorItemCapacityException;
 use common\models\CustomerCart;
 use common\models\EventItemlink;
-use common\models\VendorDraftItem;
 use common\models\VendorDraftItemPricing;
 use common\models\VendorDraftItemToCategory;
 use common\models\VendorDraftImage;
+use common\models\VendorDraftItemMenu;
+use common\models\VendorDraftItemMenuItem;
 use backend\models\VendorItem;
+use backend\models\VendorDraftItem;
 use backend\models\VendorItemSearch;
 use yii\db\StaleObjectException;
 
@@ -154,82 +156,21 @@ class VendorItemController extends Controller
      */
     public function actionCreate()
     {
-        $item = new VendorItem();
-        $item->vendor_id = Vendor::getVendor('vendor_id');
-        $item->version = 1;
-        $item->hide_from_admin = 1;
-        $item->save(false);
-
         $model = new VendorDraftItem();
-        $model->vendor_id = Vendor::getVendor('vendor_id'); 
-        $model->item_id = $item->item_id;
-        $model->version = 0;
-        $model->save(false);
-
-        $itemtype = ItemType::loaditemtype();
-        
-        $main_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 0
-            ])
-            ->all();
-
-        return $this->render('create', [
-            'model' => $model,
-            'itemtype' => $itemtype,
-            'main_categories' => $main_categories
-        ]);
-    }
-
-    /**
-     * Updates an existing VendorItem model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        //check if item in draft
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $id])
-            ->one();
-
-        //if not in draft and trying to post updated data
-
-        if(!$model && Yii::$app->request->isPost) {
-            $model = new VendorDraftItem();
-            $model->attributes = $this->findModel($id)->attributes;
-            $model->item_approved = 'Pending';
-        }
-
-        //if customer just viewing && not in draft 
-
-        if(!$model) 
-        {
-            $model = $this->findModel($id);
-        }
      
-        $itemtype = ItemType::loaditemtype();
-        
-        //to save VendorItem data to VendorDraftItem
-        if(Yii::$app->request->post('VendorItem')) {
-            $posted_data = ['VendorDraftItem' => Yii::$app->request->post('VendorItem')];
-        }else{
-            $posted_data = Yii::$app->request->post();
-        }
-        
-        if ($model->load($posted_data)) {
+        $model->scenario = 'ItemInfo';
 
-            //force to generate slug again by removing old slug 
-            $model->slug = '';
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            //to make draft visible to admin 
+            $item = new VendorItem();
+            $item->attributes = Yii::$app->request->post('VendorDraftItem');
+            $item->vendor_id = Yii::$app->user->getId();
+            $item->hide_from_admin = 1;
+            $item->save(false);
 
-            $model->is_ready = 1;
-            $model->item_approved = 'Pending';
-            $model->save();
+            $model->vendor_id = Yii::$app->user->getId();
+            $model->item_id = $item->item_id;
+            $model->save(false);
 
             //remove all old category 
             VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
@@ -248,24 +189,192 @@ class VendorItemController extends Controller
                 $vic->save();
             }
 
-            //remove old images
-            VendorDraftImage::deleteAll(['item_id' => $model->item_id]);
+            return $this->redirect(['vendor-item/item-description', 'id' => $model->item_id]);
 
-            //add new images
-            $images = Yii::$app->request->post('images');
+        }//if model-load 
 
-            if(!$images) {
-                $images = [];
+        $main_categories = Category::find()
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category}}.trash' => 'Default',
+                '{{%category_path}}.level' => 0
+            ])
+            ->all();
+
+        return $this->render('steps/item-info', [
+            'model' => $model,
+            'main_categories' => $main_categories,
+            'item_child_categories' => []
+        ]);
+    }
+
+    /**
+     * Updates an existing VendorItem model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        //check if item in draft
+
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $id])
+            ->one();
+
+        if(!$model) 
+        {
+            $model = VendorDraftItem::create_from_item($id);
+        }
+
+        $model->scenario = 'ItemInfo';
+
+        //force to generate slug again by removing old slug 
+        $model->slug = '';
+
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            //force to generate slug again by removing old slug 
+            $model->slug = '';
+
+            //remove all old category 
+            VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
+
+            //add all category
+            $category = Yii::$app->request->post('category');
+
+            if(!$category) {
+                $category = array();
             }
-            
-            foreach ($images as $key => $value) {
-                $image = new VendorDraftImage();
-                $image->item_id = $model->item_id;
-                $image->image_user_id = Yii::$app->user->getId();
-                $image->image_path = $value['image_path'];
-                $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
-                $image->save();
+
+            foreach($category as $key => $value) {
+                $vic = new VendorDraftItemToCategory();
+                $vic->item_id = $model->item_id;
+                $vic->category_id = $value;
+                $vic->save();
             }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                //to make draft visible to admin 
+
+                $model->is_ready = 1;
+                $model->item_approved = 'Pending';
+                $model->save();
+
+                Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
+
+                Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/item-description', 'id' => $model->item_id]);
+
+        } 
+
+        $item_child_categories = VendorDraftItemToCategory::find()
+            ->select('{{%category}}.category_name, {{%category}}.category_id')
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_draft_item_to_category}}.category_id')
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category}}.trash' => 'Default',
+                '{{%category_path}}.level' => 2,
+                '{{%vendor_draft_item_to_category}}.item_id' => $model->item_id
+            ])
+            ->groupBy('{{%vendor_draft_item_to_category}}.category_id')
+            ->all();
+    
+        //main
+        $main_categories = Category::find()
+            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
+            ->where([
+                '{{%category}}.trash' => 'Default',
+                '{{%category_path}}.level' => 0
+            ])
+            ->all();
+
+        return $this->render('steps/item-info', [
+            'model' => $model,
+            'main_categories' => $main_categories,
+            'item_child_categories' => $item_child_categories
+        ]);
+    }
+
+    /**
+    * Save item description from update and create page
+    *
+    * @return json
+    */
+    public function actionItemDescription($id) 
+    {
+        //check if item in draft
+
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $id])
+            ->one();
+
+        if(!$model) 
+        {
+            $model = VendorDraftItem::create_from_item($id);
+        }
+
+        $model->scenario = 'ItemDescription';
+
+        //force to generate slug again by removing old slug 
+        $model->slug = '';
+
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                //to make draft visible to admin 
+
+                $model->is_ready = 1;
+                $model->item_approved = 'Pending';
+                $model->save();
+
+                Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
+
+                Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/item-price', 'id' => $id]);
+        }
+
+        $itemType = ArrayHelper::map(ItemType::findAll(['trash' => 'Default']), 'type_id', 'type_name');
+
+        return $this->render('steps/item-description', [
+            'model' => $model,
+            'itemtype' => $itemType,
+        ]);
+    }
+
+    /**
+    * Save item price from update and create page
+    *
+    * @return json
+    */
+    public function actionItemPrice($id) 
+    {   
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $id])
+            ->one();
+
+        if(!$model) 
+        {
+            $model = VendorDraftItem::create_from_item($id);
+        }
+
+        $model->scenario = 'ItemPrice';
+
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
 
             //remove old price chart
             VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
@@ -284,459 +393,289 @@ class VendorItemController extends Controller
                     $vendor_item_pricing->save();
                 }
             }
-            //END Manage item pricing table
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                //to make draft visible to admin 
+
+                $model->is_ready = 1;
+                $model->item_approved = 'Pending';
+                $model->save();
+
+                Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
+
+                Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/menu-items', 'id' => $id]);
+        }
+
+        return $this->render('steps/item-price', [
+            'model' => $model,
+            'pricing' => VendorDraftItemPricing::findAll(['item_id' => $id])
+        ]);
+    }
+    
+     /**
+    * Save menu and menu items from update page
+    *
+    * @return json
+    */
+    public function actionMenuItems($id) 
+    {
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $id])
+            ->one();
+
+        if(!$model) 
+        {
+            $model = VendorDraftItem::create_from_item($id);
+        }
+
+        $model->scenario = 'MenuItems';
+
+        if(Yii::$app->request->isPost) 
+        {
+            //remove old menu and menu items 
+            
+            $old_menues = VendorDraftItemMenu::findALL([
+                'item_id' => $model->item_id,
+                'menu_type' => 'options'
+            ]);
+
+            foreach ($old_menues as $key => $value) {
+                VendorDraftItemMenuItem::deleteALL(['draft_menu_id' => $value->draft_menu_id]);
+            }
+
+            VendorDraftItemMenu::deleteALL([
+                'item_id' => $model->item_id,
+                'menu_type' => 'options'
+            ]);
+
+            //add menu items 
+
+            $menu_items = Yii::$app->request->post('menu_item');
+            
+            if(!$menu_items) {
+                $menu_items = array();
+            }
+
+            $draft_menu_id = 0;
+
+            /* This method will allow user to sort menu and menu item easily */
+
+            foreach ($menu_items as $key => $value) {
+                
+                //if menu 
+                if(isset($value['menu_name'])) {
+
+                    $menu = new VendorDraftItemMenu;
+                    $menu->attributes = $value;
+                    $menu->menu_type = 'options';
+                    $menu->item_id = $model->item_id;
+                    $menu->save();
+
+                    //update current menu id 
+                    $draft_menu_id = $menu->draft_menu_id;
+
+                //if menu item 
+                } else {
+
+                    $menu_item = new VendorDraftItemMenuItem;
+                    $menu_item->attributes = $value;
+                    $menu_item->draft_menu_id = $draft_menu_id;
+                    $menu_item->item_id = $model->item_id;
+                    $menu_item->save();
+                }
+            }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                //to make draft visible to admin 
+
+                $model->is_ready = 1;
+                $model->item_approved = 'Pending';
+                $model->save();
+
+                Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
+
+                Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/addon-menu-items', 'id' => $id]);
+        }
+
+        $arr_menu = VendorDraftItemMenu::findAll([
+            'item_id' => $id,
+            'menu_type' => 'options'
+        ]);
+
+        return $this->render('steps/menu-items', [
+            'model' => $model,
+            'arr_menu' => $arr_menu
+        ]);
+    }
+
+    /**
+    * Save addon menu and menu items from update page
+    *
+    * @return json
+    */
+    public function actionAddonMenuItems($id) 
+    {
+        $model = $this->findModel($id);
+        
+        if(!$model) 
+        {
+            $model = VendorDraftItem::create_from_item($id);
+        }
+
+        if(Yii::$app->request->isPost) 
+        {           
+            //remove old menu and menu items 
+
+            $old_menues = VendorDraftItemMenu::findALL([
+                'item_id' => $model->item_id,
+                'menu_type' => 'addons'
+            ]);
+
+            foreach ($old_menues as $key => $value) {
+                VendorDraftItemMenuItem::deleteALL(['draft_menu_id' => $value->draft_menu_id]);
+            }
+
+            VendorDraftItemMenu::deleteALL([
+                'item_id' => $model->item_id,
+                'menu_type' => 'addons'
+            ]);
+
+            //add menu items 
+
+            $menu_items = Yii::$app->request->post('addon_menu_item');
+            
+            if(!$menu_items) {
+                $menu_items = array();
+            }
+
+            $draft_menu_id = 0;
+
+            /* This method will allow user to sort menu and menu item easily */
+
+            foreach ($menu_items as $key => $value) {
+                
+                //if menu 
+                if(isset($value['menu_name'])) {
+                    
+                    $menu = new VendorDraftItemMenu;
+                    $menu->attributes = $value;
+                    $menu->menu_type = 'addons';
+                    $menu->item_id = $model->item_id;
+                    $menu->save();
+
+                    //update current menu id 
+                    $draft_menu_id = $menu->draft_menu_id;
+
+                //if menu item 
+                } else {
+
+                    $menu_item = new VendorDraftItemMenuItem;
+                    $menu_item->attributes = $value;
+                    $menu_item->draft_menu_id = $draft_menu_id;
+                    $menu_item->item_id = $model->item_id;
+                    $menu_item->save();
+                }
+            }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+                
+                //to make draft visible to admin 
+
+                $model->is_ready = 1;
+                $model->item_approved = 'Pending';
+                $model->save();
+
+                Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
+
+                Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/item-images', 'id' => $id]);
+        }
+
+        $arr_addon_menu = VendorDraftItemMenu::findAll([
+            'item_id' => $id,
+            'menu_type' => 'addons'
+        ]);
+
+        return $this->render('steps/addon-menu-items', [
+            'model' => $model,
+            'arr_addon_menu' => $arr_addon_menu
+        ]);
+    }
+
+    public function actionItemImages($id) 
+    {
+        $model = VendorDraftItem::find()
+            ->where(['item_id' => $id])
+            ->one();
+
+        if(!$model) 
+        {
+            $model = VendorDraftItem::create_from_item($id);
+        }
+
+        if(Yii::$app->request->isPost) 
+        {
+            //remove old images
+            VendorDraftImage::deleteAll(['item_id' => $model->item_id]);
+
+            //add new images
+
+            $images = Yii::$app->request->post('images');
+
+            if(!$images) {
+                $images = [];
+            }
+            
+            foreach ($images as $key => $value) {
+                $image = new VendorDraftImage();
+                $image->item_id = $model->item_id;
+                $image->image_user_id = Yii::$app->user->getId();
+                $image->image_path = $value['image_path'];
+                $image->vendorimage_sort_order = $value['vendorimage_sort_order'];
+                $image->save();
+            }
 
             Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
-            Yii::info('[Item Updated] Vendor updated '.$model->item_name.' item information '. $model->item_id, __METHOD__);
+            Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
 
-            return $this->redirect(['index']);
+            //to make draft visible to admin 
 
-        } else {
-
-            $model_name = $model->formName();
-            
-            if($model_name == 'VendorItem') 
-            {
-                //create draft 
-
-                $draft = new VendorDraftItem();
-                $draft->attributes = $model->attributes;
-                $model->item_approved = 'Pending';
-                $draft->save();
-
-                //copy draft related data 
-
-                $pricing = VendorItemPricing::loadpricevalues($model->item_id);
-
-                foreach ($pricing as $key => $value) {
-                    $vdip = new VendorDraftItemPricing;
-                    $vdip->attributes = $value->attributes;
-                    $vdip->save();
-                }
-                
-                $images = Image::findAll(['item_id' => $model->item_id]);
-
-                foreach ($images as $key => $value) {
-                    $vdi = new VendorDraftImage;
-                    $vdi->attributes = $value->attributes;
-                    $vdi->save();
-                }
-
-                $categories = VendorItemToCategory::findAll(['item_id' => $model->item_id]);
-
-                foreach ($categories as $key => $value) {
-                    $dic = new VendorDraftItemToCategory;
-                    $dic->attributes = $value->attributes;
-                    $dic->save();
-                }
-
-                $item_child_categories = VendorItemToCategory::find()
-                    ->select('{{%category}}.category_name, {{%category}}.category_id')
-                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
-                    ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                    ->where([
-                        '{{%category}}.trash' => 'Default',
-                        '{{%category_path}}.level' => 2,
-                        '{{%vendor_item_to_category}}.item_id' => $model->item_id
-                    ])
-                    ->groupBy('{{%vendor_item_to_category}}.category_id')
-                    ->all();
-
-                //display draft instead of item to resolve optimistick lock version issue 
-
-                $model = $draft;
-
-            }
-            else //if in draft 
-            {
-                $pricing = VendorDraftItemPricing::findAll([
-                        'item_id' => $model->item_id
-                    ]);
-
-                $images = VendorDraftImage::findAll(['item_id' => $model->item_id]);
-
-                $item_child_categories = VendorDraftItemToCategory::find()
-                    ->select('{{%category}}.category_name, {{%category}}.category_id')
-                    ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_draft_item_to_category}}.category_id')
-                    ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                    ->where([
-                        '{{%category}}.trash' => 'Default',
-                        '{{%category_path}}.level' => 2,
-                        '{{%vendor_draft_item_to_category}}.item_id' => $model->item_id
-                    ])
-                    ->groupBy('{{%vendor_draft_item_to_category}}.category_id')
-                    ->all();
-            }        
-
-            //main
-            $main_categories = Category::find()
-                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where([
-                    '{{%category}}.trash' => 'Default',
-                    '{{%category_path}}.level' => 0
-                ])
-                ->all();
-
-            return $this->render('update', [
-                'model' => $model,
-                'itemtype' => $itemtype,
-                'images' => $images,
-                'pricing' => $pricing,
-                'main_categories' => $main_categories,
-                'item_child_categories' => $item_child_categories
-            ]);
-        }
-    }
-
-    /**
-    * Save item info from update and create page
-    *
-    * @return json
-    */
-    public function actionItemInfo() 
-    {
-        $item_id = Yii::$app->request->post('item_id');
-        $is_autosave = Yii::$app->request->post('is_autosave');
-
-        //to save VendorItem data to VendorDraftItem
-        $posted_data = VendorItem::get_posted_data();
-
-        //validate 
-        $errors = VendorItem::validate_item_info($posted_data);
-
-        $model = false;
-
-        //if new item 
-
-        if(!$item_id) {
-
-            $vendor_item = new VendorItem();
-            $vendor_item->load(['VendorItem' => $posted_data]);
-            $vendor_item->vendor_id = Yii::$app->user->getId();
-            $vendor_item->hide_from_admin = 1;
-            $vendor_item->save(false);
-
-            $model = new VendorDraftItem();
-            $model->item_id = $vendor_item->item_id;
-            $model->vendor_id = Yii::$app->user->getId();
+            $model->is_ready = 1;
             $model->item_approved = 'Pending';
-            $model->priority = 'Normal';
-            $model->sort = 0;
-            $model->item_archived = 'No';
-            $model->item_status = 'inactive';
-            $model->trash = 'Default';
+            $model->save(false);
+
+            return $this->redirect(['index']);    
         }
 
-        //if old item & in draft 
-
-        if(!$model) {
-            $model = VendorDraftItem::find()
-                ->where(['item_id' => $item_id])
-                ->one();            
-        }
-        
-        //if old item & not in draft
-
-        if(!$model) {
-            $model = new VendorDraftItem();
-            $model->attributes = $this->findModel($item_id)->attributes;
-            $model->item_approved = 'Pending';
-        }
-
-        //check version 
-
-        if($model->version != $posted_data['version'])
-        {
-            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
-        }   
-    
-        if($errors) {
-            \Yii::$app->response->format = 'json';
-            
-            return [
-                'errors' => $errors
-            ];
-        }
-    
-        //load posted data to model 
-        $model->load(['VendorDraftItem' => $posted_data]);
-
-        //to make draft invisible to admin 
-        $model->is_ready = 0;
-
-        //force to generate slug again by removing old slug 
-        $model->slug = '';
-
-        //save first step data without validation 
-        try {
-
-            if(!$model->save())
-            {                
-                if(!$model->version) {
-                    $model->version = 0;
-                }
-                
-                $model->save(false);
-            }
-
-        } catch (StaleObjectException $e) {
-            
-            //if model version defined and version not matching  
-            if($model->version){
-
-                $errors['version'] = 'You have old version of data, seems like someone have updated item!';
-
-                \Yii::$app->response->format = 'json';
-                
-                return [
-                    'errors' => $errors
-                ];
-
-            //for first time validation, version not defined yet 
-            }else{
-                $model->save(false);
-            }
-        }
-
-        //remove all old category 
-        VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
-
-        //add all category
-        $category = Yii::$app->request->post('category');
-
-        if(!$category) {
-            $category = array();
-        }
-
-        foreach($category as $key => $value) {
-            $vic = new VendorDraftItemToCategory();
-            $vic->item_id = $model->item_id;
-            $vic->category_id = $value;
-            $vic->save();
-        }
-
-        \Yii::$app->response->format = 'json';
-        
-        return [
-            'success' => 1,
-            'item_id' => $model->item_id,
-            'version' => $model->version,
-            'edit_url' => Url::to(['vendor-item/update', 'id' => $model->item_id])
-        ];
+        return $this->render('steps/images', [
+            'model' => $model,
+            'images' => VendorDraftImage::findAll(['item_id' => $model->item_id])
+        ]);
     }
 
-    /**
-    * Save item description from update and create page
-    *
-    * @return json
-    */
-    public function actionItemDescription() 
-    {
-        $item_id = Yii::$app->request->post('item_id');
-        $is_autosave = Yii::$app->request->post('is_autosave');
-
-        //to save VendorItem data to VendorDraftItem
-        $posted_data = VendorItem::get_posted_data();
-
-        //validate 
-        $errors = VendorItem::validate_item_description($posted_data);
-        
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $item_id])
-            ->one();
-
-        if($model->version != $posted_data['version'])
-        {
-            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
-        }   
-
-        if($errors) {
-            \Yii::$app->response->format = 'json';
-            
-            return [
-                'errors' => $errors
-            ];
-        }
-        
-        //load posted data to model 
-        $model->load(['VendorDraftItem' => $posted_data]);
-
-        //save data without validation 
-        try {
-
-            if(!$model->save())
-            {                
-                if(!$model->version) {
-                    $model->version = 0;
-                }
-                
-                $model->save(false);
-            }
-
-        } catch (StaleObjectException $e) {
-            
-            //if model version defined and version not matching  
-            if($model->version){
-
-                $errors['version'] = 'You have old version of data, seems like someone have updated item!';
-
-                \Yii::$app->response->format = 'json';
-                
-                return [
-                    'errors' => $errors
-                ];
-
-            //for first time validation, version not defined yet 
-            }else{
-                $model->save(false);
-            }
-        }
-
-        \Yii::$app->response->format = 'json';
-        
-        return [
-            'success' => 1,
-            'item_id' => $model->item_id,
-            'version' => $model->version
-        ];
-    }
-
-    /**
-    * Save item price from update and create page
-    *
-    * @return json
-    */
-    public function actionItemPrice() 
-    {   
-        $item_id = Yii::$app->request->post('item_id');
-        $is_autosave = Yii::$app->request->post('is_autosave');
-
-        //to save VendorItem data to VendorDraftItem
-
-        $posted_data = VendorItem::get_posted_data();
-
-        //validate
-
-        $errors = VendorItem::validate_item_price($posted_data);
-
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $item_id])
-            ->one();
-
-        if($model->version != $posted_data['version'])
-        {
-            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
-        }   
-
-        if($errors) {
-            \Yii::$app->response->format = 'json';
-            
-            return [
-                'errors' => $errors
-            ];
-        }    
-    
-        //load posted data to model 
-
-        $model->load(['VendorDraftItem' => $posted_data]);
-
-        //save data without validation 
-        try {
-
-            if(!$model->save())
-            {                
-                if(!$model->version) {
-                    $model->version = 0;
-                }
-                
-                $model->save(false);
-            }
-
-        } catch (StaleObjectException $e) {
-            
-            //if model version defined and version not matching  
-            if($model->version){
-
-                $errors['version'] = 'You have old version of data, seems like someone have updated item!';
-
-                \Yii::$app->response->format = 'json';
-                
-                return [
-                    'errors' => $errors
-                ];
-
-            //for first time validation, version not defined yet 
-            }else{
-                $model->save(false);
-            }
-        }
-
-        //remove old price chart
-        VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
-
-        //add price chart
-        $vendoritem_item_price = Yii::$app->request->post('vendoritem-item_price');
-
-        if($vendoritem_item_price) {
-
-            for($opt=0; $opt < count($vendoritem_item_price['from']); $opt++){
-                $vendor_item_pricing = new VendorDraftItemPricing();
-                $vendor_item_pricing->item_id =  $model->item_id;
-                $vendor_item_pricing->range_from = $vendoritem_item_price['from'][$opt];
-                $vendor_item_pricing->range_to = $vendoritem_item_price['to'][$opt];
-                $vendor_item_pricing->pricing_price_per_unit = $vendoritem_item_price['price'][$opt];
-                $vendor_item_pricing->save();
-            }
-        }
-
-        \Yii::$app->response->format = 'json';
-        
-        return [
-            'success' => 1,
-            'item_id' => $model->item_id,
-            'version' => $model->version,
-        ];
-    }
-
-    /**
-    * Validate whole form on for complete button 
-    *
-    * @return json
-    */
-    public function actionItemValidate()
-    {
-        \Yii::$app->response->format = 'json';
-        
-        $posted_data = VendorItem::get_posted_data();
-        
-        $item_id = Yii::$app->request->post('item_id');
-
-        $errors = VendorItem::validate_form($posted_data);
-
-        //check version 
-
-        $item = VendorDraftItem::findOne(['item_id' => $item_id]);
-
-        if($item->version != $posted_data['version'])
-        {
-            $errors['version'] = 'You have old version of data, seems like someone have updated item!';
-        }
-
-        if($errors) 
-        {            
-            return [
-                'errors' => $errors
-            ];
-        }
-        else
-        {
-            return [
-                'success' => 1
-            ];
-        }
-    }
-    
     /**
      * Deletes an existing VendorItem model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -756,7 +695,10 @@ class VendorItemController extends Controller
         PriorityItem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
+
         VendorDraftItem::deleteAll(['item_id' => $id]); 
+
+
         $model->delete();
         Yii::$app->session->setFlash('success', "Item deleted successfully!");
 

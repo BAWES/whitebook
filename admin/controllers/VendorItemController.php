@@ -323,6 +323,7 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemDescription';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
+            
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
