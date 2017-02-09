@@ -34,8 +34,10 @@ class Customer extends \common\models\Customer {
     */
     public function rules() {
         return array_merge(parent::rules(), [
-            [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_gender', 'customer_mobile'], 'required'],
-            [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_gender', 'customer_mobile'], 'required', 'on'=>'signup'],
+            [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required'],
+
+            [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required', 'on'=>'signup'],
+            
             ['customer_email','email'],
             //['customer_password', 'compare', 'compareAttribute' => 'confirm_password','on'=>'signup'],
             [['customer_email', 'customer_password',], 'required', 'on'=>'login'],

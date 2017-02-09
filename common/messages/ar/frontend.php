@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Loading...' => 'جار التحميل...',
     'Collect in {count} days' => 'جمع في {count} أيام',
     'Maximum {qty}' => 'الحد الأقصى {qty}',
     'Minimum {qty}' => 'الحد الأدنى {qty}',
