@@ -11,6 +11,7 @@ use common\models\FeatureGroupItem;
 use common\models\Image;
 use common\models\VendorItemQuestion;
 use common\models\VendorItemQuestionGuide;
+use common\models\VendorDraftItemMenuItem;
 use common\components\CFormatter;
 
 $arr_categories = [];
@@ -72,9 +73,11 @@ $this->params['breadcrumbs'][] = $model->item_name;
     <ul class="nav nav-tabs">
         <li class="active"><a href="#1" data-toggle="tab">Vendor Info </a></li>
         <li><a href="#2" data-toggle="tab">Priority Log</a></li>
-        <li><a href="#3" data-toggle="tab">Gallery</a></li>
+        <li><a href="#3" data-toggle="tab">Options</a></li>
+        <li><a href="#4" data-toggle="tab">Addon</a></li>
+        <li><a href="#5" data-toggle="tab">Gallery</a></li>
         <?php if($price_table) { ?>
-        <li><a href="#4" data-toggle="tab">Price Table</a></li>
+        <li><a href="#6" data-toggle="tab">Price Table</a></li>
         <?php } ?>
     </ul>
     <div class="tab-content">
@@ -161,6 +164,25 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'label' => $vendor_item->item_for_sale != $model->item_for_sale ? 'ITEM FOR SALE *' : 'ITEM FOR SALE',
                             'value' => strip_tags($model->item_for_sale),
                         ],
+                        'quantity_label',
+                        'set_up_time',
+                        'set_up_time_ar',
+                        'max_time',
+                        'max_time_ar',
+                        'requirements',
+                        'requirements_ar',
+                        'min_order_amount',
+
+                        [
+                            'label'=>'ALLOW SPECIAL REQUEST?',
+                            'format'=>'raw',
+                            'value'  => $model->allow_special_request ? 'Yes' : 'No',
+                        ],
+                        [
+                            'label'=>'HAVE FEMALE SERVICE?',
+                            'format'=>'raw',
+                            'value'  => $model->have_female_service ? 'Yes' : 'No',
+                        ],
                         [
                             'label' => $vendor_item->item_how_long_to_make != $model->item_how_long_to_make ? 'ITEM HOW LONG TO MAKE *' : 'ITEM HOW LONG TO MAKE',
                             'value' => strip_tags($model->item_how_long_to_make),
@@ -208,6 +230,161 @@ $this->params['breadcrumbs'][] = $model->item_name;
         </div>
 
         <div class="tab-pane" id="3">
+          <ul id="item_addon_menu_list">
+          <?php foreach ($arr_menu as $key => $value) { ?>
+            <li>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th colspan="5" class="heading">
+                      Menu
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>Name</th>
+                    <th>Name - Ar</th>
+                    <th>Min Qty</th>
+                    <th>Max Qty</th>
+                    <th>Qty Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="required">
+                      <?= $value->menu_name ?>
+                    </td>
+                    <td class="required">
+                      <?= $value->menu_name_ar ?>
+                    </td>
+                    <td>
+                      <?= $value->min_quantity ?>
+                    </td>
+                    <td>
+                      <?= $value->max_quantity ?>
+                    </td>
+                    <td>
+                      <?= $value->quantity_type ?>
+                    </td>
+                </tr>
+                </tbody>
+              </table>
+
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th colspan="5" class="heading">Menu Items</th>
+                  </tr>
+                  <tr>
+                    <th>Name</th>
+                    <th>Name - Ar</th>
+                    <th>Hint</th>
+                    <th>Hint - Ar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+
+                  $arr_menu_item = VendorDraftItemMenuItem::findAll(['draft_menu_id' => $value->draft_menu_id]);
+
+                  foreach ($arr_menu_item as $key => $menu_item) { ?>
+                  <tr>
+                    <td class="required">
+                      <?= $menu_item->menu_item_name ?>
+                    </td>
+                    <td class="required">
+                      <?= $menu_item->menu_item_name_ar ?>
+                    </td>
+                    <td>
+                      <?= $menu_item->hint ?>
+                    </td>
+                    <td>
+                      <?= $menu_item->hint_ar ?>
+                    </td>
+                  </tr>
+                  <?php } ?>
+                </tbody>
+              </table>
+            </li>
+          <?php } ?>
+          </ul>
+        </div>
+
+        <div class="tab-pane" id="4">
+
+          <ul id="item_addon_menu_list">
+
+          <?php foreach ($arr_addon_menu as $key => $value) { ?>
+          <li>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th colspan="2" class="heading">
+                    Addon Menu
+                  </th>
+                </tr>
+                <tr>
+                  <th>Name</th>
+                  <th>Name - Ar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <?= $value->menu_name ?>
+                  </td>
+                  <td>
+                    <?= $value->menu_name_ar ?>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th colspan="6" class="heading">Menu Items</th>
+                </tr>
+                <tr>
+                  <th>Name</th>
+                  <th>Name - Ar</th>
+                  <th>Price</th>
+                  <th>Hint</th>
+                  <th>Hint - Ar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php 
+
+                $arr_menu_item = VendorDraftItemMenuItem::findAll(['draft_menu_id' => $value->draft_menu_id]);
+
+                foreach ($arr_menu_item as $key => $menu_item) { ?>
+                <tr>
+                  <td>
+                    <?= $menu_item->menu_item_name ?>
+                  </td>
+                  <td>
+                    <?= $menu_item->menu_item_name_ar ?>
+                  </td>
+                  <td>
+                    <?= $menu_item->price ?>
+                  </td>
+                  <td>
+                    <?= $menu_item->hint ?>
+                  </td>
+                  <td>
+                    <?= $menu_item->hint_ar ?>
+                  </td>
+                  </td>
+                </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+          </li>
+          <?php } ?>
+          </ul>
+        </div>
+
+        <div class="tab-pane" id="5">
             <ul class="row">
                 <?php foreach ($imagedata as $key => $image) {
                     $alias = Yii::getAlias('@vendor_item_images_210/');
@@ -219,7 +396,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
             </ul>
         </div>
 
-        <div class="tab-pane" id="4">
+        <div class="tab-pane" id="6">
             <table class="table table-striped table-bordered detail-view">
                 <thead>
                     <tr>
