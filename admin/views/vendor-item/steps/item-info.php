@@ -332,6 +332,7 @@ echo Html::hiddenInput('category_list_url', Url::to(['vendor-item/category-list'
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/info.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	.border-top{border-top: 1px solid;}
