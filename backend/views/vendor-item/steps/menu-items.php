@@ -109,16 +109,16 @@ $this->params['breadcrumbs'][] = 'Update';
 						<tbody>
 							<tr>
 								<td class="required">
-									<input placeholder="Name" name="menu_item[<?= $menu_count ?>][menu_name]" value="<?= $value->menu_name ?>" class="form-control" />
+									<input placeholder="Name" name="menu_item[<?= $menu_count ?>][menu_name]" value="<?= $value->menu_name ?>" class="form-control txt_menu_name" />
 								</td>
 								<td class="required">
-									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_name_ar]" value="<?= $value->menu_name_ar ?>" class="form-control" />
+									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_name_ar]" value="<?= $value->menu_name_ar ?>" class="form-control txt_menu_name_ar" />
 								</td>
 								<td>
-									<input placeholder="Min. Qty" name="menu_item[<?= $menu_count ?>][min_quantity]" value="<?= $value->min_quantity ?>" class="form-control" />
+									<input placeholder="Min. Qty" name="menu_item[<?= $menu_count ?>][min_quantity]" value="<?= $value->min_quantity ?>" class="form-control txt_min_quantity" />
 								</td>
 								<td>
-									<input placeholder="Max. Qty" name="menu_item[<?= $menu_count ?>][max_quantity]" value="<?= $value->max_quantity ?>" class="form-control" />
+									<input placeholder="Max. Qty" name="menu_item[<?= $menu_count ?>][max_quantity]" value="<?= $value->max_quantity ?>" class="form-control txt_max_quantity" />
 								</td>
 								<td>
 									<select name="menu_item[<?= $menu_count ?>][quantity_type]" class="form-control">
@@ -158,16 +158,16 @@ $this->params['breadcrumbs'][] = 'Update';
 							foreach ($arr_menu_item as $key => $menu_item) { ?>
 							<tr>
 								<td class="required">
-									<input placeholder="Name" name="menu_item[<?= $menu_count ?>][menu_item_name]" value="<?= $menu_item->menu_item_name ?>" class="form-control" />
+									<input placeholder="Name" name="menu_item[<?= $menu_count ?>][menu_item_name]" value="<?= $menu_item->menu_item_name ?>" class="txt_menu_item_name form-control" />
 								</td>
 								<td class="required">
-									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control" />
+									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control txt_menu_item_name_ar" />
 								</td>
 								<td>
-									<input placeholder="Hint" name="menu_item[<?= $menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control" />
+									<input placeholder="Hint" name="menu_item[<?= $menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control txt_hint" />
 								</td>
 								<td>
-									<input placeholder="Hint - Ar" name="menu_item[<?= $menu_count ?>][hint_ar]" value="<?= $menu_item->hint_ar ?>" class="form-control" />
+									<input placeholder="Hint - Ar" name="menu_item[<?= $menu_count ?>][hint_ar]" value="<?= $menu_item->hint_ar ?>" class="form-control txt_hint_ar" />
 								</td>
 								<td>
 									<button type="button" class="btn btn-danger btn-remove-menu-item">
@@ -226,3 +226,5 @@ echo Html::hiddenInput('isNewRecord', 0, ['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.23", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/menu.js", ['depends' => [\yii\web\JqueryAsset::className()]]);

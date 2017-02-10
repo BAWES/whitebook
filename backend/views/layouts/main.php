@@ -43,6 +43,8 @@ $this->beginPage();
 		<!-- BEGIN PAGE CONTAINER-->
 		<div class="page-content">
 			<div class="content">
+
+				<div class="message_wrapper">
 				<?php
 
 				if($flash = Yii::$app->session->getFlash('info'))
@@ -54,6 +56,8 @@ $this->beginPage();
 				if($flash = Yii::$app->session->getFlash('danger'))
 					echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash,'closeButton'=>['label'=>'']]);
 				?>
+				</div>
+				
 				<ul class="breadcrumb">
 					<?=
 					Breadcrumbs::widget([
