@@ -111,8 +111,20 @@ class VendorDraftItemController extends Controller
 
         $vendor_item = VendorItem::findOne($model->item_id);
 
+        $arr_menu = VendorDraftItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
+
+        $arr_addon_menu = VendorDraftItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
+
         return $this->render('view', [
-            'model' => $model,            
+            'model' => $model,        
+            'arr_menu' => $arr_menu,
+            'arr_addon_menu' => $arr_addon_menu,
             'vendor_item' => $vendor_item,
             'dataProvider1' => $dataProvider1, 
             'imagedata' => $imagedata,
