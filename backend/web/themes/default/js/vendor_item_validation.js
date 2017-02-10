@@ -526,16 +526,16 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '		<tbody>';
 	$html += '			<tr>';
 	$html += '				<td class="required">';
-	$html += '					<input placeholder="Name" name="menu_item['+menu_count+'][menu_name]" value="" class="form-control" />';
+	$html += '					<input placeholder="Name" name="menu_item['+menu_count+'][menu_name]" value="" class="txt_menu_name form-control" />';
 	$html += '				</td class="required">';
 	$html += '				<td>';
-	$html += '					<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_name_ar]" value="" class="form-control" />';
+	$html += '					<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_name_ar]" value="" class="txt_menu_name_ar form-control" />';
 	$html += '				</td>';
 	$html += '				<td>';
-	$html += '					<input placeholder="Min. Qty" name="menu_item['+menu_count+'][min_quantity]" value="" class="form-control" />';
+	$html += '					<input placeholder="Min. Qty" name="menu_item['+menu_count+'][min_quantity]" value="" class="txt_min_quantity form-control" />';
 	$html += '				</td>';
 	$html += '				<td>';
-	$html += '					<input placeholder="Max. Qty" name="menu_item['+menu_count+'][max_quantity]" value="" class="form-control" />';
+	$html += '					<input placeholder="Max. Qty" name="menu_item['+menu_count+'][max_quantity]" value="" class="txt_max_quantity form-control" />';
 	$html += '				</td>';
 	$html += '				<td>';
 	$html += '					<select name="menu_item['+menu_count+'][quantity_type]" class="form-control">';
@@ -583,16 +583,16 @@ $(document).delegate('.btn-add-menu-item', 'click', function(){
 	
 	$html  = '<tr>';
 	$html += '	<td class="required">';
-	$html += '		<input placeholder="Name" name="menu_item['+menu_count+'][menu_item_name]" value="" class="form-control" /></td>';
+	$html += '		<input placeholder="Name" name="menu_item['+menu_count+'][menu_item_name]" value="" class="txt_menu_item_name form-control" /></td>';
 	$html += '	<td class="required">';
-	$html += '		<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_item_name_ar]" value="" class="form-control" /></td>';
+	$html += '		<input placeholder="Name - Arabic" name="menu_item['+menu_count+'][menu_item_name_ar]" value="" class="txt_menu_item_name_ar form-control" /></td>';
 	
 	$html += '	<td>';
-	$html += '		<input placeholder="Hint" name="menu_item['+menu_count+'][hint]" value="" class="form-control" />';
+	$html += '		<input placeholder="Hint" name="menu_item['+menu_count+'][hint]" value="" class="form-control txt_hint" />';
 	$html += '	</td>';
 	
 	$html += '	<td>';
-	$html += '		<input placeholder="Hint - Ar" name="menu_item['+menu_count+'][hint_ar]" value="" class="form-control" />';
+	$html += '		<input placeholder="Hint - Ar" name="menu_item['+menu_count+'][hint_ar]" value="" class="form-control txt_hint_ar" />';
 	$html += '	</td>';
 	
 	$html += '	<td>';
@@ -629,10 +629,10 @@ $(document).delegate('.btn-add-addon-menu', 'click', function(){
 	$html += '		<tbody>';
 	$html += '			<tr>';
 	$html += '				<td>';
-	$html += '					<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_name]" value="" class="form-control" />';
+	$html += '					<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_name]" value="" class="txt_menu_name form-control" />';
 	$html += '				</td>';
 	$html += '				<td>';
-	$html += '					<input placeholder="Name - Arabic" name="addon_menu_item['+addon_menu_count+'][menu_name_ar]" value="" class="form-control" />';
+	$html += '					<input placeholder="Name - Arabic" name="addon_menu_item['+addon_menu_count+'][menu_name_ar]" value="" class="txt_menu_name_ar form-control" />';
 	$html += '				</td>';
 	$html += '			</tr>';
 	$html += '		</tbody>';
@@ -675,20 +675,20 @@ $(document).delegate('.btn-add-addon-menu-item', 'click', function(){
 	
 	$html  = '<tr>';
 	$html += '	<td>';
-	$html += '		<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_item_name]" value="" class="form-control" /></td>';
+	$html += '		<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_item_name]" value="" class="txt_menu_item_name form-control" /></td>';
 	$html += '	<td>';
-	$html += '		<input placeholder="Name - Arabic" name="addon_menu_item['+addon_menu_count+'][menu_item_name_ar]" value="" class="form-control" /></td>';
+	$html += '		<input placeholder="Name - Arabic" name="addon_menu_item['+addon_menu_count+'][menu_item_name_ar]" value="" class="txt_menu_item_name_ar form-control" /></td>';
 	
 	$html += '	<td>';
-	$html += '		<input placeholder="Price" name="addon_menu_item['+addon_menu_count+'][price]" value="" class="form-control" />';
+	$html += '		<input placeholder="Price" name="addon_menu_item['+addon_menu_count+'][price]" value="" class="txt_price form-control" />';
 	$html += '	</td>';
 	
 	$html += '	<td>';
-	$html += '		<input placeholder="Hint" name="addon_menu_item['+addon_menu_count+'][hint]" value="" class="form-control" />';
+	$html += '		<input placeholder="Hint" name="addon_menu_item['+addon_menu_count+'][hint]" value="" class="txt_hint form-control" />';
 	$html += '	</td>';
 	
 	$html += '	<td>';
-	$html += '		<input placeholder="Hint - Ar" name="addon_menu_item['+addon_menu_count+'][hint_ar]" value="" class="form-control" />';
+	$html += '		<input placeholder="Hint - Ar" name="addon_menu_item['+addon_menu_count+'][hint_ar]" value="" class="txt_hint_ar form-control" />';
 	$html += '	</td>';
 	
 	$html += '	<td>';

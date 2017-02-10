@@ -84,10 +84,10 @@ $this->params['breadcrumbs'][] = 'Update';
 						<tbody>
 							<tr>
 								<td>
-									<input placeholder="Name" name="addon_menu_item[<?= $addon_menu_count ?>][menu_name]" value="<?= $value->menu_name ?>" class="form-control" />
+									<input placeholder="Name" name="addon_menu_item[<?= $addon_menu_count ?>][menu_name]" value="<?= $value->menu_name ?>" class="txt_menu_name form-control" />
 								</td>
 								<td>
-									<input placeholder="Name - Arabic" name="addon_menu_item[<?= $addon_menu_count ?>][menu_name_ar]" value="<?= $value->menu_name_ar ?>" class="form-control" />
+									<input placeholder="Name - Arabic" name="addon_menu_item[<?= $addon_menu_count ?>][menu_name_ar]" value="<?= $value->menu_name_ar ?>" class="txt_menu_name_ar form-control" />
 								</td>
 							</tr>
 						</tbody>
@@ -117,19 +117,19 @@ $this->params['breadcrumbs'][] = 'Update';
 							foreach ($arr_menu_item as $key => $menu_item) { ?>
 							<tr>
 								<td>
-									<input placeholder="Name" name="addon_menu_item[<?= $addon_menu_count ?>][menu_item_name]" value="<?= $menu_item->menu_item_name ?>" class="form-control" />
+									<input placeholder="Name" name="addon_menu_item[<?= $addon_menu_count ?>][menu_item_name]" value="<?= $menu_item->menu_item_name ?>" class="txt_menu_item_name form-control" />
 								</td>
 								<td>
-									<input placeholder="Name - Arabic" name="addon_menu_item[<?= $addon_menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control" />
+									<input placeholder="Name - Arabic" name="addon_menu_item[<?= $addon_menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control txt_menu_item_name_ar" />
 								</td>
 								<td>
-									<input placeholder="Price" name="addon_menu_item[<?= $addon_menu_count ?>][price]" value="<?= $menu_item->price ?>" class="form-control" />
+									<input placeholder="Price" name="addon_menu_item[<?= $addon_menu_count ?>][price]" value="<?= $menu_item->price ?>" class="form-control txt_price" />
 								</td>
 								<td>
-									<input placeholder="Hint" name="addon_menu_item[<?= $addon_menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control" />
+									<input placeholder="Hint" name="addon_menu_item[<?= $addon_menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control txt_hint" />
 								</td>
 								<td>
-									<input placeholder="Hint - Ar" name="addon_menu_item[<?= $addon_menu_count ?>][hint_ar]" value="<?= $menu_item->hint_ar ?>" class="form-control" />
+									<input placeholder="Hint - Ar" name="addon_menu_item[<?= $addon_menu_count ?>][hint_ar]" value="<?= $menu_item->hint_ar ?>" class="form-control txt_hint_ar" />
 								</td>
 								<td>
 									<button type="button" class="btn btn-danger btn-remove-menu-item">
@@ -188,3 +188,5 @@ echo Html::hiddenInput('isNewRecord', 0, ['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/addon_menu.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
