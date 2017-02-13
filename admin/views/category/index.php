@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\web\View;
+use common\models\VendorItemToCategory;
 
 /* @var $searchModel common\models\SearchCategory */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -23,8 +24,16 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute'=>'category_name',
 				'format' => 'html'
 			],
+			[
+				'attribute' => 'item_count',
+			    'format' => 'raw',
+			    'value' => function ($model) {   
+			    	return VendorItemToCategory::get_item_count($model['ID']);
+			    },
+			],
 			'sort',
-			['class' => 'yii\grid\ActionColumn',
+			[
+				'class' => 'yii\grid\ActionColumn',
 				'header'=>'Action',
 				'template' => '{move} {update} {delete}',
 				'buttons' => [
