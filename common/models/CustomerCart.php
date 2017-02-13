@@ -412,6 +412,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             ->select('
                 {{%customer_cart}}.*, 
                 {{%vendor_item}}.item_price_per_unit,
+                {{%vendor_item}}.type_id,
                 {{%vendor_item}}.slug,
                 {{%vendor_item}}.vendor_id,
                 {{%vendor_item}}.item_name,
