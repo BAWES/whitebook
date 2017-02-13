@@ -34,17 +34,17 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>">
-	    		Item description
+	    		Description
 	    	</a>
 	    </li>
 	    <li class="active">
 	    	<a href="<?= Url::to(['vendor-item/item-price', 'id' => $model->item_id]) ?>">
-	    		Item price 
+	    		Price and Inventory
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>">
-	    		Menu items
+	    		Menu
 	    	</a>
 	    </li>
 	    <li>
@@ -72,68 +72,70 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	<div class="tab-content">
 		<div class="tab-pane clearfix active">
 
-			<?php
-                $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
-                echo $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
+			<fieldset>
+				<legend>Price</legend>
 
-			<?= $form->field($model, 'item_amount_in_stock')
-				->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))
-				->textInput(['maxlength' => 128]); ?>
+				<?= $form->field($model, 'item_price_per_unit', 
+					['options' => [
+						'class' => 'single_price'
+					]])
+					->textInput([
+						'maxlength' => 128
+					]); ?>
 
-			<?= $form->field($model, 'item_default_capacity')
-				->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
-				->textInput(['maxlength' => 128]); ?>
+				<?= $form->field($model, 'min_order_amount'); ?>
 
-			<?= $form->field($model, 'item_how_long_to_make')
-				->label('No of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))
-				->textInput(['maxlength' => 128]); ?>
+				<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
 
-			<?= $form->field($model, 'item_minimum_quantity_to_order')
-				->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))
-				->textInput(['maxlength' => 128]); ?>
+				<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
 
-			<?= $form->field($model, 'item_price_per_unit', 
-				['options' => [
-					'class' => 'single_price'
-				]])
-				->textInput([
-					'maxlength' => 128
-				]); ?>
+				<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price Chart </div>
 
-			<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price Chart </div>
+					<?php $t=0;
+					foreach ($itemPricing as $value) {  ?>
 
-				<?php $t=0;
-				foreach ($itemPricing as $value) {  ?>
+					<div class="controls<?= $t; ?>">
+						<input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From Quantit" value="<?= $value['range_from'];?>" />
 
-				<div class="controls<?= $t; ?>">
-					<input type="text" id="vendoritem-item_from" class="form-control from_range_<?= $t; ?>" name="vendoritem-item_price[from][]" multiple = "multiple" Placeholder="From Quantit" value="<?= $value['range_from'];?>" />
+						<input type="text" id="vendoritem-item_to" class="form-control to_range_<?= $t; ?>" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To Quantity" value="<?= $value['range_to'];?>" />
 
-					<input type="text" id="vendoritem-item_to" class="form-control to_range_<?= $t; ?>" name="vendoritem-item_price[to][]" multiple = "multiple" Placeholder="To Quantity" value="<?= $value['range_to'];?>" />
+						<input type="text" id="item_price_per_unit" class="form-control price_kd_<?= $t; ?>" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price" value="<?= $value['pricing_price_per_unit'];?>">KD
 
-					<input type="text" id="item_price_per_unit" class="form-control price_kd_<?= $t; ?>" name="vendoritem-item_price[price][]" multiple = "multiple" Placeholder="Price" value="<?= $value['pricing_price_per_unit'];?>">KD
+						<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" />
+					</div>
 
-					<input type="button" name="remove" id="remove" value="Remove" class="remove_price" onClick="removePrice(this)" />
-				</div>
+					<?php $t++; }?>
+					<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
+				</div><!-- END price_chart -->
+			</fieldset>
+		
+			<fieldset>
+				<legend>Inventory</legend>
 
-				<?php $t++; }?>
-				<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
-			</div>
+				<?= $form->field($model, 'type_id')->dropDownList($itemType, ['prompt'=>'Select...']) ?>
 
-			<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
+				<?= $form->field($model, 'quantity_label')->radioList([
+						'Quantity' => 'Quantity',
+						'Serve' => 'Serve'
+					]); ?>
 
-			<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
+				<?= $form->field($model, 'item_minimum_quantity_to_order')
+					->label('Minimum quantity to order '.Html::tag('span', '*',['class'=>'required mandatory']))
+					->textInput(['maxlength' => 128]); ?>
 
-			<?= $form->field($model, 'item_customization_description',
-					['options' => ['class' => 'form-group custom_description']]
-				)->textarea(
-					['maxlength' => 128]
-				); ?>
+				<?= $form->field($model, 'item_default_capacity')
+					->label('Maximum quantity ordered per day '.Html::tag('span', '*',['class'=>'required mandatory']))
+					->textInput(['maxlength' => 128]); ?>
 
-			<?= $form->field($model, 'item_customization_description_ar',
-					['options' => ['class' => 'form-group custom_description_ar']]
-				)->textarea(
-					['maxlength' => 128]
-				); ?>
+				<?= $form->field($model, 'item_amount_in_stock')
+					->label('Item # of stock '.Html::tag('span', '*',['class'=>'required mandatory']))
+					->textInput(['maxlength' => 128]); ?>
+
+				<?php
+	                $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
+	                echo $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
+
+			</fieldset>
 
 			<hr />
 
@@ -164,7 +166,7 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_steps/price.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/price.js?v=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}
