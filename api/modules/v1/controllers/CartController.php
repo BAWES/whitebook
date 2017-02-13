@@ -199,7 +199,6 @@ class CartController extends Controller
                 return [
                     "operation" => "success",
                     "message" => "Item Added To Cart Successfully ",
-                    "total-cart-items" => CustomerCart::item_count()
                 ];
 
             } else {
@@ -212,8 +211,8 @@ class CartController extends Controller
 
         } else {
             return [
-                "operation" => "error",
-                "message" => $this->errors
+                "operation" => "errors",
+                "message" => $this->getErrorMessage($this->errors)
             ];
         }
     }
@@ -276,13 +275,11 @@ class CartController extends Controller
                 $cart->modified_datetime  = date('Y-d-m h:i:s');
 
                 if ($cart->save()) {
-
                     return [
                         "operation" => "success",
                         "message" => "Cart Updated Successfully ",
                         "total-cart-items" => CustomerCart::item_count()
                     ];
-
                 } else {
                     return [
                         "operation" => "error",
@@ -335,6 +332,22 @@ class CartController extends Controller
                 "operation" => "error",
                 "message" => "Invalid Cart ID"
             ];
+        }
+    }
+
+    public function getErrorMessage($error) {
+        $list = '';
+        if ($error['cart_delivery_date']) {
+            return implode(',',$error['cart_delivery_date']);
+        } else if ($error['cart_quantity']) {
+            foreach($this->errors['cart_quantity'] as $error) {
+               $list .= (is_array($error)) ? implode(',',$error) : $error;
+            }
+            return $list;
+        } else if ($error['area_id']) {
+            return implode(',',$error['area_id']);
+        } else if ($error['timeslot_id']) {
+            return implode(',',$error['timeslot_id']);
         }
     }
 }
