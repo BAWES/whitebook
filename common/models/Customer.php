@@ -66,7 +66,7 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['customer_name','customer_last_name', 'customer_email', 'customer_password', 'customer_mobile','customer_dateofbirth','customer_gender'], 'required'],
+            [['customer_name','customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required'],
             [['created_by', 'message_status'], 'integer'],
             [['customer_email'], 'unique', 'on'=>'signup'],
             [['newsmail','content'], 'required', 'on'=>'newsletter'],

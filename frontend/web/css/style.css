@@ -914,10 +914,10 @@ input#search-terms::-ms-input-placeholder {
 .signup_modal_form {overflow-y:auto;}
 
 /*registermodal*/
-#myModal1 .birth_date_drop ul li{list-style: none;}
+#myModal1 .birth_date_drop ul li{list-style: none; float: left;}
 #myModal1 li.day-select{width:66px;display:inline-block;}
-#myModal1 li.month-select{width:98px;display:inline-block;}
-#myModal1 li.year-select{width:95px;display:inline-block;}
+#myModal1 li.month-select{width:88px;display:inline-block;}
+#myModal1 li.year-select{width:85px;display:inline-block;}
 #myModal1 .birth_date_drop ul li button{height:40px;border-radius:0;border:1px solid #e6e6e6;background:#f8f8f8;color:#666;font-size:15px;font-weight:normal;font-family:'OpenSansRegular' ;}
 #myModal1 .gender-select button{height:40px;border-radius:0;border:1px solid #e6e6e6;background:#f8f8f8;color:#666;font-size:15px;font-weight:normal;font-family:'OpenSansRegular' ;}
 .new_popup_common .bootstrap-select button{height:54px;border-radius:0;border:1px solid #e6e6e6;background:#fff;color:#ccc;font-size:13px;font-weight:normal;font-family:'OpenSansRegular' ;}

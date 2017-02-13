@@ -46,14 +46,16 @@ $this->beginPage();
         <div class="page-content">
             <div class="content">
 
-                <?php
-                if ($flash = Yii::$app->session->getFlash('success')) {
-                    echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => $flash]);
-                }
-                if ($flash = Yii::$app->session->getFlash('danger')) {
-                    echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash]);
-                }
-                ?>
+                <div class="message_wrapper">
+                    <?php
+                    if ($flash = Yii::$app->session->getFlash('success')) {
+                        echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => $flash]);
+                    }
+                    if ($flash = Yii::$app->session->getFlash('danger')) {
+                        echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => $flash]);
+                    }
+                    ?>
+                </div>
  
                 <?= Breadcrumbs::widget([
                         'homeLink' => [ 'label' => 'Dashboard', 'url' => ['site/index'],],

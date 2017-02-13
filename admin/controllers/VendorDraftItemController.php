@@ -6,19 +6,23 @@ use Yii;
 use yii\web\Controller;
 use yii\helpers\Url;
 use yii\filters\VerbFilter;
+use admin\models\Image;
 use admin\models\AccessControlList;
 use admin\models\VendorDraftItemSearch;
-use common\models\VendorDraftItem;
+use common\models\Vendor;
 use common\models\VendorItem;
 use common\models\PriorityItem;
-use admin\models\Image;
+use common\models\VendorDraftItem;
 use common\models\VendorItemPricing;
 use common\models\VendorItemToCategory;
 use common\models\VendorDraftImage;
-use common\models\VendorDraftItemToCategory;
+use common\models\VendorItemMenu;
+use common\models\VendorItemMenuItem;
+use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemPricing;
-use common\models\Vendor;
 use common\models\VendorOrderAlertEmails;
+use common\models\VendorDraftItemToCategory;
+use common\models\VendorDraftItemMenuItem;
 
 class VendorDraftItemController extends Controller
 {
@@ -107,8 +111,20 @@ class VendorDraftItemController extends Controller
 
         $vendor_item = VendorItem::findOne($model->item_id);
 
+        $arr_menu = VendorDraftItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
+
+        $arr_addon_menu = VendorDraftItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
+
         return $this->render('view', [
-            'model' => $model,            
+            'model' => $model,        
+            'arr_menu' => $arr_menu,
+            'arr_addon_menu' => $arr_addon_menu,
             'vendor_item' => $vendor_item,
             'dataProvider1' => $dataProvider1, 
             'imagedata' => $imagedata,
@@ -136,9 +152,6 @@ class VendorDraftItemController extends Controller
         $item->item_approved = 'Yes';
         $item->hide_from_admin = 0;
         $item->update();
-
-        //remove from draft 
-        $draft->delete();
 
         //remove old price table data 
 
@@ -191,6 +204,58 @@ class VendorDraftItemController extends Controller
             $image->trash = 'Default';
             $image->save();
         }
+
+        //remove old menu 
+
+        $menues = VendorItemMenu::findAll(['item_id' => $item->item_id]);
+
+        foreach ($menues as $key => $menu) {
+            VendorItemMenuItem::deleteAll(['menu_id' => $menu->menu_id]);        
+        }
+
+        VendorItemMenu::deleteAll(['item_id' => $item->item_id]);
+
+        //copy menu 
+
+        $menues = VendorDraftItemMenu::findAll(['item_id' => $item->item_id]);
+
+        foreach ($menues as $key => $menu) {
+
+            //add menu 
+
+            $m = new VendorItemMenu;
+            $m->attributes = $menu->attributes;
+            $m->save();
+
+            //get all menu items 
+            
+            $items = VendorDraftItemMenuItem::findAll(['draft_menu_id' => $menu->draft_menu_id]);
+
+            //add all items 
+
+            foreach ($items as $key => $item) {
+               
+                $i = new VendorItemMenuItem;
+                $i->attributes = $item->attributes;
+                $i->menu_id = $m->menu_id;
+                $i->save();
+            }
+
+            //remove all draft menu items 
+
+            VendorDraftItemMenuItem::deleteAll(['draft_menu_id' => $menu->draft_menu_id]);
+        }
+
+        //remove draft related data 
+
+        VendorDraftItemPricing::deleteAll(['item_id' => $item->item_id]);
+        VendorDraftImage::deleteAll(['item_id' => $item->item_id]);
+        VendorDraftItemMenu::deleteAll(['item_id' => $item->item_id]);
+        VendorDraftItemToCategory::deleteAll(['item_id' => $item->item_id]);
+
+        //remove from draft 
+        
+        $draft->delete();
 
         Yii::$app->session->setFlash('success', 'Item approved successfully!');
 

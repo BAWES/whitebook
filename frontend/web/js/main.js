@@ -335,6 +335,7 @@ function resetpwdcheck()
         $('#reset_pwd_result').html(password_should_contain_minimum_six_letters);
         return false;
     }
+
     if(password==conPassword)
     {
         $('#reset_pwd_result').hide();
@@ -373,6 +374,17 @@ function resetpwdcheck()
     }
 }
 /* Forgot password completed end */
+
+$(document).delegate('#conpassword', 'keyup', function() {
+
+    if($(this).val() != $('#userpassword').val()) {
+        $('#con_pass').show();
+        $('#con_pass').html(password_and_confirm_password_should_be_minimum_six_letters_and_same);
+    }else{
+        $('#con_pass').hide();
+        $('#con_pass').html('');
+    }
+});
 
 $(document).delegate('#login_button', 'click', function()
 {
@@ -487,8 +499,12 @@ function logincheck()
 }
 
 //Register save function ajax
+
 $(document).delegate('#register', 'click', function()
 {
+    $(this).html($('#txt_loading').val());
+    $(this).attr('disabled', 'disabled');
+    
     var gender = $('#gender').val();
     var bday = $('#bday').val();
     var bmonth = $('#bmonth').val();
@@ -546,6 +562,10 @@ $(document).delegate('#register', 'click', function()
         $('#con_pass').html(password_and_confirm_password_should_be_minimum_six_letters_and_same);
     }
 
+    i=1;
+    j=1;
+
+    /*
     if(gender==0)
     {
         $('#gen_er').show();
@@ -566,6 +586,7 @@ $(document).delegate('#register', 'click', function()
         $('#dob_er').hide();
         j=1;
     }
+    */
 
     if(validateEmail(x) == true){
 
@@ -644,9 +665,20 @@ $(document).delegate('#register', 'click', function()
                         location.reload()
                     });
                 }
+
+                window.setTimeout(function(){
+                    $('#register').html($('#txt_register').val());
+                    $('#register').removeAttr('disabled');
+                }, 1000);
             }
         });
-    }
+    }else{
+        window.setTimeout(function(){
+            $('#register').html($('#txt_register').val());
+            $('#register').removeAttr('disabled');
+        }, 1000);
+        console.log('no valid form');
+    }    
 });
 
 
@@ -2164,3 +2196,5 @@ $(document).delegate('#modal_event_from_package #create_event_button', 'click', 
     }
 });
 /* END ADD TO EVENT */
+
+
