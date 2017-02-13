@@ -34,17 +34,17 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>">
-	    		Item description
+	    		Description
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-price', 'id' => $model->item_id]) ?>">
-	    		Item price 
+	    		Price and Inventory
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>">
-	    		Menu items
+	    		Menu
 	    	</a>
 	    </li>
 	    <li>
