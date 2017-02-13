@@ -418,6 +418,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 {{%customer_cart}}.*, 
                 {{%image}}.image_path,
                 {{%vendor_item}}.item_price_per_unit,
+                {{%vendor_item}}.type_id,
                 {{%vendor_item}}.slug,
                 {{%vendor_item}}.vendor_id,
                 {{%vendor_item}}.item_name,

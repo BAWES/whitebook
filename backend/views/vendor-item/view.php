@@ -1,6 +1,9 @@
 <?php
+
 use yii\helpers\Url;
 use yii\helpers\Html;
+use common\models\VendorItemMenuItem;
+use common\models\VendorDraftItemMenuItem;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Vendoritem */
@@ -17,7 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <li><a href="#2" data-toggle="tab">Item description</a></li>
             <li><a href="#3" data-toggle="tab">Item price</a></li>
             <li><a href="#4" data-toggle="tab">Priority Log</a></li>
-            <li><a href="#5" data-toggle="tab">Gallery</a></li>
+            <li><a href="#5" data-toggle="tab">Options</a></li>
+            <li><a href="#6" data-toggle="tab">Addons</a></li>
+            <li><a href="#7" data-toggle="tab">Gallery</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane" id="1" >
@@ -89,6 +94,164 @@ $this->params['breadcrumbs'][] = $this->title;
                 </table>
             </div>
             <div class="tab-pane" id="5" >
+                <ul id="item_addon_menu_list">
+                  <?php foreach ($arr_menu as $key => $value) { ?>
+                    <li>
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th colspan="5" class="heading">
+                              Menu
+                            </th>
+                          </tr>
+                          <tr>
+                            <th>Name</th>
+                            <th>Name - Ar</th>
+                            <th>Min Qty</th>
+                            <th>Max Qty</th>
+                            <th>Qty Type</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="required">
+                              <?= $value->menu_name ?>
+                            </td>
+                            <td class="required">
+                              <?= $value->menu_name_ar ?>
+                            </td>
+                            <td>
+                              <?= $value->min_quantity ?>
+                            </td>
+                            <td>
+                              <?= $value->max_quantity ?>
+                            </td>
+                            <td>
+                              <?= $value->quantity_type ?>
+                            </td>
+                        </tr>
+                        </tbody>
+                      </table>
+
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th colspan="5" class="heading">Menu Items</th>
+                          </tr>
+                          <tr>
+                            <th>Name</th>
+                            <th>Name - Ar</th>
+                            <th>Hint</th>
+                            <th>Hint - Ar</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php 
+
+                          if(isset($value->menu_id)) {
+                                $arr_menu_item = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
+                          } else {
+                                $arr_menu_item = VendorDraftItemMenuItem::findAll(['draft_menu_id' => $value->draft_menu_id]);
+                          }
+
+                          foreach ($arr_menu_item as $key => $menu_item) { ?>
+                          <tr>
+                            <td class="required">
+                              <?= $menu_item->menu_item_name ?>
+                            </td>
+                            <td class="required">
+                              <?= $menu_item->menu_item_name_ar ?>
+                            </td>
+                            <td>
+                              <?= $menu_item->hint ?>
+                            </td>
+                            <td>
+                              <?= $menu_item->hint_ar ?>
+                            </td>
+                          </tr>
+                          <?php } ?>
+                        </tbody>
+                      </table>
+                    </li>
+                  <?php } ?>
+                </ul>
+            </div>
+            <div class="tab-pane" id="6" >
+                <ul id="item_addon_menu_list">
+                <?php foreach ($arr_addon_menu as $key => $value) { ?>
+                    <li>
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th colspan="2" class="heading">
+                                Addon Menu
+                              </th>
+                            </tr>
+                            <tr>
+                              <th>Name</th>
+                              <th>Name - Ar</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <?= $value->menu_name ?>
+                              </td>
+                              <td>
+                                <?= $value->menu_name_ar ?>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th colspan="6" class="heading">Menu Items</th>
+                            </tr>
+                            <tr>
+                              <th>Name</th>
+                              <th>Name - Ar</th>
+                              <th>Price</th>
+                              <th>Hint</th>
+                              <th>Hint - Ar</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php 
+
+                            if(isset($value->menu_id)) {
+                                $arr_menu_item = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
+                            } else {
+                                $arr_menu_item = VendorDraftItemMenuItem::findAll(['draft_menu_id' => $value->draft_menu_id]);
+                            }
+                            
+                            foreach ($arr_menu_item as $key => $menu_item) { ?>
+                            <tr>
+                              <td>
+                                <?= $menu_item->menu_item_name ?>
+                              </td>
+                              <td>
+                                <?= $menu_item->menu_item_name_ar ?>
+                              </td>
+                              <td>
+                                <?= $menu_item->price ?>
+                              </td>
+                              <td>
+                                <?= $menu_item->hint ?>
+                              </td>
+                              <td>
+                                <?= $menu_item->hint_ar ?>
+                              </td>
+                              </td>
+                            </tr>
+                            <?php } ?>
+                          </tbody>
+                        </table>
+                    </li>
+                <?php } ?>
+                </ul>
+            </div>
+            <div class="tab-pane" id="7" >
                 <ul class="row">
                     <?php foreach ($imagedata as $image) {
                         $alias = Yii::getAlias('@vendor_item_images_210/');
