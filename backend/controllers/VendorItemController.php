@@ -35,6 +35,8 @@ use common\models\CustomerCart;
 use common\models\EventItemlink;
 use common\models\VendorDraftItemPricing;
 use common\models\VendorDraftItemToCategory;
+use common\models\VendorItemMenu;
+use common\models\VendorItemMenuItem;
 use common\models\VendorDraftImage;
 use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemMenuItem;
