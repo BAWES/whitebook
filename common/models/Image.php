@@ -128,17 +128,6 @@ class Image extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItemQuestionGuide::className(), ['guide_image_id' => 'image_id']);
     }
 
-    public static function deleteImage() {
-        $image = Yii::$app->basePath . '/uploads/vendor_images' . $this->image_file;
-        if (unlink($image)) {
-            $this->image_file = null;
-            $this->save();
-            return true;
-        }
-        return false;
-    }
-
-
     // Only for Service and Rental
     public static function loadserviceguideimageids($image_id)
     {

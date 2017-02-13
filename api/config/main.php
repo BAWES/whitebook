@@ -103,13 +103,15 @@ return [
                         'GET list' => 'category-products',
                         'GET area' => 'product-areas',
                         'GET time-slot' => 'product-delivery-time-slot',
+                        'GET capacity' => 'item-capacity',
                         'POST event' => 'add-product-to-event',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS detail' => 'options',
                         'OPTIONS list' => 'options',
                         'OPTIONS area' => 'options',
-                        'OPTIONS time-slot' => 'options'
+                        'OPTIONS time-slot' => 'options',
+                        'OPTIONS capacity' => 'options',
                     ]
                 ],
                 [ // EventController
