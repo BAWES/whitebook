@@ -354,7 +354,6 @@ class BrowseController extends BaseController
             $model->item_approved == 'Yes' &&
             $model->trash == 'Default' &&
             $model->item_status == 'Active' &&
-            $model->type_id == '2' &&
             $model->item_for_sale == 'Yes' &&
             $model->item_amount_in_stock > 0
         ) {

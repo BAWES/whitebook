@@ -22,6 +22,8 @@ class CodController extends Controller
         //place order
         $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['fees'], $gateway['order_status_id'], '-');
 
+        Order::reduce_stock();
+
         Yii::$app->session->set('order_id', $order_id);
 
         //send order emails

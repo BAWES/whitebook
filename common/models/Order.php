@@ -8,13 +8,15 @@ use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use common\models\Customer;
 use common\models\Order;
+use common\models\Customer;
 use common\models\Suborder;
-use common\models\SuborderItemPurchase;
-use common\models\CustomerAddress;
+use common\models\ItemType;
+use common\models\VendorItem;
 use common\models\OrderStatus;
+use common\models\CustomerAddress;
 use common\models\VendorItemPricing;
+use common\models\SuborderItemPurchase;
 
 /**
  * This is the model class for table "whitebook_order".
@@ -420,6 +422,28 @@ class Order extends \yii\db\ActiveRecord
             ->setTo($emails)
             ->setSubject('New Order Placed #'.$value->suborder_id)
             ->send();
+        }
+    }
+
+    public static function reduce_stock() {
+
+        $items = CustomerCart::items();
+
+        foreach ($items as $key => $item) {
+        
+            $type = ItemType::findOne($item['type_id']);
+
+            if($type && $type->type_name == 'Product') {
+
+                VendorItem::updateAllCounters(
+                    [
+                        'item_amount_in_stock' => 0 - $item['cart_quantity']
+                    ], 
+                    [
+                        'item_id' => $item['item_id']
+                    ]
+                );
+            }
         }
     }
 }
