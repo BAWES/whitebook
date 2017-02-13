@@ -119,6 +119,16 @@ class VendorItemController extends Controller
                 ->with('category')
                 ->Where(['item_id' => $model->item_id])
                 ->all();
+
+            $arr_menu = VendorDraftItemMenu::findAll([
+                'item_id' => $id,
+                'menu_type' => 'options'
+            ]);
+
+            $arr_addon_menu = VendorDraftItemMenu::findAll([
+                'item_id' => $id,
+                'menu_type' => 'addons'
+            ]);
         }
         else
         {
@@ -135,12 +145,24 @@ class VendorItemController extends Controller
                 ->with('category')
                 ->Where(['item_id' => $model->item_id])
                 ->all();
+
+            $arr_menu = VendorItemMenu::findAll([
+                'item_id' => $id,
+                'menu_type' => 'options'
+            ]);
+
+            $arr_addon_menu = VendorItemMenu::findAll([
+                'item_id' => $id,
+                'menu_type' => 'addons'
+            ]);
         }
         
         $item_type = ItemType::itemtypename($model->type_id);
 
         return $this->render('view', [
             'model' => $model,
+            'arr_menu' => $arr_menu,
+            'arr_addon_menu' => $arr_addon_menu,
             'categories' => $categories,
             'item_type' => $item_type,
             'price_values' => $price_values,
