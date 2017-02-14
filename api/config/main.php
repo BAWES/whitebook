@@ -137,10 +137,12 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'wishlist-list',
+                        'GET exist' => 'is-item-exist',
                         'POST' => 'wishlist-add',
                         'DELETE' => 'wishlist-remove',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+                        'OPTIONS exist' => 'options',
                     ]
                 ],
                 [ // AddressController
