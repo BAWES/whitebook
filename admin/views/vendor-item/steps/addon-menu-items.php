@@ -33,17 +33,17 @@ $this->params['breadcrumbs'][] = 'Update';
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>">
-	    		Item description
+	    		Description
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-price', 'id' => $model->item_id]) ?>">
-	    		Item price 
+	    		Price and Inventory
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>">
-	    		Menu items
+	    		Menu
 	    	</a>
 	    </li>
 	    <li class="active">
@@ -199,4 +199,4 @@ echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_steps/addon_menu.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/addon_menu.js?v=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);

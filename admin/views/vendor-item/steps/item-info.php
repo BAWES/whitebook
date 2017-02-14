@@ -35,17 +35,17 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>">
-	    		Item description
+	    		Description
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-price', 'id' => $model->item_id]) ?>">
-	    		Item price 
+	    		Price and Inventory
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>">
-	    		Menu items
+	    		Menu
 	    	</a>
 	    </li>
 	    <li>
@@ -77,17 +77,17 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    </li>
 	    <li>
 	    	<a href="javascript::void();">
-	    		Item description
+	    		Description
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="javascript::void();">
-	    		Item price 
+	    		Price and Inventory
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="javascript::void();">
-	    		Menu items
+	    		Menu
 	    	</a>
 	    </li>
 	    <li>
@@ -332,7 +332,7 @@ echo Html::hiddenInput('category_list_url', Url::to(['vendor-item/category-list'
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_steps/info.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/info.js?v=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	.border-top{border-top: 1px solid;}

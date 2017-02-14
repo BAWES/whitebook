@@ -338,11 +338,8 @@ class VendorItemController extends Controller
             return $this->redirect(['vendor-item/item-price', 'id' => $id]);
         }
 
-        $itemType = ArrayHelper::map(ItemType::findAll(['trash' => 'Default']), 'type_id', 'type_name');
-
         return $this->render('steps/item-description', [
-            'model' => $model,
-            'itemType' => $itemType,
+            'model' => $model
         ]);
     }
 
@@ -391,9 +388,12 @@ class VendorItemController extends Controller
             return $this->redirect(['vendor-item/menu-items', 'id' => $id]);
         }
 
+        $itemType = ArrayHelper::map(ItemType::findAll(['trash' => 'Default']), 'type_id', 'type_name');
+
         return $this->render('steps/item-price', [
             'model' => $model,
-            'itemPricing' => VendorItemPricing::findAll(['item_id' => $id])
+            'itemPricing' => VendorItemPricing::findAll(['item_id' => $id]),
+            'itemType' => $itemType
         ]);
     }
 
