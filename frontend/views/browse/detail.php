@@ -26,7 +26,17 @@ $session = $session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 
-$quantity = $model->item_minimum_quantity_to_order;
+if($model->item_minimum_quantity_to_order > 0) {
+    $quantity = $model->item_minimum_quantity_to_order;    
+} else {
+    $quantity = 1;
+}
+
+if($model->type) {
+    $item_type_name = $model->type->type_name;
+} else {
+    $item_type_name = 'Product';
+}
 
 $capacity = $model->item_default_capacity;
 
@@ -36,7 +46,7 @@ if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapac
 
     if (isset($exceptionDate) && count($exceptionDate) > 0) {
         if ($deliver_date && isset($exceptionDate[date('Y-m-d',strtotime($deliver_date))])) {
-            $capacity = $exceptionDate[date('Y-m-d',strtotime($deliver_date))];
+            $capacity = $exceptionDate[date('Y-m-d', strtotime($deliver_date))];
         }
     }
 }
@@ -137,6 +147,8 @@ if($model->images) {
                 </div>
             </div>
         </div>
+        <?php }else{ ?>
+        Not for sale
         <?php } ?>
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
@@ -348,7 +360,7 @@ if($model->images) {
                                             <?php 
                                             } else { ?>
 
-                                                <?php if($model->item_default_capacity > 1) { ?>
+                                                <?php if($item_type_name == 'Product' || $capacity > 1) { ?>
 
                                                     <div class="padding-top-12 pull-left quantity-lbl">
                                                         <label>
@@ -359,12 +371,12 @@ if($model->images) {
                                                     <div class="clearfix qantity-div">
                                                         <div class="form-group qty" style="margin: 0px;">
                                                             <a href="#" class="btn-stepper" data-case="0">-</a>
-                                                            <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity ?>" value="<?=$quantity?>"/>
+                                                            <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity ?>" value="<?=$quantity ?>"/>
                                                             <a href="#" class="btn-stepper" data-case="1">+</a>
                                                         </div>
                                                     </div>
                                                 <?php } else { ?>
-                                                    <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity?>" value="<?= $quantity?>" />
+                                                    <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity?>" value="<?= $quantity ?>" />
                                                 <?php } ?>
 
                                                 <br />
@@ -430,7 +442,7 @@ if($model->images) {
                                                 <span class="produ_type">
                                                 (
                                                     <?= Yii::t('frontend', 'Product type') ?>:
-                                                    <?= Yii::t('frontend', $model->type->type_name); ?>
+                                                    <?= Yii::t('frontend', $item_type_name); ?>
                                                 )
                                                 </span>
                                             </a>
@@ -1076,6 +1088,7 @@ echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'tx
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);
 echo Html::hiddenInput('txt-max', Yii::t('frontend', ' upto {qty}'), ['id' => 'txt-max']);
 
+echo Html::hiddenInput('item_type_name', $item_type_name, ['id' => 'item_type_name']);
 echo Html::hiddenInput('capacity', $capacity, ['id' => 'capacity']);
 
 $this->registerJs("
@@ -1153,5 +1166,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.16', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.17', ['depends' => [\yii\web\JqueryAsset::className()]]);
 

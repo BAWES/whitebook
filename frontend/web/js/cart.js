@@ -17,7 +17,9 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 
     //max quantity for menu 
 
-    $max = $(this).parents('.menu-items').attr('data-max-quantity');
+    $qty = $('input[name="quantity"]').val();
+
+    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
 
     $qty_input = $(this).parent().find('input');
 

@@ -232,11 +232,11 @@ function productAvailabilityCart(date) {
         type: 'POST',
         url: product_availability,
         data: $('#form-update-cart').serialize(),
-        success: function (data)
+        success: function (json)
         {
-            if ($.trim(data) != '1') {
+            if (json['error']) {
                 $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html(data);
+                $('.timeslot_id_div .text').html(json['error']);
                 $('.timeslot_id_select').hide();
                 $('#timeslot_id').html('');
                 return false;

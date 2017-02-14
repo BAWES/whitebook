@@ -10,21 +10,22 @@ use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use frontend\models\VendorItem;
 use frontend\models\Users;
-use frontend\models\Website;
 use frontend\models\Vendor;
+use frontend\models\Website;
 use common\models\Events;
-use common\models\VendorLocation;
+use common\models\ItemType;
 use common\models\Category;
-use common\models\VendorItemThemes;
 use common\models\Location;
 use common\models\CategoryPath;
-use common\models\CustomerAddress;
 use common\models\VendorPhoneNo;
-use common\models\VendorItemPricing;
-use common\components\LangFormat;
 use common\models\VendorItemMenu;
+use common\models\VendorLocation;
+use common\models\CustomerAddress;
+use common\models\VendorItemThemes;
+use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
 use common\components\CFormatter;
+use common\components\LangFormat;
 
 /**
 * Site controller.
@@ -354,11 +355,24 @@ class BrowseController extends BaseController
             $model->item_approved == 'Yes' &&
             $model->trash == 'Default' &&
             $model->item_status == 'Active' &&
-            $model->item_for_sale == 'Yes' &&
-            $model->item_amount_in_stock > 0
+            $model->item_for_sale == 'Yes'
         ) {
             $AvailableStock = true;
         } else {
+            $AvailableStock = false;
+        }
+
+        //get item type 
+
+        $item_type = ItemType::findOne($model->type_id);
+
+        if($item_type) {
+            $item_type_name = $item_type->type_name;
+        } else {
+            $item_type_name = 'Product';
+        }
+
+        if($item_type_name == 'Product' && $model->item_amount_in_stock <= 0) {
             $AvailableStock = false;
         }
 
@@ -578,33 +592,43 @@ class BrowseController extends BaseController
      */
     public function actionProductAvailable()
     {
-        if (Yii::$app->request->isAjax) {
-            $AreaName = '';
-            $location = Location::findOne($_POST['area_id']);
-            if ($location) {
-                if (Yii::$app->language == "en") {
-                    $AreaName = $location->location;
-                } else {
-                    $AreaName = $location->location_ar;
-                }
-            }
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            if ($_POST['delivery_date'] == '') {
-                $selectedDate = date('Y-m-d');
+        $data = Yii::$app->request->post();
+
+        $AreaName = '';
+        
+        $location = Location::findOne($data['area_id']);
+        
+        if ($location) {
+            if (Yii::$app->language == "en") {
+                $AreaName = $location->location;
             } else {
-                $selectedDate = $_POST['delivery_date'];
+                $AreaName = $location->location_ar;
             }
-            $item = VendorItem::findOne($_POST['item_id']);
-            if ($item) {
-                $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
-                $date = date('d-m-Y', strtotime($selectedDate));
-                if ($exist) {
-                    echo "<i class='fa fa-warning' style='color: Red; font-size: 19px;' aria-hidden='true'></i> Item Not Available for on this date '$date' for this location '$AreaName' ";
-                } else {
-                    echo "<i class='fa fa-check-circle' style='color: Green; font-size: 19px;' aria-hidden='true'></i> Item Available on this date '$date' for this location '$AreaName' ";
-                }
+        }
+
+        if ($data['delivery_date'] == '') {
+            $selectedDate = date('Y-m-d');
+        } else {
+            $selectedDate = $data['delivery_date'];
+        }
+
+        $item = VendorItem::findOne($data['item_id']);
+        
+        if ($item) {
+            
+            $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
+
+            $date = date('d-m-Y', strtotime($selectedDate));
+            
+            if ($exist) {
+                echo "<i class='fa fa-warning' style='color: Red; font-size: 19px;' aria-hidden='true'></i> Item Not Available for on this date '$date' for this location '$AreaName' ";
+            } else {
+                echo "<i class='fa fa-check-circle' style='color: Green; font-size: 19px;' aria-hidden='true'></i> Item Available on this date '$date' for this location '$AreaName' ";
             }
-            exit;
         }
     }
 
