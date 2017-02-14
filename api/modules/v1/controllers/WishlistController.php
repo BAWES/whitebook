@@ -103,26 +103,36 @@ class WishlistController extends Controller
      * Add to WishList table method
      */
     public function actionWishlistAdd() {
-        $customer_id = Yii::$app->user->getId();
-        $item_id = Yii::$app->request->getBodyParam("item_id");
 
-        $exist = Wishlist::find()->where(['item_id'=>$item_id,'customer_id'=>$customer_id])->exists();
-        if (!$exist) {
-            $wish_modal = new Wishlist;
-            $wish_modal->item_id = $item_id;
-            $wish_modal->customer_id = $customer_id;
-            $wish_modal->wish_status = 1;
-            if ($wish_modal->save()) {
-                return [
-                    "operation" => "success",
-                    "message" => "Item Added Successfully",
-                ];
-            } else {
-                return [
-                    "operation" => "error",
-                    "message" => "Error While Adding Item To Wishlist",
-                ];
+        if (Yii::$app->user->getId()) {
+            $customer_id = Yii::$app->user->getId();
+            $product_id = Yii::$app->request->getBodyParam("product_id");
+
+            $exist = Wishlist::find()->where(['item_id' => $product_id, 'customer_id' => $customer_id])->exists();
+            if (!$exist) {
+                $wish_modal = new Wishlist;
+                $wish_modal->item_id = $product_id;
+                $wish_modal->customer_id = $customer_id;
+                $wish_modal->wish_status = 1;
+                if ($wish_modal->save()) {
+                    return [
+                        "operation" => "success",
+                        "message" => "Item added to wishlist Successfully",
+                        "id" => $wish_modal->wishlist_id,
+                    ];
+                } else {
+                    return [
+                        "operation" => "error",
+                        "message" => "Error While Adding Item To Wishlist",
+                        "error" => $wish_modal->errors,
+                    ];
+                }
             }
+        } else {
+            return [
+                "operation" => "error",
+                "message" => "Please login to add item to wishlist",
+            ];
         }
     }
 
@@ -137,13 +147,24 @@ class WishlistController extends Controller
         if ($item && $item->delete()) {
             return [
                 "operation" => "success",
-                "message" => "Item Deleted Successfully",
+                "message" => "Item remove from wishlist successfully",
             ];
         } else {
             return [
                 "operation" => "error",
                 "message" => "Error While Deleting Item From Wishlist",
             ];
+        }
+    }
+
+    /**
+     * check is item is in wishlist or not
+     */
+
+    public function actionIsItemExist($product_id) {
+        if (Yii::$app->user->getId()) {
+            $exist = Wishlist::find()->where(['item_id' => $product_id, 'customer_id' => Yii::$app->user->getId()])->one();
+            return ($exist) ? $exist->wishlist_id : 0;
         }
     }
 }
