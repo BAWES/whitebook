@@ -11,6 +11,8 @@ use common\models\FeatureGroupItem;
 use common\models\Image;
 use common\models\VendorItemQuestion;
 use common\models\VendorItemQuestionGuide;
+use common\models\VendorItemMenu;
+use common\models\VendorItemMenuItem;
 use common\models\VendorDraftItemMenuItem;
 use common\components\CFormatter;
 
@@ -164,15 +166,38 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'label' => $vendor_item->item_for_sale != $model->item_for_sale ? 'ITEM FOR SALE *' : 'ITEM FOR SALE',
                             'value' => strip_tags($model->item_for_sale),
                         ],
-                        'quantity_label',
-                        'set_up_time',
-                        'set_up_time_ar',
-                        'max_time',
-                        'max_time_ar',
-                        'requirements',
-                        'requirements_ar',
-                        'min_order_amount',
-
+                        [
+                            'label' => $vendor_item->quantity_label != $model->quantity_label ? 'Quantity Label *' : 'Quantity Label',
+                            'value' => $model->quantity_label,
+                        ],
+                        [
+                            'label' => $vendor_item->set_up_time != $model->set_up_time ? 'Setup Time *' : 'Setup Time',
+                            'value' => $model->set_up_time,
+                        ],
+                        [
+                            'label' => $vendor_item->set_up_time_ar != $model->set_up_time_ar ? 'Setup Time - Arabic *' : 'Setup Time - Arabic',
+                            'value' => $model->set_up_time_ar,
+                        ],
+                        [
+                            'label' => $vendor_item->max_time != $model->max_time ? 'Duration *' : 'Duration',
+                            'value' => $model->max_time,
+                        ],
+                        [
+                            'label' => $vendor_item->max_time_ar != $model->max_time_ar ? 'Duration - Arabic *' : 'Duration - Arabic',
+                            'value' => $model->max_time_ar,
+                        ],
+                        [
+                            'label' => $vendor_item->requirements != $model->requirements ? 'Requirements *' : 'Requirements',
+                            'value' => $model->requirements,
+                        ],
+                        [
+                            'label' => $vendor_item->requirements_ar != $model->requirements_ar ? 'Requirements - Arabic *' : 'Requirements - Arabic',
+                            'value' => $model->requirements_ar,
+                        ],
+                        [
+                            'label' => $vendor_item->min_order_amount != $model->min_order_amount ? 'Min. Order KD *' : 'Min. Order KD',
+                            'value' => $model->min_order_amount,
+                        ],
                         [
                             'label'=>'ALLOW SPECIAL REQUEST?',
                             'format'=>'raw',
@@ -231,7 +256,11 @@ $this->params['breadcrumbs'][] = $model->item_name;
 
         <div class="tab-pane" id="3">
           <ul id="item_addon_menu_list">
-          <?php foreach ($arr_menu as $key => $value) { ?>
+          <?php foreach ($arr_menu as $key => $value) { 
+
+            $current_menu = VendorItemMenu::findOne($value->menu_id);
+
+            ?>
             <li>
               <table class="table table-bordered">
                 <thead>
@@ -252,18 +281,34 @@ $this->params['breadcrumbs'][] = $model->item_name;
                   <tr>
                     <td class="required">
                       <?= $value->menu_name ?>
+
+                      <?php if(!$current_menu || $current_menu->menu_name != $value->menu_name) { ?>
+                        *
+                      <?php } ?>
                     </td>
                     <td class="required">
                       <?= $value->menu_name_ar ?>
+                      <?php if(!$current_menu || $current_menu->menu_name_ar != $value->menu_name_ar) { ?>
+                        *
+                      <?php } ?>
                     </td>
                     <td>
                       <?= $value->min_quantity ?>
+                      <?php if(!$current_menu || $current_menu->min_quantity != $value->min_quantity) { ?>
+                        *
+                      <?php } ?>
                     </td>
                     <td>
                       <?= $value->max_quantity ?>
+                      <?php if(!$current_menu || $current_menu->max_quantity != $value->max_quantity) { ?>
+                        *
+                      <?php } ?>
                     </td>
                     <td>
                       <?= $value->quantity_type ?>
+                      <?php if(!$current_menu || $current_menu->quantity_type != $value->quantity_type) { ?>
+                        *
+                      <?php } ?>
                     </td>
                 </tr>
                 </tbody>
@@ -286,19 +331,40 @@ $this->params['breadcrumbs'][] = $model->item_name;
 
                   $arr_menu_item = VendorDraftItemMenuItem::findAll(['draft_menu_id' => $value->draft_menu_id]);
 
-                  foreach ($arr_menu_item as $key => $menu_item) { ?>
+                  foreach ($arr_menu_item as $key => $menu_item) { 
+
+                    $current_menu_item = VendorItemMenuItem::findOne($menu_item->menu_item_id);
+
+                    ?>
                   <tr>
                     <td class="required">
                       <?= $menu_item->menu_item_name ?>
+
+                      <?php if(!$current_menu_item || $current_menu_item->menu_item_name != $menu_item->menu_item_name) { ?>
+                        *
+                      <?php } ?>
+
                     </td>
                     <td class="required">
                       <?= $menu_item->menu_item_name_ar ?>
+
+                      <?php if(!$current_menu_item || $current_menu_item->menu_item_name_ar != $menu_item->menu_item_name_ar) { ?>
+                        *
+                      <?php } ?>
                     </td>
                     <td>
                       <?= $menu_item->hint ?>
+
+                      <?php if(!$current_menu_item || $current_menu_item->hint != $menu_item->hint) { ?>
+                        *
+                      <?php } ?>
                     </td>
                     <td>
                       <?= $menu_item->hint_ar ?>
+
+                      <?php if(!$current_menu_item || $current_menu_item->hint_ar != $menu_item->hint_ar) { ?>
+                        *
+                      <?php } ?>
                     </td>
                   </tr>
                   <?php } ?>
@@ -313,7 +379,11 @@ $this->params['breadcrumbs'][] = $model->item_name;
 
           <ul id="item_addon_menu_list">
 
-          <?php foreach ($arr_addon_menu as $key => $value) { ?>
+          <?php foreach ($arr_addon_menu as $key => $value) { 
+            
+                $current_menu = VendorItemMenu::findOne($value->menu_id);
+
+            ?>
           <li>
             <table class="table table-bordered">
               <thead>
@@ -331,9 +401,17 @@ $this->params['breadcrumbs'][] = $model->item_name;
                 <tr>
                   <td>
                     <?= $value->menu_name ?>
+
+                    <?php if(!$current_menu || $current_menu->menu_name != $value->menu_name) { ?>
+                        *
+                    <?php } ?>
                   </td>
                   <td>
                     <?= $value->menu_name_ar ?>
+
+                     <?php if(!$current_menu || $current_menu->menu_name_ar != $value->menu_name_ar) { ?>
+                        *
+                    <?php } ?>
                   </td>
                 </tr>
               </tbody>
@@ -357,22 +435,46 @@ $this->params['breadcrumbs'][] = $model->item_name;
 
                 $arr_menu_item = VendorDraftItemMenuItem::findAll(['draft_menu_id' => $value->draft_menu_id]);
 
-                foreach ($arr_menu_item as $key => $menu_item) { ?>
+                foreach ($arr_menu_item as $key => $menu_item) { 
+
+                  $current_menu_item = VendorItemMenuItem::findOne($menu_item->menu_item_id);
+
+                  ?>
                 <tr>
                   <td>
                     <?= $menu_item->menu_item_name ?>
+
+                    <?php if(!$current_menu_item || $current_menu_item->menu_item_name != $menu_item->menu_item_name) { ?>
+                      *
+                    <?php } ?>
                   </td>
                   <td>
                     <?= $menu_item->menu_item_name_ar ?>
+
+                    <?php if(!$current_menu_item || $current_menu_item->menu_item_name_ar != $menu_item->menu_item_name_ar) { ?>
+                      *
+                    <?php } ?>
                   </td>
                   <td>
                     <?= $menu_item->price ?>
+
+                    <?php if(!$current_menu_item || $current_menu_item->price != $menu_item->price) { ?>
+                      *
+                    <?php } ?>
                   </td>
                   <td>
                     <?= $menu_item->hint ?>
+
+                    <?php if(!$current_menu_item || $current_menu_item->hint != $menu_item->hint) { ?>
+                      *
+                    <?php } ?>
                   </td>
                   <td>
                     <?= $menu_item->hint_ar ?>
+
+                    <?php if(!$current_menu_item || $current_menu_item->hint_ar != $menu_item->hint_ar) { ?>
+                      *
+                    <?php } ?>
                   </td>
                   </td>
                 </tr>
@@ -387,10 +489,21 @@ $this->params['breadcrumbs'][] = $model->item_name;
         <div class="tab-pane" id="5">
             <ul class="row">
                 <?php foreach ($imagedata as $key => $image) {
+                    
                     $alias = Yii::getAlias('@vendor_item_images_210/');
+
+                    //check if already in item 
+                    $exists = Image::findOne(['item_id' => $model->item_id, 'image_path' => $image->image_path]);
+
                     ?>
                     <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-                        <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-responsive','id' => 'image-'.$key,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]); ?>
+                        
+                        <?php if(!$exists) {
+                            echo '*';
+                        } ?>
+
+                        <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-responsive ', 'id' => 'image-'.$key,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]); ?>
+
                     </li>
                 <?php } ?>
             </ul>
@@ -499,6 +612,7 @@ $this->registerJs("
 ", View::POS_HEAD);
 	
 $this->registerCss("
+      
       ul {
           padding:0 0 0 0;
           margin:0 0 0 0;

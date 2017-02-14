@@ -84,6 +84,8 @@ $this->params['breadcrumbs'][] = 'Update';
 						<tbody>
 							<tr>
 								<td>
+									<input type="hidden" name="addon_menu_item[<?= $addon_menu_count ?>][menu_id]" value="<?= $value->menu_id ?>" />
+
 									<input placeholder="Name" name="addon_menu_item[<?= $addon_menu_count ?>][menu_name]" value="<?= $value->menu_name ?>" class="txt_menu_name form-control" />
 								</td>
 								<td>
@@ -117,6 +119,8 @@ $this->params['breadcrumbs'][] = 'Update';
 							foreach ($arr_menu_item as $key => $menu_item) { ?>
 							<tr>
 								<td>
+									<input type="hidden" name="addon_menu_item[<?= $addon_menu_count ?>][menu_item_id]" value="<?= $menu_item->menu_item_id ?>" />
+
 									<input placeholder="Name" name="addon_menu_item[<?= $addon_menu_count ?>][menu_item_name]" value="<?= $menu_item->menu_item_name ?>" class="txt_menu_item_name form-control" />
 								</td>
 								<td>
