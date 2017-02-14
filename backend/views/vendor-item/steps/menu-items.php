@@ -109,6 +109,8 @@ $this->params['breadcrumbs'][] = 'Update';
 						<tbody>
 							<tr>
 								<td class="required">
+									<input name="menu_item[<?= $menu_count ?>][menu_id]" value="<?= $value->menu_id ?>" type="hidden" />
+
 									<input placeholder="Name" name="menu_item[<?= $menu_count ?>][menu_name]" value="<?= $value->menu_name ?>" class="form-control txt_menu_name" />
 								</td>
 								<td class="required">
@@ -158,6 +160,9 @@ $this->params['breadcrumbs'][] = 'Update';
 							foreach ($arr_menu_item as $key => $menu_item) { ?>
 							<tr>
 								<td class="required">
+
+									<input name="menu_item[<?= $menu_count ?>][menu_item_id]" value="<?= $menu_item->menu_item_id ?>" type="hidden" />
+
 									<input placeholder="Name" name="menu_item[<?= $menu_count ?>][menu_item_name]" value="<?= $menu_item->menu_item_name ?>" class="txt_menu_item_name form-control" />
 								</td>
 								<td class="required">
