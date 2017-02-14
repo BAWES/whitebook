@@ -131,6 +131,15 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         $vendor_id = $item->vendor_id;
 
+        //get item type 
+        $item_type = ItemType::findOne($item->type_id);
+
+        if($item_type) {
+            $item_type_name = $item_type->type_name;
+        } else {
+            $item_type_name = 'Product';
+        }
+
         //check if same item with same date available in cart 
         $in_cart = CustomerCart::find()
             ->where([
@@ -171,7 +180,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //check if desire quantity available 
 
-        if($valid_for_cart_item && $in_cart > $item->item_amount_in_stock) {
+        if($item_type_name == 'Product' && $valid_for_cart_item && $in_cart > $item->item_amount_in_stock) {
 
             $errors['cart_quantity'][] = [
                 
@@ -184,7 +193,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //validate to add product to cart 
 
-        if (!$valid_for_cart_item && $data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
+        if ($item_type_name == 'Product' && !$valid_for_cart_item && $data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
 
             $errors['cart_quantity'][] = [
                 
@@ -272,7 +281,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //3) campare capacity 
 
-        if($valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
+        if($item_type_name != 'Product' && $valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased;
 
@@ -290,7 +299,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //validate to add product to cart
 
-        if(!$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
+        if($item_type_name != 'Product' && !$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased - $in_cart;
 

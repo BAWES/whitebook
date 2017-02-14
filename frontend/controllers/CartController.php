@@ -8,6 +8,7 @@ use yii\web\Response;
 use frontend\models\Vendor;
 use common\models\VendorItem;
 use common\models\City;
+use common\models\ItemType;
 use common\models\CustomerCart;
 use common\models\DeliveryTimeSlot;
 use common\models\VendorItemMenu;
@@ -349,6 +350,16 @@ class CartController extends BaseController
             return $json;
         }
 
+        //get item type 
+
+        $item_type = ItemType::findOne($item->type_id);
+
+        if($item_type) {
+            $item_type_name = $item_type->type_name;
+        } else {
+            $item_type_name = 'Product';
+        }
+
         // get date after x day then convert it to unix time 
         
         $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' days')));
@@ -399,6 +410,7 @@ class CartController extends BaseController
         //default capacity is how many of it they can process per day
 
         //1) get capacity exception for selected date
+        
         $capacity_exception = \common\models\VendorItemCapacityException::findOne([
             'item_id' => $data['item_id'],
             'exception_date' => date('Y-m-d', strtotime($data['delivery_date']))
@@ -411,6 +423,7 @@ class CartController extends BaseController
         }
 
         //2) get no of item purchased for selected date
+
         $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "' . $data['item_id'] . '" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
 
         if ($purchased_result) {
@@ -419,7 +432,7 @@ class CartController extends BaseController
             $purchased = 0;
         }
 
-        if (($purchased) > $capacity) 
+        if ($item_type_name != 'Product' && $purchased > $capacity) 
         {
             $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
 

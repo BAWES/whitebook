@@ -320,13 +320,14 @@ if (!isGuest) {
 
         $qty = parseInt($('input[name="quantity"]').val());
         $capacity = parseInt($('#capacity').val());
+        $item_type_name = $('#item_type_name').val();
 
         if (jQuery(this).data('case') == 0) {
             if ($qty >= parseInt(jQuery('#quantity').data('min'))+1) {
                 jQuery('#quantity').val($qty - 1);
                 update_option_menu_item_qty();//remove option qty for max option rule 
             }
-        } else if (jQuery(this).data('case') == 1 && $qty < $capacity) {
+        } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || $qty < $capacity)) {
             jQuery('#quantity').val($qty + 1);
         }
 
@@ -388,9 +389,11 @@ function productAvailability(date){
 
                 $qty = $('input[name="quantity"]').val();
 
+                $item_type_name = $('#item_type_name').val();
+
                 //if qty selected exceed capacity 
 
-                if($qty > json['capacity']) {
+                if($item_type_name != 'Product' && $qty > json['capacity']) {
                     $('input[name="quantity"]').val(json['capacity']);   
                     update_price();
                     update_option_menu_title_hint();    

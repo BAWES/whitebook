@@ -380,7 +380,7 @@ $this->registerJs("
 </div>
 <?php
 
-$this->registerJsFile('@web/js/cart.js?v=1.0', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/cart.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	.max-width-150-px{max-width: 150px;}
