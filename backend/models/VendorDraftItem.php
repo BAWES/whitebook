@@ -59,30 +59,24 @@ class VendorDraftItem extends \common\models\VendorDraftItem
     public function rules()
     {
         return [
-
-            //ItemApproval
-
-            [['item_approved'], 'required', 'on' => ['ItemApproval']],
            
             //MenuItems
 
-            [['allow_special_request', 'have_female_service', 'min_order_amount'], 'number', 'on' => ['MenuItems']],
-
-            [['quantity_label', 'set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar'], 'string', 'max' => 256, 'on' => ['MenuItems']],
+            [['allow_special_request', 'have_female_service'], 'number', 'on' => ['MenuItems']],
 
             //ItemPrice
 
-            [['item_for_sale', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
+            [['quantity_label', 'item_for_sale', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
             
-            [['item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
+            [['item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
             
-            [['item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
+            [['min_order_amount', 'item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
+
+            [['type_id'], 'integer', 'on' => ['ItemPrice']],
 
             //ItemDescription
-
-            [['type_id'], 'integer', 'on' => ['ItemDescription']],
             
-            [['item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
+            [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
 
             //ItemInfo
             
@@ -93,14 +87,12 @@ class VendorDraftItem extends \common\models\VendorDraftItem
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-
-        $scenarios['ItemApproval'] = ['item_status, item_approved'];
         
-        $scenarios['MenuItems'] = ['quantity_label', 'set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'min_order_amount', 'allow_special_request', 'have_female_service'];
+        $scenarios['MenuItems'] = ['allow_special_request', 'have_female_service'];
         
-        $scenarios['ItemPrice'] = ['item_for_sale', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
+        $scenarios['ItemPrice'] = ['min_order_amount', 'quantity_label', 'item_for_sale', 'item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
         
-        $scenarios['ItemDescription'] = ['type_id', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
+        $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
 
         $scenarios['ItemInfo'] = ['item_name', 'item_name_ar', 'item_status'];
 

@@ -33,17 +33,17 @@ $this->params['breadcrumbs'][] = 'Update';
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>">
-	    		Item description
+	    		Description
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-price', 'id' => $model->item_id]) ?>">
-	    		Item price 
+	    		Price and Inventory
 	    	</a>
 	    </li>
 	    <li class="active">
 	    	<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>">
-	    		Menu items
+	    		Menu
 	    	</a>
 	    </li>
 	    <li>
@@ -60,25 +60,6 @@ $this->params['breadcrumbs'][] = 'Update';
 
 	<div class="tab-content">
 		<div class="tab-pane clearfix active">
-
-			<?= $form->field($model, 'quantity_label')->dropDownList([
-					'Quantity' => 'Quantity',
-					'Serve' => 'Serve'
-				]); ?>
-
-			<?= $form->field($model, 'set_up_time'); ?>
-
-			<?= $form->field($model, 'set_up_time_ar'); ?>
-
-			<?= $form->field($model, 'max_time'); ?>
-
-			<?= $form->field($model, 'max_time_ar'); ?>
-
-			<?= $form->field($model, 'requirements'); ?>
-
-			<?= $form->field($model, 'requirements_ar'); ?>
-
-			<?= $form->field($model, 'min_order_amount'); ?>
 
 			<?= $form->field($model, 'allow_special_request')->checkbox(); ?>
 
