@@ -38,6 +38,12 @@ if($model->type) {
     $item_type_name = 'Product';
 }
 
+if($model['item_minimum_quantity_to_order'] > 0) {
+    $min_quantity_to_order = $model['item_minimum_quantity_to_order'];
+}else{
+    $min_quantity_to_order = 1;
+}
+
 $capacity = $model->item_default_capacity;
 
 if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapacityExceptions)>0) {
@@ -69,7 +75,7 @@ if($model->images) {
    "offers": {
     "@type": "Offer",
     "priceCurrency": "KWD",
-    "price": "<?= $model['item_price_per_unit'] * $model['item_minimum_quantity_to_order'] ?>",
+    "price": "<?= $model['item_price_per_unit'] * $min_quantity_to_order ?>",
     "availability": "http://schema.org/InStock",
     "seller": {
       "name": "<?= $vendor_name; ?>"
@@ -147,8 +153,6 @@ if($model->images) {
                 </div>
             </div>
         </div>
-        <?php }else{ ?>
-        Not for sale
         <?php } ?>
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
@@ -167,7 +171,7 @@ if($model->images) {
                                    
                                     <?php if($model['item_price_per_unit'] > 0) { 
                                          
-                                            echo CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']);
+                                            echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
                                          
                                           } elseif ($menu) { 
                                         
@@ -260,7 +264,7 @@ if($model->images) {
 
                                         <?php if($model['item_price_per_unit'] > 0) { 
                                          
-                                            echo CFormatter::format($model['item_price_per_unit'] * $model['item_minimum_quantity_to_order']);
+                                            echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
                                          
                                           } elseif ($menu) { 
                                         
