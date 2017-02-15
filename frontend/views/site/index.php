@@ -260,6 +260,17 @@ if (!empty($feature_group_sql_result)) {
                                         <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
                                         <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
                                     <?php } ?>
+
+                                    <?php if($product_val['item_how_long_to_make'] > 0) { ?>
+                                    <div class="callout-container" style="bottom: 10px;">
+                                        <span class="callout light">
+                                            <?= Yii::t('frontend', 'Notice: {count} days', [
+                                                    'count' => $product_val['item_how_long_to_make']
+                                                ]); ?>
+                                        </span>
+                                    </div>
+                                    <?php } ?>
+
                                 </a>
 
                                 <a href="<?= $item_url ?>">

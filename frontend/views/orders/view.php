@@ -5,6 +5,8 @@ use common\models\Vendor;
 use common\models\OrderStatus;
 use common\components\CFormatter;
 use common\components\LangFormat;
+use common\models\SuborderItemMenu;
+
 $this->title = Yii::t('frontend', 'View Order | Whitebook'); 
 
 ?>
@@ -84,7 +86,38 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                     <?php foreach (Order::subOrderItems($row->suborder_id) as $item) { ?>
                         <tr>
                             <td align="left">
-                                <?= LangFormat::format($item->vendoritem->item_name, $item->vendoritem->item_name_ar); ?>
+                                <?php 
+
+                                echo LangFormat::format($item->vendoritem->item_name, $item->vendoritem->item_name_ar);
+
+                                $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
+                                
+                                foreach ($menu_items as $key => $menu_item) { 
+                                    if (Yii::$app->language == 'en') { 
+                                        echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+                                    } else {
+                                        echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
+                                    }                                    
+
+                                    $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                                    if($menu_item_total) {
+                                        echo ' = '.CFormatter::format($menu_item_total);    
+                                    }
+                                    
+                                    echo '</i>';
+                                } 
+                                
+                                if($item['female_service']) {
+                                    echo '<i class="cart_menu_item"> - '.Yii::t('frontend', 'Female service').'</i>';
+                                }
+
+                                if($item['special_request']) {
+                                    echo '<i class="cart_menu_item"> - '.$item['special_request'].'</i>';
+                                }
+                                
+                                ?>
+
                                 <div class="visible-xs visible-sm">
                                     x <?= $item->purchase_quantity ?> = <?= CFormatter::format($item->purchase_total_price) ?>
                                 </div>

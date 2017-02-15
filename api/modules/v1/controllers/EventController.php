@@ -3,7 +3,6 @@
 namespace api\modules\v1\controllers;
 
 use admin\models\EventType;
-use common\models\CustomerToken;
 use Yii;
 use yii\rest\Controller;
 use \common\models\Events;
@@ -97,14 +96,12 @@ class EventController extends Controller
             $exit = Events::find()
                 ->where(['customer_id' => $customer_id, 'event_name' => $name])
                 ->exists();
-
             if ($exit) {
                 return [
                     "operation" => "error",
                     "message" => "Event Already Exist With Same Name."
                 ];
             }
-
             $model = new Events;
             $model->customer_id = $customer_id;
             $model->event_name = $name;
@@ -115,9 +112,8 @@ class EventController extends Controller
             if ($model->save()) {
                 return [
                     "operation" => "success",
-                    "message" => "Event Created Successfully."
+                    "message" => "Event Created Successfully.",
                 ];
-
             } else {
                 return [
                     "operation" => "error",
@@ -125,9 +121,7 @@ class EventController extends Controller
                     "detail" => $model->errors
                 ];
             }
-
         } else {
-
             return [
                 "operation" => "error",
                 "message" => "Empty event fields."
@@ -185,7 +179,7 @@ class EventController extends Controller
      */
     public function actionEventRemove($event_id) {
 
-        if ($event_id) {
+	if ($event_id) {
             $event = Events::find()
                 ->where(['customer_id' => Yii::$app->user->getId(), 'event_id' => $event_id])
                 ->one();
@@ -208,6 +202,7 @@ class EventController extends Controller
             ];
         }
     }
+
 
     /*
      * Method to list all event related with particular user
@@ -233,7 +228,6 @@ class EventController extends Controller
             ->where(['trash'=>'default'])
             ->all();
     }
-
     /*
      * Common method to generate slug from string
      */

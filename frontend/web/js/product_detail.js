@@ -1,6 +1,14 @@
 
     jQuery(document).ready(function () {
 
+        $start_date = '+' + $('#item_how_long_to_make').val() + 'd';
+
+        $('#item_delivery_date').datepicker({
+            format: 'dd-mm-yyyy',
+            startDate: $start_date,
+            autoclose:true,
+        });
+
         $('[data-toggle="tooltip"]').tooltip(); 
 
         /* client say slider start*/
@@ -295,132 +303,207 @@ if (!isGuest) {
                         });
                     });
 
+                    if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
+                        $('a[href="#collapse-options"]').trigger('click');
+                    }
+
+                    $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
                 }
             }
         );
 
         e.preventDefault();
     });
-
-    jQuery('.buy_item').click(function (e) {
-
-        var item_id = jQuery(this).attr('id');
-
-        jQuery.get(
-            addtobasket_url,
-            {
-                'item_id': item_id,
-                'cust_id': customer_id
-            },
-            function (data)
-            {
-                jQuery('#option_modal_wrapper').html(data);
-                jQuery('#productOptionModal').modal('show');
-                jQuery('.selectpicker').selectpicker();
-
-                jQuery('.date').datepicker({
-                    container:'#delivery_date_wrapper'
-                });
-            }
-        );
-
-        e.preventDefault();
-    });
-
-    function deliveryTimeSlot(date){
-        var myDate = new Date()
-        time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
-        currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
-        jQuery.ajax({
-            type: 'POST',
-            url: getdeliverytimeslot_url,
-            data: { 'vendor_id': vendor_id, 'sel_date': date,'time':time,currentDate:currentDate},
-            success: function (data)
-            {
-                if (jQuery.trim(data) == 0) {
-                    $('.timeslot_id_div').show();
-                    $('.timeslot_id_div .text').html('Delivery not available for the selected date');
-                    $('.timeslot_id_select').hide();
-                    jQuery('#timeslot_id').html('');
-                } else {
-                    $('.timeslot_id_div').hide();
-                    $('.timeslot_id_select').show();
-                    jQuery('#timeslot_id').html(data);
-                    jQuery('#timeslot_id').selectpicker('refresh');
-                    jQuery('.error.timeslot_id').html('');
-                }
-            }
-        });
-    }
-
-    function productAvailability(date){
-        jQuery.ajax({
-            type: 'POST',
-            url: product_availability,
-            data: $('#form_product_option').serialize(),
-            success: function (data)
-            {
-                if (jQuery.trim(data) != '1') {
-                    $('.timeslot_id_div').show();
-                    $('.timeslot_id_div .text').html(data);
-                    $('.timeslot_id_select').hide();
-                    $('#timeslot_id').html('');
-                    return false;
-                }else{
-                    deliveryTimeSlot(date);
-                }
-            }
-        });
-    }
-
-    // pre set value for Delivery date on product detail page
-    if (deliver_date) {
-        productAvailability(jQuery('#delivery_date').val());
-    }
 
     // Shop product page quantity increment and decrement stepper
-    jQuery(document).on('click','.btn-stepper',function(){
+    jQuery(document).on('click','.btn-stepper',function() {
+
+        $qty = parseInt($('input[name="quantity"]').val());
+        $capacity = parseInt($('#capacity').val());
+        $item_type_name = $('#item_type_name').val();
+
         if (jQuery(this).data('case') == 0) {
-            if (parseInt(jQuery('#quantity').val()) >= parseInt(jQuery('#quantity').data('min'))+1) {
-                jQuery('#quantity').val(parseInt(jQuery('#quantity').val()) - 1);
+            if ($qty >= parseInt(jQuery('#quantity').data('min'))+1) {
+                jQuery('#quantity').val($qty - 1);
+                update_option_menu_item_qty();//remove option qty for max option rule 
             }
-        } else if (jQuery(this).data('case') == 1) {
-            jQuery('#quantity').val(parseInt(jQuery('#quantity').val())+1);
+        } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || $qty < $capacity)) {
+            jQuery('#quantity').val($qty + 1);
         }
+
+        update_price();
+        update_option_menu_title_hint();
+
         return false;
     });
 }
 
+function deliveryTimeSlot(date){
+    var myDate = new Date()
+    time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
+    currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
+    jQuery.ajax({
+        type: 'POST',
+        url: getdeliverytimeslot_url,
+        data: { 'vendor_id': vendor_id, 'sel_date': date,'time':time,currentDate:currentDate},
+        success: function (data)
+        {
+            if (jQuery.trim(data) == 0) {
+                $('.timeslot_id_div').show();
+                $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                $('.timeslot_id_select').hide();
+                jQuery('#timeslot_id').html('');
+            } else {
+                $('.timeslot_id_div').hide();
+                $('.timeslot_id_select').show();
+                jQuery('#timeslot_id').html(data);
+                jQuery('#timeslot_id').selectpicker('refresh');
+                jQuery('.error.timeslot_id').html('');
+            }
+        }
+    });
+}
+
+function productAvailability(date){
+    jQuery.ajax({
+        type: 'POST',
+        url: product_availability,
+        data: $('#form_product_option').serialize(),
+        success: function (json)
+        {
+            if (json['error']) {
+
+                $('.timeslot_id_div').show();
+                $('.timeslot_id_div .text').html(json['error']);
+                $('.timeslot_id_select').hide();
+                $('#timeslot_id').html('');
+                return false;   
+
+            } else { 
+                
+                deliveryTimeSlot(date);
+
+                //set capacity for given date 
+                
+                $('#capacity').val(json['capacity']);
+
+                $qty = $('input[name="quantity"]').val();
+
+                $item_type_name = $('#item_type_name').val();
+
+                //if qty selected exceed capacity 
+
+                if($item_type_name != 'Product' && $qty > json['capacity']) {
+                    $('input[name="quantity"]').val(json['capacity']);   
+                    update_price();
+                    update_option_menu_title_hint();    
+                    update_option_menu_item_qty();             
+                }
+
+            } 
+        }
+    });
+}
+
+// pre set value for Delivery date on product detail page
+if (deliver_date) {
+    productAvailability(jQuery('#item_delivery_date').val());
+}
+
 // product detail page Delivery Date change event
-$("#delivery_date").on("changeDate", function(e) {
+$("#item_delivery_date").on("changeDate", function(e) {
     $('.error.cart_delivery_date').html('');
     productAvailability(jQuery(this).val());
 });
 
 $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
    
+    if (isGuest) {
+        show_login_modal('-2');
+        $('#myModal').modal('show');
+        return false;
+    }
+
     $qty_input = $(this).parent().find('input');
 
     $qty = parseInt($qty_input.val());
 
-    $qty_input.val($qty - 1);
+    if($qty - 1 >= 0)
+    {
+        $qty_input.val($qty - 1);    
+    }  
 
     update_price();
 });
 
 $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
-   
+
+    if (isGuest) {
+        show_login_modal('-2');
+        $('#myModal').modal('show');
+        return false;
+    }
+
+    $qty = $('input[name="quantity"]').val();
+
+    //max quantity for menu 
+
+    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
+
     $qty_input = $(this).parent().find('input');
 
     $qty = parseInt($qty_input.val());
 
-    $qty_input.val($qty + 1);
+    //get total qty in menu
 
+    $menu_total_qty = 0;
+
+    $.each($(this).parents('.menu-items').find('input'), function() {
+        $menu_total_qty += parseInt($(this).val());
+    });
+
+    // if max defined && total not exceeding max allowed
+
+    if($menu_total_qty + 1 <= $max || $max == 0) {
+        $qty_input.val($qty + 1);    
+    }    
+    
+    update_price();
+});
+
+$(document).delegate('.menu-items .checkbox input', 'click', function(e) {
+
+    if (isGuest) {
+        show_login_modal('-2');
+        $('#myModal').modal('show');
+        return false;
+    }
+
+    $qty = $('input[name="quantity"]').val();
+
+    //max quantity for menu 
+
+    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
+
+    //get total qty in menu
+
+    $menu_total_qty = 0;
+
+    $.each($(this).parents('.menu-items').find('input:checked'), function() {
+        $menu_total_qty += parseInt($(this).val());
+    });
+
+    // if max defined && total not exceeding max allowed
+
+    if($max > 0 && $menu_total_qty > $max) {
+        return false;
+    }    
+    
     update_price();
 });
 
 function update_price() {
-    $.post($('#final_price_url').val(), $('.menu-item-detail input').serialize(), function(json) {
+    $.post($('#final_price_url').val(), $('#form_product_option').serialize(), function(json) {
         $('.item-final-price').html(json.price);
     });
 }
@@ -480,4 +563,84 @@ $(document).delegate(".btn-booking-modal", 'click', function(){
     $('#modal_booking_service').modal('show');
 });
 
+$(document).delegate("#timeslot_id", 'changed.bs.select', function() {
+    
+    $timeslot_id = $(this).find('option:selected').val();
+
+    $.post($('#save-delivery-timeslot-url').val(), { 'deliver-timeslot' : $timeslot_id });
+});
+
+$(document).delegate('input[name="quantity"]', 'change', function() {
+    update_price();
+    update_option_menu_title_hint();
+    update_option_menu_item_qty();
+});
+
+function update_option_menu_title_hint() {
+
+    $.each($('.menu-hint'), function() {
+
+        $max = $(this).attr('data-max-quantity');
+        $min = $(this).attr('data-min-quantity');
+        $qty = $('#quantity').val();
+
+        //build html 
+
+        $html = $('#txt-select').val();
+
+        if($min > 0) {
+            $html += $('#txt-min').val().replace('{qty}', $min * $qty);
+        }
+        
+        if($min > 0 && $max > 0) { 
+            $html += ' , ';
+        }
+
+        if($max > 0) {
+            $html += $('#txt-max').val().replace('{qty}', $max * $qty);
+        }
+
+        $(this).html($html);
+    });    
+}
+
+function update_option_menu_item_qty() {
+
+    $.each($('#collapse-options ul.menu-items'), function() {
+
+        $max = $(this).attr('data-max-quantity') * $('input[name="quantity"]').val();
+
+        $total = 0;
+
+        $.each($(this).find('li'), function() {
+
+            $qty_input = $(this).find('.menu-item-qty');
+
+            $qty = parseInt($qty_input.val());
+
+            //if exceed limit 
+            if($total + $qty > $max) {
+
+                //if checkbox, uncheck
+                if($qty_input.attr('type') == "checkbox" && $qty_input.prop("checked") == true) 
+                {
+                    $qty_input.prop('checked', false);
+                } 
+                else if ($max - $total > 0) 
+                {
+                    $qty_input.val($max - $total);
+                    console.log('Setting : max - total = ' + ($max-$total));
+                } 
+                else 
+                {
+                    $qty_input.val(0);
+                    console.log('Setting : = ' + 0);
+                }
+            }
+
+            $total += $qty;
+        });
+    });
+}
+        
 

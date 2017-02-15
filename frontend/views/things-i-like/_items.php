@@ -19,7 +19,7 @@ foreach ($items as $key => $value) {
                     <?php
                     
                     $path = (isset($value['image_path'])) ? Yii::getAlias("@s3/vendor_item_images_210/").$value['image_path'] : Url::to("@web/images/item-default.png");
-                        
+
                     echo Html::img($path,['class'=>'item-img']);
 
                     ?>

@@ -25,7 +25,6 @@ use common\models\VendorItemToPackage;
 * @property integer $item_amount_in_stock
 * @property integer $item_default_capacity
 * @property string $item_price_per_unit
-* @property string $item_customization_description
 * @property string $item_price_description
 * @property string $item_for_sale
 * @property integer $item_how_long_to_make
@@ -111,13 +110,16 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
-            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_customization_description', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash'], 'string'],
+            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'quantity_label'], 'string'],
             
-            [['item_price_per_unit'], 'number'],
+            [['item_price_per_unit', 'min_order_amount'], 'number'],
             
-            [['created_datetime', 'modified_datetime','item_status','image_path'], 'safe'],
+            [['created_datetime', 'modified_datetime','item_status','image_path', 'allow_special_request', 'have_female_service'], 'safe'],
 
             [['item_name', 'item_name_ar'], 'string', 'max' => 128],
+
+            [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar'], 'string', 'max' => 256],
+
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
@@ -129,7 +131,7 @@ class VendorItem extends \yii\db\ActiveRecord
     {
         $scenarios = parent::scenarios();
         $scenarios['VendorItemAdd'] = ['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
-        'item_default_capacity', 'item_customization_description', 'item_price_description',
+        'item_default_capacity', 'item_price_description',
             'item_price_description_ar', 'item_how_long_to_make',
         'item_minimum_quantity_to_order','item_name','item_name_ar',
         'item_for_sale','item_price_per_unit'];
@@ -154,14 +156,12 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_additional_info' => 'Item Additional Info',
             'item_additional_info_ar' => 'Item Additional Info - Arabic',
             'item_amount_in_stock' => 'Item Number of Stock',
-            'item_default_capacity' => 'Item Default Capacity',
-            'item_price_per_unit' => 'Item Price per Unit',
-            'item_customization_description' => 'Item Customization Description',
-            'item_customization_description_ar' => 'Item Customization Description - Arabic',
+            'item_default_capacity' => 'Maximum quantity ordered per day',
+            'item_price_per_unit' => 'Price',
             'item_price_description' => 'Item Price Description',
             'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_for_sale' => 'Shop - Available for sale',
-            'item_how_long_to_make' => 'No of days delivery',
+            'item_how_long_to_make' => 'Notice Period',
             'item_minimum_quantity_to_order' => 'Item Minimum Quantity to Order',
             'item_approved' => 'Item Approved',
             'created_by' => 'Created By',
@@ -172,6 +172,15 @@ class VendorItem extends \yii\db\ActiveRecord
             'subcategory_id'=>'Sub category',
             'item_status'=> 'Display on website',
             'child_category'=>'Third Level Category',
+            'set_up_time' => 'Setup time',
+            'set_up_time_ar' => 'Setup time - Arabic',
+            'max_time' => 'Duration',
+            'max_time_ar' => 'Duration - Arabic',
+            'requirements' => 'Requirements',
+            'requirements_ar' => 'Requirements - Arabic',
+            'whats_include' => 'What\'s include?', 
+            'whats_include_ar' => 'What\'s include? - Arabic', 
+            'min_order_amount' => 'Min. Order KD'
         ];
     }
 
@@ -431,10 +440,6 @@ class VendorItem extends \yii\db\ActiveRecord
             $this->item_price_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description);
 
             $this->item_price_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description_ar);
-
-            $this->item_customization_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_customization_description);
-
-            $this->item_customization_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_customization_description_ar);            
 
             return true;
         } else {

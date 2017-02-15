@@ -35,6 +35,8 @@ if($model->isNewRecord){
 
 			<div class="tab-pane" id="1" >
 
+				<?= Html::activeHiddenInput($model, 'version', ['id' => 'version']); ?>
+				
 				<input type="hidden" name="item_id" value="<?= $model->item_id ?>" />
 
 				<?= $form->field($model, 'item_name')->textInput(['maxlength' => 128]) ?>
@@ -124,17 +126,17 @@ if($model->isNewRecord){
 
 				<?= $form->field($model, 'item_description')
 						->label('Item description'.Html::tag('span', '*',['class'=>'required']))
-						->textarea(['maxlength' => 128]); ?>
+						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_description']); ?>
 
 				<?= $form->field($model, 'item_description_ar')
-						->label('Item description - Arabic'.Html::tag('span', '*', ['class'=>'required']))
-						->textarea(['maxlength' => 128]) ?>
+						->label('Item description - Arabic'.Html::tag('span', '*',['class'=>'required']))
+						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_description_ar']); ?>
 
 				<?= $form->field($model, 'item_additional_info')
-						->textarea(['maxlength' => 128]) ?>
+						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_additional_info']); ?>
 
 				<?= $form->field($model, 'item_additional_info_ar')
-						->textarea(['maxlength' => 128]) ?>
+						->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_additional_info_ar']); ?>
 
 				<div class="col-lg-4">
 					<input type="button" name="btnPrevious" class="btnPrevious btn btn-info" value="Prev" />
@@ -210,20 +212,26 @@ if($model->isNewRecord){
 				</div>
 				<?php } ?>
 
-				<?= $form->field($model, 'item_price_description')->textarea(); ?>
-
-				<?= $form->field($model, 'item_price_description_ar')->textarea(); ?>
+				<?= $form->field($model, 'item_price_description')->textarea([
+						'id' => 'vendoritem-item_price_description'
+					]) ?>
+				
+				<?= $form->field($model, 'item_price_description_ar')->textarea([
+						'id' => 'vendoritem-item_price_description_ar'
+					]) ?>
 
 				<?= $form->field($model, 'item_customization_description')
 						->textarea([
 							'class' => 'form-group custom_description',
-							'maxlength' => 128
+							'maxlength' => 128,
+							'id' => 'vendoritem-item_customization_description'
 						]); ?>
-					
+
 				<?= $form->field($model, 'item_customization_description_ar')
 						->textarea([
+							'class' => 'form-group custom_description_ar',
 							'maxlength' => 128,
-							'class' => 'form-group custom_description'
+							'id' => 'vendoritem-item_customization_description_ar'
 						]); ?>
 
 				<div class="col-lg-4">
@@ -380,4 +388,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.15', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.16', ['depends' => [\yii\web\JqueryAsset::className()]]);

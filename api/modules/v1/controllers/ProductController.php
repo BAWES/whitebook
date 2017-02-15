@@ -2,6 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
+use common\models\Themes;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
@@ -48,6 +49,8 @@ class ProductController extends Controller
             'options',
             'category-products',
             'product-detail',
+            'load-all-themes',
+            'load-all-vendor',
         ];
 
         return $behaviors;
@@ -77,6 +80,7 @@ class ProductController extends Controller
      */
     public function actionCategoryProducts(
         $category_id,
+        $offset = 0,
         $forSale = null,
         $requestedLocation = null,
         $requestedDeliverDate = null,
@@ -87,7 +91,6 @@ class ProductController extends Controller
     )
     {
         $products = [];
-        $offset = 0;
         $limit = Yii::$app->params['limit'];
 
         if (isset($requestedVendor) && $requestedVendor != '') {
@@ -211,7 +214,7 @@ class ProductController extends Controller
                 ->orderBy(['vendorimage_sort_order' => SORT_ASC])
                 ->one();
                 if ($image) {
-                    $products[] = $item + ['image'=>Yii::getAlias("@s3/vendor_item_images_210/").$image->image_path];
+                    $products[] = $item + ['image'=>$image->image_path];
                 } else {
                     $products[] = $item;
                 }
@@ -281,56 +284,46 @@ class ProductController extends Controller
         }
     }
 
-    public function actionProductAreas($vendor_id) {
+    public function actionProductAreas($vendor_id = '') {
 
+        $userAddress = [];
         $customer_id = Yii::$app->user->getId();
 
-        $vendor_area_list = [];
-        if (empty($vendor_id) || !isset($vendor_id)) {
-            return [
-                "operation" => "error",
-                'message' => 'Invalid Vendor ID'
-            ];
+        if ($vendor_id) {
+            $vendor_area = VendorLocation::find()
+                ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
+                ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
+                ->where(['{{%vendor_location}}.vendor_id' => $vendor_id])
+                ->asArray()
+                ->all();
+        } else {
+            $vendor_area = VendorLocation::find()
+                ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
+                ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
+                ->asArray()
+                ->all();
         }
 
-        if (empty($customer_id) || !isset($customer_id)) {
-            return [
-                "operation" => "error",
-                'message' => 'Invalid Customer ID'
-            ];
+        if ($customer_id) {
+            $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id');
+
+            $my_addresses = \common\models\CustomerAddress::find()
+                ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
+                ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
+                ->where(['{{%customer_address}}.trash' => 'Default'])
+                ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+                ->andwhere(['{{%location}}.id' => $area_ids])
+                ->groupby(['{{%location}}.id'])
+                ->asArray()
+                ->all();
+
+            foreach ($my_addresses as $address) {
+                $userAddress[] = ['area_id' => 'address_' . $address['address_id'], 'location' => $address['address_name']];
+            }
+            return $userAddress + $vendor_area;
         }
-        $vendor_area = VendorLocation::findAll(['vendor_id' => $vendor_id]);
-        $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
-        $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
 
-
-        $my_addresses =  \common\models\CustomerAddress::find()
-            ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
-            ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
-            ->where(['{{%customer_address}}.trash'=>'Default'])
-            ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
-            ->andwhere(['{{%location}}.id' => $area_ids])
-            ->groupby(['{{%location}}.id'])
-            ->asArray()
-            ->all();
-
-        $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
-
-        if (count($myaddress_area_list)>0) {
-
-            // add prefix to address id ex: address_14,address_15
-            $myNewArray = array_combine(
-                array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
-                $myaddress_area_list
-            );
-
-            $combined_myaddress = array(
-                Yii::t('frontend', 'My Addresses') => $myNewArray
-            );
-
-            $vendor_area_list = $combined_myaddress + $vendor_area_list;
-        }
-        return $vendor_area_list;
+        return $userAddress;
     }
 
     /*
@@ -382,20 +375,55 @@ class ProductController extends Controller
                     if (strtotime($time) < strtotime($value['timeslot_start_time'])) {
                         $start = date('g:i A', strtotime($value['timeslot_start_time']));
                         $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                        $list = array_merge($list,[$value['timeslot_id']=>$start . ' - ' . $end]);
+                        $list[] = array(
+                            'id'=>$value['timeslot_id'],
+                            'value'=>$start . ' - ' . $end
+                        );
                     }
                 } else {
                     $start = date('g:i A', strtotime($value['timeslot_start_time']));
                     $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                    $list = array_merge($list,[$value['timeslot_id']=>$start . ' - ' . $end]);
+                    $list[] = array(
+                        'id'=>$value['timeslot_id'],
+                        'value'=>$start . ' - ' . $end
+                    );
                 }
             }
             return $list;
         } else {
-            return [
-                "operation" => "error",
-                'message' => 'Item is not available on selected date'
-            ];
+            return [];
         }
+    }
+
+    public function actionItemCapacity($product_id, $deliver_date) {
+        $model = VendorItem::find()->where(['item_id'=>$product_id])->one();
+        $capacity = $model->item_default_capacity;
+
+        if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapacityExceptions)>0) {
+
+            $exceptionDate = \yii\helpers\ArrayHelper::map($model->vendorItemCapacityExceptions, 'exception_date', 'exception_capacity');
+
+            if (isset($exceptionDate) && count($exceptionDate) > 0) {
+                if ($deliver_date && isset($exceptionDate[date('Y-m-d',strtotime($deliver_date))])) {
+                    $capacity = $exceptionDate[date('Y-m-d',strtotime($deliver_date))];
+                }
+            }
+        }
+        return $capacity;
+    }
+
+    public function actionLoadAllThemes() {
+        return Themes::findAll(['theme_status'=>'Active']);
+    }
+
+    public function actionLoadAllVendor() {
+        return $query = Vendor::find()
+            ->andWhere(['{{%vendor}}.trash'=>'Default'])
+            ->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
+            ->andWhere(['{{%vendor}}.vendor_status'=>'Active'])
+            ->orderby(['{{%vendor}}.vendor_name' => SORT_ASC])
+            ->groupby(['{{%vendor}}.vendor_id'])
+            ->asArray()
+            ->all();
     }
 }

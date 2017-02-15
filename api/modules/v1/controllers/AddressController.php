@@ -68,7 +68,7 @@ class AddressController extends Controller
     public function actionAddressTypeList() {
 
         return AddressType::find()
-            ->select(['type_id', 'type_name', 'type_name_ar'])
+            ->select(['type_id', 'type_name'])
             ->where([
                 'status' => 'Active',
                 'trash' => 'Default'
@@ -78,19 +78,19 @@ class AddressController extends Controller
     /*
      * Listing of all address
      */
-    public function actionAddressList() {
+    public function actionAddressList($offset) {
 
-        return $this->listing();
+        return $this->listing($offset);
     }
 
     /*
      * Common method to call for Listing of all address
      */
-    private function listing(){
+    private function listing($offset = 0){
 
         $customer_id = Yii::$app->user->getId();
         $addresses = array();
-
+        $limit = Yii::$app->params['limit'];
         $result = CustomerAddress::find()
             ->select('whitebook_city.city_name, whitebook_city.city_name_ar, whitebook_location.location,
                 whitebook_location.location_ar, whitebook_customer_address.*')
@@ -98,18 +98,23 @@ class AddressController extends Controller
             ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
             ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
             ->asArray()
+            ->orderBy('address_id DESC')
+            ->limit($limit)
+            ->offset($offset)
             ->all();
 
-        foreach($result as $row) {
+        if ($result) {
+            foreach ($result as $row) {
 
-            $row['questions'] = CustomerAddressResponse::find()
-                ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
-                ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
-                ->where('address_id = :address_id', [':address_id' => $row['address_id']])
-                ->asArray()
-                ->all();
+                $row['questions'] = CustomerAddressResponse::find()
+                    ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
+                    ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
+                    ->where('address_id = :address_id', [':address_id' => $row['address_id']])
+                    ->asArray()
+                    ->all();
 
-            $addresses[] = $row;
+                $addresses[] = $row;
+            }
         }
         return $addresses;
     }
@@ -152,18 +157,19 @@ class AddressController extends Controller
             $address_id = $customer_address->address_id;
 
             //save address questions
-            foreach ($questions as $key => $value) {
-                $customer_address_response = new CustomerAddressResponse();
-                $customer_address_response->address_id = $address_id;
-                $customer_address_response->address_type_question_id = $value['address_type_question_id'];
-                $customer_address_response->response_text = $value['response_text'];
-                $customer_address_response->save();
+            if ($questions && count($questions) > 0) {
+                foreach ($questions as $key => $value) {
+                    $customer_address_response = new CustomerAddressResponse();
+                    $customer_address_response->address_id = $address_id;
+                    $customer_address_response->address_type_question_id = $value['address_type_question_id'];
+                    $customer_address_response->response_text = $value['response_text'];
+                    $customer_address_response->save();
+                }
             }
 
             return [
                 "operation" => "success",
                 "message" => "Address Saved Successfully",
-                'address-list' => $this->listing()
             ];
 
         } else {
@@ -213,21 +219,22 @@ class AddressController extends Controller
             $customer_address->country_id = $location->country_id;
             if ($customer_address->save(false)) {
 
-                //remove old questions
-                CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
+                if ($questions && count($questions) > 0) {
+                    //remove old questions
+                    CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
 
-                //save address questions
-                foreach ($questions as $key => $value) {
-                    $customer_address_response = new CustomerAddressResponse();
-                    $customer_address_response->address_id = $address_id;
-                    $customer_address_response->address_type_question_id = $value['address_type_question_id'];
-                    $customer_address_response->response_text = $value['response_text'];
-                    $customer_address_response->save();
+                    //save address questions
+                    foreach ($questions as $key => $value) {
+                        $customer_address_response = new CustomerAddressResponse();
+                        $customer_address_response->address_id = $address_id;
+                        $customer_address_response->address_type_question_id = $value['address_type_question_id'];
+                        $customer_address_response->response_text = $value['response_text'];
+                        $customer_address_response->save();
+                    }
                 }
                 return [
                     "operation" => "success",
                     "message" => "Address Updated Successfully",
-                    'address-list' => $this->listing()
                 ];
 
             } else {
@@ -306,7 +313,7 @@ class AddressController extends Controller
     public function actionAddressQuestions($address_type_id)
     {
         $questions = AddressQuestion::find()
-            ->select(['ques_id','address_type_id','question','question_ar'])
+            ->select(['ques_id','address_type_id','question'])
             ->where([
                 'address_type_id' => $address_type_id,
                 'trash' => 'Default',
@@ -314,5 +321,9 @@ class AddressController extends Controller
             ->asArray()
             ->all();
         return $questions;
+    }
+
+    public function actionGetLocation(){
+        return Location::find()->where(['status'=>'Active', 'trash' => 'Default'])->all();
     }
 }

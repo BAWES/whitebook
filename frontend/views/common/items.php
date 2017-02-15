@@ -25,6 +25,7 @@ if (!empty($items->getModels())) {
         ?>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301 pull-left">
             <div class="events_items width-100-percent">
+                
                 <div class="events_images text-center position-relative">
                     <div class="hover_events">
                         <div class="pluse_cont">
@@ -93,6 +94,17 @@ if (!empty($items->getModels())) {
                                 <i class="fa fa-circle" aria-hidden="true"></i>
                                 <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
                             <?php } ?>
+   
+                            <?php if($value['item_how_long_to_make'] > 0) { ?>
+                            <div class="callout-container">
+                                <span class="callout light">
+                                    <?= Yii::t('frontend', 'Notice: {count} days', [
+                                            'count' => $value['item_how_long_to_make']
+                                        ]); ?>
+                                </span>
+                            </div>
+                            <?php } ?>
+
                         </a>
                 </div>
                 <div class="events_descrip">

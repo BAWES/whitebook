@@ -4,7 +4,9 @@ use yii\helpers\Url;
 use common\models\Order;
 use common\models\Vendor;
 use common\models\OrderStatus;
+use common\models\SuborderItemMenu;
 use common\models\SuborderItemPurchase;
+use common\components\CFormatter;
 
 ?>
 <tr>
@@ -84,8 +86,7 @@ use common\models\SuborderItemPurchase;
 						<br />
 					</td>
 					<td>
-						<?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?> <br />
-						<?= Yii::t('frontend', 'Contact Number') ?>: <?= $vendor->vendor_public_phone ?>
+						<?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?> 
 					</td>
 				</tr>
 			</tbody>
@@ -115,7 +116,31 @@ use common\models\SuborderItemPurchase;
         					echo $item->vendoritem->item_name;
         				} else {
         					echo $item->vendoritem->item_name_ar; 
-        				} ?>
+        				} 
+
+	                    $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
+
+	                    foreach ($menu_items as $key => $menu_item) { 
+	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+	                        
+	                        $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                            if($menu_item_total) {
+                                echo ' = '.CFormatter::format($menu_item_total);    
+                            }
+                            
+                            echo '</i>';
+	                    } 
+
+                        if($item['female_service']) {
+                            echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
+                        }
+
+                        if($item['special_request']) {
+                            echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$item['special_request'].'</i>';
+                        }
+
+	                    ?>
         				<br />
         				x <?= $item->purchase_quantity ?>
 		        	</th>

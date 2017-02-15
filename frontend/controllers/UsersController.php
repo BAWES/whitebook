@@ -83,17 +83,22 @@ class UsersController extends BaseController
         $error = array();
 
         if (Yii::$app->request->isAjax) {
+
             $data = Yii::$app->request->post();
             $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['customer_password']);
             $model->confirm_password=$data['confirm_password'];
-            $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];
+
+            if(!empty($data['byear']) && !empty($data['bmonth']) && !empty($data['bday'])) {
+                $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];    
+            }
+            
             $model->customer_activation_key = Users::generateRandomString();
             $model->created_datetime = date('Y-m-d H:i:s');
-            $model->customer_name=$data['customer_name'];
-            $model->customer_last_name=$data['customer_last_name'];
-            $model->customer_email=$data['customer_email'];
-            $model->customer_gender=$data['customer_gender'];
-            $model->customer_mobile=$data['customer_mobile'];
+            $model->customer_name = $data['customer_name'];
+            $model->customer_last_name = $data['customer_last_name'];
+            $model->customer_email = $data['customer_email'];
+            $model->customer_gender = $data['customer_gender'];
+            $model->customer_mobile = $data['customer_mobile'];
 
             if ($model->validate() && $model->save()) {
                
@@ -117,13 +122,15 @@ class UsersController extends BaseController
                     ->send();
 
                 //Send Email to admin
-                Yii::$app->mailer->htmlLayout = 'layouts/html';
+                Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
-                $message_admin = $model->customer_name.' registered in TheWhiteBook';
-
-                $send_admin = Yii::$app->mailer->compose(
-                    ["html" => "customer/user-register"],
-                    ["message" => $message_admin]
+                $send_admin = Yii::$app->mailer->compose("customer/user-register",
+                    [
+                        'confirm_link' => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                        'logo_1' => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                        'logo_2' => Url::to("@web/images/twb-logo-trans.png", true),
+                        'model' => $model
+                    ]
                 );
 
                 $send_admin
@@ -134,6 +141,9 @@ class UsersController extends BaseController
 
                 return Users::SUCCESS;
             } else {
+                
+            print_r($model->getErrors());
+            die();
                 return Users::FAILURE;
             }
 

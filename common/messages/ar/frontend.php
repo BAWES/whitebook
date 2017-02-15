@@ -17,6 +17,13 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Loading...' => 'جار التحميل...',
+    'Collect in {count} days' => 'جمع في {count} أيام',
+    'Maximum {qty}' => 'الحد الأقصى {qty}',
+    'Minimum {qty}' => 'الحد الأدنى {qty}',
+    'Quantity range : ' => 'مجموعة الكمية : ',
+    'Quantity must be greater than or equal to {qty} in "{menu_name}"' => 'يجب أن تكون كمية أكبر من أو يساوي {qty} في "{menu_name}"',
+    'Quantity must be less than or equal to {qty} in "{menu_name}"' => 'يجب أن تكون الكمية أقل من أو يساوي {qty} في "{menu_name}"',
     'Unit' => 'وحدة',
     'From' => 'من عند',
     'To' => 'إلى',

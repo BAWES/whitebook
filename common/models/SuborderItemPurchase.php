@@ -68,7 +68,7 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
             [['suborder_id', 'timeslot_id', 'item_id', 'area_id', 'address_id', 'purchase_delivery_address', 'purchase_delivery_date', 'purchase_price_per_unit', 'purchase_quantity', 'purchase_total_price', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
             [['suborder_id', 'timeslot_id', 'item_id', 'area_id', 'address_id', 'purchase_quantity', 'created_by', 'modified_by'], 'integer'],
             [['purchase_delivery_address', 'trash'], 'string'],
-            [['purchase_delivery_date', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['purchase_delivery_date', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
             [['purchase_price_per_unit', 'purchase_customization_price_per_unit', 'purchase_total_price'], 'number'],
         ];
     }

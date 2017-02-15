@@ -6,12 +6,14 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use common\models\CustomerCart;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use common\models\Country;
 use common\models\Location;
 use common\models\PaymentGateway;
+use common\models\CustomerCartMenuItem;
 use frontend\models\AddressType;
 
 
@@ -35,12 +37,15 @@ class CheckoutController extends BaseController
 		//validate cart
 		foreach (CustomerCart::items() as $item) {
             
+            $menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+
     		$errors = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],
                 'timeslot_end_time' => $item['timeslot_end_time'],
     			'area_id' => $item['area_id'],
-    			'quantity' => $item['cart_quantity']
+    			'quantity' => $item['cart_quantity'],
+                'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
 
     		if($errors) { 
@@ -57,12 +62,16 @@ class CheckoutController extends BaseController
 		$items = CustomerCart::items();
 
 		foreach ($items as $item) {
+            
+            $menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],
                 'timeslot_end_time' => $item['timeslot_end_time'],
     			'area_id' => $item['area_id'],
-    			'quantity' => $item['cart_quantity']
+    			'quantity' => $item['cart_quantity'],
+                'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
 
     		if($error) {
@@ -159,12 +168,16 @@ class CheckoutController extends BaseController
 		$items = CustomerCart::items();
 
 		foreach ($items as $item) {
+            
+            $menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],
                 'timeslot_end_time' => $item['timeslot_end_time'],
     			'area_id' => $item['area_id'],
-    			'quantity' => $item['cart_quantity']
+    			'quantity' => $item['cart_quantity'],
+                'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
 
     		if($error) {
@@ -208,12 +221,16 @@ class CheckoutController extends BaseController
 		$items = CustomerCart::items();
 		
 		foreach ($items as $item) {
+
+            $menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
     			'delivery_date' => $item['cart_delivery_date'],
                 'timeslot_end_time' => $item['timeslot_end_time'],
     			'area_id' => $item['area_id'],
-    			'quantity' => $item['cart_quantity']
+    			'quantity' => $item['cart_quantity'],
+                'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
 
     		if($error) {

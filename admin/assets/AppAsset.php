@@ -26,7 +26,7 @@ class AppAsset extends AssetBundle
         'plugins/boostrapv3/css/bootstrap-theme.min.css',
         'plugins/font-awesome/css/font-awesome.css',
         'plugins/jquery-scrollbar/jquery.scrollbar.css',
-        'css/style.css?v=1.6',
+        'css/style.css?v=1.8',
     ];
 
     public $js = [

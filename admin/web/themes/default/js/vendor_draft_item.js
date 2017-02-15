@@ -8,13 +8,13 @@ $('.btn-reject-submit').click(function(){
     $(this).attr('disabled', 'disabled');
     $(this).html('Please wait...');
 
-    $.post($('#reject_url').val(), $('.modal_reject form').serialize() , function(){
+    $.post($('#reject_url').val(), $('.modal_reject form').serialize() , function(json){
 
         $(this).removeAttr('disabled');
         $(this).html('Submit');
         $('.modal_reject').modal('hide');
 
-        location = location;
+        location = json.location;
 
     });
 });

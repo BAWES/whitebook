@@ -201,93 +201,6 @@ $(document).ready(function () {
     /*Responsive menu script end*/
 });//end document ready
 
-function deliveryTimeSlotCart(date){
-    var myDate = new Date()
-    time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
-        currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
-    $.ajax({
-        type: 'POST',
-        url: getdeliverytimeslot_url,
-        data: { vendor_id : $('#vendor_id').val(), sel_date: date,time:time,currentDate:currentDate},
-        success: function (data)
-        {
-            if ($.trim(data) == 0) {
-                $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html('Delivery not available for the selected date');
-                $('.timeslot_id_select').hide();
-                $('#timeslot_id').html('');
-            } else {
-                $('.timeslot_id_div').hide();
-                $('.timeslot_id_select').show();
-                $('#timeslot_id').html(data);
-                $('#timeslot_id').selectpicker('refresh');
-                $('.error.timeslot_id').html('');
-            }
-        }
-    });
-}
-
-function productAvailabilityCart(date) {
-    $.ajax({
-        type: 'POST',
-        url: product_availability,
-        data: $('#form-update-cart').serialize(),
-        success: function (data)
-        {
-            if ($.trim(data) != '1') {
-                $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html(data);
-                $('.timeslot_id_select').hide();
-                $('#timeslot_id').html('');
-                return false;
-            }else{
-                deliveryTimeSlotCart(date);
-            }
-        }
-    });
-}
-
-
-$(function() {
-    $('#update-cart-modal').on('shown.bs.modal', function() {
-        $('#delivery_date3').datepicker({
-            format: 'dd-mm-yyyy',
-            startDate:'today',
-            autoclose:true,
-            container: '#update-cart-modal modal-body'
-        }).on("changeDate", function(e) {
-            $('.error.cart_delivery_date,.cart_quantity').html('');
-            $('#quantity').val(' ');
-            productAvailabilityCart($(this).val());
-        });
-    });
-});
-
-$('body').on('click','.btn-cart-change',function(){
-    $.ajax({
-        type: 'POST',
-        url: update_cart_url,
-        data: $('#form-update-cart').serialize(),
-        success: function (data)
-        {
-            $('#form-update-cart .error').html('');
-
-            if(data['success']) {
-                location = location;
-            } else {
-
-                $.each(data['errors'], function(index, errors) {
-                    $.each(errors, function() {
-                        $('#form-update-cart .error.' + index).append('<p>' + this + '</p>');
-                    });
-                });
-
-            }
-        }
-    });
-    console.log($('#update-cart').serialize());
-    return false;
-});
 
 // plan last:child script
 $(document).ready(function() {
@@ -336,6 +249,7 @@ function resetpwdcheck()
         $('#reset_pwd_result').html(password_should_contain_minimum_six_letters);
         return false;
     }
+
     if(password==conPassword)
     {
         $('#reset_pwd_result').hide();
@@ -374,6 +288,17 @@ function resetpwdcheck()
     }
 }
 /* Forgot password completed end */
+
+$(document).delegate('#conpassword', 'keyup', function() {
+
+    if($(this).val() != $('#userpassword').val()) {
+        $('#con_pass').show();
+        $('#con_pass').html(password_and_confirm_password_should_be_minimum_six_letters_and_same);
+    }else{
+        $('#con_pass').hide();
+        $('#con_pass').html('');
+    }
+});
 
 $(document).delegate('#login_button', 'click', function()
 {
@@ -488,8 +413,12 @@ function logincheck()
 }
 
 //Register save function ajax
+
 $(document).delegate('#register', 'click', function()
 {
+    $(this).html($('#txt_loading').val());
+    $(this).attr('disabled', 'disabled');
+    
     var gender = $('#gender').val();
     var bday = $('#bday').val();
     var bmonth = $('#bmonth').val();
@@ -547,6 +476,10 @@ $(document).delegate('#register', 'click', function()
         $('#con_pass').html(password_and_confirm_password_should_be_minimum_six_letters_and_same);
     }
 
+    i=1;
+    j=1;
+
+    /*
     if(gender==0)
     {
         $('#gen_er').show();
@@ -567,6 +500,7 @@ $(document).delegate('#register', 'click', function()
         $('#dob_er').hide();
         j=1;
     }
+    */
 
     if(validateEmail(x) == true){
 
@@ -645,9 +579,20 @@ $(document).delegate('#register', 'click', function()
                         location.reload()
                     });
                 }
+
+                window.setTimeout(function(){
+                    $('#register').html($('#txt_register').val());
+                    $('#register').removeAttr('disabled');
+                }, 1000);
             }
         });
-    }
+    }else{
+        window.setTimeout(function(){
+            $('#register').html($('#txt_register').val());
+            $('#register').removeAttr('disabled');
+        }, 1000);
+        console.log('no valid form');
+    }    
 });
 
 
@@ -1369,7 +1314,11 @@ function all_form_reset(){
     $('#forgot_result').removeClass('alert-success alert fade in');
     $('#forgot_result').html('');
     var create_event = $( "#create_event" ).validate();
-    create_event.resetForm();
+    
+    if(create_event) {
+        create_event.resetForm();
+    }
+
     $(':input','#create_event')
     .not(':button, :submit, :reset, :hidden')
     .val('')
@@ -1708,7 +1657,6 @@ $(document).delegate('button#loadmore', 'click', function(event) {
         }
     });
 });
-
 
 $(document).delegate('#main-category', 'change', function(){
     var s = $('#main-category :selected').val();
@@ -2162,3 +2110,5 @@ $(document).delegate('#modal_event_from_package #create_event_button', 'click', 
     }
 });
 /* END ADD TO EVENT */
+
+

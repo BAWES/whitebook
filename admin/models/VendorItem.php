@@ -8,143 +8,147 @@ use admin\models\Vendor;
 
 class VendorItem extends \common\models\VendorItem
 {    
-    public function get_posted_data()
+    public function rules()
     {
-        return Yii::$app->request->post('VendorItem');        
-    }        
+        return [
 
-    /**
-     * Validate for complete button 
-     */
-    public static function validate_form($data)
+            //ItemApproval
+
+            [['item_approved'], 'required', 'on' => ['ItemApproval']],
+           
+            //MenuItems
+
+            [['allow_special_request', 'have_female_service'], 'number', 'on' => ['MenuItems']],
+
+            //ItemPrice
+
+            [['quantity_label', ], 'string', 'max' => 256, 'on' => ['ItemPrice']],
+
+            [['item_for_sale', 'item_price_description','item_price_description_ar'], 'string', 'on' => ['ItemPrice']],
+            
+            [['item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
+            
+            [['min_order_amount', 'item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
+
+            [['type_id'], 'integer', 'on' => ['ItemPrice']],
+
+            //ItemDescription
+            
+            [['set_up_time', 'set_up_time_ar', 'requirements','requirements_ar', 'max_time', 'max_time_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
+
+            //ItemInfo
+            
+            [['vendor_id', 'item_name', 'item_name_ar'], 'required', 'on' => ['ItemInfo']]    
+        ];
+    }
+
+    public function scenarios()
     {
-        $step_1 = VendorItem::validate_item_info($data);
-        $step_2 = VendorItem::validate_item_description($data);
-        $step_3 = VendorItem::validate_item_price($data);
-        $step_4 = VendorItem::validate_item_images($data);
+        return [
+            'ItemApproval' => ['item_status, item_approved'],
+            
+            'MenuItems' => ['allow_special_request', 'have_female_service'],
 
-        return array_merge($step_1, $step_2, $step_3, $step_4);
+            'ItemPrice' => ['quantity_label', 'item_for_sale', 'item_price_description', 'item_price_description_ar','item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'min_order_amount', 'type_id'],
+
+            'ItemDescription' => ['set_up_time', 'set_up_time_ar', 'requirements','requirements_ar', 'max_time', 'max_time_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'],
+
+            'ItemInfo' => ['vendor_id', 'item_name', 'item_name_ar']
+        ];
     }
 
     /**
-     * Validate step 1 on update / create item  
+     * Validate step 4 on update / create item  
      */
-    public static function validate_item_info($data)
-    {
-        $errors = [];
-
-        $category = Yii::$app->request->post('category');
-
-        if(!$category) 
-        {
-            $errors['category'] = 'Select main, sub and child category!';
-        }
-
-        if(empty($data['vendor_id'])) {
-            $errors['vendor_id'] = 'Vendor name cannot be blank.';
-            return $errors;
-        }
-
-        if(empty($data['item_name'])) {
-            $errors['item_name'] = 'Item name cannot be blank.';
-            return $errors;
-        }
-
-        if(empty($data['item_name_ar'])) {
-            $errors['item_name_ar'] = 'Item Name - Arabic cannot be blank.';
-            return $errors;
-        }
-
-        if(strlen($data['item_name']) < 4) {
-            $errors['item_name'] = 'Item name minimum 4 letters.';
-            return $errors;
-        }
-
-        /*
-        $count_query = VendorItem::find()
-            ->select('item_name')
-            ->where([
-                'item_name' => $data['item_name'],
-                'trash' => 'Default'
-            ]);
-
-        $item_id = Yii::$app->request->post('item_id');
-
-        if ($item_id) {            
-            $count_query->andWhere(['!=', 'item_id', $item_id]);
-        }
-
-        if($count_query->count()) {
-            $errors['item_name'] = 'Item name already exists.';
-        }
-        */
-        
-        return $errors;
-    }
-
-    /**
-     * Validate step 2 on update / create item  
-     */
-    public static function validate_item_description($data)
-    {
-        $errors = VendorItem::validate_item_info($data);
-
-        if(empty($data['type_id'])) {
-            $errors['type_id'] = 'Item type cannot be blank.';
-        }
-
-        if(empty($data['item_description'])) {
-            $errors['item_description'] = 'Item description cannot be blank.';
-        }
-
-        return $errors;
-    }
-
-
-    /**
-     * Validate step 3 on update / create item  
-     */
-    public static function validate_item_price($data)
-    {
-        $errors = VendorItem::validate_item_description($data);
-
-        if (!empty($data['item_for_sale'])){
-            $item_for_sale = $data['item_for_sale'];
-        } else {
-            $item_for_sale = false;
-        }
-
-        if($item_for_sale && !$data['item_amount_in_stock']) {
-            $errors['item_amount_in_stock'] = 'Item number of stock cannot be blank.';
-        }
-
-        if($item_for_sale && !$data['item_default_capacity']) {
-            $errors['item_default_capacity'] = 'Item default capacity cannot be blank.';
-        }
-
-        if($item_for_sale && !$data['item_how_long_to_make']) {
-            $errors['item_how_long_to_make'] = 'No of days delivery cannot be blank.';
-        }
-
-        if($item_for_sale && !$data['item_minimum_quantity_to_order']) {
-            $errors['item_minimum_quantity_to_order'] = 'Item minimum quantity to order cannot be blank.';
-        }
-
-        return $errors;
-    }
-
-     /**
-     * Validate step 5 on update / create item  
-     */
-    public static function validate_item_images($data)
+    public static function validate_item_menu($data)
     {
         $errors = VendorItem::validate_item_price($data);
 
-        /*$images = Yii::$app->request->post('images');
+        $menu_items = Yii::$app->request->post('menu_item');
+        
+        if(!$menu_items) {
+            $menu_items = array();
+        }
 
-        if(!$images) {
-            $errors['images'] = 'Item image require.';
-        }*/
+        $menu_id = 0;
+
+        foreach ($menu_items as $key => $value) {
+
+            //if menu 
+            if(isset($value['menu_name'])) {
+                
+                if(empty($value['menu_name'])) {
+                    $errors['menu_name'] = 'Menu name field require.';
+                }
+
+                if(empty($value['menu_name_ar'])) {
+                    $errors['menu_name_ar'] = 'Menu name - Arabic field require.';
+                }
+
+            //if menu item 
+            } else {
+
+                if(empty($value['menu_item_name'])) {
+                    $errors['menu_item_name'] = 'Menu item name field require.';
+                }
+
+                if(empty($value['menu_item_name_ar'])) {
+                    $errors['menu_item_name_ar'] = 'Menu item name - Arabic field require.';
+                }
+            }
+
+            $menu_id++;
+        }   
+
+        return $errors;
+    }
+
+    /**
+     * Validate step 5 on update / create item  
+     */
+    public static function validate_item_addon_menu($data)
+    {
+        $errors = VendorItem::validate_item_menu($data);
+
+        $menu_items = Yii::$app->request->post('addon_menu_item');
+        
+        if(!$menu_items) {
+            $menu_items = array();
+        }
+
+        $menu_id = 0;
+
+        foreach ($menu_items as $key => $value) {
+
+            //if menu 
+            if(isset($value['menu_name'])) {
+                
+                if(empty($value['menu_name'])) {
+                    $errors['menu_name'] = 'Menu name field require.';
+                }
+
+                if(empty($value['menu_name_ar'])) {
+                    $errors['menu_name_ar'] = 'Menu name - Arabic field require.';
+                }
+
+            //if menu item 
+            } else {
+
+                if(empty($value['menu_item_name'])) {
+                    $errors['menu_item_name'] = 'Menu item name field require.';
+                }
+
+                if(empty($value['menu_item_name_ar'])) {
+                    $errors['menu_item_name_ar'] = 'Menu item name - Arabic field require.';
+                }
+
+                if(!is_numeric($value['price'])) {
+                    $errors['menu_item_price'] = 'Menu item price is not valid.';
+                }
+            }
+
+            $menu_id++;
+        }   
 
         return $errors;
     }

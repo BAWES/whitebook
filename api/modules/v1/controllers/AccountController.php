@@ -80,31 +80,36 @@ class AccountController extends Controller
         $dob        = Yii::$app->request->getBodyParam('customer_dateofbirth');
 
         $data = Customer::findOne(['customer_email'=> $email]);
-        if ($data->customer_id != $customer_id) {
-            return [
-                "operation" => "error",
-                "message" => "Email already in use.",
-            ];
-        }
-        $model = Customer::findOne($customer_id);
-        $model->customer_name = $first_name;
-        $model->customer_last_name = $last_name;
-        $model->customer_email = $email;
-        $model->customer_gender = $gender;
-        $model->customer_dateofbirth = $dob;
-        $model->customer_mobile = $mobile;
-        $model->modified_datetime = date('Y-m-d H:i:s');
-        if ($model->save()) {
-            return [
-                "operation" => "success",
-                "message" => "Profile updated successfully.",
-                "account-detail" => $this->currentUser(),
-            ];
+        if ($data) {
+            if ($data->customer_id != $customer_id) {
+                return [
+                    "operation" => "error",
+                    "message" => "Email already in use.",
+                ];
+            }
+            $model = Customer::findOne($customer_id);
+            $model->customer_name = $first_name;
+            $model->customer_last_name = $last_name;
+            $model->customer_email = $email;
+            $model->customer_gender = $gender;
+            $model->customer_dateofbirth = $dob;
+            $model->customer_mobile = $mobile;
+            $model->modified_datetime = date('Y-m-d H:i:s');
+            if ($model->save()) {
+                return [
+                    "operation" => "success",
+                    "message" => "Profile updated successfully.",
+                ];
+            } else {
+                return [
+                    "operation" => "error",
+                    "message" => $model->getErrorMessage($model->errors),
+                ];
+            }
         } else {
             return [
                 "operation" => "error",
-                "message" => "Server issue please try again.",
-                "detail" => $model->errors,
+                "message" => "Invalid Profile.",
             ];
         }
     }

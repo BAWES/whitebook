@@ -7,7 +7,10 @@ use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\VendorItem;
-
+use common\models\VendorItemMenu;
+use common\models\VendorItemMenuItem;
+use common\components\CFormatter;
+ 
 /**
  * This is the model class for table "whitebook_customer_cart".
  *
@@ -61,8 +64,10 @@ class CustomerCart extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'item_id', 'area_id', 'timeslot_id', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
-            [['customer_id', 'item_id', 'area_id', 'timeslot_id', 'cart_quantity', 'created_by', 'modified_by'], 'integer'],
-            [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['customer_id', 'item_id', 'area_id', 'timeslot_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
+
+            [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
+
             [['cart_customization_price_per_unit'], 'number'],
             ['cart_quantity', 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['cart_valid', 'trash'], 'string'],
@@ -103,6 +108,11 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $this->hasOne(DeliveryTimeSlot::className(), ['timeslot_id' => 'timeslot_id']);
     }
 
+    public function getImage()
+    {
+        return $this->hasOne(Image::className(), ['item_id' => 'item_id']);
+    }
+
     public function validate_item($data, $valid_for_cart_item = false) {
 
         $errors = [];
@@ -120,6 +130,15 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         $vendor_id = $item->vendor_id;
+
+        //get item type 
+        $item_type = ItemType::findOne($item->type_id);
+
+        if($item_type) {
+            $item_type_name = $item_type->type_name;
+        } else {
+            $item_type_name = 'Product';
+        }
 
         //check if same item with same date available in cart 
         $in_cart = CustomerCart::find()
@@ -160,7 +179,8 @@ class CustomerCart extends \yii\db\ActiveRecord
         } 
 
         //check if desire quantity available 
-        if($valid_for_cart_item && $in_cart > $item->item_amount_in_stock) {
+
+        if($item_type_name == 'Product' && $valid_for_cart_item && $in_cart > $item->item_amount_in_stock) {
 
             $errors['cart_quantity'][] = [
                 
@@ -172,7 +192,8 @@ class CustomerCart extends \yii\db\ActiveRecord
         } 
 
         //validate to add product to cart 
-        if (!$valid_for_cart_item && $data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
+
+        if ($item_type_name == 'Product' && !$valid_for_cart_item && $data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
 
             $errors['cart_quantity'][] = [
                 
@@ -183,9 +204,10 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //item_minimum_quantity_to_order
+
         if($data['quantity'] < $item->item_minimum_quantity_to_order) {
 
-            $errors['cart_quantity'] = [
+            $errors['cart_quantity'][] = [
                 
                 Yii::t('yii', '{attribute} must be greater than or equal to "{compareValueOrAttribute}".', [
                     'attribute' => Yii::t('frontend', 'Quantity'),
@@ -207,6 +229,14 @@ class CustomerCart extends \yii\db\ActiveRecord
         // to check with old delivery date
         if ($data['delivery_date'] && strtotime($data['delivery_date']) < strtotime(date('Y-m-d'))) { 
             $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past delivery date');     
+        }
+
+        //to check min possible delivery date, get date after x day then convert it to unix time 
+    
+        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' days')));
+
+        if(strtotime($data['delivery_date']) < $min_delivery_time) {
+            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period '.$item->item_how_long_to_make.' day!');
         }
 
         # check for current date time slot
@@ -240,6 +270,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //2) get no of item purchased for selected date 
+
         $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "'.$data['item_id'].'" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(so.created_datetime) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
 
         if($purchased_result) {
@@ -249,7 +280,8 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //3) campare capacity 
-        if($valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
+
+        if($item_type_name != 'Product' && $valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased;
 
@@ -258,7 +290,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $no_of_available = $item->item_amount_in_stock;
             }
 
-            $errors['cart_quantity'] = [
+            $errors['cart_quantity'][] = [
                 Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
                    'no_of_available' => $no_of_available 
                 ])
@@ -266,7 +298,8 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //validate to add product to cart
-        if(!$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
+
+        if($item_type_name != 'Product' && !$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased - $in_cart;
 
@@ -275,7 +308,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $no_of_available = $item->item_amount_in_stock;
             }
 
-            $errors['cart_quantity'] = [
+            $errors['cart_quantity'][] = [
                 Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
                    'no_of_available' => $no_of_available 
                 ])
@@ -302,6 +335,87 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');             
         }
 
+        //item total 
+
+        $total = $item->item_price_per_unit * $data['quantity'];
+
+        //get quantity ordered per menu 
+
+        $menu_qty_ordered = [];
+
+        if(!isset($data['menu_item'])) {
+            $data['menu_item'] = [];
+        }
+
+        foreach ($data['menu_item'] as $key => $value) {
+
+            $mi = VendorItemMenuItem::findOne($key);
+
+            /* get quantity selected per menu to validate */
+
+            if(isset($menu_qty_ordered[$mi->menu_id])) {
+                $menu_qty_ordered[$mi->menu_id] = $value + $menu_qty_ordered[$mi->menu_id];
+            } else {
+                $menu_qty_ordered[$mi->menu_id] = $value;
+            }
+
+            $total += $mi->price * $value * $data['quantity'];
+        }
+
+        //item menu 
+
+        $item_menues = VendorItemMenu::findAll(['item_id' => $item->item_id]);
+
+        //menu quantity validation 
+
+        foreach ($item_menues as $key => $menu) {
+
+            $max = $menu->max_quantity * $data['quantity']; 
+            $min = $menu->min_quantity * $data['quantity'];
+
+            if(isset($menu_qty_ordered[$menu->menu_id])) {
+                $qty_ordered = $menu_qty_ordered[$menu->menu_id];
+            }else{
+                $qty_ordered = 0;    
+            }
+            
+            if(Yii::$app->language == 'en') {
+                $menu_name = $menu->menu_name;
+            }else{
+                $menu_name = $menu->menu_name_ar;
+            }
+            
+            if($max && $qty_ordered > $max) {
+                $errors['menu_'.$menu->menu_id][] = Yii::t(
+                    'frontend', 
+                    'Quantity must be less than or equal to {qty} in "{menu_name}"', [
+                        'qty' => $max,
+                        'menu_name' => $menu_name
+                    ]
+                );
+            }
+
+            if($qty_ordered < $min) {
+                $errors['menu_'.$menu->menu_id][] = Yii::t(
+                    'frontend', 
+                    'Quantity must be greater than or equal to {qty} in "{menu_name}"', [
+                        'qty' => $min, 
+                        'menu_name' => $menu_name
+                    ]
+                );
+            }
+        }
+
+        //min_order_amount
+        
+        if($total < $item->min_order_amount) {
+            $errors['cart_quantity'][] = [
+                Yii::t('frontend', 'Min. order amount "{min_order_amount}".', [
+                   'min_order_amount' => CFormatter::format($item->min_order_amount)
+                ])
+            ];
+        }
+
         return $errors;       
     }
 
@@ -311,7 +425,9 @@ class CustomerCart extends \yii\db\ActiveRecord
         $items = CustomerCart::find()
             ->select('
                 {{%customer_cart}}.*, 
+                {{%image}}.image_path,
                 {{%vendor_item}}.item_price_per_unit,
+                {{%vendor_item}}.type_id,
                 {{%vendor_item}}.slug,
                 {{%vendor_item}}.vendor_id,
                 {{%vendor_item}}.item_name,
@@ -320,6 +436,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 {{%vendor_delivery_timeslot}}.timeslot_end_time'
             )
             ->joinWith('item')
+            ->joinWith('image')
             ->joinWith('timeslot')
             ->where([
                 '{{%customer_cart}}.customer_id' => Yii::$app->user->getId(),

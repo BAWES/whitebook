@@ -69,7 +69,7 @@ class CategoryController extends Controller
     public function actionIndex()
     {
         $categories = CategoryPath::find()
-            ->select("GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, c2.sort, {{%category_path}}.category_id as ID")
+            ->select("c2.category_level, c2.parent_category_id, GROUP_CONCAT(c1.category_name ORDER BY {{%category_path}}.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS category_name, c2.sort, {{%category_path}}.category_id as ID")
             ->leftJoin('whitebook_category c1', 'c1.category_id = whitebook_category_path.path_id')
             ->leftJoin('whitebook_category c2', 'c2.category_id = whitebook_category_path.category_id')
             ->where(['c2.trash'=>'Default'])
@@ -439,5 +439,35 @@ class CategoryController extends Controller
         foreach ($subcategory as $key => $val) {
             echo  '<option value="'.$val['category_id'].'">'.$val['category_name'].'</option>';
         }
+    }
+
+    /** 
+     * Move all itemd from 1 child cat to other cat
+     * @param $from_id 
+     * @param $to_id 
+     */ 
+    public function actionMove() {
+
+        Yii::$app->response->format = 'json';
+
+        $from_id = Yii::$app->request->post('from_id');
+        $to_id = Yii::$app->request->post('to_id');
+
+        $from = Category::findOne($from_id);
+        $to = Category::findOne($to_id); 
+
+        if(!$from || !$to) {
+            return [
+                'error' => 'Please select category to move!'
+            ];
+        }
+
+        VendorItemToCategory::updateAll(['category_id' => $to_id], 'category_id="'.$from_id.'"');
+
+        Yii::$app->session->setFlash('success', 'All items moved from "'.$from->category_name.'" to "'.$to->category_name.'"!');
+
+        return [
+            'success' => 1
+        ];
     }
 }

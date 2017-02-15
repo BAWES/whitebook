@@ -49,4 +49,11 @@ class VendorItemToCategory extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
     }
+
+    public function get_item_count($category_id)
+    {
+        return VendorItemToCategory::find()
+                   ->where(['category_id' => $category_id])
+                   ->count();
+    }
 }

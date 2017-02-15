@@ -118,23 +118,22 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'type_id' => Yii::t('app', 'Type ID'),
             'vendor_id' => Yii::t('app', 'Vendor ID'),
             'item_name' => Yii::t('app', 'Item Name'),
-            'item_name_ar' => Yii::t('app', 'Item Name Ar'),
+            'item_name_ar' => Yii::t('app', 'Item Name - Arabic'),
             'priority' => Yii::t('app', 'Priority'),
             'item_description' => Yii::t('app', 'Item Description'),
-            'item_description_ar' => Yii::t('app', 'Item Description Ar'),
+            'item_description_ar' => Yii::t('app', 'Item Description - Arabic'),
             'item_additional_info' => Yii::t('app', 'Item Additional Info'),
-            'item_additional_info_ar' => Yii::t('app', 'Item Additional Info Ar'),
-            'item_amount_in_stock' => Yii::t('app', 'Item Amount In Stock'),
+            'item_additional_info_ar' => Yii::t('app', 'Item Additional Info - Arabic'),
+            'item_amount_in_stock' => Yii::t('app', 'Item # of stock'),
             'item_default_capacity' => Yii::t('app', 'Item Default Capacity'),
-            'item_price_per_unit' => Yii::t('app', 'Item Price Per Unit'),
+            'item_price_per_unit' => Yii::t('app', 'Price'),
             'item_customization_description' => Yii::t('app', 'Item Customization Description'),
-            'item_customization_description_ar' => Yii::t('app', 'Item Customization Description Ar'),
-            'item_price_description' => Yii::t('app', 'Item Price Description'),
-            'item_price_description_ar' => Yii::t('app', 'Item Price Description Ar'),
+            'item_customization_description_ar' => Yii::t('app', 'Item Customization Description - Arabic'),
+            'item_price_description' => Yii::t('app', 'Price Description'),
+            'item_price_description_ar' => Yii::t('app', 'Price Description - Arabic'),
             'item_for_sale' => Yii::t('app', 'Item For Sale'),
             'sort' => Yii::t('app', 'Sort'),
-            'item_how_long_to_make' => Yii::t('app', 'Item How Long To Make'),
-            'item_minimum_quantity_to_order' => Yii::t('app', 'Item Minimum Quantity To Order'),
+            'item_minimum_quantity_to_order' => Yii::t('app', 'Minimum quantity to order'),
             'item_archived' => Yii::t('app', 'Item Archived'),
             'item_approved' => Yii::t('app', 'Item Approved'),
             'item_status' => Yii::t('app', 'Item Status'),
@@ -144,6 +143,13 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'modified_datetime' => Yii::t('app', 'Modified Datetime'),
             'trash' => Yii::t('app', 'Trash'),
             'slug' => Yii::t('app', 'Slug'),
+            'max_time' => Yii::t('app', 'Duration'),
+            'max_time_ar' => Yii::t('app', 'Duration - Arabic'),
+            'set_up_time' => Yii::t('app', 'Setup Time'),
+            'set_up_time_ar' => Yii::t('app', 'Setup Time - Arabic'),
+            'requirements' => Yii::t('app', 'Requirements'),
+            'requirements_ar' => Yii::t('app', 'Requirements - Arabic'),
+            'min_order_amount' => Yii::t('app', 'Min. Order KD')
         ];
     }
 
@@ -188,5 +194,113 @@ class VendorDraftItem extends \yii\db\ActiveRecord
         }
         
         return implode(', ',$string);
+    }
+
+    public function is_price_table_changed($item_id)
+    {
+        $item_pricing = VendorItemPricing::findAll(['item_id' => $item_id]);
+        $draft_pricing = VendorDraftItemPricing::findAll(['item_id' => $item_id]);
+        
+        //check item item deleted in draft 
+
+        foreach ($item_pricing as $key => $value) {
+            
+            $a = VendorDraftItemPricing::find()
+                ->where([
+                        'range_from' => $value->range_from,
+                        'range_to' => $value->range_to,
+                        'pricing_price_per_unit' => $value->pricing_price_per_unit,
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+
+        //check item item added in draft 
+
+        foreach ($draft_pricing as $key => $value) {
+            
+            $a = VendorItemPricing::find()
+                ->where([
+                        'range_from' => $value->range_from,
+                        'range_to' => $value->range_to,
+                        'pricing_price_per_unit' => $value->pricing_price_per_unit,
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+    }
+    
+    public function is_images_changed($item_id)
+    {
+        $item_images = Image::findAll(['item_id' => $item_id]);
+        $draft_images = VendorDraftImage::findAll(['item_id' => $item_id]);
+        
+        //check item item deleted in draft 
+
+        foreach ($item_images as $key => $value) {
+            
+            $a = VendorDraftImage::find()
+                ->where([
+                        'image_path' => $value->image_path,
+                        'vendorimage_sort_order' => $value->vendorimage_sort_order
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+
+        //check item item added in draft 
+
+        foreach ($draft_images as $key => $value) {
+            
+            $a = Image::find()
+                ->where([
+                        'image_path' => $value->image_path,
+                        'vendorimage_sort_order' => $value->vendorimage_sort_order
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+    }
+    
+    public function is_categories_changed($item_id)
+    {
+        $item_categories = VendorItemToCategory::findAll(['item_id' => $item_id]);
+        $draft_categories = VendorDraftItemToCategory::findAll(['item_id' => $item_id]);
+        
+        //check item item deleted in draft 
+
+        foreach ($item_categories as $key => $value) {
+            
+            $a = VendorDraftItemToCategory::find()
+                ->where([
+                        'category_id' => $value->category_id
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
+
+        //check item item added in draft 
+
+        foreach ($draft_categories as $key => $value) {
+            
+            $a = VendorItemToCategory::find()
+                ->where([
+                        'category_id' => $value->category_id
+                    ])
+                ->count();
+
+            if(!$a)
+                return true;
+        }
     }
 }

@@ -10,17 +10,21 @@ use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use frontend\models\VendorItem;
 use frontend\models\Users;
-use frontend\models\Website;
 use frontend\models\Vendor;
+use frontend\models\Website;
 use common\models\Events;
-use common\models\VendorLocation;
+use common\models\ItemType;
 use common\models\Category;
-use common\models\VendorItemThemes;
 use common\models\Location;
 use common\models\CategoryPath;
-use common\models\CustomerAddress;
 use common\models\VendorPhoneNo;
+use common\models\VendorItemMenu;
+use common\models\VendorLocation;
+use common\models\CustomerAddress;
+use common\models\VendorItemThemes;
 use common\models\VendorItemPricing;
+use common\models\VendorItemMenuItem;
+use common\components\CFormatter;
 use common\components\LangFormat;
 
 /**
@@ -95,7 +99,7 @@ class BrowseController extends BaseController
         );
 
         $item_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
+            ->select('{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
             ->leftJoin(
                 '{{%vendor_item_to_category}}',
                 '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
@@ -148,10 +152,10 @@ class BrowseController extends BaseController
 
         if($Category)
         {
-            $cats = $Category->category_id;    
+            $cats = $Category->category_id;
         }
-        
-        if (isset($data['category']) && count($data['category']) > 0) 
+
+        if (isset($data['category']) && count($data['category']) > 0)
         {
             $cats = implode("','",  $data['category']);
         }
@@ -159,8 +163,8 @@ class BrowseController extends BaseController
         if($cats)
         {
             $q = "{{%category_path}}.path_id IN ('".$cats."')";
-        
-            $item_query->andWhere($q);    
+
+            $item_query->andWhere($q);
         }
         
         if ($session->has('deliver-location')) {
@@ -340,7 +344,7 @@ class BrowseController extends BaseController
                     ->one();
 
         if (empty($model)) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+           throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'] .' | '.LangFormat::format($model->item_name,$model->item_name_ar);
@@ -351,12 +355,24 @@ class BrowseController extends BaseController
             $model->item_approved == 'Yes' &&
             $model->trash == 'Default' &&
             $model->item_status == 'Active' &&
-            $model->type_id == '2' &&
-            $model->item_for_sale == 'Yes' &&
-            $model->item_amount_in_stock > 0
+            $model->item_for_sale == 'Yes'
         ) {
             $AvailableStock = true;
         } else {
+            $AvailableStock = false;
+        }
+
+        //get item type 
+
+        $item_type = ItemType::findOne($model->type_id);
+
+        if($item_type) {
+            $item_type_name = $item_type->type_name;
+        } else {
+            $item_type_name = 'Product';
+        }
+
+        if($item_type_name == 'Product' && $model->item_amount_in_stock <= 0) {
             $AvailableStock = false;
         }
 
@@ -425,74 +441,112 @@ class BrowseController extends BaseController
             ])
             ->all();
 
-        if (Yii::$app->user->isGuest) {
+        $menu = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
 
-            return $this->render('detail', [
-                'AvailableStock' => $AvailableStock,
-                'model' => $model,
-                'similiar_item' => VendorItem::more_from_vendor($model),
-                'vendor_area' => [],
-                'vendor_detail' => $vendor_detail,
-                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
-                'phone_icons' => $phone_icons,
-                'txt_day_off' => $txt_day_off,
-                'my_addresses' => [],
-                'price_table' => $price_table
-            ]);
+        $addons = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
 
-        } else {
+        $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
+        $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
+        $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
 
-            $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
-            $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
-            $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
+        // customer address areas
 
-            $customer_id = Yii::$app->user->getId();
-
+        if(!Yii::$app->user->isGuest) 
+        {
             $my_addresses =  \common\models\CustomerAddress::find()
                 ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
                 ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
                 ->where(['{{%customer_address}}.trash'=>'Default'])
-                ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+                ->andwhere(['{{%customer_address}}.customer_id' => Yii::$app->user->getId()])
                 ->andwhere(['{{%location}}.id' => $area_ids])
                 ->groupby(['{{%location}}.id'])
                 ->asArray()
                 ->all();
+        }
+        else
+        {
+            $my_addresses = [];
+        }
 
-            $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
+        $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
 
-            if (count($myaddress_area_list)>0) {
+        if ($myaddress_area_list) {
 
-                // add prefix to address id ex: address_14,address_15
-                $myNewArray = array_combine(
-                    array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
-                    $myaddress_area_list
-                );
+            // add prefix to address id ex: address_14,address_15
+            $myNewArray = array_combine(
+                array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
+                $myaddress_area_list
+            );
 
-                $combined_myaddress = array(
-                    Yii::t('frontend', 'My Addresses') => $myNewArray
-                );
+            $combined_myaddress = array(
+                Yii::t('frontend', 'My Addresses') => $myNewArray
+            );
 
-                $vendor_area_list = $combined_myaddress + $vendor_area_list;
-            }
+            $vendor_area_list = $combined_myaddress + $vendor_area_list;
+        }
 
+        // customer event list 
+        
+        if(Yii::$app->user->isGuest) 
+        {
+            $customer_events_list = [];    
+        }
+        else
+        {
             $user = new Users();
 
-            $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);
-
-            return $this->render('detail', [
-                'model' => $model,
-                'vendor_detail' => $vendor_detail,
-                'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
-                'phone_icons' => $phone_icons,
-                'txt_day_off' => $txt_day_off,
-                'similiar_item' => VendorItem::more_from_vendor($model),
-                'AvailableStock' => $AvailableStock,
-                'customer_events_list' => $customer_events_list,
-                'vendor_area' => $vendor_area_list,
-                'my_addresses' => $my_addresses,
-                'price_table' => $price_table
-            ]);
+            $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);    
         }
+        
+        return $this->render('detail', [
+            'model' => $model,
+            'menu' => $menu,
+            'addons' => $addons,
+            'vendor_detail' => $vendor_detail,
+            'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
+            'phone_icons' => $phone_icons,
+            'txt_day_off' => $txt_day_off,
+            'similiar_item' => VendorItem::more_from_vendor($model),
+            'AvailableStock' => $AvailableStock,
+            'customer_events_list' => $customer_events_list,
+            'vendor_area' => $vendor_area_list,
+            'my_addresses' => $my_addresses,
+            'price_table' => $price_table
+        ]);
+    }
+
+    public function actionBooking() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+
+        $item = VendorItem::findOne($item_id);
+
+        $phone = Yii::$app->request->post('phone');
+
+        Yii::$app->mailer->compose("customer/booking_support",
+            [
+                "item" => $item,
+                "name" => Yii::$app->request->post('name'),
+                "phone" => $phone,
+                "email" => Yii::$app->request->post('email')
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo(Yii::$app->params['supportEmail'])
+            ->setSubject('Booking support request from "'.$phone.'"')
+            ->send();
+
+        Yii::$app->getSession()->setFlash('success', Yii::t(
+                    'frontend', 
+                    'Success: We got your request, we will contact you ASAP!'
+                ));
+
+        return $this->redirect(['browse/detail', 'slug' => $item['slug']]);
     }
 
     public function actionEvent_slider()
@@ -512,7 +566,6 @@ class BrowseController extends BaseController
             return $this->renderPartial('edit_event', array('edit_eventinfo' => $edit_eventinfo));
         }
     }
-
 
     public function actionGetLocationList(){
         if (Yii::$app->request->isAjax) {
@@ -539,61 +592,72 @@ class BrowseController extends BaseController
      */
     public function actionProductAvailable()
     {
-        if (Yii::$app->request->isAjax) {
-            $AreaName = '';
-            $location = Location::findOne($_POST['area_id']);
-            if ($location) {
-                if (Yii::$app->language == "en") {
-                    $AreaName = $location->location;
-                } else {
-                    $AreaName = $location->location_ar;
-                }
-            }
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            if ($_POST['delivery_date'] == '') {
-                $selectedDate = date('Y-m-d');
+        $data = Yii::$app->request->post();
+
+        $AreaName = '';
+        
+        $location = Location::findOne($data['area_id']);
+        
+        if ($location) {
+            if (Yii::$app->language == "en") {
+                $AreaName = $location->location;
             } else {
-                $selectedDate = $_POST['delivery_date'];
+                $AreaName = $location->location_ar;
             }
-            $item = VendorItem::findOne($_POST['item_id']);
-            if ($item) {
-                $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
-                $date = date('d-m-Y', strtotime($selectedDate));
-                if ($exist) {
-                    echo "<i class='fa fa-warning' style='color: Red; font-size: 19px;' aria-hidden='true'></i> Item Not Available for on this date '$date' for this location '$AreaName' ";
-                } else {
-                    echo "<i class='fa fa-check-circle' style='color: Green; font-size: 19px;' aria-hidden='true'></i> Item Available on this date '$date' for this location '$AreaName' ";
-                }
+        }
+
+        if ($data['delivery_date'] == '') {
+            $selectedDate = date('Y-m-d');
+        } else {
+            $selectedDate = $data['delivery_date'];
+        }
+
+        $item = VendorItem::findOne($data['item_id']);
+        
+        if ($item) {
+            
+            $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
+
+            $date = date('d-m-Y', strtotime($selectedDate));
+            
+            if ($exist) {
+                echo "<i class='fa fa-warning' style='color: Red; font-size: 19px;' aria-hidden='true'></i> Item Not Available for on this date '$date' for this location '$AreaName' ";
+            } else {
+                echo "<i class='fa fa-check-circle' style='color: Green; font-size: 19px;' aria-hidden='true'></i> Item Available on this date '$date' for this location '$AreaName' ";
             }
-            exit;
         }
     }
 
-    public function actionBooking() 
+    public function actionFinalPrice() 
     {
         $item_id = Yii::$app->request->post('item_id');
 
         $item = VendorItem::findOne($item_id);
 
-        $phone = Yii::$app->request->post('phone');
+        $total = $item->item_price_per_unit * Yii::$app->request->post('quantity');
 
-        Yii::$app->mailer->compose("customer/booking_support",
-            [
-               "name" => Yii::$app->request->post('name'),
-               "phone" => $phone,
-                "email" => Yii::$app->request->post('email')
-            ])
-            ->setFrom(Yii::$app->params['supportEmail'])
-            ->setTo(Yii::$app->params['supportEmail'])
-            ->setSubject('Booking support request from "'.$phone.'"')
-            ->send();
+        $menu_items = Yii::$app->request->post('menu_item');
 
-        Yii::$app->getSession()->setFlash('success', Yii::t(
-                    'frontend', 
-                    'Success: We got your request, we will contact you ASAP!'
-                ));
+        if(!is_array($menu_items)) {
+            $menu_items = [];
+        }
 
-        return $this->redirect(['browse/detail', 'slug' => $item['slug']]);
+        foreach ($menu_items as $key => $value) {
+            
+            $menu_item = VendorItemMenuItem::findOne($key);
+
+            $total += $menu_item->price * $value;
+        }
+        
+        Yii::$app->response->format = 'json';
+
+        return [
+            'price' => CFormatter::format($total)
+        ];
     }
 
     public function actionLocationDateSelection()

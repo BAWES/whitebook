@@ -8,6 +8,7 @@ use common\models\CustomerCart;
 use common\components\CFormatter;
 use common\components\LangFormat;
 use common\models\VendorItemPricing;
+use common\models\CustomerCartMenuItem;
 
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
@@ -90,7 +91,18 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 				$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
 
-				$row_total = $unit_price * $item['cart_quantity'];
+				$menu_items = CustomerCartMenuItem::find()
+    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+    				->where(['cart_id' => $item['cart_id']])
+    				->asArray()
+    				->all();
+
+    			foreach ($menu_items as $key => $value) {
+    				$unit_price += $value['quantity'] * $value['price'];
+    			}
+
+    			$row_total = $unit_price * $item['cart_quantity'];
 
     			$sub_total += $row_total;
 
@@ -117,9 +129,33 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
                         ?>
 	        		</td>
 	        		<td>
-	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
-							<?= LangFormat::format($item['item_name'],$item['item_name_ar']); ?>
+		        		
+		        		<a target="_blank" href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
+	        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
 	        			</a>
+
+	        			<?php 
+
+	        			foreach ($menu_items as $key => $menu_item) { 
+	        				if(Yii::$app->language == 'en') {
+	        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'].'</i>';
+	        				}else{
+	        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'].'</i>';
+	        				}
+	        			} 
+
+	        			?>
+
+	        			<?php if($menu_items) { ?>
+		        			<div class="visible-xs visible-sm">	        				
+		        				 = <?= CFormatter::format($row_total); ?>
+		        			</div>
+	        			<?php } else { ?>
+		        			<div class="visible-xs visible-sm">	        				
+		        				x <?= $item['cart_quantity'] ?> = <?= CFormatter::format($row_total); ?>
+		        			</div>
+	        			<?php } ?>
+
 	        		</td>
 	        		<td>
 	        			<?php 
@@ -152,7 +188,6 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        		</td>
 	        		<td align="right">
 	        			<?= CFormatter::format($row_total)  ?>
-	        			<?= Yii::$app->params['Currency']; ?>
 	        		</td>
 	        	</tr>
 	        	<?php } ?>
