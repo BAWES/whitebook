@@ -408,7 +408,7 @@ class VendorItemController extends Controller
 
         $model->scenario = 'MenuItems';
 
-        if(Yii::$app->request->isPost) 
+        if($model->load(Yii::$app->request->post()) && $model->save()) 
         {
             //remove old menu and menu items 
             

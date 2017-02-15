@@ -85,12 +85,32 @@ class CartController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $menu = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+        $menu = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'options'
+        ]);
+
+        $addons = VendorItemMenu::findAll([
+            'item_id' => $model->item_id,
+            'menu_type' => 'addons'
+        ]);
+
+        //get timeslots 
+        $vendor_timeslot = DeliveryTimeSlot::find()
+            ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+            ->where([
+                'vendor_id' => $model->vendor_id,
+                'timeslot_day' => date("l", strtotime($item->cart_delivery_date))
+            ])
+            ->asArray()
+            ->all();
 
         return $this->renderPartial('edit_cart', [
             'item' => $item,
             'model' => $model,
-            'menu' => $menu
+            'menu' => $menu,
+            'addons' => $addons,
+            'vendor_timeslot' => $vendor_timeslot
         ]);
     }
 

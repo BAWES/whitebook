@@ -308,27 +308,9 @@ $this->registerJs("
     var availablity = '".Url::toRoute('browse/product-available')."';
     var product_availability = '".Url::toRoute('cart/validation-product-available')."';
     var update_cart_url = '".Url::toRoute('cart/update-cart-item')."';
+    var update_cart_popup_url = '".Url::to(['cart/update-cart-item-popup'])."';
+
 ", View::POS_HEAD);
-
-$this->registerJs("
-	jQuery('.btn-danger').click(function() {
-		jQuery(this).parent().find('input').val(0);
-		jQuery('#cart-form').submit();
-	});
-
-	jQuery('.fa-edit').click(function(){
-		jQuery.ajax({
-            url: '".Url::to(['cart/update-cart-item-popup'])."',
-            type:'post',
-            data:{id:$(this).data('cart-id')},
-            success:function(data)
-            {
-            	jQuery('#update-cart-modal').modal('show');
-            	jQuery('#update-cart-modal .modal-body').html(data);
-            }
-        });
-	});
-", View::POS_READY);
 
 ?>
 
@@ -380,7 +362,11 @@ $this->registerJs("
 </div>
 <?php
 
-$this->registerJsFile('@web/js/cart.js?v=1.1', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/cart.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
+echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);
+echo Html::hiddenInput('txt-max', Yii::t('frontend', ' upto {qty}'), ['id' => 'txt-max']);
 
 $this->registerCss("
 	.max-width-150-px{max-width: 150px;}
