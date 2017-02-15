@@ -228,6 +228,19 @@ class VendorItemController extends Controller
     */
     public function actionUpdate($id, $vid = false)
     {
+        //check if in draft 
+        $draft = VendorDraftItem::findOne([
+                'is_ready' => 1,
+                'item_id' => $id
+            ]);
+
+        if($draft) {
+
+            Yii::$app->session->setFlash('danger', "This item available in draft. Please approve/reject draft to edit this item.");
+
+            return $this->redirect(['index']);    
+        }
+        
         $model = $this->findModel($id);
 
         $model->scenario = 'ItemInfo';
