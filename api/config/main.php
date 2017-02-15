@@ -104,6 +104,8 @@ return [
                         'GET area' => 'product-areas',
                         'GET time-slot' => 'product-delivery-time-slot',
                         'GET capacity' => 'item-capacity',
+                        'GET theme' => 'load-all-themes',
+                        'GET vendors' => 'load-all-vendor',
                         'POST event' => 'add-product-to-event',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
@@ -112,6 +114,8 @@ return [
                         'OPTIONS area' => 'options',
                         'OPTIONS time-slot' => 'options',
                         'OPTIONS capacity' => 'options',
+                        'OPTIONS theme' => 'options',
+                        'OPTIONS vendors' => 'options',
                     ]
                 ],
                 [ // EventController
