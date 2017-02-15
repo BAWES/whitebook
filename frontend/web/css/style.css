@@ -2418,3 +2418,11 @@ span.small {
 .left-sidebar .callout {
     font-size: 14px;
 }
+
+#form-update-cart #accordion .panel {
+    margin-bottom: 0;
+}
+
+#form-update-cart #accordion .panel-body {
+    padding: 0;
+}
