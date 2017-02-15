@@ -32,17 +32,17 @@ $this->params['breadcrumbs'][] = 'Update';
 	    </li>
 	    <li class="active">
 	    	<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>">
-	    		Item description
+	    		Description
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-price', 'id' => $model->item_id]) ?>">
-	    		Item price 
+	    		Price and Inventory
 	    	</a>
 	    </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>">
-	    		Menu items
+	    		Menu
 	    	</a>
 	    </li>
 	    <li>
@@ -65,9 +65,6 @@ $this->params['breadcrumbs'][] = 'Update';
 				<button class="close" data-dismiss="alert">x</button>
 			</div>
 
-			<?= $form->field($model, 'type_id')
-					->dropDownList($itemtype, ['prompt'=>'Select...', 'id' => 'vendoritem-type_id']) ?>
-
 			<?= $form->field($model, 'item_description')
 					->label('Item description'.Html::tag('span', '*',['class'=>'required']))
 					->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_description']); ?>
@@ -81,6 +78,22 @@ $this->params['breadcrumbs'][] = 'Update';
 
 			<?= $form->field($model, 'item_additional_info_ar')
 					->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_additional_info_ar']); ?>
+
+			<?= $form->field($model, 'item_how_long_to_make')
+					->label('# of days delivery '.Html::tag('span', '*',['class'=>'required mandatory']))
+					->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_how_long_to_make']); ?>
+
+			<?= $form->field($model, 'max_time'); ?>
+
+			<?= $form->field($model, 'max_time_ar'); ?>
+
+			<?= $form->field($model, 'set_up_time'); ?>
+
+			<?= $form->field($model, 'set_up_time_ar'); ?>
+
+			<?= $form->field($model, 'requirements'); ?>
+
+			<?= $form->field($model, 'requirements_ar'); ?>
 
 			<hr />
 			
