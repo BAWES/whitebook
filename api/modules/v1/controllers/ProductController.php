@@ -2,6 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
+use common\models\Themes;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
@@ -48,6 +49,8 @@ class ProductController extends Controller
             'options',
             'category-products',
             'product-detail',
+            'load-all-themes',
+            'load-all-vendor',
         ];
 
         return $behaviors;
@@ -281,67 +284,46 @@ class ProductController extends Controller
         }
     }
 
-    public function actionProductAreas($vendor_id) {
+    public function actionProductAreas($vendor_id = '') {
 
+        $userAddress = [];
         $customer_id = Yii::$app->user->getId();
 
-        $vendor_area_list = [];
-        if (empty($vendor_id) || !isset($vendor_id)) {
-            return [
-                "operation" => "error",
-                'message' => 'Invalid Vendor ID'
-            ];
+        if ($vendor_id) {
+            $vendor_area = VendorLocation::find()
+                ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
+                ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
+                ->where(['{{%vendor_location}}.vendor_id' => $vendor_id])
+                ->asArray()
+                ->all();
+        } else {
+            $vendor_area = VendorLocation::find()
+                ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
+                ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
+                ->asArray()
+                ->all();
         }
 
-        if (empty($customer_id) || !isset($customer_id)) {
-            return [
-                "operation" => "error",
-                'message' => 'Invalid Customer ID'
-            ];
-        }
-//        $vendor_area = VendorLocation::find()
-//            ->select('area,location.location')
-//            ->where(['vendor_id' => $vendor_id])
-//            ->with('location')
-//            ->asArray()
-//            ->all();
+        if ($customer_id) {
+            $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id');
 
-            $vendor_area =  VendorLocation::find()
-            ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
-            ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
-            ->where(['{{%vendor_location}}.vendor_id'=>$vendor_id])
-            ->asArray()
-            ->all();
-//        $area_ids = \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'area_id' );
-//
-//
-//        $my_addresses =  \common\models\CustomerAddress::find()
-//            ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
-//            ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
-//            ->where(['{{%customer_address}}.trash'=>'Default'])
-//            ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
-//            ->andwhere(['{{%location}}.id' => $area_ids])
-//            ->groupby(['{{%location}}.id'])
-//            ->asArray()
-//            ->all();
-//
-//        $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
-//
-//        if (count($vendor_area)>0) {
-//
-//            // add prefix to address id ex: address_14,address_15
-//            $myNewArray = array_combine(
-//                array_map(function($key){ return 'address_'.$key; }, array_keys($myaddress_area_list)),
-//                $vendor_area
-//            );
-//
-//            $combined_myaddress = array(
-//                Yii::t('frontend', 'My Addresses') => $myNewArray
-//            );
-//
-//            $vendor_area_list = $combined_myaddress + $vendor_area_list;
-//        }
-        return $vendor_area;
+            $my_addresses = \common\models\CustomerAddress::find()
+                ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
+                ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
+                ->where(['{{%customer_address}}.trash' => 'Default'])
+                ->andwhere(['{{%customer_address}}.customer_id' => $customer_id])
+                ->andwhere(['{{%location}}.id' => $area_ids])
+                ->groupby(['{{%location}}.id'])
+                ->asArray()
+                ->all();
+
+            foreach ($my_addresses as $address) {
+                $userAddress[] = ['area_id' => 'address_' . $address['address_id'], 'location' => $address['address_name']];
+            }
+            return $userAddress + $vendor_area;
+        }
+
+        return $userAddress;
     }
 
     /*
@@ -428,5 +410,20 @@ class ProductController extends Controller
             }
         }
         return $capacity;
+    }
+
+    public function actionLoadAllThemes() {
+        return Themes::findAll(['theme_status'=>'Active']);
+    }
+
+    public function actionLoadAllVendor() {
+        return $query = Vendor::find()
+            ->andWhere(['{{%vendor}}.trash'=>'Default'])
+            ->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
+            ->andWhere(['{{%vendor}}.vendor_status'=>'Active'])
+            ->orderby(['{{%vendor}}.vendor_name' => SORT_ASC])
+            ->groupby(['{{%vendor}}.vendor_id'])
+            ->asArray()
+            ->all();
     }
 }
