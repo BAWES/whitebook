@@ -1,7 +1,7 @@
 {
     "name": "BAWES/whitebook",
     "description": "The White Book Online Event Planning Platform",
-    "version": "2.3.8",
+    "version": "2.4.0",
     "keywords": ["plan", "event"],
     "homepage": "http://www.thewhitebook.com.kw/",
     "type": "project",
