@@ -79,21 +79,22 @@ class ProductController extends Controller
      * @return array
      */
     public function actionCategoryProducts(
-        $category_id,
         $offset = 0,
-        $forSale = null,
+        $category_id,
+        $forSale = false,
         $requestedLocation = null,
         $requestedDeliverDate = null,
-        $requestedPrice = null,
-        array $requestedCategories = [],
-        array $requestedVendor = [],
-        array $requestedTheme = []
+        $requestedMinPrice = 0,
+        $requestedMaxPrice = 0,
+        $requestedCategories = '',
+        $requestedVendor = '',
+        $requestedTheme = ''
     )
     {
         $products = [];
         $limit = Yii::$app->params['limit'];
 
-        if (isset($requestedVendor) && $requestedVendor != '') {
+        if ($requestedVendor) {
             $arr_vendor_slugs = $requestedVendor;
         }else{
             $arr_vendor_slugs = [];
@@ -127,27 +128,25 @@ class ProductController extends Controller
                 '{{%vendor_item}}.item_status' => 'Active',
             ]);
 
-        if (isset($forSale) && $forSale != '') {
+        if ($forSale) {
             $item_query->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
         }
 
         $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
 
         //price filter
-        if (isset($requestedPrice) && $requestedPrice != '') {
+        if ($requestedMinPrice && $requestedMaxPrice) {
 
             $price_condition = [];
 
-            $arr_min_max = explode('-', $requestedPrice);
-
             $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
+            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$requestedMinPrice.' and '.$requestedMaxPrice;
 
             $item_query->andWhere(implode(' OR ', $price_condition));
         }
 
         //theme filter
-        if (isset($requestedTheme) && count($requestedTheme)>0) {
+        if ($requestedTheme) {
 
             $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
             $item_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
@@ -163,10 +162,10 @@ class ProductController extends Controller
             $cats = $category_id;
         }
 
-        if (isset($requestedCategories) && count($requestedCategories) > 0)
-        {
-            $cats = implode("','",  $requestedCategories);
-        }
+//        if (isset($requestedCategories) && count($requestedCategories) > 0)
+//        {
+//            $cats = implode("','",  $requestedCategories);
+//        }
 
         if ($category_id != "all") {
             $q = "{{%category_path}}.path_id IN ('" . $cats . "')";
@@ -174,7 +173,15 @@ class ProductController extends Controller
         }
 
         if ($requestedLocation) {
-            $location = $requestedLocation;
+
+
+            if (is_numeric($requestedLocation)) {
+                $location = $requestedLocation;
+            } else {
+                $address_id = substr($requestedLocation, strpos($requestedLocation, '_') + 1, strlen($requestedLocation));
+
+                $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
+            }
             $item_query->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
         }
 
@@ -413,7 +420,7 @@ class ProductController extends Controller
     }
 
     public function actionLoadAllThemes() {
-        return Themes::findAll(['theme_status'=>'Active']);
+        return Themes::findAll(['theme_status'=>'Active','trash'=>'Default']);
     }
 
     public function actionLoadAllVendor() {
