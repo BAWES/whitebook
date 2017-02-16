@@ -1043,17 +1043,17 @@ if($model->images) {
             <div class="login-padding">
                 <div class="form-group">    
                     <label>Name</label>
-                    <input class="form-control input-lg" name="name" placeholder="Your name" required />
+                    <input value="<?= $customer_name ?>" class="form-control input-lg" name="name" placeholder="Your name" required />
                     <span class="error name"></span>
                 </div>
                 <div class="form-group">    
                     <label>Phone</label>
-                    <input class="form-control input-lg" name="phone" pattern='\d' placeholder="Your phone no" title="Digits only" required />
+                    <input value="<?= $customer_phone ?>" class="form-control input-lg" name="phone" pattern='\d' placeholder="Your phone no" title="Digits only" required />
                     <span class="error phone"></span>
                 </div>
                 <div class="form-group">    
                     <label>Email</label>
-                    <input type="email" class="form-control input-lg" name="email" placeholder="Your email address" required />
+                    <input value="<?= $customer_email ?>" type="email" class="form-control input-lg" name="email" placeholder="Your email address" required />
                     <span class="error email"></span>
                 </div>
                 <div class="form-group">
