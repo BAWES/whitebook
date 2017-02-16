@@ -12,6 +12,7 @@ use frontend\models\VendorItem;
 use frontend\models\Users;
 use frontend\models\Vendor;
 use frontend\models\Website;
+use frontend\models\Customer;
 use common\models\Events;
 use common\models\ItemType;
 use common\models\Category;
@@ -468,10 +469,23 @@ class BrowseController extends BaseController
                 ->groupby(['{{%location}}.id'])
                 ->asArray()
                 ->all();
+
+            $customer = Customer::findOne(Yii::$app->user->getId());
         }
         else
         {
             $my_addresses = [];
+            $customer = null;
+        }
+
+        if($customer) {
+            $customer_name = $customer->customer_name.' '.$customer->customer_last_name;
+            $customer_phone = $customer->customer_mobile;
+            $customer_email = $customer->customer_email;
+        } else {
+            $customer_name = '';
+            $customer_phone = '';
+            $customer_email = '';
         }
 
         $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
@@ -517,6 +531,9 @@ class BrowseController extends BaseController
             'customer_events_list' => $customer_events_list,
             'vendor_area' => $vendor_area_list,
             'my_addresses' => $my_addresses,
+            'customer_name' => $customer_name,
+            'customer_phone' => $customer_phone,
+            'customer_email' => $customer_email,
             'price_table' => $price_table
         ]);
     }
@@ -543,7 +560,7 @@ class BrowseController extends BaseController
 
         Yii::$app->getSession()->setFlash('success', Yii::t(
                     'frontend', 
-                    'Success: We got your request, we will contact you ASAP!'
+                    'Thank you for your request, we will get back to you within the next 24 hours.'
                 ));
 
         return $this->redirect(['browse/detail', 'slug' => $item['slug']]);
