@@ -283,60 +283,64 @@
 
 
 /* BEGIN Buy Item */
-if (!isGuest) {
 
-    jQuery(document).delegate('#form_product_option', 'submit', function(e) {
-        jQuery.post(
-            addtobasket_url,
-            jQuery('#form_product_option').serialize(),
-            function (data)
-            {
-                jQuery('#form_product_option .error').html('');
+jQuery(document).delegate('#form_product_option', 'submit', function(e) {
 
-                if(data['success']) {
-                    location = location;
-                } else {
+    e.preventDefault();
 
-                    $.each(data.errors, function(index, errors) {
-                        $.each(errors, function(key, value) {
-                            jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');
-                        });
+    if (isGuest) {
+        show_login_modal(-2);
+        $('#myModal').modal('show');
+    }
+
+    jQuery.post(
+        addtobasket_url,
+        jQuery('#form_product_option').serialize(),
+        function (data)
+        {
+            jQuery('#form_product_option .error').html('');
+
+            if(data['success']) {
+                location = location;
+            } else {
+
+                $.each(data.errors, function(index, errors) {
+                    $.each(errors, function(key, value) {
+                        jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');
                     });
+                });
 
-                    if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
-                        $('a[href="#collapse-options"]').trigger('click');
-                    }
-
-                    $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
+                if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
+                    $('a[href="#collapse-options"]').trigger('click');
                 }
+
+                $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
             }
-        );
-
-        e.preventDefault();
-    });
-
-    // Shop product page quantity increment and decrement stepper
-    jQuery(document).on('click','.btn-stepper',function() {
-
-        $qty = parseInt($('input[name="quantity"]').val());
-        $capacity = parseInt($('#capacity').val());
-        $item_type_name = $('#item_type_name').val();
-
-        if (jQuery(this).data('case') == 0) {
-            if ($qty >= parseInt(jQuery('#quantity').data('min'))+1) {
-                jQuery('#quantity').val($qty - 1);
-                update_option_menu_item_qty();//remove option qty for max option rule 
-            }
-        } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || $qty < $capacity)) {
-            jQuery('#quantity').val($qty + 1);
         }
+    );
+});
 
-        update_price();
-        update_option_menu_title_hint();
+// Shop product page quantity increment and decrement stepper
+jQuery(document).on('click','.btn-stepper',function() {
 
-        return false;
-    });
-}
+    $qty = parseInt($('input[name="quantity"]').val());
+    $capacity = parseInt($('#capacity').val());
+    $item_type_name = $('#item_type_name').val();
+
+    if (jQuery(this).data('case') == 0) {
+        if ($qty >= parseInt(jQuery('#quantity').data('min'))+1) {
+            jQuery('#quantity').val($qty - 1);
+            update_option_menu_item_qty();//remove option qty for max option rule 
+        }
+    } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || $qty < $capacity)) {
+        jQuery('#quantity').val($qty + 1);
+    }
+
+    update_price();
+    update_option_menu_title_hint();
+
+    return false;
+});
 
 function deliveryTimeSlot(date){
     var myDate = new Date()
