@@ -352,16 +352,6 @@ if($model->images) {
                                                 
                                                 echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
 
-                                            } elseif (Yii::$app->user->isGuest) { ?>
-
-                                                <div class="clearfix qantity-div">
-                                                    <div class="button-signin">
-                                                        <button type="button" onclick="show_login_modal('-2');" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;" data-target='#myModal' data-toggle='modal'>
-                                                            <?= Yii::t('frontend', 'Buy') ?>
-                                                        </button>&nbsp;&nbsp;&nbsp;
-                                                    </div>
-                                                </div>
-                                            <?php 
                                             } else { ?>
 
                                                 <?php if($item_type_name == 'Product' || $capacity > 1) { ?>
@@ -395,7 +385,7 @@ if($model->images) {
                                                 <span class=" col-lg-12 error cart_quantity"></span>
                                                 <span id="available"></span>
                                         <?php 
-                                            } // END if not guest and item available 
+                                            } // END if item available 
                                         } // END item for sale 
                                         ?>
                                         </div>
@@ -587,7 +577,7 @@ if($model->images) {
                                                 <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
                                                         <?= Yii::t('frontend', 'Buy') ?>
                                                 </button>          
-                                            <?php } ?><!-- END not guest -->
+                                            <?php } ?><!-- END not guest -->            
                                             <?php } ?><!-- END available in stock and for sale -->
 
                                           </div>
@@ -1170,5 +1160,5 @@ $this->registerCss("
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.17', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.18', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
