@@ -647,4 +647,13 @@ function update_option_menu_item_qty() {
     });
 }
         
+$(document).delegate('.lnk-price-chart', 'click', function() {
 
+    $('.price_chart_wrapper').toggleClass('hidden');
+
+    if($('.price_chart_wrapper').hasClass('hidden')) {
+        $('.lnk-price-chart .fa-minus-square-o').removeClass('fa-minus-square-o').addClass('fa-plus-square-o');
+    }else{
+        $('.lnk-price-chart .fa-plus-square-o').removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
+    }
+});
