@@ -1354,7 +1354,7 @@ div#mobile_search_fail {
 	}
 }
 
-@media (max-width: 767px) {
+@media (max-width: 769px) {
     .cart-table .fa-edit {
         position: relative;
         background: black;
@@ -1392,7 +1392,25 @@ div#mobile_search_fail {
 	.owl-buttons, .owl-controls {
 		display: block !important;
 	}
+
+	.right_descr_product .qty_box {
+		float: none;
+		clear: both;
+		padding-top: 20px;
+	}
+	.product_detail_section .social_share {
+		clear: both;
+	    display: block;
+	    padding-top: 20px;
+	    float: none;
+	    margin: auto;
+	    text-align: center;
+	}
+	.product_detail_section .social_share ul li {
+		margin: 0 8px 0 0;
+	}
 }
+
 @media (max-width: 350px) {
 	.address_block, .address_insert_block{
         width: 100%;

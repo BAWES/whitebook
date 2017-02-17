@@ -162,7 +162,7 @@ if($model->images) {
                         <div class="left_descrip mobile-view">
                             <h2><?= $item_name; ?></h2>
                             <label>
-                                <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" class="color-999999">
+                                <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" class="color-violet">
                                     <?= $vendor_name; ?>
                                 </a>
                             </label>
@@ -184,6 +184,45 @@ if($model->images) {
                                           } ?>                                        
                                 </p>
                             </b>
+
+                            <?php 
+
+                            $pricing = VendorItemPricing::find()
+                                ->where(['item_id'=> $model->item_id])
+                                ->all();
+
+                            if($pricing) { ?>
+
+                                <a class="lnk-price-chart">
+                                    <i class="fa fa-plus-square-o"></i>
+                                    <span class="color-violet">
+                                        <?= Yii::t('frontend', 'View full price chart') ?>
+                                    </span>
+                                </a>
+
+                                <div class="price_chart_wrapper hidden text-center">
+                                    <table class="table table-striped table-bordered detail-view price_range">
+                                        <thead>
+                                            <tr>
+                                                <th><?= Yii::t('frontend', 'Quantity') ?></th>
+                                                <th><?= Yii::t('frontend', 'Price') ?></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($pricing as $key => $value) { ?>
+                                            <tr>
+                                                <td><?= $value['range_to'] ?>+</td>
+                                                <td>
+                                                    <?= CFormatter::format($value['pricing_price_per_unit']) ?>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div><!-- END .price_chart_wrapper -->
+
+                            <?php } //if pricing ?>
+
                         </div>
                         <!-- Indicators responsive slider -->
                         <div class="responsive_slider_detials">
@@ -254,7 +293,7 @@ if($model->images) {
                                     <h2><?= $item_name; ?></h2>
 
                                     <label>
-                                        <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-999999">
+                                        <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-violet">
                                             <?= $vendor_name; ?>
                                         </a>
                                     </label>
@@ -291,6 +330,45 @@ if($model->images) {
                                     } ?>
 
                                     <strong><?= LangFormat::format($model['item_price_description'], $model['item_price_description_ar']); ?></strong>
+
+                                    <?php 
+
+                                    $pricing = VendorItemPricing::find()
+                                        ->where(['item_id'=> $model->item_id])
+                                        ->all();
+
+                                    if($pricing) { ?>
+
+                                        <a class="lnk-price-chart">
+                                            <i class="fa fa-plus-square-o"></i>
+                                            <span class="color-violet">
+                                                <?= Yii::t('frontend', 'View full price chart') ?>
+                                            </span>
+                                        </a>
+
+                                        <div class="price_chart_wrapper hidden">
+                                            <table class="table table-striped table-bordered detail-view price_range">
+                                                <thead>
+                                                    <tr>
+                                                        <th><?= Yii::t('frontend', 'Quantity') ?></th>
+                                                        <th><?= Yii::t('frontend', 'Price') ?></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($pricing as $key => $value) { ?>
+                                                    <tr>
+                                                        <td><?= $value['range_to'] ?>+</td>
+                                                        <td>
+                                                            <?= CFormatter::format($value['pricing_price_per_unit']) ?>
+                                                        </td>
+                                                    </tr>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div><!-- END .price_chart_wrapper -->
+
+                                    <?php } //if pricing ?>
+                                    
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
@@ -344,36 +422,11 @@ if($model->images) {
 
                                         <!-- Add to Event End here -->
                                         <div class="buy_events">
-                                        <?php
-
-                                        if ($model->item_for_sale == 'Yes') {
-
-                                             if (!$AvailableStock) {
+                                        <?php if (!$AvailableStock) {
                                                 
                                                 echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
 
                                             } else { ?>
-
-                                                <?php if($item_type_name == 'Product' || $capacity > 1) { ?>
-
-                                                    <div class="padding-top-12 pull-left quantity-lbl">
-                                                        <label>
-                                                            <?= Yii::t('frontend', $model['quantity_label']); ?>      
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="clearfix qantity-div">
-                                                        <div class="form-group qty" style="margin: 0px;">
-                                                            <a href="#" class="btn-stepper" data-case="0">-</a>
-                                                            <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity ?>" value="<?=$quantity ?>"/>
-                                                            <a href="#" class="btn-stepper" data-case="1">+</a>
-                                                        </div>
-                                                    </div>
-                                                <?php } else { ?>
-                                                    <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity?>" value="<?= $quantity ?>" />
-                                                <?php } ?>
-
-                                                <br />
 
                                                 <div class="buy-btn">
                                                     <div class="button-signin">
@@ -384,45 +437,59 @@ if($model->images) {
                                                 </div>
                                                 <span class=" col-lg-12 error cart_quantity"></span>
                                                 <span id="available"></span>
-                                        <?php 
-                                            } // END if item available 
-                                        } // END item for sale 
-                                        ?>
+                                        <?php } // END if item available ?>
+                                        </div>
+
+                                        <a class="color-violet lnk-company-policy" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>">
+                                            <?= Yii::t('frontend', 'Company Refund Policy') ?>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <?php if($AvailableStock && ($item_type_name == 'Product' || $capacity > 1)) { ?>
+                                <div class="qty_box">
+                                    <div class="quantity-lbl">
+                                        <label>
+                                            <?= Yii::t('frontend', $model['quantity_label']); ?>      
+                                        </label>
+                                    </div>
+
+                                    <div class="qantity-div">
+                                        <div class="form-group qty" style="margin: 0px;">
+                                            <a href="#" class="btn-stepper" data-case="0">-</a>
+                                            <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity ?>" value="<?=$quantity ?>"/>
+                                            <a href="#" class="btn-stepper" data-case="1">+</a>
                                         </div>
                                     </div>
                                 </div>
+                                <?php } else { ?>
+                                    <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity?>" value="<?= $quantity ?>" />
+                                <?php } ?>
+
+                                <div class="social_share">
+                                    <?php
+
+                                    $title = Yii::$app->name.' ' . ucfirst($vendor_name);
+                                    $summary = Yii::$app->name.' '. ucfirst($item_name).' from '.ucfirst($vendor_name);
+
+                                    $image = isset($baselink) ? $baselink : '';
+                                    $url = Url::toRoute(['browse/detail','slug'=>$model->slug],true);
+                                    $mailbody = "Check out ".ucfirst($item_name)." on ".Yii::$app->name." ".$url;
+                                    ?>
+                                    <ul>
+                                        <li><a title="Facebook" href='https://www.facebook.com/sharer/sharer.php?u=<?=urlencode($url)?>' onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><span class="flaticon-facebook55"></span></a></li>
+                                        <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$summary?>&url=<?=$url; ?>" ><span class="flaticon-twitter13"></span></a></li>
+                                        <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
+                                        <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
+                                        <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
+                                        <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>" title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
+                                        <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
+                                    </ul>
+                                </div>
                             </div>
-
-                            <?php if($set_up_time || $max_time || $requirements) { ?>
-                            <div class="menu-requirements">
-
-                                <?php if($set_up_time) { ?>
-                                <div>
-                                    <i class="fa fa-clock-o"></i>
-                                    <span class="title">Set-up Time</span>
-                                    <span class="value"><?= $set_up_time ?></span>
-                                </div>
-                                <?php } ?>
-
-                                <?php if($requirements) { ?>
-                                <div>
-                                    <i class="fa fa-cog"></i>
-                                    <span class="title">Requirements</span>
-                                    <span class="value"><?= $requirements ?></span>
-                                </div>
-                                <?php } ?>
-
-                                <?php if($max_time) { ?>
-                                <div>
-                                    <i class="fa fa-info"></i>
-                                    <span class="title">Max. Time</span>
-                                    <span class="value"><?= $max_time ?></span>
-                                </div>
-                                <?php } ?>
-                                
-                                <span class="clearfix"></span>
-                            </div>
-                            <?php } ?>
 
                             <div class="accad_menus">
                                 <div class="panel-group vendor-item-detail" id="accordion">
@@ -433,18 +500,51 @@ if($model->images) {
                                           <h4 class="panel-title">
                                             <a data-toggle="collapse"  href="#collapse1">
                                                 <?= Yii::t('frontend', 'Description') ?>
-                                                <span class="produ_type">
-                                                (
-                                                    <?= Yii::t('frontend', 'Product type') ?>:
-                                                    <?= Yii::t('frontend', $item_type_name); ?>
-                                                )
-                                                </span>
                                             </a>
                                           </h4>
                                         </div>
                                         <div id="collapse1" class="panel-collapse collapse in">
                                           <div class="panel-body">
-                                            <p><?= $item_description; ?></p>
+
+                                            <?php if($set_up_time || $max_time || $requirements) { ?>
+                                            <div class="menu-requirements">
+
+                                                <?php if($set_up_time) { ?>
+                                                <div>
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <span class="title">Set-up Time</span>
+                                                    <span class="value"><?= $set_up_time ?></span>
+                                                </div>
+                                                <?php } ?>
+
+                                                <?php if($requirements) { ?>
+                                                <div>
+                                                    <i class="fa fa-cog"></i>
+                                                    <span class="title">Requirements</span>
+                                                    <span class="value"><?= $requirements ?></span>
+                                                </div>
+                                                <?php } ?>
+
+                                                <?php if($max_time) { ?>
+                                                <div>
+                                                    <i class="fa fa-info"></i>
+                                                    <span class="title">Max. Time</span>
+                                                    <span class="value"><?= $max_time ?></span>
+                                                </div>
+                                                <?php } ?>
+                                                
+                                                <span class="clearfix"></span>
+                                            </div>
+                                            <?php } ?>
+
+                                            <h4><?= Yii::t('frontend', 'Brief') ?></h3>
+                                            <p><?= nl2br($item_description); ?></p>
+
+                                            <?php if($item_additional_info) { ?>
+                                                <h4><?= Yii::t('frontend', 'Additional Info') ?></h3>
+                                                <p><?= nl2br($item_additional_info); ?></p>
+                                            <?php } ?>
+
                                           </div>
                                         </div>
                                     </div><!-- END .panel -->
@@ -750,24 +850,6 @@ if($model->images) {
                                     </div>
                                     <?php } ?>
 
-                                    <?php if (!empty($model['item_additional_info'])) { ?>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                          <h4 class="panel-title">
-                                            <a data-toggle="collapse"  href="#collapse2" aria-expanded="true">
-                                                <?= Yii::t('frontend', 'Additional Information') ?>
-                                            </a>
-                                          </h4>
-                                        </div>
-                                        <div id="collapse2" class="panel-collapse collapse in">
-                                          <div class="panel-body">
-                                            <p><?= nl2br($item_additional_info); ?></p>
-                                          </div>
-                                        </div>
-                                    </div><!-- END .panel -->
-                                    <?php } ?>
-
-
                                     <?php if ($model->item_for_sale != 'Yes' || !$AvailableStock) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
@@ -888,29 +970,6 @@ if($model->images) {
                                     </div><!-- END .panel -->
                                     <?php } ?>
 
-                                    <?php if (VendorItemPricing::checkprice(
-                                                $model->item_id,
-                                                $model->type_id,
-                                                $model->item_price_per_unit
-                                              )
-                                          ) { ?>
-
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                          <h4 class="panel-title">
-                                            <a data-toggle="collapse"  href="#collapse4" aria-expanded="true">
-                                                <?php echo Yii::t('frontend', 'Price Chart'); ?>
-                                            </a>
-                                          </h4>
-                                        </div>
-                                        <div id="collapse4" class="panel-collapse collapse in">
-                                          <div class="panel-body">
-                                            <p><?= VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit); ?></p>
-                                          </div>
-                                        </div>
-                                    </div><!-- END .panel -->
-                                    <?php } ?>
-
                                     <?php if (!empty($model['item_customization_description'])) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
@@ -930,27 +989,6 @@ if($model->images) {
                                 </div>
                             </div>
 
-                            </div>
-                            <div class="social_share">
-                                <?php
-
-                                $title = Yii::$app->name.' ' . ucfirst($vendor_name);
-                                $summary = Yii::$app->name.' '. ucfirst($item_name).' from '.ucfirst($vendor_name);
-
-                                $image = isset($baselink) ? $baselink : '';
-                                $url = Url::toRoute(['browse/detail','slug'=>$model->slug],true);
-                                $mailbody = "Check out ".ucfirst($item_name)." on ".Yii::$app->name." ".$url;
-                                ?>
-                                <h3><?= Yii::t('frontend', 'Share this'); ?></h3>
-                                <ul>
-                                    <li><a title="Facebook" href='https://www.facebook.com/sharer/sharer.php?u=<?=urlencode($url)?>' onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><span class="flaticon-facebook55"></span></a></li>
-                                    <li><a onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" href="http://twitter.com/share?text=<?=$summary?>&url=<?=$url; ?>" ><span class="flaticon-twitter13"></span></a></li>
-                                    <li><a  title="Pinterest" target="_blank" href="//www.pinterest.com/pin/create/button/?url=<?php echo $url; ?>&media=<?php echo $image; ?>&description=<?php echo substr($summary, 0, 499); ?>" data-pin-do="buttonPin"><span class="flaticon-image87"></span></a></li>
-                                    <li><a target="_blank" href="https://plus.google.com/share?url=<?php echo $url; ?>" title="Google+"><span class="flaticon-google109"></span></a></li>
-                                    <li class="hidden-lg hidden-md"><a href="whatsapp://send?text=<?=$mailbody?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
-                                    <li><a target="_blank" href="http://tumblr.com/share?s=&v=3&t=<?php echo $title; ?>&u=<?php echo $url; ?>" title="Tumblr"><span class="flaticon-tumblr14"></span></a></li>
-                                    <li><a href="mailto:?subject=TWB Inquiry&body=<?php echo $mailbody; ?>" title="MailTo"><i class="flaticon-email5"></i></a></li>
-                                </ul>
                             </div>
                         </div>
                     </div>
@@ -1136,17 +1174,14 @@ $this->registerCss("
     .selectpicker,#area_id,#delivery_date,#timeslot_id{color:#000!important;}
     .margin-left-0{margin-left:0px!important;}
     .filter-bar .submit-btn{border-radius: 0px;padding: 10px;width: 72%;}
-    .filter-bar .form-group label{font-weight:normal;color: #999 !important;font-size: 13px;}
+    .filter-bar .form-group label{font-weight:normal;color: black !important;font-size: 13px;}
     .margin-top-0{margin-top:0px!important;}
     .padding-top-12{padding-top: 12px;}
-    .btn-stepper {width: 31% !important; padding: 0px !important; color: white;background-color: #000;display: inline-block;text-align: center;height: 100%;float: left;line-height: 43px;font-size: 25px;font-style: normal;font-weight: bold;}
     .form-group input[name=quantity] {float: left;width: 38%;line-height: 38px;height: 100%!important;text-align: center;margin: 0;border-top: 1px solid #e6e6e6;box-shadow: none;border-bottom: 1px solid #e6e6e6;}
-    .qty {width: 91%;display: block;height: 45px;margin-right: 8px;overflow: hidden;}
     .product_detail_section .panel-body p{text-align:justify;}
     .font-27{font-size:27px!important;}
     .margin-bottom-14{margin-bottom:14px!important;}
     .qty a:hover, .qty a:focus {color: #fff!important;}
-    button.dropdown-toggle{background: #fff;color: #000;border-radius: 0px;height: 42px;border-color: #e6e6e6;}
     .color-808080{color: #808080!important;}
     .height-2{height:2px!important;}
     .margin-4{margin: 4px 0 0px;}
@@ -1158,7 +1193,27 @@ $this->registerCss("
     #available{display: none;margin-top: 18px;}
     .margin-top-13{margin-top: 13px!important;}
     .fa-whatsapp{font-size: 169%;margin-top: 2px;}
+    .timeslot_id_div .text { font-weight : bold; } 
+
+    .timeslot-filter button.dropdown-toggle,
+    .area-filter button.dropdown-toggle {
+        background: #EEEEEE;
+        color: black;
+        border-radius: 0px;
+        height: 42px;
+        border-color: #C2C2C2;
+    }
+
+    .filter-bar .fa-calendar {
+        color: #C2C2C2;
+    }
+
+    #item_delivery_date {
+        border-color: #C2C2C2;
+        background: #EEEEEE !important;
+        color: black !important;
+    }
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.18', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.19', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
