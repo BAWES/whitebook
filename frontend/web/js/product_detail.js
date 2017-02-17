@@ -327,17 +327,26 @@ jQuery(document).on('click','.btn-stepper',function() {
     $capacity = parseInt($('#capacity').val());
     $item_type_name = $('#item_type_name').val();
 
-    if (jQuery(this).data('case') == 0) {
-        if ($qty >= parseInt(jQuery('#quantity').data('min'))+1) {
-            jQuery('#quantity').val($qty - 1);
-            update_option_menu_item_qty();//remove option qty for max option rule 
-        }
-    } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || $qty < $capacity)) {
-        jQuery('#quantity').val($qty + 1);
+    $minimum_increment = $('#minimum_increment').val();
+
+    if($minimum_increment) {
+        $minimum_increment = parseInt($minimum_increment);
+    }else{
+        $minimum_increment = 1;
     }
 
-    update_price();
-    update_option_menu_title_hint();
+    if (jQuery(this).data('case') == 0) {
+        if ($qty >= parseInt(jQuery('#quantity').data('min')) + $minimum_increment) {
+            jQuery('#quantity').val($qty - $minimum_increment);
+            update_price();
+            update_option_menu_title_hint();
+            update_option_menu_item_qty();//remove option qty for max option rule             
+        }
+    } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || ($qty + $minimum_increment <= $capacity))) {
+        jQuery('#quantity').val($qty + $minimum_increment);
+        update_price();
+        update_option_menu_title_hint();
+    }
 
     return false;
 });
