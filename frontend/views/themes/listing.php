@@ -68,17 +68,9 @@ $get = Yii::$app->request->get();
 				</div><!-- END .filter_content -->
 			</div><!-- END .left_side_cate -->
 			<div class="col-md-9 paddingright0 right-side">
-				<div class="banner_section_plan">
-					<?= Html::img("@web/images/banner_plan.png") ?>
-				</div>
-				<!-- BEGIN Item lists -->
 				<div class="listing_right">
 					<?=$this->render('@frontend/views/common/items',['items' => $provider, 'customer_events_list' => $customer_events_list]); ?>
 				</div>
-				<div class="banner_section_plan">
-					<?= Html::img("@web/images/banner_plan.png") ?>
-				</div>
-				<!-- END Item lists -->
 			</div>
 		</div>
 	</div>

@@ -40,10 +40,6 @@ use yii\helpers\Html;
 
         </div>
 
-        <div class="add_banner">
-            <?php /* echo Html::img("@web/images/explore_banner.jpg"); */ ?>
-        </div>
-
 
     </div>
 </section>

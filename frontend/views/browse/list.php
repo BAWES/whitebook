@@ -109,22 +109,13 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     ]);  ?>
 
                 </div>
-                <div class="col-md-9 paddingright0 right-sidebar">
-                    <div class="banner_section_plan">
-                        <?= Html::img("@web/images/banner_plan.png") ?>
-                    </div>
-
-                    <!-- BEGIN Item lists -->
+                <div class="col-md-9 paddingright0 right-sidebar">                  
                     <div class="listing_right">
                         <?= $this->render('@frontend/views/common/items', [
                             'items' => $provider, 
                             'customer_events_list' => $customer_events_list
                         ]); ?>
                     </div>
-                    <div class="banner_section_plan">
-                        <?= Html::img("@web/images/banner_plan.png") ?>
-                    </div>
-                    <!-- END Item lists -->
                 </div>
             </div>
         </div>
