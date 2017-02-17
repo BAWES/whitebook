@@ -248,9 +248,7 @@
                 </div>
             </div>
             <div class="col-md-9 paddingright0">
-                <div class="banner_section_plan">
-                    <?= Html::img("@web/images/banner_plan.png") ?>
-                </div>
+
                 <div class="listing_right">
 
                     <div class="events_listing">
@@ -530,9 +528,6 @@
                     <div class="add_more_commons">
                         <div class="lode_more_buttons">
                             <button title="Load More" class="btn btn-danger" type="button">Load More</button>
-                        </div>
-                        <div class="banner_section_plan">
-                            <?= Html::img("@web/images/banner_plan.png") ?>
                         </div>
                     </div>
                 </div>

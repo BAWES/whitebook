@@ -70,9 +70,6 @@ use common\components\LangFormat;
                 </li>
             </ul>
         </div>
-        <div class="add_banner">
-            <?= Html::img("@web/images/explore_banner.jpg", ['alt' => 'Banner']) ?>
-        </div>
     </div>
 </section>
 <!-- continer end -->
