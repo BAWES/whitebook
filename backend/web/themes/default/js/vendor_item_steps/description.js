@@ -15,17 +15,7 @@ $(function() {
 	    {
 	    	$error += '<p><i class="fa fa-exclamation"></i> Please add item description - arabic.</p>';
 	    }
-
-	    if (ck_additional_info.getData() == '')
-	    {
-	    	$error += '<p><i class="fa fa-exclamation"></i> Please add item additional info.</p>';
-	    }
-
-	    if (ck_additional_info_ar.getData() == '')
-	    {
-	    	$error += '<p><i class="fa fa-exclamation"></i> Please add item additional info - arabic.</p>';
-	    }
-
+	    
 	    if($error) {
 
 		    e.preventDefault();
