@@ -55,7 +55,9 @@ currency: 'USD'
 <!-- Content start -->
 <section id="content_section">
 
-<?php if (!Yii::$app->user->isGuest) { ?>
+<?php
+/* @TODO Removed Event Section
+if (!Yii::$app->user->isGuest) { ?>
     <br />
     <div id="event_slider_wrapper">
         <div class="container paddng0">
@@ -63,7 +65,7 @@ currency: 'USD'
         </div>
     </div>
     <br />
-<?php } ?>
+<?php } */ ?>
 
 <div class="container_plan">
 
