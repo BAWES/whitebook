@@ -12,6 +12,7 @@ use Yii;
  * @property string $working_day
  * @property string $working_start_time
  * @property string $working_end_time
+ * @property string $trash
  */
 class VendorWorkingTiming extends \yii\db\ActiveRecord
 {
@@ -29,9 +30,9 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vendor_id', 'working_day', 'working_start_time', 'working_end_time'], 'required'],
+            [['working_day', 'working_start_time', 'working_end_time'], 'required'],
             [['vendor_id'], 'integer'],
-            [['working_day'], 'string'],
+            [['working_day', 'trash'], 'string'],
             [['working_start_time', 'working_end_time'], 'safe'],
         ];
     }
@@ -47,6 +48,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
             'working_day' => Yii::t('app', 'Working Day'),
             'working_start_time' => Yii::t('app', 'Working Start Time'),
             'working_end_time' => Yii::t('app', 'Working End Time'),
+            'trash' => Yii::t('app', 'Trash'),
         ];
     }
 }

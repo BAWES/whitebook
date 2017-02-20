@@ -41,8 +41,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 				<li><a href="#2" data-toggle="tab" class="onevalid1">Main Info</a></li>
 				<li><a href="#3" data-toggle="tab" class="twovalid2">Additional Info</a></li>
 				<li><a href="#4" data-toggle="tab" class="twovalid2">Social Info</a></li>
-				<li><a href="#5" data-toggle="tab" class="twovalid2"><?=Yii::t('app','Working Days & Timing')?></a></li>
-				<li><a href="#6" data-toggle="tab" class="emails twovalid2">Email addresses</a></li>
+				<li><a href="#5" data-toggle="tab" class="emails twovalid2">Email addresses</a></li>
 			</ul>
 			<div class="tab-content">
 
@@ -368,10 +367,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 						<div class="col-md-4" ><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 					</div>
 				</div>
-                <div class="tab-pane" id="5">
-                    <?=$this->render('tabs/_working_hours',['workingDay'=>$workingDay,'model'=>$model]); ?>
-                </div>
-				<div class="tab-pane" id="6">
+                <div class="tab-pane" id="">
 
 					Email address list to get order notification
 
