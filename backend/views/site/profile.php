@@ -22,12 +22,13 @@ $from = (isset($from_am[2])) ? $from_am[2] : '';
 $to = (isset($to_am[2])) ? $to_am[2] : '';
 
 ?>
+
 <style>
 	.margin-left-2{margin-left: 2px}
 </style>
 <div class="col-md-12 col-sm-12 col-xs-12">
     <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data']]); ?>
-		<div class="loadingmessage" style="display: none;"><p><?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?></p></div>
+    	<div class="loadingmessage" style="display: none;"><p><?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?></p></div>
 		
 		<div class="message_wrapper"></div>
 
@@ -40,19 +41,20 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 				<li><a href="#2" data-toggle="tab" class="onevalid1">Main Info</a></li>
 				<li><a href="#3" data-toggle="tab" class="twovalid2">Additional Info</a></li>
 				<li><a href="#4" data-toggle="tab" class="twovalid2">Social Info</a></li>
-				<li><a href="#5" data-toggle="tab" class="emails twovalid2">Email addresses</a></li>
+				<li><a href="#5" data-toggle="tab" class="twovalid2"><?=Yii::t('app','Working Days & Timing')?></a></li>
+				<li><a href="#6" data-toggle="tab" class="emails twovalid2">Email addresses</a></li>
 			</ul>
 			<div class="tab-content">
 
-			  	<div class="tab-pane" id="0">		  		
-			    	<label class="control-label">Vendor logo</label>			    	
+			  	<div class="tab-pane" id="0">
+			    	<label class="control-label">Vendor logo</label>
 		    		<div class="image-editor">
 				        <input type="file" class="cropit-image-input">
 				        <p style="color: red;">
 				    		Minimum image dimension : 565px x 565px
 				    	</p>
 				        <div class="cropit-preview" style="width: 565px; height: 565px;">
-				        	<?php 
+				        	<?php
 
 				        	if($model->vendor_logo_path) {
 					        	$src = Yii::getAlias('@vendor_logo') . '/' . $model->vendor_logo_path;
@@ -78,15 +80,14 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 					</div>
 			  	</div>
 
-				<!-- Begin First Tab -->
+                <!-- Begin First Tab -->
 				<div class="tab-pane" id="1">
-
-				    <?= $form->field($model, 'vendor_name')
+                    <?= $form->field($model, 'vendor_name')
 				    		->textInput(['maxlength' => 100]); ?>
 
 					<?= $form->field($model, 'vendor_name_ar')
 							->textInput(['maxlength' => 100]); ?>
-	
+
 					<?= $form->field($model, 'vendor_contact_name')
 							->textInput(['maxlength' => 100]); ?>
 
@@ -131,43 +132,43 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 						<div class="checkbox-inline">
 							<label for="day_1">
 								<input type="checkbox" name="vendor_day_off[]" value="1" id="day_1" <?php if(in_array('1', $day_off)) echo 'checked'; ?> />
-								Monday								
+								Monday
 							</label>
 						</div>
 						<div class="checkbox-inline">
 							<label for="day_2">
 								<input type="checkbox" name="vendor_day_off[]" value="2" id="day_2" <?php if(in_array('2', $day_off)) echo 'checked'; ?> />
-								Tuesday								
+								Tuesday
 							</label>
 						</div>
 						<div class="checkbox-inline">
 							<label for="day_3">
 								<input type="checkbox" name="vendor_day_off[]" value="3" id="day_3" <?php if(in_array('3', $day_off)) echo 'checked'; ?> />
-								Wednesday								
+								Wednesday
 							</label>
 						</div>
 						<div class="checkbox-inline">
 							<label for="day_4">
 								<input type="checkbox" name="vendor_day_off[]" value="4" id="day_4" <?php if(in_array('4', $day_off)) echo 'checked'; ?> />
-								Thirsday							
+								Thirsday
 							</label>
 						</div>
 						<div class="checkbox-inline">
 							<label for="day_5">
 								<input type="checkbox" name="vendor_day_off[]" value="5" id="day_5" <?php if(in_array('5', $day_off)) echo 'checked'; ?> />
-								Friday							
+								Friday
 							</label>
 						</div>
 						<div class="checkbox-inline">
 							<label for="day_6">
 								<input type="checkbox" name="vendor_day_off[]" value="6" id="day_6" <?php if(in_array('6', $day_off)) echo 'checked'; ?> />
-								Saturday						
+								Saturday
 							</label>
 						</div>
 						<div class="checkbox-inline">
 							<label for="day_0">
 								<input type="checkbox" name="vendor_day_off[]" value="0" id="day_0" <?php if(in_array('0', $day_off)) echo 'checked'; ?> />
-								Sunday						
+								Sunday
 							</label>
 						</div>
 					</div>
@@ -187,11 +188,11 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 					<div class="form-group">
 					<p style="font-size:14px;"> Category</p><p style="font-weight:bold; border:1px solid #ccc;padding:5px"> <?php echo implode(' , ', $vendor_categories); ?> </p>
 					</div>
-					
+
 					<input type="hidden" id="test1" value="0" name="tests">
 
 					<?= $form->field($model, 'vendor_return_policy')->textArea(['id'=>'text-editor']); ?>
-					
+
 					<?= $form->field($model, 'vendor_return_policy_ar')->textArea(['id'=>'text-editor-2']); ?>
 
 					<?= $form->field($model, 'vendor_fax'); ?>
@@ -214,7 +215,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 				<!--End Third Tab -->
 
 				<div class="tab-pane" id="3">
-				
+
 					<div class="form-group">
 						<label>Vendor public phone</label>
 						<table class="table table-bordered table-phone-list">
@@ -233,13 +234,13 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 									</td>
 									<td>
 										<select name="phone[<?= $key ?>][type]" class="form-control">
-											<option <?php if($value->type == 'Office') echo 'selected'; ?> 
+											<option <?php if($value->type == 'Office') echo 'selected'; ?>
 												value="Office">Office</option>
 										 	<option <?php if($value->type == 'Mobile') echo 'selected'; ?>
-										 		value="Mobile">Mobile									 		
+										 		value="Mobile">Mobile
 										 	</option>
 										 	<option <?php if($value->type == 'Fax') echo 'selected'; ?>
-										 		value="Fax">Fax									 		
+										 		value="Fax">Fax
 										 	</option>
 										 	<option <?php if($value->type == 'Whatsapp') echo 'selected'; ?>
 										 		value="Whatsapp">Whatsapp
@@ -280,7 +281,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 					</div>
 				</div>
 
-				<div class="tab-pane" id="4">						
+				<div class="tab-pane" id="4">
 					<table class="table table-bordered table-social">
 						<thead>
 							<tr>
@@ -367,10 +368,12 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 						<div class="col-md-4" ><input type="button" name="btnNext" class="btnNext btn btn-info" value="Next"></div>
 					</div>
 				</div>
+                <div class="tab-pane" id="5">
+                    <?=$this->render('tabs/_working_hours',['workingDay'=>$workingDay,'model'=>$model]); ?>
+                </div>
+				<div class="tab-pane" id="6">
 
-				<div class="tab-pane" id="5">
-
-					Email address list to get order notification 
+					Email address list to get order notification
 
 					<br />
 					<br />
@@ -409,6 +412,7 @@ $to = (isset($to_am[2])) ? $to_am[2] : '';
 						<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success submit_btn' : 'btn btn-primary submit_btn','style'=>'float:right;']) ?>
 					</div>
 				</div>
+
 			</div>
 		</div>
     <?php ActiveForm::end(); ?>
