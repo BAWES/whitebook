@@ -255,32 +255,6 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            /*
-             * Saving values for vendor Working hours
-             * in whitebook_vendor_working_timing table
-             */
-
-            VendorWorkingTiming::deleteAll();// Deleting all data of working hours
-
-            $vendor_working_start_time = Yii::$app->request->post('vendor_working_start_time');
-            $vendor_working_end_time = Yii::$app->request->post('vendor_working_end_time');
-
-            if (isset($_REQUEST['vendor_non_working_day'])) {
-                $vendor_non_working_day = Yii::$app->request->post('vendor_non_working_day');
-                $workingDays = array_diff_key($vendor_working_start_time,$vendor_non_working_day);
-            } else {
-                $workingDays = $vendor_working_start_time;
-            }
-
-            foreach($workingDays as $key => $day) {
-                $workingModel = new VendorWorkingTiming();
-                $workingModel->vendor_id = $vendor_id;
-                $workingModel->working_day = $key;
-                $workingModel->working_start_time = date('H:i:s',strtotime($day));
-                $workingModel->working_end_time = date('H:i:s',strtotime($vendor_working_end_time[$key]));
-                $workingModel->save();
-            }
-
             $vendor_day_off = Yii::$app->request->post('vendor_day_off');
 
             if (is_array($vendor_day_off)) {
@@ -369,9 +343,6 @@ class SiteController extends Controller
         $vendor_order_alert_emails = VendorOrderAlertEmails::find()
             ->where(['vendor_id' => $vendor_id])
             ->all();
-
-        $workingDay = VendorWorkingTiming::find()
-            ->select(['working_day','working_start_time','working_end_time'])->where(['vendor_id'=>$model->vendor_id])->asArray()->all();
 
         return $this->render('profile', [
             'model' => $model,
