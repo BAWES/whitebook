@@ -90,7 +90,7 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 			<?= $form->field($model, 'item_additional_info_ar')->textarea(['maxlength' => 128]); ?>
 			
 			<div class="form-group">
-				<label>Notice Period <span>*</span></label>		       	
+				<label>Notice Period</label>		       	
 				<div class="input-group">
 					<span class="input-group-btn">
 			        	<select name="notice_period_type" style="width: auto; min-height: 37px;">

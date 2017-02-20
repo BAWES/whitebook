@@ -22,7 +22,7 @@ class VendorItem extends \common\models\VendorItem
 
             //ItemPrice
 
-            [['quantity_label', ], 'string', 'max' => 256, 'on' => ['ItemPrice']],
+            [['quantity_label'], 'string', 'max' => 256, 'on' => ['ItemPrice']],
 
             [['item_for_sale', 'item_price_description','item_price_description_ar'], 'string', 'on' => ['ItemPrice']],
             
@@ -31,6 +31,8 @@ class VendorItem extends \common\models\VendorItem
             [['min_order_amount', 'item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
 
             [['minimum_increment', 'type_id'], 'integer', 'on' => ['ItemPrice']],
+
+            [['type_id'], 'required', 'on' => ['ItemPrice']],
 
             //ItemDescription
             
@@ -45,7 +47,7 @@ class VendorItem extends \common\models\VendorItem
     public function scenarios()
     {
         return [
-            'ItemApproval' => ['item_status, item_approved'],
+            'ItemApproval' => ['item_status', 'item_approved'],
             
             'MenuItems' => ['allow_special_request', 'have_female_service'],
 

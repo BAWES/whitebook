@@ -74,6 +74,8 @@ class VendorDraftItem extends \common\models\VendorDraftItem
 
             [['type_id', 'minimum_increment'], 'integer', 'on' => ['ItemPrice']],
 
+            [['type_id'], 'required', 'on' => ['ItemPrice']],
+            
             //ItemDescription
             
             [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],

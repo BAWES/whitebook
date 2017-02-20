@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = 'Update';
 					->textarea(['maxlength' => 128, 'id' => 'vendoritem-item_additional_info_ar']); ?>
 
 			<div class="form-group">
-				<label>Notice Period <span>*</span></label>		       	
+				<label>Notice Period</label>		       	
 				<div class="input-group">
 					<span class="input-group-btn">
 			        	<select name="notice_period_type" style="width: auto; min-height: 37px;">
