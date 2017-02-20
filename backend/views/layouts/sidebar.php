@@ -77,6 +77,10 @@ use common\models\Vendor;
 			<li class="<?=($cntrl == 'site'  && $action == 'profile') ? "active" : "noactive" ?>">
 				<?= Html::a('<i class="fa fa-user"></i><span class="title">My Profile</span>', ['site/profile'], ['class'=>'link-title']) ?>
 			</li>
+
+            <li class="<?=($cntrl == 'vendor-working-timing') ? "active" : "noactive" ?>">
+				<?= Html::a('<i class="fa fa-clock-o"></i><span class="title">Working Days & Timing</span>', ['vendor-working-timing/index'], ['class'=>'link-title']) ?>
+			</li>
 		</ul>
 			<div class="clearfix"></div>
 		<!-- END SIDEBAR WIDGETS -->
