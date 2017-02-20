@@ -167,7 +167,12 @@ $action = Yii::$app->controller->action->id;
                                 <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
                             </a>
                         </li>
+                        <?php
+                            /*
+                                @TODO Removed Event Section
+                        ?>
                         <li><a href="<?php echo Url::toRoute(['/events/index']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
+                        <?php */ ?>
                         <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
                         <?php } ?>
 
