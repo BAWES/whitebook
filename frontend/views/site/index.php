@@ -229,6 +229,7 @@ if (!empty($feature_group_sql_result)) {
                                 <div class="events_items fetu_product_list index_redirect" data-hr='<?= $item_url ?>'>
 
                                 <div class="hover_events">
+                                    <?php /* @TODO Removed Event Section
                                     <div class="pluse_cont">
                                         <?php if(Yii::$app->user->isGuest) { ?>
                                             <a role="button" class="" data-toggle="modal"  onclick="show_login_modal(<?php echo $product_val['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>">
@@ -240,6 +241,7 @@ if (!empty($feature_group_sql_result)) {
                                             </a>
                                         <?php } ?>
                                     </div>
+                                */ ?>
 
                                     <?php if(Yii::$app->user->isGuest) { ?>
                                         <div class="faver_icons">
@@ -287,7 +289,6 @@ if (!empty($feature_group_sql_result)) {
                                         </p>
                                     </div>
                                 </a>
-
                                 </div>
                             </div><!-- END .item -->
                         <?php $i++;
