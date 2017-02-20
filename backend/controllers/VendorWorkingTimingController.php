@@ -110,7 +110,7 @@ class VendorWorkingTimingController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->trash ='Delete';
+        $model->trash ='Deleted';
         $model->save();
 
         return $this->redirect(['index']);
