@@ -416,24 +416,21 @@ if($model->images) {
                                             <img id="loading-image" src="<?= $giflink; ?>" alt="Loading..." />
                                         </div>
 
-                                        <div class="clerfix"></div>
-
-                                        <button type="button" class="btn btn-default btn-booking-modal">
-                                            <?= Yii::t('frontend', 'REQUEST BOOKING SERVICE') ?>
-                                        </button>
+<!--                                        <div class="clerfix"></div>-->
+<!---->
+<!--                                        <button type="button" class="btn btn-default btn-booking-modal">-->
+<!--                                            --><?//= Yii::t('frontend', 'REQUEST BOOKING SERVICE') ?>
+<!--                                        </button>-->
 
                                         <!-- Add to Event End here -->
                                         <div class="buy_events">
                                         <?php if (!$AvailableStock) {
-                                                
                                                 echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
-
                                             } else { ?>
-
                                                 <div class="buy-btn">
                                                     <div class="button-signin">
                                                         <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
-                                                            <?= Yii::t('frontend', 'Buy') ?>
+                                                            <?= Yii::t('frontend', 'Add To Cart') ?>
                                                         </button>&nbsp;&nbsp;&nbsp;
                                                     </div>
                                                 </div>
