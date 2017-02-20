@@ -28,19 +28,24 @@ if (!empty($items->getModels())) {
                 
                 <div class="events_images text-center position-relative">
                     <div class="hover_events">
+                        <?php
+                        /*
+                         @TODO Removed Event Section
+                        ?>
                         <div class="pluse_cont">
-                            <?php if(Yii::$app->user->isGuest) { ?>
-                                <a
-                                    href=""
-                                    role="button"
-                                    class=""
-                                    data-toggle="modal"
-                                    onclick="show_login_modal(<?php echo $value['item_id'];?>);"
-                                    data-target="#myModal"
-                                    title="<?php echo Yii::t('frontend','Add to Event');?>"
-                                >
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </a>
+                            <?php
+                            if(Yii::$app->user->isGuest) { ?>
+                            <a
+                                href=""
+                                role="button"
+                                class=""
+                                data-toggle="modal"
+                                onclick="show_login_modal(<?php echo $value['item_id'];?>);"
+                                data-target="#myModal"
+                                title="<?php echo Yii::t('frontend','Add to Event');?>"
+                            >
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </a>
                             <?php } else { ?>
                                 <a
                                     href="#"
@@ -57,7 +62,7 @@ if (!empty($items->getModels())) {
                                 </a>
                             <?php } ?>
                         </div>
-
+                        <?php */ ?>
                         <?php if(Yii::$app->user->isGuest) { ?>
                             <div class="faver_icons">
                                 <a

@@ -27,17 +27,13 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
 
     <!-- coniner start -->
     <section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
-        <?php /*
-                @TODO Removed Event Section
-        ?>
+        <?php /* @TODO Removed Event Section ?>
         <div id="event_slider_wrapper">
             <div class="container paddng0">
                 <?php echo $this->render('/product/events_slider.php');  ?>
             </div>
         </div>
-        <?php
-            */
-        ?>
+        <?php */ ?>
         <div class="container paddng0">
             <div class="breadcrumb_common">
                 <div class="bs-example">
