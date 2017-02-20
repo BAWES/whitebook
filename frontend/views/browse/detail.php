@@ -86,17 +86,13 @@ if($model->images) {
 
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com <?=Yii::$app->controller->id;?>">
-    <?php /*
-                @TODO Removed Event Section
-        ?>
+    <?php /* @TODO Removed Event Section ?>
     <div id="event_slider_wrapper">
         <div class="container paddng0">
             <?php $this->render('/product/events_slider.php'); ?>
         </div>
     </div>
-    <?php
-            */
-    ?>
+    <?php */ ?>
 
     <div class="container paddng0">
 
@@ -377,8 +373,9 @@ if($model->images) {
                                 </div>
                                 <div class="right_descrip">
                                     <div class="responsive_width">
-                                        <!-- add to event start -->
-                                        <?php if (Yii::$app->user->isGuest) { ?>
+                                        <?php
+                                        /* @TODO Removed Event Section
+                                        if (Yii::$app->user->isGuest) { ?>
                                             <a href="" data-toggle="modal" class="add_events" data-target="#myModal" title="Add to event"  onclick="add_event_login(<?php echo $model['item_id']; ?>)">
                                                 <span class="plus-icon-prod">
                                                     <?php echo Yii::t('frontend', 'Add to Event'); ?>
@@ -390,7 +387,7 @@ if($model->images) {
                                                     <?php echo Yii::t('frontend', 'Add to Event'); ?>
                                                 </span>
                                             </a>
-                                        <?php } ?>
+                                        <?php }  */ ?>
                                         <!-- add to event end here -->
                                         <!-- Add to favourite start -->
                                         <?php if (Yii::$app->user->isGuest) { ?>

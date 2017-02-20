@@ -8,13 +8,13 @@ use yii\web\view;
 
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
-
+    <?php /* @TODO Removed Event Section ?>
 	<div id="event_slider_wrapper">
 		<div class="container paddng0">
 			<?=$this->render('/product/events_slider.php'); ?>
 		</div>
 	</div>
-
+    <?php */ ?>
 	<div class="container paddng0">
 
 		<div class="directory_listing">
