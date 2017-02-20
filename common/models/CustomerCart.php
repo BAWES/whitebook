@@ -231,29 +231,28 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past delivery date');     
         }
 
-        //to check min possible delivery date, get date after x day then convert it to unix time 
-    
-        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' days')));
+        //get timeslot 
 
-        if(strtotime($data['delivery_date']) < $min_delivery_time) {
-            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period '.$item->item_how_long_to_make.' day!');
-        }
-
-        # check for current date time slot
-        if (empty($data['timeslot_end_time']) && !empty($data['timeslot_id'])) {
+        if (empty($data['timeslot_end_time']) && !empty($data['timeslot_id'])) 
+        {
             $data['timeslot_end_time'] = DeliveryTimeSlot::findOne($data['timeslot_id'])->timeslot_end_time;
         }
-
-        if(empty($data['timeslot_end_time'])) {
-
+        else 
+        {
             $errors['timeslot_id'][] = Yii::t('frontend', 'Select time slot!');
+        } 
 
-        } elseif ((strtotime($data['delivery_date']) == strtotime(date('Y-m-d'))) &&
-            (strtotime($data['timeslot_end_time']) < strtotime(date('H:i:s')))) {
-                
-            $errors['timeslot_id'][] = Yii::t('frontend', 'Time slot not valid!');
+        // delivery datetime < current time + notice period hours 
+
+        $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
+
+        if(!empty($data['timeslot_end_time']) && strtotime($data['delivery_date'].' '.$data['timeslot_end_time']) < $min_delivery_time) 
+        {
+            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
+                    'count' => $item->item_how_long_to_make
+                ]);
         }
-        
+   
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
 
