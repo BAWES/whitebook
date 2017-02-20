@@ -89,9 +89,18 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 
 			<?= $form->field($model, 'item_additional_info_ar')->textarea(['maxlength' => 128]); ?>
 			
-			<?= $form->field($model, 'item_how_long_to_make')
-				->label('Notice Period '.Html::tag('span', '*',['class'=>'required mandatory']))
-				->textInput(['maxlength' => 128]); ?>
+			<div class="form-group">
+				<label>Notice Period <span>*</span></label>		       	
+				<div class="input-group">
+					<span class="input-group-btn">
+			        	<select name="notice_period_type" style="width: auto; min-height: 37px;">
+			        		<option>Hour</option>
+			        		<option>Day</option>
+			        	</select>
+			        </span>		 
+			        <input type="text" class="form-control" value="<?= $model->item_how_long_to_make ?>" name="VendorItem[item_how_long_to_make]" />		       	    	 
+			    </div>
+		    </div>
 
 			<?= $form->field($model, 'max_time'); ?>
 
