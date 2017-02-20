@@ -351,7 +351,6 @@ class SiteController extends Controller
             'vendor_categories' => $vendor_categories,
             'day_off' => $day_off,
             'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
-            'workingDay' => $workingDay
         ]);
     }
 
