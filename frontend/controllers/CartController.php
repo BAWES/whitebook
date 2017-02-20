@@ -383,11 +383,13 @@ class CartController extends BaseController
 
         // get date after x day then convert it to unix time 
         
-        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' days')));
+        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' hours')));
 
         if(strtotime($data['delivery_date']) < $min_delivery_time) 
         {
-            $json['error'] = Yii::t('frontend', 'Item notice period '.$item->item_how_long_to_make.' day!');
+            $json['error'] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
+                    'count' => $item->item_how_long_to_make
+                ]);
 
             return $json;
         }

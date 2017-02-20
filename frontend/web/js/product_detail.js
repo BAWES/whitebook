@@ -1,7 +1,10 @@
 
     jQuery(document).ready(function () {
 
-        $start_date = '+' + $('#item_how_long_to_make').val() + 'd';
+        $notice_period = parseInt($('#item_how_long_to_make').val());
+
+        $start_date = new Date();
+        $start_date.setHours($start_date.getHours() + $notice_period);
 
         $('#item_delivery_date').datepicker({
             format: 'dd-mm-yyyy',
