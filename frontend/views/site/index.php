@@ -69,7 +69,10 @@ currency: 'USD'
 
 <div class="container_common">
 
-<?php if (Yii::$app->user->isGuest) { ?>
+<?php
+/*
+@TODO Removed Event Section
+if (Yii::$app->user->isGuest) { ?>
 <span class="first_events">
     <?= Yii::t('frontend', 'My Events'); ?>
 </span>
@@ -82,7 +85,7 @@ currency: 'USD'
 </div>
 <br />
 <br />
-<?php } ?>
+<?php } */ ?>
 
 <!-- Events slider end -->
 <!-- hide temporary

@@ -14,9 +14,13 @@ $action = Yii::$app->controller->action->id;
         <li role="presentation" class="<?=($cntrl == 'users' && (($action == 'address') || ($action == 'view-address') || ($action == 'edit-address'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-address-book-o" aria-hidden="true"></i> Address Book',['/users/address']) ?>
         </li>
+        <?php /*
+                @TODO Removed Event Section
+        ?>
         <li role="presentation" class="<?=($cntrl == 'events' && (($action == 'index') || ($action == 'detail'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-calendar" aria-hidden="true"></i> My Events',['/events/index']) ?>
         </li>
+        <?php */ ?>
         <li role="presentation" class="<?=($cntrl == 'things-i-like' && (($action == 'index'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-heart-o" aria-hidden="true"></i> Things I like',['/things-i-like/index']) ?>
         </li>

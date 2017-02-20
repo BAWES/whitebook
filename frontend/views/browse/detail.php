@@ -86,12 +86,17 @@ if($model->images) {
 
 <!-- coniner start -->
 <section id="inner_pages_white_back" class="product_details_com <?=Yii::$app->controller->id;?>">
-
+    <?php /*
+                @TODO Removed Event Section
+        ?>
     <div id="event_slider_wrapper">
         <div class="container paddng0">
             <?php $this->render('/product/events_slider.php'); ?>
         </div>
     </div>
+    <?php
+            */
+    ?>
 
     <div class="container paddng0">
 
@@ -537,11 +542,11 @@ if($model->images) {
                                             </div>
                                             <?php } ?>
 
-                                            <h4><?= Yii::t('frontend', 'Brief') ?></h3>
+                                            <h4><?= Yii::t('frontend', 'Brief') ?></h4>
                                             <p><?= nl2br($item_description); ?></p>
 
                                             <?php if($item_additional_info) { ?>
-                                                <h4><?= Yii::t('frontend', 'Additional Info') ?></h3>
+                                                <h4><?= Yii::t('frontend', 'Additional Info') ?></h4>
                                                 <p><?= nl2br($item_additional_info); ?></p>
                                             <?php } ?>
 
