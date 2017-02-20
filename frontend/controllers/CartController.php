@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\VendorWorkingTiming;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Response;
@@ -537,10 +538,10 @@ class CartController extends BaseController
 
         Yii::$app->session->set('deliver-date', $data['sel_date']);
 
-        $vendor_timeslot = DeliveryTimeSlot::find()
-            ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+        $vendor_timeslot = VendorWorkingTiming::find()
+            ->select(['working_id','working_start_time','working_end_time'])
             ->where(['vendor_id' => $data['vendor_id']])
-            ->andwhere(['timeslot_day' => date("l", $timestamp)])
+            ->andwhere(['working_day' => date("l", $timestamp)])
             ->asArray()
             ->all();
 
@@ -548,22 +549,22 @@ class CartController extends BaseController
 
             foreach ($vendor_timeslot as $key => $value) {
 
-                if($deliver_timeslot == $value['timeslot_id']) {
+                if($deliver_timeslot == $value['working_id']) {
                     $selected = 'selected';
                 } else {
                     $selected = '';
                 }
 
                 if (strtotime($data['sel_date']) == (strtotime($data['currentDate']))) {
-                    if (strtotime($data['time']) < strtotime($value['timeslot_start_time'])) {
-                        $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                        $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                        echo '<option value="' . $value['timeslot_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
+                    if (strtotime($data['time']) < strtotime($value['working_start_time'])) {
+                        $start = date('g:i A', strtotime($value['working_start_time']));
+                        $end = date('g:i A', strtotime($value['working_end_time']));
+                        echo '<option value="' . $value['working_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
                     }
                 } else {
-                    $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                    $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                    echo '<option value="' . $value['timeslot_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
+                    $start = date('g:i A', strtotime($value['working_start_time']));
+                    $end = date('g:i A', strtotime($value['working_end_time']));
+                    echo '<option value="' . $value['working_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
                 }
             }
         } else {
