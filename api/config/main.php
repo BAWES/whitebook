@@ -180,11 +180,13 @@ return [
                         'GET payment-getaway' => 'payment-getaway-list',
                         'GET address' => 'address',
                         'GET success' => 'success',
+                        'GET list-with-address' => 'cart-item-with-address',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS payment-getaway' => 'options',
                         'OPTIONS address' => 'options',
-                        'OPTIONS success' => 'options'
+                        'OPTIONS success' => 'options',
+                        'OPTIONS list-with-address' => 'options'
                     ]
                 ],
                 [ // OrderController
