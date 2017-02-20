@@ -1219,5 +1219,5 @@ $this->registerCss("
     }
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.20', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.21', ['depends' => [\yii\web\JqueryAsset::className()]]);
 

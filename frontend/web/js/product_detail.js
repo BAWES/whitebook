@@ -1,7 +1,13 @@
 
     jQuery(document).ready(function () {
 
-        $start_date = '+' + $('#item_how_long_to_make').val() + 'd';
+        $notice_period = $('#item_how_long_to_make').val();
+
+        $notice_date = Math.ceil($notice_period/24);
+
+        console.log($notice_date);
+
+        $start_date = '+' + $notice_date + 'd';
 
         $('#item_delivery_date').datepicker({
             format: 'dd-mm-yyyy',
