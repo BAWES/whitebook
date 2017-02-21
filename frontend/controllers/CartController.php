@@ -101,7 +101,7 @@ class CartController extends BaseController
             ->select(['working_id','working_start_time','working_end_time'])
             ->where([
                 'vendor_id' => $model->vendor_id,
-                'workign_day' => date("l", strtotime($item->cart_delivery_date))
+                'working_day' => date("l", strtotime($item->cart_delivery_date))
             ])
             ->asArray()
             ->all();
