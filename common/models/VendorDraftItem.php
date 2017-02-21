@@ -22,7 +22,6 @@ use Yii;
  * @property string $item_description_ar
  * @property string $item_additional_info
  * @property string $item_additional_info_ar
- * @property integer $item_amount_in_stock
  * @property integer $item_default_capacity
  * @property string $item_price_per_unit
  * @property string $item_customization_description
@@ -95,7 +94,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
         return [
             [['item_id', 'item_description', 'sort', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
 
-            [['minimum_increment', 'item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'sort', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
+            [['minimum_increment', 'item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'sort', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
             
             [['item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_for_sale', 'item_archived', 'item_approved', 'item_status', 'trash'], 'string'],
 
@@ -125,7 +124,6 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'item_description_ar' => Yii::t('app', 'Item Description - Arabic'),
             'item_additional_info' => Yii::t('app', 'Item Additional Info'),
             'item_additional_info_ar' => Yii::t('app', 'Item Additional Info - Arabic'),
-            'item_amount_in_stock' => Yii::t('app', 'Item # of stock'),
             'item_default_capacity' => Yii::t('app', 'Item Default Capacity'),
             'item_price_per_unit' => Yii::t('app', 'Price'),
             'item_customization_description' => Yii::t('app', 'Item Customization Description'),

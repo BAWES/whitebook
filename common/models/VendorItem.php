@@ -22,7 +22,6 @@ use common\models\VendorItemToPackage;
 * @property string $item_name
 * @property string $item_description
 * @property string $item_additional_info
-* @property integer $item_amount_in_stock
 * @property integer $item_default_capacity
 * @property string $item_price_per_unit
 * @property string $item_price_description
@@ -108,7 +107,7 @@ class VendorItem extends \yii\db\ActiveRecord
         return [
             [['type_id', 'vendor_id', 'item_name', 'item_name_ar'], 'required'],
             
-            [['minimum_increment', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
+            [['minimum_increment', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
             [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'quantity_label'], 'string'],
             
@@ -123,21 +122,9 @@ class VendorItem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'item_description','item_description_ar', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            [['type_id', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
-
-    public function scenarios()
-    {
-        $scenarios = parent::scenarios();
-        $scenarios['VendorItemAdd'] = ['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
-        'item_default_capacity', 'item_price_description',
-            'item_price_description_ar', 'item_how_long_to_make',
-        'item_minimum_quantity_to_order','item_name','item_name_ar',
-        'item_for_sale','item_price_per_unit'];
-        return $scenarios;
-    }
-
 
     /**
     * @inheritdoc
@@ -155,7 +142,6 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_description_ar' => 'Item Description - Arabic',
             'item_additional_info' => 'Item Additional Info',
             'item_additional_info_ar' => 'Item Additional Info - Arabic',
-            'item_amount_in_stock' => 'Item Number of Stock',
             'item_default_capacity' => 'Maximum quantity ordered per day',
             'item_price_per_unit' => 'Price',
             'item_price_description' => 'Item Price Description',

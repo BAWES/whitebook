@@ -22,7 +22,6 @@ use frontend\models\Themes as ItemTheme;
 * @property string $item_name
 * @property string $item_description
 * @property string $item_additional_info
-* @property integer $item_amount_in_stock
 * @property integer $item_default_capacity
 * @property string $item_price_per_unit
 * @property string $item_customization_description

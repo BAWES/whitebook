@@ -178,31 +178,6 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
         } 
 
-        //check if desire quantity available 
-
-        if($item_type_name == 'Product' && $valid_for_cart_item && $in_cart > $item->item_amount_in_stock) {
-
-            $errors['cart_quantity'][] = [
-                
-                Yii::t('frontend', 'Maximum amount available in stock is "{item_amount_in_stock}".', [
-                    'item_amount_in_stock' => $item->item_amount_in_stock
-                ])
-            ];
-        
-        } 
-
-        //validate to add product to cart 
-
-        if ($item_type_name == 'Product' && !$valid_for_cart_item && $data['quantity'] > ($item->item_amount_in_stock - $in_cart)) {
-
-            $errors['cart_quantity'][] = [
-                
-                Yii::t('frontend', 'Maximum amount available in stock is "{item_amount_in_stock}".', [
-                    'item_amount_in_stock' => $item->item_amount_in_stock - $in_cart
-                ])
-            ];
-        }
-
         //item_minimum_quantity_to_order
 
         if($data['quantity'] < $item->item_minimum_quantity_to_order) {
@@ -279,14 +254,9 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //3) campare capacity 
 
-        if($item_type_name != 'Product' && $valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
+        if($valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased;
-
-            //if stock is lower than capacity 
-            if($item->item_amount_in_stock < $no_of_available) {
-                $no_of_available = $item->item_amount_in_stock;
-            }
 
             $errors['cart_quantity'][] = [
                 Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
@@ -297,14 +267,9 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //validate to add product to cart
 
-        if($item_type_name != 'Product' && !$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
+        if(!$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased - $in_cart;
-
-            //if stock is lower than capacity 
-            if($item->item_amount_in_stock < $no_of_available) {
-                $no_of_available = $item->item_amount_in_stock;
-            }
 
             $errors['cart_quantity'][] = [
                 Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [

@@ -424,26 +424,4 @@ class Order extends \yii\db\ActiveRecord
             ->send();
         }
     }
-
-    public static function reduce_stock() {
-
-        $items = CustomerCart::items();
-
-        foreach ($items as $key => $item) {
-        
-            $type = ItemType::findOne($item['type_id']);
-
-            if($type && $type->type_name == 'Product') {
-
-                VendorItem::updateAllCounters(
-                    [
-                        'item_amount_in_stock' => 0 - $item['cart_quantity']
-                    ], 
-                    [
-                        'item_id' => $item['item_id']
-                    ]
-                );
-            }
-        }
-    }
 }
