@@ -455,7 +455,7 @@ class CartController extends BaseController
             $purchased = 0;
         }
 
-        if ($item_type_name != 'Product' && $purchased > $capacity) 
+        if ($purchased > $capacity) 
         {
             $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
 

@@ -125,6 +125,12 @@
 }
 
 @media only screen and (max-width: 991px) {
+
+	.price_chart_wrapper table {
+	    margin-left: auto;
+	    margin-right: auto;
+	}
+	
 	.package_content {
 		margin-top: 20px;
 	}
