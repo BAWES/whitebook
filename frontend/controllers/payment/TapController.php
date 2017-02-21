@@ -132,8 +132,6 @@ class TapController extends Controller
             $order->order_transaction_id = $request['ref'];
             $order->save(false);
 
-            Order::reduce_stock();
-
             Yii::$app->session->set('order_id', $order_id);
 
             //send order emails

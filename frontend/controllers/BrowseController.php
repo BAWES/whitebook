@@ -373,10 +373,6 @@ class BrowseController extends BaseController
             $item_type_name = 'Product';
         }
 
-        if($item_type_name == 'Product' && $model->item_amount_in_stock <= 0) {
-            $AvailableStock = false;
-        }
-
         $output = \common\models\Image::find()->select(['image_path'])
             ->where(['item_id' => $model['item_id']])
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
