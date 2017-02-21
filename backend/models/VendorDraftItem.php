@@ -30,7 +30,6 @@ use Yii;
  * @property string $item_description_ar
  * @property string $item_additional_info
  * @property string $item_additional_info_ar
- * @property integer $item_amount_in_stock
  * @property integer $item_default_capacity
  * @property string $item_price_per_unit
  * @property string $item_customization_description
@@ -68,7 +67,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
 
             [['quantity_label', 'item_for_sale', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
             
-            [['item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
+            [['item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
             
             [['min_order_amount', 'item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
 
@@ -92,7 +91,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
         
         $scenarios['MenuItems'] = ['allow_special_request', 'have_female_service'];
         
-        $scenarios['ItemPrice'] = ['minimum_increment', 'min_order_amount', 'quantity_label', 'item_for_sale', 'item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
+        $scenarios['ItemPrice'] = ['minimum_increment', 'min_order_amount', 'quantity_label', 'item_for_sale', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
         
         $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
 

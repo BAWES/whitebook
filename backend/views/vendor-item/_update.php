@@ -219,10 +219,6 @@ function cmp($a, $b)
 				<?= $form->field($model, 'item_for_sale')->dropDownList(['Yes'=>'Yes', 'No'=>'No'], 
 						['id' => 'vendoritem-item_for_sale']) ?>
 				
-				<?= $form->field($model, 'item_amount_in_stock')
-						->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_amount_in_stock']); ?>
-
 				<?= $form->field($model, 'item_default_capacity')
 						->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
 						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_default_capacity']); ?>

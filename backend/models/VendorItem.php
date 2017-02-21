@@ -121,10 +121,6 @@ class VendorItem extends \common\models\VendorItem
             $item_for_sale = false;
         }
 
-        if($item_for_sale && !$data['item_amount_in_stock']) {
-            $errors['item_amount_in_stock'] = 'Item number of stock cannot be blank.';
-        }
-
         if($item_for_sale && !$data['item_default_capacity']) {
             $errors['item_default_capacity'] = 'Item default capacity cannot be blank.';
         }

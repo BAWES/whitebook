@@ -58,7 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <table class="table table-striped table-bordered detail-view">
                     <tbody>
                         <tr><th>Item for sale</th><td><?= $model->item_for_sale?'Yes':'No'; ?></td></tr>
-                        <tr><th>Item Number of Stock</th><td><?= $model->item_amount_in_stock; ?></td></tr>
                         <tr><th>Item Default Capacity</th><td><?= $model->item_default_capacity; ?></td></tr>
                         <tr><th>No of days delivery</th><td><?= $model->item_how_long_to_make ?></td></tr>
                         <tr><th>Item Minimum Quantity to Order</th><td><?= $model->item_minimum_quantity_to_order ?></td></tr>
