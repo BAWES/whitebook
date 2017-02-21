@@ -38,7 +38,7 @@ $deliver_date = $item->cart_delivery_date;
 	<div class="col-md-12 padding-left-0 timeslot_id_select <?php if(!$vendor_timeslot) { echo 'hidden'; }; ?>">
 		<div class="form-group">
 			<label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
-			<select name="working_id" id="working_id" class="selectpicker" data-size="10" data-style="">
+			<select name="working_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="">
                <?php foreach ($vendor_timeslot as $key => $value) {
 
                         if($item->working_id == $value['working_id']) {
@@ -49,15 +49,15 @@ $deliver_date = $item->cart_delivery_date;
 
                         if (strtotime($item->cart_delivery_date) == time()) {
                             
-                            if (strtotime(date('H:i:s')) < strtotime($value['timeslot_start_time'])) {
-                                $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                                $end = date('g:i A', strtotime($value['timeslot_end_time']));
+                            if (strtotime(date('H:i:s')) < strtotime($value['working_start_time'])) {
+                                $start = date('g:i A', strtotime($value['working_start_time']));
+                                $end = date('g:i A', strtotime($value['working_end_time']));
                                 echo '<option value="' . $value['working_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
                             }
 
                         } else {
-                            $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                            $end = date('g:i A', strtotime($value['timeslot_end_time']));
+                            $start = date('g:i A', strtotime($value['working_start_time']));
+                            $end = date('g:i A', strtotime($value['working_end_time']));
                             echo '<option value="' . $value['working_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
                         }
                     } ?>         
