@@ -160,10 +160,6 @@ if($model->isNewRecord){
 				
 				<?= $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
 
-				<?= $form->field($model, 'item_amount_in_stock')
-						->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128]); ?>
-
 				<?= $form->field($model, 'item_default_capacity')
 						->label('Item Default Capacity '.Html::tag('span', '*', ['class'=>'required mandatory']))
 						->textInput(['maxlength' => 128]); ?>
