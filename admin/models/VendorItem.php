@@ -26,7 +26,7 @@ class VendorItem extends \common\models\VendorItem
 
             [['item_for_sale', 'item_price_description','item_price_description_ar'], 'string', 'on' => ['ItemPrice']],
             
-            [['item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
+            [['item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
             
             [['min_order_amount', 'item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
 
@@ -51,7 +51,7 @@ class VendorItem extends \common\models\VendorItem
             
             'MenuItems' => ['allow_special_request', 'have_female_service'],
 
-            'ItemPrice' => ['minimum_increment', 'quantity_label', 'item_for_sale', 'item_price_description', 'item_price_description_ar','item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'min_order_amount', 'type_id'],
+            'ItemPrice' => ['minimum_increment', 'quantity_label', 'item_for_sale', 'item_price_description', 'item_price_description_ar','item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'min_order_amount', 'type_id'],
 
             'ItemDescription' => ['set_up_time', 'set_up_time_ar', 'requirements','requirements_ar', 'max_time', 'max_time_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'],
 

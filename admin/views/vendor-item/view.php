@@ -89,7 +89,6 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'format'=>'raw',
                             'value'  =>strip_tags($model->item_additional_info_ar),
                         ],
-                        'item_amount_in_stock',
                         'item_default_capacity',
                         [
                             'label'=>'Item customization description',

@@ -137,10 +137,6 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value' => strip_tags($model->item_additional_info_ar),
                         ],
                         [
-                            'label' => $vendor_item->item_amount_in_stock != $model->item_amount_in_stock ? 'ITEM AMOUNT IN STOCK *' : 'ITEM AMOUNT IN STOCK',
-                            'value' => $model->item_amount_in_stock,
-                        ],
-                        [
                             'label' => $vendor_item->item_default_capacity != $model->item_default_capacity ? 'ITEM DEFAULT CAPACITY *' : 'ITEM DEFAULT CAPACITY',
                             'value' => $model->item_default_capacity,
                         ],

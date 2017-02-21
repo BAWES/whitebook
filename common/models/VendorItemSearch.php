@@ -22,7 +22,7 @@ class VendorItemSearch extends VendorItem
     public function rules()
     {
         return [
-            [['item_id', 'type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
+            [['item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_for_sale',  'item_approved','priority'], 'safe'],
             [['item_price_per_unit'], 'number'],
            
@@ -94,7 +94,6 @@ class VendorItemSearch extends VendorItem
             'item_id' => $this->item_id,
             'type_id' => $this->type_id,
             'item_status' => $this->item_status,
-            'item_amount_in_stock' => $this->item_amount_in_stock,
             'item_default_capacity' => $this->item_default_capacity,
             'item_price_per_unit' => $this->item_price_per_unit,
             'item_how_long_to_make' => $this->item_how_long_to_make,
@@ -203,7 +202,6 @@ class VendorItemSearch extends VendorItem
             '{{%vendor_item}}.item_id' => $this->item_id,
             '{{%vendor_item}}.vendor_id' => $this->vendor_id,
           	'{{%vendor_item}}.item_status' => $this->item_status,
-            '{{%vendor_item}}.item_amount_in_stock' => $this->item_amount_in_stock,
             '{{%vendor_item}}.item_default_capacity' => $this->item_default_capacity,
             '{{%vendor_item}}.item_price_per_unit' => $this->item_price_per_unit,
             '{{%vendor_item}}.item_how_long_to_make' => $this->item_how_long_to_make,
@@ -266,7 +264,6 @@ class VendorItemSearch extends VendorItem
             'type_id' => $this->type_id,
             'vendor_id' => $this->vendor_id,
             'item_status' => $this->item_status,
-            'item_amount_in_stock' => $this->item_amount_in_stock,
             'item_default_capacity' => $this->item_default_capacity,
             'item_price_per_unit' => $this->item_price_per_unit,
             'item_how_long_to_make' => $this->item_how_long_to_make,
