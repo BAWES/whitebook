@@ -244,23 +244,14 @@ class CheckoutController extends BaseController
 
 		$payment_method_code = Yii::$app->session->get('payment_method');
 
-        $gateway = PaymentGateway::find()->where(['code' => $payment_method_code, 'status' => 1])->one();
-
-		if(Yii::$app->language == 'en') {
-			$payment_method = $gateway->name;
-		} else {
-			$payment_method = $gateway->name_ar;
-		}
-
 		$address = Yii::$app->session->get('address');
 
 		$items = CustomerCart::items();
 
         return $this->renderPartial('confirm', [
             'items' => $items,
-            'payment_method' => $payment_method,
             'address' => $address,
-            'pg_link' => Url::to(['payment/'.$payment_method_code.'/index'])
+            'pg_link' => Url::to(['checkout/request-send'])
         ]);
 	}
 
@@ -285,5 +276,20 @@ class CheckoutController extends BaseController
             'order_id' => $order_id,
             'order_page' => Url::to(['orders/index'])
         ]);
+    }
+
+    public function actionRequestSend()
+    {
+        $address = Yii::$app->session->get('address',false);
+        if ($address) {
+            $order_id = \common\models\Order::placeRequestOrder('', '', '', 1);
+            Yii::$app->session->set('order_id', $order_id);
+            echo "Please Wait...";
+            if ($order_id) {
+                return $this->redirect(['success']);
+            }
+        } else {
+            return $this->redirect(Yii::$app->homeUrl);
+        }
     }
 }

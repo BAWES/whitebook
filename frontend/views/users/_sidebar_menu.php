@@ -5,6 +5,9 @@ $action = Yii::$app->controller->action->id;
 ?>
 <div class="col-md-2 hidde_res">
     <ul class="nav nav-pills nav-stacked side-bar-menu">
+        <li role="presentation" class="<?=($cntrl == 'orders' && (($action == 'request-order'))) ? 'active' : '';?>">
+            <?=\yii\bootstrap\Html::a('<i class="fa fa-user-plus" aria-hidden="true"></i> My Request',['/orders/request-order']) ?>
+        </li>
         <li role="presentation" class="<?=($cntrl == 'orders' && (($action == 'index') || ($action == 'view'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-list-alt" aria-hidden="true"></i> My Order',['/orders/index']) ?>
         </li>

@@ -14,7 +14,7 @@ $this->title = Yii::t('frontend', 'Checkout | Whitebook');
 		</div>
 
 		<div class="lead text-center row checkout-wizard">
-            <div id="ar-step-address" class="col-xs-4 checkout-step text-muted" data-checkout-step="1">
+            <div id="ar-step-address" class="col-xs-6 checkout-step text-muted" data-checkout-step="1">
                 <div class="progress"><div class="progress-bar"></div></div>
                 <div class="glyphicon-stack">
                     <i class="glyphicon glyphicon-map-marker"></i>
@@ -23,22 +23,13 @@ $this->title = Yii::t('frontend', 'Checkout | Whitebook');
                     <span><?= Yii::t('frontend', 'Address') ?></span>
                 </div>
             </div>
-            <div id="ar-step-payment" class="col-xs-4 checkout-step text-muted" data-checkout-step="2">
-                <div class="progress"><div class="progress-bar"></div></div>
-                <div class="glyphicon-stack">
-                    <i class="glyphicon glyphicon-credit-card"></i>
-                </div>
-                <div class="glyphicon-title">
-                    <span><?= Yii::t('frontend', 'Payment') ?></span>
-                </div>
-            </div>
-            <div id="ar-step-account" class="col-xs-4 checkout-step text-primary" data-checkout-step="3">
+            <div id="ar-step-payment" class="col-xs-6 checkout-step text-muted" data-checkout-step="2">
                 <div class="progress"><div class="progress-bar"></div></div>
                 <div class="glyphicon-stack">
                     <i class="glyphicon glyphicon-list-alt"></i>
                 </div>
                 <div class="glyphicon-title">
-                    <span><?= Yii::t('frontend', 'Confirm') ?></span>
+                    <span><?= Yii::t('frontend', 'Confirm Request') ?></span>
                 </div>
             </div>
         </div>

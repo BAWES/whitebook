@@ -8,7 +8,6 @@ use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use common\models\Order;
 use common\models\Customer;
 use common\models\Suborder;
 use common\models\ItemType;
@@ -29,6 +28,7 @@ use common\models\SuborderItemPurchase;
  * @property string $order_payment_method
  * @property string $order_transaction_id
  * @property string $order_gateway_percentage
+ * @property string $order_gateway_fees
  * @property string $order_gateway_total
  * @property string $order_datetime
  * @property string $order_ip_address
@@ -190,7 +190,7 @@ class Order extends \yii\db\ActiveRecord
 
         //insert suborder 
         foreach($chanks as $vendor_id => $chank) {
-            
+
             //calculate order total data 
             $total = 0;
             $sub_total = 0;
@@ -291,6 +291,181 @@ class Order extends \yii\db\ActiveRecord
 
     }//END place_order
 
+
+     public function placeRequestOrder($gateway_name, $gateway_percentage, $gateway_fees, $order_status_id = 0, $transaction_id = '') {
+
+        //address ids saved in session from checkout
+        $addresses = Yii::$app->session->get('address');
+
+        //default commision
+        $default_commision = Siteinfo::info('commission');
+
+        $items = CustomerCart::items();
+
+        //price chart
+        $price_chart = array();
+
+        //check if quantity fall in price chart
+        foreach ($items as $key => $item) {
+
+            $price_chart[$item['item_id']] = [];
+
+            $price = VendorItemPricing::find()
+                ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+                ->andWhere(['<=', 'range_from', $item['cart_quantity']])
+                ->andWhere(['>=', 'range_to', $item['cart_quantity']])
+                ->orderBy('pricing_price_per_unit DESC')
+                ->one();
+
+            if($price) {
+                $price_chart[$item['item_id']]['unit_price'] = $price->pricing_price_per_unit;
+            }else{
+                $price_chart[$item['item_id']]['unit_price'] = $item['item_price_per_unit'];
+            }
+
+            $menu_items = CustomerCartMenuItem::find()
+                ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                ->where(['cart_id' => $item['cart_id']])
+                ->asArray()
+                ->all();
+
+            $price_chart[$item['item_id']]['menu_price'] = 0;
+
+            foreach ($menu_items as $key => $menu_item) {
+                $price_chart[$item['item_id']]['menu_price'] += $menu_item['quantity'] * $menu_item['price'];
+            }
+        }
+
+        //make chunks of item by vendor id
+
+        $chanks = [];
+
+        $total = $sub_total = $delivery_charge = 0;
+
+        foreach ($items as $item) {
+
+            $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+            $delivery_charge += $delivery_area->delivery_price;
+
+            $sub_total += ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
+            $total = $sub_total + $delivery_charge;
+
+            //insert main order
+            $order = new Order;
+            $order->customer_id = Yii::$app->user->getID();
+            $order->order_total_delivery_charge = $delivery_charge;
+            $order->order_total_without_delivery = $total - $delivery_charge;
+            $order->order_total_with_delivery = $total;
+            $order->order_payment_method = 'Waiting for approval';
+            $order->order_transaction_id = $transaction_id;
+            $order->order_gateway_percentage = 0.0;
+            $order->order_gateway_fees = 0.0;
+            $order->order_gateway_total = 0;
+            $order->order_ip_address = Request::getUserIP();
+            $order->trash = 'Default';
+            if ($order->save(false)) {
+
+                $request = new OrderRequestStatus();
+                $request->order_id = $order->order_id;
+                $request->request_status = 'Pending';
+                $request->save();
+
+                $sub_order = new Suborder;
+                $sub_order->order_id = $order->order_id;
+                $sub_order->vendor_id = $item['vendor_id'];
+                $sub_order->status_id = 8; // Pending
+                $sub_order->trash = 'Default';
+
+                if ($sub_order->save(false)) {
+                    //calculate order total data
+                    $total = 0;
+                    $sub_total = 0;
+                    $delivery_charge = 0;
+                    $suborder_commission_total = 0;
+
+                        //address
+                    $address_id = $addresses[$item['cart_id']];
+
+                    $item_purchase = new SuborderItemPurchase;
+                    $item_purchase->suborder_id = $sub_order->suborder_id;
+                    $item_purchase->working_id = $item['working_id'];
+                    $item_purchase->item_id  = $item['item_id'];
+                    $item_purchase->area_id = $item['area_id'];
+                    $item_purchase->address_id = $address_id;
+                    $item_purchase->purchase_delivery_address = Order::getPurchaseDeliveryAddress($address_id);
+                    $item_purchase->purchase_delivery_date = $item['cart_delivery_date'];
+                    $item_purchase->purchase_price_per_unit = $price_chart[$item['item_id']]['unit_price'];
+                    $item_purchase->purchase_customization_price_per_unit = 0;
+                    $item_purchase->purchase_quantity = $item['cart_quantity'];
+                    $item_purchase->purchase_total_price = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
+                    $item_purchase->female_service = $item['female_service'];
+                    $item_purchase->special_request = $item['special_request'];
+                    $item_purchase->trash = 'Default';
+                    $item_purchase->save(false);
+
+                    //save menu item
+                    $menu_items = CustomerCartMenuItem::find()
+                        ->select([
+                            '{{%vendor_item_menu}}.menu_id',
+                            '{{%vendor_item_menu}}.menu_name',
+                            '{{%vendor_item_menu}}.menu_name_ar',
+                            '{{%vendor_item_menu}}.menu_type',
+                            '{{%vendor_item_menu_item}}.menu_item_id',
+                            '{{%vendor_item_menu_item}}.menu_item_name',
+                            '{{%vendor_item_menu_item}}.menu_item_name_ar',
+                            '{{%vendor_item_menu_item}}.price',
+                            '{{%customer_cart_menu_item}}.quantity'
+                        ])
+                        ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                        ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+                        ->where(['cart_id' => $item['cart_id']])
+                        ->asArray()
+                        ->all();
+
+                    foreach ($menu_items as $key => $menu_item) {
+                        $soim = new SuborderItemMenu;
+                        $soim->attributes = $menu_item;
+                        $soim->purchase_id = $item_purchase->purchase_id;
+                        $soim->total = $soim->price * $soim->quantity;
+                        $soim->save();
+                    }
+
+                        //sub order total data
+
+                        $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+                        $delivery_charge = $delivery_area->delivery_price;
+
+                        $sub_total = $item_purchase->purchase_total_price;
+                    }
+
+                    $total = $sub_total + $delivery_charge;
+
+                    //suborder commission
+                    $vendor = Vendor::findOne($sub_order->vendor_id);
+
+                    if(is_null($vendor->commision) || $vendor->commision == '') {
+                        $suborder_commission_percentage = $vendor->commision;
+                    } else {
+                        $suborder_commission_percentage = $default_commision;
+                    }
+
+                    $suborder_commission_total = $total * ($suborder_commission_percentage / 100);
+
+                    //update sub order total
+                    $sub_order->suborder_delivery_charge = $delivery_charge;
+                    $sub_order->suborder_total_without_delivery = $total - $delivery_charge;
+                    $sub_order->suborder_total_with_delivery = $total;
+                    $sub_order->suborder_commission_percentage = $suborder_commission_percentage;
+                    $sub_order->suborder_commission_total =  $suborder_commission_total;
+                    $sub_order->suborder_vendor_total =  $total - $suborder_commission_total;
+                    $sub_order->save(false);
+                }
+            }
+        return $order->order_id;
+
+    }//END place_order
+
     private function getPurchaseDeliveryAddress($address_id) {
 
         $address_model = CustomerAddress::findOne($address_id);
@@ -335,6 +510,10 @@ class Order extends \yii\db\ActiveRecord
 
     public function getCustomerName() {
         return $this->customer->customer_name.' '.$this->customer->customer_last_name;
+    }
+
+    public function getRequestStatus() {
+        return $this->hasOne(OrderRequestStatus::className(), ['order_id' => 'order_id']);
     }
 
     public function getCommission() {
