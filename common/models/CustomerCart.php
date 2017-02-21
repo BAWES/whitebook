@@ -18,7 +18,7 @@ use common\components\CFormatter;
  * @property string $customer_id
  * @property string $item_id
  * @property string $area_id
- * @property string $timeslot_id
+ * @property string $working_id
  * @property string $cart_delivery_date
  * @property string $cart_customization_price_per_unit
  * @property integer $cart_quantity
@@ -63,8 +63,8 @@ class CustomerCart extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'item_id', 'area_id', 'timeslot_id', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
-            [['customer_id', 'item_id', 'area_id', 'timeslot_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
+            [['customer_id', 'item_id', 'area_id', 'working_id', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
+            [['customer_id', 'item_id', 'area_id', 'working_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
 
             [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
 
@@ -84,7 +84,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             'customer_id' => Yii::t('frontend', 'Customer'),
             'item_id' => Yii::t('frontend', 'Item'),
             'area_id' => Yii::t('frontend', 'Area'),
-            'timeslot_id' => Yii::t('frontend', 'Delivery timeslot'),
+            'working_id' => Yii::t('frontend', 'Delivery timeslot'),
             'cart_delivery_date' => Yii::t('frontend', 'Cart Delivery Date'),
             'cart_customization_price_per_unit' => Yii::t('frontend', 'Cart Customization Price Per Unit'),
             'cart_quantity' => Yii::t('frontend', 'Quantity'),
@@ -105,7 +105,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public function getTimeslot()
     {
-        return $this->hasOne(DeliveryTimeSlot::className(), ['timeslot_id' => 'timeslot_id']);
+        return $this->hasOne(VendorWorkingTiming::className(), ['working_id' => 'working_id']);
     }
 
     public function getImage()
@@ -231,22 +231,21 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past delivery date');     
         }
 
-        //get timeslot 
-
-        if (empty($data['timeslot_end_time']) && !empty($data['timeslot_id'])) 
+        //get timeslot
+        if (empty($data['working_end_time']) && !empty($data['working_id']))
         {
-            $data['timeslot_end_time'] = DeliveryTimeSlot::findOne($data['timeslot_id'])->timeslot_end_time;
+            $data['working_end_time'] = VendorWorkingTiming::findOne($data['working_id'])->working_end_time;
         }
-        else 
+        else if (empty($data['working_end_time']) || empty($data['working_id']))
         {
-            $errors['timeslot_id'][] = Yii::t('frontend', 'Select time slot!');
-        } 
+            $errors['working_id'][] = Yii::t('frontend', 'Select time slot!');
+        }
 
         // delivery datetime < current time + notice period hours 
 
         $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
 
-        if(!empty($data['timeslot_end_time']) && strtotime($data['delivery_date'].' '.$data['timeslot_end_time']) < $min_delivery_time) 
+        if(!empty($data['working_end_time']) && strtotime($data['delivery_date'].' '.$data['working_end_time']) < $min_delivery_time)
         {
             $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
                     'count' => $item->item_how_long_to_make
@@ -431,8 +430,8 @@ class CustomerCart extends \yii\db\ActiveRecord
                 {{%vendor_item}}.vendor_id,
                 {{%vendor_item}}.item_name,
                 {{%vendor_item}}.item_name_ar,
-                {{%vendor_delivery_timeslot}}.timeslot_start_time, 
-                {{%vendor_delivery_timeslot}}.timeslot_end_time'
+                {{%vendor_working_timing}}.working_start_time, 
+                {{%vendor_working_timing}}.working_end_time'
             )
             ->joinWith('item')
             ->joinWith('image')

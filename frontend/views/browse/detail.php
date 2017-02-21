@@ -149,7 +149,7 @@ if($model->images) {
             <div class="col-md-3 padding-left-0 timeslot_id_select timeslot-filter" style="display: none;">
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
-                    <select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
+                    <select name="working_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
                     <span class="error timeslot_id"></span>
                 </div>
             </div>

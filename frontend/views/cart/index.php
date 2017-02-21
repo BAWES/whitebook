@@ -33,11 +33,11 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         	foreach ($items as $item) {
 
         		$menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
-
         		$errors = CustomerCart::validate_item([
         			'item_id' => $item['item_id'],
+        			'working_id' => $item['working_id'],
         			'delivery_date' => $item['cart_delivery_date'],
-        			'timeslot_end_time' => $item['timeslot_end_time'],
+        			'working_end_time' => $item['working_end_time'],
         			'area_id' => $item['area_id'],
         			'quantity' => $item['cart_quantity'],
         			'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
@@ -197,7 +197,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 						$msg = '<small>'.Yii::t('frontend','Past delivery date').'</small>';
 					} else if (
 						(strtotime($item['cart_delivery_date']) == strtotime(date('Y-m-d'))) &&
-						(strtotime($item['timeslot_end_time']) < strtotime(date('H:i:s')))
+						(strtotime($item['working_end_time']) < strtotime(date('H:i:s')))
 					) {
 						$color = '#f2dede';
 						$msg = '<small>'.Yii::t('frontend','Past delivery time slot date').'</small>';
@@ -215,8 +215,8 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        				?>
 	        					<?= $item['cart_delivery_date'] ?><br />
 								
-								<?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
-		    					<?=	date('h:m A', strtotime($item['timeslot_end_time'])); ?>
+								<?= date('h:m A', strtotime($item['working_start_time'])) ?> -
+		    					<?=	date('h:m A', strtotime($item['working_end_time'])); ?>
 
 								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>"></i>
 							<br/>
@@ -351,7 +351,7 @@ $this->registerJs("
 					<div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">
 						<div class="form-group">
 							<label>Delivery Time Slot</label>
-							<select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
+							<select name="working_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
 							<span class="error timeslot_id"></span>
 						</div>
 					</div>

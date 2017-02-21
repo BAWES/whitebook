@@ -97,11 +97,11 @@ class CartController extends BaseController
         ]);
 
         //get timeslots 
-        $vendor_timeslot = DeliveryTimeSlot::find()
-            ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+        $vendor_timeslot = VendorWorkingTiming::find()
+            ->select(['working_id','working_start_time','working_end_time'])
             ->where([
                 'vendor_id' => $model->vendor_id,
-                'timeslot_day' => date("l", strtotime($item->cart_delivery_date))
+                'workign_day' => date("l", strtotime($item->cart_delivery_date))
             ])
             ->asArray()
             ->all();
@@ -127,7 +127,7 @@ class CartController extends BaseController
                 
                 if ($cart) {
                     $cart->cart_delivery_date = $data['delivery_date'];
-                    $cart->timeslot_id  =   $data['timeslot_id'];
+                    $cart->working_id  =   $data['working_id'];
                     $cart->cart_quantity =  $data['quantity'];
                     $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                     $cart->modified_datetime  = date('Y-d-m h:i:s');
@@ -224,7 +224,7 @@ class CartController extends BaseController
                 ->where([
                     'item_id' => $data['item_id'],
                     'area_id'   => isset($data['area_id'])?$data['area_id']:'',
-                    'timeslot_id' => isset($data['timeslot_id'])?$data['timeslot_id']:'',
+                    'working_id' => isset($data['working_id'])?$data['working_id']:'',
                     'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date']))
                 ])
                 ->one();
@@ -268,7 +268,7 @@ class CartController extends BaseController
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
                 $cart->area_id = $location;
-                $cart->timeslot_id = isset($data['timeslot_id'])?$data['timeslot_id']:'';
+                $cart->working_id = isset($data['working_id'])?$data['working_id']:'';
                 $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
