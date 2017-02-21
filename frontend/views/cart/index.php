@@ -247,27 +247,6 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        </tbody>        	
         </table>
 
-        <div class="row">
-	        <div class="col-sm-4 pull-right">
-	          <table class="table table-bordered">
-	            <tbody>
-	            <tr>
-	              <td class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
-	              <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
-	            </tr>
-	            <tr>
-	              <td class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong></td>
-	              <td class="text-right"><?= CFormatter::format($delivery_charge) ?></td>
-	            </tr>
-	            <tr>
-	              <td class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
-	              <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
-	            </tr>
-	            </tbody>
-	          </table>
-	        </div>
-        </div>
-
         <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
         </button>
