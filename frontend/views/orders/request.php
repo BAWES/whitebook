@@ -60,7 +60,7 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
 
 				<?php } else { ?>
 
-					<center><?= Yii::t('frontend', 'You have not placed any order yet!') ?></center>
+					<center><?= Yii::t('frontend', 'You have not placed any request yet!') ?></center>
 				<?php } ?>
 			</div>
 		</div>
