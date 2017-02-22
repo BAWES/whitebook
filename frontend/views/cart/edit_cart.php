@@ -351,8 +351,15 @@ $deliver_date = $item->cart_delivery_date;
         </div>
         <?php } ?>
     </div>
-
+        
 	<div class="col-md-12 padding-left-0" style="padding-top: 15px;">
-		<input type="submit" name="change" value="Change" class="btn btn-primary pull-right btn-checkout btn-cart-change">
+	    <div class="row">
+            <div class="col-sm-10">
+                <p class="alert alert-danger cart-update-error-msg"><?= Yii::t('frontend', 'Please check form catefully!') ?></p>
+            </div>
+            <div class="col-sm-2">
+                <input type="submit" name="change" value="Change" class="btn btn-primary pull-right btn-checkout btn-cart-change">
+            </div>
+        </div>
 	</div>
 </form>
