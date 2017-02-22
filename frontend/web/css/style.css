@@ -2533,6 +2533,7 @@ span.small {
     float: right;
 }
 
-.accad_menus h4 {
-    font-weight: bold;
-}
+.accad_menus h4 { font-weight: bold;  }
+.checkout-wizard {  margin-bottom: 70px;  }
+.checkout-wizard > .checkout-step:nth-child(2) > .progress {  width: 0;  }
+.request-table.table > thead > tr > th, .request-table.table > tbody > tr > th, .request-table.table > tfoot > tr > th, .request-table.table > thead > tr > td, .request-table.table > tbody > tr > td, .request-table.table > tfoot > tr > td{vertical-align: inherit;}

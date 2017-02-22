@@ -30,6 +30,8 @@ use common\models\CustomerAddress;
  * @property integer $modified_by
  * @property string $created_datetime
  * @property string $modified_datetime
+ * @property string $female_service
+ * @property string $special_request
  * @property string $trash
  */
 class SuborderItemPurchase extends \yii\db\ActiveRecord

@@ -10,7 +10,7 @@ use common\components\LangFormat;
 <div class="panel panel-default">
         <div class="panel-heading">
                 <h4 class="panel-title">
-                        <?= Yii::t('frontend', 'Select delivery address for each items') ?>                        
+                    <?= Yii::t('frontend', 'Select delivery address for each items') ?>
                 </h4>
         </div>
         <div class="panel-body padding-0">
@@ -66,68 +66,55 @@ use common\components\LangFormat;
 </div>
 
 <div class="btn-set">
-        <a href="<?= Url::to(['browse/index']); ?>" class="btn btn-primary btn-checkout pull-left margin-left-0">
-                <?= Yii::t('frontend', 'Back to shopping') ?>
-        </a>
-
-        <button class="btn btn-primary btn-checkout pull-right" onclick="save_address();">
-                <?= Yii::t('frontend', 'Next') ?>
-        </button>
+    <a href="<?= Url::to(['browse/index']); ?>" class="btn btn-primary btn-checkout pull-left margin-left-0">
+        <?= Yii::t('frontend', 'Back to shopping') ?>
+    </a>
+    <button class="btn btn-primary btn-checkout pull-right" onclick="save_address();">
+        <?= Yii::t('frontend', 'Next') ?>
+    </button>
 </div>
-
 <br />
 <br />
 <br />
 
 <div class="modal fade" id="modal_create_address">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-
-        <?php $form = ActiveForm::begin(); ?>
-
-        <div class="modal-header margin-padding-0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
-        </div>
-        <div class="modal-body body-update">
-
-                <input type="hidden" name="cart_id" value="" />
-
-                <?= $form->field($customer_address_modal, 'address_name'); ?>
-                
-                <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype, 
-                    ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
-                ); ?>
-
-                <div class="question_wrapper">
-                    <!-- question will go here -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <?php $form = ActiveForm::begin(); ?>
+                <div class="modal-header margin-padding-0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
                 </div>
-
-                <?php /* $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(), 
-                        ['class' => 'selectpicker', 'data-live-search' => 'true', 'data-size' => 10]
-                    );
-                    <span class="error area_id"></span>
-                */ ?>
-                
-                <div class="form-group">
+                <div class="modal-body body-update">
+                    <input type="hidden" name="cart_id" value="" />
+                    <?= $form->field($customer_address_modal, 'address_name'); ?>
+                    <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype,
+                        ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
+                    ); ?>
+                    <div class="question_wrapper">
+                        <!-- question will go here -->
+                    </div>
+                    <?php /* $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(),
+                            ['class' => 'selectpicker', 'data-live-search' => 'true', 'data-size' => 10]
+                        );
+                        <span class="error area_id"></span>
+                    */ ?>
+                    <div class="form-group">
                         <?= $form->field($customer_address_modal, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
-                        ])->textArea(['rows' => 6]) ?>
+                            ])->textArea(['rows' => 6]) ?>
+                    </div>
+                    <span class="error address_data"></span>
                 </div>
-                <span class="error address_data"></span>
-        </div>
-
-        <div class="modal-footer submitt_buttons">
-            <button type="submit" class="btn btn-submit-address btn-default">
-                <?= Yii::t('frontend', 'Submit') ?>
-            </button>
-        </div>
-
-        <?php ActiveForm::end(); ?>
-
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+                <div class="modal-footer submitt_buttons">
+                    <button type="submit" class="btn btn-submit-address btn-default">
+                        <?= Yii::t('frontend', 'Submit') ?>
+                    </button>
+                </div>
+            <?php ActiveForm::end(); ?>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <?php
 $this->registerCss("

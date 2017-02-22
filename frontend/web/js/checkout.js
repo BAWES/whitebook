@@ -41,7 +41,8 @@ function save_address() {
 
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			} else {
-				payment();
+				// payment();
+                confirm();
 			}
 		}
 	);
@@ -94,7 +95,7 @@ function confirm() {
 	$('.checkout_message_wrapper').html('');
 	
 	$('#ar-step-address').addClass('text-success');
-	$('#ar-step-payment').addClass('text-success');
+	// $('#ar-step-payment').addClass('text-success');
 
 	$.get(confirm_url, function(html) {
 		if(html) {
