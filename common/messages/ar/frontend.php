@@ -17,6 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Notice: {count} hours' => 'إشعار: {count} ساعات',
+    'Notice: {count} days' => 'إشعار: {count} أيام',
     'Loading...' => 'جار التحميل...',
     'Collect in {count} days' => 'جمع في {count} أيام',
     'Maximum {qty}' => 'الحد الأقصى {qty}',
