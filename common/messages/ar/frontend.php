@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Duration' => 'المدة الزمنية',
     'Notice: {count} hours' => 'إشعار: {count} ساعات',
     'Notice: {count} days' => 'إشعار: {count} أيام',
     'Loading...' => 'جار التحميل...',

@@ -538,7 +538,7 @@ if($model->images) {
                                                 <?php if($max_time) { ?>
                                                 <div>
                                                     <i class="fa fa-info"></i>
-                                                    <span class="title">Max. Time</span>
+                                                    <span class="title"><?= Yii::t('frontend', 'Duration') ?></span>
                                                     <span class="value"><?= $max_time ?></span>
                                                 </div>
                                                 <?php } ?>
