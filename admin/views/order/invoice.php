@@ -127,7 +127,16 @@ use common\components\CFormatter;
                         }
                         ?>
                     </th>
-                    <td align="left"><?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?></th>
+                    <td align="left">
+                        <?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
+
+                        <br />
+
+                        <?php if($item->timeslot) { ?>
+                            <?= date('h:m A', strtotime($item->timeslot->working_start_time)) ?> -
+                            <?= date('h:m A', strtotime($item->timeslot->working_end_time)); ?>
+                        <?php } ?>
+                    </th>
                     <td aligh="left">
                         <?= $item->purchase_delivery_address ?>
                     </th>

@@ -212,7 +212,7 @@ class Order extends \yii\db\ActiveRecord
 
                 $item_purchase = new SuborderItemPurchase;
                 $item_purchase->suborder_id = $sub_order->suborder_id;
-                $item_purchase->timeslot_id = $item['timeslot_id'];
+                $item_purchase->working_id = $item['working_id'];
                 $item_purchase->item_id  = $item['item_id'];
                 $item_purchase->area_id = $item['area_id'];
                 $item_purchase->address_id = $address_id;

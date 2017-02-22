@@ -137,11 +137,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         
                         ?>
                     </th>
-                    <td align="left"><?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?></th>
-                    <td aligh="left"><?= $item->purchase_delivery_address ?></th>
-                    <td aligh="left"><?= $item->purchase_quantity ?></th>
-                    <td align="right"><?= $item->purchase_price_per_unit ?> KWD</th>
-                    <td align="right"><?= $item->purchase_total_price ?> KWD</th>   
+                    <td align="left">
+                        <?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
+                        <br />
+
+                        <?php if($item->timeslot) { ?>
+                            <?= date('h:m A', strtotime($item->timeslot->working_start_time)) ?> -
+                            <?= date('h:m A', strtotime($item->timeslot->working_end_time)); ?>
+                        <?php } ?>
+                    </td>
+                    <td aligh="left"><?= $item->purchase_delivery_address ?></td>
+                    <td aligh="left"><?= $item->purchase_quantity ?></td>
+                    <td align="right"><?= $item->purchase_price_per_unit ?> KWD</td>
+                    <td align="right"><?= $item->purchase_total_price ?> KWD</td>   
                 </tr>
                 <?php } ?>
                 <tr>
