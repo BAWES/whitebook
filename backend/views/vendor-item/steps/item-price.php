@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
 				<?= $form->field($model, 'quantity_label')->radioList([
 						'Quantity' => 'Quantity',
-						'Serve' => 'Serve'
+						'Guests' => 'Guests'
 					]); ?>
 
 				<?= $form->field($model, 'item_minimum_quantity_to_order')
