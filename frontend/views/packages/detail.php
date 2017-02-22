@@ -109,7 +109,7 @@ use common\components\CFormatter;
 			    ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.item_id', 
 			    	'{{%vendor_item}}.item_price_per_unit', '{{%vendor_item}}.item_name', 
 			    	'{{%vendor_item}}.item_name_ar', '{{%vendor_item}}.item_for_sale', '{{%vendor_item}}.slug', 
-			    	'{{%vendor_item}}.item_id'
+			    	'{{%vendor_item}}.item_id', '{{%vendor_item}}.item_how_long_to_make'
 			    ])
 			    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_package}}.item_id')
 			    ->leftJoin(
@@ -203,6 +203,27 @@ use common\components\CFormatter;
 		                        <a href="<?= $item_url ?>" class="" >
 		                            
 		                            <?= Html::img($image,['class'=>'item-img']); ?>
+
+		                            <?php if($value['item_how_long_to_make'] > 0) { ?>
+                                    <div class="callout-container" style="bottom: 10px;">
+                                        <span class="callout light">
+                                            <?php 
+
+                                            if($value['item_how_long_to_make'] % 24 == 0) 
+                                            { 
+                                                echo Yii::t('frontend', 'Notice: {count} days', [
+                                                    'count' => $value['item_how_long_to_make']/24
+                                                ]); 
+                                            }
+                                            else
+                                            {
+                                                echo Yii::t('frontend', 'Notice: {count} hours', [
+                                                    'count' => $value['item_how_long_to_make']
+                                                ]);
+                                            } ?>
+                                        </span>
+                                    </div>
+                                    <?php } ?>
 
 		                            <?php if($value['item_for_sale'] == 'Yes') { ?>
 		                                <i class="fa fa-circle" aria-hidden="true"></i>
