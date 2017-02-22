@@ -16,7 +16,7 @@ use common\models\CustomerAddress;
  *
  * @property string $purchase_id
  * @property string $suborder_id
- * @property string $timeslot_id
+ * @property string $working_id
  * @property string $item_id
  * @property string $area_id
  * @property string $address_id
@@ -65,8 +65,8 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['suborder_id', 'timeslot_id', 'item_id', 'area_id', 'address_id', 'purchase_delivery_address', 'purchase_delivery_date', 'purchase_price_per_unit', 'purchase_quantity', 'purchase_total_price', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
-            [['suborder_id', 'timeslot_id', 'item_id', 'area_id', 'address_id', 'purchase_quantity', 'created_by', 'modified_by'], 'integer'],
+            [['suborder_id', 'working_id', 'item_id', 'area_id', 'address_id', 'purchase_delivery_address', 'purchase_delivery_date', 'purchase_price_per_unit', 'purchase_quantity', 'purchase_total_price', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
+            [['suborder_id', 'working_id', 'item_id', 'area_id', 'address_id', 'purchase_quantity', 'created_by', 'modified_by'], 'integer'],
             [['purchase_delivery_address', 'trash'], 'string'],
             [['purchase_delivery_date', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
             [['purchase_price_per_unit', 'purchase_customization_price_per_unit', 'purchase_total_price'], 'number'],
@@ -81,7 +81,7 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
         return [
             'purchase_id' => 'Purchase ID',
             'suborder_id' => 'Suborder ID',
-            'timeslot_id' => 'Timeslot ID',
+            'working_id' => 'Timeslot',
             'item_id' => 'Item ID',
             'area_id' => 'Area ID',
             'address_id' => 'Address ID',
@@ -106,7 +106,7 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
 
     public function getTimeslot()
     {
-        return $this->hasOne(DeliveryTimeSlot::className(), ['timeslot_id' => 'timeslot_id']);
+        return $this->hasOne(VendorWorkingTiming::className(), ['working_id' => 'working_id']);
     }
 
     public function getItem()
