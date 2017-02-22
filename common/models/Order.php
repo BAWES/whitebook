@@ -503,9 +503,13 @@ class Order extends \yii\db\ActiveRecord
             ->where(['suborder_id' => $suborder_id])
             ->all();
     }
-        
+
     public function getCustomer() {
         return $this->hasOne(Customer::className(), ['customer_id' => 'customer_id']);
+    }
+
+    public function getSubOrder() {
+        return $this->hasOne(Suborder::className(), ['order_id' => 'order_id']);
     }
 
     public function getCustomerName() {

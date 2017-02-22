@@ -65,4 +65,9 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             ],
         ];
     }
+
+    public function getOrderDetail()
+    {
+        return $this->hasOne(Order::className(),['order_id'=>'order_id']);
+    }
 }
