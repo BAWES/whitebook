@@ -103,9 +103,20 @@ if (!empty($items->getModels())) {
                             <?php if($value['item_how_long_to_make'] > 0) { ?>
                             <div class="callout-container">
                                 <span class="callout light">
-                                    <?= Yii::t('frontend', 'Notice: {count} days', [
+                                    <?php 
+
+                                    if($value['item_how_long_to_make'] % 24 == 0) 
+                                    { 
+                                        echo Yii::t('frontend', 'Notice: {count} days', [
+                                            'count' => $value['item_how_long_to_make']/24
+                                        ]); 
+                                    }
+                                    else
+                                    {
+                                        echo Yii::t('frontend', 'Notice: {count} hours', [
                                             'count' => $value['item_how_long_to_make']
-                                        ]); ?>
+                                        ]);
+                                    } ?>
                                 </span>
                             </div>
                             <?php } ?>
