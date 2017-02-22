@@ -105,6 +105,10 @@ class Suborder extends \yii\db\ActiveRecord
         return $this->status->name;
     }
 
+    public function getItemPurchased() {
+        return $this->hasOne(SuborderItemPurchase::className(),['suborder_id'=>'suborder_id']);
+    }
+
     public static function getReportQuery($data = array())
     {    
         $query = Suborder::find()

@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\OrderRequestStatus;
 use Yii;
 use common\models\Order;
 use common\models\Suborder;
@@ -51,9 +52,10 @@ class OrdersController extends BaseController
 	        return $this->redirect(['/site/index']);
 	    }
 
-		$query = Order::find()
-			->where('customer_id = ' . Yii::$app->user->getId())
-			->orderBy('created_datetime DESC');
+        $query = OrderRequestStatus::find()
+            ->leftJoin('whitebook_order','whitebook_order.order_id')
+            ->where(['whitebook_order.customer_id'=>Yii::$app->user->getId()])
+            ->orderBy('created_datetime DESC');
 
 		// create a pagination object with the total count
 		$pagination = new Pagination(['totalCount' => $query->count()]);

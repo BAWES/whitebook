@@ -32,14 +32,14 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
 							<tr>
 								<td align="center"><?= $order->order_id ?></td>
 								<td align="center"><?= date('d/m/Y', strtotime($order->created_datetime)) ?></td>
-								<td align="center"><?= CFormatter::format($order->order_total_with_delivery) ?></td>
+								<td align="center"><?= CFormatter::format($order->orderDetail->order_total_with_delivery) ?></td>
 								<td align="center">
-                                    <?php if ($order->requestStatus->request_status == 'Pending') { ?>
-                                        <a href="#" class="btn btn-default"><?= $order->requestStatus->request_status ?></a>
-                                    <?php } else if ($order->requestStatus->request_status == 'Approved') { ?>
+                                    <?php if ($order->request_status == 'Pending') { ?>
+                                        <a href="#" class="btn btn-default"><?= $order->request_status ?></a>
+                                    <?php } else if ($order->request_status == 'Approved') { ?>
                                         <a href="#" class="btn btn-success">Pay Now</a>
-                                    <?php } else if ($order->requestStatus->request_status == 'Declined') { ?>
-                                        <a href="#" class="btn btn-warning"><?= $order->requestStatus->request_status ?></a>
+                                    <?php } else if ($order->request_status == 'Declined') { ?>
+                                        <a href="#" class="btn btn-warning"><?= $order->request_status ?></a>
                                     <?php } ?>
                                 </td>
 								<td width="50px">

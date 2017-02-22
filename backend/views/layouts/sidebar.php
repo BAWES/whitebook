@@ -30,7 +30,10 @@ use common\models\Vendor;
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
 			</li>
 
-			<li class="<?=($cntrl == 'sub-order') ? "active" : "noactive" ?>">
+			<li class="<?=($cntrl == 'order-request-status') ? "active" : "noactive" ?>">
+				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Request</span>', ['order-request-status/index'], ['class'=>'link-title']) ?>
+			</li>
+			<li class="<?=($cntrl == 'sub-order' && $action != 'request') ? "active" : "noactive" ?>">
 				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Sub Order</span>', ['sub-order/index'], ['class'=>'link-title']) ?>
 			</li>
 
