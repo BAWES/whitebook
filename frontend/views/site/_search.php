@@ -107,8 +107,7 @@ if($customer_id) {
     </div>
     <div class="mobile-view-form-popup" style="display: none;">
         <h4>Search <a href="#" class="text-right" id="close-search-div">x</a></h4>
-        <form id='area-selection' name='area-selection' action="<?=Url::toRoute(['browse/list'],true);?>">
-            <input type="hidden" name="slug" value="all">
+        <form id='area-selection' name='area-selection' action="<?=Url::toRoute(['browse/all'], true); ?>">
             <div class="col-lg-10 col-sm-10 col-md-10">
                 <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
                     <input value="<?=$date?>" type="text" name="date" id="delivery_date" style ="color: #000!important;" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
