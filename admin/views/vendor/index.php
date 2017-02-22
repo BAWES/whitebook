@@ -27,50 +27,63 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     'vendor_name',
-                     'vendor_contact_email',
-                     [
+                    'vendor_contact_email',
+                    [
                          'label'=>'items added',
                          'format'=>'raw',
                          'value'=>function ($model) {                      
-                                    return VendorItem::vendoritemcount($model->vendor_id);
-                                },         
-                     ],
-                     [
-                    'attribute'=>'vendor_status',
-                     'label'=>'Status',
-                     'format'=>'raw',
-        			  'value'=>function($data,$model) {
-        				return HTML::a('<img src='.$data->statusImageurl($data->vendor_status).' id="image-'.$data->vendor_id.'" alt="Status Image" title='.$data->statusTitle($data->vendor_status).'>','javascript:void(0)',['id'=>'status', 
-        				'onclick'=>'change("'.$data->vendor_status.'","'.$data->vendor_id.'")']);
+                            return VendorItem::vendoritemcount($model->vendor_id);
+                         },
+                        'contentOptions' =>function ($model, $key, $index, $column){
+                            return ['class' => 'text-center'];
+                        },
+
+                    ],
+                    [
+                        'attribute'=>'vendor_status',
+                        'label'=>'Status',
+                        'format'=>'raw',
+                        'value'=>function($data,$model) {
+        				    return HTML::a('<img src='.$data->statusImageurl($data->vendor_status).' id="image-'.$data->vendor_id.'" alt="Status Image" title='.$data->statusTitle($data->vendor_status).'>','javascript:void(0)',['id'=>'status',
+                            'onclick'=>'change("'.$data->vendor_status.'","'.$data->vendor_id.'")']);
         				},
-        				'filter' => \admin\models\Vendor::Activestatus()
+        				'filter' => \admin\models\Vendor::Activestatus(),
+                        'contentOptions' =>function ($model, $key, $index, $column){
+                            return ['class' => 'text-center'];
+                        },
         			],
         			[
         				'attribute'=>'created_datetime',
         				'format' => ['date', 'php:d/m/Y'],
-        				'label'=>'created date',			
+        				'label'=>'created date',
+                        'contentOptions' =>function ($model, $key, $index, $column){
+                            return ['class' => 'text-center'];
+                        },
+
         			],
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header'=>'Action',
-                        'template' => '{update} {password} {delete} {view} {link}',
+                        'template' => '{update} {password} {delete} {view} {link} {request}',
                         'buttons' => [            
                             'link' => function ($url, $model) {
-
                                 $url = Url::to(['vendor-item/index', 'VendorItemSearch[vendor_name]' => $model->vendor_name]);
-
                                 return  Html::a('<span class="fa fa-bars"></span>', $url, [
-                                        'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
+                                    'title' => Yii::t('app', 'View items'),'data-pjax'=>"0",
                                 ]);
                             },
                             'password' => function ($url, $model) {
-
-                                $url = Url::to(['vendor/password', 'id' => $model->vendor_id]); 
-
+                                $url = Url::to(['vendor/password', 'id' => $model->vendor_id]);
                                 return  Html::a('<span class="fa fa-key fa-rotate-90"></span>', $url, [
                                     'title' => Yii::t('app', 'Change Password'), 'data-pjax'=>"0",
                                 ]);
-                            }            
+                            },
+                            'request' => function ($url, $model) {
+                                $url = Url::to(['order-request-status/index', 'id' => $model->vendor_id]);
+                                return  Html::a('<i class="fa fa-user-plus"></i>', $url, [
+                                    'title' => Yii::t('app', 'View Request'), 'data-pjax'=>"0",
+                                ]);
+                            }
                         ],
                     ],
                 ],

@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\controllers;
+namespace admin\controllers;
 
 use Yii;
 use common\models\OrderRequestStatus;
@@ -33,10 +33,10 @@ class OrderRequestStatusController extends Controller
      * Lists all OrderRequestStatus models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
         $searchModel = new OrderRequestStatusSearch();
-        $searchModel->vendor_id = Yii::$app->user->id;
+        $searchModel->vendor_id = $id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -52,16 +52,12 @@ class OrderRequestStatusController extends Controller
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
 
-        // restrict invalid access to other request
-        if ($model->vendor_id != Yii::$app->user->id) {
-            $this->redirect(['index']);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success','Request Status changed successfully');
-            return $this->redirect(['index']);
+            return $this->redirect(['order-request-status/index','id'=>$model->vendor_id]);
         } else {
             return $this->render('view', [
                 'model' => $this->findModel($id),
