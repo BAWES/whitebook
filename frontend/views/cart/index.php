@@ -341,7 +341,7 @@ $this->registerJs("
 </div>
 <?php
 
-$this->registerJsFile('@web/js/cart.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/cart.js?v=1.3', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);

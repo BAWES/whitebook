@@ -1,8 +1,10 @@
 
 function deliveryTimeSlotCart(date){
     var myDate = new Date()
+    
     time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
         currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
+
     $.ajax({
         type: 'POST',
         url: getdeliverytimeslot_url,
@@ -199,7 +201,10 @@ $(function() {
     });
 });
 
-$('body').on('click','.btn-cart-change',function(){
+$(document).delegate('.btn-cart-change', 'click', function(){
+
+    $('.cart-update-error-msg').hide();    
+
     $.ajax({
         type: 'POST',
         url: update_cart_url,
@@ -218,9 +223,11 @@ $('body').on('click','.btn-cart-change',function(){
                     });
                 });
 
+                $('.cart-update-error-msg').show();
             }
         }
     });
+
     return false;
 });
 

@@ -2537,3 +2537,9 @@ span.small {
 .checkout-wizard {  margin-bottom: 70px;  }
 .checkout-wizard > .checkout-step:nth-child(2) > .progress {  width: 0;  }
 .request-table.table > thead > tr > th, .request-table.table > tbody > tr > th, .request-table.table > tfoot > tr > th, .request-table.table > thead > tr > td, .request-table.table > tbody > tr > td, .request-table.table > tfoot > tr > td{vertical-align: inherit;}
+
+.cart-update-error-msg {
+    display: none;
+    position: relative;
+    padding: 6px;
+}
