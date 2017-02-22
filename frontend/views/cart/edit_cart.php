@@ -134,18 +134,22 @@ $deliver_date = $item->cart_delivery_date;
 
                             $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
-                            foreach ($menu_items as $menu_item) { ?>
+                            foreach ($menu_items as $menu_item) { 
+
+                                $cart_menu_item = CustomerCartMenuItem::findOne([
+                                        'menu_item_id' => $menu_item->menu_item_id,
+                                        'cart_id' => $item->cart_id
+                                    ]); ?>
 
                                 <li> 
                                     
-
                                     <?php if($value->quantity_type == 'selection') { ?>
 
                                     <!-- qty box -->
 
                                     <span class="menu-item-qty-box">
                                         <i class="fa fa-minus"></i>
-                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
                                         <i class="fa fa-plus"></i>
                                     </span>
 
@@ -162,7 +166,7 @@ $deliver_date = $item->cart_delivery_date;
                                     <?php } else { ?>
 
                                     <div class="checkbox checkbox-inline">
-                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" />
+                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" <?php if($cart_menu_item) echo 'checked'; ?> />
 
                                         <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
                                             <?php if(Yii::$app->language == 'en') { 
@@ -257,14 +261,19 @@ $deliver_date = $item->cart_delivery_date;
 
                             $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
-                            foreach ($menu_items as $menu_item) { ?>
+                            foreach ($menu_items as $menu_item) { 
+
+                                $cart_menu_item = CustomerCartMenuItem::findOne([
+                                        'menu_item_id' => $menu_item->menu_item_id,
+                                        'cart_id' => $item->cart_id
+                                    ]); ?>
 
                                 <li> 
                                     <!-- qty box -->
 
                                     <span class="menu-item-qty-box">
                                         <i class="fa fa-minus"></i>
-                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
                                         <i class="fa fa-plus"></i>
                                     </span>
 
