@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\OrderRequestStatusSearch;
 use Yii;
 use common\models\Order;
 use common\models\OrderStatus;
@@ -58,6 +59,17 @@ class SubOrderController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'status' => $status
+        ]);
+    }
+
+    public function actionRequest()
+    {
+        $searchModel = new OrderRequestStatusSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('request', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
