@@ -18,7 +18,7 @@ class OrderRequestStatusSearch extends OrderRequestStatus
     public function rules()
     {
         return [
-            [['request_id', 'order_id'], 'integer'],
+            [['request_id', 'order_id','vendor_id'], 'integer'],
             [['request_status', 'request_note', 'created_datetime', 'modified_datetime'], 'safe'],
         ];
     }
@@ -61,10 +61,10 @@ class OrderRequestStatusSearch extends OrderRequestStatus
         $query->andFilterWhere([
             'request_id' => $this->request_id,
             'order_id' => $this->order_id,
+            'vendor_id' => $this->vendor_id,
             'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
         ]);
-
         $query->andFilterWhere(['like', 'request_status', $this->request_status])
             ->andFilterWhere(['like', 'request_note', $this->request_note]);
 

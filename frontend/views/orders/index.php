@@ -13,7 +13,7 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
     <div class="container ">
        
         <div class="title_main">
-			<h1><?= Yii::t('frontend', 'Request(s)'); ?></h1>
+			<h1><?= Yii::t('frontend', 'Order'); ?></h1>
 		</div>
 
 		<div class="account_setings_sections">
