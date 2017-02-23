@@ -504,7 +504,8 @@ class CartController extends BaseController
     }
 
     /*
-        Update item quantity 
+        Update item quantity
+        function not in use
     */
     public function actionUpdate() {
         $quantity = Yii::$app->request->post('quantity');
@@ -587,6 +588,9 @@ class CartController extends BaseController
         Yii::$app->session->set('deliver-timeslot', $deliver_timeslot);
     }
 
+    /*
+     * method provide time slots interval between two time slots
+     */
     private function slots($startTime = '11:00:00', $endTime = '22:45:00'){
         $slots = [];
         if ($startTime && $endTime) {
