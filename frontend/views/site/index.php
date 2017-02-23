@@ -275,7 +275,7 @@ if (!empty($feature_group_sql_result)) {
 
                                             if($product_val['item_how_long_to_make'] % 24 == 0) 
                                             { 
-                                                echo Yii::t('frontend', 'Notice: {count} days', [
+                                                echo Yii::t('frontend', 'Notice: {count} day(s)', [
                                                     'count' => $product_val['item_how_long_to_make']/24
                                                 ]); 
                                             }

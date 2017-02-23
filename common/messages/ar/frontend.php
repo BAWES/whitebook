@@ -19,7 +19,7 @@
 return [
     'Duration' => 'المدة الزمنية',
     'Notice: {count} hours' => 'إشعار: {count} ساعات',
-    'Notice: {count} days' => 'إشعار: {count} أيام',
+    'Notice: {count} day(s)' => 'إشعار: {count} أيام',
     'Loading...' => 'جار التحميل...',
     'Collect in {count} days' => 'جمع في {count} أيام',
     'Maximum {qty}' => 'الحد الأقصى {qty}',

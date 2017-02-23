@@ -256,7 +256,7 @@ if($model->images) {
 
                                 if($model['item_how_long_to_make'] % 24 == 0) 
                                 { 
-                                    echo Yii::t('frontend', 'Notice: {count} days', [
+                                    echo Yii::t('frontend', 'Notice: {count} day(s)', [
                                         'count' => $model['item_how_long_to_make']/24
                                     ]); 
                                 }
@@ -1050,7 +1050,7 @@ if($model->images) {
 
                                                         if($s['item_how_long_to_make'] % 24 == 0) 
                                                         { 
-                                                            echo Yii::t('frontend', 'Notice: {count} days', [
+                                                            echo Yii::t('frontend', 'Notice: {count} day(s)', [
                                                                 'count' => $s['item_how_long_to_make']/24
                                                             ]); 
                                                         }
