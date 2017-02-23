@@ -434,11 +434,11 @@ $("#item_delivery_date").on("changeDate", function(e) {
 
 $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
    
-    if (isGuest) {
+    /*if (isGuest) {
         show_login_modal('-2');
         $('#myModal').modal('show');
         return false;
-    }
+    }*/
 
     $qty_input = $(this).parent().find('input');
 
@@ -454,11 +454,11 @@ $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
 
 $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 
-    if (isGuest) {
+    /*if (isGuest) {
         show_login_modal('-2');
         $('#myModal').modal('show');
         return false;
-    }
+    }*/
 
     $qty = $('input[name="quantity"]').val();
 
@@ -489,11 +489,11 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 
 $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
 
-    if (isGuest) {
+    /*if (isGuest) {
         show_login_modal('-2');
         $('#myModal').modal('show');
         return false;
-    }
+    }*/
 
     $qty = $('input[name="quantity"]').val();
 
