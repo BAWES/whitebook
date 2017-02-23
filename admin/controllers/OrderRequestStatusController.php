@@ -42,9 +42,10 @@ class OrderRequestStatusController extends Controller
      * Lists all OrderRequestStatus models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
         $searchModel = new OrderRequestStatusSearch();
+        $searchModel->vendor_id = $id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
