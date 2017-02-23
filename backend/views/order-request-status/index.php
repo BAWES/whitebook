@@ -15,9 +15,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
             'request_id',
+            [
+                'label' => 'Request Item',
+                'value' => function ($model) {
+                    return (strlen($model->orderDetail->subOrder->itemPurchased->item->item_name)>35) ?
+                        substr($model->orderDetail->subOrder->itemPurchased->item->item_name,0,35).'...' :
+                        $model->orderDetail->subOrder->itemPurchased->item->item_name;
+                }
+            ],
             [
                 'attribute'=>'request_status',
                 'filter'=>['Approved'=>'Approved','Pending'=>'Pending','Declined'=>'Declined']

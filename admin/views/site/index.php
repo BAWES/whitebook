@@ -22,7 +22,7 @@ $this->title = 'Dashboard';
 		<h1>Recent Activity</h1>
 
 		<?php
-		$logDataProvider = new ActiveDataProvider([
+        $logDataProvider = new ActiveDataProvider([
 			'query' => Log::find()->where("category != 'application'")->orderBy("log_time DESC"),
 			'pagination' => [
 				'pageSize' => 10,
