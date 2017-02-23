@@ -30,7 +30,6 @@ $order_request_count = OrderRequestStatus::find()
 	<?php } ?>
 
 	<p class="menu-title">NAVIGATION</p>
-
 	<?= \admin\widgets\MenuExtended::widget([
 	    'items' => [
 	        [	

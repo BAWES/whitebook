@@ -1,6 +1,12 @@
 <?php
 use yii\helpers\Html;
 use common\models\Vendor;
+
+$order_request_count =
+    \common\models\OrderRequestStatus::find()
+    ->where(['request_status' => 'Pending','vendor_id'=>Yii::$app->user->getId()])
+    ->count();
+
 ?>
  	<!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->
@@ -31,7 +37,7 @@ use common\models\Vendor;
 			</li>
 
 			<li class="<?=($cntrl == 'order-request-status') ? "active" : "noactive" ?>">
-				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Request</span>', ['order-request-status/index'], ['class'=>'link-title']) ?>
+				<?= Html::a('<i class="glyphicon glyphicon-send"></i><span class="title">Order Requests</span>  <span class="badge badge-danger">'.$order_request_count.'</span>', ['order-request-status/index'], ['class'=>'link-title']) ?>
 			</li>
 			
 			<li class="<?=($cntrl == 'sub-order' && $action != 'request') ? "active" : "noactive" ?>">

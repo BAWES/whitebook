@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <th><?=Yii::t('app','Item Name')?></th><td>
                     <?=$model->orderDetail->subOrder->itemPurchased->item->item_name?>
-                    <?=Html::a('View Item',['vendor-item/view','id'=>$model->orderDetail->subOrder->itemPurchased->item->item_id],['target'=>'_blank','class'=>'btn btn-default'])?>
+                    <a target="_blank" class="btn btn-default" href="<?=Yii::$app->urlManagerFrontend->createUrl(['browse/detail/'.$model->orderDetail->subOrder->itemPurchased->item->slug]); ?>">View Item</a>
                 </td>
             </tr>
         </tbody>

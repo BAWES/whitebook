@@ -46,6 +46,12 @@ return [
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
         ],
+        'urlManagerFrontend' => [
+            'class' => 'yii\web\urlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => 'http://dev.thewhitebook.com.kw',
+        ],
         'formatter' => [
             'currencyCode' => 'KWD',
             'defaultTimeZone' => 'Asia/Kuwait',
