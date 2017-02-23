@@ -107,7 +107,7 @@ if (!empty($items->getModels())) {
 
                                     if($value['item_how_long_to_make'] % 24 == 0) 
                                     { 
-                                        echo Yii::t('frontend', 'Notice: {count} days', [
+                                        echo Yii::t('frontend', 'Notice: {count} day(s)', [
                                             'count' => $value['item_how_long_to_make']/24
                                         ]); 
                                     }
