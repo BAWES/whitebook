@@ -90,26 +90,18 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
         return $this->hasOne(Vendor::className(),['vendor_id'=>'vendor_id']);
     }
 
-    public static function approved($model) 
+    public static function approved($request) 
     {
-        $order = Order::findOne($model->order_id);
+        $order = Order::findOne($request->order_id);
 
-        $vendor = Vendor::findOne($model->vendor_id);
+        $suborder = Suborder::find()
+            ->where([
+                    'order_id' => $request->order_id,
+                    'vendor_id' => $request->vendor_id
+                ])
+            ->one();
 
         $customer = Customer::findOne($order->customer_id);
-
-        //get items 
-        $items = SuborderItemPurchase::find()
-            ->select('{{%vendor_item}}.item_id, {{%vendor_item}}.item_name')
-            ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%suborder_item_purchase}}.item_id')
-            ->innerJoin('{{%suborder}}', '{{%suborder}}.suborder_id = {{%suborder_item_purchase}}.suborder_id')
-            ->where([
-                '{{%suborder}}.order_id' => $model->order_id
-            ])
-            ->asArray()
-            ->all();
-
-        $items = implode(', ', ArrayHelper::map($items, 'item_id', 'item_name'));
 
         //Send Email to customer
 
@@ -117,12 +109,9 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
 
         Yii::$app->mailer->compose("customer/request-approved",
             [
-                "model" => $model,
+                "model" => $suborder,
                 "customer" => $customer,
-                "vendor" => $vendor,
-                "items" => $items,
-                "logo_1" => Url::to("@web/uploads/twb-logo-horiz-white.png", true),
-                "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
+                "lnk_payment" => Url::to(["payment/index", 'id' => $request->request_id], true)
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo($customer->customer_email)
@@ -144,7 +133,8 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%suborder_item_purchase}}.item_id')
             ->innerJoin('{{%suborder}}', '{{%suborder}}.suborder_id = {{%suborder_item_purchase}}.suborder_id')
             ->where([
-                '{{%suborder}}.order_id' => $model->order_id
+                '{{%suborder}}.order_id' => $model->order_id,
+                '{{%suborder}}.vendor_id' => $model->vendor_id
             ])
             ->asArray()
             ->all();
