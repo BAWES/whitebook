@@ -106,4 +106,37 @@ class OrdersController extends BaseController
 			'suborder' => $suborder
 		]);
 	}
+
+	public function actionViewRequest($request_id) {
+
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders Detail';
+		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
+
+		if (Yii::$app->user->isGuest) {
+			Yii::$app->session->set('show_login_modal', 1);//to display login modal
+	        return $this->redirect(['/site/index']);
+	    }
+
+		$order = Order::find()
+			->where([
+				'order_id' => $request_id,
+				'customer_id' => Yii::$app->user->getId()
+			])
+			->one();
+
+		if (!$order) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+		$suborder = Suborder::find()
+			->where(['order_id' => $request_id])
+			->all();
+
+		return $this->render('view-request', [
+			'order' => $order,
+			'suborder' => $suborder
+		]);
+	}
 }
