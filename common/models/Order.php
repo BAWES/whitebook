@@ -292,7 +292,7 @@ class Order extends \yii\db\ActiveRecord
     }//END place_order
 
 
-     public function placeRequestOrder($gateway_name, $gateway_percentage, $gateway_fees, $order_status_id = 0, $transaction_id = '') {
+     public static function placeRequestOrder($gateway_name, $gateway_percentage, $gateway_fees, $order_status_id = 0, $transaction_id = '') {
 
         //address ids saved in session from checkout
         $addresses = Yii::$app->session->get('address');
@@ -368,8 +368,9 @@ class Order extends \yii\db\ActiveRecord
 
                 $request = new OrderRequestStatus();
                 $request->order_id = $order->order_id;
+                $request->vendor_id = $item['vendor_id'];
                 $request->request_status = 'Pending';
-                $request->save();
+                $request->save(false);
 
                 $sub_order = new Suborder;
                 $sub_order->order_id = $order->order_id;

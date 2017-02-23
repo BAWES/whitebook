@@ -43,7 +43,7 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
                                     <?php } ?>
                                 </td>
 								<td width="50px">
-									<a href="<?= Url::to(['orders/view', 'order_id' => $order->order_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Order') ?>">
+									<a href="<?= Url::to(['orders/view-request', 'request_id' => $order->order_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Order') ?>">
 										<i class="glyphicon glyphicon-eye-open"></i>
 									</a>
 								</td>

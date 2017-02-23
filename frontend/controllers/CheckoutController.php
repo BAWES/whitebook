@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use \common\models\Order;
 use common\models\CustomerCart;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
@@ -274,7 +275,7 @@ class CheckoutController extends BaseController
 
         return $this->render('success', [
             'order_id' => $order_id,
-            'order_page' => Url::to(['orders/index'])
+            'order_page' => Url::to(['orders/request-order'])
         ]);
     }
 
@@ -282,7 +283,7 @@ class CheckoutController extends BaseController
     {
         $address = Yii::$app->session->get('address',false);
         if ($address) {
-            $order_id = \common\models\Order::placeRequestOrder('', '', '', 1);
+            $order_id = Order::placeRequestOrder('', '', '', 1);
             Yii::$app->session->set('order_id', $order_id);
             echo "Please Wait...";
             if ($order_id) {
