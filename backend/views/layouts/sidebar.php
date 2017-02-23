@@ -19,7 +19,7 @@ use common\models\Vendor;
 		$cntrl = Yii::$app->controller->id;
 
 		$itemTab = ['vendor-item', 'vendor-item-capacity-exception'];
-        $DeliveryTab = array('vendor-location','delivery-time-slot', 'blocked-date');
+        $DeliveryTab = array('vendor-location','blocked-date');
 
 		?>
 		<!-- END MINI-PROFILE -->
@@ -62,10 +62,6 @@ use common\models\Vendor;
 				<ul class="sub-menu" style='<?= in_array($cntrl,$DeliveryTab)?"display:block":"" ?>'>
                     <li class="<?=($cntrl == 'vendor-location') ? "active" : "noactive" ?>">
         				<?= Html::a('<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', ['vendor-location/index'], ['class'=>'link-title']) ?>
-        			</li>
-        			<!-- Manage Address End-->
-        			<li class="<?=($cntrl == 'delivery-time-slot') ? "active" : "noactive" ?>">
-        				<?= Html::a('<i class="fa fa-clock-o"></i><span class="title">Delivery Time slot</span>', ['delivery-time-slot/index'], ['class'=>'link-title']) ?>
         			</li>
         			<!-- Block date management-->
         			<li class="<?=($cntrl == 'blocked-date' && $action == 'createweek') ? "active" : "noactive" ?>">
