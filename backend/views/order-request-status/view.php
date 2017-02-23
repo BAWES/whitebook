@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th><?=Yii::t('app','Delivery Date')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->purchase_delivery_date?></td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Time Slot')?></th><td><?=date('H:i A',strtotime($model->orderDetail->subOrder->itemPurchased->timeslot->working_start_time))?> - <?=date('H:i A',strtotime($model->orderDetail->subOrder->itemPurchased->timeslot->working_end_time))?></td>
+                <th><?=Yii::t('app','Time Slot')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->time_slot?></td>
             </tr>
             <tr>
                 <th><?=Yii::t('app','Address')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->purchase_delivery_address?></td>

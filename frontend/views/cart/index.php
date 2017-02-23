@@ -35,9 +35,8 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
         		$menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
         		$errors = CustomerCart::validate_item([
         			'item_id' => $item['item_id'],
-        			'working_id' => $item['working_id'],
+        			'time_slot' => $item['time_slot'],
         			'delivery_date' => $item['cart_delivery_date'],
-        			'working_end_time' => $item['working_end_time'],
         			'area_id' => $item['area_id'],
         			'quantity' => $item['cart_quantity'],
         			'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
@@ -215,8 +214,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        				?>
 	        					<?= $item['cart_delivery_date'] ?><br />
 								
-								<?= date('h:m A', strtotime($item['working_start_time'])) ?> -
-		    					<?=	date('h:m A', strtotime($item['working_end_time'])); ?>
+								<?= $item['time_slot']; ?>
 
 								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>"></i>
 							<br/>

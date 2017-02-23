@@ -126,10 +126,7 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 
                                 <br />
 
-                                <?php if($item->timeslot) { ?>
-                                    <?= date('h:m A', strtotime($item->timeslot->working_start_time)) ?> -
-                                    <?=	date('h:m A', strtotime($item->timeslot->working_end_time)); ?>
-                                <?php } ?>
+                                <?= $item->time_slot?>
 
                             </th>
                             <td aligh="left"><?= $item->purchase_delivery_address ?></th>

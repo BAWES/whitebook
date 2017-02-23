@@ -156,8 +156,7 @@ use common\models\CustomerCartMenuItem;
 
                         <?= $item['cart_delivery_date'] ?> <br />
         			
-                        <?= date('h:m A', strtotime($item['working_start_time'])) ?> -
-                        <?= date('h:m A', strtotime($item['working_end_time'])); ?>
+                        <?= $item['time_slot']; ?>
 
         			<?php } else { ?>
         				<span class="error">
