@@ -60,62 +60,25 @@ class OrderRequestStatusController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            
+            //if accepted
+            if($model->request_status == 'Approved') {
+                OrderRequestStatus::approved($model);
+            }
+
+            //if reject
+            if($model->request_status == 'Declined') {
+                OrderRequestStatus::declined($model);
+            }
+
             Yii::$app->session->setFlash('success','Request Status changed successfully');
+
             return $this->redirect(['index']);
         } else {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
         }
-    }
-
-    /**
-     * Creates a new OrderRequestStatus model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new OrderRequestStatus();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->request_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing OrderRequestStatus model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->request_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-    /**
-     * Deletes an existing OrderRequestStatus model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**

@@ -5,9 +5,14 @@ use yii\widgets\Menu;
 use admin\models\VendorItem;
 use admin\models\AccessControlList;
 use common\models\VendorDraftItem;
+use common\models\OrderRequestStatus;
 
 $draft_item_count = VendorDraftItem::find()
 	->where(['is_ready' => 1])
+	->count();
+
+$order_request_count = OrderRequestStatus::find()
+	->where(['request_status' => 'Pending'])
 	->count();
 
 ?>
@@ -35,6 +40,10 @@ $draft_item_count = VendorDraftItem::find()
 	        [	
 	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Draft Item</span><span class="draft_item_count">'.$draft_item_count.'</span>', 
 	        	'url' => ['vendor-draft-item/index'],
+	        ],
+	        [	
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Order Requests</span><span class="draft_item_count">'.$order_request_count.'</span>', 
+	        	'url' => ['order-request-status/index'],
 	        ],
 	        [	
 	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Order</span>', 
