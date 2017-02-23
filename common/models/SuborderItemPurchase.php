@@ -106,11 +106,6 @@ class SuborderItemPurchase extends \yii\db\ActiveRecord
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
 
-    public function getTimeslot()
-    {
-        return $this->hasOne(VendorWorkingTiming::className(), ['working_id' => 'working_id']);
-    }
-
     public function getItem()
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);

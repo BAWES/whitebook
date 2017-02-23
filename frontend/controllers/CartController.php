@@ -39,7 +39,7 @@ class CartController extends BaseController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -105,13 +105,23 @@ class CartController extends BaseController
             ])
             ->asArray()
             ->all();
+        $slots = [];
+
+        if ($vendor_timeslot) {
+
+            foreach ($vendor_timeslot as $key => $value) {
+                $slots = array_merge($slots,$this->slots($value['working_start_time'],$value['working_end_time']));
+            }
+
+        }
+
 
         return $this->renderPartial('edit_cart', [
             'item' => $item,
             'model' => $model,
             'menu' => $menu,
             'addons' => $addons,
-            'vendor_timeslot' => $vendor_timeslot
+            'vendor_timeslot' => $slots
         ]);
     }
 
@@ -127,7 +137,7 @@ class CartController extends BaseController
                 
                 if ($cart) {
                     $cart->cart_delivery_date = $data['delivery_date'];
-                    $cart->working_id  =   $data['working_id'];
+                    $cart->time_slot =   $data['time_slot'];
                     $cart->cart_quantity =  $data['quantity'];
                     $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                     $cart->modified_datetime  = date('Y-d-m h:i:s');
@@ -224,7 +234,7 @@ class CartController extends BaseController
                 ->where([
                     'item_id' => $data['item_id'],
                     'area_id'   => isset($data['area_id'])?$data['area_id']:'',
-                    'working_id' => isset($data['working_id'])?$data['working_id']:'',
+                    'time_slot' => isset($data['time_slot'])?$data['time_slot']:'',
                     'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date']))
                 ])
                 ->one();
@@ -268,7 +278,7 @@ class CartController extends BaseController
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
                 $cart->area_id = $location;
-                $cart->working_id = isset($data['working_id'])?$data['working_id']:'';
+                $cart->time_slot  = isset($data['time_slot'])?$data['time_slot']:'';
                 $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
@@ -535,7 +545,7 @@ class CartController extends BaseController
         $data = Yii::$app->request->post();
         $string = $data['sel_date'];
         $timestamp = strtotime($string);
-
+        $slots = [];
         $deliver_timeslot = Yii::$app->session->get('deliver-timeslot');
 
         Yii::$app->session->set('deliver-date', $data['sel_date']);
@@ -550,25 +560,13 @@ class CartController extends BaseController
         if ($vendor_timeslot) {
 
             foreach ($vendor_timeslot as $key => $value) {
-
-                if($deliver_timeslot == $value['working_id']) {
-                    $selected = 'selected';
-                } else {
-                    $selected = '';
-                }
-
-                if (strtotime($data['sel_date']) == (strtotime($data['currentDate']))) {
-                    if (strtotime($data['time']) < strtotime($value['working_start_time'])) {
-                        $start = date('g:i A', strtotime($value['working_start_time']));
-                        $end = date('g:i A', strtotime($value['working_end_time']));
-                        echo '<option value="' . $value['working_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
-                    }
-                } else {
-                    $start = date('g:i A', strtotime($value['working_start_time']));
-                    $end = date('g:i A', strtotime($value['working_end_time']));
-                    echo '<option value="' . $value['working_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
-                }
+                $slots = array_merge($slots,$this->slots($value['working_start_time'],$value['working_end_time']));
             }
+
+            foreach($slots as $slot) {
+                echo '<option value="' . $slot . '" >' . $slot . '</option>';
+            }
+
         } else {
             echo 0;
             exit;
@@ -587,6 +585,24 @@ class CartController extends BaseController
         $deliver_timeslot = Yii::$app->request->post('deliver-timeslot');
 
         Yii::$app->session->set('deliver-timeslot', $deliver_timeslot);
+    }
+
+    private function slots($startTime = '11:00:00', $endTime = '22:45:00'){
+        $slots = [];
+        if ($startTime && $endTime) {
+            $from = date('H:i:s',strtotime($startTime));
+            $to ='';
+            while (strtotime($from) < strtotime($endTime)) {
+                $to = strtotime("+30 minutes",strtotime($from));
+                if ($to > strtotime($endTime)) {
+                    $slots[] = $from . '-' . date('H:i:s',strtotime($endTime));
+                    break;
+                }
+                $slots[] = date('h:i A',strtotime($from)) . ' - ' . date('h:i A',$to);
+                $from = date('H:i:s',$to);
+            }
+        }
+        return $slots;
     }
 }
 

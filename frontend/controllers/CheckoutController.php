@@ -42,10 +42,9 @@ class CheckoutController extends BaseController
 
     		$errors = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
-                'working_id' => $item['working_id'],
+                'time_slot' => $item['time_slot'],
                 'delivery_date' => $item['cart_delivery_date'],
-                'working_end_time' => $item['working_end_time'],
-    			'area_id' => $item['area_id'],
+                'area_id' => $item['area_id'],
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
@@ -69,10 +68,9 @@ class CheckoutController extends BaseController
 
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
-                'working_id' => $item['working_id'],
+                'time_slot' => $item['time_slot'],
     			'delivery_date' => $item['cart_delivery_date'],
-                'working_end_time' => $item['working_end_time'],
-    			'area_id' => $item['area_id'],
+                'area_id' => $item['area_id'],
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
@@ -230,10 +228,9 @@ class CheckoutController extends BaseController
 
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
-                'working_id' => $item['working_id'],
+                'time_slot' => $item['time_slot'],
     			'delivery_date' => $item['cart_delivery_date'],
-                'working_end_time' => $item['working_end_time'],
-    			'area_id' => $item['area_id'],
+                'area_id' => $item['area_id'],
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);

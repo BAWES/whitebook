@@ -18,7 +18,7 @@ use common\components\CFormatter;
  * @property string $customer_id
  * @property string $item_id
  * @property string $area_id
- * @property string $working_id
+ * @property string $time_slot
  * @property string $cart_delivery_date
  * @property string $cart_customization_price_per_unit
  * @property integer $cart_quantity
@@ -63,14 +63,14 @@ class CustomerCart extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'item_id', 'area_id', 'working_id', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
-            [['customer_id', 'item_id', 'area_id', 'working_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
+            [['customer_id', 'item_id', 'area_id', 'time_slot', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
+            [['customer_id', 'item_id', 'area_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
 
             [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
 
             [['cart_customization_price_per_unit'], 'number'],
             ['cart_quantity', 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['cart_valid', 'trash'], 'string'],
+            [['cart_valid', 'trash','time_slot'], 'string'],
         ];
     }
 
@@ -84,7 +84,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             'customer_id' => Yii::t('frontend', 'Customer'),
             'item_id' => Yii::t('frontend', 'Item'),
             'area_id' => Yii::t('frontend', 'Area'),
-            'working_id' => Yii::t('frontend', 'Delivery timeslot'),
+            'time_slot' => Yii::t('frontend', 'Delivery time slot'),
             'cart_delivery_date' => Yii::t('frontend', 'Cart Delivery Date'),
             'cart_customization_price_per_unit' => Yii::t('frontend', 'Cart Customization Price Per Unit'),
             'cart_quantity' => Yii::t('frontend', 'Quantity'),
@@ -101,11 +101,6 @@ class CustomerCart extends \yii\db\ActiveRecord
     public function getItem()
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
-    }
-
-    public function getTimeslot()
-    {
-        return $this->hasOne(VendorWorkingTiming::className(), ['working_id' => 'working_id']);
     }
 
     public function getImage()
@@ -207,20 +202,16 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //get timeslot
-        if (empty($data['working_end_time']) && !empty($data['working_id']))
+        if (empty($data['time_slot']))
         {
-            $data['working_end_time'] = VendorWorkingTiming::findOne($data['working_id'])->working_end_time;
-        }
-        else if (empty($data['working_end_time']) || empty($data['working_id']))
-        {
-            $errors['working_id'][] = Yii::t('frontend', 'Select time slot!');
+            $errors['time_slot'][] = Yii::t('frontend', 'Select time slot!');
         }
 
         // delivery datetime < current time + notice period hours 
 
         $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
 
-        if(!empty($data['working_end_time']) && strtotime($data['delivery_date'].' '.$data['working_end_time']) < $min_delivery_time)
+        if(strtotime($data['delivery_date']) < $min_delivery_time)
         {
             $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
                     'count' => $item->item_how_long_to_make
@@ -394,13 +385,10 @@ class CustomerCart extends \yii\db\ActiveRecord
                 {{%vendor_item}}.slug,
                 {{%vendor_item}}.vendor_id,
                 {{%vendor_item}}.item_name,
-                {{%vendor_item}}.item_name_ar,
-                {{%vendor_working_timing}}.working_start_time, 
-                {{%vendor_working_timing}}.working_end_time'
+                {{%vendor_item}}.item_name_ar'
             )
             ->joinWith('item')
             ->joinWith('image')
-            ->joinWith('timeslot')
             ->where([
                 '{{%customer_cart}}.customer_id' => Yii::$app->user->getId(),
                 '{{%customer_cart}}.cart_valid' => 'yes',
@@ -420,7 +408,6 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         $items = CustomerCart::find()
             ->joinWith('item')
-            ->joinWith('timeslot')
             ->where([
                 '{{%customer_cart}}.customer_id' => Yii::$app->user->getId(),
                 '{{%customer_cart}}.cart_valid' => 'yes',
