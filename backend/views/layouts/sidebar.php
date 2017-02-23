@@ -33,6 +33,7 @@ use common\models\Vendor;
 			<li class="<?=($cntrl == 'order-request-status') ? "active" : "noactive" ?>">
 				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Request</span>', ['order-request-status/index'], ['class'=>'link-title']) ?>
 			</li>
+			
 			<li class="<?=($cntrl == 'sub-order' && $action != 'request') ? "active" : "noactive" ?>">
 				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Sub Order</span>', ['sub-order/index'], ['class'=>'link-title']) ?>
 			</li>

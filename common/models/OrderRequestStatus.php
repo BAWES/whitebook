@@ -4,7 +4,13 @@ namespace common\models;
 
 use Yii;
 use yii\db\Expression;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
+use common\models\Order;
+use common\models\Vendor;
+use common\models\Customer;
+use common\models\SuborderItemPurchase;
 
 /**
  * This is the model class for table "{{%order_request_status}}".
@@ -82,5 +88,85 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
     public function getVendorDetail()
     {
         return $this->hasOne(Vendor::className(),['vendor_id'=>'vendor_id']);
+    }
+
+    public static function approved($model) 
+    {
+        $order = Order::findOne($model->order_id);
+
+        $vendor = Vendor::findOne($model->vendor_id);
+
+        $customer = Customer::findOne($order->customer_id);
+
+        //get items 
+        $items = SuborderItemPurchase::find()
+            ->select('{{%vendor_item}}.item_id, {{%vendor_item}}.item_name')
+            ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%suborder_item_purchase}}.item_id')
+            ->innerJoin('{{%suborder}}', '{{%suborder}}.suborder_id = {{%suborder_item_purchase}}.suborder_id')
+            ->where([
+                '{{%suborder}}.order_id' => $model->order_id
+            ])
+            ->asArray()
+            ->all();
+
+        $items = implode(', ', ArrayHelper::map($items, 'item_id', 'item_name'));
+
+        //Send Email to customer
+
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+        Yii::$app->mailer->compose("customer/request-approved",
+            [
+                "model" => $model,
+                "customer" => $customer,
+                "vendor" => $vendor,
+                "items" => $items,
+                "logo_1" => Url::to("@web/uploads/twb-logo-horiz-white.png", true),
+                "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($customer->customer_email)
+            ->setSubject('Order request approved!')
+            ->send();
+    }
+
+    public static function declined($model) 
+    {
+        $order = Order::findOne($model->order_id);
+
+        $vendor = Vendor::findOne($model->vendor_id);
+
+        $customer = Customer::findOne($order->customer_id);
+
+        //get items 
+        $items = SuborderItemPurchase::find()
+            ->select('{{%vendor_item}}.item_id, {{%vendor_item}}.item_name')
+            ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%suborder_item_purchase}}.item_id')
+            ->innerJoin('{{%suborder}}', '{{%suborder}}.suborder_id = {{%suborder_item_purchase}}.suborder_id')
+            ->where([
+                '{{%suborder}}.order_id' => $model->order_id
+            ])
+            ->asArray()
+            ->all();
+
+        $items = implode(', ', ArrayHelper::map($items, 'item_id', 'item_name'));
+
+        //Send Email to customer
+
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+        Yii::$app->mailer->compose("customer/request-declined",
+            [
+                "model" => $model,
+                "customer" => $customer,
+                "vendor" => $vendor,
+                "items" => $items,
+                "logo_1" => Url::to("@web/uploads/twb-logo-horiz-white.png", true),
+                "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($customer->customer_email)
+            ->setSubject('Order request rejected!')
+            ->send();
     }
 }

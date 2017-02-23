@@ -133,7 +133,8 @@ class Role extends \yii\db\ActiveRecord
             'vendor-draft-item' => ['index', 'approve', 'reject', 'view'],
             'vendor-item-question-answer-option' => ['index', 'view', 'create', 'update', 'delete', 'deletequestionoptions'],
             'vendor-item-question' => ['index', 'view', 'create', 'update', 'delete'],
-            'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete']
+            'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete'],
+            'order-request-status' => ['index', 'view']
         ];        
     }
 }

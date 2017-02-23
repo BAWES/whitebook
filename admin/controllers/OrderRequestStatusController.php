@@ -8,6 +8,7 @@ use common\models\OrderRequestStatusSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use admin\models\AccessControlList;
 
 /**
  * OrderRequestStatusController implements the CRUD actions for OrderRequestStatus model.
@@ -23,9 +24,17 @@ class OrderRequestStatusController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                //    'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => AccessControlList::can()
+                    ],
+                ],
+            ],            
         ];
     }
 
@@ -33,10 +42,9 @@ class OrderRequestStatusController extends Controller
      * Lists all OrderRequestStatus models.
      * @return mixed
      */
-    public function actionIndex($id)
+    public function actionIndex()
     {
         $searchModel = new OrderRequestStatusSearch();
-        $searchModel->vendor_id = $id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -56,8 +64,21 @@ class OrderRequestStatusController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            //if accepted
+            if($model->request_status == 'Approved') {
+                OrderRequestStatus::approved($model);
+            }
+
+            //if reject
+            if($model->request_status == 'Declined') {
+                OrderRequestStatus::declined($model);
+            }
+
             Yii::$app->session->setFlash('success','Request Status changed successfully');
-            return $this->redirect(['order-request-status/index','id'=>$model->vendor_id]);
+
+            return $this->redirect(['order-request-status/index','id' => $model->vendor_id]);
+
         } else {
             return $this->render('view', [
                 'model' => $this->findModel($id),
@@ -101,6 +122,7 @@ class OrderRequestStatusController extends Controller
             ]);
         }
     }
+    
     /**
      * Deletes an existing OrderRequestStatus model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
