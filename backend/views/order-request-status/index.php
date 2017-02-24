@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use common\models\Order;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\OrderRequestStatusSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
