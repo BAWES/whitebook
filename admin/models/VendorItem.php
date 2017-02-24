@@ -45,7 +45,7 @@ class VendorItem extends \common\models\VendorItem
     public function scenarios()
     {
         return [
-            'ItemApproval' => ['item_status, item_approved'],
+            'ItemApproval' => ['item_status', 'item_approved'],
             
             'MenuItems' => ['allow_special_request', 'have_female_service'],
 
