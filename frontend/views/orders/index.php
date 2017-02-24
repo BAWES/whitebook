@@ -35,7 +35,7 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
 							<tr>
 								<td align="center"><?= $order->order_id ?></td>
 								<td align="left"><?= date('d/m/Y', strtotime($order->created_datetime)) ?></td>
-								<td align="right"><?= CFormatter::format($order->order_total_with_delivery) ?></td>
+								<td align="right"><?= CFormatter::format($order->orderDetail->order_total_with_delivery) ?></td>
 								<td width="50px">
 									<a href="<?= Url::to(['orders/view', 'order_id' => $order->order_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Order') ?>">
 										<i class="glyphicon glyphicon-eye-open"></i>

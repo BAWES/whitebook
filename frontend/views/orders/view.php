@@ -39,9 +39,7 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                         </tr>
                     </tbody>
                 </table>
-
                 <?php
-
                 foreach($suborder as $row){
 
                     $vendor = Vendor::findOne($row->vendor_id);
