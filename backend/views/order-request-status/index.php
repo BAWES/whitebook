@@ -27,17 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'label' => 'Remain Quantity',
-                'format' => 'html',
-                'value' => function ($model) {
-                    return '<strong>'.Order::totalPendingItem(
-                            $model->orderDetail->subOrder->itemPurchased->item_id,
-                        $model->orderDetail->subOrder->itemPurchased->purchase_delivery_date,
-                        $model->orderDetail->subOrder->itemPurchased->item->item_default_capacity
-                    ).'</strong>';
-                }
-            ],
-            [
                 'attribute'=>'request_status',
                 'filter'=>['Approved'=>'Approved','Pending'=>'Pending','Declined'=>'Declined']
             ],
