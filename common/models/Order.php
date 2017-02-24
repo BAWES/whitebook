@@ -16,7 +16,6 @@ use common\models\OrderStatus;
 use common\models\CustomerAddress;
 use common\models\VendorItemPricing;
 use common\models\SuborderItemPurchase;
-use common\models\OrderRequestStatus;
 
 /**
  * This is the model class for table "whitebook_order".
@@ -293,7 +292,7 @@ class Order extends \yii\db\ActiveRecord
     }//END place_order
 
 
-    public static function placeRequestOrder($gateway_name, $gateway_percentage, $gateway_fees, $order_status_id = 0, $transaction_id = '') {
+     public static function placeRequestOrder($gateway_name, $gateway_percentage, $gateway_fees, $order_status_id = 0, $transaction_id = '') {
 
         //address ids saved in session from checkout
         $addresses = Yii::$app->session->get('address');
@@ -608,61 +607,5 @@ class Order extends \yii\db\ActiveRecord
             ->setSubject('New Order Placed #'.$value->suborder_id)
             ->send();
         }
-    }
-
-    public static function sendOrderPaidEmails($request_id)
-    {
-        $request = OrderRequestStatus::findOne($request_id);
-
-        $order = Order::findOne($request->order_id);
-
-        $suborder = Suborder::find()
-            ->where([
-                    'order_id' => $request->order_id,
-                    'vendor_id' => $request->vendor_id
-                ])
-            ->one();
-
-        $customer = Customer::findOne($order->customer_id);
-        
-        $vendor = Vendor::findOne($request->vendor_id);
-
-        //Send Email to customer
-
-        Yii::$app->mailer->htmlLayout = 'layouts/empty';
-
-        Yii::$app->mailer->compose("customer/order-paid",
-            [
-                "model" => $suborder,
-                "customer" => $customer,
-                "vendor" => $vendor
-            ])
-            ->setFrom(Yii::$app->params['supportEmail'])
-            ->setTo($customer->customer_email)
-            ->setSubject('Order Invoice!')
-            ->send();
-
-        //Send Email to vendor
-
-        Yii::$app->mailer->htmlLayout = 'layouts/empty';
-
-        //get all vendor alert email 
-
-        $emails = VendorOrderAlertEmails::find()
-            ->where(['vendor_id' => $request->vendor_id])
-            ->all();
-
-        $emails = ArrayHelper::map($emails, 'vendor_id', 'email_address');
-
-        Yii::$app->mailer->compose("vendor/order-paid",
-            [
-                "model" => $suborder,
-                "customer" => $customer,
-                "vendor" => $vendor
-            ])
-            ->setFrom(Yii::$app->params['supportEmail'])
-            ->setTo($emails)
-            ->setSubject('Got Order Payment!')
-            ->send();
     }
 }

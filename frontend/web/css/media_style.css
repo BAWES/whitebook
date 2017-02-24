@@ -1422,12 +1422,3 @@ div#mobile_search_fail {
         width: 100%;
     }
 }
-
-
-@media (max-width: 550px) {
-	.btn-payment{
-        width: 100%;
-        float: none;
-        margin: 0 auto 10px auto;
-    }
-}

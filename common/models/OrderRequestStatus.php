@@ -111,7 +111,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             [
                 "model" => $suborder,
                 "customer" => $customer,
-                "lnk_payment" => Yii::$app->urlManagerFrontend->createUrl(["payment/index", 'id' => $request->request_id])
+                "lnk_payment" => Url::to(["payment/index", 'id' => $request->request_id], true)
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo($customer->customer_email)

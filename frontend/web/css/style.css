@@ -2543,10 +2543,3 @@ span.small {
     position: relative;
     padding: 6px;
 }
-
-.btn-payment{
-    color: #fff;
-    background-color: #000;
-    border-color: #000;
-    border-radius: 0;
-}

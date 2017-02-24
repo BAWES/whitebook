@@ -8,7 +8,6 @@ use yii\helpers\Url;
 use common\models\Order;
 use common\models\PaymentGateway;
 use common\models\Customer;
-use common\models\Suborder;
 
 class TapController extends Controller
 {
@@ -45,9 +44,10 @@ class TapController extends Controller
             $this->redirect(['checkout/index']);
         }
 
-        $order_id = Yii::$app->session->get('order_id');
+        //place order with 0 - missing order
+        $order_id = Order::place_order($gateway['name'], $gateway['percentage'], $gateway['fees'], $gateway['order_status_id']);
 
-        $request_id = Yii::$app->session->get('request_id');
+        Yii::$app->session->set('order_id', $order_id);
 
         if (!$gateway['under_testing']) {
             $data['action'] = 'https://www.gotapnow.com/webpay.aspx';
@@ -57,32 +57,23 @@ class TapController extends Controller
         }
 
         $order = Order::findOne($order_id);
-
-        if(!$order) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $suborder = Suborder::findOne([
-                'order_id' => $order_id
-            ]);
-
         $customer = Customer::findOne($order->customer_id);
         
         $data['meid'] = $this->tap_merchantid;
         $data['uname'] = $this->tap_username;
         $data['pwd'] = $this->tap_password;
 
-        $data['itemprice1'] = $suborder->suborder_total_with_delivery;
+        $data['itemprice1'] = $order->order_total_with_delivery;
         $data['itemname1'] ='Order ID - '.$order_id;
         $data['currencycode'] = 'KWD';
-        $data['ordid'] = $suborder->suborder_id;
+        $data['ordid'] = $order_id;
 
         $data['cstemail'] = $customer->customer_email;
         $data['cstname'] = $customer->customer_name;
         $data['cstmobile'] = $customer->customer_mobile;
         $data['cntry'] = 'KW';
 
-        $data['returnurl'] = Url::toRoute(['payment/tap/callback', 'hashcd' => md5($order_id . $suborder->suborder_total_with_delivery . 'KWD' . $this->tap_password)], true);
+        $data['returnurl'] = Url::toRoute(['payment/tap/callback', 'hashcd' => md5($order_id . $order->order_total_with_delivery . 'KWD' . $this->tap_password)], true);
 
         return $this->renderPartial('index', $data);
     }
@@ -91,18 +82,17 @@ class TapController extends Controller
 
         $request = Yii::$app->request->get();
 
-        $suborder_id = $request['trackid'];
+        $order_id = $request['trackid'];
 
-        $suborder = Suborder::findOne($suborder_id);
+        $order = Order::findOne($order_id);
 
-        if ($suborder) {
-
+        if ($order) {
             $error = '';
             
             $key = $this->tap_merchantid;
             $refid = $request['ref'];
             
-            $str = 'x_account_id'.$key.'x_ref'.$refid.'x_resultSUCCESSx_referenceid'.$suborder_id.'';
+            $str = 'x_account_id'.$key.'x_ref'.$refid.'x_resultSUCCESSx_referenceid'.$order_id.'';
             $hashstring = hash_hmac('sha256', $str, $this->tap_api_key);//'1tap7'
             $responsehashstring = $request['hash'];
                 
@@ -112,7 +102,7 @@ class TapController extends Controller
                 $error = Yii::t('frontend', 'Payment was declined by Tap');
             }
         } else {
-            $error = Yii::t('frontend', 'Unable to locate or update your sub order status');
+            $error = Yii::t('frontend', 'Unable to locate or update your order status');
         }
 
         if ($error) {
@@ -125,8 +115,6 @@ class TapController extends Controller
             
             //gateway info 
             $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
-
-            $order = Order::findOne($suborder->order_id);
 
             if($request['crdtype'] == 'KNET') {
                 $order->order_payment_method = 'Tap - Paid with KNET';
@@ -144,13 +132,13 @@ class TapController extends Controller
             $order->order_transaction_id = $request['ref'];
             $order->save(false);
 
-            $request_id = Yii::$app->session->get('request_id');
-            
+            Yii::$app->session->set('order_id', $order_id);
+
             //send order emails
-            Order::sendOrderPaidEmails($request_id);
+            Order::sendNewOrderEmails($order_id);
 
             //redirect to order success 
-            $this->redirect(['payment/success']);
+            $this->redirect(['checkout/success']);
         }
     }
 }

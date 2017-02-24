@@ -238,9 +238,8 @@ class CustomerCart extends \yii\db\ActiveRecord
         $q = 'SELECT count(*) as `purchased`  FROM `whitebook_suborder_item_purchase` as `wsip` ';
         $q .= 'left join `whitebook_suborder` as `ws` on `wsip`.`suborder_id` = `ws`.`suborder_id` ';
         $q .= 'left join `whitebook_order_request_status` as `wors` on `wors`.`order_id` = `ws`.`order_id` ';
-        $q .= 'WHERE `wsip`.`item_id` = '.$data['item_id'].' AND DATE(`wsip`.`purchase_delivery_date`) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '") AND ';
+        $q .= 'WHERE `wsip`.`item_id` = '.$data['item_id'].' AND DATE(`wsip`.`purchase_delivery_date`) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . ' AND ';
         $q .= '`wors`.`request_status` IN ("Pending","Approved") group by `wsip`.`item_id`';
-
         $purchased_result = Yii::$app->db->createCommand($q)->queryOne();
 
         if($purchased_result) {
