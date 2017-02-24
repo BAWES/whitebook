@@ -24,12 +24,7 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
-         Your order request approved. 
-
-        <br />
-        <br />
-
-        <a href="<?= $lnk_payment; ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Pay Now &rarr;</a>
+        Your order payment processed. 
 
         <br />
         <br />

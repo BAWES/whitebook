@@ -152,10 +152,7 @@ use common\components\CFormatter;
 		    			
 		    			<br />
 
-		    			<?php if($item->timeslot) { ?>
-			    			<?= date('h:m A', strtotime($item->timeslot->working_start_time)) ?> - 
-			    			<?=	date('h:m A', strtotime($item->timeslot->working_end_time)); ?>
-		    			<?php } ?>
+		    			<?= $item->time_slot ?>
 		    			
 		    		</td>
 		    		<td align="right" style="border-bottom: 1px solid #DDDDDD;">
