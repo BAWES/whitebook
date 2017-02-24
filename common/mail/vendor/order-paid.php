@@ -16,7 +16,7 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 14px/21px arial; color:#333333;">
-        Hi <?= $customer->customer_name ?>,
+        Hi <?= $vendor->vendor_name ?>,
     </td>
     <td width="20"></td>
 </tr>
@@ -24,12 +24,8 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
-         Your order request approved. 
-
-        <br />
-        <br />
-
-        <a href="<?= $lnk_payment; ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Pay Now &rarr;</a>
+        
+        We got order payment from <?= $customer->customer_name ?>. 
 
         <br />
         <br />
@@ -61,12 +57,6 @@ use common\components\CFormatter;
 	        </tr>    
 	    </table>
 	    
-	    <?php 
-
-	        $vendor = Vendor::findOne($model->vendor_id);
-
-	    ?>
-
 	    <br />
 
 	    <table class="table table-bordered" style="width:100%;">
