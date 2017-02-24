@@ -449,13 +449,7 @@ class CartController extends BaseController
         }
 
         //2) get no of item purchased for selected date
-        $q = 'SELECT count(*) as `purchased`  FROM `whitebook_suborder_item_purchase` as `wsip` ';
-        $q .= 'left join `whitebook_suborder` as `ws` on `wsip`.`suborder_id` = `ws`.`suborder_id` ';
-        $q .= 'left join `whitebook_order_request_status` as `wors` on `wors`.`order_id` = `ws`.`order_id` ';
-        $q .= 'WHERE `wsip`.`item_id` = '.$data['item_id'].' AND DATE(`wsip`.`purchase_delivery_date`) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '") AND ';
-        $q .= '`wors`.`request_status` IN ("Pending","Approved") group by `wsip`.`item_id`';exit;
-        $purchased_result = Yii::$app->db->createCommand($q)->queryOne();
-
+        $purchased_result = \common\models\Order::totalPurchasedItem($data['item_id'],$data['delivery_date']);
         if ($purchased_result) {
             $purchased = $purchased_result['purchased'];
         } else {

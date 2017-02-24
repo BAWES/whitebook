@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use common\models\Order;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\OrderRequestStatusSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -24,6 +24,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     return (strlen($model->orderDetail->subOrder->itemPurchased->item->item_name)>35) ?
                         substr($model->orderDetail->subOrder->itemPurchased->item->item_name,0,35).'...' :
                         $model->orderDetail->subOrder->itemPurchased->item->item_name;
+                }
+            ],
+            [
+                'label' => 'Remain Quantity',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return '<strong>'.Order::totalPendingItem(
+                            $model->orderDetail->subOrder->itemPurchased->item_id,
+                        $model->orderDetail->subOrder->itemPurchased->purchase_delivery_date,
+                        $model->orderDetail->subOrder->itemPurchased->item->item_default_capacity
+                    ).'</strong>';
                 }
             ],
             [
