@@ -608,4 +608,44 @@ class Order extends \yii\db\ActiveRecord
             ->send();
         }
     }
+
+    public static function totalPurchasedItem($item_id= false,$delivery_date = false)
+    {
+        if ($item_id== false || $delivery_date == false) {
+           return false;
+        }
+
+        $q = 'SELECT count(*) as `purchased`  FROM `whitebook_suborder_item_purchase` as `wsip` ';
+        $q .= 'left join `whitebook_suborder` as `ws` on `wsip`.`suborder_id` = `ws`.`suborder_id` ';
+        $q .= 'left join `whitebook_order_request_status` as `wors` on `wors`.`order_id` = `ws`.`order_id` ';
+        $q .= 'WHERE `wsip`.`item_id` = '.$item_id.' AND DATE(`wsip`.`purchase_delivery_date`) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '") AND ';
+        $q .= '`wors`.`request_status` IN ("Pending","Approved") group by `wsip`.`item_id`';
+        return Yii::$app->db->createCommand($q)->queryOne();
+    }
+
+    public static function totalPendingItem($item_id= false,$delivery_date = false, $item_default_capacity = false)
+    {
+
+        if ($item_id== false || $delivery_date == false || $item_default_capacity == false) {
+            return 0;
+        }
+
+        $capacity_exception = \common\models\VendorItemCapacityException::findOne([
+            'item_id' => $item_id,
+            'exception_date' => date('Y-m-d', strtotime($delivery_date))
+        ]);
+
+        if($capacity_exception && $capacity_exception->exception_capacity) {
+            $capacity = $capacity_exception->exception_capacity;
+        } else {
+            $capacity = $item_default_capacity;
+        }
+        $purchased_result = self::totalPurchasedItem($item_id,$delivery_date);
+        if ($purchased_result) {
+            $purchased = $purchased_result['purchased'];
+        } else {
+            $purchased = 0;
+        }
+        return $capacity-$purchased;
+    }
 }
