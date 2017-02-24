@@ -19,11 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <tr>
             <th><?=Yii::t('app','Request Note')?></th>
             <td>
-                Remain Quantity for this item on this date : <strong><?php echo \common\models\Order::totalPendingItem(
-                        $model->orderDetail->subOrder->itemPurchased->item_id,
-                        $model->orderDetail->subOrder->itemPurchased->purchase_delivery_date,
-                        $model->orderDetail->subOrder->itemPurchased->item->item_default_capacity
-                    );?></strong><br/><br/>
                 <?= $form->field($model, 'request_note')->textarea(['rows' => 6])->label(false) ?>
                 <note><?=Yii::t('app','In case of Declined request please mention reason for it.')?></note>
             </td></tr>
