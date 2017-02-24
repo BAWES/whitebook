@@ -11,7 +11,6 @@ use common\models\VendorItem;
 use common\models\City;
 use common\models\ItemType;
 use common\models\CustomerCart;
-use common\models\DeliveryTimeSlot;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\models\CustomerCartMenuItem;
@@ -433,12 +432,6 @@ class CartController extends BaseController
             }
         }
 
-//        //validate to add product to cart
-//        if ($data['quantity'] > ($item->item_amount_in_stock)) {
-//
-//            return Yii::t('frontend', 'Item is not available on selected date');
-//        }
-
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
 
@@ -456,8 +449,12 @@ class CartController extends BaseController
         }
 
         //2) get no of item purchased for selected date
-
-        $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "' . $data['item_id'] . '" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
+        $q = 'SELECT count(*) as `purchased`  FROM `whitebook_suborder_item_purchase` as `wsip` ';
+        $q .= 'left join `whitebook_suborder` as `ws` on `wsip`.`suborder_id` = `ws`.`suborder_id` ';
+        $q .= 'left join `whitebook_order_request_status` as `wors` on `wors`.`order_id` = `ws`.`order_id` ';
+        $q .= 'WHERE `wsip`.`item_id` = '.$data['item_id'].' AND DATE(`wsip`.`purchase_delivery_date`) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '") AND ';
+        $q .= '`wors`.`request_status` IN ("Pending","Approved") group by `wsip`.`item_id`';exit;
+        $purchased_result = Yii::$app->db->createCommand($q)->queryOne();
 
         if ($purchased_result) {
             $purchased = $purchased_result['purchased'];
