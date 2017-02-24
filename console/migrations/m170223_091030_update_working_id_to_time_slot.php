@@ -14,7 +14,7 @@ class m170223_091030_update_working_id_to_time_slot extends Migration
         $this->dropIndex('working_id','whitebook_customer_cart');
         $this->renameColumn('whitebook_customer_cart','working_id','time_slot');
         $this->alterColumn('whitebook_customer_cart','time_slot',$this->string(250));
-
+        
         // table whitebook_suborder_item_purchase
         $this->dropIndex('working_id','whitebook_suborder_item_purchase');
         $this->renameColumn('whitebook_suborder_item_purchase','working_id','time_slot');

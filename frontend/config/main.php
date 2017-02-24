@@ -52,6 +52,9 @@ return [
             // Url Rules for Frontend
             'rules' => [
                   '' => 'site/index',
+                  'payment/<id:[0-9]+>' => 'payment/index',
+                  'payment/tap' => 'payment/tap/index',
+                  'payment/cod' => 'payment/cod/index',
                   'my-events' => 'events/index',
                   'things-i-like' => 'things-i-like/index',
                   'themes' => 'themes/index',
