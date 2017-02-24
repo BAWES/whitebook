@@ -22,10 +22,10 @@ class OrdersController extends BaseController
 	        return $this->redirect(['/site/index']);
 	    }
 
-		$query = Order::find()
-			->where('customer_id = ' . Yii::$app->user->getId())
-			->andWhere('order_transaction_id != ""')
-			->orderBy('created_datetime DESC');
+        $query = OrderRequestStatus::find()
+            ->leftJoin('whitebook_order','whitebook_order.order_id')
+            ->where(['whitebook_order.customer_id'=>Yii::$app->user->getId(),'request_status'=>'Approved'])
+            ->orderBy('created_datetime DESC');
 
 		// create a pagination object with the total count
 		$pagination = new Pagination(['totalCount' => $query->count()]);
