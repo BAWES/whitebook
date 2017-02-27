@@ -6,6 +6,7 @@ use common\models\OrderStatus;
 use common\components\CFormatter;
 use common\components\LangFormat;
 use common\models\SuborderItemMenu;
+use common\models\OrderRequestStatus;
 
 $this->title = Yii::t('frontend', 'View Order | Whitebook'); 
 
@@ -44,6 +45,10 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
 
                     $vendor = Vendor::findOne($row->vendor_id);
 
+                    $request = OrderRequestStatus::findOne([
+                            'suborder_id' => $row->suborder_id
+                        ]);
+
                 ?>
 
                 <table class="table table-bordered">
@@ -63,6 +68,15 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                             </td>
                             <td>
                                 <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <?= Yii::t('frontend', 'Request status') ?>: <?= $request->request_status ?>
+                                <br />
+                            </td>
+                            <td>
+                                <?= Yii::t('frontend', 'Request note') ?>: <?= $request->request_note ?>
                             </td>
                         </tr>
                     </tbody>

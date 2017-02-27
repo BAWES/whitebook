@@ -22,10 +22,13 @@ class OrdersController extends BaseController
 	        return $this->redirect(['/site/index']);
 	    }
 
-        $query = OrderRequestStatus::find()
-            ->leftJoin('whitebook_order','whitebook_order.order_id')
-            ->where(['whitebook_order.customer_id'=>Yii::$app->user->getId(),'request_status'=>'Approved'])
-            ->orderBy('created_datetime DESC');
+        $query = Order::find()
+            ->leftJoin('{{%order_request_status}}', '{{%order}}.order_id = {{%order_request_status}}.order_id')
+            ->where([
+            		'{{%order}}.customer_id' => Yii::$app->user->getId()
+            	//	'{{%order_request_status}}.request_status' => 'Approved'
+            	])
+            ->orderBy('{{%order_request_status}}.created_datetime DESC');
 
 		// create a pagination object with the total count
 		$pagination = new Pagination(['totalCount' => $query->count()]);
@@ -53,9 +56,9 @@ class OrdersController extends BaseController
 	    }
 
         $query = OrderRequestStatus::find()
-            ->leftJoin('whitebook_order','whitebook_order.order_id')
-            ->where(['whitebook_order.customer_id'=>Yii::$app->user->getId()])
-            ->orderBy('created_datetime DESC');
+            ->leftJoin('{{%order}}','{{%order}}.order_id = {{%order_request_status}}.order_id')
+            ->where(['{{%order}}.customer_id'=>Yii::$app->user->getId()])
+            ->orderBy('{{%order}}.created_datetime DESC');
 
 		// create a pagination object with the total count
 		$pagination = new Pagination(['totalCount' => $query->count()]);
@@ -72,24 +75,22 @@ class OrdersController extends BaseController
 	}
 
 	//View order detail 
+
 	public function actionView() {
 
 		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders Detail';
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-
-
-		if (Yii::$app->user->isGuest) {
-			Yii::$app->session->set('show_login_modal', 1);//to display login modal			
-	        return $this->redirect(['/site/index']);
-	    }
 	    
-		$order_id = Yii::$app->request->get('order_id');
+		$order_uid = Yii::$app->request->get('order_uid');
+
+		if(!$order_uid) {
+			return $this->render('track');
+		}
 
 		$order = Order::find()
 			->where([
-				'order_id' => $order_id,
-				'customer_id' => Yii::$app->user->getId()
+				'order_uid' => $order_uid
 			])
 			->one();
 		
@@ -98,7 +99,7 @@ class OrdersController extends BaseController
         }
 
 		$suborder = Suborder::find()
-			->where(['order_id' => $order_id])
+			->where(['order_id' => $order->order_id])
 			->all();
 			
 		return $this->render('view', [

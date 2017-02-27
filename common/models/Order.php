@@ -81,6 +81,34 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        
+        if (!$this->order_uid) {
+            $this->order_uid = $this->generateUid();
+        }
+        
+        return true;
+    }
+
+    public function generateUid()
+    {
+        $unique = Yii::$app->getSecurity()->generateRandomString(13);
+
+        $exists = Order::findOne([
+                'order_uid' => $unique
+            ]); ;
+        
+        if (!empty($exists)) {
+            return $this->generateUid();
+        }
+        
+        return $unique;
+    }
+
     /**
      * @inheritdoc
      */
@@ -367,19 +395,21 @@ class Order extends \yii\db\ActiveRecord
             $order->trash = 'Default';
             if ($order->save(false)) {
 
-                $request = new OrderRequestStatus();
-                $request->order_id = $order->order_id;
-                $request->vendor_id = $item['vendor_id'];
-                $request->request_status = 'Pending';
-                $request->save(false);
-
-                $sub_order = new Suborder;
+                $sub_order = new Suborder;                
                 $sub_order->order_id = $order->order_id;
                 $sub_order->vendor_id = $item['vendor_id'];
                 $sub_order->status_id = 8; // Pending
                 $sub_order->trash = 'Default';
 
                 if ($sub_order->save(false)) {
+
+                    $request = new OrderRequestStatus();
+                    $request->order_id = $order->order_id;
+                    $request->suborder_id = $sub_order->suborder_id;
+                    $request->vendor_id = $item['vendor_id'];
+                    $request->request_status = 'Pending';
+                    $request->save(false);
+
                     //calculate order total data
                     $total = 0;
                     $sub_total = 0;
@@ -673,7 +703,7 @@ class Order extends \yii\db\ActiveRecord
         }
         $q = 'select sum(ip.purchase_quantity) as `purchased` from `whitebook_suborder_item_purchase` as `ip`';
         $q .= 'inner join whitebook_suborder so on so.suborder_id = ip.suborder_id ';
-        $q .= 'left join `whitebook_order_request_status` as `req` on `req`.`order_id` = `so`.`order_id` ';
+        $q .= 'left join `whitebook_order_request_status` as `req` on `req`.`suborder_id` = `ip`.`suborder_id` ';
         $q .= 'where  ip.item_id = "' . $item_id . '" AND ip.trash = "Default" AND so.trash ="Default" ';
         $q .= 'AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '") ';
         $q .= 'AND `req`.`request_status` IN ("Pending","Approved") group by `ip`.`item_id`';

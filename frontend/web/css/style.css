@@ -2550,3 +2550,15 @@ span.small {
     border-color: #000;
     border-radius: 0;
 }
+
+.form-track input {
+    line-height: 48px;
+    height: 48px;
+}
+.form-track {
+    max-width: 300px;
+    margin: auto;
+}
+.form-track .input-group-addon {
+    padding: 0;
+}
