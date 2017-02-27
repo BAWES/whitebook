@@ -671,12 +671,13 @@ class Order extends \yii\db\ActiveRecord
         if ($item_id== false || $delivery_date == false) {
            return false;
         }
+        $q = 'select sum(ip.purchase_quantity) as `purchased` from `whitebook_suborder_item_purchase` as `ip`';
+        $q .= 'inner join whitebook_suborder so on so.suborder_id = ip.suborder_id ';
+        $q .= 'left join `whitebook_order_request_status` as `req` on `req`.`order_id` = `so`.`order_id` ';
+        $q .= 'where  ip.item_id = "' . $item_id . '" AND ip.trash = "Default" AND so.trash ="Default" ';
+        $q .= 'AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '") ';
+        $q .= 'AND `req`.`request_status` IN ("Pending","Approved") group by `ip`.`item_id`';
 
-        $q = 'SELECT count(*) as `purchased`  FROM `whitebook_suborder_item_purchase` as `wsip` ';
-        $q .= 'left join `whitebook_suborder` as `ws` on `wsip`.`suborder_id` = `ws`.`suborder_id` ';
-        $q .= 'left join `whitebook_order_request_status` as `wors` on `wors`.`order_id` = `ws`.`order_id` ';
-        $q .= 'WHERE `wsip`.`item_id` = '.$item_id.' AND DATE(`wsip`.`purchase_delivery_date`) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '") AND ';
-        $q .= '`wors`.`request_status` IN ("Pending","Approved") group by `wsip`.`item_id`';
         return Yii::$app->db->createCommand($q)->queryOne();
     }
 
