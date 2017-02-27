@@ -21,9 +21,12 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Request Item',
                 'value' => function ($model) {
-                    return (strlen($model->orderDetail->subOrder->itemPurchased->item->item_name)>35) ?
-                        substr($model->orderDetail->subOrder->itemPurchased->item->item_name,0,35).'...' :
-                        $model->orderDetail->subOrder->itemPurchased->item->item_name;
+                    if (isset($model->orderDetail->subOrder->itemPurchased->item->item_name)) {
+                        $p_name = $model->orderDetail->subOrder->itemPurchased->item->item_name;
+                        return (strlen($p_name) > 35) ? substr($p_name, 0, 35) . '...' : $p_name;
+                    } else {
+                        return ' - ';
+                    }
                 }
             ],
             [
