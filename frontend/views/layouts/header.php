@@ -143,6 +143,12 @@ $action = Yii::$app->controller->action->id;
                             </li>
 
                             <li class="">
+                                <a href="<?= Url::toRoute(['orders/view'],true);?>">
+                                    <?= Yii::t('frontend', 'Track order'); ?>
+                                </a>
+                            </li>
+
+                            <li class="">
                                 <a href="<?= Url::toRoute('/contact-us',true);?>">
                                     <?= Yii::t('frontend', 'Become a Vendor'); ?>
                                 </a>
@@ -450,9 +456,16 @@ $action = Yii::$app->controller->action->id;
 
 
         <?php if (Yii::$app->user->isGuest) { ?>
+
             <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a>
             </li>
 
+            <li class="">
+                <a href="<?= Url::toRoute(['orders/view'],true);?>">
+                    <?= Yii::t('frontend', 'Track order'); ?>
+                </a>
+            </li>
+            
         <?php } else { ?>
 
         <li>

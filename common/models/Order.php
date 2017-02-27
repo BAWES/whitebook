@@ -395,19 +395,21 @@ class Order extends \yii\db\ActiveRecord
             $order->trash = 'Default';
             if ($order->save(false)) {
 
-                $request = new OrderRequestStatus();
-                $request->order_id = $order->order_id;
-                $request->vendor_id = $item['vendor_id'];
-                $request->request_status = 'Pending';
-                $request->save(false);
-
-                $sub_order = new Suborder;
+                $sub_order = new Suborder;                
                 $sub_order->order_id = $order->order_id;
                 $sub_order->vendor_id = $item['vendor_id'];
                 $sub_order->status_id = 8; // Pending
                 $sub_order->trash = 'Default';
 
                 if ($sub_order->save(false)) {
+
+                    $request = new OrderRequestStatus();
+                    $request->order_id = $order->order_id;
+                    $request->suborder_id = $sub_order->suborder_id;
+                    $request->vendor_id = $item['vendor_id'];
+                    $request->request_status = 'Pending';
+                    $request->save(false);
+
                     //calculate order total data
                     $total = 0;
                     $sub_total = 0;

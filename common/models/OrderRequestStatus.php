@@ -39,8 +39,8 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id','vendor_id'], 'required'],
-            [['order_id','vendor_id'], 'integer'],
+            [['order_id', 'suborder_id', 'vendor_id'], 'required'],
+            [['order_id', 'suborder_id', 'vendor_id'], 'integer'],
             [['request_status', 'request_note'], 'string'],
             [['created_datetime', 'modified_datetime', 'request_token'], 'safe'],
         ];
