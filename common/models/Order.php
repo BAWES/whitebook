@@ -81,6 +81,34 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        
+        if (!$this->order_uid) {
+            $this->order_uid = $this->generateUid();
+        }
+        
+        return true;
+    }
+
+    public function generateUid()
+    {
+        $unique = Yii::$app->getSecurity()->generateRandomString(13);
+
+        $exists = Order::findOne([
+                'order_uid' => $unique
+            ]); ;
+        
+        if (!empty($exists)) {
+            return $this->generateUid();
+        }
+        
+        return $unique;
+    }
+
     /**
      * @inheritdoc
      */
@@ -673,7 +701,7 @@ class Order extends \yii\db\ActiveRecord
         }
         $q = 'select sum(ip.purchase_quantity) as `purchased` from `whitebook_suborder_item_purchase` as `ip`';
         $q .= 'inner join whitebook_suborder so on so.suborder_id = ip.suborder_id ';
-        $q .= 'left join `whitebook_order_request_status` as `req` on `req`.`order_id` = `so`.`order_id` ';
+        $q .= 'left join `whitebook_order_request_status` as `req` on `req`.`suborder_id` = `ip`.`suborder_id` ';
         $q .= 'where  ip.item_id = "' . $item_id . '" AND ip.trash = "Default" AND so.trash ="Default" ';
         $q .= 'AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '") ';
         $q .= 'AND `req`.`request_status` IN ("Pending","Approved") group by `ip`.`item_id`';

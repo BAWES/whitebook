@@ -80,7 +80,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             return false;
         }
         
-        if ($this->isNewRecord) {
+        if (!$this->request_token) {
             $this->request_token = $this->generateToken();
         }
         
