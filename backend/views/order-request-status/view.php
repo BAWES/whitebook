@@ -31,13 +31,31 @@ $this->params['breadcrumbs'][] = $this->title;
     <table class="table table-striped table-bordered detail-view">
         <tbody>
             <tr>
-                <th><?=Yii::t('app','Customer Name')?></th><td><?=$model->orderDetail->customer->customer_name .' '. $model->orderDetail->customer->customer_last_name?></td>
+                <th><?=Yii::t('app','Customer Name')?></th><td>
+                    <?php
+                    if (isset($model->orderDetail->customer->customer_name) && isset($model->orderDetail->customer->customer_last_name)) {
+                        echo $model->orderDetail->customer->customer_name .' '. $model->orderDetail->customer->customer_last_name;
+                    }
+                    ?>
+                </td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Customer Email')?></th><td><?=$model->orderDetail->customer->customer_email?></td>
+                <th><?=Yii::t('app','Customer Email')?></th><td>
+                    <?php
+                    if (isset($model->orderDetail->customer->customer_email)) {
+                        echo $model->orderDetail->customer->customer_email;
+                    }
+                    ?>
+                </td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Customer Mobile')?></th><td><?=$model->orderDetail->customer->customer_mobile?></td>
+                <th><?=Yii::t('app','Customer Mobile')?></th><td>
+                    <?php
+                    if (isset($model->orderDetail->customer->customer_mobile)) {
+                        echo $model->orderDetail->customer->customer_mobile;
+                    }
+                    ?>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -46,20 +64,49 @@ $this->params['breadcrumbs'][] = $this->title;
     <table class="table table-striped table-bordered detail-view">
         <tbody>
             <tr>
-                <th><?=Yii::t('app','Area')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->location->location?></td>
+                <th><?=Yii::t('app','Area')?></th><td>
+                    <?php
+                    if (isset($model->orderDetail->subOrder->itemPurchased->location->location)) {
+                        echo $model->orderDetail->subOrder->itemPurchased->location->location;
+                    }
+                    ?>
+                </td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Delivery Date')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->purchase_delivery_date?></td>
+                <th><?=Yii::t('app','Delivery Date')?></th><td>
+                    <?php
+                    if (isset($model->orderDetail->subOrder->itemPurchased->purchase_delivery_date)) {
+                        echo $model->orderDetail->subOrder->itemPurchased->purchase_delivery_date;
+                    }
+                    ?>
+                </td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Time Slot')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->time_slot?></td>
+                <th><?=Yii::t('app','Time Slot')?></th><td>
+                    <?php
+                    if (isset($model->orderDetail->subOrder->itemPurchased->time_slot)) {
+                        echo $model->orderDetail->subOrder->itemPurchased->time_slot;
+                    }?>
+                </td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Address')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->purchase_delivery_address?></td>
+                <th><?=Yii::t('app','Address')?></th><td>
+                    <?php
+
+                    if (isset($model->orderDetail->subOrder->itemPurchased->purchase_delivery_address)) {
+                        echo $model->orderDetail->subOrder->itemPurchased->purchase_delivery_address;
+                    }
+                    ?>
+                </td>
             </tr>
             <tr>
                 <th><?=Yii::t('app','Item Name')?></th><td>
-                    <?=$model->orderDetail->subOrder->itemPurchased->item->item_name?>
+                    <?php
+
+                    if (isset($model->orderDetail->subOrder->itemPurchased->item->item_name)) {
+                        echo $model->orderDetail->subOrder->itemPurchased->item->item_name;
+                    }
+                    ?>
                     <a target="_blank" class="btn btn-default" href="<?=Yii::$app->urlManagerFrontend->createUrl(['browse/detail/'.$model->orderDetail->subOrder->itemPurchased->item->slug]); ?>">View Item</a>
                 </td>
             </tr>
