@@ -42,7 +42,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             [['order_id','vendor_id'], 'required'],
             [['order_id','vendor_id'], 'integer'],
             [['request_status', 'request_note'], 'string'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
+            [['created_datetime', 'modified_datetime', 'request_token'], 'safe'],
         ];
     }
 
@@ -72,6 +72,34 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
                 'value' => new Expression('NOW()'),
             ],
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        
+        if ($this->isNewRecord) {
+            $this->request_token = $this->generateToken();
+        }
+        
+        return true;
+    }
+
+    public function generateToken()
+    {
+        $unique = Yii::$app->getSecurity()->generateRandomString(13);
+
+        $exists = OrderRequestStatus::findOne([
+                'request_token' => $unique
+            ]); ;
+        
+        if (!empty($exists)) {
+            return $this->generateToken();
+        }
+        
+        return $unique;
     }
 
     /*
@@ -111,7 +139,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             [
                 "model" => $suborder,
                 "customer" => $customer,
-                "lnk_payment" => Yii::$app->urlManagerFrontend->createUrl(["payment/index", 'id' => $request->request_id])
+                "lnk_payment" => Yii::$app->urlManagerFrontend->createUrl(["payment/index", 'token' => $request->request_token])
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo($customer->customer_email)
