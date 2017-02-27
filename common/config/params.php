@@ -19,5 +19,6 @@ return [
     'tap_test_merchantid' => '1230',
     'tap_test_username' => 'test',
     'tap_test_password' => '123tap',
-    'tap_test_api_key' => '1tap7'
+    'tap_test_api_key' => '1tap7',
+    'notify_customer_request_decline' => false
 ];
