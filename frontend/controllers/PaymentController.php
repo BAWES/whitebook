@@ -27,19 +27,19 @@ class PaymentController extends BaseController
         ];
     }
 
-    public function actionIndex($id)
+    public function actionIndex($token)
     {
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Cart';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        $request = OrderRequestStatus::findOne($id);
+        $request = OrderRequestStatus::findOne(['request_token' => $token]);
 
         if(!$request) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        Yii::$app->session->set('request_id', $id);
+        Yii::$app->session->set('request_id', $request->request_id);
 
         Yii::$app->session->set('order_id', $request->order_id);
 
