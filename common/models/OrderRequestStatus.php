@@ -171,9 +171,30 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
 
         //Send Email to customer
 
+        if(Yii::$app->params['notify_customer_request_decline']) 
+        {
+            Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+            Yii::$app->mailer->compose("customer/request-declined",
+                [
+                    "model" => $model,
+                    "customer" => $customer,
+                    "vendor" => $vendor,
+                    "items" => $items,
+                    "logo_1" => Url::to("@web/uploads/twb-logo-horiz-white.png", true),
+                    "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
+                ])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($customer->customer_email)
+                ->setSubject('Order request rejected!')
+                ->send();
+        }
+
+        //send to admin 
+
         Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
-        Yii::$app->mailer->compose("customer/request-declined",
+        Yii::$app->mailer->compose("admin/request-declined",
             [
                 "model" => $model,
                 "customer" => $customer,
@@ -183,7 +204,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
                 "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
-            ->setTo($customer->customer_email)
+            ->setTo(Yii::$app->params['adminEmail'])
             ->setSubject('Order request rejected!')
             ->send();
     }
