@@ -2562,3 +2562,6 @@ span.small {
 .form-track .input-group-addon {
     padding: 0;
 }
+
+.badge.success {background: green;}
+.badge.warning {background: red;}

@@ -17,7 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
 //        'filterModel' => $searchModel,
         'columns' => [
-            'request_id',
+            [
+                'attribute' => 'order_id',
+                'label' => 'Request ID',
+            ],
+
             [
                 'label' => 'Request Item',
                 'value' => function ($model) {

@@ -546,12 +546,17 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(Suborder::className(), ['order_id' => 'order_id']);
     }
 
+    // Change for multiple suborder
+    public function getSubOrders() {
+        return $this->hasOne(Suborder::className(), ['order_id' => 'order_id']);
+    }
+
     public function getCustomerName() {
         return $this->customer->customer_name.' '.$this->customer->customer_last_name;
     }
 
     public function getRequestStatus() {
-        return $this->hasOne(OrderRequestStatus::className(), ['order_id' => 'order_id']);
+        return $this->hasMany(OrderRequestStatus::className(), ['order_id' => 'order_id']);
     }
 
     public function getCommission() {
