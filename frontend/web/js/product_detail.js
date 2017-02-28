@@ -366,7 +366,7 @@ function deliveryTimeSlot(date){
         {
             if (jQuery.trim(data) == 0) {
                 $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                $('.timeslot_id_div .text').html('Item is not available on selected date');
                 $('.timeslot_id_select').hide();
                 jQuery('#timeslot_id').html('');
             } else {
@@ -381,6 +381,7 @@ function deliveryTimeSlot(date){
 }
 
 function productAvailability(date){
+    $('.timeslot_id_div .text').html('Please Wait...');
     jQuery.ajax({
         type: 'POST',
         url: product_availability,
