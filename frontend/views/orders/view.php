@@ -34,8 +34,8 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                                 <b><?= Yii::t('frontend', 'Date Added') ?>:</b> <?= date('d/m/Y', strtotime($order->created_datetime)) ?>
                             </td>
                             <td>
-                                <b><?= Yii::t('frontend', 'Payment Method') ?>:</b> <?= $order->order_payment_method ?><br />
-                                <b><?= Yii::t('frontend', 'Transaction ID') ?>:</b> <?= $order->order_transaction_id ?>
+                                <b><?= Yii::t('frontend', 'Payment Method') ?>:</b> <?= $order->subOrder->suborder_payment_method ?><br />
+                                <b><?= Yii::t('frontend', 'Transaction ID') ?>:</b> <?= $order->subOrder->suborder_transaction_id ?>
                             </td>
                         </tr>
                     </tbody>

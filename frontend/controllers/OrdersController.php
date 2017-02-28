@@ -23,10 +23,9 @@ class OrdersController extends BaseController
 	    }
 
         $query = Order::find()
-            ->leftJoin('{{%order_request_status}}', '{{%order}}.order_id = {{%order_request_status}}.order_id')
+            ->innerJoin('{{%order_request_status}}', '{{%order}}.order_id = {{%order_request_status}}.order_id')
             ->where([
             		'{{%order}}.customer_id' => Yii::$app->user->getId()
-            	//	'{{%order_request_status}}.request_status' => 'Approved'
             	])
             ->orderBy('{{%order_request_status}}.created_datetime DESC');
 
