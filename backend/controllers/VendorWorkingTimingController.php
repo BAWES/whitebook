@@ -69,17 +69,18 @@ class VendorWorkingTimingController extends Controller
         $model->trash = 'Default';
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            
             $model->working_start_time = date('H:i:s',strtotime($model->working_start_time));
             $model->working_end_time = date('H:i:s',strtotime($model->working_end_time));
+            
             if ($model->save()) {
                 return $this->redirect(['index']);
             }
+        } 
 
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**

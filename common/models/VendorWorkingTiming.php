@@ -32,6 +32,8 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
         return [
             [['working_day', 'working_start_time', 'working_end_time'], 'required'],
             [['vendor_id'], 'integer'],
+            [['working_start_time'], 'validateStartTime'],
+            [['working_end_time'], 'validateEndTime'],
             [['working_day', 'trash'], 'string'],
             [['working_start_time', 'working_end_time'], 'safe'],
         ];
@@ -50,5 +52,41 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
             'working_end_time' => Yii::t('app', 'Working End Time'),
             'trash' => Yii::t('app', 'Trash'),
         ];
+    }
+
+    public function validateStartTime() 
+    {
+        $start_time = strtotime($this->working_start_time);
+        $end_time = strtotime($this->working_end_time);
+
+        $timeslots = VendorWorkingTiming::findAll([
+                'working_day' => $this->working_day
+            ]); 
+
+        foreach ($timeslots as $key => $value) {
+            
+            if($start_time > strtotime($value->working_start_time) && 
+                $start_time < strtotime($value->working_end_time)) {
+                    $this->addError('working_start_time', 'Start time conflicting with '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'.');
+            }
+        }
+    }
+
+    public function validateEndTime() 
+    {
+        $start_time = strtotime($this->working_start_time);
+        $end_time = strtotime($this->working_end_time);
+
+        $timeslots = VendorWorkingTiming::findAll([
+                'working_day' => $this->working_day
+            ]); 
+
+        foreach ($timeslots as $key => $value) {
+            
+            if($end_time > strtotime($value->working_start_time) && 
+                $end_time < strtotime($value->working_end_time)) {
+                    $this->addError('working_end_time', 'End time conflicting with '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'.');
+            }
+        }
     }
 }
