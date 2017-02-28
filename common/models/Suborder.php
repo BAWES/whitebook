@@ -21,6 +21,11 @@ use yii\db\Expression;
  * @property string $suborder_commission_total
  * @property string $suborder_vendor_total
  * @property string $suborder_datetime
+ * @property string $suborder_payment_method;
+ * @property string $suborder_transaction_id;
+ * @property double $suborder_gateway_percentage
+ * @property double $suborder_gateway_fees
+ * @property double $suborder_gateway_total
  * @property integer $created_by
  * @property integer $modified_by
  * @property string $created_datetime
@@ -63,7 +68,7 @@ class Suborder extends \yii\db\ActiveRecord
             [['order_id', 'vendor_id', 'status_id', 'suborder_delivery_charge', 'suborder_total_without_delivery', 'suborder_total_with_delivery', 'suborder_commission_percentage', 'suborder_commission_total', 'suborder_vendor_total', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
             [['order_id', 'vendor_id', 'status_id', 'created_by', 'modified_by'], 'integer'],
             [['suborder_delivery_charge', 'suborder_total_without_delivery', 'suborder_total_with_delivery', 'suborder_commission_percentage', 'suborder_commission_total', 'suborder_vendor_total'], 'number'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
+            [['suborder_payment_method','suborder_transaction_id','suborder_gateway_percentage','suborder_gateway_fees','suborder_gateway_total','created_datetime', 'modified_datetime'], 'safe'],
             [['trash'], 'string'],
         ];
     }
@@ -85,6 +90,11 @@ class Suborder extends \yii\db\ActiveRecord
             'suborder_commission_percentage' => 'Suborder Commission Percentage',
             'suborder_commission_total' => 'Suborder Commission Total',
             'suborder_vendor_total' => 'Suborder Vendor Total',
+            'suborder_payment_method = ' => 'Suborder Payment Method',
+            'suborder_transaction_id' => 'SubOrder Transaction ID',
+            'suborder_gateway_percentage' => 'SubOrder Gateway Percentage',
+            'suborder_gateway_fees' => 'SubOrder Gateway Fees',
+            'suborder_gateway_total' => 'SubOrder Gateway Total',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',

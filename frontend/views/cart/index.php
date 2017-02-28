@@ -195,8 +195,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 						$color = '#f2dede';
 						$msg = '<small>'.Yii::t('frontend','Past delivery date').'</small>';
 					} else if (
-						(strtotime($item['cart_delivery_date']) == strtotime(date('Y-m-d'))) &&
-						(strtotime($item['working_end_time']) < strtotime(date('H:i:s')))
+						(strtotime($item['cart_delivery_date']) == strtotime(date('Y-m-d')))
 					) {
 						$color = '#f2dede';
 						$msg = '<small>'.Yii::t('frontend','Past delivery time slot date').'</small>';

@@ -37,7 +37,7 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
                                     <?php if ($order->request_status == 'Pending') { ?>
                                         <a href="#" class="btn btn-default"><?= $order->request_status ?></a>
                                     <?php } else if ($order->request_status == 'Approved') { ?>
-                                        <a href="#" class="btn btn-success">Pay Now</a>
+                                        <a href="#" class="btn btn-success">Approved</a>
                                     <?php } else if ($order->request_status == 'Declined') { ?>
                                         <a href="#" class="btn btn-warning"><?= $order->request_status ?></a>
                                     <?php } ?>
