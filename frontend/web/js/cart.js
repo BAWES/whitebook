@@ -13,7 +13,7 @@ function deliveryTimeSlotCart(date){
         {
             if ($.trim(data) == 0) {
                 $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                $('.timeslot_id_div .text').html('Item is not available on selected date');
                 $('.timeslot_id_select').hide();
                 $('#timeslot_id').html('');
             } else {
