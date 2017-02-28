@@ -24,8 +24,13 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
-        Your order payment processed. 
+        Your order item payment processed. 
 
+        <br />
+        <br />
+
+        <a href="<?= Url::to(['order/view', 'order_uid' => $model->order->order_uid]); ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Track order &rarr;</a>
+        
         <br />
         <br />
     </td>
@@ -43,12 +48,20 @@ use common\components\CFormatter;
 	                Order ID: #<?= $model->order_id ?> 
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Payment method: <?= $model->order->order_payment_method ?>
+	                Order UID: #<?= $model->order->order_uid ?> 
 	            </td>
 	        </tr>
 	        <tr>
-	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
-	                Customer: <?= $model->order->customerName ?>
+	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
+	                Sub Order ID: #<?= $model->suborder_id ?> 
+	            </td>
+	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
+	                Payment method: <?= $model->suborder_payment_method ?>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;"> 
+	            	Transaction ID: #<?= $model->suborder_transaction_id ?>
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd;">
 	                Date: <?= date('d/m/Y', strtotime($model->created_datetime)) ?>                

@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use yii\web\Response;
 use yii\helpers\ArrayHelper;
+use common\models\Order;
 use common\models\Suborder;
 use common\models\CustomerCart;
 use common\models\OrderRequestStatus;
@@ -43,14 +44,10 @@ class PaymentController extends BaseController
 
         Yii::$app->session->set('order_id', $request->order_id);
 
-        $suborder = Suborder::findAll(['order_id' => $request->order_id]);
-
-        $suborder_ids = ArrayHelper::map($suborder, 'suborder_id', 'suborder_id');
-
         $items = SuborderItemPurchase::find()
             ->select('{{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.slug, {{%suborder_item_purchase}}.*')
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%suborder_item_purchase}}.item_id')
-            ->where(['in', 'suborder_id', $suborder_ids])
+            ->where(['suborder_id' => $request->suborder_id])
             ->asArray()
             ->all();
 
@@ -71,9 +68,11 @@ class PaymentController extends BaseController
 
         Yii::$app->session->remove('request_id');
         
+        $order = Order::findOne($order_id);
+
         return $this->render('success', [
             'order_id' => $order_id,
-            'order_page' => Url::to(['orders/view', 'order_id' => $order_id])
+            'order_page' => Url::to(['orders/view', 'order_uid' => $order->order_uid])
         ]);
     }
 }

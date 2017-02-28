@@ -23,27 +23,27 @@ class CodController extends Controller
 
         $order_id = Yii::$app->session->get('order_id');
 
-        $order = Order::findOne($order_id);
+        $sub_order = Suborder::findOne($order_id);
 
-        if(!$order) {
+        if(!$sub_order) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
         //if paid already 
 
-        if($order->order_transaction_id) {
+        if($sub_order->suborder_transaction_id) {
             $this->redirect(['site/index']);
         }
 
-        $gateway_total = $gateway->percentage * ($order->order_total_with_delivery / 100);
+        $gateway_total = $gateway->percentage * ($sub_order->suborder_total_with_delivery / 100);
 
         //update payment detail 
         
-        $order->order_payment_method = $gateway['name'];
-        $order->order_transaction_id = '-'; 
-        $order->order_gateway_percentage = $gateway['percentage'];
-        $order->order_gateway_fees = $gateway['fees'];
-        $order->order_gateway_total = $gateway_total;
+        $order->suborder_payment_method = $gateway['name'];
+        $order->suborder_transaction_id = '-'; 
+        $order->suborder_gateway_percentage = $gateway['percentage'];
+        $order->suborder_gateway_fees = $gateway['fees'];
+        $order->suborder_gateway_total = $gateway_total;
         $order->save();
 
         //send order emails

@@ -40,7 +40,7 @@ use common\components\CFormatter;
 	                Order ID: #<?= $model->order_id ?> 
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Payment method: <?= $model->order->order_payment_method ?>
+	                Sub Order ID: <?= $model->suborder_id ?>
 	            </td>
 	        </tr>
 	        <tr>

@@ -44,12 +44,12 @@ use common\components\CFormatter;
 	                Order ID: #<?= $model->order_id ?> 
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Payment method: <?= $model->order->order_payment_method ?>
+	                Payment method: <?= $model->suborder_payment_method ?>
 	            </td>
 	        </tr>
 	        <tr>
 	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
-	                Customer: <?= $model->order->customerName ?>
+	                Transaction ID: <?= $model->suborder_transaction_id ?>
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd;">
 	                Date: <?= date('d/m/Y', strtotime($model->created_datetime)) ?>                

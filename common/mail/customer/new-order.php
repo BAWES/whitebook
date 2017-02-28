@@ -21,6 +21,9 @@ use common\components\CFormatter;
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
         New order placed.
+
+        <a href="<?= Url::to(['order/view', 'order_uid' => $order->order_uid]); ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Track order &rarr;</a>
+        
     </td>
     <td width="20"></td>
 </tr>
@@ -43,10 +46,6 @@ use common\components\CFormatter;
 					<td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
 						<b><?= Yii::t('frontend', 'Order ID') ?>:</b> #<?= $order->order_id ?> <br />
 						<b><?= Yii::t('frontend', 'Date Added') ?>:</b> <?= date('d/m/Y', strtotime($order->created_datetime)) ?>
-					</td>
-					<td style="border-bottom: 1px solid #ddd;">
-						<b><?= Yii::t('frontend', 'Payment Method') ?>:</b> <?= $order->order_payment_method ?><br />
-						<b><?= Yii::t('frontend', 'Transaction ID') ?>:</b> <?= $order->order_transaction_id ?>
 					</td>
 				</tr>
 			</tbody>
