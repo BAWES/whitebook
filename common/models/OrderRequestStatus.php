@@ -16,6 +16,7 @@ use common\models\SuborderItemPurchase;
  * This is the model class for table "{{%order_request_status}}".
  *
  * @property integer $request_id
+ * @property integer $suborder_id
  * @property integer $order_id
  * @property integer $vendor_id
  * @property string $request_status
