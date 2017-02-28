@@ -29,25 +29,12 @@ use common\components\CFormatter;
     <table class="table table-bordered">
         <tr>
             <td>
-                Order ID: #<?= $model->order_id ?> 
-            </td>
-            <td>
-                Payment method: <?= $model->order_payment_method ?>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Customer: <?= $model->customerName ?>
+                Order ID: <?= $model->order_id ?> 
             </td>
             <td>
                 Date: <?= date('d/m/Y', strtotime($model->created_datetime)) ?>                
             </td>
-        </tr>      
-        <tr>
-            <td colspan="2">  
-                Transaction ID: <?= $model->order_transaction_id ?>                
-            </td>
-        </tr>
+        </tr>   
     </table>
     
     <?php 
@@ -67,6 +54,14 @@ use common\components\CFormatter;
                 </tr>
             </thead>
             <tbody>
+                <tr>                    
+                    <td>
+                        Payment method : <?= $row->suborder_payment_method ?>
+                    </td>
+                    <td>
+                        Transaction ID : <?= $row->suborder_transaction_id ?>
+                    </td>
+                </tr>
                 <tr>
                     <td>
                        <?= Yii::t('frontend', 'Order status') ?>: 
@@ -132,10 +127,7 @@ use common\components\CFormatter;
 
                         <br />
 
-                        <?php if($item->timeslot) { ?>
-                            <?= date('h:m A', strtotime($item->timeslot->working_start_time)) ?> -
-                            <?= date('h:m A', strtotime($item->timeslot->working_end_time)); ?>
-                        <?php } ?>
+                        <?= $item->time_slot ?>
                     </th>
                     <td aligh="left">
                         <?= $item->purchase_delivery_address ?>
