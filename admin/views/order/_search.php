@@ -18,8 +18,6 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'customerName') ?>
 
-            <?= $form->field($model, 'order_total_delivery_charge') ?>
-
         </div>
         <div class="col-md-3">
 
@@ -27,21 +25,16 @@ use yii\widgets\ActiveForm;
             
             <?= $form->field($model, 'order_total_with_delivery') ?>
 
+        </div>
+        <div class="col-md-3">
+            
+            <?= $form->field($model, 'order_total_delivery_charge') ?>
+
             <?= $form->field($model, 'order_ip_address') ?>
             
         </div>
         <div class="col-md-3">
             
-            <?= $form->field($model, 'order_payment_method') ?>
-
-            <?= $form->field($model, 'order_transaction_id') ?>
-
-            <?= $form->field($model, 'order_gateway_percentage') ?>
-
-        </div>
-        <div class="col-md-3">
-            <?= $form->field($model, 'order_gateway_total') ?>
-
             <?= $form
                 ->field($model, 'created_datetime')
                 ->textInput(['class' => 'form-control datepicker'])

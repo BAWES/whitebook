@@ -26,7 +26,6 @@ use common\models\OrderRequestStatus;
  * @property string $order_total_delivery_charge
  * @property string $order_total_without_delivery
  * @property string $order_total_with_delivery
- * @property string $order_payment_method
  * @property string $order_transaction_id
  * @property string $order_gateway_percentage
  * @property string $order_gateway_fees
@@ -55,12 +54,12 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'required'],
+            [['customer_id', 'order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'required'],
             [['customer_id', 'created_by'], 'integer'],
-            [['order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total'], 'number'],
+            [['order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery'], 'number'],
             [['modified_by', 'modified_datetime'], 'safe'],
             [['trash'], 'string'],
-            [['customerName', 'order_payment_method', 'order_transaction_id', 'order_ip_address'], 'string', 'max' => 128],
+            [['customerName', 'order_ip_address'], 'string', 'max' => 128],
         ];
     }
 
@@ -122,10 +121,6 @@ class Order extends \yii\db\ActiveRecord
             'order_total_delivery_charge' => 'Delivery Charge (KWD)',
             'order_total_without_delivery' => 'Without Delivery (KWD)',
             'order_total_with_delivery' => 'Total (KWD)',
-            'order_payment_method' => 'Order Payment Method',
-            'order_transaction_id' => 'Order Transaction ID',
-            'order_gateway_percentage' => 'Order Gateway Percentage',
-            'order_gateway_total' => 'Gateway Total (KWD)',
             'order_ip_address' => 'Order Ip Address',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',

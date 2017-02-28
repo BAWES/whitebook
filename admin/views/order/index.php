@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'customerName',
             'order_total_delivery_charge',
             'order_total_with_delivery',
-            'order_gateway_total',
             'commission',
 
             // 'order_payment_method',

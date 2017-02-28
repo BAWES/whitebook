@@ -36,11 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_total_delivery_charge',
             'order_total_without_delivery',
             'order_total_with_delivery',
-            'order_payment_method',
-            'order_transaction_id',
-            'order_gateway_percentage',
-            'order_gateway_fees',
-            'order_gateway_total',
             'commission',
             'order_ip_address',
             'created_datetime',
@@ -68,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody>            
                 <tr>
                     <td>
                         <div class="order_status_wrapper" data-id="<?= $row->suborder_id ?>">
@@ -87,6 +82,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     </td>
                     <td>
                         <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?> 
+                    </td>
+                </tr>
+                <tr>                    
+                    <td>
+                        Payment method : <?= $row->suborder_payment_method ?>
+                    </td>
+                    <td>
+                        Transaction ID : <?= $row->suborder_transaction_id ?>
+                    </td>
+                </tr>
+                <tr>                    
+                    <td colspan="2">
+                        Gateway Commission : <?= $row->suborder_gateway_percentage ?> % + <?= $row->suborder_gateway_fees ?> = <?= $row->suborder_gateway_total ?>
                     </td>
                 </tr>
             </tbody>
@@ -141,10 +149,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
                         <br />
 
-                        <?php if($item->timeslot) { ?>
-                            <?= date('h:m A', strtotime($item->timeslot->working_start_time)) ?> -
-                            <?= date('h:m A', strtotime($item->timeslot->working_end_time)); ?>
-                        <?php } ?>
+                        <?= $item->time_slot ?>
                     </td>
                     <td aligh="left"><?= $item->purchase_delivery_address ?></td>
                     <td aligh="left"><?= $item->purchase_quantity ?></td>

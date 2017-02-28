@@ -21,8 +21,8 @@ class OrderSearch extends Order
     {
         return [
             [['order_id', 'customer_id', 'created_by'], 'integer'],
-            [['order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery', 'order_gateway_percentage', 'order_gateway_total'], 'number'],
-            [['customerName', 'order_payment_method', 'order_transaction_id', 'order_ip_address', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
+            [['order_total_delivery_charge', 'order_total_without_delivery', 'order_total_with_delivery'], 'number'],
+            [['customerName','order_ip_address', 'modified_by', 'created_datetime', 'modified_datetime', 'trash'], 'safe'],
         ];
     }
 
@@ -47,7 +47,7 @@ class OrderSearch extends Order
         $query = Order::find();
 
         // add conditions that should always apply here
-        $query->where('order_transaction_id != "" AND whitebook_order.trash="default"');
+        $query->where('whitebook_order.trash="default"');
         $query->orderBy('order_id DESC');
 
         $dataProvider = new ActiveDataProvider([
@@ -81,16 +81,13 @@ class OrderSearch extends Order
             'order_total_delivery_charge' => $this->order_total_delivery_charge,
             'order_total_without_delivery' => $this->order_total_without_delivery,
             'order_total_with_delivery' => $this->order_total_with_delivery,
-            'order_gateway_percentage' => $this->order_gateway_percentage,
-            'order_gateway_total' => $this->order_gateway_total,
             'whitebook_order.created_by' => $this->created_by,
             'whitebook_order.modified_by' => $this->modified_by,
             'DATE(whitebook_order.created_datetime)' => $this->created_datetime,
             'DATE(whitebook_order.modified_datetime)' => $this->modified_datetime,
         ]);
 
-        $query->andFilterWhere(['like', 'order_payment_method', $this->order_payment_method])
-            ->andFilterWhere(['like', 'order_transaction_id', $this->order_transaction_id])
+        $query
             ->andFilterWhere(['like', 'order_ip_address', $this->order_ip_address])
             ->andFilterWhere(['like', 'trash', $this->trash]);
 
