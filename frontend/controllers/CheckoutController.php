@@ -279,13 +279,15 @@ class CheckoutController extends BaseController
     public function actionRequestSend()
     {
         $address = Yii::$app->session->get('address',false);
+        
         if ($address) {
+            
             $order_id = Order::placeRequestOrder('', '', '', 1);
+            
             Yii::$app->session->set('order_id', $order_id);
-            echo "Please Wait...";
-            if ($order_id) {
-                return $this->redirect(['success']);
-            }
+            
+            return $this->redirect(['success']);
+
         } else {
             return $this->redirect(Yii::$app->homeUrl);
         }

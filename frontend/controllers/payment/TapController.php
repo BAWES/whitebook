@@ -78,7 +78,7 @@ class TapController extends Controller
         $data['pwd'] = $this->tap_password;
 
         $data['itemprice1'] = $suborder->suborder_total_with_delivery;
-        $data['itemname1'] ='Sub order ID - '.$suborder->suborder_id;
+        $data['itemname1'] = $suborder->itemPurchased->item->item_name;
         $data['currencycode'] = 'KWD';
         $data['ordid'] = $suborder->suborder_id;
 
@@ -144,7 +144,7 @@ class TapController extends Controller
             }
 
             //update status 
-            $suborder->order_transaction_id = $request['ref'];
+            $suborder->suborder_transaction_id = $request['ref'];
             $suborder->save(false);
 
             $request_id = Yii::$app->session->get('request_id');

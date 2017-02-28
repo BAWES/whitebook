@@ -41,7 +41,8 @@ class OrderRequestStatusSearch extends OrderRequestStatus
      */
     public function search($params)
     {
-        $query = OrderRequestStatus::find();
+        $query = OrderRequestStatus::find()
+            ->orderBy('request_id DESC');
 
         // add conditions that should always apply here
 
@@ -65,6 +66,7 @@ class OrderRequestStatusSearch extends OrderRequestStatus
             'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
         ]);
+
         $query->andFilterWhere(['like', 'request_status', $this->request_status])
             ->andFilterWhere(['like', 'request_note', $this->request_note]);
 
