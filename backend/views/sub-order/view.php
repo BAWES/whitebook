@@ -29,6 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'suborder_total_with_delivery',
             'suborder_commission_percentage',
             'suborder_commission_total',
+            'suborder_payment_method',
+            'suborder_transaction_id',
             [
                 'label' => 'Profit (KWD)',
                 'attribute' => 'suborder_vendor_total'
@@ -124,11 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
                     
                     <br />
-
-                    <?php if($item->timeslot) { ?>
-                        <?= date('h:m A', strtotime($item->timeslot->working_start_time)) ?> -
-                        <?= date('h:m A', strtotime($item->timeslot->working_end_time)); ?>
-                    <?php } ?>
+                    <?=$item->time_slot?>
                 </th>
                 <td aligh="left"><?= $item->purchase_delivery_address ?></th>
                 <td aligh="left"><?= $item->purchase_quantity ?></th>

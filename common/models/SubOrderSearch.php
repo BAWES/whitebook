@@ -87,6 +87,7 @@ class SubOrderSearch extends Suborder
             'suborder_total_with_delivery' => $this->suborder_total_with_delivery,
             'suborder_commission_percentage' => $this->suborder_commission_percentage,
             'suborder_commission_total' => $this->suborder_commission_total,
+            'suborder_commission_total' => $this->suborder_commission_total,
             'suborder_vendor_total' => $this->suborder_vendor_total,
             'whitebook_suborder.created_by' => $this->created_by,
             'whitebook_suborder.modified_by' => $this->modified_by,
@@ -101,7 +102,7 @@ class SubOrderSearch extends Suborder
         }]);
 
         $query->joinWith(['order' => function ($q) {
-            $q->where('whitebook_order.order_transaction_id != "" AND whitebook_order.trash="default"');
+            $q->where('whitebook_order.trash="default"');
         }]);
 
         return $dataProvider;

@@ -32,7 +32,7 @@ use common\components\CFormatter;
                 Order ID: #<?= $model->order_id ?> 
             </td>
             <td>
-                Payment method: <?= $model->order->order_payment_method ?>
+                Payment method: <?= $model->suborder_payment_method ?>
             </td>
         </tr>
         <tr>
@@ -45,7 +45,7 @@ use common\components\CFormatter;
         </tr>      
         <tr>
             <td colspan="2">  
-                Transaction ID: <?= $model->order->order_transaction_id ?>                
+                Transaction ID: <?= $model->suborder_transaction_id ?>
             </td>
         </tr>
     </table>
@@ -129,10 +129,7 @@ use common\components\CFormatter;
                     
                     <br />
 
-                    <?php if($item->timeslot) { ?>
-                        <?= date('h:m A', strtotime($item->timeslot->working_start_time)) ?> -
-                        <?= date('h:m A', strtotime($item->timeslot->working_end_time)); ?>
-                    <?php } ?>
+                    <?=$item->time_slot?>
                 </th>
                 <td aligh="left"><?= $item->purchase_delivery_address ?></th>
                 <td aligh="left"><?= $item->purchase_quantity ?></th>
