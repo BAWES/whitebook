@@ -111,6 +111,15 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
         return $this->hasOne(Order::className(),['order_id'=>'order_id']);
     }
 
+
+    /*
+     *  purchased item details
+     */
+
+    public function getItemPurchased() {
+        return $this->hasOne(SuborderItemPurchase::className(),['suborder_id'=>'suborder_id']);
+    }
+
     /*
      * get vendor detail
      */
@@ -204,3 +213,9 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             ->send();
     }
 }
+
+
+
+
+
+

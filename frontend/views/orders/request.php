@@ -15,40 +15,35 @@ $this->title = Yii::t('frontend', 'Orders | Whitebook');
 		</div>
 		<div class="account_setings_sections clearfix">
 			<?=$this->render('/users/_sidebar_menu');?>
-			<div class="col-md-9 border-left">
+			<div class="col-md-9">
 				<?php if($orders) { ?>
 					<table class="table table-bordered cart-table request-table">
 						<thead>
 							<tr>
 								<td align="center"><?= Yii::t('frontend', 'Request ID') ?></td>
 								<td align="center"><?= Yii::t('frontend', 'Sent On') ?></td>
-								<td align="center"><?= Yii::t('frontend', 'Total') ?></td>
-								<td align="center"><?= Yii::t('frontend', 'Status') ?></td>
-								<td></td>
+								<td align="center"><?= Yii::t('frontend', 'Total Product') ?></td>
+								<td align="center"><?= Yii::t('frontend', 'View') ?></td>
 							</tr>
 						</thead>
 						<tbody>
-						<?php foreach ($orders as $order) { ?>
-							<tr>
-								<td align="center"><?= $order->order_id ?></td>
-								<td align="center"><?= date('d/m/Y', strtotime($order->created_datetime)) ?></td>
-								<td align="center"><?= CFormatter::format($order->orderDetail->order_total_with_delivery) ?></td>
-								<td align="center">
-                                    <?php if ($order->request_status == 'Pending') { ?>
-                                        <a href="#" class="btn btn-default"><?= $order->request_status ?></a>
-                                    <?php } else if ($order->request_status == 'Approved') { ?>
-                                        <a href="#" class="btn btn-success">Approved</a>
-                                    <?php } else if ($order->request_status == 'Declined') { ?>
-                                        <a href="#" class="btn btn-warning"><?= $order->request_status ?></a>
-                                    <?php } ?>
-                                </td>
-								<td width="50px">
-									<a href="<?= Url::to(['orders/view-request', 'request_id' => $order->order_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Order') ?>">
-										<i class="glyphicon glyphicon-eye-open"></i>
-									</a>
-								</td>
-							</tr>
-						<?php } ?>
+						<?php foreach ($orders as $order) {
+                            if (isset($order->requestStatus) && count($order->requestStatus)>0) {
+                                ?>
+                                <tr>
+                                    <td align="center"><?= $order->order_id ?></td>
+                                    <td align="center"><?= date('d/m/Y', strtotime($order->created_datetime)) ?></td>
+                                    <td align="center"><?= count($order->requestStatus) ?></td>
+                                    <td width="50px">
+                                        <a href="<?= Url::to(['orders/requested-products', 'request_id' => $order->order_id]) ?>"
+                                           class="btn btn-primary" title="<?= Yii::t('frontend', 'View Order') ?>">
+                                            <i class="glyphicon glyphicon-eye-open"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php }
+                        }
+						?>
 						</tbody>
 					</table>
 

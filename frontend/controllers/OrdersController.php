@@ -55,8 +55,7 @@ class OrdersController extends BaseController
 	        return $this->redirect(['/site/index']);
 	    }
 
-        $query = OrderRequestStatus::find()
-            ->leftJoin('{{%order}}','{{%order}}.order_id = {{%order_request_status}}.order_id')
+        $query = Order::find()
             ->where(['{{%order}}.customer_id'=>Yii::$app->user->getId()])
             ->orderBy('{{%order}}.created_datetime DESC');
 
@@ -69,6 +68,35 @@ class OrdersController extends BaseController
 		    ->all();
 
 		return $this->render('request', [
+			'orders' => $orders,
+			'pagination' => $pagination
+		]);
+	}
+
+	public function actionRequestedProducts($request_id) {
+
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders';
+		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
+		if (Yii::$app->user->isGuest) {
+			Yii::$app->session->set('show_login_modal', 1);//to display login modal
+	        return $this->redirect(['/site/index']);
+	    }
+
+        $query = OrderRequestStatus::find()
+            ->where(['order_id'=>$request_id])
+            ->orderBy('created_datetime DESC');
+
+		// create a pagination object with the total count
+		$pagination = new Pagination(['totalCount' => $query->count()]);
+
+		// limit the query using the pagination and retrieve the orders
+		$orders = $query->offset($pagination->offset)
+		    ->limit($pagination->limit)
+		    ->all();
+
+		return $this->render('requested-product', [
 			'orders' => $orders,
 			'pagination' => $pagination
 		]);
