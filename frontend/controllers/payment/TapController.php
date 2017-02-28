@@ -9,6 +9,7 @@ use common\models\Order;
 use common\models\PaymentGateway;
 use common\models\Customer;
 use common\models\Suborder;
+use common\models\OrderRequestStatus;
 
 class TapController extends Controller
 {
@@ -56,15 +57,19 @@ class TapController extends Controller
             $data['action'] = 'http://live.gotapnow.com/webpay.aspx';
         }
 
-        $order = Order::findOne($order_id);
+        $request = OrderRequestStatus::findOne($request_id);
 
-        if(!$order) {
+        if(!$request) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $suborder = Suborder::findOne([
-                'order_id' => $order_id
-            ]);
+        $suborder = Suborder::findOne($request->suborder_id);
+
+        if(!$suborder) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $order = Order::findOne($request->order_id);
 
         $customer = Customer::findOne($order->customer_id);
         
@@ -73,7 +78,7 @@ class TapController extends Controller
         $data['pwd'] = $this->tap_password;
 
         $data['itemprice1'] = $suborder->suborder_total_with_delivery;
-        $data['itemname1'] ='Order ID - '.$order_id;
+        $data['itemname1'] ='Sub order ID - '.$suborder->suborder_id;
         $data['currencycode'] = 'KWD';
         $data['ordid'] = $suborder->suborder_id;
 
@@ -82,7 +87,7 @@ class TapController extends Controller
         $data['cstmobile'] = $customer->customer_mobile;
         $data['cntry'] = 'KW';
 
-        $data['returnurl'] = Url::toRoute(['payment/tap/callback', 'hashcd' => md5($order_id . $suborder->suborder_total_with_delivery . 'KWD' . $this->tap_password)], true);
+        $data['returnurl'] = Url::toRoute(['payment/tap/callback', 'hashcd' => md5($suborder->suborder_id . $suborder->suborder_total_with_delivery . 'KWD' . $this->tap_password)], true);
 
         return $this->renderPartial('index', $data);
     }
@@ -126,23 +131,21 @@ class TapController extends Controller
             //gateway info 
             $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
 
-            $order = Order::findOne($suborder->order_id);
-
             if($request['crdtype'] == 'KNET') {
-                $order->order_payment_method = 'Tap - Paid with KNET';
-                $order->order_gateway_fees = $gateway->fees;
-                $order->order_gateway_percentage = 0;
-                $order->order_gateway_total = $gateway->fees;//fixed price fee 
+                $suborder->suborder_payment_method = 'Tap - Paid with KNET';
+                $suborder->suborder_gateway_fees = $gateway->fees;
+                $suborder->suborder_gateway_percentage = 0;
+                $suborder->suborder_gateway_total = $gateway->fees;//fixed price fee 
             } else {
-                $order->order_payment_method = 'Tap - Paid with Creditcard/Debitcard';
-                $order->order_gateway_fees = 0;
-                $order->order_gateway_percentage = $gateway->percentage;
-                $order->order_gateway_total = $gateway->percentage * ($order->order_total_with_delivery / 100);
+                $suborder->suborder_payment_method = 'Tap - Paid with Creditcard/Debitcard';
+                $suborder->suborder_gateway_fees = 0;
+                $suborder->suborder_gateway_percentage = $gateway->percentage;
+                $suborder->suborder_gateway_total = $gateway->percentage * ($suborder->order_total_with_delivery / 100);
             }
 
             //update status 
-            $order->order_transaction_id = $request['ref'];
-            $order->save(false);
+            $suborder->order_transaction_id = $request['ref'];
+            $suborder->save(false);
 
             $request_id = Yii::$app->session->get('request_id');
             

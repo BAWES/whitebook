@@ -122,12 +122,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
     {
         $order = Order::findOne($request->order_id);
 
-        $suborder = Suborder::find()
-            ->where([
-                    'order_id' => $request->order_id,
-                    'vendor_id' => $request->vendor_id
-                ])
-            ->one();
+        $suborder = Suborder::findOne($request->suborder_id);
 
         $customer = Customer::findOne($order->customer_id);
 
@@ -143,7 +138,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo($customer->customer_email)
-            ->setSubject('Order request approved!')
+            ->setSubject('Item request approved!')
             ->send();
     }
 
@@ -161,8 +156,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             ->innerJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%suborder_item_purchase}}.item_id')
             ->innerJoin('{{%suborder}}', '{{%suborder}}.suborder_id = {{%suborder_item_purchase}}.suborder_id')
             ->where([
-                '{{%suborder}}.order_id' => $model->order_id,
-                '{{%suborder}}.vendor_id' => $model->vendor_id
+                '{{%suborder}}.suborder_id' => $model->suborder_id
             ])
             ->asArray()
             ->all();
