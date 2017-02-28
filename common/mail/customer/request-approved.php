@@ -45,15 +45,15 @@ use common\components\CFormatter;
         <table class="table table-bordered" style="width:100%;">
 	        <tr>
 	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Order ID: #<?= $model->order_id ?> 
+	                Order ID: <?= $model->order_id ?> 
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Order UID: #<?= $model->order->order_uid ?>
+	                Order UID: <?= $model->order->order_uid ?>
 	            </td>
 	        </tr>
 	        <tr>
 	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
-	                Sub Order ID: #<?= $model->suborder_id ?>
+	                Sub Order ID: <?= $model->suborder_id ?>
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd;">
 	                Date: <?= date('d/m/Y', strtotime($model->created_datetime)) ?>                

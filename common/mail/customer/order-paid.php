@@ -29,7 +29,7 @@ use common\components\CFormatter;
         <br />
         <br />
 
-        <a href="<?= Url::to(['order/view', 'order_uid' => $model->order->order_uid]); ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Track order &rarr;</a>
+        <a href="<?= Url::to(['orders/view', 'order_uid' => $model->order->order_uid], true); ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Track order &rarr;</a>
         
         <br />
         <br />
@@ -45,23 +45,23 @@ use common\components\CFormatter;
         <table class="table table-bordered" style="width:100%;">
 	        <tr>
 	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Order ID: #<?= $model->order_id ?> 
+	                Order ID: <?= $model->order_id ?> 
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Order UID: #<?= $model->order->order_uid ?> 
+	                Order UID: <?= $model->order->order_uid ?> 
 	            </td>
 	        </tr>
 	        <tr>
-	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Sub Order ID: #<?= $model->suborder_id ?> 
+	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+	                Sub Order ID: <?= $model->suborder_id ?> 
 	            </td>
-	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
+	            <td style="border-bottom: 1px solid #ddd;">
 	                Payment method: <?= $model->suborder_payment_method ?>
 	            </td>
 	        </tr>
 	        <tr>
-	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;"> 
-	            	Transaction ID: #<?= $model->suborder_transaction_id ?>
+	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;"> 
+	            	Transaction ID: <?= $model->suborder_transaction_id ?>
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd;">
 	                Date: <?= date('d/m/Y', strtotime($model->created_datetime)) ?>                

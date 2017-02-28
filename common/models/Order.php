@@ -371,6 +371,7 @@ class Order extends \yii\db\ActiveRecord
         $chanks = [];
 
         $total = $sub_total = $delivery_charge = 0;
+
         foreach ($items as $item) {
 
             $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
@@ -380,121 +381,123 @@ class Order extends \yii\db\ActiveRecord
             $total = $sub_total + $delivery_charge;
         }
 
-            //insert main order
-            $order = new Order;
-            $order->customer_id = Yii::$app->user->getID();
-            $order->order_total_delivery_charge = $delivery_charge;
-            $order->order_total_without_delivery = $total - $delivery_charge;
-            $order->order_total_with_delivery = $total;
-            $order->order_ip_address = Request::getUserIP();
-            $order->trash = 'Default';
-            if ($order->save(false)) {
-                foreach ($items as $item) {
+        //insert main order
+        $order = new Order;
+        $order->customer_id = Yii::$app->user->getID();
+        $order->order_total_delivery_charge = $delivery_charge;
+        $order->order_total_without_delivery = $total - $delivery_charge;
+        $order->order_total_with_delivery = $total;
+        $order->order_ip_address = Request::getUserIP();
+        $order->trash = 'Default';
+        $order->save(false);
 
-                    $sub_order = new Suborder;
-                    $sub_order->order_id = $order->order_id;
-                    $sub_order->vendor_id = $item['vendor_id'];
-                    $sub_order->status_id = 8; // Pending
-                    $sub_order->trash = 'Default';
-                    $sub_order->suborder_payment_method = '-';
-                    $sub_order->suborder_transaction_id = $transaction_id;
-                    $sub_order->suborder_gateway_percentage = 0.0;
-                    $sub_order->suborder_gateway_fees = 0.0;
-                    $sub_order->suborder_gateway_total = 0;
+        foreach ($items as $item) {
 
-                    if ($sub_order->save(false)) {
+            $sub_order = new Suborder;
+            $sub_order->order_id = $order->order_id;
+            $sub_order->vendor_id = $item['vendor_id'];
+            $sub_order->status_id = 8; // Pending
+            $sub_order->trash = 'Default';
+            $sub_order->suborder_payment_method = '-';
+            $sub_order->suborder_transaction_id = $transaction_id;
+            $sub_order->suborder_gateway_percentage = 0.0;
+            $sub_order->suborder_gateway_fees = 0.0;
+            $sub_order->suborder_gateway_total = 0;
 
-                        $request = new OrderRequestStatus();
-                        $request->order_id = $order->order_id;
-                        $request->suborder_id = $sub_order->suborder_id;
-                        $request->vendor_id = $item['vendor_id'];
-                        $request->request_status = 'Pending';
-                        $request->save(false);
+            if ($sub_order->save(false)) {
 
-                        //calculate order total data
-                        $total = 0;
-                        $sub_total = 0;
-                        $delivery_charge = 0;
-                        $suborder_commission_total = 0;
+                $request = new OrderRequestStatus();
+                $request->order_id = $order->order_id;
+                $request->suborder_id = $sub_order->suborder_id;
+                $request->vendor_id = $item['vendor_id'];
+                $request->request_status = 'Pending';
+                $request->save(false);
 
-                        //address
-                        $address_id = $addresses[$item['cart_id']];
+                //calculate order total data
+                $total = 0;
+                $sub_total = 0;
+                $delivery_charge = 0;
+                $suborder_commission_total = 0;
 
-                        $item_purchase = new SuborderItemPurchase;
-                        $item_purchase->suborder_id = $sub_order->suborder_id;
-                        $item_purchase->time_slot = $item['time_slot'];
-                        $item_purchase->item_id = $item['item_id'];
-                        $item_purchase->area_id = $item['area_id'];
-                        $item_purchase->address_id = $address_id;
-                        $item_purchase->purchase_delivery_address = Order::getPurchaseDeliveryAddress($address_id);
-                        $item_purchase->purchase_delivery_date = $item['cart_delivery_date'];
-                        $item_purchase->purchase_price_per_unit = $price_chart[$item['item_id']]['unit_price'];
-                        $item_purchase->purchase_customization_price_per_unit = 0;
-                        $item_purchase->purchase_quantity = $item['cart_quantity'];
-                        $item_purchase->purchase_total_price = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
-                        $item_purchase->female_service = $item['female_service'];
-                        $item_purchase->special_request = $item['special_request'];
-                        $item_purchase->trash = 'Default';
-                        $item_purchase->save(false);
+                //address
+                $address_id = $addresses[$item['cart_id']];
 
-                        //save menu item
-                        $menu_items = CustomerCartMenuItem::find()
-                            ->select([
-                                '{{%vendor_item_menu}}.menu_id',
-                                '{{%vendor_item_menu}}.menu_name',
-                                '{{%vendor_item_menu}}.menu_name_ar',
-                                '{{%vendor_item_menu}}.menu_type',
-                                '{{%vendor_item_menu_item}}.menu_item_id',
-                                '{{%vendor_item_menu_item}}.menu_item_name',
-                                '{{%vendor_item_menu_item}}.menu_item_name_ar',
-                                '{{%vendor_item_menu_item}}.price',
-                                '{{%customer_cart_menu_item}}.quantity'
-                            ])
-                            ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-                            ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-                            ->where(['cart_id' => $item['cart_id']])
-                            ->asArray()
-                            ->all();
+                $item_purchase = new SuborderItemPurchase;
+                $item_purchase->suborder_id = $sub_order->suborder_id;
+                $item_purchase->time_slot = $item['time_slot'];
+                $item_purchase->item_id = $item['item_id'];
+                $item_purchase->area_id = $item['area_id'];
+                $item_purchase->address_id = $address_id;
+                $item_purchase->purchase_delivery_address = Order::getPurchaseDeliveryAddress($address_id);
+                $item_purchase->purchase_delivery_date = $item['cart_delivery_date'];
+                $item_purchase->purchase_price_per_unit = $price_chart[$item['item_id']]['unit_price'];
+                $item_purchase->purchase_customization_price_per_unit = 0;
+                $item_purchase->purchase_quantity = $item['cart_quantity'];
+                $item_purchase->purchase_total_price = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
+                $item_purchase->female_service = $item['female_service'];
+                $item_purchase->special_request = $item['special_request'];
+                $item_purchase->trash = 'Default';
+                $item_purchase->save(false);
 
-                        foreach ($menu_items as $key => $menu_item) {
-                            $soim = new SuborderItemMenu;
-                            $soim->attributes = $menu_item;
-                            $soim->purchase_id = $item_purchase->purchase_id;
-                            $soim->total = $soim->price * $soim->quantity;
-                            $soim->save();
-                        }
+                //save menu item
+                $menu_items = CustomerCartMenuItem::find()
+                    ->select([
+                        '{{%vendor_item_menu}}.menu_id',
+                        '{{%vendor_item_menu}}.menu_name',
+                        '{{%vendor_item_menu}}.menu_name_ar',
+                        '{{%vendor_item_menu}}.menu_type',
+                        '{{%vendor_item_menu_item}}.menu_item_id',
+                        '{{%vendor_item_menu_item}}.menu_item_name',
+                        '{{%vendor_item_menu_item}}.menu_item_name_ar',
+                        '{{%vendor_item_menu_item}}.price',
+                        '{{%customer_cart_menu_item}}.quantity'
+                    ])
+                    ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                    ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+                    ->where(['cart_id' => $item['cart_id']])
+                    ->asArray()
+                    ->all();
 
-                        //sub order total data
-
-                        $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
-                        $delivery_charge = $delivery_area->delivery_price;
-
-                        $sub_total = $item_purchase->purchase_total_price;
-                    }
-
-                    $total = $sub_total + $delivery_charge;
-
-                    //suborder commission
-                    $vendor = Vendor::findOne($sub_order->vendor_id);
-
-                    if (is_null($vendor->commision) || $vendor->commision == '') {
-                        $suborder_commission_percentage = $vendor->commision;
-                    } else {
-                        $suborder_commission_percentage = $default_commision;
-                    }
-
-                    $suborder_commission_total = $total * ($suborder_commission_percentage / 100);
-
-                    //update sub order total
-                    $sub_order->suborder_delivery_charge = $delivery_charge;
-                    $sub_order->suborder_total_without_delivery = $total - $delivery_charge;
-                    $sub_order->suborder_total_with_delivery = $total;
-                    $sub_order->suborder_commission_percentage = $suborder_commission_percentage;
-                    $sub_order->suborder_commission_total = $suborder_commission_total;
-                    $sub_order->suborder_vendor_total = $total - $suborder_commission_total;
-                    $sub_order->save(false);
+                foreach ($menu_items as $key => $menu_item) {
+                    $soim = new SuborderItemMenu;
+                    $soim->attributes = $menu_item;
+                    $soim->purchase_id = $item_purchase->purchase_id;
+                    $soim->total = $soim->price * $soim->quantity;
+                    $soim->save();
                 }
+
+                //sub order total data
+
+                $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+                $delivery_charge = $delivery_area->delivery_price;
+
+                $sub_total = $item_purchase->purchase_total_price;
             }
+
+            $total = $sub_total + $delivery_charge;
+
+            //suborder commission
+            $vendor = Vendor::findOne($sub_order->vendor_id);
+
+            if (is_null($vendor->commision) || $vendor->commision == '') {
+                $suborder_commission_percentage = $vendor->commision;
+            } else {
+                $suborder_commission_percentage = $default_commision;
+            }
+
+            $suborder_commission_total = $total * ($suborder_commission_percentage / 100);
+
+            //update sub order total
+            $sub_order->suborder_delivery_charge = $delivery_charge;
+            $sub_order->suborder_total_without_delivery = $total - $delivery_charge;
+            $sub_order->suborder_total_with_delivery = $total;
+            $sub_order->suborder_commission_percentage = $suborder_commission_percentage;
+            $sub_order->suborder_commission_total = $suborder_commission_total;
+            $sub_order->suborder_vendor_total = $total - $suborder_commission_total;
+            $sub_order->save(false);
+        }
+
+        Order::sendNewOrderEmails($order->order_id);
 
         return $order->order_id;
 
@@ -653,12 +656,7 @@ class Order extends \yii\db\ActiveRecord
 
         $order = Order::findOne($request->order_id);
 
-        $suborder = Suborder::find()
-            ->where([
-                    'order_id' => $request->order_id,
-                    'vendor_id' => $request->vendor_id
-                ])
-            ->one();
+        $suborder = Suborder::findOne($request->suborder_id);
 
         $customer = Customer::findOne($order->customer_id);
         

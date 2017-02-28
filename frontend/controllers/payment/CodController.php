@@ -5,6 +5,7 @@ namespace frontend\controllers\payment;
 use Yii;
 use yii\web\Controller;
 use common\models\Order;
+use common\models\Suborder;
 use common\models\PaymentGateway;
 
 class CodController extends Controller
@@ -39,12 +40,12 @@ class CodController extends Controller
 
         //update payment detail 
         
-        $order->suborder_payment_method = $gateway['name'];
-        $order->suborder_transaction_id = '-'; 
-        $order->suborder_gateway_percentage = $gateway['percentage'];
-        $order->suborder_gateway_fees = $gateway['fees'];
-        $order->suborder_gateway_total = $gateway_total;
-        $order->save();
+        $sub_order->suborder_payment_method = $gateway['name'];
+        $sub_order->suborder_transaction_id = '-'; 
+        $sub_order->suborder_gateway_percentage = $gateway['percentage'];
+        $sub_order->suborder_gateway_fees = $gateway['fees'];
+        $sub_order->suborder_gateway_total = $gateway_total;
+        $sub_order->save();
 
         //send order emails
         Order::sendOrderPaidEmails($request_id);

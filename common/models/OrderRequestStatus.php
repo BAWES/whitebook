@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 use common\models\Order;
+use common\models\Suborder;
 use common\models\Vendor;
 use common\models\Customer;
 use common\models\SuborderItemPurchase;
@@ -101,6 +102,14 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
         }
         
         return $unique;
+    }
+
+    /*
+     * Get sub order detail
+     */
+    public function getSubOrderDetail()
+    {
+        return $this->hasOne(Suborder::className(), ['suborder_id' => 'suborder_id']);
     }
 
     /*
