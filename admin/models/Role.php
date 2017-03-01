@@ -115,7 +115,7 @@ class Role extends \yii\db\ActiveRecord
             'item-type' => ['index', 'view', 'create', 'update', 'delete'],
             'location' => ['index', 'view', 'create', 'update', 'delete', 'city', 'area'],
             'log' => ['view'],
-            'order' => ['index', 'view', 'invoice', 'order-status', 'delete'],
+            'order' => ['index', 'view', 'invoice', 'order-status', 'order-payment','delete'],
             'order-status' => ['index', 'view', 'create', 'update', 'delete'],
             'package' => ['index', 'view', 'create', 'update', 'delete', 'update-item'],
             'payment-gateway' => ['index', 'view', 'create', 'update', 'delete'],

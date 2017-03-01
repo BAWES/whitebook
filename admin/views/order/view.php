@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     echo OrderStatus::findOne($row->status_id)->name_ar;
                                   } ?>  
                             </span>      
-                            <a data-toggle="modal" href="#status_modal" class="edit_status">
+                            <a data-toggle="modal" href="#status_modal" class="btn btn-default edit_status pull-right">
                                 <i class="glyphicon glyphicon-pencil"></i>
                             </a>
                         </div>
@@ -85,8 +85,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     </td>
                 </tr>
                 <tr>                    
-                    <td>
-                        Payment method : <?= $row->suborder_payment_method ?>
+                    <td data-id="<?= $row->suborder_id ?>">
+                        Payment method :
+                        <span class="payment_method_<?= $row->suborder_id ?>"><?= $row->suborder_payment_method ?></span>
+                        <a data-toggle="modal" href="#payment_method_modal" class="btn btn-default edit_payment pull-right">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>
                     </td>
                     <td>
                         Transaction ID : <?= $row->suborder_transaction_id ?>
@@ -200,10 +204,39 @@ $this->params['breadcrumbs'][] = $this->title;
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+<div class="modal fade" id="payment_method_modal">
+  <div class="modal-dialog" role="document">
+      <form class="payment_method_form" id="payment_method_form" action="#" method="POST">
+        <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Payment Made by</h4>
+              </div>
+              <div class="modal-body">
+                    <input type="hidden" name="suborder_id" value="" id="suborder_id" />
+                    <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
+                    <select name="mode" class="form-control" id="mode">
+                        <option val="0">Please select Payment Mode</option>
+                        <option val="Cash">Cash</option>
+                        <option val="Cheque">Cheque</option>
+                    </select>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary save_payment">Submit</button>
+              </div>
+        </div><!-- /.modal-content -->
+      </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <?php 
 
 $this->registerJs("
-    jQuery('.edit_status').click(function(){
+    jQuery('.edit_status,.edit_payment').click(function(){
         jQuery('input[name=\'suborder_id\']').val(jQuery(this).parent().attr('data-id'));
     });
 
@@ -222,9 +255,22 @@ $this->registerJs("
         }, function(){
             jQuery('#status_modal').modal('hide');
             jQuery('[data-id=\'' + suborder_id + '\'] span').html(status); 
-
             jQuery('.save_status').html('Submit');
             jQuery('.save_status').removeAttr('disabled');
+        });
+    });
+    
+    
+    jQuery('.save_payment').click(function(){
+
+        jQuery(this).html('Sending Mail...');
+        jQuery(this).attr('disabled', 'disabled');
+        jQuery.post('".Url::to(["order/order-payment"])."', jQuery('#payment_method_form').serialize(), function(data){
+            jQuery('#payment_method_modal').modal('hide');
+            jQuery('.'+data).html(jQuery('#mode').val());
+            jQuery('[data-id=\'' + suborder_id + '\'] span').html('Processed');
+            jQuery('.save_payment').html('Submit');
+            jQuery('.save_payment').removeAttr('disabled');
         });
     });
 ", View::POS_READY);
