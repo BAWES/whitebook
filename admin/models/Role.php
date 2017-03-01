@@ -134,7 +134,8 @@ class Role extends \yii\db\ActiveRecord
             'vendor-item-question-answer-option' => ['index', 'view', 'create', 'update', 'delete', 'deletequestionoptions'],
             'vendor-item-question' => ['index', 'view', 'create', 'update', 'delete'],
             'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete'],
-            'order-request-status' => ['index', 'view']
+            'order-request-status' => ['index', 'view'],
+            'payments' => ['index', 'view', 'create', 'update', 'delete'],
         ];        
     }
 }

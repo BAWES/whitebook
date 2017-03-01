@@ -80,4 +80,11 @@ class VendorAccountPayable extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }
+
+    public function getvendorName()
+    {
+        if($this->vendor) {
+            return $this->vendor->vendor_name;
+        }
+    }
 }
