@@ -44,6 +44,14 @@ $order_request_count =
 				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Sub Order</span>', ['sub-order/index'], ['class'=>'link-title']) ?>
 			</li>
 
+			<li class="<?=($cntrl == 'payments') ? "active" : "noactive" ?>">
+				<?= Html::a('<i class="fa fa-money"></i><span class="title">Payments</span>', ['payments/index'], ['class'=>'link-title']) ?>
+			</li>
+
+			<li class="<?=($cntrl == 'payable') ? "active" : "noactive" ?>">
+				<?= Html::a('<i class="fa fa-money"></i><span class="title">Payable</span>', ['payable/index'], ['class'=>'link-title']) ?>
+			</li>
+
             <li class="<?=(in_array($cntrl,$itemTab)) ? "open" : "noactive" ?>">
 				<a href="javascript:;">
 					<i class="fa fa-archive"></i>
