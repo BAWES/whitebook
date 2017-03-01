@@ -48,6 +48,10 @@ $order_request_count = OrderRequestStatus::find()
 	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Order</span>', 
 	        	'url' => ['order/index'],
 	        ],
+	        [	
+	        	'label' => '<i class="fa fa-money"></i><span class="title">Payments</span>', 
+	        	'url' => ['payments/index'],
+	        ],
 	        [
 	        	'label' => '<i class="fa fa-university"></i><span class="title">General Settings</span>',
 				'options' => ['class'=>'dropdown'],
