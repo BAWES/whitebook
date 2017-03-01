@@ -19,10 +19,17 @@ class CronController extends \yii\console\Controller {
     }
 
     /**
-     * Method called by cron every 5 minutes or so
+     * Method called by cron once a day
      */
-    public function actionMinute() {
-        //Code here
+    public function actionDaily() {
+
+        return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     * Method called by cron every minute
+     */
+    public function actionEveryMinute() {
 
         return self::EXIT_CODE_NORMAL;
     }
@@ -32,11 +39,9 @@ class CronController extends \yii\console\Controller {
      * Method called by cron once a day
      */
     public function actionDailyEmail(){
-        //Code here
-            /*
+    /*
     *  BEGIN Cron Job  for if pending items of items table
     */
-
         $model = Yii::$app->db->createCommand('SELECT item_name FROM `whitebook_vendor_item` WHERE item_approved="Pending" and item_status = "Active" and trash = "Default"');
         $vendor = $model->queryAll();
         $i = 1;
@@ -58,23 +63,13 @@ class CronController extends \yii\console\Controller {
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo(Yii::$app->params['adminEmail'])
             ->setSubject('PENDING-PRODUCTS')
-            ->send();    
+            ->send();
         /*
         *  END Cron Job  for if pending items of items table
         */
 
         return self::EXIT_CODE_NORMAL;
     }
-
-    /**
-     * Method called by cron once a week
-     */
-    public function actionWeeklyEmail(){
-        //Code here
-
-        return self::EXIT_CODE_NORMAL;
-    }
-
 
     /*
      *  Cron Job  for if Vendor package expire with in two days
@@ -96,7 +91,4 @@ class CronController extends \yii\console\Controller {
         ->send();
         }
     }
-    /*
-     *  Cron Job  for if Vendor package expire with in two days
-     */
 }
