@@ -59,21 +59,26 @@ class OrderRequestStatusController extends Controller
             $this->redirect(['index']);
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            //if accepted
-            if($model->request_status == 'Approved') {
-                OrderRequestStatus::approved($model);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->setExpiredOn($model); // set expire date
+
+            if ($model->save()) {
+
+                //if accepted
+                if ($model->request_status == 'Approved') {
+                    OrderRequestStatus::approved($model);
+                }
+
+                //if reject
+                if ($model->request_status == 'Declined') {
+                    OrderRequestStatus::declined($model);
+                }
+
+                Yii::$app->session->setFlash('success', 'Request Status changed successfully');
+
+                return $this->redirect(['index']);
             }
-
-            //if reject
-            if($model->request_status == 'Declined') {
-                OrderRequestStatus::declined($model);
-            }
-
-            Yii::$app->session->setFlash('success','Request Status changed successfully');
-
-            return $this->redirect(['index']);
         } else {
             return $this->render('view', [
                 'model' => $this->findModel($id),

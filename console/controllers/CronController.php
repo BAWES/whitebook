@@ -96,7 +96,4 @@ class CronController extends \yii\console\Controller {
         ->send();
         }
     }
-    /*
-     *  Cron Job  for if Vendor package expire with in two days
-     */
 }
