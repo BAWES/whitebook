@@ -22,6 +22,7 @@ use common\models\SuborderItemPurchase;
  * @property integer $vendor_id
  * @property string $request_status
  * @property string $request_note
+ * @property datetime $expired_on
  * @property string $created_datetime
  * @property string $modified_datetime
  */
@@ -44,7 +45,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             [['order_id', 'suborder_id', 'vendor_id'], 'required'],
             [['order_id', 'suborder_id', 'vendor_id'], 'integer'],
             [['request_status', 'request_note'], 'string'],
-            [['created_datetime', 'modified_datetime', 'request_token'], 'safe'],
+            [['expired_on','created_datetime', 'modified_datetime', 'request_token'], 'safe'],
         ];
     }
 
@@ -59,6 +60,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             'vendor_id' => Yii::t('app', 'Vendor ID'),
             'request_status' => Yii::t('app', 'Request Status'),
             'request_note' => Yii::t('app', 'Request Note'),
+            'expired_on' => Yii::t('app', 'Expired On'),
             'created_datetime' => Yii::t('app', 'Created On'),
             'modified_datetime' => Yii::t('app', 'Modified On'),
         ];
@@ -220,6 +222,15 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             ->setTo(Yii::$app->params['adminEmail'])
             ->setSubject('Order request rejected!')
             ->send();
+    }
+
+    public function setExpiredOn($model) {
+
+        if (
+            $model->request_status != $model->oldAttributes['request_status'] &&
+            $model->request_status == 'Approved'
+        )
+        $model->expired_on = date('Y-m-d H:i:s',strtotime('+1 day')); // set 24 hour expire date
     }
 }
 
