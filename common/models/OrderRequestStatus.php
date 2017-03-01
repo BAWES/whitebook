@@ -232,6 +232,72 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
         )
         $model->expired_on = date('Y-m-d H:i:s',strtotime('+1 day')); // set 24 hour expire date
     }
+
+    /*
+     * cron job for booking expire alert before 1 hour;
+     */
+    public function bookingBeforeExpireAlert() {
+
+        $q = "SELECT wo.customer_id,wors.request_status,wors.request_token,wors.order_id FROM whitebook_order_request_status wors ";
+        $q .= "inner join whitebook_order wo on wors.order_id = wo.order_id WHERE wors.expired_on < NOW() - INTERVAL 1 HOUR AND ";
+        $q .= "wors.notification_status = '0'";
+        $model = Yii::$app->db->createCommand($q);
+        $customer = $model->queryAll();
+        if ($customer) {
+            foreach ($customer as $detail) {
+                $customerDetail = Customer::findOne($detail['customer_id']);
+                if ($customerDetail) {
+                    $message = 'Hello '.$customerDetail->customer_name.' ' .$customerDetail->customer_last_login;
+                    $message .= '<br/><br/> Your Approved Booking Item going to Expire in one hour. Please pay pending due before it expire.';
+                    $message .= '<br/> Request Token '.$detail['request_token'];
+                    $message .= '<br/> Order ID '.$detail['order_id'];
+
+                    echo Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['supportEmail'])
+                        ->setTo($customerDetail->customer_email)
+                        ->setSubject('Whitebook : Expiring booking token #'.$detail['request_token'])
+                        ->setTextBody($message)
+                        ->send();
+
+                }
+            }
+        }
+    }
+
+    /*
+     * cron job for booking expired notification;
+     */
+    public function bookingAfterExpiredAlert() {
+
+        $q = "SELECT wo.customer_id,wors.request_id,wors.request_status,wors.request_token,wors.order_id FROM whitebook_order_request_status wors ";
+        $q .= "inner join whitebook_order wo on wors.order_id = wo.order_id WHERE wors.expired_on >= NOW() AND ";
+        $q .= "wors.notification_status = '0'";
+        $model = Yii::$app->db->createCommand($q);
+        $customer = $model->queryAll();
+        if ($customer) {
+            $q = "update whitebook_order_request_status set request_status = 'Expired', notification_status = '1'";
+            $q .= "WHERE expired_on >= NOW() AND notification_status = '0'";
+            Yii::$app->db->createCommand($q)->execute();
+
+            foreach ($customer as $detail) {
+                $customerDetail = Customer::findOne($detail['customer_id']);
+                if ($customerDetail) {
+                    $message = 'Hello '.$customerDetail->customer_name.' ' .$customerDetail->customer_last_login;
+                    $message .= '<br/><br/> Your Approved Booking Item is Expired.';
+                    $message .= '<br/> Request Token '.$detail['request_token'];
+                    $message .= '<br/> Order ID '.$detail['order_id'];
+
+                    echo Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['supportEmail'])
+                        ->setTo($customerDetail->customer_email)
+                        ->setSubject('Whitebook : Expired booking token number #'.$detail['request_token'])
+                        ->setTextBody($message)
+                        ->send();
+
+                }
+            }
+        }
+    }
 }
 
 
