@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\models\Customer;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Console;
@@ -26,10 +27,17 @@ class CronController extends \yii\console\Controller {
     }
 
     /**
-     * Method called by cron every 5 minutes or so
+     * Method called by cron once a day
      */
-    public function actionMinute() {
-        //Code here
+    public function actionDaily() {
+
+        return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     * Method called by cron every minute
+     */
+    public function actionEveryMinute() {
 
         return self::EXIT_CODE_NORMAL;
     }
@@ -39,11 +47,9 @@ class CronController extends \yii\console\Controller {
      * Method called by cron once a day
      */
     public function actionDailyEmail(){
-        //Code here
-            /*
+    /*
     *  BEGIN Cron Job  for if pending items of items table
     */
-
         $model = Yii::$app->db->createCommand('SELECT item_name FROM `whitebook_vendor_item` WHERE item_approved="Pending" and item_status = "Active" and trash = "Default"');
         $vendor = $model->queryAll();
         $i = 1;
@@ -65,7 +71,7 @@ class CronController extends \yii\console\Controller {
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo(Yii::$app->params['adminEmail'])
             ->setSubject('PENDING-PRODUCTS')
-            ->send();    
+            ->send();
         /*
         *  END Cron Job  for if pending items of items table
         */
@@ -180,6 +186,37 @@ class CronController extends \yii\console\Controller {
         ->setSubject('Welcome to Whitebook')
         ->setTextBody('Your package will be expired with in two days. Kindly update your package. Thanks')
         ->send();
+        }
+    }
+
+    /*
+     * cron job for booking expire alert before 1 hour;
+     */
+    public function actionBookingExpireAlert() {
+
+        $q = "SELECT wo.customer_id,wors.request_status,wors.request_token,wors.order_id FROM whitebook_order_request_status wors ";
+        $q .= "inner join whitebook_order wo on wors.order_id = wo.order_id WHERE wors.expired_on < NOW() - INTERVAL 1 HOUR AND ";
+        $q .= "wors.request_status = 'Approved'";
+        $model = Yii::$app->db->createCommand($q);
+        $customer = $model->queryAll();
+        if ($customer) {
+            foreach ($customer as $detail) {
+                $customerDetail = Customer::findOne($detail['customer_id']);
+                if ($customerDetail) {
+                    $message = 'Hello '.$customerDetail->customer_name.' ' .$customerDetail->customer_last_login;
+                    $message .= '<br/><br/> Your Approved Booking Item going to Expire in one hour. Please pay pending due before it expire.';
+                    $message .= '<br/> Request Token '.$detail['request_token'];
+                    $message .= '<br/> Order ID '.$detail['order_id'];
+
+                    echo Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['supportEmail'])
+                        ->setTo($customerDetail->customer_email)
+                        ->setSubject('Whitebook : Expiring booking token #'.$detail['request_token'])
+                        ->setHtmlBody($message)
+                        ->send();
+
+                }
+            }
         }
     }
 }
