@@ -160,4 +160,24 @@ class OrderController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+
+    public function actionOrderPayment()
+    {
+        if (Yii::$app->request->isAjax) {
+            if (Yii::$app->request->post('mode') != '0') {
+                $suborder = Suborder::findOne(Yii::$app->request->post('suborder_id'));
+                $suborder->suborder_payment_method = Yii::$app->request->post('mode');
+                $suborder->status_id = 9;
+                $suborder->save(false);
+
+                if (isset($suborder->requestStatus->request_id)) {
+                    Order::sendOrderPaidEmails($suborder->requestStatus->request_id);
+                }
+                echo 'payment_method_' . Yii::$app->request->post('suborder_id'); // class id so show result
+
+            }
+        }
+    }
 }

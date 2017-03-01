@@ -107,6 +107,10 @@ class Suborder extends \yii\db\ActiveRecord
         return $this->hasOne(Order::className(), ['order_id' => 'order_id']);
     }
 
+    public function getRequestStatus() {
+        return $this->hasOne(OrderRequestStatus::className(), ['suborder_id' => 'suborder_id']);
+    }
+
     public function getStatus() {
         return $this->hasOne(OrderStatus::className(), ['order_status_id' => 'status_id']);
     }
