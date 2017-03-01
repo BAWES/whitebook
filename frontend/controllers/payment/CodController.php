@@ -7,6 +7,7 @@ use yii\web\Controller;
 use common\models\Order;
 use common\models\Suborder;
 use common\models\PaymentGateway;
+use common\models\VendorAccountPayable;
 
 class CodController extends Controller
 {
@@ -46,6 +47,14 @@ class CodController extends Controller
         $sub_order->suborder_gateway_fees = $gateway['fees'];
         $sub_order->suborder_gateway_total = $gateway_total;
         $sub_order->save();
+
+        //add payment to vendor wallet 
+
+        $payment = new VendorAccountPayable;
+        $payment->vendor_id = $suborder->vendor_id;
+        $payment->amount = $suborder->suborder_vendor_total;
+        $payment->description = 'Suborder #'.$suborder->suborder_id.' got paid.';
+        $payment->save();
 
         //send order emails
         Order::sendOrderPaidEmails($request_id);
