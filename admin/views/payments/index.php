@@ -15,6 +15,10 @@ $this->params['breadcrumbs'][] = 'Vendor Account Payables';
 
 <div class="vendor-account-payable-index">
 
+    <p>
+        <?= Html::a('Add payment', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
