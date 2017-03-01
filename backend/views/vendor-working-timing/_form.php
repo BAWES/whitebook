@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
         <div class="col-md-4 working_hours_wrapper">
             <?= $form->field($model, 'working_start_time')->textInput() ?>
         </div>
-        <div class="col-md-4 working_hours_wrapper">
+        <div class="col-md-4 working_hours_wrapper2">
             <?= $form->field($model, 'working_end_time')->textInput() ?>
         </div>
     </div>
@@ -33,9 +33,15 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datetimepicker/js/m
 $this->registerJsFile("@web/themes/default/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJs("
         $('.working_hours_wrapper input').datetimepicker({
-		//inline: true,
-        //sideBySide: true,
-        format: 'LT'
-    });
+	        format: 'LT',
+	        useCurrent: false,
+	        defaultDate: '12/12/13 08:00:00'
+        });
+        
+        $('.working_hours_wrapper2 input').datetimepicker({
+	        format: 'LT',
+	        useCurrent: false,
+	        defaultDate: '12/12/13 20:00:00'
+        });
     ", \yii\web\View::POS_READY);
 
