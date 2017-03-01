@@ -10,6 +10,7 @@ use common\models\PaymentGateway;
 use common\models\Customer;
 use common\models\Suborder;
 use common\models\OrderRequestStatus;
+use common\models\VendorAccountPayable;
 
 class TapController extends Controller
 {
@@ -146,6 +147,14 @@ class TapController extends Controller
             //update status 
             $suborder->suborder_transaction_id = $request['ref'];
             $suborder->save(false);
+
+            //add payment to vendor wallet 
+
+            $payment = new VendorAccountPayable;
+            $payment->vendor_id = $suborder->vendor_id;
+            $payment->amount = $suborder->suborder_vendor_total;
+            $payment->description = 'Suborder #'.$suborder->suborder_id.' got paid.';
+            $payment->save();
 
             $request_id = Yii::$app->session->get('request_id');
             
