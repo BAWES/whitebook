@@ -115,7 +115,7 @@ class Role extends \yii\db\ActiveRecord
             'item-type' => ['index', 'view', 'create', 'update', 'delete'],
             'location' => ['index', 'view', 'create', 'update', 'delete', 'city', 'area'],
             'log' => ['view'],
-            'order' => ['index', 'view', 'invoice', 'order-status', 'delete'],
+            'order' => ['index', 'view', 'invoice', 'order-status', 'order-payment','delete'],
             'order-status' => ['index', 'view', 'create', 'update', 'delete'],
             'package' => ['index', 'view', 'create', 'update', 'delete', 'update-item'],
             'payment-gateway' => ['index', 'view', 'create', 'update', 'delete'],
@@ -135,7 +135,7 @@ class Role extends \yii\db\ActiveRecord
             'vendor-item-question' => ['index', 'view', 'create', 'update', 'delete'],
             'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete'],
             'order-request-status' => ['index', 'view'],
-            'payments' => ['index', 'view', 'create', 'update', 'delete'],
+            'payable' => ['index', 'view', 'create', 'update', 'delete'],
         ];        
     }
 }

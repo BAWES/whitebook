@@ -42,21 +42,6 @@ $action = Yii::$app->controller->action->id;
                 <div id="mobile_search_fail"></div>
                 <div id="desktop_search_fail"></div>
             </div>
-            <div class="mobile-logo-text col-xs-12 text-center padding0">
-                <?php if (Yii::$app->user->isGuest) { ?>
-
-                    <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK">
-                        <?= Yii::t('frontend', 'My Events') ?>
-                    </a>
-
-                <?php } else { ?>
-
-                    <a href="<?= Url::toRoute(['events/index']); ?>" title="THEWHITEBOOK">
-                        <?= Yii::t('frontend', 'My Events') ?>
-                    </a>
-                <?php } ?>
-            </div>
-
             <div class="desktop-menu">
                 <div class="col-md-12">
                     <div class="col-md-3 col-xs-12 col-sm-4 respo_hidde"></div>
@@ -491,9 +476,6 @@ $action = Yii::$app->controller->action->id;
                 <?php echo Yii::t('frontend', 'Things I like'); ?>
             </a>
         </li>
-
-        <li><a href="<?= Url::toRoute(['/events/index']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
-
         <li>
             <a href="<?php echo Url::toRoute('/users/address', true); ?>">
                 <?php echo Yii::t('frontend', 'Address Book'); ?>
