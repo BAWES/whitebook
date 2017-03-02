@@ -230,7 +230,7 @@ class OrderRequestStatus extends \yii\db\ActiveRecord
             $model->request_status != $model->oldAttributes['request_status'] &&
             $model->request_status == 'Approved'
         )
-        $model->expired_on = date('Y-m-d H:i:s',strtotime('+1 day')); // set 24 hour expire date
+        $model->expired_on = date('Y-m-d H:i:s',strtotime('+2 day')); // set 48 hour expire date
     }
 
     /*

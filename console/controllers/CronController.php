@@ -110,7 +110,7 @@ class CronController extends \yii\console\Controller {
             // to admin 
             
             $message = 'Hello Admin,';
-            $message .= '<br/><br/>  The booking is cancelled now for '.$items.' on '.date('d/m/Y h:i A').' because customer have not paid within 24 hour.<br />';
+            $message .= '<br/><br/>  The booking is cancelled now for '.$items.' on '.date('d/m/Y h:i A').' because customer have not paid within 48 hours.<br />';
             $message .= '<br/> Request Token : '.$request->request_token;
             $message .= '<br/> Order ID : '.$request->order_id;
             $message .= '<br/> Sub Order ID : '.$request->suborder_id;
