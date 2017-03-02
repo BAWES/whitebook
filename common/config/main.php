@@ -52,6 +52,12 @@ return [
             'showScriptName' => false,
             'baseUrl' => 'http://dev.thewhitebook.com.kw',
         ],
+        'urlManagerVendor' => [
+            'class' => 'yii\web\urlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => 'http://devvendor.thewhitebook.com.kw',
+        ],
         'formatter' => [
             'currencyCode' => 'KWD',
             'defaultTimeZone' => 'Asia/Kuwait',
