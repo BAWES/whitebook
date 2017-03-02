@@ -4,10 +4,8 @@ namespace frontend\controllers\payment;
 
 use Yii;
 use yii\web\Controller;
-use common\models\Order;
-use common\models\Suborder;
+use common\models\Booking;
 use common\models\PaymentGateway;
-use common\models\VendorAccountPayable;
 
 class CodController extends Controller
 {

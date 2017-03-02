@@ -7,7 +7,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use \common\models\Order;
+use common\models\Booking;
 use common\models\CustomerCart;
 use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
@@ -282,9 +282,9 @@ class CheckoutController extends BaseController
         
         if ($address) {
             
-            $order_id = Order::placeRequestOrder('', '', '', 1);
-            
-            Yii::$app->session->set('order_id', $order_id);
+            $booking_id = Booking::checkoutConfirm();
+
+            Yii::$app->session->set('booking_id', $booking_id);
             
             return $this->redirect(['success']);
 
