@@ -20,7 +20,7 @@ use common\components\LangFormat;
         <form id="address_selection_form">
 
         <?php foreach ($items as $item) { ?>
-                
+
                 <div class="item_wrapper" id="item_wrapper_<?= $item['cart_id'] ?>">
 
                         <input type="hidden" class="hdn_address" name="address[<?= $item['cart_id'] ?>]" value="" />
@@ -30,17 +30,17 @@ use common\components\LangFormat;
                         </div>
 
                         <div class="address_block_wrapper">
-                        <?php 
+                        <?php
                         $addresses = CustomerCart::customerAddress($item['area_id'],Yii::$app->user->id);
 
                         foreach ($addresses as $address) { ?>
                                 <div class="address_block pull-left" data-id="<?= $address['address_id'] ?>">
-                                    <?php 
+                                    <?php
 
                                     if($address['address_name']) {
-                                        echo $address['address_name'].'<br />';    
+                                        echo $address['address_name'].'<br />';
                                     }
-                                                                            
+
                                     echo $address['address_data'].'<br />';
 
                                     echo LangFormat::format($address['location']['location'],$address['location']['location_ar']);
@@ -48,17 +48,17 @@ use common\components\LangFormat;
                                     ?>
                                 </div>
                         <?php } ?>
-                                
+
                                 <div class="address_insert_block pull-left" data-toggle="modal" data-target="#modal_create_address" data-id="<?= $item['cart_id'] ?>">
                                         <i class="glyphicon glyphicon-plus"></i>
-                                        <br /><br /> 
+                                        <br /><br />
                                         <?= Yii::t('frontend', 'Add new address') ?>
                                 </div>
 
                         </div>
                         <div class="clearfix"></div>
                 </div>
-        <?php } ?>   
+        <?php } ?>
 
         </form>
 
