@@ -14,7 +14,7 @@ use common\models\Vendor;
 /**
  * PaymentsController implements the CRUD actions for VendorAccountPayable model.
  */
-class PaymentsController extends Controller
+class PayableController extends Controller
 {
     /**
      * @inheritdoc

@@ -49,8 +49,8 @@ $order_request_count = OrderRequestStatus::find()
 	        	'url' => ['order/index'],
 	        ],
 	        [	
-	        	'label' => '<i class="fa fa-money"></i><span class="title">Payments</span>', 
-	        	'url' => ['payments/index'],
+	        	'label' => '<i class="fa fa-money"></i><span class="title">Payable</span>',
+	        	'url' => ['payable/index'],
 	        ],
 	        [
 	        	'label' => '<i class="fa fa-university"></i><span class="title">General Settings</span>',
