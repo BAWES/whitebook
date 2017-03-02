@@ -23,6 +23,7 @@ $this->title = Yii::t('frontend', 'Request Product | Whitebook');
 								<td align="center"><?= Yii::t('frontend', 'Product Name') ?></td>
 								<td align="center"><?= Yii::t('frontend', 'Status') ?></td>
 								<td align="center"><?= Yii::t('frontend', 'Price') ?></td>
+								<td></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -42,6 +43,10 @@ $this->title = Yii::t('frontend', 'Request Product | Whitebook');
                                         <span class="badge <?=$class?>"><?= $order->request_status ?></span>
                                     </td>
                                     <td align="center">KD <?= $order->itemPurchased->vendoritem->item_price_per_unit  ?> / Unit</td>
+                                    <td align="center">
+                                    	<a href="<?= Url::to(['payment/index', 'token' => $order->request_token]) ?>" class="btn btn-default btn-sm"><?= Yii::t('frontend', 'Pay Now') ?>
+                                    	</a>
+                                    </td>
                                 </tr>
                             <?php
                         }
