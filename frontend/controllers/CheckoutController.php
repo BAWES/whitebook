@@ -260,12 +260,12 @@ class CheckoutController extends BaseController
             $this->redirect(['site/index']);
         }
 
-        //clear cart 
-        //CustomerCart::deleteAll('customer_id = "'.Yii::$app->user->getId().'"');
+        // clear cart
+        CustomerCart::deleteAll('customer_id = "'.Yii::$app->user->getId().'"');
 
-        //clear temp session data
-        //Yii::$app->session->remove('payment_method');
-        //Yii::$app->session->remove('address');
+        // clear temp session data
+        Yii::$app->session->remove('payment_method');
+        Yii::$app->session->remove('address');
 
         $arr_booking_id = Yii::$app->session->get('arr_booking_id');
 

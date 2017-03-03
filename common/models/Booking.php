@@ -173,7 +173,7 @@ class Booking extends \yii\db\ActiveRecord
      */
     public function getBookingItems()
     {
-        return $this->hasOne(BookingItem::className(), ['booking_id' => 'booking_id']);
+        return $this->hasMany(BookingItem::className(), ['booking_id' => 'booking_id']);
     }
 
     public function beforeSave($insert)
@@ -477,7 +477,7 @@ class Booking extends \yii\db\ActiveRecord
             ->send();
     }
 
-    public static function rejected($booking) 
+    public static function rejected($booking)
     {
         $booking->booking_status = Booking::STATUS_REJECTED;
         $booking->booking_note = Yii::$app->request->post('booking_note');
@@ -487,8 +487,7 @@ class Booking extends \yii\db\ActiveRecord
 
         //Send Email to customer
 
-        if(Yii::$app->params['notify_customer_request_decline']) 
-        {
+        if (Yii::$app->params['notify_customer_request_decline']) {
             Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
             Yii::$app->mailer->compose("customer/request-rejected",
@@ -522,6 +521,7 @@ class Booking extends \yii\db\ActiveRecord
             ->setSubject('Booking request rejected!')
             ->send();
 
+    }
     /*
      * cron job for booking expire alert before 1 hour;
      */

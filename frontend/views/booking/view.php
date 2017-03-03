@@ -90,95 +90,99 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                             <td align="right" class="hidden-xs hidden-sm"><?= Yii::t('frontend', 'Total') ?></th>
                         </tr>
                     </thead>
+
                     <tbody>
+                    <?php foreach ($booking->bookingItems as $item) { ?>
                         <tr>
-                            <td align="left">
-                                <?php 
+                            <td align="left" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;">
+                                <?php if(Yii::$app->language == 'en') {
+                                    echo $item->item_name;
+                                } else {
+                                    echo $item->item_name_ar;
+                                }
 
-                                echo LangFormat::format($item->item_name, $item->item_name_ar);
+                                foreach ($item->bookingItemMenus as $key => $menu_item) {
+                                    echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
 
-//                                $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
-                                
-//                                foreach ($menu_items as $key => $menu_item) {
-//                                    if (Yii::$app->language == 'en') {
-//                                        echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
-//                                    } else {
-//                                        echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
-//                                    }
-//
-//                                    $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
-//
-//                                    if($menu_item_total) {
-//                                        echo ' = '.CFormatter::format($menu_item_total);
-//                                    }
-//
-//                                    echo '</i>';
-//                                }
-                                
+                                    $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                                    if($menu_item_total) {
+                                        echo ' = '.CFormatter::format($menu_item_total);
+                                    }
+
+                                    echo '</i>';
+                                }
+
                                 if($item['female_service']) {
-                                    echo '<i class="cart_menu_item"> - '.Yii::t('frontend', 'Female service').'</i>';
+                                    echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
                                 }
 
                                 if($item['special_request']) {
-                                    echo '<i class="cart_menu_item"> - '.$item['special_request'].'</i>';
+                                    echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$item['special_request'].'</i>';
                                 }
-                                
-                                ?>
 
-                                <div class="visible-xs visible-sm">
-                                    x <?= $item->quantity ?> = <?= CFormatter::format($item->total) ?>
-                                </div>
-                            </th>
-                            <td align="left">
+                                ?>
+                            </td>
+                            <td>
                                 <?= date('d/m/Y', strtotime($item->delivery_date)) ?>
 
                                 <br />
-                                <?= $item->timeslot?>
-                            </th>
-                            <td aligh="left"><?= $item->delivery_address ?></th>
-                            <td aligh="left" class="hidden-xs hidden-sm"><?= $item->quantity ?></th>
-                            <td align="right" class="hidden-xs hidden-sm"><?= CFormatter::format($item->price) ?></th>
-                            <td align="right" class="hidden-xs hidden-sm"><?= CFormatter::format($item->total) ?></th>
-                        </tr>
 
-                        <!-- for small device -->
-                        <tr class="visible-xs visible-sm">
-                            <td align="right" colspan="2"><?=Yii::t('frontend','Sub Total')?></td>
-                            <td align="right">
-                                <?= CFormatter::format($booking->total_without_delivery) ?>
+                                <?= $item->timeslot ?>
                             </td>
-                        </tr>
-                        <tr class="visible-xs visible-sm">
-                            <td align="right" colspan="2"><?=Yii::t('frontend','Delivery Charge')?></td>
-                            <td align="right">
-                                <?= CFormatter::format($booking->total_delivery_charge) ?></td>
-                        </tr>
-                        <tr class="visible-xs visible-sm">
-                            <td align="right" colspan="2"><?=Yii::t('frontend','Total')?></td>
-                            <td align="right">
-                                <?= CFormatter::format($booking->total_with_delivery) ?>
+                            <td aligh="left">
+                                <?= $item->delivery_address ?>
                             </td>
-                        </tr>
+                            <td class="hidden-xs hidden-sm" align="left">
+                                <?= $item->quantity ?>
+                            </td>
 
-                        <!-- for desktop -->
-                        <tr class="hidden-xs hidden-sm">
-                            <td align="right" colspan="5"><?=Yii::t('frontend','Sub Total')?></td>
-                            <td align="right">
-                                <?= CFormatter::format($booking->total_without_delivery) ?>
+                            <td class="hidden-xs hidden-sm" align="right">
+                                <?= $item->price ?>
                             </td>
+                            <td class="hidden-xs hidden-sm" align="right">
+                                <?= $item->total ?> KD</th>
                         </tr>
-                        <tr class="hidden-xs hidden-sm">
-                            <td align="right" colspan="5"><?=Yii::t('frontend','Delivery Charge')?></td>
-                            <td align="right">
-                                <?= CFormatter::format($booking->total_delivery_charge) ?></td>
-                        </tr>
-                        <tr class="hidden-xs hidden-sm">
-                            <td align="right" colspan="5"><?=Yii::t('frontend','Total')?></td>
-                            <td align="right">
-                                <?= CFormatter::format($booking->total_with_delivery) ?>
-                            </td>
-                        </tr>
+                    <?php } ?>
+                    <!-- for small device -->
+                    <tr class="visible-xs visible-sm">
+                        <td align="right" colspan="2"><?=Yii::t('frontend','Sub Total')?></td>
+                        <td align="right">
+                            <?= CFormatter::format($booking->total_without_delivery) ?>
+                        </td>
+                    </tr>
+                    <tr class="visible-xs visible-sm">
+                        <td align="right" colspan="2"><?=Yii::t('frontend','Delivery Charge')?></td>
+                        <td align="right">
+                            <?= CFormatter::format($booking->total_delivery_charge) ?></td>
+                    </tr>
+                    <tr class="visible-xs visible-sm">
+                        <td align="right" colspan="2"><?=Yii::t('frontend','Total')?></td>
+                        <td align="right">
+                            <?= CFormatter::format($booking->total_with_delivery) ?>
+                        </td>
+                    </tr>
+
+                    <!-- for desktop -->
+                    <tr class="hidden-xs hidden-sm">
+                        <td align="right" colspan="5"><?=Yii::t('frontend','Sub Total')?></td>
+                        <td align="right">
+                            <?= CFormatter::format($booking->total_without_delivery) ?>
+                        </td>
+                    </tr>
+                    <tr class="hidden-xs hidden-sm">
+                        <td align="right" colspan="5"><?=Yii::t('frontend','Delivery Charge')?></td>
+                        <td align="right">
+                            <?= CFormatter::format($booking->total_delivery_charge) ?></td>
+                    </tr>
+                    <tr class="hidden-xs hidden-sm">
+                        <td align="right" colspan="5"><?=Yii::t('frontend','Total')?></td>
+                        <td align="right">
+                            <?= CFormatter::format($booking->total_with_delivery) ?>
+                        </td>
+                    </tr>
                     </tbody>
+
                 </table>
             </div>
         </div>
