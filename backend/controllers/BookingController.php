@@ -2,9 +2,9 @@
 
 namespace backend\controllers;
 
+use admin\models\BookingSearch;
+use common\models\Booking;
 use Yii;
-use common\models\OrderRequestStatus;
-use common\models\OrderRequestStatusSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * OrderRequestStatusController implements the CRUD actions for OrderRequestStatus model.
  */
-class OrderRequestStatusController extends Controller
+class BookingController extends Controller
 {
     /**
      * @inheritdoc
@@ -35,11 +35,27 @@ class OrderRequestStatusController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new OrderRequestStatusSearch();
+        $searchModel = new BookingSearch();
+        $searchModel->vendor_id = Yii::$app->user->id;
+        $dataProvider = $searchModel->searchAll(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all OrderRequestStatus models.
+     * @return mixed
+     */
+    public function actionPending()
+    {
+        $searchModel = new BookingSearch();
         $searchModel->vendor_id = Yii::$app->user->id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
+        return $this->render('pending', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -66,18 +82,18 @@ class OrderRequestStatusController extends Controller
             if ($model->save()) {
 
                 //if accepted
-                if ($model->request_status == 'Approved') {
-                    OrderRequestStatus::approved($model);
+                if (($model->oldAttributes['booking_status'] != $model->booking_status) && $model->booking_status == '1') {
+                    Yii::$app->session->setFlash('success', 'Request Status changed successfully');
+                    Booking::approved($model);
                 }
 
                 //if reject
-                if ($model->request_status == 'Declined') {
-                    OrderRequestStatus::declined($model);
+                if (($model->oldAttributes['booking_status'] != $model->booking_status) && $model->booking_status == '2') {
+                    Yii::$app->session->setFlash('success', 'Request Status changed successfully');
+                    Booking::rejected($model);
                 }
 
-                Yii::$app->session->setFlash('success', 'Request Status changed successfully');
-
-                return $this->redirect(['index']);
+                return $this->redirect(['pending']);
             }
         } else {
             return $this->render('view', [
@@ -95,7 +111,7 @@ class OrderRequestStatusController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = OrderRequestStatus::findOne($id)) !== null) {
+        if (($model = Booking::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

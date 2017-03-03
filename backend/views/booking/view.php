@@ -5,8 +5,8 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\OrderRequestStatus */
 
-$this->title = 'Request ID : '. $model->request_id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Order Request Statuses'), 'url' => ['index']];
+$this->title = 'Booking Request ID : '. $model->booking_id;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Booking Request'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-request-status-view">
@@ -14,12 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $form = ActiveForm::begin(); ?>
     <table class="table table-striped table-bordered detail-view">
         <tbody>
-        <tr><th><?=Yii::t('app','Request ID')?></th><td><?=$model->request_id?></td></tr>
-        <tr><th><?=Yii::t('app','Request Status')?></th><td><?= $form->field($model, 'request_status')->dropDownList([ 'Pending' => 'Pending', 'Approved' => 'Approved', 'Declined' => 'Declined', ], ['prompt' => ''])->label(false) ?></td></tr>
+        <tr><th><?=Yii::t('app','Booking Request ID')?></th><td><?=$model->booking_id?></td></tr>
+        <tr><th><?=Yii::t('app','Booking Request Status')?></th><td><?= $form->field($model, 'booking_status')->dropDownList([ '0' => 'Pending', '1' => 'Approved', '2' => 'Reject','3' => 'Expired'])->label(false) ?></td></tr>
         <tr>
-            <th><?=Yii::t('app','Request Note')?></th>
+            <th><?=Yii::t('app','Booking Request Note')?></th>
             <td>
-                <?= $form->field($model, 'request_note')->textarea(['rows' => 6])->label(false) ?>
+                <?= $form->field($model, 'booking_note')->textarea(['rows' => 6])->label(false) ?>
                 <note><?=Yii::t('app','In case of Declined request please mention reason for it.')?></note>
             </td></tr>
         <tr><th><?=Yii::t('app','Request Received On')?></th><td><?=date('M d Y, H:i A',strtotime($model->created_datetime))?></td></tr>
@@ -32,29 +32,17 @@ $this->params['breadcrumbs'][] = $this->title;
         <tbody>
             <tr>
                 <th><?=Yii::t('app','Customer Name')?></th><td>
-                    <?php
-                    if (isset($model->orderDetail->customer->customer_name) && isset($model->orderDetail->customer->customer_last_name)) {
-                        echo $model->orderDetail->customer->customer_name .' '. $model->orderDetail->customer->customer_last_name;
-                    }
-                    ?>
+                    <?=$model->customer_name .' '. $model->customer_lastname; ?>
                 </td>
             </tr>
             <tr>
                 <th><?=Yii::t('app','Customer Email')?></th><td>
-                    <?php
-                    if (isset($model->orderDetail->customer->customer_email)) {
-                        echo $model->orderDetail->customer->customer_email;
-                    }
-                    ?>
+                    <?=$model->customer_email?>
                 </td>
             </tr>
             <tr>
                 <th><?=Yii::t('app','Customer Mobile')?></th><td>
-                    <?php
-                    if (isset($model->orderDetail->customer->customer_mobile)) {
-                        echo $model->orderDetail->customer->customer_mobile;
-                    }
-                    ?>
+                    <?=$model->customer_mobile?>
                 </td>
             </tr>
         </tbody>
@@ -66,8 +54,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <th><?=Yii::t('app','Area')?></th><td>
                     <?php
-                    if (isset($model->orderDetail->subOrder->itemPurchased->location->location)) {
-                        echo $model->orderDetail->subOrder->itemPurchased->location->location;
+                    if (isset($model->bookingItems[0]->location->location)) {
+                        echo $model->bookingItems[0]->location->location;
                     }
                     ?>
                 </td>
@@ -75,8 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <th><?=Yii::t('app','Delivery Date')?></th><td>
                     <?php
-                    if (isset($model->orderDetail->subOrder->itemPurchased->purchase_delivery_date)) {
-                        echo $model->orderDetail->subOrder->itemPurchased->purchase_delivery_date;
+                    if (isset($model->bookingItems[0]->delivery_date)) {
+                        echo $model->bookingItems[0]->delivery_date;
                     }
                     ?>
                 </td>
@@ -84,8 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <th><?=Yii::t('app','Time Slot')?></th><td>
                     <?php
-                    if (isset($model->orderDetail->subOrder->itemPurchased->time_slot)) {
-                        echo $model->orderDetail->subOrder->itemPurchased->time_slot;
+                    if (isset($model->bookingItems[0]->timeslot)) {
+                        echo $model->bookingItems[0]->timeslot;
                     }?>
                 </td>
             </tr>
@@ -93,8 +81,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th><?=Yii::t('app','Address')?></th><td>
                     <?php
 
-                    if (isset($model->orderDetail->subOrder->itemPurchased->purchase_delivery_address)) {
-                        echo $model->orderDetail->subOrder->itemPurchased->purchase_delivery_address;
+                    if (isset($model->bookingItems[0]->delivery_address)) {
+                        echo $model->bookingItems[0]->delivery_address;
                     }
                     ?>
                 </td>
@@ -102,12 +90,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <th><?=Yii::t('app','Item Name')?></th><td>
                     <?php
-                    if (isset($model->orderDetail->subOrder->itemPurchased->item->item_name)) {
-                        echo $model->orderDetail->subOrder->itemPurchased->item->item_name;
+                    if (isset($model->bookingItems[0]->item_name)) {
+                        echo $model->bookingItems[0]->item_name;
                     }
                     $slug = '';
-                    if (isset($model->orderDetail->subOrder->itemPurchased->item->slug)) {
-                        $slug = $model->orderDetail->subOrder->itemPurchased->item->slug;
+                    if (isset($model->bookingItems[0]->item->slug)) {
+                        $slug = $model->bookingItems[0]->item->slug;
                     }
                     ?>
                     <a target="_blank" class="btn btn-default" href="<?=Yii::$app->urlManagerFrontend->createUrl(['browse/detail/'.$slug]); ?>">View Item</a>
