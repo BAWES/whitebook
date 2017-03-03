@@ -8,8 +8,8 @@ $action = Yii::$app->controller->action->id;
         <li role="presentation" class="<?=($cntrl == 'booking' && (($action == 'pending' || $action == 'view-pending'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-list-alt" aria-hidden="true"></i> Pending Booking',['/booking/pending']) ?>
         </li>
-        <li role="presentation" class="<?=($cntrl == 'orders' && (($action == 'index') || ($action == 'view'))) ? 'active' : '';?>">
-            <?=\yii\bootstrap\Html::a('<i class="fa fa-list-alt" aria-hidden="true"></i> My Order',['/orders/index']) ?>
+        <li role="presentation" class="<?=($cntrl == 'booking' && (($action == 'index') || ($action == 'view'))) ? 'active' : '';?>">
+            <?=\yii\bootstrap\Html::a('<i class="fa fa-list-alt" aria-hidden="true"></i> My Bookings',['/booking/index']) ?>
         </li>
         <li role="presentation" class="<?=($cntrl == 'users' && (($action == 'account_settings'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-user-circle" aria-hidden="true"></i> Account Settings',['/account-settings']) ?>

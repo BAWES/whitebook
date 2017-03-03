@@ -2,7 +2,6 @@
 
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
-use common\models\OrderStatus;
 use common\components\CFormatter;
 use common\components\LangFormat;
 $this->title = Yii::t('frontend', 'Booking | Whitebook');
@@ -28,7 +27,10 @@ $this->title = Yii::t('frontend', 'Booking | Whitebook');
 								<td align="center"><?= Yii::t('frontend', 'Product Name') ?></td>
 								<td align="left"><?= Yii::t('frontend', 'Delivery Date') ?></td>
 								<td align="center"><?= Yii::t('frontend', 'Status') ?></td>
-								<td align="right"><?= Yii::t('frontend', 'Total') ?></td>
+                                <?php if (Yii::$app->controller->action->id != 'pending') :?>
+                                    <td align="right"><?= Yii::t('frontend', 'Total') ?></td>
+                                <?php endif;?>
+                                <td align="center"><?= Yii::t('frontend', 'Pay Now') ?></td>
 								<td></td>
 							</tr>
 						</thead>
@@ -42,11 +44,31 @@ $this->title = Yii::t('frontend', 'Booking | Whitebook');
                                     <?= $booking->bookingItems->timeslot ?>
                                 </td>
 								<td align="center">
-                                    <span class="badge"><?=LangFormat::format(OrderStatus::findOne($booking->booking_status)->name,OrderStatus::findOne($booking->booking_status)->name_ar);?></span>
+                                    <span class="badge badge_<?=$booking->booking_status?>">
+                                        <?=$booking->getStatusName();?>
+                                    </span>
                                 </td>
 								<td align="right"><?= CFormatter::format($booking->total_with_delivery) ?></td>
+
+                                <?php if ($booking->booking_status != 0) :?>
+                                    <td align="center">
+                                        <?php
+                                        if ($booking->booking_status == 1 && $booking->transaction_id == '') {
+                                            echo \yii\bootstrap\Html::a(Yii::t('frontend', 'Pay Now'),['payment/index', 'token' => $booking->booking_token],['class'=>"btn btn-default btn-sm"]);
+                                         } else if ($booking->booking_status == 1 && $booking->transaction_id != '') {
+                                                echo 'Paid';
+                                        }  else {
+                                                echo '-';
+                                        }
+                                        ?>
+                                    </td>
+                                <?php endif;?>
+
 								<td width="50px">
-									<a href="<?= Url::to(['booking/view-pending', 'booking_id' => $booking->booking_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Booking') ?>">
+                                    <?php
+                                    $link = ($booking->booking_status == 0) ? 'booking/view-pending' : 'booking/view';
+                                    ?>
+									<a href="<?= Url::to([$link, 'booking_id' => $booking->booking_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Booking') ?>">
 										<i class="glyphicon glyphicon-eye-open"></i>
 									</a>
 								</td>
