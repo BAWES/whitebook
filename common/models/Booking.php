@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Request;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\behaviors\TimestampBehavior;
 use common\models\Customer;
 use common\models\VendorItemPricing;
@@ -77,7 +78,7 @@ class Booking extends \yii\db\ActiveRecord
             [['vendor_id', 'customer_id', 'notification_status', 'booking_status'], 'integer'],
             [['booking_note'], 'string'],
             [['status_name', 'expired_on', 'created_datetime', 'modified_datetime'], 'safe'],
-            [['commission_percentage', 'commission_total', 'gateway_percentage', 'gateway_fees', 'gateway_total', 'total_delivery_charge', 'total_without_delivery', 'total_with_delivery', 'total _vendor'], 'number'],
+            [['commission_percentage', 'commission_total', 'gateway_percentage', 'gateway_fees', 'gateway_total', 'total_delivery_charge', 'total_without_delivery', 'total_with_delivery', 'total_vendor'], 'number'],
             [['booking_token'], 'string', 'max' => 13],
             [['customer_name', 'customer_lastname', 'customer_email', 'payment_method', 'transaction_id'], 'string', 'max' => 100],
             [['customer_mobile'], 'string', 'max' => 20],
@@ -181,6 +182,10 @@ class Booking extends \yii\db\ActiveRecord
             return false;
         }
         
+        if (!$this->booking_status) {
+            $this->booking_status = Booking::STATUS_PENDING;
+        }
+
         if (!$this->booking_token) {
             $this->booking_token = $this->generateToken();
         }
@@ -447,5 +452,74 @@ class Booking extends \yii\db\ActiveRecord
         ->setTo($emails)
         ->setSubject('New Booking #'.$booking->booking_id)
         ->send();
+    }
+
+    public static function approved($booking) 
+    {
+        //set expiry 
+        $booking->booking_status = Booking::STATUS_ACCEPTED;
+        $booking->expired_on = date('Y-m-d H:i:s',strtotime('+2 day')); // set 48 hour expire date
+        $booking->save();
+
+        //Send Email to customer
+
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+        Yii::$app->mailer->compose("customer/request-approved",
+            [
+                "booking" => $booking,
+                "vendor" => $booking->vendor,
+                "lnk_payment" => Yii::$app->urlManagerFrontend->createUrl(["payment/index", 'token' => $booking->booking_token])
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($booking->customer_email)
+            ->setSubject('Booking request approved!')
+            ->send();
+    }
+
+    public static function rejected($booking) 
+    {
+        $booking->booking_status = Booking::STATUS_REJECTED;
+        $booking->booking_note = Yii::$app->request->post('booking_note');
+        $booking->save(false);
+
+        $items = implode(', ', ArrayHelper::map($booking->bookingItems, 'item_id', 'item_name'));
+
+        //Send Email to customer
+
+        if(Yii::$app->params['notify_customer_request_decline']) 
+        {
+            Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+            Yii::$app->mailer->compose("customer/request-rejected",
+                [
+                    "booking" => $booking,
+                    "vendor" => $booking->vendor,
+                    "items" => $items,
+                    "logo_1" => Url::to("@web/uploads/twb-logo-horiz-white.png", true),
+                    "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
+                ])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($booking->customer_email)
+                ->setSubject('Booking requets rejected!')
+                ->send();
+        }
+
+        //send to admin 
+
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+        Yii::$app->mailer->compose("admin/request-rejected",
+            [
+                "booking" => $booking,
+                "vendor" => $booking->vendor,
+                "items" => $items,
+                "logo_1" => Url::to("@web/uploads/twb-logo-horiz-white.png", true),
+                "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('Booking request rejected!')
+            ->send();
     }
 }
