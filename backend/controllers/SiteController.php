@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use common\models\Booking;
 use common\models\VendorWorkingTiming;
 use Yii;
 use yii\db\Query;
@@ -64,19 +65,15 @@ class SiteController extends Controller
         $monthitemcnt = VendorItem::vendoritemmonthcount($vendor_id);
         $dateitemcnt = VendorItem::vendoritemdatecount($vendor_id);
 
-        $commission_total = Suborder::find()
-            ->where(['vendor_id' => $vendor_id])
-            ->sum('suborder_commission_total');
-
-        $earning_total = Suborder::find()
-            ->where(['vendor_id' => $vendor_id])
-            ->sum('suborder_vendor_total');
+        $earning_total = Booking::find()
+            ->where('transaction_id is not NULL')
+            ->andWhere(['vendor_id' => $vendor_id,'booking_status'=>1])
+            ->sum('total_vendor');
 
         return $this->render('index', [
             'vendoritemcnt' => $vendoritemcnt,
             'monthitemcnt' => $monthitemcnt,
             'dateitemcnt' => $dateitemcnt,
-            'commission_total' => number_format($commission_total, 3).' KD',
             'earning_total' => number_format($earning_total, 3).' KD'
         ]);
     }

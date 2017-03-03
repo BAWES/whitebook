@@ -2,7 +2,6 @@
 
 namespace frontend\controllers;
 
-use common\models\OrderRequestStatus;
 use Yii;
 use common\models\Booking;
 use yii\data\Pagination;
@@ -11,7 +10,7 @@ class BookingController extends BaseController
 {
 	public function actionIndex() {
 
-		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders';
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Booking';
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
@@ -122,4 +121,13 @@ class BookingController extends BaseController
 			'booking' => $booking,
 		]);
 	}
+
+	public function actionMail() {
+        $booking = Booking::findOne(1);
+        return $this->render('view-request', [
+            'user'  => $booking->customer_name,
+            'booking' => $booking,
+            'vendor' => $booking->vendor
+        ]);
+    }
 }
