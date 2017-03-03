@@ -10,7 +10,6 @@ use yii\behaviors\TimestampBehavior;
 use common\models\Customer;
 use common\models\VendorItemPricing;
 use common\models\Vendor;
-use common\models\Booking;
 use common\models\BookingItem;
 use common\models\BookingItemMenu;
 use common\models\CustomerAddress;
@@ -102,17 +101,17 @@ class Booking extends \yii\db\ActiveRecord
     public static function statusList()
     {
         return [
-            STATUS_PENDING => 'Pending',
-            STATUS_ACCEPTED => 'Accepted',
-            STATUS_REJECTED => 'Rejected'
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_ACCEPTED => 'Accepted',
+            self::STATUS_REJECTED => 'Rejected'
         ];
     }
 
-    public static function getStatusName() 
+    public function getStatusName()
     {
         $statusList = Booking::statusList();
 
-        if(isset($statusList[$this->booking_status])) 
+        if(isset($statusList[$this->booking_status]))
             return $statusList[$this->booking_status];
     }
 
@@ -172,7 +171,7 @@ class Booking extends \yii\db\ActiveRecord
      */
     public function getBookingItems()
     {
-        return $this->hasMany(BookingItem::className(), ['booking_id' => 'booking_id']);
+        return $this->hasOne(BookingItem::className(), ['booking_id' => 'booking_id']);
     }
 
     public function beforeSave($insert)

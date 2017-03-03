@@ -2563,5 +2563,5 @@ span.small {
     padding: 0;
 }
 
-.badge.success {background: green;}
-.badge.warning {background: red;}
+.badge.badge_1 {background: green;}
+.badge.badge_2 {background: red;}
