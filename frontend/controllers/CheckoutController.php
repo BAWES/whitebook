@@ -245,7 +245,6 @@ class CheckoutController extends BaseController
 		$address = Yii::$app->session->get('address');
 
 		$items = CustomerCart::items();
-
         return $this->renderPartial('confirm', [
             'items' => $items,
             'address' => $address,

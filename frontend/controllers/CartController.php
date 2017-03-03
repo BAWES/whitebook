@@ -351,6 +351,7 @@ class CartController extends BaseController
     */
     public function validate_item($data) {
 
+        // will change them too
         $this->errors = CustomerCart::validate_item($data);
 
         return !$this->errors;
@@ -359,6 +360,7 @@ class CartController extends BaseController
 
     public function actionValidationProductAvailable() {
 
+        // will change them too
         if (!Yii::$app->request->isAjax) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
