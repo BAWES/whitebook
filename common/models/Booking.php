@@ -11,7 +11,6 @@ use yii\behaviors\TimestampBehavior;
 use common\models\Customer;
 use common\models\VendorItemPricing;
 use common\models\Vendor;
-use common\models\Booking;
 use common\models\BookingItem;
 use common\models\BookingItemMenu;
 use common\models\CustomerAddress;
@@ -58,6 +57,7 @@ class Booking extends \yii\db\ActiveRecord
     const STATUS_PENDING = 0;
     const STATUS_ACCEPTED = 1;
     const STATUS_REJECTED = 2;
+    const STATUS_EXPIRED = 3;
 
     public $status_name;
 
@@ -103,17 +103,17 @@ class Booking extends \yii\db\ActiveRecord
     public static function statusList()
     {
         return [
-            STATUS_PENDING => 'Pending',
-            STATUS_ACCEPTED => 'Accepted',
-            STATUS_REJECTED => 'Rejected'
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_ACCEPTED => 'Accepted',
+            self::STATUS_REJECTED => 'Rejected'
         ];
     }
 
-    public static function getStatusName() 
+    public function getStatusName()
     {
         $statusList = Booking::statusList();
 
-        if(isset($statusList[$this->booking_status])) 
+        if(isset($statusList[$this->booking_status]))
             return $statusList[$this->booking_status];
     }
 
@@ -173,7 +173,7 @@ class Booking extends \yii\db\ActiveRecord
      */
     public function getBookingItems()
     {
-        return $this->hasMany(BookingItem::className(), ['booking_id' => 'booking_id']);
+        return $this->hasOne(BookingItem::className(), ['booking_id' => 'booking_id']);
     }
 
     public function beforeSave($insert)
@@ -521,5 +521,108 @@ class Booking extends \yii\db\ActiveRecord
             ->setTo(Yii::$app->params['adminEmail'])
             ->setSubject('Booking request rejected!')
             ->send();
+
+    /*
+     * cron job for booking expire alert before 1 hour;
+     */
+    public function bookingBeforeExpireAlert() {
+
+        $q = "SELECT b.customer_id,b.booking_status,b.booking_token,b.booking_id FROM whitebook_booking b ";
+        $q .= "WHERE b.expired_on < NOW() - INTERVAL 1 HOUR AND b.notification_status = '0' AND b.booking_status = '1' and b.transaction_id is  NULL";
+        $model = Yii::$app->db->createCommand($q);
+        $customer = $model->queryAll();
+        if ($customer) {
+            foreach ($customer as $detail) {
+                $customerDetail = Customer::findOne($detail['customer_id']);
+                if ($customerDetail) {
+                    $message = 'Hello '.$customerDetail->customer_name.' ' .$customerDetail->customer_last_login;
+                    $message .= '<br/><br/> Your Approved Booking Item going to Expire in one hour. Please pay pending due before it expire.';
+                    $message .= '<br/> Booking Token '.$detail['booking_token'];
+                    $message .= '<br/> Booking ID '.$detail['booking_id'];
+
+                    echo Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['supportEmail'])
+                        ->setTo($customerDetail->customer_email)
+                        ->setSubject('Whitebook : Expiring booking token #'.$detail['booking_token'])
+                        ->setTextBody($message)
+                        ->send();
+
+                }
+            }
+        }
+    }
+
+    /**
+     * Send mail to vendor + admin if customer have not paid
+     * within 24 hour after booking
+     */
+    public function bookingExpire(){
+
+        //list all booking with status as pending and placed before 24 hours
+        $requests = Booking::find()
+            ->where('expired_on < NOW() and transaction_id is NULL')
+            ->andWhere([
+                'booking_status' => '1'
+            ])
+            ->all();
+
+        foreach ($requests as $key => $request)
+        {
+            $vendor = Vendor::findOne($request->vendor_id);
+
+            //get items
+
+            $items = BookingItem::find()
+                ->select('item_id, item_name')
+                ->where([
+                    'booking_id' => $request->booking_id
+                ])
+                ->asArray()
+                ->all();
+
+            $items = implode(', ', ArrayHelper::map($items, 'item_id', 'item_name'));
+
+            // to vendor
+
+            $message = 'Hello '.$vendor->vendor_name.',';
+            $message .= '<br/><br/>  The booking is Expired now for '.$items.' on '.date('d/m/Y h:i A').' because customer have not paid within 24 hour.<br />';
+            $message .= '<br/> Request Token : '.$request->booking_token;
+            $message .= '<br/> Order ID : '.$request->booking_id;
+
+            //get all vendor alert email
+
+            $emails = VendorOrderAlertEmails::find()
+                ->where(['vendor_id' => $request->vendor_id])
+                ->all();
+
+            $emails = ArrayHelper::getColumn($emails, 'email_address');
+
+            Yii::$app->mailer->compose()
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($emails)
+                ->setSubject('Booking Expired!')
+                ->setHtmlBody($message)
+                ->send();
+
+            // to admin
+
+            $message = 'Hello Admin,';
+            $message .= '<br/><br/>  The booking is Expired now for '.$items.' on '.date('d/m/Y h:i A').' because customer have not paid within 48 hours.<br />';
+            $message .= '<br/> Request Token : '.$request->booking_token;
+            $message .= '<br/> Order ID : '.$request->booking_id;
+
+            Yii::$app->mailer->compose()
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo(Yii::$app->params['adminEmail'])
+                ->setSubject('Booking Expired!')
+                ->setHtmlBody($message)
+                ->send();
+
+            //set request status to `Declined`
+
+            $request->request_status = '3';
+            $request->request_note = 'Payment not complete withing within 24 hour';
+            $request->save();
+        }
     }
 }

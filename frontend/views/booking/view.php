@@ -63,8 +63,7 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                         </tr>    
                         <tr>
                             <td>
-                                <?= Yii::t('frontend', 'Order status') ?>:
-                                <?=LangFormat::format(OrderStatus::findOne($booking->booking_status)->name,OrderStatus::findOne($booking->booking_status)->name_ar);?>
+                                <?= Yii::t('frontend', 'Order status') ?>: <?=$booking->getStatusName();?>
                                 <br />
                             </td>
                             <td>
