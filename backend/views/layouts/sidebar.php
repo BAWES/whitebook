@@ -3,8 +3,8 @@ use yii\helpers\Html;
 use common\models\Vendor;
 
 $order_request_count =
-    \common\models\OrderRequestStatus::find()
-    ->where(['request_status' => 'Pending','vendor_id'=>Yii::$app->user->getId()])
+    \common\models\Booking::find()
+    ->where(['booking_status' => '0','vendor_id'=>Yii::$app->user->getId()])
     ->count();
 
 ?>
