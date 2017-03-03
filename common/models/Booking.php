@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\web\Request;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 use common\models\Customer;
 use common\models\VendorItemPricing;
@@ -57,6 +58,8 @@ class Booking extends \yii\db\ActiveRecord
     const STATUS_ACCEPTED = 1;
     const STATUS_REJECTED = 2;
 
+    public $status_name;
+
     /**
      * @inheritdoc
      */
@@ -73,7 +76,7 @@ class Booking extends \yii\db\ActiveRecord
         return [
             [['vendor_id', 'customer_id', 'notification_status', 'booking_status'], 'integer'],
             [['booking_note'], 'string'],
-            [['expired_on', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['status_name', 'expired_on', 'created_datetime', 'modified_datetime'], 'safe'],
             [['commission_percentage', 'commission_total', 'gateway_percentage', 'gateway_fees', 'gateway_total', 'total_delivery_charge', 'total_without_delivery', 'total_with_delivery', 'total _vendor'], 'number'],
             [['booking_token'], 'string', 'max' => 13],
             [['customer_name', 'customer_lastname', 'customer_email', 'payment_method', 'transaction_id'], 'string', 'max' => 100],
@@ -169,7 +172,7 @@ class Booking extends \yii\db\ActiveRecord
      */
     public function getBookingItems()
     {
-        return $this->hasOne(BookingItem::className(), ['booking_id' => 'booking_id']);
+        return $this->hasMany(BookingItem::className(), ['booking_id' => 'booking_id']);
     }
 
     public function beforeSave($insert)
@@ -362,7 +365,7 @@ class Booking extends \yii\db\ActiveRecord
             $booking->total_vendor = $total - $commission_total;
             $booking->save(false);
 
-            Booking::sendNewBookingEmails($booking->booking_id);
+            Booking::sendNewBookingEmails($booking);
 
             $arr_booking_id[] = $booking->booking_id;
         }
@@ -394,8 +397,55 @@ class Booking extends \yii\db\ActiveRecord
         return $purchase_delivery_address;
     }
 
-    public function sendNewBookingEmails($booking_id) 
+    public function sendNewBookingEmails($booking) 
     {
+        //send to customer
 
+        Yii::$app->mailer->compose([
+            "html" => "customer/new-booking"
+        ],[
+            'user'  => $booking->customer_name,
+            'booking' => $booking,
+            'vendor' => $booking->vendor
+        ])
+        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setTo($booking->customer_email)
+        ->setSubject('New Booking #'.$booking->booking_id)
+        ->send();
+        
+        //send to admin
+
+        Yii::$app->mailer->compose([
+            "html" => "customer/new-booking"
+        ],[
+            'user'  => 'Admin',
+            'booking' => $booking,
+            'vendor' => $booking->vendor
+        ])
+        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setTo(Yii::$app->params['adminEmail'])
+        ->setSubject('New Booking #'.$booking->booking_id)
+        ->send();
+        
+        //send to vendor 
+
+        //get all vendor alert email 
+        
+        $emails = VendorOrderAlertEmails::find()
+            ->where(['vendor_id' => $booking->vendor_id])
+            ->all();
+
+        $emails = ArrayHelper::getColumn($emails, 'email_address');
+
+        Yii::$app->mailer->compose([
+            "html" => "vendor/new-booking"
+        ],[
+            'booking' => $booking,
+            'vendor' => $booking->vendor
+        ])
+        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setTo($emails)
+        ->setSubject('New Booking #'.$booking->booking_id)
+        ->send();
     }
 }
