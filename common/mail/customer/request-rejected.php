@@ -89,7 +89,7 @@
                 <td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="left">
                     <div style="cursor:auto;color:grey;font-family:Open Sans, Arial, Arial, Helvetica, sans-serif;font-size:13px;line-height:22px;">
                
-                    <?= $vendor->vendor_name ?> is unable to provide you with <?= $items ?> on <?= date('d/m/Y h:i A') ?> because <?= $model->request_note ?>.
+                    <?= $vendor->vendor_name ?> is unable to provide you with <?= $items ?> on <?= date('d/m/Y h:i A') ?> because <?= $booking->booking_note ?>.
 
                     </div>
                 </td>

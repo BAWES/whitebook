@@ -5,14 +5,14 @@ use yii\widgets\Menu;
 use admin\models\VendorItem;
 use admin\models\AccessControlList;
 use common\models\VendorDraftItem;
-use common\models\OrderRequestStatus;
+use common\models\Booking;
 
 $draft_item_count = VendorDraftItem::find()
 	->where(['is_ready' => 1])
 	->count();
 
-$order_request_count = OrderRequestStatus::find()
-	->where(['request_status' => 'Pending'])
+$booking_request_count = Booking::find()
+	->where(['booking_status' => Booking::STATUS_PENDING])
 	->count();
 
 ?>
@@ -41,12 +41,12 @@ $order_request_count = OrderRequestStatus::find()
 	        	'url' => ['vendor-draft-item/index'],
 	        ],
 	        [	
-	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Order Requests</span><span class="draft_item_count">'.$order_request_count.'</span>', 
-	        	'url' => ['order-request-status/index'],
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Booking Requests</span><span class="draft_item_count">'.$booking_request_count.'</span>', 
+	        	'url' => ['booking-request/index'],
 	        ],
 	        [	
-	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Order</span>', 
-	        	'url' => ['order/index'],
+	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Booking</span>', 
+	        	'url' => ['booking/index'],
 	        ],
 	        [	
 	        	'label' => '<i class="fa fa-money"></i><span class="title">Payable</span>',

@@ -115,7 +115,6 @@ class Role extends \yii\db\ActiveRecord
             'item-type' => ['index', 'view', 'create', 'update', 'delete'],
             'location' => ['index', 'view', 'create', 'update', 'delete', 'city', 'area'],
             'log' => ['view'],
-            'order' => ['index', 'view', 'invoice', 'order-status', 'order-payment','delete'],
             'order-status' => ['index', 'view', 'create', 'update', 'delete'],
             'package' => ['index', 'view', 'create', 'update', 'delete', 'update-item'],
             'payment-gateway' => ['index', 'view', 'create', 'update', 'delete'],
@@ -134,7 +133,8 @@ class Role extends \yii\db\ActiveRecord
             'vendor-item-question-answer-option' => ['index', 'view', 'create', 'update', 'delete', 'deletequestionoptions'],
             'vendor-item-question' => ['index', 'view', 'create', 'update', 'delete'],
             'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete'],
-            'order-request-status' => ['index', 'view'],
+            'booking' => ['index', 'view', 'invoice', 'booking-payment','delete'],
+            'booking-request' => ['index', 'view', 'approve', 'reject'],
             'payable' => ['index', 'view', 'create', 'update', 'delete'],
         ];        
     }
