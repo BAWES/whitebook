@@ -2,9 +2,9 @@
 
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
-use common\models\Order;
+use common\models\OrderStatus;
 use common\components\CFormatter;
-
+use common\components\LangFormat;
 $this->title = Yii::t('frontend', 'Booking | Whitebook');
 
 ?>
@@ -25,7 +25,9 @@ $this->title = Yii::t('frontend', 'Booking | Whitebook');
 						<thead>
 							<tr>
 								<td align="center"><?= Yii::t('frontend', 'Booking ID') ?></td>
-								<td align="left"><?= Yii::t('frontend', 'Date Added') ?></td>
+								<td align="center"><?= Yii::t('frontend', 'Product Name') ?></td>
+								<td align="left"><?= Yii::t('frontend', 'Delivery Date') ?></td>
+								<td align="center"><?= Yii::t('frontend', 'Status') ?></td>
 								<td align="right"><?= Yii::t('frontend', 'Total') ?></td>
 								<td></td>
 							</tr>
@@ -34,10 +36,17 @@ $this->title = Yii::t('frontend', 'Booking | Whitebook');
 						<?php foreach ($bookings as $booking) { ?>
 							<tr>
 								<td align="center"><?= $booking->booking_id?></td>
-								<td align="left"><?= date('d/m/Y', strtotime($booking->created_datetime)) ?></td>
+								<td align="center"><?= (isset($booking->bookingItems->item_name)) ? $booking->bookingItems->item_name : '';?></td>
+								<td align="left">
+                                    <?= date('d/m/Y', strtotime($booking->bookingItems->delivery_date)) ?><br/>
+                                    <?= $booking->bookingItems->timeslot ?>
+                                </td>
+								<td align="center">
+                                    <span class="badge"><?=LangFormat::format(OrderStatus::findOne($booking->booking_status)->name,OrderStatus::findOne($booking->booking_status)->name_ar);?></span>
+                                </td>
 								<td align="right"><?= CFormatter::format($booking->total_with_delivery) ?></td>
 								<td width="50px">
-									<a href="<?= Url::to(['orders/view', 'order_uid' => $booking->booking_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Booking') ?>">
+									<a href="<?= Url::to(['booking/view-pending', 'booking_id' => $booking->booking_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Booking') ?>">
 										<i class="glyphicon glyphicon-eye-open"></i>
 									</a>
 								</td>
