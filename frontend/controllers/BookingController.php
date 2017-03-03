@@ -4,12 +4,10 @@ namespace frontend\controllers;
 
 use common\models\OrderRequestStatus;
 use Yii;
-use common\models\Order;
-use common\models\Suborder;
-use common\models\SuborderItemPurchase;
+use common\models\Booking;
 use yii\data\Pagination;
 
-class OrdersController extends BaseController
+class BookingController extends BaseController
 {
 	public function actionIndex() {
 
@@ -43,9 +41,9 @@ class OrdersController extends BaseController
 		]);
 	}
 
-	public function actionRequestOrder() {
+	public function actionPending() {
 
-		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders';
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Booking';
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
@@ -54,20 +52,20 @@ class OrdersController extends BaseController
 	        return $this->redirect(['/site/index']);
 	    }
 
-        $query = Order::find()
-            ->where(['{{%order}}.customer_id'=>Yii::$app->user->getId()])
-            ->orderBy('{{%order}}.created_datetime DESC');
+        $query = Booking::find()
+            ->where(['customer_id'=>Yii::$app->user->getId()])
+            ->orderBy('created_datetime DESC');
 
 		// create a pagination object with the total count
 		$pagination = new Pagination(['totalCount' => $query->count()]);
 
 		// limit the query using the pagination and retrieve the orders
-		$orders = $query->offset($pagination->offset)
+		$booking = $query->offset($pagination->offset)
 		    ->limit($pagination->limit)
 		    ->all();
 
-		return $this->render('request', [
-			'orders' => $orders,
+		return $this->render('index', [
+			'bookings' => $booking,
 			'pagination' => $pagination
 		]);
 	}

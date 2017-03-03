@@ -701,12 +701,10 @@ class Order extends \yii\db\ActiveRecord
         if ($item_id== false || $delivery_date == false) {
            return false;
         }
-        $q = 'select sum(ip.purchase_quantity) as `purchased` from `whitebook_suborder_item_purchase` as `ip`';
-        $q .= 'inner join whitebook_suborder so on so.suborder_id = ip.suborder_id ';
-        $q .= 'left join `whitebook_order_request_status` as `req` on `req`.`suborder_id` = `ip`.`suborder_id` ';
-        $q .= 'where  ip.item_id = "' . $item_id . '" AND ip.trash = "Default" AND so.trash ="Default" ';
-        $q .= 'AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '") ';
-        $q .= 'AND `req`.`request_status` IN ("Pending","Approved") group by `ip`.`item_id`';
+        $q = 'select sum(bi.quantity) as `purchased` from `whitebook_booking_item` as `bi`';
+        $q .= ' inner join whitebook_booking b on b.booking_id = bi.booking_id where bi.item_id = '.$item_id;
+        $q .= ' AND b.booking_status IN (1,2,4,9) AND DATE(bi.delivery_date) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '")';
+        $q .= ' group by `bi`.`item_id`';
 
         return Yii::$app->db->createCommand($q)->queryOne();
     }
