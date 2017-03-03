@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = 'Vendor Payments | <small>Total Paid for current result: '.$total.'</small>';
+$this->title = 'Vendor Payments | Total Paid for current result: '.$total;
 
 $this->params['breadcrumbs'][] = 'Vendor Payments';
 ?>

@@ -101,4 +101,15 @@ class BookingItem extends \yii\db\ActiveRecord
     {
         return $this->hasMany(BookingItemMenu::className(), ['booking_item_id' => 'booking_item_id']);
     }
+
+    public function getLocation()
+    {
+        return $this->hasOne(Location::className(), ['id' => 'area_id']);
+    }
+
+    public function getAddress()
+    {
+        return $this->hasOne(CustomerAddress::className(), ['address_id' => 'address_id']);
+    }
+
 }

@@ -289,6 +289,7 @@ class Booking extends \yii\db\ActiveRecord
             $booking->customer_name = $customer_name;
             $booking->customer_lastname = $customer_lastname;
             $booking->customer_email = $customer_email;
+            $booking->booking_status = Booking::STATUS_PENDING;
             $booking->customer_mobile = $customer_mobile;
             $booking->ip_address = Request::getUserIP();
             $booking->save(false);
@@ -500,7 +501,7 @@ class Booking extends \yii\db\ActiveRecord
                 ])
                 ->setFrom(Yii::$app->params['supportEmail'])
                 ->setTo($booking->customer_email)
-                ->setSubject('Booking requets rejected!')
+                ->setSubject('Booking request rejected!')
                 ->send();
         }
 
@@ -623,6 +624,15 @@ class Booking extends \yii\db\ActiveRecord
             $request->request_status = '3';
             $request->request_note = 'Payment not complete withing within 24 hour';
             $request->save();
+        }
+    }
+
+    public function setExpiredOn($model) {
+        if (
+            ($model->oldAttributes['booking_status'] != $model->booking_status) &&
+            $model->booking_status == self::STATUS_ACCEPTED
+        )  {
+            $model->expired_on = date('Y-m-d H:i:s',strtotime('+1 Day'));
         }
     }
 }
