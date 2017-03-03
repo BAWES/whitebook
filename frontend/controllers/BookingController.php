@@ -101,41 +101,41 @@ class BookingController extends BaseController
 
 	//View order detail 
 
-	public function actionView() {
+//	public function actionView() {
+//
+//		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders Detail';
+//		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+//		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+//
+//		$order_uid = Yii::$app->request->get('order_uid');
+//
+//		if(!$order_uid) {
+//			return $this->render('track');
+//		}
+//
+//		$order = Order::find()
+//			->where([
+//				'order_uid' => $order_uid
+//			])
+//			->one();
+//
+//		if (!$order) {
+//            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+//        }
+//
+//		$suborder = Suborder::find()
+//			->where(['order_id' => $order->order_id])
+//			->all();
+//
+//		return $this->render('view', [
+//			'order' => $order,
+//			'suborder' => $suborder
+//		]);
+//	}
 
-		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders Detail';
-		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
-		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-	    
-		$order_uid = Yii::$app->request->get('order_uid');
+	public function actionView($booking_id) {
 
-		if(!$order_uid) {
-			return $this->render('track');
-		}
-
-		$order = Order::find()
-			->where([
-				'order_uid' => $order_uid
-			])
-			->one();
-		
-		if (!$order) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-		$suborder = Suborder::find()
-			->where(['order_id' => $order->order_id])
-			->all();
-			
-		return $this->render('view', [
-			'order' => $order,
-			'suborder' => $suborder
-		]);
-	}
-
-	public function actionViewRequest($request_id) {
-
-		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Orders Detail';
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Booking Detail';
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
@@ -145,24 +145,47 @@ class BookingController extends BaseController
 	        return $this->redirect(['/site/index']);
 	    }
 
-		$order = Order::find()
+		$booking = Booking::find()
 			->where([
-				'order_id' => $request_id,
+				'booking_id' => $booking_id,
 				'customer_id' => Yii::$app->user->getId()
 			])
 			->one();
 
-		if (!$order) {
+		if (!$booking) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-		$suborder = Suborder::find()
-			->where(['order_id' => $request_id])
-			->all();
+		return $this->render('view', [
+			'booking' => $booking,
+		]);
+	}
 
-		return $this->render('view-request', [
-			'order' => $order,
-			'suborder' => $suborder
+	public function actionViewPending($booking_id) {
+
+		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Booking Detail';
+		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
+
+		if (Yii::$app->user->isGuest) {
+			Yii::$app->session->set('show_login_modal', 1);//to display login modal
+	        return $this->redirect(['/site/index']);
+	    }
+
+		$booking = Booking::find()
+			->where([
+				'booking_id' => $booking_id,
+				'customer_id' => Yii::$app->user->getId()
+			])
+			->one();
+
+		if (!$booking) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+		return $this->render('view', [
+			'booking' => $booking,
 		]);
 	}
 }

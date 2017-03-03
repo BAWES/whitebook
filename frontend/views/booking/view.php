@@ -8,14 +8,14 @@ use common\components\LangFormat;
 use common\models\SuborderItemMenu;
 use common\models\OrderRequestStatus;
 
-$this->title = Yii::t('frontend', 'View Order | Whitebook'); 
+$this->title = Yii::t('frontend', 'View Booking | Whitebook');
 
 ?>
 
 <section id="inner_pages_sections">
     <div class="container">
         <div class="title_main">
-			<h1><?= Yii::t('frontend', 'View Order'); ?></h1>
+			<h1><?= Yii::t('frontend', 'View Booking'); ?></h1>
 		</div>
         <div class="account_setings_sections">
         <?=$this->render('/users/_sidebar_menu');?>
@@ -24,28 +24,23 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <td colspan="2"><?= Yii::t('frontend', 'Order Details') ?></td>
+                            <td colspan="2"><?= Yii::t('frontend', 'Booking Details') ?></td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <b><?= Yii::t('frontend', 'Order ID') ?>:</b> #<?= $order->order_id ?>
+                                <b><?= Yii::t('frontend', 'Booking ID') ?>:</b> #<?= $booking->booking_id?>
                             </td>
                             <td>
-                                <b><?= Yii::t('frontend', 'Date Added') ?>:</b> <?= date('d/m/Y', strtotime($order->created_datetime)) ?>
+                                <b><?= Yii::t('frontend', 'Date Added') ?>:</b> <?= date('d/m/Y', strtotime($booking->created_datetime)) ?>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <?php
-                foreach($suborder as $row){
-
-                    $vendor = Vendor::findOne($row->vendor_id);
-
-                    $request = OrderRequestStatus::findOne([
-                            'suborder_id' => $row->suborder_id
-                        ]);
+                $item = $booking->bookingItems;
+                $vendor = Vendor::findOne($booking->vendor_id);
 
                 ?>
 
@@ -60,16 +55,16 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                     <tbody>
                         <tr>
                             <td>
-                                <?= Yii::t('frontend', 'Payment Method') ?>: <?= $row->suborder_payment_method ?>
+                                <?= Yii::t('frontend', 'Payment Method') ?>: <?= $booking->payment_method ?>
                             </td>
                             <td>
-                                <?= Yii::t('frontend', 'Transaction ID') ?>: <?= $row->suborder_transaction_id ?>
+                                <?= Yii::t('frontend', 'Transaction ID') ?>: <?= $booking->transaction_id ?>
                             </td>
                         </tr>    
                         <tr>
                             <td>
                                 <?= Yii::t('frontend', 'Order status') ?>:
-                                <?=LangFormat::format(OrderStatus::findOne($row->status_id)->name,OrderStatus::findOne($row->status_id)->name_ar);?>
+                                <?=LangFormat::format(OrderStatus::findOne($booking->booking_status)->name,OrderStatus::findOne($booking->booking_status)->name_ar);?>
                                 <br />
                             </td>
                             <td>
@@ -78,11 +73,7 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                         </tr>
                         <tr>
                             <td>
-                                <?= Yii::t('frontend', 'Request status') ?>: <?= $request->request_status ?>
-                                <br />
-                            </td>
-                            <td>
-                                <?= Yii::t('frontend', 'Request note') ?>: <?= $request->request_note ?>
+                                <?= Yii::t('frontend', 'Booking note') ?>: <?= $booking->booking_note?>
                             </td>
                         </tr>
                     </tbody>
@@ -101,30 +92,29 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                         </tr>
                     </thead>
                     <tbody>
-                    <?php foreach (Order::subOrderItems($row->suborder_id) as $item) { ?>
                         <tr>
                             <td align="left">
                                 <?php 
 
-                                echo LangFormat::format($item->vendoritem->item_name, $item->vendoritem->item_name_ar);
+                                echo LangFormat::format($item->item_name, $item->item_name_ar);
 
-                                $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
+//                                $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
                                 
-                                foreach ($menu_items as $key => $menu_item) { 
-                                    if (Yii::$app->language == 'en') { 
-                                        echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
-                                    } else {
-                                        echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
-                                    }                                    
-
-                                    $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
-
-                                    if($menu_item_total) {
-                                        echo ' = '.CFormatter::format($menu_item_total);    
-                                    }
-                                    
-                                    echo '</i>';
-                                } 
+//                                foreach ($menu_items as $key => $menu_item) {
+//                                    if (Yii::$app->language == 'en') {
+//                                        echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+//                                    } else {
+//                                        echo '<i class="cart_menu_item"> - '.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
+//                                    }
+//
+//                                    $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+//
+//                                    if($menu_item_total) {
+//                                        echo ' = '.CFormatter::format($menu_item_total);
+//                                    }
+//
+//                                    echo '</i>';
+//                                }
                                 
                                 if($item['female_service']) {
                                     echo '<i class="cart_menu_item"> - '.Yii::t('frontend', 'Female service').'</i>';
@@ -137,38 +127,37 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                                 ?>
 
                                 <div class="visible-xs visible-sm">
-                                    x <?= $item->purchase_quantity ?> = <?= CFormatter::format($item->purchase_total_price) ?>
+                                    x <?= $item->quantity ?> = <?= CFormatter::format($item->total) ?>
                                 </div>
                             </th>
                             <td align="left">
-                                <?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
+                                <?= date('d/m/Y', strtotime($item->delivery_date)) ?>
 
                                 <br />
-                                <?= $item->time_slot?>
+                                <?= $item->timeslot?>
                             </th>
-                            <td aligh="left"><?= $item->purchase_delivery_address ?></th>
-                            <td aligh="left" class="hidden-xs hidden-sm"><?= $item->purchase_quantity ?></th>
-                            <td align="right" class="hidden-xs hidden-sm"><?= CFormatter::format($item->purchase_price_per_unit) ?></th>
-                            <td align="right" class="hidden-xs hidden-sm"><?= CFormatter::format($item->purchase_total_price) ?></th>
+                            <td aligh="left"><?= $item->delivery_address ?></th>
+                            <td aligh="left" class="hidden-xs hidden-sm"><?= $item->quantity ?></th>
+                            <td align="right" class="hidden-xs hidden-sm"><?= CFormatter::format($item->price) ?></th>
+                            <td align="right" class="hidden-xs hidden-sm"><?= CFormatter::format($item->total) ?></th>
                         </tr>
-                        <?php } ?>
 
                         <!-- for small device -->
                         <tr class="visible-xs visible-sm">
                             <td align="right" colspan="2"><?=Yii::t('frontend','Sub Total')?></td>
                             <td align="right">
-                                <?= CFormatter::format($row->suborder_total_without_delivery) ?>
+                                <?= CFormatter::format($booking->total_without_delivery) ?>
                             </td>
                         </tr>
                         <tr class="visible-xs visible-sm">
                             <td align="right" colspan="2"><?=Yii::t('frontend','Delivery Charge')?></td>
                             <td align="right">
-                                <?= CFormatter::format($row->suborder_delivery_charge) ?></td>
+                                <?= CFormatter::format($booking->total_delivery_charge) ?></td>
                         </tr>
                         <tr class="visible-xs visible-sm">
                             <td align="right" colspan="2"><?=Yii::t('frontend','Total')?></td>
                             <td align="right">
-                                <?= CFormatter::format($row->suborder_total_with_delivery) ?>
+                                <?= CFormatter::format($booking->total_with_delivery) ?>
                             </td>
                         </tr>
 
@@ -176,23 +165,22 @@ $this->title = Yii::t('frontend', 'View Order | Whitebook');
                         <tr class="hidden-xs hidden-sm">
                             <td align="right" colspan="5"><?=Yii::t('frontend','Sub Total')?></td>
                             <td align="right">
-                                <?= CFormatter::format($row->suborder_total_without_delivery) ?>
+                                <?= CFormatter::format($booking->total_without_delivery) ?>
                             </td>
                         </tr>
                         <tr class="hidden-xs hidden-sm">
                             <td align="right" colspan="5"><?=Yii::t('frontend','Delivery Charge')?></td>
                             <td align="right">
-                                <?= CFormatter::format($row->suborder_delivery_charge) ?></td>
+                                <?= CFormatter::format($booking->total_delivery_charge) ?></td>
                         </tr>
                         <tr class="hidden-xs hidden-sm">
                             <td align="right" colspan="5"><?=Yii::t('frontend','Total')?></td>
                             <td align="right">
-                                <?= CFormatter::format($row->suborder_total_with_delivery) ?>
+                                <?= CFormatter::format($booking->total_with_delivery) ?>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <?php } ?>
             </div>
         </div>
     </div>

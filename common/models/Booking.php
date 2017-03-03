@@ -144,7 +144,7 @@ class Booking extends \yii\db\ActiveRecord
      */
     public function getBookingItems()
     {
-        return $this->hasMany(BookingItem::className(), ['booking_id' => 'booking_id']);
+        return $this->hasOne(BookingItem::className(), ['booking_id' => 'booking_id']);
     }
 
     /** 
