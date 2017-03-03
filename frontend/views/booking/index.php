@@ -38,10 +38,10 @@ $this->title = Yii::t('frontend', 'Booking | Whitebook');
 						<?php foreach ($bookings as $booking) { ?>
 							<tr>
 								<td align="center"><?= $booking->booking_id?></td>
-								<td align="center"><?= (isset($booking->bookingItems->item_name)) ? $booking->bookingItems->item_name : '';?></td>
+								<td align="center"><?= (isset($booking->bookingItems[0]->item_name)) ? $booking->bookingItems[0]->item_name : '';?></td>
 								<td align="left">
-                                    <?= date('d/m/Y', strtotime($booking->bookingItems->delivery_date)) ?><br/>
-                                    <?= $booking->bookingItems->timeslot ?>
+                                    <?= date('d/m/Y', strtotime($booking->bookingItems[0]->delivery_date)) ?><br/>
+                                    <?= $booking->bookingItems[0]->timeslot ?>
                                 </td>
 								<td align="center">
                                     <span class="badge badge_<?=$booking->booking_status?>">

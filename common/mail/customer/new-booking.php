@@ -129,7 +129,7 @@ use common\components\CFormatter;
 	                    ?>
         				<br />
         				x <?= $item->quantity ?>
-		        	</th>
+		        	</td>
 		    		<td aligh="left" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;">
 		    			<?= $item->delivery_address ?> 
 		    			<br />
