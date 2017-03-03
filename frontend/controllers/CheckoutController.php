@@ -268,11 +268,11 @@ class CheckoutController extends BaseController
         Yii::$app->session->remove('payment_method');
         Yii::$app->session->remove('address');
 
-        $order_id = Yii::$app->session->get('order_id');
+        $arr_booking_id = Yii::$app->session->get('arr_booking_id');
 
         return $this->render('success', [
-            'order_id' => $order_id,
-            'order_page' => Url::to(['orders/request-order'])
+            'arr_booking_id' => $arr_booking_id,
+            'booking_page' => Url::to(['booking/index'])
         ]);
     }
 
@@ -282,9 +282,9 @@ class CheckoutController extends BaseController
         
         if ($address) {
             
-            $booking_id = Booking::checkoutConfirm();
+            $arr_booking_id = Booking::checkoutConfirm();
 
-            Yii::$app->session->set('booking_id', $booking_id);
+            Yii::$app->session->set('arr_booking_id', $arr_booking_id);
             
             return $this->redirect(['success']);
 

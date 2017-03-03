@@ -3,6 +3,19 @@
 namespace common\models;
 
 use Yii;
+use yii\web\Request;
+use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
+use common\models\Customer;
+use common\models\VendorItemPricing;
+use common\models\Vendor;
+use common\models\Booking;
+use common\models\BookingItem;
+use common\models\BookingItemMenu;
+use common\models\CustomerAddress;
+use common\models\CustomerAddressResponse;
+use common\models\CustomerCartMenuItem;
+use common\models\CustomerCart;
 
 /**
  * This is the model class for table "whitebook_booking".
@@ -68,6 +81,18 @@ class Booking extends \yii\db\ActiveRecord
             [['ip_address'], 'string', 'max' => 128],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'customer_id']],
             [['vendor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vendor::className(), 'targetAttribute' => ['vendor_id' => 'vendor_id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
         ];
     }
 
@@ -147,23 +172,55 @@ class Booking extends \yii\db\ActiveRecord
         return $this->hasMany(BookingItem::className(), ['booking_id' => 'booking_id']);
     }
 
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        
+        if (!$this->booking_token) {
+            $this->booking_token = $this->generateToken();
+        }
+        
+        return true;
+    }
+
+    public function generateToken()
+    {
+        $unique = Yii::$app->getSecurity()->generateRandomString(13);
+
+        $exists = Booking::findOne([
+                'booking_token' => $unique
+            ]); ;
+        
+        if (!empty($exists)) {
+            return $this->generateToken();
+        }
+        
+        return $unique;
+    }
+
     /** 
      * Add new bookings on checkout confirm 
      */ 
     public function checkoutConfirm()
     {        
         //address ids saved in session from checkout
+
         $addresses = Yii::$app->session->get('address');
 
         //default commision
+
         $default_commision = Siteinfo::info('commission');
 
         $items = CustomerCart::items();
 
         //price chart
+
         $price_chart = array();
 
         //check if quantity fall in price chart
+
         foreach ($items as $key => $item) {
 
             $price_chart[$item['item_id']] = [];
@@ -195,140 +252,150 @@ class Booking extends \yii\db\ActiveRecord
             }
         }
 
-        //make chunks of item by vendor id
+        if(Yii::$app->user->isGuest) 
+        {
+            $customer_id = 0;
+            $customer_name = Yii::$app->session->get('customer_name');
+            $customer_lastname = Yii::$app->session->get('customer_lastname');
+            $customer_email = Yii::$app->session->get('customer_email'); 
+            $customer_mobile = Yii::$app->session->get('customer_mobile'); 
+        }
+        else
+        {   
+            $customer = Customer::findOne(Yii::$app->user->getId());
 
-        $chanks = [];
+            $customer_id = $customer->customer_id;
+            $customer_name = $customer->customer_name;
+            $customer_lastname = $customer->customer_last_name;
+            $customer_email = $customer->customer_email;
+            $customer_mobile = $customer->customer_mobile;
+        }
 
-        $total = $sub_total = $delivery_charge = 0;
+        $arr_booking_id = [];
 
         foreach ($items as $item) {
+
+            $booking = new Booking;
+            $booking->vendor_id = $item['vendor_id'];
+            $booking->customer_id = $customer_id;
+            $booking->customer_name = $customer_name;
+            $booking->customer_lastname = $customer_lastname;
+            $booking->customer_email = $customer_email;
+            $booking->customer_mobile = $customer_mobile;
+            $booking->ip_address = Request::getUserIP();
+            $booking->save(false);
+
+            //address
+            $address_id = $addresses[$item['cart_id']];
+
+            $booking_item = new BookingItem;
+            $booking_item->booking_id = $booking->booking_id;
+            $booking_item->item_id = $item['item_id'];
+            $booking_item->item_name = $item['item_name'];
+            $booking_item->item_name_ar = $item['item_name_ar'];
+            $booking_item->timeslot = $item['time_slot'];
+            $booking_item->area_id = $item['area_id'];
+            $booking_item->address_id = $address_id;
+            $booking_item->delivery_address = Booking::getPurchaseDeliveryAddress($address_id);
+            $booking_item->delivery_date = $item['cart_delivery_date'];
+            $booking_item->price = $price_chart[$item['item_id']]['unit_price'];
+            $booking_item->quantity = $item['cart_quantity'];
+            $booking_item->total = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
+            $booking_item->female_service = $item['female_service'];
+            $booking_item->special_request = $item['special_request'];
+            $booking_item->save();
+
+            //save menu item
+            $menu_items = CustomerCartMenuItem::find()
+                ->select([
+                    '{{%vendor_item_menu}}.menu_id',
+                    '{{%vendor_item_menu}}.menu_name',
+                    '{{%vendor_item_menu}}.menu_name_ar',
+                    '{{%vendor_item_menu}}.menu_type',
+                    '{{%vendor_item_menu_item}}.menu_item_id',
+                    '{{%vendor_item_menu_item}}.menu_item_name',
+                    '{{%vendor_item_menu_item}}.menu_item_name_ar',
+                    '{{%vendor_item_menu_item}}.price',
+                    '{{%customer_cart_menu_item}}.quantity'
+                ])
+                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+                ->where(['cart_id' => $item['cart_id']])
+                ->asArray()
+                ->all();
+
+            foreach ($menu_items as $key => $menu_item) {
+                $bim = new BookingItemMenu;
+                $bim->attributes = $menu_item;
+                $bim->booking_item_id = $booking_item->booking_item_id;
+                $bim->total = $bim->price * $bim->quantity;
+                $bim->save();
+            }
+
+            //delivery charge 
 
             $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
-            $delivery_charge += $delivery_area->delivery_price;
 
-            $sub_total += ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
-            $total = $sub_total + $delivery_charge;
-        }
+            $delivery_charge = $delivery_area->delivery_price;
 
-        //insert main order
-        $order = new Order;
-        $order->customer_id = Yii::$app->user->getID();
-        $order->order_total_delivery_charge = $delivery_charge;
-        $order->order_total_without_delivery = $total - $delivery_charge;
-        $order->order_total_with_delivery = $total;
-        $order->order_ip_address = Request::getUserIP();
-        $order->trash = 'Default';
-        $order->save(false);
+            //total 
 
-        foreach ($items as $item) {
+            $total = $booking_item->total + $delivery_charge;
 
-            $sub_order = new Suborder;
-            $sub_order->order_id = $order->order_id;
-            $sub_order->vendor_id = $item['vendor_id'];
-            $sub_order->status_id = 8; // Pending
-            $sub_order->trash = 'Default';
-            $sub_order->suborder_payment_method = '-';
-            $sub_order->suborder_transaction_id = $transaction_id;
-            $sub_order->suborder_gateway_percentage = 0.0;
-            $sub_order->suborder_gateway_fees = 0.0;
-            $sub_order->suborder_gateway_total = 0;
+            //commission percentage 
 
-            if ($sub_order->save(false)) {
-
-                $request = new OrderRequestStatus();
-                $request->order_id = $order->order_id;
-                $request->suborder_id = $sub_order->suborder_id;
-                $request->vendor_id = $item['vendor_id'];
-                $request->request_status = 'Pending';
-                $request->save(false);
-
-                //calculate order total data
-                $total = 0;
-                $sub_total = 0;
-                $delivery_charge = 0;
-                $suborder_commission_total = 0;
-
-                //address
-                $address_id = $addresses[$item['cart_id']];
-
-                $item_purchase = new SuborderItemPurchase;
-                $item_purchase->suborder_id = $sub_order->suborder_id;
-                $item_purchase->time_slot = $item['time_slot'];
-                $item_purchase->item_id = $item['item_id'];
-                $item_purchase->area_id = $item['area_id'];
-                $item_purchase->address_id = $address_id;
-                $item_purchase->purchase_delivery_address = Order::getPurchaseDeliveryAddress($address_id);
-                $item_purchase->purchase_delivery_date = $item['cart_delivery_date'];
-                $item_purchase->purchase_price_per_unit = $price_chart[$item['item_id']]['unit_price'];
-                $item_purchase->purchase_customization_price_per_unit = 0;
-                $item_purchase->purchase_quantity = $item['cart_quantity'];
-                $item_purchase->purchase_total_price = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
-                $item_purchase->female_service = $item['female_service'];
-                $item_purchase->special_request = $item['special_request'];
-                $item_purchase->trash = 'Default';
-                $item_purchase->save(false);
-
-                //save menu item
-                $menu_items = CustomerCartMenuItem::find()
-                    ->select([
-                        '{{%vendor_item_menu}}.menu_id',
-                        '{{%vendor_item_menu}}.menu_name',
-                        '{{%vendor_item_menu}}.menu_name_ar',
-                        '{{%vendor_item_menu}}.menu_type',
-                        '{{%vendor_item_menu_item}}.menu_item_id',
-                        '{{%vendor_item_menu_item}}.menu_item_name',
-                        '{{%vendor_item_menu_item}}.menu_item_name_ar',
-                        '{{%vendor_item_menu_item}}.price',
-                        '{{%customer_cart_menu_item}}.quantity'
-                    ])
-                    ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-                    ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-                    ->where(['cart_id' => $item['cart_id']])
-                    ->asArray()
-                    ->all();
-
-                foreach ($menu_items as $key => $menu_item) {
-                    $soim = new SuborderItemMenu;
-                    $soim->attributes = $menu_item;
-                    $soim->purchase_id = $item_purchase->purchase_id;
-                    $soim->total = $soim->price * $soim->quantity;
-                    $soim->save();
-                }
-
-                //sub order total data
-
-                $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
-                $delivery_charge = $delivery_area->delivery_price;
-
-                $sub_total = $item_purchase->purchase_total_price;
-            }
-
-            $total = $sub_total + $delivery_charge;
-
-            //suborder commission
-            $vendor = Vendor::findOne($sub_order->vendor_id);
+            $vendor = Vendor::findOne($booking->vendor_id);
 
             if (is_null($vendor->commision) || $vendor->commision == '') {
-                $suborder_commission_percentage = $vendor->commision;
+                $commission_percentage = $vendor->commision;
             } else {
-                $suborder_commission_percentage = $default_commision;
+                $commission_percentage = $default_commision;
             }
 
-            $suborder_commission_total = $total * ($suborder_commission_percentage / 100);
+            $commission_total = $total * ($commission_percentage / 100);
 
-            //update sub order total
-            $sub_order->suborder_delivery_charge = $delivery_charge;
-            $sub_order->suborder_total_without_delivery = $total - $delivery_charge;
-            $sub_order->suborder_total_with_delivery = $total;
-            $sub_order->suborder_commission_percentage = $suborder_commission_percentage;
-            $sub_order->suborder_commission_total = $suborder_commission_total;
-            $sub_order->suborder_vendor_total = $total - $suborder_commission_total;
-            $sub_order->save(false);
+            $booking->commission_percentage = $commission_percentage;
+            $booking->commission_total = $commission_total;
+            $booking->total_delivery_charge = $delivery_charge;
+            $booking->total_without_delivery = $total - $delivery_charge;
+            $booking->total_with_delivery = $total;
+            $booking->total_vendor = $total - $commission_total;
+            $booking->save(false);
+
+            Booking::sendNewBookingEmails($booking->booking_id);
+
+            $arr_booking_id[] = $booking->booking_id;
         }
 
-        Order::sendNewOrderEmails($order->order_id);
+        return $arr_booking_id;
+    }
 
-        return $order->order_id;
+    public function getPurchaseDeliveryAddress($address_id)
+    {
+        $address_model = CustomerAddress::findOne($address_id);
+
+        $purchase_delivery_address = $address_model->address_data.'<br />';
+        
+        //get address response 
+        $address_responses = CustomerAddressResponse::find()
+            ->where(['address_id' => $address_id])
+            ->all();
+
+        foreach ($address_responses as $response) {
+           $purchase_delivery_address .= $response->response_text.'<br />';
+        }
+
+        //area 
+        $purchase_delivery_address .= $address_model->location->location.'<br />';
+
+        //city 
+        $purchase_delivery_address .= $address_model->city->city_name;
+
+        return $purchase_delivery_address;
+    }
+
+    public function sendNewBookingEmails($booking_id) 
+    {
 
     }
 }
