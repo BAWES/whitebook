@@ -36,11 +36,11 @@ $order_request_count =
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
 			</li>
 
-			<li class="<?=($cntrl == 'booking' && $action == 'pending') ? "active" : "noactive" ?>">
+			<li class="<?=($cntrl == 'booking' && ($action == 'pending' || $action == 'view-pending')) ? "active" : "noactive" ?>">
 				<?= Html::a('<i class="glyphicon glyphicon-send"></i><span class="title">Booking Requests</span>  <span class="badge badge-danger">'.$order_request_count.'</span>', ['booking/pending'], ['class'=>'link-title']) ?>
 			</li>
 			
-			<li class="<?=($cntrl == 'booking' && $action == 'index') ? "active" : "noactive" ?>">
+			<li class="<?=($cntrl == 'booking' && ($action == 'index' || $action == 'view')) ? "active" : "noactive" ?>">
 				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">All Booking</span>', ['booking/index'], ['class'=>'link-title']) ?>
 			</li>
 

@@ -51,7 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view}'
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url,$model) {
+                        $url = \yii\helpers\Url::to(['view-pending','id'=>$model->booking_id]);
+                        return \yii\helpers\Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url);
+                    },
+                ],
             ],
         ],
     ]); ?>
