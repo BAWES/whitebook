@@ -126,7 +126,7 @@ $booking_request_count = Booking::find()
 				'options'=>['class'=>'dropdown'],
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'items' => [
-					['label' => 'Vendor packages', 'url' => ['report/package']],
+					//['label' => 'Vendor packages', 'url' => ['report/package']],
 					['label' => 'Vendor commission', 'url' => ['report/commission']]
 				]
 			],
