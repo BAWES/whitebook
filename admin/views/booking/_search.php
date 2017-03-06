@@ -14,23 +14,24 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-3">
-            <?= $form->field($model, 'order_id') ?>
 
-            <?= $form->field($model, 'customerName') ?>
+            <?= $form->field($model, 'booking_id') ?>
 
-        </div>
-        <div class="col-md-3">
-
-            <?= $form->field($model, 'order_total_without_delivery') ?>
-            
-            <?= $form->field($model, 'order_total_with_delivery') ?>
+            <?= $form->field($model, 'customer_name') ?>
 
         </div>
         <div class="col-md-3">
-            
-            <?= $form->field($model, 'order_total_delivery_charge') ?>
 
-            <?= $form->field($model, 'order_ip_address') ?>
+            <?= $form->field($model, 'total_without_delivery') ?>
+            
+            <?= $form->field($model, 'total_with_delivery') ?>
+
+        </div>
+        <div class="col-md-3">
+            
+            <?= $form->field($model, 'total_delivery_charge') ?>
+
+            <?= $form->field($model, 'ip_address') ?>
             
         </div>
         <div class="col-md-3">
