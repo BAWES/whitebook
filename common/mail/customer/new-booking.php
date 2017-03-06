@@ -70,7 +70,7 @@ use common\components\CFormatter;
 				<tr>
 					<td style="border-right: 1px solid #ddd;"">
 						<?= Yii::t('frontend', 'Status') ?>: 
-						<?= $booking->status_name ?>	
+						<?= $booking->statusName ?>	
 						<br />
 					</td>
 					<td>

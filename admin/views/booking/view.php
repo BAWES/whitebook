@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_lastname',
             'customer_email',
             'customer_mobile',
-            //'status_name',
+            //'statusName',
             'booking_note',
             'expired_on',
             'notification_status',

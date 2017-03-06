@@ -7,14 +7,14 @@
 			<h1><?= Yii::t('frontend', 'Success'); ?></h1>
 		</div>
 		<center>
-			<h2><?= Yii::t('frontend', 'Congratulation! Your Order Payment Complete Successfully!') ?></h2>
+			<h2><?= Yii::t('frontend', 'Congratulation! Your Payment Processed Successfully!') ?></h2>
 			<br />
 			<p><?= Yii::t(
 					'frontend', 
-					'We received your payment successfully. Your Order ID is #{id}. You can track and view detail of your order in <a href="{order_page}">My Orders</a>. Thank You, for shopping with us.',
+					'We received your payment successfully. Your Booking ID is #{id}. You can view detail of your booking <a href="{lnk_track}">here</a>. Thank You, for shopping with us.',
 					[
-						'id' => $order_id,
-						'order_page' => $order_page
+						'id' => $booking_id,
+						'lnk_track' => $lnk_track
 					]
 				); ?></p>
 

@@ -4,19 +4,19 @@ use yii\web\View;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use common\models\Order;
-use common\models\Vendor;
-use common\models\Siteinfo;
-use common\models\OrderStatus;
-use common\models\SuborderItemMenu;
-use common\models\SuborderItemPurchase;
+use common\bookings\Booking;
+use common\bookings\Vendor;
+use common\bookings\Siteinfo;
+use common\bookings\BookingStatus;
+use common\bookings\SuborderItemMenu;
+use common\bookings\SuborderItemPurchase;
 use common\components\CFormatter;
 
 ?>
 <tr>
     <td width="20"></td>
     <td style=" font:normal 14px/21px arial; color:#333333;">
-        Hi <?= $customer->customer_name ?>,
+        Hi <?= $booking->customer_name ?>,
     </td>
     <td width="20"></td>
 </tr>
@@ -24,13 +24,13 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
-        Your order item payment processed. 
+         Your item request approved. 
 
         <br />
         <br />
 
-        <a href="<?= Url::to(['orders/view', 'order_uid' => $model->order->order_uid], true); ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Track order &rarr;</a>
-        
+        <a href="<?= $lnk_payment; ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Pay Now &rarr;</a>
+
         <br />
         <br />
     </td>
@@ -45,36 +45,14 @@ use common\components\CFormatter;
         <table class="table table-bordered" style="width:100%;">
 	        <tr>
 	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Order ID: <?= $model->order_id ?> 
+	                Booking ID: <?= $booking->booking_id ?> 
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Order UID: <?= $model->order->order_uid ?> 
+	                Booking Token: <?= $booking->booking_token ?>
 	            </td>
 	        </tr>
-	        <tr>
-	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
-	                Sub Order ID: <?= $model->suborder_id ?> 
-	            </td>
-	            <td style="border-bottom: 1px solid #ddd;">
-	                Payment method: <?= $model->suborder_payment_method ?>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;"> 
-	            	Transaction ID: <?= $model->suborder_transaction_id ?>
-	            </td>
-	            <td style="border-bottom: 1px solid #ddd;">
-	                Date: <?= date('d/m/Y', strtotime($model->created_datetime)) ?>                
-	            </td>
-	        </tr>    
 	    </table>
 	    
-	    <?php 
-
-	        $vendor = Vendor::findOne($model->vendor_id);
-
-	    ?>
-
 	    <br />
 
 	    <table class="table table-bordered" style="width:100%;">
@@ -88,12 +66,8 @@ use common\components\CFormatter;
 	        <tbody>
 	            <tr>
 	                <td style="border-right: 1px solid #ddd;">
-	                   <?= Yii::t('frontend', 'Order status') ?>: 
-	                    <?php if(Yii::$app->language == 'en') { 
-	                            echo OrderStatus::findOne($model->status_id)->name;
-	                          } else {
-	                            echo OrderStatus::findOne($model->status_id)->name_ar;
-	                          } ?>  
+	                    <?= Yii::t('frontend', 'Booking status') ?>: 
+	                    <?= $booking->statusName ?>  
 	                </td>
 	                <td>
 	                    <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?>
@@ -116,18 +90,17 @@ use common\components\CFormatter;
 	            </tr>
 	        </thead>    
 	        <tbody>
-	        <?php foreach (Order::subOrderItems($model->suborder_id) as $item) { ?>
+	        <?php foreach ($booking->bookingItems as $item) { ?>
 	            <tr>
 	                <td align="left" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;">
+	                    
 	                    <?php if(Yii::$app->language == 'en') {
-	                        echo $item->vendoritem->item_name;
+	                        echo $item->item_name;
 	                    } else {
-	                        echo $item->vendoritem->item_name_ar; 
+	                        echo $item->item_name_ar; 
 	                    } 
 	                    
-	                    $menu_items = SuborderItemMenu::findAll(['purchase_id' => $item->purchase_id]);
-
-	                    foreach ($menu_items as $key => $menu_item) { 
+	                    foreach ($item->bookingItemMenus as $key => $menu_item) { 
 	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
 
                             $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
@@ -149,35 +122,35 @@ use common\components\CFormatter;
 
 						?>
 	                    <br />
-	                    x <?= $item->purchase_quantity ?>
+	                    x <?= $item->quantity ?>
 	                </th>
 	                <td aligh="left" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;">
-	                	<?= $item->purchase_delivery_address ?>
+	                	<?= $item->delivery_address ?>
 	                	<br />
 	                	
-	                	<?= date('d/m/Y', strtotime($item->purchase_delivery_date)) ?>
+	                	<?= date('d/m/Y', strtotime($item->delivery_date)) ?>
 
 	                	<br />
 
-	                	<?= $item->time_slot ?>
+	                	<?= $item->timeslot ?>
 
 	                </th>
 	                <td align="right" style="border-bottom: 1px solid #DDDDDD;">
-	                	<?= $item->purchase_total_price ?> KWD</th>   
+	                	<?= $item->total ?> KWD</th>   
 	            </tr>
 	            <?php } ?>
 
 	            <tr>
 	                <td align="right" colspan="2" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;"><b>Sub Total</b></td>
-	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $model->suborder_total_without_delivery ?> KWD</td>
+	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $booking->total_without_delivery ?> KWD</td>
 	            </tr>
 	            <tr>
 	                <td align="right" colspan="2" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;"><b>Delivery Charge</b></td>
-	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $model->suborder_delivery_charge ?> KWD</td>
+	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $booking->total_delivery_charge ?> KWD</td>
 	            </tr>
 	            <tr>
 	                <td align="right" colspan="2" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;"><b>Total</b></td>
-	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $model->suborder_total_with_delivery ?> KWD</td>
+	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $booking->total_with_delivery ?> KWD</td>
 	            </tr>
 	        </tbody>
 	    </table>

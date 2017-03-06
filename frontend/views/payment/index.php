@@ -23,8 +23,6 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 		<br />
 		<br />
 
-        <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">
-
         <table class="table table-bordered cart-table">
 	        <thead>
 	        	<tr>
@@ -44,17 +42,7 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 	        	</tr>
 	        </thead>
 	        <tbody>
-	        	<?php
-	        	
-	        	$sub_total = $delivery_charge = 0;
-	        	
-	        	foreach ($items as $item) {
-
-    			$sub_total += $item['purchase_total_price'];
-	        	
-	        	$menu_items = SuborderItemMenu::findAll(['purchase_id' => $item['purchase_id']]);
-
-	        	?>
+	        	<?php foreach ($items as $item) { ?>
 	        	<tr>
 	        		<td align="center">
 	        			<?php
@@ -76,8 +64,8 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
                         ?>
 	        		</td>
 	        		<td>
-	        			<?php if($item['slug']) { ?>
-	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>" target="_blank">
+	        			<?php if($item->item) { ?>
+	        			<a href="<?= Url::to(["browse/detail", 'slug' => $item->item->slug]) ?>" target="_blank">
 	        				<?= LangFormat::format($item['item_name'], $item['item_name_ar']); ?>
 	        			</a>
 	        			<?php } else {  ?>
@@ -86,7 +74,7 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 
 	        			<?php 
 
-	        			foreach ($menu_items as $key => $menu_item) { 
+	        			foreach ($item->bookingItemMenus as $key => $menu_item) { 
 	        				if(Yii::$app->language == 'en') {
 	        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
 	        				}else{
@@ -112,13 +100,13 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 
 	        			?>
 
-	        			<?php if($menu_items) { ?>
+	        			<?php if($item->bookingItemMenus) { ?>
 		        			<div class="visible-xs visible-sm">	        				
-		        				 = <?= CFormatter::format($item['purchase_total_price']); ?>
+		        				 = <?= CFormatter::format($item['total']); ?>
 		        			</div>
 	        			<?php } else { ?>
 		        			<div class="visible-xs visible-sm">	        				
-		        				x <?= $item['purchase_quantity'] ?> = <?= CFormatter::format($item['purchase_total_price']); ?>
+		        				x <?= $item['quantity'] ?> = <?= CFormatter::format($item['total']); ?>
 		        			</div>
 	        			<?php } ?>
 
@@ -127,11 +115,11 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 					$color = '';
 					$msg = '';
 					
-					/*if (strtotime($item['purchase_delivery_date']) < strtotime(date('Y-m-d'))) {
+					/*if (strtotime($item['delivery_date']) < strtotime(date('Y-m-d'))) {
 						$color = '#f2dede';
 						$msg = '<small>'.Yii::t('frontend','Past delivery date').'</small>';
 					} else if (
-						(strtotime($item['purchase_delivery_date']) == strtotime(date('Y-m-d'))) &&
+						(strtotime($item['delivery_date']) == strtotime(date('Y-m-d'))) &&
 						(strtotime($item['working_end_time']) < strtotime(date('H:i:s')))
 					) {
 						$color = '#f2dede';
@@ -141,22 +129,22 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 					?>
 	        		<td class="position-relative " style="background-color:<?=$color?> ">
 
-	        			<?= $item['purchase_delivery_address'] ?><br />
+	        			<?= $item['delivery_address'] ?><br />
 
-    					<?= $item['purchase_delivery_date'] ?><br />
+    					<?= $item['delivery_date'] ?><br />
 						
-						<?= $item['time_slot']; ?><br />
+						<?= $item['timeslot']; ?><br />
 
 						<?= $msg; ?>      			
 	        		</td>
 	        		<td align="center">
-		        		<?= $item['purchase_quantity'] ?>
+		        		<?= $item['quantity'] ?>
                     </td>
 	        		<td align="right" class="visible-md visible-lg">
-	        			<?= CFormatter::format($item['purchase_price_per_unit'])  ?>
+	        			<?= CFormatter::format($item['price'])  ?>
 	        		</td>
 	        		<td align="right" class="visible-md visible-lg">
-	        			<?= CFormatter::format($item['purchase_total_price'])  ?>
+	        			<?= CFormatter::format($item['total'])  ?>
 	        		</td>
 	        	</tr>
 	        	<?php } ?>
