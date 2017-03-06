@@ -40,7 +40,9 @@ class BookingController extends BaseController
 	public function actionPending() {
 
 		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Booking';
+		
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+		
 		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
 		if (Yii::$app->user->isGuest) {
@@ -66,7 +68,7 @@ class BookingController extends BaseController
 		]);
 	}
 
-	public function actionView($booking_id) {
+	public function actionView($booking_token) {
 
 		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Booking Detail';
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
@@ -80,8 +82,7 @@ class BookingController extends BaseController
 
 		$booking = Booking::find()
 			->where([
-				'booking_id' => $booking_id,
-				'customer_id' => Yii::$app->user->getId()
+				'booking_token' => $booking_token
 			])
 			->one();
 
@@ -94,7 +95,7 @@ class BookingController extends BaseController
 		]);
 	}
 
-	public function actionViewPending($booking_id) {
+	public function actionViewPending($booking_token) {
 
 		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Booking Detail';
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
@@ -108,8 +109,7 @@ class BookingController extends BaseController
 
 		$booking = Booking::find()
 			->where([
-				'booking_id' => $booking_id,
-				'customer_id' => Yii::$app->user->getId()
+				'booking_token' => $booking_token
 			])
 			->one();
 

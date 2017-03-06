@@ -19,43 +19,35 @@ class CodController extends Controller
             $this->redirect(['checkout/index']);
         }
         
-        $request_id = Yii::$app->session->get('request_id');
+        $booking_id = Yii::$app->session->get('booking_id');
 
-        $order_id = Yii::$app->session->get('order_id');
+        $booking = Booking::findOne($booking_id);
 
-        $sub_order = Suborder::findOne($order_id);
-
-        if(!$sub_order) {
+        if(!$booking) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        //if paid already 
-
-        if($sub_order->suborder_transaction_id) {
-            $this->redirect(['site/index']);
-        }
-
-        $gateway_total = $gateway->percentage * ($sub_order->suborder_total_with_delivery / 100);
+        $gateway_total = $gateway->percentage * ($booking->total_with_delivery / 100);
 
         //update payment detail 
         
-        $sub_order->suborder_payment_method = $gateway['name'];
-        $sub_order->suborder_transaction_id = '-'; 
-        $sub_order->suborder_gateway_percentage = $gateway['percentage'];
-        $sub_order->suborder_gateway_fees = $gateway['fees'];
-        $sub_order->suborder_gateway_total = $gateway_total;
-        $sub_order->save();
+        $booking->payment_method = $gateway['name'];
+        $booking->transaction_id = '-'; 
+        $booking->gateway_percentage = $gateway['percentage'];
+        $booking->gateway_fees = $gateway['fees'];
+        $booking->gateway_total = $gateway_total;
+        $booking->save();
 
         //add payment to vendor wallet 
 
-        $payment = new VendorAccountPayable;
+        /*$payment = new VendorAccountPayable;
         $payment->vendor_id = $suborder->vendor_id;
         $payment->amount = $suborder->suborder_vendor_total;
         $payment->description = 'Suborder #'.$suborder->suborder_id.' got paid.';
-        $payment->save();
+        $payment->save();*/
 
         //send order emails
-        Order::sendOrderPaidEmails($request_id);
+        Booking::sendBookingPaidEmails($booking_id);
 
         //redirect to order success 
         $this->redirect(['payment/success']);

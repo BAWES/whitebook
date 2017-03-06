@@ -68,7 +68,7 @@ $this->title = Yii::t('frontend', 'Booking | Whitebook');
                                     <?php
                                     $link = ($booking->booking_status == 0) ? 'booking/view-pending' : 'booking/view';
                                     ?>
-									<a href="<?= Url::to([$link, 'booking_id' => $booking->booking_id]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Booking') ?>">
+									<a href="<?= Url::to([$link, 'booking_token' => $booking->booking_token]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Booking') ?>">
 										<i class="glyphicon glyphicon-eye-open"></i>
 									</a>
 								</td>

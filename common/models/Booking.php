@@ -465,7 +465,7 @@ class Booking extends \yii\db\ActiveRecord
 
         Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
-        Yii::$app->mailer->compose("customer/request-approved",
+        Yii::$app->mailer->compose("customer/booking-approved",
             [
                 "booking" => $booking,
                 "vendor" => $booking->vendor,
@@ -490,7 +490,7 @@ class Booking extends \yii\db\ActiveRecord
         if (Yii::$app->params['notify_customer_request_decline']) {
             Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
-            Yii::$app->mailer->compose("customer/request-rejected",
+            Yii::$app->mailer->compose("customer/booking-rejected",
                 [
                     "booking" => $booking,
                     "vendor" => $booking->vendor,
@@ -683,5 +683,46 @@ class Booking extends \yii\db\ActiveRecord
         $query->orderBy("created_datetime DESC");
 
         return $query;
+    }
+
+    public static function sendBookingPaidEmails($booking_id)
+    {
+        $booking = Booking::findOne($booking_id);
+
+        //Send Email to customer
+
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+        Yii::$app->mailer->compose("customer/booking-paid",
+            [
+                "model" => $booking,
+                "vendor" => $booking->vendor
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($booking->customer_email)
+            ->setSubject('Booking Invoice!')
+            ->send();
+
+        //Send Email to vendor
+
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+        //get all vendor alert email 
+
+        $emails = VendorOrderAlertEmails::find()
+            ->where(['vendor_id' => $booking->vendor_id])
+            ->all();
+
+        $emails = ArrayHelper::map($emails, 'vendor_id', 'email_address');
+
+        Yii::$app->mailer->compose("vendor/booking-paid",
+            [
+                "model" => $booking,
+                "vendor" => $booking->vendor
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($emails)
+            ->setSubject('Got Booking Payment!')
+            ->send();
     }
 }

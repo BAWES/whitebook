@@ -5,11 +5,9 @@ namespace frontend\controllers\payment;
 use Yii;
 use yii\web\Controller;
 use yii\helpers\Url;
-use common\models\Order;
+use yii\helpers\ArrayHelper;
+use common\models\Booking;
 use common\models\PaymentGateway;
-use common\models\Customer;
-use common\models\Suborder;
-use common\models\OrderRequestStatus;
 use common\models\VendorAccountPayable;
 
 class TapController extends Controller
@@ -47,9 +45,7 @@ class TapController extends Controller
             $this->redirect(['checkout/index']);
         }
 
-        $order_id = Yii::$app->session->get('order_id');
-
-        $request_id = Yii::$app->session->get('request_id');
+        $booking_id = Yii::$app->session->get('booking_id');
 
         if (!$gateway['under_testing']) {
             $data['action'] = 'https://www.gotapnow.com/webpay.aspx';
@@ -58,37 +54,29 @@ class TapController extends Controller
             $data['action'] = 'http://live.gotapnow.com/webpay.aspx';
         }
 
-        $request = OrderRequestStatus::findOne($request_id);
+        $booking = Booking::findOne($booking_id);
 
-        if(!$request) {
+        if(!$booking) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $suborder = Suborder::findOne($request->suborder_id);
+        $arr_item_name = ArrayHelper::map($booking->bookingItems, 'booking_item_id', 'item_name');
 
-        if(!$suborder) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $order = Order::findOne($request->order_id);
-
-        $customer = Customer::findOne($order->customer_id);
-        
         $data['meid'] = $this->tap_merchantid;
         $data['uname'] = $this->tap_username;
         $data['pwd'] = $this->tap_password;
 
-        $data['itemprice1'] = $suborder->suborder_total_with_delivery;
-        $data['itemname1'] = $suborder->itemPurchased->item->item_name;
+        $data['itemprice1'] = $booking->total_with_delivery;
+        $data['itemname1'] = implode(', ', $arr_item_name);
         $data['currencycode'] = 'KWD';
-        $data['ordid'] = $suborder->suborder_id;
+        $data['ordid'] = $booking_id;
 
-        $data['cstemail'] = $customer->customer_email;
-        $data['cstname'] = $customer->customer_name;
-        $data['cstmobile'] = $customer->customer_mobile;
+        $data['cstemail'] = $booking->customer_email;
+        $data['cstname'] = $booking->customer_name;
+        $data['cstmobile'] = $booking->customer_mobile;
         $data['cntry'] = 'KW';
 
-        $data['returnurl'] = Url::toRoute(['payment/tap/callback', 'hashcd' => md5($suborder->suborder_id . $suborder->suborder_total_with_delivery . 'KWD' . $this->tap_password)], true);
+        $data['returnurl'] = Url::toRoute(['payment/tap/callback', 'hashcd' => md5($booking_id . $booking->total_with_delivery . 'KWD' . $this->tap_password)], true);
 
         return $this->renderPartial('index', $data);
     }
@@ -97,30 +85,29 @@ class TapController extends Controller
 
         $request = Yii::$app->request->get();
 
-        $suborder_id = $request['trackid'];
+        $booking_id = $request['trackid'];
 
-        $suborder = Suborder::findOne($suborder_id);
+        $booking = Booking::findOne($booking_id);
 
-        if ($suborder) {
-
-            $error = '';
-            
-            $key = $this->tap_merchantid;
-            $refid = $request['ref'];
-            
-            $str = 'x_account_id'.$key.'x_ref'.$refid.'x_resultSUCCESSx_referenceid'.$suborder_id.'';
-            $hashstring = hash_hmac('sha256', $str, $this->tap_api_key);//'1tap7'
-            $responsehashstring = $request['hash'];
-                
-            if ($hashstring != $responsehashstring) {
-                $error = Yii::t('frontend', 'Unable to locate or update your order status');
-            } else if ($request['result'] != 'SUCCESS') {
-                $error = Yii::t('frontend', 'Payment was declined by Tap');
-            }
-        } else {
-            $error = Yii::t('frontend', 'Unable to locate or update your sub order status');
+        if(!$booking) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
+        $error = '';
+        
+        $key = $this->tap_merchantid;
+        $refid = $request['ref'];
+        
+        $str = 'x_account_id'.$key.'x_ref'.$refid.'x_resultSUCCESSx_referenceid'.$booking_id.'';
+        $hashstring = hash_hmac('sha256', $str, $this->tap_api_key);//'1tap7'
+        $responsehashstring = $request['hash'];
+            
+        if ($hashstring != $responsehashstring) {
+            $error = Yii::t('frontend', 'Unable to locate or update your booking status');
+        } else if ($request['result'] != 'SUCCESS') {
+            $error = Yii::t('frontend', 'Payment was declined by Tap');
+        }
+   
         if ($error) {
            
             return $this->render('error', [
@@ -133,33 +120,31 @@ class TapController extends Controller
             $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
 
             if($request['crdtype'] == 'KNET') {
-                $suborder->suborder_payment_method = 'Tap - Paid with KNET';
-                $suborder->suborder_gateway_fees = $gateway->fees;
-                $suborder->suborder_gateway_percentage = 0;
-                $suborder->suborder_gateway_total = $gateway->fees;//fixed price fee 
+                $booking->payment_method = 'Tap - Paid with KNET';
+                $booking->gateway_fees = $gateway->fees;
+                $booking->gateway_percentage = 0;
+                $booking->gateway_total = $gateway->fees;//fixed price fee 
             } else {
-                $suborder->suborder_payment_method = 'Tap - Paid with Creditcard/Debitcard';
-                $suborder->suborder_gateway_fees = 0;
-                $suborder->suborder_gateway_percentage = $gateway->percentage;
-                $suborder->suborder_gateway_total = $gateway->percentage * ($suborder->order_total_with_delivery / 100);
+                $booking->payment_method = 'Tap - Paid with Creditcard/Debitcard';
+                $booking->gateway_fees = 0;
+                $booking->gateway_percentage = $gateway->percentage;
+                $booking->gateway_total = $gateway->percentage * ($booking->total_with_delivery / 100);
             }
 
             //update status 
-            $suborder->suborder_transaction_id = $request['ref'];
-            $suborder->save(false);
+            $booking->transaction_id = $request['ref'];
+            $booking->save(false);
 
             //add payment to vendor wallet 
 
-            $payment = new VendorAccountPayable;
-            $payment->vendor_id = $suborder->vendor_id;
-            $payment->amount = $suborder->suborder_vendor_total;
-            $payment->description = 'Suborder #'.$suborder->suborder_id.' got paid.';
-            $payment->save();
+            /*$payment = new VendorAccountPayable;
+            $payment->vendor_id = $booking->vendor_id;
+            $payment->amount = $booking->booking_vendor_total;
+            $payment->description = 'Suborder #'.$booking->booking_id.' got paid.';
+            $payment->save();*/
 
-            $request_id = Yii::$app->session->get('request_id');
-            
             //send order emails
-            Order::sendOrderPaidEmails($request_id);
+            Booking::sendBookingPaidEmails($booking_id);
 
             //redirect to order success 
             $this->redirect(['payment/success']);

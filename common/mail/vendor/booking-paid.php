@@ -3,20 +3,15 @@
 use yii\web\View;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\widgets\DetailView;
-use common\bookings\Order;
-use common\bookings\Vendor;
-use common\bookings\Siteinfo;
-use common\bookings\OrderStatus;
-use common\bookings\SuborderItemMenu;
-use common\bookings\SuborderItemPurchase;
+use common\models\Booking;
+use common\models\Siteinfo;
 use common\components\CFormatter;
 
 ?>
 <tr>
     <td width="20"></td>
     <td style=" font:normal 14px/21px arial; color:#333333;">
-        Hi <?= $booking->customer_name ?>,
+        Hi <?= $vendor->vendor_name ?>,
     </td>
     <td width="20"></td>
 </tr>
@@ -24,12 +19,10 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
-         Your item request approved. 
-
         <br />
         <br />
-
-        <a href="<?= $lnk_payment; ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Pay Now &rarr;</a>
+        
+        Booking #<?= $model->booking_id ?> got paid from <?= $model->customer_name ?>. 
 
         <br />
         <br />
@@ -45,12 +38,28 @@ use common\components\CFormatter;
         <table class="table table-bordered" style="width:100%;">
 	        <tr>
 	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Booking ID: <?= $booking->booking_id ?> 
+	                Booking ID: #<?= $model->booking_id ?> 
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Booking Token: <?= $booking->booking_token ?>
+	                Booking Token : <?= $model->booking_token ?>
 	            </td>
 	        </tr>
+	        <tr>
+	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+	                Customer: <?= $model->customer_name ?>
+	            </td>
+	            <td style="border-bottom: 1px solid #ddd;">
+	                Date: <?= date('d/m/Y', strtotime($model->created_datetime)) ?>                
+	            </td>
+	        </tr>    
+	        <tr>
+	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+	                Payment method: <?= $model->payment_method ?>
+	            </td>
+	            <td style="border-bottom: 1px solid #ddd;">
+	                Transaction ID: <?= $model->transaction_id ?>             
+	            </td>
+	        </tr>    
 	    </table>
 	    
 	    <br />
@@ -67,7 +76,7 @@ use common\components\CFormatter;
 	            <tr>
 	                <td style="border-right: 1px solid #ddd;">
 	                    <?= Yii::t('frontend', 'Order status') ?>: 
-	                    <?= $booking->status_name ?>  
+	                    <?= $model->statusName ?>
 	                </td>
 	                <td>
 	                    <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?>
@@ -90,10 +99,9 @@ use common\components\CFormatter;
 	            </tr>
 	        </thead>    
 	        <tbody>
-	        <?php foreach ($booking->bookingItems as $item) { ?>
+	        <?php foreach ($model->bookingItems as $item) { ?>
 	            <tr>
 	                <td align="left" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;">
-	                    
 	                    <?php if(Yii::$app->language == 'en') {
 	                        echo $item->item_name;
 	                    } else {
@@ -101,6 +109,7 @@ use common\components\CFormatter;
 	                    } 
 	                    
 	                    foreach ($item->bookingItemMenus as $key => $menu_item) { 
+
 	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
 
                             $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
@@ -142,15 +151,15 @@ use common\components\CFormatter;
 
 	            <tr>
 	                <td align="right" colspan="2" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;"><b>Sub Total</b></td>
-	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $booking->total_without_delivery ?> KWD</td>
+	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $model->total_without_delivery ?> KWD</td>
 	            </tr>
 	            <tr>
 	                <td align="right" colspan="2" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;"><b>Delivery Charge</b></td>
-	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $booking->total_delivery_charge ?> KWD</td>
+	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $model->total_delivery_charge ?> KWD</td>
 	            </tr>
 	            <tr>
 	                <td align="right" colspan="2" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;"><b>Total</b></td>
-	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $booking->total_with_delivery ?> KWD</td>
+	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $model->total_with_delivery ?> KWD</td>
 	            </tr>
 	        </tbody>
 	    </table>
