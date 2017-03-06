@@ -69,7 +69,19 @@ class BookingController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
+        // restrict invalid access to other request
+        if ($model->vendor_id != Yii::$app->user->id && $model->getStatusName() == 'Pending') {
+            $this->redirect(['index']);
+        }
 
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function actionViewPending($id)
+    {
+        $model = $this->findModel($id);
         // restrict invalid access to other request
         if ($model->vendor_id != Yii::$app->user->id) {
             $this->redirect(['index']);
@@ -96,7 +108,7 @@ class BookingController extends Controller
                 return $this->redirect(['pending']);
             }
         } else {
-            return $this->render('view', [
+            return $this->render('view-pending', [
                 'model' => $this->findModel($id),
             ]);
         }

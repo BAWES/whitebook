@@ -15,9 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <table class="table table-striped table-bordered detail-view">
         <tbody>
         <tr><th><?=Yii::t('app','Booking Request ID')?></th><td><?=$model->booking_id?></td></tr>
-        <tr><th><?=Yii::t('app','Booking Request Status')?></th><td><?= $model->getStatusName(); ?></td></tr>
-        <tr><th><?=Yii::t('app','Booking Request Note')?></th><td><?= $model->booking_note ?></td></tr>
+        <tr><th><?=Yii::t('app','Booking Request Status')?></th><td><?= $form->field($model, 'booking_status')->dropDownList([ '0' => 'Pending', '1' => 'Approved', '2' => 'Reject','3' => 'Expired'])->label(false) ?></td></tr>
+        <tr>
+            <th><?=Yii::t('app','Booking Request Note')?></th>
+            <td>
+                <?= $form->field($model, 'booking_note')->textarea(['rows' => 6])->label(false) ?>
+                <note><?=Yii::t('app','In case of Declined request please mention reason for it.')?></note>
+            </td></tr>
         <tr><th><?=Yii::t('app','Request Received On')?></th><td><?=date('M d Y, H:i A',strtotime($model->created_datetime))?></td></tr>
+        <tr><td align="right" colspan="2"><?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?></td></tr>
         </tbody>
     </table>
     <?php ActiveForm::end(); ?>
