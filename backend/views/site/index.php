@@ -40,7 +40,6 @@ $this->title = 'Whitebook Application';
 			</li>
 		</ul>
 	</div>
-
 </div>
 <!-- END DASHBOARD TILES -->
 

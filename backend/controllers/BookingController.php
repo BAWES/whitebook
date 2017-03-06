@@ -8,7 +8,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\filters\AccessControl;
 /**
  * OrderRequestStatusController implements the CRUD actions for OrderRequestStatus model.
  */
@@ -20,10 +20,19 @@ class BookingController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['post'],
                 ],
             ],
         ];
@@ -127,6 +136,32 @@ class BookingController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /*
+     * booking status change from mail link
+     */
+    public function actionStatus($token, $action){
+
+        $booking = Booking::findOne(['booking_token'=>$token,'booking_status'=>'0']);
+
+        if ($booking->vendor_id == Yii::$app->user->getId()) { // check for vendor items booking only
+
+            if ($booking) {
+
+                $booking->booking_status = ($action) ? $action : Booking::STATUS_REJECTED;
+                $booking->save(false);
+                Yii::$app->session->setFlash('success', 'Booking Status Changed Successfully');
+                return $this->redirect(['index']);
+
+            } else { // in case invalid booking
+                Yii::$app->session->setFlash('danger', 'Invalid token ID');
+                return $this->redirect(['index']);
+            }
+        } else {
+            Yii::$app->session->setFlash('danger', 'Invalid token ID');
+            return $this->redirect(['index']);
         }
     }
 }
