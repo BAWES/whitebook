@@ -25,6 +25,16 @@ return [
                 'database' => 1,
             ]
         ],
+        'log' => [
+            'targets' => [
+                [
+                    'class' => 'notamedia\sentry\SentryTarget',
+                    'dsn' => 'https://12f8992cb2f64b0a8f5c5e094c648a38:93850c4478f24f888b47203fd7928b5d@sentry.io/145337',
+                    'levels' => ['error', 'warning'],
+                    'context' => true // Write the context information. The default is true.
+                ],
+            ],
+        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
