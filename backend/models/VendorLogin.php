@@ -41,7 +41,11 @@ class VendorLogin extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUsers();
-            if (!$user || !$user->validatePassword($this->vendor_password)) {
+            if ($user) {
+                if (!$user->validatePassword($this->vendor_password)) {
+                    $this->addError($attribute, 'Incorrect email or password.');
+                }
+            } else {
                 $this->addError($attribute, 'Incorrect email or password.');
             }
         }

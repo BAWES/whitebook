@@ -306,8 +306,11 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     */
     public function validatePassword($passwords)
     {
-        return  Yii::$app->getSecurity()->validatePassword($passwords, $this->vendor_password);
-
+        if ($this->vendor_password) {
+            return Yii::$app->getSecurity()->validatePassword($passwords, $this->vendor_password);
+        } else {
+            return false;
+        }
     }
 
     /**
