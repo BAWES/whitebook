@@ -2,8 +2,10 @@
 
 use yii\grid\GridView;
 
-$this->title = Yii::t('app', 'Booking Request');
+$this->title = Yii::t('app', 'Booking');
+
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="order-request-status-index">
 
@@ -13,10 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'attribute' => 'booking_id',
-                'label' => 'Booking Request ID',
+                'label' => 'Booking ID',
             ],
             [
-                'label' => 'Requested Item',
+                'label' => 'Item',
                 'value' => function ($model) {
                     if (isset($model->bookingItems[0]->item_name)) {
                         return $model->bookingItems[0]->item_name;

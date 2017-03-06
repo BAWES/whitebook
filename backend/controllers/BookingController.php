@@ -2,13 +2,14 @@
 
 namespace backend\controllers;
 
-use admin\models\BookingSearch;
-use common\models\Booking;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use admin\models\BookingSearch;
+use common\models\Booking;
+
 /**
  * OrderRequestStatusController implements the CRUD actions for OrderRequestStatus model.
  */
@@ -163,6 +164,38 @@ class BookingController extends Controller
             Yii::$app->session->setFlash('danger', 'Invalid token ID');
             return $this->redirect(['index']);
         }
+    }
+
+    /**
+     * Approve request 
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionApprove($id)
+    {
+        $model = $this->findModel($id);
+
+        Booking::approved($model);
+
+        Yii::$app->session->setFlash('success', 'Booking request approved!');
+
+        return $this->redirect(['pending']);
+    }
+
+    /**
+     * Reject request 
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionReject($id)
+    {
+        $model = $this->findModel($id);
+
+        Booking::rejected($model);
+
+        Yii::$app->session->setFlash('success', 'Booking request rejected!');
+
+        return $this->redirect(['pending']);
     }
 }
 
