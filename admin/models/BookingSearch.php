@@ -57,7 +57,7 @@ class BookingSearch extends Booking
     public function searchAll($params)
     {
         $query = Booking::find()
-            ->where(['booking_status' => [Booking::STATUS_ACCEPTED,Booking::STATUS_EXPIRED,Booking::STATUS_REJECTED]]);
+            ->where(['booking_status' => [Booking::STATUS_ACCEPTED, Booking::STATUS_EXPIRED,Booking::STATUS_REJECTED]]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

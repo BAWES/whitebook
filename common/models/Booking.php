@@ -59,8 +59,6 @@ class Booking extends \yii\db\ActiveRecord
     const STATUS_REJECTED = 2;
     const STATUS_EXPIRED = 3;
 
-    public $status_name;
-
     /**
      * @inheritdoc
      */
@@ -77,7 +75,7 @@ class Booking extends \yii\db\ActiveRecord
         return [
             [['vendor_id', 'customer_id', 'notification_status', 'booking_status'], 'integer'],
             [['booking_note'], 'string'],
-            [['status_name', 'expired_on', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['expired_on', 'created_datetime', 'modified_datetime'], 'safe'],
             [['commission_percentage', 'commission_total', 'gateway_percentage', 'gateway_fees', 'gateway_total', 'total_delivery_charge', 'total_without_delivery', 'total_with_delivery', 'total_vendor'], 'number'],
             [['booking_token'], 'string', 'max' => 13],
             [['customer_name', 'customer_lastname', 'customer_email', 'payment_method', 'transaction_id'], 'string', 'max' => 100],
@@ -105,13 +103,14 @@ class Booking extends \yii\db\ActiveRecord
         return [
             self::STATUS_PENDING => 'Pending',
             self::STATUS_ACCEPTED => 'Accepted',
-            self::STATUS_REJECTED => 'Rejected'
+            self::STATUS_REJECTED => 'Rejected',
+            self::STATUS_EXPIRED => 'Expired'
         ];
     }
 
     public function getStatusName()
     {
-        $statusList = Booking::statusList();
+        $statusList = self::statusList();
 
         if(isset($statusList[$this->booking_status]))
             return $statusList[$this->booking_status];
