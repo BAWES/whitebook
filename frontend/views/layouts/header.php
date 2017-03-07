@@ -98,7 +98,7 @@ $action = Yii::$app->controller->action->id;
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-3 col-xs-12 col-sm-6 padding-left0 <?php if (!Yii::$app->user->isGuest) { echo 'new_user_name'; } ?>">
+                    <div class="col-md-3 col-xs-12 col-sm-6 padding-right0 padding-left0 <?php if (!Yii::$app->user->isGuest) { echo 'new_user_name'; } ?>">
                         <?php if (!Yii::$app->user->isGuest) { ?>
                         <div class="user_name_cont">
                             <p>
@@ -132,7 +132,11 @@ $action = Yii::$app->controller->action->id;
                                     <?= Yii::t('frontend', 'Track order'); ?>
                                 </a>
                             </li>
-
+                            <li>
+                                <a href="<?php echo Url::to(['cart/index']); ?>">
+                                    <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
+                                </a>
+                            </li>
                             <li class="">
                                 <a href="<?= Url::toRoute('/contact-us',true);?>">
                                     <?= Yii::t('frontend', 'Become a Vendor'); ?>

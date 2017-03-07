@@ -1143,9 +1143,8 @@ echo Html::hiddenInput('txt-max', Yii::t('frontend', ' upto {qty}'), ['id' => 't
 
 echo Html::hiddenInput('item_type_name', $item_type_name, ['id' => 'item_type_name']);
 echo Html::hiddenInput('capacity', $capacity, ['id' => 'capacity']);
-
 echo Html::hiddenInput('minimum_increment', $model->minimum_increment, ['id' => 'minimum_increment']);
-
+echo Html::hiddenInput('for_sale_validation', $model->item_for_sale, ['id' => 'for_sale_validation']);
 $this->registerJs("
     var deliver_date = '".$deliver_date."';
     var isGuest = ".(int)Yii::$app->user->isGuest.";

@@ -291,10 +291,10 @@ jQuery(document).delegate('#form_product_option', 'submit', function(e) {
 
     e.preventDefault();
 
-    if (isGuest) {
-        show_login_modal(-2);
-        $('#myModal').modal('show');
-    }
+    // if (isGuest) {
+    //     show_login_modal(-2);
+    //     $('#myModal').modal('show');
+    // }
 
     jQuery.post(
         addtobasket_url,
@@ -423,7 +423,7 @@ function productAvailability(date){
 }
 
 // pre set value for Delivery date on product detail page
-if (deliver_date) {
+if (deliver_date && $('#for_sale_validation').val() == 'Yes') {
     productAvailability(jQuery('#item_delivery_date').val());
 }
 

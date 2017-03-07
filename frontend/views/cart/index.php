@@ -17,19 +17,11 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 <section id="inner_pages_white_back">
     <div class="container paddng0">
-       
         <div class="title_main">
 			<h1><?= Yii::t('frontend', 'Shopping Cart'); ?></h1>
-		</div>
-
-		<br />
-		<br />
-		<br />
-
-        <?php 
-
-        if($items) { 
-
+		</div><br /><br /><br />
+        <?php
+        if ($items) {
         	foreach ($items as $item) {
 
         		$menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
@@ -343,6 +335,10 @@ $this->registerJsFile('@web/js/cart.js?v=1.3', ['depends' => [\yii\web\JqueryAss
 echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);
 echo Html::hiddenInput('txt-max', Yii::t('frontend', ' upto {qty}'), ['id' => 'txt-max']);
+
+$this->registerJs("
+    var isGuest = ".(int)Yii::$app->user->isGuest.";
+", View::POS_HEAD);
 
 $this->registerCss("
 	.max-width-150-px{max-width: 150px;}

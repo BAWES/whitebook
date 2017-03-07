@@ -31,11 +31,6 @@ return [
         'log' => [
             'targets' => [
                 [
-                    'class' => 'yii\log\DbTarget',
-                    'levels' => ['info', 'error', 'warning'],
-                    'categories' => ['backend\*', 'admin\*', 'frontend\*', 'common\*'],
-                ],
-                [
                     'class' => 'common\components\SlackLogger',
                     'logVars' => [],
                     'levels' => ['info', 'error', 'warning'],
