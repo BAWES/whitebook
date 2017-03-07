@@ -406,7 +406,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $query->andWhere(['{{%customer_cart}}.cart_session_id'=>Customer::currentUser()]);
             }
 
-    $items = $query->asArray()
+        $items = $query->asArray()
             ->all();
 
         return $items;    
