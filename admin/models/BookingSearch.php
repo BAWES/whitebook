@@ -38,13 +38,17 @@ class BookingSearch extends Booking
         }
 
         $query->andFilterWhere([
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
             'booking_token' => $this->booking_token,
+            'booking_id' => $this->booking_id,
             'vendor_id' => $this->vendor_id,
             'customer_id' => $this->customer_id,
             'customer_mobile' => $this->customer_mobile,
-            'ip_address' => $this->ip_address
+            'ip_address' => $this->ip_address,
+            'total_without_delivery' => $this->total_without_delivery,
+            'total_with_delivery' => $this->total_with_delivery,
+            'total_delivery_charge' => $this->total_delivery_charge,
+            'DATE(created_datetime)' => $this->created_datetime,
+            'DATE(modified_datetime)' => $this->modified_datetime
         ]);
 
         $query->andFilterWhere(['like', 'customer_name', $this->customer_name])
@@ -57,7 +61,7 @@ class BookingSearch extends Booking
     public function searchAll($params)
     {
         $query = Booking::find()
-            ->where(['booking_status' => [Booking::STATUS_ACCEPTED, Booking::STATUS_EXPIRED,Booking::STATUS_REJECTED]]);
+            ->where(['in', 'booking_status', [Booking::STATUS_ACCEPTED, Booking::STATUS_EXPIRED,Booking::STATUS_REJECTED]]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -73,13 +77,17 @@ class BookingSearch extends Booking
         }
 
         $query->andFilterWhere([
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
             'booking_token' => $this->booking_token,
+            'booking_id' => $this->booking_id,
             'vendor_id' => $this->vendor_id,
             'customer_id' => $this->customer_id,
             'customer_mobile' => $this->customer_mobile,
-            'ip_address' => $this->ip_address
+            'ip_address' => $this->ip_address,
+            'total_without_delivery' => $this->total_without_delivery,
+            'total_with_delivery' => $this->total_with_delivery,
+            'total_delivery_charge' => $this->total_delivery_charge,
+            'DATE(created_datetime)' => $this->created_datetime,
+            'DATE(modified_datetime)' => $this->modified_datetime
         ]);
 
         $query->andFilterWhere(['like', 'customer_name', $this->customer_name])

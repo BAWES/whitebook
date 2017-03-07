@@ -73,7 +73,7 @@ class Booking extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vendor_id', 'customer_id', 'notification_status', 'booking_status'], 'integer'],
+            [['booking_id', 'vendor_id', 'customer_id', 'notification_status', 'booking_status'], 'integer'],
             [['booking_note'], 'string'],
             [['expired_on', 'created_datetime', 'modified_datetime'], 'safe'],
             [['commission_percentage', 'commission_total', 'gateway_percentage', 'gateway_fees', 'gateway_total', 'total_delivery_charge', 'total_without_delivery', 'total_with_delivery', 'total_vendor'], 'number'],

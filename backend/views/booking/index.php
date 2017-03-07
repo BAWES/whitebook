@@ -1,6 +1,7 @@
 <?php
 
 use yii\grid\GridView;
+use yii\web\View;
 
 $this->title = Yii::t('app', 'Booking');
 
@@ -9,7 +10,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-request-status-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?= $this->render('_search', [
+        'model' => $searchModel,
+    ]) ?>
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -60,3 +64,16 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+
+<?php 
+
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.min.css', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJs("
+    jQuery('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+    });
+", View::POS_READY);
