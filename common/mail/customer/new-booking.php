@@ -22,7 +22,7 @@ use common\components\CFormatter;
     <td style=" font:normal 15px arial; color:#333333;">
         New booking request registered.
 
-        <a href="<?= Url::to(['booking/view', 'booking_token' => $booking->booking_token], true); ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Track booking request &rarr;</a>
+        <a href="<?= Url::to(['booking/view-pending', 'booking_token' => $booking->booking_token], true); ?>" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Track booking request &rarr;</a>
         
     </td>
     <td width="20"></td>

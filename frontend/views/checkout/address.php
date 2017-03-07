@@ -10,57 +10,44 @@ use common\components\LangFormat;
 <div class="panel panel-default">
         <div class="panel-heading">
                 <h4 class="panel-title">
-                    <?= Yii::t('frontend', 'Select delivery address for each items') ?>
+                    <?= Yii::t('frontend', 'Select delivery address') ?>
                 </h4>
         </div>
         <div class="panel-body padding-0">
 
-        <br />
+            <form id="address_selection_form">
 
-        <form id="address_selection_form">
+                <input type="hidden" name="address_id" />
 
-        <?php foreach ($items as $item) { ?>
+                <div class="address_block_wrapper">
+                <?php
 
-                <div class="item_wrapper" id="item_wrapper_<?= $item['cart_id'] ?>">
+                $addresses = CustomerCart::customerAddress();
+                
+                foreach ($addresses as $address) { ?>
+                        <div class="address_block pull-left" data-id="<?= $address['address_id'] ?>">
+                            <?php
 
-                        <input type="hidden" class="hdn_address" name="address[<?= $item['cart_id'] ?>]" value="" />
+                            if($address['address_name']) {
+                                echo $address['address_name'].'<br />';
+                            }
 
-                        <div class="item_name">
-                            <?=LangFormat::format($item['item_name'],$item['item_name_ar']); ?>
+                            echo $address['address_data'].'<br />';
+
+                            echo LangFormat::format($address['location']['location'],$address['location']['location_ar']);
+                            echo LangFormat::format($address['city']['city_name'],$address['city']['city_name_ar']);
+                            ?>
+                        </div>
+                <?php } ?>
+
+                        <div class="address_insert_block pull-left" data-toggle="modal" data-target="#modal_create_address">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <br /><br />
+                                <?= Yii::t('frontend', 'Add new address') ?>
                         </div>
 
-                        <div class="address_block_wrapper">
-                        <?php
-                        $addresses = CustomerCart::customerAddress($item['area_id'],Yii::$app->user->id);
-
-                        foreach ($addresses as $address) { ?>
-                                <div class="address_block pull-left" data-id="<?= $address['address_id'] ?>">
-                                    <?php
-
-                                    if($address['address_name']) {
-                                        echo $address['address_name'].'<br />';
-                                    }
-
-                                    echo $address['address_data'].'<br />';
-
-                                    echo LangFormat::format($address['location']['location'],$address['location']['location_ar']);
-                                    echo LangFormat::format($address['city']['city_name'],$address['city']['city_name_ar']);
-                                    ?>
-                                </div>
-                        <?php } ?>
-
-                                <div class="address_insert_block pull-left" data-toggle="modal" data-target="#modal_create_address" data-id="<?= $item['cart_id'] ?>">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        <br /><br />
-                                        <?= Yii::t('frontend', 'Add new address') ?>
-                                </div>
-
-                        </div>
-                        <div class="clearfix"></div>
                 </div>
-        <?php } ?>
-
-        </form>
+            </form>
 
         </div>
 </div>
@@ -88,7 +75,7 @@ use common\components\LangFormat;
                     <h4 class="modal-title"><?php echo Yii::t('frontend','Add new address') ?></h4>
                 </div>
                 <div class="modal-body body-update">
-                    <input type="hidden" name="cart_id" value="" />
+                    
                     <?= $form->field($customer_address_modal, 'address_name'); ?>
                     <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype,
                         ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]

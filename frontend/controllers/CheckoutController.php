@@ -148,15 +148,7 @@ class CheckoutController extends BaseController
 
 		$json = array();
 
-		$addresses = Yii::$app->request->post('address');
-
-		foreach ($addresses as $key => $value) {
-			if(empty($value)) {
-				$json['errors'][$key] = 'Please select address for Item - '.$value;
-			}
-		}
-		
-		Yii::$app->session->set('address', $addresses);
+		Yii::$app->session->set('address', Yii::$app->request->post('address_id'));
 
 		Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -245,6 +237,7 @@ class CheckoutController extends BaseController
 		$address = Yii::$app->session->get('address');
 
 		$items = CustomerCart::items();
+
         return $this->renderPartial('confirm', [
             'items' => $items,
             'address' => $address,
@@ -271,14 +264,14 @@ class CheckoutController extends BaseController
 
         return $this->render('success', [
             'arr_booking_id' => $arr_booking_id,
-            'booking_page' => Url::to(['booking/index'])
+            'booking_page' => Url::to(['booking/pending'])
         ]);
     }
 
     public function actionRequestSend()
     {
-        $address = Yii::$app->session->get('address',false);
-        
+        $address = Yii::$app->session->get('address');
+
         if ($address) {
             
             $arr_booking_id = Booking::checkoutConfirm();

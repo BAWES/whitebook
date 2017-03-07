@@ -75,14 +75,6 @@ class VendorItemMenuItem extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSuborderItemMenus()
-    {
-        return $this->hasMany(SuborderItemMenu::className(), ['menu_item_id' => 'menu_item_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getItem()
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);

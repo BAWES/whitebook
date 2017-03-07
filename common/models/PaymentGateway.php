@@ -57,8 +57,4 @@ class PaymentGateway extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
-
-    public function getOrderStatus() {
-        return $this->hasOne(OrderStatus::className(), ['order_status_id' => 'order_status_id']);
-    }
 }

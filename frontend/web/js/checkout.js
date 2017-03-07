@@ -109,7 +109,7 @@ function confirm() {
 
 $(document).delegate('.address_block', 'click', function(){
 	$(this).parent().find('.active').removeClass('active');
-	$(this).parent().parent().find('input').val($(this).attr('data-id'));
+	$('input["address_id"]').val($(this).attr('data-id'));
 	$(this).addClass('active');
 });
 
