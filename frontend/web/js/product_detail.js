@@ -423,7 +423,7 @@ function productAvailability(date){
 }
 
 // pre set value for Delivery date on product detail page
-if (deliver_date) {
+if (deliver_date && $('#for_sale_validation').val() == 'Yes') {
     productAvailability(jQuery('#item_delivery_date').val());
 }
 
