@@ -46,7 +46,7 @@ class BookingController extends Controller
     public function actionIndex()
     {
         $searchModel = new BookingSearch();
-        $searchModel->vendor_id = Yii::$app->user->id;
+       // $searchModel->vendor_id = Yii::$app->user->id;
         $dataProvider = $searchModel->searchAll(Yii::$app->request->queryParams);
 
         return $this->render('index', [

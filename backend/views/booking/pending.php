@@ -8,6 +8,11 @@ $this->title = Yii::t('app', 'Booking Request');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-request-status-index">
+
+    <?= $this->render('_search-pending', [
+        'model' => $searchModel,
+    ]) ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -99,7 +104,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php 
 
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.min.css', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
 $this->registerJs("
+    jQuery('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+    });
+
     jQuery(document).delegate('.glyphicon-remove', 'click', function(e){
         jQuery('#form_booking_reject').attr('action', jQuery(this).parent().attr('href'));
         jQuery('#booking_modal').modal('show');
