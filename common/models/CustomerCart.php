@@ -24,6 +24,7 @@ use common\components\CFormatter;
  * @property integer $cart_quantity
  * @property string $cart_datetime_added
  * @property string $cart_valid
+ * @property string $cart_session_id
  * @property integer $created_by
  * @property integer $modified_by
  * @property string $created_datetime
@@ -44,11 +45,6 @@ class CustomerCart extends \yii\db\ActiveRecord
     {
         return [
             [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by'
-            ],
-            [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_datetime',
                 'updatedAtAttribute' => 'modified_datetime',
@@ -63,14 +59,14 @@ class CustomerCart extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'item_id', 'area_id', 'time_slot', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
+            [['item_id', 'area_id', 'time_slot', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
             [['customer_id', 'item_id', 'area_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
 
             [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
 
             [['cart_customization_price_per_unit'], 'number'],
             ['cart_quantity', 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['cart_valid', 'trash','time_slot'], 'string'],
+            [['cart_valid', 'trash','time_slot','cart_session_id'], 'string'],
         ];
     }
 
@@ -90,6 +86,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             'cart_quantity' => Yii::t('frontend', 'Quantity'),
             'cart_datetime_added' => Yii::t('frontend', 'Cart Datetime Added'),
             'cart_valid' => Yii::t('frontend', 'Cart Valid'),
+            'cart_session_id' => Yii::t('frontend', 'Cart Session ID'),
             'created_by' => Yii::t('frontend', 'Created By'),
             'modified_by' => Yii::t('frontend', 'Modified By'),
             'created_datetime' => Yii::t('frontend', 'Created Datetime'),
@@ -135,16 +132,21 @@ class CustomerCart extends \yii\db\ActiveRecord
             $item_type_name = 'Product';
         }
 
-        //check if same item with same date available in cart 
-        $in_cart = CustomerCart::find()
-            ->where([
-                'customer_id' => Yii::$app->user->getId(),
-                'item_id' => $data['item_id'],
-                'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
-                'cart_valid' => 'yes',
-                'trash' => 'Default'
-            ])->sum('cart_quantity');
-
+        //check if same item with same date available in cart
+        //
+            $query = CustomerCart::find();
+            $query->where([
+                    'item_id' => $data['item_id'],
+                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
+                    'cart_valid' => 'yes',
+                    'trash' => 'Default'
+                ]);
+            if (Yii::$app->user->getId()) {
+                $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
+            } else {
+                $query->andWhere(['cart_session_id'=>Customer::currentUser()]);
+            }
+            $in_cart = $query->sum('cart_quantity');
         /*
             Check if deliery availabel in selected area 
         */
@@ -376,7 +378,7 @@ class CustomerCart extends \yii\db\ActiveRecord
     //return customer items 
     public static function items() {
 
-        $items = CustomerCart::find()
+        $query = CustomerCart::find()
             ->select('
                 {{%customer_cart}}.*, 
                 {{%image}}.image_path,
@@ -390,15 +392,21 @@ class CustomerCart extends \yii\db\ActiveRecord
             ->joinWith('item')
             ->joinWith('image')
             ->where([
-                '{{%customer_cart}}.customer_id' => Yii::$app->user->getId(),
                 '{{%customer_cart}}.cart_valid' => 'yes',
                 '{{%customer_cart}}.trash' => 'Default',
                 '{{%vendor_item}}.trash' => 'Default',
                 '{{%vendor_item}}.item_for_sale' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.item_approved' => 'Yes',
-            ])
-            ->asArray()
+            ]);
+
+            if (Yii::$app->user->getId()) {
+                $query->andWhere(['{{%customer_cart}}.customer_id'=>Yii::$app->user->getId()]);
+            } else {
+                $query->andWhere(['{{%customer_cart}}.cart_session_id'=>Customer::currentUser()]);
+            }
+
+    $items = $query->asArray()
             ->all();
 
         return $items;    

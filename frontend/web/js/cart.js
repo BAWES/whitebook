@@ -249,3 +249,13 @@ $('.fa-edit').click(function(){
         }
     });
 });
+
+jQuery(document).delegate('#cart-form', 'submit', function(e) {
+
+    e.preventDefault();
+
+    if (isGuest) {
+        show_login_modal(-2);
+        $('#myModal').modal('show');
+    }
+});

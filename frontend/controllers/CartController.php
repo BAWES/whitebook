@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Customer;
 use common\models\VendorWorkingTiming;
 use Yii;
 use yii\helpers\Url;
@@ -43,7 +44,8 @@ class CartController extends BaseController
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots'],
+                        //'actions' => ['validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot'],
                         'allow' => true,
                         'roles' => ['?'],
                     ]
@@ -228,15 +230,20 @@ class CartController extends BaseController
         $data = Yii::$app->request->post();
 
         if($this->validate_item($data)) {
-            
-            $cart = CustomerCart::find()
+            $query = CustomerCart::find()
                 ->where([
                     'item_id' => $data['item_id'],
                     'area_id'   => isset($data['area_id'])?$data['area_id']:'',
                     'time_slot' => isset($data['time_slot'])?$data['time_slot']:'',
                     'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date']))
-                ])
-                ->one();
+                ]);
+            if (Yii::$app->user->getId()) {
+                $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
+            } else {
+                $query->andWhere(['cart_session_id'=>Customer::currentUser()]);
+            }
+
+            $cart= $query->one();
 
             /* 
                 product already available in cart 
@@ -282,6 +289,7 @@ class CartController extends BaseController
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');
+                $cart->cart_session_id = (!Yii::$app->user->getId()) ? Customer::currentUser() : '';
                 $cart->cart_valid = 'yes';
                 $cart->trash = 'Default';
             }
