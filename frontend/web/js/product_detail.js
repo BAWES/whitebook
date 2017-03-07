@@ -290,7 +290,7 @@
 jQuery(document).delegate('#form_product_option', 'submit', function(e) {
 
     e.preventDefault();
-
+    // code commented to allow user to add to cart without login
     // if (isGuest) {
     //     show_login_modal(-2);
     //     $('#myModal').modal('show');
