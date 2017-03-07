@@ -269,4 +269,29 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(CustomerCart::className(), ['customer_id' => 'customer_id']);
     }
+
+    public static function currentUser(){
+        return self::getSessionUser();
+    }
+
+    public static function getSessionUser() {
+        if (Yii::$app->session->has('_user')) {
+            return Yii::$app->session->get('_user');
+        } else {
+            $SessionUserID = self::getSessionCartID();
+            Yii::$app->session->set('_user', $SessionUserID);
+            return Yii::$app->session->get('_user');
+        }
+    }
+
+    public static function destroySessionUser() {
+        if (Yii::$app->session->has('_user')) {
+            Yii::$app->session->remove('_user');
+        }
+    }
+
+    public static function getSessionCartID() {
+        $unique = Yii::$app->getSecurity()->generateRandomString(13);
+        return $unique.strtotime('now');
+    }
 }
