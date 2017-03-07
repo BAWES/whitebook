@@ -21,6 +21,8 @@ return [
         'user' => [
             'identityClass' => 'common\models\Customer',
             'enableAutoLogin' => true,
+            'on '.\yii\web\User::EVENT_BEFORE_LOGIN => ['common\models\Customer', 'handleBeforeLogin'],
+
         ],
         'session' => [
             'name' => 'app-frontend',
