@@ -467,7 +467,7 @@ class CartController extends BaseController
         }
 
         //2) get no of item purchased for selected date
-        $purchased_result = \common\models\Order::totalPurchasedItem($data['item_id'],$data['delivery_date']);
+        $purchased_result = \common\models\Booking::totalPurchasedItem($data['item_id'],$data['delivery_date']);
         if ($purchased_result) {
             $purchased = $purchased_result['purchased'];
         } else {

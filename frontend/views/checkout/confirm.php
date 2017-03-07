@@ -72,7 +72,7 @@ use common\models\CustomerCartMenuItem;
 			
 			$sub_total += $row_total;
 
-            $address_data = CustomerCart::getAddressData($address[$item['cart_id']]);
+            $address_data = CustomerCart::getAddressData($address);
 
             $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
 
@@ -151,6 +151,7 @@ use common\models\CustomerCartMenuItem;
         				?>
         				
         				<?= nl2br($address_data); ?> <br />
+                        
                         <?=LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar);?><br/>
                         <?=LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar);?><br/>
 

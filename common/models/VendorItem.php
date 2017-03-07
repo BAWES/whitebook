@@ -197,14 +197,6 @@ class VendorItem extends \yii\db\ActiveRecord
     /**
     * @return \yii\db\ActiveQuery
     */
-    public function getSuborderItemPurchases()
-    {
-        return $this->hasMany(SuborderItemPurchase::className(), ['item_id' => 'item_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
     public function getVendorItemToPackage()
     {
         return $this->hasMany(VendorItemToPackage::className(), ['item_id' => 'item_id']);

@@ -294,7 +294,7 @@ class Booking extends \yii\db\ActiveRecord
             $booking->save(false);
 
             //address
-            $address_id = $addresses[$item['cart_id']];
+            $address_id = $addresses;//[$item['cart_id']]
 
             $booking_item = new BookingItem;
             $booking_item->booking_id = $booking->booking_id;
@@ -585,9 +585,9 @@ class Booking extends \yii\db\ActiveRecord
             // to vendor
 
             $message = 'Hello '.$vendor->vendor_name.',';
-            $message .= '<br/><br/>  The booking is Expired now for '.$items.' on '.date('d/m/Y h:i A').' because customer have not paid within 24 hour.<br />';
+            $message .= '<br/><br/>  The booking is Expired now for '.$items.' on '.date('d/m/Y h:i A').' because customer have not paid within 48 hour.<br />';
             $message .= '<br/> Request Token : '.$request->booking_token;
-            $message .= '<br/> Order ID : '.$request->booking_id;
+            $message .= '<br/> Booking ID : '.$request->booking_id;
 
             //get all vendor alert email
 
@@ -609,7 +609,7 @@ class Booking extends \yii\db\ActiveRecord
             $message = 'Hello Admin,';
             $message .= '<br/><br/>  The booking is Expired now for '.$items.' on '.date('d/m/Y h:i A').' because customer have not paid within 48 hours.<br />';
             $message .= '<br/> Request Token : '.$request->booking_token;
-            $message .= '<br/> Order ID : '.$request->booking_id;
+            $message .= '<br/> Booking ID : '.$request->booking_id;
 
             Yii::$app->mailer->compose()
                 ->setFrom(Yii::$app->params['supportEmail'])
@@ -621,7 +621,7 @@ class Booking extends \yii\db\ActiveRecord
             //set request status to `Declined`
 
             $request->request_status = '3';
-            $request->request_note = 'Payment not complete withing within 24 hour';
+            $request->request_note = 'Payment not complete withing within 48 hour';
             $request->save();
         }
     }
@@ -724,5 +724,19 @@ class Booking extends \yii\db\ActiveRecord
             ->setTo($emails)
             ->setSubject('Got Booking Payment!')
             ->send();
+    }
+
+    public static function totalPurchasedItem($item_id = false, $delivery_date = false)
+    {
+        if ($item_id== false || $delivery_date == false) {
+           return false;
+        }
+        
+        $q = 'select sum(bi.quantity) as `purchased` from `whitebook_booking_item` as `bi`';
+        $q .= ' inner join whitebook_booking b on b.booking_id = bi.booking_id where bi.item_id = '.$item_id;
+        $q .= ' AND b.booking_status IN (1,2,4,9) AND DATE(bi.delivery_date) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '")';
+        $q .= ' group by `bi`.`item_id`';
+
+        return Yii::$app->db->createCommand($q)->queryOne();
     }
 }

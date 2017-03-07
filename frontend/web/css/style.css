@@ -1588,9 +1588,8 @@ a.thing_cont:hover {
 .address_block_wrapper {
     display: block;
     clear: both;
-    margin-top: 11px;
     float: left;
-    margin-left: -5px;
+    margin-left: -19px;
     width: 100%;
 }
 .address_block {
@@ -2534,7 +2533,7 @@ span.small {
 }
 
 .accad_menus h4 { font-weight: bold;  }
-.checkout-wizard {  margin-bottom: 70px;  }
+.checkout-wizard {  margin-bottom: 20px;  }
 .checkout-wizard > .checkout-step:nth-child(2) > .progress {  width: 0;  }
 .request-table.table > thead > tr > th, .request-table.table > tbody > tr > th, .request-table.table > tfoot > tr > th, .request-table.table > thead > tr > td, .request-table.table > tbody > tr > td, .request-table.table > tfoot > tr > td{vertical-align: inherit;}
 

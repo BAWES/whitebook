@@ -13,9 +13,7 @@ use Yii;
  * @property string $menu_name_ar
  *
  * @property CustomerCartMenuItem[] $customerCartMenuItems
- * @property SuborderItemMenu[] $suborderItemMenus
  * @property VendorItem $item
- * @property VendorItemMenuItem[] $vendorItemMenuItems
  */
 class VendorItemMenu extends \yii\db\ActiveRecord
 {
@@ -61,14 +59,6 @@ class VendorItemMenu extends \yii\db\ActiveRecord
     public function getCustomerCartMenuItems()
     {
         return $this->hasMany(CustomerCartMenuItem::className(), ['menu_id' => 'menu_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSuborderItemMenus()
-    {
-        return $this->hasMany(SuborderItemMenu::className(), ['menu_id' => 'menu_id']);
     }
 
     /**

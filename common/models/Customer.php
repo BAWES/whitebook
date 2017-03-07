@@ -6,6 +6,7 @@ use Yii;
 use yii\web\IdentityInterface;
 use common\models\CustomerAddress;
 use common\models\CustomerCart;
+use common\models\Booking;
 
 /**
 * This is the model class for table "whitebook_customer".
@@ -135,9 +136,9 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     /**
     * @return \yii\db\ActiveQuery
     */
-    public function getOrders()
+    public function getBookings()
     {
-        return $this->hasMany(Order::className(), ['customer_id' => 'customer_id']);
+        return $this->hasMany(Booking::className(), ['customer_id' => 'customer_id']);
     }
 
    /*

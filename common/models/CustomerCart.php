@@ -237,7 +237,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //2) get no of item purchased for selected date 
 
-        $purchased_result = Order::totalPurchasedItem($data['item_id'],$data['delivery_date']);
+        $purchased_result = Booking::totalPurchasedItem($data['item_id'],$data['delivery_date']);
 
         if($purchased_result) {
             $purchased = $purchased_result['purchased'];
@@ -464,13 +464,19 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $result;
     }
 
-    public static function customerAddress($area_id,$customer_id){
+    public static function customerAddress(){
         
+        if(Yii::$app->user->isGuest) {
+            return [];
+        }
+                
+        $area_id = self::findOne(['customer_id' => Yii::$app->user->getId()])->area_id;
+
         $result = CustomerAddress::find()
             ->joinWith('location')
             ->joinWith('city')
             ->where([
-                '{{%customer_address}}.customer_id' => $customer_id,
+                '{{%customer_address}}.customer_id' => Yii::$app->user->getId(),
                 '{{%customer_address}}.trash' => 'Default',
                 '{{%location}}.id' => $area_id,
                 '{{%location}}.status' => 'Active',
