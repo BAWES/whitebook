@@ -116,7 +116,6 @@ class CartController extends BaseController
 
         }
 
-
         return $this->renderPartial('edit_cart', [
             'item' => $item,
             'model' => $model,
@@ -126,82 +125,85 @@ class CartController extends BaseController
         ]);
     }
 
-    public function actionUpdateCartItem(){
-        if(Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
+    public function actionUpdateCartItem()
+    {
+        if(!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            $data = Yii::$app->request->post();
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
-            if($this->validate_item($data)) {
+        $data = Yii::$app->request->post();
 
-                $cart = CustomerCart::findOne($data['cart_id']);
-                
-                if ($cart) {
-                    $cart->cart_delivery_date = $data['delivery_date'];
-                    $cart->time_slot =   $data['time_slot'];
-                    $cart->cart_quantity =  $data['quantity'];
-                    $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
-                    $cart->modified_datetime  = date('Y-d-m h:i:s');
+        if($this->validate_item($data)) {
 
-                    if(!empty($data['female_service'])) {
-                        $cart->female_service = $data['female_service'];
-                    }
+            $cart = CustomerCart::findOne($data['cart_id']);
+            
+            if ($cart) {
+                $cart->cart_delivery_date = $data['delivery_date'];
+                $cart->time_slot =   $data['time_slot'];
+                $cart->cart_quantity =  $data['quantity'];
+                $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
+                $cart->modified_datetime  = date('Y-d-m h:i:s');
 
-                    if(!empty($data['special_request'])) {
-                        $cart->special_request = $data['special_request'];
-                    }
-
-                    if ($cart->save()) {
-
-                        // remove old 
-
-                        CustomerCartMenuItem::deleteAll(['cart_id' => $cart->cart_id]);
-
-                        // add menu 
-
-                        if(empty($data['menu_item'])) {
-                            $data['menu_item'] = [];
-                        }
-                        
-                        foreach ($data['menu_item'] as $key => $value) {
-
-                            if($value > 0) {
-                                                        
-                                $mi = VendorItemMenuItem::findOne($key);
-
-                                $cart_menu_item = new CustomerCartMenuItem;
-                                $cart_menu_item->cart_id = $cart->cart_id;
-                                $cart_menu_item->menu_id = $mi->menu_id;
-                                $cart_menu_item->menu_item_id = $mi->menu_item_id;
-                                $cart_menu_item->quantity = $value;
-                                $cart_menu_item->save();   
-                            }
-                        }
-
-                        Yii::$app->getSession()->setFlash('success', Yii::t(
-                            'frontend',
-                            'Success: Product <a href="{product_link}">{product_name}</a> added to cart!',
-                            [
-                                'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
-                                'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
-                            ]
-                        ));
-
-                        return [
-                            'success' => 1
-                        ];
-                    } else {
-                        return [
-                            'error' => Yii::t('frontend','Error while updateing cart')
-                        ];
-                    }
+                if(!empty($data['female_service'])) {
+                    $cart->female_service = $data['female_service'];
                 }
-                exit;
-            } else {
-                return [
-                    'errors' => $this->errors
-                ];
+
+                if(!empty($data['special_request'])) {
+                    $cart->special_request = $data['special_request'];
+                }
+
+                if ($cart->save()) {
+
+                    // remove old 
+
+                    CustomerCartMenuItem::deleteAll(['cart_id' => $cart->cart_id]);
+
+                    // add menu 
+
+                    if(empty($data['menu_item'])) {
+                        $data['menu_item'] = [];
+                    }
+                    
+                    foreach ($data['menu_item'] as $key => $value) {
+
+                        if($value > 0) {
+                                                    
+                            $mi = VendorItemMenuItem::findOne($key);
+
+                            $cart_menu_item = new CustomerCartMenuItem;
+                            $cart_menu_item->cart_id = $cart->cart_id;
+                            $cart_menu_item->menu_id = $mi->menu_id;
+                            $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                            $cart_menu_item->quantity = $value;
+                            $cart_menu_item->save();   
+                        }
+                    }
+
+                    Yii::$app->getSession()->setFlash('success', Yii::t(
+                        'frontend',
+                        'Success: Product <a href="{product_link}">{product_name}</a> added to cart!',
+                        [
+                            'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
+                            'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
+                        ]
+                    ));
+
+                    return [
+                        'success' => 1
+                    ];
+                } else {
+                    return [
+                        'error' => Yii::t('frontend','Error while updateing cart')
+                    ];
+                }
             }
+            exit;
+        } else {
+            return [
+                'errors' => $this->errors
+            ];
         }
     }
 
@@ -378,6 +380,12 @@ class CartController extends BaseController
         $json = [];
 
         $data = Yii::$app->request->post();
+
+        if(empty($data['item_id'])) {
+            $json['error'] = Yii::t('frontend', 'Item ID require!');
+
+            return $json;
+        }
 
         $item = VendorItem::find()->where([
             'item_id' => $data['item_id'],
