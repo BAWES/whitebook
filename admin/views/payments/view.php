@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\VendorAccountPayable */
+/* @var $model common\models\VendorPayment */
 
-$this->title = $model->payable_id;
+$this->title = $model->payment_id;
 $this->params['breadcrumbs'][] = ['label' => 'Vendor Account Payables', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,8 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->payable_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->payable_id], [
+        <?= Html::a('Update', ['update', 'id' => $model->payment_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->payment_id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'payable_id',
+            'payment_id',
             'vendorName',
             'amount',
             'description:ntext',

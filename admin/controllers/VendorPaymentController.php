@@ -3,18 +3,18 @@
 namespace admin\controllers;
 
 use Yii;
+use common\models\VendorPayment;
+use common\models\VendorPaymentSearch;
+use common\models\Vendor;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
-use common\models\VendorAccountPayable;
-use common\models\VendorAccountPayableSearch;
-use common\models\Vendor;
 
 /**
- * PaymentsController implements the CRUD actions for VendorAccountPayable model.
+ * VendorPaymentController implements the CRUD actions for VendorPayment model.
  */
-class PayableController extends Controller
+class VendorPaymentController extends Controller
 {
     /**
      * @inheritdoc
@@ -32,25 +32,22 @@ class PayableController extends Controller
     }
 
     /**
-     * Lists all VendorAccountPayable models.
+     * Lists all VendorPayment models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new VendorAccountPayableSearch();
+        $searchModel = new VendorPaymentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        $total = $searchModel->total(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'total' => $total
         ]);
     }
 
     /**
-     * Displays a single VendorAccountPayable model.
+     * Displays a single VendorPayment model.
      * @param integer $id
      * @return mixed
      */
@@ -62,19 +59,19 @@ class PayableController extends Controller
     }
 
     /**
-     * Creates a new VendorAccountPayable model.
+     * Creates a new VendorPayment model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new VendorAccountPayable();
+        $model = new VendorPayment();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
 
-            $vendors = Vendor::findAll(['trash' => 'Default']);
+            $vendors = Vendor::find()->all();
 
             return $this->render('create', [
                 'model' => $model,
@@ -84,7 +81,7 @@ class PayableController extends Controller
     }
 
     /**
-     * Updates an existing VendorAccountPayable model.
+     * Updates an existing VendorPayment model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -97,7 +94,7 @@ class PayableController extends Controller
             return $this->redirect(['index']);
         } else {
 
-            $vendors = Vendor::findAll(['trash' => 'Default']);
+            $vendors = Vendor::find()->all();
 
             return $this->render('update', [
                 'model' => $model,
@@ -107,7 +104,7 @@ class PayableController extends Controller
     }
 
     /**
-     * Deletes an existing VendorAccountPayable model.
+     * Deletes an existing VendorPayment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -120,15 +117,15 @@ class PayableController extends Controller
     }
 
     /**
-     * Finds the VendorAccountPayable model based on its primary key value.
+     * Finds the VendorPayment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return VendorAccountPayable the loaded model
+     * @return VendorPayment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = VendorAccountPayable::findOne($id)) !== null) {
+        if (($model = VendorPayment::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
