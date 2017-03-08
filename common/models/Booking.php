@@ -17,6 +17,7 @@ use common\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use common\models\CustomerCartMenuItem;
 use common\models\CustomerCart;
+use common\models\VendorPayment;
 
 /**
  * This is the model class for table "whitebook_booking".
@@ -738,5 +739,20 @@ class Booking extends \yii\db\ActiveRecord
         $q .= ' group by `bi`.`item_id`';
 
         return Yii::$app->db->createCommand($q)->queryOne();
+    }
+
+    public static function addPayment($booking) 
+    {
+        $payment = new VendorPayment;
+        $payment->vendor_id = $booking->vendor_id;
+        $payment->booking_id = $booking->booking_id;
+        $payment->type = VendorPayment::TYPE_ORDER;
+        $payment->amount = $booking->total_vendor;
+        $payment->description = 'Booking #'.$booking->booking_id.' got paid.';
+        $payment->save();
+
+        $vendor = Vendor::findOne($booking->vendor_id);
+        $vendor->vendor_payable += $booking->total_vendor;
+        $vendor->save();
     }
 }

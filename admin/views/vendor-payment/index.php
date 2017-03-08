@@ -25,7 +25,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'payment_id',
-            'vendorName',
+            [
+                'attribute' => 'vendorName',
+                'value' => function($model) {
+                    return $model->vendor->vendor_name;
+                }
+            ],
             //'booking_id',
             'description:ntext',
             [
@@ -40,7 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_datetime',
             // 'modified_datetime',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {delete}'
+            ],
         ],
     ]); ?>
 </div>
