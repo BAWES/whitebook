@@ -16,7 +16,7 @@ class VendorSearch extends Vendor
     {
         return [
             [['vendor_id', 'image_id', 'created_by', 'modified_by'], 'integer'],
-            [['vendor_name', 'vendor_return_policy', 'vendor_public_email', 'vendor_working_hours', 'vendor_contact_name', 'vendor_contact_email', 'vendor_contact_number', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_website', 'vendor_password', 'vendor_status',], 'safe'],
+            [['vendor_name', 'vendor_return_policy', 'vendor_public_email', 'vendor_working_hours', 'vendor_contact_name', 'vendor_contact_email', 'vendor_contact_number', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_website', 'vendor_password', 'vendor_status','vendor_payable'], 'safe'],
         ];
     }
 
@@ -57,6 +57,7 @@ class VendorSearch extends Vendor
 
         $query->andFilterWhere([
             'vendor_id' => $this->vendor_id,
+            'vendor_payable' => $this->vendor_payable,
             'image_id' => $this->image_id,
             'created_by' => $this->created_by,
             'modified_by' => $this->modified_by,

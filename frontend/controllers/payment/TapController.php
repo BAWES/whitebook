@@ -8,7 +8,6 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use common\models\Booking;
 use common\models\PaymentGateway;
-use common\models\VendorAccountPayable;
 
 class TapController extends Controller
 {
@@ -136,15 +135,8 @@ class TapController extends Controller
             $booking->save(false);
 
             //add payment to vendor wallet 
-
-            $payment = new VendorPayment;
-            $payment->vendor_id = $booking->vendor_id;
-            $payment->booking_id = $booking->booking_id;
-            $payment->type = VendorPayment::TYPE_ORDER;
-            $payment->amount = $booking->total_vendor;
-            $payment->description = 'Booking #'.$booking->booking_id.' got paid.';
-            $payment->save();
-
+            Booking::addPayment($booking);
+    
             //send order emails
             Booking::sendBookingPaidEmails($booking_id);
 

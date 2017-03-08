@@ -52,6 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return ['class' => 'text-center'];
                         },
         			],
+                    'vendor_payable',
         			[
         				'attribute'=>'created_datetime',
         				'format' => ['date', 'php:d/m/Y'],
