@@ -185,4 +185,36 @@ class VendorItem extends \common\models\VendorItem
             ])
             ->count();
     }
+
+    public function getSoldItems($item, $date) {
+
+        $purchased_result = \common\models\Booking::totalPurchasedItem($item->item_id,$date);
+
+        return (int)$purchased_result['purchased'];
+    }
+
+    public function getItemInStock($item, $date) {
+
+        $capacity_exception = VendorItemCapacityException::findOne([
+            'item_id' => $item->item_id,
+            'exception_date' => date('Y-m-d', strtotime($date))
+        ]);
+
+        if($capacity_exception && $capacity_exception->exception_capacity) {
+            $capacity = $capacity_exception->exception_capacity;
+        } else {
+            $capacity = $item->item_default_capacity;
+        }
+        //2) get no of item purchased for selected date
+
+        $purchased_result = \common\models\Booking::totalPurchasedItem($item->item_id,$date);
+
+        if($purchased_result) {
+            $purchased = $purchased_result['purchased'];
+        } else {
+            $purchased = 0;
+        }
+
+        return $capacity - $purchased_result['purchased'];
+    }
 }
