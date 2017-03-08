@@ -49,8 +49,8 @@ $booking_request_count = Booking::find()
 	        	'url' => ['booking/index'],
 	        ],
 	        [	
-	        	'label' => '<i class="fa fa-money"></i><span class="title">Payable</span>',
-	        	'url' => ['payable/index'],
+	        	'label' => '<i class="fa fa-money"></i><span class="title">Vendor Payment</span>',
+	        	'url' => ['vendor-payment/index'],
 	        ],
 	        [
 	        	'label' => '<i class="fa fa-university"></i><span class="title">General Settings</span>',

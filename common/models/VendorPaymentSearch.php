@@ -20,7 +20,7 @@ class VendorPaymentSearch extends VendorPayment
     public function rules()
     {
         return [
-            [['payment_id', 'vendor_id'], 'integer'],
+            [['payment_id', 'vendor_id', 'booking_id', 'type'], 'integer'],
             [['amount'], 'number'],
             [['vendorName', 'description', 'created_datetime', 'modified_datetime'], 'safe'],
         ];
@@ -77,6 +77,8 @@ class VendorPaymentSearch extends VendorPayment
         $query->andFilterWhere([
             'payment_id' => $this->payment_id,
             'vendor_id' => $this->vendor_id,
+            'booking_id' => $this->booking_id,
+            'type' => $this->type,
             'amount' => $this->amount,
             'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
@@ -89,44 +91,5 @@ class VendorPaymentSearch extends VendorPayment
         }]);
 
         return $dataProvider;
-    }
-
-    /**
-     * Total payment amount 
-     *
-     * @param array $params
-     *
-     * @return number $total 
-     */
-    public function total($params)
-    {
-        $query = VendorPayment::find()
-            ->orderBy('payment_id DESC');
-
-        // add conditions that should always apply here
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            $query->joinWith(['vendor']);
-            return $q->sum('amount');
-        }
-
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'payment_id' => $this->payment_id,
-            'vendor_id' => $this->vendor_id,
-            'amount' => $this->amount,
-            'created_datetime' => $this->created_datetime,
-            'modified_datetime' => $this->modified_datetime,
-        ]);
-
-        $query->andFilterWhere(['like', 'description', $this->description]);
-
-        $query->joinWith(['vendor' => function ($q) {
-            $q->where('whitebook_vendor.vendor_name LIKE "%' . $this->vendorName . '%"');
-        }]);
-
-        return $query->sum('amount');
     }
 }

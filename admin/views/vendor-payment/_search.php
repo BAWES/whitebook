@@ -4,26 +4,30 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\VendorAccountPayableSearch */
+/* @var $model common\models\VendorPaymentSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="vendor-account-payable-search">
+<div class="vendor-payment-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'payable_id') ?>
+    <?= $form->field($model, 'payment_id') ?>
 
     <?= $form->field($model, 'vendor_id') ?>
 
+    <?= $form->field($model, 'booking_id') ?>
+
+    <?= $form->field($model, 'type') ?>
+
     <?= $form->field($model, 'amount') ?>
 
-    <?= $form->field($model, 'description') ?>
+    <?php // echo $form->field($model, 'description') ?>
 
-    <?= $form->field($model, 'created_datetime') ?>
+    <?php // echo $form->field($model, 'created_datetime') ?>
 
     <?php // echo $form->field($model, 'modified_datetime') ?>
 

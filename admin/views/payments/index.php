@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = 'Vendor Account Payables | <small>Total Payable for current result: '.$total.'</small>';
+$this->title = 'Vendor Payments | Total Paid for current result: '.$total;
 
-$this->params['breadcrumbs'][] = 'Vendor Account Payables';
+$this->params['breadcrumbs'][] = 'Vendor Payments';
 ?>
 
 
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = 'Vendor Account Payables';
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
 
-            'payable_id',
+            'payment_id',
             'amount',
             'description:ntext',
             'created_datetime',
