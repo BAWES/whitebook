@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use common\models\Booking;
 use common\models\PaymentGateway;
+use common\models\VendorPayment;
 
 class CodController extends Controller
 {
@@ -40,11 +41,13 @@ class CodController extends Controller
 
         //add payment to vendor wallet 
 
-        /*$payment = new VendorAccountPayable;
-        $payment->vendor_id = $suborder->vendor_id;
-        $payment->amount = $suborder->suborder_vendor_total;
-        $payment->description = 'Suborder #'.$suborder->suborder_id.' got paid.';
-        $payment->save();*/
+        $payment = new VendorPayment;
+        $payment->vendor_id = $booking->vendor_id;
+        $payment->booking_id = $booking->booking_id;
+        $payment->type = VendorPayment::TYPE_ORDER;
+        $payment->amount = $booking->total_vendor;
+        $payment->description = 'Booking #'.$booking->booking_id.' got paid.';
+        $payment->save();
 
         //send order emails
         Booking::sendBookingPaidEmails($booking_id);

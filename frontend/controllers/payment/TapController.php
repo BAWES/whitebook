@@ -137,11 +137,13 @@ class TapController extends Controller
 
             //add payment to vendor wallet 
 
-            /*$payment = new VendorAccountPayable;
+            $payment = new VendorPayment;
             $payment->vendor_id = $booking->vendor_id;
-            $payment->amount = $booking->booking_vendor_total;
-            $payment->description = 'Suborder #'.$booking->booking_id.' got paid.';
-            $payment->save();*/
+            $payment->booking_id = $booking->booking_id;
+            $payment->type = VendorPayment::TYPE_ORDER;
+            $payment->amount = $booking->total_vendor;
+            $payment->description = 'Booking #'.$booking->booking_id.' got paid.';
+            $payment->save();
 
             //send order emails
             Booking::sendBookingPaidEmails($booking_id);

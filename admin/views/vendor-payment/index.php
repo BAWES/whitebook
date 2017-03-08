@@ -30,7 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             [
                 'attribute' => 'type',
-                'filter' => $searchModel::typeList()
+                'filter' => $searchModel::typeList(),
+                'value' =>  function($model) {
+                    return $model->typeName();
+                }
             ],
             'amount',
             

@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "whitebook_vendor_payment".
@@ -21,6 +23,8 @@ use Yii;
  */
 class VendorPayment extends \yii\db\ActiveRecord
 {
+    public $vendorName;
+
     const TYPE_ORDER = 0;
     const TYPE_TRANSFER = 1;
     
@@ -58,9 +62,21 @@ class VendorPayment extends \yii\db\ActiveRecord
             [['amount'], 'required'],
             [['amount'], 'number'],
             [['description'], 'string'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
+            [['vendorName', 'created_datetime', 'modified_datetime'], 'safe'],
             [['booking_id'], 'exist', 'skipOnError' => true, 'targetClass' => Booking::className(), 'targetAttribute' => ['booking_id' => 'booking_id']],
             [['vendor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vendor::className(), 'targetAttribute' => ['vendor_id' => 'vendor_id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
         ];
     }
 

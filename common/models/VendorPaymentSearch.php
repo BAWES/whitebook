@@ -12,8 +12,6 @@ use common\models\VendorPayment;
  */
 class VendorPaymentSearch extends VendorPayment
 {
-    public $vendorName;
-
     /**
      * @inheritdoc
      */
@@ -33,6 +31,12 @@ class VendorPaymentSearch extends VendorPayment
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
+    }
+
+    public function getVendorName()
+    {
+        if($this->vendor)
+            return $this->vendor->vendor_name;
     }
 
     /**
