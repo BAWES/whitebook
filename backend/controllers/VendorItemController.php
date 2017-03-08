@@ -952,4 +952,33 @@ class VendorItemController extends Controller
             'categories' => Category::findAll(['parent_category_id' => $category_id])
         ];
     }
+
+    public function actionItemInventory() {
+
+        $query = VendorItem::find();
+        $date = date('Y-m-d');
+        $item_id = '';
+        $query->where(['trash'=>'Default']);
+        if (Yii::$app->request->post()) {
+            if (Yii::$app->request->post('date')) {
+                $date =Yii::$app->request->post('date');
+            } else {
+                Yii::$app->session->setFlash('danger', 'Please select date');
+            }
+        }
+
+        if (Yii::$app->request->post('item_id') && Yii::$app->request->post('item_id') != '') {
+            $query->andWhere(['item_id' => Yii::$app->request->post('item_id')]);
+            $item_id =Yii::$app->request->post('item_id');
+        }
+
+        $provider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('inventory',['provider'=>$provider,'date'=>$date,'item_id'=>$item_id]);
+    }
 }

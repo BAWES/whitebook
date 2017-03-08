@@ -730,12 +730,12 @@ class Booking extends \yii\db\ActiveRecord
     public static function totalPurchasedItem($item_id = false, $delivery_date = false)
     {
         if ($item_id== false || $delivery_date == false) {
-           return false;
+            return false;
         }
-        
+
         $q = 'select sum(bi.quantity) as `purchased` from `whitebook_booking_item` as `bi`';
         $q .= ' inner join whitebook_booking b on b.booking_id = bi.booking_id where bi.item_id = '.$item_id;
-        $q .= ' AND b.booking_status IN (1,2,4,9) AND DATE(bi.delivery_date) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '")';
+        $q .= ' AND b.booking_status IN (0,1) AND DATE(bi.delivery_date) = DATE("' . date('Y-m-d', strtotime($delivery_date)) . '")';
         $q .= ' group by `bi`.`item_id`';
 
         return Yii::$app->db->createCommand($q)->queryOne();
