@@ -70,11 +70,14 @@ class SiteController extends Controller
             ->andWhere(['vendor_id' => $vendor_id,'booking_status'=>1])
             ->sum('total_vendor');
 
+        $vendor = Vendor::findOne($vendor_id);
+
         return $this->render('index', [
             'vendoritemcnt' => $vendoritemcnt,
             'monthitemcnt' => $monthitemcnt,
             'dateitemcnt' => $dateitemcnt,
-            'earning_total' => number_format($earning_total, 3).' KD'
+            'earning_total' => number_format($earning_total, 3).' KD',
+            'vendor_payable' => number_format($vendor->vendor_payable, 3).' KD'
         ]);
     }
 
