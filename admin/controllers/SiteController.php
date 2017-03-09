@@ -49,6 +49,22 @@ class SiteController extends Controller
         ];
     }
 
+    /* method to change 404 page design in case
+     * user not logged in
+     */
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action)) {
+            // change layout for error action
+            if ($action->id=='error' && Yii::$app->user->isGuest)
+                $this->layout ='error-layout';
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     /**
      * {@inheritdoc}
      */
