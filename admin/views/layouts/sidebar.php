@@ -52,6 +52,10 @@ $booking_request_count = Booking::find()
 	        	'label' => '<i class="fa fa-money"></i><span class="title">Vendor Payment</span>',
 	        	'url' => ['vendor-payment/index'],
 	        ],
+	        [	
+	        	'label' => '<i class="fa fa-money"></i><span class="title">Vendor Payable</span>',
+	        	'url' => ['vendor-payable/index'],
+	        ],
 	        [
 	        	'label' => '<i class="fa fa-university"></i><span class="title">General Settings</span>',
 				'options' => ['class'=>'dropdown'],
