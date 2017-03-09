@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute'=>'item_name',
                     'label'=>'Item Name',
                     'value'=>function($data){
-                        return $data->vendoritem->item_name;
+                        return (isset($data->vendoritem->item_name)) ? $data->vendoritem->item_name : '-';
                     }
                 ],
                 [
