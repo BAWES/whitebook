@@ -13,6 +13,7 @@ use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemMenuItem;
+use common\models\VendorDraftImage;
 
 use Yii;
 
