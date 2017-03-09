@@ -59,12 +59,15 @@ $order_request_count =
 					<span class="<?=(in_array($cntrl,$itemTab)) ? "arrow open" : "arrow" ?>"></span>
 				</a>
 				<ul class="sub-menu" style='<?= in_array($cntrl,$itemTab)?"display:block":"" ?>'>
-                    <li class="<?=($cntrl == 'vendor-item') ? "active"  : "noactive";?>">
+                    <li class="<?=($cntrl == 'vendor-item' && $action == 'index') ? "active"  : "noactive";?>">
         				<?= Html::a('<i class="fa fa-certificate"></i><span class="title">Manage Item</span>', ['vendor-item/index'], ['class'=>'link-title']) ?>
         			</li>
-                    <li class="<?=($cntrl == 'vendor-item-capacity-exception'  && $action == 'index') ? "active"  : "noactive"; ?>">
+                    <li class="<?=($cntrl == 'vendor-item-capacity-exception' && $action == 'index') ? "active"  : "noactive"; ?>">
 						<?= Html::a('<i class="fa fa-calendar-o"></i><span class="title">Exception Dates</span>', ['vendor-item-capacity-exception/index'], ['class'=>'link-title']) ?>
         			</li>
+                    <li class="<?=($cntrl == 'vendor-item'  && $action == 'item-inventory') ? "active"  : "noactive"; ?>">
+                        <?= Html::a('<i class="fa fa-calculator"></i><span class="title">Inventory</span>', ['vendor-item/item-inventory'], ['class'=>'link-title']) ?>
+                    </li>
                 </ul>
             </li>
 

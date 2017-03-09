@@ -38,6 +38,13 @@ $this->title = 'Whitebook Application';
 					<span>Earning total</span>
 				</div>
 			</li>
+			<li class="satblue">
+				<i class="fa fa-money"></i>
+				<div class="details">
+					<span class="big"><?= $vendor_payable ?></span>
+					<span>Account Receivable</span>
+				</div>
+			</li>
 		</ul>
 	</div>
 </div>
