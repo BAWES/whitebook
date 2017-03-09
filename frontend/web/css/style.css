@@ -2565,3 +2565,11 @@ span.small {
 .badge.badge_1 {background: green;}
 .badge.badge_2 {background: red;}
 .logout_part li {  padding: 0 0px 0px 2px;  }
+
+.cart-table .label-danger {
+    background-color: #d9534f;
+    margin: 2px;
+    font-weight: normal;
+    display: block;
+    float: left;
+}
