@@ -12,10 +12,10 @@ $form = ActiveForm::begin([
             <input type="text" name="date" id="date" value="<?=$date?>" />
         </div>
         <div class="col-md-3">
-            <?=\yii\helpers\Html::dropDownList('item_id',$item_id,\yii\helpers\ArrayHelper::map(\common\models\VendorItem::findAll(['trash'=>'Default']),'item_id','item_name'),['prompt'=>'All Items'])?>
+            <?=\yii\helpers\Html::dropDownList('item_id',$item_id,\yii\helpers\ArrayHelper::map(\common\models\VendorItem::findAll(['trash'=>'Default','vendor_id' => Yii::$app->user->getId()]),'item_id','item_name'),['prompt'=>'All Items'])?>
         </div>
         <div class="col-md-3">
-            <?= Html::submitButton('Login', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('Show Detail', ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 <?php ActiveForm::end() ?>

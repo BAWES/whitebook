@@ -101,6 +101,7 @@ $booking_request_count = Booking::find()
 				'items' => [
 					['label' => 'Manage Vendor', 'url' => ['vendor/index']],
 					['label' => 'Manage Vendor Item', 'url' => ['vendor-item/index']],
+					['label' => 'Item Inventor', 'url' => ['vendor-item/item-inventory']],
 				]
 			],
 			[

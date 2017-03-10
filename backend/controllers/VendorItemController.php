@@ -971,6 +971,7 @@ class VendorItemController extends Controller
             $query->andWhere(['item_id' => Yii::$app->request->post('item_id')]);
             $item_id =Yii::$app->request->post('item_id');
         }
+        $query->andWhere(['vendor_id' => Yii::$app->user->getId()]);
 
         $provider = new \yii\data\ActiveDataProvider([
             'query' => $query,

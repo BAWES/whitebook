@@ -68,7 +68,6 @@ class VendorSearch extends Vendor
         $query->andFilterWhere(['like', 'vendor_name', $this->vendor_name])
             ->andFilterWhere(['like', 'vendor_return_policy', $this->vendor_return_policy])
             ->andFilterWhere(['like', 'vendor_public_email', $this->vendor_public_email])
-            ->andFilterWhere(['like', 'vendor_working_hours', $this->vendor_working_hours])
             ->andFilterWhere(['like', 'vendor_contact_name', $this->vendor_contact_name])
             ->andFilterWhere(['like', 'vendor_contact_email', $this->vendor_contact_email])
             ->andFilterWhere(['like', 'vendor_contact_number', $this->vendor_contact_number])
