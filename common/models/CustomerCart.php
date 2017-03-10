@@ -253,10 +253,13 @@ class CustomerCart extends \yii\db\ActiveRecord
             $no_of_available = $capacity - $purchased;
 
             $errors['cart_quantity'][] = [
-                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
-                   'no_of_available' => $no_of_available 
-                ])
-            ];        
+                Yii::t('frontend', 'Item is Out of stock')
+            ];
+//            $errors['cart_quantity'][] = [
+//                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
+//                   'no_of_available' => $no_of_available
+//                ])
+//            ];
         }
 
         //validate to add product to cart
@@ -265,10 +268,14 @@ class CustomerCart extends \yii\db\ActiveRecord
 
             $no_of_available = $capacity - $purchased - $in_cart;
 
+//            $errors['cart_quantity'][] = [
+//                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
+//                   'no_of_available' => $no_of_available
+//                ])
+//            ];
+
             $errors['cart_quantity'][] = [
-                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
-                   'no_of_available' => $no_of_available 
-                ])
+                Yii::t('frontend', 'Item is Out of stock')
             ];
         }
 
