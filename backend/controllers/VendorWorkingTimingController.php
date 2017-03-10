@@ -45,7 +45,6 @@ class VendorWorkingTimingController extends Controller
     public function actionIndex()
     {
         $searchModel = new VendorWorkingTimingSearch();
-        $searchModel->trash = 'Default';
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -120,8 +119,8 @@ class VendorWorkingTimingController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->trash ='Deleted';
-        $model->save();
+        $model->trash = 'Deleted';
+        $model->save(false);
 
         return $this->redirect(['index']);
     }
