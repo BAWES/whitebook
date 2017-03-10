@@ -274,8 +274,6 @@ class CheckoutController extends BaseController
         $address = Yii::$app->session->get('address');
 
         if ($address) {
-            print_r($address);
-            exit;
             
             $arr_booking_id = Booking::checkoutConfirm();
 
