@@ -603,16 +603,16 @@ class CartController extends BaseController
     private function slots($startTime = '11:00:00', $endTime = '22:45:00'){
         $slots = [];
         if ($startTime && $endTime) {
-            $from = date('H:i:s',strtotime($startTime));
+            $from = date('h:i A', strtotime($startTime));
             $to ='';
             while (strtotime($from) < strtotime($endTime)) {
-                $to = strtotime("+30 minutes",strtotime($from));
+                $to = strtotime("+30 minutes", strtotime($from));
                 if ($to > strtotime($endTime)) {
-                    $slots[] = $from . '-' . date('H:i:s',strtotime($endTime));
+                    $slots[] = $from;// . '-' . date('H:i:s',strtotime($endTime));
                     break;
                 }
-                $slots[] = date('h:i A',strtotime($from)) . ' - ' . date('h:i A',$to);
-                $from = date('H:i:s',$to);
+                $slots[] = date('h:i A',strtotime($from));// . ' - ' . date('h:i A',$to);
+                $from = date('h:i A',$to);
             }
         }
         return $slots;
