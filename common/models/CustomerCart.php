@@ -146,6 +146,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             } else {
                 $query->andWhere(['cart_session_id'=>Customer::currentUser()]);
             }
+
             $in_cart = $query->sum('cart_quantity');
         /*
             Check if deliery availabel in selected area 
@@ -200,7 +201,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             
         // to check with old delivery date
         if ($data['delivery_date'] && strtotime($data['delivery_date']) < strtotime(date('Y-m-d'))) { 
-            $errors['cart_delivery_date'][] = Yii::t('frontend','Error : Cart item with past delivery date');     
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Cart item with past delivery date');     
         }
 
         //get timeslot
@@ -288,7 +289,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         $day = date('N', strtotime($data['delivery_date']));//7-sunday, 1-monday
 
         if(!$block_date && in_array($day, $blocked_days)) {
-            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');             
+            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');
         }
 
         //item total 
