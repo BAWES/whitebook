@@ -145,22 +145,20 @@ class BookingController extends Controller
      */
     public function actionStatus($token, $action){
 
-        $booking = Booking::findOne(['booking_token'=>$token,'booking_status'=>'0']);
+        $booking = Booking::findOne([
+                'booking_token' => $token,
+                'booking_status' => '0',
+                'vendor_id' => Yii::$app->user->getId()
+            ]);
+  
+        if ($booking) {
 
-        if ($booking->vendor_id == Yii::$app->user->getId()) { // check for vendor items booking only
+            $booking->booking_status = ($action) ? $action : Booking::STATUS_REJECTED;
+            $booking->save(false);
+            Yii::$app->session->setFlash('success', 'Booking Status Changed Successfully');
+            return $this->redirect(['index']);
 
-            if ($booking) {
-
-                $booking->booking_status = ($action) ? $action : Booking::STATUS_REJECTED;
-                $booking->save(false);
-                Yii::$app->session->setFlash('success', 'Booking Status Changed Successfully');
-                return $this->redirect(['index']);
-
-            } else { // in case invalid booking
-                Yii::$app->session->setFlash('danger', 'Invalid token ID');
-                return $this->redirect(['index']);
-            }
-        } else {
+        } else { // in case invalid booking
             Yii::$app->session->setFlash('danger', 'Invalid token ID');
             return $this->redirect(['index']);
         }
