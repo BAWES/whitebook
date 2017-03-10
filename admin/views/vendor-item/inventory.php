@@ -15,7 +15,7 @@ $form = ActiveForm::begin([
             <?=\yii\helpers\Html::dropDownList('item_id',$item_id,\yii\helpers\ArrayHelper::map(\common\models\VendorItem::findAll(['trash'=>'Default']),'item_id','item_name'),['prompt'=>'All Items'])?>
         </div>
         <div class="col-md-3">
-            <?= Html::submitButton('Login', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('Show Detail', ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 <?php ActiveForm::end() ?>
