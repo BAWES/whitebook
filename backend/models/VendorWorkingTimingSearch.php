@@ -66,7 +66,7 @@ class VendorWorkingTimingSearch extends VendorWorkingTiming
         ]);
 
         $query->andFilterWhere(['like', 'working_day', $this->working_day])
-            ->andFilterWhere(['like', 'trash', $this->trash]);
+            ->andFilterWhere(['like', 'trash', 'Default']);
 
         return $dataProvider;
     }
