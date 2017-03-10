@@ -890,30 +890,6 @@ if($model->images) {
                                                     </li>
                                                     <?php } ?>
 
-                                                    <?php if ($vendor_detail['vendor_working_hours'] &&
-                                                                $vendor_detail['vendor_working_hours_to']) { ?>
-                                                    <li class="vendor_working_hours">
-                                                        <a>
-                                                            <i class="fa fa-clock-o"></i>
-                                                            <?php
-                                                                $from = explode(':', $vendor_detail['vendor_working_hours']);
-
-                                                                if($from)
-                                                                echo (isset($from[0])) ? $from[0] : '';
-                                                                echo (isset($from[1])) ? ':'.$from[1] : '';
-                                                                echo (isset($from[2])) ? ''.$from[2] : '';
-                                                            ?>
-                                                            -
-                                                            <?php
-                                                                $to = explode(':', $vendor_detail['vendor_working_hours_to']);
-                                                                echo (isset($to[0])) ? $to[0] : '';
-                                                                echo (isset($to[1])) ? ':'.$to[1] : '';
-                                                                echo (isset($to[2])) ? ''.$to[2] : ''
-                                                            ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-
                                                     <?php if($txt_day_off) { ?>
                                                     <li>
                                                         <a>
