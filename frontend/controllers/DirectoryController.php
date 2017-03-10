@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\VendorWorkingTiming;
 use Yii;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
@@ -278,6 +279,8 @@ class DirectoryController extends BaseController
         //day off 
         $search = array(0, 1, 2, 3, 4, 5, 6, ',');
 
+
+        $working_days = ArrayHelper::map(VendorWorkingTiming::findAll(['vendor_id'=>$vendor_details->vendor_id]),'working_day','working_day');
         $replace = array(
             Yii::t('frontend', 'Sunday'),
             Yii::t('frontend', 'Monday'),
@@ -286,12 +289,8 @@ class DirectoryController extends BaseController
             Yii::t('frontend', 'Thursday'),
             Yii::t('frontend', 'Friday'),
             Yii::t('frontend', 'Saturday'),
-            ', '
         );
-
-        $day_off = explode(',', $vendor_details['day_off']);
-
-        $txt_day_off = str_replace($search, $replace, $vendor_details['day_off']);
+        $txt_day_off = implode(',',array_diff($replace,$working_days));
 
         $TopCategories = Category::find()
             ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
