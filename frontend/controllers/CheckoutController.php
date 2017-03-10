@@ -110,7 +110,8 @@ class CheckoutController extends BaseController
 
         //get are id from cart_id 
         $cart_item = CustomerCart::find()
-            ->where(['cart_id' => Yii::$app->request->post()])
+            //->where(['cart_id' => Yii::$app->request->post()])
+            ->where(['customer_id' => Yii::$app->user->getId()])
             ->one();
 
         $customer_address->area_id = $cart_item->area_id;

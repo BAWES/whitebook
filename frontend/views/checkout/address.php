@@ -17,13 +17,12 @@ use common\components\LangFormat;
 
             <form id="address_selection_form">
 
-                <input type="hidden" name="address_id" />
+                <input type="hidden" name="address_id" id="selected_address_id" />
 
                 <div class="address_block_wrapper">
                 <?php
 
                 $addresses = CustomerCart::customerAddress();
-                
                 foreach ($addresses as $address) { ?>
                         <div class="address_block pull-left" data-id="<?= $address['address_id'] ?>">
                             <?php
