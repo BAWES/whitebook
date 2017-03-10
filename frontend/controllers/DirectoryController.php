@@ -280,7 +280,6 @@ class DirectoryController extends BaseController
         $search = array(0, 1, 2, 3, 4, 5, 6, ',');
 
 
-        $working_days = ArrayHelper::map(VendorWorkingTiming::findAll(['vendor_id'=>$vendor_details->vendor_id]),'working_day','working_day');
         $replace = array(
             Yii::t('frontend', 'Sunday'),
             Yii::t('frontend', 'Monday'),
@@ -290,6 +289,7 @@ class DirectoryController extends BaseController
             Yii::t('frontend', 'Friday'),
             Yii::t('frontend', 'Saturday'),
         );
+        $working_days = ArrayHelper::map(VendorWorkingTiming::findAll(['vendor_id'=>$vendor_details->vendor_id]),'working_day','working_day');
         $txt_day_off = implode(',',array_diff($replace,$working_days));
 
         $TopCategories = Category::find()

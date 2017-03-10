@@ -423,9 +423,9 @@ class BrowseController extends BaseController
             ', '
         );
 
-        $day_off = explode(',', $vendor_detail->day_off);
+        $working_days = ArrayHelper::map(\common\models\VendorWorkingTiming::findAll(['vendor_id'=>$vendor_detail->vendor_id]),'working_day','working_day');
+        $txt_day_off = implode(',',array_diff($replace,$working_days));
 
-        $txt_day_off = str_replace($search, $replace, $vendor_detail->day_off);
 
         if ($vendor_detail->vendor_website && strpos($vendor_detail->vendor_website, 'http://') === false) {
             $vendor_detail->vendor_website = 'http://'.$vendor_detail->vendor_website;

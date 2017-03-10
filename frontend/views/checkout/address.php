@@ -23,7 +23,6 @@ use common\components\LangFormat;
                 <?php
 
                 $addresses = CustomerCart::customerAddress();
-                
                 foreach ($addresses as $address) { ?>
                         <div class="address_block pull-left" data-id="<?= $address['address_id'] ?>">
                             <?php

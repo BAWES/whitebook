@@ -16,7 +16,7 @@ class VendorSearch extends Vendor
     {
         return [
             [['vendor_id', 'image_id', 'created_by', 'modified_by'], 'integer'],
-            [['vendor_name', 'vendor_return_policy', 'vendor_public_email', 'vendor_working_hours', 'vendor_contact_name', 'vendor_contact_email', 'vendor_contact_number', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_website', 'vendor_password', 'vendor_status','vendor_payable'], 'safe'],
+            [['vendor_name', 'vendor_return_policy', 'vendor_public_email', 'vendor_contact_name', 'vendor_contact_email', 'vendor_contact_number', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_website', 'vendor_password', 'vendor_status','vendor_payable'], 'safe'],
         ];
     }
 
@@ -123,7 +123,6 @@ class VendorSearch extends Vendor
         $query->andFilterWhere(['like', 'vendor_name', $this->vendor_name])
             ->andFilterWhere(['like', 'vendor_return_policy', $this->vendor_return_policy])
             ->andFilterWhere(['like', 'vendor_public_email', $this->vendor_public_email])
-            ->andFilterWhere(['like', 'vendor_working_hours', $this->vendor_working_hours])
             ->andFilterWhere(['like', 'vendor_contact_name', $this->vendor_contact_name])
             ->andFilterWhere(['like', 'vendor_contact_email', $this->vendor_contact_email])
             ->andFilterWhere(['like', 'vendor_contact_number', $this->vendor_contact_number])
