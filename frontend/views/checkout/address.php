@@ -17,7 +17,7 @@ use common\components\LangFormat;
 
             <form id="address_selection_form">
 
-                <input type="hidden" name="address_id" />
+                <input type="hidden" name="address_id" id="selected_address_id" />
 
                 <div class="address_block_wrapper">
                 <?php
