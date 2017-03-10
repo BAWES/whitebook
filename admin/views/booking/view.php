@@ -182,6 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <option val="0">Please select Payment Mode</option>
                         <option val="Cash">Cash</option>
                         <option val="Cheque">Cheque</option>
+                        <option val="Tap - Paid with KNET">Tap - Paid with KNET</option>
                     </select>
               </div>
               <div class="modal-footer">
