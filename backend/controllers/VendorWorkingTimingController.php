@@ -8,7 +8,7 @@ use backend\models\VendorWorkingTimingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\filters\AccessControl;
 /**
  * VendorWorkingTimingController implements the CRUD actions for VendorWorkingTiming model.
  */
@@ -24,6 +24,15 @@ class VendorWorkingTimingController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [//allow authenticated users only
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
