@@ -12,10 +12,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="order-request-status-view">
 
     <?php $form = ActiveForm::begin(); ?>
+    <?= $form->errorSummary($model); ?>
     <table class="table table-striped table-bordered detail-view">
         <tbody>
         <tr><th><?=Yii::t('app','Booking Request ID')?></th><td><?=$model->booking_id?></td></tr>
-        <tr><th><?=Yii::t('app','Booking Request Status')?></th><td><?= $form->field($model, 'booking_status')->dropDownList([ '0' => 'Pending', '1' => 'Approved', '2' => 'Reject','3' => 'Expired'])->label(false) ?></td></tr>
+        <tr><th><?=Yii::t('app','Booking Request Status')?></th><td><?= $form->field($model, 'booking_status')->dropDownList([ '0' => 'Please Select Status', '1' => 'Accept', '2' => 'Reject'])->label(false) ?></td></tr>
         <tr>
             <th><?=Yii::t('app','Booking Request Note')?></th>
             <td>
@@ -104,3 +105,22 @@ $this->params['breadcrumbs'][] = $this->title;
         </tbody>
     </table>
 </div>
+
+<?php
+
+$this->registerJs('
+
+$("#w0").off("submit").on("submit",function(){
+    $("div.field-booking-booking_note").removeClass("has-error");
+    $("div.field-booking-booking_note .help-block").removeClass("error");
+        
+    if ($("#booking-booking_status").val() == 2) {
+        $("div.field-booking-booking_note").addClass("has-error");
+        $("div.field-booking-booking_note .help-block").addClass("error");
+        $("div.field-booking-booking_note .help-block").html("Please mention reason for rejection");
+        return false;
+    }
+})
+
+',\yii\web\View::POS_READY)
+?>
