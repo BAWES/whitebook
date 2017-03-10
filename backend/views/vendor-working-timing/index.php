@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return date('h:i A',strtotime($model->working_end_time));
                 }
             ],
-            'trash',
             [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{delete}'
