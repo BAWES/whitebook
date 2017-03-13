@@ -142,12 +142,39 @@ if($customer_id) {
     <div class="mobile-view-form-popup" style="display: none;">
         <h4>Search <a href="#" class="text-right" id="close-search-div">x</a></h4>
         <form id='area-selection' name='area-selection' action="<?=Url::toRoute(['browse/all'], true); ?>">
-            <div class="col-lg-10 col-sm-10 col-md-10">
+            <div class="col-lg-12 col-sm-12 col-md-12 margin-top-15" id="event-time">
+                <select id="event_time" name="event_time" class="selectpicker" data-live-search="false" data-size="10" data-placeholder="">
+                    <option value="" class="label"><?= Yii::t('frontend', 'Choose Your Event Time') ?></option>
+                    <optgroup label="am">                        
+                        <?php foreach ($arr_time as $key => $value) {
+                            if($value.' am' == $event_time) 
+                                $selected = 'selected'; 
+                            else
+                                $selected = ''; ?>
+                            <option value="<?= $value ?> am" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
+                                <?= $value ?>
+                            </option>
+                        <?php } ?>
+                    </optgroup>
+                    <optgroup label="pm">                        
+                        <?php foreach ($arr_time as $key => $value) { 
+                            if($value.' pm' == $event_time) 
+                                $selected = 'selected'; 
+                            else
+                                $selected = ''; ?>
+                            <option value="<?= $value ?> pm" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
+                                <?= $value ?>
+                            </option>
+                        <?php } ?>
+                    </optgroup>
+                </select>
+            </div>    
+            <div class="col-lg-10 col-sm-10 col-md-10 margin-top-15">
                 <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
                     <input value="<?=$date?>" type="text" name="date" id="delivery_date" style ="color: #000!important;" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
                     <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                 </div>
-            </div>
+            </div>            
             <div class="col-lg-12 col-sm-12 col-md-12 margin-top-15">
                 <select class="selectpicker trigger" name="location" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
                     <option value=""><?=Yii::t('frontend','All'); ?></option>
