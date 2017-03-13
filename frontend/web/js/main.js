@@ -1670,6 +1670,7 @@ var loadmore = 0;
 function filter(){
     var ajax_data = {},
         date = '',
+        event_time = '',
         areas = 'All',
         slug = '',
         search = '',
@@ -1716,6 +1717,11 @@ function filter(){
     if ($('#delivery_date_2').length>0) {
         var date = $('#delivery_date_2').val();
     }
+
+    if ($('#event_time').length>0) {
+        event_time = $('#event_time').val();
+    }
+
     if ($('#delivery_area_filter').length>0) {
         var areas = $('#delivery_area_filter').val();
     }
@@ -1779,6 +1785,11 @@ function filter(){
         ajax_data.date = date;
     }
 
+    if(event_time != '') {
+        url_path += '&event_time=' + event_time;
+        ajax_data.event_time = event_time;
+    }
+    
     if(areas != '') {
         url_path += '&location=' + areas;
         ajax_data.location = areas;
@@ -2110,5 +2121,3 @@ $(document).delegate('#modal_event_from_package #create_event_button', 'click', 
     }
 });
 /* END ADD TO EVENT */
-
-

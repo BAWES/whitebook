@@ -86,6 +86,10 @@ class BrowseController extends BaseController
             $block_date = '';
         }
 
+        if (isset($data['event_time'])) {
+            $session->set('event_time', $data['event_time']);
+        }
+
         if (isset($data['vendor']) && $data['vendor'] != '') {
             $arr_vendor_slugs = $data['vendor'];
         }else{
@@ -148,6 +152,11 @@ class BrowseController extends BaseController
 
         }//if themes
 
+        //event time 
+        if($session->has('event_time')) {
+            $item_query->leftJoin('{{%vendor_working_timing}}', '{{%vendor_working_timing}}.vendor_id = {{%vendor}}.vendor_id');
+        }
+
         //category filter
         $cats = '';
 
@@ -183,13 +192,24 @@ class BrowseController extends BaseController
             $item_query->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
         }
 
-
         if ($session->has('deliver-date')) {
             $date = date('Y-m-d', strtotime($session->get('deliver-date')));
-            $condition .= " ({{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')) ";
+            $item_query->andWhere("{{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')");
         }
 
-        $item_query->andWhere($condition);
+        if ($session->has('event_time')) {
+            
+            $delivery_date = $session->get('deliver-date');
+
+            if($delivery_date)
+                $working_day = date('D', strtotime($delivery_date));
+            else 
+                $working_day = date('D');
+
+            $event_time = date('H:i:s', strtotime($session->get('event_time')));
+            
+            $item_query->andWhere("'".$event_time."' >= {{%vendor_working_timing}}.working_start_time AND '".$event_time."' < {{%vendor_working_timing}}.working_end_time AND working_day='".$working_day."day'");
+        }
 
         $expression = new Expression(
             "CASE 

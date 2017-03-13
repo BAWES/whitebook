@@ -2573,3 +2573,60 @@ span.small {
     display: block;
     float: left;
 }
+
+#event-time .btn {
+    padding : 10px 12px;
+}
+
+.btn.bs-placeholder:focus {
+    outline: none !important;
+}
+
+#event-time .text {
+    margin: 0 !important;
+}
+
+#event-time .label {
+    display: none;
+}
+
+#event-time .bootstrap-select.btn-group .dropdown-menu li {
+    position: relative;
+    width: 24.5%;
+    float: left;
+}
+
+#event-time .bootstrap-select.btn-group .dropdown-menu li a {
+    padding: 0 !important;
+    text-align: center;
+}
+
+#event-time .dropdown-menu .divider {
+    width: 100% !important;
+    display: block;
+}
+
+#event-time .dropdown-header {
+    display: block;
+    padding: 3px 20px;
+    color: black;
+    width: 100% !important;
+    text-align: center;
+    top: -9px;
+    background: #eee;
+}
+
+#event-time .opt:hover,
+#event-time li.selected .opt {
+    background-color: #4bcb7f;
+    background-image: -webkit-gradient(linear,50% 0%,50% 100%,color-stop(20%,#4bcb7f),color-stop(90%,#3da366));
+    background-image: -webkit-linear-gradient(#4bcb7f 20%,#3da366 90%);
+    background-image: -moz-linear-gradient(#4bcb7f 20%,#3da366 90%);
+    background-image: -o-linear-gradient(#4bcb7f 20%,#3da366 90%);
+    background-image: linear-gradient(#4bcb7f 20%,#3da366 90%);
+    color: #fff;
+}
+
+#event-time .dropdown-menu li a span {
+    display: none;
+}

@@ -3,7 +3,14 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 $session = Yii::$app->session;
 $dLocation = $session->get('deliver-location');
+
 $date = $session->get('deliver-date');
+
+$event_time = $session->get('event_time');
+
+$arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00',
+          '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+          '11:00', '11:30'];
 
 $customer_id = Yii::$app->user->getId();
 
@@ -73,11 +80,38 @@ if($customer_id) {
                     ?>
                 </select>
             </div>
-            <div class="col-lg-3 col-sm-3 col-md-3 date-div">
+            <div class="col-lg-2 col-sm-3 col-md-3 date-div">
                 <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
                     <input value="<?=$date?>" type="text" name="date" id="delivery_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
                     <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                 </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-md-3" id="event-time">
+                <select id="event_time" name="event_time" class="selectpicker" data-live-search="false" data-size="10" data-placeholder="">
+                    <option value="" class="label"><?= Yii::t('frontend', 'Choose Your Event Time') ?></option>
+                    <optgroup label="am">                        
+                        <?php foreach ($arr_time as $key => $value) {
+                            if($value.' am' == $event_time) 
+                                $selected = 'selected'; 
+                            else
+                                $selected = ''; ?>
+                            <option value="<?= $value ?> am" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
+                                <?= $value ?>
+                            </option>
+                        <?php } ?>
+                    </optgroup>
+                    <optgroup label="pm">                        
+                        <?php foreach ($arr_time as $key => $value) { 
+                            if($value.' pm' == $event_time) 
+                                $selected = 'selected'; 
+                            else
+                                $selected = ''; ?>
+                            <option value="<?= $value ?> pm" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
+                                <?= $value ?>
+                            </option>
+                        <?php } ?>
+                    </optgroup>
+                </select>
             </div>
             <div class="col-lg-1 col-sm-1 col-md-1 width-5-percent padding-right-0">
                 <input type="submit" class="bg-000 color-fff btn btn-default btn-submit" value="Search">

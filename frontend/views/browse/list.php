@@ -58,6 +58,12 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <div class="mid-space">
                         &nbsp;
                     </div>
+                    <div class="col-lg-3 padding-left-0 event-filter">
+                        <?= $this->render('@frontend/views/common/filter/event_time.php');  ?>
+                    </div>
+                    <div class="mid-space">
+                        &nbsp;
+                    </div>
                     <div class="col-lg-3 padding-left-0 location-filter">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
