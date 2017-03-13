@@ -5,25 +5,22 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\OrderRequestStatus */
 
-$this->title = 'Request ID : '. $model->request_id;
+$this->title = 'Request ID : '. $model->booking_id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Order Request Statuses'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="order-request-status-view">
 
     <?php $form = ActiveForm::begin(); ?>
     <table class="table table-striped table-bordered detail-view">
         <tbody>
-        <tr><th><?=Yii::t('app','Request ID')?></th><td><?=$model->request_id?></td></tr>
-        <tr><th><?=Yii::t('app','Request Status')?></th><td><?= $form->field($model, 'request_status')->dropDownList([ 'Pending' => 'Pending', 'Approved' => 'Approved', 'Declined' => 'Declined', ], ['prompt' => ''])->label(false) ?></td></tr>
+        <tr><th><?=Yii::t('app','Booking ID')?></th><td><?=$model->booking_id?></td></tr>
+        <tr><th><?=Yii::t('app','Booking Status')?></th><td><?= $model->getStatusName(); ?></td></tr>
         <tr>
-            <th><?=Yii::t('app','Request Note')?></th>
-            <td>
-                <?= $form->field($model, 'request_note')->textarea(['rows' => 6])->label(false) ?>
-                <note><?=Yii::t('app','In case of Declined request please mention reason for it.')?></note>
-            </td></tr>
-        <tr><th><?=Yii::t('app','Request Received On')?></th><td><?=date('M d Y, H:i A',strtotime($model->created_datetime))?></td></tr>
-        <tr><td align="right" colspan="2"><?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?></td></tr>
+            <th><?=Yii::t('app','Booking Note')?></th>
+            <td><?= $model->booking_note ?></td></tr>
+        <tr><th><?=Yii::t('app','Booking Received On')?></th><td><?=date('M d Y, H:i A',strtotime($model->created_datetime))?></td></tr>
         </tbody>
     </table>
     <?php ActiveForm::end(); ?>
@@ -31,13 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <table class="table table-striped table-bordered detail-view">
         <tbody>
             <tr>
-                <th><?=Yii::t('app','Customer Name')?></th><td><?=$model->orderDetail->customer->customer_name .' '. $model->orderDetail->customer->customer_last_name?></td>
+                <th><?=Yii::t('app','Customer Name')?></th><td><?=$model->customer_name .' '. $model->customer_lastname?></td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Customer Email')?></th><td><?=$model->orderDetail->customer->customer_email?></td>
+                <th><?=Yii::t('app','Customer Email')?></th><td><?=$model->customer_email?></td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Customer Mobile')?></th><td><?=$model->orderDetail->customer->customer_mobile?></td>
+                <th><?=Yii::t('app','Customer Mobile')?></th><td><?=$model->customer_mobile?></td>
             </tr>
         </tbody>
     </table>
@@ -46,21 +43,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <table class="table table-striped table-bordered detail-view">
         <tbody>
             <tr>
-                <th><?=Yii::t('app','Area')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->location->location?></td>
+                <th><?=Yii::t('app','Area')?></th><td><?=$model->bookingItems[0]->location->location?></td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Delivery Date')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->purchase_delivery_date?></td>
+                <th><?=Yii::t('app','Delivery Date')?></th><td><?=$model->bookingItems[0]->delivery_date?></td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Time Slot')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->time_slot?></td>
+                <th><?=Yii::t('app','Time Slot')?></th><td><?=$model->bookingItems[0]->timeslot?></td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Address')?></th><td><?=$model->orderDetail->subOrder->itemPurchased->purchase_delivery_address?></td>
+                <th><?=Yii::t('app','Address')?></th><td><?=$model->bookingItems[0]->delivery_address?></td>
             </tr>
             <tr>
                 <th><?=Yii::t('app','Item Name')?></th><td>
-                    <?=$model->orderDetail->subOrder->itemPurchased->item->item_name?>
-                    <a target="_blank" class="btn btn-default" href="<?=Yii::$app->urlManagerFrontend->createUrl(['browse/detail/'.$model->orderDetail->subOrder->itemPurchased->item->slug]); ?>">View Item</a>
+                    <?=$model->bookingItems[0]->item->item_name?>
+                    <a target="_blank" class="btn btn-default" href="<?=Yii::$app->urlManagerFrontend->createUrl(['browse/detail/'.$model->bookingItems[0]->item->slug]); ?>">View Item</a>
                 </td>
             </tr>
         </tbody>

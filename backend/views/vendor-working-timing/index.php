@@ -36,7 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>function($model) {
                     return date('h:i A',strtotime($model->working_end_time));
                 }
-
             ],
             [
                     'class' => 'yii\grid\ActionColumn',

@@ -445,7 +445,7 @@ if($model->images) {
                                                         </button>&nbsp;&nbsp;&nbsp;
                                                     </div>
                                                 </div>
-                                                <span class=" col-lg-12 error cart_quantity"></span>
+                                                <span class=" col-lg-12 error cart_quantity text-center"></span>
                                                 <span id="available"></span>
                                         <?php } // END if item available ?>
                                         </div>
