@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Choose Your Event Time' => 'اختر وقت الحدث',
     'Duration' => 'المدة الزمنية',
     'Notice: {count} hours' => 'إشعار: {count} ساعات',
     'Notice: {count} day(s)' => 'إشعار: {count} أيام',
