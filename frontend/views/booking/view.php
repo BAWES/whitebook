@@ -17,9 +17,28 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
         <div class="title_main">
 			<h1><?= Yii::t('frontend', 'View Booking'); ?></h1>
 		</div>
+
+
         <div class="account_setings_sections">
-        <?=$this->render('/users/_sidebar_menu');?>
-            <div class="col-md-9 border-left">
+            
+            <?php 
+
+                if(!Yii::$app->user->isGuest) 
+                { 
+                    $class = 'col-md-9 border-left';
+
+                    echo $this->render('/users/_sidebar_menu'); 
+                } 
+                else 
+                {
+                    $class = 'col-md-12';
+
+                    echo '<br /><br />';
+                }  
+
+            ?>
+
+            <div class="<?= $class; ?>">
 
                 <table class="table table-bordered">
                     <thead>
