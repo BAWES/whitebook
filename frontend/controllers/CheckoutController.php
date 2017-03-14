@@ -238,10 +238,10 @@ class CheckoutController extends BaseController
 
             //save customer info 
 
-            Yii::$app->session->set('customer_name', Yii::$app->request->post('customer_name'));
-            Yii::$app->session->set('customer_lastname', Yii::$app->request->post('customer_last_name'));
-            Yii::$app->session->set('customer_email', Yii::$app->request->post('customer_email')); 
-            Yii::$app->session->set('customer_mobile', Yii::$app->request->post('customer_mobile')); 
+            Yii::$app->session->set('customer_name', $customer->customer_name);
+            Yii::$app->session->set('customer_lastname', $customer->customer_last_name);
+            Yii::$app->session->set('customer_email', $customer->customer_email); 
+            Yii::$app->session->set('customer_mobile', $customer->customer_mobile); 
 
             //save address 
         

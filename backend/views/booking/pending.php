@@ -32,8 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Delivery Date',
                 'format' => 'html',
                 'value' => function ($model) {
-                    return date('d/m/Y', strtotime($model->bookingItems[0]->delivery_date))
-                    .'<br/>'.$model->bookingItems[0]->timeslot;
+                    if (isset($model->bookingItems[0])) {
+                        return date('d/m/Y', strtotime($model->bookingItems[0]->delivery_date))
+                        .'<br/>'.$model->bookingItems[0]->timeslot;
+                    }
                 }
             ],
             [
