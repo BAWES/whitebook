@@ -37,11 +37,13 @@ class BookingController extends BaseController
 		]);
 	}
 
-	public function actionView($booking_token) {
+	public function actionView() {
 
 		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Booking Detail';
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
+		$booking_token = Yii::$app->request->get('booking_token');
 
 		$booking = Booking::find()
 			->where([
@@ -49,14 +51,18 @@ class BookingController extends BaseController
 			])
 			->one();
 
-		if (!$booking) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-		return $this->render('view', [
-			'booking' => $booking,
-		]);
+		if($booking) 
+		{
+			return $this->render('view', [
+				'booking' => $booking,
+			]);
+		}
+		else
+		{
+			return $this->render('track');
+		}	
 	}
+
 	public function actionMail() {
         $booking = Booking::findOne(1);
         return $this->render('view-request', [

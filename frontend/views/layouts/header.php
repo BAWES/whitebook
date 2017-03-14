@@ -122,14 +122,14 @@ $action = Yii::$app->controller->action->id;
                         <?php if (Yii::$app->user->isGuest) { ?>
                             <li class="">
                                 <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
-                                title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>">
-                                    <?php echo Yii::t('frontend', 'Sign in / Register'); ?>
+                                title="<?php echo Yii::t('frontend', 'Log In'); ?>">
+                                    <?php echo Yii::t('frontend', 'Log In'); ?>
                                 </a>
                             </li>
 
                             <li class="">
-                                <a href="<?= Url::toRoute(['orders/view'],true);?>">
-                                    <?= Yii::t('frontend', 'Track order'); ?>
+                                <a href="<?= Url::toRoute(['booking/view'],true);?>">
+                                    <?= Yii::t('frontend', 'Track Booking'); ?>
                                 </a>
                             </li>
                             <li>
@@ -445,12 +445,12 @@ $action = Yii::$app->controller->action->id;
 
         <?php if (Yii::$app->user->isGuest) { ?>
 
-            <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a>
+            <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Log In'); ?>"><?php echo Yii::t('frontend', 'Log In'); ?></a>
             </li>
 
             <li class="">
-                <a href="<?= Url::toRoute(['orders/view'],true);?>">
-                    <?= Yii::t('frontend', 'Track order'); ?>
+                <a href="<?= Url::toRoute(['booking/view'],true); ?>">
+                    <?= Yii::t('frontend', 'Track Booking'); ?>
                 </a>
             </li>
             
