@@ -43,12 +43,6 @@ class BookingController extends BaseController
 		\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
 		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-
-		if (Yii::$app->user->isGuest) {
-			Yii::$app->session->set('show_login_modal', 1);//to display login modal
-	        return $this->redirect(['/site/index']);
-	    }
-
 		$booking = Booking::find()
 			->where([
 				'booking_token' => $booking_token

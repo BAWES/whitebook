@@ -467,7 +467,7 @@ class Booking extends \yii\db\ActiveRecord
         //set expiry 
         $booking->booking_status = Booking::STATUS_ACCEPTED;
         $booking->expired_on = date('Y-m-d H:i:s',strtotime('+2 day')); // set 48 hour expire date
-        $booking->save();
+        $booking->save(false);
 
         //Send Email to customer
 
