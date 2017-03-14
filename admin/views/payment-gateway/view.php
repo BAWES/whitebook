@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'fees',
             [
              'attribute' => 'order_status',
-             'value' => $model->orderStatus->name
+             'value' => 'Pending'
             ],
             [
              'attribute' => 'under_testing',

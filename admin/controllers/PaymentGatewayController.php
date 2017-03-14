@@ -94,16 +94,13 @@ class PaymentGatewayController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $model->order_status_id = 0;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
 
-            $order_status = OrderStatus::get_dpdwn_list();
-
             return $this->render('update', [
                 'model' => $model,
-                'order_status' => $order_status
             ]);
         }
     }
