@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 $form = ActiveForm::begin([
     'id' => 'inventory-form'
 ]) ?>
+
     <div class="vendoritem-index clearfix" style="margin-bottom:20px;">
         <div class="col-md-3">
             <input type="text" name="date" id="date" value="<?=$date?>" />
@@ -24,23 +25,30 @@ $form = ActiveForm::begin([
         echo yii\grid\GridView::widget([
             'dataProvider' => $provider,
             'columns' => [
-                //['class' => 'yii\grid\SerialColumn'],
                 'item_id',
                 'item_name',
                 [
-                    'label' =>'Total Sale',
+                    'label' =>'Capacity left for that day',
+                    'value' => function($model) {
+                        $date = (Yii::$app->request->post('date')) ? Yii::$app->request->post('date') : date('Y-m-d');
+                        return $model->getItemInStock($model,$date);
+                    }
+                ],
+                [
+                    'label' =>'Item Sale for that day',
                     'value' => function($model) {
                         $date = (Yii::$app->request->post('date')) ? Yii::$app->request->post('date') : date('Y-m-d');
                         return $model->getSoldItems($model,$date);
                     }
                 ],
                 [
-                    'label' =>'Items in Stock',
+                    'label' =>'View Item',
+                    'format' =>'raw',
                     'value' => function($model) {
-                        $date = (Yii::$app->request->post('date')) ? Yii::$app->request->post('date') : date('Y-m-d');
-                        return $model->getItemInStock($model,$date);
-                    }
+                        return Html::a('<i class="glyphicon glyphicon-eye-open"></i>',['vendor-item/update','id'=>$model->item_id],['class'=>'btn btn-default','target'=>'_blank']);
+                    },
                 ]
+
             ]
         ]);
 
@@ -55,6 +63,13 @@ $form = ActiveForm::begin([
             });
         ", View::POS_READY);
 
+        $this->registerCss("
+        .table tr td:nth-child(3),.table tr td:nth-child(4),.table tr td:nth-child(5),
+        .table tr th:nth-child(3),.table tr th:nth-child(4),.table tr th:nth-child(5)
+         {
+            text-align:center;
+        }
+        ");
         ?>
     </div>
 

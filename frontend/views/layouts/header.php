@@ -150,7 +150,6 @@ $action = Yii::$app->controller->action->id;
                                 <?php echo Yii::t('frontend', 'My Account'); ?>
                             </a>
                             <ul class="account-dropdown-menu">
-                                <li><a href="<?php echo Url::to(['booking/pending']); ?>" title="<?php echo Yii::t('frontend', 'My Pending Booking'); ?>"><?php echo Yii::t('frontend', 'My Pending Booking'); ?></a></li>
                                 <li><a href="<?php echo Url::to(['booking/index']); ?>" title="<?php echo Yii::t('frontend', 'My Booking'); ?>"><?php echo Yii::t('frontend', 'My Booking'); ?></a></li>
                                 <li><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'Account Settings'); ?>"><?php echo Yii::t('frontend', 'Account Settings'); ?></a></li>
                                 <li><a href="<?php echo Url::toRoute('/users/address', true); ?>" title="<?php echo Yii::t('frontend', 'Address Book'); ?>"><?php echo Yii::t('frontend', 'Address Book'); ?></a></li>
@@ -469,11 +468,6 @@ $action = Yii::$app->controller->action->id;
             </a>
         </li>
 
-        <li>
-            <a href="<?php echo Url::to(['booking/pending']); ?>">
-                <?php echo Yii::t('frontend', 'My Pending Bookings'); ?>
-            </a>
-        </li>
         <li>
             <a href="<?php echo Url::to(['booking/index']); ?>">
                 <?php echo Yii::t('frontend', 'My Bookings'); ?>

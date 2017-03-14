@@ -36,7 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_datetime:date',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view} {approve} {reject}',
+                //'template' =>'{view} {approve} {reject}',
+                'template' =>'{view}',
                 'buttons' => [
                     'approve' => function ($url, $model) {     
                         return Html::a('<span class="glyphicon glyphicon-ok"></span>', $url, [

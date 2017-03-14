@@ -341,13 +341,13 @@ $this->registerJs("
 					</div>
 					<div class="col-md-5 padding-left-0 timeslot_id_div">
 						<div class="form-group">
-							<label><?=Yii::t('frontend','Delivery Time Slot')?></label>
+							<label><?=Yii::t('frontend','Delivery Time')?></label>
 							<div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date')?></div>
 						</div>
 					</div>
 					<div class="col-md-2 padding-left-0 timeslot_id_select" style="display: none;">
 						<div class="form-group">
-							<label>Delivery Time Slot</label>
+							<label>Delivery Time</label>
 							<select name="working_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
 							<span class="error timeslot_id"></span>
 						</div>

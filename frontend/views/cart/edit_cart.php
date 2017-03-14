@@ -30,14 +30,14 @@ $deliver_date = $item->cart_delivery_date;
 
 	<div class="col-md-12 padding-left-0 timeslot_id_div <?php if($vendor_timeslot) { echo 'hidden'; }; ?>">
 		<div class="form-group">
-			<label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+			<label><?=Yii::t('frontend', 'Delivery Time'); ?></label>
 			<div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date');?></div>
 		</div>
 	</div>
 
 	<div class="col-md-12 padding-left-0 timeslot_id_select <?php if(!$vendor_timeslot) { echo 'hidden'; }; ?>">
 		<div class="form-group">
-			<label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+			<label><?=Yii::t('frontend', 'Delivery Time'); ?></label>
 			<select name="time_slot" id="timeslot_id" class="selectpicker" data-size="10" data-style="">
                <?php foreach ($vendor_timeslot as $key => $value) {
                     echo '<option value="' . $value . '" >' . $value . '</option>';
