@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Time Slot')?></th><td>
+                <th><?=Yii::t('app','Delivery Time')?></th><td>
                     <?php
                     if (isset($model->bookingItems[0]->timeslot)) {
                         echo $model->bookingItems[0]->timeslot;

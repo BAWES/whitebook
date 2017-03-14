@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th><?=Yii::t('app','Delivery Date')?></th><td><?=$model->bookingItems[0]->delivery_date?></td>
             </tr>
             <tr>
-                <th><?=Yii::t('app','Time Slot')?></th><td><?=$model->bookingItems[0]->timeslot?></td>
+                <th><?=Yii::t('app','Delivery Time')?></th><td><?=$model->bookingItems[0]->timeslot?></td>
             </tr>
             <tr>
                 <th><?=Yii::t('app','Address')?></th><td><?=$model->bookingItems[0]->delivery_address?></td>

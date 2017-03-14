@@ -80,7 +80,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             'customer_id' => Yii::t('frontend', 'Customer'),
             'item_id' => Yii::t('frontend', 'Item'),
             'area_id' => Yii::t('frontend', 'Area'),
-            'time_slot' => Yii::t('frontend', 'Delivery time slot'),
+            'time_slot' => Yii::t('frontend', 'Delivery time'),
             'cart_delivery_date' => Yii::t('frontend', 'Cart Delivery Date'),
             'cart_customization_price_per_unit' => Yii::t('frontend', 'Cart Customization Price Per Unit'),
             'cart_quantity' => Yii::t('frontend', 'Quantity'),
@@ -207,7 +207,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         //get timeslot
         if (empty($data['time_slot']))
         {
-            $errors['time_slot'][] = Yii::t('frontend', 'Select time slot!');
+            $errors['time_slot'][] = Yii::t('frontend', 'Select Delivery time!');
         }
 
         // delivery datetime < current time + notice period hours 
