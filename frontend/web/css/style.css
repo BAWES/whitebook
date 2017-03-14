@@ -84,9 +84,13 @@ a:focus, a:hover{text-decoration:none;}
     border-radius: 0 !important;
 }
 
-input[type="text"]{-webkit-appearance: none!important;     border-radius: 0;outline:none!important;}
+input[type="password"],input[type="text"]{-webkit-appearance: none!important;     border-radius: 0;outline:none!important;}
 
-input[type="text"],input[type="button"],input[type="submit"],select{appearance:none;-moz-appearance:none; /* Firefox */-webkit-appearance:none; /* Safari and Chrome*/}
+
+input[type="text"],
+input[type="button"],
+input[type="submit"],
+select{appearance:none;-moz-appearance:none; /* Firefox */-webkit-appearance:none; /* Safari and Chrome*/}
 
 textarea,input,
 input[type="button"],
@@ -2534,7 +2538,7 @@ span.small {
 
 .accad_menus h4 { font-weight: bold;  }
 .checkout-wizard {  margin-bottom: 20px;  }
-.checkout-wizard > .checkout-step:nth-child(2) > .progress {  width: 0;  }
+.checkout-wizard > .checkout-step:last-child > .progress {  width: 0;  }
 .request-table.table > thead > tr > th, .request-table.table > tbody > tr > th, .request-table.table > tfoot > tr > th, .request-table.table > thead > tr > td, .request-table.table > tbody > tr > td, .request-table.table > tfoot > tr > td{vertical-align: inherit;}
 
 .cart-update-error-msg {
@@ -2629,4 +2633,9 @@ span.small {
 
 #event-time .dropdown-menu li a span {
     display: none;
+}
+
+.btn-primary {
+    background: black;
+    border-color: black;
 }

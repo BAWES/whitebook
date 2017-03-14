@@ -36,11 +36,15 @@ class Customer extends \common\models\Customer {
         return array_merge(parent::rules(), [
             [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required'],
 
+            [['customer_name', 'customer_last_name', 'customer_email', 'customer_mobile'], 'required', 'on'=>'guest'],
+
             [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required', 'on'=>'signup'],
             
             ['customer_email','email'],
+            
             //['customer_password', 'compare', 'compareAttribute' => 'confirm_password','on'=>'signup'],
             [['customer_email', 'customer_password',], 'required', 'on'=>'login'],
+
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean']
             //[['step', 'majorsSelected', 'languagesSelected'], 'required'],
@@ -63,7 +67,13 @@ class Customer extends \common\models\Customer {
         $scenarios = parent::scenarios();
         $scenarios['login'] = ['customer_email','customer_password'];//Scenario Values Only Accepted
         $scenarios['signup'] = ['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'confirm_password', 'bday', 'bmonth', 'byear', 'customer_gender', 'customer_mobile'];
+        $scenarios['guest'] = ['customer_name', 'customer_last_name', 'customer_email', 'customer_mobile'];
         return $scenarios;
+    }
+
+    public function getErrorName() 
+    {
+
     }
 
     public function login()
@@ -73,24 +83,35 @@ class Customer extends \common\models\Customer {
             $model =  Customer::findByEmail($this->customer_email);
 
             if($model){
+
                 if($model->customer_activation_status == self::ACTIVATION_FALSE)
                 {
+                    $this->addError('customer_email', Yii::t('frontend', 'Email not verified'));
+
                     return self::ERROR_EMAIL_NOT_VERIFIED;
                 }
-                elseif ($model->customer_status == self::STATUS_DEACTIVE) {
+                elseif ($model->customer_status == self::STATUS_DEACTIVE) 
+                {
+                    $this->addError('customer_email', Yii::t('frontend', 'Account disabled'));
+
                     return self::ERROR_ACCOUNT_DISABLED;
                 }
                 else if($model->trash == self::TRASH_DELETED)
                 {
+                    $this->addError('customer_email', Yii::t('frontend', 'Email not exists'));
+
                     return self::ERROR_EMAIL_DOESNT_EXIST;
                 }
                 if (!Yii::$app->getSecurity()->validatePassword($this->customer_password, $model['customer_password']))
                 {
+                    $this->addError('customer_password', Yii::t('frontend', 'Password not match'));
+
                     return self::ERROR_PASSWORD_NO_MATCH;
                 }
 
                 //No issues, now we can successfully log the customer in
                 Yii::$app->user->login($this->getCustomer(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+                
                 return self::SUCCESS_LOGIN;
 
             }else{

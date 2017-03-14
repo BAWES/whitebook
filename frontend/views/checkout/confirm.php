@@ -148,12 +148,19 @@ use common\models\CustomerCartMenuItem;
 
 						$delivery_charge += $delivery_area->delivery_price;
 
-        				?>
-        				
-        				<?= nl2br($address_data); ?> <br />
+                        if(!Yii::$app->user->isGuest) { ?>
+                            
+                            <?= nl2br($address_data); ?> <br />
                         
-                        <?=LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar);?><br/>
-                        <?=LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar);?><br/>
+                            <?= LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar);?><br/>
+
+                            <?= LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar);?><br/>
+
+                        <?php } else { ?>
+                            
+                            <?= Yii::$app->session->get('guest_address'); ?>
+
+                        <?php } ?>     
 
                         <?= $item['cart_delivery_date'] ?> <br />
         			

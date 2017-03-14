@@ -16,6 +16,7 @@ use common\models\Location;
 use common\models\PaymentGateway;
 use common\models\CustomerCartMenuItem;
 use frontend\models\AddressType;
+use frontend\models\Customer;
 
 
 /**
@@ -23,12 +24,6 @@ use frontend\models\AddressType;
  */
 class CheckoutController extends BaseController
 {
-	public function init(){
-        if(Yii::$app->user->isGuest) {
-            $this->redirect(['/site/index']);
-        }
-    }
-
 	public function actionIndex()
 	{
 		\Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Checkout';
@@ -57,6 +52,45 @@ class CheckoutController extends BaseController
         return $this->render('index');
 	}
 
+    //Display form to login 
+    public function actionLogin(){
+
+        $model = new Customer();
+        $model->scenario = 'login';
+
+        $request = Yii::$app->request;
+
+        if ($request->post('type') == 'login' && $model->load($request->post())) {
+
+            if($model->login() == Customer::SUCCESS_LOGIN) {
+                $json['status'] = Customer::SUCCESS_LOGIN;
+            } else {
+                $json['status'] = 0;
+                $json['errors'] = $model->getErrors();
+            }  
+
+            Yii::$app->response->format = 'json';
+            return $json;
+        }
+
+        if ($request->post('type') == 'guest') {
+
+            $model->customer_email = $request->post('email');
+            $model->customer_password = $request->post('password');
+
+            if($model->login() == Customer::SUCCESS_LOGIN) {
+                $json['status'] = Customer::SUCCESS_LOGIN;
+            } else {
+                $json['status'] = $model->login();
+            }
+
+            Yii::$app->response->format = 'json';
+            return $json;
+        } 
+
+        return $this->renderPartial('login', ['model' => $model]);
+    }
+
 	//Display form to select delivery address 
 	public function actionAddress(){
 		
@@ -84,12 +118,21 @@ class CheckoutController extends BaseController
         $addresstype = AddressType::loadAddresstype();
         $country = Country::loadcountry();
 
-        return $this->renderPartial('address', [
+        if(Yii::$app->user->isGuest) 
+        {
+            $template = 'address_guest';
+        } 
+        else 
+        {
+            $template = 'address';            
+        }
+
+        return $this->renderPartial($template, [
             'items' => $items,
             'customer_address_modal' => $customer_address_modal,
             'addresstype' => $addresstype,
             'country' => $country
-        ]);
+        ]);   
 	}
 
 	public function actionAddAddress() {
@@ -143,6 +186,81 @@ class CheckoutController extends BaseController
 
         return $json;
 	}
+
+    /** 
+     * Save guest info + address 
+     */ 
+    public function actionSaveGuestAddress() 
+    {
+        //save address 
+
+        $json = array('errors' => array());
+
+        $questions = Yii::$app->request->post('question');
+
+        if(!$questions) {
+            $questions = array();
+        }
+
+        $customer_address = new CustomerAddress();
+          
+        $customer_address->load(Yii::$app->request->post());
+        
+        //get are id from cart_id 
+        $cart_item = CustomerCart::find()
+            ->where(['{{%customer_cart}}.cart_session_id'=>Customer::currentUser()])
+            ->one();
+
+        $customer_address->area_id = $cart_item->area_id;
+
+        //get city & country from area 
+        $location = Location::findOne($customer_address->area_id);
+
+        $customer_address->city_id = $location->city_id;
+        $customer_address->country_id = $location->country_id;
+
+        if (!$customer_address->validate()) {
+            $json['errors'] = $customer_address->getErrors();
+        }
+
+        // save customer info 
+        $customer = new Customer();
+        $customer->scenario = 'guest';
+        $customer->load(Yii::$app->request->post());
+
+        if(!$customer->validate()) {
+            $json['errors'] = array_merge($json['errors'], $customer->getErrors());
+        }
+
+        if(!$json['errors']) 
+        {
+            unset($json['errors']);
+
+            //save customer info 
+
+            Yii::$app->session->set('customer_name', Yii::$app->request->post('customer_name'));
+            Yii::$app->session->set('customer_lastname', Yii::$app->request->post('customer_last_name'));
+            Yii::$app->session->set('customer_email', Yii::$app->request->post('customer_email')); 
+            Yii::$app->session->set('customer_mobile', Yii::$app->request->post('customer_mobile')); 
+
+            //save address 
+        
+            $address  = $customer_address->address_data.'<br />';
+
+            foreach ($questions as $key => $value) {
+                $address .= $value.'<br />';    
+            }
+
+            $address .= $customer_address->location->location.'<br />';
+            $address .= $customer_address->city->city_name.'<br />';
+
+            Yii::$app->session->set('guest_address', $address);
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return $json;
+    }
 
 	//save address 
 	public function actionSaveAddress() {
@@ -248,15 +366,16 @@ class CheckoutController extends BaseController
 
     public function actionSuccess() {
 
-        $customer_id = Yii::$app->user->getId();
-
-        if(!$customer_id) {
-            $this->redirect(['site/index']);
-        }
-
         // clear cart
-        CustomerCart::deleteAll('customer_id = "'.Yii::$app->user->getId().'"');
-
+        if(Yii::$app->user->isGuest) 
+        {
+            CustomerCart::deleteAll('cart_session_id = "'.Customer::currentUser().'"');
+        }
+        else
+        {
+            CustomerCart::deleteAll('customer_id = "'.Yii::$app->user->getId().'"');
+        }
+        
         // clear temp session data
         Yii::$app->session->remove('payment_method');
         Yii::$app->session->remove('address');
@@ -271,7 +390,14 @@ class CheckoutController extends BaseController
 
     public function actionRequestSend()
     {
-        $address = Yii::$app->session->get('address');
+        if(Yii::$app->user->isGuest) 
+        {
+            $address = Yii::$app->session->get('guest_address');
+        }
+        else
+        {
+            $address = Yii::$app->session->get('address');
+        }
 
         if ($address) {
             

@@ -213,10 +213,6 @@ class Booking extends \yii\db\ActiveRecord
      */ 
     public function checkoutConfirm()
     {        
-        //address ids saved in session from checkout
-
-        $addresses = Yii::$app->session->get('address');
-
         //default commision
 
         $default_commision = Siteinfo::info('commission');
@@ -295,8 +291,17 @@ class Booking extends \yii\db\ActiveRecord
             $booking->save(false);
 
             //address
-            $address_id = $addresses;//[$item['cart_id']]
-
+            if(Yii::$app->user->isGuest) 
+            {
+                $address = Yii::$app->session->get('guest_address');
+                $address_id = null;
+            }
+            else
+            {
+                $address_id = Yii::$app->session->get('address');
+                $address = Booking::getPurchaseDeliveryAddress($address_id);
+            }
+            
             $booking_item = new BookingItem;
             $booking_item->booking_id = $booking->booking_id;
             $booking_item->item_id = $item['item_id'];
@@ -304,8 +309,10 @@ class Booking extends \yii\db\ActiveRecord
             $booking_item->item_name_ar = $item['item_name_ar'];
             $booking_item->timeslot = $item['time_slot'];
             $booking_item->area_id = $item['area_id'];
+            
             $booking_item->address_id = $address_id;
-            $booking_item->delivery_address = Booking::getPurchaseDeliveryAddress($address_id);
+            $booking_item->delivery_address = $address;
+            
             $booking_item->delivery_date = $item['cart_delivery_date'];
             $booking_item->price = $price_chart[$item['item_id']]['unit_price'];
             $booking_item->quantity = $item['cart_quantity'];
