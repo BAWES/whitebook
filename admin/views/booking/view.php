@@ -80,10 +80,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>                    
                 <td data-id="<?= $model->booking_id ?>">
                     Payment method :
-                    <span class="payment_method_<?= $model->booking_id ?>"><?= $model->payment_method ?></span>
-                    <a data-toggle="modal" href="#payment_method_modal" class="btn btn-default edit_payment pull-right">
-                        <i class="glyphicon glyphicon-pencil"></i>
-                    </a>
+                    <?php if ($model->booking_status == Booking::STATUS_ACCEPTED) { ?>
+                        <span class="payment_method_<?= $model->booking_id ?>"><?= $model->payment_method ?></span>
+                        <a data-toggle="modal" href="#payment_method_modal" class="btn btn-default edit_payment pull-right">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>
+                    <?php } ?>
                 </td>
                 <td>
                     Transaction ID : <?= $model->transaction_id ?>
