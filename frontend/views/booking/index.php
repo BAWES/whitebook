@@ -50,25 +50,20 @@ $this->title = Yii::t('frontend', 'Booking | Whitebook');
                                 </td>
 								<td align="right"><?= CFormatter::format($booking->total_with_delivery) ?></td>
 
-                                <?php if ($booking->booking_status != 0) :?>
-                                    <td align="center">
-                                        <?php
-                                        if ($booking->booking_status == 1 && $booking->transaction_id == '') {
-                                            echo \yii\bootstrap\Html::a(Yii::t('frontend', 'Pay Now'),['payment/index', 'token' => $booking->booking_token],['class'=>"btn btn-default btn-sm"]);
-                                         } else if ($booking->booking_status == 1 && $booking->transaction_id != '') {
-                                                echo 'Paid';
-                                        }  else {
-                                                echo '-';
-                                        }
-                                        ?>
-                                    </td>
-                                <?php endif;?>
+                                <td align="center">
+                                    <?php
+                                    if ($booking->booking_status == 1 && $booking->transaction_id == '') {
+                                        echo \yii\bootstrap\Html::a(Yii::t('frontend', 'Pay Now'),['payment/index', 'token' => $booking->booking_token],['class'=>"btn btn-default btn-sm"]);
+                                    } else if ($booking->booking_status == 1 && $booking->transaction_id != '') {
+                                            echo 'Paid';
+                                    }  else {
+                                            echo '-';
+                                    }
+                                    ?>
+                                </td>
 
 								<td width="50px">
-                                    <?php
-                                    $link = ($booking->booking_status == 0) ? 'booking/view-pending' : 'booking/view';
-                                    ?>
-									<a href="<?= Url::to([$link, 'booking_token' => $booking->booking_token]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Booking') ?>">
+                                    <a href="<?= Url::to(['booking/view', 'booking_token' => $booking->booking_token]) ?>" class="btn btn-primary" title="<?= Yii::t('frontend', 'View Booking') ?>">
 										<i class="glyphicon glyphicon-eye-open"></i>
 									</a>
 								</td>
