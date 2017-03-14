@@ -47,7 +47,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['country_id', 'city_id'], 'required'],
+            [['country_id', 'city_id', 'address_type_id', 'address_data'], 'required'],
             [['customer_id', 'address_type_id', 'country_id', 'city_id', 'area_id', 'created_by', 'modified_by'], 'integer'],
             [['address_archived', 'trash'], 'string'],
             [['customer', 'address_name', 'address_data', 'created_datetime', 'modified_datetime'], 'safe']

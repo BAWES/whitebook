@@ -2,20 +2,21 @@
 
 namespace frontend\controllers;
 
-use common\models\Customer;
-use common\models\VendorWorkingTiming;
 use Yii;
-use yii\helpers\Url;
 use yii\web\Response;
+use yii\filters\AccessControl;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use frontend\models\Vendor;
 use common\models\VendorItem;
 use common\models\City;
 use common\models\ItemType;
+use common\models\Customer;
 use common\models\CustomerCart;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\models\CustomerCartMenuItem;
-use yii\filters\AccessControl;
+use common\models\VendorWorkingTiming;
 
 class CartController extends BaseController
 {
@@ -206,46 +207,77 @@ class CartController extends BaseController
         }
     }
 
-    /*  
-     *  Add product to cart  
-     ----------------------------
-        - Show product options on get request 
-        - On post validate options and add item to cart 
+    /**  
+     * On post validate options and add item to cart 
      */
     public function actionAdd() {
 
-        if(Yii::$app->request->isGet) {
-            
-            $cities = City::find()
-                    ->where('status="Active" AND trash="Default"')
-                    ->all();
+        $data = Yii::$app->request->post();
 
-            return $this->renderPartial('add', [
-              'cities' => $cities,
-              'item_id' => Yii::$app->request->get('item_id')
-            ]);    
+        //remove menu item with 0 quantity 
+
+        if(empty($data['menu_item'])) {
+            $data['menu_item'] = [];
+        }
+
+        foreach ($data['menu_item'] as $key => $value)
+        {
+            if($value == 0)
+                unset($data['menu_item'][$key]);
         }
 
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $data = Yii::$app->request->post();
-
         if($this->validate_item($data)) {
+            
             $query = CustomerCart::find()
                 ->where([
                     'item_id' => $data['item_id'],
                     'area_id'   => isset($data['area_id'])?$data['area_id']:'',
                     'time_slot' => isset($data['time_slot'])?$data['time_slot']:'',
-                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date']))
+                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
                 ]);
+            
+            if(!empty($data['female_service'])){
+                $query->andWhere(['female_service' => $data['female_service']]);
+            }
+
+            if(!empty($data['special_request'])){
+                $query->andWhere(['special_request' => $data['special_request']]);
+            }
+
             if (Yii::$app->user->getId()) {
                 $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
             } else {
                 $query->andWhere(['cart_session_id'=>Customer::currentUser()]);
             }
 
-            $cart= $query->one();
+            $cart = $query->one();
 
+            //if available in cart check if have exact menu and quantity combo 
+
+            if($cart) {
+                $cart_menu_items = CustomerCartMenuItem::findAll(['cart_id' => $cart->cart_id]);
+                    
+                $arr_cart_menu_items = ArrayHelper::map($cart_menu_items, 'menu_item_id', 'quantity');
+
+                //if cart menu are same as posted menu_item 
+
+                if(sizeof($arr_cart_menu_items) != sizeof($data['menu_item']))
+                    $cart = false;
+
+                //check menu item quantity is same for 1 quantity of item in cart and we trying to add 
+                // so we can add cart item with p quantity to cart item item with q quantity if both ahve 
+                // same no of menu items 
+
+                foreach ($arr_cart_menu_items as $key => $value) {
+                    if(empty($data['menu_item'][$key]) || $data['menu_item'][$key]/$data['quantity'] != $value/$cart->cart_quantity){
+                        $cart = false;
+                        break;
+                    }
+                }
+            }
+            
             /* 
                 product already available in cart 
                 Just need to update quantity 
@@ -260,6 +292,13 @@ class CartController extends BaseController
                 }   
 
                 $cart->cart_quantity = $cart->cart_quantity + $quantity;
+
+                //update menu item quantities 
+
+                foreach ($cart_menu_items as $key => $menu_item) {
+                    $menu_item->quantity += $data['menu_item'][$menu_item->menu_item_id];
+                    $menu_item->save();
+                }
             }
 
             /*
@@ -293,6 +332,27 @@ class CartController extends BaseController
                 $cart->cart_session_id = (!Yii::$app->user->getId()) ? Customer::currentUser() : '';
                 $cart->cart_valid = 'yes';
                 $cart->trash = 'Default';
+
+                if(!$cart->save())
+                {
+                    return [
+                        'errors' => array_merge($this->errors, $cart->getErrors())
+                    ];
+                }
+
+                // add menu 
+                
+                foreach ($data['menu_item'] as $key => $value) {
+
+                    $mi = VendorItemMenuItem::findOne($key);
+
+                    $cart_menu_item = new CustomerCartMenuItem;
+                    $cart_menu_item->cart_id = $cart->cart_id;
+                    $cart_menu_item->menu_id = $mi->menu_id;
+                    $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                    $cart_menu_item->quantity = $value;
+                    $cart_menu_item->save(); 
+                }
             }
             
             if(!empty($data['female_service'])) {
@@ -304,27 +364,6 @@ class CartController extends BaseController
             }
 
             if($cart->save()) {
-                
-                // add menu 
-
-                if(empty($data['menu_item'])) {
-                    $data['menu_item'] = [];
-                }
-                
-                foreach ($data['menu_item'] as $key => $value) {
-
-                    if($value > 0) {
-                                                
-                        $mi = VendorItemMenuItem::findOne($key);
-
-                        $cart_menu_item = new CustomerCartMenuItem;
-                        $cart_menu_item->cart_id = $cart->cart_id;
-                        $cart_menu_item->menu_id = $mi->menu_id;
-                        $cart_menu_item->menu_item_id = $mi->menu_item_id;
-                        $cart_menu_item->quantity = $value;
-                        $cart_menu_item->save();   
-                    }
-                }
 
                 $item = VendorItem::findOne($data['item_id']);
 

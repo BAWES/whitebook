@@ -250,6 +250,7 @@ $('.fa-edit').click(function(){
     });
 });
 
+/*
 jQuery(document).delegate('#cart-form', 'submit', function(e) {
 
     if (isGuest) {
@@ -257,4 +258,4 @@ jQuery(document).delegate('#cart-form', 'submit', function(e) {
         $('#myModal').modal('show');
         e.preventDefault();
     }
-});
+});*/

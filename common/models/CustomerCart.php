@@ -422,7 +422,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public static function item_count() {
 
-        $items = CustomerCart::find()
+        $query = CustomerCart::find()
             ->joinWith('item')
             ->where([
                 '{{%customer_cart}}.customer_id' => Yii::$app->user->getId(),
@@ -432,10 +432,15 @@ class CustomerCart extends \yii\db\ActiveRecord
                 '{{%vendor_item}}.item_for_sale' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.item_approved' => 'Yes',
-            ])
-            ->count();
+            ]);
 
-        return $items;   
+        if (Yii::$app->user->getId()) {
+            $query->andWhere(['{{%customer_cart}}.customer_id' => Yii::$app->user->getId()]);
+        } else {
+            $query->andWhere(['{{%customer_cart}}.cart_session_id' => Customer::currentUser()]);
+        }
+
+        return $query->count();
     }
 
     /*

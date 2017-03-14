@@ -1,13 +1,28 @@
-//glyphicon-ok-sign
 
 $(function(){	
-	address();
+	
+	if($('#ar-step-login').length > 0) {
+		login();
+	} else {
+		address();	
+	}
 });
+
+function login() {
+
+	$('.checkout-wizard .text-success').removeClass('text-success');
+
+	$.get(login_url, function(html) {
+		$('.checkout_content_wrapper').html(html);
+	});
+
+	$('html, body').animate({ scrollTop: 0 }, 'slow');
+}
 
 //load address selection form 
 function address() {
 
-	$('.checkout-wizard .text-success').removeClass('text-success');
+	$('#ar-step-address').removeClass('text-success');
 
 	$.get(address_url, function(html) {
 		if(html) {
@@ -19,6 +34,32 @@ function address() {
 	});
 
 	$('html, body').animate({ scrollTop: 0 }, 'slow');
+}
+
+function save_guest_address() {
+
+	$('form .error').html('');
+
+	$.post(
+		save_guest_address_url, 
+		$('.checkout_content_wrapper form').serialize(),
+		function(json) {
+			
+			if(json.errors) {
+				
+				$.each(json['errors'], function(index, errors) {
+		            $.each(errors, function() {
+		                $('form .error.' + index).append('<p>' + this + '</p>');
+		            });
+		        });	
+
+				$('html, body').animate({ scrollTop: 0 }, 'slow');
+			} else {
+				// payment();
+                confirm();
+			}
+		}
+	);
 }
 
 function save_address() {
@@ -106,6 +147,55 @@ function confirm() {
 		}
 	});
 }
+
+$(document).delegate('.btn-guest-checkout', 'click', function(){
+	$('#ar-step-login').addClass('text-success');
+	address();
+});
+
+$(document).delegate('.frm_guest', 'submit', function(e) {
+
+	$.post(login_url, $(this).serialize(), function(json) {
+		
+		$('.frm_guest .error').html('');
+
+		if(json['status'] == 1) {
+			location = location;
+		}
+
+		if(json['errors']) {				
+			$.each(json['errors'], function(index, errors) {
+	            $.each(errors, function() {
+	                $('.frm_guest .error.' + index).append('<p>' + this + '</p>');
+	            });
+	        });	
+		}
+	});
+
+	e.preventDefault();
+});
+
+
+$(document).delegate('.frm_login', 'submit', function(e){
+	$.post(login_url, $(this).serialize(), function(json) {
+		
+		$('.frm_login .error').html('');
+
+		if(json['status'] == 1) {
+			location = location;
+		}
+
+		if(json['errors']) {				
+			$.each(json['errors'], function(index, errors) {
+	            $.each(errors, function() {
+	                $('.frm_login .error.' + index).append('<p>' + this + '</p>');
+	            });
+	        });	
+		}
+	});
+
+	e.preventDefault();
+});
 
 $(document).delegate('.address_block', 'click', function(){
 	$(this).parent().find('.active').removeClass('active');
