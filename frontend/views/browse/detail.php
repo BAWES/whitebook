@@ -142,13 +142,13 @@ if($model->images) {
             </div>
             <div class="col-md-5 padding-left-0 timeslot_id_div timeslot-filter">
                 <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+                    <label><?=Yii::t('frontend', 'Delivery Time'); ?></label>
                     <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Valid Delivery Date');?></div>
                 </div>
             </div>
             <div class="col-md-3 padding-left-0 timeslot_id_select timeslot-filter" style="display: none;">
                 <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+                    <label><?=Yii::t('frontend', 'Delivery Time'); ?></label>
                     <select name="time_slot" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
                     <span class="error timeslot_id"></span>
                 </div>
