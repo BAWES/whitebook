@@ -62,27 +62,46 @@ use common\components\LangFormat;
         
         <hr />
 
-        <?= $form->field($customer_address_modal, 'address_type_id')->dropDownList($addresstype,
-            ['class' => 'selectpicker', 'prompt' => Yii::t('frontend', 'Select...')]
-        ); ?>
+        <?= $form->field($customer_address_modal, 'address_type_id')
+                ->radioList($addresstype
+                    //,['class' => 'selectpicker']
+                ); ?>
         <span class="error address_type_id"></span>
-
-        
-        <div class="question_wrapper">
-            <!-- question will go here -->
-        </div>
         
         <?php /* $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(),
                 ['class' => 'selectpicker', 'data-live-search' => 'true', 'data-size' => 10]
             );
             <span class="error area_id"></span>
         */ ?>
-        
-        <div class="form-group">
-            <?= $form->field($customer_address_modal, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
-                ])->textArea(['rows' => 6]) ?>
-            <span class="error address_data"></span>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <?= $form->field($customer_address_modal, 'block') ?>
+
+                <?= $form->field($customer_address_modal, 'street') ?>
+            
+                <?= $form->field($customer_address_modal, 'avenue') ?>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <?= $form->field($customer_address_modal, 'building',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
+                        ]); ?>
+                    <div class="error building"></div>
+                </div>
+            
+                <?= $form->field($customer_address_modal, 'floor') ?>
+
+                <?= $form->field($customer_address_modal, 'apartment') ?>
+            </div>
         </div>
+
+        <?= $form->field($customer_address_modal, 'extra_details') ?>
+
+        <?= $form->field($customer_address_modal, 'recipient_number') ?>
             
     </div>
 

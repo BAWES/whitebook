@@ -275,6 +275,12 @@ class Booking extends \yii\db\ActiveRecord
             $customer_mobile = $customer->customer_mobile;
         }
 
+        //address
+        
+        $address_id = Yii::$app->session->get('address_id');
+        
+        $address = Booking::getPurchaseDeliveryAddress($address_id);
+    
         $arr_booking_id = [];
         
         $arr_booking = [];
@@ -292,18 +298,6 @@ class Booking extends \yii\db\ActiveRecord
             $booking->ip_address = Request::getUserIP();
             $booking->save(false);
 
-            //address
-            if(Yii::$app->user->isGuest) 
-            {
-                $address = Yii::$app->session->get('guest_address');
-                $address_id = null;
-            }
-            else
-            {
-                $address_id = Yii::$app->session->get('address');
-                $address = Booking::getPurchaseDeliveryAddress($address_id);
-            }
-            
             $booking_item = new BookingItem;
             $booking_item->booking_id = $booking->booking_id;
             $booking_item->item_id = $item['item_id'];
@@ -392,26 +386,52 @@ class Booking extends \yii\db\ActiveRecord
 
     public function getPurchaseDeliveryAddress($address_id)
     {
-        $address_model = CustomerAddress::findOne($address_id);
+        $model = CustomerAddress::findOne($address_id);
 
-        $purchase_delivery_address = $address_model->address_data.'<br />';
-        
-        //get address response 
-        $address_responses = CustomerAddressResponse::find()
-            ->where(['address_id' => $address_id])
-            ->all();
+        if(!$model) 
+            return null;
 
-        foreach ($address_responses as $response) {
-           $purchase_delivery_address .= $response->response_text.'<br />';
+        $address = '';
+
+        if($model->block) {
+            $address .= 'Block '.$model->block.'<br />';    
         }
 
+        if($model->street) {
+            $address .= $model->street.'<br />';    
+        }
+
+        if($model->avenue) {
+            $address .= $model->avenue.' avenue<br />';    
+        }
+
+        if($model->building) {
+            $address .= $model->building.' building<br />';    
+        }
+
+        if($model->floor) {
+            $address .= $model->floor.' floor<br />';    
+        }
+
+        if($model->apartment) {
+            $address .= $model->apartment.' apartment<br />';    
+        }
+
+        if($model->extra_details) {
+            $address .= $model->extra_details.'<br />';    
+        }
+        
         //area 
-        $purchase_delivery_address .= $address_model->location->location.'<br />';
+        $address .= $model->location->location.'<br />';
 
         //city 
-        $purchase_delivery_address .= $address_model->city->city_name;
+        $address .= $model->city->city_name.'<br />';
 
-        return $purchase_delivery_address;
+        if($model->recipient_number) {
+            $address .= 'Recipient no. '.$model->recipient_number.'<br />';    
+        }
+
+        return $address;
     }
 
     public function sendNewBookingEmails($arr_booking) 

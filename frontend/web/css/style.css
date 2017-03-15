@@ -92,8 +92,12 @@ input[type="button"],
 input[type="submit"],
 select{appearance:none;-moz-appearance:none; /* Firefox */-webkit-appearance:none; /* Safari and Chrome*/}
 
-textarea,input,
-input[type="button"],
+textarea,
+input[type="checkbox"],
+input[type="password"],
+input[type="text"],
+input[type="text"],
+input[type="email"],
 input[type="submit"] {
      -webkit-appearance: none;
      border-radius: 0;
