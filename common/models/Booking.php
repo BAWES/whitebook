@@ -276,6 +276,8 @@ class Booking extends \yii\db\ActiveRecord
         }
 
         $arr_booking_id = [];
+        
+        $arr_booking = [];
 
         foreach ($items as $item) {
 
@@ -378,10 +380,12 @@ class Booking extends \yii\db\ActiveRecord
             $booking->total_vendor = $total - $commission_total;
             $booking->save(false);
 
-            Booking::sendNewBookingEmails($booking);
+            $arr_booking[] = $booking;
 
             $arr_booking_id[] = $booking->booking_id;
         }
+
+        Booking::sendNewBookingEmails($arr_booking);
 
         return $arr_booking_id;
     }
@@ -410,20 +414,19 @@ class Booking extends \yii\db\ActiveRecord
         return $purchase_delivery_address;
     }
 
-    public function sendNewBookingEmails($booking) 
+    public function sendNewBookingEmails($arr_booking) 
     {
         //send to customer
 
         Yii::$app->mailer->compose([
             "html" => "customer/new-booking"
         ],[
-            'user'  => $booking->customer_name,
-            'booking' => $booking,
-            'vendor' => $booking->vendor
+            'user'  => $arr_booking[0]->customer_name,
+            'arr_booking' => $arr_booking
         ])
         ->setFrom(Yii::$app->params['supportEmail'])
-        ->setTo($booking->customer_email)
-        ->setSubject('New Booking #'.$booking->booking_id)
+        ->setTo($arr_booking[0]->customer_email)
+        ->setSubject('New Booking')
         ->send();
         
         //send to admin
@@ -432,34 +435,36 @@ class Booking extends \yii\db\ActiveRecord
             "html" => "customer/new-booking"
         ],[
             'user'  => 'Admin',
-            'booking' => $booking,
-            'vendor' => $booking->vendor
+            'arr_booking' => $arr_booking,
         ])
         ->setFrom(Yii::$app->params['supportEmail'])
         ->setTo(Yii::$app->params['adminEmail'])
-        ->setSubject('New Booking #'.$booking->booking_id)
+        ->setSubject('New Booking')
         ->send();
         
         //send to vendor 
 
-        //get all vendor alert email 
-        
-        $emails = VendorOrderAlertEmails::find()
-            ->where(['vendor_id' => $booking->vendor_id])
-            ->all();
+        foreach ($arr_booking as $key => $value) 
+        {   
+            //get all vendor alert email 
+            
+            $emails = VendorOrderAlertEmails::find()
+                ->where(['vendor_id' => $value->vendor_id])
+                ->all();
 
-        $emails = ArrayHelper::getColumn($emails, 'email_address');
+            $emails = ArrayHelper::getColumn($emails, 'email_address');
 
-        Yii::$app->mailer->compose([
-            "html" => "vendor/new-booking"
-        ],[
-            'booking' => $booking,
-            'vendor' => $booking->vendor
-        ])
-        ->setFrom(Yii::$app->params['supportEmail'])
-        ->setTo($emails)
-        ->setSubject('New Booking #'.$booking->booking_id)
-        ->send();
+            Yii::$app->mailer->compose([
+                "html" => "vendor/new-booking"
+            ],[
+                'booking' => $value,
+                'vendor' => $value->vendor
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($emails)
+            ->setSubject('New Booking #'.$value->booking_id)
+            ->send();
+        }
     }
 
     public static function approved($booking) 
