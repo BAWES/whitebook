@@ -66,7 +66,7 @@ return [
                   'browse/final-price' => 'browse/final-price',
                   'browse/save-note' => 'browse/save-note',
                   'browse/<slug:[A-Za-z0-9\_-]+>' => 'browse/list',
-//                  'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',
+                  'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',
                   'themes/<slug:[A-Za-z0-9\_-]+>/<themes:[A-Za-z0-9\_-]+>' => 'themes/detail',
                   /*'vendor/<slug:[A-Za-z0-9\_-]+>/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',*/
                   'vendor/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',
