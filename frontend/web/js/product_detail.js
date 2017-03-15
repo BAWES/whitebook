@@ -389,15 +389,18 @@ function productAvailability(date){
         success: function (json)
         {
             if (json['error']) {
-
                 $('.timeslot_id_div').show();
                 $('.timeslot_id_div .text').html(json['error']);
                 $('.timeslot_id_select').hide();
                 $('#timeslot_id').html('');
-                return false;   
+                $('.button-signin button').html('Out of stock');
+                $('.button-signin button').attr('disabled',true);
+                return false;
 
-            } else { 
-                
+            } else {
+                $('.button-signin button').html('ADD TO CART');
+                $('.button-signin button').attr('disabled',false);
+
                 deliveryTimeSlot(date);
 
                 //set capacity for given date 
