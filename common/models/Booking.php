@@ -444,12 +444,22 @@ class Booking extends \yii\db\ActiveRecord
         
         //send to vendor 
 
+        $arr_vendor_booking = [];
+
         foreach ($arr_booking as $key => $value) 
+        {   
+            if(!isset($arr_vendor_booking[$value->vendor_id])) 
+                $arr_vendor_booking[$value->vendor_id] = [];
+
+            $arr_vendor_booking[$value->vendor_id][] = $value;
+        }
+
+        foreach ($arr_vendor_booking as $key => $arr_booking) 
         {   
             //get all vendor alert email 
             
             $emails = VendorOrderAlertEmails::find()
-                ->where(['vendor_id' => $value->vendor_id])
+                ->where(['vendor_id' => $arr_booking[0]->vendor_id])
                 ->all();
 
             $emails = ArrayHelper::getColumn($emails, 'email_address');
@@ -457,12 +467,12 @@ class Booking extends \yii\db\ActiveRecord
             Yii::$app->mailer->compose([
                 "html" => "vendor/new-booking"
             ],[
-                'booking' => $value,
-                'vendor' => $value->vendor
+                'arr_booking' => $arr_booking,
+                'vendor' => $arr_booking[0]->vendor
             ])
             ->setFrom(Yii::$app->params['supportEmail'])
             ->setTo($emails)
-            ->setSubject('New Booking #'.$value->booking_id)
+            ->setSubject('New Booking')
             ->send();
         }
     }

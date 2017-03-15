@@ -24,10 +24,35 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
-        New booking request registered.
+        New booking request(s) registered.
     </td>
     <td width="20"></td>
 </tr>
+
+<tr>
+    <td width="20"></td>
+    <td style=" font:normal 15px arial; color:#333333;">
+
+        <table class="table table-bordered" style="width:100%;">
+        	<thead>
+	            <tr>
+	                <td colspan="2" style="border-top: 1px solid #ddd; border-bottom: 1px solid #DDDDDD;">
+	                    <b><?= $vendor->vendor_name; ?></b>
+	                </td>
+	            </tr>
+	        </thead>
+	        <tbody>
+		        <tr>
+		            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+		                Customer: <?= $arr_booking[0]->customer_name ?>
+		            </td>
+		        </tr>  
+	        </tbody>  
+	    </table>
+	</td>
+</tr>
+
+<?php foreach($arr_booking as $booking) { ?>
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
@@ -45,37 +70,24 @@ use common\components\CFormatter;
 	        </tr>
 	        <tr>
 	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
-	                Customer: <?= $booking->customer_name ?>
+                    <?= Yii::t('frontend', 'Booking status') ?>: 
+                    <?= $booking->statusName ?>	
+                </td>
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd;">
 	                Date: <?= date('d/m/Y', strtotime($booking->created_datetime)) ?>                
 	            </td>
-	        </tr>    
+	        </tr>   
+	        <tr>
+	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+                    <a href="<?= Yii::$app->urlManagerVendor->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'1'], true); ?>" style="background-color:#008a00;border:1px solid #008a00;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Accept</a>
+                </td>
+	            <td style="border-bottom: 1px solid #ddd;">
+	                <a href="<?= Yii::$app->urlManagerVendor->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'0'], true); ?>" style="background-color:#ff0000;border:1px solid #ff0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Reject</a>              
+	            </td>
+	        </tr>  
 	    </table>
 	    
-	    <br />
-
-	    <table class="table table-bordered" style="width:100%;">
-	        <thead>
-	            <tr>
-	                <td colspan="2" style="border-top: 1px solid #ddd; border-bottom: 1px solid #DDDDDD;">
-	                    <b><?= $vendor->vendor_name; ?></b>
-	                </td>
-	            </tr>
-	        </thead>
-	        <tbody>
-	            <tr>
-	                <td style="border-right: 1px solid #ddd;">
-	                    <?= Yii::t('frontend', 'Booking status') ?>: 
-	                    <?= $booking->statusName ?>	
-	                </td>
-	                <td>
-	                    <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?>
-	                </td>
-	            </tr>
-	        </tbody>
-	    </table>
-
 	    <br />
 
 	    <table class="table table-bordered" style="width:100%;">
@@ -151,16 +163,10 @@ use common\components\CFormatter;
 	                <td align="right" colspan="2" style="border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;"><b>Total</b></td>
 	                <td align="right" style="border-bottom: 1px solid #DDDDDD;"><?= $booking->total_with_delivery ?> KWD</td>
 	            </tr>
-                <tr>
-                    <td align="center" colspan="3">
-                        <a href="<?= Yii::$app->urlManagerVendor->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'1'], true); ?>" style="background-color:#008a00;border:1px solid #008a00;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Accept</a>
-                        <a href="<?= Yii::$app->urlManagerVendor->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'0'], true); ?>" style="background-color:#ff0000;border:1px solid #ff0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Reject</a>
-                    </td>
-                </tr>
 	        </tbody>
 	    </table>
 
     </td>
     <td width="20"></td>
 </tr>
-
+<?php } ?>
