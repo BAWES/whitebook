@@ -165,21 +165,8 @@ class CheckoutController extends BaseController
         $customer_address->city_id = $location->city_id;
         $customer_address->country_id = $location->country_id;
 
-        if ($customer_address->save()) {
-          
-            $address_id = $customer_address->address_id;
-
-            //save customer address response 
-            foreach ($questions as $key => $value) {
-                $customer_address_response = new CustomerAddressResponse();
-                $customer_address_response->address_id = $address_id;
-                $customer_address_response->address_type_question_id = $key;
-                $customer_address_response->response_text = $value;                                        
-                $customer_address_response->save();
-            }
-            
-        }else{
-        	$json['errors'] = $customer_address->getErrors();
+        if (!$customer_address->save()) {
+            $json['errors'] = $customer_address->getErrors();
         }
 
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -219,7 +206,7 @@ class CheckoutController extends BaseController
         $customer_address->city_id = $location->city_id;
         $customer_address->country_id = $location->country_id;
 
-        if (!$customer_address->validate()) {
+        if (!$customer_address->save()) {
             $json['errors'] = $customer_address->getErrors();
         }
 
@@ -244,17 +231,8 @@ class CheckoutController extends BaseController
             Yii::$app->session->set('customer_mobile', $customer->customer_mobile); 
 
             //save address 
-        
-            $address  = $customer_address->address_data.'<br />';
 
-            foreach ($questions as $key => $value) {
-                $address .= $value.'<br />';    
-            }
-
-            $address .= $customer_address->location->location.'<br />';
-            $address .= $customer_address->city->city_name.'<br />';
-
-            Yii::$app->session->set('guest_address', $address);
+            Yii::$app->session->set('address_id', $customer_address->address_id);
         }
 
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -267,7 +245,7 @@ class CheckoutController extends BaseController
 
 		$json = array();
 
-		Yii::$app->session->set('address', Yii::$app->request->post('address_id'));
+		Yii::$app->session->set('address_id', Yii::$app->request->post('address_id'));
 
 		Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -390,15 +368,8 @@ class CheckoutController extends BaseController
 
     public function actionRequestSend()
     {
-        if(Yii::$app->user->isGuest) 
-        {
-            $address = Yii::$app->session->get('guest_address');
-        }
-        else
-        {
-            $address = Yii::$app->session->get('address');
-        }
-
+        $address = Yii::$app->session->get('address_id');
+        
         if ($address) {
             
             $arr_booking_id = Booking::checkoutConfirm();

@@ -6,6 +6,7 @@ use Yii;
 use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use common\models\Booking;
 use common\models\VendorItem;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
@@ -502,14 +503,8 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $result;    
     }
 
-    public static function getAddressData($address_id) {
-
-        $address = CustomerAddress::findOne($address_id);
-
-        if($address) {
-            return $address->address_data;
-        } else {
-            return null;
-        }        
+    public static function getAddressData($address_id) 
+    {
+        return Booking::getPurchaseDeliveryAddress($address_id);
     }
 }
