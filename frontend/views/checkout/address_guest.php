@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use common\models\Location;
 use common\models\CustomerCart;
 use common\components\LangFormat;
+
 ?>
 
 
@@ -23,7 +24,7 @@ use common\components\LangFormat;
                 <div class="form-group field-customer-customer_email required">
                     <label class="control-label" for="customer-customer_email">First name</label>
                     <div class="controls1">
-                        <input type="text" id="customer-customer_name" class="form-control" name="Customer[customer_name]">
+                        <input type="text" id="customer-customer_name" class="required form-control" name="Customer[customer_name]">
                     </div>  
                     <span class="error customer_name"></span>
                 </div>
@@ -32,7 +33,7 @@ use common\components\LangFormat;
                 <div class="form-group field-customer-customer_email required">
                     <label class="control-label" for="customer-customer_email">Last name</label>
                     <div class="controls1">
-                        <input type="text" id="customer-customer_lastname" class="form-control" name="Customer[customer_last_name]">
+                        <input type="text" id="customer-customer_lastname" class="required form-control" name="Customer[customer_last_name]">
                     </div>  
                     <span class="error customer_last_name"></span>
                 </div>
@@ -42,7 +43,7 @@ use common\components\LangFormat;
         <div class="form-group field-customer-customer_email required">
             <label class="control-label" for="customer-customer_email">Email</label>
             <div class="controls1">
-                <input type="text" id="customer-customer_email" class="form-control" name="Customer[customer_email]">
+                <input type="text" id="customer-customer_email" class="required form-control" name="Customer[customer_email]">
             </div>  
             <span class="error customer_email"></span>
         </div>
@@ -50,7 +51,7 @@ use common\components\LangFormat;
         <div class="form-group field-customer-customer_mobile required">
             <label class="control-label" for="customer-customer_mobile">Phone</label>
             <div class="controls1">
-                <input type="text" id="customer-customer_mobile" class="form-control" name="Customer[customer_mobile]">
+                <input type="text" id="customer-customer_mobile" class="required form-control" name="Customer[customer_mobile]">
             </div>  
             <span class="error customer_mobile"></span>
         </div>
@@ -74,34 +75,15 @@ use common\components\LangFormat;
             <span class="error area_id"></span>
         */ ?>
 
-        <div class="row">
-
-            <div class="col-md-6">
-                <?= $form->field($customer_address_modal, 'block') ?>
-
-                <?= $form->field($customer_address_modal, 'street') ?>
-            
-                <?= $form->field($customer_address_modal, 'avenue') ?>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <div class="form-group">
-                    <?= $form->field($customer_address_modal, 'building',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
-                        ]); ?>
-                    <div class="error building"></div>
-                </div>
-            
-                <?= $form->field($customer_address_modal, 'floor') ?>
-
-                <?= $form->field($customer_address_modal, 'apartment') ?>
-            </div>
+        <div class="question_wrapper">
+            <!-- question will go here -->
         </div>
 
-        <?= $form->field($customer_address_modal, 'extra_details') ?>
-
-        <?= $form->field($customer_address_modal, 'recipient_number') ?>
+        <div class="form-group">
+            <?= $form->field($customer_address_modal, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
+                ])->textArea(['rows' => 6]) ?>
+            <span class="error address_data"></span>
+        </div>
             
     </div>
 

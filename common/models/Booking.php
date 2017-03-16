@@ -393,43 +393,27 @@ class Booking extends \yii\db\ActiveRecord
 
         $address = '';
 
-        if($model->block) {
-            $address .= 'Block '.$model->block.'<br />';    
+        $address_responses = CustomerAddressResponse::find()
+            ->where(['address_id' => $address_id])
+            ->all();
+
+        foreach ($address_responses as $response) {
+            if($response->response_text) {
+                $address .= $response->response_text.'<br />';     
+            }           
         }
 
-        if($model->street) {
-            $address .= $model->street.'<br />';    
-        }
-
-        if($model->avenue) {
-            $address .= $model->avenue.' avenue<br />';    
-        }
-
-        if($model->building) {
-            $address .= $model->building.' building<br />';    
-        }
-
-        if($model->floor) {
-            $address .= $model->floor.' floor<br />';    
-        }
-
-        if($model->apartment) {
-            $address .= $model->apartment.' apartment<br />';    
-        }
-
-        if($model->extra_details) {
-            $address .= $model->extra_details.'<br />';    
+        if($model->address_data) {
+            $address .= $model->address_data.'<br />';
         }
         
-        //area 
-        $address .= $model->location->location.'<br />';
-
-        //city 
-        $address .= $model->city->city_name.'<br />';
-
-        if($model->recipient_number) {
-            $address .= 'Recipient no. '.$model->recipient_number.'<br />';    
+        if($model->location) {
+            $address .= $model->location->location.'<br />';    
         }
+        
+        if($model->city) {
+            $address .= $model->city->city_name.'<br />';
+        }        
 
         return $address;
     }

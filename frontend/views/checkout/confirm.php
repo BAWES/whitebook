@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\models\Booking;
 use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
@@ -100,7 +101,7 @@ use common\models\CustomerCartMenuItem;
         		</td>
         		<td>
         			<a target="_blank" href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
-        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
+        				<?= LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
         			</a>
 
                     <?php 
@@ -142,35 +143,7 @@ use common\models\CustomerCartMenuItem;
                         <?php } ?>
         		</td>
         		<td>
-        			<?php 
-
-        			if(isset($delivery_area->location)) { 
-
-						$delivery_charge += $delivery_area->delivery_price;
-
-                        if(!Yii::$app->user->isGuest) { ?>
-                            
-                            <?= nl2br($address_data); ?> <br />
-                        
-                            <?= LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar);?><br/>
-
-                            <?= LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar);?><br/>
-
-                        <?php } else { ?>
-                            
-                            <?= Yii::$app->session->get('guest_address'); ?>
-
-                        <?php } ?>     
-
-                        <?= $item['cart_delivery_date'] ?> <br />
-        			
-                        <?= $item['time_slot']; ?>
-
-        			<?php } else { ?>
-        				<span class="error">
-        					<?= Yii::t('frontend', 'We cannot delivery this item!'); ?>
-        				</span>
-        			<?php } ?>		        			
+        			<?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
         		</td>
         		<td align="left">
 	        		<?= $item['cart_quantity'] ?>

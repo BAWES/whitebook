@@ -18,7 +18,6 @@ use common\models\CustomerCartMenuItem;
 use frontend\models\AddressType;
 use frontend\models\Customer;
 
-
 /**
  * Checkout controller.
  */
@@ -118,6 +117,8 @@ class CheckoutController extends BaseController
         $addresstype = AddressType::loadAddresstype();
         $country = Country::loadcountry();
 
+        $customer_address_modal->address_type_id = 1;
+
         if(Yii::$app->user->isGuest) 
         {
             $template = 'address_guest';
@@ -165,7 +166,20 @@ class CheckoutController extends BaseController
         $customer_address->city_id = $location->city_id;
         $customer_address->country_id = $location->country_id;
 
-        if (!$customer_address->save()) {
+        if ($customer_address->save()) {
+
+            $address_id = $customer_address->address_id;
+
+            //save customer address response 
+            foreach ($questions as $key => $value) {
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $key;
+                $customer_address_response->response_text = $value;                                        
+                $customer_address_response->save();
+            }
+            
+        }else{
             $json['errors'] = $customer_address->getErrors();
         }
 
@@ -206,7 +220,24 @@ class CheckoutController extends BaseController
         $customer_address->city_id = $location->city_id;
         $customer_address->country_id = $location->country_id;
 
-        if (!$customer_address->save()) {
+        if ($customer_address->save()) {
+            
+            $address_id = $customer_address->address_id;
+
+            //save customer address response 
+            foreach ($questions as $key => $value) {
+
+                if(!$value) 
+                    continue;
+                
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $key;
+                $customer_address_response->response_text = $value;                                        
+                $customer_address_response->save();
+            }
+
+        } else {
             $json['errors'] = $customer_address->getErrors();
         }
 
