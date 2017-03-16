@@ -1606,8 +1606,8 @@ a.thing_cont:hover {
     padding: 5px;
     margin: 5px 0 5px 5px;
     cursor: pointer;
-    width: 200px;
-    height: 130px;
+    width: 230px;
+    height: 230px;
 }
 .active.address_block {
     border: 1px solid gray;
@@ -1616,14 +1616,14 @@ a.thing_cont:hover {
 .address_insert_block {
     float: left;
     border: 1px solid #ccc;
-    padding: 25px;
+    padding: 80px 25px;
     margin: 5px;
     display: block;
     cursor: pointer;
     vertical-align: middle;
     text-align: center;
-    height: 130px;
-    width: 130px;
+    height: 230px;
+    width: 230px;
 }
 
 .border-top{ display: inline-block; width: 100%;  border-top: 1px solid #e6e6e6; vertical-align: top; margin: 10px 0 0 0;}

@@ -26,8 +26,8 @@ function address() {
 
 	$.get(address_url, function(html) {
 		if(html) {
-			$('.checkout_content_wrapper').html(html);	
-			jQuery('.selectpicker').selectpicker();
+			$('.checkout_content_wrapper').html(html);
+			$('input[name="CustomerAddress[address_type_id]"]:checked').trigger('change');
 		}else{
 			location = cart_url;
 		}
@@ -39,6 +39,21 @@ function address() {
 function save_guest_address() {
 
 	$('form .error').html('');
+	
+	//check all input 
+
+	$('.checkout_content_wrapper .has-error').removeClass('has-error');
+
+    $('.checkout_content_wrapper input.required').each(function(){
+        if(!$(this).val()){
+            $(this).parent().addClass('has-error');
+        }
+    });
+
+    if($('.checkout_content_wrapper .has-error').length > 0) {
+    	console.log($('.has-error'));
+    	return false;
+    }
 
 	$.post(
 		save_guest_address_url, 
@@ -209,15 +224,15 @@ $(document).delegate('#modal_create_address form', 'submit', function(e){
 	$('.has-error').removeClass('has-error');
     $('.has-success').removeClass('has-success');
 
-    //check all textarea 
-    $('#modal_create_address textarea').each(function(){
+    //check all input 
+    $('#modal_create_address input.required').each(function(){
         if(!$(this).val()){
             $(this).parent().addClass('has-error');
         }
-    })
+    });
 
     //check address type
-    var address_type_id = $('#customeraddress-address_type_id').val();
+    var address_type_id = $('input[name="CustomerAddress[address_type_id]"]:checked').val();
 
     if(!address_type_id) {
         $('.field-customeraddress-address_type_id').addClass('has-error');
@@ -255,9 +270,10 @@ $(document).delegate('#modal_create_address form', 'submit', function(e){
 
 $(function (){
 
-    $(document).delegate('#customeraddress-address_type_id', 'change', function (){
+    $(document).delegate('input[name="CustomerAddress[address_type_id]"]', 'change', function (){
+        
         var csrfToken = $('meta[name=\"csrf-token\"]').attr('content');
-        var address_type_id = $('#customeraddress-address_type_id').val();
+        var address_type_id = $(this).val();//$('#customeraddress-address_type_id input:selected').val()
         var path = questions_url;
         
         $.ajax({

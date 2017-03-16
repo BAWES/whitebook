@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use common\models\Location;
 use common\models\CustomerCart;
 use common\components\LangFormat;
-use common\components\Booking;
+use common\models\Booking;
 
 ?>
 
@@ -34,7 +34,7 @@ use common\components\Booking;
                                 echo $address['address_name'].'<br />';
                             }
 
-                            echo Booking::getPurchaseDeliveryAddress($address->address_id);
+                            echo Booking::getPurchaseDeliveryAddress($address['address_id']);
 
                             ?>
                         </div>
@@ -87,36 +87,18 @@ use common\components\Booking;
                         <span class="error area_id"></span>
                     */ ?>
                     
-                    <div class="col-md-12">
-
-                        <div class="col-md-6">
-                            <?= $form->field($customer_address_modal, 'block') ?>
-
-                            <?= $form->field($customer_address_modal, 'street') ?>
-                        </div>
-
-                        <div class="col-md-6">
-                            <?= $form->field($customer_address_modal, 'avenue') ?>
-
-                            <div class="form-group">
-                                <?= $form->field($customer_address_modal, 'building',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
-                                    ]); ?>
-                                <div class="error building"></div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <?= $form->field($customer_address_modal, 'floor') ?>
-
-                            <?= $form->field($customer_address_modal, 'apartment') ?>
-                        </div>
+                    <div class="question_wrapper">
+                        <!-- question will go here -->
                     </div>
 
-                    <?= $form->field($customer_address_modal, 'extra_details') ?>
-
-                    <?= $form->field($customer_address_modal, 'recipient_number') ?>
+                    <div class="form-group">
+                        <?= $form->field($customer_address_modal, 'address_data',['template' => "{label}<div class='controls1'>{input}</div> {hint} {error}"
+                            ])->textArea(['rows' => 6]) ?>
+                        <span class="error address_data"></span>
+                    </div>
 
                 </div>
+
                 <div class="modal-footer submitt_buttons">
                     <button type="submit" class="btn btn-submit-address btn-default">
                         <?= Yii::t('frontend', 'Submit') ?>
@@ -133,4 +115,4 @@ $this->registerCss("
     .margin-padding-0{padding-bottom:0; margin-bottom: 0;}
     .body-update{background: white; margin-top: 0;}
 ");
-?>
+

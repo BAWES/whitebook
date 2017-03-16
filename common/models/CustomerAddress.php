@@ -47,10 +47,10 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['country_id', 'city_id', 'address_type_id', 'building'], 'required'],
-            [['customer_id', 'address_type_id', 'country_id', 'city_id', 'area_id'], 'integer'],
-            [['address_archived', 'trash', 'building', 'block', 'street', 'avenue', 'floor', 'apartment', 'extra_details', 'recipient_number'], 'string'],
-            [['customer', 'created_by', 'modified_by', 'address_name', 'created_datetime', 'modified_datetime'], 'safe']
+            [['country_id', 'city_id', 'address_type_id'], 'required'],
+            [['customer_id', 'address_type_id', 'country_id', 'city_id', 'area_id', 'created_by', 'modified_by'], 'integer'],
+            [['address_archived', 'trash'], 'string'],
+            [['customer', 'address_name', 'address_data', 'created_datetime', 'modified_datetime'], 'safe']
         ];
     }
 
@@ -89,14 +89,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
             'city_id' => Yii::t('frontend', 'Governorate'),
             'area_id' => Yii::t('frontend', 'Area name'),
             'address_archived' => Yii::t('frontend', 'Delete'),
-            'building' =>  Yii::t('frontend', 'Building Number/Name'),
-            'block' => Yii::t('frontend', 'Block'),
-            'street' => Yii::t('frontend', 'Street'),
-            'avenue' => Yii::t('frontend', 'Avenue'), 
-            'floor' => Yii::t('frontend', 'Floor'),
-            'apartment'  => Yii::t('frontend', 'Apartment'),
-            'extra_details' => Yii::t('frontend', 'Extra Details'), 
-            'recipient_number' => Yii::t('frontend', 'Recipient Number'),
+            'address_data' =>  Yii::t('frontend', 'Other direction or note'),
             'created_by' => Yii::t('frontend', 'Created By'),
             'modified_by' => Yii::t('frontend', 'Modified By'),
             'created_datetime' => Yii::t('frontend', 'Created Datetime'),
