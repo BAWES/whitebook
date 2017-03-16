@@ -92,6 +92,7 @@ class BookingController extends Controller
     public function actionViewPending($id)
     {
         $model = $this->findModel($id);
+        $_oldBookingStatus = $model->booking_status;
         // restrict invalid access to other request
         if ($model->vendor_id != Yii::$app->user->id) {
             $this->redirect(['index']);
@@ -99,18 +100,16 @@ class BookingController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $model->setExpiredOn($model); // set expire date
-
-            if ($model->save()) {
+            if ($model->save(false)) {
 
                 //if accepted
-                if (($model->oldAttributes['booking_status'] != $model->booking_status) && $model->booking_status == '1') {
+                if (($_oldBookingStatus != $model->booking_status) && $model->booking_status == Booking::STATUS_ACCEPTED) {
                     Yii::$app->session->setFlash('success', 'Request Status changed successfully');
                     Booking::approved($model);
                 }
 
                 //if reject
-                if (($model->oldAttributes['booking_status'] != $model->booking_status) && $model->booking_status == '2') {
+                if (($_oldBookingStatus != $model->booking_status) && $model->booking_status ==  Booking::STATUS_REJECTED) {
                     Yii::$app->session->setFlash('success', 'Request Status changed successfully');
                     Booking::rejected($model);
                 }
