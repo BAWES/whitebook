@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?php
     $timeslot_val = array();
-    $delivery_data = DeliveryTimeSlot::vendor_delivery_details($model->vendor_id);
+    $delivery_data = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id]);
     if ($delivery_data>0) { ?>
 
 	<div class="vendor-admin-new">
