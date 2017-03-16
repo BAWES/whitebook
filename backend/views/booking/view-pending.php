@@ -114,11 +114,13 @@ $("#w0").off("submit").on("submit",function(){
     $("div.field-booking-booking_note").removeClass("has-error");
     $("div.field-booking-booking_note .help-block").removeClass("error");
         
-    if ($("#booking-booking_status").val() == 2) {
+    if ($("#booking-booking_status").val() == 2 && $("#booking-booking_note").val() == "") {
         $("div.field-booking-booking_note").addClass("has-error");
         $("div.field-booking-booking_note .help-block").addClass("error");
         $("div.field-booking-booking_note .help-block").html("Please mention reason for rejection");
         return false;
+    } else {
+        $("#w0").submit();
     }
 })
 
