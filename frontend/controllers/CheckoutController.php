@@ -361,8 +361,7 @@ class CheckoutController extends BaseController
         $arr_booking_id = Yii::$app->session->get('arr_booking_id');
 
         return $this->render('success', [
-            'arr_booking_id' => $arr_booking_id,
-            'booking_page' => Url::to(['booking/pending'])
+            'arr_booking_id' => $arr_booking_id
         ]);
     }
 
