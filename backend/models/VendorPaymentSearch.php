@@ -90,7 +90,7 @@ class VendorPaymentSearch extends VendorPayment
         $this->load($params);
 
         if (!$this->validate()) {
-            return $q->sum('amount');
+            return $query->sum('amount');
         }
 
         // grid filtering conditions
