@@ -120,7 +120,10 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 		        			<?php 
 
+		        			$arr_menu_id = [];
+
 		        			foreach ($menu_items as $key => $menu_item) { 
+
 		        				if(Yii::$app->language == 'en') {
 		        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
 		        				}else{
@@ -134,6 +137,10 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        				}
 		        				
 		        				echo '</i>';
+
+		        				//get distinct menu_id 
+
+		        				$arr_menu_id[$menu_item['menu_id']] = $menu_item['menu_id'];
 		        			} 
 
 	                        if($item['female_service']) {
@@ -156,9 +163,11 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 			        			</div>
 		        			<?php } ?>
 
-		        			<?php foreach ($menu_items as $key => $menu_item) { 
-		        				if(isset($errors['menu_'.$menu_item['menu_id']])) { 
-			        				foreach($errors['menu_'.$menu_item['menu_id']] as $error) { 
+		        			<!-- display error for each menu --> 
+		        			
+		        			<?php foreach ($arr_menu_id as $key => $menu_id) { 
+		        				if(isset($errors['menu_'.$menu_id])) { 
+			        				foreach($errors['menu_'.$menu_id] as $error) { 
 
 				        				if(is_array($error)) {
 		        							foreach ($error as $value) {
