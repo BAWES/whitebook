@@ -351,7 +351,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
             
             if($max && $qty_ordered > $max) {
-                $errors['menu_'.$menu->menu_id][] = Yii::t(
+                $errors['menu_'.$menu->menu_id]['max'] = Yii::t(
                     'frontend', 
                     'Quantity must be less than or equal to {qty} in "{menu_name}"', [
                         'qty' => $max,
@@ -361,7 +361,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
 
             if($qty_ordered < $min) {
-                $errors['menu_'.$menu->menu_id][] = Yii::t(
+                $errors['menu_'.$menu->menu_id]['min'] = Yii::t(
                     'frontend', 
                     'Quantity must be greater than or equal to {qty} in "{menu_name}"', [
                         'qty' => $min, 
