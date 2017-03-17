@@ -61,7 +61,7 @@ class BrowseController extends BaseController
             $Category = Category::findOne(['slug' => $slug]);
 
             if (empty($Category)) {
-                throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+                return $this->goBack();
             }
         } else {
             $Category = '';
