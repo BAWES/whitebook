@@ -22,7 +22,9 @@ use common\components\LangFormat;
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group field-customer-customer_email required">
-                    <label class="control-label" for="customer-customer_email">First name*</label>
+                    <label class="control-label" for="customer-customer_email">
+                        <?= Yii::t('frontend', 'First name') ?>*
+                    </label>
                     <div class="controls1">
                         <input type="text" id="customer-customer_name" class="required form-control" name="Customer[customer_name]">
                     </div>  
@@ -31,7 +33,9 @@ use common\components\LangFormat;
             </div>
             <div class="col-md-6">
                 <div class="form-group field-customer-customer_email required">
-                    <label class="control-label" for="customer-customer_email">Last name* </label>
+                    <label class="control-label" for="customer-customer_email">
+                        <?= Yii::t('frontend', 'Last name') ?>* 
+                    </label>
                     <div class="controls1">
                         <input type="text" id="customer-customer_lastname" class="required form-control" name="Customer[customer_last_name]">
                     </div>  
@@ -41,7 +45,9 @@ use common\components\LangFormat;
         </div>
 
         <div class="form-group field-customer-customer_email required">
-            <label class="control-label" for="customer-customer_email">Email*</label>
+            <label class="control-label" for="customer-customer_email">
+                <?= Yii::t('frontend', 'Email') ?>*
+            </label>
             <div class="controls1">
                 <input type="text" id="customer-customer_email" class="required form-control" name="Customer[customer_email]">
             </div>  
@@ -49,7 +55,9 @@ use common\components\LangFormat;
         </div>
 
         <div class="form-group field-customer-customer_mobile required">
-            <label class="control-label" for="customer-customer_mobile">Phone*</label>
+            <label class="control-label" for="customer-customer_mobile">
+                <?= Yii::t('frontend', 'Phone') ?>*
+            </label>
             <div class="controls1">
                 <input type="text" id="customer-customer_mobile" class="required form-control" name="Customer[customer_mobile]">
             </div>  
