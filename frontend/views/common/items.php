@@ -11,6 +11,17 @@ if (!empty($items->getModels())) {
 
     foreach ($items->getModels() as $key => $value) {
 
+        if (
+            $value['item_approved'] == 'Yes' &&
+            $value['trash'] == 'Default' &&
+            $value['item_status'] == 'Active' &&
+            $value['item_for_sale'] == 'Yes'
+        ) {
+            $AvailableStock = true;
+        } else {
+            $AvailableStock = false;
+        }
+
         $image_data = Image::find()
             ->where(['item_id' => $value['item_id']])
             ->orderBy(['vendorimage_sort_order' => SORT_ASC])
@@ -24,6 +35,9 @@ if (!empty($items->getModels())) {
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
         ?>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301 pull-left">
+            <?php if (!$AvailableStock) { ?>
+                <img src="<?php echo Url::to("@web/images/sold-out.png");?>" class="sold-out">
+            <?php } ?>
             <div class="events_items width-100-percent">
                 
                 <div class="events_images text-center position-relative">

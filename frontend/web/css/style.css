@@ -2638,8 +2638,5 @@ span.small {
 #event-time .dropdown-menu li a span {
     display: none;
 }
-
-.btn-primary {
-    background: black;
-    border-color: black;
-}
+.btn-primary {  background: black;  border-color: black;  }
+.sold-out{    position: absolute;  z-index: 999;  top: -4px;  left: 2px;  width: 43px;  }
