@@ -428,10 +428,11 @@ class Booking extends \yii\db\ActiveRecord
             'user'  => $arr_booking[0]->customer_name,
             'arr_booking' => $arr_booking
         ])
-        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
         ->setTo($arr_booking[0]->customer_email)
-        ->setSubject('New Booking')
+        ->setSubject('New Booking #'.$arr_booking[0]->booking_id)
         ->send();
+
         
         //send to admin
 
@@ -441,9 +442,9 @@ class Booking extends \yii\db\ActiveRecord
             'user'  => 'Admin',
             'arr_booking' => $arr_booking,
         ])
-        ->setFrom(Yii::$app->params['supportEmail'])
+        ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
         ->setTo(Yii::$app->params['adminEmail'])
-        ->setSubject('New Booking')
+        ->setSubject('New Booking #'.$arr_booking[0]->booking_id)
         ->send();
         
         //send to vendor 
@@ -474,9 +475,9 @@ class Booking extends \yii\db\ActiveRecord
                 'arr_booking' => $arr_booking,
                 'vendor' => $arr_booking[0]->vendor
             ])
-            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
             ->setTo($emails)
-            ->setSubject('New Booking')
+            ->setSubject('New Booking #'.$arr_booking[0]->booking_id)
             ->send();
         }
     }
@@ -498,9 +499,9 @@ class Booking extends \yii\db\ActiveRecord
                 "vendor" => $booking->vendor,
                 "lnk_payment" => Yii::$app->urlManagerFrontend->createUrl(["payment/index", 'token' => $booking->booking_token])
             ])
-            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
             ->setTo($booking->customer_email)
-            ->setSubject('Booking request approved!')
+            ->setSubject('Booking ID #'.$booking->booking_id.' request approved!')
             ->send();
     }
 
@@ -525,9 +526,9 @@ class Booking extends \yii\db\ActiveRecord
                     "logo_1" => Url::to("@web/uploads/twb-logo-horiz-white.png", true),
                     "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
                 ])
-                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
                 ->setTo($booking->customer_email)
-                ->setSubject('Booking request rejected!')
+                ->setSubject('Booking ID #'.$booking->booking_id.' request rejected!')
                 ->send();
         }
 
@@ -543,10 +544,11 @@ class Booking extends \yii\db\ActiveRecord
                 "logo_1" => Url::to("@web/uploads/twb-logo-horiz-white.png", true),
                 "logo_2" => Url::to("@web/uploads/twb-logo-trans.png", true),
             ])
-            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
             ->setTo(Yii::$app->params['adminEmail'])
-            ->setSubject('Booking request rejected!')
+            ->setSubject('Booking ID #'.$booking->booking_id.' request rejected!')
             ->send();
+
 
     }
     /*
@@ -568,7 +570,7 @@ class Booking extends \yii\db\ActiveRecord
                     $message .= '<br/> Booking ID '.$detail['booking_id'];
 
                     echo Yii::$app->mailer->compose()
-                        ->setFrom(Yii::$app->params['supportEmail'])
+                        ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
                         ->setTo($customerDetail->customer_email)
                         ->setSubject('Whitebook : Expiring booking token #'.$detail['booking_token'])
                         ->setTextBody($message)
@@ -625,9 +627,9 @@ class Booking extends \yii\db\ActiveRecord
             $emails = ArrayHelper::getColumn($emails, 'email_address');
 
             Yii::$app->mailer->compose()
-                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
                 ->setTo($emails)
-                ->setSubject('Booking Expired!')
+                ->setSubject('Booking ID #'.$request->booking_id.' Expired!')
                 ->setHtmlBody($message)
                 ->send();
 
@@ -639,9 +641,9 @@ class Booking extends \yii\db\ActiveRecord
             $message .= '<br/> Booking ID : '.$request->booking_id;
 
             Yii::$app->mailer->compose()
-                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
                 ->setTo(Yii::$app->params['adminEmail'])
-                ->setSubject('Booking Expired!')
+                ->setSubject('Booking ID #'.$request->booking_id.' Expired!')
                 ->setHtmlBody($message)
                 ->send();
 
@@ -725,9 +727,9 @@ class Booking extends \yii\db\ActiveRecord
                 "model" => $booking,
                 "vendor" => $booking->vendor
             ])
-            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
             ->setTo($booking->customer_email)
-            ->setSubject('Booking Invoice!')
+            ->setSubject('Booking ID #'.$booking_id.' Invoice!')
             ->send();
 
         //Send Email to vendor
@@ -747,9 +749,9 @@ class Booking extends \yii\db\ActiveRecord
                 "model" => $booking,
                 "vendor" => $booking->vendor
             ])
-            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
             ->setTo($emails)
-            ->setSubject('Got Booking Payment!')
+            ->setSubject('Got Booking Payment for ID #'.$booking_id)
             ->send();
     }
 
