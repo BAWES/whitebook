@@ -286,6 +286,8 @@ class VendorItemController extends Controller
                 $model->item_approved = 'Pending';
                 $model->save();
 
+                VendorItem::notifyAdmin($id);
+
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
                 Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -364,6 +366,8 @@ class VendorItemController extends Controller
                 $model->is_ready = 1;
                 $model->item_approved = 'Pending';
                 $model->save();
+                
+                VendorItem::notifyAdmin($id);
 
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
@@ -425,6 +429,8 @@ class VendorItemController extends Controller
                 $model->is_ready = 1;
                 $model->item_approved = 'Pending';
                 $model->save();
+
+                VendorItem::notifyAdmin($id);
 
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
@@ -526,6 +532,8 @@ class VendorItemController extends Controller
                 $model->item_approved = 'Pending';
                 $model->save();
 
+                VendorItem::notifyAdmin($id);
+
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
                 Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -626,6 +634,8 @@ class VendorItemController extends Controller
                 $model->item_approved = 'Pending';
                 $model->save();
 
+                VendorItem::notifyAdmin($id);
+
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
                 Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -678,6 +688,8 @@ class VendorItemController extends Controller
                 $image->save();
             }
 
+            VendorItem::notifyAdmin($id);
+            
             Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
             Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);

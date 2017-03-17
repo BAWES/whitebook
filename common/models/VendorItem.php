@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Url;
 use common\models\Vendor;
 use common\models\VendorDraftItem;
 use common\models\VendorItemToPackage;
@@ -455,5 +456,25 @@ class VendorItem extends \yii\db\ActiveRecord
         }
 
         return $capacity - $purchased_result['purchased'];
+    }
+
+    /** 
+     * Notify admin on item update 
+     * @param $item_id 
+     */
+    public static function notifyAdmin($id)
+    {
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+        
+        Yii::$app->mailer->compose("admin/item-updated",
+            [
+                "model" => self::findOne($id),
+                "image_1" => Url::to("@web/twb-logo-trans.png", true),
+                "image_2" => Url::to("@web/twb-logo-horiz-white.png", true)
+            ])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('Vendor Updated Item #'.$id)
+            ->send();
     }
 }
