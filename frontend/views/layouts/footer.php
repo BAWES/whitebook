@@ -384,7 +384,7 @@ use frontend\models\Users;
                                     <div id="vendor_phone" class="error"></div>
                                 </div>
                             </div>
-                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-right-0">
                                 <div class="form-group">
                                     <label><?= Yii::t('frontend', 'Email of contact person') ?></label>
                                     <input type="text" placeholder="" name="email" id="email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
@@ -398,7 +398,7 @@ use frontend\models\Users;
                             <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
                                 <div class="form-group reg_gender">
                                     <label><?= Yii::t('frontend', 'Valid commercial license available?') ?></label>
-                                    <div class="col-md-12 padding0 gender-select">
+                                    <div class="col-md-12 padding0 license-select">
                                         <select class="selectpicker" data-style="btn-primary" id="license" name="license" style="display: none;">
                                             <option value=""><?= Yii::t('frontend', 'Select Option') ?></option>
                                             <option value="Yes"><?= Yii::t('frontend', 'Yes') ?></option>

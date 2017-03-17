@@ -902,7 +902,7 @@ class UsersController extends BaseController
                     'email'=>$email,'license'=>$license,'description'=>$description
                 ])
                 ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
-                ->setTo('anilkumar.dhiman1@gmail.com')
+                ->setTo(Yii::$app->params['adminEmail'])
                 ->setSubject('Vendor Registration Request')
                 ->send();
 
