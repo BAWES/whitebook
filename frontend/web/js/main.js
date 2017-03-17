@@ -887,12 +887,15 @@ function forgot_password()
                 {
                     $('#forgot_loader').hide();
                     $('#forgotPwdModal').modal('hide');
+                    $('#chkForgotPwdModal').modal('hide');
                     $('#MyModal').modal('hide');
                     $('#EventModal').modal('hide');
                     $('#login_success').modal('show');
                     $('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+receive_email+'</span>');
                     //window.setTimeout(function(){location.reload()},2000)
-                    window.setTimeout(function() {$('#login_success').modal('hide');}, 3000);
+                    window.setTimeout(function() {
+                        $('#login_success').modal('hide');
+                    }, 3000);
                 }
                 else if(data==-1)
                 {
